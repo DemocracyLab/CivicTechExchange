@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DemocracyLab</title>
+    <link href='/static/css/projects.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <table class="projects">
+        <tbody>
+            <tr>
+                <th>Project</th>
+                <th>Description</th>
+                <th>Tags</th>
+            </tr>
+
+            {% for project in projects %}
+            <tr>
+                <td>
+                    <a href="{{ project.project_url }}">{{ project.project_name }}</a>
+                </td>
+                <td>{{ project.project_description }}</td>
+                <td>{{ project.project_tags }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

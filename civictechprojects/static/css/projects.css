@@ -1,0 +1,40 @@
+/* Spacing */
+
+table {
+    table-layout:       fixed;
+    margin-left:        10%;
+    margin-right:       10%;
+    width:              80%;
+    border-collapse:    collapse;
+    border:             3px solid purple;
+}
+
+thead th:nth-child(1) {
+    width: 30%;
+}
+
+thead th:nth-child(2) {
+    width: 40%;
+}
+
+thead th:nth-child(3) {
+    width: 30%;
+}
+
+th, td {
+    padding: 5px;
+}
+
+/* Color */
+
+tbody tr:nth-child(odd) {
+    background-color: #DDEAFF;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #CFC6FF;
+}
+
+table {
+    background-color: #DDE0FF;
+}
