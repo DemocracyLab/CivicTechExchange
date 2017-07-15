@@ -1,0 +1,7 @@
+Django==1.10.7
+django-appconf==1.0.2
+django-compressor==2.1.1
+django-registration==2.1.2
+django-s3direct==0.4.2
+django-storages==1.5.1
+gunicorn==19.6.0
