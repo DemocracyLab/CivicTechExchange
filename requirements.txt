@@ -5,3 +5,4 @@ django-registration==2.1.2
 django-s3direct==0.4.2
 django-storages==1.5.1
 gunicorn==19.6.0
+psycopg2==2.6.2
