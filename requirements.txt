@@ -7,3 +7,4 @@ django-s3direct==0.4.2
 django-storages==1.5.1
 gunicorn==19.6.0
 psycopg2==2.6.2
+whitenoise==3.3.0
