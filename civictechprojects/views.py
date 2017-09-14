@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
+from .serializers import ProjectSerializer
 
 from .models import Project
 
@@ -14,3 +15,9 @@ def index(request):
         'projects' : projects
     }
     return HttpResponse(template.render(context, request))
+
+def projects_list(request):
+    if request.method == 'GET':
+        projects = Project.objects.order_by('-project_name')
+    serializer = ProjectSerializer(projects, many=True)
+    return JsonResponse(serializer.data, safe=False)
