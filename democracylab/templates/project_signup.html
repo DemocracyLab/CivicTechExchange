@@ -1,0 +1,169 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        <h1 class="signup-primary-header signup-headers">Add project</h1>
+        <div class="signup-inputs">
+            <div class="row">
+                <div class="col-md-12 signup-label">Project Name</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"><input type="text" name="project_name" class="signup-wide"></div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 signup-label">Brief Description</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"><input type="text" name="brief_description" class="signup-wide" placeholder="This will appear as project introduction"></div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 signup-label">Project Description</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"> <textarea name="aboutme" class="signup-textarea"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 signup-label">Project Timeline</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"><input type="text" name="project_timeline" class="signup-wide"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 signup-label">Executive Summary</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"><input type="text" name="executive_summary" class="signup-wide" placeholder="Link any other documents"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 signup-label">Connect Your Project</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"><input type="text" name="connect_google_drive" class="signup-wide" placeholder="Link in your document from Google Drive"></div>
+            </div>
+            <div class="row stacked-input">
+                <div class="col-md-12"><input type="text" name="connect_github" class="signup-wide" placeholder="Link in your document GitHub"></div>
+            </div>
+            <div class="row stacked-input">
+                <div class="col-md-12"><input type="text" name="connect_trello" class="signup-wide" placeholder="Link in your document from Trello"></div>
+            </div>
+            <div class="row stacked-input">
+                <div class="col-md-12"><input type="text" name="connect_slack_channel" class="signup-wide" placeholder="Link in your document from Slack Channel"></div>
+            </div>
+            <div class="row stacked-input">
+                <div class="col-md-12"><input type="text" name="connect_other" class="signup-wide" placeholder="Link in any other documents"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="signup-section">Issues Addressed</h3>
+                </div>
+            </div>
+            <div class="row">
+                {% for row in projects %} {% for item in row %}
+                <div class="col-md-4">
+                    <input type="checkbox" name="skills" value="{{item.tag_name}}" /><span class="signup-checkbox">{{item.display_name}}</span>
+                </div>
+                {% endfor %} {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="signup-section">Skills Needed</h3>
+                </div>
+            </div>
+            <div class="row">
+                {% for row in skills %} {% for item in row %}
+                <div class="col-md-4">
+                    <input type="checkbox" name="skills" value="{{item.tag_name}}" /><span class="signup-checkbox">{{item.display_name}}</span>
+                </div>
+                {% endfor %} {% endfor %}
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 signup-label">Other</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"><input type="text" name="skills_other" class="signup-wide" /></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 signup-label">Project Duration</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <select name="duration" class="signup-wide">
+                        <option value="1">0 - 1 month</option>
+                        <option value="4">2 - 4 months</option>
+                        <option value="12">4 - 12 months</option>
+                        <option value="13">&gt; 1 year</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 signup-label">Project Stage</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <select name="stage" class="signup-wide" >
+                        {% for stage in stages %}
+                        <option value="{{stage.tag_name}}">{{stage.display_name}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 signup-label">Technologies Used</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <select name="technologies" multiple class="signup-wide multiselect">
+                        {% for tech in technologies %}
+                        <option value="{{tech.tag_name}}">{{tech.display_name}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 signup-label">Project Type</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <select name="project_type" class="signup-wide" >
+                        {% for project_type in project_types %}
+                        <option value="{{project_type.tag_name}}">{{project_type.display_name}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+            <!-- 
+            <div class="row">
+                <div class="col-md-12 signup-label">Open Source</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="radio" name="opensource" class="signup-wide" value="1">Yes
+                    <input type="radio" name="opensource" class="signup-wide" value="0">No
+                </div>
+            </div>
+        -->
+            <div class="row">
+                <div class="col-md-12 signup-label">Software License</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"><input type="text" name="license" class="signup-wide"></div>
+            </div>
+        </div>
+        <div class="submit-row">
+            <button type="submit" class="btn-primary btn-left">SUBMIT</button>
+            <button type="submit" class="btn-secondary">CANCEL</button>
+        </div>
+    </form>
+    {% endblock %}
+</div>

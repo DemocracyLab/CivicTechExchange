@@ -72,6 +72,18 @@ table {
     border:0px;
 }
 
+.btn-secondary  {
+  width: 200px;
+  height: 45px;
+  background-color: #f2f2f2 !important;
+  border:0px;
+  color:#000000 !important;
+}
+
+.btn-left {
+  margin-right:31px;
+}
+
 /* Color palette */
 
 :root {
@@ -118,6 +130,9 @@ table {
       border:0px;
   }
 
+  select {
+    border:0px;
+  }
   .navbar-inverse {
     background-color: #282424;
     color:#ffffff
@@ -208,4 +223,12 @@ table {
       text-align: left;
       color: #231f1f;
       color: var(--black);
+  }
+
+  .stacked-input {
+    margin-top:8px;
+  }
+
+  .multiselect {
+    height:180px;
   }
