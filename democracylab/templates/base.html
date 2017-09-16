@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}DemocracyLab{% endblock %}</title>
+    <link href='/static/css/projects.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+<header>
+    <h1>DemocracyLab</h1>
+    {% if user.is_authenticated %}
+        {{ user.username }}
+    {% else %}
+        <a href="{% url 'signup' %}">login</a>
+    {% endif %}
+    <hr>
+</header>
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+</body>
+</html>

@@ -76,4 +76,5 @@ ENV/
 .env
 
 # IntelliJ IDEA files
+*.iml
 .idea/

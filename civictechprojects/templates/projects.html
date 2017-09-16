@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +8,10 @@
     <link href='/static/css/projects.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
-    <table class="projects">
+
+{% block content %}
+
+<table class="projects">
         <tbody>
             <tr>
                 <th>Project</th>
@@ -25,5 +30,4 @@
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}

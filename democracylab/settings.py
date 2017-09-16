@@ -15,8 +15,7 @@ import dj_database_url
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -58,7 +57,10 @@ ROOT_URLCONF = 'democracylab.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(PROJECT_ROOT, 'democracylab/templates'),
+            os.path.join(PROJECT_ROOT, 'civictechprojects/templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,8 +83,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'democracylab',
--       'USER': 'democracylab',
--       'PASSWORD': 'CHANGE_ME',
+        'USER': 'democracylab',
+        'PASSWORD': 'CHANGE_ME',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
