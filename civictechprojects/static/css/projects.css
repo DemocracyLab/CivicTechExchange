@@ -38,3 +38,144 @@ tbody tr:nth-child(even) {
 table {
     background-color: #DDE0FF;
 }
+
+.signup-text {
+    width: 325px;
+    height: 40px;
+    background-color: #f2f2f2;
+    background-color: var(--text-box-grey);
+}
+
+.signup-half-col {
+    width:325px !important;
+    margin-right:100px !important; 
+    padding-left:15px;
+}
+
+.signup-wide {
+    width: 750px;
+    height: 40px;
+    background-color: #f2f2f2;
+    background-color: var(--text-box-grey);
+}
+
+.btn-primary {
+    width: 200px;
+    height: 45px;
+    background-color: #fc8a04 !important;
+    border:0px;
+}
+
+/* Color palette */
+
+:root {
+    --black: #231f1f;
+    --pumpkin-orange: #fc8a04;
+    --text-box-grey: #f2f2f2;
+  }
+  
+  /* Text styles */
+  
+  h1 {
+    font-family: HiraginoSans-W5;
+    font-size: 32px;
+    text-align: left;
+    color: #231f1f;
+    color: var(--black);
+  }
+  
+  h2 {
+    font-family: HiraginoSans-W5;
+    font-size: 26px;
+    text-align: left;
+    color: #231f1f;
+    color: var(--black);
+  }
+  
+  h3 {
+    font-family: HiraginoSans-W5;
+    font-size: 18px;
+    text-align: left;
+    color: #231f1f;
+    color: var(--black);
+  }
+  
+  body {
+    font-family: Helvetica;
+    font-size: 14px;
+    font-weight: 300;
+    color: #231f1f;
+    color: var(--black);
+  }
+
+  input {
+      border:0px;
+  }
+
+  .navbar-inverse {
+    background-color: #282424;
+    color:#ffffff
+  }
+
+  a.navbar-inverse {
+    color:#ffffff
+  }
+
+  .base-signup {
+    width: 65px;
+    height: 22px;
+    font-family: Helvetica;
+    font-size: 18px;
+    text-align: left;
+    color: #ffffff;
+  }
+
+  .signup-label {
+    width: 70px;
+    height: 17px;
+    font-family: Helvetica;
+    font-size: 14px;
+    font-weight: 300;
+    color: #231f1f;
+    color: var(--black);
+    margin-bottom:7px !important;
+    margin-top:20px;
+  }
+
+
+  .input-link-icon {
+    background-image: url(/static/images/link.png);
+    background-repeat: no-repeat;
+    background-color: white;
+    background-position: 97% 4px !important;
+  }
+
+  .signup-primary-header {
+    padding-top:93px;
+    padding-bottom:35px;
+  }
+  .signup-secondary-header {
+    padding-bottom:43px;
+  }
+
+  .signup-headers {
+    text-align:center !important;
+  }
+
+  .signup-my-details {
+    font-family: Helvetica, HiraginoSans-W5;
+
+    font-size: 18px;
+    text-align: left;
+    color: #231f1f;
+    color: var(--black);
+  }
+
+  .submit-row {
+      padding-top:91px;
+    text-align:center;
+  }
+
+  .signup-inputs {
+    padding-left:145px;
+  }

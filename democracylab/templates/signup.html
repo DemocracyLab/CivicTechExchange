@@ -1,21 +1,65 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Sign up</h2>
+<div class="container">
 <form method="post">
   {% csrf_token %}
-  {% for field in form %}
-  <p>
-    {{ field.label_tag }}<br>
-    {{ field }}
-    {% if field.help_text %}
-    <small style="color: grey">{{ field.help_text }}</small>
-    {% endif %}
-    {% for error in field.errors %}
-  <p style="color: red">{{ error }}</p>
-  {% endfor %}
-  </p>
-  {% endfor %}
-  <button type="submit">Sign up</button>
+  <div class="signup-inputs">
+      <h1 class="signup-primary-header signup-headers">Want to make a difference in your community?</h1>
+      <h2 class="signup-secondary-header signup-headers">Become a project contributor</h2>
+      <div class="row">
+          <div class="col-md-12">
+            <div class="signup-my-details">My details:</div>
+          </div>
+        </div>
+        <div class="row">
+        <div class="signup-label signup-half-col">First name:</div>
+        <div class="signup-label signup-half-col">Last name:</div>          
+    </div>
+    <div class="row">
+        <div class="signup-half-col"><input type="text" name="first_name" class="signup-text"></div>
+        <div class="signup-half-col"><input type="text" name="last_name"  class="signup-text"></div>          
+    </div>
+    <div class="row">
+        <div class="signup-half-col signup-label">Zip Code/Postal Code (optional):</div>
+        <div class="signup-half-col signup-label">Phone (optional):</div>          
+    </div>
+    <div class="row">
+        <div class="col-md-12 signup-label">Email:</div>
+    </div>
+    <div class="row">
+        <div class="col-md-12"><input type="email" name="email"  class="signup-wide"></div>
+    </div>
+    <div class="row">
+        <div class="signup-half-col signup-label">Zip Code/Postal Code (optional):</div>
+        <div class="signup-half-col signup-label">Phone (optional):</div>          
+    </div>
+    <div class="row">
+        <div class="signup-half-col "><input type="text" name="first_name"  class="signup-text"></div>
+      <div class="signup-half-col"><input type="text" name="last_name"  class="signup-text"></div>          
+    </div>
+    <div class="row">
+        <div class="col-md-12 signup-label">Username:</div>
+    </div>
+    <div class="row">
+        <div class="col-md-12"><input type="text" name="username"  class="signup-wide"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 signup-label">Password:</div>
+    </div>
+    <div class="row">
+        <div class="col-md-12"><input type="password" name="password1"  class="signup-wide"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 signup-label">Confirm password:</div>
+    </div>
+    <div class="row">
+        <div class="col-md-12"><input type="password" name="password2"  class="signup-wide"></div>
+    </div>
+  </div>
+<div class="submit-row">
+    <button type="submit" class="btn-primary">Create Account</button>
+  </div>
 </form>
 {% endblock %}
+</div>

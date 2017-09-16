@@ -82,9 +82,9 @@ WSGI_APPLICATION = 'democracylab.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'democracylab',
-        'USER': 'democracylab',
-        'PASSWORD': 'CHANGE_ME',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'p0stgres!',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

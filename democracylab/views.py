@@ -4,9 +4,11 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
 
+from .forms import DemocracyLabUserCreationForm
+
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = DemocracyLabUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
