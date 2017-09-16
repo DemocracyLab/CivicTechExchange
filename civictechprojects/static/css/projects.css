@@ -9,6 +9,9 @@ table {
     border:             3px solid purple;
 }
 
+.navbar {
+  height:139px;
+}
 thead th:nth-child(1) {
     width: 30%;
 }
@@ -48,8 +51,11 @@ table {
 
 .signup-half-col {
     width:325px !important;
-    margin-right:100px !important; 
     padding-left:15px;
+}
+
+.signup-half-col-left {
+  margin-right:100px;
 }
 
 .signup-wide {
@@ -102,7 +108,7 @@ table {
   
   body {
     font-family: Helvetica;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 300;
     color: #231f1f;
     color: var(--black);
@@ -134,7 +140,7 @@ table {
     width: 70px;
     height: 17px;
     font-family: Helvetica;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 300;
     color: #231f1f;
     color: var(--black);
@@ -177,5 +183,29 @@ table {
   }
 
   .signup-inputs {
-    padding-left:145px;
+    width:750px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .signup-section {
+    margin-top:47px;
+  }
+
+  .signup-textarea {
+    width:100%;
+    height:150px;
+    background-color:#f2f2f2;
+    border:0px;
+  }
+
+  .signup-checkbox {
+      width: 72px;
+      height: 17px;
+      font-family: Helvetica;
+      font-size: 14px;
+      font-weight: 300;
+      text-align: left;
+      color: #231f1f;
+      color: var(--black);
   }
