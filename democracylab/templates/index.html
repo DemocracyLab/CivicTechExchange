@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container" style="width:1280px">
+    <h1 class="signup-primary-header signup-headers">We support technology for the public good by connecting<br>passionate people with impactful projects.</h1>
+    <br><br>
+    <h1 class="signup-headers">It's easy to get started</h1>
+
+    <img src="/static/images/getstarted.png">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Featured Projects
+                <input type="search" placeholder="Search" style="float:right; width:150px;">
+
+            </h1>
+
+
+
+            {% for row in projects %}
+            <div class="row">
+                {% for project in row %}
+                <div class="col-md-3">
+                    <img src="{{project.image_url}}" style="width:280px; height:203px; ">
+                    <div class="project-name">{{project.name}}</div>
+                    {{project.description}}<br>
+                    <div class="project-status">Status: {{project.status}}</div>
+                </div>
+                {%endfor%}
+            </div>{%endfor%}
+        </div>
+    </div>
+</div>
+{% endblock %}

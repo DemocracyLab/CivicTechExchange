@@ -145,6 +145,7 @@ table {
   .base-signup {
     width: 65px;
     height: 22px;
+    margin-right:39px;
     font-family: Helvetica;
     font-size: 18px;
     text-align: left;
@@ -231,4 +232,33 @@ table {
 
   .multiselect {
     height:180px;
+  }
+
+  .add-a-project {
+    font-family: Helvetica;
+    font-size: 16px;
+    text-align: center;
+    color: #ffffff;
+    vertical-align:middle;
+    display:inline-block;
+    line-height:47px;    
+  }
+
+  .project-status {
+  font-family: Helvetica;
+  font-size: 16px;
+  color: #fc8a04;
+  color: var(--pumpkin-orange);
+  margin-bottom:23px;
+
+  }
+
+  .project-name {
+    font-family: Helvetica;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+    color: #231f1f;
+    color: var(--black);
+  
   }

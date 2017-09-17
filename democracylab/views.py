@@ -89,16 +89,19 @@ PROJECT_TYPES = tags(
     'Infrastructure'
 )
 
-def to_columns(items):
-    res = [[], [], []]
+def to_columns(items, count = 3):
+    res = []
+    for i in range(count):
+        res.append([])
     cur = 0
     for item in items:
-        res[cur % 3].append(item)
+        res[cur % count].append(item)
         cur+=1
     return res
 
 def signup(request):
     if request.method == 'POST':
+        return redirect('/')
         form = DemocracyLabUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
@@ -106,7 +109,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('home')
+            return redirect('/')
     else:
         form = DemocracyLabUserCreationForm()
 
@@ -120,7 +123,7 @@ def signup(request):
 
 def project_signup(request):
     if request.method == 'POST':
-        pass
+        return redirect('/')
     else:
         form = ProjectCreationForm()
 
@@ -132,4 +135,27 @@ def project_signup(request):
         'project_types':PROJECT_TYPES,
         'stages':STAGES
     }
+    return HttpResponse(template.render(context, request))
+
+class Project:
+    def __init__(self, image_url, name, description, status):
+        self.image_url = image_url
+        self.name = name
+        self.description = description
+        self.status = status
+PROJECTS = [
+    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
+]
+
+def index(request):
+    template = loader.get_template('index.html')
+    print(to_columns(PROJECTS,4))
+    context = {'projects':to_columns(PROJECTS,2)}
     return HttpResponse(template.render(context, request))

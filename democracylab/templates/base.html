@@ -18,6 +18,7 @@
                 {% if user.is_authenticated %}
                     {{ user.username }}
                 {% else %}
+                <a href="/projects/signup" class="btn-primary add-a-project" >ADD A PROJECT</a>
                 <div>
                     <a href="{% url 'signup' %}" class="base-signup">
                         Sign Up
