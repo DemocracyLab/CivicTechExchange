@@ -145,12 +145,12 @@ class Project:
         self.status = status
 PROJECTS = [
     Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','Redesigning Washington Legislative Web Services', 'Port information from WA legislative services website into a more user-friendly format and add more data to encourage civic engagement.', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','SDOT', 'Bringing digital equity to public transportation', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','Haskell Bindings to the Socrata Open Data API', 'Creating libraries for Haskell bindings to the Socrata Open Data API (SODA). ', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','Using AI and Satellite Imagery to Protect Our Wetlands', 'Using AI and satellite imagery to help track and call attention to major changes made to our environment.', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','DESC Project Brainstorming', 'Forming ideas for a technology project to benefit DESC, the largest homeless agency in Seattle.', 'Accepting Contributions'),
+    Project('/static/images/projectPlaceholder.png','Civic User Testing Group', 'Giving Seattle residents a way to participate in civic tech by getting paid to test and provide user feedback on civic tech projects. ', 'Accepting Contributions'),
     Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
 ]
 
