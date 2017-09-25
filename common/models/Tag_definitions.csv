@@ -1,0 +1,134 @@
+Canonical Name(lowercase + '-'),Display Name(shown on UI),Caption (Hover-over text in UI),Category,Subcategory,Parent (Use Canonical Name)
+new-idea,New Idea,,Project Stage,,
+research,Research,,Project Stage,,
+requirements,Requirements Gathering,,Project Stage,,
+planning,Planning,,Project Stage,,
+design,Design,,Project Stage,,
+development,Development,,Project Stage,,
+release,Release,,Project Stage,,
+iteration,Iteration,,Project Stage,,
+updated,Updated,Project has posted an update within last 7 days,Status,,
+active,Active,Project has posted an update within last 30 days,Status,,
+less-active,Less Active,Project has posted an update within last 90 days,Status,,
+dormant,Dormant,Project has posted an update within last 365 days,Status,,
+abandoned,Abandoned,Project has not posted an update within past year,Status,,
+accounting,Accounting,,Project Need,,
+back-end-development,Back-End Software Development,,Project Need,,
+business strategy,Business Strategy,,Project Need,,
+copywriting,Copywriting,,Project Need,,
+data-science,Data Science,,Project Need,,
+data-visualization,Data Visualization,,Project Need,,
+database-architecture,Database Architecture,,Project Need,,
+front-end-development,Front-End Software Development,,Project Need,,
+fundraising,Fundraising,,Project Need,,
+graphic-design,Graphic Design,,Project Need,,
+legal-services,Legal Services,,Project Need,,
+project-management,Project Management,,Project Need,,
+research,Research,,Project Need,,
+user-interface,User Interface,,Project Need,,
+user-experience,User Experience,,Project Need,,
+other-need,Other,,Project Need,,
+no-specific-issue,No Specific Issue,,Issue(s) Addressed,,
+1st-amendment,1st Amendment,,Issue(s) Addressed,,
+2nd-amendment,2nd Amendment,,Issue(s) Addressed,,
+cultural-issues,cultural Issues,,Issue(s) Addressed,,
+economy,Economy,,Issue(s) Addressed,,
+education,Education,,Issue(s) Addressed,,
+environment,Environment,,Issue(s) Addressed,,
+health-care,Health Care,,Issue(s) Addressed,,
+homelessness,Homelessness,,Issue(s) Addressed,,
+housing,Housing,,Issue(s) Addressed,,
+immigration,Immigration,,Issue(s) Addressed,,
+international-issues,International Issues,,Issue(s) Addressed,,
+national-security,National Security,,Issue(s) Addressed,,
+political-reform,Political Reform,,Issue(s) Addressed,,
+public-safety,Public Safety,,Issue(s) Addressed,,
+social-justice,Social Justice,,Issue(s) Addressed,,
+taxes,Taxes,,Issue(s) Addressed,,
+transportation,Transportation,,Issue(s) Addressed,,
+other-issue,Other Issue,,Issue(s) Addressed,,
+python,Python,,Technologies Used,,
+c,C,,Technologies Used,,
+java,Java,,Technologies Used,,
+c-plusplus,C++,,Technologies Used,,
+c-sharp,C#,,Technologies Used,,
+r,R,,Technologies Used,,
+javascript,JavaScript,,Technologies Used,,
+php,PHP,,Technologies Used,,
+go,Go,,Technologies Used,,
+swift,Swift,,Technologies Used,,
+arduino,Arduino,,Technologies Used,,
+ruby,Ruby,,Technologies Used,,
+assembly,Assembly,,Technologies Used,,
+scala,Scala,,Technologies Used,,
+matlab,Matlab,,Technologies Used,,
+html,HTML,,Technologies Used,,
+shell,Shell,,Technologies Used,,
+perl,Perl,,Technologies Used,,
+visual-basic,Visual Basic,,Technologies Used,,
+cuda,Cuda,,Technologies Used,,
+lua,Lua,,Technologies Used,,
+rust,Rust,,Technologies Used,,
+sql,SQL,,Technologies Used,,
+processing,Processing,,Technologies Used,,
+haskell,Haskell,,Technologies Used,,
+other-technology,Other Technology,,Technologies Used,,
+government-efficiency,Government Efficiency,,Project Category,,
+civic-engagement,Civic Engagement,,Project Category,,
+community-organizing,Community Organizing,,Project Category,,
+infrastructure,Infrastructure,,Project Category,,
+media,Media,,Project Category,,
+other-category,Other Project Category,,Project Category,,
+gov-constituent-communication,Government to Constituent Communication,,Project Category,Product Subcategory,government-efficiency
+bureaucracy-tech,Bureaucracy Tech,,Project Category,Product Subcategory,government-efficiency
+open-data-publishing,Open Data Publishing,,Project Category,Product Subcategory,government-efficiency
+service-alerts,Service Alerts,,Project Category,Product Subcategory,government-efficiency
+issue-reporting,Issue Reporting,,Project Category,Product Subcategory,government-efficiency
+benfit-navigation,Benefit Navigation,,Project Category,Product Subcategory,government-efficiency
+freedom-of-information,Freedom of Information,,Project Category,Product Subcategory,government-efficiency
+watchdogging-and-transparency,Watchdogging and Transparency,,Project Category,Product Subcategory,government-efficiency
+sensors,Sensors,,Project Category,Product Subcategory,government-efficiency
+data-visualization-tools,Data Visualization,,Project Category,Product Subcategory,government-efficiency
+mapping,Mapping,,Project Category,Product Subcategory,government-efficiency
+constituent-gov-communication,Constituent to Government Communication,,Project Category,Product Subcategory,civic-engagement
+voting-reg-election-info,"Voting, Registration and Election Info",,Project Category,Product Subcategory,civic-engagement
+candidacy-support,Candidacy Support,,Project Category,Product Subcategory,civic-engagement
+ideation,Ideation,,Project Category,Product Subcategory,civic-engagement
+online-petition-sites,Online Petition Sites,,Project Category,Product Subcategory,civic-engagement
+civic-forums,Civic Forums,,Project Category,Product Subcategory,civic-engagement
+opinion matching,Opinion Matching,,Project Category,Product Subcategory,civic-engagement
+legislation-engagement,Legislation Engagement,,Project Category,Product Subcategory,civic-engagement
+check-in-tools,Check-In Tools,,Project Category,Product Subcategory,civic-engagement
+crowdsourced-data-collection,Crowdsourced Data Collection,,Project Category,Product Subcategory,civic-engagement
+de-polarization-tech,De-Polarization Tech,,Project Category,Product Subcategory,civic-engagement
+crowdfunding,Crowdfunding,,Project Category,Project Subcategory,community-organizing
+marketplaces,Marketplaces,,Project Category,Project Subcategory,community-organizing
+collections,Collections,,Project Category,Project Subcategory,community-organizing
+campaign-organizing,Campaign-Organizing,,Project Category,Project Subcategory,community-organizing
+neighborhood-forums,Neighborhood Forums,,Project Category,Project Subcategory,community-organizing
+event-organizing,Event Organizing,,Project Category,Project Subcategory,community-organizing
+collaborative-calendars,Collaborative Calendars,,Project Category,Project Subcategory,community-organizing
+group-communication,Group Communication,,Project Category,Project Subcategory,community-organizing
+group-decision-making,Group Decision-Making,,Project Category,Project Subcategory,community-organizing
+activism-aggregation,Activism Aggregation,,Project Category,Project Subcategory,community-organizing
+resource-matching,Resource Matching,,Project Category,Project Subcategory,community-organizing
+artificial-intelligence,Artificial Intelligence,,Project Category,Project Subcategory,infrastructure
+data-schemes-and-standards,Data Schemes And Standards,,Project Category,Project Subcategory,infrastructure
+identity,Identity,,Project Category,Project Subcategory,infrastructure
+virtual/augmented-reality,Virtual/Augmented Reality,,Project Category,Project Subcategory,infrastructure
+blockchain,Blockchain,,Project Category,Project Subcategory,infrastructure
+hardware,Hardware,,Project Category,Project Subcategory,infrastructure
+journalism-action,Journalism Action,,Project Category,Project Subcategory,media
+media-analysis,Media and Social Media Analysis,,Project Category,Project Subcategory,media
+open-source,Open Source,,Software License,,
+propreitary,Propreitary,,Software License,Open Source License,open-source
+mit,MIT,,Software License,Open Source License,open-source
+gpl2,GPL 2.0,,Software License,Open Source License,open-source
+apache,Apache,,Software License,Open Source License,open-source
+gnu3,GNU 3.0,,Software License,Open Source License,open-source
+bsd2,BSD 2.0,,Software License,Open Source License,open-source
+isc,ISC,,Software License,Open Source License,open-source
+artistic,Artistic,,Software License,Open Source License,open-source
+lgpl2.1,LGPL 2.1,,Software License,Open Source License,open-source
+lgpl3,LGPL 3.0,,Software License,Open Source License,open-source
+other-open-source-license,Other Open Source License,,Software License,Open Source License,open-source
