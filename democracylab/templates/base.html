@@ -16,16 +16,18 @@
                     <a href="/" class="navbar-brand"><img src="/static/images/logo.png"></a>
                 </div>
                 {% if user.is_authenticated %}
-                    {{ user.username }}
-                {% else %}
                 <a href="/projects/signup" class="btn-primary add-a-project" >ADD A PROJECT</a>
+                <a href="/logout" class="btn-primary add-a-project" >Logout</a>
+                <img src="/static/images/login.png" />
+                {{ user.username }}
+                {% else %}
+                <a href="/login" class="btn-primary add-a-project" >Login</a>
                 <div>
                     <a href="{% url 'signup' %}" class="base-signup">
                         Sign Up
                     </a>
-                    <img src="/static/images/login.png" />
-                    {% endif %}
                 </div>
+                {% endif %}
             </div>
         </div>
         

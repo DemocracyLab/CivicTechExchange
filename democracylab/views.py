@@ -1,11 +1,12 @@
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
 
 from .forms import DemocracyLabUserCreationForm, ProjectCreationForm
-#from common.models.tags import Tag
+from .models import Contributor
+
+from pprint import pprint
 
 class Tag:
     pass
@@ -99,17 +100,30 @@ def to_columns(items, count = 3):
         cur+=1
     return res
 
+
+
 def signup(request):
     if request.method == 'POST':
-        return redirect('/')
         form = DemocracyLabUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('/')
+        is_valid = form.is_valid()
+        pprint(vars(form))
+        username = form.cleaned_data.get('username')
+        raw_password = form.cleaned_data.get('password1')
+        # TODO: Form validation
+        contributor = Contributor(
+            username=username,
+            first_name=form.cleaned_data.get('first_name'),
+            last_name=form.cleaned_data.get('last_name'),
+            email=form.cleaned_data.get('email'),
+            postal_code=form.cleaned_data.get('postal_code'),
+            phone_primary=form.cleaned_data.get('phone_primary'),
+            about_me=form.cleaned_data.get('about_me'),
+        )
+        contributor.set_password(raw_password)
+        contributor.save()
+        user = authenticate(username=username, password=raw_password)
+        login(request, user)
+        return redirect('/')
     else:
         form = DemocracyLabUserCreationForm()
 
@@ -119,7 +133,7 @@ def signup(request):
         'projects':to_columns(PROJECT_KINDS)
     }
     return HttpResponse(template.render(context, request))
-    # return render(request, 'signup.html', {'form': form})
+
 
 def project_signup(request):
     if request.method == 'POST':
