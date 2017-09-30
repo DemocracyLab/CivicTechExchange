@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
 
-from .forms import DemocracyLabUserCreationForm, ProjectCreationForm
+from .forms import DemocracyLabUserCreationForm, ProjectCreationForm, UserUpdateForm
 from .models import Contributor
 
 from pprint import pprint
@@ -20,9 +20,9 @@ def tag(name):
 def tags(*tags):
     return [tag(t) for t in tags]
 PROJECT_KINDS = tags(
-    '1st Amendment', 
-    '2nd Amendment', 
-    'Cultural Issues', 
+    '1st Amendment',
+    '2nd Amendment',
+    'Cultural Issues',
     'Economy',
     'Education',
     'Environment',
@@ -134,6 +134,29 @@ def signup(request):
     }
     return HttpResponse(template.render(context, request))
 
+def user_update(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST)
+        contributor = Contributor(
+            username=username,
+            first_name=form.cleaned_data.get('first_name'),
+            last_name=form.cleaned_data.get('last_name'),
+            email=form.cleaned_data.get('email'),
+            postal_code=form.cleaned_data.get('postal_code'),
+            phone_primary=form.cleaned_data.get('phone_primary'),
+            about_me=form.cleaned_data.get('about_me'),
+        )
+        contributor.save()
+        return redirect('/')
+    else:
+        form = UserUpdateForm()
+
+    template = loader.get_template('aboutme.html')
+    context = {'form': form,
+        'skills':to_columns(SKILL_KINDS),
+        'projects':to_columns(PROJECT_KINDS)
+    }
+    return HttpResponse(template.render(context, request))
 
 def project_signup(request):
     if request.method == 'POST':

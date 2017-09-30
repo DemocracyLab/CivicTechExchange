@@ -20,3 +20,9 @@ class ProjectCreationForm(forms.ModelForm):
         model = Project
         fields = ('project_name',)
         field_classes = {'project_name':forms.CharField}
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Contributor
+        fields = '__all__'
+        
