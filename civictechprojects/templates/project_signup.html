@@ -11,6 +11,39 @@
                 <div class="col-md-12"><input type="text" name="project_name" class="signup-wide"></div>
             </div>
 
+            <div class="row">
+                <div class="col-md-12 signup-label">Project Location</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"><input type="text" name="project_location" class="signup-wide"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 signup-label">Website URL</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"><input type="text" name="website_url" class="signup-wide"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 signup-label">Project Status</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <select name="project_status" class="signup-wide" >
+                        {% for project_status in status %}
+                        <option value="{{project_status.tag_name}}">{{project_status.display_name}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 signup-label">Start Date</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"><input type="text" name="start_date" class="signup-wide"></div>
+            </div>
 
             <div class="row">
                 <div class="col-md-12 signup-label">Brief Description</div>
@@ -19,20 +52,12 @@
                 <div class="col-md-12"><input type="text" name="brief_description" class="signup-wide" placeholder="This will appear as project introduction"></div>
             </div>
 
-
             <div class="row">
                 <div class="col-md-12 signup-label">Project Description</div>
             </div>
             <div class="row">
-                <div class="col-md-12"> <textarea name="aboutme" class="signup-textarea"></textarea>
+                <div class="col-md-12"> <textarea name="project_description" class="signup-textarea"></textarea>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 signup-label">Project Timeline</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="project_timeline" class="signup-wide"></div>
             </div>
 
             <div class="row">
@@ -142,23 +167,7 @@
                     </select>
                 </div>
             </div>
-            <!-- 
-            <div class="row">
-                <div class="col-md-12 signup-label">Open Source</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <input type="radio" name="opensource" class="signup-wide" value="1">Yes
-                    <input type="radio" name="opensource" class="signup-wide" value="0">No
-                </div>
-            </div>
-        -->
-            <div class="row">
-                <div class="col-md-12 signup-label">Software License</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="license" class="signup-wide"></div>
-            </div>
+
         </div>
         <div class="submit-row">
             <button type="submit" class="btn-primary btn-left">SUBMIT</button>
