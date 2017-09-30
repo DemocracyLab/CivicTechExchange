@@ -1,13 +1,9 @@
 {% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>DemocracyLab</title>
-    <link href='/static/css/projects.css' rel='stylesheet' type='text/css'>
-</head>
-<body>
+{% block extra_head %}
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/projects.css' %}" />
+{% endblock %}
 
 {% block content %}
 
