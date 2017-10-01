@@ -1,11 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from .serializers import ProjectSerializer
 
-from .models import Project
+from pprint import pprint
 
-from democracylab.forms import DemocracyLabUserCreationForm, ProjectCreationForm
+from .models import Project as realProject
+from democracylab.models import get_request_contributor
+
+from .forms import ProjectCreationForm
 
 
 class Tag:
@@ -115,6 +118,18 @@ def to_columns(items, count = 3):
 
 def project_signup(request):
     if request.method == 'POST':
+        form = ProjectCreationForm(request.POST)
+        form.is_valid()
+        # pprint(vars(request._post))
+        # TODO: Form validation
+        project = realProject(
+            project_creator=get_request_contributor(request),
+            project_name=form.cleaned_data.get('project_name'),
+            project_url=form.cleaned_data.get('project_url'),
+            project_description=form.cleaned_data.get('project_description'),
+            project_tags=form.cleaned_data.get('project_tags'),
+        )
+        project.save()
         return redirect('/')
     else:
         form = ProjectCreationForm()

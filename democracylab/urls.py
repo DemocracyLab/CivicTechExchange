@@ -18,14 +18,12 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from . import views
-from civictechprojects import views as cvtviews
 
 urlpatterns = [
     url(r'^aboutme/$', views.user_update, name='user_update'),
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
-    url(r'^projects/signup/$', cvtviews.project_signup, name='project_signup'),
     url(r'^', include('civictechprojects.urls')),
     url(r'^$', views.index, name='index'),
     url(r'^admin/', admin.site.urls)

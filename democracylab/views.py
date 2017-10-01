@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
 
-from .forms import DemocracyLabUserCreationForm, ProjectCreationForm, UserUpdateForm
+from .forms import DemocracyLabUserCreationForm, UserUpdateForm
 from .models import Contributor
 
 from pprint import pprint
