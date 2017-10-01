@@ -21,6 +21,7 @@ from . import views
 from civictechprojects import views as cvtviews
 
 urlpatterns = [
+    url(r'^aboutme/$', views.user_update, name='user_update'),
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),

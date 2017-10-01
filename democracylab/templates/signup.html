@@ -1,22 +1,27 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+
+{% block extra_head %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}" />
+{% endblock %}
+
+{% block content %}
 <div class="container">
     <form method="post">
         {% csrf_token %}
-        <h1 class="signup-primary-header signup-headers">Want to make a difference in your community?</h1>
-        <h2 class="signup-secondary-header signup-headers">Become a project contributor</h2>
+        <h1 class="signup-primary-header signup-headers">SIGN UP, IT'S EASY AND FREE</h1>
         <div class="signup-inputs">
-            <div class="signup-my-details">My details:</div>
             <div class="row">
-                <div class="col-md-12">
-                </div>
+                <div class="col-md-12 signup-label">First name</div>
             </div>
             <div class="row">
-                <div class="signup-label signup-half-col signup-half-col-left">First name</div>
-                <div class="signup-label signup-half-col">Last name</div>
+                <div class="col-md-12"><input type="text" name="first_name" class="signup-wide"></div>
             </div>
             <div class="row">
-                <div class="signup-half-col signup-half-col-left"><input type="text" name="first_name" class="signup-text"></div>
-                <div class="signup-half-col"><input type="text" name="last_name" class="signup-text"></div>
+                <div class="col-md-12 signup-label">Last name</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12"><input type="text" name="last_name" class="signup-wide"></div>
             </div>
             <div class="row">
                 <div class="col-md-12 signup-label">Email</div>
@@ -25,71 +30,21 @@
                 <div class="col-md-12"><input type="email" name="email" class="signup-wide"></div>
             </div>
             <div class="row">
-                <div class="signup-half-col signup-label  signup-half-col-left">Zip Code/Postal Code (optional)</div>
-                <div class="signup-half-col signup-label">Phone (optional)</div>
-            </div>
-            <div class="row">
-                <div class="signup-half-col "><input type="text" name="postal_code" class="signup-text"></div>
-                <div class="signup-half-col"><input type="text" name="phone_primary" class="signup-text"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 signup-label">Username</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="username" class="signup-wide"></div>
-            </div>
-            <div class="row">
                 <div class="col-md-12 signup-label">Password</div>
             </div>
             <div class="row">
                 <div class="col-md-12"><input type="password" name="password1" class="signup-wide"></div>
             </div>
             <div class="row">
-                <div class="col-md-12 signup-label">Confirm password</div>
+                <div class="col-md-12 signup-label">Re-Enter Password</div>
             </div>
             <div class="row">
                 <div class="col-md-12"><input type="password" name="password2" class="signup-wide"></div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 class="signup-section">I am interested in projects that address (select at least one)</h3>
-                </div>
-            </div>
-            <div class="row">
-                {% for row in projects %} {% for item in row %}
-                <div class="col-md-4">
-                    <input type="checkbox" name="skills" value="{{item.tag_name}}" /><span class="signup-checkbox">{{item.display_name}}</span>
-                </div>
-                {% endfor %} {% endfor %}
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 class="signup-section">My skills (select at least one)</h3>
-                </div>
-            </div>
-            <div class="row">
-                {% for row in skills %} {% for item in row %}
-                <div class="col-md-4">
-                    <input type="checkbox" name="skills" value="{{item.tag_name}}" /><span class="signup-checkbox">{{item.display_name}}</span>
-                </div>
-                {% endfor %} {% endfor %}
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 class="signup-section">About me (optional)</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <textarea name="about_me" class="signup-textarea"></textarea>
-                </div>
             </div>
         </div>
         <div class="submit-row">
             <button type="submit" class="btn-primary">Create Account</button>
         </div>
     </form>
-    {% endblock %}
 </div>
+{% endblock %}

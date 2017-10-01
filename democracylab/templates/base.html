@@ -19,7 +19,7 @@
                 <a href="/projects/signup" class="btn-primary add-a-project" >ADD A PROJECT</a>
                 <a href="/logout" class="btn-primary add-a-project" >Logout</a>
                 <img src="/static/images/login.png" />
-                {{ user.username }}
+                {{ user.first_name }} {{ user.last_name }}
                 {% else %}
                 <a href="/login" class="btn-primary add-a-project" >Login</a>
                 <div>

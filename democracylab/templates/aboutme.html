@@ -1,0 +1,118 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        <div class="signup-inputs">
+
+
+                      <div class="row">
+                          <div class="col-md-12">
+                              <h3 class="signup-section">About me:</h3>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12">
+                              <textarea name="about_me" class="signup-textarea"></textarea>
+                          </div>
+                      </div>
+
+                      <div class="submit-row">
+                          <button type="upload_photo" class="btn-primary">Upload Photo</button>
+                          <button type="upload_resume" class="btn-primary">Upload Resume</button>
+                      </div>
+
+
+
+            <div class="signup-my-details">CONTACT AND PERSONAL DETAILS:</div>
+            <div class="row">
+                <div class="col-md-12">
+                </div>
+            </div>
+            <div class="row">
+                <div class="signup-label signup-half-col signup-half-col-left">Email Address</div>
+                <div class="signup-label signup-half-col">LinkedIn URL</div>
+            </div>
+            <div class="row">
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="email_address" class="signup-text"></div>
+                <div class="signup-half-col"><input type="text" name="linkedin_url" class="signup-text"></div>
+            </div>
+
+            <div class="row">
+                <div class="signup-label signup-half-col signup-half-col-left">Phone Number</div>
+                <div class="signup-label signup-half-col">Website URL</div>
+            </div>
+            <div class="row">
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="phone_number" class="signup-text"></div>
+                <div class="signup-half-col"><input type="text" name="website_url" class="signup-text"></div>
+            </div>
+
+            <div class="row">
+                <div class="signup-label signup-half-col signup-half-col-left">Job Role</div>
+                <div class="signup-label signup-half-col">Behance</div>
+            </div>
+            <div class="row">
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="job_role" class="signup-text"></div>
+                <div class="signup-half-col"><input type="text" name="behance" class="signup-text"></div>
+            </div>
+
+            <div class="row">
+                <div class="signup-label signup-half-col signup-half-col-left">Experience Level</div>
+                <div class="signup-label signup-half-col">Dribble</div>
+            </div>
+            <div class="row">
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="experience_level" class="signup-text"></div>
+                <div class="signup-half-col"><input type="text" name="dribble" class="signup-text"></div>
+            </div>
+
+            <div class="row">
+                <div class="signup-label signup-half-col signup-half-col-left">Country</div>
+                <div class="signup-label signup-half-col">Facebook</div>
+            </div>
+            <div class="row">
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="country" class="signup-text"></div>
+                <div class="signup-half-col"><input type="text" name="facebook" class="signup-text"></div>
+            </div>
+
+            <div class="row">
+                <div class="signup-label signup-half-col signup-half-col-left">ZIP Code</div>
+                <div class="signup-label signup-half-col">Other URL</div>
+            </div>
+            <div class="row">
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="zip_code" class="signup-text"></div>
+                <div class="signup-half-col"><input type="text" name="other_url" class="signup-text"></div>
+            </div>
+
+            <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                    <!--<h3 class="signup-section">I am interested in projects that address (select at least one)</h3>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--{% for row in projects %} {% for item in row %}-->
+                <!--<div class="col-md-4">-->
+                    <!--<input type="checkbox" name="skills" value="{{item.tag_name}}" /><span class="signup-checkbox">{{item.display_name}}</span>-->
+                <!--</div>-->
+                <!--{% endfor %} {% endfor %}-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
+                    <!--<h3 class="signup-section">My skills (select at least one)</h3>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--{% for row in skills %} {% for item in row %}-->
+                <!--<div class="col-md-4">-->
+                    <!--<input type="checkbox" name="skills" value="{{item.tag_name}}" /><span class="signup-checkbox">{{item.display_name}}</span>-->
+                <!--</div>-->
+                <!--{% endfor %} {% endfor %}-->
+            <!--</div>-->
+
+
+
+        </div>
+        <div class="submit-row">
+            <button type="update" class="btn-primary">Update Account</button>
+        </div>
+    </form>
+    {% endblock %}
+</div>
