@@ -8,7 +8,6 @@ from .models import Contributor
 
 from pprint import pprint
 
-from civictechprojects.views import PROJECTS
 
 def to_columns(items, count = 3):
     res = []
@@ -72,10 +71,4 @@ def user_update(request):
         # 'skills':to_columns(SKILL_KINDS),
         # 'projects':to_columns(PROJECT_KINDS)
     }
-    return HttpResponse(template.render(context, request))
-
-def index(request):
-    template = loader.get_template('index.html')
-    print(to_columns(PROJECTS,4))
-    context = {'projects':to_columns(PROJECTS,2)}
     return HttpResponse(template.render(context, request))

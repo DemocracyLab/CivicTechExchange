@@ -20,5 +20,5 @@ from . import views
 urlpatterns = [
     url(r'^projects/signup/$', views.project_signup, name='project_signup'),
     url(r'^api/projects', views.projects_list),
-    url(r'^projects/$', views.index),
+    url(r'^projects/$', views.projects),
 ]

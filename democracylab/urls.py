@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from . import views
+from civictechprojects import views as ctviews
 
 urlpatterns = [
     url(r'^aboutme/$', views.user_update, name='user_update'),
@@ -25,6 +26,6 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^', include('civictechprojects.urls')),
-    url(r'^$', views.index, name='index'),
+    url(r'^$', ctviews.projects),
     url(r'^admin/', admin.site.urls)
 ]

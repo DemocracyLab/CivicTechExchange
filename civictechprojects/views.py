@@ -116,6 +116,19 @@ def to_columns(items, count = 3):
     return res
 
 
+def to_rows(items, width):
+    rows = [[]]
+    row_number = 0
+    column_number = 0
+    for item in items:
+        pprint(item)
+        rows[row_number].append(item)
+        if ++column_number >= width:
+            column_number = 0
+            rows.append([])
+            ++row_number
+    return rows
+
 def project_signup(request):
     if request.method == 'POST':
         form = ProjectCreationForm(request.POST)
@@ -145,30 +158,12 @@ def project_signup(request):
     }
     return HttpResponse(template.render(context, request))
 
-class Project:
-    def __init__(self, image_url, name, description, status):
-        self.image_url = image_url
-        self.name = name
-        self.description = description
-        self.status = status
 
-PROJECTS = [
-    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','Redesigning Washington Legislative Web Services', 'Port information from WA legislative services website into a more user-friendly format and add more data to encourage civic engagement.', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','SDOT', 'Bringing digital equity to public transportation', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','Haskell Bindings to the Socrata Open Data API', 'Creating libraries for Haskell bindings to the Socrata Open Data API (SODA). ', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','Using AI and Satellite Imagery to Protect Our Wetlands', 'Using AI and satellite imagery to help track and call attention to major changes made to our environment.', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','DESC Project Brainstorming', 'Forming ideas for a technology project to benefit DESC, the largest homeless agency in Seattle.', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','Civic User Testing Group', 'Giving Seattle residents a way to participate in civic tech by getting paid to test and provide user feedback on civic tech projects. ', 'Accepting Contributions'),
-    Project('/static/images/projectPlaceholder.png','DemocracyLab', 'We support technology for the public good by connecting passionate people with impactful projects.', 'Accepting Contributions'),
-]
-
-def index(request):
-    template = loader.get_template('index.html')
-    print(to_columns(PROJECTS,4))
-    context = {'projects':to_columns(PROJECTS,2)}
+def projects(request):
+    template = loader.get_template('projects.html')
+    projects = realProject.objects.order_by('-project_name')
+    context = {'projects':to_rows(projects,4)}
     return HttpResponse(template.render(context, request))
-
 
 
 def home(request):
