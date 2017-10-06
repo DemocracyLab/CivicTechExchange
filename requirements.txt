@@ -6,6 +6,7 @@ django-core==1.4.1
 django-registration==2.1.2
 django-s3direct==0.4.2
 django-storages==1.5.1
+django-taggit==0.22.1
 djangorestframework==3.6.4
 gunicorn==19.6.0
 psycopg2==2.6.2

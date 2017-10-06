@@ -10,7 +10,10 @@
     <div class="row">
         <div class="col-md-12">
             <h1>Featured Projects
-                <input type="search" placeholder="Search" style="float:right; width:150px;">
+                <form>
+                    <input type="search" name="search" placeholder="Search" style="float:right; width:150px;">
+                    <button type="submit" class="btn-primary">Search</button>
+                </form>
             </h1>
 
             {% for row in projects %}

@@ -3,9 +3,10 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from .serializers import ProjectSerializer
 
+from urllib import parse as urlparse
 from pprint import pprint
 
-from .models import Project as realProject
+from .models import Project
 from democracylab.models import get_request_contributor
 
 from .forms import ProjectCreationForm
@@ -121,7 +122,6 @@ def to_rows(items, width):
     row_number = 0
     column_number = 0
     for item in items:
-        pprint(item)
         rows[row_number].append(item)
         if ++column_number >= width:
             column_number = 0
@@ -135,7 +135,7 @@ def project_signup(request):
         form.is_valid()
         # pprint(vars(request._post))
         # TODO: Form validation
-        project = realProject(
+        project = Project(
             project_creator=get_request_contributor(request),
             project_name=form.cleaned_data.get('project_name'),
             project_url=form.cleaned_data.get('project_url'),
@@ -161,7 +161,16 @@ def project_signup(request):
 
 def projects(request):
     template = loader.get_template('projects.html')
-    projects = realProject.objects.order_by('-project_name')
+    url_parts = request.GET.urlencode()
+    query_terms = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+    projects = Project.objects
+    if 'search' in query_terms:
+        search_query = (query_terms['search'])[0]
+        search_tags = search_query.split(',')
+        for tag in search_tags:
+            print('filtering by ' + str(tag))
+            projects = projects.filter(project_tags__name__in=[tag])
+    projects = projects.order_by('-project_name')
     context = {'projects':to_rows(projects,4)}
     return HttpResponse(template.render(context, request))
 
