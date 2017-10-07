@@ -1,8 +1,20 @@
 {% extends 'base.html' %} {% block content %}
+
 <div class="container">
     <form method="post">
         {% csrf_token %}
-        <h1 class="signup-primary-header signup-headers">Add project</h1>
+        <h1 class="signup-primary-header signup-headers">CREATE A PROJECT</h1>
+        <!-- creating two columns here -->
+        <table>
+            <tr>
+                <th align="center">
+                    DETAILS
+                </td>
+                <th align="center">
+                    LINKS
+                </td>
+            </tr>
+        </table>
         <div class="signup-inputs">
             <div class="row">
                 <div class="col-md-12 signup-label">Project Name</div>
@@ -30,7 +42,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <select name="project_status" class="signup-wide" >
+                    <select name="project_status" class="signup-wide">
                         {% for project_status in status %}
                         <option value="{{project_status.tag_name}}">{{project_status.display_name}}</option>
                         {%endfor%}
@@ -136,7 +148,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <select name="stage" class="signup-wide" >
+                    <select name="stage" class="signup-wide">
                         {% for stage in stages %}
                         <option value="{{stage.tag_name}}">{{stage.display_name}}</option>
                         {%endfor%}
@@ -160,7 +172,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <select name="project_type" class="signup-wide" >
+                    <select name="project_type" class="signup-wide">
                         {% for project_type in project_types %}
                         <option value="{{project_type.tag_name}}">{{project_type.display_name}}</option>
                         {%endfor%}

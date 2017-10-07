@@ -5,9 +5,8 @@ table {
     margin-left:        10%;
     margin-right:       10%;
     width:              80%;
-    border-collapse:    collapse;
-    border:             3px solid purple;
 }
+
 
 .navbar {
   height:139px;
@@ -260,5 +259,5 @@ table {
     text-align: left;
     color: #231f1f;
     color: var(--black);
-  
   }
+  
