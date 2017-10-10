@@ -1,13 +1,5 @@
 /* Spacing */
 
-table {
-    table-layout:       fixed;
-    margin-left:        10%;
-    margin-right:       10%;
-    width:              80%;
-}
-
-
 .navbar {
   height:139px;
 }
@@ -193,12 +185,12 @@ table {
   }
 
   .submit-row {
-      padding-top:91px;
+    padding-top:91px;
     text-align:center;
   }
 
   .signup-inputs {
-    width:750px;
+    /*width:750px*/;
     margin-left:auto;
     margin-right:auto;
   }
@@ -261,3 +253,57 @@ table {
     color: var(--black);
   }
   
+
+
+  
+  /* TO BE TRANSFERRED TO PROJECT_SIGNUP.CSS */
+
+  .LINKS {
+    width: 40px;
+    height: 17px;
+    font-family: Helvetica;
+    font-size: 14px;
+    font-weight: 300;
+    text-align: left;
+    color: #000000;
+  }
+
+  .DETAILS {
+    width: 55px;
+    height: 17px;
+    font-family: Helvetica;
+    font-size: 14px;
+    font-weight: 300;
+    text-align: left;
+    color: #000000;
+  }
+
+  .Create-a-project-month-Copy {
+    width: 1280px;
+    height: 1616px;
+    background-color: #f6f7f8;
+  }
+
+  .Fill-22-wide {
+    width: 1003px;
+    height: 85px;
+    background-color: #ffffff;
+    border: solid 1px #d8d8d8;
+  }
+
+  .Fill-22 {
+    width: 455px;
+    height: 40px;
+    background-color: #ffffff;
+    border: solid 1px #d8d8d8;
+  }
+
+  .Field_names {
+    width: 150px;
+    height: 14px;
+    font-family: Helvetica;
+    font-size: 12px;
+    font-weight: 300;
+    text-align: left;
+    color: #000000;
+  }
