@@ -1,105 +1,108 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container Create-a-project-month-Copy">
+<div class="container">
     <form method="post"></form>
         {% csrf_token %}
         <h1 class="signup-primary-header signup-headers">CREATE A PROJECT</h1>
         
-        <!-- fields start here -->
-        <div class="row">
-            <div class="col-md-12 signup-label">Describe This Project</div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 Fill-22-wide"><input type="text" name="brief_description" placeholder="This will appear as project introduction"></div>
-        </div>
-        
-        <!-- creating two columns here -->
-        <div class='row'>
-            <div class='col-md-6'> <!-- LEFT-HAND COLUMN -->
-                <div class='row'>
-                    <div class="col-md-12 DETAILS">DETAILS</div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Field_names">Project Name</div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Fill-22"><input type="text" name="project_name"></div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Field_names">Project Location</div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Fill-22"><input type="text" name="project_location"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 Field_names">Website URL</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 Fill-22"><input type="text" name="website_url"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 Field_names">Status</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <select name="project_status" class="Fill-22">
-                            {% for project_status in status %}
-                            <option value="{{project_status.tag_name}}">{{project_status.display_name}}</option>
-                            {%endfor%}
-                        </select>
-                    </div>
-                </div>
-        
-                <div class="row">
-                    <div class="col-md-12 Field_names">Project Type</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <select name="project_type" class="Fill-22">
-                            {% for project_type in project_types %}
-                            <option value="{{project_type.tag_name}}">{{project_type.display_name}}</option>
-                            {%endfor%}
-                        </select>
-                    </div>
-                </div>
+        <div style='background-color:#f6f7f8'>
+            <!-- fields start here -->
+            <div class="row">
+                <div class="col-md-12 signup-label">Describe This Project</div>
             </div>
+            <div class="row">
+                <div class="col-md-12 Fill-22-wide"><input type="text" name="brief_description" placeholder="This will appear as project introduction"></div>
+            </div>
+            
+            <!-- creating two columns here -->
+            <div class='row'>
+                <div class='col-md-6'> <!-- LEFT-HAND COLUMN -->
+                    <div class='row'>
+                        <div class="col-md-12 DETAILS">DETAILS</div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Field_names">Project Name</div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Fill-22"><input type="text" name="project_name"></div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Field_names">Project Location</div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Fill-22"><input type="text" name="project_location"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 Field_names">Website URL</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 Fill-22"><input type="text" name="website_url"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 Field_names">Status</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <select name="project_status" class="Fill-22">
+                                {% for project_status in status %}
+                                <option value="{{project_status.tag_name}}">{{project_status.display_name}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+            
+                    <div class="row">
+                        <div class="col-md-12 Field_names">Project Type</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <select name="project_type" class="Fill-22">
+                                {% for project_type in project_types %}
+                                <option value="{{project_type.tag_name}}">{{project_type.display_name}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
-            <div class='col-md-6'> <!-- RIGHT-HAND COLUMN -->
-                <div class='row'>
-                    <div class="col-md-12 LINKS">LINKS</div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Field_names">Slack</div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Fill-22"><input type="text" name="connect_slack_channel"></div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Field_names">Google Drive</div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Fill-22"><input type="text" name="connect_google_drive"></div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Field_names">Github</div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Fill-22"><input type="text" name="connect_github"></div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Field_names">Trello</div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Fill-22"><input type="text" name="connect_trello"></div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Field_names">Other</div>
-                </div>
-                <div class='row'>
-                    <div class="col-md-12 Fill-22"><input type="text" name="connect_other"></div>
+                <div class='col-md-6'> <!-- RIGHT-HAND COLUMN -->
+                    <div class='row'>
+                        <div class="col-md-12 LINKS">LINKS</div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Field_names">Slack</div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Fill-22"><input type="text" name="connect_slack_channel"></div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Field_names">Google Drive</div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Fill-22"><input type="text" name="connect_google_drive"></div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Field_names">Github</div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Fill-22"><input type="text" name="connect_github"></div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Field_names">Trello</div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Fill-22"><input type="text" name="connect_trello"></div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Field_names">Other</div>
+                    </div>
+                    <div class='row'>
+                        <div class="col-md-12 Fill-22"><input type="text" name="connect_other"></div>
+                    </div>
                 </div>
             </div>
         </div>
+
 
         <!-- EARLIER CODE STARTS BELOW -->
 
