@@ -1,48 +1,69 @@
 /* Project_Sign-up Elements  */
 
-/* CSS */ 
-
-  /* Attempt 1: create columns manually, with IDs */
-  #details {
-    padding-left: 151px;
-    padding-right: 674px;
-
-  }
-  #links {
-    padding-left: 698px;
-    padding-right: 127px;
-  }
-
-  /* Attempt 2: create a new table  */
-  table.project-signup {
-    table-layout:       fixed;
-    margin-left:        10%;
-    margin-right:       10%;
-    width:              80%;
-    border:             1px solid black;
+.LINKS {
+  width: 40px;
+  height: 17px;
+  font-family: Helvetica;
+  font-size: 14px;
+  font-weight: 300;
+  text-align: left;
+  color: #000000;
 }
 
-/* Corresponding HTML */ 
+.DETAILS {
+  width: 55px;
+  height: 17px;
+  font-family: Helvetica;
+  font-size: 14px;
+  font-weight: 300;
+  text-align: left;
+  color: #000000;
+}
 
-  /* Attempt 1 */
-  <div id="details">
-  </div>
+.create-project {
+  height: 76px;
+  
+}
 
-  /* Attempt 1.5 - use classes. something like: */
-  .col-wrapper{width:1094px; margin:0 auto; overflow:hidden}
-  .col{margin:0 10px; float:left; display:inline;}
-  .col-670{width:523px;float:left}
-  .col-250{width:571px;float:right}
+.create-project h1 {
+  font-size: 16px;
+  text-align: center;
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
 
-  /* Attempt 2 */
-  <table>
-    <tr>
-        <td>
-            DETAILS
-        </td>
-        <td>
-            LINKS
-        </td>
-    </tr>
-  </table>
+.wrapper-gray {
+  background-color: #f6f7f8;
+}
 
+/*
+.Create-a-project-month-Copy {
+  width: 1280px;
+  height: 1616px;
+  background-color: #f6f7f8;
+}
+*/
+
+.Fill-22-wide {
+  width: 1003px;
+  height: 85px;
+  background-color: #ffffff;
+  border: solid 1px #d8d8d8;
+}
+
+.Fill-22 {
+  width: 455px;
+  height: 40px;
+  background-color: #ffffff;
+  border: solid 1px #d8d8d8;
+}
+
+.Field_names {
+  width: 150px;
+  height: 14px;
+  font-family: Helvetica;
+  font-size: 12px;
+  font-weight: 300;
+  text-align: left;
+  color: #000000;
+}

@@ -1,208 +1,89 @@
 {% extends 'base.html' %} {% block content %}
+<div class="create-project">
+    <!-- signup-primary-header signup-headers -->
+        <h1 class="">CREATE A PROJECT</h1>        
+</div>
 
+<div class="wrapper-gray">
+        
 <div class="container">
-    <form method="post"></form>
+    <form method="post">
         {% csrf_token %}
-        <h1 class="signup-primary-header signup-headers">CREATE A PROJECT</h1>
         
         <div style='background-color:#f6f7f8'>
             <!-- fields start here -->
-            <div class="row">
-                <div class="col-md-12 signup-label">Describe This Project</div>
+            <div class="form-group">
+                <label for="brief_description">Describe This Project</label>
+                <textarea class="form-control" id="brief_description" placeholder="This will appear as project introduction" rows=3></textarea>
             </div>
-            <div class="row">
-                <div class="col-md-12 Fill-22-wide"><input type="text" name="brief_description" placeholder="This will appear as project introduction"></div>
-            </div>
-            
+
             <!-- creating two columns here -->
             <div class='row'>
                 <div class='col-md-6'> <!-- LEFT-HAND COLUMN -->
-                    <div class='row'>
-                        <div class="col-md-12 DETAILS">DETAILS</div>
+                    <h6 class="DETAILS">Details</h6>
+                    
+                    <div class="form-group">
+                        <label for="project_name">Project Name</label>
+                        <input type="text" class="form-control" id="project_name">
                     </div>
-                    <div class='row'>
-                        <div class="col-md-12 Field_names">Project Name</div>
+                    
+                    <div class="form-group">
+                        <label for="project_location">Project Location</label>
+                        <input type="text" class="form-control" id="project_location">
                     </div>
-                    <div class='row'>
-                        <div class="col-md-12 Fill-22"><input type="text" name="project_name"></div>
+                    <div class="form-group">
+                        <label for="website_url">Website URL</label>
+                        <input type="text" class="form-control" id="website_url">
                     </div>
-                    <div class='row'>
-                        <div class="col-md-12 Field_names">Project Location</div>
+                    <div class="form-group">
+                        <label for="project_status">Status</label>
+                        <select name="project_status">
+                            {% for project_status in status %}
+                            <option value="{{project_status.tag_name}}">{{project_status.display_name}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    <div class='row'>
-                        <div class="col-md-12 Fill-22"><input type="text" name="project_location"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 Field_names">Website URL</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 Fill-22"><input type="text" name="website_url"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 Field_names">Status</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <select name="project_status" class="Fill-22">
-                                {% for project_status in status %}
-                                <option value="{{project_status.tag_name}}">{{project_status.display_name}}</option>
-                                {%endfor%}
-                            </select>
-                        </div>
-                    </div>
-            
-                    <div class="row">
-                        <div class="col-md-12 Field_names">Project Type</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <select name="project_type" class="Fill-22">
-                                {% for project_type in project_types %}
-                                <option value="{{project_type.tag_name}}">{{project_type.display_name}}</option>
-                                {%endfor%}
-                            </select>
-                        </div>
-                    </div>
+                        
+                    <div class="Field_names">Project Type</div>
+                        <select name="project_type" class="Fill-22">
+                            {% for project_type in project_types %}
+                            <option value="{{project_type.tag_name}}">{{project_type.display_name}}</option>
+                            {%endfor%}
+                        </select>
                 </div>
 
                 <div class='col-md-6'> <!-- RIGHT-HAND COLUMN -->
-                    <div class='row'>
-                        <div class="col-md-12 LINKS">LINKS</div>
+                    <h6 class="LINKS">Links</h6>
+
+                    <div class='form-group'>
+                        <label for="connect_slack_channel">Slack</label>
+                        <input type="text" class="form-control" id="connect_slack_channel"
                     </div>
-                    <div class='row'>
-                        <div class="col-md-12 Field_names">Slack</div>
+                    <div class='form-group'>
+                        <label for="connect_google_drive">Google Drive</label>
+                        <input type="text" class="form-control" id="connect_google_drive"
                     </div>
-                    <div class='row'>
-                        <div class="col-md-12 Fill-22"><input type="text" name="connect_slack_channel"></div>
+                    <div class='form-group'>
+                        <label for="connect_github">Github</label>
+                        <input type="text" class="form-control" id="connect_github"
                     </div>
-                    <div class='row'>
-                        <div class="col-md-12 Field_names">Google Drive</div>
+                    <div class='form-group'>
+                        <label for="connect_trello">Trello</label>
+                        <input type="text" class="form-control" id="connect_trello"
                     </div>
-                    <div class='row'>
-                        <div class="col-md-12 Fill-22"><input type="text" name="connect_google_drive"></div>
-                    </div>
-                    <div class='row'>
-                        <div class="col-md-12 Field_names">Github</div>
-                    </div>
-                    <div class='row'>
-                        <div class="col-md-12 Fill-22"><input type="text" name="connect_github"></div>
-                    </div>
-                    <div class='row'>
-                        <div class="col-md-12 Field_names">Trello</div>
-                    </div>
-                    <div class='row'>
-                        <div class="col-md-12 Fill-22"><input type="text" name="connect_trello"></div>
-                    </div>
-                    <div class='row'>
-                        <div class="col-md-12 Field_names">Other</div>
-                    </div>
-                    <div class='row'>
-                        <div class="col-md-12 Fill-22"><input type="text" name="connect_other"></div>
+                    <div class='form-group'>
+                        <label for="connect_other">Other</label>
+                        <input type="text" class="form-control" id="connect_other"
                     </div>
                 </div>
             </div>
         </div>
 
 
-        <!-- EARLIER CODE STARTS BELOW -->
+        <!-- EARLIER CODE, TO BE INCORPORATED, STARTS BELOW -->
 
 
         <div class="signup-inputs">
-            <div class="row">
-                <div class="col-md-12 signup-label">Project Name</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="project_name" class="signup-wide"></div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 signup-label">Project Location</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="project_location" class="signup-wide"></div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 signup-label">Website URL</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="website_url" class="signup-wide"></div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 signup-label">Status</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <select name="project_status" class="signup-wide">
-                        {% for project_status in status %}
-                        <option value="{{project_status.tag_name}}">{{project_status.display_name}}</option>
-                        {%endfor%}
-                    </select>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 signup-label">Project Type</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <select name="project_type" class="signup-wide">
-                        {% for project_type in project_types %}
-                        <option value="{{project_type.tag_name}}">{{project_type.display_name}}</option>
-                        {%endfor%}
-                    </select>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 signup-label">Start Date</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="start_date" class="signup-wide"></div>
-            </div>
-
-                <div class="col-md-12 signup-label">Describe This Project</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="brief_description" class="signup-wide" placeholder="This will appear as project introduction"></div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 signup-label">Project Description</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"> <textarea name="project_description" class="signup-textarea"></textarea>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 signup-label">Executive Summary</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="executive_summary" class="signup-wide" placeholder="Link any other documents"></div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-12 signup-label">Connect Your Project</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="connect_google_drive" class="signup-wide" placeholder="Link in your document from Google Drive"></div>
-            </div>
-            <div class="row stacked-input">
-                <div class="col-md-12"><input type="text" name="connect_github" class="signup-wide" placeholder="Link in your document GitHub"></div>
-            </div>
-            <div class="row stacked-input">
-                <div class="col-md-12"><input type="text" name="connect_trello" class="signup-wide" placeholder="Link in your document from Trello"></div>
-            </div>
-            <div class="row stacked-input">
-                <div class="col-md-12"><input type="text" name="connect_slack_channel" class="signup-wide" placeholder="Link in your document from Slack Channel"></div>
-            </div>
-            <div class="row stacked-input">
-                <div class="col-md-12"><input type="text" name="connect_other" class="signup-wide" placeholder="Link in any other documents"></div>
-            </div>
-
-
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="signup-section">Issues Addressed</h3>
@@ -280,4 +161,5 @@
         </div>
     </form>
     {% endblock %}
+</div>
 </div>
