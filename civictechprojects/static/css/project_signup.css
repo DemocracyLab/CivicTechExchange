@@ -1,8 +1,10 @@
 /* Project_Sign-up Elements  */
 
+.subheader{
+  font-size: 20px
+}
+
 .LINKS {
-  width: 40px;
-  height: 17px;
   font-family: Helvetica;
   font-size: 14px;
   font-weight: 300;
@@ -11,8 +13,6 @@
 }
 
 .DETAILS {
-  width: 55px;
-  height: 17px;
   font-family: Helvetica;
   font-size: 14px;
   font-weight: 300;
@@ -66,4 +66,46 @@
   font-weight: 300;
   text-align: left;
   color: #000000;
+}
+
+.upload_img {
+  width: 41px;
+  height: 41px;
+  object-fit: contain;
+  background-color: #979797;
+}
+
+.upload_img_bdr {
+  width: 80px;
+  height: 81px;
+  border-radius: 5px;
+  border: solid 1px #979797;
+}
+
+.upload_btn {
+  width: 174px;
+  height: 35px;
+  background: none;
+  border: solid 1px #61892f;
+  border-radius: 5px;
+  text-align: center;
+  color: #61892f;
+}
+
+.upload_btn_sm {
+  width: 81px;
+  height: 27px;
+  background: none;
+  border: solid 1px #61892f;
+  border-radius: 5px;
+  text-align: center;
+  color: #61892f;
+}
+.save_btn {
+  width: 130px;
+  height: 35px;
+  border-radius: 5px;
+  background-color: #86c232;
+  border: 0px;
+  color: #ffffff;
 }

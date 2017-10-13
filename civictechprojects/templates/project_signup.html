@@ -13,6 +13,13 @@
         <div style='background-color:#f6f7f8'>
             <!-- fields start here -->
             <div class="form-group">
+                <img src="img/directory-image-1624.png"
+                srcset="img/directory-image-1624@2x.png 2x,
+                        img/directory-image-1624@3x.png 3x"
+                class="upload_img upload_img_bdr">
+                <button type="button" class="btn_outline upload_btn">Upload Project Image</button>
+            </div>
+            <div class="form-group">
                 <label for="brief_description">Describe This Project</label>
                 <textarea class="form-control" id="brief_description" placeholder="This will appear as project introduction" rows=3></textarea>
             </div>
@@ -20,7 +27,7 @@
             <!-- creating two columns here -->
             <div class='row'>
                 <div class='col-md-6'> <!-- LEFT-HAND COLUMN -->
-                    <h6 class="DETAILS">Details</h6>
+                    <h2 class="form-group subheader">DETAILS</h2>
                     
                     <div class="form-group">
                         <label for="project_name">Project Name</label>
@@ -37,23 +44,52 @@
                     </div>
                     <div class="form-group">
                         <label for="project_status">Status</label>
-                        <select name="project_status">
+                        <select name="project_status" class="form-control">
                             {% for project_status in status %}
                             <option value="{{project_status.tag_name}}">{{project_status.display_name}}</option>
                             {% endfor %}
                         </select>
                     </div>
                         
-                    <div class="Field_names">Project Type</div>
-                        <select name="project_type" class="Fill-22">
+                    <div class="form-group">
+                        <label for="project_type">Project Type*</label>
+                        <select name="project_type" class="form-control">
                             {% for project_type in project_types %}
                             <option value="{{project_type.tag_name}}">{{project_type.display_name}}</option>
                             {%endfor%}
                         </select>
+                    </div>
+
+                    <div class="form-group"> <!-- OPTIONS NEED UPDATING -->
+                        <label for="project_type">Issue Areas</label>
+                        <select name="project_type" class="form-control">
+                            {% for row in projects %} 
+                                {% for item in row %}
+                                    <option value="{{item.tag_name}}">{{item.display_name}}</option>
+                                {% endfor %} 
+                            {% endfor %}   
+                        </select>
+                    </div>
+
+                    <div class="form-group"> <!-- OPTIONS NEED UPDATING -->
+                        <label for="project_type">Start Date - End Date</label>
+                        <select name="project_type" class="form-control">
+                            {% for project_type in project_types %}
+                            <option value="{{project_type.tag_name}}">{{project_type.display_name}}</option>
+                            {%endfor%}
+                            </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="add_volunteers">Add Volunteers</label>
+                        <input type="text" class="form-control" id="add_volunteers">
+                        <button type="button" class="btn_outline upload_btn_sm">Invite</button>
+                    </div>
+                    
                 </div>
 
                 <div class='col-md-6'> <!-- RIGHT-HAND COLUMN -->
-                    <h6 class="LINKS">Links</h6>
+                    <h2 class="form-group subheader">LINKS</h2>
 
                     <div class='form-group'>
                         <label for="connect_slack_channel">Slack</label>
@@ -75,6 +111,26 @@
                         <label for="connect_other">Other</label>
                         <input type="text" class="form-control" id="connect_other"
                     </div>
+                    <h2 class="form-group subheader">DOCUMENTS</h2>
+                    <div class="form-group">
+                        <label>Executive Summary</label>
+                        <input type="file">
+                        <div class='text-right'>
+                            <button type="button" class="btn_outline upload_btn">Choose File</button> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Other Documents</label>
+                        <input type="file">
+                        <div class='text-right'>
+                            <button type="button" class="btn_outline upload_btn">Choose File</button>     
+                        </div>
+                    </div>
+                    <div class="form-group pull-right">
+                        <div class='text-right'>
+                            <button type="button" class="btn_outline save_btn">Save Project</button> 
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,11 +146,14 @@
                 </div>
             </div>
             <div class="row">
-                {% for row in projects %} {% for item in row %}
-                <div class="col-md-4">
-                    <input type="checkbox" name="skills" value="{{item.tag_name}}" /><span class="signup-checkbox">{{item.display_name}}</span>
-                </div>
-                {% endfor %} {% endfor %}
+                {% for row in projects %} 
+                    {% for item in row %}
+                        <div class="col-md-4">
+                            <input type="checkbox" name="skills" value="{{item.tag_name}}" />
+                            <span class="signup-checkbox">{{item.display_name}}</span>
+                        </div>
+                    {% endfor %} 
+                {% endfor %}
             </div>
             <div class="row">
                 <div class="col-md-12">
