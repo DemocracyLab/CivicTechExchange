@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+S3_BUCKET = os.environ.get('S3_BUCKET')
 
 # Application definition
 

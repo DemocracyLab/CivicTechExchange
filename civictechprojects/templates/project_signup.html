@@ -1,4 +1,18 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+
+{% block extra_head %}
+{% load static %}
+<script type="text/javascript" src="{% static 'js/file_upload_s3.js' %}"></script>
+<script type="text/javascript">
+    $(function() {
+        initializeS3UploadHander("thumbnail_input", "thumbnail_preview");
+    });
+</script>
+
+
+{% endblock %}
+
+{% block content %}
 <div class="create-project">
     <!-- signup-primary-header signup-headers -->
         <h1 class="">CREATE A PROJECT</h1>        
@@ -13,11 +27,9 @@
         <div style='background-color:#f6f7f8'>
             <!-- fields start here -->
             <div class="form-group">
-                <img src="img/directory-image-1624.png"
-                srcset="img/directory-image-1624@2x.png 2x,
-                        img/directory-image-1624@3x.png 3x"
-                class="upload_img upload_img_bdr">
-                <button type="button" class="btn_outline upload_btn">Upload Project Image</button>
+
+                <img id="thumbnail_preview" class="upload_img upload_img_bdr">
+                <input type="file" id="thumbnail_input"/>
             </div>
             <div class="form-group">
                 <label for="brief_description">Describe This Project</label>
