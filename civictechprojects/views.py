@@ -46,67 +46,6 @@ PROJECT_KINDS = tags(
     'Other'
 )
 
-SKILL_KINDS = tags(
-    'Accounting',
-    'Back-End Development',
-    'Business Strategy',
-    'Copywriting',
-    'Data Science',
-    'Data Visualization',
-    'Database Architecture',
-    'Front-End Development',
-    'Fundraising',
-    'Graphic Design',
-    'Legal Services',
-    'Project Management',
-    'Research',
-    'UI Design',
-    'UX Design',
-    'Other'
-)
-
-TECHNOLOGIES = tags(
-    'Python',
-    'C',
-    'Java',
-    'C++',
-    'C#,'
-    'R',
-    'JavaScript',
-    'PHP',
-    'Go',
-    'Swift'
-)
-
-STATUS = tags(
-    'Updated',
-    'Active',
-    'Less Active',
-    'Dormant',
-    'Abandoned'
-)
-
-STAGES = tags(
-    'New Idea',
-    'Research',
-    'Requirements Gathering and Analysis',
-    'Planning',
-    'Design',
-    'Development',
-    'Release',
-    'Iteration',
-)
-
-PROJECT_TYPES = tags(
-    'Government Efficiency',
-    'Civic Engagement',
-    'Community Organizing',
-    'Infrastructure'
-)
-
-# PROJECT_SUBTYPES = tags(
-#     ''
-# )
 
 def to_columns(items, count = 3):
     res = []
@@ -151,12 +90,7 @@ def project_signup(request):
 
     template = loader.get_template('project_signup.html')
     context = {'form': form,
-        'skills':to_columns(SKILL_KINDS),
-        'projects':to_columns(PROJECT_KINDS),
-        'technologies':TECHNOLOGIES,
-        'project_types':PROJECT_TYPES,
-        'stages':STAGES,
-        'status':STATUS
+        'projects':to_columns(PROJECT_KINDS)
     }
     return HttpResponse(template.render(context, request))
 
