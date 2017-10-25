@@ -3,10 +3,14 @@
 {% block extra_head %}
 {% load static %}
 <link rel="stylesheet" href="/static/css/project_signup.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.min.css"/>
 <script type="text/javascript" src="{% static 'js/file_upload_s3.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/selection.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js"></script>
 <script type="text/javascript">
     $(function() {
         initializeS3UploadHander("thumbnail_input", "thumbnail_preview", "thumbnail_placeholder");
+        initializeSelectionControl("select_issues");
     });
 </script>
 
@@ -53,7 +57,8 @@
 
             <div class="form-group"> <!-- OPTIONS NEED UPDATING -->
                 <label for="project_type">Issue Areas</label>
-                <select name="project_type" class="form-control">
+                <select id="select_issues" name="project_type" class="form-control">
+                    <option value=""></option>
                     {% for row in projects %}
                         {% for item in row %}
                             <option value="{{item.tag_name}}">{{item.display_name}}</option>
