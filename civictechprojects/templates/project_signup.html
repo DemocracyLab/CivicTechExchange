@@ -43,21 +43,21 @@
             <h2 class="form-group subheader">DETAILS</h2>
             <div class="form-group">
                 <label for="project_name">Project Name</label>
-                <input type="text" class="form-control" id="project_name">
+                <input type="text" class="form-control" name="project_name">
             </div>
 
             <div class="form-group">
                 <label for="project_location">Project Location</label>
-                <input type="text" class="form-control" id="project_location">
+                <input type="text" class="form-control" name="project_location">
             </div>
             <div class="form-group">
                 <label for="website_url">Website URL</label>
-                <input type="text" class="form-control" id="website_url">
+                <input type="text" class="form-control" name="website_url">
             </div>
 
             <div class="form-group"> <!-- OPTIONS NEED UPDATING -->
-                <label for="project_type">Issue Areas</label>
-                <select id="select_issues" name="project_type" class="form-control">
+                <label for="issue_areas">Issue Areas</label>
+                <select name="issue_areas" class="form-control">
                     <option value=""></option>
                     {% for row in projects %}
                         {% for item in row %}
@@ -69,12 +69,12 @@
 
             <div class="form-group">
                 <label for="brief_description">Describe This Project</label>
-                <textarea class="form-control" id="brief_description" placeholder="This will appear as project introduction" rows=3></textarea>
+                <textarea class="form-control" name="brief_description" placeholder="This will appear as project introduction" rows=3></textarea>
             </div>
 
             <div class="form-group">
                 <label for="add_volunteers">Add Volunteers</label>
-                <input type="text" class="form-control" id="add_volunteers">
+                <input type="text" class="form-control" name="add_volunteers">
                 <button type="button" class="btn_outline upload_btn_sm">Invite</button>
             </div>
 
@@ -82,19 +82,19 @@
 
             <div class='form-group'>
                 <label for="connect_slack_channel">Group Chat (Slack, Skype, etc.)</label>
-                <input type="text" class="form-control" id="connect_slack_channel"
+                <input type="text" class="form-control" name="connect_slack_channel"
             </div>
             <div class='form-group'>
                 <label for="connect_google_drive">Document Storage (Google Drive, Dropbox, etc.)</label>
-                <input type="text" class="form-control" id="connect_google_drive"
+                <input type="text" class="form-control" name="connect_google_drive"
             </div>
             <div class='form-group'>
                 <label for="connect_github">Github</label>
-                <input type="text" class="form-control" id="connect_github"
+                <input type="text" class="form-control" name="connect_github"
             </div>
             <div class='form-group'>
                 <label for="connect_trello">Project Management (Trello, etc.)</label>
-                <input type="text" class="form-control" id="connect_trello"
+                <input type="text" class="form-control" name="connect_trello"
             </div>
             <div class='form-group'>
                 <!--TODO-->
@@ -117,7 +117,7 @@
             </div>
             <div class="form-group pull-right">
                 <div class='text-right'>
-                    <button type="button" class="btn_outline save_btn">Save Project</button>
+                    <button type="submit" class="btn_outline save_btn">Save Project</button>
                 </div>
             </div>
         </div>

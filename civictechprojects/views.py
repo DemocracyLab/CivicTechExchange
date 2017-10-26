@@ -2,6 +2,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from time import time
+from django.db.models import Q
 from .serializers import ProjectSerializer
 
 from urllib import parse as urlparse
@@ -105,7 +106,7 @@ def projects(request):
         search_tags = search_query.split(',')
         for tag in search_tags:
             print('filtering by ' + str(tag))
-            projects = projects.filter(project_tags__name__in=[tag])
+            projects = projects.filter(Q(project_name__contains=tag) | Q(project_tags__name__contains=tag))
     projects = projects.order_by('-project_name')
     context = {'projects':to_rows(projects,4)}
     return HttpResponse(template.render(context, request))
