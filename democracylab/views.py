@@ -70,12 +70,9 @@ def signup(request):
     return render(request, 'signup.html', context)
 
 def user_update(request):
-    try:
-      user = Contributor.objects.get(username=request.user)
-    except (KeyError, Contributor.DoesNotExist):
-        error(request, 'A user with this email does not exist.')
-        return redirect('/login')
-    print(request.user)
+    if request.user.is_anonymous():
+      return redirect('login')
+    user = Contributor.objects.get(username=request.user)
     if request.method == 'POST':
         form = UserUpdateForm(request.POST)
         is_valid = form.is_valid()
@@ -94,11 +91,8 @@ def user_update(request):
         user.country=form.cleaned_data.get('country')
         user.other_url=form.cleaned_data.get('other_url')
         user.save()
-        print(user.website_url)
         return redirect('/')
 
-    print(user.first_name)
-    print(user.website_url)
     context = {'user': user
         # 'skills':to_columns(SKILL_KINDS),
         # 'projects':to_columns(PROJECT_KINDS)
