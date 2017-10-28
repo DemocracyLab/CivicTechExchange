@@ -108,7 +108,7 @@ def projects(request):
             print('filtering by ' + str(tag))
             projects = projects.filter(Q(project_name__contains=tag) | Q(project_tags__name__contains=tag))
     projects = projects.order_by('-project_name')
-    context = {'projects':to_rows(projects,4)}
+    context = {'projects':to_rows(projects,4), 'user':request.user}
     return HttpResponse(template.render(context, request))
 
 
