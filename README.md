@@ -6,7 +6,7 @@ Make sure you are using Python 3. [pyenv](https://github.com/pyenv/pyenv) and [v
 
 Install libraries: `pip install -r requirements.txt`
 
-SQLite is used by default. If you want to use other databases, change the `DATABASES` entry in `civic_marketplace/settings.py` accordingly.
+SQLite is used by default. If you want to use other databases, change the `DATABASES` entry in `democracylab/settings.py` accordingly.
 
 ## Run Locally
 
