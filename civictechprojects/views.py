@@ -72,6 +72,8 @@ def to_rows(items, width):
     return rows
 
 def project_signup(request):
+    if request.user.is_anonymous():
+        return redirect('login')
     if request.method == 'POST':
         form = ProjectCreationForm(request.POST)
         form.is_valid()
