@@ -11,6 +11,11 @@
         {% csrf_token %}
         <h1 class="signup-primary-header signup-headers">SIGN UP, IT'S EASY AND FREE</h1>
         <div class="signup-inputs">
+            {% if messages %}
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            {% endif %}
             <div class="row">
                 <div class="col-md-12 signup-label">First name</div>
             </div>

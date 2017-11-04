@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.template import loader
@@ -45,22 +46,26 @@ def login_view(request):
 
 def signup(request):
     if request.method == 'POST':
-        form = DemocracyLabUserCreationForm(request.POST)
+        data = request.POST.copy()
+        data['date_joined']=datetime.datetime.now()
+        # Revisit if we don't use email as the username
+        data['username']=data['email']
+        form = DemocracyLabUserCreationForm(data)
         is_valid = form.is_valid()
+        if not is_valid:
+            error(request, form.errors)
+            return redirect('signup')
         email = form.cleaned_data.get('email')
-        password_1 = form.cleaned_data.get('password1')
-        password_2 = form.cleaned_data.get('password2')
-        if password_1 != password_2:
-            return error('Passwords do not match')
-        # TODO: Form validation
+        password = form.cleaned_data.get('password1')
         contributor = Contributor(
             username=email,
             first_name=form.cleaned_data.get('first_name'),
             last_name=form.cleaned_data.get('last_name'),
+            date_joined=form.cleaned_data.get('date_joined'),
         )
-        contributor.set_password(password_1)
+        contributor.set_password(password)
         contributor.save()
-        user = authenticate(username=email, password=password_1)
+        user = authenticate(username=email, password=password)
         login(request, user)
         return redirect('/')
     elif request.method == 'GET':
