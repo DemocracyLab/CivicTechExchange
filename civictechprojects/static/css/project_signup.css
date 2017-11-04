@@ -1,32 +1,19 @@
 /* Project_Sign-up Elements  */
 
 .subheader{
-  font-size: 20px
-}
-
-.LINKS {
-  font-family: Helvetica;
-  font-size: 14px;
-  font-weight: 300;
-  text-align: left;
-  color: #000000;
-}
-
-.DETAILS {
-  font-family: Helvetica;
-  font-size: 14px;
-  font-weight: 300;
-  text-align: left;
-  color: #000000;
+  margin-top: 74px;
+  font-size: 18px
 }
 
 .create-project {
-  height: 76px;
-  
+  height: 60px;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 28px;
 }
 
 .create-project h1 {
-  font-size: 16px;
+  font-size: 18px;
   text-align: center;
   margin-top: 28px;
   margin-bottom: 28px;
@@ -102,10 +89,30 @@
   color: #61892f;
 }
 .save_btn {
-  width: 130px;
-  height: 35px;
   border-radius: 5px;
   background-color: #86c232;
   border: 0px;
   color: #ffffff;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 8px; 
+  padding-bottom: 8px;
+  margin-top: 17px;
+  margin-bottom: 14px;
+}
+
+.fin_btn {
+  border-radius: 5px;
+  background-color: #f79e02;
+  border: 0px; 
+  color: #ffffff;
+  padding-left: 19px;
+  padding-right: 19px;
+  padding-top: 8px; 
+  padding-bottom: 8px;
+}
+
+#content{
+  width: 596px;
+  margin:0 auto;
 }
