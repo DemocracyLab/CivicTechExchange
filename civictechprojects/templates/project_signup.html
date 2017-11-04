@@ -18,46 +18,54 @@
 {% endblock %}
 
 {% block content %}
-<div class="create-project">
-    <!-- signup-primary-header signup-headers -->
-        <h1 class="">CREATE A PROJECT</h1>        
+<div class="create-project"> <!-- signup-primary-header signup-headers -->
+    CREATE A PROJECT    
 </div>
 
-<div class="wrapper-gray">
-        
-<div class="container">
-    <form method="post">
-        {% csrf_token %}
-        
-        <div style='background-color:#f6f7f8'>
-            <!-- fields start here -->
-            <div class="form-group">
-                <span id="thumbnail_placeholder" class="upload_img upload_img_bdr">
-                    <i class="fa fa-folder-open-o fa-3x" aria-hidden="true"></i>
-                </span>
-                <img id="thumbnail_preview" class="upload_img upload_img_bdr">
-                <input type="button" id="loadFileXml" value="Upload Project Image" onclick="document.getElementById('thumbnail_input').click();" />
-                <input type="file" style="display:none;" id="thumbnail_input"/>
-            </div>
+<div class="wrapper-gray">   
+    <div class="container" id = "content">
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <!-- fields start here -->
+                <div class="form-group">
+                    <span id="thumbnail_placeholder" class="upload_img upload_img_bdr">
+                        <i class="fa fa-folder-open-o fa-3x" aria-hidden="true"></i>
+                    </span>
+                    <img id="thumbnail_preview" class="upload_img upload_img_bdr" hspace="23">
+                    <input type="file" style="display:none;" id="thumbnail_input"/>
+                    <button type="button" class="btn_outline save_btn" onclick="document.getElementById('thumbnail_input').click();">Upload Project Image</button>
+                </div>
 
-            <h2 class="form-group subheader">DETAILS</h2>
-            <div class="form-group">
-                <label for="project_name">Project Name</label>
-                <input type="text" class="form-control" id="project_name">
-            </div>
+                <h2 class="form-group subheader">DETAILS</h2>
+                <div class="form-group">
+                    <label for="project_name">Project Name</label>
+                    <input type="text" class="form-control" name="project_name">
+                </div>
 
-            <div class="form-group">
-                <label for="project_location">Project Location</label>
-                <input type="text" class="form-control" id="project_location">
-            </div>
-            <div class="form-group">
-                <label for="website_url">Website URL</label>
-                <input type="text" class="form-control" id="website_url">
-            </div>
+                <div class="form-group">
+                    <label for="project_location">Project Location</label>
+                    <input type="text" class="form-control" name="project_location">
+                </div>
+                <div class="form-group">
+                    <label for="website_url">Website URL</label>
+                    <input type="text" class="form-control" name="website_url">
+                </div>
 
+                <div class="form-group"> 
+                    <label for="issue_areas">Issue Areas</label>
+                    <select name="issue_areas" class="form-control">
+                        <option value=""></option>
+                        {% for row in projects %}
+                            {% for item in row %}
+                                <option value="{{item.tag_name}}">{{item.display_name}}</option>
+                            {% endfor %}
+                        {% endfor %}
+                    </select>
+                </div>
             <div class="form-group"> <!-- OPTIONS NEED UPDATING -->
-                <label for="project_type">Issue Areas</label>
-                <select id="select_issues" name="project_type" class="form-control">
+                <label for="select_issues">Issue Areas</label>
+                <select id="select_issues" name="select_issues" class="form-control">
                     <option value=""></option>
                     {% for row in projects %}
                         {% for item in row %}
@@ -68,60 +76,68 @@
             </div>
 
             <div class="form-group">
-                <label for="brief_description">Describe This Project</label>
-                <textarea class="form-control" id="brief_description" placeholder="This will appear as project introduction" rows=3></textarea>
+                <label for="project_description">Describe This Project</label>
+                <textarea class="form-control" name="project_description" placeholder="This will appear as project introduction" rows=3></textarea>
             </div>
 
-            <div class="form-group">
-                <label for="add_volunteers">Add Volunteers</label>
-                <input type="text" class="form-control" id="add_volunteers">
-                <button type="button" class="btn_outline upload_btn_sm">Invite</button>
-            </div>
+                <div class="form-group">
+                    <label for="brief_description">Describe This Project</label>
+                    <textarea class="form-control" name="brief_description" placeholder="This will appear as project introduction" rows=3></textarea>
+                </div>
 
-            <h2 class="form-group subheader">LINKS</h2>
+                <h2 class="form-group subheader">LINKS</h2>
 
-            <div class='form-group'>
-                <label for="connect_slack_channel">Group Chat (Slack, Skype, etc.)</label>
-                <input type="text" class="form-control" id="connect_slack_channel"
-            </div>
-            <div class='form-group'>
-                <label for="connect_google_drive">Document Storage (Google Drive, Dropbox, etc.)</label>
-                <input type="text" class="form-control" id="connect_google_drive"
-            </div>
-            <div class='form-group'>
-                <label for="connect_github">Github</label>
-                <input type="text" class="form-control" id="connect_github"
-            </div>
-            <div class='form-group'>
-                <label for="connect_trello">Project Management (Trello, etc.)</label>
-                <input type="text" class="form-control" id="connect_trello"
-            </div>
-            <div class='form-group'>
-                <!--TODO-->
-                <button type="button" class="btn_outline upload_btn_sm">Add More Links</button>
-            </div>
-            <h2 class="form-group subheader">DOCUMENTS</h2>
-            <div class="form-group">
-                <label>Executive Summary</label>
-                <input type="file">
-                <div class='text-right'>
-                    <button type="button" class="btn_outline upload_btn">Choose File</button>
+                <div class='form-group'>
+                    <label for="connect_slack_channel">Group Chat (Slack, Skype, etc.)</label>
+                    <input type="text" class="form-control" name="connect_slack_channel"
+                </div>
+                <div class='form-group'>
+                    <label for="connect_google_drive">Document Storage (Google Drive, Dropbox, etc.)</label>
+                    <input type="text" class="form-control" name="connect_google_drive"
+                </div>
+                <div class='form-group'>
+                    <label for="connect_github">Github</label>
+                    <input type="text" class="form-control" name="connect_github"
+                </div>
+                <div class='form-group'>
+                    <label for="connect_trello">Project Management (Trello, etc.)</label>
+                    <input type="text" class="form-control" name="connect_trello"
+                </div>
+                <div class='form-group'>
+                    <!--TODO-->
+                    <button type="button" class="btn_outline save_btn pull-right">Add More Links</button>
+                </div>
+                <h2 class="form-group subheader">PEOPLE</h2>
+                <div class="form-group">
+                    <label for="add_project_leads">Add Project Leads</label>
+                    <input type="text" class="form-control" name="add_project_leads">
+                    <button type="button" class="btn_outline save_btn pull-right">Invite</button>
+                </div>
+                <div class="form-group">
+                    <label for="add_volunteers">Add Volunteers</label>
+                    <input type="text" class="form-control" name="add_volunteers">
+                    <button type="button" class="btn_outline save_btn pull-right">Invite</button>
+                </div>
+                <h2 class="form-group subheader">DOCUMENTS</h2>
+                <div class="form-group">
+                    <label>Executive Summary</label>
+                    <div class='text-right'>
+                        <button type="button" class="btn_outline save_btn" onclick="document.getElementById('thumbnail_input').click();">Choose File</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Other Documents</label>
+                    <div class='text-right'>
+                        <button type="button" class="btn_outline save_btn" onclick="document.getElementById('thumbnail_input').click();">Choose File</button>
+                    </div>
+                </div>
+                <div class="form-group pull-right">
+                    <div class='text-right'>
+                        <button type="submit" class="btn_outline fin_btn">Save Project</button>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label>Other Documents</label>
-                <input type="file">
-                <div class='text-right'>
-                    <button type="button" class="btn_outline upload_btn">Choose File</button>
-                </div>
-            </div>
-            <div class="form-group pull-right">
-                <div class='text-right'>
-                    <button type="button" class="btn_outline save_btn">Save Project</button>
-                </div>
-            </div>
-        </div>
-    </form>
-    {% endblock %}
-</div>
+        </form>
+        {% endblock %}
+    </div>
 </div>

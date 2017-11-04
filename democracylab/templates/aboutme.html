@@ -1,12 +1,21 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+
+{% block extra_head %}
+{% load static %}
+<!--getting error connecting the path for the first stylesheet. Once corrected, a lot of formatting should fix itself-->
+<link rel="stylesheet" href="/CivicTechExchange/civictechprojects/static/css/project_signup.css"/>
+<link rel="stylesheet" href="/static/css/aboutme.css"/>
+{% endblock %}
+
+{% block content %}
 <div class="container">
     <form method="post">
         {% csrf_token %}
         <div class="signup-inputs">
-
-
+                      <div class="row">When you apply to volunteer through DemocracyLab, this information is visible to employers and it is what they will use to contact you. 
+                      </div>
                       <div class="row">
-                          <div class="col-md-12">
+                            <div class="col-md-12">
                               <h3 class="signup-section">About me:</h3>
                           </div>
                       </div>
@@ -17,8 +26,8 @@
                       </div>
 
                       <div class="submit-row">
-                          <button type="upload_photo" class="btn-primary">Upload Photo</button>
-                          <button type="upload_resume" class="btn-primary">Upload Resume</button>
+                          <button type="upload_photo" class="btn-primary save_btn">Upload Photo</button>
+                          <button type="upload_resume" class="btn-primary save_btn">Upload Resume</button>
                       </div>
 
 
@@ -29,12 +38,20 @@
                 </div>
             </div>
             <div class="row">
+                <div class="signup-label signup-half-col signup-half-col-left">First Name</div>
+                <div class="signup-label signup-half-col">Last Name</div>
+            </div>
+            <div class="row">
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="first_name" class="signup-text" value={{ user.first_name }}></div>
+                <div class="signup-half-col"><input type="text" name="last_name" class="signup-text" value={{ user.last_name }}></div>
+            </div>
+            <div class="row">
                 <div class="signup-label signup-half-col signup-half-col-left">Email Address</div>
                 <div class="signup-label signup-half-col">LinkedIn URL</div>
             </div>
             <div class="row">
-                <div class="signup-half-col signup-half-col-left"><input type="text" name="email_address" class="signup-text"></div>
-                <div class="signup-half-col"><input type="text" name="linkedin_url" class="signup-text"></div>
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="email_address" class="signup-text" value={{ user.username }}></div>
+                <div class="signup-half-col"><input type="text" name="linkedin" class="signup-text" value={{ user.linkedin }}></div>
             </div>
 
             <div class="row">
@@ -42,8 +59,8 @@
                 <div class="signup-label signup-half-col">Website URL</div>
             </div>
             <div class="row">
-                <div class="signup-half-col signup-half-col-left"><input type="text" name="phone_number" class="signup-text"></div>
-                <div class="signup-half-col"><input type="text" name="website_url" class="signup-text"></div>
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="phone_primary" class="signup-text" value={{ user.phone_primary }}></div>
+                <div class="signup-half-col"><input type="text" name="website_url" class="signup-text" value={{ user.website_url }}></div>
             </div>
 
             <div class="row">
@@ -51,8 +68,8 @@
                 <div class="signup-label signup-half-col">Behance</div>
             </div>
             <div class="row">
-                <div class="signup-half-col signup-half-col-left"><input type="text" name="job_role" class="signup-text"></div>
-                <div class="signup-half-col"><input type="text" name="behance" class="signup-text"></div>
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="job_role" class="signup-text" value={{ user.job_role }}></div>
+                <div class="signup-half-col"><input type="text" name="behance" class="signup-text" value={{ user.behance }}></div>
             </div>
 
             <div class="row">
@@ -60,8 +77,8 @@
                 <div class="signup-label signup-half-col">Dribble</div>
             </div>
             <div class="row">
-                <div class="signup-half-col signup-half-col-left"><input type="text" name="experience_level" class="signup-text"></div>
-                <div class="signup-half-col"><input type="text" name="dribble" class="signup-text"></div>
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="experience_level" class="signup-text" value={{ user.experience_level }}></div>
+                <div class="signup-half-col"><input type="text" name="dribble" class="signup-text" value={{ user.dribble }}></div>
             </div>
 
             <div class="row">
@@ -69,8 +86,8 @@
                 <div class="signup-label signup-half-col">Facebook</div>
             </div>
             <div class="row">
-                <div class="signup-half-col signup-half-col-left"><input type="text" name="country" class="signup-text"></div>
-                <div class="signup-half-col"><input type="text" name="facebook" class="signup-text"></div>
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="country" class="signup-text" value={{ user.country }}></div>
+                <div class="signup-half-col"><input type="text" name="facebook" class="signup-text" value={{ user.facebook }}></div>
             </div>
 
             <div class="row">
@@ -78,8 +95,8 @@
                 <div class="signup-label signup-half-col">Other URL</div>
             </div>
             <div class="row">
-                <div class="signup-half-col signup-half-col-left"><input type="text" name="zip_code" class="signup-text"></div>
-                <div class="signup-half-col"><input type="text" name="other_url" class="signup-text"></div>
+                <div class="signup-half-col signup-half-col-left"><input type="text" name="postal_code" class="signup-text" value={{ user.postal_code }}></div>
+                <div class="signup-half-col"><input type="text" name="other_url" class="signup-text" value={{ user.other_url }}></div>
             </div>
 
             <!--<div class="row">-->
@@ -111,7 +128,7 @@
 
         </div>
         <div class="submit-row">
-            <button type="update" class="btn-primary">Update Account</button>
+            <button type="submit" class="btn-primary">Update Account</button>
         </div>
     </form>
     {% endblock %}

@@ -2,6 +2,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from time import time
+from django.db.models import Q
 from .serializers import ProjectSerializer
 
 from urllib import parse as urlparse
@@ -71,6 +72,8 @@ def to_rows(items, width):
     return rows
 
 def project_signup(request):
+    if request.user.is_anonymous():
+        return redirect('login')
     if request.method == 'POST':
         form = ProjectCreationForm(request.POST)
         form.is_valid()
@@ -105,9 +108,9 @@ def projects(request):
         search_tags = search_query.split(',')
         for tag in search_tags:
             print('filtering by ' + str(tag))
-            projects = projects.filter(project_tags__name__in=[tag])
+            projects = projects.filter(Q(project_name__contains=tag) | Q(project_tags__name__contains=tag))
     projects = projects.order_by('-project_name')
-    context = {'projects':to_rows(projects,4)}
+    context = {'projects':to_rows(projects,4), 'user':request.user}
     return HttpResponse(template.render(context, request))
 
 
