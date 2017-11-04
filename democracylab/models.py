@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class Contributor(User):
     # TODO: some of these need to be incorporated to jobs/projects
-    postal_code = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=100, blank=True)
     phone_primary = models.CharField(max_length=200, blank=True)
     about_me = models.CharField(max_length=10000, blank=True)
     linkedin = models.CharField(max_length=200, blank=True)

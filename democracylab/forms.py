@@ -10,6 +10,8 @@ class DemocracyLabUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Otherwise is_valid() complains that password is required
+        del self.fields['password']
 
     def is_valid(self):
         return super().is_valid()

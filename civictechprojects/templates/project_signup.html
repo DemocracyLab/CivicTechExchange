@@ -63,6 +63,22 @@
                         {% endfor %}
                     </select>
                 </div>
+            <div class="form-group"> <!-- OPTIONS NEED UPDATING -->
+                <label for="select_issues">Issue Areas</label>
+                <select id="select_issues" name="select_issues" class="form-control">
+                    <option value=""></option>
+                    {% for row in projects %}
+                        {% for item in row %}
+                            <option value="{{item.tag_name}}">{{item.display_name}}</option>
+                        {% endfor %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="project_description">Describe This Project</label>
+                <textarea class="form-control" name="project_description" placeholder="This will appear as project introduction" rows=3></textarea>
+            </div>
 
                 <div class="form-group">
                     <label for="brief_description">Describe This Project</label>
