@@ -13,11 +13,13 @@ __pycache__/
 .Python
 env/
 build/
+staticfiles/
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
+node_modules/
 lib/
 lib64/
 parts/
@@ -26,6 +28,8 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+bundle.js
+*.js.map
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -78,3 +82,6 @@ ENV/
 # IntelliJ IDEA files
 *.iml
 .idea/
+
+# Local database
+mydatabase
