@@ -1,5 +1,4 @@
 # Byte-compiled / optimized / DLL files
-
 db.sqlite3
 
 __pycache__/
@@ -85,3 +84,7 @@ ENV/
 
 # Local database
 mydatabase
+
+# [vim] swap files
+*.swp
+

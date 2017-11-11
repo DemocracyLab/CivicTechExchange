@@ -116,6 +116,10 @@ def home(request):
     context = {}
     return HttpResponse(template.render(context, request))
 
+def index(request):
+    template = loader.get_template('new_index.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
 
 def projects_list(request):
     if request.method == 'GET':
@@ -131,3 +135,4 @@ def presign_project_thumbnail_upload(request):
     unique_file_name = 'project_thumbnail_' + str(time())
     s3_key = 'thumbnails/%s/%s.%s' % (uploader, unique_file_name, file_extension)
     return presign_s3_upload(key=s3_key, file_type=file_type, acl="public-read")
+
