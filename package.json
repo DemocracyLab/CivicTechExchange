@@ -6,6 +6,9 @@
   "repository": "https://github.com/DemocracyLab/CivicTechExchange.git",
   "author": "Marlon Keating <marlonakeating@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "webpack": "webpack webpack.config.js"
+  },
   "dependencies": {
     "path": "^0.12.7",
     "react": "^16.0.0",
@@ -14,10 +17,14 @@
     "webpack-dev-server": "^2.9.4"
   },
   "devDependencies": {
+    "aws-sdk": "^2.149.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "child_process": "^1.0.2",
+    "fs": "0.0.1-security",
+    "net": "^1.0.2",
     "sync-exec": "~0.6.2",
     "webpack": "~3.8.1"
   }

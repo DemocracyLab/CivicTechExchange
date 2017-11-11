@@ -18,7 +18,9 @@ module.exports = {
         aliasFields: ['browser']
     },
     node: {
-        fs: "empty"
+        child_process: "empty",
+        fs: "empty",
+        tls: "empty"
     },
     devtool: 'source-map',
     plugins: [
