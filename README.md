@@ -17,14 +17,7 @@ source myvenv/bin/activate
 
 # install python libraries
 pip install --upgrade pip
-pip install django
-pip install dj_database_url
-pip install djangorestframework
-pip install taggit
-pip install django-taggit
-pip install whitenoise
-pip install psycopg2
-pip install boto3
+pip install -r requirements.txt
 
 # create database via django and start test server
 python manage.py migrate
