@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^presign_s3/upload/project/thumbnail/$', views.presign_project_thumbnail_upload),
     url(r'^api/projects', views.projects_list),
     url(r'^projects/$', views.projects),
+    url(r'^project/(?P<project_id>[0-9]+)/$', views.project, name='project'),
 ]
