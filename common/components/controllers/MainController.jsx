@@ -1,8 +1,14 @@
+import MainHeader from '../chrome/MainHeader.jsx';
 import React from 'react';
 
 class MainController extends React.Component {
   render() {
-    return <div>hello react</div>;
+    return (
+      <div>
+        <MainHeader />
+        hello react
+      </div>
+    );
   }
 }
 

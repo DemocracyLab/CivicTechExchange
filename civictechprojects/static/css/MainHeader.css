@@ -1,0 +1,11 @@
+.MainHeader-root {
+  height: 54px;
+}
+
+.MainHeader-root span {
+  padding-right: 40px;
+}
+
+.MainController-rightContent {
+  float: right;
+}
