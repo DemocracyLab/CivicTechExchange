@@ -1,0 +1,18 @@
+.LandingController-landingText {
+  color: white;
+  font-size: 24px;
+  text-align: center;
+  width: 469px;
+}
+
+.LandingController-landingTextContainer {
+  margin-top: 110px;
+}
+
+.LandingController-supremeCourtBanner {
+  background-image: url(https://c1.staticflickr.com/9/8335/28612636244_8f15312bc9_b.jpg);
+  background-size: cover;
+  display: flex;
+  height: 427px;
+  justify-content: center;
+}
