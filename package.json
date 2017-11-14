@@ -7,7 +7,7 @@
   "author": "Marlon Keating <marlonakeating@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "webpack": "webpack webpack.config.js"
+    "build" : "webpack --config webpack.config.js && python manage.py collectstatic"
   },
   "dependencies": {
     "path": "^0.12.7",
