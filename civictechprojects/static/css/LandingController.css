@@ -1,18 +1,45 @@
+.LandingController-centerer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .LandingController-landingText {
   color: white;
-  font-size: 24px;
+  font-weight: bold;
   text-align: center;
-  width: 469px;
+  width: 51%;
 }
 
 .LandingController-landingTextContainer {
   margin-top: 110px;
 }
 
+.LandingController-letsGetStarted {
+  font-size: 48px;
+}
+
+.LandingController-signUp {
+  background-color: #86c232;
+  border-radius: 5px;
+  font-size: 19px;
+  padding: 10px 36px 10px 36px;
+  width: auto;
+}
+
+.LandingController-signUpContainer {
+  width: 100%;
+}
+
 .LandingController-supremeCourtBanner {
-  background-image: url(https://c1.staticflickr.com/9/8335/28612636244_8f15312bc9_b.jpg);
+  background-image: url(https://i.imgur.com/6sECa9O.png);
   background-size: cover;
   display: flex;
   height: 427px;
   justify-content: center;
+}
+
+.LandingController-useYourSkills {
+  font-size: 36px;
+  line-height: 1.5;
 }
