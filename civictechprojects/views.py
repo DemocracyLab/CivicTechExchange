@@ -95,6 +95,13 @@ def project_signup(request):
     return HttpResponse(template.render(context, request))
 
 
+def project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    template = loader.get_template('project.html')
+    context = {'project': project }
+    return HttpResponse(template.render(context, request))
+
+
 def projects(request):
     template = loader.get_template('projects.html')
     url_parts = request.GET.urlencode()
