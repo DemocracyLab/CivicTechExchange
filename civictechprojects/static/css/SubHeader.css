@@ -1,0 +1,14 @@
+.SubHeader-root {
+  background-color: #222629;
+  padding: 18px 80px 18px 80px;
+}
+
+.SubHeader-root span {
+  color: white;
+  font-weight: bold;
+  padding-right: 40px;
+}
+
+.SubHeader-rightContent {
+  float: right;
+}
