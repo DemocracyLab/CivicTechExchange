@@ -30,7 +30,9 @@ class SubHeader extends React.Component {
     return SectionLinkConfigs
       .map(config =>
         <SectionLink
+          activeSection={this.props.activeSection}
           key={config.title}
+          section={config.section}
           title={config.title}
           onChangeSection={
             this.props.onChangeSection.bind(this, config.section)

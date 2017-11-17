@@ -6,15 +6,15 @@ const SectionLinkConfigs = [
     title: 'FIND PROJECTS',
   },
   {
-    section: Section.FindProjects,
+    section: Section.MyProjects,
     title: 'MY PROJECTS',
   },
   {
-    section: Section.FindProjects,
+    section: Section.Profile,
     title: 'PROFILE',
   },
   {
-    section: Section.FindProjects,
+    section: Section.Inbox,
     title: 'INBOX',
   },
 ];

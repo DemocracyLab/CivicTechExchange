@@ -16,7 +16,10 @@ class MainController extends React.Component {
     return (
       <div>
         <MainHeader />
-        <SubHeader onChangeSection={section => this.setState({section})}/>
+        <SubHeader
+          onChangeSection={section => this.setState({section})}
+          activeSection={this.state.section}
+        />
         <SectionController section={this.state.section}/>
       </div>
     );
@@ -24,4 +27,3 @@ class MainController extends React.Component {
 }
 
 export default MainController;
-

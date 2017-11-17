@@ -19,7 +19,7 @@ class SectionController extends React.Component {
       case Section.FindProjects:
         return <FindProjectsController />;
       default:
-        return <div>Unknown section: {this.props.section}</div>
+        return <div>Section not yet implemented: {this.props.section}</div>
     }
   }
 }
