@@ -1,4 +1,6 @@
+import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import cx from '../utils/cx';
+import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
 
@@ -12,27 +14,7 @@ class SubHeader extends React.Component {
   render() {
     return (
       <div className={this._cx.get('root')}>
-        <span
-          className={this._cx.get('sectionButton')}
-          onClick={() => this.props.onChangeSection(Section.FindProjects)}
-        >
-          FIND PROJECTS
-        </span>
-        <span
-          className={this._cx.get('sectionButton')}
-          >
-          MY PROJECTS
-        </span>
-        <span
-          className={this._cx.get('sectionButton')}
-          >
-          PROFILE
-        </span>
-        <span
-          className={this._cx.get('sectionButton')}
-          >
-          INBOX
-        </span>
+        {this._renderSectionLinks()}
         <span className={this._cx.get('rightContent')}>
           <button
             className={this._cx.get('createProject')}
@@ -42,6 +24,19 @@ class SubHeader extends React.Component {
         </span>
       </div>
     );
+  }
+
+  _renderSectionLinks() {
+    return SectionLinkConfigs
+      .map(config =>
+        <SectionLink
+          key={config.title}
+          title={config.title}
+          onChangeSection={
+            this.props.onChangeSection.bind(this, config.section)
+          }
+        />
+      );
   }
 }
 
