@@ -1,10 +1,11 @@
+import ProjectSearchContainer from '../componentsBySection/ProjectSearchContainer.jsx';
 import React from 'react';
 
 class FindProjectsController extends React.Component {
   render() {
     return (
-      <div>
-        Find Projects, yo
+      <div className="FindProjectsController-root">
+        <ProjectSearchContainer />
       </div>
     );
   }
