@@ -11,29 +11,36 @@ class LandingController extends React.Component {
   render() {
     return (
       <div>
-        <div className={this._cx.get('supremeCourtBanner')}>
-          <div
-            className={this._cx.get('landingTextContainer', 'centerer')}
+        {this._renderSupremeCourt()}
+        {this._renderFooter()}
+      </div>
+    );
+  }
+
+  _renderSupremeCourt() {
+    return (
+      <div className={this._cx.get('supremeCourtBanner')}>
+        <div
+          className={this._cx.get('landingTextContainer', 'centerer')}
+          >
+          <p
+            className={this._cx.get('landingText', 'useYourSkills')}
             >
-            <p
-              className={this._cx.get('landingText', 'useYourSkills')}
-              >
-              Use your skills to make a difference and
-              change the world, one project at a time.
+            Use your skills to make a difference and
+            change the world, one project at a time.
+          </p>
+          <p
+            className={this._cx.get('landingText', 'letsGetStarted')}
+            >
+              {"LET'S GET STARTED."}
             </p>
-            <p
-              className={this._cx.get('landingText', 'letsGetStarted')}
-              >
-                {"LET'S GET STARTED."}
-              </p>
+          <div
+            className={this._cx.get('centerer', 'signUpContainer')}
+            >
             <div
-              className={this._cx.get('centerer', 'signUpContainer')}
+              className={this._cx.get('landingText', 'signUp')}
               >
-              <div
-                className={this._cx.get('landingText', 'signUp')}
-                >
-                Sign Up
-              </div>
+              Sign Up
             </div>
           </div>
         </div>
@@ -41,6 +48,13 @@ class LandingController extends React.Component {
     );
   }
 
+  _renderFooter() {
+    return (
+      <div className="LandingController-footer">
+        HELP . BLOG . TWITTER . TERMS & RISKS
+      </div>
+    )
+  }
 }
 
 export default LandingController;
