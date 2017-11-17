@@ -12,16 +12,18 @@
 }
 
 .LandingController-landingTextContainer {
-  margin-top: 110px;
+  margin-top: 71px;
 }
 
 .LandingController-letsGetStarted {
   font-size: 48px;
+  margin-top: 0;
 }
 
 .LandingController-signUp {
   background-color: #86c232;
   border-radius: 5px;
+  display: inline-table;
   font-size: 19px;
   padding: 10px 36px 10px 36px;
   width: auto;
@@ -42,4 +44,5 @@
 .LandingController-useYourSkills {
   font-size: 36px;
   line-height: 1.5;
+  margin-bottom: 0;
 }

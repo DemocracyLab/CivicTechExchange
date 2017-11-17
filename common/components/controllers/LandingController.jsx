@@ -1,34 +1,36 @@
+import cx from '../utils/cx';
 import React from 'react';
 
-function css(...classnames) {
-  const prefix = 'LandingController-';
-  return prefix + classnames.join(' ' + prefix);
-}
-
 class LandingController extends React.Component {
+
+  constructor() {
+    super();
+    this._cx = new cx('LandingController-');
+  }
+
   render() {
     return (
       <div>
-        <div className={css('supremeCourtBanner')}>
+        <div className={this._cx.get('supremeCourtBanner')}>
           <div
-            className={css('landingTextContainer', 'centerer')}
+            className={this._cx.get('landingTextContainer', 'centerer')}
             >
             <p
-              className={css('landingText', 'useYourSkills')}
+              className={this._cx.get('landingText', 'useYourSkills')}
               >
               Use your skills to make a difference and
               change the world, one project at a time.
             </p>
             <p
-              className={css('landingText', 'useYourSkills')}
+              className={this._cx.get('landingText', 'letsGetStarted')}
               >
                 {"LET'S GET STARTED."}
               </p>
             <div
-              className={css('centerer', 'signUpContainer')}
+              className={this._cx.get('centerer', 'signUpContainer')}
               >
               <div
-                className={css('landingText', 'signUp')}
+                className={this._cx.get('landingText', 'signUp')}
                 >
                 Sign Up
               </div>
