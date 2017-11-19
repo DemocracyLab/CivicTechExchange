@@ -6,6 +6,7 @@ from .serializers import ProjectSerializer
 
 from urllib import parse as urlparse
 from pprint import pprint
+import simplejson as json
 
 from .models import Project
 from common.helpers.s3 import presign_s3_upload
@@ -128,11 +129,11 @@ def index(request):
     context = {}
     return HttpResponse(template.render(context, request))
 
+
 def projects_list(request):
     if request.method == 'GET':
         projects = Project.objects.order_by('-project_name')
-    serializer = ProjectSerializer(projects, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    return HttpResponse(json.dumps(list(projects.values())))
 
 
 def presign_project_thumbnail_upload(request):
@@ -142,4 +143,3 @@ def presign_project_thumbnail_upload(request):
     unique_file_name = 'project_thumbnail_' + str(time())
     s3_key = 'thumbnails/%s/%s.%s' % (uploader, unique_file_name, file_extension)
     return presign_s3_upload(key=s3_key, file_type=file_type, acl="public-read")
-
