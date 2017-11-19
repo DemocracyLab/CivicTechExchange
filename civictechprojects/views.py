@@ -134,7 +134,17 @@ def index(request):
 
 def projects_list(request):
     if request.method == 'GET':
-        projects = Project.objects.order_by('-project_name')
+        url_parts = request.GET.urlencode()
+        query_params = urlparse.parse_qs(
+            url_parts, keep_blank_values=0, strict_parsing=0)
+        if 'keyword' in query_params:
+            keyword = query_params['keyword'][0]
+            projects = (Project
+                        .objects
+                        .filter(project_description__icontains=keyword)
+                        .order_by('project_name'))
+        else:
+            projects = Project.objects.order_by('project_name')
     return HttpResponse(json.dumps(list(projects.values())))
 
 
