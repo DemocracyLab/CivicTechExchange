@@ -1,4 +1,4 @@
-import ProjectCard from '../componentsBySection/ProjectCard.jsx';
+import ProjectCard from './ProjectCard.jsx';
 import React from 'react';
 
 class ProjectCardsContainer extends React.PureComponent {

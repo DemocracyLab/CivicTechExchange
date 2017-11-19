@@ -1,5 +1,5 @@
-import ProjectCardsContainer from '../componentsBySection/ProjectCardsContainer.jsx';
-import ProjectSearchContainer from '../componentsBySection/ProjectSearchContainer.jsx';
+import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
+import ProjectSearchContainer from '../componentsBySection/FindProjects/ProjectSearchContainer.jsx';
 import React from 'react';
 
 class FindProjectsController extends React.PureComponent {
