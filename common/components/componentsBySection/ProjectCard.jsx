@@ -6,7 +6,7 @@ class ProjectCard extends React.PureComponent {
       <div className="ProjectCard-root">
         {this._renderName()}
         {this._renderIssueAndLocation()}
-        {this.props.description}
+        {this._renderDescription()}
       </div>
     );
   }
@@ -30,6 +30,13 @@ class ProjectCard extends React.PureComponent {
         </div>
       </div>
     );
+  }
+
+  _renderDescription() {
+    const maxDescriptionLength = 300;
+    return this.props.description.length > maxDescriptionLength
+      ? this.props.description.slice(0, maxDescriptionLength) + '...'
+      : this.props.description;
   }
 }
 

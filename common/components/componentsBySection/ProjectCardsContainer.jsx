@@ -5,21 +5,42 @@ class ProjectCardsContainer extends React.PureComponent {
   render() {
     return (
       <div>
-        {this._renderDummyCards()}
+        {this._useDummyData() ? this._renderDummyCards() : this._renderCards()}
       </div>
     );
+  }
+
+  _useDummyData() {
+    return new URL(
+      window.location.href
+    ).searchParams
+      .get('useDummyData') === '1';
+  }
+
+  _renderCards() {
+    return this.props.projects
+      ? this.props.projects.map(
+        (project, index) =>
+          <ProjectCard
+            description={project.description}
+            key={index}
+            issueArea={project.issueArea}
+            location={project.location}
+            name={project.name}
+          />
+      ) : 'Loading projects ...';
   }
 
   _renderDummyCards() {
     return Array(20)
       .fill(this._getDummyCardProps())
-      .map((props, index) =>
+      .map((project, index) =>
         <ProjectCard
-          description={props.description}
+          description={project.description}
           key={index}
-          issueArea={props.issueArea}
-          location={props.location}
-          name={props.name}
+          issueArea={project.issueArea}
+          location={project.location}
+          name={project.name}
         />
       );
   }
