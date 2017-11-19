@@ -1,6 +1,6 @@
 import React from 'react';
 
-class ProjectSearchBar extends React.Component {
+class ProjectSearchBar extends React.PureComponent {
 
   constructor() {
     super();

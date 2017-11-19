@@ -1,6 +1,6 @@
 import React from 'react'
 
-class CharacterCounter extends React.Component {
+class CharacterCounter extends React.PureComponent {
     constructor(props) {
         super(props);
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Section from '../enums/Section.js';
 
-class MainHeader extends React.Component {
+class MainHeader extends React.PureComponent {
   render() {
     return (
       <div className="MainHeader-root">

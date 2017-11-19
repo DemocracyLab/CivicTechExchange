@@ -4,7 +4,7 @@ import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
 
-class SubHeader extends React.Component {
+class SubHeader extends React.PureComponent {
 
   constructor() {
     super();

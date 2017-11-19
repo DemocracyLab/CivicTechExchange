@@ -1,7 +1,7 @@
 import cx from '../utils/cx';
 import React from 'react';
 
-class LandingController extends React.Component {
+class LandingController extends React.PureComponent {
 
   constructor() {
     super();

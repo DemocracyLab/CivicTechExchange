@@ -1,7 +1,7 @@
 import cx from '../utils/cx';
 import React from 'react';
 
-class SectionLink extends React.Component {
+class SectionLink extends React.PureComponent {
   constructor() {
     super();
     this._cx = new cx('SectionLink-');

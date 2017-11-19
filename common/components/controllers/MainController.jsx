@@ -4,7 +4,7 @@ import React from 'react';
 import Section from '../enums/Section.js';
 import SubHeader from '../chrome/SubHeader.jsx';
 
-class MainController extends React.Component {
+class MainController extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {

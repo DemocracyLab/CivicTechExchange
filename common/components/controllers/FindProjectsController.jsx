@@ -2,7 +2,7 @@ import ProjectCardsContainer from '../componentsBySection/ProjectCardsContainer.
 import ProjectSearchContainer from '../componentsBySection/ProjectSearchContainer.jsx';
 import React from 'react';
 
-class FindProjectsController extends React.Component {
+class FindProjectsController extends React.PureComponent {
 
   constructor() {
     super();

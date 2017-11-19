@@ -3,7 +3,7 @@ import LandingController from './LandingController.jsx'
 import React from 'react';
 import Section from '../enums/Section.js'
 
-class SectionController extends React.Component {
+class SectionController extends React.PureComponent {
   render() {
     return (
       <div>
