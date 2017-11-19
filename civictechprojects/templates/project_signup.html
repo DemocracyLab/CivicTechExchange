@@ -43,21 +43,21 @@
             <h2 class="form-group subheader">DETAILS</h2>
             <div class="form-group">
                 <label for="project_name">Project Name</label>
-                <input type="text" class="form-control" id="project_name">
+                <input type="text" class="form-control" id="project_name" name="project_name">
             </div>
 
             <div class="form-group">
                 <label for="project_location">Project Location</label>
-                <input type="text" class="form-control" id="project_location">
+                <input type="text" class="form-control" id="project_location" name="project_location">
             </div>
             <div class="form-group">
                 <label for="website_url">Website URL</label>
-                <input type="text" class="form-control" id="website_url">
+                <input type="text" class="form-control" id="website_url" name="website_url">
             </div>
 
             <div class="form-group"> <!-- OPTIONS NEED UPDATING -->
                 <label for="project_type">Issue Areas</label>
-                <select id="select_issues" name="project_type" class="form-control">
+                <select id="project_type" name="project_type" class="form-control">
                     <option value=""></option>
                     {% for row in projects %}
                         {% for item in row %}
@@ -68,9 +68,9 @@
             </div>
 
             <div class="form-group">
-                <label for="brief_description">Describe This Project</label>
-                <div id="CharacterCounter" data-elementId="brief_description" data-maxLength="3000" class="__react-root"></div>
-                <textarea class="form-control" id="brief_description" placeholder="This will appear as project introduction" rows=3 maxlength="3000"></textarea>
+                <label for="project_description">Describe This Project</label>
+                <div id="CharacterCounter" data-elementId="project_description" data-maxLength="3000" class="__react-root"></div>
+                <textarea class="form-control" id="project_description" name="project_description" placeholder="This will appear as project introduction" rows=3 maxlength="3000"></textarea>
             </div>
 
             <div class="form-group">
@@ -83,23 +83,19 @@
 
             <div class='form-group'>
                 <label for="connect_slack_channel">Group Chat (Slack, Skype, etc.)</label>
-                <input type="text" class="form-control" id="connect_slack_channel"
+                <input type="text" class="form-control" id="connect_slack_channel">
             </div>
             <div class='form-group'>
                 <label for="connect_google_drive">Document Storage (Google Drive, Dropbox, etc.)</label>
-                <input type="text" class="form-control" id="connect_google_drive"
+                <input type="text" class="form-control" id="connect_google_drive">
             </div>
             <div class='form-group'>
                 <label for="connect_github">Github</label>
-                <input type="text" class="form-control" id="connect_github"
+                <input type="text" class="form-control" id="connect_github">
             </div>
             <div class='form-group'>
                 <label for="connect_trello">Project Management (Trello, etc.)</label>
-                <input type="text" class="form-control" id="connect_trello"
-            </div>
-            <div class='form-group'>
-                <!--TODO-->
-                <button type="button" class="btn_outline upload_btn_sm">Add More Links</button>
+                <input type="text" class="form-control" id="connect_trello">
             </div>
             <h2 class="form-group subheader">DOCUMENTS</h2>
             <div class="form-group">
@@ -118,7 +114,7 @@
             </div>
             <div class="form-group pull-right">
                 <div class='text-right'>
-                    <button type="button" class="btn_outline save_btn">Save Project</button>
+                    <input type="submit" class="btn_outline save_btn" value="Save Project"/>
                 </div>
             </div>
         </div>
