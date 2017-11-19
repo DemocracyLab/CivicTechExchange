@@ -5,7 +5,7 @@ class ProjectSearchContainer extends React.Component {
   render() {
     return (
       <div>
-        <ProjectSearchBar />
+        <ProjectSearchBar onSubmitKeyword={this.props.onSubmitKeyword}/>
       </div>
     );
   }

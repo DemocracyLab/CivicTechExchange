@@ -7,22 +7,35 @@ class FindProjectsController extends React.Component {
   constructor() {
     super();
     this.state = {
+      keyword: null,
       projects: null,
     };
   }
 
   componentWillMount() {
-    fetch(new Request('/api/projects'))
+    this._loadProjects();
+  }
+
+  _loadProjects(keyword) {
+    fetch(new Request(this._getAPIURL(keyword)))
       .then(response => response.json())
       .then(projects =>
         this.setState({projects: projects.map(this._projectFromAPIData)}),
       )
   }
 
+  _getAPIURL(keyword) {
+    const baseURL = '/api/projects';
+    return keyword
+      ? baseURL + '?keyword=' + keyword
+      : baseURL;
+  }
+
   _projectFromAPIData(apiData) {
     return {
       description: apiData.project_description,
-      // TODO location not received from API
+      // TODO issueArea, location not received from API
+      issueArea: 'Social Justice',
       location: 'Seattle, WA',
       name: apiData.project_name,
     };
@@ -31,12 +44,17 @@ class FindProjectsController extends React.Component {
   render() {
     return (
       <div className="FindProjectsController-root">
-        <ProjectSearchContainer />
+        <ProjectSearchContainer
+          onSubmitKeyword={this._onSubmitKeyword.bind(this)}
+        />
         <ProjectCardsContainer projects={this.state.projects}/>
       </div>
     );
   }
 
+  _onSubmitKeyword(keyword) {
+    this._loadProjects(keyword);
+  }
 }
 
 export default FindProjectsController;
