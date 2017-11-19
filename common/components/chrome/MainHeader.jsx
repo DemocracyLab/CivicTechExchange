@@ -1,10 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
+import Section from '../enums/Section.js';
 
-class MainHeader extends Component {
+class MainHeader extends React.Component {
   render() {
     return (
       <div className="MainHeader-root">
-        <span>[DLAB LOGO]</span>
+        <span
+          onClick={() => this.props.onChangeSection(Section.Landing)}>
+          [DLAB LOGO]
+        </span>
         <span className="MainController-rightContent">
           <span>About</span>
           <span>Notifications</span>
@@ -17,4 +21,3 @@ class MainHeader extends Component {
 }
 
 export default MainHeader;
-

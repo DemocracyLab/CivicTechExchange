@@ -22,7 +22,7 @@ class MainController extends React.Component {
   render() {
     return (
       <div>
-        <MainHeader />
+        <MainHeader onChangeSection={this._onChangeSection.bind(this)}/>
         <SubHeader
           onChangeSection={this._onChangeSection.bind(this)}
           activeSection={this.state.section}
