@@ -16,10 +16,17 @@ class ProjectSearchBar extends React.PureComponent {
         <input
           value={this.state.keyword}
           onChange={e => this.setState({keyword: e.target.value})}
+          onKeyPress={this._handleKeyPress.bind(this)}
         />
         <button onClick={this._onSubmitKeyword.bind(this)}>Submit</button>
       </div>
     );
+  }
+
+  _handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this._onSubmitKeyword();
+    }
   }
 
   _onSubmitKeyword() {
