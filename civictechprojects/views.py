@@ -81,10 +81,12 @@ def project_signup(request):
         # TODO: Form validation
         project = Project(
             project_creator=get_request_contributor(request),
-            project_name=form.cleaned_data.get('project_name'),
-            project_url=form.cleaned_data.get('project_url'),
             project_description=form.cleaned_data.get('project_description'),
+            project_issue_area=form.cleaned_data.get('project_issue_area'),
+            project_location=form.cleaned_data.get('project_location'),
+            project_name=form.cleaned_data.get('project_name'),
             project_tags=form.cleaned_data.get('project_tags'),
+            project_url=form.cleaned_data.get('project_url'),
         )
         project.save()
         return redirect('/')
