@@ -7,6 +7,7 @@ class IssueAreasFilter extends React.PureComponent {
   constructor() {
     super();
     this.state = {
+      chevronX: 0,
       showDropdown: false,
     };
   }
@@ -18,7 +19,7 @@ class IssueAreasFilter extends React.PureComponent {
         Issue Areas  {this._renderChevron()}
         {
           this.state.showDropdown
-            ? <IssueAreaDropDown />
+            ? <IssueAreaDropDown xPos={this.state.chevronX}/>
             : null
         }
       </span>
@@ -28,10 +29,19 @@ class IssueAreasFilter extends React.PureComponent {
   _renderChevron() {
     const chevron = '\u25BE';
     return (
-      <span id="issueAreasChevron">
+      <span
+        ref={this._onChevronMount.bind(this)}>
         {chevron}
       </span>
     );
+  }
+
+  _onChevronMount(chevronElement) {
+    const dropDownWidth = 185;
+    const chevronX = chevronElement
+      ? chevronElement.getBoundingClientRect().left - (dropDownWidth / 2)
+      : 0;
+    this.setState({chevronX});
   }
 }
 
