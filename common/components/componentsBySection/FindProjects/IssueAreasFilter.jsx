@@ -1,12 +1,26 @@
 import IssueArea from '../../enums/IssueArea.js';
+import IssueAreaDropDown from './IssueAreaDropDown.jsx';
 import React from 'react';
 
 class IssueAreasFilter extends React.PureComponent {
+
+  constructor() {
+    super();
+    this.state = {
+      showDropdown: false,
+    };
+  }
+
   render() {
     return (
-      <span>
+      <span
+        onClick={() => this.setState({showDropdown: !this.state.showDropdown})}>
         Issue Areas  {this._renderChevron()}
-        {this._renderIssueAreas()}
+        {
+          this.state.showDropdown
+            ? <IssueAreaDropDown />
+            : null
+        }
       </span>
     );
   }
@@ -18,15 +32,6 @@ class IssueAreasFilter extends React.PureComponent {
         {chevron}
       </span>
     );
-  }
-
-  _renderIssueAreas() {
-    return Object.keys(IssueArea)
-      .map(issueAreaKey =>
-        <div>
-          {issueAreaKey}: {IssueArea[issueAreaKey]}
-        </div>
-      );
   }
 }
 
