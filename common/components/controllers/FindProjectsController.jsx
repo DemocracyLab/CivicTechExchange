@@ -34,9 +34,8 @@ class FindProjectsController extends React.PureComponent {
   _projectFromAPIData(apiData) {
     return {
       description: apiData.project_description,
-      // TODO issueArea, location not received from API
-      issueArea: 'Social Justice',
-      location: 'Seattle, WA',
+      issueArea: apiData.project_issue_area,
+      location: apiData.project_location,
       name: apiData.project_name,
     };
   }
