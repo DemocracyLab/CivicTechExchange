@@ -4,7 +4,7 @@ import React from 'react';
 class IssueAreaDropDownItem extends React.PureComponent {
   render() {
     return (
-      <div>
+      <div className="IssueAreaDropDownItem-root">
         {IssueArea[this.props.issueArea]}
       </div>
     );
