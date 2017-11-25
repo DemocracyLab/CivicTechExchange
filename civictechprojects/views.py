@@ -79,16 +79,20 @@ def project_signup(request):
         form.is_valid()
         # pprint(vars(request._post))
         # TODO: Form validation
-        project = Project(
+        project = Project.objects.create(
             project_creator=get_request_contributor(request),
             project_description=form.cleaned_data.get('project_description'),
-            project_issue_area=form.cleaned_data.get('project_issue_area'),
             project_location=form.cleaned_data.get('project_location'),
             project_name=form.cleaned_data.get('project_name'),
-            project_tags=form.cleaned_data.get('project_tags'),
             project_url=form.cleaned_data.get('project_url'),
         )
-        project.save()
+        issue_areas = form.cleaned_data.get('project_issue_area')
+        if len(issue_areas) != 0:
+            # Tag fields operate like ManyToMany fields, and so cannot
+            # be added until after the object is created.
+            project = Project.objects.get(id=project.id)
+            project.project_issue_area.add(issue_areas[0])
+            project.save()
         return redirect('/')
     else:
         form = ProjectCreationForm()
@@ -147,7 +151,22 @@ def projects_list(request):
                         .order_by('project_name'))
         else:
             projects = Project.objects.order_by('project_name')
-    return HttpResponse(json.dumps(list(projects.values())))
+    return HttpResponse(
+        json.dumps(projects_with_issue_areas(list(projects.values())))
+    )
+
+
+def projects_with_issue_areas(list_of_projects):
+    return [
+        dict(
+            project,
+            project_issue_area=list(
+                Project
+                .objects
+                .get(id=project['id']).project_issue_area.all().values())
+            )
+        for project in list_of_projects
+    ]
 
 
 def presign_project_thumbnail_upload(request):
