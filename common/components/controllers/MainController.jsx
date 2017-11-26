@@ -1,16 +1,19 @@
+// @flow
 import SectionController from './SectionController.jsx';
 import MainHeader from '../chrome/MainHeader.jsx';
 import React from 'react';
 import Section from '../enums/Section.js';
 import SubHeader from '../chrome/SubHeader.jsx';
 
-class MainController extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      section: Section.Landing,
-    };
-  }
+type State = {|
+  section: $Keys<typeof Section>,
+|};
+
+class MainController extends React.PureComponent<void, State> {
+
+  state: State = {
+    section: Section.Landing,
+  };
 
   componentWillMount() {
     const section = new URL(window.location.href).searchParams.get('section');
@@ -32,7 +35,7 @@ class MainController extends React.PureComponent {
     );
   }
 
-  _onChangeSection(section) {
+  _onChangeSection(section: $Keys<typeof Section>) {
     history.pushState({}, '', "?section=" + section)
     this.setState({section});
   }

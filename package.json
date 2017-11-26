@@ -7,9 +7,13 @@
   "author": "Marlon Keating <marlonakeating@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --config webpack.config.js && python manage.py collectstatic --noinput"
+    "build": "webpack --config webpack.config.js && python manage.py collectstatic --noinput",
+    "flow": "flow"
   },
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-flow": "^6.23.0",
+    "flow-bin": "^0.59.0",
     "immutable": "^3.8.2",
     "path": "^0.12.7",
     "react": "^16.0.0",
