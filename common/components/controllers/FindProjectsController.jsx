@@ -34,7 +34,10 @@ class FindProjectsController extends React.PureComponent {
   _projectFromAPIData(apiData) {
     return {
       description: apiData.project_description,
-      issueArea: apiData.project_issue_area,
+      issueArea:
+        apiData.project_issue_area.length != 0
+          ? apiData.project_issue_area[0].name
+          : 'None',
       location: apiData.project_location,
       name: apiData.project_name,
     };
