@@ -1,10 +1,17 @@
+// @flow
+
 import IssueArea from '../../enums/IssueArea.js';
 import IssueAreaDropDown from './IssueAreaDropDown.jsx';
 import React from 'react';
 
-class IssueAreasFilter extends React.PureComponent {
+type State = {|
+  chevronX: number,
+  showDropdown: boolean,
+|};
 
-  constructor() {
+class IssueAreasFilter extends React.PureComponent<{||}, State> {
+
+  constructor(): void {
     super();
     this.state = {
       chevronX: 0,
@@ -12,7 +19,7 @@ class IssueAreasFilter extends React.PureComponent {
     };
   }
 
-  render() {
+  render(): React$Node {
     return (
       <span
         onClick={() => this.setState({showDropdown: !this.state.showDropdown})}>
@@ -26,7 +33,7 @@ class IssueAreasFilter extends React.PureComponent {
     );
   }
 
-  _renderChevron() {
+  _renderChevron(): React$Node {
     const chevron = '\u25BE';
     return (
       <span
@@ -36,7 +43,7 @@ class IssueAreasFilter extends React.PureComponent {
     );
   }
 
-  _onChevronMount(chevronElement) {
+  _onChevronMount(chevronElement: ?React$ElementRef<*>): void {
     const dropDownWidth = 185;
     const chevronX = chevronElement
       ? chevronElement.getBoundingClientRect().left - (dropDownWidth / 2)
