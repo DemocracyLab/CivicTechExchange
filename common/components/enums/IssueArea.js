@@ -19,4 +19,6 @@ const IssueArea = {
   Other: 'Other',
 };
 
+export type IssueAreaType = $Keys<typeof IssueArea>;
+
 export default IssueArea;
