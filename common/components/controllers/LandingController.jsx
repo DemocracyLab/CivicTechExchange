@@ -1,14 +1,18 @@
+// @flow
+
 import cx from '../utils/cx';
 import React from 'react';
 
-class LandingController extends React.PureComponent {
+class LandingController extends React.PureComponent<{||}> {
 
-  constructor() {
+  _cx: cx;
+
+  constructor(): void {
     super();
     this._cx = new cx('LandingController-');
   }
 
-  render() {
+  render(): React$Node {
     return (
       <div>
         {this._renderSupremeCourt()}
@@ -17,7 +21,7 @@ class LandingController extends React.PureComponent {
     );
   }
 
-  _renderSupremeCourt() {
+  _renderSupremeCourt(): React$Node {
     return (
       <div className={this._cx.get('supremeCourtBanner')}>
         <div
@@ -48,7 +52,7 @@ class LandingController extends React.PureComponent {
     );
   }
 
-  _renderFooter() {
+  _renderFooter(): React$Node {
     return (
       <div className="LandingController-footer">
         HELP . BLOG . TWITTER . TERMS & RISKS

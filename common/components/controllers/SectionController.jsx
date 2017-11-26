@@ -8,7 +8,7 @@ import React from 'react';
 import Section from '../enums/Section.js'
 
 type Props = {|
-  section: SectionType,
+  +section: SectionType,
 |};
 
 class SectionController extends React.PureComponent<Props> {
@@ -20,7 +20,7 @@ class SectionController extends React.PureComponent<Props> {
     );
   }
 
-  _getController() {
+  _getController(): React$Node {
     switch (this.props.section) {
       case Section.Landing:
         return <LandingController />;
