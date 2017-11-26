@@ -67,7 +67,7 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
     };
   }
 
-  render(): React$Element<*> {
+  render(): React$Node {
     return (
       <div className="FindProjectsController-root">
         <ProjectSearchContainer

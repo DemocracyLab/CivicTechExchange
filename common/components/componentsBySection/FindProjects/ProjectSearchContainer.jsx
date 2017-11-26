@@ -1,9 +1,15 @@
+// @flow
+
 import ProjectFilterContainer from './ProjectFilterContainer.jsx';
 import ProjectSearchBar from './ProjectSearchBar.jsx';
 import React from 'react';
 
-class ProjectSearchContainer extends React.PureComponent {
-  render() {
+type Props = {|
+  +onSubmitKeyword: (string) => void,
+|};
+
+class ProjectSearchContainer extends React.PureComponent<Props> {
+  render(): React$Node {
     return (
       <div>
         <ProjectSearchBar onSubmitKeyword={this.props.onSubmitKeyword}/>
