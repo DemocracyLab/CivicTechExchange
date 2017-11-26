@@ -1,8 +1,16 @@
+// @flow
+
+import type {SectionType} from '../enums/Section.js';
+
 import React from 'react';
 import Section from '../enums/Section.js';
 
-class MainHeader extends React.PureComponent {
-  render() {
+type Props = {|
+  +onChangeSection: (SectionType) => void,
+|};
+
+class MainHeader extends React.PureComponent<Props> {
+  render(): React$Node {
     return (
       <div className="MainHeader-root">
         <span

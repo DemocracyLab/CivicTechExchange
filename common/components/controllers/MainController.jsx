@@ -21,14 +21,14 @@ class MainController extends React.PureComponent<void, State> {
     };
   }
 
-  componentWillMount() {
+  componentWillMount(): void {
     const section = new URL(window.location.href).searchParams.get('section');
     if (Object.keys(Section).includes(section)) {
       this.setState({section});
     }
   }
 
-  render() {
+  render(): React$Node {
     return (
       <div>
         <MainHeader onChangeSection={this._onChangeSection.bind(this)}/>
@@ -41,7 +41,7 @@ class MainController extends React.PureComponent<void, State> {
     );
   }
 
-  _onChangeSection(section: SectionType) {
+  _onChangeSection(section: SectionType): void {
     history.pushState({}, '', "?section=" + section)
     this.setState({section});
   }
