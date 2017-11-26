@@ -1,17 +1,26 @@
+// @flow
+
 import IssueArea from '../../enums/IssueArea.js';
 import IssueAreaDropDownItem from './IssueAreaDropDownItem.jsx';
 import React from 'react';
 
-class IssueAreaDropDown extends React.PureComponent {
+type Props = {|
+  xPos: number,
+|};
+type State = {|
+  contextualArrowX: number,
+|};
 
-  constructor() {
+class IssueAreaDropDown extends React.PureComponent<Props, State> {
+
+  constructor(): void {
     super();
     this.state = {
       contextualArrowX: 0,
     };
   }
 
-  render() {
+  render(): React$Node {
     return (
       <div
         className="IssueAreaDropDown-root"
@@ -23,21 +32,21 @@ class IssueAreaDropDown extends React.PureComponent {
     );
   }
 
-  _onDropDownMount(dropDownElement) {
+  _onDropDownMount(dropDownElement: ?React$ElementRef<*>): void {
     const contextualArrowX = dropDownElement
       ? dropDownElement.getBoundingClientRect().width / 2
       : 0;
     this.setState({contextualArrowX});
   }
 
-  _renderIssueAreas() {
+  _renderIssueAreas(): React$Node {
     return Object.keys(IssueArea)
       .map(issueArea =>
         <IssueAreaDropDownItem issueArea={issueArea} key={issueArea}/>
       );
   }
 
-  _renderContextualArrow() {
+  _renderContextualArrow(): React$Node {
     return (
       <div
         className="IssueAreaDropDown-contextualArrow"
