@@ -1,15 +1,24 @@
+// @flow
+
 import React from 'react';
 
-class ProjectSearchBar extends React.PureComponent {
+type Props = {|
+  +onSubmitKeyword: (string) => void,
+|};
+type State = {|
+  keyword: ?string,
+|};
 
-  constructor() {
+class ProjectSearchBar extends React.PureComponent<Props, State> {
+
+  constructor(): void {
     super();
     this.state = {
       keyword: '',
     };
   }
 
-  render() {
+  render(): React$Node {
     return (
       <div className="ProjectSearchBar-root">
         Enter a keyword:
@@ -23,14 +32,14 @@ class ProjectSearchBar extends React.PureComponent {
     );
   }
 
-  _handleKeyPress(e) {
+  _handleKeyPress(e: SyntheticEvent<HTMLInputElement>): void {
     if (e.key === 'Enter') {
       this._onSubmitKeyword();
     }
   }
 
-  _onSubmitKeyword() {
-    this.props.onSubmitKeyword(this.state.keyword);
+  _onSubmitKeyword(): void {
+    this.state.keyword && this.props.onSubmitKeyword(this.state.keyword);
   }
 }
 
