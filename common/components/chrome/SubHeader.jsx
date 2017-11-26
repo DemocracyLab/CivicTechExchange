@@ -1,17 +1,28 @@
+// @flow
+
+import type {SectionType} from '../enums/Section.js';
+
 import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import cx from '../utils/cx';
 import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
 
-class SubHeader extends React.PureComponent {
+type Props = {|
+  +activeSection: SectionType,
+  +onChangeSection: (SectionType) => void,
+|};
 
-  constructor() {
+class SubHeader extends React.PureComponent<Props> {
+
+  _cx: cx;
+
+  constructor(): void {
     super();
     this._cx = new cx('SubHeader-');
   }
 
-  render() {
+  render(): React$Node {
     return (
       <div className={this._cx.get('root')}>
         {this._renderSectionLinks()}
@@ -26,7 +37,7 @@ class SubHeader extends React.PureComponent {
     );
   }
 
-  _renderSectionLinks() {
+  _renderSectionLinks(): React$Node {
     return SectionLinkConfigs
       .map(config =>
         <SectionLink
