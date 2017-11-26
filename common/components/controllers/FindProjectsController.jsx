@@ -1,40 +1,61 @@
+// @flow
+
 import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
 import ProjectSearchContainer from '../componentsBySection/FindProjects/ProjectSearchContainer.jsx';
 import React from 'react';
-import Immutable from 'immutable'
+import {List} from 'immutable'
 
-class FindProjectsController extends React.PureComponent {
+type State = {|
+  keyword: ?string,
+  projects: List<Project>
+|};
 
-  constructor() {
+type ProjectAPIData = {|
+  +project_description: string,
+  +project_issue_area: $ReadOnlyArray<{|+name: string|}>,
+  +project_location: string,
+  +project_name: string,
+|};
+
+type Project = {|
+  +description: string,
+  +issueArea: string,
+  +location: string,
+  +name: string,
+|};
+
+class FindProjectsController extends React.PureComponent<{||}, State> {
+
+  constructor(): void {
     super();
     this.state = {
       keyword: null,
-      projects: Immutable.List(),
+      projects: List(),
     };
   }
 
-  componentWillMount() {
+  componentWillMount(): void {
     this._loadProjects();
   }
 
-  _loadProjects(keyword) {
+  _loadProjects(keyword: ?string): void {
     fetch(new Request(this._getAPIURL(keyword)))
       .then(response => response.json())
       .then(projects =>
         this.setState({
-          projects: Immutable.List(projects.map(this._projectFromAPIData)),
+          projects: List(projects.map(this._projectFromAPIData)),
         }),
       )
   }
 
-  _getAPIURL(keyword) {
+  _getAPIURL(keyword: ?string): string {
     const baseURL = '/api/projects';
     return keyword
       ? baseURL + '?keyword=' + keyword
       : baseURL;
   }
 
-  _projectFromAPIData(apiData) {
+  _projectFromAPIData(apiData: ProjectAPIData): Project {
     return {
       description: apiData.project_description,
       issueArea:
@@ -46,7 +67,7 @@ class FindProjectsController extends React.PureComponent {
     };
   }
 
-  render() {
+  render(): React$Element<*> {
     return (
       <div className="FindProjectsController-root">
         <ProjectSearchContainer
@@ -57,7 +78,7 @@ class FindProjectsController extends React.PureComponent {
     );
   }
 
-  _onSubmitKeyword(keyword) {
+  _onSubmitKeyword(keyword: string): void {
     this._loadProjects(keyword);
   }
 }

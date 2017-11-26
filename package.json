@@ -7,7 +7,7 @@
   "author": "Marlon Keating <marlonakeating@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "flow && webpack --config webpack.config.js && python manage.py collectstatic --noinput",
+    "build": "webpack --config webpack.config.js && python manage.py collectstatic --noinput",
     "flow": "flow"
   },
   "dependencies": {
