@@ -1,7 +1,16 @@
+// @flow
+
 import React from 'react';
 
-class ProjectCard extends React.PureComponent {
-  render() {
+type Props = {|
+  +description: string,
+  +issueArea: string,
+  +location: string,
+  +name: string,
+|};
+
+class ProjectCard extends React.PureComponent<Props> {
+  render(): React$Node {
     return (
       <div className="ProjectCard-root">
         {this._renderName()}
@@ -11,7 +20,7 @@ class ProjectCard extends React.PureComponent {
     );
   }
 
-  _renderName() {
+  _renderName(): React$Node {
     return (
       <div className="ProjectCard-name">
         {this.props.name}
@@ -19,7 +28,7 @@ class ProjectCard extends React.PureComponent {
     );
   }
 
-  _renderIssueAndLocation() {
+  _renderIssueAndLocation(): React$Node {
     return (
       <div className="ProjectCard-issueAndLocation">
         <div>
@@ -32,7 +41,7 @@ class ProjectCard extends React.PureComponent {
     );
   }
 
-  _renderDescription() {
+  _renderDescription(): string {
     const maxDescriptionLength = 300;
     return this.props.description.length > maxDescriptionLength
       ? this.props.description.slice(0, maxDescriptionLength) + '...'
