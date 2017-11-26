@@ -1,6 +1,7 @@
 import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
 import ProjectSearchContainer from '../componentsBySection/FindProjects/ProjectSearchContainer.jsx';
 import React from 'react';
+import Immutable from 'immutable'
 
 class FindProjectsController extends React.PureComponent {
 
@@ -8,7 +9,7 @@ class FindProjectsController extends React.PureComponent {
     super();
     this.state = {
       keyword: null,
-      projects: null,
+      projects: Immutable.List(),
     };
   }
 
@@ -20,7 +21,9 @@ class FindProjectsController extends React.PureComponent {
     fetch(new Request(this._getAPIURL(keyword)))
       .then(response => response.json())
       .then(projects =>
-        this.setState({projects: projects.map(this._projectFromAPIData)}),
+        this.setState({
+          projects: Immutable.List(projects.map(this._projectFromAPIData)),
+        }),
       )
   }
 

@@ -7,9 +7,10 @@
   "author": "Marlon Keating <marlonakeating@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build" : "webpack --config webpack.config.js && python manage.py collectstatic --noinput"
+    "build": "webpack --config webpack.config.js && python manage.py collectstatic --noinput"
   },
   "dependencies": {
+    "immutable": "^3.8.2",
     "path": "^0.12.7",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
