@@ -143,16 +143,27 @@ def projects_list(request):
         url_parts = request.GET.urlencode()
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
+        projects = Project.objects
         if 'keyword' in query_params:
-            keyword = query_params['keyword'][0]
-            projects = (Project
-                        .objects
-                        .filter(project_description__icontains=keyword)
-                        .order_by('project_name'))
-        else:
-            projects = Project.objects.order_by('project_name')
+            projects = (
+                projects
+                .filter(
+                    project_description__icontains=query_params['keyword'][0],
+                )
+            )
+        if 'issueArea' in query_params:
+            projects = (
+                projects
+                .filter(
+                    project_issue_area__name__in=query_params['issueArea'],
+                )
+            )
     return HttpResponse(
-        json.dumps(projects_with_issue_areas(list(projects.values())))
+        json.dumps(
+            projects_with_issue_areas(
+                list(projects.order_by('project_name').values())
+            )
+        )
     )
 
 

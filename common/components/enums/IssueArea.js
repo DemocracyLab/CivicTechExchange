@@ -3,7 +3,7 @@ const IssueArea = {
   Economy: 'Economy',
   Education: 'Education',
   Environment: 'Environment',
-  HealthCare: 'HealthCare',
+  HealthCare: 'Health Care',
   Homelessness: 'Homelessness',
   Housing: 'Housing',
   Immigration: 'Immigration',
