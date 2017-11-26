@@ -1,9 +1,17 @@
+// @flow
+
+import type {SectionType} from '../enums/Section.js';
+
 import FindProjectsController  from './FindProjectsController.jsx'
 import LandingController from './LandingController.jsx'
 import React from 'react';
 import Section from '../enums/Section.js'
 
-class SectionController extends React.PureComponent {
+type Props = {|
+  section: SectionType,
+|};
+
+class SectionController extends React.PureComponent<Props> {
   render() {
     return (
       <div>

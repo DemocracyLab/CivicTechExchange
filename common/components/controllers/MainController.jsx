@@ -1,4 +1,7 @@
 // @flow
+
+import type {SectionType} from '../enums/Section.js';
+
 import SectionController from './SectionController.jsx';
 import MainHeader from '../chrome/MainHeader.jsx';
 import React from 'react';
@@ -6,7 +9,7 @@ import Section from '../enums/Section.js';
 import SubHeader from '../chrome/SubHeader.jsx';
 
 type State = {|
-  section: $Keys<typeof Section>,
+  section: SectionType,
 |};
 
 class MainController extends React.PureComponent<void, State> {
@@ -38,7 +41,7 @@ class MainController extends React.PureComponent<void, State> {
     );
   }
 
-  _onChangeSection(section: $Keys<typeof Section>) {
+  _onChangeSection(section: SectionType) {
     history.pushState({}, '', "?section=" + section)
     this.setState({section});
   }

@@ -6,4 +6,6 @@ const Section = {
   Inbox: 'Inbox',
 };
 
+export type SectionType = $Keys<typeof Section>;
+
 export default Section;
