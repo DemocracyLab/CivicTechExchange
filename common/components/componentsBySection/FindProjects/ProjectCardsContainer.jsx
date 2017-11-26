@@ -1,8 +1,17 @@
+// @flow
+
+import type {Project} from '../../controllers/FindProjectsController.jsx';
+
 import ProjectCard from './ProjectCard.jsx';
 import React from 'react';
+import {List} from 'immutable'
 
-class ProjectCardsContainer extends React.PureComponent {
-  render() {
+type Props = {|
+  +projects: List<Project>
+|};
+
+class ProjectCardsContainer extends React.PureComponent<Props> {
+  render(): React$Node {
     return (
       <div>
         {this._useDummyData() ? this._renderDummyCards() : this._renderCards()}
@@ -10,14 +19,14 @@ class ProjectCardsContainer extends React.PureComponent {
     );
   }
 
-  _useDummyData() {
+  _useDummyData(): boolean {
     return new URL(
       window.location.href
     ).searchParams
       .get('useDummyData') === '1';
   }
 
-  _renderCards() {
+  _renderCards(): React$Node {
     return this.props.projects
       ? this.props.projects.map(
         (project, index) =>
@@ -31,9 +40,9 @@ class ProjectCardsContainer extends React.PureComponent {
       ) : 'Loading projects ...';
   }
 
-  _renderDummyCards() {
+  _renderDummyCards(): React$Node {
     return Array(20)
-      .fill(this._getDummyCardProps())
+      .fill(this._getDummyProject())
       .map((project, index) =>
         <ProjectCard
           description={project.description}
@@ -45,7 +54,7 @@ class ProjectCardsContainer extends React.PureComponent {
       );
   }
 
-  _getDummyCardProps() {
+  _getDummyProject(): Project {
     return {
       description: '"The pharmaceutical and insurance industries are legally empowered to hold sick children hostage while their parents frantically bankrupt themselves trying to save their sons or daughters." -- Chris Hedges',
       issueArea: 'Social Justice',

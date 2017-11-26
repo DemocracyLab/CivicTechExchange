@@ -17,7 +17,7 @@ type ProjectAPIData = {|
   +project_name: string,
 |};
 
-type Project = {|
+export type Project = {|
   +description: string,
   +issueArea: string,
   +location: string,
