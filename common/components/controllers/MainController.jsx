@@ -11,9 +11,12 @@ type State = {|
 
 class MainController extends React.PureComponent<void, State> {
 
-  state: State = {
-    section: Section.Landing,
-  };
+  constructor(): void {
+    super();
+    this.state = {
+      section: Section.Landing,
+    };
+  }
 
   componentWillMount() {
     const section = new URL(window.location.href).searchParams.get('section');
