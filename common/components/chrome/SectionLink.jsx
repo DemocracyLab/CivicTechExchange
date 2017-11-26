@@ -1,13 +1,27 @@
+// @flow
+
+import type {SectionType} from '../enums/Section.js';
+
 import cx from '../utils/cx';
 import React from 'react';
 
-class SectionLink extends React.PureComponent {
-  constructor() {
+type Props = {|
+  +activeSection: SectionType,
+  +onChangeSection: (SectionType) => void,
+  +section: SectionType,
+  +title: string,
+|};
+
+class SectionLink extends React.PureComponent<Props> {
+
+  _cx: cx;
+
+  constructor(): void {
     super();
     this._cx = new cx('SectionLink-');
   }
 
-  render() {
+  render(): React$Node {
     return (
       <div
         className={this._cx.get(...this._getClassNames())}
@@ -18,7 +32,7 @@ class SectionLink extends React.PureComponent {
     );
   }
 
-  _getClassNames() {
+  _getClassNames(): $ReadOnlyArray<string> {
     return this.props.section === this.props.activeSection
       ? ['root', 'active']
       : ['root'];
