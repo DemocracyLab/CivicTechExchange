@@ -109,3 +109,7 @@
   border: 0px;
   color: #ffffff;
 }
+
+div.modal {
+  opacity: 1
+}

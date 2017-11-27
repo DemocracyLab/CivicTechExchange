@@ -7,11 +7,12 @@
   "author": "Marlon Keating <marlonakeating@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build" : "webpack --config webpack.config.js && python manage.py collectstatic"
+    "build": "webpack --config webpack.config.js && python manage.py collectstatic"
   },
   "dependencies": {
     "path": "^0.12.7",
     "react": "^16.0.0",
+    "react-bootstrap": "^0.31.5",
     "react-dom": "^16.0.0",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
@@ -26,6 +27,6 @@
     "fs": "0.0.1-security",
     "net": "^1.0.2",
     "sync-exec": "~0.6.2",
-    "webpack": "~3.8.1"
+    "webpack": "^3.8.1"
   }
 }

@@ -80,38 +80,9 @@
             </div>
 
             <h2 class="form-group subheader">LINKS</h2>
+            <input type="hidden" id="project_links" value='[{"linkUrl":"http://www.google.com","linkName":"GOOGLE"}]'>
+            <div id="LinkList" data-elementId="project_links" class="__react-root"></div>
 
-            <div class='form-group'>
-                <label for="connect_slack_channel">Group Chat (Slack, Skype, etc.)</label>
-                <input type="text" class="form-control" id="connect_slack_channel">
-            </div>
-            <div class='form-group'>
-                <label for="connect_google_drive">Document Storage (Google Drive, Dropbox, etc.)</label>
-                <input type="text" class="form-control" id="connect_google_drive">
-            </div>
-            <div class='form-group'>
-                <label for="connect_github">Github</label>
-                <input type="text" class="form-control" id="connect_github">
-            </div>
-            <div class='form-group'>
-                <label for="connect_trello">Project Management (Trello, etc.)</label>
-                <input type="text" class="form-control" id="connect_trello">
-            </div>
-            <h2 class="form-group subheader">DOCUMENTS</h2>
-            <div class="form-group">
-                <label>Executive Summary</label>
-                <input type="file">
-                <div class='text-right'>
-                    <button type="button" class="btn_outline upload_btn">Choose File</button>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Other Documents</label>
-                <input type="file">
-                <div class='text-right'>
-                    <button type="button" class="btn_outline upload_btn">Choose File</button>
-                </div>
-            </div>
             <div class="form-group pull-right">
                 <div class='text-right'>
                     <input type="submit" class="btn_outline save_btn" value="Save Project"/>
