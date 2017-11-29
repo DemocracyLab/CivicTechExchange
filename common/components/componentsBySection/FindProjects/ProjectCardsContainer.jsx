@@ -1,16 +1,30 @@
 // @flow
 
-import type {Project} from '../../controllers/FindProjectsController.jsx';
+import type {Project} from '../../stores/ProjectSearchStore.js';
+import type {FluxReduceStore} from 'flux/utils';
 
-import ProjectCard from './ProjectCard.jsx';
-import React from 'react';
+import {Container} from 'flux/utils';
 import {List} from 'immutable'
+import ProjectCard from './ProjectCard.jsx';
+import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
+import React from 'react';
 
-type Props = {|
-  +projects: List<Project>
+type State = {|
+  projects: List<Project>
 |};
 
-class ProjectCardsContainer extends React.PureComponent<Props> {
+class ProjectCardsContainer extends React.Component<{||}, State> {
+
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [ProjectSearchStore];
+  }
+
+  static calculateState(prevState: State): State {
+    return {
+      projects: ProjectSearchStore.getProjects(),
+    };
+  }
+
   render(): React$Node {
     return (
       <div>
@@ -27,8 +41,8 @@ class ProjectCardsContainer extends React.PureComponent<Props> {
   }
 
   _renderCards(): React$Node {
-    return this.props.projects
-      ? this.props.projects.map(
+    return this.state.projects
+      ? this.state.projects.map(
         (project, index) =>
           <ProjectCard
             description={project.description}
@@ -64,4 +78,4 @@ class ProjectCardsContainer extends React.PureComponent<Props> {
   }
 }
 
-export default ProjectCardsContainer;
+export default Container.create(ProjectCardsContainer);

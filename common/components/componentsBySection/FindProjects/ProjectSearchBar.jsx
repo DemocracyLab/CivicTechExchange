@@ -1,15 +1,13 @@
 // @flow
 
+import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
 
-type Props = {|
-  +onSubmitKeyword: (string) => void,
-|};
 type State = {|
   keyword: ?string,
 |};
 
-class ProjectSearchBar extends React.PureComponent<Props, State> {
+class ProjectSearchBar extends React.PureComponent<{||}, State> {
 
   constructor(): void {
     super();
@@ -39,7 +37,12 @@ class ProjectSearchBar extends React.PureComponent<Props, State> {
   }
 
   _onSubmitKeyword(): void {
-    this.state.keyword && this.props.onSubmitKeyword(this.state.keyword);
+    if (this.state.keyword) {
+      ProjectSearchDispatcher.dispatch({
+        type: 'FILTER_BY_KEYWORD',
+        keyword: this.state.keyword,
+      });
+    }
   }
 }
 
