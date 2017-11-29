@@ -19,13 +19,18 @@ class ProjectSearchBar extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return (
       <div className="ProjectSearchBar-root">
-        Enter a keyword:
         <input
-          value={this.state.keyword}
+          className="ProjectSearchBar-input"
           onChange={e => this.setState({keyword: e.target.value})}
           onKeyPress={this._handleKeyPress.bind(this)}
+          placeholder="Enter a keyword"
+          value={this.state.keyword}
         />
-        <button onClick={this._onSubmitKeyword.bind(this)}>Submit</button>
+        <button
+          className="ProjectSearchBar-submit"
+          onClick={this._onSubmitKeyword.bind(this)}>
+          Search Projects
+        </button>
       </div>
     );
   }

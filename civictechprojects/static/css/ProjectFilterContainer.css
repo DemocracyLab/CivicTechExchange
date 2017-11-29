@@ -4,3 +4,9 @@
   border-top: 0;
   padding: 24px 51px 24px 51px;
 }
+
+.ProjectFilterContainer-label {
+  color: #727272;
+  font-size: 12px;
+  margin-right: 67px;
+}

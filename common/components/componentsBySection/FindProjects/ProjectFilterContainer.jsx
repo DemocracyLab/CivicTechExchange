@@ -7,7 +7,9 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
   render(): React$Node {
     return (
       <div className="ProjectFilterContainer-root">
-        Filter Search:
+        <span className="ProjectFilterContainer-label">
+          Filter Search:
+        </span>
         <IssueAreasFilter />
       </div>
     );
