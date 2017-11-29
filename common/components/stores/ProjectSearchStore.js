@@ -1,5 +1,7 @@
 // @flow
 
+import type {IssueAreaType} from '../enums/IssueArea';
+
 import {ReduceStore} from 'flux/utils';
 import ProjectSearchDispatcher from './ProjectSearchDispatcher.js';
 import {List, Record} from 'immutable'
@@ -19,10 +21,15 @@ type ProjectAPIData = {|
 |};
 
 export type ProjectSearchActionType = {
-  type: 'FILTER_BY_KEYWORD',
+  type: 'INIT',
+} | {
+  type: 'SET_ISSUE_AREA',
+  issueArea: IssueAreaType,
+} | {
+  type: 'SET_KEYWORD',
   keyword: string,
 } | {
-  type: 'SET_PROJECTS',
+  type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
   projects: List<Project>,
 };
 
@@ -45,17 +52,16 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   reduce(state: State, action: ProjectSearchActionType): State {
     switch (action.type) {
-      case 'FILTER_BY_KEYWORD':
-        fetch(new Request(this._getAPIURL(action.keyword)))
-          .then(response => response.json())
-          .then(projects =>
-            ProjectSearchDispatcher.dispatch({
-              type: 'SET_PROJECTS',
-              projects: List(projects.map(this._projectFromAPIData)),
-            }),
-          );
+      case 'INIT':
+        this._loadProjects({});
         return state.set('projects', null);
-      case 'SET_PROJECTS':
+      case 'SET_ISSUE_AREA':
+        this._loadProjects({issueArea: action.issueArea});
+        return state.set('projects', null);
+      case 'SET_KEYWORD':
+        this._loadProjects({keyword: action.keyword});
+        return state.set('projects', null);
+      case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
         return state.set('projects', action.projects);
       default:
         (action: empty);
@@ -63,11 +69,30 @@ class ProjectSearchStore extends ReduceStore<State> {
     }
   }
 
-  _getAPIURL(keyword: ?string): string {
-    const baseURL = '/api/projects';
-    return keyword
-      ? baseURL + '?keyword=' + keyword
-      : baseURL;
+  _loadProjects(
+    {issueArea, keyword}: {issueArea?: ?IssueAreaType, keyword?: ?string}
+  ): void {
+    const url = [
+      '/api/projects?',
+      keyword ? '&keyword=' + keyword : null,
+      issueArea
+        ? '&issueArea=' + this._reformatIssueAreaForAPI(issueArea)
+        : null,
+    ].join('');
+    fetch(new Request(url))
+      .then(response => response.json())
+      .then(projects =>
+        ProjectSearchDispatcher.dispatch({
+          type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
+          projects: List(projects.map(this._projectFromAPIData)),
+        }),
+      );
+  }
+
+  _reformatIssueAreaForAPI(issueArea: IssueAreaType): string {
+    return issueArea
+      .replace(/\.?([A-Z])/g, (_, match) => "_" + match.toLowerCase())
+      .replace(/^_/, "");
   }
 
   _projectFromAPIData(apiData: ProjectAPIData): Project {
@@ -80,10 +105,6 @@ class ProjectSearchStore extends ReduceStore<State> {
       location: apiData.project_location,
       name: apiData.project_name,
     };
-  }
-
-  getKeyword(): string {
-    return this.getState().keyword;
   }
 
   getProjects(): List<Project> {

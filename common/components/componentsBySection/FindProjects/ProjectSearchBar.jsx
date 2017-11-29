@@ -39,7 +39,7 @@ class ProjectSearchBar extends React.PureComponent<{||}, State> {
   _onSubmitKeyword(): void {
     if (this.state.keyword) {
       ProjectSearchDispatcher.dispatch({
-        type: 'FILTER_BY_KEYWORD',
+        type: 'SET_KEYWORD',
         keyword: this.state.keyword,
       });
     }
