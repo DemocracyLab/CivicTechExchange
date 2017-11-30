@@ -34,10 +34,14 @@ export type ProjectSearchActionType = {
 };
 
 const DEFAULT_STATE = {
+  issueArea: null,
+  keyword: '',
   projects: List(),
 };
 
 class State extends Record(DEFAULT_STATE) {
+  issueArea: ?IssueAreaType;
+  keyword: string;
   projects: List<Project>;
 }
 
@@ -51,16 +55,22 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   reduce(state: State, action: ProjectSearchActionType): State {
+    let newState = new State();
     switch (action.type) {
       case 'INIT':
-        this._loadProjects({});
-        return state.set('projects', null);
+        newState = this._clearProjects(state);
+        this._loadProjects(newState);
+        return newState;
       case 'SET_ISSUE_AREA':
-        this._loadProjects({issueArea: action.issueArea});
-        return state.set('projects', null);
+        newState = this._clearProjects(
+          state.set('issueArea', action.issueArea),
+        );
+        this._loadProjects(newState);
+        return newState;
       case 'SET_KEYWORD':
-        this._loadProjects({keyword: action.keyword});
-        return state.set('projects', null);
+        newState = this._clearProjects(state.set('keyword', action.keyword));
+        this._loadProjects(newState);
+        return newState;
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
         return state.set('projects', action.projects);
       default:
@@ -69,9 +79,12 @@ class ProjectSearchStore extends ReduceStore<State> {
     }
   }
 
-  _loadProjects(
-    {issueArea, keyword}: {issueArea?: ?IssueAreaType, keyword?: ?string}
-  ): void {
+  _clearProjects(state: State): State {
+    return state.set('projects', null);
+  }
+
+  _loadProjects(state: State): void {
+    const {keyword, issueArea} = state;
     const url = [
       '/api/projects?',
       keyword ? '&keyword=' + keyword : null,
@@ -105,6 +118,10 @@ class ProjectSearchStore extends ReduceStore<State> {
       location: apiData.project_location,
       name: apiData.project_name,
     };
+  }
+
+  getKeyword(): string {
+    return this.getState().keyword;
   }
 
   getProjects(): List<Project> {

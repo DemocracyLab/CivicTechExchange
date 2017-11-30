@@ -41,17 +41,20 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   }
 
   _renderCards(): React$Node {
-    return this.state.projects
-      ? this.state.projects.map(
-        (project, index) =>
-          <ProjectCard
-            description={project.description}
-            key={index}
-            issueArea={project.issueArea}
-            location={project.location}
-            name={project.name}
-          />
-      ) : 'Loading projects ...';
+    return !this.state.projects
+      ? 'Loading projects ...'
+      : this.state.projects.size === 0
+        ? 'No projects match the provided criteria'
+        : this.state.projects.map(
+          (project, index) =>
+            <ProjectCard
+              description={project.description}
+              key={index}
+              issueArea={project.issueArea}
+              location={project.location}
+              name={project.name}
+            />
+        );
   }
 
   _renderDummyCards(): React$Node {

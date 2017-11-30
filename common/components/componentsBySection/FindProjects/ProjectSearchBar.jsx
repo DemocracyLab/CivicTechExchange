@@ -1,18 +1,25 @@
 // @flow
 
+import type {FluxReduceStore} from 'flux/utils';
+
+import {Container} from 'flux/utils';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
+import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import React from 'react';
 
 type State = {|
   keyword: ?string,
 |};
 
-class ProjectSearchBar extends React.PureComponent<{||}, State> {
+class ProjectSearchBar extends React.Component<{||}, State> {
 
-  constructor(): void {
-    super();
-    this.state = {
-      keyword: '',
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [ProjectSearchStore];
+  }
+
+  static calculateState(prevState: State): State {
+    return {
+      keyword: ProjectSearchStore.getKeyword(),
     };
   }
 
@@ -51,4 +58,4 @@ class ProjectSearchBar extends React.PureComponent<{||}, State> {
   }
 }
 
-export default ProjectSearchBar;
+export default Container.create(ProjectSearchBar);
