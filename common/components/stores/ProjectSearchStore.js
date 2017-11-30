@@ -89,7 +89,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       '/api/projects?',
       keyword ? '&keyword=' + keyword : null,
       issueArea
-        ? '&issueArea=' + this._reformatIssueAreaForAPI(issueArea)
+        ? '&issueArea=' + this._camelCaseToSnakeCase(issueArea)
         : null,
     ].join('');
     fetch(new Request(url))
@@ -102,8 +102,8 @@ class ProjectSearchStore extends ReduceStore<State> {
       );
   }
 
-  _reformatIssueAreaForAPI(issueArea: IssueAreaType): string {
-    return issueArea
+  _camelCaseToSnakeCase(camelCase: string): string {
+    return camelCase
       .replace(/\.?([A-Z])/g, (_, match) => "_" + match.toLowerCase())
       .replace(/^_/, "");
   }
