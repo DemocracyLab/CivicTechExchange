@@ -5,6 +5,7 @@ import type {IssueAreaType} from '../enums/IssueArea';
 import {ReduceStore} from 'flux/utils';
 import ProjectSearchDispatcher from './ProjectSearchDispatcher.js';
 import {List, Record} from 'immutable'
+import lodash from 'lodash';
 
 export type Project = {|
   +description: string,
@@ -89,7 +90,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       '/api/projects?',
       keyword ? '&keyword=' + keyword : null,
       issueArea
-        ? '&issueArea=' + this._camelCaseToSnakeCase(issueArea)
+        ? '&issueArea=' + lodash.snakeCase(issueArea)
         : null,
     ].join('');
     fetch(new Request(url))
@@ -100,12 +101,6 @@ class ProjectSearchStore extends ReduceStore<State> {
           projects: List(projects.map(this._projectFromAPIData)),
         }),
       );
-  }
-
-  _camelCaseToSnakeCase(camelCase: string): string {
-    return camelCase
-      .replace(/\.?([A-Z])/g, (_, match) => "_" + match.toLowerCase())
-      .replace(/^_/, "");
   }
 
   _projectFromAPIData(apiData: ProjectAPIData): Project {
