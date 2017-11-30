@@ -1,6 +1,5 @@
 boto3==1.4.7
 botocore==1.7.28
-docutils==0.14
 dj-database-url==0.4.1
 Django==1.10.7
 django-appconf==1.0.2
@@ -11,10 +10,15 @@ django-s3direct==0.4.2
 django-storages==1.5.1
 django-taggit==0.22.1
 djangorestframework==3.6.4
+docutils==0.14
 gunicorn==19.6.0
 jmespath==0.9.3
-python-dateutil==2.6.1
 psycopg2==2.7.3.2
-whitenoise==3.3.0
+python-dateutil==2.6.1
+pytz==2017.3
+rcssmin==1.0.6
+rjsmin==1.0.12
 s3transfer==0.1.11
+simplejson==3.12.0
 six==1.11.0
+whitenoise==3.3.0

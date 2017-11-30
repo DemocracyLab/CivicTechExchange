@@ -1,0 +1,37 @@
+.ProjectCard-root {
+  background-color: white;
+  border: solid 1px #6b6e70;
+  display: inline-block;
+  height: 340px;
+  margin: 25px 45px 0 0;
+  width: 262px;
+}
+
+.ProjectCard-root > div {
+  padding: 5px;
+}
+
+.ProjectCard-description {
+  line-height: 1.5;
+}
+
+.ProjectCard-issueAndLocation {
+  border-bottom: solid 1px;
+}
+
+.ProjectCard-label {
+  color: #222629;
+}
+
+.ProjectCard-name {
+  height: 140px;
+  border-bottom: solid 1px;
+}
+
+.ProjectCard-subtext {
+  font-size: 12px;
+}
+
+.ProjectCard-value {
+  color: #6b6e70;
+}

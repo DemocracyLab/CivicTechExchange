@@ -1,0 +1,9 @@
+.IssueAreaDropDownItem-root {
+  padding-left: 15px;
+  padding-right: 29px;
+}
+
+.IssueAreaDropDownItem-root:hover {
+  color: white;
+  background-color: #61892f;
+}

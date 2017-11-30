@@ -1,0 +1,13 @@
+.SectionLink-root {
+  color: white;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 23px 40px;
+  padding-bottom: 8px;
+}
+
+.SectionLink-active {
+  border-bottom: orange 5px solid;
+  color: orange;
+}

@@ -19,7 +19,10 @@ from . import views
 
 urlpatterns = [
     url(r'^projects/signup/$', views.project_signup, name='project_signup'),
-    url(r'^presign_s3/upload/project/thumbnail/$', views.presign_project_thumbnail_upload),
+    url(
+        r'^presign_s3/upload/project/thumbnail/$',
+        views.presign_project_thumbnail_upload,
+    ),
     url(r'^api/projects', views.projects_list),
     url(r'^projects/$', views.projects),
     url(r'^index/$', views.index),

@@ -1,4 +1,5 @@
 .MainHeader-root {
+  font-size: 12px;
   height: 54px;
 }
 
@@ -6,6 +7,23 @@
   padding-right: 40px;
 }
 
-.MainController-rightContent {
+.MainHeader-link {
+  display: inline-block;
+  margin-top: 21px;
+}
+
+.MainHeader-logo {
+  padding-left: 75px;
+  width: 120px;
+}
+
+.MainHeader-profilePicture {
+  border-radius: 5px;
+  margin-right: 40px;
+  vertical-align: middle;
+  width: 40px;
+}
+
+.MainHeader-rightContent {
   float: right;
 }

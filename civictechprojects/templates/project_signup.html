@@ -20,15 +20,15 @@
 {% block content %}
 <div class="create-project">
     <!-- signup-primary-header signup-headers -->
-        <h1 class="">CREATE A PROJECT</h1>        
+        <h1 class="">CREATE A PROJECT</h1>
 </div>
 
 <div class="wrapper-gray">
-        
+
 <div class="container">
     <form method="post">
         {% csrf_token %}
-        
+
         <div style='background-color:#f6f7f8'>
             <!-- fields start here -->
             <div class="form-group">
@@ -56,8 +56,8 @@
             </div>
 
             <div class="form-group"> <!-- OPTIONS NEED UPDATING -->
-                <label for="project_type">Issue Areas</label>
-                <select id="project_type" name="project_type" class="form-control">
+                <label for="project_issue_area">Issue Areas</label>
+                <select id="project_issue_area" name="project_issue_area" class="form-control">
                     <option value=""></option>
                     {% for row in projects %}
                         {% for item in row %}
