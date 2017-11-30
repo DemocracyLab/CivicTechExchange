@@ -5,6 +5,14 @@ from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 
 
+# Without the following two classes, the following error occurs:
+#
+#   ValueError: You can't have two TaggableManagers with the same
+#   through model.
+#
+# By default, the `through` field is the same across both TaggableManagers
+# because when the parameter is omitted, identical defaults are provided.
+# See: https://django-taggit.readthedocs.io/en/latest/api.html#TaggableManager
 class TaggedIssueAreas(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
