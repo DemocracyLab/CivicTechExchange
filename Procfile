@@ -1,2 +1,2 @@
 web: gunicorn democracylab.wsgi
-release: python manage.py migrate --noinput && python manage.py collectstatic --noinput --clear
+release: yarn install && webpack --config webpack.config.js && python manage.py collectstatic --noinput --clear
