@@ -17,7 +17,7 @@ class MainHeader extends React.PureComponent<Props> {
           onClick={() => this.props.onChangeSection(Section.Landing)}>
           <img
             className="MainHeader-logo"
-            src="https://i.imgur.com/jvnaJWz.png"
+            src="https://i.imgur.com/NhoAjjN.png"
           />
         </span>
         <span className="MainHeader-rightContent">
