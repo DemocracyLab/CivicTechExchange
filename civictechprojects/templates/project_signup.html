@@ -20,15 +20,15 @@
 {% block content %}
 <div class="create-project">
     <!-- signup-primary-header signup-headers -->
-        <h1 class="">CREATE A PROJECT</h1>        
+        <h1 class="">CREATE A PROJECT</h1>
 </div>
 
 <div class="wrapper-gray">
-        
+
 <div class="container">
     <form method="post">
         {% csrf_token %}
-        
+
         <div style='background-color:#f6f7f8'>
             <!-- fields start here -->
             <div class="form-group">
@@ -56,13 +56,11 @@
             </div>
 
             <div class="form-group"> <!-- OPTIONS NEED UPDATING -->
-                <label for="project_type">Issue Areas</label>
-                <select id="project_type" name="project_type" class="form-control">
-                    <option value=""></option>
-                    {% for row in projects %}
-                        {% for item in row %}
-                            <option value="{{item.tag_name}}">{{item.display_name}}</option>
-                        {% endfor %}
+                <label for="project_issue_area">Issue Areas</label>
+                <select id="project_issue_area" name="project_issue_area" class="form-control">
+                    <option value="{{ issues }}"></option>
+                    {% for key, display_name in issues %}
+                        <option value="{{ key }}">{{ display_name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -73,11 +71,11 @@
                 <textarea class="form-control" id="project_description" name="project_description" placeholder="This will appear as project introduction" rows=3 maxlength="3000"></textarea>
             </div>
 
-            <div class="form-group">
-                <label for="add_volunteers">Add Volunteers</label>
-                <input type="text" class="form-control" id="add_volunteers">
-                <button type="button" class="btn_outline upload_btn_sm">Invite</button>
-            </div>
+            <!--<div class="form-group">-->
+                <!--<label for="add_volunteers">Add Volunteers</label>-->
+                <!--<input type="text" class="form-control" id="add_volunteers">-->
+                <!--<button type="button" class="btn_outline upload_btn_sm">Invite</button>-->
+            <!--</div>-->
 
             <h2 class="form-group subheader">LINKS</h2>
             <input type="hidden" id="project_links" value='[{"linkUrl":"http://www.google.com","linkName":"GOOGLE"}]'>

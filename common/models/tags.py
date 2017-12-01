@@ -3,6 +3,8 @@ import sys
 import os
 import csv
 
+from pprint import pprint
+
 # Create your models here.
 class Tag(models.Model):
     tag_name = models.CharField(max_length=100, unique=True)
@@ -11,6 +13,10 @@ class Tag(models.Model):
     category = models.CharField(max_length=200)
     subcategory = models.CharField(max_length=200, blank=True)
     parent = models.CharField(max_length=100, blank=True)
+
+def get_tags_by_category(categoryName):
+    # pprint(Tag.objects.all().values())
+    return Tag.objects.filter(category__contains=categoryName)
 
 def import_tags_from_csv(apps, schema):
     dir = os.path.dirname(__file__)
@@ -32,3 +38,4 @@ def import_tags_from_csv(apps, schema):
                 tag.save()
         except csv.Error as e:
             sys.exit('file %s, line %d: %s' % (filename, reader.line_num, e))
+

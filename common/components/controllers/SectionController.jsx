@@ -1,9 +1,17 @@
+// @flow
+
+import type {SectionType} from '../enums/Section.js';
+
 import FindProjectsController  from './FindProjectsController.jsx'
 import LandingController from './LandingController.jsx'
 import React from 'react';
 import Section from '../enums/Section.js'
 
-class SectionController extends React.Component {
+type Props = {|
+  +section: SectionType,
+|};
+
+class SectionController extends React.PureComponent<Props> {
   render() {
     return (
       <div>
@@ -12,14 +20,14 @@ class SectionController extends React.Component {
     );
   }
 
-  _getController() {
+  _getController(): React$Node {
     switch (this.props.section) {
       case Section.Landing:
         return <LandingController />;
       case Section.FindProjects:
         return <FindProjectsController />;
       default:
-        return <div>Unknown section: {this.props.section}</div>
+        return <div>Section not yet implemented: {this.props.section}</div>
     }
   }
 }

@@ -1,11 +1,26 @@
-.SubHeader-root {
-  background-color: #222629;
-  padding: 18px 80px 18px 80px;
+.SubHeader-createProject {
+  background-color: #f79e02;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  display: inline-table;
+  font-size: 19px;
+  margin-top: 5px;
+  padding: 8px 7px 8px 7px;
+  width: auto;
 }
 
-.SubHeader-root span {
+.SubHeader-root {
+  background-color: #222629;
+  height: 50px;
+  padding: 0 80px 0 80px;
+}
+
+.SubHeader-sectionButton {
   color: white;
+  display: inline-block;
   font-weight: bold;
+  margin-top: 18px;
   padding-right: 40px;
 }
 
