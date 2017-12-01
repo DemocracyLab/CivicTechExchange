@@ -9,6 +9,7 @@ import simplejson as json
 from .models import Project
 from common.helpers.s3 import presign_s3_upload
 from common.models.tags import get_tags_by_category
+from .forms import ProjectCreationForm
 from democracylab.models import get_request_contributor
 
 
@@ -51,7 +52,8 @@ def project_signup(request):
             project = Project.objects.get(id=project.id)
             project.project_issue_area.add(issue_areas[0])
             project.save()
-        return redirect('/')
+        # TODO: Redirect somewhere better
+        return redirect('/index/?section=FindProjects')
     else:
         form = ProjectCreationForm()
 

@@ -86,7 +86,6 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   _loadProjects(state: State): void {
     const {keyword, issueArea} = state;
-    console.log(issueArea);
     const url = [
       '/api/projects?',
       keyword ? '&keyword=' + keyword : null,
@@ -94,7 +93,6 @@ class ProjectSearchStore extends ReduceStore<State> {
         ? '&issueArea=' + issueArea
         : null,
     ].join('');
-    console.log(url);
     fetch(new Request(url))
       .then(response => response.json())
       .then(projects =>

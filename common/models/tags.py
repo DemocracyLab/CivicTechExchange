@@ -15,7 +15,6 @@ class Tag(models.Model):
     parent = models.CharField(max_length=100, blank=True)
 
 def get_tags_by_category(categoryName):
-    # pprint(Tag.objects.all().values())
     return Tag.objects.filter(category__contains=categoryName)
 
 def import_tags_from_csv(apps, schema):
