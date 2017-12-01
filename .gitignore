@@ -27,7 +27,6 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-bundle.js
 *.js.map
 
 # PyInstaller
