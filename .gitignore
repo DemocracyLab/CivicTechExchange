@@ -88,3 +88,4 @@ mydatabase
 # [vim] swap files
 *.swp
 
+/package-lock.json
