@@ -8,7 +8,8 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --config webpack.config.js && python manage.py collectstatic --noinput",
-    "flow": "flow"
+    "flow": "flow",
+    "postinstall": "webpack --config webpack.config.js && python manage.py collectstatic --noinput"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
