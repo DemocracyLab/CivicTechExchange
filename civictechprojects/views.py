@@ -127,7 +127,7 @@ def projects_list(request):
             url_parts, keep_blank_values=0, strict_parsing=0)
         projects = (
             projects_by_keyword(query_params)
-            | projects_by_issue_area(query_params)
+            | projects_by_tag(query_params)
         )
     return HttpResponse(
         json.dumps(
@@ -141,19 +141,19 @@ def projects_list(request):
 def projects_by_keyword(query_params):
     return Project.objects.filter(
         project_description__icontains=(
-            query_params['keyword'][0] if 'keyword' in query_params else ''
+            query_params['keyword'][0]
             )
-        )
+        ) if 'keyword' in query_params else Project.objects.none()
 
 
-def projects_by_issue_area(query_params):
+def projects_by_tag(query_params):
     return Project.objects.filter(
         project_issue_area__name__in=(
-            query_params['issueArea']
-            if 'issueArea' in query_params
+            query_params['tags']
+            if 'tags' in query_params
             else []
             )
-        )
+    )
 
 
 def projects_with_issue_areas(list_of_projects):
