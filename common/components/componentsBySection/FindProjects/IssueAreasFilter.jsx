@@ -1,7 +1,8 @@
 // @flow
 
+import ContextualDropdown from '../../common/ContextualDropdown.jsx';
 import IssueArea from '../../enums/IssueArea.js';
-import IssueAreaDropDown from './IssueAreaDropDown.jsx';
+import IssueAreaDropDownItem from './IssueAreaDropDownItem.jsx';
 import React from 'react';
 
 type State = {|
@@ -26,7 +27,18 @@ class IssueAreasFilter extends React.PureComponent<{||}, State> {
         Issue Areas  {this._renderChevron()}
         {
           this.state.showDropdown
-            ? <IssueAreaDropDown xPos={this.state.chevronX}/>
+            ? (
+              <ContextualDropdown xPos={this.state.chevronX}>
+                {
+                  Object.keys(IssueArea)
+                    .map(issueArea =>
+                      <IssueAreaDropDownItem
+                        issueArea={issueArea}
+                        key={issueArea}/>
+                    )
+                }
+              </ContextualDropdown>
+            )
             : null
         }
       </span>
