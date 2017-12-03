@@ -8,46 +8,18 @@ import simplejson as json
 
 from .models import Project
 from common.helpers.s3 import presign_s3_upload
+from common.models.tags import Tag
 from democracylab.models import get_request_contributor
 
 from .forms import ProjectCreationForm
 
 
-class Tag:
-    pass
-
-
-def tag(name):
-    res = Tag()
-    res.tag_name = name.lower().replace(' ', '_')
-    res.display_name = name
-    return res
-
-
-def tags(*tags):
-    return [tag(t) for t in tags]
-
-
-PROJECT_KINDS = tags(
-    '1st Amendment',
-    '2nd Amendment',
-    'Cultural Issues',
-    'Economy',
-    'Education',
-    'Environment',
-    'Health Care',
-    'Homelessness',
-    'Housing',
-    'Immigration',
-    'International Issues',
-    'National Security',
-    'Political Reform',
-    'Public Safety',
-    'Social Justice',
-    'Taxes',
-    'Transportation',
-    'Other'
-)
+def tags(request):
+    return HttpResponse(
+        json.dumps(
+            list(Tag.objects.values())
+        )
+    )
 
 
 def to_columns(items, count=3):
@@ -98,7 +70,17 @@ def project_signup(request):
         form = ProjectCreationForm()
 
     template = loader.get_template('project_signup.html')
-    context = {'form': form, 'projects': to_columns(PROJECT_KINDS)}
+    context = {
+        'form': form,
+        'projects': to_columns(
+            list(
+                Tag
+                .objects
+                .filter(category__iexact='Issue(s) Addressed')
+                .values()
+            )
+        )
+    }
     return HttpResponse(template.render(context, request))
 
 
