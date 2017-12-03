@@ -3,6 +3,7 @@
 import ContextualDropdown from '../../common/ContextualDropdown.jsx';
 import IssueArea from '../../enums/IssueArea.js';
 import IssueAreaDropDownItem from './IssueAreaDropDownItem.jsx';
+import IssueAreaList from './IssueAreaList.jsx';
 import React from 'react';
 
 type State = {|
@@ -29,14 +30,7 @@ class IssueAreasFilter extends React.PureComponent<{||}, State> {
           this.state.showDropdown
             ? (
               <ContextualDropdown xPos={this.state.chevronX}>
-                {
-                  Object.keys(IssueArea)
-                    .map(issueArea =>
-                      <IssueAreaDropDownItem
-                        issueArea={issueArea}
-                        key={issueArea}/>
-                    )
-                }
+                <IssueAreaList />
               </ContextualDropdown>
             )
             : null

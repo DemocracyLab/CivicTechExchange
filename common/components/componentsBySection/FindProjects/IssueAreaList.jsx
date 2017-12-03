@@ -4,24 +4,24 @@ import type {FluxReduceStore} from 'flux/utils';
 import type {Tag} from '../../stores/TagStore.js';
 
 import {List} from 'immutable'
+import IssueAreaDropDownItem from './IssueAreaDropDownItem.jsx';
 import {Container} from 'flux/utils';
 import TagDispatcher from '../../stores/ProjectSearchDispatcher.js';
-import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
+import TagStore from '../../stores/TagStore.js';
 import React from 'react';
 
 type State = {|
-  tags: List<Tag>,
+  issueAreas: List<Tag>,
 |};
 
-class ProjectTagContainer extends React.Component<{||}, State> {
-
+class IssueAreaList extends React.Component<{||}, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore];
+    return [TagStore];
   }
 
   static calculateState(prevState: State): State {
     return {
-      tags: ProjectSearchStore.getTags(),
+      issueAreas: TagStore.getIssueAreas(),
     };
   }
 
@@ -29,8 +29,10 @@ class ProjectTagContainer extends React.Component<{||}, State> {
     return (
       <div>
         {
-          this.state.tags.map(
-            tag => <span key={tag.tagName}>{tag.displayName}, </span>,
+          this.state.issueAreas.map(issueArea =>
+            <IssueAreaDropDownItem
+              issueArea={issueArea}
+              key={issueArea.tagName}/>
           )
         }
       </div>
@@ -38,4 +40,4 @@ class ProjectTagContainer extends React.Component<{||}, State> {
   }
 }
 
-export default Container.create(ProjectTagContainer);
+export default Container.create(IssueAreaList);

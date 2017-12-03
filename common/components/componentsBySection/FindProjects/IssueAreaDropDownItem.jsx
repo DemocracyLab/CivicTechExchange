@@ -1,14 +1,13 @@
 // @flow
 
-import type {IssueAreaType} from '../../enums/IssueArea.js';
+import type {Tag} from '../../stores/TagStore.js';
 
-import IssueArea from '../../enums/IssueArea.js';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
 import TagStore from '../../stores/TagStore.js';
 
 type Props = {|
-  +issueArea: IssueAreaType,
+  +issueArea: Tag,
 |};
 
 class IssueAreaDropDownItem extends React.PureComponent<Props> {
@@ -23,14 +22,11 @@ class IssueAreaDropDownItem extends React.PureComponent<Props> {
           })
           ProjectSearchDispatcher.dispatch({
             type: 'ADD_TAG',
-            tag: TagStore.getTags().get(
-              // TODO
-              Math.floor(Math.random() * (TagStore.getTags().size))
-            ),
+            tag: this.props.issueArea,
           });
         }
       }>
-        {IssueArea[this.props.issueArea]}
+        {this.props.issueArea.displayName}
       </div>
     );
   }

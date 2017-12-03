@@ -87,6 +87,12 @@ class TagStore extends ReduceStore<State> {
   getTags(): List<Tag> {
     return this.getState().tags;
   }
+
+  getIssueAreas(): List<Tag> {
+    return this.getState().tags.filter(
+      tag => tag.category === 'Issue(s) Addressed',
+    );
+  }
 }
 
 export default new TagStore();
