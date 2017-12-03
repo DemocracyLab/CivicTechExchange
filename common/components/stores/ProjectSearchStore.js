@@ -1,6 +1,7 @@
 // @flow
 
 import type {IssueAreaType} from '../enums/IssueArea';
+import type {Tag} from './TagStore';
 
 import {ReduceStore} from 'flux/utils';
 import ProjectSearchDispatcher from './ProjectSearchDispatcher.js';
@@ -24,6 +25,9 @@ type ProjectAPIData = {|
 export type ProjectSearchActionType = {
   type: 'INIT',
 } | {
+  type: 'ADD_TAG',
+  tag: Tag,
+} | {
   type: 'SET_ISSUE_AREA',
   issueArea: IssueAreaType,
 } | {
@@ -35,9 +39,10 @@ export type ProjectSearchActionType = {
 };
 
 const DEFAULT_STATE = {
-  issueArea: null,
+  issueArea: '',
   keyword: '',
   projects: List(),
+  tags: List(),
 };
 
 class State extends Record(DEFAULT_STATE) {
@@ -62,6 +67,8 @@ class ProjectSearchStore extends ReduceStore<State> {
         newState = this._clearProjects(state);
         this._loadProjects(newState);
         return newState;
+      case 'ADD_TAG':
+        return state.set('tags', state.tags.push(action.tag));
       case 'SET_ISSUE_AREA':
         newState = this._clearProjects(
           state.set('issueArea', action.issueArea),
@@ -121,6 +128,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getProjects(): List<Project> {
     return this.getState().projects;
+  }
+
+  getTags(): List<Tag> {
+    return this.getState().tags;
   }
 }
 

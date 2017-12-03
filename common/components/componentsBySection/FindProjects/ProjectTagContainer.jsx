@@ -6,7 +6,7 @@ import type {Tag} from '../../stores/TagStore.js';
 import {List} from 'immutable'
 import {Container} from 'flux/utils';
 import TagDispatcher from '../../stores/ProjectSearchDispatcher.js';
-import TagStore from '../../stores/TagStore.js';
+import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import React from 'react';
 
 type State = {|
@@ -16,12 +16,12 @@ type State = {|
 class ProjectTagContainer extends React.Component<{||}, State> {
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [TagStore];
+    return [ProjectSearchStore];
   }
 
   static calculateState(prevState: State): State {
     return {
-      tags: TagStore.getTags(),
+      tags: ProjectSearchStore.getTags(),
     };
   }
 

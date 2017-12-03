@@ -8,7 +8,7 @@ import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import React from 'react';
 
 type State = {|
-  keyword: ?string,
+  keyword: string,
 |};
 
 class ProjectSearchBar extends React.Component<{||}, State> {
