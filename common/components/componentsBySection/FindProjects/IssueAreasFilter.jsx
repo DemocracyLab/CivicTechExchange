@@ -1,7 +1,6 @@
 // @flow
 
 import ContextualDropdown from '../../common/ContextualDropdown.jsx';
-import IssueArea from '../../enums/IssueArea.js';
 import IssueAreaDropDownItem from './IssueAreaDropDownItem.jsx';
 import IssueAreaList from './IssueAreaList.jsx';
 import React from 'react';

@@ -129,6 +129,7 @@ def projects_list(request):
             projects_by_keyword(query_params)
             | projects_by_tag(query_params)
         )
+        projects = Project.objects if projects.count() == 0 else projects
     return HttpResponse(
         json.dumps(
             projects_with_issue_areas(
@@ -149,7 +150,7 @@ def projects_by_keyword(query_params):
 def projects_by_tag(query_params):
     return Project.objects.filter(
         project_issue_area__name__in=(
-            query_params['tags']
+            query_params['tags'][0].split(',')
             if 'tags' in query_params
             else []
             )

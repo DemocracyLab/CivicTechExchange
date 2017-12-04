@@ -1,12 +1,10 @@
 // @flow
 
-import type {IssueAreaType} from '../enums/IssueArea';
 import type {Tag} from './TagStore';
 
 import {ReduceStore} from 'flux/utils';
 import ProjectSearchDispatcher from './ProjectSearchDispatcher.js';
 import {List, Record} from 'immutable'
-import lodash from 'lodash';
 
 export type Project = {|
   +description: string,
@@ -28,9 +26,6 @@ export type ProjectSearchActionType = {
   type: 'ADD_TAG',
   tag: Tag,
 } | {
-  type: 'SET_ISSUE_AREA',
-  issueArea: IssueAreaType,
-} | {
   type: 'SET_KEYWORD',
   keyword: string,
 } | {
@@ -39,14 +34,12 @@ export type ProjectSearchActionType = {
 };
 
 const DEFAULT_STATE = {
-  issueArea: '',
   keyword: '',
   projects: List(),
   tags: List(),
 };
 
 class State extends Record(DEFAULT_STATE) {
-  issueArea: ?IssueAreaType;
   keyword: string;
   projects: List<Project>;
 }
@@ -68,10 +61,8 @@ class ProjectSearchStore extends ReduceStore<State> {
         this._loadProjects(newState);
         return newState;
       case 'ADD_TAG':
-        return state.set('tags', state.tags.push(action.tag));
-      case 'SET_ISSUE_AREA':
         newState = this._clearProjects(
-          state.set('issueArea', action.issueArea),
+          state.set('tags', state.tags.push(action.tag)),
         );
         this._loadProjects(newState);
         return newState;
@@ -92,12 +83,12 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _loadProjects(state: State): void {
-    const {keyword, issueArea} = state;
     const url = [
       '/api/projects?',
-      keyword ? '&keyword=' + keyword : null,
-      issueArea
-        ? '&issueArea=' + lodash.snakeCase(issueArea)
+      state.keyword ? '&keyword=' + this.getState().keyword : null,
+      state.tags
+        ? '&tags='
+          + state.tags.map(tag => tag.tagName).join(',').replace('-', '_')
         : null,
     ].join('');
     fetch(new Request(url))

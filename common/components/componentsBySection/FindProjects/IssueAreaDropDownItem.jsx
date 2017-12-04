@@ -17,10 +17,6 @@ class IssueAreaDropDownItem extends React.PureComponent<Props> {
         className="IssueAreaDropDownItem-root"
         onClick={() => {
           ProjectSearchDispatcher.dispatch({
-            type: 'SET_ISSUE_AREA',
-            issueArea: this.props.issueArea,
-          })
-          ProjectSearchDispatcher.dispatch({
             type: 'ADD_TAG',
             tag: this.props.issueArea,
           });
