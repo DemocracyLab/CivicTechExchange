@@ -11,7 +11,6 @@ type State = {|
 |};
 
 class IssueAreasFilter extends React.PureComponent<{||}, State> {
-
   constructor(): void {
     super();
     this.state = {

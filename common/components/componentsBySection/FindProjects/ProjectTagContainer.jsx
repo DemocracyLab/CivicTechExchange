@@ -5,8 +5,8 @@ import type {Tag} from '../../stores/TagStore.js';
 
 import {List} from 'immutable'
 import {Container} from 'flux/utils';
-import TagDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
+import ProjectTag from './ProjectTag.jsx';
 import React from 'react';
 
 type State = {|
@@ -27,10 +27,14 @@ class ProjectTagContainer extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div>
+      <div
+        className={
+          'ProjectTagContainer-root'
+            + (this.state.tags.size === 0 ? '  ProjectTagContainer-noTags' : '')
+        }>
         {
           this.state.tags.map(
-            tag => <span key={tag.tagName}>{tag.displayName}, </span>,
+            tag => <ProjectTag key={tag.tagName} tag={tag}/>,
           )
         }
       </div>
