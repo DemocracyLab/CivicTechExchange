@@ -19,9 +19,8 @@ class IssueAreaDropDownItem extends React.PureComponent<Props> {
           ProjectSearchDispatcher.dispatch({
             type: 'ADD_TAG',
             tag: this.props.issueArea,
-          });
-        }
-      }>
+          })}
+        }>
         {this.props.issueArea.displayName}
       </div>
     );

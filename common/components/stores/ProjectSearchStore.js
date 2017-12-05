@@ -26,6 +26,9 @@ export type ProjectSearchActionType = {
   type: 'ADD_TAG',
   tag: Tag,
 } | {
+  type: 'REMOVE_TAG',
+  tag: Tag,
+} | {
   type: 'SET_KEYWORD',
   keyword: string,
 } | {
@@ -63,6 +66,19 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'ADD_TAG':
         newState = this._clearProjects(
           state.set('tags', state.tags.push(action.tag)),
+        );
+        this._loadProjects(newState);
+        return newState;
+      case 'REMOVE_TAG':
+        newState = this._clearProjects(
+          state.set(
+            'tags',
+            state.tags.delete(
+              /* $FlowFixMe I don't know why, but the action type isn't being
+                subtyped here */
+              state.tags.findIndex(tag => tag.id === action.tag.id),
+            ),
+          ),
         );
         this._loadProjects(newState);
         return newState;

@@ -9,5 +9,6 @@
 }
 
 .ProjectTag-closeButton {
+  cursor: pointer;
   margin-left: 18px;
 }

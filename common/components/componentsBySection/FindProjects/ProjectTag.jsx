@@ -2,6 +2,7 @@
 
 import type {Tag} from '../../stores/TagStore.js';
 
+import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
 
 type Props = {|
@@ -20,9 +21,15 @@ class ProjectTag extends React.PureComponent<Props> {
   }
 
   _renderCloseButton(): React$Node {
-    // TODO add onClick handler
     return (
-      <span className="ProjectTag-closeButton">
+      <span
+        className="ProjectTag-closeButton"
+        onClick={() => {
+          ProjectSearchDispatcher.dispatch({
+            type: 'REMOVE_TAG',
+            tag: this.props.tag,
+          })}
+        }>
         ×
       </span>
     );
