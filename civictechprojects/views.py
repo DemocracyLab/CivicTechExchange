@@ -128,8 +128,10 @@ def projects_list(request):
         projects = (
             projects_by_keyword(query_params)
             | projects_by_tag(query_params)
-        )
-        projects = Project.objects if projects.count() == 0 else projects
+        ) if (
+            'keyword' in query_params
+            or 'tags' in query_params
+        ) else Project.objects
     return HttpResponse(
         json.dumps(
             projects_with_issue_areas(
