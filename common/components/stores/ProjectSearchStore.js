@@ -57,20 +57,13 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   reduce(state: State, action: ProjectSearchActionType): State {
-    let newState = new State();
     switch (action.type) {
       case 'INIT':
-        newState = this._clearProjects(state);
-        this._loadProjects(newState);
-        return newState;
+        return this._loadProjects(new State());
       case 'ADD_TAG':
-        newState = this._clearProjects(
-          state.set('tags', state.tags.push(action.tag)),
-        );
-        this._loadProjects(newState);
-        return newState;
+        return this._loadProjects(state.set('tags', state.tags.push(action.tag)));
       case 'REMOVE_TAG':
-        newState = this._clearProjects(
+        return this._loadProjects(
           state.set(
             'tags',
             state.tags.delete(
@@ -80,12 +73,8 @@ class ProjectSearchStore extends ReduceStore<State> {
             ),
           ),
         );
-        this._loadProjects(newState);
-        return newState;
       case 'SET_KEYWORD':
-        newState = this._clearProjects(state.set('keyword', action.keyword));
-        this._loadProjects(newState);
-        return newState;
+        return this._loadProjects(state.set('keyword', action.keyword));
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
         return state.set('projects', action.projects);
       default:
@@ -94,11 +83,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     }
   }
 
-  _clearProjects(state: State): State {
-    return state.set('projects', null);
-  }
-
-  _loadProjects(state: State): void {
+  _loadProjects(state: State): State {
     const url = [
       '/api/projects?',
       state.keyword ? '&keyword=' + this.getState().keyword : null,
@@ -115,6 +100,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           projects: List(projects.map(this._projectFromAPIData)),
         }),
       );
+    return state.set('projects', null);
   }
 
   _projectFromAPIData(apiData: ProjectAPIData): Project {
