@@ -89,7 +89,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       state.keyword ? '&keyword=' + this.getState().keyword : null,
       state.tags
         ? '&tags='
-          + state.tags.map(tag => tag.tagName).join(',').replace('-', '_')
+          + state.tags.map(tag => tag.tagName).join(',')
         : null,
     ].join('');
     fetch(new Request(url))
