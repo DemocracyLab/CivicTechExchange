@@ -86,11 +86,8 @@ class ProjectSearchStore extends ReduceStore<State> {
   _loadProjects(state: State): State {
     const url = [
       '/api/projects?',
-      state.keyword ? '&keyword=' + this.getState().keyword : null,
-      state.tags
-        ? '&tags='
-          + state.tags.map(tag => tag.tagName).join(',')
-        : null,
+      this._getKeywordQueryParam(state),
+      this._getTagsQueryParam(state),
     ].join('');
     fetch(new Request(url))
       .then(response => response.json())
@@ -101,6 +98,17 @@ class ProjectSearchStore extends ReduceStore<State> {
         }),
       );
     return state.set('projects', null);
+  }
+
+  _getKeywordQueryParam(state: State): ?string {
+    return state.keyword ? '&keyword=' + state.keyword : null;
+  }
+
+  _getTagsQueryParam(state: State): ?string {
+    return state.tags
+      ? '&tags='
+        + state.tags.map(tag => tag.tagName).join(',')
+      : null;
   }
 
   _projectFromAPIData(apiData: ProjectAPIData): Project {
