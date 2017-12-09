@@ -48,11 +48,8 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
         : this.state.projects.map(
           (project, index) =>
             <ProjectCard
-              description={project.description}
+              project={project}
               key={index}
-              issueArea={project.issueArea}
-              location={project.location}
-              name={project.name}
             />
         );
   }
@@ -62,11 +59,8 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
       .fill(this._getDummyProject())
       .map((project, index) =>
         <ProjectCard
-          description={project.description}
+          project={project}
           key={index}
-          issueArea={project.issueArea}
-          location={project.location}
-          name={project.name}
         />
       );
   }
@@ -74,6 +68,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   _getDummyProject(): Project {
     return {
       description: '"The pharmaceutical and insurance industries are legally empowered to hold sick children hostage while their parents frantically bankrupt themselves trying to save their sons or daughters." -- Chris Hedges',
+      id: 1,
       issueArea: 'Social Justice',
       location: 'Seattle',
       name: 'Incite Socialist Revolution'
