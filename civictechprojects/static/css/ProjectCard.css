@@ -1,9 +1,11 @@
 .ProjectCard-root {
   background-color: white;
   border: solid 1px #6b6e70;
+  color: inherit;
   display: inline-block;
   height: 340px;
   margin: 25px 45px 0 0;
+  text-decoration: inherit;
   width: 262px;
 }
 

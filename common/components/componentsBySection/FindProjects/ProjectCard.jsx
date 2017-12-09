@@ -1,13 +1,11 @@
 // @flow
 
 import cx from '../../utils/cx';
+import type {Project} from '../../stores/ProjectSearchStore.js';
 import React from 'react';
 
 type Props = {|
-  +description: string,
-  +issueArea: string,
-  +location: string,
-  +name: string,
+  +project: Project,
 |};
 
 class ProjectCard extends React.PureComponent<Props> {
@@ -21,20 +19,22 @@ class ProjectCard extends React.PureComponent<Props> {
 
   render(): React$Node {
     return (
-      <div className="ProjectCard-root">
+      <a
+        className="ProjectCard-root"
+        href={'/project/' + this.props.project.id}>
         {this._renderName()}
         {this._renderIssueAndLocation()}
         <div className={this._cx.get('description', 'subtext', 'value')}>
           {this._renderDescription()}
         </div>
-      </div>
+      </a>
     );
   }
 
   _renderName(): React$Node {
     return (
       <div className="ProjectCard-name">
-        {this.props.name}
+        {this.props.project.name}
       </div>
     );
   }
@@ -42,8 +42,13 @@ class ProjectCard extends React.PureComponent<Props> {
   _renderIssueAndLocation(): React$Node {
     return (
       <div className="ProjectCard-issueAndLocation">
-        {this._renderLabelAndValue('Issue Area: ', this.props.issueArea)}
-        {this._renderLabelAndValue('Location: ', this.props.location)}
+        {
+          this._renderLabelAndValue(
+            'Issue Area: ',
+            this.props.project.issueArea,
+          )
+        }
+        {this._renderLabelAndValue('Location: ', this.props.project.location)}
       </div>
     );
   }
@@ -63,9 +68,9 @@ class ProjectCard extends React.PureComponent<Props> {
 
   _renderDescription(): string {
     const maxDescriptionLength = 300;
-    return this.props.description.length > maxDescriptionLength
-      ? this.props.description.slice(0, maxDescriptionLength) + '...'
-      : this.props.description;
+    return this.props.project.description.length > maxDescriptionLength
+      ? this.props.project.description.slice(0, maxDescriptionLength) + '...'
+      : this.props.project.description;
   }
 }
 
