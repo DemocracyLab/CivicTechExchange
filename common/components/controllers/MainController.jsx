@@ -44,6 +44,7 @@ class MainController extends React.PureComponent<void, State> {
   _onChangeSection(section: SectionType): void {
     history.pushState({}, '', "?section=" + section)
     this.setState({section});
+    window.FB.AppEvents.logEvent('sectionLinkClick', null, {section});
   }
 }
 

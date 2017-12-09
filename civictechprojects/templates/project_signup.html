@@ -24,9 +24,13 @@
 </div>
 
 <div class="wrapper-gray">
-
+<script>
+  function logProjectCreated() {
+    window.FB.AppEvents.logEvent('projectCreated');
+  }
+</script>
 <div class="container">
-    <form method="post">
+    <form onsubmit="logProjectCreated();" method="post">
         {% csrf_token %}
 
         <div style='background-color:#f6f7f8'>
