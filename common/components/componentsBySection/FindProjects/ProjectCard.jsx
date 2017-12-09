@@ -19,20 +19,16 @@ class ProjectCard extends React.PureComponent<Props> {
 
   render(): React$Node {
     return (
-      <div
+      <a
         className="ProjectCard-root"
-        onClick={this._goToDetailsView.bind(this)}>
+        href={'/project/' + this.props.project.id}>
         {this._renderName()}
         {this._renderIssueAndLocation()}
         <div className={this._cx.get('description', 'subtext', 'value')}>
           {this._renderDescription()}
         </div>
-      </div>
+      </a>
     );
-  }
-
-  _goToDetailsView(): void {
-    window.location.replace('/project/' + this.props.project.id);
   }
 
   _renderName(): React$Node {
