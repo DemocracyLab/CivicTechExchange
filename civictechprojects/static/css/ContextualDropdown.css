@@ -1,4 +1,4 @@
-.IssueAreaDropDown-root {
+.ContextualDropdown-root {
   background: white;
   border: solid 0.5px #cecece;
   margin-top: 10px;
@@ -8,7 +8,7 @@
   width: fit-content;
 }
 
-.IssueAreaDropDown-contextualArrow {
+.ContextualDropdown-contextualArrow {
   background: white;
   border: solid 0.5px #cecece;
   border-bottom: 0;

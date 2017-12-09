@@ -8,7 +8,7 @@ import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import React from 'react';
 
 type State = {|
-  keyword: ?string,
+  keyword: string,
 |};
 
 class ProjectSearchBar extends React.Component<{||}, State> {
@@ -49,12 +49,10 @@ class ProjectSearchBar extends React.Component<{||}, State> {
   }
 
   _onSubmitKeyword(): void {
-    if (this.state.keyword) {
-      ProjectSearchDispatcher.dispatch({
-        type: 'SET_KEYWORD',
-        keyword: this.state.keyword,
-      });
-    }
+    ProjectSearchDispatcher.dispatch({
+      type: 'SET_KEYWORD',
+      keyword: this.state.keyword,
+    });
   }
 }
 

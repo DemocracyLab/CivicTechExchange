@@ -10,7 +10,16 @@ from .models import Project
 from common.helpers.s3 import presign_s3_upload
 from common.models.tags import get_tags_by_category
 from .forms import ProjectCreationForm
+from common.models.tags import Tag
 from democracylab.models import get_request_contributor
+
+
+def tags(request):
+    return HttpResponse(
+        json.dumps(
+            list(Tag.objects.values())
+        )
+    )
 
 
 def to_rows(items, width):
@@ -58,10 +67,12 @@ def project_signup(request):
         form = ProjectCreationForm()
 
     template = loader.get_template('project_signup.html')
-    print("Getting issue list")
     issues = get_tags_by_category('Issue(s) Addressed')
     tag_map = to_tag_map(issues)
-    context = {'form': form, 'issues': tag_map}
+    context = {
+        'form': form,
+        'issues': to_tag_map(issues)
+    }
     return HttpResponse(template.render(context, request))
 
 
@@ -106,27 +117,37 @@ def projects_list(request):
         url_parts = request.GET.urlencode()
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
-        projects = Project.objects
-        if 'keyword' in query_params:
-            projects = (
-                projects
-                .filter(
-                    project_description__icontains=query_params['keyword'][0],
-                )
-            )
-        if 'issueArea' in query_params:
-            projects = (
-                projects
-                .filter(
-                    project_issue_area__name__in=query_params['issueArea'],
-                )
-            )
+        projects = (
+            projects_by_keyword(query_params)
+            | projects_by_tag(query_params)
+        ) if (
+            'keyword' in query_params
+            or 'tags' in query_params
+        ) else Project.objects
     return HttpResponse(
         json.dumps(
             projects_with_issue_areas(
                 list(projects.order_by('project_name').values())
             )
         )
+    )
+
+
+def projects_by_keyword(query_params):
+    return Project.objects.filter(
+        project_description__icontains=(
+            query_params['keyword'][0]
+            )
+        ) if 'keyword' in query_params else Project.objects.none()
+
+
+def projects_by_tag(query_params):
+    return Project.objects.filter(
+        project_issue_area__name__in=(
+            query_params['tags'][0].split(',')
+            if 'tags' in query_params
+            else []
+            )
     )
 
 
