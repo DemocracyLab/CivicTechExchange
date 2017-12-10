@@ -19,6 +19,24 @@
     <link rel="stylesheet" type="text/css" href="/static/css/SubHeader.css"/>
   </head>
   <body>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '137258853647008',
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v2.10',
+        });
+        FB.AppEvents.logPageView();
+      };
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "https://connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
     <div id="MainController" data-elementId="brief_description" data-maxLength="3000" class="__react-root">Loading . . .</div>
   </body>
 </html>

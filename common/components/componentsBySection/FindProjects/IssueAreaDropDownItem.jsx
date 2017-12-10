@@ -19,8 +19,13 @@ class IssueAreaDropDownItem extends React.PureComponent<Props> {
           ProjectSearchDispatcher.dispatch({
             type: 'ADD_TAG',
             tag: this.props.issueArea,
-          })}
-        }>
+          });
+          window.FB.AppEvents.logEvent(
+            'addIssueAreaTag',
+            null,
+            {issueArea: this.props.issueArea.displayName},
+          );
+        }}>
         {this.props.issueArea.displayName}
       </div>
     );
