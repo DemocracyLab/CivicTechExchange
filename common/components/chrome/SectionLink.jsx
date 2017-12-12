@@ -3,11 +3,11 @@
 import type {SectionType} from '../enums/Section.js';
 
 import cx from '../utils/cx';
+import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
 
 type Props = {|
   +activeSection: SectionType,
-  +onChangeSection: (SectionType) => void,
   +section: SectionType,
   +title: string,
 |};
@@ -25,7 +25,7 @@ class SectionLink extends React.PureComponent<Props> {
     return (
       <div
         className={this._cx.get(...this._getClassNames())}
-        onClick={this.props.onChangeSection}
+        onClick={this._onChangeSection.bind(this)}
         >
         {this.props.title}
       </div>
@@ -36,6 +36,18 @@ class SectionLink extends React.PureComponent<Props> {
     return this.props.section === this.props.activeSection
       ? ['root', 'active']
       : ['root'];
+  }
+
+  _onChangeSection(): void {
+    NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: this.props.section,
+    });
+    window.FB.AppEvents.logEvent(
+      'sectionLinkClick',
+      null,
+      {section: this.props.section},
+    );
   }
 }
 
