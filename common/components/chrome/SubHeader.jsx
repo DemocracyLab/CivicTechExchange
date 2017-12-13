@@ -5,6 +5,7 @@ import type {SectionType} from '../enums/Section.js';
 
 import {Container} from 'flux/utils';
 import cx from '../utils/cx';
+import NavigationDispatcher from '../stores/NavigationDispatcher.js'
 import NavigationStore from '../stores/NavigationStore.js'
 import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import SectionLink from './SectionLink.jsx';
@@ -41,6 +42,7 @@ class SubHeader extends React.Component<{||}, State> {
         <span className={this._cx.get('rightContent')}>
           <button
             className={this._cx.get('createProject')}
+            onClick={this._goToCreateProject}
             >
             Create A Project
           </button>
@@ -59,6 +61,14 @@ class SubHeader extends React.Component<{||}, State> {
           title={config.title}
         />
       );
+  }
+
+  _goToCreateProject(): void {
+    NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: Section.CreateProject,
+    });
+    window.FB.AppEvents.logEvent('CreateProjectNavBarClick');
   }
 }
 
