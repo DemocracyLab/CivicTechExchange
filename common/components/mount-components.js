@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import CharacterCounter from './forms/CharacterCounter.jsx'
 import LinkList from './forms/LinkList.jsx'
 import MainController from './controllers/MainController.jsx'
+import ImageUploadFormElement from './forms/ImageUploadFormElement.jsx'
 
 // TODO: Figure out a better way to prevent react console error where it's expecting node Environment variables
 global.process = {
@@ -14,7 +15,8 @@ global.process = {
 const APPS = {
     "CharacterCounter": CharacterCounter,
     'MainController': MainController,
-    'LinkList' : LinkList
+    'LinkList' : LinkList,
+    'ImageUploadFormElement' : ImageUploadFormElement
 };
 
 function renderElement(el) {

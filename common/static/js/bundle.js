@@ -14024,6 +14024,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__forms_CharacterCounter_jsx__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__forms_LinkList_jsx__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__controllers_MainController_jsx__ = __webpack_require__(303);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__forms_ImageUploadFormElement_jsx__ = __webpack_require__(331);
+
 
 
 
@@ -14040,7 +14042,8 @@ global.process = {
 var APPS = {
     "CharacterCounter": __WEBPACK_IMPORTED_MODULE_2__forms_CharacterCounter_jsx__["a" /* default */],
     'MainController': __WEBPACK_IMPORTED_MODULE_4__controllers_MainController_jsx__["a" /* default */],
-    'LinkList': __WEBPACK_IMPORTED_MODULE_3__forms_LinkList_jsx__["a" /* default */]
+    'LinkList': __WEBPACK_IMPORTED_MODULE_3__forms_LinkList_jsx__["a" /* default */],
+    'ImageUploadFormElement': __WEBPACK_IMPORTED_MODULE_5__forms_ImageUploadFormElement_jsx__["a" /* default */]
 };
 
 function renderElement(el) {
@@ -48241,6 +48244,183 @@ var SectionLink = function (_React$PureComponent) {
 }(__WEBPACK_IMPORTED_MODULE_1_react___default.a.PureComponent);
 
 /* harmony default export */ __webpack_exports__["a"] = (SectionLink);
+
+/***/ }),
+/* 331 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_upload_FileUploadButton_jsx__ = __webpack_require__(332);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+var ImageUploadFormElement = function (_React$PureComponent) {
+  _inherits(ImageUploadFormElement, _React$PureComponent);
+
+  function ImageUploadFormElement() {
+    _classCallCheck(this, ImageUploadFormElement);
+
+    var _this = _possibleConstructorReturn(this, (ImageUploadFormElement.__proto__ || Object.getPrototypeOf(ImageUploadFormElement)).call(this));
+
+    _this.state = {
+      imagePreviewUrl: undefined
+    };
+    return _this;
+  }
+
+  _createClass(ImageUploadFormElement, [{
+    key: 'render',
+    value: function render() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        null,
+        this.state.imagePreviewUrl ? this._renderThumbnail() : this._renderThumbnailPlaceholder(),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_upload_FileUploadButton_jsx__["a" /* default */], { acceptedFileTypes: 'image/*', buttonText: 'Upload Project Image', onFileUpload: this._handleFileSelection.bind(this) }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', name: this.props.form_id, id: this.props.form_id })
+      );
+    }
+  }, {
+    key: '_renderThumbnailPlaceholder',
+    value: function _renderThumbnailPlaceholder() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'span',
+        { ref: 'thumbnailPlaceholder', 'class': 'upload_img upload_img_bdr' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { 'class': 'fa fa-folder-open-o fa-3x', 'aria-hidden': 'true' })
+      );
+    }
+  }, {
+    key: '_renderThumbnail',
+    value: function _renderThumbnail() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { 'class': 'upload_img upload_img_bdr', src: this.state.imagePreviewUrl });
+    }
+  }, {
+    key: '_handleFileSelection',
+    value: function _handleFileSelection(fileUploadData) {
+      this.refs.hiddenFormField.value = fileUploadData.key;
+      this.setState({ "imagePreviewUrl": fileUploadData.publicUrl });
+    }
+  }]);
+
+  return ImageUploadFormElement;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent);
+
+/* harmony default export */ __webpack_exports__["a"] = (ImageUploadFormElement);
+
+/***/ }),
+/* 332 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var FileUploadButton = function (_React$PureComponent) {
+  _inherits(FileUploadButton, _React$PureComponent);
+
+  function FileUploadButton() {
+    _classCallCheck(this, FileUploadButton);
+
+    var _this = _possibleConstructorReturn(this, (FileUploadButton.__proto__ || Object.getPrototypeOf(FileUploadButton)).call(this));
+
+    _this.state = {
+      s3Key: undefined
+    };
+    return _this;
+  }
+
+  _createClass(FileUploadButton, [{
+    key: "render",
+    value: function render() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        "div",
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "button", value: this.props.buttonText, onClick: this._handleClick.bind(this) }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { ref: "fileInput", type: "file", style: { display: "none" }, accept: this.props.acceptedFileTypes, onChange: this._handleFileSelection.bind(this) })
+      );
+    }
+  }, {
+    key: "_handleClick",
+    value: function _handleClick() {
+      this.refs.fileInput.click();
+    }
+  }, {
+    key: "_handleFileSelection",
+    value: function _handleFileSelection() {
+      this.launchPresignedUploadToS3(this.refs.fileInput.files[0]);
+    }
+  }, {
+    key: "launchPresignedUploadToS3",
+    value: function launchPresignedUploadToS3(file) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "/presign_s3/upload/project/thumbnail?file_type=" + file.type);
+      var instance = this;
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            instance.uploadFileToS3(file, response.data, response.url);
+          } else {
+            alert("Could not get signed URL.");
+          }
+        }
+      };
+      xhr.send();
+    }
+  }, {
+    key: "uploadFileToS3",
+    value: function uploadFileToS3(file, s3Data, url) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", s3Data.url);
+
+      var postData = new FormData();
+      for (var key in s3Data.fields) {
+        postData.append(key, s3Data.fields[key]);
+      }
+      postData.append('file', file);
+      this.state.s3Key = s3Data.fields.key;
+      var instance = this;
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200 || xhr.status === 204) {
+            var fileUploadData = {
+              key: instance.state.s3Key,
+              publicUrl: url
+            };
+            instance.props.onFileUpload(fileUploadData);
+          } else {
+            alert("Could not upload file.");
+          }
+        }
+      };
+      xhr.send(postData);
+    }
+  }]);
+
+  return FileUploadButton;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent);
+
+/* harmony default export */ __webpack_exports__["a"] = (FileUploadButton);
 
 /***/ })
 /******/ ]);

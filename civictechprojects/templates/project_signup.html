@@ -9,7 +9,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js"></script>
 <script type="text/javascript">
     $(function() {
-        initializeS3UploadHander("thumbnail_input", "thumbnail_preview", "thumbnail_placeholder");
         initializeSelectionControl("select_issues");
     });
 </script>
@@ -32,12 +31,7 @@
         <div style='background-color:#f6f7f8'>
             <!-- fields start here -->
             <div class="form-group">
-                <span id="thumbnail_placeholder" class="upload_img upload_img_bdr">
-                    <i class="fa fa-folder-open-o fa-3x" aria-hidden="true"></i>
-                </span>
-                <img id="thumbnail_preview" class="upload_img upload_img_bdr">
-                <input type="button" id="loadFileXml" value="Upload Project Image" onclick="document.getElementById('thumbnail_input').click();" />
-                <input type="file" style="display:none;" id="thumbnail_input"/>
+                <div id="ImageUploadFormElement" data-form_id="project_thumbnail_location" class="__react-root"></div>
             </div>
 
             <h2 class="form-group subheader">DETAILS</h2>
