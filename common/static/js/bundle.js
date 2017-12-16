@@ -45487,9 +45487,7 @@ var Well = function (_React$Component) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__ = __webpack_require__(92);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -45501,11 +45499,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-
 /**
  * Modal for adding/editing hyperlinks
  */
-
 var LinkEntryModal = function (_React$PureComponent) {
   _inherits(LinkEntryModal, _React$PureComponent);
 
@@ -45588,22 +45584,22 @@ var LinkEntryModal = function (_React$PureComponent) {
         'div',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["b" /* Modal */],
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["b" /* Modal */],
           { show: this.state.showModal,
             onHide: this.close,
             backdrop: 'true'
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["b" /* Modal */].Header,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["b" /* Modal */].Header,
             { closeButton: true },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["b" /* Modal */].Title,
+              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["b" /* Modal */].Title,
               null,
               'Modal heading'
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["b" /* Modal */].Body,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["b" /* Modal */].Body,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'label',
@@ -45623,16 +45619,16 @@ var LinkEntryModal = function (_React$PureComponent) {
               } })
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["b" /* Modal */].Footer,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["b" /* Modal */].Footer,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["a" /* Button */],
+              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
               { onClick: this.close },
               'Close'
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["a" /* Button */],
-              { onClick: this.save },
+              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
+              { disabled: !this.state.linkInfo.linkUrl, onClick: this.save },
               'Save'
             )
           )
@@ -45643,18 +45639,6 @@ var LinkEntryModal = function (_React$PureComponent) {
 
   return LinkEntryModal;
 }(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent);
-
-LinkEntryModal.propTypes = {
-  /** True to show modal, false to hide */
-  showModal: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.bool,
-  /**
-   * Properties of the link we are editing
-   */
-  linkInfo: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-    linkUrl: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
-    linkName: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string
-  })
-};
 
 /* harmony default export */ __webpack_exports__["a"] = (LinkEntryModal);
 

@@ -1,12 +1,28 @@
+// @flow
+
 import React from 'react';
-import PropTypes from 'prop-types';
 import {Modal, Button} from 'react-bootstrap';
+import type { LinkInfo } from './LinkInfo.jsx'
+
+type Props = {|
+  showModal: boolean,
+  linkInfo: LinkInfo,
+  onSaveLink: (LinkInfo) => null
+|};
+type State = {|
+  showModal: boolean,
+  linkInfo: LinkInfo,
+|};
 
 /**
  * Modal for adding/editing hyperlinks
  */
-class LinkEntryModal extends React.PureComponent {
-  constructor(props) {
+class LinkEntryModal extends React.PureComponent<Props,State> {
+  close: Function;
+  save: Function;
+  handleChange: Function;
+  
+  constructor(props: Props): void {
     super(props);
     this.state = {
       showModal: false,
@@ -21,14 +37,14 @@ class LinkEntryModal extends React.PureComponent {
     this.handleChange = this.handleChange.bind(this);
   }
   
-  resetModal(url, name) {
+  resetModal(url:?string, name:?string): void {
     this.setState({ "linkInfo": {
       linkUrl: url || "",
       linkName: name || ""
     }});
   }
   
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props): void {
     this.setState({ showModal: nextProps.showModal });
   
     if(nextProps.existingLink) {
@@ -38,11 +54,11 @@ class LinkEntryModal extends React.PureComponent {
     }
   }
   
-  close() {
+  close(): void {
     this.setState({showModal: false});
   }
   
-  save() {
+  save(): void {
     //Sanitize link
     this.state.linkInfo.linkUrl = this.sanitizeUrl(this.state.linkInfo.linkUrl);
     
@@ -51,7 +67,7 @@ class LinkEntryModal extends React.PureComponent {
   }
   
   // TODO: Put this in a common library
-  sanitizeUrl(url) {
+  sanitizeUrl(url:string): string {
     // TODO: Find a library that can handle this so we don't have to maintain regexes
     if (!/^(f|ht)tps?:\/\//i.test(url)) {
       url = "http://" + url;
@@ -59,12 +75,12 @@ class LinkEntryModal extends React.PureComponent {
     return url;
   }
   
-  handleChange(event, propertyName) {
+  handleChange(event: SyntheticInputEvent<HTMLInputElement>, propertyName: string): void {
     this.state.linkInfo[propertyName] = event.target.value;
     this.forceUpdate();
   }
   
-  render() {
+  render(): React$Node {
     return (
       <div>
           <Modal show={this.state.showModal}
@@ -82,24 +98,12 @@ class LinkEntryModal extends React.PureComponent {
               </Modal.Body>
               <Modal.Footer>
                   <Button onClick={this.close}>Close</Button>
-                  <Button onClick={this.save}>Save</Button>
+                  <Button disabled={!this.state.linkInfo.linkUrl} onClick={this.save}>Save</Button>
               </Modal.Footer>
           </Modal>
       </div>
     );
   }
 }
-
-LinkEntryModal.propTypes = {
-  /** True to show modal, false to hide */
-  showModal: PropTypes.bool,
-  /**
-   * Properties of the link we are editing
-   */
-  linkInfo: PropTypes.shape({
-    linkUrl: PropTypes.string,
-    linkName: PropTypes.string
-  })
-};
 
 export default LinkEntryModal;
