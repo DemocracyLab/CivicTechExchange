@@ -23,6 +23,10 @@ urlpatterns = [
         r'^presign_s3/upload/project/thumbnail/$',
         views.presign_project_thumbnail_upload,
     ),
+    url(
+        r'^delete_s3/(?P<s3_key>.*)$',
+        views.delete_uploaded_file,
+    ),
     url(r'^api/projects', views.projects_list),
     url(r'^api/tags', views.tags),
     url(r'^projects/$', views.projects),

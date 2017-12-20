@@ -7,7 +7,7 @@ from urllib import parse as urlparse
 import simplejson as json
 
 from .models import Project
-from common.helpers.s3 import presign_s3_upload
+from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.models.tags import get_tags_by_category
 from .forms import ProjectCreationForm
 from common.models.tags import Tag
@@ -172,4 +172,16 @@ def presign_project_thumbnail_upload(request):
     s3_key = 'thumbnails/%s/%s.%s' % (
         uploader, unique_file_name, file_extension)
     return presign_s3_upload(
-        key=s3_key, file_type=file_type, acl="public-read")
+        raw_key=s3_key, file_type=file_type, acl="public-read")
+
+
+def delete_uploaded_file(request, s3_key):
+    uploader = request.user.username
+    has_permisson = user_has_permission_for_s3_file(uploader, s3_key)
+
+    if has_permisson:
+        delete_s3_file(s3_key)
+        return HttpResponse(status=202)
+    else:
+        # TODO: Log this
+        return HttpResponse(status=401)
