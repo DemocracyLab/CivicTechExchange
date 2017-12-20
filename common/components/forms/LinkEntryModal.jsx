@@ -6,8 +6,9 @@ import type { LinkInfo } from './LinkInfo.jsx'
 
 type Props = {|
   showModal: boolean,
-  linkInfo: LinkInfo,
-  onSaveLink: (LinkInfo) => null
+  existingLink: LinkInfo,
+  onSaveLink: (LinkInfo) => void,
+  onCancelLink: (void) => void
 |};
 type State = {|
   showModal: boolean,
@@ -56,6 +57,7 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
   
   close(): void {
     this.setState({showModal: false});
+    this.props.onCancelLink();
   }
   
   save(): void {

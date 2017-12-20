@@ -1,37 +1,58 @@
+// @flow
+
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import LinkEntryModal from './LinkEntryModal.jsx'
+import type { LinkInfo } from './LinkInfo.jsx'
+import _ from 'lodash'
+
+
+type Props = {|
+  links: string,
+  elementid: string
+|};
+type State = {|
+  showModal: boolean,
+  existingLink: LinkInfo,
+  links: Array<LinkInfo>
+|};
 
 /**
  * Lists hyperlinks and provides add/edit functionality for them
  */
-class LinkList extends React.PureComponent {
-  constructor(props) {
+class LinkList extends React.PureComponent<Props,State>  {
+  editLink: Function;
+  _renderLinks: Function;
+  
+  constructor(props: Props): void {
     super(props);
-    var initialValue = document.getElementById(this.props.elementid).value;
     this.state = {
-      linkList: JSON.parse(initialValue)
+      links: JSON.parse(this.props.links),
+      showModal: false,
+      existingLink: null
     };
     
-    this.createNewLink = this.createNewLink.bind(this);
     this.editLink = this.editLink.bind(this);
-    this.saveLink = this.saveLink.bind(this);
     this._renderLinks = this._renderLinks.bind(this);
   }
 
-  createNewLink() {
+  createNewLink(): void {
     this.state.existingLink = null;
     this.openModal();
   }
   
-  editLink(linkData) {
+  onModalCancel(): void {
+    this.setState({showModal: false})
+  }
+  
+  editLink(linkData: LinkInfo): void {
     this.state.existingLink = linkData;
     this.openModal();
   }
   
-  saveLink(linkData) {
+  saveLink(linkData: LinkInfo): void {
     if(!this.state.existingLink) {
-      this.state.linkList.push(linkData);
+      this.state.links.push(linkData);
     } else {
       _.assign(this.state.existingLink, linkData);
     }
@@ -40,40 +61,40 @@ class LinkList extends React.PureComponent {
     this.updateLinkField();
   }
   
-  updateLinkField() {
-    document.getElementById(this.props.elementid).value = JSON.stringify(this.state.linkList);
+  updateLinkField(): void {
+    this.refs.hiddenFormField.value = JSON.stringify(this.state.links);
   }
 
-  openModal() {
-    // If showModal is already true and we set it here, the change won't be passed onto the Modal child component
-    // TODO: Find less cleaner way to handle this.
-    this.state.showModal = false;
+  openModal(): void {
     this.setState({showModal: true});
   }
   
-  render() {
+  render(): React$Node {
     return (
       <div>
+        <input type="hidden" ref="hiddenFormField" id={this.props.elementid} value={this.state.links}/>
+        
         {this._renderLinks()}
         
         <Button
             bsStyle="primary"
             bsSize="large"
-            onClick={this.createNewLink}
+            onClick={this.createNewLink.bind(this)}
         >
           Add
         </Button>
 
         <LinkEntryModal showModal={this.state.showModal}
           existingLink={this.state.existingLink}
-          onSaveLink={this.saveLink}
+          onSaveLink={this.saveLink.bind(this)}
+          onCancelLink={this.onModalCancel.bind(this)}
         />
       </div>
     );
   }
   
-  _renderLinks() {
-    return this.state.linkList.map(link =>
+  _renderLinks(): Array<React$Node> {
+    return this.state.links.map(link =>
       <div>
         <a href={link.linkUrl}>{link.linkName}</a>
         <i class="fa fa-pencil-square-o fa-1" aria-hidden="true" onClick={(e) => this.editLink(link)}></i>
