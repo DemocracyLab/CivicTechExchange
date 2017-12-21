@@ -34144,10 +34144,6 @@ var LinkList = function (_React$PureComponent) {
       existingLink: null,
       linkToDelete: null
     };
-
-    //TODO: Remove this in lieu of inline bind pattern
-    // this.editLink = this.editLink.bind(this);
-    // this._renderLinks = this._renderLinks.bind(this);
     return _this;
   }
 
@@ -65511,7 +65507,7 @@ var ImageUploadFormElement = function (_React$PureComponent) {
     var _this = _possibleConstructorReturn(this, (ImageUploadFormElement.__proto__ || Object.getPrototypeOf(ImageUploadFormElement)).call(this));
 
     _this.state = {
-      imagePreviewUrl: undefined
+      imagePreviewUrl: ""
     };
     return _this;
   }
@@ -65532,14 +65528,14 @@ var ImageUploadFormElement = function (_React$PureComponent) {
     value: function _renderThumbnailPlaceholder() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'span',
-        { ref: 'thumbnailPlaceholder', 'class': 'upload_img upload_img_bdr' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { 'class': 'fa fa-folder-open-o fa-3x', 'aria-hidden': 'true' })
+        { ref: 'thumbnailPlaceholder', className: 'upload_img upload_img_bdr' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-folder-open-o fa-3x', 'aria-hidden': 'true' })
       );
     }
   }, {
     key: '_renderThumbnail',
     value: function _renderThumbnail() {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { 'class': 'upload_img upload_img_bdr', src: this.state.imagePreviewUrl });
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.state.imagePreviewUrl });
     }
   }, {
     key: '_handleFileSelection',
@@ -65580,33 +65576,33 @@ var FileUploadButton = function (_React$PureComponent) {
     var _this = _possibleConstructorReturn(this, (FileUploadButton.__proto__ || Object.getPrototypeOf(FileUploadButton)).call(this));
 
     _this.state = {
-      s3Key: undefined
+      s3Key: ""
     };
     return _this;
   }
 
   _createClass(FileUploadButton, [{
-    key: "render",
+    key: 'render',
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "div",
+        'div',
         null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "button", value: this.props.buttonText, onClick: this._handleClick.bind(this) }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { ref: "fileInput", type: "file", style: { display: "none" }, accept: this.props.acceptedFileTypes, onChange: this._handleFileSelection.bind(this) })
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'button', value: this.props.buttonText, onClick: this._handleClick.bind(this) }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { ref: 'fileInput', type: 'file', style: { display: "none" }, accept: this.props.acceptedFileTypes, onChange: this._handleFileSelection.bind(this) })
       );
     }
   }, {
-    key: "_handleClick",
+    key: '_handleClick',
     value: function _handleClick() {
       this.refs.fileInput.click();
     }
   }, {
-    key: "_handleFileSelection",
+    key: '_handleFileSelection',
     value: function _handleFileSelection() {
       this.launchPresignedUploadToS3(this.refs.fileInput.files[0]);
     }
   }, {
-    key: "launchPresignedUploadToS3",
+    key: 'launchPresignedUploadToS3',
     value: function launchPresignedUploadToS3(file) {
       var xhr = new XMLHttpRequest();
       xhr.open("GET", "/presign_s3/upload/project/thumbnail?file_type=" + file.type);
@@ -65625,7 +65621,7 @@ var FileUploadButton = function (_React$PureComponent) {
       xhr.send();
     }
   }, {
-    key: "uploadFileToS3",
+    key: 'uploadFileToS3',
     value: function uploadFileToS3(file, s3Data, url) {
       var xhr = new XMLHttpRequest();
       xhr.open("POST", s3Data.url);

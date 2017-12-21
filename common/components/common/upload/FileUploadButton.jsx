@@ -1,14 +1,15 @@
 // @flow
 
 import React from 'react';
+import type { S3Data } from './S3Data.jsx'
 
-type FileUploadData = {|
+export type FileUploadData = {|
   key: string,
   publicUrl: string
 |};
 
 type Props = {|
-  onFileUpload: (FileUploadData) => null,
+  onFileUpload: (FileUploadData) => void,
   buttonText: string,
   acceptedFileTypes: string
 |};
@@ -22,7 +23,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
   constructor(): void {
     super();
     this.state = {
-      s3Key: undefined
+      s3Key: ""
     };
   }
   
@@ -35,15 +36,15 @@ class FileUploadButton extends React.PureComponent<Props, State> {
     );
   }
   
-  _handleClick() {
+  _handleClick(): void {
     this.refs.fileInput.click();
   }
   
-  _handleFileSelection() {
+  _handleFileSelection(): void {
     this.launchPresignedUploadToS3(this.refs.fileInput.files[0]);
   }
   
-  launchPresignedUploadToS3(file){
+  launchPresignedUploadToS3(file: File): void {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/presign_s3/upload/project/thumbnail?file_type=" + file.type);
     var instance = this;
@@ -62,7 +63,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
     xhr.send();
   }
   
-  uploadFileToS3(file, s3Data, url){
+  uploadFileToS3(file: File, s3Data: S3Data, url: string){
     var xhr = new XMLHttpRequest();
     xhr.open("POST", s3Data.url);
     

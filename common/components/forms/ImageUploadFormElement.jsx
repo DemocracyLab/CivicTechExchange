@@ -2,6 +2,7 @@
 
 import React from 'react';
 import FileUploadButton from '../common/upload/FileUploadButton.jsx'
+import type FileUploadData from '../common/upload/FileUploadButton.jsx'
 
 type Props = {|
   form_id: string
@@ -17,7 +18,7 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
   constructor(): void {
     super();
     this.state = {
-      imagePreviewUrl: undefined
+      imagePreviewUrl: ""
     };
   }
 
@@ -37,19 +38,19 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
   
   _renderThumbnailPlaceholder() : React$Node {
     return (
-      <span ref="thumbnailPlaceholder" class="upload_img upload_img_bdr">
-          <i class="fa fa-folder-open-o fa-3x" aria-hidden="true"></i>
+      <span ref="thumbnailPlaceholder" className="upload_img upload_img_bdr">
+          <i className="fa fa-folder-open-o fa-3x" aria-hidden="true"></i>
       </span>
     );
   }
   
   _renderThumbnail() : React$Node {
     return (
-      <img class="upload_img upload_img_bdr" src={this.state.imagePreviewUrl}/>
+      <img className="upload_img upload_img_bdr" src={this.state.imagePreviewUrl}/>
     );
   }
   
-  _handleFileSelection(fileUploadData) {
+  _handleFileSelection(fileUploadData: FileUploadData) : void {
     this.refs.hiddenFormField.value = fileUploadData.key;
     this.setState({"imagePreviewUrl": fileUploadData.publicUrl});
   }
