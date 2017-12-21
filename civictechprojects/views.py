@@ -116,7 +116,7 @@ def home(request):
 
 def index(request):
     template = loader.get_template('new_index.html')
-    context = {}
+    context = {'userID': request.user.id}
     return HttpResponse(template.render(context, request))
 
 
