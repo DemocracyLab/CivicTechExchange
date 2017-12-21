@@ -120,6 +120,11 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 
+def my_projects(request):
+    projects = Project.objects.filter(project_volunteers__id=request.user.id)
+    return HttpResponse(json.dumps(list(projects.values())))
+
+
 def projects_list(request):
     if request.method == 'GET':
         url_parts = request.GET.urlencode()
