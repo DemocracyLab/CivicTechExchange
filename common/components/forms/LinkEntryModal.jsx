@@ -61,6 +61,7 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
   }
   
   save(): void {
+    //TODO: Validate that link is not duplicate of existing link in the list before saving
     //Sanitize link
     this.state.linkInfo.linkUrl = this.sanitizeUrl(this.state.linkInfo.linkUrl);
     
@@ -87,15 +88,14 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
       <div>
           <Modal show={this.state.showModal}
                  onHide={this.close}
-                 backdrop="true"
           >
               <Modal.Header closeButton>
                   <Modal.Title>Modal heading</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                  <label for="link-url">Link URL</label>
+                  <label htmlFor="link-url">Link URL</label>
                   <input type="text" class="form-control" id="link-url" value={this.state.linkInfo.linkUrl} onChange={(e) => this.handleChange(e, "linkUrl")}/>
-                  <label for="link-name">Link Name</label>
+                  <label htmlFor="link-name">Link Name</label>
                   <input type="text" class="form-control" id="link-name" value={this.state.linkInfo.linkName} onChange={(e) => this.handleChange(e, "linkName")}/>
               </Modal.Body>
               <Modal.Footer>

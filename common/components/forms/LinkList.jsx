@@ -3,6 +3,7 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import LinkEntryModal from './LinkEntryModal.jsx'
+import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
 import type { LinkInfo } from './LinkInfo.jsx'
 import _ from 'lodash'
 
@@ -12,8 +13,10 @@ type Props = {|
   elementid: string
 |};
 type State = {|
-  showModal: boolean,
+  showAddEditModal: boolean,
+  showDeleteModal: boolean,
   existingLink: LinkInfo,
+  linkToDelete: LinkInfo,
   links: Array<LinkInfo>
 |};
 
@@ -21,19 +24,15 @@ type State = {|
  * Lists hyperlinks and provides add/edit functionality for them
  */
 class LinkList extends React.PureComponent<Props,State>  {
-  editLink: Function;
-  _renderLinks: Function;
-  
   constructor(props: Props): void {
     super(props);
     this.state = {
       links: JSON.parse(this.props.links),
-      showModal: false,
-      existingLink: null
+      showAddEditModal: false,
+      showDeleteModal: false,
+      existingLink: null,
+      linkToDelete: null
     };
-    
-    this.editLink = this.editLink.bind(this);
-    this._renderLinks = this._renderLinks.bind(this);
   }
 
   createNewLink(): void {
@@ -42,7 +41,7 @@ class LinkList extends React.PureComponent<Props,State>  {
   }
   
   onModalCancel(): void {
-    this.setState({showModal: false})
+    this.setState({showAddEditModal: false})
   }
   
   editLink(linkData: LinkInfo): void {
@@ -57,7 +56,7 @@ class LinkList extends React.PureComponent<Props,State>  {
       _.assign(this.state.existingLink, linkData);
     }
   
-    this.setState({showModal: false});
+    this.setState({showAddEditModal: false});
     this.updateLinkField();
   }
   
@@ -66,7 +65,24 @@ class LinkList extends React.PureComponent<Props,State>  {
   }
 
   openModal(): void {
-    this.setState({showModal: true});
+    this.setState({showAddEditModal: true});
+  }
+  
+  askForDeleteConfirmation(linkToDelete: LinkInfo): void {
+    this.setState({
+      linkToDelete: linkToDelete,
+      showDeleteModal: true
+    })
+  }
+  
+  confirmDelete(confirmed: boolean): void {
+    if(confirmed) {
+      _.remove(this.state.links, (link) => link.linkUrl === this.state.linkToDelete.linkUrl);
+    }
+    this.setState({
+      showDeleteModal: false,
+      linkToDelete: null
+    })
   }
   
   render(): React$Node {
@@ -84,20 +100,27 @@ class LinkList extends React.PureComponent<Props,State>  {
           Add
         </Button>
 
-        <LinkEntryModal showModal={this.state.showModal}
+        <LinkEntryModal showModal={this.state.showAddEditModal}
           existingLink={this.state.existingLink}
           onSaveLink={this.saveLink.bind(this)}
           onCancelLink={this.onModalCancel.bind(this)}
+        />
+        
+        <ConfirmationModal
+          showModal={this.state.showDeleteModal}
+          message="Do you want to delete this link?"
+          onSelection={this.confirmDelete.bind(this)}
         />
       </div>
     );
   }
   
   _renderLinks(): Array<React$Node> {
-    return this.state.links.map(link =>
-      <div>
+    return this.state.links.map((link,i) =>
+      <div key={i}>
         <a href={link.linkUrl}>{link.linkName}</a>
-        <i class="fa fa-pencil-square-o fa-1" aria-hidden="true" onClick={(e) => this.editLink(link)}></i>
+        <i class="fa fa-pencil-square-o fa-1" aria-hidden="true" onClick={this.editLink.bind(this,link)}></i>
+        <i class="fa fa-trash-o fa-1" aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,link)}></i>
       </div>
     );
   }
