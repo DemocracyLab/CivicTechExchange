@@ -4,6 +4,7 @@ import type {SectionType} from '../enums/Section.js';
 
 import FindProjectsController  from './FindProjectsController.jsx'
 import LandingController from './LandingController.jsx'
+import MyProjectsController from './MyProjectsController.jsx'
 import React from 'react';
 import Section from '../enums/Section.js'
 
@@ -24,6 +25,8 @@ class SectionController extends React.PureComponent<Props> {
     switch (this.props.section) {
       case Section.Landing:
         return <LandingController />;
+      case Section.MyProjects:
+        return <MyProjectsController />;
       case Section.FindProjects:
         return <FindProjectsController />;
       default:
