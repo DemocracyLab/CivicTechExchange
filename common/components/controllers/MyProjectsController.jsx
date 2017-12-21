@@ -1,8 +1,33 @@
 // @flow
 
+import type {Project} from '../stores/ProjectSearchStore.js';
+
+import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
+import ProjectCard from '../componentsBySection/FindProjects/ProjectCard.jsx';
 import React from 'react';
 
-class MyProjectsController extends React.PureComponent<{||}> {
+type State = {|
+  projects: $ReadOnlyArray<Project>,
+|};
+
+class MyProjectsController extends React.PureComponent<{||}, State> {
+
+  constructor(): void {
+    super();
+    this.state = {
+      projects: [],
+    };
+  }
+
+  componentWillMount(): void {
+    fetch(new Request('/api/my_projects'))
+      .then(response => response.json())
+      .then(projects =>
+        this.setState({
+          projects: projects.map(ProjectAPIUtils.projectFromAPIData),
+        }),
+      );
+  }
 
   render(): React$Node {
     return (
@@ -18,6 +43,9 @@ class MyProjectsController extends React.PureComponent<{||}> {
         </div>
           PROJECTS YOU ARE VOLUNTEERING ON
         <div>
+          {this.state.projects.map(project => {
+            return <ProjectCard key={project.name} project={project} />;
+          })}
         </div>
           [project card]
         <div>
