@@ -5,6 +5,7 @@ import type { S3Data } from './S3Data.jsx'
 
 export type FileUploadData = {|
   key: string,
+  fileName: string,
   publicUrl: string
 |};
 
@@ -80,6 +81,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
         if(xhr.status === 200 || xhr.status === 204){
           var fileUploadData = {
             key: instance.state.s3Key,
+            fileName: file.name,
             publicUrl: url
           };
           instance.props.onFileUpload(fileUploadData);

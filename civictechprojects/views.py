@@ -5,6 +5,7 @@ from time import time
 
 from urllib import parse as urlparse
 import simplejson as json
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Project
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
@@ -175,6 +176,8 @@ def presign_project_thumbnail_upload(request):
         raw_key=s3_key, file_type=file_type, acl="public-read")
 
 
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
 def delete_uploaded_file(request, s3_key):
     uploader = request.user.username
     has_permisson = user_has_permission_for_s3_file(uploader, s3_key)

@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import CharacterCounter from './forms/CharacterCounter.jsx'
 import LinkList from './forms/LinkList.jsx'
+import FileUploadList from './forms/FileUploadList.jsx'
 import MainController from './controllers/MainController.jsx'
 import ImageUploadFormElement from './forms/ImageUploadFormElement.jsx'
 
@@ -16,6 +17,7 @@ const APPS = {
     "CharacterCounter": CharacterCounter,
     'MainController': MainController,
     'LinkList' : LinkList,
+    'FileUploadList' : FileUploadList,
     'ImageUploadFormElement' : ImageUploadFormElement
 };
 
