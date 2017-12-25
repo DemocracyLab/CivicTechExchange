@@ -20,13 +20,16 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
   }
 
   componentWillMount(): void {
-    fetch(new Request('/api/my_projects'))
-      .then(response => response.json())
-      .then(projects =>
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener(
+      'load',
+      () =>
         this.setState({
-          projects: projects.map(ProjectAPIUtils.projectFromAPIData),
-        }),
-      );
+          projects: JSON.parse(xhr.response)
+            .map(ProjectAPIUtils.projectFromAPIData)}),
+    );
+    xhr.open('GET', '/api/my_projects');
+    xhr.send();
   }
 
   render(): React$Node {
@@ -36,23 +39,9 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
           My Projects | Applications
         </div>
         <div>
-          PROJECTS YOU OWN
-        </div>
-          [project card]
-        <div>
-        </div>
-          PROJECTS YOU ARE VOLUNTEERING ON
-        <div>
           {this.state.projects.map(project => {
             return <ProjectCard key={project.name} project={project} />;
           })}
-        </div>
-          [project card]
-        <div>
-          [project card]
-        </div>
-        <div>
-          [project card]
         </div>
       </div>
     );

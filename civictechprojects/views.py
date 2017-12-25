@@ -5,6 +5,7 @@ from time import time
 
 from urllib import parse as urlparse
 import simplejson as json
+from rest_framework.authtoken.models import Token
 
 from .models import Project
 from common.helpers.s3 import presign_s3_upload
@@ -121,7 +122,7 @@ def index(request):
 
 
 def my_projects(request):
-    projects = Project.objects.filter(project_volunteers__id=request.user.id)
+    projects = Project.objects.filter(project_creator_id=request.user.id)
     return HttpResponse(json.dumps(list(projects.values())))
 
 
