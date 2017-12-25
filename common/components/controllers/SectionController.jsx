@@ -1,19 +1,33 @@
 // @flow
 
+import type {FluxReduceStore} from 'flux/utils';
 import type {SectionType} from '../enums/Section.js';
 
+import {Container} from 'flux/utils';
+import CreateProjectController from './CreateProjectController.jsx'
 import FindProjectsController  from './FindProjectsController.jsx'
 import LandingController from './LandingController.jsx'
 import MyProjectsController from './MyProjectsController.jsx'
+import NavigationStore from '../stores/NavigationStore.js'
 import React from 'react';
 import Section from '../enums/Section.js'
 
-type Props = {|
-  +section: SectionType,
+type State = {|
+  section: SectionType,
 |};
 
-class SectionController extends React.PureComponent<Props> {
-  render() {
+class SectionController extends React.Component<{||}, State> {
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [NavigationStore];
+  }
+
+  static calculateState(prevState: State): State {
+    return {
+      section: NavigationStore.getSection(),
+    };
+  }
+
+  render(): React$Node {
     return (
       <div>
         {this._getController()}
@@ -22,7 +36,9 @@ class SectionController extends React.PureComponent<Props> {
   }
 
   _getController(): React$Node {
-    switch (this.props.section) {
+    switch (this.state.section) {
+      case Section.CreateProject:
+        return <CreateProjectController />;
       case Section.Landing:
         return <LandingController />;
       case Section.MyProjects:
@@ -30,9 +46,9 @@ class SectionController extends React.PureComponent<Props> {
       case Section.FindProjects:
         return <FindProjectsController />;
       default:
-        return <div>Section not yet implemented: {this.props.section}</div>
+        return <div>Section not yet implemented: {this.state.section}</div>
     }
   }
 }
 
-export default SectionController;
+export default Container.create(SectionController);

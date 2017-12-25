@@ -2,19 +2,15 @@
 
 import type {SectionType} from '../enums/Section.js';
 
+import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
 import Section from '../enums/Section.js';
 
-type Props = {|
-  +onChangeSection: (SectionType) => void,
-|};
-
-class MainHeader extends React.PureComponent<Props> {
+class MainHeader extends React.PureComponent<{||}> {
   render(): React$Node {
     return (
       <div className="MainHeader-root">
-        <span
-          onClick={() => this.props.onChangeSection(Section.Landing)}>
+        <span onClick={this._onHomeButtonClick}>
           <img
             className="MainHeader-logo"
             src="https://i.imgur.com/jvnaJWz.png"
@@ -31,6 +27,13 @@ class MainHeader extends React.PureComponent<Props> {
         </span>
       </div>
     );
+  }
+
+  _onHomeButtonClick(): void {
+    NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: Section.Landing,
+    });
   }
 
   _renderLinks(): React$Node {
