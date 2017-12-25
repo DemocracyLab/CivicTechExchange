@@ -3,7 +3,7 @@
 import type {Project} from '../stores/ProjectSearchStore.js';
 
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
-import ProjectCard from '../componentsBySection/FindProjects/ProjectCard.jsx';
+import MyProjectCard from '../componentsBySection/MyProjects/MyProjectCard.jsx';
 import React from 'react';
 
 type State = {|
@@ -36,11 +36,8 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
     return (
       <div>
         <div>
-          My Projects | Applications
-        </div>
-        <div>
           {this.state.projects.map(project => {
-            return <ProjectCard key={project.name} project={project} />;
+            return <MyProjectCard key={project.name} project={project} />;
           })}
         </div>
       </div>
