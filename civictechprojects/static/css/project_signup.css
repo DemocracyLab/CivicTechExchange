@@ -110,6 +110,10 @@
   color: #ffffff;
 }
 
+input[type="submit"]:disabled {
+  background: grey;
+}
+
 div.modal {
   opacity: 1
 }

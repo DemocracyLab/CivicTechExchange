@@ -5,12 +5,23 @@ import ImageUploadFormElement from '../forms/ImageUploadFormElement.jsx'
 import CharacterCounter from '../forms/CharacterCounter.jsx'
 import LinkList from '../forms/LinkList.jsx'
 import FileUploadList from '../forms/FileUploadList.jsx'
+import _ from 'lodash'
+
+type FormFields = {|
+  project_name: ?string,
+  project_location: ?string,
+  project_url: ?string,
+  project_issue_area: ?string,
+  project_description: ?string
+|};
 
 type Props = {|
   issues_elementid: string
 |};
 type State = {|
-  issues: Array<[string, string]>
+  issues: Array<[string, string]>,
+  formIsValid: boolean,
+  formFields: FormFields
 |};
 
 /**
@@ -24,9 +35,32 @@ class CreateProjectController extends React.PureComponent<Props,State> {
     var issues_element = document.getElementById(this.props.issues_elementid);
     if(issues_element) {
       this.state = {
-        issues: JSON.parse(issues_element.innerHTML)
+        issues: JSON.parse(issues_element.innerHTML),
+        formIsValid: false,
+        formFields: {
+          project_name: null,
+          project_location: null,
+          project_url: null,
+          project_issue_area: null,
+          project_description: null
+        }
       };
     }
+  }
+  
+  onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
+    this.state.formFields[formFieldName] = event.target.value;
+    this.checkFormValidity();
+    // this.forceUpdate();
+  }
+  
+  checkFormValidity(): void {
+    var formFields = this.state.formFields;
+    
+    var valid = !_.isEmpty(formFields["project_name"]) && !_.isEmpty(formFields["project_description"]);
+    this.setState({
+      formIsValid: valid
+    });
   }
   
   render(): React$Node {
@@ -40,30 +74,30 @@ class CreateProjectController extends React.PureComponent<Props,State> {
         <h2 className="form-group subheader">DETAILS</h2>
         <div className="form-group">
           <label htmlFor="project_name">Project Name</label>
-          <input type="text" className="form-control" id="project_name" name="project_name"/>
+          <input type="text" className="form-control" id="project_name" name="project_name" onChange={this.onFormFieldChange.bind(this,"project_name")}/>
         </div>
     
         <div className="form-group">
           <label htmlFor="project_location">Project Location</label>
-          <input type="text" className="form-control" id="project_location" name="project_location"/>
+          <input type="text" className="form-control" id="project_location" name="project_location" onChange={this.onFormFieldChange.bind(this,"project_location")}/>
         </div>
         <div className="form-group">
-          <label htmlFor="website_url">Website URL</label>
-          <input type="text" className="form-control" id="website_url" name="website_url"/>
+          <label htmlFor="project_url">Website URL</label>
+          <input type="text" className="form-control" id="project_url" name="project_url" onChange={this.onFormFieldChange.bind(this,"project_url")}/>
         </div>
     
         <div className="form-group">
           <label htmlFor="project_issue_area">Issue Areas</label>
-          <select id="project_issue_area" name="project_issue_area" className="form-control">
+          <select id="project_issue_area" name="project_issue_area" className="form-control" onChange={this.onFormFieldChange.bind(this,"project_issue_area")}>
             {this._renderIssues()}
           </select>
         </div>
     
         <div className="form-group">
           <label htmlFor="project_description">Describe This Project</label>
-          {/*TODO: Fix character counter control to work within React component*/}
           <CharacterCounter elementId="project_description" maxLength="3000"/>
-          <textarea className="form-control" id="project_description" name="project_description" placeholder="This will appear as project introduction" rows="3" maxLength="3000"></textarea>
+          <textarea className="form-control" id="project_description" name="project_description" placeholder="This will appear as project introduction" rows="3" maxLength="3000"
+                    onChange={this.onFormFieldChange.bind(this,"project_description")}></textarea>
         </div>
         
         <h2 className="form-group subheader">LINKS</h2>
@@ -74,7 +108,7 @@ class CreateProjectController extends React.PureComponent<Props,State> {
     
         <div className="form-group pull-right">
           <div className='text-right'>
-            <input type="submit" className="btn_outline save_btn" value="Save Project"/>
+            <input disabled={!this.state.formIsValid} type="submit" className="btn_outline save_btn" value="Save Project"/>
           </div>
         </div>
       </div>
@@ -87,7 +121,6 @@ class CreateProjectController extends React.PureComponent<Props,State> {
       } else {
         return null;
       }
-    
   }
 }
 
