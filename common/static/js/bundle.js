@@ -9903,46 +9903,50 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var CharacterCounter = function (_React$PureComponent) {
-    _inherits(CharacterCounter, _React$PureComponent);
+  _inherits(CharacterCounter, _React$PureComponent);
 
-    function CharacterCounter(props) {
-        _classCallCheck(this, CharacterCounter);
+  function CharacterCounter(props) {
+    _classCallCheck(this, CharacterCounter);
 
-        return _possibleConstructorReturn(this, (CharacterCounter.__proto__ || Object.getPrototypeOf(CharacterCounter)).call(this, props));
+    return _possibleConstructorReturn(this, (CharacterCounter.__proto__ || Object.getPrototypeOf(CharacterCounter)).call(this, props));
+  }
+
+  _createClass(CharacterCounter, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var component = this;
+
+      this.refreshElementCharacterCount();
+      var input = document.getElementById(this.props.elementId);
+      // add onclick event
+      if (input) {
+        input.addEventListener("input", function () {
+          component.refreshElementCharacterCount();
+        });
+      }
     }
+  }, {
+    key: "refreshElementCharacterCount",
+    value: function refreshElementCharacterCount() {
+      var input = document.getElementById(this.props.elementId);
+      if (input && input.value && input.value.length) {
+        this.setState({ characterCount: String(input.value.length) });
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        "div",
+        { className: "character-count" },
+        this.state ? this.state.characterCount : 0,
+        " / ",
+        this.props.maxLength
+      );
+    }
+  }]);
 
-    _createClass(CharacterCounter, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
-            var component = this;
-
-            this.refreshElementCharacterCount();
-            var input = document.getElementById(this.props.elementid);
-            // add onclick event
-            input.addEventListener("input", function () {
-                component.refreshElementCharacterCount();
-            });
-        }
-    }, {
-        key: "refreshElementCharacterCount",
-        value: function refreshElementCharacterCount() {
-            var input = document.getElementById(this.props.elementid);
-            this.setState({ characterCount: input.value.length });
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "div",
-                { className: "character-count" },
-                this.state ? this.state.characterCount : 0,
-                " / ",
-                this.props.maxlength
-            );
-        }
-    }]);
-
-    return CharacterCounter;
+  return CharacterCounter;
 }(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent);
 
 /* harmony default export */ __webpack_exports__["a"] = (CharacterCounter);
@@ -65851,7 +65855,7 @@ var CreateProjectController = function (_React$PureComponent) {
   function CreateProjectController(props) {
     _classCallCheck(this, CreateProjectController);
 
-    // TODO:
+    // TODO: Pass issue list in props once we have moved away from django rendering
     var _this = _possibleConstructorReturn(this, (CreateProjectController.__proto__ || Object.getPrototypeOf(CreateProjectController)).call(this, props));
 
     var issues_element = document.getElementById(_this.props.issues_elementid);
@@ -65931,7 +65935,7 @@ var CreateProjectController = function (_React$PureComponent) {
             { htmlFor: 'project_description' },
             'Describe This Project'
           ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { id: 'CharacterCounter', 'data-elementId': 'project_description', 'data-maxLength': '3000' }),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__forms_CharacterCounter_jsx__["a" /* default */], { elementId: 'project_description', maxLength: '3000' }),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { className: 'form-control', id: 'project_description', name: 'project_description', placeholder: 'This will appear as project introduction', rows: '3', maxLength: '3000' })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(

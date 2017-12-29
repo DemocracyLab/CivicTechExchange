@@ -62,7 +62,7 @@ class CreateProjectController extends React.PureComponent<Props,State> {
         <div className="form-group">
           <label htmlFor="project_description">Describe This Project</label>
           {/*TODO: Fix character counter control to work within React component*/}
-          <div id="CharacterCounter" data-elementId="project_description" data-maxLength="3000"/>
+          <CharacterCounter elementId="project_description" maxLength="3000"/>
           <textarea className="form-control" id="project_description" name="project_description" placeholder="This will appear as project introduction" rows="3" maxLength="3000"></textarea>
         </div>
         
