@@ -25,7 +25,10 @@
     <div class="container">
         <form method="post">
             {% csrf_token %}
-            <div id="CreateProjectController" class="__react-root"/>
+            <div id="issues_list" style="display: none;">
+                {{ issues }}
+            </div>
+            <div id="CreateProjectController" data-issues_elementid="issues_list" class="__react-root"/>
         </form>
         {% endblock %}
     </div>

@@ -72,7 +72,7 @@ def project_signup(request):
     tag_map = to_tag_map(issues)
     context = {
         'form': form,
-        'issues': to_tag_map(issues)
+        'issues': json.dumps(tag_map)
     }
     return HttpResponse(template.render(context, request))
 

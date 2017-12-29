@@ -6,12 +6,11 @@ import CharacterCounter from '../forms/CharacterCounter.jsx'
 import LinkList from '../forms/LinkList.jsx'
 import FileUploadList from '../forms/FileUploadList.jsx'
 
-
 type Props = {|
-
+  issues_elementid: string
 |};
 type State = {|
-
+  issues: Array<[string, string]>
 |};
 
 /**
@@ -20,6 +19,14 @@ type State = {|
 class CreateProjectController extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
+    
+    // TODO: Pass issue list in props once we have moved away from django rendering
+    var issues_element = document.getElementById(this.props.issues_elementid);
+    if(issues_element) {
+      this.state = {
+        issues: JSON.parse(issues_element.innerHTML)
+      };
+    }
   }
   
   render(): React$Node {
@@ -48,7 +55,7 @@ class CreateProjectController extends React.PureComponent<Props,State> {
         <div className="form-group">
           <label htmlFor="project_issue_area">Issue Areas</label>
           <select id="project_issue_area" name="project_issue_area" className="form-control">
-            {/*TODO: Inject issues from backend*/}
+            {this._renderIssues()}
           </select>
         </div>
     
@@ -72,6 +79,15 @@ class CreateProjectController extends React.PureComponent<Props,State> {
         </div>
       </div>
     );
+  }
+  
+  _renderIssues(): React$Node {
+      if(this.state) {
+        return this.state.issues.map((issue) => <option key={issue[0]} value={issue[0]}>{issue[1]}</option>);
+      } else {
+        return null;
+      }
+    
   }
 }
 
