@@ -4,6 +4,7 @@ import CharacterCounter from './forms/CharacterCounter.jsx'
 import LinkList from './forms/LinkList.jsx'
 import FileUploadList from './forms/FileUploadList.jsx'
 import MainController from './controllers/MainController.jsx'
+import CreateProjectController from './controllers/CreateProjectController.jsx'
 import ImageUploadFormElement from './forms/ImageUploadFormElement.jsx'
 
 // TODO: Figure out a better way to prevent react console error where it's expecting node Environment variables
@@ -18,7 +19,8 @@ const APPS = {
     'MainController': MainController,
     'LinkList' : LinkList,
     'FileUploadList' : FileUploadList,
-    'ImageUploadFormElement' : ImageUploadFormElement
+    'ImageUploadFormElement' : ImageUploadFormElement,
+    'CreateProjectController': CreateProjectController
 };
 
 function renderElement(el) {

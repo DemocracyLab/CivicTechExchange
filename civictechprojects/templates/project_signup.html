@@ -22,69 +22,11 @@
 </div>
 
 <div class="wrapper-gray">
-
-<div class="container">
-    <form method="post">
-        {% csrf_token %}
-
-        <div style='background-color:#f6f7f8'>
-            <!-- fields start here -->
-            <div class="form-group">
-                <div id="ImageUploadFormElement" data-form_id="project_thumbnail_location" class="__react-root"></div>
-            </div>
-
-            <h2 class="form-group subheader">DETAILS</h2>
-            <div class="form-group">
-                <label for="project_name">Project Name</label>
-                <input type="text" class="form-control" id="project_name" name="project_name">
-            </div>
-
-            <div class="form-group">
-                <label for="project_location">Project Location</label>
-                <input type="text" class="form-control" id="project_location" name="project_location">
-            </div>
-            <div class="form-group">
-                <label for="website_url">Website URL</label>
-                <input type="text" class="form-control" id="website_url" name="website_url">
-            </div>
-
-            <div class="form-group">
-                <label for="project_issue_area">Issue Areas</label>
-                <select id="project_issue_area" name="project_issue_area" class="form-control">
-                    <option value="{{ issues }}"></option>
-                    {% for key, display_name in issues %}
-                        <option value="{{ key }}">{{ display_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="project_description">Describe This Project</label>
-                <div id="CharacterCounter" data-elementId="project_description" data-maxLength="3000" class="__react-root"></div>
-                <textarea class="form-control" id="project_description" name="project_description" placeholder="This will appear as project introduction" rows=3 maxlength="3000"></textarea>
-            </div>
-
-            <!--TODO: Uncomment this when the implementations for People is complete-->
-
-            <!--<div class="form-group">-->
-                <!--<label for="add_volunteers">Add Volunteers</label>-->
-                <!--<input type="text" class="form-control" id="add_volunteers">-->
-                <!--<button type="button" class="btn_outline upload_btn_sm">Invite</button>-->
-            <!--</div>-->
-
-            <h2 class="form-group subheader">LINKS</h2>
-            <div id="LinkList" data-elementId="project_links" data-links="[]" class="__react-root"></div>
-
-            <h2 class="form-group subheader">FILES</h2>
-            <div id="FileUploadList" data-elementId="project_files" data-files="[]" class="__react-root"></div>
-
-            <div class="form-group pull-right">
-                <div class='text-right'>
-                    <input type="submit" class="btn_outline save_btn" value="Save Project"/>
-                </div>
-            </div>
-        </div>
-    </form>
-    {% endblock %}
-</div>
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <div id="CreateProjectController" class="__react-root"/>
+        </form>
+        {% endblock %}
+    </div>
 </div>
