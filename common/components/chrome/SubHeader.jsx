@@ -1,21 +1,34 @@
 // @flow
 
+import type {FluxReduceStore} from 'flux/utils';
 import type {SectionType} from '../enums/Section.js';
 
-import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
+import {Container} from 'flux/utils';
 import cx from '../utils/cx';
+import NavigationDispatcher from '../stores/NavigationDispatcher.js'
+import NavigationStore from '../stores/NavigationStore.js'
+import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
 
-type Props = {|
+type State = {|
   +activeSection: SectionType,
-  +onChangeSection: (SectionType) => void,
 |};
 
-class SubHeader extends React.PureComponent<Props> {
+class SubHeader extends React.Component<{||}, State> {
 
   _cx: cx;
+
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [NavigationStore];
+  }
+
+  static calculateState(prevState: State): State {
+    return {
+      activeSection: NavigationStore.getSection(),
+    };
+  }
 
   constructor(): void {
     super();
@@ -27,11 +40,12 @@ class SubHeader extends React.PureComponent<Props> {
       <div className={this._cx.get('root')}>
         {this._renderSectionLinks()}
         <span className={this._cx.get('rightContent')}>
-          <button
+          <a
             className={this._cx.get('createProject')}
+            href="/projects/signup"
             >
             Create A Project
-          </button>
+          </a>
         </span>
       </div>
     );
@@ -41,16 +55,13 @@ class SubHeader extends React.PureComponent<Props> {
     return SectionLinkConfigs
       .map(config =>
         <SectionLink
-          activeSection={this.props.activeSection}
+          activeSection={this.state.activeSection}
           key={config.title}
           section={config.section}
           title={config.title}
-          onChangeSection={
-            this.props.onChangeSection.bind(this, config.section)
-          }
         />
       );
   }
 }
 
-export default SubHeader;
+export default Container.create(SubHeader);

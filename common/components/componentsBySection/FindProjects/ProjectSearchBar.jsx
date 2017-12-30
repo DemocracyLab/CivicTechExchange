@@ -53,6 +53,11 @@ class ProjectSearchBar extends React.Component<{||}, State> {
       type: 'SET_KEYWORD',
       keyword: this.state.keyword,
     });
+    window.FB.AppEvents.logEvent(
+      'searchByKeyword',
+      null,
+      {keyword: this.state.keyword},
+    );
   }
 }
 

@@ -28,6 +28,7 @@ urlpatterns = [
         views.delete_uploaded_file,
     ),
     url(r'^api/projects', views.projects_list),
+    url(r'^api/my_projects', views.my_projects),
     url(r'^api/tags', views.tags),
     url(r'^projects/$', views.projects),
     url(r'^index/$', views.index),
