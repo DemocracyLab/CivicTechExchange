@@ -34,12 +34,10 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
 
   render(): React$Node {
     return (
-      <div>
-        <div>
-          {this.state.projects.map(project => {
-            return <MyProjectCard key={project.name} project={project} />;
-          })}
-        </div>
+      <div className="MyProjectsController-root">
+        {this.state.projects.map(project => {
+          return <MyProjectCard key={project.name} project={project} />;
+        })}
       </div>
     );
   }
