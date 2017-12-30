@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%">
   <head>
     <meta charset="utf-8">
     <script src="/static/js/bundle.js" defer></script>
@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="/static/css/IssueAreaDropDownItem.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/LandingController.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/MainHeader.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/MyProjectCard.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/MyProjectsController.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/ProjectCard.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/ProjectFilterContainer.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/ProjectSearchBar.css"/>
@@ -36,6 +38,16 @@
          js.src = "https://connect.facebook.net/en_US/sdk.js";
          fjs.parentNode.insertBefore(js, fjs);
        }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <script type="text/javascript">
+      window.DLAB_GLOBAL_CONTEXT =
+        '{{userID}}'
+        ? Object.freeze({
+          userID: '{{userID}}',
+          firstName: '{{firstName}}',
+          lastName: '{{lastName}}',
+        })
+        : {};
     </script>
     <div id="MainController" data-elementId="brief_description" data-maxLength="3000" class="__react-root">Loading . . .</div>
   </body>

@@ -5,6 +5,7 @@ import type {Tag} from './TagStore';
 import {ReduceStore} from 'flux/utils';
 import ProjectSearchDispatcher from './ProjectSearchDispatcher.js';
 import {List, Record} from 'immutable'
+import ProjectAPIUtils from '../utils/ProjectAPIUtils';
 
 export type Project = {|
   +description: string,
@@ -12,14 +13,6 @@ export type Project = {|
   +issueArea: string,
   +location: string,
   +name: string,
-|};
-
-type ProjectAPIData = {|
-  +id: number,
-  +project_description: string,
-  +project_issue_area: $ReadOnlyArray<{|+name: string|}>,
-  +project_location: string,
-  +project_name: string,
 |};
 
 export type ProjectSearchActionType = {
@@ -96,7 +89,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       .then(projects =>
         ProjectSearchDispatcher.dispatch({
           type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
-          projects: List(projects.map(this._projectFromAPIData)),
+          projects: List(projects.map(ProjectAPIUtils.projectFromAPIData)),
         }),
       );
     return state.set('projects', null);
@@ -111,19 +104,6 @@ class ProjectSearchStore extends ReduceStore<State> {
       ? '&tags='
         + state.tags.map(tag => tag.tagName).join(',')
       : null;
-  }
-
-  _projectFromAPIData(apiData: ProjectAPIData): Project {
-    return {
-      description: apiData.project_description,
-      id: apiData.id,
-      issueArea:
-        apiData.project_issue_area.length != 0
-          ? apiData.project_issue_area[0].name
-          : 'None',
-      location: apiData.project_location,
-      name: apiData.project_name,
-    };
   }
 
   getKeyword(): string {

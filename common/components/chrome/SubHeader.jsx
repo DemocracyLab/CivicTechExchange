@@ -40,12 +40,12 @@ class SubHeader extends React.Component<{||}, State> {
       <div className={this._cx.get('root')}>
         {this._renderSectionLinks()}
         <span className={this._cx.get('rightContent')}>
-          <button
+          <a
             className={this._cx.get('createProject')}
-            onClick={this._goToCreateProject}
+            href="/projects/signup"
             >
             Create A Project
-          </button>
+          </a>
         </span>
       </div>
     );
@@ -61,14 +61,6 @@ class SubHeader extends React.Component<{||}, State> {
           title={config.title}
         />
       );
-  }
-
-  _goToCreateProject(): void {
-    NavigationDispatcher.dispatch({
-      type: 'SET_SECTION',
-      section: Section.CreateProject,
-    });
-    window.FB.AppEvents.logEvent('CreateProjectNavBarClick');
   }
 }
 

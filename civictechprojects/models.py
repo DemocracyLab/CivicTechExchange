@@ -22,7 +22,11 @@ class TaggedTag(TaggedItemBase):
 
 
 class Project(models.Model):
-    project_creator = models.ForeignKey(Contributor)
+    project_volunteers = models.ManyToManyField(
+        Contributor,
+        related_name='volunteers',
+    )
+    project_creator = models.ForeignKey(Contributor, related_name='creator')
     project_description = models.CharField(max_length=1000, blank=True)
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
     project_issue_area.remote_field.related_name = "+"

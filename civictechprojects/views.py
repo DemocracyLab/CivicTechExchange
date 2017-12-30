@@ -46,6 +46,8 @@ def to_rows(items, width):
 
 
 def project_signup(request):
+    if not request.user.is_authenticated():
+        return redirect('/signup')
     if request.method == 'POST':
         form = ProjectCreationForm(request.POST)
         form.is_valid()
@@ -65,7 +67,7 @@ def project_signup(request):
             project = Project.objects.get(id=project.id)
             project.project_issue_area.add(issue_areas[0])
             project.save()
-        return redirect('/')
+        return redirect('/index/?section=MyProjects')
     else:
         form = ProjectCreationForm()
 
@@ -92,6 +94,7 @@ def project(request, project_id):
 
 
 def projects(request):
+    return redirect('/index/')
     template = loader.get_template('projects.html')
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
@@ -116,8 +119,21 @@ def home(request):
 
 def index(request):
     template = loader.get_template('new_index.html')
-    context = {}
+    context = (
+        {
+            'userID': request.user.id,
+            'firstName': request.user.first_name,
+            'lastName': request.user.last_name,
+        }
+        if request.user.is_authenticated() else
+        {}
+    )
     return HttpResponse(template.render(context, request))
+
+
+def my_projects(request):
+    projects = Project.objects.filter(project_creator_id=request.user.id)
+    return HttpResponse(json.dumps(list(projects.values())))
 
 
 def projects_list(request):
