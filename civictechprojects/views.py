@@ -65,7 +65,7 @@ def project_signup(request):
             project = Project.objects.get(id=project.id)
             project.project_issue_area.add(issue_areas[0])
             project.save()
-        return redirect('/')
+        return redirect('/index/?section=MyProjects')
     else:
         form = ProjectCreationForm()
 
