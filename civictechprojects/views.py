@@ -116,7 +116,15 @@ def home(request):
 
 def index(request):
     template = loader.get_template('new_index.html')
-    context = {'userID': request.user.id, 'firstName': request.user.first_name}
+    context = (
+        {
+            'userID': request.user.id,
+            'firstName': request.user.first_name,
+            'lastName': request.user.last_name,
+        }
+        if request.user.is_authenticated() else
+        {}
+    )
     return HttpResponse(template.render(context, request))
 
 

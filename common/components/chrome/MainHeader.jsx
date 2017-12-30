@@ -20,10 +20,7 @@ class MainHeader extends React.PureComponent<{||}> {
           <span>
             {this._renderLinks()}
           </span>
-          <img
-            className="MainHeader-profilePicture"
-            src="https://avatars2.githubusercontent.com/u/3479724?s=400&u=d8619269a20955dd8df8215d1c41faad9b6fb62a&v=4"
-          />
+          {this._renderHero()}
         </span>
       </div>
     );
@@ -34,6 +31,13 @@ class MainHeader extends React.PureComponent<{||}> {
       type: 'SET_SECTION',
       section: Section.Landing,
     });
+  }
+
+  _renderHero(): React$Node {
+    const {userID, firstName, lastName} = window.DLAB_GLOBAL_CONTEXT;
+    return userID
+      ? <span>{firstName + ' ' + lastName} | Logout</span>
+      : <span>Log In | Sign Up</span>;
   }
 
   _renderLinks(): React$Node {

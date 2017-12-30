@@ -40,10 +40,14 @@
        }(document, 'script', 'facebook-jssdk'));
     </script>
     <script type="text/javascript">
-      window.DLAB_GLOBAL_CONTEXT = Object.freeze({
-        userID: '{{userID}}',
-        userID: '{{firstName}}',
-      });
+      window.DLAB_GLOBAL_CONTEXT =
+        '{{userID}}'
+        ? Object.freeze({
+          userID: '{{userID}}',
+          firstName: '{{firstName}}',
+          lastName: '{{lastName}}',
+        })
+        : {};
     </script>
     <div id="MainController" data-elementId="brief_description" data-maxLength="3000" class="__react-root">Loading . . .</div>
   </body>
