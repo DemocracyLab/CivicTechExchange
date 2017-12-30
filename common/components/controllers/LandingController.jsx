@@ -41,11 +41,13 @@ class LandingController extends React.PureComponent<{||}> {
           <div
             className={this._cx.get('centerer', 'signUpContainer')}
             >
-            <div
-              className={this._cx.get('landingText', 'signUp')}
-              >
-              Sign Up
-            </div>
+            <a href="/signup">
+              <div
+                className={this._cx.get('landingText', 'signUp')}
+                >
+                Sign Up
+              </div>
+            </a>
           </div>
         </div>
       </div>
