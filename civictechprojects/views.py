@@ -92,6 +92,7 @@ def project(request, project_id):
 
 
 def projects(request):
+    return redirect('/index/')
     template = loader.get_template('projects.html')
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
