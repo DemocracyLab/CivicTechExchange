@@ -36,11 +36,10 @@ class MainHeader extends React.PureComponent<{||}> {
   _renderHero(): React$Node {
     const {userID, firstName, lastName} = window.DLAB_GLOBAL_CONTEXT;
     return userID
-      ? <span>{firstName + ' ' + lastName} | Logout</span>
+      ? <span>{firstName + ' ' + lastName} | <a href="/logout">Logout</a></span>
       : (
         <span>
-          <a href="/login">Log In</a>
-          <a href="/signup">Sign Up</a>
+          <a href="/login">Log In</a> | <a href="/signup">Sign Up</a>
         </span>
       );
   }
