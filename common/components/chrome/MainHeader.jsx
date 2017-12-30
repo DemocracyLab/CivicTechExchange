@@ -37,7 +37,12 @@ class MainHeader extends React.PureComponent<{||}> {
     const {userID, firstName, lastName} = window.DLAB_GLOBAL_CONTEXT;
     return userID
       ? <span>{firstName + ' ' + lastName} | Logout</span>
-      : <span>Log In | Sign Up</span>;
+      : (
+        <span>
+          <a href="/login">Log In</a>
+          <a href="/signup">Sign Up</a>
+        </span>
+      );
   }
 
   _renderLinks(): React$Node {
