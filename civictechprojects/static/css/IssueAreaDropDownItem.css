@@ -1,4 +1,5 @@
 .IssueAreaDropDownItem-root {
+  cursor: pointer;
   padding-left: 15px;
   padding-right: 29px;
 }

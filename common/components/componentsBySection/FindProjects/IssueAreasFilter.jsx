@@ -22,8 +22,10 @@ class IssueAreasFilter extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return (
       <span
-        onClick={() => this.setState({showDropdown: !this.state.showDropdown})}>
-        Issue Areas  {this._renderChevron()}
+        onClick={() => this.setState({showDropdown: !this.state.showDropdown})}
+        style={{cursor: 'pointer'}}>
+        Issue Areas {' '}
+        {this._renderChevron()}
         {
           this.state.showDropdown
             ? (
