@@ -36,7 +36,12 @@ class MainHeader extends React.PureComponent<{||}> {
 
   _renderHero(): React$Node {
     return CurrentUser.isLoggedIn()
-      ? <span>{CurrentUser.firstName() + ' ' + CurrentUser.lastName()} | <a href="/logout">Logout</a></span>
+      ? (
+        <span>
+          {CurrentUser.firstName() + ' ' + CurrentUser.lastName() + ' '}
+          | <a href="/logout">Logout</a>
+        </span>
+      )
       : (
         <span>
           <a href="/login">Log In</a> |{' '}
