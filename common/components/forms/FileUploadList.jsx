@@ -2,17 +2,12 @@
 
 import React from 'react';
 import type { FileUploadData } from '../common/upload/FileUploadButton.jsx'
+import type { FileInfo } from '../common/FileInfo.jsx'
+import Visibility from '../common/Visibility.jsx'
 import FileUploadButton from '../common/upload/FileUploadButton.jsx'
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
 import { deleteFromS3 } from '../utils/s3.js'
 import _ from 'lodash'
-
-type FileInfo = {|
-  s3Key: string,
-  name: string,
-  type: string,
-  fileUrl: string
-|};
 
 type Props = {|
   files: string,
@@ -50,9 +45,11 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   
   confirmDelete(confirmed: boolean): void {
     if(confirmed) {
-      _.remove(this.state.files, (file) => file.fileUrl === this.state.fileToDelete.fileUrl);
-      deleteFromS3(this.state.fileToDelete.s3Key);
+      _.remove(this.state.files, (file) => file.publicUrl === this.state.fileToDelete.publicUrl);
+      deleteFromS3(this.state.fileToDelete.key);
     }
+  
+    this.updateLinkField();
     
     this.setState({
       showDeleteModal: false,
@@ -61,12 +58,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   }
   
   handleFileSelection(fileUploadData: FileUploadData): void {
-    var fileInfo = {
-      s3Key: fileUploadData.key,
-      name: fileUploadData.fileName,
-      type: fileUploadData.fileName.split(".")[-1],
-      fileUrl: fileUploadData.publicUrl
-    }
+    var fileInfo = _.assign({ visibility: Visibility.PUBLIC }, fileUploadData);
     this.state.files.push(fileInfo);
     this.updateLinkField();
     this.forceUpdate();
@@ -75,7 +67,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   render(): React$Node {
     return (
       <div>
-        <input type="hidden" ref="hiddenFormField" id={this.props.elementid} value={this.state.files}/>
+        <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
         
         {this._renderFiles()}
         
@@ -97,8 +89,8 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   _renderFiles(): Array<React$Node> {
     return this.state.files.map((file,i) =>
       <div key={i}>
-        <a href={file.fileUrl}>{file.name}</a>
-        <i class="fa fa-trash-o fa-1" aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,file)}></i>
+        <a href={file.publicUrl}>{file.fileName}</a>
+        <i className="fa fa-trash-o fa-1" aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,file)}></i>
       </div>
     );
   }

@@ -88,7 +88,7 @@ class LinkList extends React.PureComponent<Props,State>  {
   render(): React$Node {
     return (
       <div>
-        <input type="hidden" ref="hiddenFormField" id={this.props.elementid} value={this.state.links}/>
+        <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
         
         {this._renderLinks()}
         
@@ -119,8 +119,8 @@ class LinkList extends React.PureComponent<Props,State>  {
     return this.state.links.map((link,i) =>
       <div key={i}>
         <a href={link.linkUrl}>{link.linkName}</a>
-        <i class="fa fa-pencil-square-o fa-1" aria-hidden="true" onClick={this.editLink.bind(this,link)}></i>
-        <i class="fa fa-trash-o fa-1" aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,link)}></i>
+        <i className="fa fa-pencil-square-o fa-1" aria-hidden="true" onClick={this.editLink.bind(this,link)}></i>
+        <i className="fa fa-trash-o fa-1" aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,link)}></i>
       </div>
     );
   }

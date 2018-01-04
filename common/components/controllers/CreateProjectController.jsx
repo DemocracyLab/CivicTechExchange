@@ -73,18 +73,18 @@ class CreateProjectController extends React.PureComponent<Props,State> {
         <h2 className="form-group subheader">DETAILS</h2>
         <div className="form-group">
           <label htmlFor="project_name">Project Name</label>
-          <input type="text" className="form-control" id="project_name" name="project_name"
+          <input type="text" className="form-control" id="project_name" name="project_name" maxLength="200"
                  onChange={this.onFormFieldChange.bind(this, "project_name")}/>
         </div>
         
         <div className="form-group">
           <label htmlFor="project_location">Project Location</label>
-          <input type="text" className="form-control" id="project_location" name="project_location"
+          <input type="text" className="form-control" id="project_location" name="project_location" maxLength="200"
                  onChange={this.onFormFieldChange.bind(this, "project_location")}/>
         </div>
         <div className="form-group">
           <label htmlFor="project_url">Website URL</label>
-          <input type="text" className="form-control" id="project_url" name="project_url"
+          <input type="text" className="form-control" id="project_url" name="project_url" maxLength="200"
                  onChange={this.onFormFieldChange.bind(this, "project_url")}/>
         </div>
         
@@ -105,10 +105,10 @@ class CreateProjectController extends React.PureComponent<Props,State> {
         </div>
         
         <h2 className="form-group subheader">LINKS</h2>
-        <LinkList elementId="project_links" links="[]"/>
+        <LinkList elementid="project_links" links="[]"/>
         
         <h2 className="form-group subheader">FILES</h2>
-        <FileUploadList elementId="project_files" files="[]"/>
+        <FileUploadList elementid="project_files" files="[]"/>
         
         <div className="form-group pull-right">
           <div className='text-right'>

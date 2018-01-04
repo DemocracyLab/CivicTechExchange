@@ -2,6 +2,7 @@
 
 import React from 'react';
 import FileUploadButton from '../common/upload/FileUploadButton.jsx'
+import Visibility from '../common/Visibility.jsx'
 import type FileUploadData from '../common/upload/FileUploadButton.jsx'
 
 type Props = {|
@@ -51,7 +52,8 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
   }
   
   _handleFileSelection(fileUploadData: FileUploadData) : void {
-    this.refs.hiddenFormField.value = fileUploadData.key;
+    var fileInfo = _.assign({ visibility: Visibility.PUBLIC }, fileUploadData);
+    this.refs.hiddenFormField.value = JSON.stringify(fileInfo);
     this.setState({"imagePreviewUrl": fileUploadData.publicUrl});
   }
 

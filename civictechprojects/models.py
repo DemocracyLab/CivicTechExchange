@@ -1,4 +1,5 @@
 from django.db import models
+from enum import Enum
 from democracylab.models import Contributor
 
 from taggit.managers import TaggableManager
@@ -26,8 +27,9 @@ class Project(models.Model):
         Contributor,
         related_name='volunteers',
     )
+    # TODO: Change related name to 'created_projects' or something similar
     project_creator = models.ForeignKey(Contributor, related_name='creator')
-    project_description = models.CharField(max_length=1000, blank=True)
+    project_description = models.CharField(max_length=3000, blank=True)
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
     project_issue_area.remote_field.related_name = "+"
     project_location = models.CharField(max_length=200)
@@ -35,3 +37,71 @@ class Project(models.Model):
     project_tags = TaggableManager(blank=True, through=TaggedTag)
     project_tags.remote_field.related_name = "+"
     project_url = models.CharField(max_length=200, blank=True)
+    project_links = models.CharField(max_length=5000, blank=True)
+
+
+class ProjectLink(models.Model):
+    link_project = models.ForeignKey(Project, related_name='links')
+    link_name = models.CharField(max_length=200, blank=True)
+    link_url = models.CharField(max_length=2000)
+    link_visibility = models.CharField(max_length=50)
+
+    @staticmethod
+    def create(project, url, name, visibility):
+        # TODO: Validate input
+        link = ProjectLink()
+        link.link_project = project
+        link.link_url = url
+        link.link_name = name
+        link.link_visibility = visibility
+        return link
+
+    @staticmethod
+    def from_json(project, thumbnail_json):
+        return ProjectLink.create(project=project,
+                                  url=thumbnail_json['linkUrl'],
+                                  name=thumbnail_json['linkName'],
+                                  visibility=thumbnail_json['visibility']
+                                  )
+
+
+class ProjectFile(models.Model):
+    file_project = models.ForeignKey(Project, related_name='files')
+    file_visibility = models.CharField(max_length=50)
+    file_name = models.CharField(max_length=200)
+    file_key = models.CharField(max_length=200)
+    file_url = models.CharField(max_length=2000)
+    file_type = models.CharField(max_length=50)
+    file_category = models.CharField(max_length=50)
+
+    @staticmethod
+    def create(project, file_url, file_name, file_key, file_type, file_category, file_visibility):
+        # TODO: Validate input
+        file = ProjectFile()
+        file.file_project = project
+        file.file_url = file_url
+        file.file_name = file_name
+        file.file_key = file_key
+        file.file_type = file_type
+        file.file_category = file_category
+        file.file_visibility = file_visibility
+        return file
+
+    @staticmethod
+    def from_json(project, file_category, thumbnail_json):
+        file_name_parts = thumbnail_json['fileName'].split('.')
+        file_name = "".join(file_name_parts[:-1])
+        file_type = file_name_parts[-1]
+
+        return ProjectFile.create(project=project,
+                                  file_url=thumbnail_json['publicUrl'],
+                                  file_name=file_name,
+                                  file_key=thumbnail_json['key'],
+                                  file_type=file_type,
+                                  file_category=file_category.value,
+                                  file_visibility=thumbnail_json['visibility'])
+
+
+class FileCategory(Enum):
+    THUMBNAIL = 'THUMBNAIL'
+    ETC = 'ETC'

@@ -12,7 +12,6 @@ from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file
 from common.models.tags import get_tags_by_category
 from .forms import ProjectCreationForm
 from common.models.tags import Tag
-from democracylab.models import get_request_contributor
 
 
 def tags(request):
@@ -46,24 +45,7 @@ def project_signup(request):
     if not request.user.is_authenticated():
         return redirect('/signup')
     if request.method == 'POST':
-        form = ProjectCreationForm(request.POST)
-        form.is_valid()
-        # TODO: Form validation
-        project = Project.objects.create(
-            project_creator=get_request_contributor(request),
-            project_description=form.cleaned_data.get('project_description'),
-            project_location=form.cleaned_data.get('project_location'),
-            project_name=form.cleaned_data.get('project_name'),
-            project_url=form.cleaned_data.get('project_url'),
-        )
-        issue_areas = form.cleaned_data.get('project_issue_area')
-        if len(issue_areas) != 0:
-            # Tag fields operate like ManyToMany fields, and so cannot
-            # be added until after the object is created.
-            project = Project.objects.get(id=project.id)
-            project.project_issue_area.add(issue_areas[0])
-
-        project.save()
+        ProjectCreationForm.create_project(request)
         return redirect('/index/?section=MyProjects')
     else:
         form = ProjectCreationForm()

@@ -3,6 +3,7 @@
 import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import type { LinkInfo } from './LinkInfo.jsx'
+import Visibility from '../common/Visibility.jsx'
 
 type Props = {|
   showModal: boolean,
@@ -29,7 +30,8 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
       showModal: false,
       linkInfo: {
         linkUrl: "",
-        linkName: ""
+        linkName: "",
+        visibility: Visibility.PUBLIC
       }
     }
   
@@ -38,10 +40,11 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
     this.handleChange = this.handleChange.bind(this);
   }
   
-  resetModal(url:?string, name:?string): void {
+  resetModal(url:?string, name:?string, visibility:?string): void {
     this.setState({ "linkInfo": {
       linkUrl: url || "",
-      linkName: name || ""
+      linkName: name || "",
+      visibility: visibility || Visibility.PUBLIC
     }});
   }
   
@@ -94,9 +97,9 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
               </Modal.Header>
               <Modal.Body>
                   <label htmlFor="link-url">Link URL</label>
-                  <input type="text" class="form-control" id="link-url" value={this.state.linkInfo.linkUrl} onChange={(e) => this.handleChange(e, "linkUrl")}/>
+                  <input type="text" className="form-control" id="link-url" maxLength="2000" value={this.state.linkInfo.linkUrl} onChange={(e) => this.handleChange(e, "linkUrl")}/>
                   <label htmlFor="link-name">Link Name</label>
-                  <input type="text" class="form-control" id="link-name" value={this.state.linkInfo.linkName} onChange={(e) => this.handleChange(e, "linkName")}/>
+                  <input type="text" className="form-control" id="link-name" maxLength="200" value={this.state.linkInfo.linkName} onChange={(e) => this.handleChange(e, "linkName")}/>
               </Modal.Body>
               <Modal.Footer>
                   <Button onClick={this.close}>Close</Button>
