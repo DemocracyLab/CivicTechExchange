@@ -66175,11 +66175,19 @@ var MainHeader = function (_React$PureComponent) {
           { href: '/login' },
           'Log In'
         ),
-        ' | ',
+        ' |',
+        ' ',
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'a',
           { href: '/signup' },
           'Sign Up'
+        ),
+        ' |',
+        ' ',
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'a',
+          { href: '/password_reset' },
+          'Forgot Password'
         )
       );
     }
