@@ -7,7 +7,7 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Project
+from .models import Project, ProjectFile, FileCategory, ProjectLink
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.models.tags import get_tags_by_category
 from .forms import ProjectCreationForm
@@ -63,7 +63,17 @@ def project_signup(request):
 def project(request, project_id):
     project = Project.objects.get(id=project_id)
     template = loader.get_template('project.html')
-    context = {'project': project}
+    files = ProjectFile.objects.filter(file_project=project_id)
+    thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+    other_files = list(files.filter(file_category=FileCategory.ETC.value))
+    links = ProjectLink.objects.filter(link_project=project_id)
+    context = {
+        'project': project,
+        'files': map(lambda file: file.to_json(), other_files),
+        'links': map(lambda link: link.to_json(), links),
+    }
+    if len(thumbnail_files) > 0:
+        context['thumbnail'] = thumbnail_files[0].to_json()
     return HttpResponse(template.render(context, request))
 
 

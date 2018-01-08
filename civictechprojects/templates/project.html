@@ -1,5 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 
+<link rel="stylesheet" href="/static/css/project_signup.css"/>
 <link href='/static/css/project.css' rel='stylesheet' type='text/css'>
 
 <div class="container-fluid">
@@ -7,22 +8,12 @@
         <div class="col-sm-5">
             <div class="row">
                 <div class="col-sm-auto">
-                    <img style="width: 111px; height: 108px" src="" />
+                    <img class="upload_img upload_img_bdr" src="{{ thumbnail.publicUrl }}" />
                 </div>
                 <div class="col">
                     <div class="row">
                         <div class="col">
                             {{ project.project_name }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Status: In Progress
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Starts: 10/02/17
                         </div>
                     </div>
                 </div>
@@ -33,45 +24,16 @@
         <div class="col col-sm-3">
             <div class="row">
                 <div class="col">
-                    <img style="width: 31px; height: 31px" src="" />
-                    {{ project.project_url }}
+                    <i class="fa fa-link fa-1" aria-hidden="true"></i>
+                    <a href="{{ project.project_url }}">{{ project.project_url }}</a>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <img style="width: 31px; height: 31px" src="" />
-                    Seattle, WA
+                    <i class="fa fa-map-marker fa-1" aria-hidden="true"></i>
+                    {{ project.project_location }}
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
-                    <img style="width: 31px; height: 31px" src="" />
-                    Software License: Open Source
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <img style="width: 31px; height: 31px" src="" />
-                    Government Efficiency, Crowdsourcing, Civic Technology
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row" style="margin: 0 40px 0 40px;">
-        <div class="col-sm-1" 
-             style="font-size: 12px; margin: 0 16px; padding: 0; max-width: 120px; border-bottom: 8px solid #333;">
-            ABOUT PROJECT
-        </div>
-        <div class="col-sm-1" 
-             style="font-size: 12px; margin: 0 16px; padding: 0; max-width: 120px">
-            RESOURCES
-        </div>
-        <div class="col-sm-1" 
-             style="font-size: 12px; margin: 0 16px; padding: 0; max-width: 120px">
-            VOLUNTEERS
-        </div>
-        <div class="col">
         </div>
     </div>
 
@@ -80,131 +42,28 @@
             PROJECT DETAILS
             <div>
                 {{ project.project_description }}
-                <br />
-                Lorem ipsum a sem Donec vel magna erat, at ac in. Vitae ipsum Suspendisse nec vitae vestibulum neque volutpat, leo, vel tortor feugiat taciti tempor felis interdum, Cras consectetur risus. A rutrum, mi lorem, eu adipiscing amet, condimentum ultrices sed, eu iaculis Class vitae. Velit nisi eu massa maximus quis, eget fringilla sollicitudin ultrices. A ante. Ex fringilla felis at lorem, eget a eu lectus. Eleifend nec sit tempus non vitae. Taciti vehicula feugiat id volutpat eu elit. Elit Quisque faucibus inceptos Mauris Suspendisse arcu tincidunt imperdiet ultricies magna eget luctus aliquet Proin sed Suspendisse arcu. Quam. In nibh ultrices eu. Erat Sed consectetur dictum vestibulum risus. Turpis pharetra metus lectus augue in accumsan nisi eu mollis Nam vitae at sed dictum a augue aptent volutpat ultrices. A nibh sapien non laoreet ultricies tortor taciti ipsum nisi luctus vitae. Massa lectus a justo, rhoncus congue Fusce nibh. Sed arcu. Orci vel ultrices vestibulum eu. Praesent velit felis Morbi egestas, augue Suspendisse … More
-            </div>
-            <div class="row">
-                <div class="col">
-                </div>
-                <div class="col">
-                    <button>
-                        View Executive Summary
-                    </button>
-                </div>
-                <div class="col">
-                </div>
             </div>
         </div>
+</div>
 
-        <div class="col col-sm-3">
-            PROJECT LEADS
-            <div class="row">
-                <div class="col-sm-auto">
-                    <img style="width: 75px; height: 75px" src="" />
-                </div>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            {{ project.project_creator.first_name }} {{ project.project_creator.last_name }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Founder at Acme, Inc.
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            LinkedIn Profile
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-auto">
-                    <img style="width: 75px; height: 75px" src="" />
-                </div>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            John Doe
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            Founder at Acme, Inc.
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            LinkedIn Profile
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="row" style="margin: 30px 40px 0 40px;">
+    <div class = 'col'>
+        <h2 class="form-group subheader">LINKS</h2>
+        {% for link in links %}
+        <h6>{{ link.linkName }}</h6>
+        <a href="{{ link.linkUrl }}">{{ link.linkUrl }}</a>
+        {% endfor %}
     </div>
+</div>
 
-    <div class="row" style="margin: 30px 40px 0 40px;">
-        <div class="col">
-            VOLUNTEER WITH US
-            <br />
-            <br />
-            OPEN POSITIONS
-
-            <div class="row open-position-row">
-                <div class="col">
-                    Design
-                </div>
-                <div class="col">
-                    Graphic Designer
-                </div>
-                <div class="col">
-                    <button>Apply</button>
-                </div>
-            </div>
-
-            <div class="row open-position-row">
-                <div class="col">
-                    Software Development
-                </div>
-                <div class="col">
-                    Font-End Development
-                </div>
-                <div class="col">
-                    <button>Apply</button>
-                </div>
-            </div>
-
-            <div class="row open-position-row">
-                <div class="col">
-                    Software Development
-                </div>
-                <div class="col">
-                    Back-End Development
-                </div>
-                <div class="col">
-                    <button>Apply</button>
-                </div>
-            </div>
-
-            <div class="row open-position-row">
-                <div class="col">
-                    Business
-                </div>
-                <div class="col">
-                    Accountant
-                </div>
-                <div class="col">
-                    <button>Apply</button>
-                </div>
-            </div>
-            <div class="row" style="padding: 16px 0; margin: 0 16px">
-            </div>
+<div class="row" style="margin: 30px 40px 0 40px;">
+    <div class = 'col'>
+        <h2 class="form-group subheader">FILES</h2>
+        {% for file in files %}
+        <div>
+            <a href="{{ file.publicUrl }}">{{ file.fileName }}</a>
         </div>
-
-        <div class="col col-sm-3">
-        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

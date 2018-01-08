@@ -64,6 +64,13 @@ class ProjectLink(models.Model):
                                   visibility=thumbnail_json['visibility']
                                   )
 
+    def to_json(self):
+        return {
+            'linkName': self.link_name,
+            'linkUrl': self.link_url,
+            'visibility': self.link_visibility
+        }
+
 
 class ProjectFile(models.Model):
     file_project = models.ForeignKey(Project, related_name='files')
@@ -88,18 +95,26 @@ class ProjectFile(models.Model):
         return file
 
     @staticmethod
-    def from_json(project, file_category, thumbnail_json):
-        file_name_parts = thumbnail_json['fileName'].split('.')
+    def from_json(project, file_category, file_json):
+        file_name_parts = file_json['fileName'].split('.')
         file_name = "".join(file_name_parts[:-1])
         file_type = file_name_parts[-1]
 
         return ProjectFile.create(project=project,
-                                  file_url=thumbnail_json['publicUrl'],
+                                  file_url=file_json['publicUrl'],
                                   file_name=file_name,
-                                  file_key=thumbnail_json['key'],
+                                  file_key=file_json['key'],
                                   file_type=file_type,
                                   file_category=file_category.value,
-                                  file_visibility=thumbnail_json['visibility'])
+                                  file_visibility=file_json['visibility'])
+
+    def to_json(self):
+        return {
+            'key': self.file_key,
+            'fileName': self.file_name + '.' + self.file_type,
+            'publicUrl': self.file_url,
+            'visibility': self.file_visibility
+        }
 
 
 class FileCategory(Enum):
