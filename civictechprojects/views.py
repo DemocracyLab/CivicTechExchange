@@ -13,6 +13,7 @@ from common.models.tags import get_tags_by_category
 from .forms import ProjectCreationForm
 from common.models.tags import Tag
 
+from pprint import pprint
 
 def tags(request):
     return HttpResponse(
@@ -132,13 +133,13 @@ def projects_list(request):
             'keyword' in query_params
             or 'tags' in query_params
         ) else Project.objects
-    return HttpResponse(
-        json.dumps(
-            projects_with_issue_areas(
-                list(projects.order_by('project_name').values())
-            )
+    response = json.dumps(
+        projects_with_issue_areas(
+            list(projects.order_by('project_name').values())
         )
     )
+    pprint(response)
+    return HttpResponse(response)
 
 
 def projects_by_keyword(query_params):

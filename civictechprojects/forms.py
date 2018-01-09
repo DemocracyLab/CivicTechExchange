@@ -3,7 +3,6 @@ from django import forms
 from .models import Project, ProjectLink, ProjectFile, FileCategory
 from democracylab.models import get_request_contributor
 
-
 class ProjectCreationForm(forms.Form):
     class Meta:
         fields = [
@@ -34,7 +33,7 @@ class ProjectCreationForm(forms.Form):
         if len(issue_areas) != 0:
             # Tag fields operate like ManyToMany fields, and so cannot
             # be added until after the object is created.
-            project.project_issue_area.add(issue_areas[0])
+            project.project_issue_area.add(issue_areas)
 
         project.save()
 
