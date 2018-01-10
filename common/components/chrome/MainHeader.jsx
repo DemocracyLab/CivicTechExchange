@@ -44,11 +44,18 @@ class MainHeader extends React.PureComponent<{||}> {
       )
       : (
         <span>
-          <a href="/login">Log In</a> |{' '}
+          <a href="#" onClick={this._onLogInClick}>Log In</a> |{' '}
           <a href="/signup">Sign Up</a> |{' '}
           <a href="/password_reset">Forgot Password</a>
         </span>
       );
+  }
+
+  _onLogInClick(): void {
+    NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: Section.SignIn,
+    });
   }
 
   _renderLinks(): React$Node {
