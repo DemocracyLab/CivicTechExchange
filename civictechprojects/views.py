@@ -1,8 +1,8 @@
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.template import loader
+from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
-
 from urllib import parse as urlparse
 import simplejson as json
 
@@ -117,6 +117,7 @@ def home(request):
     return HttpResponse(template.render(context, request))
 
 
+@ensure_csrf_cookie
 def index(request):
     template = loader.get_template('new_index.html')
     context = (
