@@ -28,7 +28,6 @@ urlpatterns = [
     url(r'^api/my_projects', views.my_projects),
     url(r'^api/tags', views.tags),
     url(r'^projects/$', views.projects),
-    url(r'^login_react/$', views.login_react),
     url(r'^index/$', views.index),
     url(r'^project/(?P<project_id>[0-9]+)/$', views.project, name='project'),
     url(

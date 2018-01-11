@@ -44,7 +44,7 @@ class MainHeader extends React.PureComponent<{||}> {
       )
       : (
         <span>
-          <a href="/login_react">Log In</a> |{' '}
+          <a href="/login">Log In</a> |{' '}
           <a href="/signup">Sign Up</a> |{' '}
           <a href="/password_reset">Forgot Password</a>
         </span>
