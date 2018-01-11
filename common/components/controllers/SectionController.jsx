@@ -7,7 +7,6 @@ import {Container} from 'flux/utils';
 import CreateProjectController from './CreateProjectController.jsx'
 import FindProjectsController  from './FindProjectsController.jsx'
 import LandingController from './LandingController.jsx'
-import SignInController from './SignInController.jsx'
 import MyProjectsController from './MyProjectsController.jsx'
 import NavigationStore from '../stores/NavigationStore.js'
 import React from 'react';
@@ -46,8 +45,6 @@ class SectionController extends React.Component<{||}, State> {
         return <LandingController />;
       case Section.MyProjects:
         return <MyProjectsController />;
-      case Section.SignIn:
-        return <SignInController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }
