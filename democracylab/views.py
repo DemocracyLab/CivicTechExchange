@@ -20,7 +20,6 @@ def to_columns(items, count = 3):
     return res
 
 
-
 def signup(request):
     if request.method == 'POST':
         form = DemocracyLabUserCreationForm(request.POST)
@@ -47,6 +46,7 @@ def signup(request):
     template = loader.get_template('signup.html')
     context = {'form': form}
     return HttpResponse(template.render(context, request))
+
 
 def user_update(request):
     if request.method == 'POST':

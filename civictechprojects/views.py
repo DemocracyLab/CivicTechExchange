@@ -132,6 +132,11 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 
+def login_react(request):
+    template = loader.get_template('login_react.html')
+    return HttpResponse(template.render({}, request))
+
+
 def my_projects(request):
     projects = Project.objects.filter(project_creator_id=request.user.id)
     return HttpResponse(json.dumps(list(projects.values())))
