@@ -16,3 +16,15 @@
 .LogInController-greeting {
   margin-bottom: 27px;
 }
+
+.LogInController-signInButton {
+  background-color: #86c232;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 19px;
+  height: 42px;
+  margin-left: 40%;
+  width: auto;
+}

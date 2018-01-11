@@ -47,7 +47,11 @@ class LogInController extends React.Component<{||}, State> {
                 type="password"
               />
             </div>
-            <button type="submit">Login</button>
+            <button
+              className="LogInController-signInButton"
+              type="submit">
+              Sign In
+            </button>
         </form>
       </div>
     );
