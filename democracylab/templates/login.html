@@ -1,24 +1,5 @@
-{% extends 'base.html' %} {% block content %}
-<div class="container">
-    <form method="post">
-        {% csrf_token %}
-        <div class="signup-inputs">
-            <div class="row">
-                <div class="col-md-12 signup-label">Email</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="username" class="signup-wide"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 signup-label">Password</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="password" name="password" class="signup-wide"></div>
-            </div>
-        </div>
-        <div class="submit-row">
-            <button type="submit" class="btn-primary">Login</button>
-        </div>
-    </form>
-    {% endblock %}
-</div>
+<!-- This is just a stub until I can figure out a cleaner way to re-route -->
+<script>
+  window.location.replace('/login_react');
+</script>
+<div>Redirecting ...</div>
