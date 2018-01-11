@@ -19,22 +19,30 @@ class LogInController extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div>
-        Welcome back. Log into your account.
+      <div className="LogInController-root">
+        WELCOME BACK. LOG INTO YOUR ACCOUNT
         <form action="/login/" method="post">
             <DjangoCSRFToken />
-            Email:
-            <input
-              name="username"
-              onChange={e => this.setState({username: e.target.value})}
-              type="text"
-            />
-            Password:
-            <input
-              name="password"
-              onChange={e => this.setState({password: e.target.value})}
-              type="password"
-            />
+            <div>
+              Email:
+            </div>
+            <div>
+              <input
+                name="username"
+                onChange={e => this.setState({username: e.target.value})}
+                type="text"
+              />
+            </div>
+            <div>
+              Password:
+            </div>
+            <div>
+              <input
+                name="password"
+                onChange={e => this.setState({password: e.target.value})}
+                type="password"
+              />
+            </div>
             <button type="submit">Login</button>
         </form>
       </div>
