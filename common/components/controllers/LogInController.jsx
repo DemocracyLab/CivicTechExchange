@@ -49,6 +49,7 @@ class LogInController extends React.Component<{||}, State> {
             </div>
             <button
               className="LogInController-signInButton"
+              disabled={!this.state.username || !this.state.password}
               type="submit">
               Sign In
             </button>

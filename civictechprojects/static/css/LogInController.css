@@ -28,3 +28,8 @@
   margin-left: 40%;
   width: auto;
 }
+
+.LogInController-signInButton:disabled {
+  background-color: #dddddd;
+  cursor: no-drop;
+}
