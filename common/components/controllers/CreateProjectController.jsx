@@ -5,21 +5,20 @@ import ImageUploadFormElement from '../forms/ImageUploadFormElement.jsx'
 import CharacterCounter from '../forms/CharacterCounter.jsx'
 import LinkList from '../forms/LinkList.jsx'
 import FileUploadList from '../forms/FileUploadList.jsx'
+import TagCategory from '../common/tags/TagCategory.jsx'
+import TagSelect from '../common/tags/TagSelect.jsx'
 import _ from 'lodash'
 
 type FormFields = {|
   project_name: ?string,
   project_location: ?string,
   project_url: ?string,
-  project_issue_area: ?string,
   project_description: ?string
 |};
 
 type Props = {|
-  issues_elementid: string
 |};
 type State = {|
-  issues: Array<[string, string]>,
   formIsValid: boolean,
   formFields: FormFields
 |};
@@ -30,26 +29,25 @@ type State = {|
 class CreateProjectController extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
-    
-    // TODO: Pass issue list in props once we have moved away from django rendering
-    var issues_element = document.getElementById(this.props.issues_elementid);
-    if (issues_element) {
-      this.state = {
-        issues: JSON.parse(issues_element.innerHTML),
-        formIsValid: false,
-        formFields: {
-          project_name: null,
-          project_location: null,
-          project_url: null,
-          project_issue_area: null,
-          project_description: null
-        }
-      };
-    }
+  
+    this.state = {
+      formIsValid: false,
+      formFields: {
+        project_name: null,
+        project_location: null,
+        project_url: null,
+        project_description: null
+      }
+    };
   }
   
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.formFields[formFieldName] = event.target.value;
+    this.checkFormValidity();
+  }
+  
+  onComponentChange(formFieldName: string, newValue: string): void {
+    this.state.formFields[formFieldName] = newValue;
     this.checkFormValidity();
   }
   
@@ -90,10 +88,11 @@ class CreateProjectController extends React.PureComponent<Props,State> {
         
         <div className="form-group">
           <label htmlFor="project_issue_area">Issue Areas</label>
-          <select id="project_issue_area" name="project_issue_area" className="form-control"
-                  onChange={this.onFormFieldChange.bind(this, "project_issue_area")}>
-            {this._renderIssues()}
-          </select>
+          <TagSelect
+            elementId="project_issue_area"
+            category={TagCategory.ISSUES}
+            onSelection={this.onComponentChange.bind(this, "project_issue_area")}
+          />
         </div>
         
         <div className="form-group">
@@ -118,14 +117,6 @@ class CreateProjectController extends React.PureComponent<Props,State> {
         </div>
       </div>
     );
-  }
-  
-  _renderIssues(): React$Node {
-    if (this.state) {
-      return this.state.issues.map((issue) => <option key={issue[0]} value={issue[0]}>{issue[1]}</option>);
-    } else {
-      return null;
-    }
   }
 }
 

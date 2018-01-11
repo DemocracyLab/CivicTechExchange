@@ -13,12 +13,19 @@ from common.models.tags import get_tags_by_category
 from .forms import ProjectCreationForm
 from common.models.tags import Tag
 
-from pprint import pprint
 
 def tags(request):
+    url_parts = request.GET.urlencode()
+    query_terms = urlparse.parse_qs(
+        url_parts, keep_blank_values=0, strict_parsing=0)
+    if 'category' in query_terms:
+        category = query_terms.get('category')[0]
+        tags = get_tags_by_category(category)
+    else:
+        tags = Tag.objects
     return HttpResponse(
         json.dumps(
-            list(Tag.objects.values())
+            list(tags.values())
         )
     )
 
@@ -52,11 +59,8 @@ def project_signup(request):
         form = ProjectCreationForm()
 
     template = loader.get_template('project_signup.html')
-    issues = get_tags_by_category('Issue(s) Addressed')
-    tag_map = to_tag_map(issues)
     context = {
-        'form': form,
-        'issues': json.dumps(tag_map)
+        'form': form
     }
     return HttpResponse(template.render(context, request))
 
@@ -138,7 +142,6 @@ def projects_list(request):
             list(projects.order_by('project_name').values())
         )
     )
-    pprint(response)
     return HttpResponse(response)
 
 
