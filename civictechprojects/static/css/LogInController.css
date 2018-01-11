@@ -1,6 +1,18 @@
 .LogInController-root {
   background-color: white;
   border: solid 0.5px #979797;
-  margin: 168px 285px;
+  font-weight: 300;
+  margin: 168px 25%;
   padding: 58px 145px;
+}
+
+.LogInController-input {
+  border: solid 1px #6b6e70;
+  height: 40px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.LogInController-greeting {
+  margin-bottom: 27px;
 }
