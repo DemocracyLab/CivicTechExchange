@@ -31564,7 +31564,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-// import css from '../../../civictechprojects/static/css/project_signup.css'
 
 /**
  * Encapsulates form for creating projects
