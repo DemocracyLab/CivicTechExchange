@@ -15,8 +15,8 @@ type Props = {|
 |};
 type State = {|
   showDeleteModal: boolean,
-  fileToDelete: LinkInfo,
-  files: Array<LinkInfo>
+  fileToDelete: FileInfo,
+  files: Array<FileInfo>
 |};
 
 /**

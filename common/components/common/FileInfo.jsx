@@ -1,7 +1,6 @@
 export type FileInfo = {|
-  s3Key: string,
-  name: string,
-  type: string,
-  fileUrl: string,
+  key: string,
+  fileName: string,
+  publicUrl: string,
   visibility: ?string
 |};

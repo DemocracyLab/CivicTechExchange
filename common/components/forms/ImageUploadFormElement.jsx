@@ -4,6 +4,7 @@ import React from 'react';
 import FileUploadButton from '../common/upload/FileUploadButton.jsx'
 import Visibility from '../common/Visibility.jsx'
 import type FileUploadData from '../common/upload/FileUploadButton.jsx'
+import _ from 'lodash'
 
 type Props = {|
   form_id: string
