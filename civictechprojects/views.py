@@ -65,6 +65,7 @@ def project_signup(request):
     return HttpResponse(template.render(context, request))
 
 
+# TODO: Remove when React implementation complete
 def project(request, project_id):
     project = Project.objects.get(id=project_id)
     template = loader.get_template('project.html')
@@ -80,6 +81,11 @@ def project(request, project_id):
     if len(thumbnail_files) > 0:
         context['thumbnail'] = thumbnail_files[0].to_json()
     return HttpResponse(template.render(context, request))
+
+
+def get_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    return HttpResponse(json.dumps(project.to_json()))
 
 
 def projects(request):
