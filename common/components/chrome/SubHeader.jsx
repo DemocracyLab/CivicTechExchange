@@ -42,7 +42,7 @@ class SubHeader extends React.Component<{||}, State> {
         <span className={this._cx.get('rightContent')}>
           <a
             className={this._cx.get('createProject')}
-            href="/projects/signup"
+            href="/index/?section=CreateProject"
             >
             Create A Project
           </a>
