@@ -3,18 +3,21 @@ import ReactDOM from 'react-dom'
 import CharacterCounter from './forms/CharacterCounter.jsx'
 import MainController from './controllers/MainController.jsx'
 import LogInController from './controllers/LogInController.jsx'
+import SignUpController from './controllers/SignUpController.jsx'
 
-// TODO: Figure out a better way to prevent react console error where it's expecting node Environment variables
+// TODO: Figure out a better way to prevent react console error where it's
+// expecting node Environment variables
 global.process = {
   env: {
-      NODE_ENV: 'production'
+    NODE_ENV: 'production'
   }
 };
 
 const APPS = {
-  "CharacterCounter": CharacterCounter,
-  'MainController': MainController,
-  'LogInController': LogInController,
+  CharacterCounter,
+  MainController,
+  LogInController,
+  SignUpController,
 };
 
 function renderElement(el) {

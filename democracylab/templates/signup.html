@@ -1,50 +1,33 @@
-{% extends 'base.html' %}
-
-{% block extra_head %}
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}" />
-{% endblock %}
-
-{% block content %}
-<div class="container">
-    <form method="post">
-        {% csrf_token %}
-        <h1 class="signup-primary-header signup-headers">SIGN UP, IT'S EASY AND FREE</h1>
-        <div class="signup-inputs">
-            <div class="row">
-                <div class="col-md-12 signup-label">First name</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="first_name" class="signup-wide"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 signup-label">Last name</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="text" name="last_name" class="signup-wide"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 signup-label">Email</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="email" name="email" class="signup-wide"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 signup-label">Password</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="password" name="password1" class="signup-wide"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 signup-label">Re-Enter Password</div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><input type="password" name="password2" class="signup-wide"></div>
-            </div>
-        </div>
-        <div class="submit-row">
-            <button type="submit" class="btn-primary">Create Account</button>
-        </div>
-    </form>
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+  <head>
+    <meta charset="utf-8">
+    <script src="/static/js/bundle.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.0.0/cjs/react.development.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/Global.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/LogInController.css"/>
+  </head>
+  <body>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '137258853647008',
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v2.10',
+        });
+        FB.AppEvents.logPageView();
+      };
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "https://connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <div id="SignUpController" data-maxLength="3000" class="__react-root">
+      Loading Sign Up Page. . .
+    </div>
+  </body>
+</html>
