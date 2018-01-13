@@ -39,13 +39,12 @@ def signup(request):
         else:
             # TODO inform client of form invalidity
             print('Invalid form', form.errors.as_json())
-            return redirect('/signup')
+            template = loader.get_template('signup.html')
+            context = {'errors': form.errors.as_json()}
+            return HttpResponse(template.render(context, request))
     else:
-        form = DemocracyLabUserCreationForm()
-
-    template = loader.get_template('signup.html')
-    context = {'form': form}
-    return HttpResponse(template.render(context, request))
+        template = loader.get_template('signup.html')
+        return HttpResponse(template.render({}, request))
 
 
 def user_update(request):

@@ -3,6 +3,10 @@
 import DjangoCSRFToken from 'django-react-csrftoken'
 import React from 'react';
 
+type Props = {|
+  +errors: {+[key: string]: $ReadOnlyArray<string>},
+|};
+
 type State = {|
   firstName: string,
   lastName: string,
@@ -11,7 +15,7 @@ type State = {|
   password2: string,
 |}
 
-class LogInController extends React.Component<{||}, State> {
+class SignUpController extends React.Component<Props, State> {
   constructor(): void {
     super();
     this.state = {
@@ -97,6 +101,9 @@ class LogInController extends React.Component<{||}, State> {
             type="hidden"
           />
 
+          {/* TODO: Prettier. */}
+          {JSON.stringify(this.props.errors)}
+
           <button
             className="LogInController-signInButton"
             disabled={!this._isInputValid()}
@@ -114,4 +121,4 @@ class LogInController extends React.Component<{||}, State> {
   }
 }
 
-export default LogInController;
+export default SignUpController;

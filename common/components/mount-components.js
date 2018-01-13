@@ -1,9 +1,11 @@
+// @flow
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import CharacterCounter from './forms/CharacterCounter.jsx'
 import MainController from './controllers/MainController.jsx'
 import LogInController from './controllers/LogInController.jsx'
-import SignUpController from './controllers/SignUpController.jsx'
+import SignUpErrorAdapter from './componentsBySection/signUp/SignUpErrorAdapter.jsx'
 
 // TODO: Figure out a better way to prevent react console error where it's
 // expecting node Environment variables
@@ -17,7 +19,7 @@ const APPS = {
   CharacterCounter,
   MainController,
   LogInController,
-  SignUpController,
+  SignUpErrorAdapter,
 };
 
 function renderElement(el) {
