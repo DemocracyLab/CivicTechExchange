@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    url(r'^projects/signup/$', views.project_signup, name='project_signup'),
+    url(r'^projects/signup/(?P<project_id>[0-9]+)/$$', views.project_signup, name='project_signup'),
     url(
         r'^presign_s3/upload/project/thumbnail/$',
         views.presign_project_thumbnail_upload,

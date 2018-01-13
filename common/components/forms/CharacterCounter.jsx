@@ -10,6 +10,7 @@ type State = {|
   characterCount: string
 |};
 
+// TODO: Consider whether we need this in a controlled components environment
 class CharacterCounter extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);

@@ -6,6 +6,7 @@ import type {SectionType} from '../enums/Section.js';
 import {Container} from 'flux/utils';
 import AboutProjectController from './AboutProjectController.jsx'
 import CreateProjectController from './CreateProjectController.jsx'
+import EditProjectController from './EditProjectController.jsx'
 import FindProjectsController  from './FindProjectsController.jsx'
 import LandingController from './LandingController.jsx'
 import MyProjectsController from './MyProjectsController.jsx'
@@ -42,6 +43,8 @@ class SectionController extends React.Component<{||}, State> {
         return <AboutProjectController />;
       case Section.CreateProject:
         return <CreateProjectController />;
+      case Section.EditProject:
+        return <EditProjectController />;
       case Section.Landing:
         return <LandingController />;
       case Section.MyProjects:

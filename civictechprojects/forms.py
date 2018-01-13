@@ -56,3 +56,14 @@ class ProjectCreationForm(forms.Form):
             thumbnail_json = json.loads(project_thumbnail_location)
             thumbnail = ProjectFile.from_json(project, FileCategory.THUMBNAIL, thumbnail_json)
             thumbnail.save()
+
+    @staticmethod
+    def edit_project(request, project_id):
+        project = Project.objects.get(id=project_id)
+        form = ProjectCreationForm(request.POST)
+
+        project.project_description = form.data.get('project_description')
+        project.project_location=form.data.get('project_location')
+        project.project_name=form.data.get('project_name')
+        project.project_url=form.data.get('project_url')
+        project.save()

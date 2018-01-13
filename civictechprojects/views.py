@@ -49,12 +49,17 @@ def to_tag_map(tags):
     return list(tag_map)
 
 
-def project_signup(request):
+def project_signup(request, project_id):
     if not request.user.is_authenticated():
         return redirect('/signup')
     if request.method == 'POST':
-        ProjectCreationForm.create_project(request)
-        return redirect('/index/?section=MyProjects')
+        if not project_id:
+            ProjectCreationForm.create_project(request)
+            return redirect('/index/?section=MyProjects')
+        else:
+            # TODO: Throw error if unauthorized
+            ProjectCreationForm.edit_project(request, project_id)
+            return redirect('/index/?section=AboutProject&id=' + project_id)
     else:
         form = ProjectCreationForm()
 

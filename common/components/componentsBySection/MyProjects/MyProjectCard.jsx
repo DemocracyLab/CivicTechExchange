@@ -38,6 +38,11 @@ class MyProjectCard extends React.PureComponent<Props> {
                 </tr>
                 <tr>In Progress</tr>
               </td>
+              <td className="MyProjectCard-column">
+                <tr className="MyProjectCard-header">
+                  <a href={'?section=EditProject&id=' + this.props.project.id}>Edit</a>
+                </tr>
+              </td>
             </tr>
           </tbody>
         </table>
