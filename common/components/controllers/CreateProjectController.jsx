@@ -61,11 +61,15 @@ class CreateProjectController extends React.PureComponent<Props,State> {
     });
   }
   
+  logProjectCreated() {
+    window.FB.AppEvents.logEvent('projectCreated');
+  }
+  
   render(): React$Node {
     return (
-      <div class="wrapper-gray">
-        <div class="container">
-          <form action="/projects/signup/" onsubmit="logProjectCreated();" method="post">
+      <div className="wrapper-gray">
+        <div className="container">
+          <form action="/projects/signup/" onSubmit={this.logProjectCreated} method="post">
             <div className="CreateProjectController-root">
               
               <DjangoCSRFToken/>

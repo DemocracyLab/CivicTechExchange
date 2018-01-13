@@ -38,7 +38,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     return (
       <div className="AboutProjectController-root">
         <div className="container-fluid">
-          <div className="row" style={{margin: "30px 40px 0 40px;"}}>
+          <div className="row" style={{margin: "30px 40px 0 40px"}}>
             <div className="col-sm-5">
               <div className="row">
                 <div className="col-sm-auto">
@@ -76,7 +76,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </div>
           </div>
     
-          <div className="row" style={{margin: "30px 40px 0 40px;"}}>
+          <div className="row" style={{margin: "30px 40px 0 40px"}}>
             <div className="col">
               PROJECT DETAILS
               <div>
@@ -85,14 +85,14 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </div>
           </div>
     
-          <div className="row" style={{margin: "30px 40px 0 40px;"}}>
+          <div className="row" style={{margin: "30px 40px 0 40px"}}>
             <div className='col'>
               <h2 className="form-group subheader">LINKS</h2>
               {this._renderLinks()}
             </div>
           </div>
     
-          <div className="row" style={{margin: "30px 40px 0 40px;"}}>
+          <div className="row" style={{margin: "30px 40px 0 40px"}}>
             <div className='col'>
               <h2 className="form-group subheader">FILES</h2>
               {this._renderFiles()}

@@ -3,6 +3,11 @@
 import React from 'react'
 import Select from 'react-select'
 
+type TagOption = {|
+  value: string,
+  label: string
+|};
+
 type Props = {|
   elementId: string,
   category: string,
@@ -10,7 +15,7 @@ type Props = {|
   onSelection: (string) => void
 |};
 type State = {|
-  tags: string,
+  tags: Array<TagOption>,
   selected: string
 |};
 
@@ -21,7 +26,7 @@ class TagSelect extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
-      tags: "",
+      tags: [],
       selected: this.props.value || ""
     };
     
@@ -37,7 +42,9 @@ class TagSelect extends React.PureComponent<Props, State> {
   }
   
   componentWillReceiveProps(nextProps: Props): void {
-    this.setState({selected: nextProps.value || ""});
+    if(nextProps.value) {
+      this.setState({selected: nextProps.value || ""});
+    }
   }
   
   handleSelection(selectedValueOrValues: string): void {

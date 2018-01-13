@@ -6490,6 +6490,7 @@ var Section = {
   MyProjects: 'MyProjects',
   Profile: 'Profile',
   Inbox: 'Inbox'
+
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Section);
@@ -31653,17 +31654,22 @@ var CreateProjectController = function (_React$PureComponent) {
       });
     }
   }, {
+    key: 'logProjectCreated',
+    value: function logProjectCreated() {
+      window.FB.AppEvents.logEvent('projectCreated');
+    }
+  }, {
     key: 'render',
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
-        { 'class': 'wrapper-gray' },
+        { className: 'wrapper-gray' },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
-          { 'class': 'container' },
+          { className: 'container' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'form',
-            { action: '/projects/signup/', onsubmit: 'logProjectCreated();', method: 'post' },
+            { action: '/projects/signup/', onSubmit: this.logProjectCreated, method: 'post' },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'div',
               { className: 'CreateProjectController-root' },
@@ -64839,7 +64845,7 @@ var AboutProjectController = function (_React$PureComponent) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       var projectId = new RegExp("id=([^&]+)").exec(document.location.search)[1];
-      __WEBPACK_IMPORTED_MODULE_0__utils_ProjectAPIUtils_js__["a" /* default */].fetchProjectDetails(new Number(projectId), this.loadProjectDetails.bind(this));
+      __WEBPACK_IMPORTED_MODULE_0__utils_ProjectAPIUtils_js__["a" /* default */].fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
     }
   }, {
     key: 'loadProjectDetails',
@@ -64860,6 +64866,7 @@ var AboutProjectController = function (_React$PureComponent) {
   }, {
     key: '_renderDetails',
     value: function _renderDetails() {
+      var project = this.state.project;
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
         { className: 'AboutProjectController-root' },
@@ -64868,7 +64875,7 @@ var AboutProjectController = function (_React$PureComponent) {
           { className: 'container-fluid' },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
-            { className: 'row', style: { margin: "30px 40px 0 40px;" } },
+            { className: 'row', style: { margin: "30px 40px 0 40px" } },
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               'div',
               { className: 'col-sm-5' },
@@ -64878,7 +64885,7 @@ var AboutProjectController = function (_React$PureComponent) {
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   'div',
                   { className: 'col-sm-auto' },
-                  __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.state.project.project_thumbnail.publicUrl })
+                  __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: project && project.project_thumbnail && project.project_thumbnail.publicUrl })
                 ),
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   'div',
@@ -64889,7 +64896,7 @@ var AboutProjectController = function (_React$PureComponent) {
                     __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                       'div',
                       { className: 'col' },
-                      this.state.project.project_name
+                      project && project.project_name
                     )
                   ),
                   __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
@@ -64898,7 +64905,7 @@ var AboutProjectController = function (_React$PureComponent) {
                     __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                       'div',
                       { className: 'col' },
-                      this.state.project.project_issue_area[0].name
+                      project && project.project_issue_area[0].name
                     )
                   )
                 )
@@ -64918,7 +64925,7 @@ var AboutProjectController = function (_React$PureComponent) {
                   __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                     'a',
                     { href: '{{ project.project_url }}' },
-                    this.state.project.project_url
+                    project && project.project_url
                   )
                 )
               ),
@@ -64929,14 +64936,14 @@ var AboutProjectController = function (_React$PureComponent) {
                   'div',
                   { className: 'col' },
                   __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('i', { className: 'fa fa-map-marker fa-1', 'aria-hidden': 'true' }),
-                  this.state.project.project_location
+                  project && project.project_location
                 )
               )
             )
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
-            { className: 'row', style: { margin: "30px 40px 0 40px;" } },
+            { className: 'row', style: { margin: "30px 40px 0 40px" } },
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               'div',
               { className: 'col' },
@@ -64944,13 +64951,13 @@ var AboutProjectController = function (_React$PureComponent) {
               __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                 'div',
                 null,
-                this.state.project.project_description
+                project && project.project_description
               )
             )
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
-            { className: 'row', style: { margin: "30px 40px 0 40px;" } },
+            { className: 'row', style: { margin: "30px 40px 0 40px" } },
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               'div',
               { className: 'col' },
@@ -64964,7 +64971,7 @@ var AboutProjectController = function (_React$PureComponent) {
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
-            { className: 'row', style: { margin: "30px 40px 0 40px;" } },
+            { className: 'row', style: { margin: "30px 40px 0 40px" } },
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               'div',
               { className: 'col' },
@@ -64982,7 +64989,8 @@ var AboutProjectController = function (_React$PureComponent) {
   }, {
     key: '_renderLinks',
     value: function _renderLinks() {
-      return this.state.project.project_links.map(function (link, i) {
+      var project = this.state.project;
+      return project && project.project_links && project.project_links.map(function (link, i) {
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           { key: i },
@@ -65002,7 +65010,8 @@ var AboutProjectController = function (_React$PureComponent) {
   }, {
     key: '_renderFiles',
     value: function _renderFiles() {
-      return this.state.project.project_files.map(function (file, i) {
+      var project = this.state.project;
+      return project && project.project_files && project.project_files.map(function (file, i) {
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           { key: i },
@@ -65070,7 +65079,7 @@ var TagSelect = function (_React$PureComponent) {
     var _this = _possibleConstructorReturn(this, (TagSelect.__proto__ || Object.getPrototypeOf(TagSelect)).call(this, props));
 
     _this.state = {
-      tags: "",
+      tags: [],
       selected: _this.props.value || ""
     };
 
@@ -65092,7 +65101,9 @@ var TagSelect = function (_React$PureComponent) {
   _createClass(TagSelect, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      this.setState({ selected: nextProps.value || "" });
+      if (nextProps.value) {
+        this.setState({ selected: nextProps.value || "" });
+      }
     }
   }, {
     key: 'handleSelection',
@@ -69501,7 +69512,8 @@ var MainHeader = function (_React$PureComponent) {
     value: function _onHomeButtonClick() {
       __WEBPACK_IMPORTED_MODULE_0__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
         type: 'SET_SECTION',
-        section: __WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].Landing
+        section: __WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].Landing,
+        url: '/index/?section=Landing'
       });
     }
   }, {
@@ -69748,7 +69760,8 @@ var SectionLink = function (_React$PureComponent) {
     value: function _onChangeSection() {
       __WEBPACK_IMPORTED_MODULE_1__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
         type: 'SET_SECTION',
-        section: this.props.section
+        section: this.props.section,
+        url: '/index/?section=' + this.props.section
       });
       window.FB.AppEvents.logEvent('sectionLinkClick', null, { section: this.props.section });
     }

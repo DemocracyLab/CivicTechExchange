@@ -42,6 +42,7 @@ class SectionLink extends React.PureComponent<Props> {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: this.props.section,
+      url: '/index/?section=' + this.props.section
     });
     window.FB.AppEvents.logEvent(
       'sectionLinkClick',

@@ -30,6 +30,7 @@ class MainHeader extends React.PureComponent<{||}> {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: Section.Landing,
+      url: '/index/?section=Landing'
     });
   }
 
