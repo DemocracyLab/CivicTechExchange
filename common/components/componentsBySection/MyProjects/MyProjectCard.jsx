@@ -14,7 +14,7 @@ class MyProjectCard extends React.PureComponent<Props> {
     return (
       <a
         className="MyProjectCard-root"
-        href={'/project/' + this.props.project.id}>
+        href={'?section=AboutProject&id=' + this.props.project.id}>
          <table className="MyProjectCard-table">
           <tbody>
             <tr>

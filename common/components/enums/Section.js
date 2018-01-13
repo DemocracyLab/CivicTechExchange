@@ -1,4 +1,5 @@
 const Section = {
+  AboutProject: 'AboutProject',
   CreateProject: 'CreateProject',
   Landing: 'Landing',
   FindProjects: 'FindProjects',

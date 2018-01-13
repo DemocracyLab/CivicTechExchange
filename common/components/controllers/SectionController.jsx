@@ -4,6 +4,7 @@ import type {FluxReduceStore} from 'flux/utils';
 import type {SectionType} from '../enums/Section.js';
 
 import {Container} from 'flux/utils';
+import AboutProjectController from './AboutProjectController.jsx'
 import CreateProjectController from './CreateProjectController.jsx'
 import FindProjectsController  from './FindProjectsController.jsx'
 import LandingController from './LandingController.jsx'
@@ -37,6 +38,8 @@ class SectionController extends React.Component<{||}, State> {
 
   _getController(): React$Node {
     switch (this.state.section) {
+      case Section.AboutProject:
+        return <AboutProjectController />;
       case Section.CreateProject:
         return <CreateProjectController />;
       case Section.Landing:

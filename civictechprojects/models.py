@@ -40,23 +40,25 @@ class Project(models.Model):
     project_links = models.CharField(max_length=5000, blank=True)
 
     def to_json(self):
-        project = {
-            'project_name': self.project_name,
-            'project_description': self.project_description,
-            'project_url': self.project_url
-        }
-
         files = ProjectFile.objects.filter(file_project=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
+        links = ProjectLink.objects.filter(link_project=self.id)
+
+        project = {
+            'project_name': self.project_name,
+            'project_description': self.project_description,
+            'project_url': self.project_url,
+            'project_location': self.project_location,
+            'project_issue_area': list(self.project_issue_area.all().values()),
+            'project_files': list(map(lambda file: file.to_json(), other_files)),
+            'project_links': list(map(lambda link: link.to_json(), links))
+        }
+
         if len(thumbnail_files) > 0:
             project['project_thumbnail'] = thumbnail_files[0].to_json()
-        links = ProjectLink.objects.filter(link_project=self.id)
-        return {
-            'project': project,
-            'files': list(map(lambda file: file.to_json(), other_files)),
-            'links': list(map(lambda link: link.to_json(), links))
-        }
+
+        return project
 
 
 class ProjectLink(models.Model):
