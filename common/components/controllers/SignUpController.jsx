@@ -101,8 +101,7 @@ class SignUpController extends React.Component<Props, State> {
             type="hidden"
           />
 
-          {/* TODO: Prettier. */}
-          {JSON.stringify(this.props.errors)}
+          {this._renderErrors()}
 
           <button
             className="LogInController-signInButton"
@@ -112,6 +111,19 @@ class SignUpController extends React.Component<Props, State> {
           </button>
         </form>
       </div>
+    );
+  }
+
+  _renderErrors(): React$Node {
+    return (
+      <ul>
+        {
+          Object.values(this.props.errors)
+            .reduce((e1, e2) => e1.concat(e2), [])
+            // $FlowFixMe Flow isn't smart enough to know the type of `errors`
+            .map(error => <li key={error}>{error}</li>)
+        }
+      </ul>
     );
   }
 

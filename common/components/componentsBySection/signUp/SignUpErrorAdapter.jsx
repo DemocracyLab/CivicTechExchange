@@ -15,7 +15,6 @@ class SignUpErrorAdapter extends React.Component<Props> {
 
   // e.g. {password: ['Password too short.', 'Password too similar.'], ...}
   _getErrors(): {+[key: string]: $ReadOnlyArray<string>} {
-    console.log({props: this.props});
     const structuredErrors = {};
     if (this.props.json_encoded_errors) {
       const decodedErrors = JSON.parse(this.props.json_encoded_errors);
