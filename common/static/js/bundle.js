@@ -27094,7 +27094,7 @@ var LinkList = function (_React$PureComponent) {
     var _this = _possibleConstructorReturn(this, (LinkList.__proto__ || Object.getPrototypeOf(LinkList)).call(this, props));
 
     _this.state = {
-      links: JSON.parse(_this.props.links),
+      links: _this.props.links || [],
       showAddEditModal: false,
       showDeleteModal: false,
       existingLink: null,
@@ -27104,6 +27104,14 @@ var LinkList = function (_React$PureComponent) {
   }
 
   _createClass(LinkList, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.links) {
+        this.setState({ links: nextProps.links || [] });
+        this.updateLinkField();
+      }
+    }
+  }, {
     key: 'createNewLink',
     value: function createNewLink() {
       this.state.existingLink = null;
@@ -27159,6 +27167,7 @@ var LinkList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.remove(this.state.links, function (link) {
           return link.linkUrl === _this2.state.linkToDelete.linkUrl;
         });
+        this.updateLinkField();
       }
       this.setState({
         showDeleteModal: false,
@@ -31640,7 +31649,8 @@ var EditProjectForm = function (_React$PureComponent) {
           project_name: project.project_name,
           project_location: project.project_location,
           project_url: project.project_url,
-          project_description: project.project_description
+          project_description: project.project_description,
+          project_links: project.project_links
         }
       });
       this.checkFormValidity();
@@ -31755,7 +31765,7 @@ var EditProjectForm = function (_React$PureComponent) {
           { className: 'form-group subheader' },
           'LINKS'
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__components_forms_LinkList_jsx__["a" /* default */], { elementid: 'project_links', links: '[]' }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__components_forms_LinkList_jsx__["a" /* default */], { elementid: 'project_links', links: this.state.formFields.project_links }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'h2',
           { className: 'form-group subheader' },

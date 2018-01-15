@@ -78,15 +78,48 @@ class ProjectLink(models.Model):
         return link
 
     @staticmethod
+    def merge_changes(project, links):
+        ProjectLink.remove_links_not_in_list(project, links)
+        for link_json in links:
+            link = ProjectLink.from_json(project, link_json)
+
+            if not link.id:
+                ProjectLink.create(project,
+                                   link.link_url,
+                                   link.link_name,
+                                   link.link_visibility).save()
+            else:
+                existing_link = ProjectLink.objects.get(id=link.id)
+                existing_link.link_name = link.link_name
+                existing_link.link_url = link.link_url
+                existing_link.link_visibility = link.link_visibility
+                existing_link.save()
+
+    @staticmethod
+    def remove_links_not_in_list(project, links):
+        existing_links = ProjectLink.objects.filter(link_project=project.id)
+        existing_link_ids = set(map(lambda link: link.id, existing_links))
+        updated_link_ids = set(map(lambda link: link['id'], links))
+        deleted_link_ids = list(existing_link_ids - updated_link_ids)
+        for link_id in deleted_link_ids:
+            ProjectLink.objects.get(id=link_id).delete()
+
+    @staticmethod
     def from_json(project, thumbnail_json):
-        return ProjectLink.create(project=project,
+        link = ProjectLink.create(project=project,
                                   url=thumbnail_json['linkUrl'],
                                   name=thumbnail_json['linkName'],
                                   visibility=thumbnail_json['visibility']
                                   )
 
+        if 'id' in thumbnail_json:
+            link.id = thumbnail_json['id']
+
+        return link
+
     def to_json(self):
         return {
+            'id': self.id,
             'linkName': self.link_name,
             'linkUrl': self.link_url,
             'visibility': self.link_visibility

@@ -9,7 +9,7 @@ import _ from 'lodash'
 
 
 type Props = {|
-  links: string,
+  links: Array<LinkInfo>,
   elementid: string
 |};
 type State = {|
@@ -27,12 +27,19 @@ class LinkList extends React.PureComponent<Props,State>  {
   constructor(props: Props): void {
     super(props);
     this.state = {
-      links: JSON.parse(this.props.links),
+      links: this.props.links || [],
       showAddEditModal: false,
       showDeleteModal: false,
       existingLink: null,
       linkToDelete: null
     };
+  }
+  
+  componentWillReceiveProps(nextProps: Props): void {
+    if(nextProps.links) {
+      this.setState({links: nextProps.links || []});
+      this.updateLinkField();
+    }
   }
 
   createNewLink(): void {
@@ -78,6 +85,7 @@ class LinkList extends React.PureComponent<Props,State>  {
   confirmDelete(confirmed: boolean): void {
     if(confirmed) {
       _.remove(this.state.links, (link) => link.linkUrl === this.state.linkToDelete.linkUrl);
+      this.updateLinkField();
     }
     this.setState({
       showDeleteModal: false,

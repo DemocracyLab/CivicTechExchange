@@ -53,7 +53,8 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         project_name: project.project_name,
         project_location: project.project_location,
         project_url: project.project_url,
-        project_description: project.project_description
+        project_description: project.project_description,
+        project_links: project.project_links
       }
     });
     this.checkFormValidity();
@@ -128,7 +129,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
         
         <h2 className="form-group subheader">LINKS</h2>
-        <LinkList elementid="project_links" links="[]"/>
+        <LinkList elementid="project_links" links={this.state.formFields.project_links}/>
         
         <h2 className="form-group subheader">FILES</h2>
         <FileUploadList elementid="project_files" files="[]"/>
