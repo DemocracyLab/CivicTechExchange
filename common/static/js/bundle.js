@@ -24969,11 +24969,19 @@ var ProjectAPIUtils = function () {
     }
   }, {
     key: 'fetchProjectDetails',
-    value: function fetchProjectDetails(id, callback) {
+    value: function fetchProjectDetails(id, callback, errCallback) {
       fetch(new Request('/api/project/' + id + '/')).then(function (response) {
+        if (!response.ok) {
+          throw Error(response);
+        }
         return response.json();
       }).then(function (projectDetails) {
         return callback(projectDetails);
+      }).catch(function (response) {
+        return errCallback && errCallback({
+          errorCode: response.status,
+          errorMessage: JSON.stringify(response)
+        });
       });
     }
   }]);
@@ -31622,6 +31630,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+
 /**
  * Encapsulates form for creating/editing projects
  */
@@ -31646,24 +31655,39 @@ var EditProjectForm = function (_React$PureComponent) {
   }
 
   _createClass(EditProjectForm, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      __WEBPACK_IMPORTED_MODULE_7__components_utils_ProjectAPIUtils_js__["a" /* default */].fetchProjectDetails(this.props.projectId, this.loadProjectDetails.bind(this));
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      if (this.props.projectId) {
+        __WEBPACK_IMPORTED_MODULE_7__components_utils_ProjectAPIUtils_js__["a" /* default */].fetchProjectDetails(this.props.projectId, this.loadProjectDetails.bind(this), this.handleLoadProjectError.bind(this));
+      }
     }
   }, {
     key: 'loadProjectDetails',
     value: function loadProjectDetails(project) {
+      if (project.project_creator != window.DLAB_GLOBAL_CONTEXT.userID) {
+        this.setState({
+          error: "You are not authorized to edit this Project"
+        });
+      } else {
+        this.setState({
+          formFields: {
+            project_name: project.project_name,
+            project_location: project.project_location,
+            project_url: project.project_url,
+            project_description: project.project_description,
+            project_links: project.project_links,
+            project_files: project.project_files
+          }
+        });
+        this.checkFormValidity();
+      }
+    }
+  }, {
+    key: 'handleLoadProjectError',
+    value: function handleLoadProjectError(error) {
       this.setState({
-        formFields: {
-          project_name: project.project_name,
-          project_location: project.project_location,
-          project_url: project.project_url,
-          project_description: project.project_description,
-          project_links: project.project_links,
-          project_files: project.project_files
-        }
+        error: "Failed to load project information"
       });
-      this.checkFormValidity();
     }
   }, {
     key: 'onFormFieldChange',
@@ -31691,6 +31715,24 @@ var EditProjectForm = function (_React$PureComponent) {
   }, {
     key: 'render',
     value: function render() {
+      if (this.state.error) {
+        return this._renderError();
+      } else {
+        return this._renderForm();
+      }
+    }
+  }, {
+    key: '_renderError',
+    value: function _renderError() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        { className: 'EditProjectForm-error' },
+        this.state.error
+      );
+    }
+  }, {
+    key: '_renderForm',
+    value: function _renderForm() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         { className: 'EditProjectForm-root' },

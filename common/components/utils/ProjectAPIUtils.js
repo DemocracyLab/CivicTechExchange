@@ -4,6 +4,11 @@ import type {Project} from '../stores/ProjectSearchStore.js';
 import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 
+export type APIError = {|
+  +errorCode: number,
+  +errorMessage: string
+|};
+
 type ProjectAPIData = {|
   +id: number,
   +project_description: string,
@@ -15,6 +20,7 @@ type ProjectAPIData = {|
 export type ProjectDetailsAPIData = {|
   +id: number,
   +project_description: string,
+  +project_creator: number,
   +project_url: string,
   +project_issue_area: $ReadOnlyArray<{|+name: string|}>,
   +project_location: string,
@@ -38,10 +44,19 @@ class ProjectAPIUtils {
     };
   }
   
-  static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void): void {
+  static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
     fetch(new Request('/api/project/' + id + '/'))
-      .then(response => response.json())
+      .then(response => {
+        if(!response.ok) {
+          throw Error(response);
+        }
+        return response.json();
+      })
       .then(projectDetails => callback(projectDetails))
+      .catch(response => errCallback && errCallback({
+        errorCode: response.status,
+        errorMessage: JSON.stringify(response)
+      }));
   }
 }
 

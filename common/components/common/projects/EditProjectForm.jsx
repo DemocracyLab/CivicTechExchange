@@ -10,6 +10,7 @@ import TagCategory from '../../common/tags/TagCategory.jsx'
 import TagSelect from '../../common/tags/TagSelect.jsx'
 import DjangoCSRFToken from '../../common/DjangoCSRFToken.jsx'
 import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
+import type {ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
 import _ from 'lodash'
 
 type FormFields = {|
@@ -25,6 +26,7 @@ type Props = {|
   projectId: number
 |};
 type State = {|
+  error: string,
   formIsValid: boolean,
   formFields: FormFields
 |};
@@ -47,22 +49,36 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     };
   }
   
-  componentWillMount(): void {
-    ProjectAPIUtils.fetchProjectDetails(this.props.projectId, this.loadProjectDetails.bind(this));
+  componentDidMount(): void {
+    if(this.props.projectId) {
+      ProjectAPIUtils.fetchProjectDetails(this.props.projectId, this.loadProjectDetails.bind(this), this.handleLoadProjectError.bind(this));
+    }
   }
   
-  loadProjectDetails(project: ProjectDetailsAPIData) {
+  loadProjectDetails(project: ProjectDetailsAPIData): void {
+    if(project.project_creator != window.DLAB_GLOBAL_CONTEXT.userID) {
+      this.setState({
+        error: "You are not authorized to edit this Project"
+      });
+    } else {
+      this.setState({
+        formFields: {
+          project_name: project.project_name,
+          project_location: project.project_location,
+          project_url: project.project_url,
+          project_description: project.project_description,
+          project_links: project.project_links,
+          project_files: project.project_files,
+        }
+      });
+      this.checkFormValidity();
+    }
+  }
+  
+  handleLoadProjectError(error: APIError): void {
     this.setState({
-      formFields: {
-        project_name: project.project_name,
-        project_location: project.project_location,
-        project_url: project.project_url,
-        project_description: project.project_description,
-        project_links: project.project_links,
-        project_files: project.project_files,
-      }
+      error: "Failed to load project information"
     });
-    this.checkFormValidity();
   }
   
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
@@ -85,8 +101,23 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     });
   }
   
-  
   render(): React$Node {
+    if(this.state.error) {
+      return this._renderError();
+    } else {
+      return this._renderForm();
+    }
+  }
+  
+  _renderError(): React$Node {
+    return (
+      <div className="EditProjectForm-error">
+        {this.state.error}
+      </div>
+    );
+  }
+  
+  _renderForm(): React$Node {
     return (
       <div className="EditProjectForm-root">
         

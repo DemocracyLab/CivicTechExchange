@@ -5,7 +5,6 @@ from democracylab.models import Contributor
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 
-from pprint import pprint
 
 # Without the following two classes, the following error occurs:
 #
@@ -48,6 +47,7 @@ class Project(models.Model):
 
         project = {
             'project_name': self.project_name,
+            'project_creator': self.project_creator.id,
             'project_description': self.project_description,
             'project_url': self.project_url,
             'project_location': self.project_location,

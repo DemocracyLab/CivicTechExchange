@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
 from django.template import loader
 from time import time
 
@@ -58,8 +59,13 @@ def project_create(request):
 
 
 def project_edit(request, project_id):
-    # TODO: Throw error if unauthorized
-    ProjectCreationForm.edit_project(request, project_id)
+    if not request.user.is_authenticated():
+        return redirect('/signup')
+
+    try:
+        ProjectCreationForm.edit_project(request, project_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
     return redirect('/index/?section=AboutProject&id=' + project_id)
 
 

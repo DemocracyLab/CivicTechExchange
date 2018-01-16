@@ -1,5 +1,6 @@
 import json
 from django import forms
+from django.core.exceptions import PermissionDenied
 from .models import Project, ProjectLink, ProjectFile, FileCategory
 from democracylab.models import get_request_contributor
 
@@ -60,8 +61,11 @@ class ProjectCreationForm(forms.Form):
     @staticmethod
     def edit_project(request, project_id):
         project = Project.objects.get(id=project_id)
-        form = ProjectCreationForm(request.POST)
 
+        if not request.user.username == project.project_creator.username:
+            raise PermissionDenied()
+
+        form = ProjectCreationForm(request.POST)
         project.project_description = form.data.get('project_description')
         project.project_location=form.data.get('project_location')
         project.project_name=form.data.get('project_name')
