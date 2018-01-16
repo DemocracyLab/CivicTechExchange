@@ -5,6 +5,7 @@ from democracylab.models import Contributor
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 
+from pprint import pprint
 
 # Without the following two classes, the following error occurs:
 #
@@ -147,6 +148,31 @@ class ProjectFile(models.Model):
         file.file_category = file_category
         file.file_visibility = file_visibility
         return file
+
+    @staticmethod
+    def merge_changes(project, files):
+        # Add new files
+        added_files = filter(lambda file: 'id' not in file, files)
+        old_files = list(ProjectFile.objects.filter(file_project=project.id).values())
+        for file in added_files:
+            ProjectFile.from_json(project=project, file_category=FileCategory.ETC, file_json=file).save()
+
+        # Remove files that were deleted
+        old_file_ids = set(map(lambda file: file['id'], old_files))
+        updated_files = filter(lambda file: 'id' in file, files)
+        updated_file_ids = set(map(lambda file: file['id'], updated_files))
+        removed_file_ids = list(old_file_ids - updated_file_ids)
+        for file_id in removed_file_ids:
+            ProjectFile.objects.get(id=file_id).delete()
+
+    @staticmethod
+    def remove_links_not_in_list(project, links):
+        existing_links = ProjectLink.objects.filter(link_project=project.id)
+        existing_link_ids = set(map(lambda link: link.id, existing_links))
+        updated_link_ids = set(map(lambda link: link['id'], links))
+        deleted_link_ids = list(existing_link_ids - updated_link_ids)
+        for link_id in deleted_link_ids:
+            ProjectLink.objects.get(id=link_id).delete()
 
     @staticmethod
     def from_json(project, file_category, file_json):

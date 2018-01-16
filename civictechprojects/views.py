@@ -49,25 +49,18 @@ def to_tag_map(tags):
     return list(tag_map)
 
 
-def project_signup(request, project_id):
+def project_create(request):
     if not request.user.is_authenticated():
         return redirect('/signup')
-    if request.method == 'POST':
-        if not project_id:
-            ProjectCreationForm.create_project(request)
-            return redirect('/index/?section=MyProjects')
-        else:
-            # TODO: Throw error if unauthorized
-            ProjectCreationForm.edit_project(request, project_id)
-            return redirect('/index/?section=AboutProject&id=' + project_id)
-    else:
-        form = ProjectCreationForm()
 
-    template = loader.get_template('project_signup.html')
-    context = {
-        'form': form
-    }
-    return HttpResponse(template.render(context, request))
+    ProjectCreationForm.create_project(request)
+    return redirect('/index/?section=MyProjects')
+
+
+def project_edit(request, project_id):
+    # TODO: Throw error if unauthorized
+    ProjectCreationForm.edit_project(request, project_id)
+    return redirect('/index/?section=AboutProject&id=' + project_id)
 
 
 # TODO: Remove when React implementation complete

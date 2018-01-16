@@ -72,3 +72,8 @@ class ProjectCreationForm(forms.Form):
         if len(links_json_text) > 0:
             links_json = json.loads(links_json_text)
             ProjectLink.merge_changes(project, links_json)
+
+        files_json_text = form.data.get('project_files')
+        if len(files_json_text) > 0:
+            files_json = json.loads(files_json_text)
+            ProjectFile.merge_changes(project, files_json)

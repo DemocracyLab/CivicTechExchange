@@ -31070,7 +31070,7 @@ var FileUploadList = function (_React$PureComponent) {
     var _this = _possibleConstructorReturn(this, (FileUploadList.__proto__ || Object.getPrototypeOf(FileUploadList)).call(this, props));
 
     _this.state = {
-      files: _this.props.files ? JSON.parse(_this.props.files) : [],
+      files: _this.props.files || [],
       showDeleteModal: false,
       fileToDelete: null
     };
@@ -31078,8 +31078,16 @@ var FileUploadList = function (_React$PureComponent) {
   }
 
   _createClass(FileUploadList, [{
-    key: 'updateLinkField',
-    value: function updateLinkField() {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.files) {
+        this.setState({ files: nextProps.files || [] });
+        this.updateHiddenField();
+      }
+    }
+  }, {
+    key: 'updateHiddenField',
+    value: function updateHiddenField() {
       this.refs.hiddenFormField.value = JSON.stringify(this.state.files);
     }
   }, {
@@ -31102,7 +31110,7 @@ var FileUploadList = function (_React$PureComponent) {
         Object(__WEBPACK_IMPORTED_MODULE_4__utils_s3_js__["a" /* deleteFromS3 */])(this.state.fileToDelete.key);
       }
 
-      this.updateLinkField();
+      this.updateHiddenField();
 
       this.setState({
         showDeleteModal: false,
@@ -31114,7 +31122,7 @@ var FileUploadList = function (_React$PureComponent) {
     value: function handleFileSelection(fileUploadData) {
       var fileInfo = __WEBPACK_IMPORTED_MODULE_5_lodash___default.a.assign({ visibility: __WEBPACK_IMPORTED_MODULE_1__common_Visibility_jsx__["a" /* default */].PUBLIC }, fileUploadData);
       this.state.files.push(fileInfo);
-      this.updateLinkField();
+      this.updateHiddenField();
       this.forceUpdate();
     }
   }, {
@@ -31613,6 +31621,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+
 /**
  * Encapsulates form for creating/editing projects
  */
@@ -31650,7 +31659,8 @@ var EditProjectForm = function (_React$PureComponent) {
           project_location: project.project_location,
           project_url: project.project_url,
           project_description: project.project_description,
-          project_links: project.project_links
+          project_links: project.project_links,
+          project_files: project.project_files
         }
       });
       this.checkFormValidity();
@@ -31771,7 +31781,7 @@ var EditProjectForm = function (_React$PureComponent) {
           { className: 'form-group subheader' },
           'FILES'
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__components_forms_FileUploadList_jsx__["a" /* default */], { elementid: 'project_files', files: '[]' }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__components_forms_FileUploadList_jsx__["a" /* default */], { elementid: 'project_files', files: this.state.formFields.project_files }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           { className: 'form-group pull-right' },

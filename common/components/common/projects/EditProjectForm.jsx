@@ -1,6 +1,8 @@
 // @flow
 
 import React from 'react';
+import type {LinkInfo} from '../../../components/forms/LinkInfo.jsx'
+import type {FileInfo} from '../../common/FileInfo.jsx'
 import ImageUploadFormElement from '../../../components/forms/ImageUploadFormElement.jsx'
 import LinkList from '../../../components/forms/LinkList.jsx'
 import FileUploadList from '../../../components/forms/FileUploadList.jsx'
@@ -14,7 +16,9 @@ type FormFields = {|
   project_name: ?string,
   project_location: ?string,
   project_url: ?string,
-  project_description: ?string
+  project_description: ?string,
+  project_links: Array<LinkInfo>,
+  project_files: Array<FileInfo>
 |};
 
 type Props = {|
@@ -54,7 +58,8 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         project_location: project.project_location,
         project_url: project.project_url,
         project_description: project.project_description,
-        project_links: project.project_links
+        project_links: project.project_links,
+        project_files: project.project_files,
       }
     });
     this.checkFormValidity();
@@ -132,7 +137,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <LinkList elementid="project_links" links={this.state.formFields.project_links}/>
         
         <h2 className="form-group subheader">FILES</h2>
-        <FileUploadList elementid="project_files" files="[]"/>
+        <FileUploadList elementid="project_files" files={this.state.formFields.project_files}/>
         
         <div className="form-group pull-right">
           <div className='text-right'>
