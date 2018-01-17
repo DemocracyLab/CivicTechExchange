@@ -2,11 +2,9 @@
 
 import React from 'react'
 import Select from 'react-select'
+import _ from 'lodash'
 
-type TagOption = {|
-  value: string,
-  label: string
-|};
+
 
 type Props = {|
   elementId: string,
@@ -15,8 +13,8 @@ type Props = {|
   onSelection: (string) => void
 |};
 type State = {|
-  tags: Array<TagOption>,
-  selected: string
+  tags: Array<TagDefinition>,
+  selected: TagDefinition
 |};
 
 /**
@@ -43,7 +41,7 @@ class TagSelect extends React.PureComponent<Props, State> {
   
   componentWillReceiveProps(nextProps: Props): void {
     if(nextProps.value) {
-      this.setState({selected: nextProps.value || ""});
+      this.setState({selected: {value:nextProps.value, label:_.find(this.state.tags, tag => tag.value === nextProps.value).label} || ""});
     }
   }
   

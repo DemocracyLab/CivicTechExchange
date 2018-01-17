@@ -13,6 +13,8 @@ import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
 import _ from 'lodash'
 
+
+
 type FormFields = {|
   project_name: ?string,
   project_location: ?string,
@@ -68,6 +70,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_location: project.project_location,
           project_url: project.project_url,
           project_description: project.project_description,
+          project_issue_area: project.project_issue_area && project.project_issue_area[0],
           project_links: project.project_links,
           project_files: project.project_files,
           project_thumbnail: project.project_thumbnail
@@ -151,6 +154,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           <label htmlFor="project_issue_area">Issue Areas</label>
           <TagSelect
             elementId="project_issue_area"
+            value={this.state.formFields.project_issue_area && this.state.formFields.project_issue_area.value}
             category={TagCategory.ISSUES}
             onSelection={this.onComponentChange.bind(this, "project_issue_area")}
           />

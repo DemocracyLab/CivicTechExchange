@@ -3,7 +3,6 @@ import sys
 import os
 import csv
 
-from pprint import pprint
 
 # Create your models here.
 class Tag(models.Model):
@@ -13,6 +12,27 @@ class Tag(models.Model):
     category = models.CharField(max_length=200)
     subcategory = models.CharField(max_length=200, blank=True)
     parent = models.CharField(max_length=100, blank=True)
+
+    @staticmethod
+    def hydrate_to_json(tag_entries):
+        # TODO: Use in-memory cache for tags
+        tags = list(map(lambda tag_slug: Tag.objects.filter(tag_name=tag_slug['slug']).first(), tag_entries))
+        hydrated_tags = list(map(lambda tag: {'label': tag.display_name, 'value': tag.tag_name}, tags))
+        return hydrated_tags
+
+    @staticmethod
+    def merge_tags_field(tags_field, tag_entries):
+        tag_entry_slugs = set(tag_entries.split(','))
+        existing_tag_slugs = set(tags_field.slugs())
+
+        tags_to_add = list(tag_entry_slugs - existing_tag_slugs)
+        for tag in tags_to_add:
+            tags_field.add(tag)
+
+        tags_to_remove = list(existing_tag_slugs - tag_entry_slugs)
+        for tag in tags_to_remove:
+            tags_field.remove(tag)
+
 
 def get_tags_by_category(categoryName):
     return Tag.objects.filter(category__contains=categoryName)

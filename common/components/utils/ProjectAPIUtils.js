@@ -9,6 +9,11 @@ export type APIError = {|
   +errorMessage: string
 |};
 
+type TagDefinition = {|
+  value: string,
+  label: string
+|};
+
 type ProjectAPIData = {|
   +id: number,
   +project_description: string,
@@ -22,7 +27,7 @@ export type ProjectDetailsAPIData = {|
   +project_description: string,
   +project_creator: number,
   +project_url: string,
-  +project_issue_area: $ReadOnlyArray<{|+name: string|}>,
+  +project_issue_area: $ReadOnlyArray<TagDefinition>,
   +project_location: string,
   +project_name: string,
   +project_thumbnail: FileInfo,

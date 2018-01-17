@@ -1,7 +1,7 @@
 from django.db import models
 from enum import Enum
 from democracylab.models import Contributor
-
+from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 
@@ -51,7 +51,7 @@ class Project(models.Model):
             'project_description': self.project_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
-            'project_issue_area': list(self.project_issue_area.all().values()),
+            'project_issue_area': Tag.hydrate_to_json(list(self.project_issue_area.all().values())),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links))
         }

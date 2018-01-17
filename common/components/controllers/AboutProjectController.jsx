@@ -52,7 +52,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                   </div>
                   <div className="row">
                     <div className="col">
-                      {project && project.project_issue_area[0].name}
+                      {project && project.project_issue_area[0].label}
                     </div>
                   </div>
                 </div>

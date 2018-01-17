@@ -3,6 +3,7 @@ from django import forms
 from django.core.exceptions import PermissionDenied
 from .models import Project, ProjectLink, ProjectFile, FileCategory
 from democracylab.models import get_request_contributor
+from common.models.tags import Tag
 
 class ProjectCreationForm(forms.Form):
     class Meta:
@@ -70,6 +71,9 @@ class ProjectCreationForm(forms.Form):
         project.project_location=form.data.get('project_location')
         project.project_name=form.data.get('project_name')
         project.project_url=form.data.get('project_url')
+        issue_areas = form.data.get('project_issue_area')
+        if len(issue_areas) != 0:
+            Tag.merge_tags_field(project.project_issue_area, issue_areas)
         project.save()
 
         links_json_text = form.data.get('project_links')
