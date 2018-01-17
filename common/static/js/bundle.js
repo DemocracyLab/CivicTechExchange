@@ -31676,7 +31676,8 @@ var EditProjectForm = function (_React$PureComponent) {
             project_url: project.project_url,
             project_description: project.project_description,
             project_links: project.project_links,
-            project_files: project.project_files
+            project_files: project.project_files,
+            project_thumbnail: project.project_thumbnail
           }
         });
         this.checkFormValidity();
@@ -31740,7 +31741,7 @@ var EditProjectForm = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           { className: 'form-group' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__components_forms_ImageUploadFormElement_jsx__["a" /* default */], { form_id: 'project_thumbnail_location' })
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__components_forms_ImageUploadFormElement_jsx__["a" /* default */], { form_id: 'project_thumbnail_location', currentImage: this.state.formFields.project_thumbnail })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'h2',
@@ -31877,18 +31878,31 @@ var ImageUploadFormElement = function (_React$PureComponent) {
     var _this = _possibleConstructorReturn(this, (ImageUploadFormElement.__proto__ || Object.getPrototypeOf(ImageUploadFormElement)).call(this));
 
     _this.state = {
-      imagePreviewUrl: ""
+      currentImage: ""
     };
     return _this;
   }
 
   _createClass(ImageUploadFormElement, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.currentImage) {
+        this.updateFormFields(nextProps.currentImage);
+      }
+    }
+  }, {
+    key: 'updateFormFields',
+    value: function updateFormFields(fileInfo) {
+      this.refs.hiddenFormField.value = JSON.stringify(fileInfo);
+      this.setState({ "currentImage": fileInfo });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         null,
-        this.state.imagePreviewUrl ? this._renderThumbnail() : this._renderThumbnailPlaceholder(),
+        this.state.currentImage ? this._renderThumbnail() : this._renderThumbnailPlaceholder(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_upload_FileUploadButton_jsx__["a" /* default */], { acceptedFileTypes: 'image/*', buttonText: 'Upload Project Image', onFileUpload: this._handleFileSelection.bind(this) }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', name: this.props.form_id, id: this.props.form_id })
       );
@@ -31905,14 +31919,13 @@ var ImageUploadFormElement = function (_React$PureComponent) {
   }, {
     key: '_renderThumbnail',
     value: function _renderThumbnail() {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.state.imagePreviewUrl });
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.state.currentImage.publicUrl });
     }
   }, {
     key: '_handleFileSelection',
     value: function _handleFileSelection(fileUploadData) {
       var fileInfo = __WEBPACK_IMPORTED_MODULE_3_lodash___default.a.assign({ visibility: __WEBPACK_IMPORTED_MODULE_2__common_Visibility_jsx__["a" /* default */].PUBLIC }, fileUploadData);
-      this.refs.hiddenFormField.value = JSON.stringify(fileInfo);
-      this.setState({ "imagePreviewUrl": fileUploadData.publicUrl });
+      this.updateFormFields(fileInfo);
     }
   }]);
 

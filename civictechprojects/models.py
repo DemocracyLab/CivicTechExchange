@@ -153,7 +153,9 @@ class ProjectFile(models.Model):
     def merge_changes(project, files):
         # Add new files
         added_files = filter(lambda file: 'id' not in file, files)
-        old_files = list(ProjectFile.objects.filter(file_project=project.id).values())
+        old_files = list(ProjectFile.objects.filter(file_project=project.id, file_category=FileCategory.ETC.value)
+                         .values())
+
         for file in added_files:
             ProjectFile.from_json(project=project, file_category=FileCategory.ETC, file_json=file).save()
 

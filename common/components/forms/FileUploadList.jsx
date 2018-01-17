@@ -52,7 +52,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   
   confirmDelete(confirmed: boolean): void {
     if(confirmed) {
-      _.remove(this.state.files, (file) => file.publicUrl === this.state.fileToDelete.publicUrl);
+      _.remove(this.state.files, (file) => file.publicUrl + file.id === this.state.fileToDelete.publicUrl + this.state.fileToDelete.id);
       deleteFromS3(this.state.fileToDelete.key);
     }
   

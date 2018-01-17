@@ -19,7 +19,8 @@ type FormFields = {|
   project_url: ?string,
   project_description: ?string,
   project_links: Array<LinkInfo>,
-  project_files: Array<FileInfo>
+  project_files: Array<FileInfo>,
+  project_thumbnail: FileInfo
 |};
 
 type Props = {|
@@ -69,6 +70,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_description: project.project_description,
           project_links: project.project_links,
           project_files: project.project_files,
+          project_thumbnail: project.project_thumbnail
         }
       });
       this.checkFormValidity();
@@ -124,7 +126,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <DjangoCSRFToken/>
         
         <div className="form-group">
-          <ImageUploadFormElement form_id="project_thumbnail_location"/>
+          <ImageUploadFormElement form_id="project_thumbnail_location" currentImage={this.state.formFields.project_thumbnail}/>
         </div>
         
         <h2 className="form-group subheader">DETAILS</h2>
