@@ -13,8 +13,6 @@ import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
 import _ from 'lodash'
 
-
-
 type FormFields = {|
   project_name: ?string,
   project_location: ?string,

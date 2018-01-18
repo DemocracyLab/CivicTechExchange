@@ -80,7 +80,8 @@ class ProjectLink(models.Model):
 
     @staticmethod
     def merge_changes(project, links):
-        ProjectLink.remove_links_not_in_list(project, links)
+        updated_links = list(filter(lambda link: 'id' in link, links))
+        ProjectLink.remove_links_not_in_list(project, updated_links)
         for link_json in links:
             link = ProjectLink.from_json(project, link_json)
 
