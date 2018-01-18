@@ -13,6 +13,7 @@
 }
 
 .MainHeader-logo {
+  cursor: pointer;
   padding-left: 75px;
   width: 195px;
 }

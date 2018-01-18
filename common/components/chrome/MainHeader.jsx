@@ -5,6 +5,7 @@ import type {SectionType} from '../enums/Section.js';
 import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
 import Section from '../enums/Section.js';
+import CurrentUser from '../utils/CurrentUser.js';
 
 class MainHeader extends React.PureComponent<{||}> {
   render(): React$Node {
@@ -35,9 +36,13 @@ class MainHeader extends React.PureComponent<{||}> {
   }
 
   _renderHero(): React$Node {
-    const {userID, firstName, lastName} = window.DLAB_GLOBAL_CONTEXT;
-    return userID
-      ? <span>{firstName + ' ' + lastName} | <a href="/logout">Logout</a></span>
+    return CurrentUser.isLoggedIn()
+      ? (
+        <span>
+          {CurrentUser.firstName() + ' ' + CurrentUser.lastName() + ' '}
+          | <a href="/logout">Logout</a>
+        </span>
+      )
       : (
         <span>
           <a href="/login">Log In</a> |{' '}
