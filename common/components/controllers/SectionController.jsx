@@ -39,12 +39,12 @@ class SectionController extends React.Component<{||}, State> {
     switch (this.state.section) {
       case Section.CreateProject:
         return <CreateProjectController />;
+      case Section.FindProjects:
+        return <FindProjectsController />;
       case Section.Landing:
         return <LandingController />;
       case Section.MyProjects:
         return <MyProjectsController />;
-      case Section.FindProjects:
-        return <FindProjectsController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }

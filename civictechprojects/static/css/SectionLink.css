@@ -1,5 +1,6 @@
 .SectionLink-root {
   color: white;
+  cursor: pointer;
   display: inline-block;
   font-size: 12px;
   font-weight: bold;

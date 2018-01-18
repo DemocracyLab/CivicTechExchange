@@ -2,6 +2,7 @@
 
 import type {Project} from '../stores/ProjectSearchStore.js';
 
+import CurrentUser from '../utils/CurrentUser.js'
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import MyProjectCard from '../componentsBySection/MyProjects/MyProjectCard.jsx';
 import React from 'react';
@@ -33,13 +34,15 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
   }
 
   render(): React$Node {
-    return (
-      <div className="MyProjectsController-root">
-        {this.state.projects.map(project => {
-          return <MyProjectCard key={project.name} project={project} />;
-        })}
-      </div>
-    );
+    return CurrentUser.isLoggedIn()
+      ? (
+        <div className="MyProjectsController-root">
+          {this.state.projects.map(project => {
+            return <MyProjectCard key={project.name} project={project} />;
+          })}
+        </div>
+      )
+      : <p><a href="/login">Login</a> to see a list of your projects.</p>;
   }
 }
 
