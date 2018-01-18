@@ -25478,10 +25478,11 @@ var ProjectAPIUtils = function () {
     value: function projectFromAPIData(apiData) {
       return {
         description: apiData.project_description,
-        id: apiData.id,
-        issueArea: apiData.project_issue_area && apiData.project_issue_area.length != 0 ? apiData.project_issue_area[0].name : 'None',
+        id: apiData.project_id,
+        issueArea: apiData.project_issue_area && apiData.project_issue_area.length != 0 ? apiData.project_issue_area[0].label : 'None',
         location: apiData.project_location,
-        name: apiData.project_name
+        name: apiData.project_name,
+        thumbnail: apiData.project_thumbnail
       };
     }
   }, {
@@ -27243,6 +27244,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -70318,7 +70320,7 @@ var ProjectCard = function (_React$PureComponent) {
         'a',
         {
           className: 'ProjectCard-root',
-          href: '/project/' + this.props.project.id },
+          href: '?section=AboutProject&id=' + this.props.project.id },
         this._renderName(),
         this._renderIssueAndLocation(),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
@@ -70333,8 +70335,17 @@ var ProjectCard = function (_React$PureComponent) {
     value: function _renderName() {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
-        { className: 'ProjectCard-name' },
-        this.props.project.name
+        null,
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'div',
+          { className: 'ProjectCard-name' },
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'div',
+            null,
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl })
+          ),
+          this.props.project.name
+        )
       );
     }
   }, {

@@ -89,7 +89,7 @@ def project(request, project_id):
 
 def get_project(request, project_id):
     project = Project.objects.get(id=project_id)
-    return HttpResponse(json.dumps(project.to_json()))
+    return HttpResponse(json.dumps(project.hydrate_to_json()))
 
 
 def projects(request):
@@ -148,11 +148,8 @@ def projects_list(request):
             'keyword' in query_params
             or 'tags' in query_params
         ) else Project.objects
-    response = json.dumps(
-        projects_with_issue_areas(
-            list(projects.order_by('project_name').values())
-        )
-    )
+    response = json.dumps(projects_with_issue_areas(projects.order_by('project_name')))
+
     return HttpResponse(response)
 
 
@@ -176,14 +173,7 @@ def projects_by_tag(query_params):
 
 def projects_with_issue_areas(list_of_projects):
     return [
-        dict(
-            project,
-            project_issue_area=list(
-                Project
-                .objects
-                .get(id=project['id']).project_issue_area.all().values())
-            )
-        for project in list_of_projects
+        project.hydrate_to_json() for project in list_of_projects
     ]
 
 

@@ -6,6 +6,7 @@ import {ReduceStore} from 'flux/utils';
 import ProjectSearchDispatcher from './ProjectSearchDispatcher.js';
 import {List, Record} from 'immutable'
 import ProjectAPIUtils from '../utils/ProjectAPIUtils';
+import type {FileInfo} from '../../../common/FileInfo.jsx'
 
 export type Project = {|
   +description: string,
@@ -13,6 +14,7 @@ export type Project = {|
   +issueArea: string,
   +location: string,
   +name: string,
+  +thumbnail: FileInfo
 |};
 
 export type ProjectSearchActionType = {

@@ -23,7 +23,7 @@ type ProjectAPIData = {|
 |};
 
 export type ProjectDetailsAPIData = {|
-  +id: number,
+  +project_id: number,
   +project_description: string,
   +project_creator: number,
   +project_url: string,
@@ -36,16 +36,17 @@ export type ProjectDetailsAPIData = {|
 |};
 
 class ProjectAPIUtils {
-  static projectFromAPIData(apiData: ProjectAPIData): Project {
+  static projectFromAPIData(apiData: ProjectDetailsAPIData): Project {
     return {
       description: apiData.project_description,
-      id: apiData.id,
+      id: apiData.project_id,
       issueArea:
         apiData.project_issue_area && apiData.project_issue_area.length != 0
-          ? apiData.project_issue_area[0].name
+          ? apiData.project_issue_area[0].label
           : 'None',
       location: apiData.project_location,
       name: apiData.project_name,
+      thumbnail: apiData.project_thumbnail
     };
   }
   

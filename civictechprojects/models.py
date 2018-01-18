@@ -39,13 +39,14 @@ class Project(models.Model):
     project_url = models.CharField(max_length=200, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
 
-    def to_json(self):
+    def hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_project=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_project=self.id)
 
         project = {
+            'project_id': self.id,
             'project_name': self.project_name,
             'project_creator': self.project_creator.id,
             'project_description': self.project_description,
