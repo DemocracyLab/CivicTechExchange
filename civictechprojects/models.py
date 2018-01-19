@@ -62,6 +62,16 @@ class Project(models.Model):
 
         return project
 
+    # Remove any tags that aren't part of the canonical list
+    @staticmethod
+    def remove_tags_not_in_list():
+        for project in Project.objects.all():
+            for issue in project.project_issue_area.all():
+                issue_tag = Tag.get_by_name(issue)
+                if not issue_tag:
+                    print('Removing invalid tag', issue, 'from project:', project.project_name)
+                    project.project_issue_area.remove(issue)
+
 
 class ProjectLink(models.Model):
     link_project = models.ForeignKey(Project, related_name='links')

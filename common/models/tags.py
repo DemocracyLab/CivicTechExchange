@@ -14,6 +14,11 @@ class Tag(models.Model):
     parent = models.CharField(max_length=100, blank=True)
 
     @staticmethod
+    def get_by_name(name):
+        # TODO: Get from in-memory cache
+        return Tag.objects.filter(tag_name=name).first()
+
+    @staticmethod
     def hydrate_to_json(tag_entries):
         # TODO: Use in-memory cache for tags
         tags = list(map(lambda tag_slug: Tag.objects.filter(tag_name=tag_slug['slug']).first(), tag_entries))
@@ -37,6 +42,7 @@ class Tag(models.Model):
 def get_tags_by_category(categoryName):
     return Tag.objects.filter(category__contains=categoryName)
 
+
 def import_tags_from_csv(apps, schema):
     dir = os.path.dirname(__file__)
     filename = os.path.join(dir, 'Tag_definitions.csv')
@@ -57,4 +63,3 @@ def import_tags_from_csv(apps, schema):
                 tag.save()
         except csv.Error as e:
             sys.exit('file %s, line %d: %s' % (filename, reader.line_num, e))
-
