@@ -8,7 +8,7 @@ import LinkList from '../../../components/forms/LinkList.jsx'
 import FileUploadList from '../../../components/forms/FileUploadList.jsx'
 import TagCategory from '../../common/tags/TagCategory.jsx'
 import TagSelect from '../../common/tags/TagSelect.jsx'
-import DjangoCSRFToken from '../../common/DjangoCSRFToken.jsx'
+import DjangoCSRFToken from 'django-react-csrftoken'
 import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
 import _ from 'lodash'

@@ -22,8 +22,10 @@ type ProjectAPIData = {|
   +project_name: string,
 |};
 
+// TODO: Unify backend schema for project id
 export type ProjectDetailsAPIData = {|
-  +project_id: number,
+  +project_id?: number,
+  +id?: number,
   +project_description: string,
   +project_creator: number,
   +project_url: string,
@@ -39,7 +41,7 @@ class ProjectAPIUtils {
   static projectFromAPIData(apiData: ProjectDetailsAPIData): Project {
     return {
       description: apiData.project_description,
-      id: apiData.project_id,
+      id: apiData.project_id || apiData.id,
       issueArea:
         apiData.project_issue_area && apiData.project_issue_area.length != 0
           ? apiData.project_issue_area[0].label
