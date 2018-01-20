@@ -2,6 +2,7 @@
 
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
+import _ from 'lodash'
 
 import React from 'react';
 
@@ -52,7 +53,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                   </div>
                   <div className="row">
                     <div className="col">
-                      {project && project.project_issue_area[0].label}
+                      {project && !_.isEmpty(project.project_issue_area) && project.project_issue_area[0].label}
                     </div>
                   </div>
                 </div>

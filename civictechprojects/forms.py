@@ -32,7 +32,7 @@ class ProjectCreationForm(forms.Form):
         project = Project.objects.get(id=project.id)
 
         issue_areas = form.data.get('project_issue_area')
-        if len(issue_areas) != 0:
+        if issue_areas and len(issue_areas) != 0:
             # Tag fields operate like ManyToMany fields, and so cannot
             # be added until after the object is created.
             project.project_issue_area.add(issue_areas)
@@ -72,7 +72,7 @@ class ProjectCreationForm(forms.Form):
         project.project_name=form.data.get('project_name')
         project.project_url=form.data.get('project_url')
         issue_areas = form.data.get('project_issue_area')
-        if len(issue_areas) != 0:
+        if issue_areas and len(issue_areas) != 0:
             Tag.merge_tags_field(project.project_issue_area, issue_areas)
         project.save()
 
