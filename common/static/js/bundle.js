@@ -32709,7 +32709,7 @@ var FileUploadButton = function (_React$PureComponent) {
     key: 'launchPresignedUploadToS3',
     value: function launchPresignedUploadToS3(file) {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", "/presign_s3/upload/project/thumbnail?file_type=" + file.type);
+      xhr.open("GET", '/presign_s3/upload/project/thumbnail?file_name=' + file.name + '&file_type=' + file.type);
       var instance = this;
 
       xhr.onreadystatechange = function () {

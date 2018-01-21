@@ -179,13 +179,14 @@ def projects_with_issue_areas(list_of_projects):
 
 def presign_project_thumbnail_upload(request):
     uploader = request.user.username
+    file_name = request.GET['file_name']
     file_type = request.GET['file_type']
     file_extension = file_type.split('/')[-1]
-    unique_file_name = 'project_thumbnail_' + str(time())
+    unique_file_name = file_name + '_' + str(time())
     s3_key = 'thumbnails/%s/%s.%s' % (
         uploader, unique_file_name, file_extension)
     return presign_s3_upload(
-        raw_key=s3_key, file_type=file_type, acl="public-read")
+        raw_key=s3_key, file_name=file_name, file_type=file_type, acl="public-read")
 
 
 # TODO: Pass csrf token in ajax call so we can check for it

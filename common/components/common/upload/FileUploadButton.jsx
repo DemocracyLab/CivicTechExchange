@@ -47,7 +47,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
   
   launchPresignedUploadToS3(file: File): void {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/presign_s3/upload/project/thumbnail?file_type=" + file.type);
+    xhr.open("GET", `/presign_s3/upload/project/thumbnail?file_name=${file.name}&file_type=${file.type}`);
     var instance = this;
     
     xhr.onreadystatechange = function(){
