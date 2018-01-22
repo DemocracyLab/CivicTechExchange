@@ -36,7 +36,7 @@ class Project(models.Model):
     project_name = models.CharField(max_length=200)
     project_tags = TaggableManager(blank=True, through=TaggedTag)
     project_tags.remote_field.related_name = "+"
-    project_url = models.CharField(max_length=200, blank=True)
+    project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
 
     def hydrate_to_json(self):
@@ -76,7 +76,7 @@ class Project(models.Model):
 class ProjectLink(models.Model):
     link_project = models.ForeignKey(Project, related_name='links')
     link_name = models.CharField(max_length=200, blank=True)
-    link_url = models.CharField(max_length=2000)
+    link_url = models.CharField(max_length=2083)
     link_visibility = models.CharField(max_length=50)
 
     @staticmethod
@@ -144,7 +144,7 @@ class ProjectFile(models.Model):
     file_visibility = models.CharField(max_length=50)
     file_name = models.CharField(max_length=200)
     file_key = models.CharField(max_length=200)
-    file_url = models.CharField(max_length=2000)
+    file_url = models.CharField(max_length=2083)
     file_type = models.CharField(max_length=50)
     file_category = models.CharField(max_length=50)
 

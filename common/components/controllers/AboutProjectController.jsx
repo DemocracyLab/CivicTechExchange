@@ -2,6 +2,7 @@
 
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
+import url from '../utils/url.js'
 import _ from 'lodash'
 
 import React from 'react';
@@ -63,10 +64,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </div>
             <div className="col col-sm-3">
               <div className="row">
-                <div className="col">
-                  <i className="fa fa-link fa-1" aria-hidden="true"></i>
-                  <a href="{{ project.project_url }}">{project && project.project_url}</a>
-                </div>
+                {this._renderProjectHomepageLink()}
               </div>
               <div className="row">
                 <div className="col">
@@ -103,13 +101,23 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </div>
     );
   }
-    
+  
+  _renderProjectHomepageLink(): React$Node {
+    if(this.state.project && this.state.project.project_url) {
+      return <div className="col">
+        <i className="fa fa-link fa-1" aria-hidden="true"></i>
+        <a href={this.state.project.project_url}>{ this.state.project.project_url.length > 100
+          ? "Project Homepage"
+          : url.beautify(this.state.project.project_url)}</a>
+      </div>
+    }
+  }
+  
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
     return project && project.project_links && project.project_links.map((link, i) =>
       <div key={i}>
-        <h6>{link.linkName}</h6>
-        <a href={link.linkUrl}>{link.linkUrl}</a>
+        <a href={link.linkUrl}>{link.linkName}</a>
       </div>
     );
   }

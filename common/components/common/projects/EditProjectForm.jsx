@@ -11,6 +11,7 @@ import TagSelect from '../../common/tags/TagSelect.jsx'
 import DjangoCSRFToken from 'django-react-csrftoken'
 import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
+import url from '../../utils/url.js'
 import _ from 'lodash'
 
 type FormFields = {|
@@ -95,6 +96,12 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     this.checkFormValidity();
   }
   
+  onSubmit(): void {
+    //Sanitize project url if necessary
+    this.state.formFields.project_url = url.appendHttpIfMissingProtocol(this.state.formFields.project_url);
+    this.forceUpdate();
+  }
+  
   checkFormValidity(): void {
     var formFields = this.state.formFields;
     
@@ -144,7 +151,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
         <div className="form-group">
           <label htmlFor="project_url">Website URL</label>
-          <input type="text" className="form-control" id="project_url" name="project_url" maxLength="200"
+          <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
                  value={this.state.formFields.project_url} onChange={this.onFormFieldChange.bind(this, "project_url")}/>
         </div>
         
@@ -177,7 +184,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <div className="form-group pull-right">
           <div className='text-right'>
             <input disabled={!this.state.formIsValid} type="submit" className="btn_outline save_btn"
-                   value="Save Project"/>
+                   value="Save Project" onClick={this.onSubmit.bind(this)}/>
           </div>
         </div>
       </div>
