@@ -7,7 +7,7 @@ import ImageUploadFormElement from '../../../components/forms/ImageUploadFormEle
 import LinkList from '../../../components/forms/LinkList.jsx'
 import FileUploadList from '../../../components/forms/FileUploadList.jsx'
 import TagCategory from '../../common/tags/TagCategory.jsx'
-import TagSelect from '../../common/tags/TagSelect.jsx'
+import TagSelector from '../tags/TagSelector.jsx'
 import DjangoCSRFToken from 'django-react-csrftoken'
 import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
@@ -103,20 +103,14 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   }
   
   checkFormValidity(): void {
-    var formFields = this.state.formFields;
+    const {formFields} = this.state;
     
-    var valid = !_.isEmpty(formFields["project_name"]) && !_.isEmpty(formFields["project_description"]);
-    this.setState({
-      formIsValid: valid
-    });
+    const formIsValid = !_.isEmpty(formFields["project_name"]) && !_.isEmpty(formFields["project_description"]);
+    this.setState({formIsValid});
   }
   
   render(): React$Node {
-    if(this.state.error) {
-      return this._renderError();
-    } else {
-      return this._renderForm();
-    }
+    return this.state.error ? this._renderError() : this._renderForm();
   }
   
   _renderError(): React$Node {
@@ -157,7 +151,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         
         <div className="form-group">
           <label htmlFor="project_issue_area">Issue Areas</label>
-          <TagSelect
+          <TagSelector
             elementId="project_issue_area"
             value={this.state.formFields.project_issue_area && this.state.formFields.project_issue_area.value}
             category={TagCategory.ISSUES}

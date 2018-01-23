@@ -68,9 +68,9 @@ class ProjectCreationForm(forms.Form):
 
         form = ProjectCreationForm(request.POST)
         project.project_description = form.data.get('project_description')
-        project.project_location=form.data.get('project_location')
-        project.project_name=form.data.get('project_name')
-        project.project_url=form.data.get('project_url')
+        project.project_location = form.data.get('project_location')
+        project.project_name = form.data.get('project_name')
+        project.project_url = form.data.get('project_url')
         issue_areas = form.data.get('project_issue_area')
         if issue_areas and len(issue_areas) != 0:
             Tag.merge_tags_field(project.project_issue_area, issue_areas)
@@ -89,8 +89,8 @@ class ProjectCreationForm(forms.Form):
         project_thumbnail_location = form.data.get('project_thumbnail_location')
         if len(project_thumbnail_location) > 0:
             thumbnail_json = json.loads(project_thumbnail_location)
-            existing_thumbnail = ProjectFile.objects\
-                .filter(file_project=project.id, file_category=FileCategory.THUMBNAIL.value).first()
+            existing_thumbnail = ProjectFile.objects.filter(
+                file_project=project.id, file_category=FileCategory.THUMBNAIL.value).first()
 
             if not existing_thumbnail:
                 thumbnail = ProjectFile.from_json(project, FileCategory.THUMBNAIL, thumbnail_json)

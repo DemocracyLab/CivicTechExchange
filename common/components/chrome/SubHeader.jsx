@@ -11,6 +11,7 @@ import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
+import url from '../utils/url.js'
 
 type State = {|
   +activeSection: SectionType,
@@ -29,6 +30,14 @@ class SubHeader extends React.Component<{||}, State> {
       activeSection: NavigationStore.getSection(),
     };
   }
+  
+  navigateToCreateProject(): void {
+    NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: Section.CreateProject,
+      url: url.section(Section.CreateProject)
+    });
+  }
 
   constructor(): void {
     super();
@@ -40,12 +49,9 @@ class SubHeader extends React.Component<{||}, State> {
       <div className={this._cx.get('root')}>
         {this._renderSectionLinks()}
         <span className={this._cx.get('rightContent')}>
-          <a
-            className={this._cx.get('createProject')}
-            href="/index/?section=CreateProject"
-            >
+          <span className={this._cx.get('createProject')} onClick={this.navigateToCreateProject.bind(this)}>
             Create A Project
-          </a>
+          </span>
         </span>
       </div>
     );

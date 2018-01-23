@@ -20,7 +20,7 @@ type State = {|
 /**
  * Dropdown selector for tags
  */
-class TagSelect extends React.PureComponent<Props, State> {
+class TagSelector extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
@@ -41,7 +41,12 @@ class TagSelect extends React.PureComponent<Props, State> {
   
   componentWillReceiveProps(nextProps: Props): void {
     if(nextProps.value) {
-      this.setState({selected: {value:nextProps.value, label:_.find(this.state.tags, tag => tag.value === nextProps.value).label} || ""});
+      this.setState({
+        selected: {
+          value:nextProps.value,
+          label:this.state.tags.find(tag => tag.value === nextProps.value).label
+        }
+      });
     }
   }
   
@@ -68,4 +73,4 @@ class TagSelect extends React.PureComponent<Props, State> {
   }
 }
 
-export default TagSelect;
+export default TagSelector;

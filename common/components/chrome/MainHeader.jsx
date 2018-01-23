@@ -6,6 +6,7 @@ import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
 import Section from '../enums/Section.js';
 import CurrentUser from '../utils/CurrentUser.js';
+import url from '../utils/url.js';
 
 class MainHeader extends React.PureComponent<{||}> {
   render(): React$Node {
@@ -31,7 +32,7 @@ class MainHeader extends React.PureComponent<{||}> {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: Section.Landing,
-      url: '/index/?section=Landing'
+      url: url.section(Section.Landing)
     });
   }
 

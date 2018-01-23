@@ -3,6 +3,8 @@
 import cx from '../../utils/cx';
 import type {Project} from '../../stores/ProjectSearchStore.js';
 import React from 'react';
+import Section from '../../enums/Section.js'
+import url from '../../utils/url.js'
 
 type Props = {|
   +project: Project,
@@ -11,10 +13,11 @@ type Props = {|
 class MyProjectCard extends React.PureComponent<Props> {
 
   render(): React$Node {
+    const id = {'id':this.props.project.id};
     return (
       <a
         className="MyProjectCard-root"
-        href={'?section=AboutProject&id=' + this.props.project.id}>
+        href={url.section(Section.AboutProject, id)}>
          <table className="MyProjectCard-table">
           <tbody>
             <tr>
@@ -40,7 +43,7 @@ class MyProjectCard extends React.PureComponent<Props> {
               </td>
               <td className="MyProjectCard-column">
                 <tr className="MyProjectCard-header">
-                  <a href={'?section=EditProject&id=' + this.props.project.id}>Edit</a>
+                  <a href={url.section(Section.EditProject, id)}>Edit</a>
                 </tr>
               </td>
             </tr>

@@ -5,6 +5,7 @@ import type {SectionType} from '../enums/Section.js';
 import cx from '../utils/cx';
 import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
+import url from '../utils/url.js';
 
 type Props = {|
   +activeSection: SectionType,
@@ -42,7 +43,7 @@ class SectionLink extends React.PureComponent<Props> {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: this.props.section,
-      url: '/index/?section=' + this.props.section
+      url: url.section(this.props.section)
     });
     window.FB.AppEvents.logEvent(
       'sectionLinkClick',

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import EditProjectForm from '../common/projects/EditProjectForm.jsx'
+import url from '../utils/url.js'
 
 type State = {|
   projectId: number
@@ -15,7 +16,7 @@ class EditProjectController extends React.PureComponent<{||},State> {
     super(props);
   
     this.state = {
-      projectId:  (new RegExp("id=([^&]+)")).exec(document.location.search)[1]
+      projectId:  url.arguments(document.location.search).id
     }
   }
   
@@ -27,7 +28,7 @@ class EditProjectController extends React.PureComponent<{||},State> {
     return (
       <div className="wrapper-gray">
         <div className="container">
-          <form action={"/projects/signup/" + this.state.projectId + "/"} onSubmit={this.logProjectEdited} method="post">
+          <form action={`/projects/edit/${this.state.projectId}/`} onSubmit={this.logProjectEdited} method="post">
             <EditProjectForm projectId={this.state.projectId}/>
           </form>
         </div>
