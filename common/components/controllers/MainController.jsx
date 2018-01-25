@@ -11,7 +11,8 @@ class MainController extends React.Component<{||}> {
   componentWillMount(): void {
     const section = new URL(window.location.href).searchParams.get('section');
     if (Object.keys(Section).includes(section)) {
-      NavigationDispatcher.dispatch({type: 'SET_SECTION', section});
+      
+      NavigationDispatcher.dispatch({type: 'SET_SECTION', section: section, url:window.location.href});
     }
   }
 

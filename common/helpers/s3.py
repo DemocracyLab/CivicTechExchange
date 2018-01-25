@@ -12,16 +12,18 @@ class S3Key:
         self.file_name = key_parts[2]
 
 
-def presign_s3_upload(raw_key, file_type, acl):
+def presign_s3_upload(raw_key, file_name, file_type, acl):
     s3 = client('s3')
 
+    content_disposition = 'attachment; filename="{0}"'.format(file_name)
     presigned_post = s3.generate_presigned_post(
         Bucket=settings.S3_BUCKET,
         Key=raw_key,
-        Fields={"acl": acl, "Content-Type": file_type},
+        Fields={"acl": acl, "Content-Type": file_type, "Content-Disposition": content_disposition},
         Conditions=[
             {"acl": acl},
-            {"Content-Type": file_type}
+            {"Content-Type": file_type},
+            {"Content-Disposition": content_disposition}
         ],
         ExpiresIn=3600
     )

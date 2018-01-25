@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
 from django.template import loader
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
@@ -13,12 +14,19 @@ from common.models.tags import get_tags_by_category
 from .forms import ProjectCreationForm
 from common.models.tags import Tag
 
-from pprint import pprint
 
 def tags(request):
+    url_parts = request.GET.urlencode()
+    query_terms = urlparse.parse_qs(
+        url_parts, keep_blank_values=0, strict_parsing=0)
+    if 'category' in query_terms:
+        category = query_terms.get('category')[0]
+        tags = get_tags_by_category(category)
+    else:
+        tags = Tag.objects
     return HttpResponse(
         json.dumps(
-            list(Tag.objects.values())
+            list(tags.values())
         )
     )
 
@@ -42,25 +50,26 @@ def to_tag_map(tags):
     return list(tag_map)
 
 
-def project_signup(request):
+def project_create(request):
     if not request.user.is_authenticated():
         return redirect('/signup')
-    if request.method == 'POST':
-        ProjectCreationForm.create_project(request)
-        return redirect('/index/?section=MyProjects')
-    else:
-        form = ProjectCreationForm()
 
-    template = loader.get_template('project_signup.html')
-    issues = get_tags_by_category('Issue(s) Addressed')
-    tag_map = to_tag_map(issues)
-    context = {
-        'form': form,
-        'issues': json.dumps(tag_map)
-    }
-    return HttpResponse(template.render(context, request))
+    ProjectCreationForm.create_project(request)
+    return redirect('/index/?section=MyProjects')
 
 
+def project_edit(request, project_id):
+    if not request.user.is_authenticated():
+        return redirect('/signup')
+
+    try:
+        ProjectCreationForm.edit_project(request, project_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return redirect('/index/?section=AboutProject&id=' + project_id)
+
+
+# TODO: Remove when React implementation complete
 def project(request, project_id):
     project = Project.objects.get(id=project_id)
     template = loader.get_template('project.html')
@@ -76,6 +85,11 @@ def project(request, project_id):
     if len(thumbnail_files) > 0:
         context['thumbnail'] = thumbnail_files[0].to_json()
     return HttpResponse(template.render(context, request))
+
+
+def get_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    return HttpResponse(json.dumps(project.hydrate_to_json()))
 
 
 def projects(request):
@@ -134,12 +148,8 @@ def projects_list(request):
             'keyword' in query_params
             or 'tags' in query_params
         ) else Project.objects
-    response = json.dumps(
-        projects_with_issue_areas(
-            list(projects.order_by('project_name').values())
-        )
-    )
-    pprint(response)
+    response = json.dumps(projects_with_issue_areas(projects.order_by('project_name')))
+
     return HttpResponse(response)
 
 
@@ -163,26 +173,20 @@ def projects_by_tag(query_params):
 
 def projects_with_issue_areas(list_of_projects):
     return [
-        dict(
-            project,
-            project_issue_area=list(
-                Project
-                .objects
-                .get(id=project['id']).project_issue_area.all().values())
-            )
-        for project in list_of_projects
+        project.hydrate_to_json() for project in list_of_projects
     ]
 
 
 def presign_project_thumbnail_upload(request):
     uploader = request.user.username
+    file_name = request.GET['file_name']
     file_type = request.GET['file_type']
     file_extension = file_type.split('/')[-1]
-    unique_file_name = 'project_thumbnail_' + str(time())
+    unique_file_name = file_name + '_' + str(time())
     s3_key = 'thumbnails/%s/%s.%s' % (
         uploader, unique_file_name, file_extension)
     return presign_s3_upload(
-        raw_key=s3_key, file_type=file_type, acl="public-read")
+        raw_key=s3_key, file_name=file_name, file_type=file_type, acl="public-read")
 
 
 # TODO: Pass csrf token in ajax call so we can check for it

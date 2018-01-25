@@ -3,6 +3,8 @@
 import cx from '../../utils/cx';
 import type {Project} from '../../stores/ProjectSearchStore.js';
 import React from 'react';
+import Section from '../../../components/enums/Section.js'
+import url from '../../utils/url.js';
 
 type Props = {|
   +project: Project,
@@ -21,7 +23,7 @@ class ProjectCard extends React.PureComponent<Props> {
     return (
       <a
         className="ProjectCard-root"
-        href={'/project/' + this.props.project.id}>
+        href={url.section(Section.AboutProject, {id: this.props.project.id})}>
         {this._renderName()}
         {this._renderIssueAndLocation()}
         <div className={this._cx.get('description', 'subtext', 'value')}>
@@ -33,8 +35,13 @@ class ProjectCard extends React.PureComponent<Props> {
 
   _renderName(): React$Node {
     return (
-      <div className="ProjectCard-name">
-        {this.props.project.name}
+      <div>
+        <div className="ProjectCard-name">
+          <div>
+            <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
+          </div>
+          {this.props.project.name}
+        </div>
       </div>
     );
   }

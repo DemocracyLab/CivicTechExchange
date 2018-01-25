@@ -19,7 +19,8 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    url(r'^projects/signup/$', views.project_signup, name='project_signup'),
+    url(r'^projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
+    url(r'^projects/signup/$', views.project_create, name='project_create'),
     url(
         r'^presign_s3/upload/project/thumbnail/$',
         views.presign_project_thumbnail_upload,
@@ -34,6 +35,7 @@ urlpatterns = [
     url(r'^projects/$', views.projects),
     url(r'^index/$', views.index),
     url(r'^project/(?P<project_id>[0-9]+)/$', views.project, name='project'),
+    url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
     url(
         r'^password_reset/$',
         auth_views.password_reset,

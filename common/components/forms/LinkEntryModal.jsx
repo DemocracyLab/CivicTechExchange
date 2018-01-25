@@ -4,6 +4,7 @@ import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import type { LinkInfo } from './LinkInfo.jsx'
 import Visibility from '../common/Visibility.jsx'
+import url from '../utils/url.js'
 
 type Props = {|
   showModal: boolean,
@@ -66,19 +67,10 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
   save(): void {
     //TODO: Validate that link is not duplicate of existing link in the list before saving
     //Sanitize link
-    this.state.linkInfo.linkUrl = this.sanitizeUrl(this.state.linkInfo.linkUrl);
+    this.state.linkInfo.linkUrl = url.appendHttpIfMissingProtocol(this.state.linkInfo.linkUrl);
     
     this.props.onSaveLink(this.state.linkInfo);
     this.close();
-  }
-  
-  // TODO: Put this in a common library
-  sanitizeUrl(url:string): string {
-    // TODO: Find a library that can handle this so we don't have to maintain regexes
-    if (!/^(f|ht)tps?:\/\//i.test(url)) {
-      url = "http://" + url;
-    }
-    return url;
   }
   
   handleChange(event: SyntheticInputEvent<HTMLInputElement>, propertyName: string): void {
@@ -97,7 +89,7 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
               </Modal.Header>
               <Modal.Body>
                   <label htmlFor="link-url">Link URL</label>
-                  <input type="text" className="form-control" id="link-url" maxLength="2000" value={this.state.linkInfo.linkUrl} onChange={(e) => this.handleChange(e, "linkUrl")}/>
+                  <input type="text" className="form-control" id="link-url" maxLength="2075" value={this.state.linkInfo.linkUrl} onChange={(e) => this.handleChange(e, "linkUrl")}/>
                   <label htmlFor="link-name">Link Name</label>
                   <input type="text" className="form-control" id="link-name" maxLength="200" value={this.state.linkInfo.linkName} onChange={(e) => this.handleChange(e, "linkName")}/>
               </Modal.Body>

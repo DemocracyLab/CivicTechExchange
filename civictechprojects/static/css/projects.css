@@ -19,20 +19,6 @@ th, td {
     padding: 5px;
 }
 
-/* Color */
-
-tbody tr:nth-child(odd) {
-    background-color: #DDEAFF;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #CFC6FF;
-}
-
-table {
-    background-color: #DDE0FF;
-}
-
 .signup-text {
     width: 325px;
     height: 40px;

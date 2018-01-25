@@ -4,13 +4,16 @@ import React from 'react';
 import FileUploadButton from '../common/upload/FileUploadButton.jsx'
 import Visibility from '../common/Visibility.jsx'
 import type FileUploadData from '../common/upload/FileUploadButton.jsx'
+import type {FileInfo} from '../common/FileInfo.jsx'
+import _ from 'lodash'
 
 type Props = {|
-  form_id: string
+  form_id: string,
+  currentImage: FileInfo
 |};
 
 type State = {|
-  imagePreviewUrl: string,
+  currentImage: FileInfo
 |};
 
 
@@ -19,15 +22,26 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
   constructor(): void {
     super();
     this.state = {
-      imagePreviewUrl: ""
+      currentImage: ""
     };
+  }
+  
+  componentWillReceiveProps(nextProps: Props): void {
+    if(nextProps.currentImage) {
+      this.updateFormFields(nextProps.currentImage);
+    }
+  }
+  
+  updateFormFields(fileInfo: FileInfo): void {
+    this.refs.hiddenFormField.value = JSON.stringify(fileInfo);
+    this.setState({"currentImage": fileInfo});
   }
 
   render(): React$Node {
     return (
       <div>
         {
-          this.state.imagePreviewUrl
+          this.state.currentImage
           ? this._renderThumbnail()
           : this._renderThumbnailPlaceholder()
         }
@@ -47,14 +61,13 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
   
   _renderThumbnail() : React$Node {
     return (
-      <img className="upload_img upload_img_bdr" src={this.state.imagePreviewUrl}/>
+      <img className="upload_img upload_img_bdr" src={this.state.currentImage.publicUrl}/>
     );
   }
   
   _handleFileSelection(fileUploadData: FileUploadData) : void {
     var fileInfo = _.assign({ visibility: Visibility.PUBLIC }, fileUploadData);
-    this.refs.hiddenFormField.value = JSON.stringify(fileInfo);
-    this.setState({"imagePreviewUrl": fileUploadData.publicUrl});
+    this.updateFormFields(fileInfo);
   }
 
 }

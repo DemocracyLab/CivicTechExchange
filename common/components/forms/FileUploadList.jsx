@@ -10,13 +10,13 @@ import { deleteFromS3 } from '../utils/s3.js'
 import _ from 'lodash'
 
 type Props = {|
-  files: string,
+  files: Array<FileInfo>,
   elementid: string
 |};
 type State = {|
   showDeleteModal: boolean,
-  fileToDelete: LinkInfo,
-  files: Array<LinkInfo>
+  fileToDelete: FileInfo,
+  files: Array<FileInfo>
 |};
 
 /**
@@ -26,13 +26,20 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   constructor(props: Props): void {
     super(props);
     this.state = {
-      files: this.props.files ? JSON.parse(this.props.files) : [],
+      files: this.props.files || [],
       showDeleteModal: false,
       fileToDelete: null
     };
   }
   
-  updateLinkField(): void {
+  componentWillReceiveProps(nextProps: Props): void {
+    if(nextProps.files) {
+      this.setState({files: nextProps.files || []});
+      this.updateHiddenField();
+    }
+  }
+  
+  updateHiddenField(): void {
     this.refs.hiddenFormField.value = JSON.stringify(this.state.files);
   }
   
@@ -45,11 +52,11 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   
   confirmDelete(confirmed: boolean): void {
     if(confirmed) {
-      _.remove(this.state.files, (file) => file.publicUrl === this.state.fileToDelete.publicUrl);
+      _.remove(this.state.files, (file) => file.publicUrl + file.id === this.state.fileToDelete.publicUrl + this.state.fileToDelete.id);
       deleteFromS3(this.state.fileToDelete.key);
     }
   
-    this.updateLinkField();
+    this.updateHiddenField();
     
     this.setState({
       showDeleteModal: false,
@@ -60,7 +67,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   handleFileSelection(fileUploadData: FileUploadData): void {
     var fileInfo = _.assign({ visibility: Visibility.PUBLIC }, fileUploadData);
     this.state.files.push(fileInfo);
-    this.updateLinkField();
+    this.updateHiddenField();
     this.forceUpdate();
   }
   
