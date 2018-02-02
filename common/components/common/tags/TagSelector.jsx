@@ -2,19 +2,17 @@
 
 import React from 'react'
 import Select from 'react-select'
-import _ from 'lodash'
-
-
+import type {TagDefinition} from '../../../components/utils/ProjectAPIUtils.js';
 
 type Props = {|
   elementId: string,
   category: string,
-  value?: string,
-  onSelection: (string) => void
+  value?: TagDefinition,
+  onSelection: (TagDefinition) => void
 |};
 type State = {|
   tags: Array<TagDefinition>,
-  selected: TagDefinition
+  selected?: TagDefinition
 |};
 
 /**
@@ -24,8 +22,7 @@ class TagSelector extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
-      tags: [],
-      selected: this.props.value || ""
+      tags: []
     };
     
     fetch(new Request('/api/tags?category=' + this.props.category))
@@ -41,18 +38,17 @@ class TagSelector extends React.PureComponent<Props, State> {
   
   componentWillReceiveProps(nextProps: Props): void {
     if(nextProps.value) {
+      var tag = this.state.tags.find(tag => tag.value === nextProps.value);
       this.setState({
-        selected: {
-          value:nextProps.value,
-          label:this.state.tags.find(tag => tag.value === nextProps.value).label
-        }
+        selected: tag
       });
     }
   }
   
-  handleSelection(selectedValueOrValues: string): void {
-    this.setState({selected: selectedValueOrValues});
-    this.props.onSelection(selectedValueOrValues);
+  handleSelection(selectedValue: string): void {
+    var tag:TagDefinition = Object.seal(this.state.tags.find((tag:TagDefinition) => tag.value === selectedValue));
+    this.setState({selected: tag});
+    this.props.onSelection(tag);
   }
   
   render(): React$Node {
