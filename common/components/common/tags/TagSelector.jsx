@@ -38,7 +38,7 @@ class TagSelector extends React.PureComponent<Props, State> {
   
   componentWillReceiveProps(nextProps: Props): void {
     if(nextProps.value) {
-      var tag = this.state.tags.find(tag => tag.value === nextProps.value);
+      const tag = this.state.tags.find(tag => tag.value === nextProps.value);
       this.setState({
         selected: tag
       });

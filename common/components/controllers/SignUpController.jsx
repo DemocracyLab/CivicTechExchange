@@ -2,7 +2,7 @@
 
 import DjangoCSRFToken from 'django-react-csrftoken'
 import React from 'react';
-import type {Validation} from '../forms/FormValidation.jsx'
+import type {Validator} from '../forms/FormValidation.jsx'
 import FormValidation from '../forms/FormValidation.jsx'
 import _ from 'lodash'
 
@@ -16,14 +16,18 @@ type State = {|
   email: string,
   password1: string,
   password2: string,
-  validations: $ReadOnlyArray<Validation>,
+  validations: $ReadOnlyArray<Validator>,
   isValid: boolean
 |}
 
 class SignUpController extends React.Component<Props, State> {
+  minimumPasswordLength: number;
+  
   constructor(): void {
     super();
-    
+  
+    this.minimumPasswordLength = 8;
+  
     this.state = {
       firstName: '',
       lastName: '',
@@ -45,8 +49,8 @@ class SignUpController extends React.Component<Props, State> {
           errorMessage: "Please enter email address"
         },
         {
-          checkFunc: (state: State) => state.password1.length >= 8,
-          errorMessage: "Password must be at least 8 characters"
+          checkFunc: (state: State) => state.password1.length >= this.minimumPasswordLength,
+          errorMessage: `Password must be at least ${this.minimumPasswordLength} characters`
         },
         {
           checkFunc: (state: State) => state.password1 === state.password2,
@@ -58,7 +62,7 @@ class SignUpController extends React.Component<Props, State> {
   
   onValidationCheck(isValid: boolean): void {
     if(isValid !== this.state.isValid) {
-      this.setState({isValid: isValid});
+      this.setState({isValid});
     }
   }
 

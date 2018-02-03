@@ -50,7 +50,9 @@ class SubHeader extends React.Component<{||}, State> {
       <div className={this._cx.get('root')}>
         {this._renderSectionLinks()}
         <span className={this._cx.get('rightContent')}>
-          {this._renderCreateProjectButton()}
+          {
+            CurrentUser.isLoggedIn() ? this._renderCreateProjectButton() : null
+          }
         </span>
       </div>
     );
@@ -69,13 +71,11 @@ class SubHeader extends React.Component<{||}, State> {
   }
   
   _renderCreateProjectButton(): ?React$Node {
-    if(CurrentUser.isLoggedIn()) {
-      return (
-        <span className={this._cx.get('createProject')} onClick={this.navigateToCreateProject.bind(this)}>
+    return (
+      <span className={this._cx.get('createProject')} onClick={this.navigateToCreateProject.bind(this)}>
         Create A Project
       </span>
-      );
-    }
+    )
   }
 
 }

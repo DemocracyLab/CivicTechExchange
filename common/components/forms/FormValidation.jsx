@@ -3,18 +3,18 @@
 import React from 'react';
 import _ from 'lodash'
 
-export type Validation = {|
+export type Validator = {|
   checkFunc: (formState: any) => boolean,
   errorMessage: string
 |};
 
 type Props = {|
-  validations: $ReadOnlyArray<Validation>,
-  onValidationCheck: (boolean) => void,
+  +validations: $ReadOnlyArray<Validator>,
+  +onValidationCheck: (boolean) => void,
   formState: any
 |};
 type State = {|
-  errorMessages: Array<string>
+  errorMessages: $ReadOnlyArray<string>
 |};
 
 /**
@@ -30,8 +30,8 @@ class FormValidation extends React.PureComponent<Props,State>  {
   
   componentWillReceiveProps(nextProps: Props): void {
     if(nextProps.formState && nextProps.validations) {
-      var failedValidations = _.filter(nextProps.validations, validation => !validation.checkFunc(nextProps.formState));
-      var validationSuccess = _.isEmpty(failedValidations);
+      const failedValidations = nextProps.validations.filter(validation => !validation.checkFunc(nextProps.formState));
+      const validationSuccess = _.isEmpty(failedValidations);
       this.setState({
         errorMessages: failedValidations.map(validation => validation.errorMessage)
       });
@@ -42,7 +42,7 @@ class FormValidation extends React.PureComponent<Props,State>  {
   render(): React$Node {
     return (
       <ul>
-        {this.state.errorMessages && this.state.errorMessages.map((msg,i) => (
+        {(this.state.errorMessages || []).map((msg,i) => (
           <li key={i}>{msg}</li>
         ))}
       </ul>

@@ -7,7 +7,7 @@ import EditProjectForm from '../common/projects/EditProjectForm.jsx'
  * Encapsulates form for creating projects
  */
 class CreateProjectController extends React.PureComponent<{||},{||}> {
-  constructor(props: any): void {
+  constructor(props: {||}): void {
     super(props);
   }
   

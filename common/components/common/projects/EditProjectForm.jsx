@@ -10,7 +10,7 @@ import TagCategory from '../../common/tags/TagCategory.jsx'
 import TagSelector from '../tags/TagSelector.jsx'
 import DjangoCSRFToken from 'django-react-csrftoken'
 import FormValidation from '../../../components/forms/FormValidation.jsx'
-import type {Validation} from '../../../components/forms/FormValidation.jsx'
+import type {Validator} from '../../../components/forms/FormValidation.jsx'
 import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
 import type {APIError, TagDefinition, ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
 import url from '../../utils/url.js'
@@ -34,7 +34,7 @@ type State = {|
   error: string,
   formIsValid: boolean,
   formFields: FormFields,
-  validations: $ReadOnlyArray<Validation>
+  validations: $ReadOnlyArray<Validator>
 |};
 
 /**
@@ -113,7 +113,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   }
   
   onIssueAreaChange(tag: TagDefinition): void {
-    this.state.formFields["project_issue_area"] = tag;
+    this.state.formFields.project_issue_area = tag;
   }
   
   onSubmit(): void {
