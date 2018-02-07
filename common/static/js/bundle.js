@@ -74838,9 +74838,13 @@ var SignUpController = function (_React$Component) {
   function SignUpController() {
     _classCallCheck(this, SignUpController);
 
+    // Make sure to keep validators in sync with the backend validators specified in settings.py
     var _this = _possibleConstructorReturn(this, (SignUpController.__proto__ || Object.getPrototypeOf(SignUpController)).call(this));
 
     _this.minimumPasswordLength = 8;
+    _this.hasNumberPattern = new RegExp("[0-9]");
+    _this.hasLetterPattern = new RegExp("[A-Za-z]");
+    _this.hasSpecialCharacterPattern = new RegExp("[^A-Za-z0-9]");
 
     _this.state = {
       firstName: '',
@@ -74869,6 +74873,11 @@ var SignUpController = function (_React$Component) {
           return state.password1.length >= _this.minimumPasswordLength;
         },
         errorMessage: 'Password must be at least ' + _this.minimumPasswordLength + ' characters'
+      }, {
+        checkFunc: function checkFunc(state) {
+          return _this.hasNumberPattern.test(state.password1) && _this.hasLetterPattern.test(state.password1) && _this.hasSpecialCharacterPattern.test(state.password1);
+        },
+        errorMessage: "Password must contain at least one letter, one number, and one special character (examples: !,@,$,&)"
       }, {
         checkFunc: function checkFunc(state) {
           return state.password1 === state.password2;

@@ -26,7 +26,11 @@ class SignUpController extends React.Component<Props, State> {
   constructor(): void {
     super();
   
+    // Make sure to keep validators in sync with the backend validators specified in settings.py
     this.minimumPasswordLength = 8;
+    this.hasNumberPattern = new RegExp("[0-9]");
+    this.hasLetterPattern = new RegExp("[A-Za-z]");
+    this.hasSpecialCharacterPattern = new RegExp("[^A-Za-z0-9]");
   
     this.state = {
       firstName: '',
@@ -51,6 +55,14 @@ class SignUpController extends React.Component<Props, State> {
         {
           checkFunc: (state: State) => state.password1.length >= this.minimumPasswordLength,
           errorMessage: `Password must be at least ${this.minimumPasswordLength} characters`
+        },
+        {
+          checkFunc: (state: State) => {
+            return this.hasNumberPattern.test(state.password1)
+              && this.hasLetterPattern.test(state.password1)
+              && this.hasSpecialCharacterPattern.test(state.password1);                  
+          },
+          errorMessage: "Password must contain at least one letter, one number, and one special character (examples: !,@,$,&)"
         },
         {
           checkFunc: (state: State) => state.password1 === state.password2,
