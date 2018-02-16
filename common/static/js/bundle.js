@@ -65430,6 +65430,7 @@ function deleteFromS3(s3Key) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__enums_Section_js__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__chrome_SubHeader_jsx__ = __webpack_require__(393);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_utils_url_js__ = __webpack_require__(21);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -65437,6 +65438,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -65457,10 +65459,9 @@ var MainController = function (_React$Component) {
   _createClass(MainController, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      var section = new URL(window.location.href).searchParams.get('section');
-      if (Object.keys(__WEBPACK_IMPORTED_MODULE_4__enums_Section_js__["a" /* default */]).includes(section)) {
-
-        __WEBPACK_IMPORTED_MODULE_2__stores_NavigationDispatcher_js__["a" /* default */].dispatch({ type: 'SET_SECTION', section: section, url: window.location.href });
+      var args = __WEBPACK_IMPORTED_MODULE_6__components_utils_url_js__["a" /* default */].arguments(window.location.href);
+      if (args.section) {
+        __WEBPACK_IMPORTED_MODULE_2__stores_NavigationDispatcher_js__["a" /* default */].dispatch({ type: 'SET_SECTION', section: args.section, url: window.location.href });
       }
     }
   }, {
@@ -66941,8 +66942,6 @@ var TagSelector = function (_React$PureComponent) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       if (nextProps.value) {
-
-        // const tag = this.state.tags.find(tag => tag.value === nextProps.value.value);
         this.setState({
           selected: nextProps.value
         });
@@ -73293,13 +73292,8 @@ var ProjectCardsContainer = function (_React$Component) {
       return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
         'div',
         null,
-        this._useDummyData() ? this._renderDummyCards() : this._renderCards()
+        this._renderCards()
       );
-    }
-  }, {
-    key: '_useDummyData',
-    value: function _useDummyData() {
-      return new URL(window.location.href).searchParams.get('useDummyData') === '1';
     }
   }, {
     key: '_renderCards',
@@ -73310,27 +73304,6 @@ var ProjectCardsContainer = function (_React$Component) {
           key: index
         });
       });
-    }
-  }, {
-    key: '_renderDummyCards',
-    value: function _renderDummyCards() {
-      return Array(20).fill(this._getDummyProject()).map(function (project, index) {
-        return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ProjectCard_jsx__["a" /* default */], {
-          project: project,
-          key: index
-        });
-      });
-    }
-  }, {
-    key: '_getDummyProject',
-    value: function _getDummyProject() {
-      return {
-        description: '"The pharmaceutical and insurance industries are legally empowered to hold sick children hostage while their parents frantically bankrupt themselves trying to save their sons or daughters." -- Chris Hedges',
-        id: 1,
-        issueArea: 'Social Justice',
-        location: 'Seattle',
-        name: 'Incite Socialist Revolution'
-      };
     }
   }], [{
     key: 'getStores',
