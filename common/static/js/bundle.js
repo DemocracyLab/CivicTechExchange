@@ -1334,16 +1334,21 @@ var url = function () {
     key: "arguments",
     value: function _arguments(url) {
       // Take argument section of url and split args into substrings
-      var args = url.slice(url.indexOf("?") + 1).split("&");
-      // Pull the key and value out of each arg substring into array pairs of [key,value]
-      var argMatches = args.map(function (arg) {
-        return regex.argumentSplit.exec(arg);
-      });
-      var argPairs = argMatches.map(function (argMatch) {
-        return [argMatch[1], argMatch[2]];
-      });
-      // Construct object from array pairs
-      return __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.fromPairs(argPairs);
+      var argStart = url.indexOf("?");
+      if (argStart > -1) {
+        var args = url.slice(argStart + 1).split("&");
+        // Pull the key and value out of each arg substring into array pairs of [key,value]
+        var argMatches = args.map(function (arg) {
+          return regex.argumentSplit.exec(arg);
+        });
+        var argPairs = argMatches.map(function (argMatch) {
+          return [argMatch[1], argMatch[2]];
+        });
+        // Construct object from array pairs
+        return __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.fromPairs(argPairs);
+      } else {
+        return {};
+      }
     }
   }, {
     key: "appendHttpIfMissingProtocol",
