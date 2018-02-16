@@ -14,32 +14,25 @@ type State = {|
 |};
 
 class ProjectCardsContainer extends React.Component<{||}, State> {
-
+  
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [ProjectSearchStore];
   }
-
+  
   static calculateState(prevState: State): State {
     return {
       projects: ProjectSearchStore.getProjects(),
     };
   }
-
+  
   render(): React$Node {
     return (
       <div>
-        {this._useDummyData() ? this._renderDummyCards() : this._renderCards()}
+        {this._renderCards()}
       </div>
     );
   }
-
-  _useDummyData(): boolean {
-    return new URL(
-      window.location.href
-    ).searchParams
-      .get('useDummyData') === '1';
-  }
-
+  
   _renderCards(): React$Node {
     return !this.state.projects
       ? 'Loading projects ...'
@@ -52,27 +45,6 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
               key={index}
             />
         );
-  }
-
-  _renderDummyCards(): React$Node {
-    return Array(20)
-      .fill(this._getDummyProject())
-      .map((project, index) =>
-        <ProjectCard
-          project={project}
-          key={index}
-        />
-      );
-  }
-
-  _getDummyProject(): Project {
-    return {
-      description: '"The pharmaceutical and insurance industries are legally empowered to hold sick children hostage while their parents frantically bankrupt themselves trying to save their sons or daughters." -- Chris Hedges',
-      id: 1,
-      issueArea: 'Social Justice',
-      location: 'Seattle',
-      name: 'Incite Socialist Revolution'
-    }
   }
 }
 
