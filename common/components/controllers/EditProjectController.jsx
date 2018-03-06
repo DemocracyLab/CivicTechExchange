@@ -12,7 +12,7 @@ type State = {|
  * Encapsulates form for editing projects
  */
 class EditProjectController extends React.PureComponent<{||},State> {
-  constructor(props: Props): void {
+  constructor(props: {||}): void {
     super(props);
   
     this.state = {

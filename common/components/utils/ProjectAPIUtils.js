@@ -9,23 +9,22 @@ export type APIError = {|
   +errorMessage: string
 |};
 
-type TagDefinition = {|
+export type TagDefinition = {|
   value: string,
   label: string
 |};
 
 type ProjectAPIData = {|
-  +id: number,
+  +project_id: number,
   +project_description: string,
-  +project_issue_area: $ReadOnlyArray<{|+name: string|}>,
+  +project_issue_area: $ReadOnlyArray<TagDefinition>,
   +project_location: string,
   +project_name: string,
+  +project_thumbnail: FileInfo
 |};
 
-// TODO: Unify backend schema for project id
 export type ProjectDetailsAPIData = {|
-  +project_id?: number,
-  +id?: number,
+  +project_id: number,
   +project_description: string,
   +project_creator: number,
   +project_url: string,
@@ -38,10 +37,10 @@ export type ProjectDetailsAPIData = {|
 |};
 
 class ProjectAPIUtils {
-  static projectFromAPIData(apiData: ProjectDetailsAPIData): Project {
+  static projectFromAPIData(apiData: ProjectAPIData): Project {
     return {
       description: apiData.project_description,
-      id: apiData.project_id || apiData.id,
+      id: apiData.project_id,
       issueArea:
         apiData.project_issue_area && apiData.project_issue_area.length != 0
           ? apiData.project_issue_area[0].label
@@ -56,7 +55,7 @@ class ProjectAPIUtils {
     fetch(new Request('/api/project/' + id + '/'))
       .then(response => {
         if(!response.ok) {
-          throw Error(response);
+          throw Error();
         }
         return response.json();
       })

@@ -133,7 +133,7 @@ def index(request):
 
 def my_projects(request):
     projects = Project.objects.filter(project_creator_id=request.user.id)
-    return HttpResponse(json.dumps(list(projects.values())))
+    return HttpResponse(json.dumps(projects_with_issue_areas(projects)))
 
 
 def projects_list(request):

@@ -20,12 +20,17 @@ class url {
   
   static arguments(url: string) {
     // Take argument section of url and split args into substrings
-    var args = url.slice(url.indexOf("?") + 1).split("&");
-    // Pull the key and value out of each arg substring into array pairs of [key,value]
-    var argMatches = args.map(arg => regex.argumentSplit.exec(arg));
-    var argPairs = argMatches.map(argMatch => [argMatch[1], argMatch[2]]);
-    // Construct object from array pairs
-    return _.fromPairs(argPairs);
+    const argStart = url.indexOf("?");
+    if(argStart > -1) {
+      var args = url.slice(argStart + 1).split("&");
+      // Pull the key and value out of each arg substring into array pairs of [key,value]
+      var argMatches = args.map(arg => regex.argumentSplit.exec(arg));
+      var argPairs = argMatches.map(argMatch => [argMatch[1], argMatch[2]]);
+      // Construct object from array pairs
+      return _.fromPairs(argPairs);
+    } else {
+      return {};
+    }
   }
   
   static appendHttpIfMissingProtocol(url: string): string {

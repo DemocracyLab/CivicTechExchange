@@ -5,6 +5,7 @@ import type {SectionType} from '../enums/Section.js';
 
 import {Container} from 'flux/utils';
 import cx from '../utils/cx';
+import CurrentUser from '../../components/utils/CurrentUser.js';
 import NavigationDispatcher from '../stores/NavigationDispatcher.js'
 import NavigationStore from '../stores/NavigationStore.js'
 import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
@@ -49,9 +50,9 @@ class SubHeader extends React.Component<{||}, State> {
       <div className={this._cx.get('root')}>
         {this._renderSectionLinks()}
         <span className={this._cx.get('rightContent')}>
-          <span className={this._cx.get('createProject')} onClick={this.navigateToCreateProject.bind(this)}>
-            Create A Project
-          </span>
+          {
+            CurrentUser.isLoggedIn() ? this._renderCreateProjectButton() : null
+          }
         </span>
       </div>
     );
@@ -68,6 +69,15 @@ class SubHeader extends React.Component<{||}, State> {
         />
       );
   }
+  
+  _renderCreateProjectButton(): ?React$Node {
+    return (
+      <span className={this._cx.get('createProject')} onClick={this.navigateToCreateProject.bind(this)}>
+        Create A Project
+      </span>
+    )
+  }
+
 }
 
 export default Container.create(SubHeader);

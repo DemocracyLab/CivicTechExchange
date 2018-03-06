@@ -9,8 +9,10 @@ import FileUploadList from '../../../components/forms/FileUploadList.jsx'
 import TagCategory from '../../common/tags/TagCategory.jsx'
 import TagSelector from '../tags/TagSelector.jsx'
 import DjangoCSRFToken from 'django-react-csrftoken'
+import FormValidation from '../../../components/forms/FormValidation.jsx'
+import type {Validator} from '../../../components/forms/FormValidation.jsx'
 import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
-import type {ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
+import type {APIError, TagDefinition, ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
 import url from '../../utils/url.js'
 import _ from 'lodash'
 
@@ -19,18 +21,20 @@ type FormFields = {|
   project_location: ?string,
   project_url: ?string,
   project_description: ?string,
+  project_issue_area?: TagDefinition,
   project_links: Array<LinkInfo>,
   project_files: Array<FileInfo>,
-  project_thumbnail: FileInfo
+  project_thumbnail?: FileInfo
 |};
 
 type Props = {|
-  projectId: number
+  projectId?: number
 |};
 type State = {|
   error: string,
   formIsValid: boolean,
-  formFields: FormFields
+  formFields: FormFields,
+  validations: $ReadOnlyArray<Validator>
 |};
 
 /**
@@ -41,14 +45,33 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     super(props);
   
     this.state = {
+      error: "",
       formIsValid: false,
       formFields: {
         project_name: "",
         project_location: "",
         project_url: "",
-        project_description: ""
-      }
+        project_description: "",
+        project_links: [],
+        project_files: []
+      },
+      validations: [
+        {
+          checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_name"]),
+          errorMessage: "Please enter Project Name"
+        },
+        {
+          checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_description"]),
+          errorMessage: "Please enter Project Description"
+        }
+      ]
     };
+  }
+  
+  onValidationCheck(formIsValid: boolean): void {
+    if(formIsValid !== this.state.formIsValid) {
+      this.setState({formIsValid});
+    }
   }
   
   componentDidMount(): void {
@@ -70,12 +93,11 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_url: project.project_url,
           project_description: project.project_description,
           project_issue_area: project.project_issue_area && project.project_issue_area[0],
-          project_links: project.project_links,
-          project_files: project.project_files,
+          project_links: _.cloneDeep(project.project_links),
+          project_files: _.cloneDeep(project.project_files),
           project_thumbnail: project.project_thumbnail
         }
       });
-      this.checkFormValidity();
     }
   }
   
@@ -88,25 +110,18 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.formFields[formFieldName] = event.target.value;
     this.forceUpdate();
-    this.checkFormValidity();
   }
   
-  onComponentChange(formFieldName: string, newValue: string): void {
-    this.state.formFields[formFieldName] = newValue;
-    this.checkFormValidity();
+  onIssueAreaChange(tag: TagDefinition): void {
+    this.state.formFields.project_issue_area = tag;
   }
   
   onSubmit(): void {
     //Sanitize project url if necessary
-    this.state.formFields.project_url = url.appendHttpIfMissingProtocol(this.state.formFields.project_url);
+    if(this.state.formFields.project_url) {
+      this.state.formFields.project_url = url.appendHttpIfMissingProtocol(this.state.formFields.project_url);
+    }
     this.forceUpdate();
-  }
-  
-  checkFormValidity(): void {
-    const {formFields} = this.state;
-    
-    const formIsValid = !_.isEmpty(formFields["project_name"]) && !_.isEmpty(formFields["project_description"]);
-    this.setState({formIsValid});
   }
   
   render(): React$Node {
@@ -153,16 +168,16 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           <label htmlFor="project_issue_area">Issue Areas</label>
           <TagSelector
             elementId="project_issue_area"
-            value={this.state.formFields.project_issue_area && this.state.formFields.project_issue_area.value}
+            value={this.state.formFields.project_issue_area}
             category={TagCategory.ISSUES}
-            onSelection={this.onComponentChange.bind(this, "project_issue_area")}
+            onSelection={this.onIssueAreaChange.bind(this)}
           />
         </div>
         
         <div className="form-group">
           <label htmlFor="project_description">Describe This Project</label>
           <div className="character-count">
-            {this.state.formFields.project_description.length} / 3000
+            { (this.state.formFields.project_description || "").length} / 3000
           </div>
           <textarea className="form-control" id="project_description" name="project_description"
                     placeholder="This will appear as project introduction" rows="3" maxLength="3000"
@@ -174,6 +189,12 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         
         <h2 className="form-group subheader">FILES</h2>
         <FileUploadList elementid="project_files" files={this.state.formFields.project_files}/>
+  
+        <FormValidation
+          validations={this.state.validations}
+          onValidationCheck={this.onValidationCheck.bind(this)}
+          formState={this.state.formFields}
+        />
         
         <div className="form-group pull-right">
           <div className='text-right'>

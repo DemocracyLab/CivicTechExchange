@@ -2,6 +2,9 @@
 
 import DjangoCSRFToken from 'django-react-csrftoken'
 import React from 'react';
+import type {Validator} from '../forms/FormValidation.jsx'
+import FormValidation from '../forms/FormValidation.jsx'
+import _ from 'lodash'
 
 type Props = {|
   +errors: {+[key: string]: $ReadOnlyArray<string>},
@@ -13,18 +16,66 @@ type State = {|
   email: string,
   password1: string,
   password2: string,
+  validations: $ReadOnlyArray<Validator>,
+  isValid: boolean
 |}
 
 class SignUpController extends React.Component<Props, State> {
+  minimumPasswordLength: number;
+  
   constructor(): void {
     super();
+  
+    // Make sure to keep validators in sync with the backend validators specified in settings.py
+    this.minimumPasswordLength = 8;
+    this.hasNumberPattern = new RegExp("[0-9]");
+    this.hasLetterPattern = new RegExp("[A-Za-z]");
+    this.hasSpecialCharacterPattern = new RegExp("[^A-Za-z0-9]");
+  
     this.state = {
       firstName: '',
       lastName: '',
       email: '',
       password1: '',
       password2: '',
+      isValid: false,
+      validations: [
+        {
+          checkFunc: (state: State) => !_.isEmpty(state.firstName),
+          errorMessage: "Please enter First Name"
+        },
+        {
+          checkFunc: (state: State) => !_.isEmpty(state.lastName),
+          errorMessage: "Please enter Last Name"
+        },
+        {
+          checkFunc: (state: State) => !_.isEmpty(state.email),
+          errorMessage: "Please enter email address"
+        },
+        {
+          checkFunc: (state: State) => state.password1.length >= this.minimumPasswordLength,
+          errorMessage: `Password must be at least ${this.minimumPasswordLength} characters`
+        },
+        {
+          checkFunc: (state: State) => {
+            return this.hasNumberPattern.test(state.password1)
+              && this.hasLetterPattern.test(state.password1)
+              && this.hasSpecialCharacterPattern.test(state.password1);                  
+          },
+          errorMessage: "Password must contain at least one letter, one number, and one special character (examples: !,@,$,&)"
+        },
+        {
+          checkFunc: (state: State) => state.password1 === state.password2,
+          errorMessage: "Passwords don't match"
+        },
+      ]
     };
+  }
+  
+  onValidationCheck(isValid: boolean): void {
+    if(isValid !== this.state.isValid) {
+      this.setState({isValid});
+    }
   }
 
   render(): React$Node {
@@ -101,35 +152,21 @@ class SignUpController extends React.Component<Props, State> {
             type="hidden"
           />
 
-          {this._renderErrors()}
+          <FormValidation
+            validations={this.state.validations}
+            onValidationCheck={this.onValidationCheck.bind(this)}
+            formState={this.state}
+          />
 
           <button
             className="LogInController-signInButton"
-            disabled={!this._isInputValid()}
+            disabled={!this.state.isValid}
             type="submit">
             Create Account
           </button>
         </form>
       </div>
     );
-  }
-
-  _renderErrors(): React$Node {
-    return (
-      <ul>
-        {
-          Object.values(this.props.errors)
-            .reduce((e1, e2) => e1.concat(e2), [])
-            // $FlowFixMe Flow isn't smart enough to know the type of `errors`
-            .map(error => <li key={error}>{error}</li>)
-        }
-      </ul>
-    );
-  }
-
-  _isInputValid(): boolean {
-    return this.state.password1 === this.state.password2
-      && Object.values(this.state).every(_ => _);
   }
 }
 
