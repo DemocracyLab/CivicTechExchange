@@ -37,3 +37,7 @@
 .ProjectCard-value {
   color: #6b6e70;
 }
+
+.ProjectCard-root a:hover {
+  text-decoration: none;
+}
