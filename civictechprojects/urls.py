@@ -56,4 +56,5 @@ urlpatterns = [
         auth_views.password_reset_complete,
         name="password_reset_complete",
     ),
+    url(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner'),
 ]

@@ -14,6 +14,8 @@ from common.models.tags import get_tags_by_category
 from .forms import ProjectCreationForm
 from common.models.tags import Tag
 
+from pprint import pprint
+
 
 def tags(request):
     url_parts = request.GET.urlencode()
@@ -201,3 +203,8 @@ def delete_uploaded_file(request, s3_key):
     else:
         # TODO: Log this
         return HttpResponse(status=401)
+
+
+def contact_project_owner(request, project_id):
+    pprint(request.POST)
+    return HttpResponse(status=501)
