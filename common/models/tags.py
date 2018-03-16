@@ -43,16 +43,16 @@ def get_tags_by_category(categoryName):
     return Tag.objects.filter(category__contains=categoryName)
 
 
-def import_tags_from_csv(apps, schema):
+def import_tags_from_csv():
     dir = os.path.dirname(__file__)
     filename = os.path.join(dir, 'Tag_definitions.csv')
+    tags = []
     with open(filename, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
         try:
             #skip header row
             next(reader)
             for row in reader:
-                print(row)
                 tag = Tag(tag_name=row[0],
                           display_name=row[1],
                           caption=row[2],
@@ -60,6 +60,34 @@ def import_tags_from_csv(apps, schema):
                           subcategory=row[4],
                           parent=row[5]
                           )
-                tag.save()
+                tags.append(tag)
         except csv.Error as e:
             sys.exit('file %s, line %d: %s' % (filename, reader.line_num, e))
+    merge_tags_with_existing(tags)
+
+
+def import_tags(tags):
+    for tag in tags:
+        tag.save()
+
+
+def merge_tags_with_existing(tags):
+    existing_tags = Tag.objects.all()
+
+    if existing_tags.count() == 0:
+        import_tags(tags)
+    else:
+        indexed_tags = {tag.tag_name: tag for tag in existing_tags}
+        for tag in tags:
+            if tag.tag_name in indexed_tags:
+                print('Updating tag ' + tag.tag_name)
+                existing_tag = indexed_tags[tag.tag_name]
+                existing_tag.display_name = tag.display_name
+                existing_tag.caption = tag.caption
+                existing_tag.category = tag.category
+                existing_tag.subcategory = tag.subcategory
+                existing_tag.parent = tag.parent
+                existing_tag.save()
+            else:
+                print('Adding tag ' + tag.tag_name)
+                tag.save()
