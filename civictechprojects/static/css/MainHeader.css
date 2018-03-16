@@ -14,8 +14,8 @@
 
 .MainHeader-logo {
   cursor: pointer;
-  padding-left: 75px;
-  width: 195px;
+  width: 200px;
+  height: 100%;
 }
 
 .MainHeader-profilePicture {
