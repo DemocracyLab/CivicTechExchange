@@ -19,10 +19,6 @@ class TaggedIssueAreas(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
 
-class TaggedTag(TaggedItemBase):
-    content_object = models.ForeignKey('Project')
-
-
 class Project(models.Model):
     project_volunteers = models.ManyToManyField(
         Contributor,
@@ -35,8 +31,6 @@ class Project(models.Model):
     project_issue_area.remote_field.related_name = "+"
     project_location = models.CharField(max_length=200)
     project_name = models.CharField(max_length=200)
-    project_tags = TaggableManager(blank=True, through=TaggedTag)
-    project_tags.remote_field.related_name = "+"
     project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
 

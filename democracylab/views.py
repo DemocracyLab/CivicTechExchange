@@ -3,19 +3,8 @@ from django.shortcuts import redirect
 from django.template import loader
 from django.http import HttpResponse
 
-from .forms import DemocracyLabUserCreationForm, UserUpdateForm
+from .forms import DemocracyLabUserCreationForm
 from .models import Contributor
-
-
-def to_columns(items, count=3):
-    res = []
-    for _ in range(count):
-        res.append([])
-    cur = 0
-    for item in items:
-        res[cur % count].append(item)
-        cur += 1
-    return res
 
 
 def signup(request):
@@ -45,26 +34,3 @@ def signup(request):
     else:
         template = loader.get_template('signup.html')
         return HttpResponse(template.render({}, request))
-
-
-def user_update(request):
-    if request.method == 'POST':
-        form = UserUpdateForm(request.POST)
-        # TODO: Get current user and just edit the fields
-        # contributor = Contributor(
-        #     username=username,
-        #     first_name=form.cleaned_data.get('first_name'),
-        #     last_name=form.cleaned_data.get('last_name'),
-        #     email=form.cleaned_data.get('email'),
-        #     postal_code=form.cleaned_data.get('postal_code'),
-        #     phone_primary=form.cleaned_data.get('phone_primary'),
-        #     about_me=form.cleaned_data.get('about_me'),
-        # )
-        # contributor.save()
-        return redirect('/')
-    else:
-        form = UserUpdateForm()
-
-    template = loader.get_template('aboutme.html')
-    context = {'form': form}
-    return HttpResponse(template.render(context, request))

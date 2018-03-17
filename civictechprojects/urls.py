@@ -32,7 +32,6 @@ urlpatterns = [
     url(r'^api/projects', views.projects_list),
     url(r'^api/my_projects', views.my_projects),
     url(r'^api/tags', views.tags),
-    url(r'^projects/$', views.projects),
     url(r'^index/$', views.index),
     url(r'^project/(?P<project_id>[0-9]+)/$', views.project, name='project'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),

@@ -10,9 +10,3 @@ class DemocracyLabUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-
-class UserUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Contributor
-        fields = '__all__'

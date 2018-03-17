@@ -92,30 +92,6 @@ def get_project(request, project_id):
     return HttpResponse(json.dumps(project.hydrate_to_json()))
 
 
-def projects(request):
-    return redirect('/index/')
-    template = loader.get_template('projects.html')
-    url_parts = request.GET.urlencode()
-    query_terms = urlparse.parse_qs(
-        url_parts, keep_blank_values=0, strict_parsing=0)
-    projects = Project.objects
-    if 'search' in query_terms:
-        search_query = (query_terms['search'])[0]
-        search_tags = search_query.split(',')
-        for tag in search_tags:
-            print('filtering by ' + str(tag))
-            projects = projects.filter(project_tags__name__in=[tag])
-    projects = projects.order_by('-project_name')
-    context = {'projects': to_rows(projects, 4)}
-    return HttpResponse(template.render(context, request))
-
-
-def home(request):
-    template = loader.get_template('home.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-
 @ensure_csrf_cookie
 def index(request):
     template = loader.get_template('new_index.html')
