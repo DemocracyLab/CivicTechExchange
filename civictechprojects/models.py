@@ -1,6 +1,7 @@
 from django.db import models
 from enum import Enum
 from democracylab.models import Contributor
+from common.helpers.constants import TagCategory
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
@@ -61,16 +62,6 @@ class Project(models.Model):
             project['project_thumbnail'] = thumbnail_files[0].to_json()
 
         return project
-
-    # Remove any tags that aren't part of the canonical list
-    @staticmethod
-    def remove_tags_not_in_list():
-        for project in Project.objects.all():
-            for issue in project.project_issue_area.all():
-                issue_tag = Tag.get_by_name(issue)
-                if not issue_tag:
-                    print('Removing invalid tag', issue, 'from project:', project.project_name)
-                    project.project_issue_area.remove(issue)
 
 
 class ProjectLink(models.Model):
