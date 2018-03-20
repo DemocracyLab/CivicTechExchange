@@ -21,7 +21,8 @@ type FormFields = {|
   project_location: ?string,
   project_url: ?string,
   project_description: ?string,
-  project_issue_area?: TagDefinition,
+  project_issue_area?: Array<TagDefinition>,
+  project_technologies?: Array<TagDefinition>,
   project_links: Array<LinkInfo>,
   project_files: Array<FileInfo>,
   project_thumbnail?: FileInfo
@@ -92,7 +93,8 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_location: project.project_location,
           project_url: project.project_url,
           project_description: project.project_description,
-          project_issue_area: project.project_issue_area && project.project_issue_area[0],
+          project_issue_area: project.project_issue_area,
+          project_technologies: project.project_technologies,
           project_links: _.cloneDeep(project.project_links),
           project_files: _.cloneDeep(project.project_files),
           project_thumbnail: project.project_thumbnail
@@ -112,8 +114,8 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     this.forceUpdate();
   }
   
-  onIssueAreaChange(tag: TagDefinition): void {
-    this.state.formFields.project_issue_area = tag;
+  onTagChange(formFieldName: string, value: $ReadOnlyArray<TagDefinition>): void {
+    this.state.formFields[formFieldName] = value;
   }
   
   onSubmit(): void {
@@ -170,7 +172,19 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             elementId="project_issue_area"
             value={this.state.formFields.project_issue_area}
             category={TagCategory.ISSUES}
-            onSelection={this.onIssueAreaChange.bind(this)}
+            allowMultiSelect={false}
+            onSelection={this.onTagChange.bind(this, "project_issue_area")}
+          />
+        </div>
+  
+        <div className="form-group">
+          <label htmlFor="project_technologies">Technology Used</label>
+          <TagSelector
+            elementId="project_technologies"
+            value={this.state.formFields.project_technologies}
+            category={TagCategory.TECHNOLOGIES_USED}
+            allowMultiSelect={true}
+            onSelection={this.onTagChange.bind(this, "project_technologies")}
           />
         </div>
         

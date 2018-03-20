@@ -5,6 +5,7 @@ from .models import Project, ProjectLink, ProjectFile, FileCategory
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
 
+
 class ProjectCreationForm(forms.Form):
     class Meta:
         fields = [
@@ -13,6 +14,7 @@ class ProjectCreationForm(forms.Form):
             'project_location',
             'project_url',
             'project_issue_area',
+            'project_technologies',
             'project_description',
             'project_links',
             'project_files'
@@ -31,11 +33,15 @@ class ProjectCreationForm(forms.Form):
         )
         project = Project.objects.get(id=project.id)
 
+        # Tag fields operate like ManyToMany fields, and so cannot
+        # be added until after the object is created.
         issue_areas = form.data.get('project_issue_area')
         if issue_areas and len(issue_areas) != 0:
-            # Tag fields operate like ManyToMany fields, and so cannot
-            # be added until after the object is created.
             project.project_issue_area.add(issue_areas)
+
+        project_technologies = form.data.get('project_technologies')
+        if project_technologies and len(project_technologies) != 0:
+            project.project_technologies.add(project_technologies.split(','))
 
         project.save()
 
@@ -71,9 +77,16 @@ class ProjectCreationForm(forms.Form):
         project.project_location = form.data.get('project_location')
         project.project_name = form.data.get('project_name')
         project.project_url = form.data.get('project_url')
+
         issue_areas = form.data.get('project_issue_area')
         if issue_areas and len(issue_areas) != 0:
             Tag.merge_tags_field(project.project_issue_area, issue_areas)
+
+        project_technologies = form.data.get('project_technologies')
+        pprint(form.data)
+        if project_technologies and len(project_technologies) != 0:
+            Tag.merge_tags_field(project.project_technologies, project_technologies)
+
         project.save()
 
         links_json_text = form.data.get('project_links')

@@ -32640,8 +32640,6 @@ var ConfirmationModal = function (_React$PureComponent) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_upload_FileUploadButton_jsx__ = __webpack_require__(157);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_confirmation_ConfirmationModal_jsx__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_s3_js__ = __webpack_require__(330);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32649,7 +32647,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 
 
 
@@ -32704,7 +32701,7 @@ var FileUploadList = function (_React$PureComponent) {
       var _this2 = this;
 
       if (confirmed) {
-        __WEBPACK_IMPORTED_MODULE_5_lodash___default.a.remove(this.state.files, function (file) {
+        _.remove(this.state.files, function (file) {
           return file.publicUrl + file.id === _this2.state.fileToDelete.publicUrl + _this2.state.fileToDelete.id;
         });
         Object(__WEBPACK_IMPORTED_MODULE_4__utils_s3_js__["a" /* deleteFromS3 */])(this.state.fileToDelete.key);
@@ -32720,7 +32717,7 @@ var FileUploadList = function (_React$PureComponent) {
   }, {
     key: 'handleFileSelection',
     value: function handleFileSelection(fileUploadData) {
-      var fileInfo = __WEBPACK_IMPORTED_MODULE_5_lodash___default.a.assign({ visibility: __WEBPACK_IMPORTED_MODULE_1__common_Visibility_jsx__["a" /* default */].PUBLIC }, fileUploadData);
+      var fileInfo = _.assign({ visibility: __WEBPACK_IMPORTED_MODULE_1__common_Visibility_jsx__["a" /* default */].PUBLIC }, fileUploadData);
       this.state.files.push(fileInfo);
       this.updateHiddenField();
       this.forceUpdate();
@@ -33294,7 +33291,8 @@ var EditProjectForm = function (_React$PureComponent) {
             project_location: project.project_location,
             project_url: project.project_url,
             project_description: project.project_description,
-            project_issue_area: project.project_issue_area && project.project_issue_area[0],
+            project_issue_area: project.project_issue_area,
+            project_technologies: project.project_technologies,
             project_links: __WEBPACK_IMPORTED_MODULE_10_lodash___default.a.cloneDeep(project.project_links),
             project_files: __WEBPACK_IMPORTED_MODULE_10_lodash___default.a.cloneDeep(project.project_files),
             project_thumbnail: project.project_thumbnail
@@ -33316,9 +33314,9 @@ var EditProjectForm = function (_React$PureComponent) {
       this.forceUpdate();
     }
   }, {
-    key: 'onIssueAreaChange',
-    value: function onIssueAreaChange(tag) {
-      this.state.formFields.project_issue_area = tag;
+    key: 'onTagChange',
+    value: function onTagChange(formFieldName, value) {
+      this.state.formFields[formFieldName] = value;
     }
   }, {
     key: 'onSubmit',
@@ -33405,7 +33403,24 @@ var EditProjectForm = function (_React$PureComponent) {
             elementId: 'project_issue_area',
             value: this.state.formFields.project_issue_area,
             category: __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ISSUES,
-            onSelection: this.onIssueAreaChange.bind(this)
+            allowMultiSelect: false,
+            onSelection: this.onTagChange.bind(this, "project_issue_area")
+          })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'label',
+            { htmlFor: 'project_technologies' },
+            'Technology Used'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__tags_TagSelector_jsx__["a" /* default */], {
+            elementId: 'project_technologies',
+            value: this.state.formFields.project_technologies,
+            category: __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED,
+            allowMultiSelect: true,
+            onSelection: this.onTagChange.bind(this, "project_technologies")
           })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -66902,6 +66917,8 @@ var TagCategory = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_select__ = __webpack_require__(345);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -66909,6 +66926,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
 
 
 
@@ -66934,7 +66953,7 @@ var TagSelector = function (_React$PureComponent) {
       return tags.map(function (tag) {
         return {
           value: tag.tag_name,
-          label: tag.display_name
+          label: tag.subcategory ? tag.subcategory + ': ' + tag.display_name : tag.display_name
         };
       });
     }).then(function (options) {
@@ -66944,22 +66963,36 @@ var TagSelector = function (_React$PureComponent) {
   }
 
   _createClass(TagSelector, [{
+    key: 'getDisplayTag',
+    value: function getDisplayTag(tag) {
+      return this.state.tags.find(function (displayTag) {
+        return displayTag.value === tag.value;
+      });
+    }
+  }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      if (nextProps.value) {
+      var _this2 = this;
+
+      if (!this.state.initialized && !__WEBPACK_IMPORTED_MODULE_2_lodash___default.a.isEmpty(nextProps.value)) {
+        var displayTags = nextProps.value.map(function (tag) {
+          return _this2.getDisplayTag(tag);
+        });
         this.setState({
-          selected: nextProps.value
+          selected: nextProps.allowMultiSelect ? displayTags : displayTags[0],
+          initialized: true
         });
       }
     }
   }, {
     key: 'handleSelection',
-    value: function handleSelection(selectedValue) {
-      var tag = Object.seal(this.state.tags.find(function (tag) {
-        return tag.value === selectedValue;
+    value: function handleSelection(selectedValueOrValues) {
+      this.setState({ selected: selectedValueOrValues });
+      var selectedValues = this.props.allowMultiSelect ? selectedValueOrValues : [selectedValueOrValues];
+      var tags = Object.seal(selectedValues.map(function (value) {
+        return value.value;
       }));
-      this.setState({ selected: tag });
-      this.props.onSelection(tag);
+      this.props.onSelection(this.props.allowMultiSelect ? tags : [tags]);
     }
   }, {
     key: 'render',
@@ -66974,8 +67007,10 @@ var TagSelector = function (_React$PureComponent) {
           value: this.state.selected,
           onChange: this.handleSelection.bind(this),
           className: 'form-control',
-          simpleValue: true,
-          clearable: false
+          simpleValue: false,
+          clearable: false,
+          multi: this.props.allowMultiSelect,
+          joinValues: true
         })
       );
     }

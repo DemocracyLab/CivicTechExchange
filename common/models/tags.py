@@ -13,13 +13,17 @@ class Tag(models.Model):
     @staticmethod
     def get_by_name(name):
         # TODO: Get from in-memory cache
-        return Tag.objects.filter(tag_name=name).first()
+        tag = Tag.objects.filter(tag_name=name).first()
+        if tag is None:
+            print("ERROR: Could not find tag", name)
+        return tag
 
     @staticmethod
     def hydrate_to_json(tag_entries):
         # TODO: Use in-memory cache for tags
-        tags = list(map(lambda tag_slug: Tag.objects.filter(tag_name=tag_slug['slug']).first(), tag_entries))
-        hydrated_tags = list(map(lambda tag: {'label': tag.display_name, 'value': tag.tag_name}, tags))
+        tags = map(lambda tag_slug: Tag.get_by_name(tag_slug['slug']), tag_entries)
+        existing_tags = filter(lambda tag: tag is not None, tags)
+        hydrated_tags = list(map(lambda tag: {'label': tag.display_name, 'value': tag.tag_name}, existing_tags))
         return hydrated_tags
 
     @staticmethod
