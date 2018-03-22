@@ -23,7 +23,11 @@ class Tag(models.Model):
         # TODO: Use in-memory cache for tags
         tags = map(lambda tag_slug: Tag.get_by_name(tag_slug['slug']), tag_entries)
         existing_tags = filter(lambda tag: tag is not None, tags)
-        hydrated_tags = list(map(lambda tag: {'label': tag.display_name, 'value': tag.tag_name}, existing_tags))
+        hydrated_tags = list(map(lambda tag: {
+            'label': tag.display_name,
+            'value': tag.tag_name,
+            'category': tag.category,
+            'subcategory': tag.subcategory}, existing_tags))
         return hydrated_tags
 
     @staticmethod

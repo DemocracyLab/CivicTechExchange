@@ -11,7 +11,9 @@ export type APIError = {|
 
 export type TagDefinition = {|
   value: string,
-  label: string
+  label: string,
+  category: string,
+  subcategory: string
 |};
 
 type ProjectAPIData = {|

@@ -2,6 +2,7 @@
 
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
+import TagsDisplay from '../common/tags/TagsDisplay.jsx'
 import url from '../utils/url.js'
 import _ from 'lodash'
 
@@ -71,6 +72,15 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                   <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
                   {project && project.project_location}
                 </div>
+              </div>
+            </div>
+          </div>
+  
+          <div className="row" style={{margin: "30px 40px 0 40px"}}>
+            <div className="col">
+              TECHNOLOGIES USED
+              <div>
+                <TagsDisplay tags={project && project.project_technologies}/>
               </div>
             </div>
           </div>
