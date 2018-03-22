@@ -74195,7 +74195,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var style = {
-  textDecoration: none
+  textDecoration: 'none'
 };
 
 var MyProjectCard = function (_React$PureComponent) {
@@ -74275,7 +74275,7 @@ var MyProjectCard = function (_React$PureComponent) {
                   { className: 'MyProjectCard-header' },
                   __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                     'a',
-                    { href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].EditProject, id) },
+                    { style: style, href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].EditProject, id) },
                     'Edit'
                   )
                 )

@@ -11,7 +11,7 @@ type Props = {|
 |};
 
 const style = {
-  textDecoration: none
+  textDecoration: 'none'
 }
 
 class MyProjectCard extends React.PureComponent<Props> {
@@ -47,7 +47,7 @@ class MyProjectCard extends React.PureComponent<Props> {
               </td>
               <td className="MyProjectCard-column">
                 <tr className="MyProjectCard-header">
-                  <a href={url.section(Section.EditProject, id)}>Edit</a>
+                  <a style={style} href={url.section(Section.EditProject, id)}>Edit</a>
                 </tr>
               </td>
             </tr>
