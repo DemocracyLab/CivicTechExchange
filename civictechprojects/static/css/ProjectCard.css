@@ -5,13 +5,11 @@
   display: inline-table;
   height: 340px;
   margin: 25px 45px 0 0;
-  text-decoration: none;
   width: 262px;
 }
 
 .ProjectCard-root > div {
   padding: 5px;
-  text-decoration: none;
 }
 
 .ProjectCard-description {
@@ -37,8 +35,4 @@
 
 .ProjectCard-value {
   color: #6b6e70;
-}
-
-.ProjectCard-root a:hover {
-  text-decoration: none;
 }

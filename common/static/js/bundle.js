@@ -74194,6 +74194,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+var style = {
+  textDecoration: none
+};
+
 var MyProjectCard = function (_React$PureComponent) {
   _inherits(MyProjectCard, _React$PureComponent);
 
@@ -74209,7 +74213,7 @@ var MyProjectCard = function (_React$PureComponent) {
       var id = { 'id': this.props.project.id };
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'a',
-        {
+        { style: style,
           className: 'MyProjectCard-root',
           href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].AboutProject, id) },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
@@ -74518,7 +74522,7 @@ var SubHeader = function (_React$Component) {
       return __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
         'span',
         { className: this._cx.get('createProject'), onClick: this.navigateToCreateProject.bind(this) },
-        'Create A Project'
+        'Create a Project'
       );
     }
   }]);
