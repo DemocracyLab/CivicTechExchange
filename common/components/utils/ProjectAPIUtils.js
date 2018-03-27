@@ -68,6 +68,17 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
+  
+  static fetchTagsByCategory(tagCategory: string, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): void {
+    fetch(new Request('/api/tags?category=' + tagCategory))
+      .then(response => response.json())
+      .then(tags => callback(tags))
+      .catch(response => errCallback && errCallback({
+        errorCode: response.status,
+        errorMessage: JSON.stringify(response)
+      }));
+  }
+  
 }
 
 export default ProjectAPIUtils

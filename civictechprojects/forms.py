@@ -83,7 +83,6 @@ class ProjectCreationForm(forms.Form):
             Tag.merge_tags_field(project.project_issue_area, issue_areas)
 
         project_technologies = form.data.get('project_technologies')
-        pprint(form.data)
         if project_technologies and len(project_technologies) != 0:
             Tag.merge_tags_field(project.project_technologies, project_technologies)
 
