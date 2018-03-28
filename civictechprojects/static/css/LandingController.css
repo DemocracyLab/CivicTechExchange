@@ -24,6 +24,7 @@
 
 .LandingController-landingTextContainer {
   margin-top: 71px;
+  margin-bottom: 400px;
 }
 
 .LandingController-letsGetStarted {
@@ -47,8 +48,9 @@
 .LandingController-supremeCourtBanner {
   background-image: url(https://i.imgur.com/6sECa9O.png);
   background-size: cover;
+  background-position: center;
   display: flex;
-  height: 427px;
+  height: 100%;
   justify-content: center;
 }
 

@@ -10,12 +10,16 @@ type Props = {|
   +project: Project,
 |};
 
+const style = {
+  textDecoration: 'none'
+}
+
 class MyProjectCard extends React.PureComponent<Props> {
 
   render(): React$Node {
     const id = {'id':this.props.project.id};
     return (
-      <a
+      <a style={style}
         className="MyProjectCard-root"
         href={url.section(Section.AboutProject, id)}>
          <table className="MyProjectCard-table">
@@ -43,7 +47,7 @@ class MyProjectCard extends React.PureComponent<Props> {
               </td>
               <td className="MyProjectCard-column">
                 <tr className="MyProjectCard-header">
-                  <a href={url.section(Section.EditProject, id)}>Edit</a>
+                  <a style={style} href={url.section(Section.EditProject, id)}>Edit</a>
                 </tr>
               </td>
             </tr>

@@ -3,12 +3,16 @@
 import cx from '../../utils/cx';
 import type {Project} from '../../stores/ProjectSearchStore.js';
 import React from 'react';
-import Section from '../../../components/enums/Section.js'
+import Section from '../../../components/enums/Section.js';
 import url from '../../utils/url.js';
 
 type Props = {|
   +project: Project,
 |};
+
+const styles = {
+  textDecoration: 'none'
+}
 
 class ProjectCard extends React.PureComponent<Props> {
 
@@ -21,7 +25,7 @@ class ProjectCard extends React.PureComponent<Props> {
 
   render(): React$Node {
     return (
-      <a
+      <a style={styles}
         className="ProjectCard-root"
         href={url.section(Section.AboutProject, {id: this.props.project.id})}>
         {this._renderName()}
@@ -36,7 +40,7 @@ class ProjectCard extends React.PureComponent<Props> {
   _renderName(): React$Node {
     return (
       <div>
-        <div className="ProjectCard-name">
+        <div className="ProjectCard-name" >
           <div>
             <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
           </div>
