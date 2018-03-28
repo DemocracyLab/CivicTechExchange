@@ -2,6 +2,8 @@
 
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
+import { Button } from 'react-bootstrap';
+import ContactProjectModal from '../common/projects/ContactProjectModal.jsx'
 import url from '../utils/url.js'
 import _ from 'lodash'
 
@@ -15,9 +17,14 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   constructor(): void {
     super();
+
     this.state = {
-      project: null
+      project: null,
+      showModal: false
     };
+
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
   
   componentDidMount() {
@@ -31,6 +38,15 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     });
   }
   
+
+  handleClose() {
+    this.setState({ showModal: false });
+  }
+
+  handleShow() {
+    this.setState({ showModal: true });
+  }
+
   render(): React$Node {
     return this.state.project ? this._renderDetails() : <div>Loading...</div>
   }
@@ -72,9 +88,14 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                   {project && project.project_location}
                 </div>
               </div>
+              <div className="row">
+                <Button className="ProjectSearchBar-submit" type="button" onClick={this.handleShow}>Contact {project && project.project_name}</Button>
+              </div>
             </div>
           </div>
-    
+          <div>
+            <ContactProjectModal showModal={this.state.showModal} handleClose={this.handleClose}></ContactProjectModal>
+          </div>
           <div className="row" style={{margin: "30px 40px 0 40px"}}>
             <div className="col">
               PROJECT DETAILS
