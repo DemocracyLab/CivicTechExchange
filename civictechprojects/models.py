@@ -39,6 +39,9 @@ class Project(models.Model):
     project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
 
+    def __str__(self):
+        return str(self.id) + ':' + self.project_name
+
     def hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_project=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
