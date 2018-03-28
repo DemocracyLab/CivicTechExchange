@@ -11,6 +11,7 @@ type Props = {|
   +activeSection: SectionType,
   +section: SectionType,
   +title: string,
+  +showOnlyWhenLoggedIn: SectionType
 |};
 
 class SectionLink extends React.PureComponent<Props> {

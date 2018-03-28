@@ -3,20 +3,14 @@ import Section from '../enums/Section.js'
 const SectionLinkConfigs = [
   {
     section: Section.FindProjects,
-    title: 'FIND PROJECTS',
+    title: 'DISCOVER',
+    showOnlyWhenLoggedIn: false
   },
   {
     section: Section.MyProjects,
     title: 'MY PROJECTS',
-  },
-  {
-    section: Section.Profile,
-    title: 'PROFILE',
-  },
-  {
-    section: Section.Inbox,
-    title: 'INBOX',
-  },
+    showOnlyWhenLoggedIn: true
+  }
 ];
 
 export default SectionLinkConfigs;

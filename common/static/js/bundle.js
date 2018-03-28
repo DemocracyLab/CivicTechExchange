@@ -74344,11 +74344,7 @@ var MainHeader = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'span',
           { className: 'MainHeader-rightContent' },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'span',
-            null,
-            this._renderLinks()
-          ),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('span', null),
           this._renderHero()
         )
       );
@@ -74358,8 +74354,8 @@ var MainHeader = function (_React$PureComponent) {
     value: function _onHomeButtonClick() {
       __WEBPACK_IMPORTED_MODULE_0__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
         type: 'SET_SECTION',
-        section: __WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].Landing,
-        url: __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].Landing)
+        section: __WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].FindProjects,
+        url: __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].FindProjects)
       });
     }
   }, {
@@ -74399,17 +74395,15 @@ var MainHeader = function (_React$PureComponent) {
         )
       );
     }
-  }, {
-    key: '_renderLinks',
-    value: function _renderLinks() {
-      return ['About', 'Notifications', 'Messages'].map(function (link) {
-        return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'span',
-          { className: 'MainHeader-link', key: link },
-          link
-        );
-      });
-    }
+
+    // _renderLinks(): React$Node {
+    //   return [
+    //     'About',
+    //     'Notifications',
+    //     'Messages',
+    //   ].map(link => <span className="MainHeader-link" key={link}>{link}</span>);
+    // }
+
   }]);
 
   return MainHeader;
@@ -74507,7 +74501,10 @@ var SubHeader = function (_React$Component) {
     value: function _renderSectionLinks() {
       var _this2 = this;
 
-      return __WEBPACK_IMPORTED_MODULE_5__configs_SectionLinkConfigs_js__["a" /* default */].map(function (config) {
+      var SectionsToShow = __WEBPACK_IMPORTED_MODULE_2__components_utils_CurrentUser_js__["a" /* default */].isLoggedIn() ? __WEBPACK_IMPORTED_MODULE_5__configs_SectionLinkConfigs_js__["a" /* default */] : __WEBPACK_IMPORTED_MODULE_5__configs_SectionLinkConfigs_js__["a" /* default */].filter(function (config) {
+        return !config.showOnlyWhenLoggedIn;
+      });
+      return SectionsToShow.map(function (config) {
         return __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__SectionLink_jsx__["a" /* default */], {
           activeSection: _this2.state.activeSection,
           key: config.title,
@@ -74542,16 +74539,12 @@ var SubHeader = function (_React$Component) {
 
 var SectionLinkConfigs = [{
   section: __WEBPACK_IMPORTED_MODULE_0__enums_Section_js__["a" /* default */].FindProjects,
-  title: 'FIND PROJECTS'
+  title: 'DISCOVER',
+  showOnlyWhenLoggedIn: false
 }, {
   section: __WEBPACK_IMPORTED_MODULE_0__enums_Section_js__["a" /* default */].MyProjects,
-  title: 'MY PROJECTS'
-}, {
-  section: __WEBPACK_IMPORTED_MODULE_0__enums_Section_js__["a" /* default */].Profile,
-  title: 'PROFILE'
-}, {
-  section: __WEBPACK_IMPORTED_MODULE_0__enums_Section_js__["a" /* default */].Inbox,
-  title: 'INBOX'
+  title: 'MY PROJECTS',
+  showOnlyWhenLoggedIn: true
 }];
 
 /* harmony default export */ __webpack_exports__["a"] = (SectionLinkConfigs);
