@@ -59,7 +59,10 @@ class SubHeader extends React.Component<{||}, State> {
   }
 
   _renderSectionLinks(): React$Node {
-    return SectionLinkConfigs
+    const SectionsToShow = CurrentUser.isLoggedIn() ?
+    SectionLinkConfigs : SectionLinkConfigs
+      .filter(config => !config.showOnlyWhenLoggedIn);
+      return SectionsToShow
       .map(config =>
         <SectionLink
           activeSection={this.state.activeSection}
@@ -73,7 +76,7 @@ class SubHeader extends React.Component<{||}, State> {
   _renderCreateProjectButton(): ?React$Node {
     return (
       <span className={this._cx.get('createProject')} onClick={this.navigateToCreateProject.bind(this)}>
-        Create A Project
+        Create a Project
       </span>
     )
   }
