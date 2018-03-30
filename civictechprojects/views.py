@@ -12,6 +12,7 @@ from .models import Project, ProjectFile, FileCategory, ProjectLink
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category
 from .forms import ProjectCreationForm
+from .models import Contributor
 from common.models.tags import Tag
 
 
@@ -95,15 +96,18 @@ def get_project(request, project_id):
 @ensure_csrf_cookie
 def index(request):
     template = loader.get_template('new_index.html')
-    context = (
+    if request.user.is_authenticated():
+        contributor = Contributor.objects.get(id=request.user.id)
+        context = (
         {
             'userID': request.user.id,
+            'emailVerified': contributor.email_verified,
             'firstName': request.user.first_name,
             'lastName': request.user.last_name,
-        }
-        if request.user.is_authenticated() else
-        {}
-    )
+        })
+    else:
+        context = {}
+
     return HttpResponse(template.render(context, request))
 
 

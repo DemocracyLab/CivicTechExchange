@@ -51,6 +51,7 @@
         '{{userID}}'
         ? Object.freeze({
           userID: '{{userID}}',
+          emailVerified: {{emailVerified|yesno:"true,false"}},
           firstName: '{{firstName}}',
           lastName: '{{lastName}}',
         })
