@@ -26,5 +26,5 @@ class Contributor(User):
         email_msg.send()
 
 
-def get_request_contributor(request, project_id, token):
+def get_request_contributor(request):
     return Contributor.objects.get_by_natural_key(request.user.username)

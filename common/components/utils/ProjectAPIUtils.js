@@ -4,6 +4,10 @@ import type {Project} from '../stores/ProjectSearchStore.js';
 import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 
+export type APIResponse = {|
+  +status: number
+|};
+
 export type APIError = {|
   +errorCode: number,
   +errorMessage: string
@@ -79,6 +83,20 @@ class ProjectAPIUtils {
       }));
   }
   
+  static post(url: string, successCallback: (APIResponse) => void, errCallback: (APIError) => void) {
+    const doError = (response) => errCallback && errCallback({
+      errorCode: response.status,
+      errorMessage: JSON.stringify(response)
+    });
+    
+    fetch(new Request(url, {method:"POST", credentials:"include"}))
+      .then(response => ProjectAPIUtils.isSuccessResponse(response) ? successCallback() : doError(response))
+      .catch(response => doError(response));
+  }
+  
+  static isSuccessResponse(response:APIResponse): boolean {
+    return response.status < 400;
+  }
 }
 
 export default ProjectAPIUtils

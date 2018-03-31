@@ -129,6 +129,9 @@ EMAIL_HOST_USER = 'democracylabreset@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 
+# TODO: Set to True in production
+# SESSION_COOKIE_SECURE = True
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
