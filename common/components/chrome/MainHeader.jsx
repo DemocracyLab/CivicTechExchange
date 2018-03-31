@@ -20,7 +20,7 @@ class MainHeader extends React.PureComponent<{||}> {
         </span>
         <span className="MainHeader-rightContent">
           <span>
-            {this._renderLinks()}
+            {/* {this._renderLinks()} */}
           </span>
           {this._renderHero()}
         </span>
@@ -31,8 +31,8 @@ class MainHeader extends React.PureComponent<{||}> {
   _onHomeButtonClick(): void {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
-      section: Section.Landing,
-      url: url.section(Section.Landing)
+      section: Section.FindProjects,
+      url: url.section(Section.FindProjects)
     });
   }
 
@@ -53,13 +53,13 @@ class MainHeader extends React.PureComponent<{||}> {
       );
   }
 
-  _renderLinks(): React$Node {
-    return [
-      'About',
-      'Notifications',
-      'Messages',
-    ].map(link => <span className="MainHeader-link" key={link}>{link}</span>);
-  }
+  // _renderLinks(): React$Node {
+  //   return [
+  //     'About',
+  //     'Notifications',
+  //     'Messages',
+  //   ].map(link => <span className="MainHeader-link" key={link}>{link}</span>);
+  // }
 }
 
 export default MainHeader;

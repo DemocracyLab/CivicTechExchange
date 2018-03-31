@@ -13,6 +13,12 @@ class Tag(models.Model):
     subcategory = models.CharField(max_length=200, blank=True)
     parent = models.CharField(max_length=100, blank=True)
 
+    def __str__(self):
+        prefix = self.category
+        if self.subcategory:
+            prefix += '->' + self.subcategory
+        return prefix + '->' + self.tag_name
+
     @staticmethod
     def get_by_name(name):
         # TODO: Get from in-memory cache
