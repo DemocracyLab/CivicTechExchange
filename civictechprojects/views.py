@@ -12,7 +12,7 @@ from .models import Project, ProjectFile, FileCategory, ProjectLink
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category
 from .forms import ProjectCreationForm
-from .models import Contributor
+from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 
 
@@ -54,6 +54,11 @@ def to_tag_map(tags):
 def project_create(request):
     if not request.user.is_authenticated():
         return redirect('/signup')
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        # TODO: Log this
+        return HttpResponse(status=403)
 
     ProjectCreationForm.create_project(request)
     return redirect('/index/?section=MyProjects')

@@ -54,6 +54,11 @@ urlpatterns = [
         views.verify_user,
         name="verify_user"
     ),
+    url(
+        r'^verify_user/$',
+        views.send_verification_email,
+        name="send_verification_email"
+    ),
     url(r'^', include('civictechprojects.urls')),
     url(r'^$', RedirectView.as_view(url='/index/', permanent=True)),
     url(r'^admin/', admin.site.urls)

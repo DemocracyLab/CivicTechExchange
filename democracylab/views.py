@@ -3,10 +3,10 @@ from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import redirect
 from django.template import loader
 from django.http import HttpResponse
-
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import DemocracyLabUserCreationForm
-from .models import Contributor
+from .models import Contributor, get_request_contributor
 
 
 def signup(request):
@@ -53,3 +53,18 @@ def verify_user(request, user_id, token):
         return redirect('/')
     else:
         return HttpResponse(status=401)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def send_verification_email(request):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        user.send_verification_email()
+        return HttpResponse(status=200)
+    else:
+        # If user's email was already confirmed
+        return HttpResponse(status=403)
