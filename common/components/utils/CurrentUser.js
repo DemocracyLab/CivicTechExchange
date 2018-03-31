@@ -10,6 +10,10 @@ class CurrentUser {
   static isLoggedIn(): bool {
     return Boolean(this.userID());
   }
+  
+  static isEmailVerified(): bool {
+    return Boolean(window.DLAB_GLOBAL_CONTEXT.emailVerified);
+  }
 
   static firstName(): string {
     return window.DLAB_GLOBAL_CONTEXT.firstName;

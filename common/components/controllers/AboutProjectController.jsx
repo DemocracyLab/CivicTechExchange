@@ -4,6 +4,7 @@ import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import { Button } from 'react-bootstrap';
 import ContactProjectModal from '../common/projects/ContactProjectModal.jsx'
+import TagsDisplay from '../common/tags/TagsDisplay.jsx'
 import url from '../utils/url.js'
 import _ from 'lodash'
 
@@ -96,6 +97,16 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
           <div>
             <ContactProjectModal showModal={this.state.showModal} handleClose={this.handleClose}></ContactProjectModal>
           </div>
+  
+          <div className="row" style={{margin: "30px 40px 0 40px"}}>
+            <div className="col">
+              TECHNOLOGIES USED
+              <div>
+                <TagsDisplay tags={project && project.project_technologies}/>
+              </div>
+            </div>
+          </div>
+    
           <div className="row" style={{margin: "30px 40px 0 40px"}}>
             <div className="col">
               PROJECT DETAILS

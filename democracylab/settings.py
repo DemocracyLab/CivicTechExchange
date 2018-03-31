@@ -127,6 +127,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'democracylabreset@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-from common.models.tags import import_tags_from_csv
+from common.helpers.tags import import_tags_from_csv
 
 
 class Migration(migrations.Migration):

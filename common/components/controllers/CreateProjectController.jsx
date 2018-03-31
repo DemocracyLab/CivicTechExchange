@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import CurrentUser from '../../components/utils/CurrentUser.js';
 import EditProjectForm from '../common/projects/EditProjectForm.jsx'
 
 /**
@@ -19,10 +20,24 @@ class CreateProjectController extends React.PureComponent<{||},{||}> {
     return (
       <div className="wrapper-gray">
         <div className="container">
-          <form action="/projects/signup/" onSubmit={this.logProjectCreated} method="post">
-            <EditProjectForm/>
-          </form>
+          {CurrentUser.isEmailVerified() ? this._renderCreateProjectForm() : this._renderEmailNotVerifiedMessage()}
         </div>
+      </div>
+    );
+  }
+  
+  _renderCreateProjectForm() : React$Node {
+    return (
+      <form action="/projects/signup/" onSubmit={this.logProjectCreated} method="post">
+        <EditProjectForm/>
+      </form>
+    );
+  }
+  
+  _renderEmailNotVerifiedMessage() : React$Node {
+    return (
+      <div>
+        You have not verified your email address yet.  Please check your email inbox and click on the supplied link.
       </div>
     );
   }

@@ -1,6 +1,7 @@
 from django.db import models
 from enum import Enum
 from democracylab.models import Contributor
+from common.helpers.constants import TagCategory
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
@@ -18,7 +19,7 @@ class TaggedIssueAreas(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
 
-class TaggedTag(TaggedItemBase):
+class TaggedTechnologies(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
 
@@ -32,10 +33,10 @@ class Project(models.Model):
     project_description = models.CharField(max_length=3000, blank=True)
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
     project_issue_area.remote_field.related_name = "+"
+    project_technologies = TaggableManager(blank=True, through=TaggedTechnologies)
+    project_technologies.remote_field.related_name = "+"
     project_location = models.CharField(max_length=200)
     project_name = models.CharField(max_length=200)
-    project_tags = TaggableManager(blank=True, through=TaggedTag)
-    project_tags.remote_field.related_name = "+"
     project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
 
@@ -56,6 +57,7 @@ class Project(models.Model):
             'project_url': self.project_url,
             'project_location': self.project_location,
             'project_issue_area': Tag.hydrate_to_json(list(self.project_issue_area.all().values())),
+            'project_technologies': Tag.hydrate_to_json(list(self.project_technologies.all().values())),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links))
         }
@@ -64,16 +66,6 @@ class Project(models.Model):
             project['project_thumbnail'] = thumbnail_files[0].to_json()
 
         return project
-
-    # Remove any tags that aren't part of the canonical list
-    @staticmethod
-    def remove_tags_not_in_list():
-        for project in Project.objects.all():
-            for issue in project.project_issue_area.all():
-                issue_tag = Tag.get_by_name(issue)
-                if not issue_tag:
-                    print('Removing invalid tag', issue, 'from project:', project.project_name)
-                    project.project_issue_area.remove(issue)
 
 
 class ProjectLink(models.Model):

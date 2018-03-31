@@ -11,7 +11,9 @@ export type APIError = {|
 
 export type TagDefinition = {|
   value: string,
-  label: string
+  label: string,
+  category: string,
+  subcategory: string
 |};
 
 type ProjectAPIData = {|
@@ -29,6 +31,7 @@ export type ProjectDetailsAPIData = {|
   +project_creator: number,
   +project_url: string,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
+  +project_technologies: $ReadOnlyArray<TagDefinition>,
   +project_location: string,
   +project_name: string,
   +project_thumbnail: FileInfo,
@@ -65,6 +68,17 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
+  
+  static fetchTagsByCategory(tagCategory: string, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): void {
+    fetch(new Request('/api/tags?category=' + tagCategory))
+      .then(response => response.json())
+      .then(tags => callback(tags))
+      .catch(response => errCallback && errCallback({
+        errorCode: response.status,
+        errorMessage: JSON.stringify(response)
+      }));
+  }
+  
 }
 
 export default ProjectAPIUtils
