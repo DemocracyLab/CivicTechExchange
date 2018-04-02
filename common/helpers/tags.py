@@ -54,7 +54,7 @@ def merge_tags_with_existing(tags):
         indexed_tags = {tag.tag_name: tag for tag in existing_tags}
         for tag in tags:
             if tag.tag_name in indexed_tags:
-                print('Updating tag ' + tag.tag_name)
+                # print('Updating tag ' + tag.tag_name)
                 existing_tag = indexed_tags[tag.tag_name]
                 existing_tag.display_name = tag.display_name
                 existing_tag.caption = tag.caption

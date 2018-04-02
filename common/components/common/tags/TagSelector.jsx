@@ -6,15 +6,20 @@ import type {TagDefinition} from '../../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js';
 import _ from 'lodash'
 
+type TagOption = {|
+  value: string,
+  label: string,
+|};
+
 type Props = {|
   elementId: string,
   category: string,
   allowMultiSelect: boolean,
-  value?: TagDefinition,
+  value?: $ReadOnlyArray<TagDefinition>,
   onSelection: ($ReadOnlyArray<TagDefinition>) => void
 |};
 type State = {|
-  displayList: Array<TagDefinition>,
+  displayList: Array<TagOption>,
   tagMap: {[key: string]: TagDefinition},
   selected?: TagDefinition,
   initialized: boolean
@@ -26,9 +31,9 @@ type State = {|
 class TagSelector extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.state = {
-      tags: []
-    };
+    this.state = {};
+    //   tags: []
+    // };
     
     ProjectAPIUtils.fetchTagsByCategory(this.props.category, (tags) => {
       const tagMap = _.mapKeys(tags, (tag) => tag.tag_name);
@@ -42,20 +47,26 @@ class TagSelector extends React.PureComponent<Props, State> {
         tagMap: tagMap,
         displayList: displayList
       });
+      this.initializeSelectedTags(props);
     });
   }
   
-  getDisplayTag(tag: TagDefinition): TagDefinition {
-    return this.state.displayList.find(displayTag => displayTag.value === tag.value);
+  initializeSelectedTags(props: Props):void {
+    if(props.value) {
+      const displayTags: $ReadOnlyArray<TagOption> = props.value[0]
+        ? props.value.map(tag => this.getDisplayTag(tag))
+        : [null];
+      this.setState({selected : props.allowMultiSelect ? displayTags : displayTags[0]});
+    }
+  }
+  
+  getDisplayTag(tag: TagDefinition): TagOption {
+    return this.state.displayList.find(displayTag => displayTag.value === tag.tag_name);
   }
   
   componentWillReceiveProps(nextProps: Props): void {
     if(!this.state.initialized && !_.isEmpty(nextProps.value)) {
-      const displayTags = nextProps.value.map(tag => this.getDisplayTag(tag));
-      this.setState({
-        selected: nextProps.allowMultiSelect ? displayTags : displayTags[0],
-        initialized: true
-      });
+      this.initializeSelectedTags(nextProps);
     }
   }
   
@@ -72,8 +83,8 @@ class TagSelector extends React.PureComponent<Props, State> {
         <Select
           id={this.props.elementId}
           name={this.props.elementId}
-          options={this.state.displayList}
-          value={this.state.selected}
+          options={this.state && this.state.displayList}
+          value={this.state && this.state.selected}
           onChange={this.handleSelection.bind(this)}
           className="form-control"
           simpleValue={false}

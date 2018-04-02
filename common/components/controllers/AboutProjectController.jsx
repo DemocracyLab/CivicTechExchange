@@ -71,7 +71,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                   </div>
                   <div className="row">
                     <div className="col">
-                      {project && !_.isEmpty(project.project_issue_area) && project.project_issue_area[0].label}
+                      {project && !_.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name}
                     </div>
                   </div>
                 </div>

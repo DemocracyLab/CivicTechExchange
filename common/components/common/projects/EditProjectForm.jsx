@@ -14,7 +14,10 @@ import type {Validator} from '../../../components/forms/FormValidation.jsx'
 import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
 import type {APIError, TagDefinition, ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
 import url from '../../utils/url.js'
+import {PositionInfo} from "../../forms/PositionInfo.jsx";
+import PositionList from "../../forms/PositionList.jsx";
 import _ from 'lodash'
+
 
 type FormFields = {|
   project_name: ?string,
@@ -23,6 +26,7 @@ type FormFields = {|
   project_description: ?string,
   project_issue_area?: Array<TagDefinition>,
   project_technologies?: Array<TagDefinition>,
+  project_positions?: Array<PositionInfo>,
   project_links: Array<LinkInfo>,
   project_files: Array<FileInfo>,
   project_thumbnail?: FileInfo
@@ -197,6 +201,9 @@ class EditProjectForm extends React.PureComponent<Props,State> {
                     placeholder="This will appear as project introduction" rows="3" maxLength="3000"
                     value={this.state.formFields.project_description} onChange={this.onFormFieldChange.bind(this, "project_description")}></textarea>
         </div>
+  
+        <h2 className="form-group subheader">OPEN POSITIONS</h2>
+        <PositionList elementid="project_positions" positions={this.state.formFields.project_positions}/>
         
         <h2 className="form-group subheader">LINKS</h2>
         <LinkList elementid="project_links" links={this.state.formFields.project_links}/>

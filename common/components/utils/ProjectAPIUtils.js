@@ -14,10 +14,13 @@ export type APIError = {|
 |};
 
 export type TagDefinition = {|
-  value: string,
-  label: string,
+  id: number,
+  tag_name: string,
+  display_name: string,
+  caption: string,
   category: string,
-  subcategory: string
+  subcategory: string,
+  parent: string,
 |};
 
 type ProjectAPIData = {|
@@ -50,7 +53,7 @@ class ProjectAPIUtils {
       id: apiData.project_id,
       issueArea:
         apiData.project_issue_area && apiData.project_issue_area.length != 0
-          ? apiData.project_issue_area[0].label
+          ? apiData.project_issue_area[0].display_name
           : 'None',
       location: apiData.project_location,
       name: apiData.project_name,

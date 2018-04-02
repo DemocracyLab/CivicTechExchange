@@ -25,15 +25,18 @@ class Tag(models.Model):
         return tag
 
     @staticmethod
-    def hydrate_to_json(tag_entries):
+    def hydrate_to_json(project_id, tag_entries):
         # TODO: Use in-memory cache for tags
         tags = map(lambda tag_slug: Tag.get_by_name(tag_slug['slug']), tag_entries)
         existing_tags = filter(lambda tag: tag is not None, tags)
         hydrated_tags = list(map(lambda tag: {
-            'label': tag.display_name,
-            'value': tag.tag_name,
+            'id': project_id,
+            'display_name': tag.display_name,
+            'tag_name': tag.tag_name,
+            'caption': tag.caption,
             'category': tag.category,
-            'subcategory': tag.subcategory}, existing_tags))
+            'subcategory': tag.subcategory,
+            'parent': tag.parent}, existing_tags))
         return hydrated_tags
 
     @staticmethod

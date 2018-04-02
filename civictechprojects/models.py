@@ -56,8 +56,8 @@ class Project(models.Model):
             'project_description': self.project_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
-            'project_issue_area': Tag.hydrate_to_json(list(self.project_issue_area.all().values())),
-            'project_technologies': Tag.hydrate_to_json(list(self.project_technologies.all().values())),
+            'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
+            'project_technologies': Tag.hydrate_to_json(self.id, list(self.project_technologies.all().values())),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links))
         }
