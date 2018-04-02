@@ -2,15 +2,18 @@
 
 import React from 'react';
 import {Modal, Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
+import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
+
 
 type Props = {|
+  projectId: number,
   showModal: boolean,
-  handleClose: () => void,
+  handleClose: () => void
 |};
 type State = {|
   showModal: boolean,
-  message: string,
-  email: string
+  isSending: boolean,
+  message: string
 |};
 
 /**
@@ -22,8 +25,8 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
     super(props);
     this.state = {
       showModal: false,
-      message: "",
-      email: ""
+      isSending: false,
+      message: ""
     }
     this.closeModal = this.closeModal.bind(this, this.props.handleClose);
     this.handleChange = this.handleChange.bind(this);
@@ -35,21 +38,22 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
   }
   
 
-  handleChange(event) {
-    if(event.target.name === "message") {
+  handleChange(event: SyntheticInputEvent<HTMLInputElement>): void {
       this.setState({message: event.target.value});
-    } 
-    if(event.target.name === "email") {
-     this.setState({email: event.target.value});
-    }
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    this.setState({isSending:true});
+    ProjectAPIUtils.post("/contact/project/" + this.props.projectId + "/",
+      {message: this.state.message},
+      response => this.closeModal(),
+      response => null /* TODO: Report error to user */
+      );
   }
 
-  closeModal(handleClose){
-    handleClose();
+  closeModal(){
+    this.setState({isSending:false});
+    this.props.handleClose();
   }
 
   render(): React$Node {
@@ -60,35 +64,22 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
                  style={{paddingTop:'20%'}}
           >
               <Modal.Header >
-                  <Modal.Title>Send us a message!</Modal.Title>
+                  <Modal.Title>Send message to Project Owner</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <form onSubmit={this.handleSubmit}>
-                  <FormGroup>
-                    <ControlLabel>Message:</ControlLabel>
-                    <FormControl componentClass="textarea" 
-                      placeholder="Enter Message" 
-                      rows="4" 
-                      cols="50" 
-                      name="message" 
-                      value={this.state.message} 
-                      onChange={this.handleChange}/>
-                  </FormGroup>
-                  <FormGroup>
-                    <ControlLabel>Email address:</ControlLabel>
-                    <FormControl
-                      id="formControlsEmail"
-                      type="email"
-                      placeholder="Enter email"
-                      name="email"
-                      value={this.state.email}
-                      onChange={this.handleChange}
-                    />
-                  </FormGroup>
-                </form>
+                <FormGroup>
+                  <ControlLabel>Message:</ControlLabel>
+                  <FormControl componentClass="textarea"
+                    placeholder="Enter Message"
+                    rows="4"
+                    cols="50"
+                    name="message"
+                    value={this.state.message}
+                    onChange={this.handleChange}/>
+                </FormGroup>
               </Modal.Body>
               <Modal.Footer>
-                <Button type="submit" value="Submit">Submit</Button>
+                <Button disabled={this.state.isSending} onClick={this.handleSubmit.bind(this)}>{this.state.isSending ? "Sending" : "Send"}</Button>
               </Modal.Footer>
           </Modal>
       </div>

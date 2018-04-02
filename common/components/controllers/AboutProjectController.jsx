@@ -90,12 +90,16 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
               </div>
               <div className="row">
-                <Button className="ProjectSearchBar-submit" type="button" onClick={this.handleShow}>Contact {project && project.project_name}</Button>
+                <Button className="ProjectSearchBar-submit" type="button" onClick={this.handleShow}>Contact Project</Button>
               </div>
             </div>
           </div>
           <div>
-            <ContactProjectModal showModal={this.state.showModal} handleClose={this.handleClose}></ContactProjectModal>
+            <ContactProjectModal
+              projectId={this.state.project && this.state.project.project_id}
+              showModal={this.state.showModal}
+              handleClose={this.handleClose}
+            />
           </div>
   
           <div className="row" style={{margin: "30px 40px 0 40px"}}>

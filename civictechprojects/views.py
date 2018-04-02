@@ -1,6 +1,8 @@
 from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
+from django.core.mail import EmailMessage
+from django.conf import settings
 from django.template import loader
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
@@ -189,7 +191,29 @@ def delete_uploaded_file(request, s3_key):
         # TODO: Log this
         return HttpResponse(status=401)
 
-
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
 def contact_project_owner(request, project_id):
-    pprint(request.POST)
-    return HttpResponse(status=501)
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    message = body['message']
+
+    project = Project.objects.get(id=project_id)
+    email_msg = EmailMessage(
+        '{firstname} {lastname} would like to connect with {project}'.format(
+            firstname=user.first_name,
+            lastname=user.last_name,
+            project=project.project_name),
+        '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email),
+        settings.EMAIL_HOST_USER,
+        [project.project_creator.email],
+        {'Reply-To': user.email}
+    )
+    email_msg.send()
+    return HttpResponse(status=200)

@@ -83,13 +83,16 @@ class ProjectAPIUtils {
       }));
   }
   
-  static post(url: string, successCallback: (APIResponse) => void, errCallback: (APIError) => void) {
+  static post(url: string, body: {||},successCallback: (APIResponse) => void, errCallback: (APIError) => void) {
     const doError = (response) => errCallback && errCallback({
       errorCode: response.status,
       errorMessage: JSON.stringify(response)
     });
     
-    fetch(new Request(url, {method:"POST", credentials:"include"}))
+    fetch(new Request(url, {method:"POST", body:JSON.stringify(body), credentials:"include", headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },}))
       .then(response => ProjectAPIUtils.isSuccessResponse(response) ? successCallback() : doError(response))
       .catch(response => doError(response));
   }

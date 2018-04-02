@@ -72,7 +72,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   }
   
   sendVerificationEmail(): void {
-    ProjectAPIUtils.post("/verify_user/",
+    ProjectAPIUtils.post("/verify_user/", {},
       response => this.setState(
         {
           showEmailConfirmationModal: true,
