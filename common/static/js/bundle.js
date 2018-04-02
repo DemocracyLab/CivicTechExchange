@@ -67133,7 +67133,7 @@ var ContactProjectModal = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */],
           { show: this.state.showModal,
-            onHide: this.closeModal.bind(this),
+            onHide: this.closeModal,
             style: { paddingTop: '20%' }
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -67170,7 +67170,12 @@ var ContactProjectModal = function (_React$PureComponent) {
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-              { disabled: this.state.isSending, onClick: this.handleSubmit.bind(this) },
+              { onClick: this.closeModal },
+              "Cancel"
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
+              { disabled: this.state.isSending, onClick: this.handleSubmit },
               this.state.isSending ? "Sending" : "Send"
             )
           )

@@ -60,7 +60,7 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
     return (
       <div>
           <Modal show={this.state.showModal}
-                 onHide={this.closeModal.bind(this)}
+                 onHide={this.closeModal}
                  style={{paddingTop:'20%'}}
           >
               <Modal.Header >
@@ -79,7 +79,8 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
                 </FormGroup>
               </Modal.Body>
               <Modal.Footer>
-                <Button disabled={this.state.isSending} onClick={this.handleSubmit.bind(this)}>{this.state.isSending ? "Sending" : "Send"}</Button>
+                <Button onClick={this.closeModal}>{"Cancel"}</Button>
+                <Button disabled={this.state.isSending} onClick={this.handleSubmit}>{this.state.isSending ? "Sending" : "Send"}</Button>
               </Modal.Footer>
           </Modal>
       </div>
