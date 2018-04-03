@@ -3,7 +3,9 @@
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import { Button } from 'react-bootstrap';
+import type {PositionInfo} from "../forms/PositionInfo.jsx";
 import ContactProjectModal from '../common/projects/ContactProjectModal.jsx'
+import NotificationModal from "../common/notification/NotificationModal.jsx";
 import TagsDisplay from '../common/tags/TagsDisplay.jsx'
 import url from '../utils/url.js'
 import _ from 'lodash'
@@ -12,6 +14,9 @@ import React from 'react';
 
 type State = {|
   project: ?ProjectDetailsAPIData,
+  showContactModal: boolean,
+  showPositionModal: boolean,
+  shownPosition: ?PositionInfo
 |};
 
 class AboutProjectController extends React.PureComponent<{||}, State> {
@@ -21,7 +26,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
     this.state = {
       project: null,
-      showModal: false
+      showContactModal: false,
+      showPositionModal: false,
+      shownPosition: null
     };
 
     this.handleShow = this.handleShow.bind(this);
@@ -41,11 +48,11 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   
 
   handleClose() {
-    this.setState({ showModal: false });
+    this.setState({ showContactModal: false });
   }
 
   handleShow() {
-    this.setState({ showModal: true });
+    this.setState({ showContactModal: true });
   }
 
   render(): React$Node {
@@ -97,7 +104,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
           <div>
             <ContactProjectModal
               projectId={this.state.project && this.state.project.project_id}
-              showModal={this.state.showModal}
+              showModal={this.state.showContactModal}
               handleClose={this.handleClose}
             />
           </div>
@@ -119,20 +126,47 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               </div>
             </div>
           </div>
+
+          <NotificationModal
+            showModal={this.state.showPositionModal}
+            message={this.state.shownPosition && this.state.shownPosition.description}
+            buttonText="Close"
+            headerText={this.state.shownPosition && this.state.shownPosition.roleTag.display_name}
+            onClickButton={() => this.setState({showPositionModal: false})}
+          />
+          
+          {
+            project && !_.isEmpty(project.project_positions)
+              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
+                  <div className='col'>
+                    <h2 className="form-group subheader">OPEN POSITIONS</h2>
+                    {this._renderPositions()}
+                  </div>
+                </div>
+              : null
+          }
     
-          <div className="row" style={{margin: "30px 40px 0 40px"}}>
-            <div className='col'>
-              <h2 className="form-group subheader">LINKS</h2>
-              {this._renderLinks()}
-            </div>
-          </div>
-    
-          <div className="row" style={{margin: "30px 40px 0 40px"}}>
-            <div className='col'>
-              <h2 className="form-group subheader">FILES</h2>
-              {this._renderFiles()}
-            </div>
-          </div>
+          {
+            project && !_.isEmpty(project.project_links)
+              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
+                  <div className='col'>
+                    <h2 className="form-group subheader">LINKS</h2>
+                    {this._renderLinks()}
+                  </div>
+                </div>
+              : null
+          }
+          
+          {
+            project && !_.isEmpty(project.project_files)
+              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
+                  <div className='col'>
+                    <h2 className="form-group subheader">FILES</h2>
+                    {this._renderFiles()}
+                  </div>
+                </div>
+              : null
+          }
         </div>
       </div>
     );
@@ -165,6 +199,22 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         <a href={file.publicUrl}>{file.fileName}</a>
       </div>
     );
+  }
+  
+  _renderPositions(): ?Array<React$Node> {
+    const project = this.state.project;
+    return project && project.project_positions && project.project_positions.map((position, i) =>
+      <div key={i}>
+        <span className="pseudo-link" onClick={this.showPositionModal.bind(this,position)}>{position.roleTag.display_name}</span>
+      </div>
+    );
+  }
+  
+  showPositionModal(position: PositionInfo): void {
+    this.setState({
+      showPositionModal: true,
+      shownPosition: position
+    });
   }
 }
 
