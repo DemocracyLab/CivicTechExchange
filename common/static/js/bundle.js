@@ -34783,7 +34783,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var DEFAULT_STATE = {
-  section: __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].Landing
+  section: __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].FindProjects
 };
 
 var State = function (_Record) {

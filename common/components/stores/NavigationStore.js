@@ -14,7 +14,7 @@ export type NavigationActionType = {
 };
 
 const DEFAULT_STATE = {
-  section: Section.Landing,
+  section: Section.FindProjects,
 };
 
 class State extends Record(DEFAULT_STATE) {
