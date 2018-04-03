@@ -33579,7 +33579,7 @@ var EditProjectForm = function (_React$PureComponent) {
             { htmlFor: 'project_name' },
             'Project Name'
           ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_name', name: 'project_name', maxLength: '200',
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_name', name: 'project_name', maxLength: '60',
             value: this.state.formFields.project_name, onChange: this.onFormFieldChange.bind(this, "project_name") })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -67074,7 +67074,6 @@ var AboutProjectController = function (_React$PureComponent) {
 
     _this.handleShow = _this.handleShow.bind(_this);
     _this.handleClose = _this.handleClose.bind(_this);
-    // this.showPositionModal = this.showPositionModal.bind(this);
     return _this;
   }
 
@@ -67083,7 +67082,6 @@ var AboutProjectController = function (_React$PureComponent) {
     value: function componentDidMount() {
       var projectId = new RegExp("id=([^&]+)").exec(document.location.search)[1];
       __WEBPACK_IMPORTED_MODULE_0__utils_ProjectAPIUtils_js__["a" /* default */].fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
-      __WEBPACK_IMPORTED_MODULE_3__common_notification_NotificationModal_jsx__["a" /* default */];
     }
   }, {
     key: 'loadProjectDetails',

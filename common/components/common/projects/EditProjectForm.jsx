@@ -156,7 +156,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <h2 className="form-group subheader">DETAILS</h2>
         <div className="form-group">
           <label htmlFor="project_name">Project Name</label>
-          <input type="text" className="form-control" id="project_name" name="project_name" maxLength="200"
+          <input type="text" className="form-control" id="project_name" name="project_name" maxLength="60"
                  value={this.state.formFields.project_name} onChange={this.onFormFieldChange.bind(this, "project_name")}/>
         </div>
         
