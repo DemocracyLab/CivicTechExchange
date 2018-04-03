@@ -3,6 +3,7 @@
 import type {Project} from '../stores/ProjectSearchStore.js';
 import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
+import {PositionInfo} from "../forms/PositionInfo.jsx";
 
 export type APIResponse = {|
   +status: number
@@ -39,6 +40,7 @@ export type ProjectDetailsAPIData = {|
   +project_url: string,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
   +project_technologies: $ReadOnlyArray<TagDefinition>,
+  +project_positions: $ReadOnlyArray<PositionInfo>,
   +project_location: string,
   +project_name: string,
   +project_thumbnail: FileInfo,

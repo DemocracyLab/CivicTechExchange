@@ -1,7 +1,7 @@
 import json
 from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
-from .models import Project, ProjectLink, ProjectFile, FileCategory
+from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
 
@@ -35,6 +35,12 @@ class ProjectCreationForm(ModelForm):
             project.project_technologies.add(project_technologies.split(','))
 
         project.save()
+
+        positions_json_text = form.data.get('project_positions')
+        if len(positions_json_text) > 0:
+            positions_json = json.loads(positions_json_text)
+            for position_json in positions_json:
+                position = ProjectPosition.create_from_json(project, position_json)
 
         links_json_text = form.data.get('project_links')
         if len(links_json_text) > 0:
@@ -82,6 +88,11 @@ class ProjectCreationForm(ModelForm):
             Tag.merge_tags_field(project.project_technologies, project_technologies)
 
         project.save()
+
+        positions_json_text = form.data.get('project_positions')
+        if len(positions_json_text) > 0:
+            positions_json = json.loads(positions_json_text)
+            ProjectPosition.merge_changes(project, positions_json)
 
         links_json_text = form.data.get('project_links')
         if len(links_json_text) > 0:

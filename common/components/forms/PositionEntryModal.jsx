@@ -49,7 +49,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
       this.setState({
         "positionInfo": {
           roleTag: null,
-          roleDescription: ""
+          description: ""
         }
       });
     }
@@ -76,7 +76,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
   }
   
   onDescriptionChange(event: SyntheticInputEvent<HTMLInputElement>): void {
-    this.state.positionInfo.roleDescription = event.target.value;
+    this.state.positionInfo.description = event.target.value;
     this.forceUpdate();
   }
   
@@ -102,11 +102,11 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
   
                 <div className="form-group">
                   <div className="character-count">
-                    { (this.state.positionInfo.roleDescription || "").length} / 3000
+                    { (this.state.positionInfo.description || "").length} / 3000
                   </div>
                   <textarea className="form-control"
                             placeholder="Describe the position's qualifications and responsibilities" rows="3" maxLength="3000"
-                            value={this.state.positionInfo.roleDescription} onChange={this.onDescriptionChange.bind(this)}></textarea>
+                            value={this.state.positionInfo.description} onChange={this.onDescriptionChange.bind(this)}></textarea>
                 </div>
               </Modal.Body>
               <Modal.Footer>

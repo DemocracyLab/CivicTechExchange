@@ -1,7 +1,6 @@
 from django.db import models
 from enum import Enum
 from democracylab.models import Contributor
-from common.helpers.constants import TagCategory
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
@@ -48,6 +47,7 @@ class Project(models.Model):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_project=self.id)
+        positions = ProjectPosition.objects.filter(position_project=self.id)
 
         project = {
             'project_id': self.id,
@@ -58,6 +58,7 @@ class Project(models.Model):
             'project_location': self.project_location,
             'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
             'project_technologies': Tag.hydrate_to_json(self.id, list(self.project_technologies.all().values())),
+            'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links))
         }
@@ -132,6 +133,68 @@ class ProjectLink(models.Model):
             'linkUrl': self.link_url,
             'visibility': self.link_visibility
         }
+
+
+class TaggedPositionRole(TaggedItemBase):
+    content_object = models.ForeignKey('ProjectPosition')
+
+
+class ProjectPosition(models.Model):
+    position_project = models.ForeignKey(Project, related_name='positions')
+    position_role = TaggableManager(blank=False, through=TaggedPositionRole)
+    position_description = models.CharField(max_length=3000)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'description': self.position_description,
+            'roleTag': Tag.hydrate_to_json(self.id, self.position_role.all().values())[0]
+        }
+
+    @staticmethod
+    def create_from_json(project, position_json):
+        position = ProjectPosition()
+        position.position_project = project
+        position.position_description = position_json['description']
+        position.save()
+
+        position.position_role.add(position_json['roleTag']['tag_name'])
+
+        return position
+
+    @staticmethod
+    def update_from_json(position, position_json):
+        position.position_description = position_json['description']
+        new_role = position_json['roleTag']['tag_name']
+        Tag.merge_tags_field(position.position_role, new_role)
+        position.save()
+
+    @staticmethod
+    def delete_position(position):
+        position.position_role.clear()
+        position.delete()
+
+    @staticmethod
+    def merge_changes(project, positions):
+        added_positions = list(filter(lambda position: 'id' not in position, positions))
+        updated_positions = list(filter(lambda position: 'id' in position, positions))
+        updated_positions_ids = set(map(lambda position: position['id'], updated_positions))
+        existing_positions = ProjectPosition.objects.filter(position_project=project.id)
+        existing_positions_ids = set(map(lambda position: position.id, existing_positions))
+        existing_projects_by_id = {position.id: position for position in existing_positions}
+
+        deleted_position_ids = list(existing_positions_ids - updated_positions_ids)
+
+        for added_position in added_positions:
+            ProjectPosition.create_from_json(project, added_position)
+
+        for updated_position_json in updated_positions:
+            ProjectPosition.update_from_json(existing_projects_by_id[updated_position_json['id']], updated_position_json)
+
+        for deleted_position_id in deleted_position_ids:
+            ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
+
+
 
 
 class ProjectFile(models.Model):

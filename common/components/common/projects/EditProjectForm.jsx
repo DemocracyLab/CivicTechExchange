@@ -101,6 +101,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_technologies: project.project_technologies,
           project_links: _.cloneDeep(project.project_links),
           project_files: _.cloneDeep(project.project_files),
+          project_positions: _.cloneDeep(project.project_positions),
           project_thumbnail: project.project_thumbnail
         }
       });
