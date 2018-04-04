@@ -67830,7 +67830,7 @@ Value.propTypes = {
 };
 
 /*!
-  Copyright (c) 2018 Jed Watson.
+  Copyright (c) 2017 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/react-select
 */
@@ -68386,8 +68386,8 @@ var Select$1 = function (_React$Component) {
 					break;
 				case 46:
 					// delete
+					event.preventDefault();
 					if (!this.state.inputValue && this.props.deleteRemoves) {
-						event.preventDefault();
 						this.popValue();
 					}
 					break;
@@ -68818,7 +68818,7 @@ var Select$1 = function (_React$Component) {
 			}
 			return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
 				'div',
-				{ className: className, key: 'input-wrap', style: { display: 'inline-block' } },
+				{ className: className, key: 'input-wrap' },
 				__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('input', _extends({ id: this.props.id }, inputProps))
 			);
 		}
