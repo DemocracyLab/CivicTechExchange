@@ -1,22 +1,25 @@
 import json
 from django import forms
+from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from .models import Project, ProjectLink, ProjectFile, FileCategory
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
 
-class ProjectCreationForm(forms.Form):
+
+class ProjectCreationForm(ModelForm):
     class Meta:
-        fields = [
-            'project_thumbnail_location',
-            'project_name',
-            'project_location',
-            'project_url',
-            'project_issue_area',
-            'project_description',
-            'project_links',
-            'project_files'
-        ]
+        fields = '__all__'
+        # fields = [
+        #     'project_thumbnail_location',
+        #     'project_name',
+        #     'project_location',
+        #     'project_url',
+        #     'project_issue_area',
+        #     'project_description',
+        #     'project_links',
+        #     'project_files'
+        # ]
 
     @staticmethod
     def create_project(request):
@@ -58,6 +61,10 @@ class ProjectCreationForm(forms.Form):
             thumbnail_json = json.loads(project_thumbnail_location)
             thumbnail = ProjectFile.from_json(project, FileCategory.THUMBNAIL, thumbnail_json)
             thumbnail.save()
+
+    @staticmethod
+    def delete_project(project_id):
+        Project.objects.get(id=project_id).delete()
 
     @staticmethod
     def edit_project(request, project_id):
