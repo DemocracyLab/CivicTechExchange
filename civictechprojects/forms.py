@@ -1,5 +1,4 @@
 import json
-from django import forms
 from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from .models import Project, ProjectLink, ProjectFile, FileCategory
@@ -9,17 +8,8 @@ from common.models.tags import Tag
 
 class ProjectCreationForm(ModelForm):
     class Meta:
+        model = Project
         fields = '__all__'
-        # fields = [
-        #     'project_thumbnail_location',
-        #     'project_name',
-        #     'project_location',
-        #     'project_url',
-        #     'project_issue_area',
-        #     'project_description',
-        #     'project_links',
-        #     'project_files'
-        # ]
 
     @staticmethod
     def create_project(request):
