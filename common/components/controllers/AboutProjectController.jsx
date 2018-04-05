@@ -4,7 +4,8 @@ import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import { Button } from 'react-bootstrap';
 import type {PositionInfo} from "../forms/PositionInfo.jsx";
-import ContactProjectModal from '../common/projects/ContactProjectModal.jsx'
+import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
+import ContactProjectModal from "../common/projects/ContactProjectModal.jsx";
 import NotificationModal from "../common/notification/NotificationModal.jsx";
 import TagsDisplay from '../common/tags/TagsDisplay.jsx'
 import url from '../utils/url.js'
@@ -14,7 +15,6 @@ import React from 'react';
 
 type State = {|
   project: ?ProjectDetailsAPIData,
-  showContactModal: boolean,
   showPositionModal: boolean,
   shownPosition: ?PositionInfo
 |};
@@ -31,7 +31,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       shownPosition: null
     };
 
-    this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
   
@@ -46,13 +45,8 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     });
   }
   
-
   handleClose() {
     this.setState({ showContactModal: false });
-  }
-
-  handleShow() {
-    this.setState({ showContactModal: true });
   }
 
   render(): React$Node {
@@ -97,16 +91,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
               </div>
               <div className="row">
-                <Button className="ProjectSearchBar-submit" type="button" onClick={this.handleShow}>Contact Project</Button>
+                <ContactProjectButton project={this.state.project}/>
               </div>
             </div>
-          </div>
-          <div>
-            <ContactProjectModal
-              projectId={this.state.project && this.state.project.project_id}
-              showModal={this.state.showContactModal}
-              handleClose={this.handleClose}
-            />
           </div>
   
           <div className="row" style={{margin: "30px 40px 0 40px"}}>

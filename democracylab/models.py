@@ -11,6 +11,9 @@ class Contributor(User):
     phone_primary = models.CharField(max_length=200, blank=True)
     about_me = models.CharField(max_length=100000, blank=True)
 
+    def is_admin_contributor(self):
+        return self.email == settings.ADMIN_EMAIL
+
     def send_verification_email(self):
         # Get token
         user = Contributor.objects.get(id=self.id)
@@ -28,3 +31,4 @@ class Contributor(User):
 
 def get_request_contributor(request):
     return Contributor.objects.get_by_natural_key(request.user.username)
+

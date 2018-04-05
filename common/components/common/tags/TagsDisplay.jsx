@@ -19,7 +19,7 @@ class TagsDisplay extends React.PureComponent<Props> {
     return (
       <div>
         {this.props.tags.map(
-          tag => <span className="Tag-Item" key={tag.value} title={tag.subcategory}>{tag.display_name}</span>
+          tag => <span className="Tag-Item" key={tag.tag_name} title={tag.subcategory}>{tag.display_name}</span>
         )}
       </div>
     );
