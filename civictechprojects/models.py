@@ -40,7 +40,7 @@ class Project(models.Model):
     project_links = models.CharField(max_length=5000, blank=True)
 
     def __str__(self):
-        return str(self.id) + ':' + self.project_name
+        return str(self.id) + ':' + str(self.project_name)
 
     def hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_project=self.id)

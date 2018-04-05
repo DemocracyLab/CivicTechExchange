@@ -20,6 +20,7 @@ from . import views
 
 urlpatterns = [
     url(r'^projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
+    url(r'^projects/delete/(?P<project_id>[0-9]+)/$', views.project_delete, name='project_delete'),
     url(r'^projects/signup/$', views.project_create, name='project_create'),
     url(
         r'^presign_s3/upload/project/thumbnail/$',

@@ -71,6 +71,17 @@ def project_edit(request, project_id):
     return redirect('/index/?section=AboutProject&id=' + project_id)
 
 
+def project_delete(request, project_id):
+    if not request.user.is_authenticated():
+        return redirect('/signup')
+
+    try:
+        ProjectCreationForm.delete_project(project_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return redirect('/index/')
+
+
 # TODO: Remove when React implementation complete
 def project(request, project_id):
     project = Project.objects.get(id=project_id)
