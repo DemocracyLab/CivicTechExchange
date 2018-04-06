@@ -155,8 +155,9 @@ def projects_list(request):
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
         projects = (
-            projects_by_keyword(query_params)
-            | projects_by_tag(query_params)
+            projects_by_description(query_params) or
+            projects_by_name(query_params) or
+            projects_by_tag(query_params)
         ) if (
             'keyword' in query_params
             or 'tags' in query_params
@@ -166,12 +167,20 @@ def projects_list(request):
     return HttpResponse(response)
 
 
-def projects_by_keyword(query_params):
+def projects_by_description(query_params):
     return Project.objects.filter(
         project_description__icontains=(
             query_params['keyword'][0]
             )
-        ) if 'keyword' in query_params else Project.objects.none()
+    ) if 'keyword' in query_params else Project.objects.none()
+
+
+def projects_by_name(query_params):
+    return Project.objects.filter(
+        project_name__icontains=(
+            query_params['keyword'][0]
+            )
+    ) if 'keyword' in query_params else Project.objects.none()
 
 
 def projects_by_tag(query_params):
