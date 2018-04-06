@@ -2,6 +2,7 @@ import json
 from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory
+from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
 
@@ -32,7 +33,7 @@ class ProjectCreationForm(ModelForm):
 
         project_technologies = form.data.get('project_technologies')
         if project_technologies and len(project_technologies) != 0:
-            project.project_technologies.add(project_technologies.split(','))
+            project.project_technologies.add(project_technologies)
 
         project.save()
 
@@ -61,6 +62,9 @@ class ProjectCreationForm(ModelForm):
             thumbnail_json = json.loads(project_thumbnail_location)
             thumbnail = ProjectFile.from_json(project, FileCategory.THUMBNAIL, thumbnail_json)
             thumbnail.save()
+
+        # Notify the admins that a new project has been created
+        send_project_creation_notification(project)
 
     @staticmethod
     def delete_project(project_id):
