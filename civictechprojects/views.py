@@ -155,8 +155,8 @@ def projects_list(request):
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
         projects = (
-            projects_by_description(query_params) or
-            projects_by_name(query_params) or
+            projects_by_description(query_params) |
+            projects_by_name(query_params) |
             projects_by_tag(query_params)
         ) if (
             'keyword' in query_params
