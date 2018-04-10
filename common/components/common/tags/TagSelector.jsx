@@ -32,8 +32,6 @@ class TagSelector extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {};
-    //   tags: []
-    // };
     
     ProjectAPIUtils.fetchTagsByCategory(this.props.category, (tags) => {
       const tagMap = _.mapKeys(tags, (tag) => tag.tag_name);
@@ -45,7 +43,7 @@ class TagSelector extends React.PureComponent<Props, State> {
       });
       this.setState({
         tagMap: tagMap,
-        displayList: displayList
+        displayList: _.sortBy(displayList, ['label'])
       });
       this.initializeSelectedTags(props);
     });
