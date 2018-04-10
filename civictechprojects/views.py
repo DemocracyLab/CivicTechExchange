@@ -166,7 +166,7 @@ def projects_list(request):
 
 
 def projects_by_keyword(keyword):
-    return Project.objects.filter(project_description__icontains=keyword) or \
+    return Project.objects.filter(project_description__icontains=keyword) and \
            Project.objects.filter(project_name__icontains=keyword)
 
 
