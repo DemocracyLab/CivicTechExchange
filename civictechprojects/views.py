@@ -7,7 +7,7 @@ from time import time
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
-
+from django.db.models import Q
 from .models import Project, ProjectFile, FileCategory, ProjectLink
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.models.tags import get_tags_by_category
@@ -166,8 +166,7 @@ def projects_list(request):
 
 
 def projects_by_keyword(keyword):
-    return Project.objects.filter(project_description__icontains=keyword) and \
-           Project.objects.filter(project_name__icontains=keyword)
+    return Project.objects.filter(Q(project_description__icontains=keyword) | Q(project_name__icontains=keyword))
 
 
 def projects_by_tag(tags):
