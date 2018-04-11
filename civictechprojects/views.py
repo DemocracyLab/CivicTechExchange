@@ -7,7 +7,7 @@ from time import time
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
-
+from django.db.models import Q
 from .models import Project, ProjectFile, FileCategory, ProjectLink
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.models.tags import get_tags_by_category
@@ -69,6 +69,17 @@ def project_edit(request, project_id):
     except PermissionDenied:
         return HttpResponseForbidden()
     return redirect('/index/?section=AboutProject&id=' + project_id)
+
+
+def project_delete(request, project_id):
+    if not request.user.is_authenticated():
+        return redirect('/signup')
+
+    try:
+        ProjectCreationForm.delete_project(project_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return redirect('/index/')
 
 
 # TODO: Remove when React implementation complete
@@ -139,38 +150,27 @@ def my_projects(request):
 
 
 def projects_list(request):
+    project_list = Project.objects.all()
     if request.method == 'GET':
         url_parts = request.GET.urlencode()
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
-        projects = (
-            projects_by_keyword(query_params)
-            | projects_by_tag(query_params)
-        ) if (
-            'keyword' in query_params
-            or 'tags' in query_params
-        ) else Project.objects
-    response = json.dumps(projects_with_issue_areas(projects.order_by('project_name')))
+        if 'tags' in query_params:
+            project_list = projects_by_tag(query_params['tags'][0].split(','))
+        if 'keyword' in query_params:
+            project_list = project_list & projects_by_keyword(query_params['keyword'][0])
+
+    response = json.dumps(projects_with_issue_areas(project_list.order_by('project_name')))
 
     return HttpResponse(response)
 
 
-def projects_by_keyword(query_params):
-    return Project.objects.filter(
-        project_description__icontains=(
-            query_params['keyword'][0]
-            )
-        ) if 'keyword' in query_params else Project.objects.none()
+def projects_by_keyword(keyword):
+    return Project.objects.filter(Q(project_description__icontains=keyword) | Q(project_name__icontains=keyword))
 
 
-def projects_by_tag(query_params):
-    return Project.objects.filter(
-        project_issue_area__name__in=(
-            query_params['tags'][0].split(',')
-            if 'tags' in query_params
-            else []
-            )
-    )
+def projects_by_tag(tags):
+    return Project.objects.filter(project_issue_area__name__in=tags)
 
 
 def projects_with_issue_areas(list_of_projects):
