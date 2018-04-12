@@ -73717,7 +73717,7 @@ var ProjectFilterContainer = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'span',
           { className: 'ProjectFilterContainer-label' },
-          'Filter Search:'
+          'Filter By:'
         ),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_0__IssueAreasFilter_jsx__["a" /* default */], null)
       );

@@ -9,6 +9,7 @@
 }
 
 .SectionLink-active {
-  border-bottom: orange 5px solid;
+  height: 25px;
+  border-bottom: orange 3px solid;
   color: orange;
 }
