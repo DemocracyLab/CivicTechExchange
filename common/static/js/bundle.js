@@ -73581,7 +73581,11 @@ var ProjectCard = function (_React$PureComponent) {
             null,
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl })
           ),
-          this.props.project.name
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'h2',
+            null,
+            this.props.project.name
+          )
         )
       );
     }
