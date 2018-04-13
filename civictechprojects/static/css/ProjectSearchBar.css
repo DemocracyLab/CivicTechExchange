@@ -4,6 +4,10 @@
   height: 64px;
 }
 
+.ProjectSearchBar-root span.glyphicon {
+  color: blue;
+}
+
 .ProjectSearchBar-input {
   border: 0;
   font-size: 14px;

@@ -73582,7 +73582,7 @@ var ProjectCard = function (_React$PureComponent) {
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl })
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'h2',
+            'h3',
             null,
             this.props.project.name
           )
@@ -74122,6 +74122,7 @@ var ProjectSearchBar = function (_React$Component) {
       return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
         'div',
         { className: 'ProjectSearchBar-root' },
+        __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('span', { className: 'glyphicon glyphicon-search' }),
         __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('input', {
           className: 'ProjectSearchBar-input',
           onChange: function onChange(e) {
@@ -74783,7 +74784,11 @@ var SectionLink = function (_React$PureComponent) {
           className: (_cx = this._cx).get.apply(_cx, _toConsumableArray(this._getClassNames())),
           onClick: this._onChangeSection.bind(this)
         },
-        this.props.title
+        __WEBPACK_IMPORTED_MODULE_2_react___default.a.createElement(
+          'h3',
+          null,
+          this.props.title
+        )
       );
     }
   }, {
