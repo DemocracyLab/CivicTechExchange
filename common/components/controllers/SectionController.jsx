@@ -51,6 +51,10 @@ class SectionController extends React.Component<{||}, State> {
         return <LandingController />;
       case Section.MyProjects:
         return <MyProjectsController />;
+      case Section.SignUp:
+        return <SignUpController />;
+      case Section.LogIn:
+        return <LogInController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }
