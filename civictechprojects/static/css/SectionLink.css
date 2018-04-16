@@ -8,6 +8,10 @@
   padding-bottom: 8px;
 }
 
+.SectionLink-root h3 {
+  font-size: 1.2rem;
+}
+
 .SectionLink-active {
   height: 25px;
   border-bottom: orange 3px solid;
