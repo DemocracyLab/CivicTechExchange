@@ -74122,7 +74122,7 @@ var ProjectSearchBar = function (_React$Component) {
       return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
         'div',
         { className: 'ProjectSearchBar-root' },
-        __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('span', { className: 'glyphicon glyphicon-search' }),
+        __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('i', { 'class': 'fa fa-search' }),
         __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('input', {
           className: 'ProjectSearchBar-input',
           onChange: function onChange(e) {

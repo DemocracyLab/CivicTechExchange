@@ -4,12 +4,13 @@
   border-radius: 5px;
   color: white;
   display: inline-table;
-  font-size: 19px;
-  margin-top: 5px;
+  font-size: 15px;
+  margin-top: 6px;
   margin-bottom: 5px;
-  padding: 8px 7px 8px 7px;
+  padding: 8px 8px;
   text-decoration: inherit;
   width: auto;
+  cursor: pointer;
 }
 
 .SubHeader-root {
