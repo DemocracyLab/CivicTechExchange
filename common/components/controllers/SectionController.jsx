@@ -13,6 +13,8 @@ import MyProjectsController from './MyProjectsController.jsx'
 import NavigationStore from '../stores/NavigationStore.js'
 import React from 'react';
 import Section from '../enums/Section.js'
+import LogInController from './LogInController.jsx'
+import SignUpController from './SignUpController.jsx'
 
 type State = {|
   section: SectionType,
