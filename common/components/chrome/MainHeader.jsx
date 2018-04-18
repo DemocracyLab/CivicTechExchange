@@ -1,4 +1,4 @@
-h// @flow
+// @flow
 
 import type {SectionType} from '../enums/Section.js';
 
