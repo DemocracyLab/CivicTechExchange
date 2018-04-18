@@ -43,14 +43,36 @@ class MainHeader extends React.PureComponent<{||}> {
           {CurrentUser.firstName() + ' ' + CurrentUser.lastName() + ' '}
           | <a href="/logout">Logout</a>
         </span>
-      )
-      : (
-        <span>
-          <a href="/login">Log In</a> |{' '}
-          <a href="/signup">Sign Up</a> |{' '}
-          <a href="/password_reset">Forgot Password</a>
-        </span>
-      );
+            ) :
+            (
+            <span className = "MainHeader-links">
+                <span onClick = {this._onLogInClick}>
+                <a href = "" > Log In </a>
+                </span>
+
+                <span onClick = {this._onSignUpClick} >
+                <a href = "" > Sign Up < /a>
+                </span>
+
+                <a href = "/password_reset" > Forgot Password < /a>
+            </span>
+            );
+  }
+
+  _onLogInClick(): void {
+      NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: Section.LogIn,
+      url: url.section(Section.LogIn)
+    });
+  }
+
+  _onSignUpClick(): void {
+      NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: Section.SignUp,
+      url: url.section(Section.SignUp)
+    });
   }
 
   // _renderLinks(): React$Node {

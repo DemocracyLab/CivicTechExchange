@@ -74890,27 +74890,49 @@ var MainHeader = function (_React$PureComponent) {
         )
       ) : __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'span',
-        null,
+        { className: 'MainHeader-links' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'a',
-          { href: '/login' },
-          'Log In'
+          'span',
+          { onClick: this._onLogInClick },
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'a',
+            { href: '' },
+            ' Log In '
+          )
         ),
-        ' |',
-        ' ',
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'a',
-          { href: '/signup' },
-          'Sign Up'
+          'span',
+          { onClick: this._onSignUpClick },
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'a',
+            { href: '' },
+            ' Sign Up '
+          )
         ),
-        ' |',
-        ' ',
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'a',
           { href: '/password_reset' },
-          'Forgot Password'
+          ' Forgot Password '
         )
       );
+    }
+  }, {
+    key: '_onLogInClick',
+    value: function _onLogInClick() {
+      __WEBPACK_IMPORTED_MODULE_0__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
+        type: 'SET_SECTION',
+        section: __WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].LogIn,
+        url: __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].LogIn)
+      });
+    }
+  }, {
+    key: '_onSignUpClick',
+    value: function _onSignUpClick() {
+      __WEBPACK_IMPORTED_MODULE_0__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
+        type: 'SET_SECTION',
+        section: __WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].SignUp,
+        url: __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].SignUp)
+      });
     }
 
     // _renderLinks(): React$Node {
