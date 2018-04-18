@@ -68324,7 +68324,7 @@ Value.propTypes = {
 };
 
 /*!
-  Copyright (c) 2018 Jed Watson.
+  Copyright (c) 2017 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/react-select
 */
@@ -68880,8 +68880,8 @@ var Select$1 = function (_React$Component) {
 					break;
 				case 46:
 					// delete
+					event.preventDefault();
 					if (!this.state.inputValue && this.props.deleteRemoves) {
-						event.preventDefault();
 						this.popValue();
 					}
 					break;
@@ -69312,7 +69312,7 @@ var Select$1 = function (_React$Component) {
 			}
 			return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
 				'div',
-				{ className: className, key: 'input-wrap', style: { display: 'inline-block' } },
+				{ className: className, key: 'input-wrap' },
 				__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('input', _extends({ id: this.props.id }, inputProps))
 			);
 		}
@@ -74421,7 +74421,11 @@ var ProjectCard = function (_React$PureComponent) {
             null,
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl })
           ),
-          this.props.project.name
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'h3',
+            null,
+            this.props.project.name
+          )
         )
       );
     }
@@ -74553,7 +74557,7 @@ var ProjectFilterContainer = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'span',
           { className: 'ProjectFilterContainer-label' },
-          'Filter Search:'
+          'Filter By:'
         ),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_0__IssueAreasFilter_jsx__["a" /* default */], null)
       );
@@ -74959,6 +74963,7 @@ var ProjectSearchBar = function (_React$Component) {
       return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
         'div',
         { className: 'ProjectSearchBar-root' },
+        __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('i', { 'class': 'fa fa-search' }),
         __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('input', {
           className: 'ProjectSearchBar-input',
           onChange: function onChange(e) {
@@ -75620,7 +75625,11 @@ var SectionLink = function (_React$PureComponent) {
           className: (_cx = this._cx).get.apply(_cx, _toConsumableArray(this._getClassNames())),
           onClick: this._onChangeSection.bind(this)
         },
-        this.props.title
+        __WEBPACK_IMPORTED_MODULE_2_react___default.a.createElement(
+          'h3',
+          null,
+          this.props.title
+        )
       );
     }
   }, {

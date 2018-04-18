@@ -4,8 +4,9 @@
   color: inherit;
   display: inline-table;
   height: 340px;
-  margin: 25px 45px 0 0;
-  width: 262px;
+  margin-right: 20px;
+  margin-top: 20px;
+  width: 260px;
 }
 
 .ProjectCard-root > div {
@@ -27,6 +28,10 @@
 .ProjectCard-name {
   height: 140px;
   border-bottom: solid 1px;
+}
+
+.ProjectCard-name > h3{
+  font-size: 1.2rem;
 }
 
 .ProjectCard-subtext {
