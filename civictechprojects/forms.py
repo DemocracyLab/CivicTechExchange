@@ -1,22 +1,16 @@
 import json
-from django import forms
+from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
-from .models import Project, ProjectLink, ProjectFile, FileCategory
+from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory
+from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
 
-class ProjectCreationForm(forms.Form):
+
+class ProjectCreationForm(ModelForm):
     class Meta:
-        fields = [
-            'project_thumbnail_location',
-            'project_name',
-            'project_location',
-            'project_url',
-            'project_issue_area',
-            'project_description',
-            'project_links',
-            'project_files'
-        ]
+        model = Project
+        fields = '__all__'
 
     @staticmethod
     def create_project(request):
@@ -31,13 +25,23 @@ class ProjectCreationForm(forms.Form):
         )
         project = Project.objects.get(id=project.id)
 
+        # Tag fields operate like ManyToMany fields, and so cannot
+        # be added until after the object is created.
         issue_areas = form.data.get('project_issue_area')
         if issue_areas and len(issue_areas) != 0:
-            # Tag fields operate like ManyToMany fields, and so cannot
-            # be added until after the object is created.
             project.project_issue_area.add(issue_areas)
 
+        project_technologies = form.data.get('project_technologies')
+        if project_technologies and len(project_technologies) != 0:
+            project.project_technologies.add(project_technologies)
+
         project.save()
+
+        positions_json_text = form.data.get('project_positions')
+        if len(positions_json_text) > 0:
+            positions_json = json.loads(positions_json_text)
+            for position_json in positions_json:
+                position = ProjectPosition.create_from_json(project, position_json)
 
         links_json_text = form.data.get('project_links')
         if len(links_json_text) > 0:
@@ -59,6 +63,13 @@ class ProjectCreationForm(forms.Form):
             thumbnail = ProjectFile.from_json(project, FileCategory.THUMBNAIL, thumbnail_json)
             thumbnail.save()
 
+        # Notify the admins that a new project has been created
+        send_project_creation_notification(project)
+
+    @staticmethod
+    def delete_project(project_id):
+        Project.objects.get(id=project_id).delete()
+
     @staticmethod
     def edit_project(request, project_id):
         project = Project.objects.get(id=project_id)
@@ -71,10 +82,21 @@ class ProjectCreationForm(forms.Form):
         project.project_location = form.data.get('project_location')
         project.project_name = form.data.get('project_name')
         project.project_url = form.data.get('project_url')
+
         issue_areas = form.data.get('project_issue_area')
         if issue_areas and len(issue_areas) != 0:
             Tag.merge_tags_field(project.project_issue_area, issue_areas)
+
+        project_technologies = form.data.get('project_technologies')
+        if project_technologies and len(project_technologies) != 0:
+            Tag.merge_tags_field(project.project_technologies, project_technologies)
+
         project.save()
+
+        positions_json_text = form.data.get('project_positions')
+        if len(positions_json_text) > 0:
+            positions_json = json.loads(positions_json_text)
+            ProjectPosition.merge_changes(project, positions_json)
 
         links_json_text = form.data.get('project_links')
         if len(links_json_text) > 0:

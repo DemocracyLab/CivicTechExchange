@@ -14,14 +14,19 @@ import type {Validator} from '../../../components/forms/FormValidation.jsx'
 import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
 import type {APIError, TagDefinition, ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
 import url from '../../utils/url.js'
+import {PositionInfo} from "../../forms/PositionInfo.jsx";
+import PositionList from "../../forms/PositionList.jsx";
 import _ from 'lodash'
+
 
 type FormFields = {|
   project_name: ?string,
   project_location: ?string,
   project_url: ?string,
   project_description: ?string,
-  project_issue_area?: TagDefinition,
+  project_issue_area?: Array<TagDefinition>,
+  project_technologies?: Array<TagDefinition>,
+  project_positions?: Array<PositionInfo>,
   project_links: Array<LinkInfo>,
   project_files: Array<FileInfo>,
   project_thumbnail?: FileInfo
@@ -92,9 +97,11 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_location: project.project_location,
           project_url: project.project_url,
           project_description: project.project_description,
-          project_issue_area: project.project_issue_area && project.project_issue_area[0],
+          project_issue_area: project.project_issue_area,
+          project_technologies: project.project_technologies,
           project_links: _.cloneDeep(project.project_links),
           project_files: _.cloneDeep(project.project_files),
+          project_positions: _.cloneDeep(project.project_positions),
           project_thumbnail: project.project_thumbnail
         }
       });
@@ -112,8 +119,8 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     this.forceUpdate();
   }
   
-  onIssueAreaChange(tag: TagDefinition): void {
-    this.state.formFields.project_issue_area = tag;
+  onTagChange(formFieldName: string, value: $ReadOnlyArray<TagDefinition>): void {
+    this.state.formFields[formFieldName] = value;
   }
   
   onSubmit(): void {
@@ -149,7 +156,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <h2 className="form-group subheader">DETAILS</h2>
         <div className="form-group">
           <label htmlFor="project_name">Project Name</label>
-          <input type="text" className="form-control" id="project_name" name="project_name" maxLength="200"
+          <input type="text" className="form-control" id="project_name" name="project_name" maxLength="60"
                  value={this.state.formFields.project_name} onChange={this.onFormFieldChange.bind(this, "project_name")}/>
         </div>
         
@@ -170,7 +177,19 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             elementId="project_issue_area"
             value={this.state.formFields.project_issue_area}
             category={TagCategory.ISSUES}
-            onSelection={this.onIssueAreaChange.bind(this)}
+            allowMultiSelect={false}
+            onSelection={this.onTagChange.bind(this, "project_issue_area")}
+          />
+        </div>
+  
+        <div className="form-group">
+          <label htmlFor="project_technologies">Technology Used</label>
+          <TagSelector
+            elementId="project_technologies"
+            value={this.state.formFields.project_technologies}
+            category={TagCategory.TECHNOLOGIES_USED}
+            allowMultiSelect={true}
+            onSelection={this.onTagChange.bind(this, "project_technologies")}
           />
         </div>
         
@@ -183,6 +202,9 @@ class EditProjectForm extends React.PureComponent<Props,State> {
                     placeholder="This will appear as project introduction" rows="3" maxLength="3000"
                     value={this.state.formFields.project_description} onChange={this.onFormFieldChange.bind(this, "project_description")}></textarea>
         </div>
+  
+        <h2 className="form-group subheader">OPEN POSITIONS</h2>
+        <PositionList elementid="project_positions" positions={this.state.formFields.project_positions}/>
         
         <h2 className="form-group subheader">LINKS</h2>
         <LinkList elementid="project_links" links={this.state.formFields.project_links}/>

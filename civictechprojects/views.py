@@ -1,17 +1,20 @@
 from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
+from django.core.mail import EmailMessage
+from django.conf import settings
 from django.template import loader
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
-
+from django.db.models import Q
 from .models import Project, ProjectFile, FileCategory, ProjectLink
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
-from common.models.tags import get_tags_by_category
+from common.helpers.tags import get_tags_by_category
 from .forms import ProjectCreationForm
+from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 
 from pprint import pprint
@@ -56,6 +59,11 @@ def project_create(request):
     if not request.user.is_authenticated():
         return redirect('/signup')
 
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        # TODO: Log this
+        return HttpResponse(status=403)
+
     ProjectCreationForm.create_project(request)
     return redirect('/index/?section=MyProjects')
 
@@ -69,6 +77,17 @@ def project_edit(request, project_id):
     except PermissionDenied:
         return HttpResponseForbidden()
     return redirect('/index/?section=AboutProject&id=' + project_id)
+
+
+def project_delete(request, project_id):
+    if not request.user.is_authenticated():
+        return redirect('/signup')
+
+    try:
+        ProjectCreationForm.delete_project(project_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return redirect('/index/')
 
 
 # TODO: Remove when React implementation complete
@@ -94,42 +113,21 @@ def get_project(request, project_id):
     return HttpResponse(json.dumps(project.hydrate_to_json()))
 
 
-def projects(request):
-    return redirect('/index/')
-    template = loader.get_template('projects.html')
-    url_parts = request.GET.urlencode()
-    query_terms = urlparse.parse_qs(
-        url_parts, keep_blank_values=0, strict_parsing=0)
-    projects = Project.objects
-    if 'search' in query_terms:
-        search_query = (query_terms['search'])[0]
-        search_tags = search_query.split(',')
-        for tag in search_tags:
-            print('filtering by ' + str(tag))
-            projects = projects.filter(project_tags__name__in=[tag])
-    projects = projects.order_by('-project_name')
-    context = {'projects': to_rows(projects, 4)}
-    return HttpResponse(template.render(context, request))
-
-
-def home(request):
-    template = loader.get_template('home.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-
 @ensure_csrf_cookie
 def index(request):
     template = loader.get_template('new_index.html')
-    context = (
+    if request.user.is_authenticated():
+        contributor = Contributor.objects.get(id=request.user.id)
+        context = (
         {
             'userID': request.user.id,
+            'emailVerified': contributor.email_verified,
             'firstName': request.user.first_name,
             'lastName': request.user.last_name,
-        }
-        if request.user.is_authenticated() else
-        {}
-    )
+        })
+    else:
+        context = {}
+
     return HttpResponse(template.render(context, request))
 
 
@@ -139,38 +137,27 @@ def my_projects(request):
 
 
 def projects_list(request):
+    project_list = Project.objects.all()
     if request.method == 'GET':
         url_parts = request.GET.urlencode()
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
-        projects = (
-            projects_by_keyword(query_params)
-            | projects_by_tag(query_params)
-        ) if (
-            'keyword' in query_params
-            or 'tags' in query_params
-        ) else Project.objects
-    response = json.dumps(projects_with_issue_areas(projects.order_by('project_name')))
+        if 'tags' in query_params:
+            project_list = projects_by_tag(query_params['tags'][0].split(','))
+        if 'keyword' in query_params:
+            project_list = project_list & projects_by_keyword(query_params['keyword'][0])
+
+    response = json.dumps(projects_with_issue_areas(project_list.order_by('project_name')))
 
     return HttpResponse(response)
 
 
-def projects_by_keyword(query_params):
-    return Project.objects.filter(
-        project_description__icontains=(
-            query_params['keyword'][0]
-            )
-        ) if 'keyword' in query_params else Project.objects.none()
+def projects_by_keyword(keyword):
+    return Project.objects.filter(Q(project_description__icontains=keyword) | Q(project_name__icontains=keyword))
 
 
-def projects_by_tag(query_params):
-    return Project.objects.filter(
-        project_issue_area__name__in=(
-            query_params['tags'][0].split(',')
-            if 'tags' in query_params
-            else []
-            )
-    )
+def projects_by_tag(tags):
+    return Project.objects.filter(project_issue_area__name__in=tags)
 
 
 def projects_with_issue_areas(list_of_projects):
@@ -204,7 +191,29 @@ def delete_uploaded_file(request, s3_key):
         # TODO: Log this
         return HttpResponse(status=401)
 
-
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
 def contact_project_owner(request, project_id):
-    pprint(request.POST)
-    return HttpResponse(status=501)
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    message = body['message']
+
+    project = Project.objects.get(id=project_id)
+    email_msg = EmailMessage(
+        '{firstname} {lastname} would like to connect with {project}'.format(
+            firstname=user.first_name,
+            lastname=user.last_name,
+            project=project.project_name),
+        '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email),
+        settings.EMAIL_HOST_USER,
+        [project.project_creator.email],
+        {'Reply-To': user.email}
+    )
+    email_msg.send()
+    return HttpResponse(status=200)

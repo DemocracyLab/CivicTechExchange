@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="/static/css/ProjectTagContainer.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/SectionLink.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/SubHeader.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/TagsDisplay.css"/>
     <link href='/static/css/projects.css' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/static/css/project_signup.css"/>
     <!--TODO: Webpack react-select.css from node_modules instead of keeping a copy in git-->
@@ -50,6 +51,7 @@
         '{{userID}}'
         ? Object.freeze({
           userID: '{{userID}}',
+          emailVerified: {{emailVerified|yesno:"true,false"}},
           firstName: '{{firstName}}',
           lastName: '{{lastName}}',
         })

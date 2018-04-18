@@ -6,7 +6,8 @@ const TagCategory = {
   PROJECT_STAGE: "Project Stage",
   SOFTWARE_LICENSE: "Software License",
   STATUS: "Status",
-  TECHNOLOGIES_USED: "Technologies Used"
+  TECHNOLOGIES_USED: "Technologies Used",
+  ROLE: "Role"
 };
 
 export default TagCategory;

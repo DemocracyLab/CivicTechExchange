@@ -18,7 +18,7 @@ class TaggedIssueAreas(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
 
-class TaggedTag(TaggedItemBase):
+class TaggedTechnologies(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
 
@@ -32,30 +32,34 @@ class Project(models.Model):
     project_description = models.CharField(max_length=3000, blank=True)
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
     project_issue_area.remote_field.related_name = "+"
+    project_technologies = TaggableManager(blank=True, through=TaggedTechnologies)
+    project_technologies.remote_field.related_name = "+"
     project_location = models.CharField(max_length=200)
     project_name = models.CharField(max_length=200)
-    project_tags = TaggableManager(blank=True, through=TaggedTag)
-    project_tags.remote_field.related_name = "+"
     project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
 
     def __str__(self):
-        return str(self.id) + ':' + self.project_name
+        return str(self.id) + ':' + str(self.project_name)
 
     def hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_project=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_project=self.id)
+        positions = ProjectPosition.objects.filter(position_project=self.id)
 
         project = {
             'project_id': self.id,
             'project_name': self.project_name,
             'project_creator': self.project_creator.id,
+            'project_claimed': not self.project_creator.is_admin_contributor(),
             'project_description': self.project_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
-            'project_issue_area': Tag.hydrate_to_json(list(self.project_issue_area.all().values())),
+            'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
+            'project_technologies': Tag.hydrate_to_json(self.id, list(self.project_technologies.all().values())),
+            'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links))
         }
@@ -64,16 +68,6 @@ class Project(models.Model):
             project['project_thumbnail'] = thumbnail_files[0].to_json()
 
         return project
-
-    # Remove any tags that aren't part of the canonical list
-    @staticmethod
-    def remove_tags_not_in_list():
-        for project in Project.objects.all():
-            for issue in project.project_issue_area.all():
-                issue_tag = Tag.get_by_name(issue)
-                if not issue_tag:
-                    print('Removing invalid tag', issue, 'from project:', project.project_name)
-                    project.project_issue_area.remove(issue)
 
 
 class ProjectLink(models.Model):
@@ -140,6 +134,68 @@ class ProjectLink(models.Model):
             'linkUrl': self.link_url,
             'visibility': self.link_visibility
         }
+
+
+class TaggedPositionRole(TaggedItemBase):
+    content_object = models.ForeignKey('ProjectPosition')
+
+
+class ProjectPosition(models.Model):
+    position_project = models.ForeignKey(Project, related_name='positions')
+    position_role = TaggableManager(blank=False, through=TaggedPositionRole)
+    position_description = models.CharField(max_length=3000)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'description': self.position_description,
+            'roleTag': Tag.hydrate_to_json(self.id, self.position_role.all().values())[0]
+        }
+
+    @staticmethod
+    def create_from_json(project, position_json):
+        position = ProjectPosition()
+        position.position_project = project
+        position.position_description = position_json['description']
+        position.save()
+
+        position.position_role.add(position_json['roleTag']['tag_name'])
+
+        return position
+
+    @staticmethod
+    def update_from_json(position, position_json):
+        position.position_description = position_json['description']
+        new_role = position_json['roleTag']['tag_name']
+        Tag.merge_tags_field(position.position_role, new_role)
+        position.save()
+
+    @staticmethod
+    def delete_position(position):
+        position.position_role.clear()
+        position.delete()
+
+    @staticmethod
+    def merge_changes(project, positions):
+        added_positions = list(filter(lambda position: 'id' not in position, positions))
+        updated_positions = list(filter(lambda position: 'id' in position, positions))
+        updated_positions_ids = set(map(lambda position: position['id'], updated_positions))
+        existing_positions = ProjectPosition.objects.filter(position_project=project.id)
+        existing_positions_ids = set(map(lambda position: position.id, existing_positions))
+        existing_projects_by_id = {position.id: position for position in existing_positions}
+
+        deleted_position_ids = list(existing_positions_ids - updated_positions_ids)
+
+        for added_position in added_positions:
+            ProjectPosition.create_from_json(project, added_position)
+
+        for updated_position_json in updated_positions:
+            ProjectPosition.update_from_json(existing_projects_by_id[updated_position_json['id']], updated_position_json)
+
+        for deleted_position_id in deleted_position_ids:
+            ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
+
+
 
 
 class ProjectFile(models.Model):
