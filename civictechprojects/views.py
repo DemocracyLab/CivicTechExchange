@@ -142,8 +142,8 @@ def projects_list(request):
         url_parts = request.GET.urlencode()
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
-        if 'tags' in query_params:
-            project_list = projects_by_tag(query_params['tags'][0].split(','))
+        if 'issues' in query_params:
+            project_list = projects_by_issue_areas(query_params['issues'][0].split(','))
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
 
@@ -156,8 +156,12 @@ def projects_by_keyword(keyword):
     return Project.objects.filter(Q(project_description__icontains=keyword) | Q(project_name__icontains=keyword))
 
 
-def projects_by_tag(tags):
+def projects_by_issue_areas(tags):
     return Project.objects.filter(project_issue_area__name__in=tags)
+
+
+def projects_by_technologies(tags):
+    return Project.objects.filter(project_technologies__name__in=tags)
 
 
 def projects_with_issue_areas(list_of_projects):

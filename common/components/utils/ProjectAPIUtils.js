@@ -14,6 +14,7 @@ export type APIError = {|
   +errorMessage: string
 |};
 
+// TODO: Condense redundant tag definitions
 export type TagDefinition = {|
   id: number,
   tag_name: string,

@@ -7,6 +7,9 @@ import ProjectSearchDispatcher from './ProjectSearchDispatcher.js';
 import {List, Record} from 'immutable'
 import ProjectAPIUtils from '../utils/ProjectAPIUtils';
 import type {FileInfo} from '../../../common/FileInfo.jsx'
+import TagCategory from "../common/tags/TagCategory.jsx";
+import urls from "../utils/url.js";
+import _ from 'lodash'
 
 export type Project = {|
   +description: string,
@@ -81,11 +84,11 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _loadProjects(state: State): State {
-    const url = [
-      '/api/projects?',
-      this._getKeywordQueryParam(state),
-      this._getTagsQueryParam(state),
-    ].join('');
+    const args = _.pickBy({
+        keyword: state.keyword,
+        issues: this._getIssueAreasQueryParam(state)
+      },_.identity);
+    const url: string = urls.constructWithQueryString('/api/projects', args);
     fetch(new Request(url))
       .then(response => response.json())
       .then(projects =>
@@ -97,15 +100,9 @@ class ProjectSearchStore extends ReduceStore<State> {
     return state.set('projects', null);
   }
 
-  _getKeywordQueryParam(state: State): ?string {
-    return state.keyword ? '&keyword=' + state.keyword : null;
-  }
-
-  _getTagsQueryParam(state: State): ?string {
-    return state.tags
-      ? '&tags='
-        + state.tags.map(tag => tag.tagName).join(',')
-      : null;
+  _getIssueAreasQueryParam(state: State): ?string {
+    const issueTags = state.tags.filter(tag => tag.category === TagCategory.ISSUES);
+    return issueTags.map(tag => tag.tagName).join(',');
   }
 
   getKeyword(): string {
