@@ -1,8 +1,10 @@
 // @flow
 
 import React from 'react';
+import metrics from "../../utils/metrics.js";
 import {Modal, Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
 import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
+import CurrentUser from "../../utils/CurrentUser";
 
 
 type Props = {|
@@ -44,6 +46,7 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
 
   handleSubmit(event) {
     this.setState({isSending:true});
+    metrics.logUserContactedProjectOwner(CurrentUser.userID(), this.props.projectId);
     ProjectAPIUtils.post("/contact/project/" + this.props.projectId + "/",
       {message: this.state.message},
       response => this.closeModal(),
