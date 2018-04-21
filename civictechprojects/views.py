@@ -10,7 +10,7 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import Project, ProjectFile, FileCategory, ProjectLink
+from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category
 from .forms import ProjectCreationForm
@@ -143,7 +143,11 @@ def projects_list(request):
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
         if 'issues' in query_params:
-            project_list = projects_by_issue_areas(query_params['issues'][0].split(','))
+            project_list = project_list & projects_by_issue_areas(query_params['issues'][0].split(','))
+        if 'tech' in query_params:
+            project_list = project_list & projects_by_technologies(query_params['tech'][0].split(','))
+        if 'role' in query_params:
+            project_list = project_list & projects_by_roles(query_params['role'][0].split(','))
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
 
@@ -162,6 +166,14 @@ def projects_by_issue_areas(tags):
 
 def projects_by_technologies(tags):
     return Project.objects.filter(project_technologies__name__in=tags)
+
+
+def projects_by_roles(tags):
+    # Get roles by tags
+    positions = ProjectPosition.objects.filter(position_role__name__in=tags).select_related('position_project')
+
+    # Get the list of projects linked to those roles
+    return Project.objects.filter(positions__in=positions)
 
 
 def projects_with_issue_areas(list_of_projects):
