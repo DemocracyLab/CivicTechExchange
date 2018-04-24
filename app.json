@@ -27,6 +27,10 @@
     },
     "PROTOCOL_DOMAIN": {
       "required": true
+    },
+    "DISABLE_COLLECTSTATIC": {
+      "description": "Don't run python manage.py collectstatic --noinput on deploy",
+      "value": "1"
     }
   },
   "formation": {
