@@ -20,6 +20,7 @@ class MainHeader extends React.PureComponent<{||}> {
         </span>
         <span className="MainHeader-rightContent">
           <span>
+            <button id="contact"><a href="mailto:hello@democracylab.org">Contact Us</a></button>
             {/* {this._renderLinks()} */}
           </span>
           {this._renderHero()}
