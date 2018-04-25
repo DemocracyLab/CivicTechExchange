@@ -13,7 +13,8 @@ type Props = {|
 |};
 
 type State = {|
-  currentImage: FileInfo
+  currentImage: FileInfo,
+  initialized: boolean
 |};
 
 
@@ -22,13 +23,15 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
   constructor(): void {
     super();
     this.state = {
-      currentImage: ""
+      currentImage: "",
+      initialized: false
     };
   }
   
   componentWillReceiveProps(nextProps: Props): void {
-    if(nextProps.currentImage) {
+    if(!this.state.initialized && nextProps.currentImage) {
       this.updateFormFields(nextProps.currentImage);
+      this.setState({initialized: true});
     }
   }
   
