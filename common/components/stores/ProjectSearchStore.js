@@ -91,10 +91,10 @@ class ProjectSearchStore extends ReduceStore<State> {
     const url: string = urls.constructWithQueryString('/api/projects', args);
     fetch(new Request(url))
       .then(response => response.json())
-      .then(projects =>
+      .then(getProjectsResponse =>
         ProjectSearchDispatcher.dispatch({
           type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
-          projects: List(projects.map(ProjectAPIUtils.projectFromAPIData)),
+          projects: List(getProjectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData)),
         }),
       );
     return state.set('projects', null);

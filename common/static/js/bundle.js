@@ -28075,11 +28075,6 @@ var ProjectSearchStore = function (_ReduceStore) {
   }, {
     key: '_loadProjects',
     value: function _loadProjects(state) {
-      // const url = [
-      //   '/api/projects?',
-      //   this._getKeywordQueryParam(state),
-      //   this._getIssueAreasQueryParam(state),
-      // ].join('');
       var args = __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.pickBy({
         keyword: state.keyword,
         issues: this._getIssueAreasQueryParam(state)
@@ -28087,20 +28082,14 @@ var ProjectSearchStore = function (_ReduceStore) {
       var url = __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].constructWithQueryString('/api/projects', args);
       fetch(new Request(url)).then(function (response) {
         return response.json();
-      }).then(function (projects) {
+      }).then(function (getProjectsResponse) {
         return __WEBPACK_IMPORTED_MODULE_1__ProjectSearchDispatcher_js__["a" /* default */].dispatch({
           type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
-          projects: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(projects.map(__WEBPACK_IMPORTED_MODULE_3__utils_ProjectAPIUtils__["a" /* default */].projectFromAPIData))
+          projects: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(getProjectsResponse.projects.map(__WEBPACK_IMPORTED_MODULE_3__utils_ProjectAPIUtils__["a" /* default */].projectFromAPIData))
         });
       });
       return state.set('projects', null);
     }
-    //
-    // _getKeywordQueryParam(state: State): ?string {
-    //   return state.keyword ? 'keyword=' + state.keyword : null;
-    // }
-    //
-
   }, {
     key: '_getIssueAreasQueryParam',
     value: function _getIssueAreasQueryParam(state) {
@@ -28111,8 +28100,6 @@ var ProjectSearchStore = function (_ReduceStore) {
         return tag.tagName;
       }).join(',');
     }
-    // _getTagSlugs(tags: )
-
   }, {
     key: 'getKeyword',
     value: function getKeyword() {
@@ -28123,14 +28110,6 @@ var ProjectSearchStore = function (_ReduceStore) {
     value: function getProjects() {
       return this.getState().projects;
     }
-
-    // Returns all issue tags
-    // _getIssues(): List<Tag> {
-    //   return this.getState().tags.filter(tag => tag.category === TagCategory.ISSUES);
-    // }
-
-    // Returns all tags
-
   }, {
     key: 'getTags',
     value: function getTags() {

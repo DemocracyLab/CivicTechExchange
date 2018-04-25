@@ -11,6 +11,7 @@ import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition
+from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category
 from .forms import ProjectCreationForm
@@ -133,7 +134,9 @@ def index(request):
 
 def my_projects(request):
     projects = Project.objects.filter(project_creator_id=request.user.id)
-    return HttpResponse(json.dumps(projects_with_issue_areas(projects)))
+    return HttpResponse(json.dumps([
+        project.hydrate_to_json() for project in projects
+    ]))
 
 
 def projects_list(request):
@@ -151,7 +154,7 @@ def projects_list(request):
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
 
-    response = json.dumps(projects_with_issue_areas(project_list.order_by('project_name')))
+    response = json.dumps(projects_with_filter_counts(project_list.order_by('project_name')))
 
     return HttpResponse(response)
 
@@ -176,10 +179,11 @@ def projects_by_roles(tags):
     return Project.objects.filter(positions__in=positions)
 
 
-def projects_with_issue_areas(list_of_projects):
-    return [
-        project.hydrate_to_json() for project in list_of_projects
-    ]
+def projects_with_filter_counts(projects):
+    return {
+        'projects': [project.hydrate_to_json() for project in projects],
+        'filters': projects_tag_counts(projects)
+    }
 
 
 def presign_project_thumbnail_upload(request):
