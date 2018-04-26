@@ -36,7 +36,7 @@ class LandingController extends React.PureComponent<{||}> {
           <p
             className={this._cx.get('landingText', 'letsGetStarted')}
             >
-              {"LET'S GET STARTED."}
+              {"LET'S GET STARTED NOW!"}
             </p>
           <div
             className={this._cx.get('centerer', 'signUpContainer')}

@@ -28,7 +28,9 @@ class ProjectCard extends React.PureComponent<Props> {
       <a style={styles}
         className="ProjectCard-root"
         href={url.section(Section.AboutProject, {id: this.props.project.id})}>
+        <img className="checkbox" src= "https://i.imgur.com/yXgKEHY.jpg"/>
         {this._renderName()}
+
         {this._renderIssueAndLocation()}
         <div className={this._cx.get('description', 'subtext', 'value')}>
           {this._renderDescription()}

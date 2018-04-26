@@ -74432,6 +74432,7 @@ var ProjectCard = function (_React$PureComponent) {
         { style: styles,
           className: 'ProjectCard-root',
           href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }) },
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'checkbox', src: 'https://i.imgur.com/yXgKEHY.jpg' }),
         this._renderName(),
         this._renderIssueAndLocation(),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
@@ -75115,7 +75116,7 @@ var LandingController = function (_React$PureComponent) {
             {
               className: this._cx.get('landingText', 'letsGetStarted')
             },
-            "LET'S GET STARTED."
+            "LET'S GET STARTED NOW!"
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
@@ -75465,6 +75466,15 @@ var MainHeader = function (_React$PureComponent) {
     //   ].map(link => <span className="MainHeader-link" key={link}>{link}</span>);
     // }
 
+  }, {
+    key: '_renderLinks',
+    value: function _renderLinks() {
+      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+        'a',
+        { href: 'https://www.google.com' },
+        'Feedback'
+      );
+    }
   }]);
 
   return MainHeader;

@@ -60,6 +60,9 @@ class MainHeader extends React.PureComponent<{||}> {
   //     'Messages',
   //   ].map(link => <span className="MainHeader-link" key={link}>{link}</span>);
   // }
+  _renderLinks(): React$Node {
+    return <a href="https://www.google.com">Feedback</a>
+  }
 }
 
 export default MainHeader;
