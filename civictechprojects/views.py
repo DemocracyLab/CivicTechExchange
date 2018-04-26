@@ -80,11 +80,11 @@ def project_edit(request, project_id):
 
 
 def project_delete(request, project_id):
+    # if not logged in, send user to login page
     if not request.user.is_authenticated():
-        return redirect('/signup')
-
+        return redirect('/login')
     try:
-        ProjectCreationForm.delete_project(project_id)
+        ProjectCreationForm.delete_project(request, project_id)
     except PermissionDenied:
         return HttpResponseForbidden()
     return redirect('/index/')
