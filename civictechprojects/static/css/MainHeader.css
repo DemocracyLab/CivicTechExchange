@@ -29,7 +29,7 @@
   float: right;
 }
 
-.MainHeader-rightContent #contact {
+/* .MainHeader-rightContent #contact {
   border-radius: 5px;
   border: 0;
   background-color: orange;
@@ -47,4 +47,4 @@
 .MainHeader-rightContent #contact:hover {
   background-color: rgb(194, 128, 13);
   text-decoration: none;
-}
+} */

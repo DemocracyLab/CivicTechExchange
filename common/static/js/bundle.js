@@ -75432,19 +75432,7 @@ var MainHeader = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'span',
           { className: 'MainHeader-rightContent' },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'span',
-            null,
-            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-              'button',
-              { id: 'contact' },
-              __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-                'a',
-                { href: 'mailto:hello@democracylab.org' },
-                'Contact Us'
-              )
-            )
-          ),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('span', null),
           this._renderHero()
         )
       );
@@ -75470,10 +75458,24 @@ var MainHeader = function (_React$PureComponent) {
           'a',
           { href: '/logout' },
           'Logout'
+        ),
+        ' | ',
+        ' ',
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'a',
+          { href: 'mailto:hello@democracylab.org' },
+          'Contact Us'
         )
       ) : __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'span',
         null,
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'a',
+          { href: 'mailto:hello@democracylab.org' },
+          'Contact Us'
+        ),
+        ' |',
+        ' ',
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'a',
           { href: '/login' },
