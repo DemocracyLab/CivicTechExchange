@@ -28,23 +28,3 @@
 .MainHeader-rightContent {
   float: right;
 }
-
-/* .MainHeader-rightContent #contact {
-  border-radius: 5px;
-  border: 0;
-  background-color: orange;
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-#contact > a {
-  text-decoration: none;
-}
-
-.MainHeader-rightContent #contact:hover {
-  background-color: rgb(194, 128, 13);
-  text-decoration: none;
-} */

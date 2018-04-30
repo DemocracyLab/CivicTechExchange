@@ -33280,7 +33280,8 @@ var ContactProjectModal = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__common_confirmation_ConfirmationModal_jsx__["a" /* default */], { showModal: this.state.showConfirmationModal,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__common_confirmation_ConfirmationModal_jsx__["a" /* default */], {
+          showModal: this.state.showConfirmationModal,
           message: 'Do you want to send this?',
           onSelection: this.receiveSendConfirmation
         }),
@@ -75463,7 +75464,7 @@ var MainHeader = function (_React$PureComponent) {
         ' ',
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'a',
-          { href: 'mailto:hello@democracylab.org' },
+          { href: 'mailto:hello@democracylab.org', target: '_blank' },
           'Contact Us'
         )
       ) : __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
