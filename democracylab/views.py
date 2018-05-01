@@ -1,21 +1,12 @@
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import redirect
 from django.template import loader
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
-from .forms import DemocracyLabUserCreationForm, UserUpdateForm
-from .models import Contributor
-
-
-def to_columns(items, count=3):
-    res = []
-    for _ in range(count):
-        res.append([])
-    cur = 0
-    for item in items:
-        res[cur % count].append(item)
-        cur += 1
-    return res
+from .forms import DemocracyLabUserCreationForm
+from .models import Contributor, get_request_contributor
 
 
 def signup(request):
@@ -29,12 +20,14 @@ def signup(request):
                 username=email,
                 email=email,
                 first_name=form.cleaned_data.get('first_name'),
-                last_name=form.cleaned_data.get('last_name')
+                last_name=form.cleaned_data.get('last_name'),
+                email_verified=False
             )
             contributor.set_password(raw_password)
             contributor.save()
             user = authenticate(username=email, password=raw_password)
             login(request, user)
+            contributor.send_verification_email()
             return redirect('/')
         else:
             # TODO inform client of form invalidity
@@ -47,24 +40,31 @@ def signup(request):
         return HttpResponse(template.render({}, request))
 
 
-def user_update(request):
-    if request.method == 'POST':
-        form = UserUpdateForm(request.POST)
-        # TODO: Get current user and just edit the fields
-        # contributor = Contributor(
-        #     username=username,
-        #     first_name=form.cleaned_data.get('first_name'),
-        #     last_name=form.cleaned_data.get('last_name'),
-        #     email=form.cleaned_data.get('email'),
-        #     postal_code=form.cleaned_data.get('postal_code'),
-        #     phone_primary=form.cleaned_data.get('phone_primary'),
-        #     about_me=form.cleaned_data.get('about_me'),
-        # )
-        # contributor.save()
+def verify_user(request, user_id, token):
+    # Get user info
+    user = Contributor.objects.get(id=user_id)
+
+    # Verify token
+    if default_token_generator.check_token(user, token):
+        # TODO: Add feedback from the frontend to indicate success/failure
+        contributor = Contributor.objects.get(id=user_id)
+        contributor.email_verified = True
+        contributor.save()
         return redirect('/')
     else:
-        form = UserUpdateForm()
+        return HttpResponse(status=401)
 
-    template = loader.get_template('aboutme.html')
-    context = {'form': form}
-    return HttpResponse(template.render(context, request))
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def send_verification_email(request):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        user.send_verification_email()
+        return HttpResponse(status=200)
+    else:
+        # If user's email was already confirmed
+        return HttpResponse(status=403)

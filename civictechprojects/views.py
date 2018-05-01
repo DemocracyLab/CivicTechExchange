@@ -1,6 +1,8 @@
 from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
+from django.core.mail import EmailMessage
+from django.conf import settings
 from django.template import loader
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
@@ -10,8 +12,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .models import Project, ProjectFile, FileCategory, ProjectLink
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
-from common.models.tags import get_tags_by_category
+from common.helpers.tags import get_tags_by_category
 from .forms import ProjectCreationForm
+from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 
 from pprint import pprint
@@ -55,6 +58,11 @@ def to_tag_map(tags):
 def project_create(request):
     if not request.user.is_authenticated():
         return redirect('/signup')
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        # TODO: Log this
+        return HttpResponse(status=403)
 
     ProjectCreationForm.create_project(request)
     return redirect('/index/?section=MyProjects')
@@ -105,42 +113,21 @@ def get_project(request, project_id):
     return HttpResponse(json.dumps(project.hydrate_to_json()))
 
 
-def projects(request):
-    return redirect('/index/')
-    template = loader.get_template('projects.html')
-    url_parts = request.GET.urlencode()
-    query_terms = urlparse.parse_qs(
-        url_parts, keep_blank_values=0, strict_parsing=0)
-    projects = Project.objects
-    if 'search' in query_terms:
-        search_query = (query_terms['search'])[0]
-        search_tags = search_query.split(',')
-        for tag in search_tags:
-            print('filtering by ' + str(tag))
-            projects = projects.filter(project_tags__name__in=[tag])
-    projects = projects.order_by('-project_name')
-    context = {'projects': to_rows(projects, 4)}
-    return HttpResponse(template.render(context, request))
-
-
-def home(request):
-    template = loader.get_template('home.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-
 @ensure_csrf_cookie
 def index(request):
     template = loader.get_template('new_index.html')
-    context = (
+    if request.user.is_authenticated():
+        contributor = Contributor.objects.get(id=request.user.id)
+        context = (
         {
             'userID': request.user.id,
+            'emailVerified': contributor.email_verified,
             'firstName': request.user.first_name,
             'lastName': request.user.last_name,
-        }
-        if request.user.is_authenticated() else
-        {}
-    )
+        })
+    else:
+        context = {}
+
     return HttpResponse(template.render(context, request))
 
 
@@ -204,7 +191,29 @@ def delete_uploaded_file(request, s3_key):
         # TODO: Log this
         return HttpResponse(status=401)
 
-
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
 def contact_project_owner(request, project_id):
-    pprint(request.POST)
-    return HttpResponse(status=501)
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    message = body['message']
+
+    project = Project.objects.get(id=project_id)
+    email_msg = EmailMessage(
+        '{firstname} {lastname} would like to connect with {project}'.format(
+            firstname=user.first_name,
+            lastname=user.last_name,
+            project=project.project_name),
+        '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email),
+        settings.EMAIL_HOST_USER,
+        [project.project_creator.email],
+        {'Reply-To': user.email}
+    )
+    email_msg.send()
+    return HttpResponse(status=200)

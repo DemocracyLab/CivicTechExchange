@@ -6,9 +6,9 @@ import type {Tag} from '../../stores/TagStore.js';
 import {List} from 'immutable'
 import IssueAreaDropDownItem from './IssueAreaDropDownItem.jsx';
 import {Container} from 'flux/utils';
-import TagDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import TagStore from '../../stores/TagStore.js';
 import React from 'react';
+import _ from 'lodash';
 
 type State = {|
   issueAreas: List<Tag>,
@@ -21,8 +21,8 @@ class IssueAreaList extends React.Component<{||}, State> {
 
   static calculateState(prevState: State): State {
     return {
-      issueAreas: TagStore.getIssueAreas(),
-    };
+      issueAreas: _.sortBy(TagStore.getIssueAreas().toArray(), ["displayName"])
+    }
   }
 
   render(): React$Node {

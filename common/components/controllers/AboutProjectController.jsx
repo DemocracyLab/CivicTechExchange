@@ -3,7 +3,11 @@
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import { Button } from 'react-bootstrap';
-import ContactProjectModal from '../common/projects/ContactProjectModal.jsx'
+import type {PositionInfo} from "../forms/PositionInfo.jsx";
+import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
+import ContactProjectModal from "../common/projects/ContactProjectModal.jsx";
+import NotificationModal from "../common/notification/NotificationModal.jsx";
+import TagsDisplay from '../common/tags/TagsDisplay.jsx'
 import url from '../utils/url.js'
 import _ from 'lodash'
 
@@ -11,6 +15,8 @@ import React from 'react';
 
 type State = {|
   project: ?ProjectDetailsAPIData,
+  showPositionModal: boolean,
+  shownPosition: ?PositionInfo
 |};
 
 class AboutProjectController extends React.PureComponent<{||}, State> {
@@ -20,10 +26,11 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
     this.state = {
       project: null,
-      showModal: false
+      showContactModal: false,
+      showPositionModal: false,
+      shownPosition: null
     };
 
-    this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
   
@@ -38,13 +45,8 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     });
   }
   
-
   handleClose() {
-    this.setState({ showModal: false });
-  }
-
-  handleShow() {
-    this.setState({ showModal: true });
+    this.setState({ showContactModal: false });
   }
 
   render(): React$Node {
@@ -70,7 +72,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                   </div>
                   <div className="row">
                     <div className="col">
-                      {project && !_.isEmpty(project.project_issue_area) && project.project_issue_area[0].label}
+                      {project && !_.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name}
                     </div>
                   </div>
                 </div>
@@ -89,13 +91,20 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
               </div>
               <div className="row">
-                <Button className="ProjectSearchBar-submit" type="button" onClick={this.handleShow}>Contact {project && project.project_name}</Button>
+                <ContactProjectButton project={this.state.project}/>
               </div>
             </div>
           </div>
-          <div>
-            <ContactProjectModal showModal={this.state.showModal} handleClose={this.handleClose}></ContactProjectModal>
+  
+          <div className="row" style={{margin: "30px 40px 0 40px"}}>
+            <div className="col">
+              TECHNOLOGIES USED
+              <div>
+                <TagsDisplay tags={project && project.project_technologies}/>
+              </div>
+            </div>
           </div>
+    
           <div className="row" style={{margin: "30px 40px 0 40px"}}>
             <div className="col">
               PROJECT DETAILS
@@ -104,20 +113,47 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               </div>
             </div>
           </div>
+
+          <NotificationModal
+            showModal={this.state.showPositionModal}
+            message={this.state.shownPosition && this.state.shownPosition.description}
+            buttonText="Close"
+            headerText={this.state.shownPosition && this.state.shownPosition.roleTag.display_name}
+            onClickButton={() => this.setState({showPositionModal: false})}
+          />
+          
+          {
+            project && !_.isEmpty(project.project_positions)
+              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
+                  <div className='col'>
+                    <h2 className="form-group subheader">OPEN POSITIONS</h2>
+                    {this._renderPositions()}
+                  </div>
+                </div>
+              : null
+          }
     
-          <div className="row" style={{margin: "30px 40px 0 40px"}}>
-            <div className='col'>
-              <h2 className="form-group subheader">LINKS</h2>
-              {this._renderLinks()}
-            </div>
-          </div>
-    
-          <div className="row" style={{margin: "30px 40px 0 40px"}}>
-            <div className='col'>
-              <h2 className="form-group subheader">FILES</h2>
-              {this._renderFiles()}
-            </div>
-          </div>
+          {
+            project && !_.isEmpty(project.project_links)
+              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
+                  <div className='col'>
+                    <h2 className="form-group subheader">LINKS</h2>
+                    {this._renderLinks()}
+                  </div>
+                </div>
+              : null
+          }
+          
+          {
+            project && !_.isEmpty(project.project_files)
+              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
+                  <div className='col'>
+                    <h2 className="form-group subheader">FILES</h2>
+                    {this._renderFiles()}
+                  </div>
+                </div>
+              : null
+          }
         </div>
       </div>
     );
@@ -150,6 +186,22 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         <a href={file.publicUrl}>{file.fileName}</a>
       </div>
     );
+  }
+  
+  _renderPositions(): ?Array<React$Node> {
+    const project = this.state.project;
+    return project && project.project_positions && project.project_positions.map((position, i) =>
+      <div key={i}>
+        <span className="pseudo-link" onClick={this.showPositionModal.bind(this,position)}>{position.roleTag.display_name}</span>
+      </div>
+    );
+  }
+  
+  showPositionModal(position: PositionInfo): void {
+    this.setState({
+      showPositionModal: true,
+      shownPosition: position
+    });
   }
 }
 

@@ -4,17 +4,22 @@
   height: 64px;
 }
 
+.ProjectSearchBar-root > i {
+  margin-left: 10px;
+}
+
 .ProjectSearchBar-input {
   border: 0;
   font-size: 14px;
   outline-width: 0;
-  margin-left: 51px;
+  margin-left: 10px;
   margin-top: 24px;
 }
 
 .ProjectSearchBar-submit {
   background-color: #86c232;
   border: 0;
+  border-radius: 5px;
   color: white;
   cursor: pointer;
   float: right;

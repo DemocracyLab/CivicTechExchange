@@ -1,0 +1,9 @@
+.Tag-Item {
+  background-color: lightblue;
+  border-radius: 5px;
+  padding: 5px 5px 5px 5px;
+}
+
+span.Tag-Item + span.Tag-Item {
+  margin-left: 10px;
+}

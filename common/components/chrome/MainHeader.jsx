@@ -41,11 +41,14 @@ class MainHeader extends React.PureComponent<{||}> {
       ? (
         <span>
           {CurrentUser.firstName() + ' ' + CurrentUser.lastName() + ' '}
-          | <a href="/logout">Logout</a>
+          | <a href="/logout">Logout</a> | {' '}
+            <a href="mailto:hello@democracylab.org" target="_blank">Contact Us</a>
         </span>
+
             ) :
             (
             <span className = "MainHeader-links">
+                <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
                 <span onClick = {this._onLogInClick}>
                 <a href = "" > Log In </a>
                 </span>
@@ -73,6 +76,17 @@ class MainHeader extends React.PureComponent<{||}> {
       section: Section.SignUp,
       url: url.section(Section.SignUp)
     });
+
+      // )
+      // : (
+      //   <span>
+      //     <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
+      //     <a href="/login">Log In</a> |{' '}
+      //     <a href="/signup">Sign Up</a> |{' '}
+      //     <a href="/password_reset">Forgot Password</a>
+      //   </span>
+      // );
+
   }
 
   // _renderLinks(): React$Node {

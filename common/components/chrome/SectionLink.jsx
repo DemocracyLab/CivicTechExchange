@@ -29,7 +29,7 @@ class SectionLink extends React.PureComponent<Props> {
         className={this._cx.get(...this._getClassNames())}
         onClick={this._onChangeSection.bind(this)}
         >
-        {this.props.title}
+        <h3>{this.props.title}</h3>
       </div>
     );
   }
