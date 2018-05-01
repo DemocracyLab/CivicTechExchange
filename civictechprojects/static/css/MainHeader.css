@@ -3,15 +3,6 @@
   height: 54px;
 }
 
-.MainHeader-root span {
-  padding-right: 40px;
-}
-
-.MainHeader-link {
-  display: inline-block;
-  margin-top: 21px;
-}
-
 .MainHeader-logo {
   cursor: pointer;
   width: 200px;

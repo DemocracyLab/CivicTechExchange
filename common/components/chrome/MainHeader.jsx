@@ -51,13 +51,13 @@ class MainHeader extends React.PureComponent<{||}> {
                 <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
                 <span onClick = {this._onLogInClick}>
                 <a href = "" > Log In </a>
-                </span>
+                </span> |{' '}
 
                 <span onClick = {this._onSignUpClick} >
-                <a href = "" > Sign Up < /a>
-                </span>
+                <a href = "" > Sign Up </a>
+                </span> |{' '}
 
-                <a href = "/password_reset" > Forgot Password < /a>
+                <a href = "/password_reset" > Forgot Password </a>
             </span>
             );
   }

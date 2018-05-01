@@ -75824,6 +75824,8 @@ var MainHeader = function (_React$PureComponent) {
             ' Log In '
           )
         ),
+        ' |',
+        ' ',
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'span',
           { onClick: this._onSignUpClick },
@@ -75833,6 +75835,8 @@ var MainHeader = function (_React$PureComponent) {
             ' Sign Up '
           )
         ),
+        ' |',
+        ' ',
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'a',
           { href: '/password_reset' },
