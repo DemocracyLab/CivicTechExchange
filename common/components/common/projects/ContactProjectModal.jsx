@@ -55,9 +55,9 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
 
   receiveSendConfirmation(confirmation: boolean): void {
         if (confirmation) {
-      this.handleSubmit()
-    }
-    this.setState({showConfirmationModal: false});
+          this.handleSubmit()
+        }
+        this.setState({showConfirmationModal: false});
   }
 
   handleSubmit() {
@@ -78,9 +78,10 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div>
-        <ConfirmationModal showModal={this.state.showConfirmationModal}
-        message="Do you want to send this?"
-        onSelection={this.receiveSendConfirmation}
+        <ConfirmationModal 
+          showModal={this.state.showConfirmationModal}
+          message="Do you want to send this?"
+          onSelection={this.receiveSendConfirmation}
         />
           <Modal show={this.state.showModal}
                  onHide={this.closeModal}
