@@ -75116,7 +75116,7 @@ var LandingController = function (_React$PureComponent) {
             {
               className: this._cx.get('landingText', 'letsGetStarted')
             },
-            "LET'S GET STARTED NOW!"
+            "LET'S GET STARTED"
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
@@ -75455,24 +75455,6 @@ var MainHeader = function (_React$PureComponent) {
           { href: '/password_reset' },
           'Forgot Password'
         )
-      );
-    }
-
-    // _renderLinks(): React$Node {
-    //   return [
-    //     'About',
-    //     'Notifications',
-    //     'Messages',
-    //   ].map(link => <span className="MainHeader-link" key={link}>{link}</span>);
-    // }
-
-  }, {
-    key: '_renderLinks',
-    value: function _renderLinks() {
-      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        'a',
-        { href: 'https://www.google.com' },
-        'Feedback'
       );
     }
   }]);
