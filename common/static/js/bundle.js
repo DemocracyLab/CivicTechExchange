@@ -75116,7 +75116,7 @@ var LandingController = function (_React$PureComponent) {
             {
               className: this._cx.get('landingText', 'letsGetStarted')
             },
-            "LET'S GET STARTED"
+            "LET'S GET STARTED."
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
