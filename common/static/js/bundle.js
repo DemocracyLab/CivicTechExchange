@@ -74432,7 +74432,7 @@ var ProjectCard = function (_React$PureComponent) {
         { style: styles,
           className: 'ProjectCard-root',
           href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }) },
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'checkbox', src: 'https://i.imgur.com/yXgKEHY.jpg' }),
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'checkbox', src: 'https://i.imgur.com/yXgKEHY.jpg', align: 'right' }),
         this._renderName(),
         this._renderIssueAndLocation(),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
@@ -75223,6 +75223,15 @@ var MyProjectsController = function (_React$PureComponent) {
           'Login'
         ),
         ' to see a list of your projects.'
+      );
+      __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
+        'p',
+        null,
+        __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
+          'a',
+          { href: 'https://imgur.com/a/AxiCx', position: 'absolute' },
+          'claimed Icon'
+        )
       );
     }
   }]);
