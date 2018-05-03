@@ -75302,10 +75302,8 @@ var MyProjectCard = function (_React$PureComponent) {
     value: function render() {
       var id = { 'id': this.props.project.id };
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        'a',
-        { style: style,
-          className: 'MyProjectCard-root',
-          href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].AboutProject, id) },
+        'div',
+        { className: 'MyProjectCard-root' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'table',
           { className: 'MyProjectCard-table' },
@@ -75363,6 +75361,11 @@ var MyProjectCard = function (_React$PureComponent) {
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   'tr',
                   { className: 'MyProjectCard-header' },
+                  __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+                    'a',
+                    { style: style, href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].AboutProject, id) },
+                    'View'
+                  ),
                   __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                     'a',
                     { style: style, href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].EditProject, id) },

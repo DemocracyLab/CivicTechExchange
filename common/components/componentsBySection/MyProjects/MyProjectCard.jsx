@@ -3,8 +3,9 @@
 import cx from '../../utils/cx';
 import type {Project} from '../../stores/ProjectSearchStore.js';
 import React from 'react';
-import Section from '../../enums/Section.js'
-import url from '../../utils/url.js'
+import Section from '../../enums/Section.js';
+import url from '../../utils/url.js';
+import Button from 'react-bootstrap';
 
 type Props = {|
   +project: Project,
@@ -19,9 +20,7 @@ class MyProjectCard extends React.PureComponent<Props> {
   render(): React$Node {
     const id = {'id':this.props.project.id};
     return (
-      <a style={style}
-        className="MyProjectCard-root"
-        href={url.section(Section.AboutProject, id)}>
+      <div className="MyProjectCard-root">
          <table className="MyProjectCard-table">
           <tbody>
             <tr>
@@ -47,13 +46,23 @@ class MyProjectCard extends React.PureComponent<Props> {
               </td>
               <td className="MyProjectCard-column">
                 <tr className="MyProjectCard-header">
+                  // make View a button
+                  <a style={style} href={url.section(Section.AboutProject, id)}>View</a>
+                  // make Edit a button
                   <a style={style} href={url.section(Section.EditProject, id)}>Edit</a>
+                  // the Delete button will need to:
+                  // - pass the id to MyProjectController
+
+                  // MyProjectController will need to:
+                  // - bring up the confirmation modal
+                  // - if 'yes', use url.js to create the delete route and delete
+                  // - then remove the project from this.state.projects, rerender list of project cards
                 </tr>
               </td>
             </tr>
           </tbody>
         </table>
-      </a>
+      </div>
     );
   }
 }
