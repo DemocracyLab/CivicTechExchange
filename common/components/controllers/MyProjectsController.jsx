@@ -43,7 +43,7 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
         </div>
       )
       : <p><a href="/login">Login</a> to see a list of your projects.</p>;
-      <p><a href="https://imgur.com/a/AxiCx"position="absolute" >claimed Icon</a></p>;
+    
 
   }
 }
