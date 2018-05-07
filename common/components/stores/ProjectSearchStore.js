@@ -14,7 +14,8 @@ export type Project = {|
   +issueArea: string,
   +location: string,
   +name: string,
-  +thumbnail: FileInfo
+  +thumbnail: FileInfo,
+  +claimed: boolean
 |};
 
 export type ProjectSearchActionType = {
