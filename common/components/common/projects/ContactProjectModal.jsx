@@ -5,6 +5,7 @@ import metrics from "../../utils/metrics.js";
 import {Modal, Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
 import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
 import CurrentUser from "../../utils/CurrentUser";
+import ConfirmationModal from '../../common/confirmation/ConfirmationModal.jsx';
 
 
 type Props = {|
@@ -15,7 +16,8 @@ type Props = {|
 type State = {|
   showModal: boolean,
   isSending: boolean,
-  message: string
+  message: string,
+  showConfirmationModal: boolean
 |};
 
 /**
@@ -28,11 +30,14 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
     this.state = {
       showModal: false,
       isSending: false,
-      message: ""
+      message: "",
+      showConfirmationModal: false
     }
     this.closeModal = this.closeModal.bind(this, this.props.handleClose);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.askForSendConfirmation = this.askForSendConfirmation.bind(this);
+    this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
   }
     
   componentWillReceiveProps(nextProps: Props): void {
@@ -44,7 +49,18 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
       this.setState({message: event.target.value});
   }
 
-  handleSubmit(event) {
+  askForSendConfirmation(): void {
+    this.setState({showConfirmationModal:true});
+  }
+
+  receiveSendConfirmation(confirmation: boolean): void {
+        if (confirmation) {
+          this.handleSubmit()
+        }
+        this.setState({showConfirmationModal: false});
+  }
+
+  handleSubmit() {
     this.setState({isSending:true});
     metrics.logUserContactedProjectOwner(CurrentUser.userID(), this.props.projectId);
     ProjectAPIUtils.post("/contact/project/" + this.props.projectId + "/",
@@ -62,6 +78,11 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div>
+        <ConfirmationModal 
+          showModal={this.state.showConfirmationModal}
+          message="Do you want to send this?"
+          onSelection={this.receiveSendConfirmation}
+        />
           <Modal show={this.state.showModal}
                  onHide={this.closeModal}
                  style={{paddingTop:'20%'}}
@@ -70,10 +91,11 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
                   <Modal.Title>Send message to Project Owner</Modal.Title>
               </Modal.Header>
               <Modal.Body>
+                <p>The project owner will reply to your message via your registered email.</p>
                 <FormGroup>
                   <ControlLabel>Message:</ControlLabel>
                   <FormControl componentClass="textarea"
-                    placeholder="Enter Message"
+                    placeholder="I'm interested in helping with this project because..."
                     rows="4"
                     cols="50"
                     name="message"
@@ -83,7 +105,7 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button disabled={this.state.isSending} onClick={this.handleSubmit}>{this.state.isSending ? "Sending" : "Send"}</Button>
+                <Button disabled={this.state.isSending} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
               </Modal.Footer>
           </Modal>
       </div>
