@@ -54,14 +54,6 @@ class MainHeader extends React.PureComponent<{||}> {
         </span>
       );
   }
-
-  // _renderLinks(): React$Node {
-  //   return [
-  //     'About',
-  //     'Notifications',
-  //     'Messages',
-  //   ].map(link => <span className="MainHeader-link" key={link}>{link}</span>);
-  // }
 }
 
 export default MainHeader;
