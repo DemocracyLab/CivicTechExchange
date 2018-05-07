@@ -45,5 +45,14 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
       : <p><a href="/login">Login</a> to see a list of your projects.</p>;
   }
 }
+  // the Delete button will need to:
+  // - pass the id to MyProjectController
+
+  
+  // MyProjectController will need to:
+  // - bring up the confirmation modal
+  // - if 'yes', use url.js to create the delete route and delete
+  // - then remove the project from this.state.projects, rerender list of project cards
+
 
 export default MyProjectsController;
