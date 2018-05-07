@@ -52,10 +52,6 @@ class MainHeader extends React.PureComponent<{||}> {
         </span>
       );
   }
-
-  
-  
-    
 }
 
 export default MainHeader;
