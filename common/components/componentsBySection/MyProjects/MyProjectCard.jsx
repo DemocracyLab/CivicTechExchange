@@ -9,6 +9,7 @@ import {Button} from 'react-bootstrap';
 
 type Props = {|
   +project: Project,
+  +onProjectClickDelete: (Project) => void,
 |};
 
 const style = {
@@ -45,17 +46,9 @@ class MyProjectCard extends React.PureComponent<Props> {
                 <tr>In Progress</tr>
               </td>
               <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">
-
                   <Button href={url.section(Section.AboutProject, id)} bsStyle="info">View</Button>
-
-                  <Button href={url.section(Section.EditProject, id)} bsStyle="warning">Edit</Button>                  
-                  
-                  <Button bsStyle="danger">Delete</Button>
-                  
-
-
-                </tr>
+                  <Button href={url.section(Section.EditProject, id)} bsStyle="warning">Edit</Button>
+                  <Button bsStyle="danger" onClick={() => this.props.onProjectClickDelete(this.props.project)}>Delete</Button>
               </td>
             </tr>
           </tbody>
