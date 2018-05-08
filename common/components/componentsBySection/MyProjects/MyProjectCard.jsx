@@ -46,9 +46,9 @@ class MyProjectCard extends React.PureComponent<Props> {
                 <tr>In Progress</tr>
               </td>
               <td className="MyProjectCard-column">
-                  <Button href={url.section(Section.AboutProject, id)} bsStyle="info">View</Button>
-                  <Button href={url.section(Section.EditProject, id)} bsStyle="warning">Edit</Button>
-                  <Button bsStyle="danger" onClick={() => this.props.onProjectClickDelete(this.props.project)}>Delete</Button>
+                  <Button className="MyProjectCard-button" href={url.section(Section.AboutProject, id)} bsStyle="info">View</Button>
+                  <Button className="MyProjectCard-button" href={url.section(Section.EditProject, id)} bsStyle="info">Edit</Button>
+                  <Button className="MyProjectCard-button" bsStyle="danger" onClick={() => this.props.onProjectClickDelete(this.props.project)}>Delete</Button>
               </td>
             </tr>
           </tbody>

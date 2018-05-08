@@ -75413,17 +75413,17 @@ var MyProjectCard = function (_React$PureComponent) {
                 { className: 'MyProjectCard-column' },
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   __WEBPACK_IMPORTED_MODULE_4_react_bootstrap__["a" /* Button */],
-                  { href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].AboutProject, id), bsStyle: 'info' },
+                  { className: 'MyProjectCard-button', href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].AboutProject, id), bsStyle: 'info' },
                   'View'
                 ),
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   __WEBPACK_IMPORTED_MODULE_4_react_bootstrap__["a" /* Button */],
-                  { href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].EditProject, id), bsStyle: 'warning' },
+                  { className: 'MyProjectCard-button', href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].EditProject, id), bsStyle: 'info' },
                   'Edit'
                 ),
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   __WEBPACK_IMPORTED_MODULE_4_react_bootstrap__["a" /* Button */],
-                  { bsStyle: 'danger', onClick: function onClick() {
+                  { className: 'MyProjectCard-button', bsStyle: 'danger', onClick: function onClick() {
                       return _this2.props.onProjectClickDelete(_this2.props.project);
                     } },
                   'Delete'
