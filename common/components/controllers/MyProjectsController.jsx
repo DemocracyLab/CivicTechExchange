@@ -42,7 +42,6 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
       showConfirmDeleteModal: true,
       projectToDelete: project,
     })
-
   }
 
   removeProjectFromList(): void {
@@ -61,6 +60,7 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
         {},
         // success callback
         this.removeProjectFromList.bind(this)
+        //TODO: handle errors
       );
     };
     this.setState({
@@ -89,8 +89,6 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
       )
       : <p><a href="/login">Login</a> to see a list of your projects.</p>;
   }
-
 }
-
 
 export default MyProjectsController;
