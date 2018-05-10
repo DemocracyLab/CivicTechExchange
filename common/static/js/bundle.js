@@ -67355,7 +67355,7 @@ var AboutProjectController = function (_React$PureComponent) {
               )
             )
           ),
-          __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+          project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_technologies) ? __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'div',
             { className: 'row', style: { margin: "30px 40px 0 40px" } },
             __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
@@ -67369,10 +67369,10 @@ var AboutProjectController = function (_React$PureComponent) {
               __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                 'div',
                 { className: 'Text-section' },
-                __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__common_tags_TagsDisplay_jsx__["a" /* default */], { tags: project && project.project_technologies })
+                this._renderTechnologies()
               )
             )
-          ),
+          ) : null,
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'div',
             { className: 'row', style: { margin: "30px 40px 0 40px" } },
@@ -67472,6 +67472,12 @@ var AboutProjectController = function (_React$PureComponent) {
           )
         );
       }
+    }
+  }, {
+    key: '_renderTechnologies',
+    value: function _renderTechnologies() {
+      var project = this.state.project;
+      return project && project.project_technologies && __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__common_tags_TagsDisplay_jsx__["a" /* default */], { tags: project && project.project_technologies });
     }
   }, {
     key: '_renderLinks',

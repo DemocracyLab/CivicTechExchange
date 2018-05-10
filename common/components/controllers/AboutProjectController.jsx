@@ -97,14 +97,20 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               </div>
             </div>
           </div>
-          <div className="row" style={{margin: "30px 40px 0 40px"}}>
-            <div className="col">
-              <h2 className="form-group subheader">TECHNOLOGIES USED</h2>
-              <div className="Text-section">
-                <TagsDisplay tags={project && project.project_technologies}/>
-              </div>
-            </div>
-          </div>
+
+          {
+            project && !_.isEmpty(project.project_technologies)
+              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
+                  <div className='col'>
+                    <h2 className="form-group subheader">TECHNOLOGIES USED</h2>
+                    <div className="Text-section">
+                      {this._renderTechnologies()}
+                    </div>
+                  </div>
+                </div>
+              : null
+          }
+          
   
           <div className="row" style={{margin: "30px 40px 0 40px"}}>
             <div className="col">
@@ -176,6 +182,13 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </div>
     }
   }
+
+  _renderTechnologies(): ?Array<React$Node> {
+    const project = this.state.project;
+    return project && project.project_technologies && 
+      <TagsDisplay tags={project && project.project_technologies}/>
+  }
+  
   
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
