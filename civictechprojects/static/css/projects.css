@@ -244,3 +244,8 @@ th, td {
     color: var(--black);
   }
   
+.Text-section {
+  background-color: white;
+  border: solid 1px #cecece;
+  padding: 10px;
+}

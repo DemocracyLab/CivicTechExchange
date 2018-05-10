@@ -58,62 +58,63 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     return (
       <div className="AboutProjectController-root">
         <div className="container-fluid">
+          <div style={{backgroundColor: "white"}}>
+            <div className="row" style={{margin: "30px 0 0 0", padding: "10px 0"}}>
+              <div className="col-sm-5">
+                <div className="row">
+                  <div className="col-sm-auto">
+                    <img className="upload_img upload_img_bdr" src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
+                  </div>
+                  <div className="col">
+                    <div className="row">
+                      <div className="col">
+                        {project && project.project_name}
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col">
+                        {project && !_.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col">
+              </div>
+              <div className="col col-sm-3">
+                <div className="row">
+                  {this._renderProjectHomepageLink()}
+                </div>
+                <div className="row">
+                  <div className="col">
+                    <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
+                    {project && project.project_location}
+                  </div>
+                </div>
+                <div className="row">
+                  <ContactProjectButton project={this.state.project}/>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="row" style={{margin: "30px 40px 0 40px"}}>
-            <div className="col-sm-5">
-              <div className="row">
-                <div className="col-sm-auto">
-                  <img className="upload_img upload_img_bdr" src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
-                </div>
-                <div className="col">
-                  <div className="row">
-                    <div className="col">
-                      {project && project.project_name}
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col">
-                      {project && !_.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div className="col">
-            </div>
-            <div className="col col-sm-3">
-              <div className="row">
-                {this._renderProjectHomepageLink()}
-              </div>
-              <div className="row">
-                <div className="col">
-                  <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
-                  {project && project.project_location}
-                </div>
-              </div>
-              <div className="row">
-                <ContactProjectButton project={this.state.project}/>
+              <h2 className="form-group subheader">TECHNOLOGIES USED</h2>
+              <div className="Text-section">
+                <TagsDisplay tags={project && project.project_technologies}/>
               </div>
             </div>
           </div>
   
           <div className="row" style={{margin: "30px 40px 0 40px"}}>
             <div className="col">
-              TECHNOLOGIES USED
-              <div>
-                <TagsDisplay tags={project && project.project_technologies}/>
-              </div>
-            </div>
-          </div>
-    
-          <div className="row" style={{margin: "30px 40px 0 40px"}}>
-            <div className="col">
-              PROJECT DETAILS
-              <div>
+              <h2 className="form-group subheader">PROJECT DETAILS</h2>
+              <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
                 {project && project.project_description}
               </div>
             </div>
           </div>
-
+        
           <NotificationModal
             showModal={this.state.showPositionModal}
             message={this.state.shownPosition && this.state.shownPosition.description}
@@ -121,24 +122,28 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             headerText={this.state.shownPosition && this.state.shownPosition.roleTag.display_name}
             onClickButton={() => this.setState({showPositionModal: false})}
           />
-          
+        
           {
             project && !_.isEmpty(project.project_positions)
               ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
                   <div className='col'>
                     <h2 className="form-group subheader">OPEN POSITIONS</h2>
-                    {this._renderPositions()}
+                    <div className="Text-section">
+                      {this._renderPositions()}
+                    </div>  
                   </div>
                 </div>
               : null
           }
-    
+  
           {
             project && !_.isEmpty(project.project_links)
               ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
                   <div className='col'>
                     <h2 className="form-group subheader">LINKS</h2>
-                    {this._renderLinks()}
+                    <div className="Text-section">
+                      {this._renderLinks()}
+                    </div>
                   </div>
                 </div>
               : null
@@ -149,7 +154,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
                   <div className='col'>
                     <h2 className="form-group subheader">FILES</h2>
-                    {this._renderFiles()}
+                    <div className="Text-section">
+                      {this._renderFiles()}
+                    </div>
                   </div>
                 </div>
               : null

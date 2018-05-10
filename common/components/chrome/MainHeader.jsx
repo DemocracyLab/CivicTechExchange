@@ -4,6 +4,7 @@ import type {SectionType} from '../enums/Section.js';
 
 import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
+import {DropdownButton, MenuItem} from 'react-bootstrap';
 import Section from '../enums/Section.js';
 import CurrentUser from '../utils/CurrentUser.js';
 import url from '../utils/url.js';
@@ -39,11 +40,17 @@ class MainHeader extends React.PureComponent<{||}> {
   _renderHero(): React$Node {
     return CurrentUser.isLoggedIn()
       ? (
-        <span>
-          {CurrentUser.firstName() + ' ' + CurrentUser.lastName() + ' '}
-          | <a href="/logout">Logout</a> | {' '}
-            <a href="mailto:hello@democracylab.org" target="_blank">Contact Us</a>
-        </span>
+          <DropdownButton
+            style={{cursor: "pointer",  textDecoration: "none", color: "black"}}
+            bsStyle="link"
+            title={CurrentUser.firstName() + ' ' + CurrentUser.lastName()}
+            noCaret
+            id="dropdown-no-caret"
+          >
+            <MenuItem href="mailto:hello@democracylab.org">Contact Us</MenuItem>
+            <MenuItem divider />
+            <MenuItem href="/logout">Logout</MenuItem>
+          </DropdownButton>
       )
       : (
         <span>
