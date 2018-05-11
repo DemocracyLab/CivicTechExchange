@@ -35038,6 +35038,7 @@ var LogInController = function (_React$Component) {
     _this.state = {
       username: '',
       password: ''
+      // errorMessage: url.arguments.(document.location.search)
     };
     return _this;
   }
