@@ -145,16 +145,23 @@ def projects_list(request):
         url_parts = request.GET.urlencode()
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
+        selected_tag_filters = []
         if 'issues' in query_params:
-            project_list = project_list & projects_by_issue_areas(query_params['issues'][0].split(','))
+            issue_filters = query_params['issues'][0].split(',')
+            selected_tag_filters += issue_filters
+            project_list = project_list & projects_by_issue_areas(issue_filters)
         if 'tech' in query_params:
-            project_list = project_list & projects_by_technologies(query_params['tech'][0].split(','))
+            tech_filters = query_params['tech'][0].split(',')
+            selected_tag_filters += tech_filters
+            project_list = project_list & projects_by_technologies(tech_filters)
         if 'role' in query_params:
-            project_list = project_list & projects_by_roles(query_params['role'][0].split(','))
+            role_filters = query_params['role'][0].split(',')
+            selected_tag_filters += role_filters
+            project_list = project_list & projects_by_roles(role_filters)
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
 
-    response = json.dumps(projects_with_filter_counts(project_list.order_by('project_name')))
+    response = json.dumps(projects_with_filter_counts(project_list.order_by('project_name'), selected_tag_filters))
 
     return HttpResponse(response)
 
@@ -179,14 +186,23 @@ def projects_by_roles(tags):
     return Project.objects.filter(positions__in=positions)
 
 
-def projects_with_filter_counts(projects):
+def projects_with_filter_counts(projects, selected_tag_filters):
     return {
         'projects': [project.hydrate_to_json() for project in projects],
         'tags': list(Tag.objects.values()),
         'availableFilters': {
-            'tags': projects_tag_counts(projects)
+            'tags': available_tag_filters(projects, selected_tag_filters)
         }
     }
+
+
+def available_tag_filters(projects, selected_tag_filters):
+    project_tags = projects_tag_counts(projects)
+    # Remove any filters that are already selected
+    for tag in selected_tag_filters:
+        if project_tags[tag]:
+            project_tags.pop(tag)
+    return project_tags
 
 
 def presign_project_thumbnail_upload(request):
