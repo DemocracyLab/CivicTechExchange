@@ -1,4 +1,5 @@
 from civictechprojects.models import ProjectPosition
+from common.helpers.dictionaries import merge_dicts
 from collections import Counter
 
 
@@ -14,8 +15,4 @@ def projects_tag_counts(projects):
         positions += map(lambda position: position.position_role.slugs()[0], project_positions)
 
     # Get the counts of all the tags used
-    return {
-        'issue_counts': Counter(issues),
-        'technology_counts': Counter(technologies),
-        'position_counts': Counter(positions),
-    }
+    return merge_dicts(Counter(issues), Counter(technologies), Counter(positions))

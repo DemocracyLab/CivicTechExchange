@@ -1,16 +1,17 @@
 // @flow
 
 import type {FluxReduceStore} from 'flux/utils';
-import type {Tag} from '../../stores/TagStore.js';
+// import type {Tag} from '../../stores/TagStore.js';
 
 import {List} from 'immutable'
 import {Container} from 'flux/utils';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import ProjectTag from './ProjectTag.jsx';
 import React from 'react';
+import type {TagDefinition} from "../../utils/ProjectAPIUtils.js";
 
 type State = {|
-  tags: List<Tag>,
+  tags: List<TagDefinition>,
 |};
 
 class ProjectTagContainer extends React.Component<{||}, State> {
@@ -21,7 +22,7 @@ class ProjectTagContainer extends React.Component<{||}, State> {
 
   static calculateState(prevState: State): State {
     return {
-      tags: ProjectSearchStore.getTags(),
+      tags: ProjectSearchStore.getTags() || [],
     };
   }
 
@@ -34,7 +35,7 @@ class ProjectTagContainer extends React.Component<{||}, State> {
         }>
         {
           this.state.tags.map(
-            tag => <ProjectTag key={tag.tagName} tag={tag}/>,
+            tag => <ProjectTag key={tag.tag_name} tag={tag}/>,
           )
         }
       </div>

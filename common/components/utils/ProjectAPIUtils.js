@@ -25,7 +25,7 @@ export type TagDefinition = {|
   parent: string,
 |};
 
-type ProjectAPIData = {|
+export type ProjectAPIData = {|
   +project_id: number,
   +project_description: string,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,

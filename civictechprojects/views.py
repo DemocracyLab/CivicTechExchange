@@ -182,7 +182,10 @@ def projects_by_roles(tags):
 def projects_with_filter_counts(projects):
     return {
         'projects': [project.hydrate_to_json() for project in projects],
-        'filters': projects_tag_counts(projects)
+        'tags': list(Tag.objects.values()),
+        'availableFilters': {
+            'tags': projects_tag_counts(projects)
+        }
     }
 
 
