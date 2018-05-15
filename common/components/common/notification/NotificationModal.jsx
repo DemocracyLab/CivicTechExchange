@@ -38,10 +38,10 @@ class NotificationModal extends React.PureComponent<Props, State> {
     return (
       <div>
           <Modal show={this.state.showModal}>
-              <Modal.Header >
+              <Modal.Header style={{whiteSpace: "pre-wrap"}}>
                   <Modal.Title>{this.props.headerText}</Modal.Title>
               </Modal.Header>
-              <Modal.Body>
+              <Modal.Body style={{whiteSpace: "pre-wrap"}}>
                 {this.props.message}
               </Modal.Body>
               <Modal.Footer>

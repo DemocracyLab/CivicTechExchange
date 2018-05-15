@@ -18208,15 +18208,15 @@ module.exports = warning;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__Dropdown__ = __webpack_require__(65);
 /* unused harmony reexport Dropdown */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__DropdownButton__ = __webpack_require__(263);
-/* unused harmony reexport DropdownButton */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_17__DropdownButton__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__Fade__ = __webpack_require__(68);
 /* unused harmony reexport Fade */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__Form__ = __webpack_require__(264);
 /* unused harmony reexport Form */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__FormControl__ = __webpack_require__(265);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_20__FormControl__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_20__FormControl__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__FormGroup__ = __webpack_require__(268);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_21__FormGroup__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_21__FormGroup__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__Glyphicon__ = __webpack_require__(95);
 /* unused harmony reexport Glyphicon */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__Grid__ = __webpack_require__(137);
@@ -18238,9 +18238,9 @@ module.exports = warning;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__Media__ = __webpack_require__(69);
 /* unused harmony reexport Media */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__MenuItem__ = __webpack_require__(283);
-/* unused harmony reexport MenuItem */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_32__MenuItem__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__Modal__ = __webpack_require__(284);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_33__Modal__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_33__Modal__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__ModalBody__ = __webpack_require__(143);
 /* unused harmony reexport ModalBody */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__ModalFooter__ = __webpack_require__(144);
@@ -24905,26 +24905,26 @@ var ConfirmationModal = function (_React$PureComponent) {
         'div',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */],
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */],
           { show: this.state.showModal,
             onHide: this.confirm.bind(this, false)
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Header,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Header,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Title,
+              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Title,
               null,
               'Confirm'
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Body,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Body,
             null,
             this.props.message
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Footer,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Footer,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
@@ -33287,22 +33287,22 @@ var ContactProjectModal = function (_React$PureComponent) {
           onSelection: this.receiveSendConfirmation
         }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Modal */],
+          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["g" /* Modal */],
           { show: this.state.showModal,
             onHide: this.closeModal,
             style: { paddingTop: '20%' }
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Modal */].Header,
+            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["g" /* Modal */].Header,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Modal */].Title,
+              __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["g" /* Modal */].Title,
               null,
               'Send message to Project Owner'
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Modal */].Body,
+            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["g" /* Modal */].Body,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'p',
@@ -33310,14 +33310,14 @@ var ContactProjectModal = function (_React$PureComponent) {
               'The project owner will reply to your message via your registered email.'
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["d" /* FormGroup */],
+              __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* FormGroup */],
               null,
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["b" /* ControlLabel */],
                 null,
                 'Message:'
               ),
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["c" /* FormControl */], { componentClass: 'textarea',
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["d" /* FormControl */], { componentClass: 'textarea',
                 placeholder: 'I\'m interested in helping with this project because...',
                 rows: '4',
                 cols: '50',
@@ -33327,7 +33327,7 @@ var ContactProjectModal = function (_React$PureComponent) {
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Modal */].Footer,
+            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["g" /* Modal */].Footer,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["a" /* Button */],
@@ -33404,24 +33404,24 @@ var NotificationModal = function (_React$PureComponent) {
         'div',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */],
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */],
           { show: this.state.showModal },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Header,
-            null,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Header,
+            { style: { whiteSpace: "pre-wrap" } },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Title,
+              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Title,
               null,
               this.props.headerText
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Body,
-            null,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Body,
+            { style: { whiteSpace: "pre-wrap" } },
             this.props.message
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Footer,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Footer,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
@@ -57991,7 +57991,7 @@ var DropdownButton = function (_React$Component) {
 
 DropdownButton.propTypes = propTypes;
 
-/* unused harmony default export */ var _unused_webpack_default_export = (DropdownButton);
+/* harmony default export */ __webpack_exports__["a"] = (DropdownButton);
 
 /***/ }),
 /* 264 */
@@ -59768,7 +59768,7 @@ var MenuItem = function (_React$Component) {
 MenuItem.propTypes = propTypes;
 MenuItem.defaultProps = defaultProps;
 
-/* unused harmony default export */ var _unused_webpack_default_export = (Object(__WEBPACK_IMPORTED_MODULE_10__utils_bootstrapUtils__["a" /* bsClass */])('dropdown', MenuItem));
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_10__utils_bootstrapUtils__["a" /* bsClass */])('dropdown', MenuItem));
 
 /***/ }),
 /* 284 */
@@ -65865,21 +65865,21 @@ var LinkEntryModal = function (_React$PureComponent) {
         'div',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */],
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */],
           { show: this.state.showModal,
             onHide: this.close
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Header,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Header,
             { closeButton: true },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Title,
+              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Title,
               null,
               'Modal heading'
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Body,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Body,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'label',
@@ -65899,7 +65899,7 @@ var LinkEntryModal = function (_React$PureComponent) {
               } })
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Footer,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Footer,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
@@ -67289,92 +67289,104 @@ var AboutProjectController = function (_React$PureComponent) {
           { className: 'container-fluid' },
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'div',
-            { className: 'row', style: { margin: "30px 40px 0 40px" } },
+            { style: { backgroundColor: "white" } },
             __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
               'div',
-              { className: 'col-sm-5' },
+              { className: 'row', style: { margin: "30px 0 0 0", padding: "10px 0" } },
               __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                 'div',
-                { className: 'row' },
+                { className: 'col-sm-5' },
                 __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                   'div',
-                  { className: 'col-sm-auto' },
-                  __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: project && project.project_thumbnail && project.project_thumbnail.publicUrl })
-                ),
-                __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
-                  'div',
-                  { className: 'col' },
+                  { className: 'row' },
                   __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                     'div',
-                    { className: 'row' },
-                    __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
-                      'div',
-                      { className: 'col' },
-                      project && project.project_name
-                    )
+                    { className: 'col-sm-auto' },
+                    __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: project && project.project_thumbnail && project.project_thumbnail.publicUrl })
                   ),
                   __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                     'div',
-                    { className: 'row' },
+                    { className: 'col' },
                     __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                       'div',
-                      { className: 'col' },
-                      project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name
+                      { className: 'row' },
+                      __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                        'div',
+                        { className: 'col' },
+                        project && project.project_name
+                      )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                      'div',
+                      { className: 'row' },
+                      __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                        'div',
+                        { className: 'col' },
+                        project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name
+                      )
                     )
                   )
                 )
-              )
-            ),
-            __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('div', { className: 'col' }),
-            __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
-              'div',
-              { className: 'col col-sm-3' },
-              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
-                'div',
-                { className: 'row' },
-                this._renderProjectHomepageLink()
               ),
+              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('div', { className: 'col' }),
               __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                 'div',
-                { className: 'row' },
+                { className: 'col col-sm-3' },
                 __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                   'div',
-                  { className: 'col' },
-                  __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('i', { className: 'fa fa-map-marker fa-1', 'aria-hidden': 'true' }),
-                  project && project.project_location
+                  { className: 'row' },
+                  this._renderProjectHomepageLink()
+                ),
+                __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                  'div',
+                  { className: 'row' },
+                  __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                    'div',
+                    { className: 'col' },
+                    __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('i', { className: 'fa fa-map-marker fa-1', 'aria-hidden': 'true' }),
+                    project && project.project_location
+                  )
+                ),
+                __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                  'div',
+                  { className: 'row' },
+                  __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_projects_ContactProjectButton_jsx__["a" /* default */], { project: this.state.project })
                 )
+              )
+            )
+          ),
+          project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_technologies) ? __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+            'div',
+            { className: 'row', style: { margin: "30px 40px 0 40px" } },
+            __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+              'div',
+              { className: 'col' },
+              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                'h2',
+                { className: 'form-group subheader' },
+                'TECHNOLOGIES USED'
               ),
               __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                 'div',
-                { className: 'row' },
-                __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_projects_ContactProjectButton_jsx__["a" /* default */], { project: this.state.project })
+                { className: 'Text-section' },
+                this._renderTechnologies()
               )
             )
-          ),
+          ) : null,
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'div',
             { className: 'row', style: { margin: "30px 40px 0 40px" } },
             __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
               'div',
               { className: 'col' },
-              'TECHNOLOGIES USED',
+              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                'h2',
+                { className: 'form-group subheader' },
+                'PROJECT DETAILS'
+              ),
               __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                 'div',
-                null,
-                __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__common_tags_TagsDisplay_jsx__["a" /* default */], { tags: project && project.project_technologies })
-              )
-            )
-          ),
-          __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
-            'div',
-            { className: 'row', style: { margin: "30px 40px 0 40px" } },
-            __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
-              'div',
-              { className: 'col' },
-              'PROJECT DETAILS',
-              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
-                'div',
-                null,
+                { className: 'Text-section', style: { whiteSpace: "pre-wrap" } },
                 project && project.project_description
               )
             )
@@ -67399,7 +67411,11 @@ var AboutProjectController = function (_React$PureComponent) {
                 { className: 'form-group subheader' },
                 'OPEN POSITIONS'
               ),
-              this._renderPositions()
+              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                'div',
+                { className: 'Text-section' },
+                this._renderPositions()
+              )
             )
           ) : null,
           project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_links) ? __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
@@ -67413,7 +67429,11 @@ var AboutProjectController = function (_React$PureComponent) {
                 { className: 'form-group subheader' },
                 'LINKS'
               ),
-              this._renderLinks()
+              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                'div',
+                { className: 'Text-section' },
+                this._renderLinks()
+              )
             )
           ) : null,
           project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_files) ? __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
@@ -67427,7 +67447,11 @@ var AboutProjectController = function (_React$PureComponent) {
                 { className: 'form-group subheader' },
                 'FILES'
               ),
-              this._renderFiles()
+              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                'div',
+                { className: 'Text-section' },
+                this._renderFiles()
+              )
             )
           ) : null
         )
@@ -67448,6 +67472,12 @@ var AboutProjectController = function (_React$PureComponent) {
           )
         );
       }
+    }
+  }, {
+    key: '_renderTechnologies',
+    value: function _renderTechnologies() {
+      var project = this.state.project;
+      return project && project.project_technologies && __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__common_tags_TagsDisplay_jsx__["a" /* default */], { tags: project && project.project_technologies });
     }
   }, {
     key: '_renderLinks',
@@ -73911,21 +73941,21 @@ var PositionEntryModal = function (_React$PureComponent) {
         'div',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */],
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */],
           { show: this.state.showModal,
             onHide: this.close
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Header,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Header,
             { closeButton: true },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Title,
+              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Title,
               null,
               'Position Details'
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Body,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Body,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'div',
@@ -73957,7 +73987,7 @@ var PositionEntryModal = function (_React$PureComponent) {
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["e" /* Modal */].Footer,
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Footer,
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
@@ -75454,9 +75484,10 @@ var MyProjectCard = function (_React$PureComponent) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stores_NavigationDispatcher_js__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__enums_Section_js__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_CurrentUser_js__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_url_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_CurrentUser_js__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_url_js__ = __webpack_require__(23);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -75464,6 +75495,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -75508,29 +75540,32 @@ var MainHeader = function (_React$PureComponent) {
     value: function _onHomeButtonClick() {
       __WEBPACK_IMPORTED_MODULE_0__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
         type: 'SET_SECTION',
-        section: __WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].FindProjects,
-        url: __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__enums_Section_js__["a" /* default */].FindProjects)
+        section: __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].FindProjects,
+        url: __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].FindProjects)
       });
     }
   }, {
     key: '_renderHero',
     value: function _renderHero() {
-      return __WEBPACK_IMPORTED_MODULE_3__utils_CurrentUser_js__["a" /* default */].isLoggedIn() ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        'span',
-        null,
-        __WEBPACK_IMPORTED_MODULE_3__utils_CurrentUser_js__["a" /* default */].firstName() + ' ' + __WEBPACK_IMPORTED_MODULE_3__utils_CurrentUser_js__["a" /* default */].lastName() + ' ',
-        '| ',
+      return __WEBPACK_IMPORTED_MODULE_4__utils_CurrentUser_js__["a" /* default */].isLoggedIn() ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+        __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["c" /* DropdownButton */],
+        {
+          style: { cursor: "pointer", textDecoration: "none", color: "black" },
+          bsStyle: 'link',
+          title: __WEBPACK_IMPORTED_MODULE_4__utils_CurrentUser_js__["a" /* default */].firstName() + ' ' + __WEBPACK_IMPORTED_MODULE_4__utils_CurrentUser_js__["a" /* default */].lastName(),
+          noCaret: true,
+          id: 'dropdown-no-caret'
+        },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'a',
+          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["f" /* MenuItem */],
+          { href: 'mailto:hello@democracylab.org' },
+          'Contact Us'
+        ),
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["f" /* MenuItem */], { divider: true }),
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["f" /* MenuItem */],
           { href: '/logout' },
           'Logout'
-        ),
-        ' | ',
-        ' ',
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'a',
-          { href: 'mailto:hello@democracylab.org', target: '_blank' },
-          'Contact Us'
         )
       ) : __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'span',
