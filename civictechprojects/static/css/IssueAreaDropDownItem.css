@@ -1,10 +1,21 @@
-.IssueAreaDropDownItem-root {
+.DropDownCategoryItem-root {
   cursor: pointer;
   padding-left: 15px;
   padding-right: 29px;
 }
 
-.IssueAreaDropDownItem-root:hover {
+.DropDownCategoryItem-root.unselected:hover {
+  color: white;
+  background-color: #61892f;
+}
+
+.DropDownMenuItem-root {
+  cursor: pointer;
+  padding-left: 15px;
+  padding-right: 29px;
+}
+
+.DropDownMenuItem-root:hover {
   color: white;
   background-color: #61892f;
 }

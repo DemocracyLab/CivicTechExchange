@@ -35033,8 +35033,16 @@ var SelectorDropdown = function (_React$PureComponent) {
 
     var _this = _possibleConstructorReturn(this, (SelectorDropdown.__proto__ || Object.getPrototypeOf(SelectorDropdown)).call(this));
 
+    var constants = {
+      chevronRight: '\u25B8',
+      chevronDown: '\u25BE',
+      width: 185
+    };
+    _this.constants = constants;
+
     _this.state = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.assign({
       chevronX: 0,
+      rightEdgeX: 0,
       showDropdown: false,
       optionFlatList: null,
       optionCategoryTree: null
@@ -35049,7 +35057,7 @@ var SelectorDropdown = function (_React$PureComponent) {
     value: function initializeOptions(props) {
       if (!__WEBPACK_IMPORTED_MODULE_2_lodash___default.a.isEmpty(props.options)) {
         if (props.optionCategory && __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.some(props.options, props.optionCategory)) {
-          return { optionCategoryTree: __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.mapKeys(props.options, props.optionCategory) };
+          return { optionCategoryTree: __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.groupBy(props.options, props.optionCategory) };
         } else {
           return { optionFlatList: props.options };
         }
@@ -35066,21 +35074,30 @@ var SelectorDropdown = function (_React$PureComponent) {
       return this.state.optionFlatList || this.state.optionCategoryTree;
     }
   }, {
+    key: 'expandCategory',
+    value: function expandCategory(category) {
+      this.setState({
+        categoryShown: this.state.categoryShown !== category ? category : null
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
 
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'span',
-        {
-          onClick: function onClick() {
-            return _this2.isReady() && _this2.setState({ showDropdown: !_this2.state.showDropdown });
-          },
-          style: { cursor: 'pointer' } },
-        this.props.title,
-        ' ',
-        ' ',
-        this._renderChevron(),
+        { style: { cursor: 'pointer' } },
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'span',
+          { onClick: function onClick() {
+              return _this2.isReady() && _this2.setState({ showDropdown: !_this2.state.showDropdown });
+            } },
+          this.props.title,
+          ' ',
+          ' ',
+          this._renderChevron()
+        ),
         this.state.showDropdown ? this._renderDropdown() : null
       );
     }
@@ -35090,22 +35107,22 @@ var SelectorDropdown = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_0__common_ContextualDropdown_jsx__["a" /* default */],
         { xPos: this.state.chevronX },
-        this.props.optionCategory ? this._renderCategories() : this._renderOptions()
+        this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList, false)
       );
     }
   }, {
     key: '_renderOptions',
-    value: function _renderOptions() {
+    value: function _renderOptions(options, isSubMenu) {
       var _this3 = this;
 
-      return this.state.optionFlatList.map(function (option, i) {
+      return options.map(function (option, i) {
         // TODO: Style element based on whether its disabled
         var enabled = _this3.props.optionEnabled(option);
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           {
             key: i,
-            className: 'IssueAreaDropDownItem-root',
+            className: isSubMenu ? "DropDownMenuItem-root" : "DropDownCategoryItem-root",
             disabled: !enabled,
             onClick: function onClick() {
               return enabled && _this3.props.onOptionSelect(option);
@@ -35118,24 +35135,46 @@ var SelectorDropdown = function (_React$PureComponent) {
   }, {
     key: '_renderCategories',
     value: function _renderCategories() {
-      return NULLUNTILWEIMPLEMENT;
+      var _this4 = this;
+
+      // TODO: Calculate this in a more intelligent way
+      var subMenuX = this.state.chevronX - 50;
+
+      return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).map(function (category, i) {
+        var isExpanded = category === _this4.state.categoryShown;
+        return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'div',
+          {
+            key: i,
+            className: "DropDownCategoryItem-root" + (isExpanded ? "" : " unselected"),
+            onClick: _this4.expandCategory.bind(_this4, category)
+          },
+          category,
+          ' ',
+          ' ',
+          isExpanded ? _this4.constants.chevronDown : _this4.constants.chevronRight,
+          isExpanded ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            __WEBPACK_IMPORTED_MODULE_0__common_ContextualDropdown_jsx__["a" /* default */],
+            { xPos: subMenuX },
+            _this4._renderOptions(_this4.state.optionCategoryTree[category], true)
+          ) : null
+        );
+      });
     }
   }, {
     key: '_renderChevron',
     value: function _renderChevron() {
-      var chevron = '\u25BE';
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'span',
         {
           ref: this._onChevronMount.bind(this) },
-        chevron
+        this.constants.chevronDown
       );
     }
   }, {
     key: '_onChevronMount',
     value: function _onChevronMount(chevronElement) {
-      var dropDownWidth = 185;
-      var chevronX = chevronElement ? chevronElement.getBoundingClientRect().left - dropDownWidth / 2 : 0;
+      var chevronX = chevronElement ? chevronElement.getBoundingClientRect().left - this.constants.width / 2 : 0;
       this.setState({ chevronX: chevronX });
     }
   }]);
@@ -74827,7 +74866,7 @@ var ProjectFilterContainer = function (_React$PureComponent) {
   }, {
     key: 'render',
     value: function render() {
-      var testStuff = [{ id: 1, text: "AAAAAAA", disabled: false }, { id: 1, text: "BBBBBBB", disabled: false }, { id: 1, text: "CCCCCCC", disabled: true }, { id: 1, text: "DDDDDDD", disabled: true }];
+      var testStuff = [{ id: 1, text: "AAAAAAA", disabled: false, category: "Vowel" }, { id: 1, text: "BBBBBBB", disabled: false, category: "Consonant" }, { id: 1, text: "CCCCCCC", disabled: true, category: "Consonant" }, { id: 1, text: "DDDDDDD", disabled: true, category: "Consonant" }];
 
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
@@ -74837,7 +74876,19 @@ var ProjectFilterContainer = function (_React$PureComponent) {
           { className: 'ProjectFilterContainer-label' },
           'Filter By:'
         ),
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ISSUES, title: 'Issue Areas' })
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ISSUES, title: 'Issue Areas' }),
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__common_selection_SelectorDropdown_jsx__["a" /* default */], {
+          title: 'Test Dropdown',
+          options: testStuff,
+          optionDisplay: this.renderStuff,
+          onOptionSelect: this.handleStuff,
+          optionEnabled: function optionEnabled(stuff) {
+            return !stuff.disabled;
+          },
+          optionCategory: function optionCategory(stuff) {
+            return stuff.category;
+          }
+        })
       );
     }
   }]);

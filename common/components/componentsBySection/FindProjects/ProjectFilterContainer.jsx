@@ -21,10 +21,10 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
   
   render(): React$Node {
     const testStuff = [
-      {id: 1, text:"AAAAAAA", disabled:false},
-      {id: 1, text:"BBBBBBB", disabled:false},
-      {id: 1, text:"CCCCCCC", disabled:true},
-      {id: 1, text:"DDDDDDD", disabled:true},
+      {id: 1, text:"AAAAAAA", disabled:false, category:"Vowel"},
+      {id: 1, text:"BBBBBBB", disabled:false, category:"Consonant"},
+      {id: 1, text:"CCCCCCC", disabled:true, category:"Consonant"},
+      {id: 1, text:"DDDDDDD", disabled:true, category:"Consonant"},
     ];
     
     return (
@@ -34,13 +34,14 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
         </span>
         {/*<IssueAreasFilter />*/}
         <TagSelectorDropdown category={TagCategory.ISSUES} title="Issue Areas" />
-        {/*<SelectorDropdown*/}
-          {/*title="Test Dropdown"*/}
-          {/*options={testStuff}*/}
-          {/*optionDisplay={this.renderStuff}*/}
-          {/*onOptionSelect={this.handleStuff}*/}
-          {/*optionEnabled={(stuff) => !stuff.disabled}*/}
-        {/*/>*/}
+        <SelectorDropdown
+          title="Test Dropdown"
+          options={testStuff}
+          optionDisplay={this.renderStuff}
+          onOptionSelect={this.handleStuff}
+          optionEnabled={(stuff) => !stuff.disabled}
+          optionCategory={(stuff) => stuff.category}
+        />
       </div>
     );
   }

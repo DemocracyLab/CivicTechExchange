@@ -4,6 +4,12 @@ import ContextualDropdown from '../../common/ContextualDropdown.jsx';
 import React from 'react';
 import _ from 'lodash'
 
+type Constants = {|
+  chevronOpen: string,
+  chevronClosed: string,
+  width: number
+|};
+
 type Props<T> = {|
   title: string,
   options: $ReadOnlyArray<T>,
@@ -17,12 +23,21 @@ type State = {|
   chevronX: number,
   showDropdown: boolean,
   optionFlatList: ?$ReadOnlyArray<T>,
-  optionCategoryTree: ?{ [key: string]: $ReadOnlyArray<T> }
+  optionCategoryTree: ?{ [key: string]: $ReadOnlyArray<T> },
+  categoryShown: string
 |};
 
 class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
     super();
+  
+    const constants: Constants = {
+      chevronRight: '\u25B8',
+      chevronDown: '\u25BE',
+      width: 185
+    };
+    this.constants = constants;
+    
     this.state = _.assign({
       chevronX: 0,
       showDropdown: false,
@@ -36,7 +51,7 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   initializeOptions(props: Props) {
     if(!_.isEmpty(props.options)) {
       if(props.optionCategory && _.some(props.options, props.optionCategory)) {
-        return {optionCategoryTree:_.mapKeys(props.options, props.optionCategory)};
+        return {optionCategoryTree:_.groupBy(props.options, props.optionCategory)};
       } else {
         return {optionFlatList: props.options};
       }
@@ -51,13 +66,19 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
     return this.state.optionFlatList || this.state.optionCategoryTree;
   }
   
+  expandCategory(category:string):void {
+    this.setState({
+      categoryShown: this.state.categoryShown !== category ? category : null
+    });
+  }
+  
   render(): React$Node {
     return (
-      <span
-        onClick={() => this.isReady() && this.setState({showDropdown: !this.state.showDropdown})}
-        style={{cursor: 'pointer'}}>
-        {this.props.title} {' '}
-        {this._renderChevron()}
+      <span style={{cursor: 'pointer'}}>
+        <span onClick={() => this.isReady() && this.setState({showDropdown: !this.state.showDropdown})}>
+          {this.props.title} {' '}
+          {this._renderChevron()}
+        </span>
         {this.state.showDropdown ? this._renderDropdown() : null}
       </span>
     );
@@ -66,18 +87,18 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   _renderDropdown(): React$Node {
     return (
       <ContextualDropdown xPos={this.state.chevronX}>
-        { this.props.optionCategory ? this._renderCategories() : this._renderOptions() }
+        { this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList, false) }
       </ContextualDropdown>
     );
   }
   
-  _renderOptions(): $ReadOnlyArray<React$Node> {
-    return this.state.optionFlatList.map( (option, i) => {
+  _renderOptions(options: $ReadOnlyArray<T>, isSubMenu: boolean): $ReadOnlyArray<React$Node> {
+    return options.map( (option, i) => {
       // TODO: Style element based on whether its disabled
       const enabled = this.props.optionEnabled(option);
       return <div
         key={i}
-        className="IssueAreaDropDownItem-root"
+        className= {isSubMenu ? "DropDownMenuItem-root" : "DropDownCategoryItem-root"}
         disabled={!enabled}
         onClick={() => enabled && this.props.onOptionSelect(option)}
         >
@@ -87,23 +108,39 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   }
   
   _renderCategories(): $ReadOnlyArray<React$Node> {
-    return NULLUNTILWEIMPLEMENT;
+    // TODO: Calculate this in a more intelligent way
+    const subMenuX = this.state.chevronX - 50;
+    
+    return _.keys(this.state.optionCategoryTree).map( (category,i) => {
+      const isExpanded:boolean = category === this.state.categoryShown;
+      return <div
+        key={i}
+        className= {"DropDownCategoryItem-root" + (isExpanded ? "" : " unselected")}
+        onClick={this.expandCategory.bind(this, category)}
+      >
+        {category} { } {isExpanded ? this.constants.chevronDown : this.constants.chevronRight}
+        { isExpanded
+          ? <ContextualDropdown xPos={subMenuX}>
+              { this._renderOptions(this.state.optionCategoryTree[category], true) }
+            </ContextualDropdown>
+          : null
+        }
+      </div>
+    });
   }
   
   _renderChevron(): React$Node {
-    const chevron = '\u25BE';
     return (
       <span
         ref={this._onChevronMount.bind(this)}>
-        {chevron}
+        {this.constants.chevronDown}
       </span>
     );
   }
   
   _onChevronMount(chevronElement: ?React$ElementRef<*>): void {
-    const dropDownWidth = 185;
     const chevronX = chevronElement
-      ? chevronElement.getBoundingClientRect().left - (dropDownWidth / 2)
+      ? chevronElement.getBoundingClientRect().left - (this.constants.width / 2)
       : 0;
     this.setState({chevronX});
   }
