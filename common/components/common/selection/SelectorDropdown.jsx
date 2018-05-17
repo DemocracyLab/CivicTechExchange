@@ -107,7 +107,9 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   }
   
   _renderOptions(options: $ReadOnlyArray<T>): $ReadOnlyArray<React$Node> {
-    return options.map( (option, i) => {
+    const sortedOptions = _.sortBy(options, this.props.optionDisplay);
+    
+    return sortedOptions.map( (option, i) => {
       const enabled = this.props.optionEnabled(option);
       const classes = "DropDownMenuItem-root " + (enabled ? "enabled" : "disabled");
       return <div
@@ -121,7 +123,7 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   }
   
   _renderCategories(): $ReadOnlyArray<React$Node> {
-    return _.keys(this.state.optionCategoryTree).map( (category,i) => {
+    return (_.keys(this.state.optionCategoryTree).sort()).map( (category,i) => {
       const isExpanded:boolean = category === this.state.categoryShown;
       return <div
         key={i}

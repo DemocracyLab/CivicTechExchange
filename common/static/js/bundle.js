@@ -74705,7 +74705,9 @@ var SelectorDropdown = function (_React$PureComponent) {
     value: function _renderOptions(options) {
       var _this3 = this;
 
-      return options.map(function (option, i) {
+      var sortedOptions = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.sortBy(options, this.props.optionDisplay);
+
+      return sortedOptions.map(function (option, i) {
         var enabled = _this3.props.optionEnabled(option);
         var classes = "DropDownMenuItem-root " + (enabled ? "enabled" : "disabled");
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
@@ -74726,7 +74728,7 @@ var SelectorDropdown = function (_React$PureComponent) {
     value: function _renderCategories() {
       var _this4 = this;
 
-      return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).map(function (category, i) {
+      return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).sort().map(function (category, i) {
         var isExpanded = category === _this4.state.categoryShown;
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
