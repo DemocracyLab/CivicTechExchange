@@ -7,6 +7,7 @@ import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js';
 import SelectorDropdown from "../selection/SelectorDropdown.jsx";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import metrics from "../../utils/metrics";
 import _ from 'lodash'
 
 // TODO: Pass title in
@@ -57,11 +58,7 @@ class TagSelectorDropdown extends React.Component<Props, State> {
       type: 'ADD_TAG',
       tag: tag.tag_name,
     });
-    // window.FB.AppEvents.logEvent(
-    //   'addIssueAreaTag',
-    //   null,
-    //   {issueArea: this.props.issueArea.displayName},
-    // );
+    metrics.addTagFilterEvent(tag);
   }
   
   render(): React$Node {
