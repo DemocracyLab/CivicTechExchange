@@ -10,6 +10,15 @@ type Constants = {|
   width: number
 |};
 
+
+/**
+ * @title: Title of the dropdown
+ * @options: List of options that dropdown selector displays
+ * @optionCategory: Selector for categorizing options (Turns into a 2-level selector)
+ * @optionEnabled: Determines whether any given option is selectable
+ * @optionDisplay: How to display option
+ * @onOptionSelect: Callback for when option is selected
+ */
 type Props<T> = {|
   title: string,
   options: $ReadOnlyArray<T>,
@@ -28,6 +37,9 @@ type State = {|
   categoryShown: string
 |};
 
+/**
+ * Generic dropdown selector that supports either 1 or 2 levels
+ */
 class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
     super();

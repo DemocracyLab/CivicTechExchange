@@ -74485,7 +74485,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-// TODO: Pass title in
+/**
+ * @category: Tag category to pull from
+ * @title: Title of the dropdown
+ */
 
 /**
  * Dropdown selector for tags
@@ -74600,6 +74603,18 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+/**
+ * @title: Title of the dropdown
+ * @options: List of options that dropdown selector displays
+ * @optionCategory: Selector for categorizing options (Turns into a 2-level selector)
+ * @optionEnabled: Determines whether any given option is selectable
+ * @optionDisplay: How to display option
+ * @onOptionSelect: Callback for when option is selected
+ */
+
+/**
+ * Generic dropdown selector that supports either 1 or 2 levels
+ */
 var SelectorDropdown = function (_React$PureComponent) {
   _inherits(SelectorDropdown, _React$PureComponent);
 

@@ -10,7 +10,10 @@ import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
 import metrics from "../../utils/metrics";
 import _ from 'lodash'
 
-// TODO: Pass title in
+/**
+ * @category: Tag category to pull from
+ * @title: Title of the dropdown
+ */
 type Props = {|
   category: string,
   title: string
