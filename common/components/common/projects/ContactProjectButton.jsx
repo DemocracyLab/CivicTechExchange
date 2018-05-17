@@ -83,27 +83,46 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
 
   render(): ?React$Node {
     if(this.state) {
-      return (
-        <div>
-          {this.state.buttonVisible
-            ? <Button
-              className="ProjectSearchBar-submit"
-              type="button"
-              disabled={this.state.buttonDisabled}
-              title={this.state.buttonTitle}
-              onClick={this.handleShow}
-            >
-              Contact Project
-            </Button>
-            : null
-          }
-          <ContactProjectModal
-            projectId={this.state.project && this.state.project.project_id}
-            showModal={this.state.showContactModal}
-            handleClose={this.handleClose}
-          />
-        </div>
-      );
+      if(CurrentUser.isLoggedIn()) {
+        return (
+          <div>
+            {this.state.buttonVisible
+              ? <Button
+                className="ProjectSearchBar-submit"
+                type="button"
+                disabled={this.state.buttonDisabled}
+                title={this.state.buttonTitle}
+                onClick={this.handleShow}
+              >
+                Contact Project
+              </Button>
+              : null
+            }
+            <ContactProjectModal
+              projectId={this.state.project && this.state.project.project_id}
+              showModal={this.state.showContactModal}
+              handleClose={this.handleClose}
+            />
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            {this.state.buttonVisible
+              ? <Button
+                className="ProjectSearchBar-submit"
+                type="button"
+                disabled={!this.state.buttonDisabled}
+                title={this.state.buttonTitle}
+                href="../login"
+              >
+                Sign in to Contact Project
+              </Button>
+              : null
+            }
+          </div>
+        );
+      }
     } else {
       return null;
     }
