@@ -74713,10 +74713,6 @@ var SelectorDropdown = function (_React$PureComponent) {
     value: function _renderCategories() {
       var _this4 = this;
 
-      // TODO: Calculate this in a more intelligent way
-      var subMenuX = this.state.chevronX - 50;
-      // this.state.optionCategoryCoords[category].top
-
       return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).map(function (category, i) {
         var isExpanded = category === _this4.state.categoryShown;
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
