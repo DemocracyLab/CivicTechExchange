@@ -74435,7 +74435,7 @@ var ProjectFilterContainer = function (_React$PureComponent) {
         "div",
         { className: "ProjectFilterContainer-root" },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "span",
+          "div",
           { className: "ProjectFilterContainer-label" },
           "Filter By:"
         ),
@@ -74683,23 +74683,22 @@ var SelectorDropdown = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_0__common_ContextualDropdown_jsx__["a" /* default */],
         { xPos: this.state.chevronX },
-        this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList, false)
+        this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList)
       );
     }
   }, {
     key: '_renderOptions',
-    value: function _renderOptions(options, isSubMenu) {
+    value: function _renderOptions(options) {
       var _this3 = this;
 
       return options.map(function (option, i) {
-        // TODO: Style element based on whether its disabled
         var enabled = _this3.props.optionEnabled(option);
+        var classes = "DropDownMenuItem-root " + (enabled ? "enabled" : "disabled");
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           {
             key: i,
-            className: isSubMenu ? "DropDownMenuItem-root" : "DropDownCategoryItem-root",
-            disabled: !enabled,
+            className: classes,
             onClick: function onClick() {
               return enabled && _this3.props.onOptionSelect(option);
             }
@@ -74732,7 +74731,7 @@ var SelectorDropdown = function (_React$PureComponent) {
           isExpanded ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_0__common_ContextualDropdown_jsx__["a" /* default */],
             { xPos: subMenuX },
-            _this4._renderOptions(_this4.state.optionCategoryTree[category], true)
+            _this4._renderOptions(_this4.state.optionCategoryTree[category])
           ) : null
         );
       });

@@ -87,19 +87,18 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   _renderDropdown(): React$Node {
     return (
       <ContextualDropdown xPos={this.state.chevronX}>
-        { this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList, false) }
+        { this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList) }
       </ContextualDropdown>
     );
   }
   
-  _renderOptions(options: $ReadOnlyArray<T>, isSubMenu: boolean): $ReadOnlyArray<React$Node> {
+  _renderOptions(options: $ReadOnlyArray<T>): $ReadOnlyArray<React$Node> {
     return options.map( (option, i) => {
-      // TODO: Style element based on whether its disabled
       const enabled = this.props.optionEnabled(option);
+      const classes = "DropDownMenuItem-root " + (enabled ? "enabled" : "disabled");
       return <div
         key={i}
-        className= {isSubMenu ? "DropDownMenuItem-root" : "DropDownCategoryItem-root"}
-        disabled={!enabled}
+        className= {classes}
         onClick={() => enabled && this.props.onOptionSelect(option)}
         >
           {this.props.optionDisplay(option)}
@@ -115,13 +114,13 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
       const isExpanded:boolean = category === this.state.categoryShown;
       return <div
         key={i}
-        className= {"DropDownCategoryItem-root" + (isExpanded ? "" : " unselected")}
+        className={"DropDownCategoryItem-root" + (isExpanded ? "" : " unselected")}
         onClick={this.expandCategory.bind(this, category)}
       >
         {category} { } {isExpanded ? this.constants.chevronDown : this.constants.chevronRight}
         { isExpanded
           ? <ContextualDropdown xPos={subMenuX}>
-              { this._renderOptions(this.state.optionCategoryTree[category], true) }
+              { this._renderOptions(this.state.optionCategoryTree[category]) }
             </ContextualDropdown>
           : null
         }
