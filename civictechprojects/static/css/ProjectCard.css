@@ -1,6 +1,6 @@
 .ProjectCard-root {
   background-color: white;
-  border: solid 1px #6b6e70;
+  border: solid 1px #868e96;
   color: inherit;
   display: inline-table;
   height: 340px;
@@ -11,9 +11,11 @@
 
 .ProjectCard-root > div {
   padding: 5px;
+  border-bottom: solid 1px; 
 }
 
 .ProjectCard-description {
+  white-space: pre-wrap;
   line-height: 1.5;
 }
 
@@ -27,7 +29,7 @@
 
 .ProjectCard-name {
   height: 140px;
-  border-bottom: solid 1px;
+  
 }
 
 .ProjectCard-name > h3{

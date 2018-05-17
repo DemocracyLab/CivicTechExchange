@@ -17,6 +17,13 @@ class metrics {
       {tagName: tag.tag_name}
     );
   }
+  
+  static logUserContactedProjectOwner(userId: number, projectId: number) {
+    var params = {};
+    params['userId'] = userId;
+    params['projectId'] = projectId;
+    window.FB.AppEvents.logEvent('UserContactedProjectOwner', null, params);
+  }
 }
 
 export default metrics

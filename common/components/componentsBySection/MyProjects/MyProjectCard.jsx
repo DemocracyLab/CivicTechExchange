@@ -3,11 +3,13 @@
 import cx from '../../utils/cx';
 import type {Project} from '../../stores/ProjectSearchStore.js';
 import React from 'react';
-import Section from '../../enums/Section.js'
-import url from '../../utils/url.js'
+import Section from '../../enums/Section.js';
+import url from '../../utils/url.js';
+import {Button} from 'react-bootstrap';
 
 type Props = {|
   +project: Project,
+  +onProjectClickDelete: (Project) => void,
 |};
 
 const style = {
@@ -19,9 +21,7 @@ class MyProjectCard extends React.PureComponent<Props> {
   render(): React$Node {
     const id = {'id':this.props.project.id};
     return (
-      <a style={style}
-        className="MyProjectCard-root"
-        href={url.section(Section.AboutProject, id)}>
+      <div className="MyProjectCard-root">
          <table className="MyProjectCard-table">
           <tbody>
             <tr>
@@ -46,14 +46,14 @@ class MyProjectCard extends React.PureComponent<Props> {
                 <tr>In Progress</tr>
               </td>
               <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">
-                  <a style={style} href={url.section(Section.EditProject, id)}>Edit</a>
-                </tr>
+                  <Button className="MyProjectCard-button" href={url.section(Section.AboutProject, id)} bsStyle="info">View</Button>
+                  <Button className="MyProjectCard-button" href={url.section(Section.EditProject, id)} bsStyle="info">Edit</Button>
+                  <Button className="MyProjectCard-button" bsStyle="danger" onClick={() => this.props.onProjectClickDelete(this.props.project)}>Delete</Button>
               </td>
             </tr>
           </tbody>
         </table>
-      </a>
+      </div>
     );
   }
 }

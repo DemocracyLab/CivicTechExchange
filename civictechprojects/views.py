@@ -17,7 +17,6 @@ from common.helpers.tags import get_tags_by_category
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-
 from pprint import pprint
 
 
@@ -35,7 +34,6 @@ def tags(request):
             list(tags.values())
         )
     )
-
 
 def to_rows(items, width):
     rows = [[]]
@@ -79,16 +77,17 @@ def project_edit(request, project_id):
         return HttpResponseForbidden()
     return redirect('/index/?section=AboutProject&id=' + project_id)
 
-
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
 def project_delete(request, project_id):
+    # if not logged in, send user to login page
     if not request.user.is_authenticated():
-        return redirect('/signup')
-
+        return HttpResponse(status=401)
     try:
-        ProjectCreationForm.delete_project(project_id)
+        ProjectCreationForm.delete_project(request, project_id)
     except PermissionDenied:
         return HttpResponseForbidden()
-    return redirect('/index/')
+    return HttpResponse(status=204)
 
 
 # TODO: Remove when React implementation complete

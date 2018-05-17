@@ -31,7 +31,8 @@ export type ProjectAPIData = {|
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
   +project_location: string,
   +project_name: string,
-  +project_thumbnail: FileInfo
+  +project_thumbnail: FileInfo,
+  +project_claimed: boolean
 |};
 
 export type ProjectDetailsAPIData = {|
@@ -61,7 +62,8 @@ class ProjectAPIUtils {
           : 'None',
       location: apiData.project_location,
       name: apiData.project_name,
-      thumbnail: apiData.project_thumbnail
+      thumbnail: apiData.project_thumbnail,
+      claimed: apiData.project_claimed
     };
   }
   
