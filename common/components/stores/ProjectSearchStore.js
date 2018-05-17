@@ -94,9 +94,13 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _loadProjects(state: State): State {
+    
+    
     const args = _.pickBy({
         keyword: state.keyword,
-        issues: state.tags && this._getIssueAreasQueryParam(state)
+        issues: this._getTagCategoryParams(state, TagCategory.ISSUES),
+        tech: this._getTagCategoryParams(state, TagCategory.TECHNOLOGIES_USED),
+        role: this._getTagCategoryParams(state, TagCategory.ROLE)
       },_.identity);
     const url: string = urls.constructWithQueryString('/api/projects', args);
     fetch(new Request(url))
@@ -110,9 +114,9 @@ class ProjectSearchStore extends ReduceStore<State> {
     return state.set('projectsData', null);
   }
 
-  _getIssueAreasQueryParam(state: State): ?string {
-    const issueTags = state.tags.filter(tag => tag.category === TagCategory.ISSUES);
-    return issueTags.map(tag => tag.tag_name).join(',');
+  _getTagCategoryParams(state: State, category: string): ?string {
+    const tags = state.tags.filter(tag => tag.category === category);
+    return tags.map(tag => tag.tag_name).join(',');
   }
 
   getKeyword(): string {
@@ -132,8 +136,6 @@ class ProjectSearchStore extends ReduceStore<State> {
   getAvailableFilters(): AvailableFilters {
     const state: State = this.getState();
     return state.projectsData && state.projectsData.availableFilters;
-    
-    
   }
 
   getTags(): List<TagDefinition> {
