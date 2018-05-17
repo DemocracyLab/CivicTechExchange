@@ -24,6 +24,7 @@ type State = {|
   showDropdown: boolean,
   optionFlatList: ?$ReadOnlyArray<T>,
   optionCategoryTree: ?{ [key: string]: $ReadOnlyArray<T> },
+  optionCategoryCoords: { [key: string]: ClientRect},
   categoryShown: string
 |};
 
@@ -42,7 +43,8 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
       chevronX: 0,
       showDropdown: false,
       optionFlatList: null,
-      optionCategoryTree: null
+      optionCategoryTree: null,
+      optionCategoryCoords: {}
     }, this.initializeOptions(props));
     
     this.isReady = this.isReady.bind(this);
@@ -86,7 +88,7 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   
   _renderDropdown(): React$Node {
     return (
-      <ContextualDropdown xPos={this.state.chevronX}>
+      <ContextualDropdown showContextualArrow={true} xPos={this.state.chevronX}>
         { this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList) }
       </ContextualDropdown>
     );
@@ -107,19 +109,17 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   }
   
   _renderCategories(): $ReadOnlyArray<React$Node> {
-    // TODO: Calculate this in a more intelligent way
-    const subMenuX = this.state.chevronX - 50;
-    
     return _.keys(this.state.optionCategoryTree).map( (category,i) => {
       const isExpanded:boolean = category === this.state.categoryShown;
       return <div
         key={i}
+        ref={this._onCategoryMount.bind(this, category)}
         className={"DropDownCategoryItem-root" + (isExpanded ? "" : " unselected")}
         onClick={this.expandCategory.bind(this, category)}
       >
         {category} { } {isExpanded ? this.constants.chevronDown : this.constants.chevronRight}
         { isExpanded
-          ? <ContextualDropdown xPos={subMenuX}>
+          ? <ContextualDropdown xPos={this.state.optionCategoryCoords[category].width} yPos={-this.state.optionCategoryCoords[category].height}>
               { this._renderOptions(this.state.optionCategoryTree[category]) }
             </ContextualDropdown>
           : null
@@ -135,6 +135,12 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
         {this.constants.chevronDown}
       </span>
     );
+  }
+  
+  _onCategoryMount(category: string, categoryElement: ?React$ElementRef<*>): void {
+    if(categoryElement) {
+      this.state.optionCategoryCoords[category] = categoryElement.getBoundingClientRect();
+    }
   }
   
   _onChevronMount(chevronElement: ?React$ElementRef<*>): void {
