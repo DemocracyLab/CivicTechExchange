@@ -125,10 +125,14 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   _renderCategories(): $ReadOnlyArray<React$Node> {
     return (_.keys(this.state.optionCategoryTree).sort()).map( (category,i) => {
       const isExpanded:boolean = category === this.state.categoryShown;
+      const hasEnabledItems = _.some(this.state.optionCategoryTree[category], this.props.optionEnabled);
+      const classes: string = "DropDownCategoryItem-root"
+        + (isExpanded ? "" : " unselected")
+        + (hasEnabledItems ? "" : " disabled");
       return <div
         key={i}
         ref={this._onCategoryMount.bind(this, category)}
-        className={"DropDownCategoryItem-root" + (isExpanded ? "" : " unselected")}
+        className={classes}
         onClick={this.expandCategory.bind(this, category)}
       >
         {category} { } {isExpanded ? this.constants.chevronDown : this.constants.chevronRight}

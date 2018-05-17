@@ -15,7 +15,7 @@
   padding-right: 29px;
 }
 
-.DropDownMenuItem-root.disabled {
+.DropDownMenuItem-root.disabled,.DropDownCategoryItem-root.disabled{
   color: grey;
 }
 

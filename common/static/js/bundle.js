@@ -74841,12 +74841,14 @@ var SelectorDropdown = function (_React$PureComponent) {
 
       return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).sort().map(function (category, i) {
         var isExpanded = category === _this4.state.categoryShown;
+        var hasEnabledItems = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.some(_this4.state.optionCategoryTree[category], _this4.props.optionEnabled);
+        var classes = "DropDownCategoryItem-root" + (isExpanded ? "" : " unselected") + (hasEnabledItems ? "" : " disabled");
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           {
             key: i,
             ref: _this4._onCategoryMount.bind(_this4, category),
-            className: "DropDownCategoryItem-root" + (isExpanded ? "" : " unselected"),
+            className: classes,
             onClick: _this4.expandCategory.bind(_this4, category)
           },
           category,
