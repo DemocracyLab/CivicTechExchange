@@ -67608,7 +67608,7 @@ var ContactProjectButton = function (_React$PureComponent) {
       };
       if (!__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isLoggedIn()) {
         newState.buttonVisible = true;
-        newState.buttonDisabled = true;
+        newState.buttonDisabled = false;
         newState.buttonTitle = "Please sign up or log in to contact project owner";
       } else if (!__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isEmailVerified()) {
         newState.buttonVisible = true;
@@ -67675,11 +67675,11 @@ var ContactProjectButton = function (_React$PureComponent) {
               {
                 className: 'ProjectSearchBar-submit',
                 type: 'button',
-                disabled: !this.state.buttonDisabled,
+                disabled: this.state.buttonDisabled,
                 title: this.state.buttonTitle,
                 href: '../login'
               },
-              'Sign in to contact project'
+              'Sign in to Contact Project'
             ) : null
           );
         }

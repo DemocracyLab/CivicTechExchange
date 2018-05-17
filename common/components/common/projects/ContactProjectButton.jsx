@@ -50,7 +50,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     };
     if(!CurrentUser.isLoggedIn()) {
       newState.buttonVisible = true;
-      newState.buttonDisabled = true;
+      newState.buttonDisabled = false;
       newState.buttonTitle = "Please sign up or log in to contact project owner";
     } else if(!CurrentUser.isEmailVerified()) {
       newState.buttonVisible = true;
@@ -112,7 +112,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
               ? <Button
                 className="ProjectSearchBar-submit"
                 type="button"
-                disabled={!this.state.buttonDisabled}
+                disabled={this.state.buttonDisabled}
                 title={this.state.buttonTitle}
                 href="../login"
               >
