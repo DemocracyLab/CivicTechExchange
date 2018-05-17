@@ -10,7 +10,8 @@
 }
 
 .ProjectCard-root > div {
-  padding: 2px;
+  padding: 5px;
+  border-bottom: solid 1px; 
 }
 
 .ProjectCard-description {
@@ -27,7 +28,7 @@
 
 .ProjectCard-name {
   height: 140px;
-  border-bottom: solid 1px;
+  
 }
 
 .ProjectCard-name > h3{
