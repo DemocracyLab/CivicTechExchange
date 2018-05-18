@@ -67,8 +67,13 @@ class ProjectCreationForm(ModelForm):
         send_project_creation_notification(project)
 
     @staticmethod
-    def delete_project(project_id):
-        Project.objects.get(id=project_id).delete()
+    def delete_project(request, project_id):
+        project = Project.objects.get(id=project_id)
+
+        if not request.user.username == project.project_creator.username:
+            raise PermissionDenied()
+
+        project.delete()
 
     @staticmethod
     def edit_project(request, project_id):

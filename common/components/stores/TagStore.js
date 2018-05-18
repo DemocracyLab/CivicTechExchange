@@ -11,6 +11,7 @@ export type TagActionType = {
   tags: List<Tag>,
 };
 
+// TODO: Condense redundant tag definitions
 export type Tag = {|
   +caption: string,
   +category: string,

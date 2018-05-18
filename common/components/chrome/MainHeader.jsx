@@ -1,9 +1,8 @@
 // @flow
 
-import type {SectionType} from '../enums/Section.js';
-
 import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
+import {DropdownButton, MenuItem} from 'react-bootstrap';
 import Section from '../enums/Section.js';
 import CurrentUser from '../utils/CurrentUser.js';
 import url from '../utils/url.js';
@@ -19,9 +18,6 @@ class MainHeader extends React.PureComponent<{||}> {
           />
         </span>
         <span className="MainHeader-rightContent">
-          <span>
-            {/* {this._renderLinks()} */}
-          </span>
           {this._renderHero()}
         </span>
       </div>
@@ -39,27 +35,32 @@ class MainHeader extends React.PureComponent<{||}> {
   _renderHero(): React$Node {
     return CurrentUser.isLoggedIn()
       ? (
-        <span>
-          {CurrentUser.firstName() + ' ' + CurrentUser.lastName() + ' '}
-          | <a href="/logout">Logout</a> | {' '}
-            <a href="mailto:hello@democracylab.org" target="_blank">Contact Us</a>
-        </span>
+        <DropdownButton
+          style={{cursor: "pointer",  textDecoration: "none", color: "black"}}
+          bsStyle="link"
+          title={CurrentUser.firstName() + ' ' + CurrentUser.lastName()}
+          noCaret
+          id="dropdown-no-caret"
+        >
+          <MenuItem href="mailto:hello@democracylab.org">Contact Us</MenuItem>
+          <MenuItem divider />
+          <MenuItem href="/logout">Logout</MenuItem>
+        </DropdownButton>
+          )
+      : (
+          <span className = "MainHeader-links">
+              <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
+              <span onClick = {this._onLogInClick}>
+              <a href = "" > Log In </a>
+              </span> |{' '}
 
-            ) :
-            (
-            <span className = "MainHeader-links">
-                <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
-                <span onClick = {this._onLogInClick}>
-                <a href = "" > Log In </a>
-                </span> |{' '}
+              <span onClick = {this._onSignUpClick} >
+              <a href = "" > Sign Up </a>
+              </span> |{' '}
 
-                <span onClick = {this._onSignUpClick} >
-                <a href = "" > Sign Up </a>
-                </span> |{' '}
-
-                <a href = "/password_reset" > Forgot Password </a>
-            </span>
-            );
+              <a href = "/password_reset" > Forgot Password </a>
+          </span>
+        );
   }
 
   _onLogInClick(): void {
@@ -71,31 +72,12 @@ class MainHeader extends React.PureComponent<{||}> {
   }
 
   _onSignUpClick(): void {
-      NavigationDispatcher.dispatch({
+    NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: Section.SignUp,
       url: url.section(Section.SignUp)
     });
-
-      // )
-      // : (
-      //   <span>
-      //     <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
-      //     <a href="/login">Log In</a> |{' '}
-      //     <a href="/signup">Sign Up</a> |{' '}
-      //     <a href="/password_reset">Forgot Password</a>
-      //   </span>
-      // );
-
   }
-
-  // _renderLinks(): React$Node {
-  //   return [
-  //     'About',
-  //     'Notifications',
-  //     'Messages',
-  //   ].map(link => <span className="MainHeader-link" key={link}>{link}</span>);
-  // }
 }
 
 export default MainHeader;

@@ -18,6 +18,15 @@ class url {
     return sectionUrl;
   }
   
+  // Construct a url with properly-formatted query string for the given arguments
+  static constructWithQueryString(url: string, args: { [key: string]: string }): string {
+    let result: string = url;
+    if(!_.isEmpty(args)) {
+      result += "?" + _.keys(args).map(key => key + "=" + args[key]).join("&");
+    }
+    return result;
+  }
+  
   static arguments(url: string) {
     // Take argument section of url and split args into substrings
     const argStart = url.indexOf("?");
