@@ -86,10 +86,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                   {this._renderProjectHomepageLink()}
                 </div>
                 <div className="row">
-                  <div className="col">
-                    <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
-                    {project && project.project_location}
-                  </div>
+                  {this._renderProjectLocation()}
                 </div>
                 <div className="row">
                   <ContactProjectButton project={this.state.project}/>
@@ -171,6 +168,15 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         </div>
       </div>
     );
+  }
+  
+  _renderProjectLocation(): React$Node {
+    if(this.state.project && this.state.project.project_location) {
+      return <div className="col">
+        <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
+        {this.state.project.project_location}
+      </div>
+    }
   }
   
   _renderProjectHomepageLink(): React$Node {

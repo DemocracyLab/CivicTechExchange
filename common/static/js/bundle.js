@@ -67123,12 +67123,7 @@ var AboutProjectController = function (_React$PureComponent) {
                 __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                   'div',
                   { className: 'row' },
-                  __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
-                    'div',
-                    { className: 'col' },
-                    __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('i', { className: 'fa fa-map-marker fa-1', 'aria-hidden': 'true' }),
-                    project && project.project_location
-                  )
+                  this._renderProjectLocation()
                 ),
                 __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                   'div',
@@ -67240,6 +67235,18 @@ var AboutProjectController = function (_React$PureComponent) {
           ) : null
         )
       );
+    }
+  }, {
+    key: '_renderProjectLocation',
+    value: function _renderProjectLocation() {
+      if (this.state.project && this.state.project.project_location) {
+        return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+          'div',
+          { className: 'col' },
+          __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('i', { className: 'fa fa-map-marker fa-1', 'aria-hidden': 'true' }),
+          this.state.project.project_location
+        );
+      }
     }
   }, {
     key: '_renderProjectHomepageLink',
