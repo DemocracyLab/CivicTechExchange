@@ -2,13 +2,13 @@
 
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
-import { Button } from 'react-bootstrap';
 import type {PositionInfo} from "../forms/PositionInfo.jsx";
 import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
-import ContactProjectModal from "../common/projects/ContactProjectModal.jsx";
 import NotificationModal from "../common/notification/NotificationModal.jsx";
 import TagsDisplay from '../common/tags/TagsDisplay.jsx'
 import url from '../utils/url.js'
+import CurrentUser from "../utils/CurrentUser.js";
+import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 import _ from 'lodash'
 
 import React from 'react';
@@ -93,6 +93,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
                 <div className="row">
                   <ContactProjectButton project={this.state.project}/>
+                  { !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> }
                 </div>
               </div>
             </div>
