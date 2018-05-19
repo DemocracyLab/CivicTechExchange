@@ -75998,7 +75998,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-
 var MainHeader = function (_React$PureComponent) {
   _inherits(MainHeader, _React$PureComponent);
 
@@ -76118,18 +76117,6 @@ var MainHeader = function (_React$PureComponent) {
         url: __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].SignUp)
       });
     }
-
-    //     )
-    //     : (
-    //       <span>
-    //         <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
-    //         <a href="/login">Log In</a> |{' '}
-    //         <a href="/signup">Sign Up</a> |{' '}
-    //         <a href="/password_reset">Forgot Password</a>
-    //       </span>
-    //     );
-    // }
-
   }]);
 
   return MainHeader;
