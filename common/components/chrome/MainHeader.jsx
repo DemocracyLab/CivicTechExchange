@@ -1,7 +1,5 @@
 // @flow
 
-import type {SectionType} from '../enums/Section.js';
-
 import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
 import {DropdownButton, MenuItem} from 'react-bootstrap';
@@ -20,9 +18,6 @@ class MainHeader extends React.PureComponent<{||}> {
           />
         </span>
         <span className="MainHeader-rightContent">
-          <span>
-            {/* {this._renderLinks()} */}
-          </span>
           {this._renderHero()}
         </span>
       </div>
@@ -40,26 +35,48 @@ class MainHeader extends React.PureComponent<{||}> {
   _renderHero(): React$Node {
     return CurrentUser.isLoggedIn()
       ? (
-          <DropdownButton
-            style={{cursor: "pointer",  textDecoration: "none", color: "black"}}
-            bsStyle="link"
-            title={CurrentUser.firstName() + ' ' + CurrentUser.lastName()}
-            noCaret
-            id="dropdown-no-caret"
-          >
-            <MenuItem href="mailto:hello@democracylab.org">Contact Us</MenuItem>
-            <MenuItem divider />
-            <MenuItem href="/logout">Logout</MenuItem>
-          </DropdownButton>
-      )
+        <DropdownButton
+          style={{cursor: "pointer",  textDecoration: "none", color: "black"}}
+          bsStyle="link"
+          title={CurrentUser.firstName() + ' ' + CurrentUser.lastName()}
+          noCaret
+          id="dropdown-no-caret"
+        >
+          <MenuItem href="mailto:hello@democracylab.org">Contact Us</MenuItem>
+          <MenuItem divider />
+          <MenuItem href="/logout">Logout</MenuItem>
+        </DropdownButton>
+          )
       : (
-        <span>
-          <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
-          <a href="/login">Log In</a> |{' '}
-          <a href="/signup">Sign Up</a> |{' '}
-          <a href="/password_reset">Forgot Password</a>
-        </span>
-      );
+          <span className = "MainHeader-links">
+              <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
+              <span onClick = {this._onLogInClick}>
+              <a href = "" > Log In </a>
+              </span> |{' '}
+
+              <span onClick = {this._onSignUpClick} >
+              <a href = "" > Sign Up </a>
+              </span> |{' '}
+
+              <a href = "/password_reset" > Forgot Password </a>
+          </span>
+        );
+  }
+
+  _onLogInClick(): void {
+      NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: Section.LogIn,
+      url: url.section(Section.LogIn)
+    });
+  }
+
+  _onSignUpClick(): void {
+    NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: Section.SignUp,
+      url: url.section(Section.SignUp)
+    });
   }
 }
 
