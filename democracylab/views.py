@@ -32,12 +32,9 @@ def signup(request):
         else:
             # TODO inform client of form invalidity
             print('Invalid form', form.errors.as_json())
-            template = loader.get_template('signup.html')
-            context = {'errors': form.errors.as_json()}
-            return HttpResponse(template.render(context, request))
+            return redirect('/index/?section=SignUp')
     else:
-        template = loader.get_template('signup.html')
-        return HttpResponse(template.render({}, request))
+        return redirect('/index/?section=SignUp')
 
 
 def verify_user(request, user_id, token):
