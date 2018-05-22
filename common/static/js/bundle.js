@@ -68707,7 +68707,7 @@ Value.propTypes = {
 };
 
 /*!
-  Copyright (c) 2018 Jed Watson.
+  Copyright (c) 2017 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/react-select
 */
@@ -69263,8 +69263,8 @@ var Select$1 = function (_React$Component) {
 					break;
 				case 46:
 					// delete
+					event.preventDefault();
 					if (!this.state.inputValue && this.props.deleteRemoves) {
-						event.preventDefault();
 						this.popValue();
 					}
 					break;
@@ -69695,7 +69695,7 @@ var Select$1 = function (_React$Component) {
 			}
 			return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
 				'div',
-				{ className: className, key: 'input-wrap', style: { display: 'inline-block' } },
+				{ className: className, key: 'input-wrap' },
 				__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('input', _extends({ id: this.props.id }, inputProps))
 			);
 		}
@@ -74907,6 +74907,11 @@ var ProjectSearchContainer = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
         'div',
         null,
+        __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
+          'p',
+          null,
+          'Welcome to DemocracyLab! Use the filters and search bar below to find tech-for-good projects in Seattle.'
+        ),
         __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ProjectSearchBar_jsx__["a" /* default */], null),
         __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__ProjectTagContainer_jsx__["a" /* default */], null),
         __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_0__ProjectFilterContainer_jsx__["a" /* default */], null)
