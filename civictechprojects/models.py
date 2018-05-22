@@ -26,6 +26,7 @@ class Project(models.Model):
     project_volunteers = models.ManyToManyField(
         Contributor,
         related_name='volunteers',
+        blank=True
     )
     # TODO: Change related name to 'created_projects' or something similar
     project_creator = models.ForeignKey(Contributor, related_name='creator')
@@ -38,6 +39,7 @@ class Project(models.Model):
     project_name = models.CharField(max_length=200)
     project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
+    is_searchable = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)

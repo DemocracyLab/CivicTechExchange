@@ -139,7 +139,7 @@ def my_projects(request):
 
 
 def projects_list(request):
-    project_list = Project.objects.all()
+    project_list = Project.objects.filter(is_searchable=True)
     if request.method == 'GET':
         url_parts = request.GET.urlencode()
         query_params = urlparse.parse_qs(
