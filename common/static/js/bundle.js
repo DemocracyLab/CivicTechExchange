@@ -74478,7 +74478,7 @@ var ProjectCard = function (_React$PureComponent) {
     value: function _renderName() {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
-        null,
+        { 'class': 'borderbottom' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           { className: 'ProjectCard-name' },

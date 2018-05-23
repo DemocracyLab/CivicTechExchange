@@ -44,7 +44,7 @@ class ProjectCard extends React.PureComponent<Props> {
 
   _renderName(): React$Node {
     return (
-      <div>
+      <div class="borderbottom">
         <div className="ProjectCard-name" >
           <div>
             <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>

@@ -6,10 +6,11 @@
   height: 340px;
   margin-right: 20px;
   margin-top: 20px;
+  margin-bottom: 30px;
   width: 260px;
 }
 
-.ProjectCard-root > div {
+.ProjectCard-root > div.borderbottom {
   padding: 5px;
   border-bottom: solid 1px; 
 }
