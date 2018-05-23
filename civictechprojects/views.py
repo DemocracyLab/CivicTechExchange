@@ -160,7 +160,7 @@ def projects_list(request):
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
 
-    response = json.dumps(projects_with_filter_counts(project_list.order_by('project_name'), selected_tag_filters))
+    response = json.dumps(projects_with_filter_counts(project_list.distinct().order_by('project_name'), selected_tag_filters))
 
     return HttpResponse(response)
 
