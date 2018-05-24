@@ -1,12 +1,26 @@
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import redirect
-from django.template import loader
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import DemocracyLabUserCreationForm
 from .models import Contributor, get_request_contributor
+
+
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=email, password=password)
+        if user is not None and user.is_authenticated:
+            login(request, user)
+            return redirect('/')
+        else:
+            # TODO: Show error message if the email/password combination are invalid
+            return redirect('/index/?section=LogIn')
+    else:
+        return redirect('/index/?section=LogIn')
 
 
 def signup(request):

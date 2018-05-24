@@ -22,9 +22,7 @@ from . import views
 
 urlpatterns = [
     url(r'^signup/$', views.signup, name='signup'),
-    url(
-        r'^login/$', RedirectView.as_view(url='/index/?section=LogIn', permanent=False)
-    ),
+    url(r'^login/$', views.login_view, name='login_view'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(
         r'^password_reset/$',
