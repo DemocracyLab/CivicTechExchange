@@ -67466,7 +67466,7 @@ var AboutProjectController = function (_React$PureComponent) {
                   'div',
                   { className: 'row' },
                   __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_projects_ContactProjectButton_jsx__["a" /* default */], { project: this.state.project }),
-                  !__WEBPACK_IMPORTED_MODULE_5__utils_CurrentUser_js__["a" /* default */].isEmailVerified() && __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__common_notification_VerifyEmailBlurb_jsx__["a" /* default */], null)
+                  __WEBPACK_IMPORTED_MODULE_5__utils_CurrentUser_js__["a" /* default */].isLoggedIn() && !__WEBPACK_IMPORTED_MODULE_5__utils_CurrentUser_js__["a" /* default */].isEmailVerified() && __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__common_notification_VerifyEmailBlurb_jsx__["a" /* default */], null)
                 )
               )
             )

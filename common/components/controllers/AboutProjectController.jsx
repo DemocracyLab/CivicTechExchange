@@ -90,7 +90,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
                 <div className="row">
                   <ContactProjectButton project={this.state.project}/>
-                  { !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> }
+                  { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> }
                 </div>
               </div>
             </div>
