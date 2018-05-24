@@ -32,8 +32,9 @@ class ProjectCreationForm(ModelForm):
             project.project_issue_area.add(issue_areas)
 
         project_technologies = form.data.get('project_technologies')
-        if project_technologies and len(project_technologies) != 0:
-            project.project_technologies.add(project_technologies)
+        if len(project_technologies) > 0:
+            for tech in project_technologies.split(','):
+                project.project_technologies.add(tech)
 
         project.save()
 
