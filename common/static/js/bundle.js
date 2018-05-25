@@ -67768,41 +67768,19 @@ var ContactProjectButton = function (_React$PureComponent) {
   }, {
     key: 'render',
     value: function render() {
-      var id = { 'id': this.props.project.project_id };
       if (this.state) {
         if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isLoggedIn()) {
           if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].userID() === this.props.project.project_creator) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'div',
               null,
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-                {
-                  className: 'ProjectSearchBar-submit',
-                  type: 'button',
-                  disabled: this.state.buttonDisabled,
-                  title: this.state.buttonTitle,
-                  href: __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].EditProject, id),
-                  bsStyle: 'info'
-                },
-                'Edit Project'
-              )
+              this._renderEditProjectButton()
             );
           } else {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'div',
               null,
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-                {
-                  className: 'ProjectSearchBar-submit',
-                  type: 'button',
-                  disabled: this.state.buttonDisabled,
-                  title: this.state.buttonTitle,
-                  onClick: this.handleShow
-                },
-                'Contact Project'
-              ),
+              this._renderContactProjectButton(),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__ContactProjectModal_jsx__["a" /* default */], {
                 projectId: this.state.project && this.state.project.project_id,
                 showModal: this.state.showContactModal,
@@ -67814,22 +67792,59 @@ var ContactProjectButton = function (_React$PureComponent) {
           return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
             null,
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-              {
-                className: 'ProjectSearchBar-submit',
-                type: 'button',
-                disabled: this.state.buttonDisabled,
-                title: this.state.buttonTitle,
-                href: '../login'
-              },
-              'Sign in to Contact Project'
-            )
+            this._renderLinkToSignInButton()
           );
         }
       } else {
         return null;
       }
+    }
+  }, {
+    key: '_renderEditProjectButton',
+    value: function _renderEditProjectButton() {
+      var id = { 'id': this.props.project.project_id };
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
+        {
+          className: 'ProjectSearchBar-submit',
+          type: 'button',
+          disabled: this.state.buttonDisabled,
+          title: this.state.buttonTitle,
+          href: __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].EditProject, id),
+          bsStyle: 'info'
+        },
+        'Edit Project'
+      );
+    }
+  }, {
+    key: '_renderContactProjectButton',
+    value: function _renderContactProjectButton() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
+        {
+          className: 'ProjectSearchBar-submit',
+          type: 'button',
+          disabled: this.state.buttonDisabled,
+          title: this.state.buttonTitle,
+          onClick: this.handleShow
+        },
+        'Contact Project'
+      );
+    }
+  }, {
+    key: '_renderLinkToSignInButton',
+    value: function _renderLinkToSignInButton() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
+        {
+          className: 'ProjectSearchBar-submit',
+          type: 'button',
+          disabled: this.state.buttonDisabled,
+          title: this.state.buttonTitle,
+          href: '../login'
+        },
+        'Sign in to Contact Project'
+      );
     }
   }]);
 

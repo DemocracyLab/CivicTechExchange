@@ -8,7 +8,6 @@ import Section from '../../enums/Section.js';
 import url from '../../utils/url.js';
 import ContactProjectModal from "./ContactProjectModal.jsx";
 
-
 type Props = {|
   project: ?ProjectDetailsAPIData
 |};
@@ -75,36 +74,18 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   }
 
   render(): ?React$Node {
-    const id = {'id':this.props.project.project_id};
     if(this.state) {
       if(CurrentUser.isLoggedIn()) {
         if(CurrentUser.userID() === this.props.project.project_creator){
           return (
             <div>
-              <Button
-                className="ProjectSearchBar-submit"
-                type="button"
-                disabled={this.state.buttonDisabled}
-                title={this.state.buttonTitle}
-                href={url.section(Section.EditProject, id)}
-                bsStyle="info"
-              >
-                Edit Project
-              </Button>
+              {this._renderEditProjectButton()}
             </div>
           );
         } else {
           return (
             <div>
-              <Button
-                className="ProjectSearchBar-submit"
-                type="button"
-                disabled={this.state.buttonDisabled}
-                title={this.state.buttonTitle}
-                onClick={this.handleShow}
-              >
-                Contact Project
-              </Button>
+              {this._renderContactProjectButton()}
               <ContactProjectModal
                 projectId={this.state.project && this.state.project.project_id}
                 showModal={this.state.showContactModal}
@@ -113,25 +94,61 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
             </div>
           );       
         }
-        
       } else {
         return (
           <div>
-            <Button
-              className="ProjectSearchBar-submit"
-              type="button"
-              disabled={this.state.buttonDisabled}
-              title={this.state.buttonTitle}
-              href="../login"
-            >
-              Sign in to Contact Project
-            </Button>
+            {this._renderLinkToSignInButton()}
           </div>
         );
       }
     } else {
       return null;
     }
+  }
+
+
+  _renderEditProjectButton(): React$Node {
+    const id = {'id':this.props.project.project_id};
+    return (
+        <Button
+          className="ProjectSearchBar-submit"
+          type="button"
+          disabled={this.state.buttonDisabled}
+          title={this.state.buttonTitle}
+          href={url.section(Section.EditProject, id)}
+          bsStyle="info"
+        >
+          Edit Project
+        </Button>
+    );
+  }
+
+  _renderContactProjectButton(): React$Node {
+    return (
+      <Button
+        className="ProjectSearchBar-submit"
+        type="button"
+        disabled={this.state.buttonDisabled}
+        title={this.state.buttonTitle}
+        onClick={this.handleShow}
+      >
+        Contact Project
+      </Button>
+    );
+  }
+
+  _renderLinkToSignInButton(): React$Node {
+    return (
+      <Button
+        className="ProjectSearchBar-submit"
+        type="button"
+        disabled={this.state.buttonDisabled}
+        title={this.state.buttonTitle}
+        href="../login"
+      >
+        Sign in to Contact Project
+      </Button>
+    );
   }
 }
 
