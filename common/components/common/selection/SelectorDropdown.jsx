@@ -60,6 +60,7 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
     }, this.initializeOptions(props));
     
     this.isReady = this.isReady.bind(this);
+    this.selectOption = this.selectOption.bind(this);
   }
   
   initializeOptions(props: Props) {
@@ -84,6 +85,11 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
     this.setState({
       categoryShown: this.state.categoryShown !== category ? category : null
     });
+  }
+  
+  selectOption(option: T):void {
+    this.props.onOptionSelect(option);
+    this.setState({showDropdown: false});
   }
   
   render(): React$Node {
@@ -115,7 +121,7 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
       return <div
         key={i}
         className= {classes}
-        onClick={() => enabled && this.props.onOptionSelect(option)}
+        onClick={() => enabled && this.selectOption(option)}
         >
           {this.props.optionDisplay(option)}
       </div>

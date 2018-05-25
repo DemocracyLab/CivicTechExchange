@@ -75034,6 +75034,7 @@ var TagSelectorDropdown = function (_React$Component) {
       });
     });
     _this._displayTag = _this._displayTag.bind(_this);
+    _this._tagEnabled = _this._tagEnabled.bind(_this);
     return _this;
   }
 
@@ -75054,7 +75055,7 @@ var TagSelectorDropdown = function (_React$Component) {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         null,
-        this.state.tags && this.state.tagCounts ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__selection_SelectorDropdown_jsx__["a" /* default */], {
+        this.state.tags ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__selection_SelectorDropdown_jsx__["a" /* default */], {
           title: this.props.title,
           options: this.state.tags,
           optionCategory: this.state.hasSubcategories && function (tag) {
@@ -75064,21 +75065,28 @@ var TagSelectorDropdown = function (_React$Component) {
             return _this2._displayTag(tag);
           },
           optionEnabled: function optionEnabled(tag) {
-            return _this2.state.tagCounts[tag.tag_name];
+            return _this2._tagEnabled(tag);
           },
           onOptionSelect: this.selectTag.bind(this)
         }) : null
       );
     }
   }, {
+    key: '_tagEnabled',
+    value: function _tagEnabled(tag) {
+      // Disable tags that are already selected
+      return !this.state.selectedTags || !this.state.selectedTags[tag.tag_name];
+    }
+  }, {
     key: '_displayTag',
     value: function _displayTag(tag) {
-      var tagCount = this.state.tagCounts[tag.tag_name] || 0;
-      var tagDisplay = tag.display_name;
-      if (tagCount > 0) {
-        tagDisplay += " (" + tagCount + ")";
-      }
-      return tagDisplay;
+      // const tagCount: number = this.state.tagCounts[tag.tag_name] || 0;
+      // let tagDisplay: string = tag.display_name;
+      // if(tagCount > 0) {
+      //   tagDisplay += " (" + tagCount + ")";
+      // }
+      // return tagDisplay;
+      return tag.display_name;
     }
   }], [{
     key: 'getStores',
@@ -75088,11 +75096,10 @@ var TagSelectorDropdown = function (_React$Component) {
   }, {
     key: 'calculateState',
     value: function calculateState(prevState) {
-      var filters = __WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchStore_js__["a" /* default */].getAvailableFilters();
-
-      // TODO: Fix this
       return {
-        tagCounts: filters && filters.tags
+        selectedTags: __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.mapKeys(__WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchStore_js__["a" /* default */].getTags().toArray(), function (tag) {
+          return tag.tag_name;
+        })
       };
     }
   }]);
@@ -75160,6 +75167,7 @@ var SelectorDropdown = function (_React$PureComponent) {
     }, _this.initializeOptions(props));
 
     _this.isReady = _this.isReady.bind(_this);
+    _this.selectOption = _this.selectOption.bind(_this);
     return _this;
   }
 
@@ -75190,6 +75198,12 @@ var SelectorDropdown = function (_React$PureComponent) {
       this.setState({
         categoryShown: this.state.categoryShown !== category ? category : null
       });
+    }
+  }, {
+    key: 'selectOption',
+    value: function selectOption(option) {
+      this.props.onOptionSelect(option);
+      this.setState({ showDropdown: false });
     }
   }, {
     key: 'render',
@@ -75237,7 +75251,7 @@ var SelectorDropdown = function (_React$PureComponent) {
             key: i,
             className: classes,
             onClick: function onClick() {
-              return enabled && _this3.props.onOptionSelect(option);
+              return enabled && _this3.selectOption(option);
             }
           },
           _this3.props.optionDisplay(option)

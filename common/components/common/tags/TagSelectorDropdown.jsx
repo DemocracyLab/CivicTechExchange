@@ -22,6 +22,7 @@ type Props = {|
 type State = {|
   tags: ?$ReadOnlyArray<TagDefinition>,
   tagCounts: ?{ [key: string]: number },
+  selectedTags: ?{ [key: string]: boolean },
   hasSubcategories: boolean
 |};
 
@@ -41,6 +42,7 @@ class TagSelectorDropdown extends React.Component<Props, State> {
       });
     });
     this._displayTag = this._displayTag.bind(this);
+    this._tagEnabled = this._tagEnabled.bind(this);
   }
   
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -48,11 +50,8 @@ class TagSelectorDropdown extends React.Component<Props, State> {
   }
   
   static calculateState(prevState: State): State {
-    const filters = ProjectSearchStore.getAvailableFilters();
-    
-    // TODO: Fix this
     return {
-      tagCounts: filters && filters.tags
+      selectedTags:_.mapKeys(ProjectSearchStore.getTags().toArray(), (tag: TagDefinition) => tag.tag_name)
     };
   }
   
@@ -67,14 +66,14 @@ class TagSelectorDropdown extends React.Component<Props, State> {
   render(): React$Node {
     return (
       <div>
-        { this.state.tags && this.state.tagCounts
+        { this.state.tags
           ? (
             <SelectorDropdown
               title={this.props.title}
               options={this.state.tags}
               optionCategory={this.state.hasSubcategories && (tag => tag.subcategory)}
               optionDisplay={tag => this._displayTag(tag)}
-              optionEnabled={tag => this.state.tagCounts[tag.tag_name]}
+              optionEnabled={tag => this._tagEnabled(tag)}
               onOptionSelect={this.selectTag.bind(this)}
             />
             )
@@ -84,13 +83,19 @@ class TagSelectorDropdown extends React.Component<Props, State> {
     );
   }
   
+  _tagEnabled(tag: TagDefinition): boolean {
+    // Disable tags that are already selected
+    return !this.state.selectedTags || !this.state.selectedTags[tag.tag_name];
+  }
+  
   _displayTag(tag: TagDefinition): string {
-    const tagCount: number = this.state.tagCounts[tag.tag_name] || 0;
-    let tagDisplay: string = tag.display_name;
-    if(tagCount > 0) {
-      tagDisplay += " (" + tagCount + ")";
-    }
-    return tagDisplay;
+    // const tagCount: number = this.state.tagCounts[tag.tag_name] || 0;
+    // let tagDisplay: string = tag.display_name;
+    // if(tagCount > 0) {
+    //   tagDisplay += " (" + tagCount + ")";
+    // }
+    // return tagDisplay;
+    return tag.display_name;
   }
 }
 
