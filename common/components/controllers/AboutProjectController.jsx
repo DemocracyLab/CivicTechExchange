@@ -215,11 +215,24 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     );
   }
   
-  _renderPositions(): ?Array<React$Node> {
+  _renderPositionsOld(): ?Array<React$Node> {
     const project = this.state.project;
     return project && project.project_positions && project.project_positions.map((position, i) =>
       <div key={i}>
         <span className="pseudo-link" onClick={this.showPositionModal.bind(this,position)}>{position.roleTag.display_name}</span>
+      </div>
+    );
+  }
+  
+  _renderPositions(): ?Array<React$Node> {
+    const project = this.state.project;
+    return project && project.project_positions && project.project_positions.map((position, i) =>
+      <div key={i}>
+        {
+          position.descriptionUrl
+          ? <a href={position.descriptionUrl}>{position.roleTag.display_name}</a>
+          : <p>{position.roleTag.display_name}</p>
+        }
       </div>
     );
   }

@@ -145,12 +145,14 @@ class TaggedPositionRole(TaggedItemBase):
 class ProjectPosition(models.Model):
     position_project = models.ForeignKey(Project, related_name='positions')
     position_role = TaggableManager(blank=False, through=TaggedPositionRole)
-    position_description = models.CharField(max_length=3000)
+    position_description = models.CharField(max_length=3000, blank=True)
+    description_url = models.CharField(max_length=2083, default='')
 
     def to_json(self):
         return {
             'id': self.id,
             'description': self.position_description,
+            'descriptionUrl': self.description_url,
             'roleTag': Tag.hydrate_to_json(self.id, self.position_role.all().values())[0]
         }
 
@@ -158,7 +160,7 @@ class ProjectPosition(models.Model):
     def create_from_json(project, position_json):
         position = ProjectPosition()
         position.position_project = project
-        position.position_description = position_json['description']
+        position.position_description = position_json['descriptionUrl']
         position.save()
 
         position.position_role.add(position_json['roleTag']['tag_name'])
@@ -167,7 +169,7 @@ class ProjectPosition(models.Model):
 
     @staticmethod
     def update_from_json(position, position_json):
-        position.position_description = position_json['description']
+        position.description_url = position_json['descriptionUrl']
         new_role = position_json['roleTag']['tag_name']
         Tag.merge_tags_field(position.position_role, new_role)
         position.save()
@@ -196,8 +198,6 @@ class ProjectPosition(models.Model):
 
         for deleted_position_id in deleted_position_ids:
             ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
-
-
 
 
 class ProjectFile(models.Model):
