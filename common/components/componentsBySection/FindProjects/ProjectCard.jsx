@@ -35,9 +35,7 @@ class ProjectCard extends React.PureComponent<Props> {
         }
         {this._renderName()}
         {this._renderIssueAndLocation()}
-        <div className={this._cx.get('description', 'subtext', 'value')}>
-          {this._renderDescription()}
-        </div>
+        
       </a>
     );
   }
