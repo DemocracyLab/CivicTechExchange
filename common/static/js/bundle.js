@@ -74853,12 +74853,7 @@ var ProjectCard = function (_React$PureComponent) {
           href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }) },
         this.props.project && this.props.project.claimed ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'checkbox', src: 'https://i.imgur.com/yXgKEHY.jpg', align: 'right' }) : null,
         this._renderName(),
-        this._renderIssueAndLocation(),
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'div',
-          { className: this._cx.get('description', 'subtext', 'value') },
-          this._renderDescription()
-        )
+        this._renderIssueAndLocation()
       );
     }
   }, {
