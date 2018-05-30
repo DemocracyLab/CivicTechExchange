@@ -10,13 +10,13 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import Project, ProjectFile, FileCategory, ProjectLink
+from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition
+from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-
 from pprint import pprint
 
 
@@ -34,7 +34,6 @@ def tags(request):
             list(tags.values())
         )
     )
-
 
 def to_rows(items, width):
     rows = [[]]
@@ -78,16 +77,17 @@ def project_edit(request, project_id):
         return HttpResponseForbidden()
     return redirect('/index/?section=AboutProject&id=' + project_id)
 
-
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
 def project_delete(request, project_id):
+    # if not logged in, send user to login page
     if not request.user.is_authenticated():
-        return redirect('/signup')
-
+        return HttpResponse(status=401)
     try:
-        ProjectCreationForm.delete_project(project_id)
+        ProjectCreationForm.delete_project(request, project_id)
     except PermissionDenied:
         return HttpResponseForbidden()
-    return redirect('/index/')
+    return HttpResponse(status=204)
 
 
 # TODO: Remove when React implementation complete
@@ -133,21 +133,34 @@ def index(request):
 
 def my_projects(request):
     projects = Project.objects.filter(project_creator_id=request.user.id)
-    return HttpResponse(json.dumps(projects_with_issue_areas(projects)))
+    return HttpResponse(json.dumps([
+        project.hydrate_to_json() for project in projects
+    ]))
 
 
 def projects_list(request):
-    project_list = Project.objects.all()
+    project_list = Project.objects.filter(is_searchable=True)
     if request.method == 'GET':
         url_parts = request.GET.urlencode()
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
-        if 'tags' in query_params:
-            project_list = projects_by_tag(query_params['tags'][0].split(','))
+        selected_tag_filters = []
+        if 'issues' in query_params:
+            issue_filters = query_params['issues'][0].split(',')
+            selected_tag_filters += issue_filters
+            project_list = project_list & projects_by_issue_areas(issue_filters)
+        if 'tech' in query_params:
+            tech_filters = query_params['tech'][0].split(',')
+            selected_tag_filters += tech_filters
+            project_list = project_list & projects_by_technologies(tech_filters)
+        if 'role' in query_params:
+            role_filters = query_params['role'][0].split(',')
+            selected_tag_filters += role_filters
+            project_list = project_list & projects_by_roles(role_filters)
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
 
-    response = json.dumps(projects_with_issue_areas(project_list.order_by('project_name')))
+    response = json.dumps(projects_with_filter_counts(project_list.distinct().order_by('project_name'), selected_tag_filters))
 
     return HttpResponse(response)
 
@@ -156,14 +169,39 @@ def projects_by_keyword(keyword):
     return Project.objects.filter(Q(project_description__icontains=keyword) | Q(project_name__icontains=keyword))
 
 
-def projects_by_tag(tags):
+def projects_by_issue_areas(tags):
     return Project.objects.filter(project_issue_area__name__in=tags)
 
 
-def projects_with_issue_areas(list_of_projects):
-    return [
-        project.hydrate_to_json() for project in list_of_projects
-    ]
+def projects_by_technologies(tags):
+    return Project.objects.filter(project_technologies__name__in=tags)
+
+
+def projects_by_roles(tags):
+    # Get roles by tags
+    positions = ProjectPosition.objects.filter(position_role__name__in=tags).select_related('position_project')
+
+    # Get the list of projects linked to those roles
+    return Project.objects.filter(positions__in=positions)
+
+
+def projects_with_filter_counts(projects, selected_tag_filters):
+    return {
+        'projects': [project.hydrate_to_json() for project in projects],
+        'tags': list(Tag.objects.values()),
+        'availableFilters': {
+            'tags': available_tag_filters(projects, selected_tag_filters)
+        }
+    }
+
+
+def available_tag_filters(projects, selected_tag_filters):
+    project_tags = projects_tag_counts(projects)
+    # Remove any filters that are already selected
+    for tag in selected_tag_filters:
+        if project_tags[tag]:
+            project_tags.pop(tag)
+    return project_tags
 
 
 def presign_project_thumbnail_upload(request):

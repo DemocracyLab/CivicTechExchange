@@ -14,6 +14,7 @@ export type APIError = {|
   +errorMessage: string
 |};
 
+// TODO: Condense redundant tag definitions
 export type TagDefinition = {|
   id: number,
   tag_name: string,
@@ -24,7 +25,7 @@ export type TagDefinition = {|
   parent: string,
 |};
 
-type ProjectAPIData = {|
+export type ProjectAPIData = {|
   +project_id: number,
   +project_description: string,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,

@@ -2,13 +2,13 @@
 
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
-import { Button } from 'react-bootstrap';
 import type {PositionInfo} from "../forms/PositionInfo.jsx";
 import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
-import ContactProjectModal from "../common/projects/ContactProjectModal.jsx";
 import NotificationModal from "../common/notification/NotificationModal.jsx";
 import TagsDisplay from '../common/tags/TagsDisplay.jsx'
 import url from '../utils/url.js'
+import CurrentUser from "../utils/CurrentUser.js";
+import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 import _ from 'lodash'
 
 import React from 'react';
@@ -58,62 +58,67 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     return (
       <div className="AboutProjectController-root">
         <div className="container-fluid">
-          <div className="row" style={{margin: "30px 40px 0 40px"}}>
-            <div className="col-sm-5">
-              <div className="row">
-                <div className="col-sm-auto">
-                  <img className="upload_img upload_img_bdr" src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
-                </div>
-                <div className="col">
-                  <div className="row">
-                    <div className="col">
-                      {project && project.project_name}
+          <div style={{backgroundColor: "white"}}>
+            <div className="row" style={{margin: "30px 0 0 0", padding: "10px 0"}}>
+              <div className="col-sm-5">
+                <div className="row">
+                  <div className="col-sm-auto">
+                    <img className="upload_img upload_img_bdr" src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
+                  </div>
+                  <div className="col">
+                    <div className="row">
+                      <div className="col">
+                        {project && project.project_name}
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col">
+                        {project && !_.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name}
+                      </div>
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col">
-                      {project && !_.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name}
-                    </div>
-                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col">
-            </div>
-            <div className="col col-sm-3">
-              <div className="row">
-                {this._renderProjectHomepageLink()}
+              <div className="col">
               </div>
-              <div className="row">
-                <div className="col">
-                  <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
-                  {project && project.project_location}
+              <div className="col col-sm-3">
+                <div className="row">
+                  {this._renderProjectHomepageLink()}
                 </div>
-              </div>
-              <div className="row">
-                <ContactProjectButton project={this.state.project}/>
-              </div>
-            </div>
-          </div>
-  
-          <div className="row" style={{margin: "30px 40px 0 40px"}}>
-            <div className="col">
-              TECHNOLOGIES USED
-              <div>
-                <TagsDisplay tags={project && project.project_technologies}/>
-              </div>
-            </div>
-          </div>
-    
-          <div className="row" style={{margin: "30px 40px 0 40px"}}>
-            <div className="col">
-              PROJECT DETAILS
-              <div>
-                {project && project.project_description}
+                <div className="row">
+                  {this._renderProjectLocation()}
+                </div>
+                <div className="row">
+                  <ContactProjectButton project={this.state.project}/>
+                  { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> }
+                </div>
               </div>
             </div>
           </div>
 
+          {
+            project && !_.isEmpty(project.project_technologies)
+              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
+                  <div className='col'>
+                    <h2 className="form-group subheader">TECHNOLOGIES USED</h2>
+                    <div className="Text-section">
+                      {this._renderTechnologies()}
+                    </div>
+                  </div>
+                </div>
+              : null
+          }
+          
+  
+          <div className="row" style={{margin: "30px 40px 0 40px"}}>
+            <div className="col">
+              <h2 className="form-group subheader">PROJECT DETAILS</h2>
+              <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
+                {project && project.project_description}
+              </div>
+            </div>
+          </div>
+        
           <NotificationModal
             showModal={this.state.showPositionModal}
             message={this.state.shownPosition && this.state.shownPosition.description}
@@ -121,24 +126,28 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             headerText={this.state.shownPosition && this.state.shownPosition.roleTag.display_name}
             onClickButton={() => this.setState({showPositionModal: false})}
           />
-          
+        
           {
             project && !_.isEmpty(project.project_positions)
               ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
                   <div className='col'>
                     <h2 className="form-group subheader">OPEN POSITIONS</h2>
-                    {this._renderPositions()}
+                    <div className="Text-section">
+                      {this._renderPositions()}
+                    </div>  
                   </div>
                 </div>
               : null
           }
-    
+  
           {
             project && !_.isEmpty(project.project_links)
               ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
                   <div className='col'>
                     <h2 className="form-group subheader">LINKS</h2>
-                    {this._renderLinks()}
+                    <div className="Text-section">
+                      {this._renderLinks()}
+                    </div>
                   </div>
                 </div>
               : null
@@ -149,7 +158,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
                   <div className='col'>
                     <h2 className="form-group subheader">FILES</h2>
-                    {this._renderFiles()}
+                    <div className="Text-section">
+                      {this._renderFiles()}
+                    </div>
                   </div>
                 </div>
               : null
@@ -157,6 +168,15 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         </div>
       </div>
     );
+  }
+  
+  _renderProjectLocation(): React$Node {
+    if(this.state.project && this.state.project.project_location) {
+      return <div className="col">
+        <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
+        {this.state.project.project_location}
+      </div>
+    }
   }
   
   _renderProjectHomepageLink(): React$Node {
@@ -169,6 +189,13 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </div>
     }
   }
+
+  _renderTechnologies(): ?Array<React$Node> {
+    const project = this.state.project;
+    return project && project.project_technologies && 
+      <TagsDisplay tags={project && project.project_technologies}/>
+  }
+  
   
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
@@ -188,11 +215,24 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     );
   }
   
-  _renderPositions(): ?Array<React$Node> {
+  _renderPositionsOld(): ?Array<React$Node> {
     const project = this.state.project;
     return project && project.project_positions && project.project_positions.map((position, i) =>
       <div key={i}>
         <span className="pseudo-link" onClick={this.showPositionModal.bind(this,position)}>{position.roleTag.display_name}</span>
+      </div>
+    );
+  }
+  
+  _renderPositions(): ?Array<React$Node> {
+    const project = this.state.project;
+    return project && project.project_positions && project.project_positions.map((position, i) =>
+      <div key={i}>
+        {
+          position.descriptionUrl
+          ? <a href={position.descriptionUrl}>{position.roleTag.display_name}</a>
+          : <p>{position.roleTag.display_name}</p>
+        }
       </div>
     );
   }

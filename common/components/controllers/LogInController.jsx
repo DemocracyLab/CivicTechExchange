@@ -6,6 +6,7 @@ import React from 'react';
 type State = {|
   username: string,
   password: string,
+  errorMessage: string
 |}
 
 class LogInController extends React.Component<{||}, State> {
@@ -14,6 +15,7 @@ class LogInController extends React.Component<{||}, State> {
     this.state = {
       username: '',
       password: '',
+      // errorMessage: url.arguments.(document.location.search)
     };
   }
 
@@ -53,6 +55,11 @@ class LogInController extends React.Component<{||}, State> {
               type="submit">
               Sign In
             </button>
+            {/* <div
+              name="error"
+              type="text">
+              {(!this.state.username && !this.state.password) ? this.state.errorMessage : null}
+            </div> */}
         </form>
       </div>
     );
