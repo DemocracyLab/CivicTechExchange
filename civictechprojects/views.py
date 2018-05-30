@@ -189,9 +189,9 @@ def projects_with_filter_counts(projects, selected_tag_filters):
     return {
         'projects': [project.hydrate_to_json() for project in projects],
         'tags': list(Tag.objects.values()),
-        'availableFilters': {
-            'tags': available_tag_filters(projects, selected_tag_filters)
-        }
+        # 'availableFilters': {
+        #     'tags': available_tag_filters(projects, selected_tag_filters)
+        # }
     }
 
 
