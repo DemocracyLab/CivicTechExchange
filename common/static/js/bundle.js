@@ -76586,7 +76586,7 @@ var SubHeader = function (_React$Component) {
 
 var SectionLinkConfigs = [{
   section: __WEBPACK_IMPORTED_MODULE_0__enums_Section_js__["a" /* default */].FindProjects,
-  title: 'FIND PROJECT',
+  title: 'FIND PROJECTS',
   showOnlyWhenLoggedIn: false
 }, {
   section: __WEBPACK_IMPORTED_MODULE_0__enums_Section_js__["a" /* default */].MyProjects,
