@@ -29087,7 +29087,7 @@ var LinkList = function (_React$PureComponent) {
           { key: i },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'a',
-            { href: link.linkUrl },
+            { href: link.linkUrl, target: '_blank', rel: 'noopener noreferrer' },
             link.linkName
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-pencil-square-o fa-1', 'aria-hidden': 'true', onClick: _this3.editLink.bind(_this3, link) }),
@@ -32953,7 +32953,7 @@ var FileUploadList = function (_React$PureComponent) {
           { key: i },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'a',
-            { href: file.publicUrl },
+            { href: file.publicUrl, target: '_blank', rel: 'noopener noreferrer' },
             file.fileName
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-trash-o fa-1', 'aria-hidden': 'true', onClick: _this3.askForDeleteConfirmation.bind(_this3, file) })
@@ -67604,7 +67604,7 @@ var AboutProjectController = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('i', { className: 'fa fa-link fa-1', 'aria-hidden': 'true' }),
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'a',
-            { href: this.state.project.project_url },
+            { href: this.state.project.project_url, target: '_blank', rel: 'noopener noreferrer' },
             this.state.project.project_url.length > 100 ? "Project Homepage" : __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].beautify(this.state.project.project_url)
           )
         );
@@ -67626,7 +67626,7 @@ var AboutProjectController = function (_React$PureComponent) {
           { key: i },
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'a',
-            { href: link.linkUrl },
+            { href: link.linkUrl, target: '_blank', rel: 'noopener noreferrer' },
             link.linkName
           )
         );
@@ -67642,7 +67642,7 @@ var AboutProjectController = function (_React$PureComponent) {
           { key: i },
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'a',
-            { href: file.publicUrl },
+            { href: file.publicUrl, target: '_blank', rel: 'noopener noreferrer' },
             file.fileName
           )
         );
@@ -67671,17 +67671,18 @@ var AboutProjectController = function (_React$PureComponent) {
     value: function _renderPositions() {
       var project = this.state.project;
       return project && project.project_positions && project.project_positions.map(function (position, i) {
+        var positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;
         return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
           'div',
           { key: i },
           position.descriptionUrl ? __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'a',
-            { href: position.descriptionUrl },
-            position.roleTag.display_name
+            { href: position.descriptionUrl, target: '_blank', rel: 'noopener noreferrer' },
+            positionDisplay
           ) : __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'span',
             null,
-            position.roleTag.display_name
+            positionDisplay
           )
         );
       });
@@ -74170,7 +74171,7 @@ var PositionList = function (_React$PureComponent) {
           { key: i },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'a',
-            { href: position.descriptionUrl },
+            { href: position.descriptionUrl, target: '_blank', rel: 'noopener noreferrer' },
             position.roleTag.subcategory + ":" + position.roleTag.display_name
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-pencil-square-o fa-1', 'aria-hidden': 'true', onClick: _this2.editPosition.bind(_this2, position) }),
@@ -76279,7 +76280,7 @@ var ChangePasswordController = function (_React$Component) {
               className: 'LogInController-signInButton',
               disabled: !this.state.isValid,
               type: 'submit' },
-            'Create Account'
+            'Change Password'
           )
         )
       );

@@ -183,9 +183,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     if(this.state.project && this.state.project.project_url) {
       return <div className="col">
         <i className="fa fa-link fa-1" aria-hidden="true"></i>
-        <a href={this.state.project.project_url}>{ this.state.project.project_url.length > 100
-          ? "Project Homepage"
-          : url.beautify(this.state.project.project_url)}</a>
+        <a href={this.state.project.project_url} target="_blank" rel="noopener noreferrer">
+          {this.state.project.project_url.length > 100 ? "Project Homepage" : url.beautify(this.state.project.project_url)}
+        </a>
       </div>
     }
   }
@@ -201,7 +201,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     const project = this.state.project;
     return project && project.project_links && project.project_links.map((link, i) =>
       <div key={i}>
-        <a href={link.linkUrl}>{link.linkName}</a>
+        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName}</a>
       </div>
     );
   }
@@ -210,7 +210,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     const project = this.state.project;
     return project && project.project_files && project.project_files.map((file, i) =>
       <div key={i}>
-        <a href={file.publicUrl}>{file.fileName}</a>
+        <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">{file.fileName}</a>
       </div>
     );
   }
@@ -226,16 +226,21 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   
   _renderPositions(): ?Array<React$Node> {
     const project = this.state.project;
-    return project && project.project_positions && project.project_positions.map((position, i) =>
-      <div key={i}>
-        {
-          position.descriptionUrl
-          ? <a href={position.descriptionUrl}>{position.roleTag.display_name}</a>
-          : <span>{position.roleTag.display_name}</span>
-        }
-      </div>
-    );
+    return project && project.project_positions && project.project_positions.map((position, i) => {
+      const positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;
+      return (
+          <div key={i}>
+          {
+            position.descriptionUrl
+            ? <a href={position.descriptionUrl} target="_blank" rel="noopener noreferrer">{positionDisplay}</a>
+            : <span>{positionDisplay}</span>
+          }
+          </div>
+        );
+    });
   }
+  
+  
   
   showPositionModal(position: PositionInfo): void {
     this.setState({

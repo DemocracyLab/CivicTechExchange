@@ -126,7 +126,7 @@ class LinkList extends React.PureComponent<Props,State>  {
   _renderLinks(): Array<React$Node> {
     return this.state.links.map((link,i) =>
       <div key={i}>
-        <a href={link.linkUrl}>{link.linkName}</a>
+        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName}</a>
         <i className="fa fa-pencil-square-o fa-1" aria-hidden="true" onClick={this.editLink.bind(this,link)}></i>
         <i className="fa fa-trash-o fa-1" aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,link)}></i>
       </div>
