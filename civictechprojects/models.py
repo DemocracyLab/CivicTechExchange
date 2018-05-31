@@ -160,7 +160,7 @@ class ProjectPosition(models.Model):
     def create_from_json(project, position_json):
         position = ProjectPosition()
         position.position_project = project
-        position.position_description = position_json['descriptionUrl']
+        position.description_url = position_json['descriptionUrl']
         position.save()
 
         position.position_role.add(position_json['roleTag']['tag_name'])

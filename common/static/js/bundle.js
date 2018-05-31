@@ -67670,7 +67670,7 @@ var AboutProjectController = function (_React$PureComponent) {
             { href: position.descriptionUrl },
             position.roleTag.display_name
           ) : __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
-            'p',
+            'span',
             null,
             position.roleTag.display_name
           )

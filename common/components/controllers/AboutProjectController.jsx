@@ -231,7 +231,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         {
           position.descriptionUrl
           ? <a href={position.descriptionUrl}>{position.roleTag.display_name}</a>
-          : <p>{position.roleTag.display_name}</p>
+          : <span>{position.roleTag.display_name}</span>
         }
       </div>
     );
