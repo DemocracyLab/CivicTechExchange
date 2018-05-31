@@ -9,3 +9,9 @@ class TagCategory(Enum):
     ISSUE_ADDRESSED = 'Issue(s) Addressed'
     TECHNOLOGIES_USED = 'Technologies Used'
     SOFTWARE_LICENSE = 'Software License'
+
+
+# TODO: Keep in sync with /common/components/enums/Section.js
+class FrontEndSection(Enum):
+    ResetPassword = 'ResetPassword'
+    ChangePassword = 'ChangePassword'

@@ -15,6 +15,8 @@ import React from 'react';
 import Section from '../enums/Section.js'
 import LogInController from './LogInController.jsx'
 import SignUpController from './SignUpController.jsx'
+import ResetPasswordController from "./ResetPasswordController.jsx";
+import ChangePasswordController from "./ChangePasswordController.jsx";
 
 type State = {|
   section: SectionType,
@@ -57,6 +59,10 @@ class SectionController extends React.Component<{||}, State> {
         return <SignUpController />;
       case Section.LogIn:
         return <LogInController />;
+      case Section.ResetPassword:
+        return <ResetPasswordController />;
+      case Section.ChangePassword:
+        return <ChangePasswordController />
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }

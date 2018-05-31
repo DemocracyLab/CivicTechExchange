@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.contrib.auth.tokens import default_token_generator
+from common.helpers.constants import FrontEndSection
+from common.helpers.front_end import section_url
 
 
 class Contributor(User):
@@ -28,7 +30,29 @@ class Contributor(User):
         )
         email_msg.send()
 
+    def send_password_reset_email(self):
+        # Get token
+        user = Contributor.objects.get(id=self.id)
+        reset_parameters = {
+            'userId': self.id,
+            'token': default_token_generator.make_token(user)
+        }
+        reset_url = section_url(FrontEndSection.ChangePassword, reset_parameters)
+        print(reset_url)
+        # Send email with token
+        email_msg = EmailMessage(
+            'DemocracyLab Password Reset',
+            'Click here to change your password: ' + reset_url,
+            settings.EMAIL_HOST_USER,
+            [self.email]
+        )
+        email_msg.send()
+
+
+def get_contributor_by_username(username):
+    return Contributor.objects.get_by_natural_key(username)
+
 
 def get_request_contributor(request):
-    return Contributor.objects.get_by_natural_key(request.user.username)
+    return get_contributor_by_username(request.user.username)
 

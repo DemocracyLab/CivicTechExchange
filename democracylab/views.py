@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import DemocracyLabUserCreationForm
-from .models import Contributor, get_request_contributor
+from .models import Contributor, get_request_contributor, get_contributor_by_username
 
 
 def login_view(request):
@@ -72,9 +72,39 @@ def verify_user(request, user_id, token):
 #         return redirect('/?=errorpage')
     # else:
     #     return ... login/ show discover page
-        
-        
 
+
+def password_reset(request):
+    username = request.POST['email']
+    user = get_contributor_by_username(username)
+
+    if user is not None:
+        user.send_password_reset_email()
+    else:
+        # Failing silently to not alert
+        print('Attempt to reset password for unregistered email: ' + username)
+
+    # TODO: Give the user a message
+    print("We got to the end of password_reset")
+    return redirect('/')
+
+
+def change_password(request):
+    user_id = request.POST['userId']
+    token = request.POST['token']
+    password = request.POST['password']
+    # Get user info
+    contributor = Contributor.objects.get(id=user_id)
+
+    # Verify token
+    if default_token_generator.check_token(contributor, token):
+        contributor.set_password(password)
+        contributor.save()
+        return redirect('/')
+    else:
+        return HttpResponse(status=401)
+
+    
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def send_verification_email(request):

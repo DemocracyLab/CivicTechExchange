@@ -9,7 +9,8 @@ const Section = {
   Inbox: 'Inbox',
   SignUp: 'SignUp',
   LogIn: 'LogIn',
-
+  ResetPassword: 'ResetPassword',
+  ChangePassword: 'ChangePassword'
 };
 
 export type SectionType = $Keys<typeof Section>;

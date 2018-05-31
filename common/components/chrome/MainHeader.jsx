@@ -57,8 +57,10 @@ class MainHeader extends React.PureComponent<{||}> {
               <span onClick = {this._onSignUpClick} >
               <a href = "" > Sign Up </a>
               </span> |{' '}
-
-              <a href = "/password_reset" > Forgot Password </a>
+  
+              <span onClick = {this._onResetPasswordClick} >
+              <a href = "" > Forgot Password </a>
+              </span>
           </span>
         );
   }
@@ -76,6 +78,14 @@ class MainHeader extends React.PureComponent<{||}> {
       type: 'SET_SECTION',
       section: Section.SignUp,
       url: url.section(Section.SignUp)
+    });
+  }
+  
+  _onResetPasswordClick(): void {
+    NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: Section.ResetPassword,
+      url: url.section(Section.ResetPassword)
     });
   }
 }
