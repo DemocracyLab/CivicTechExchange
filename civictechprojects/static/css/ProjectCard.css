@@ -3,11 +3,10 @@
   border: solid 1px #868e96;
   color: inherit;
   display: inline-table;
-  height: 340px;
   margin-right: 20px;
   margin-top: 20px;
   margin-bottom: 30px;
-  width: 260px;
+  width: 200px;
 }
 
 .ProjectCard-root > div.borderbottom {
