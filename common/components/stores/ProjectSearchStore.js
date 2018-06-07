@@ -5,17 +5,25 @@ import type {Tag} from './TagStore';
 import {ReduceStore} from 'flux/utils';
 import ProjectSearchDispatcher from './ProjectSearchDispatcher.js';
 import {List, Record} from 'immutable'
-import ProjectAPIUtils from '../utils/ProjectAPIUtils';
+import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
+import type {Project, TagDefinition, ProjectAPIData} from '../utils/ProjectAPIUtils.js';
 import type {FileInfo} from '../../../common/FileInfo.jsx'
+import TagCategory from "../common/tags/TagCategory.jsx";
+import urls from "../utils/url.js";
+import _ from 'lodash'
 
-export type Project = {|
-  +description: string,
-  +id: number,
-  +issueArea: string,
-  +location: string,
-  +name: string,
-  +thumbnail: FileInfo,
-  +claimed: boolean
+type AvailableFilters = {|
+  +tags:{[key: string]: number}
+|};
+
+type FindProjectsResponse = {|
+  +projects: $ReadOnlyArray<ProjectAPIData>,
+  +availableFilters: AvailableFilters
+|};
+
+type FindProjectsData = {|
+  +projects: $ReadOnlyArray<Project>,
+  +availableFilters: AvailableFilters
 |};
 
 export type ProjectSearchActionType = {
@@ -31,18 +39,18 @@ export type ProjectSearchActionType = {
   keyword: string,
 } | {
   type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
-  projects: List<Project>,
+  projectsResponse: FindProjectsResponse,
 };
 
 const DEFAULT_STATE = {
   keyword: '',
-  projects: List(),
   tags: List(),
+  projectsData: {}
 };
 
 class State extends Record(DEFAULT_STATE) {
   keyword: string;
-  projects: List<Project>;
+  projectsData: FindProjectsData;
 }
 
 class ProjectSearchStore extends ReduceStore<State> {
@@ -59,7 +67,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'INIT':
         return this._loadProjects(new State());
       case 'ADD_TAG':
-        return this._loadProjects(state.set('tags', state.tags.push(action.tag)));
+        return this._loadProjects(state.set('tags', state.tags.push(state.projectsData.allTags[action.tag])));
       case 'REMOVE_TAG':
         return this._loadProjects(
           state.set(
@@ -74,7 +82,11 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'SET_KEYWORD':
         return this._loadProjects(state.set('keyword', action.keyword));
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
-        return state.set('projects', action.projects);
+        return state.set('projectsData', {
+          projects: List(action.projectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData)),
+          allTags: _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name),
+          availableFilters: action.projectsResponse.availableFilters
+        });
       default:
         (action: empty);
         return state;
@@ -82,31 +94,29 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _loadProjects(state: State): State {
-    const url = [
-      '/api/projects?',
-      this._getKeywordQueryParam(state),
-      this._getTagsQueryParam(state),
-    ].join('');
+    
+    
+    const args = _.pickBy({
+        keyword: state.keyword,
+        issues: this._getTagCategoryParams(state, TagCategory.ISSUES),
+        tech: this._getTagCategoryParams(state, TagCategory.TECHNOLOGIES_USED),
+        role: this._getTagCategoryParams(state, TagCategory.ROLE)
+      },_.identity);
+    const url: string = urls.constructWithQueryString('/api/projects', args);
     fetch(new Request(url))
       .then(response => response.json())
-      .then(projects =>
+      .then(getProjectsResponse =>
         ProjectSearchDispatcher.dispatch({
           type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
-          projects: List(projects.map(ProjectAPIUtils.projectFromAPIData)),
+          projectsResponse: getProjectsResponse
         }),
       );
-    return state.set('projects', null);
+    return state.set('projectsData', null);
   }
 
-  _getKeywordQueryParam(state: State): ?string {
-    return state.keyword ? '&keyword=' + state.keyword : null;
-  }
-
-  _getTagsQueryParam(state: State): ?string {
-    return state.tags
-      ? '&tags='
-        + state.tags.map(tag => tag.tagName).join(',')
-      : null;
+  _getTagCategoryParams(state: State, category: string): ?string {
+    const tags = state.tags.filter(tag => tag.category === category);
+    return tags.map(tag => tag.tag_name).join(',');
   }
 
   getKeyword(): string {
@@ -114,10 +124,21 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   getProjects(): List<Project> {
-    return this.getState().projects;
+    const state: State = this.getState();
+    return state.projectsData && state.projectsData.projects;
+  }
+  
+  getAllTags(): { [key: string]: TagDefinition }{
+    const state: State = this.getState();
+    return state.projectsData && state.projectsData.allTags;
+  }
+  
+  getAvailableFilters(): AvailableFilters {
+    const state: State = this.getState();
+    return state.projectsData && state.projectsData.availableFilters;
   }
 
-  getTags(): List<Tag> {
+  getTags(): List<TagDefinition> {
     return this.getState().tags;
   }
 }

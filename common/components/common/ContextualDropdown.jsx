@@ -1,10 +1,13 @@
 // @flow
 
 import React from 'react';
+import _ from 'lodash';
 
 type Props = {|
+  showContextualArrow: ?boolean,
   children: React$Node,
   xPos: number,
+  yPos: ?number
 |};
 type State = {|
   contextualArrowX: number,
@@ -20,12 +23,17 @@ class ContextualDropdown extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
+    const style = _.pickBy({
+      left: this.props.xPos,
+      top: this.props.yPos
+    },_.identity);
+    
     return (
       <div
         className="ContextualDropdown-root"
         ref={this._onDropDownMount.bind(this)}
-        style={{left: this.props.xPos}}>
-        {this._renderContextualArrow()}
+        style={style}>
+        {this.props.showContextualArrow ? this._renderContextualArrow() : null}
         {this.props.children}
       </div>
     );

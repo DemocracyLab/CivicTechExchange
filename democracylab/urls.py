@@ -22,32 +22,17 @@ from . import views
 
 urlpatterns = [
     url(r'^signup/$', views.signup, name='signup'),
-    url(
-        r'^login/$',
-        auth_views.login,
-        {'template_name': 'login.html'},
-        name='login',
-    ),
+    url(r'^login/$', views.login_view, name='login_view'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(
         r'^password_reset/$',
-        auth_views.password_reset,
+        views.password_reset,
         name="password_reset",
     ),
     url(
-        r'^password_reset/done/$',
-        auth_views.password_reset_done,
-        name="password_reset_done",
-    ),
-    url(
-        r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        auth_views.password_reset_confirm,
-        name="password_reset_confirm"
-    ),
-    url(
-        r'^reset/done/$',
-        auth_views.password_reset_complete,
-        name="password_reset_complete",
+        r'^change_password/$',
+        views.change_password,
+        name="change_password",
     ),
     url(
         r'^verify_user/(?P<user_id>[0-9]+)/(?P<token>[0-9a-z\-]+)$',
@@ -61,5 +46,10 @@ urlpatterns = [
     ),
     url(r'^', include('civictechprojects.urls')),
     url(r'^$', RedirectView.as_view(url='/index/', permanent=True)),
-    url(r'^admin/', admin.site.urls)
+    url(r'^admin/', admin.site.urls),
+    # url(
+    #     r'check_email/(?P<user_email>.*)$',
+    #     views.check_email,
+    #     name="check_email"
+    # )
 ]

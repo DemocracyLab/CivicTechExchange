@@ -6,6 +6,7 @@ import {TagDefinition} from "../utils/ProjectAPIUtils.js";
 import TagSelector from "../common/tags/TagSelector.jsx";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import {PositionInfo} from "./PositionInfo.jsx";
+import url from "../utils/url.js";
 import _ from 'lodash'
 
 type Props = {|
@@ -31,7 +32,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
       showModal: false,
       positionInfo: {
         roleTag: null,
-        description: ""
+        descriptionUrl: ""
       }
     };
   
@@ -49,7 +50,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
       this.setState({
         "positionInfo": {
           roleTag: null,
-          description: ""
+          descriptionUrl: ""
         }
       });
     }
@@ -66,6 +67,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
   }
   
   save(): void {
+    this.state.positionInfo.descriptionUrl = url.appendHttpIfMissingProtocol(this.state.positionInfo.descriptionUrl);
     this.props.onSavePosition(this.state.positionInfo);
     this.close();
   }
@@ -76,7 +78,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
   }
   
   onDescriptionChange(event: SyntheticInputEvent<HTMLInputElement>): void {
-    this.state.positionInfo.description = event.target.value;
+    this.state.positionInfo.descriptionUrl = event.target.value;
     this.forceUpdate();
   }
   
@@ -101,12 +103,8 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
                   </div>
   
                 <div className="form-group">
-                  <div className="character-count">
-                    { (this.state.positionInfo.description || "").length} / 3000
-                  </div>
-                  <textarea className="form-control"
-                            placeholder="Describe the position's qualifications and responsibilities" rows="3" maxLength="3000"
-                            value={this.state.positionInfo.description} onChange={this.onDescriptionChange.bind(this)}></textarea>
+                  <label htmlFor="link-position-description">Link to Description</label>
+                  <input type="text" className="form-control" id="link-position-description" maxLength="2075" value={this.state.positionInfo.descriptionUrl} onChange={this.onDescriptionChange.bind(this)}/>
                 </div>
               </Modal.Body>
               <Modal.Footer>

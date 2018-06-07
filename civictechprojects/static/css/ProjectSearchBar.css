@@ -28,3 +28,8 @@
   margin-right: 34px;
   margin-top: 16px;
 }
+
+button.ProjectSearchBar-submit:disabled {
+  background-color: #ededed;
+  color: #7a7a7a;
+}

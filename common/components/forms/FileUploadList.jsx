@@ -96,7 +96,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   _renderFiles(): Array<React$Node> {
     return this.state.files.map((file,i) =>
       <div key={i}>
-        <a href={file.publicUrl}>{file.fileName}</a>
+        <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">{file.fileName}</a>
         <i className="fa fa-trash-o fa-1" aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,file)}></i>
       </div>
     );

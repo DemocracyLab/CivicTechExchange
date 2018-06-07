@@ -1,12 +1,26 @@
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import redirect
-from django.template import loader
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import DemocracyLabUserCreationForm
-from .models import Contributor, get_request_contributor
+from .models import Contributor, get_request_contributor, get_contributor_by_username
+
+
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=email, password=password)
+        if user is not None and user.is_authenticated:
+            login(request, user)
+            return redirect('/')
+        else:
+            # TODO: Show error message if the email/password combination are invalid
+            return redirect('/index/?section=LogIn')
+    else:
+        return redirect('/index/?section=LogIn')
 
 
 def signup(request):
@@ -32,12 +46,9 @@ def signup(request):
         else:
             # TODO inform client of form invalidity
             print('Invalid form', form.errors.as_json())
-            template = loader.get_template('signup.html')
-            context = {'errors': form.errors.as_json()}
-            return HttpResponse(template.render(context, request))
+            return redirect('/index/?section=SignUp')
     else:
-        template = loader.get_template('signup.html')
-        return HttpResponse(template.render({}, request))
+        return redirect('/index/?section=SignUp')
 
 
 def verify_user(request, user_id, token):
@@ -54,7 +65,46 @@ def verify_user(request, user_id, token):
     else:
         return HttpResponse(status=401)
 
+# def check_email(request):
+#     user = authenticate(username = email, password = raw_password)
+#     if not request.user.is_authenticated():
+#         print('Incorrect Login Details')
+#         return redirect('/?=errorpage')
+    # else:
+    #     return ... login/ show discover page
 
+
+def password_reset(request):
+    username = request.POST['email']
+    user = get_contributor_by_username(username)
+
+    if user is not None:
+        user.send_password_reset_email()
+    else:
+        # Failing silently to not alert
+        print('Attempt to reset password for unregistered email: ' + username)
+
+    # TODO: Give the user a message
+    print("We got to the end of password_reset")
+    return redirect('/')
+
+
+def change_password(request):
+    user_id = request.POST['userId']
+    token = request.POST['token']
+    password = request.POST['password']
+    # Get user info
+    contributor = Contributor.objects.get(id=user_id)
+
+    # Verify token
+    if default_token_generator.check_token(contributor, token):
+        contributor.set_password(password)
+        contributor.save()
+        return redirect('/')
+    else:
+        return HttpResponse(status=401)
+
+    
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def send_verification_email(request):

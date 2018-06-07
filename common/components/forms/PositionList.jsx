@@ -128,7 +128,9 @@ class PositionList extends React.PureComponent<Props,State>  {
   _renderPositions(): Array<React$Node> {
     return this.state.positions.map((position,i) =>
       <div key={i}>
-        {position.roleTag.subcategory + ":" + position.roleTag.display_name}
+        <a href={position.descriptionUrl} target="_blank" rel="noopener noreferrer">
+          {position.roleTag.subcategory + ":" + position.roleTag.display_name}
+        </a>
         <i className="fa fa-pencil-square-o fa-1" aria-hidden="true" onClick={this.editPosition.bind(this,position)}></i>
         <i className="fa fa-trash-o fa-1" aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,i)}></i>
       </div>

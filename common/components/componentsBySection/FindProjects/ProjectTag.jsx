@@ -1,12 +1,12 @@
 // @flow
 
-import type {Tag} from '../../stores/TagStore.js';
+import {TagDefinition} from "../../utils/ProjectAPIUtils.js";
 
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
 
 type Props = {|
-  tag: Tag,
+  tag: TagDefinition,
 |};
 
 class ProjectTag extends React.PureComponent<Props> {
@@ -14,7 +14,7 @@ class ProjectTag extends React.PureComponent<Props> {
   render(): React$Node {
     return (
       <span className="ProjectTag-root">
-        {this.props.tag.displayName}
+        {this.props.tag.display_name}
         {this._renderCloseButton()}
       </span>
     );
@@ -27,7 +27,7 @@ class ProjectTag extends React.PureComponent<Props> {
         onClick={() => {
           ProjectSearchDispatcher.dispatch({
             type: 'REMOVE_TAG',
-            tag: this.props.tag,
+            tag: this.props.tag.tag_name,
           })}
         }>
         ×
