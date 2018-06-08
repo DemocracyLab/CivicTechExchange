@@ -74166,13 +74166,18 @@ var PositionList = function (_React$PureComponent) {
       var _this2 = this;
 
       return this.state.positions.map(function (position, i) {
+        var positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           { key: i },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          position.descriptionUrl ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'a',
             { href: position.descriptionUrl, target: '_blank', rel: 'noopener noreferrer' },
-            position.roleTag.subcategory + ":" + position.roleTag.display_name
+            positionDisplay
+          ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'span',
+            null,
+            positionDisplay
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-pencil-square-o fa-1', 'aria-hidden': 'true', onClick: _this2.editPosition.bind(_this2, position) }),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-trash-o fa-1', 'aria-hidden': 'true', onClick: _this2.askForDeleteConfirmation.bind(_this2, i) })
@@ -74274,7 +74279,9 @@ var PositionEntryModal = function (_React$PureComponent) {
   }, {
     key: 'save',
     value: function save() {
-      this.state.positionInfo.descriptionUrl = __WEBPACK_IMPORTED_MODULE_6__utils_url_js__["a" /* default */].appendHttpIfMissingProtocol(this.state.positionInfo.descriptionUrl);
+      if (this.state.positionInfo.descriptionUrl) {
+        this.state.positionInfo.descriptionUrl = __WEBPACK_IMPORTED_MODULE_6__utils_url_js__["a" /* default */].appendHttpIfMissingProtocol(this.state.positionInfo.descriptionUrl);
+      }
       this.props.onSavePosition(this.state.positionInfo);
       this.close();
     }

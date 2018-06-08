@@ -67,7 +67,9 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
   }
   
   save(): void {
-    this.state.positionInfo.descriptionUrl = url.appendHttpIfMissingProtocol(this.state.positionInfo.descriptionUrl);
+    if(this.state.positionInfo.descriptionUrl) {
+      this.state.positionInfo.descriptionUrl = url.appendHttpIfMissingProtocol(this.state.positionInfo.descriptionUrl);
+    }
     this.props.onSavePosition(this.state.positionInfo);
     this.close();
   }
