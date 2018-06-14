@@ -1,46 +1,31 @@
 .ProjectCard-root {
-  background-color: white;
-  border: solid 1px #868e96;
-  color: inherit;
-  display: inline-table;
-  height: 340px;
-  margin-right: 20px;
-  margin-top: 20px;
-  margin-bottom: 30px;
-  width: 260px;
+  background-color: LightGray;
+  max-width: 900px;
+  border-radius: 15px;
+  margin: 20px;
+  overflow: auto;
+  padding: 0 0 15px 0;
+  font-family: serif;
 }
 
-.ProjectCard-root > div.borderbottom {
-  padding: 5px;
-  border-bottom: solid 1px; 
+.ProjectCard-link, .ProjectCard-link:hover {
+  text-decoration: none;
+  color: black;
+}
+
+.ProjectCard-img {
+  padding: 15px 15px 0 15px;
+  float: left;
+  max-width: 50%;
 }
 
 .ProjectCard-description {
-  white-space: pre-wrap;
-  line-height: 1.5;
+  float: left;
+  display: inline-block;
+  padding: 15px 15px 0 15px;
+  max-width: 50%;
 }
 
-.ProjectCard-issueAndLocation {
-  border-bottom: solid 1px;
-}
-
-.ProjectCard-label {
+.h-color {
   color: #222629;
-}
-
-.ProjectCard-name {
-  height: 140px;
-  
-}
-
-.ProjectCard-name > h3{
-  font-size: 1.2rem;
-}
-
-.ProjectCard-subtext {
-  font-size: 12px;
-}
-
-.ProjectCard-value {
-  color: #6b6e70;
 }
