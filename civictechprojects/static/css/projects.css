@@ -247,5 +247,6 @@ th, td {
 .Text-section {
   background-color: white;
   border: solid 1px #cecece;
-  padding: 50px;
+  padding: 10px;
+  margin-bottom: 50px;
 }
