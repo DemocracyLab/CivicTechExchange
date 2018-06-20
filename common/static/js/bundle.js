@@ -20140,12 +20140,9 @@ var ProjectSearchStore = function (_ReduceStore) {
         case 'ADD_TAG':
           return this._loadProjects(this._addTagToState(state, action.tag));
         case 'REMOVE_TAG':
-          state = state.set('tags', state.tags.delete(
-          /* $FlowFixMe I don't know why, but the action type isn't being
-            subtyped here */
-          state.tags.findIndex(function (tag) {
-            return tag.tag_name === action.tag.tag_name;
-          })));
+          state = state.set('tags', state.tags.filter(function (tag) {
+            return tag !== action.tag.tag_name;
+          }));
           return this._loadProjects(state);
         case 'SET_KEYWORD':
           return this._loadProjects(this._addKeywordToState(state, action.keyword));
@@ -75653,7 +75650,7 @@ var ProjectTag = function (_React$PureComponent) {
           onClick: function onClick() {
             __WEBPACK_IMPORTED_MODULE_1__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
               type: 'REMOVE_TAG',
-              tag: _this2.props.tag.tag_name
+              tag: _this2.props.tag
             });
           } },
         '\xD7'

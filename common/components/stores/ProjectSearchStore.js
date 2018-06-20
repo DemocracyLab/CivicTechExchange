@@ -80,14 +80,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'ADD_TAG':
         return this._loadProjects(this._addTagToState(state, action.tag));
       case 'REMOVE_TAG':
-        state = state.set(
-          'tags',
-          state.tags.delete(
-            /* $FlowFixMe I don't know why, but the action type isn't being
-              subtyped here */
-            state.tags.findIndex(tag => tag.tag_name === action.tag.tag_name),
-          ),
-        );
+        state = state.set('tags', state.tags.filter(tag => tag !== action.tag.tag_name));
         return this._loadProjects(state);
       case 'SET_KEYWORD':
         return this._loadProjects(this._addKeywordToState(state, action.keyword));
