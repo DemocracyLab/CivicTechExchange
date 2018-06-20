@@ -6,7 +6,7 @@ const regex = {
   argumentSplit: new RegExp("([^=]+)=(.*)")
 }
 
-class url {
+class urlHelper {
   static section(section: string, args: ?Object) {
     var sectionUrl = "?section=" + section;
     if(args) {
@@ -22,12 +22,14 @@ class url {
   static constructWithQueryString(url: string, args: { [key: string]: string }): string {
     let result: string = url;
     if(!_.isEmpty(args)) {
-      result += "?" + _.keys(args).map(key => key + "=" + args[key]).join("&");
+      const existingArgs: {[key: string]: number} = urlHelper.arguments(url);
+      result += _.isEmpty(existingArgs) ? "?" : "&";
+      result += _.keys(args).map(key => key + "=" + args[key]).join("&");
     }
     return result;
   }
   
-  static arguments(url: string) {
+  static arguments(url: string): { [key: string]: string } {
     // Take argument section of url and split args into substrings
     const argStart = url.indexOf("?");
     if(argStart > -1) {
@@ -56,4 +58,4 @@ class url {
   }
 }
 
-export default url
+export default urlHelper

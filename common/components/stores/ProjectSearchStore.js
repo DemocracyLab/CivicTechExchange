@@ -10,24 +10,27 @@ import type {Project, TagDefinition, ProjectAPIData} from '../utils/ProjectAPIUt
 import type {FileInfo} from '../../../common/FileInfo.jsx'
 import TagCategory from "../common/tags/TagCategory.jsx";
 import urls from "../utils/url.js";
+import Section from "../enums/Section.js";
 import _ from 'lodash'
 
-type AvailableFilters = {|
-  +tags:{[key: string]: number}
+export type FindProjectsArgs = {|
+  keyword: string,
+  issues: string,
+  tech: string,
+  role: string
 |};
 
 type FindProjectsResponse = {|
   +projects: $ReadOnlyArray<ProjectAPIData>,
-  +availableFilters: AvailableFilters
 |};
 
 type FindProjectsData = {|
   +projects: $ReadOnlyArray<Project>,
-  +availableFilters: AvailableFilters
 |};
 
 export type ProjectSearchActionType = {
   type: 'INIT',
+  findProjectsArgs: FindProjectsArgs
 } | {
   type: 'ADD_TAG',
   tag: Tag,
@@ -45,12 +48,15 @@ export type ProjectSearchActionType = {
 const DEFAULT_STATE = {
   keyword: '',
   tags: List(),
-  projectsData: {}
+  projectsData: {},
+  findProjectsArgs: {}
 };
 
 class State extends Record(DEFAULT_STATE) {
   keyword: string;
   projectsData: FindProjectsData;
+  tags: $ReadOnlyArray<string>;
+  findProjectsArgs: FindProjectsArgs;
 }
 
 class ProjectSearchStore extends ReduceStore<State> {
@@ -65,44 +71,92 @@ class ProjectSearchStore extends ReduceStore<State> {
   reduce(state: State, action: ProjectSearchActionType): State {
     switch (action.type) {
       case 'INIT':
-        return this._loadProjects(new State());
+        let initialState: State = new State();
+        if(action.findProjectsArgs) {
+          initialState = this._initializeFilters(initialState, action.findProjectsArgs);
+        }
+        initialState = initialState.set('findProjectsArgs', action.findProjectsArgs || {});
+        return this._loadProjects(initialState);
       case 'ADD_TAG':
-        return this._loadProjects(state.set('tags', state.tags.push(state.projectsData.allTags[action.tag])));
+        return this._loadProjects(this._addTagToState(state, action.tag));
       case 'REMOVE_TAG':
-        return this._loadProjects(
-          state.set(
-            'tags',
-            state.tags.delete(
-              /* $FlowFixMe I don't know why, but the action type isn't being
-                subtyped here */
-              state.tags.findIndex(tag => tag.id === action.tag.id),
-            ),
+        state = state.set(
+          'tags',
+          state.tags.delete(
+            /* $FlowFixMe I don't know why, but the action type isn't being
+              subtyped here */
+            state.tags.findIndex(tag => tag.tag_name === action.tag.tag_name),
           ),
         );
+        return this._loadProjects(state);
       case 'SET_KEYWORD':
-        return this._loadProjects(state.set('keyword', action.keyword));
+        return this._loadProjects(this._addKeywordToState(state, action.keyword));
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
+        let projects = action.projectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData);
+        let allTags = _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name);
         return state.set('projectsData', {
-          projects: List(action.projectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData)),
-          allTags: _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name),
-          availableFilters: action.projectsResponse.availableFilters
+          projects: List(projects),
+          allTags: allTags,
         });
       default:
         (action: empty);
         return state;
     }
   }
-
-  _loadProjects(state: State): State {
-    
-    
-    const args = _.pickBy({
+  
+  _updateFindProjectArgs(state: State): State {
+    if(state.projectsData && state.projectsData.allTags) {
+      const findProjectsArgs: FindProjectsArgs = _.pickBy({
         keyword: state.keyword,
         issues: this._getTagCategoryParams(state, TagCategory.ISSUES),
         tech: this._getTagCategoryParams(state, TagCategory.TECHNOLOGIES_USED),
         role: this._getTagCategoryParams(state, TagCategory.ROLE)
-      },_.identity);
-    const url: string = urls.constructWithQueryString('/api/projects', args);
+      }, _.identity);
+  
+      state = state.set('findProjectsArgs',findProjectsArgs);
+    }
+    
+    return state;
+  }
+  
+  _updateWindowUrl(state: State) {
+    const windowUrl: string = urls.constructWithQueryString(urls.section(Section.FindProjects), state.findProjectsArgs);
+    history.pushState({},null,windowUrl);
+  }
+  
+  _initializeFilters(state: State, findProjectsArgs: FindProjectsArgs): State {
+    state = this._addTagFilters(state, findProjectsArgs.issues);
+    state = this._addTagFilters(state, findProjectsArgs.role);
+    state = this._addTagFilters(state, findProjectsArgs.tech);
+    state = this._addKeywordToState(state, findProjectsArgs.keyword);
+    
+    return state;
+  }
+  
+  _addTagFilters(state: State, filter:string): State {
+    if(filter) {
+      filter.split(",").forEach((tag) => {
+        state = this._addTagToState(state, tag);
+      });
+    }
+    return state;
+  }
+  
+  _addTagToState(state: State, tag: string): State {
+    const newTags:$ReadOnlyArray<string> = state.tags.concat(tag);
+    return state.set('tags', newTags);
+  }
+  
+  _addKeywordToState(state: State, keyword: string): State {
+    state = state.set('keyword', keyword);
+    return state;
+  }
+  
+  _loadProjects(state: State): State {
+    state = this._updateFindProjectArgs(state);
+    this._updateWindowUrl(state);
+
+    const url: string = urls.constructWithQueryString('/api/projects', state.findProjectsArgs);
     fetch(new Request(url))
       .then(response => response.json())
       .then(getProjectsResponse =>
@@ -115,7 +169,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _getTagCategoryParams(state: State, category: string): ?string {
-    const tags = state.tags.filter(tag => tag.category === category);
+    const tags = this.getTags(state).filter(tag => tag.category === category);
     return tags.map(tag => tag.tag_name).join(',');
   }
 
@@ -128,18 +182,13 @@ class ProjectSearchStore extends ReduceStore<State> {
     return state.projectsData && state.projectsData.projects;
   }
   
-  getAllTags(): { [key: string]: TagDefinition }{
-    const state: State = this.getState();
-    return state.projectsData && state.projectsData.allTags;
-  }
-  
-  getAvailableFilters(): AvailableFilters {
-    const state: State = this.getState();
-    return state.projectsData && state.projectsData.availableFilters;
-  }
-
-  getTags(): List<TagDefinition> {
-    return this.getState().tags;
+  getTags(inProgressState: ?State): List<TagDefinition> {
+    const state: State = inProgressState || this.getState();
+    if(state.projectsData && state.projectsData.allTags && state.tags) {
+      return List(state.tags.map(tag => state.projectsData.allTags[tag]));
+    } else {
+      return List();
+    }
   }
 }
 
