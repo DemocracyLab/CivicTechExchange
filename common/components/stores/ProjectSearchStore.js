@@ -87,6 +87,8 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
         let projects = action.projectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData);
         let allTags = _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name);
+        // Remove all tag filters that don't match an existing tag name
+        state = state.set('tags', state.tags.filter(tag => allTags[tag]));
         return state.set('projectsData', {
           projects: List(projects),
           allTags: allTags,

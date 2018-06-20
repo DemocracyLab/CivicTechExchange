@@ -20151,6 +20151,10 @@ var ProjectSearchStore = function (_ReduceStore) {
           var allTags = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.mapKeys(action.projectsResponse.tags, function (tag) {
             return tag.tag_name;
           });
+          // Remove all tag filters that don't match an existing tag name
+          state = state.set('tags', state.tags.filter(function (tag) {
+            return allTags[tag];
+          }));
           return state.set('projectsData', {
             projects: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(_projects),
             allTags: allTags
