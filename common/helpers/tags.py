@@ -10,6 +10,10 @@ def get_tags_by_category(categoryName):
     return Tag.objects.filter(category__contains=categoryName)
 
 
+def get_tag_dictionary():
+    return {tag.tag_name: tag for tag in Tag.objects.all()}
+
+
 def import_tags_from_csv():
     dir = os.path.dirname(__file__)
     filename = os.path.join(dir, '../models/Tag_definitions.csv')
