@@ -161,16 +161,37 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
         
         <div className="form-group">
-          <label htmlFor="project_location">Project Location</label>
-          <input type="text" className="form-control" id="project_location" name="project_location" maxLength="200"
-                 value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}/>
-        </div>
-        <div className="form-group">
           <label htmlFor="project_url">Website URL</label>
           <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
                  value={this.state.formFields.project_url} onChange={this.onFormFieldChange.bind(this, "project_url")}/>
         </div>
+
+        <div className="form-group">
+          <label htmlFor="project_location">Project Location</label>
+
+          <select name="project_location" id="project_location" className="form-control" value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}>
+            <option value={this.state.formFields.project_location}>{this.state.formFields.project_location}</option>
+            <option value="Redmond, WA">Redmond, WA</option>
+            <option value="Kirkland, WA">Kirkland, WA</option>
+            <option value="Bellevue, WA">Bellevue, WA</option>
+            <option value="Seattle, WA">Seattle, WA</option>
+          </select>
+        </div>
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div className="form-group">
           <label htmlFor="project_issue_area">Issue Areas</label>
           <TagSelector
