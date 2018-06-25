@@ -13,11 +13,10 @@ from django.db.models import Q
 from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
-from common.helpers.tags import get_tags_by_category
+from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from pprint import pprint
 
 
 def tags(request):
@@ -144,25 +143,29 @@ def projects_list(request):
         url_parts = request.GET.urlencode()
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
-        selected_tag_filters = []
-        if 'issues' in query_params:
-            issue_filters = query_params['issues'][0].split(',')
-            selected_tag_filters += issue_filters
-            project_list = project_list & projects_by_issue_areas(issue_filters)
-        if 'tech' in query_params:
-            tech_filters = query_params['tech'][0].split(',')
-            selected_tag_filters += tech_filters
-            project_list = project_list & projects_by_technologies(tech_filters)
-        if 'role' in query_params:
-            role_filters = query_params['role'][0].split(',')
-            selected_tag_filters += role_filters
-            project_list = project_list & projects_by_roles(role_filters)
+        project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
+        project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
+        project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
 
-    response = json.dumps(projects_with_filter_counts(project_list.distinct().order_by('project_name'), selected_tag_filters))
-
+    response = json.dumps(projects_with_filter_counts(project_list.distinct().order_by('project_name')))
     return HttpResponse(response)
+
+
+def apply_tag_filters(project_list, query_params, param_name, tag_filter):
+    if param_name in query_params:
+        tag_dict = get_tag_dictionary()
+        tags_to_filter_by = query_params[param_name][0].split(',')
+        tags_to_filter_by = clean_nonexistent_tags(tags_to_filter_by, tag_dict)
+        if len(tags_to_filter_by):
+            project_list = project_list & tag_filter(tags_to_filter_by)
+
+    return project_list
+
+
+def clean_nonexistent_tags(tags, tag_dict):
+    return list(filter(lambda tag: tag in tag_dict, tags))
 
 
 def projects_by_keyword(keyword):
@@ -185,13 +188,10 @@ def projects_by_roles(tags):
     return Project.objects.filter(positions__in=positions)
 
 
-def projects_with_filter_counts(projects, selected_tag_filters):
+def projects_with_filter_counts(projects):
     return {
         'projects': [project.hydrate_to_json() for project in projects],
-        'tags': list(Tag.objects.values()),
-        # 'availableFilters': {
-        #     'tags': available_tag_filters(projects, selected_tag_filters)
-        # }
+        'tags': list(Tag.objects.values())
     }
 
 
