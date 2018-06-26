@@ -89,7 +89,6 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
 
   selectOption(option: T):void {
     this.props.onOptionSelect(option);
-    // this.setState({showDropdown: false});
   }
 
   render(): React$Node {
@@ -129,7 +128,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
   _renderCategories(): $ReadOnlyArray<React$Node> {
     return (_.keys(this.state.optionCategoryTree).sort()).map( (category,i) => {
       const isExpanded:boolean = category === this.state.categoryShown;
-      const classes: string = "DropDownCategoryItem-root enabled"
+      const classes: string = "DropDownCategoryItem-root"
         + (isExpanded ? "" : " unselected")
       return <div
         key={i}
