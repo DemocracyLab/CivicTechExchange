@@ -75266,7 +75266,7 @@ var TagSelectorCollapsible = function (_React$Component) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_ContextualDropdown_jsx__ = __webpack_require__(394);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__ = __webpack_require__(394);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__(12);
@@ -75382,7 +75382,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
     key: '_renderDropdown',
     value: function _renderDropdown() {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_0__common_ContextualDropdown_jsx__["a" /* default */],
+        __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
         { showContextualArrow: true, xPos: this.state.chevronX },
         this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList)
       );
@@ -75395,7 +75395,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
       var sortedOptions = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.sortBy(options, this.props.optionDisplay);
 
       return sortedOptions.map(function (option, i) {
-        var classes = "DropDownMenuItem-root enabled";
+        var classes = "DropDownMenuItem-root DropDownMenuItem-collapsible enabled";
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'label',
           {
@@ -75416,8 +75416,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).sort().map(function (category, i) {
         var isExpanded = category === _this4.state.categoryShown;
-        var hasEnabledItems = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.some(_this4.state.optionCategoryTree[category], _this4.props.optionEnabled);
-        var classes = "DropDownCategoryItem-root" + (isExpanded ? "" : " unselected") + (hasEnabledItems ? "" : " disabled");
+        var classes = "DropDownCategoryItem-root" + (isExpanded ? "" : " unselected");
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           {
@@ -75431,7 +75430,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
           ' ',
           isExpanded ? _this4.constants.chevronDown : _this4.constants.chevronRight,
           isExpanded ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_0__common_ContextualDropdown_jsx__["a" /* default */],
+            __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
             { xPos: _this4.state.optionCategoryCoords[category].width, yPos: -_this4.state.optionCategoryCoords[category].height },
             _this4._renderOptions(_this4.state.optionCategoryTree[category])
           ) : null
@@ -75488,13 +75487,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var ContextualDropdown = function (_React$PureComponent) {
-  _inherits(ContextualDropdown, _React$PureComponent);
+var ContextualCollapsible = function (_React$PureComponent) {
+  _inherits(ContextualCollapsible, _React$PureComponent);
 
-  function ContextualDropdown() {
-    _classCallCheck(this, ContextualDropdown);
+  function ContextualCollapsible() {
+    _classCallCheck(this, ContextualCollapsible);
 
-    var _this = _possibleConstructorReturn(this, (ContextualDropdown.__proto__ || Object.getPrototypeOf(ContextualDropdown)).call(this));
+    var _this = _possibleConstructorReturn(this, (ContextualCollapsible.__proto__ || Object.getPrototypeOf(ContextualCollapsible)).call(this));
 
     _this.state = {
       contextualArrowX: 0
@@ -75502,7 +75501,7 @@ var ContextualDropdown = function (_React$PureComponent) {
     return _this;
   }
 
-  _createClass(ContextualDropdown, [{
+  _createClass(ContextualCollapsible, [{
     key: 'render',
     value: function render() {
       var style = __WEBPACK_IMPORTED_MODULE_1_lodash___default.a.pickBy({
@@ -75513,7 +75512,7 @@ var ContextualDropdown = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         {
-          className: 'ContextualDropdown-root',
+          className: 'ContextualCollapsible-root',
           ref: this._onDropDownMount.bind(this),
           style: style },
         this.props.showContextualArrow ? this._renderContextualArrow() : null,
@@ -75530,16 +75529,16 @@ var ContextualDropdown = function (_React$PureComponent) {
     key: '_renderContextualArrow',
     value: function _renderContextualArrow() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', {
-        className: 'ContextualDropdown-contextualArrow',
+        className: 'ContextualCollapsible-contextualArrow',
         style: { left: this.state.contextualArrowX }
       });
     }
   }]);
 
-  return ContextualDropdown;
+  return ContextualCollapsible;
 }(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent);
 
-/* harmony default export */ __webpack_exports__["a"] = (ContextualDropdown);
+/* harmony default export */ __webpack_exports__["a"] = (ContextualCollapsible);
 
 /***/ }),
 /* 395 */

@@ -5,10 +5,9 @@
   padding-bottom: 15px;
   padding-top: 15px;
   position: absolute;
-  width: fit-content;
 }
 
-.ContextualDropdown-contextualArrow {
+.ContextualDropdown-contextualArrow, .ContextualCollapsible-contextualArrow {
   background: white;
   border: solid 0.5px #cecece;
   border-bottom: 0;
@@ -19,4 +18,13 @@
   transform-origin: center;
   transform: rotate(45deg);
   width: 10px;
+}
+
+.ContextualCollapsible-root {
+  background: none;
+  border: none;
+  margin-top: 10px;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  position: static;
 }

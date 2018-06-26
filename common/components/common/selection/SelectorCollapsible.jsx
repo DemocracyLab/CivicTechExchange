@@ -1,6 +1,6 @@
 // @flow
 
-import ContextualDropdown from '../../common/ContextualDropdown.jsx';
+import ContextualCollapsible from '../../common/ContextualCollapsible.jsx';
 import React from 'react';
 import _ from 'lodash'
 
@@ -106,9 +106,9 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
 
   _renderDropdown(): React$Node {
     return (
-      <ContextualDropdown showContextualArrow={true} xPos={this.state.chevronX}>
+      <ContextualCollapsible showContextualArrow={true} xPos={this.state.chevronX}>
         { this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList) }
-      </ContextualDropdown>
+      </ContextualCollapsible>
     );
   }
 
@@ -116,7 +116,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
     const sortedOptions = _.sortBy(options, this.props.optionDisplay);
 
     return sortedOptions.map( (option, i) => {
-      const classes = "DropDownMenuItem-root enabled"
+      const classes = "DropDownMenuItem-root DropDownMenuItem-collapsible enabled"
       return <label
         key={i}
         className={classes}
@@ -129,10 +129,8 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
   _renderCategories(): $ReadOnlyArray<React$Node> {
     return (_.keys(this.state.optionCategoryTree).sort()).map( (category,i) => {
       const isExpanded:boolean = category === this.state.categoryShown;
-      const hasEnabledItems = _.some(this.state.optionCategoryTree[category], this.props.optionEnabled);
       const classes: string = "DropDownCategoryItem-root"
         + (isExpanded ? "" : " unselected")
-        + (hasEnabledItems ? "" : " disabled");
       return <div
         key={i}
         ref={this._onCategoryMount.bind(this, category)}
@@ -141,9 +139,9 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       >
         {category} { } {isExpanded ? this.constants.chevronDown : this.constants.chevronRight}
         { isExpanded
-          ? <ContextualDropdown xPos={this.state.optionCategoryCoords[category].width} yPos={-this.state.optionCategoryCoords[category].height}>
+          ? <ContextualCollapsible xPos={this.state.optionCategoryCoords[category].width} yPos={-this.state.optionCategoryCoords[category].height}>
               { this._renderOptions(this.state.optionCategoryTree[category]) }
-            </ContextualDropdown>
+            </ContextualCollapsible>
           : null
         }
       </div>
