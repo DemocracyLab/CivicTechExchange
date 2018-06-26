@@ -33799,6 +33799,7 @@ var EditProjectForm = function (_React$PureComponent) {
             project_location: project.project_location,
             project_url: project.project_url,
             project_description: project.project_description,
+            project_organization: project.project_organization,
             project_issue_area: project.project_issue_area,
             project_technologies: project.project_technologies,
             project_links: __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.cloneDeep(project.project_links),
@@ -33910,7 +33911,7 @@ var EditProjectForm = function (_React$PureComponent) {
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__tags_TagSelector_jsx__["a" /* default */], {
             elementId: 'project_organization',
-            value: this.state.formFields.project_issue_area,
+            value: this.state.formFields.project_organization,
             category: __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION,
             allowMultiSelect: false,
             onSelection: this.onTagChange.bind(this, "project_organization")
@@ -67530,6 +67531,11 @@ var AboutProjectController = function (_React$PureComponent) {
                         { className: 'col' },
                         project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name
                       )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                      'div',
+                      { className: 'row' },
+                      this._renderProjectCommunity()
                     )
                   )
                 )
@@ -67668,6 +67674,18 @@ var AboutProjectController = function (_React$PureComponent) {
           { className: 'col' },
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('i', { className: 'fa fa-map-marker fa-1', 'aria-hidden': 'true' }),
           this.state.project.project_location
+        );
+      }
+    }
+  }, {
+    key: '_renderProjectCommunity',
+    value: function _renderProjectCommunity() {
+      if (this.state.project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(this.state.project.project_organization)) {
+        return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+          'div',
+          { className: 'col' },
+          'Community: ',
+          this.state.project.project_organization[0].display_name
         );
       }
     }
