@@ -40,7 +40,7 @@ type State = {|
 /**
  * Generic dropdown selector that supports either 1 or 2 levels
  */
-class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
+class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
     super();
 
@@ -173,4 +173,4 @@ class SelectorDropdown<T> extends React.PureComponent<Props<T>, State> {
   }
 }
 
-export default SelectorDropdown;
+export default SelectorCollapsible;

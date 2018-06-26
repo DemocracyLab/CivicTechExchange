@@ -75067,7 +75067,7 @@ var ProjectSearchContainer = function (_React$PureComponent) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__ = __webpack_require__(392);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__ = __webpack_require__(392);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__ = __webpack_require__(54);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -75101,9 +75101,9 @@ var ProjectFilterContainer = function (_React$PureComponent) {
           { className: "ProjectFilterContainer-label" },
           "Filter By:"
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ISSUES, title: "Issue Areas" }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED, title: "Technology Used" }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ROLE, title: "Roles Needed" })
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ISSUES, title: "Issue Areas" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED, title: "Technology Used" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ROLE, title: "Roles Needed" })
       );
     }
   }]);
@@ -75123,7 +75123,7 @@ var ProjectFilterContainer = function (_React$PureComponent) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_flux_utils__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_flux_utils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_flux_utils__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__selection_SelectorDropdown_jsx__ = __webpack_require__(393);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__selection_SelectorCollapsible_jsx__ = __webpack_require__(393);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchStore_js__ = __webpack_require__(57);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_metrics__ = __webpack_require__(164);
@@ -75155,13 +75155,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Dropdown selector for tags
  */
-var TagSelectorDropdown = function (_React$Component) {
-  _inherits(TagSelectorDropdown, _React$Component);
+var TagSelectorCollapsible = function (_React$Component) {
+  _inherits(TagSelectorCollapsible, _React$Component);
 
-  function TagSelectorDropdown(props) {
-    _classCallCheck(this, TagSelectorDropdown);
+  function TagSelectorCollapsible(props) {
+    _classCallCheck(this, TagSelectorCollapsible);
 
-    var _this = _possibleConstructorReturn(this, (TagSelectorDropdown.__proto__ || Object.getPrototypeOf(TagSelectorDropdown)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (TagSelectorCollapsible.__proto__ || Object.getPrototypeOf(TagSelectorCollapsible)).call(this, props));
 
     _this.state = { tags: null };
 
@@ -75179,14 +75179,25 @@ var TagSelectorDropdown = function (_React$Component) {
     return _this;
   }
 
-  _createClass(TagSelectorDropdown, [{
+  _createClass(TagSelectorCollapsible, [{
     key: 'selectTag',
     value: function selectTag(tag) {
-      __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
-        type: 'ADD_TAG',
-        tag: tag.tag_name
-      });
-      __WEBPACK_IMPORTED_MODULE_6__utils_metrics__["a" /* default */].addTagFilterEvent(tag);
+      var tagInState = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.has(this.state.selectedTags, tag.tag_name);
+      //if tag is NOT currently in state, add it, otherwise remove
+      if (!tagInState) {
+        console.log("adding tag: ", tag.tag_name);
+        __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
+          type: 'ADD_TAG',
+          tag: tag.tag_name
+        });
+        __WEBPACK_IMPORTED_MODULE_6__utils_metrics__["a" /* default */].addTagFilterEvent(tag);
+      } else {
+        console.log("removing tag: ", tag.tag_name);
+        __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
+          type: 'REMOVE_TAG',
+          tag: tag.tag_name
+        });
+      }
     }
   }, {
     key: 'render',
@@ -75196,7 +75207,7 @@ var TagSelectorDropdown = function (_React$Component) {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         null,
-        this.state.tags ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__selection_SelectorDropdown_jsx__["a" /* default */], {
+        this.state.tags ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__selection_SelectorCollapsible_jsx__["a" /* default */], {
           title: this.props.title,
           options: this.state.tags,
           optionCategory: this.state.hasSubcategories && function (tag) {
@@ -75215,8 +75226,8 @@ var TagSelectorDropdown = function (_React$Component) {
   }, {
     key: '_tagEnabled',
     value: function _tagEnabled(tag) {
-      // Disable tags that are already selected
-      return !this.state.selectedTags || !this.state.selectedTags[tag.tag_name];
+      //return true if tag is in this.state.selectedTags, else implicitly false
+      __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.has(this.state.selectedTags, tag.tag_name);
     }
   }, {
     key: '_displayTag',
@@ -75245,10 +75256,10 @@ var TagSelectorDropdown = function (_React$Component) {
     }
   }]);
 
-  return TagSelectorDropdown;
+  return TagSelectorCollapsible;
 }(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
 
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1_flux_utils__["Container"].create(TagSelectorDropdown));
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1_flux_utils__["Container"].create(TagSelectorCollapsible));
 
 /***/ }),
 /* 393 */
@@ -75284,13 +75295,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Generic dropdown selector that supports either 1 or 2 levels
  */
-var SelectorDropdown = function (_React$PureComponent) {
-  _inherits(SelectorDropdown, _React$PureComponent);
+var SelectorCollapsible = function (_React$PureComponent) {
+  _inherits(SelectorCollapsible, _React$PureComponent);
 
-  function SelectorDropdown(props) {
-    _classCallCheck(this, SelectorDropdown);
+  function SelectorCollapsible(props) {
+    _classCallCheck(this, SelectorCollapsible);
 
-    var _this = _possibleConstructorReturn(this, (SelectorDropdown.__proto__ || Object.getPrototypeOf(SelectorDropdown)).call(this));
+    var _this = _possibleConstructorReturn(this, (SelectorCollapsible.__proto__ || Object.getPrototypeOf(SelectorCollapsible)).call(this));
 
     var constants = {
       chevronRight: '\u25B8',
@@ -75312,7 +75323,7 @@ var SelectorDropdown = function (_React$PureComponent) {
     return _this;
   }
 
-  _createClass(SelectorDropdown, [{
+  _createClass(SelectorCollapsible, [{
     key: 'initializeOptions',
     value: function initializeOptions(props) {
       if (!__WEBPACK_IMPORTED_MODULE_2_lodash___default.a.isEmpty(props.options)) {
@@ -75344,7 +75355,7 @@ var SelectorDropdown = function (_React$PureComponent) {
     key: 'selectOption',
     value: function selectOption(option) {
       this.props.onOptionSelect(option);
-      this.setState({ showDropdown: false });
+      // this.setState({showDropdown: false});
     }
   }, {
     key: 'render',
@@ -75384,17 +75395,16 @@ var SelectorDropdown = function (_React$PureComponent) {
       var sortedOptions = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.sortBy(options, this.props.optionDisplay);
 
       return sortedOptions.map(function (option, i) {
-        var enabled = _this3.props.optionEnabled(option);
-        var classes = "DropDownMenuItem-root " + (enabled ? "enabled" : "disabled");
+        var classes = "DropDownMenuItem-root enabled";
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'div',
+          'label',
           {
             key: i,
-            className: classes,
-            onClick: function onClick() {
-              return enabled && _this3.selectOption(option);
-            }
+            className: classes
           },
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', value: i, checked: _this3.props.optionEnabled, onChange: function onChange() {
+              return _this3.selectOption(option);
+            } }),
           _this3.props.optionDisplay(option)
         );
       });
@@ -75453,10 +75463,10 @@ var SelectorDropdown = function (_React$PureComponent) {
     }
   }]);
 
-  return SelectorDropdown;
+  return SelectorCollapsible;
 }(__WEBPACK_IMPORTED_MODULE_1_react___default.a.PureComponent);
 
-/* harmony default export */ __webpack_exports__["a"] = (SelectorDropdown);
+/* harmony default export */ __webpack_exports__["a"] = (SelectorCollapsible);
 
 /***/ }),
 /* 394 */
