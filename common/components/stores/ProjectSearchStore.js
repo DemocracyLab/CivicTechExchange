@@ -105,7 +105,8 @@ class ProjectSearchStore extends ReduceStore<State> {
         keyword: state.keyword,
         issues: this._getTagCategoryParams(state, TagCategory.ISSUES),
         tech: this._getTagCategoryParams(state, TagCategory.TECHNOLOGIES_USED),
-        role: this._getTagCategoryParams(state, TagCategory.ROLE)
+        role: this._getTagCategoryParams(state, TagCategory.ROLE),
+        org: this._getTagCategoryParams(state, TagCategory.ORGANIZATION)
       }, _.identity);
   
       state = state.set('findProjectsArgs',findProjectsArgs);

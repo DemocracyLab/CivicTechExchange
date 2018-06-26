@@ -14,6 +14,7 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
         <TagSelectorDropdown category={TagCategory.ISSUES} title="Issue Areas" />
         <TagSelectorDropdown category={TagCategory.TECHNOLOGIES_USED} title="Technology Used" />
         <TagSelectorDropdown category={TagCategory.ROLE} title="Roles Needed" />
+        <TagSelectorDropdown category={TagCategory.ORGANIZATION} title="Communities" />
       </div>
     );
   }

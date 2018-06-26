@@ -20173,7 +20173,8 @@ var ProjectSearchStore = function (_ReduceStore) {
           keyword: state.keyword,
           issues: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ISSUES),
           tech: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED),
-          role: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ROLE)
+          role: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ROLE),
+          org: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION)
         }, __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.identity);
 
         state = state.set('findProjectsArgs', _findProjectsArgs);
@@ -75138,7 +75139,8 @@ var ProjectFilterContainer = function (_React$PureComponent) {
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ISSUES, title: "Issue Areas" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED, title: "Technology Used" }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ROLE, title: "Roles Needed" })
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ROLE, title: "Roles Needed" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION, title: "Communities" })
       );
     }
   }]);
