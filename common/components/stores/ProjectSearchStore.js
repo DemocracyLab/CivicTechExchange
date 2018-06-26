@@ -17,7 +17,8 @@ export type FindProjectsArgs = {|
   keyword: string,
   issues: string,
   tech: string,
-  role: string
+  role: string,
+  org: string
 |};
 
 type FindProjectsResponse = {|
@@ -124,6 +125,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = this._addTagFilters(state, findProjectsArgs.issues);
     state = this._addTagFilters(state, findProjectsArgs.role);
     state = this._addTagFilters(state, findProjectsArgs.tech);
+    state = this._addTagFilters(state, findProjectsArgs.org);
     state = this._addKeywordToState(state, findProjectsArgs.keyword);
     
     return state;

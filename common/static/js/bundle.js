@@ -20194,6 +20194,7 @@ var ProjectSearchStore = function (_ReduceStore) {
       state = this._addTagFilters(state, findProjectsArgs.issues);
       state = this._addTagFilters(state, findProjectsArgs.role);
       state = this._addTagFilters(state, findProjectsArgs.tech);
+      state = this._addTagFilters(state, findProjectsArgs.org);
       state = this._addKeywordToState(state, findProjectsArgs.keyword);
 
       return state;
@@ -74578,7 +74579,7 @@ var FindProjectsController = function (_React$PureComponent) {
     key: 'componentWillMount',
     value: function componentWillMount() {
       var args = __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].arguments(document.location.search);
-      args = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.pick(args, ['keyword', 'issues', 'tech', 'role']);
+      args = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.pick(args, ['keyword', 'issues', 'tech', 'role', 'org']);
       __WEBPACK_IMPORTED_MODULE_0__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({ type: 'INIT', findProjectsArgs: !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(args) ? args : null });
       __WEBPACK_IMPORTED_MODULE_1__stores_TagDispatcher_js__["a" /* default */].dispatch({ type: 'INIT' });
     }
