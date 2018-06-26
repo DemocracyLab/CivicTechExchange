@@ -174,7 +174,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
   
         <div className="form-group">
-          <label htmlFor="project_organization">Organization</label>
+          <label htmlFor="project_organization">Community</label>
           <TagSelector
             elementId="project_organization"
             value={this.state.formFields.project_organization}
