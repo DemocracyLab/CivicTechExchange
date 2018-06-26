@@ -75232,12 +75232,6 @@ var TagSelectorCollapsible = function (_React$Component) {
   }, {
     key: '_displayTag',
     value: function _displayTag(tag) {
-      // const tagCount: number = this.state.tagCounts[tag.tag_name] || 0;
-      // let tagDisplay: string = tag.display_name;
-      // if(tagCount > 0) {
-      //   tagDisplay += " (" + tagCount + ")";
-      // }
-      // return tagDisplay;
       return tag.display_name;
     }
   }], [{
@@ -75416,7 +75410,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).sort().map(function (category, i) {
         var isExpanded = category === _this4.state.categoryShown;
-        var classes = "DropDownCategoryItem-root" + (isExpanded ? "" : " unselected");
+        var classes = "DropDownCategoryItem-root enabled" + (isExpanded ? "" : " unselected");
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           {

@@ -129,7 +129,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
   _renderCategories(): $ReadOnlyArray<React$Node> {
     return (_.keys(this.state.optionCategoryTree).sort()).map( (category,i) => {
       const isExpanded:boolean = category === this.state.categoryShown;
-      const classes: string = "DropDownCategoryItem-root"
+      const classes: string = "DropDownCategoryItem-root enabled"
         + (isExpanded ? "" : " unselected")
       return <div
         key={i}
