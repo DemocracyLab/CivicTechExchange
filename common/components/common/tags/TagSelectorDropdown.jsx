@@ -33,7 +33,7 @@ class TagSelectorDropdown extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {tags: null};
-    
+
     // TODO: Use Flux to get tags in a single request
     ProjectAPIUtils.fetchTagsByCategory(this.props.category, tags => {
       this.setState({
@@ -44,17 +44,17 @@ class TagSelectorDropdown extends React.Component<Props, State> {
     this._displayTag = this._displayTag.bind(this);
     this._tagEnabled = this._tagEnabled.bind(this);
   }
-  
+
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [ProjectSearchStore];
   }
-  
+
   static calculateState(prevState: State): State {
     return {
       selectedTags:_.mapKeys(ProjectSearchStore.getTags().toArray(), (tag: TagDefinition) => tag.tag_name)
     };
   }
-  
+
   selectTag(tag: TagDefinition): void {
     ProjectSearchDispatcher.dispatch({
       type: 'ADD_TAG',
@@ -62,7 +62,7 @@ class TagSelectorDropdown extends React.Component<Props, State> {
     });
     metrics.addTagFilterEvent(tag);
   }
-  
+
   render(): React$Node {
     return (
       <div>
@@ -82,12 +82,12 @@ class TagSelectorDropdown extends React.Component<Props, State> {
       </div>
     );
   }
-  
+
   _tagEnabled(tag: TagDefinition): boolean {
     // Disable tags that are already selected
     return !this.state.selectedTags || !this.state.selectedTags[tag.tag_name];
   }
-  
+
   _displayTag(tag: TagDefinition): string {
     // const tagCount: number = this.state.tagCounts[tag.tag_name] || 0;
     // let tagDisplay: string = tag.display_name;

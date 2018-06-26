@@ -75349,7 +75349,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
     key: 'selectOption',
     value: function selectOption(option) {
       this.props.onOptionSelect(option);
-      // this.setState({showDropdown: false});
+      this.setState({ showDropdown: false });
     }
   }, {
     key: 'render',
@@ -75410,7 +75410,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).sort().map(function (category, i) {
         var isExpanded = category === _this4.state.categoryShown;
-        var classes = "DropDownCategoryItem-root enabled" + (isExpanded ? "" : " unselected");
+        var classes = "DropDownCategoryItem-root" + (isExpanded ? "" : " unselected");
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           {
