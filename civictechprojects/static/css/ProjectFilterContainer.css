@@ -3,8 +3,10 @@
   border: solid 1px #cecece;
   border-top: 0;
   padding: 10px;
-  width: 300px;
+  width: 280px;
+  margin-right: 10px;
   float: left;
+  /*TODO: Change this to inline-block (probably) when updating layout for new project cards */
 }
 
 .ProjectFilterContainer-label {
@@ -17,6 +19,5 @@
 }
 
 .ProjectFilterContainer-root > div {
-  width: 100%;
   display: block;
 }
