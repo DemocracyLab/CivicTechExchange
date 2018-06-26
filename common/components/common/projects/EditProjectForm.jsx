@@ -174,6 +174,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             <option value="Kirkland, WA">Kirkland, WA</option>
             <option value="Bellevue, WA">Bellevue, WA</option>
             <option value="Seattle, WA">Seattle, WA</option>
+            <option value="Other">Other</option>
           </select>
         </div>
         
