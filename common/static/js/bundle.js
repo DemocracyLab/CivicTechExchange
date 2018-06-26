@@ -20006,7 +20006,8 @@ var TagCategory = {
   SOFTWARE_LICENSE: "Software License",
   STATUS: "Status",
   TECHNOLOGIES_USED: "Technologies Used",
-  ROLE: "Role"
+  ROLE: "Role",
+  ORGANIZATION: "Organization"
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (TagCategory);
@@ -33898,6 +33899,22 @@ var EditProjectForm = function (_React$PureComponent) {
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_url', name: 'project_url', maxLength: '2075',
             value: this.state.formFields.project_url, onChange: this.onFormFieldChange.bind(this, "project_url") })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'label',
+            { htmlFor: 'project_organization' },
+            'Organization'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__tags_TagSelector_jsx__["a" /* default */], {
+            elementId: 'project_organization',
+            value: this.state.formFields.project_issue_area,
+            category: __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION,
+            allowMultiSelect: false,
+            onSelection: this.onTagChange.bind(this, "project_organization")
+          })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
@@ -68828,7 +68845,7 @@ Value.propTypes = {
 };
 
 /*!
-  Copyright (c) 2017 Jed Watson.
+  Copyright (c) 2018 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/react-select
 */
@@ -69384,8 +69401,8 @@ var Select$1 = function (_React$Component) {
 					break;
 				case 46:
 					// delete
-					event.preventDefault();
 					if (!this.state.inputValue && this.props.deleteRemoves) {
+						event.preventDefault();
 						this.popValue();
 					}
 					break;
@@ -69816,7 +69833,7 @@ var Select$1 = function (_React$Component) {
 			}
 			return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
 				'div',
-				{ className: className, key: 'input-wrap' },
+				{ className: className, key: 'input-wrap', style: { display: 'inline-block' } },
 				__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('input', _extends({ id: this.props.id }, inputProps))
 			);
 		}

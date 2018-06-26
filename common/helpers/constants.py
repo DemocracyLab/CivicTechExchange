@@ -9,6 +9,7 @@ class TagCategory(Enum):
     ISSUE_ADDRESSED = 'Issue(s) Addressed'
     TECHNOLOGIES_USED = 'Technologies Used'
     SOFTWARE_LICENSE = 'Software License'
+    ORGANIZATION = 'Organization'
 
 
 # TODO: Keep in sync with /common/components/enums/Section.js

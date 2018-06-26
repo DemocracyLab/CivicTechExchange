@@ -170,6 +170,17 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
                  value={this.state.formFields.project_url} onChange={this.onFormFieldChange.bind(this, "project_url")}/>
         </div>
+  
+        <div className="form-group">
+          <label htmlFor="project_organization">Organization</label>
+          <TagSelector
+            elementId="project_organization"
+            value={this.state.formFields.project_issue_area}
+            category={TagCategory.ORGANIZATION}
+            allowMultiSelect={false}
+            onSelection={this.onTagChange.bind(this, "project_organization")}
+          />
+        </div>
         
         <div className="form-group">
           <label htmlFor="project_issue_area">Issue Areas</label>
