@@ -75195,7 +75195,7 @@ var TagSelectorCollapsible = function (_React$Component) {
         console.log("removing tag: ", tag.tag_name);
         __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
           type: 'REMOVE_TAG',
-          tag: tag.tag_name
+          tag: tag
         });
       }
     }

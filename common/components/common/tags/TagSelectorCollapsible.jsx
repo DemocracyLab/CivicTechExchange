@@ -70,7 +70,7 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
       console.log("removing tag: ", tag.tag_name)
       ProjectSearchDispatcher.dispatch({
         type: 'REMOVE_TAG',
-        tag: tag.tag_name,
+        tag: tag,
       });
     }
   }
@@ -102,12 +102,6 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
   }
 
   _displayTag(tag: TagDefinition): string {
-    // const tagCount: number = this.state.tagCounts[tag.tag_name] || 0;
-    // let tagDisplay: string = tag.display_name;
-    // if(tagCount > 0) {
-    //   tagDisplay += " (" + tagCount + ")";
-    // }
-    // return tagDisplay;
     return tag.display_name;
   }
 }
