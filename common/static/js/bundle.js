@@ -33822,22 +33822,49 @@ var EditProjectForm = function (_React$PureComponent) {
           { className: 'form-group' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
-            { htmlFor: 'project_location' },
-            'Project Location'
+            { htmlFor: 'project_url' },
+            'Website URL'
           ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_location', name: 'project_location', maxLength: '200',
-            value: this.state.formFields.project_location, onChange: this.onFormFieldChange.bind(this, "project_location") })
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_url', name: 'project_url', maxLength: '2075',
+            value: this.state.formFields.project_url, onChange: this.onFormFieldChange.bind(this, "project_url") })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           { className: 'form-group' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
-            { htmlFor: 'project_url' },
-            'Website URL'
+            { htmlFor: 'project_location' },
+            'Project Location'
           ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_url', name: 'project_url', maxLength: '2075',
-            value: this.state.formFields.project_url, onChange: this.onFormFieldChange.bind(this, "project_url") })
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'select',
+            { name: 'project_location', id: 'project_location', className: 'form-control', value: this.state.formFields.project_location, onChange: this.onFormFieldChange.bind(this, "project_location") },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'option',
+              { value: this.state.formFields.project_location },
+              this.state.formFields.project_location
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'option',
+              { value: 'Redmond, WA' },
+              'Redmond, WA'
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'option',
+              { value: 'Kirkland, WA' },
+              'Kirkland, WA'
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'option',
+              { value: 'Bellevue, WA' },
+              'Bellevue, WA'
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'option',
+              { value: 'Seattle, WA' },
+              'Seattle, WA'
+            )
+          )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
@@ -68768,7 +68795,7 @@ Value.propTypes = {
 };
 
 /*!
-  Copyright (c) 2018 Jed Watson.
+  Copyright (c) 2017 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/react-select
 */
@@ -69324,8 +69351,8 @@ var Select$1 = function (_React$Component) {
 					break;
 				case 46:
 					// delete
+					event.preventDefault();
 					if (!this.state.inputValue && this.props.deleteRemoves) {
-						event.preventDefault();
 						this.popValue();
 					}
 					break;
@@ -69756,7 +69783,7 @@ var Select$1 = function (_React$Component) {
 			}
 			return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
 				'div',
-				{ className: className, key: 'input-wrap', style: { display: 'inline-block' } },
+				{ className: className, key: 'input-wrap' },
 				__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('input', _extends({ id: this.props.id }, inputProps))
 			);
 		}
