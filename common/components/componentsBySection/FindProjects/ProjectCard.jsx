@@ -62,7 +62,11 @@ class ProjectCard extends React.PureComponent<Props> {
             this.props.project.issueArea,
           )
         }
-        {this._renderLabelAndValue('Location: ', this.props.project.location)}
+        { 
+          (this.props.project.location!='Other')
+          ? this._renderLabelAndValue('Location: ', this.props.project.location)
+          : this._renderLabelAndValue('Location: ', '')
+        }
       </div>
     );
   }

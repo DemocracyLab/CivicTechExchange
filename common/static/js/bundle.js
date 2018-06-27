@@ -67617,7 +67617,7 @@ var AboutProjectController = function (_React$PureComponent) {
   }, {
     key: '_renderProjectLocation',
     value: function _renderProjectLocation() {
-      if (this.state.project && this.state.project.project_location) {
+      if (this.state.project && this.state.project.project_location && this.state.project.project_location != 'Other') {
         return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
           'div',
           { className: 'col' },
@@ -74934,7 +74934,7 @@ var ProjectCard = function (_React$PureComponent) {
         'div',
         { className: 'ProjectCard-issueAndLocation' },
         this._renderLabelAndValue('Issue Area: ', this.props.project.issueArea),
-        this._renderLabelAndValue('Location: ', this.props.project.location)
+        this.props.project.location != 'Other' ? this._renderLabelAndValue('Location: ', this.props.project.location) : this._renderLabelAndValue('Location: ', '')
       );
     }
   }, {

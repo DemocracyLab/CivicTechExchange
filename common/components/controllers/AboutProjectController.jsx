@@ -171,7 +171,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
   
   _renderProjectLocation(): React$Node {
-    if(this.state.project && this.state.project.project_location) {
+    if(this.state.project && this.state.project.project_location && (this.state.project.project_location!='Other')) {
       return <div className="col">
         <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
         {this.state.project.project_location}
