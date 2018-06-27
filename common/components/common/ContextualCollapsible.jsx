@@ -45,7 +45,7 @@ class ContextualCollapsible extends React.PureComponent<Props, State> {
       : 0;
     this.setState({contextualArrowX});
   }
-
+//TODO: determine if this needs to stay at all (left: values aren't generally useful in the collapsible)
   _renderContextualArrow(): React$Node {
     return (
       <div

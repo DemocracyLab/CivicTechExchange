@@ -128,7 +128,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
   _renderCategories(): $ReadOnlyArray<React$Node> {
     return (_.keys(this.state.optionCategoryTree).sort()).map( (category,i) => {
       const isExpanded:boolean = category === this.state.categoryShown;
-      const classes: string = "DropDownCategoryItem-root"
+      const classes: string = "DropDownCategoryItem-collapsible"
         + (isExpanded ? "" : " unselected")
       return <div
         key={i}
@@ -138,7 +138,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       >
         {category} { } {isExpanded ? this.constants.chevronDown : this.constants.chevronRight}
         { isExpanded
-          ? <ContextualCollapsible xPos={this.state.optionCategoryCoords[category].width} yPos={-this.state.optionCategoryCoords[category].height}>
+          ? <ContextualCollapsible>
               { this._renderOptions(this.state.optionCategoryTree[category]) }
             </ContextualCollapsible>
           : null

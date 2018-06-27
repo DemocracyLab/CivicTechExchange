@@ -75349,7 +75349,6 @@ var SelectorCollapsible = function (_React$PureComponent) {
     key: 'selectOption',
     value: function selectOption(option) {
       this.props.onOptionSelect(option);
-      this.setState({ showDropdown: false });
     }
   }, {
     key: 'render',
@@ -75410,7 +75409,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).sort().map(function (category, i) {
         var isExpanded = category === _this4.state.categoryShown;
-        var classes = "DropDownCategoryItem-root" + (isExpanded ? "" : " unselected");
+        var classes = "DropDownCategoryItem-collapsible" + (isExpanded ? "" : " unselected");
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           {
@@ -75425,7 +75424,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
           isExpanded ? _this4.constants.chevronDown : _this4.constants.chevronRight,
           isExpanded ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
-            { xPos: _this4.state.optionCategoryCoords[category].width, yPos: -_this4.state.optionCategoryCoords[category].height },
+            null,
             _this4._renderOptions(_this4.state.optionCategoryTree[category])
           ) : null
         );
@@ -75505,12 +75504,20 @@ var ContextualCollapsible = function (_React$PureComponent) {
 
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
-        {
-          className: 'ContextualCollapsible-root',
-          ref: this._onDropDownMount.bind(this),
-          style: style },
-        this.props.showContextualArrow ? this._renderContextualArrow() : null,
-        this.props.children
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          {
+            className: 'ContextualCollapsible-root',
+            ref: this._onDropDownMount.bind(this),
+            style: style },
+          this.props.showContextualArrow ? this._renderContextualArrow() : null
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          null,
+          this.props.children
+        )
       );
     }
   }, {
