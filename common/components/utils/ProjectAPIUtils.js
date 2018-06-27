@@ -41,6 +41,7 @@ export type ProjectDetailsAPIData = {|
   +project_creator: number,
   +project_claimed: boolean,
   +project_url: string,
+  +project_organization: $ReadOnlyArray<TagDefinition>,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
   +project_technologies: $ReadOnlyArray<TagDefinition>,
   +project_positions: $ReadOnlyArray<PositionInfo>,

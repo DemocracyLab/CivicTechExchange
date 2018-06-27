@@ -36,6 +36,11 @@ class ProjectCreationForm(ModelForm):
             for tech in project_technologies.split(','):
                 project.project_technologies.add(tech)
 
+        project_organization = form.data.get('project_organization')
+        if len(project_organization) > 0:
+            for org in project_organization.split(','):
+                project.project_organization.add(org)
+
         project.save()
 
         positions_json_text = form.data.get('project_positions')
@@ -96,6 +101,10 @@ class ProjectCreationForm(ModelForm):
         project_technologies = form.data.get('project_technologies')
         if project_technologies and len(project_technologies) != 0:
             Tag.merge_tags_field(project.project_technologies, project_technologies)
+
+        project_organizations = form.data.get('project_organization')
+        if project_organizations and len(project_organizations) != 0:
+            Tag.merge_tags_field(project.project_organization, project_organizations)
 
         project.save()
 
