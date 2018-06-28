@@ -1,0 +1,13 @@
+.CollapsibleCategoryItem-root {
+  cursor: pointer;
+}
+
+.CollapsibleCategoryItem-root:hover, .CollapsibleMenuItem:hover {
+  color: white;
+  background-color: #61892f;
+}
+
+.CollapsibleMenuItem {
+  width: 100%;
+  padding: 0px 10px;
+}

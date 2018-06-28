@@ -75223,14 +75223,12 @@ var TagSelectorCollapsible = function (_React$Component) {
       var tagInState = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.has(this.state.selectedTags, tag.tag_name);
       //if tag is NOT currently in state, add it, otherwise remove
       if (!tagInState) {
-        console.log("adding tag: ", tag.tag_name);
         __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
           type: 'ADD_TAG',
           tag: tag.tag_name
         });
         __WEBPACK_IMPORTED_MODULE_6__utils_metrics__["a" /* default */].addTagFilterEvent(tag);
       } else {
-        console.log("removing tag: ", tag.tag_name);
         __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
           type: 'REMOVE_TAG',
           tag: tag
@@ -75426,7 +75424,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
       var sortedOptions = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.sortBy(options, this.props.optionDisplay);
 
       return sortedOptions.map(function (option, i) {
-        var classes = "DropDownMenuItem-root DropDownMenuItem-collapsible enabled";
+        var classes = "CollapsibleMenuItem";
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'label',
           {
@@ -75447,7 +75445,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).sort().map(function (category, i) {
         var isExpanded = category === _this4.state.categoryShown;
-        var classes = "DropDownCategoryItem-collapsible" + (isExpanded ? "" : " unselected");
+        var classes = "CollapsibleCategoryItem-root" + (isExpanded ? "" : " unselected");
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           {
@@ -75559,7 +75557,7 @@ var ContextualCollapsible = function (_React$PureComponent) {
       var contextualArrowX = dropDownElement ? dropDownElement.getBoundingClientRect().width / 2 : 0;
       this.setState({ contextualArrowX: contextualArrowX });
     }
-    //TODO: determine if this style needs to stay at all (left: values aren't generally useful in the collapsible)
+    //TODO: determine if this style and associated state needs to stay at all (left: values aren't generally useful in the collapsible)
 
   }, {
     key: '_renderContextualArrow',

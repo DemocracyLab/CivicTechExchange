@@ -60,14 +60,12 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
     var tagInState = _.has(this.state.selectedTags, tag.tag_name);
     //if tag is NOT currently in state, add it, otherwise remove
     if(!tagInState) {
-      console.log("adding tag: ", tag.tag_name)
       ProjectSearchDispatcher.dispatch({
         type: 'ADD_TAG',
         tag: tag.tag_name,
       });
       metrics.addTagFilterEvent(tag);
     } else {
-      console.log("removing tag: ", tag.tag_name)
       ProjectSearchDispatcher.dispatch({
         type: 'REMOVE_TAG',
         tag: tag,
