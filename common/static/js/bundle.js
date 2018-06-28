@@ -75415,13 +75415,16 @@ var SelectorCollapsible = function (_React$PureComponent) {
           {
             key: i,
             ref: _this4._onCategoryMount.bind(_this4, category),
-            className: classes,
-            onClick: _this4.expandCategory.bind(_this4, category)
+            className: classes
           },
-          category,
-          ' ',
-          ' ',
-          isExpanded ? _this4.constants.chevronDown : _this4.constants.chevronRight,
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'span',
+            { onClick: _this4.expandCategory.bind(_this4, category) },
+            category,
+            ' ',
+            ' ',
+            isExpanded ? _this4.constants.chevronDown : _this4.constants.chevronRight
+          ),
           isExpanded ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
             null,
@@ -75504,20 +75507,12 @@ var ContextualCollapsible = function (_React$PureComponent) {
 
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
-        null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          {
-            className: 'ContextualCollapsible-root',
-            ref: this._onDropDownMount.bind(this),
-            style: style },
-          this.props.showContextualArrow ? this._renderContextualArrow() : null
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          null,
-          this.props.children
-        )
+        {
+          className: 'ContextualCollapsible-root',
+          ref: this._onDropDownMount.bind(this),
+          style: style },
+        this.props.showContextualArrow ? this._renderContextualArrow() : null,
+        this.props.children
       );
     }
   }, {
@@ -75526,6 +75521,8 @@ var ContextualCollapsible = function (_React$PureComponent) {
       var contextualArrowX = dropDownElement ? dropDownElement.getBoundingClientRect().width / 2 : 0;
       this.setState({ contextualArrowX: contextualArrowX });
     }
+    //TODO: determine if this needs to stay at all (left: values aren't generally useful in the collapsible)
+
   }, {
     key: '_renderContextualArrow',
     value: function _renderContextualArrow() {

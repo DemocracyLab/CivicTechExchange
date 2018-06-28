@@ -133,10 +133,10 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       return <div
         key={i}
         ref={this._onCategoryMount.bind(this, category)}
-        className={classes}
-        onClick={this.expandCategory.bind(this, category)}
+        className={classes}  
       >
-        {category} { } {isExpanded ? this.constants.chevronDown : this.constants.chevronRight}
+      <span onClick={this.expandCategory.bind(this, category)}>
+        {category} { } {isExpanded ? this.constants.chevronDown : this.constants.chevronRight}</span>
         { isExpanded
           ? <ContextualCollapsible>
               { this._renderOptions(this.state.optionCategoryTree[category]) }
