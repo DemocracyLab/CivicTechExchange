@@ -20006,7 +20006,8 @@ var TagCategory = {
   SOFTWARE_LICENSE: "Software License",
   STATUS: "Status",
   TECHNOLOGIES_USED: "Technologies Used",
-  ROLE: "Role"
+  ROLE: "Role",
+  ORGANIZATION: "Organization"
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (TagCategory);
@@ -20172,7 +20173,8 @@ var ProjectSearchStore = function (_ReduceStore) {
           keyword: state.keyword,
           issues: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ISSUES),
           tech: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED),
-          role: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ROLE)
+          role: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ROLE),
+          org: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION)
         }, __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.identity);
 
         state = state.set('findProjectsArgs', _findProjectsArgs);
@@ -20192,6 +20194,7 @@ var ProjectSearchStore = function (_ReduceStore) {
       state = this._addTagFilters(state, findProjectsArgs.issues);
       state = this._addTagFilters(state, findProjectsArgs.role);
       state = this._addTagFilters(state, findProjectsArgs.tech);
+      state = this._addTagFilters(state, findProjectsArgs.org);
       state = this._addKeywordToState(state, findProjectsArgs.keyword);
 
       return state;
@@ -33798,6 +33801,7 @@ var EditProjectForm = function (_React$PureComponent) {
             project_location: project.project_location,
             project_url: project.project_url,
             project_description: project.project_description,
+            project_organization: project.project_organization,
             project_issue_area: project.project_issue_area,
             project_technologies: project.project_technologies,
             project_links: __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.cloneDeep(project.project_links),
@@ -33898,6 +33902,22 @@ var EditProjectForm = function (_React$PureComponent) {
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_url', name: 'project_url', maxLength: '2075',
             value: this.state.formFields.project_url, onChange: this.onFormFieldChange.bind(this, "project_url") })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'label',
+            { htmlFor: 'project_organization' },
+            'Community'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__tags_TagSelector_jsx__["a" /* default */], {
+            elementId: 'project_organization',
+            value: this.state.formFields.project_organization,
+            category: __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION,
+            allowMultiSelect: false,
+            onSelection: this.onTagChange.bind(this, "project_organization")
+          })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
@@ -67513,6 +67533,11 @@ var AboutProjectController = function (_React$PureComponent) {
                         { className: 'col' },
                         project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name
                       )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                      'div',
+                      { className: 'row' },
+                      this._renderProjectCommunity()
                     )
                   )
                 )
@@ -67651,6 +67676,18 @@ var AboutProjectController = function (_React$PureComponent) {
           { className: 'col' },
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('i', { className: 'fa fa-map-marker fa-1', 'aria-hidden': 'true' }),
           this.state.project.project_location
+        );
+      }
+    }
+  }, {
+    key: '_renderProjectCommunity',
+    value: function _renderProjectCommunity() {
+      if (this.state.project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(this.state.project.project_organization)) {
+        return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+          'div',
+          { className: 'col' },
+          'Community: ',
+          this.state.project.project_organization[0].display_name
         );
       }
     }
@@ -74542,7 +74579,7 @@ var FindProjectsController = function (_React$PureComponent) {
     key: 'componentWillMount',
     value: function componentWillMount() {
       var args = __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].arguments(document.location.search);
-      args = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.pick(args, ['keyword', 'issues', 'tech', 'role']);
+      args = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.pick(args, ['keyword', 'issues', 'tech', 'role', 'org']);
       __WEBPACK_IMPORTED_MODULE_0__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({ type: 'INIT', findProjectsArgs: !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(args) ? args : null });
       __WEBPACK_IMPORTED_MODULE_1__stores_TagDispatcher_js__["a" /* default */].dispatch({ type: 'INIT' });
     }
@@ -75103,7 +75140,8 @@ var ProjectFilterContainer = function (_React$PureComponent) {
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ISSUES, title: "Issue Areas" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED, title: "Technology Used" }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ROLE, title: "Roles Needed" })
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ROLE, title: "Roles Needed" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION, title: "Communities" })
       );
     }
   }]);
@@ -75521,7 +75559,7 @@ var ContextualCollapsible = function (_React$PureComponent) {
       var contextualArrowX = dropDownElement ? dropDownElement.getBoundingClientRect().width / 2 : 0;
       this.setState({ contextualArrowX: contextualArrowX });
     }
-    //TODO: determine if this needs to stay at all (left: values aren't generally useful in the collapsible)
+    //TODO: determine if this style needs to stay at all (left: values aren't generally useful in the collapsible)
 
   }, {
     key: '_renderContextualArrow',

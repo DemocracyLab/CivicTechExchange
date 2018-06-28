@@ -24,6 +24,7 @@ type FormFields = {|
   project_location: ?string,
   project_url: ?string,
   project_description: ?string,
+  project_organization?: Array<TagDefinition>,
   project_issue_area?: Array<TagDefinition>,
   project_technologies?: Array<TagDefinition>,
   project_positions?: Array<PositionInfo>,
@@ -97,6 +98,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_location: project.project_location,
           project_url: project.project_url,
           project_description: project.project_description,
+          project_organization: project.project_organization,
           project_issue_area: project.project_issue_area,
           project_technologies: project.project_technologies,
           project_links: _.cloneDeep(project.project_links),
@@ -169,6 +171,17 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           <label htmlFor="project_url">Website URL</label>
           <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
                  value={this.state.formFields.project_url} onChange={this.onFormFieldChange.bind(this, "project_url")}/>
+        </div>
+  
+        <div className="form-group">
+          <label htmlFor="project_organization">Community</label>
+          <TagSelector
+            elementId="project_organization"
+            value={this.state.formFields.project_organization}
+            category={TagCategory.ORGANIZATION}
+            allowMultiSelect={false}
+            onSelection={this.onTagChange.bind(this, "project_organization")}
+          />
         </div>
         
         <div className="form-group">

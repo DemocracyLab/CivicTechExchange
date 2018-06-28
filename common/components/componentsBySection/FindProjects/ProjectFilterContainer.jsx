@@ -14,6 +14,7 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
         <TagSelectorCollapsible category={TagCategory.ISSUES} title="Issue Areas" />
         <TagSelectorCollapsible category={TagCategory.TECHNOLOGIES_USED} title="Technology Used" />
         <TagSelectorCollapsible category={TagCategory.ROLE} title="Roles Needed" />
+        <TagSelectorCollapsible category={TagCategory.ORGANIZATION} title="Communities" />
       </div>
     );
   }
