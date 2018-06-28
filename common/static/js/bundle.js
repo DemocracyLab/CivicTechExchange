@@ -33841,11 +33841,6 @@ var EditProjectForm = function (_React$PureComponent) {
             { name: 'project_location', id: 'project_location', className: 'form-control', value: this.state.formFields.project_location, onChange: this.onFormFieldChange.bind(this, "project_location") },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'option',
-              { value: this.state.formFields.project_location },
-              this.state.formFields.project_location
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'option',
               { value: 'Redmond, WA' },
               'Redmond, WA'
             ),

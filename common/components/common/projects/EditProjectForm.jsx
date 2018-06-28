@@ -169,7 +169,6 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <div className="form-group">
           <label htmlFor="project_location">Project Location</label>
           <select name="project_location" id="project_location" className="form-control" value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}>
-            <option value={this.state.formFields.project_location}>{this.state.formFields.project_location}</option>
             <option value="Redmond, WA">Redmond, WA</option>
             <option value="Kirkland, WA">Kirkland, WA</option>
             <option value="Bellevue, WA">Bellevue, WA</option>
