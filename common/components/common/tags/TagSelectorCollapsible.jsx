@@ -96,7 +96,7 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
 
   _tagEnabled(tag: TagDefinition): boolean {
     //return true if tag is in this.state.selectedTags, else implicitly false
-    _.has(this.state.selectedTags, tag.tag_name)
+    return _.has(this.state.selectedTags, tag.tag_name)
   }
 
   _displayTag(tag: TagDefinition): string {

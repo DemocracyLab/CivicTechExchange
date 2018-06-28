@@ -75263,7 +75263,7 @@ var TagSelectorCollapsible = function (_React$Component) {
     key: '_tagEnabled',
     value: function _tagEnabled(tag) {
       //return true if tag is in this.state.selectedTags, else implicitly false
-      __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.has(this.state.selectedTags, tag.tag_name);
+      return __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.has(this.state.selectedTags, tag.tag_name);
     }
   }, {
     key: '_displayTag',
@@ -75431,7 +75431,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
             key: i,
             className: classes
           },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', value: i, checked: _this3.props.optionEnabled, onChange: function onChange() {
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', checked: _this3.props.optionEnabled(option), onChange: function onChange() {
               return _this3.selectOption(option);
             } }),
           _this3.props.optionDisplay(option)

@@ -119,7 +119,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       return <label
         key={i}
         className={classes}
-        ><input type="checkbox" value={i} checked={this.props.optionEnabled} onChange={() => this.selectOption(option)}></input>
+        ><input type="checkbox" checked={this.props.optionEnabled(option)} onChange={() => this.selectOption(option)}></input>
         {this.props.optionDisplay(option)}
       </label>
     });
