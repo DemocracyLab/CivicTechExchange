@@ -2,7 +2,7 @@
   cursor: pointer;
 }
 
-.CollapsibleCategoryItem-root:hover, .CollapsibleMenuItem:hover {
+.CollapsibleMenuItem:hover {
   color: white;
   background-color: #61892f;
 }

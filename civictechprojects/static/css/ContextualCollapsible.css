@@ -19,3 +19,10 @@
   transform: rotate(45deg);
   width: 10px;
 }
+
+.CollapsibleCategoryContainer, .CollapsibleCategoryHeader {
+  cursor: pointer;
+}
+.CollapsibleCategoryHeader {
+  font-size: 1.2rem;
+}

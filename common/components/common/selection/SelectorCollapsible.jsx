@@ -93,8 +93,8 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
 
   render(): React$Node {
     return (
-      <span style={{cursor: 'pointer'}}>
-        <span onClick={() => this.isReady() && this.setState({showDropdown: !this.state.showDropdown})}>
+      <span className="CollapsibleCategoryContainer">
+        <span className="CollapsibleCategoryHeader" onClick={() => this.isReady() && this.setState({showDropdown: !this.state.showDropdown})}>
           {this.props.title} {' '}
           {this._renderChevron()}
         </span>

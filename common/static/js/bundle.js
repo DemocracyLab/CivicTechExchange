@@ -75393,10 +75393,10 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'span',
-        { style: { cursor: 'pointer' } },
+        { className: 'CollapsibleCategoryContainer' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'span',
-          { onClick: function onClick() {
+          { className: 'CollapsibleCategoryHeader', onClick: function onClick() {
               return _this2.isReady() && _this2.setState({ showDropdown: !_this2.state.showDropdown });
             } },
           this.props.title,
