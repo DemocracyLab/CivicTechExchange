@@ -4,6 +4,7 @@ import ProjectSearchDispatcher from '../stores/ProjectSearchDispatcher.js';
 import TagDispatcher from '../stores/TagDispatcher.js';
 import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
 import ProjectSearchContainer from '../componentsBySection/FindProjects/ProjectSearchContainer.jsx';
+import ProjectFilterContainer from '../componentsBySection/FindProjects/ProjectFilterContainer.jsx';
 import {FindProjectsArgs} from "../stores/ProjectSearchStore.js";
 import urls from "../utils/url.js";
 import React from 'react';
@@ -22,6 +23,7 @@ class FindProjectsController extends React.PureComponent<{||}> {
     return (
       <div className="FindProjectsController-root">
         <ProjectSearchContainer />
+        <ProjectFilterContainer />
         <ProjectCardsContainer />
       </div>
     );

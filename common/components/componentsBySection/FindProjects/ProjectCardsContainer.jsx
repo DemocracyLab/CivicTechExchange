@@ -14,25 +14,25 @@ type State = {|
 |};
 
 class ProjectCardsContainer extends React.Component<{||}, State> {
-  
+
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [ProjectSearchStore];
   }
-  
+
   static calculateState(prevState: State): State {
     return {
       projects: ProjectSearchStore.getProjects(),
     };
   }
-  
+
   render(): React$Node {
     return (
-      <div>
+      <div className="ProjectCardContainer">
         {this._renderCards()}
       </div>
     );
   }
-  
+
   _renderCards(): React$Node {
     return !this.state.projects
       ? 'Loading projects ...'
