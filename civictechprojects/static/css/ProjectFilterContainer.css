@@ -4,6 +4,7 @@
   padding: 10px;
   width: 280px;
   margin-right: 10px;
+  /* add total width of content + padding + margin for ProjectCard container */
   display: inline-block;
   min-height: 100%;
   vertical-align: top;
@@ -11,7 +12,7 @@
 
 .ProjectFilterContainer-label {
   color: #727272;
-  font-size: 12px;
+  font-size: 16px;
   margin-right: 50px;
   margin-top: 2px;
   width: 100%;
