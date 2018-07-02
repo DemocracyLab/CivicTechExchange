@@ -26,3 +26,6 @@
 .CollapsibleCategoryHeader {
   font-size: 1.2rem;
 }
+.CollapsibleCategoryHeader, .CollapsibleCategorySubheader {
+  font-weight: bold;
+}

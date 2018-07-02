@@ -75687,7 +75687,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
           },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'span',
-            { onClick: _this4.expandCategory.bind(_this4, category) },
+            { className: 'CollapsibleCategorySubheader', onClick: _this4.expandCategory.bind(_this4, category) },
             category,
             ' ',
             ' ',
