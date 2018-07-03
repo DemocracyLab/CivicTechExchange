@@ -12,6 +12,7 @@ import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 import _ from 'lodash'
 
 import React from 'react';
+import {Locations} from "../constants/ProjectConstants.js";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -171,7 +172,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
   
   _renderProjectLocation(): React$Node {
-    if(this.state.project && this.state.project.project_location && (this.state.project.project_location!='Other')) {
+    if(this.state.project && this.state.project.project_location && (this.state.project.project_location !== Locations.OTHER)) {
       return <div className="col">
         <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
         {this.state.project.project_location}

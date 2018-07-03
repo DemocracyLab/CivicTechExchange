@@ -5,6 +5,7 @@ import type {Project} from '../../stores/ProjectSearchStore.js';
 import React from 'react';
 import Section from '../../../components/enums/Section.js';
 import url from '../../utils/url.js';
+import {Locations} from "../../constants/ProjectConstants.js";
 
 type Props = {|
   +project: Project,
@@ -42,7 +43,7 @@ class ProjectCard extends React.PureComponent<Props> {
 
   _renderName(): React$Node {
     return (
-      <div class="borderbottom">
+      <div className="borderbottom">
         <div className="ProjectCard-name" >
           <div>
             <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
@@ -63,9 +64,9 @@ class ProjectCard extends React.PureComponent<Props> {
           )
         }
         { 
-          (this.props.project.location!='Other')
+          (this.props.project.location !== Locations.OTHER)
           ? this._renderLabelAndValue('Location: ', this.props.project.location)
-          : this._renderLabelAndValue('Location: ', '')
+          : this._renderLabelAndValue('Location: ', null)
         }
       </div>
     );
@@ -78,7 +79,7 @@ class ProjectCard extends React.PureComponent<Props> {
             {label}
           </span>
           <span className="ProjectCard-value">
-            {value}
+            {value ? value : null}
           </span>
         </div>
       );
