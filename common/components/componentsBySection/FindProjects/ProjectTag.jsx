@@ -27,7 +27,7 @@ class ProjectTag extends React.PureComponent<Props> {
         onClick={() => {
           ProjectSearchDispatcher.dispatch({
             type: 'REMOVE_TAG',
-            tag: this.props.tag.tag_name,
+            tag: this.props.tag,
           })}
         }>
         ×

@@ -22,6 +22,10 @@ class TaggedTechnologies(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
 
+class TaggedOrganization(TaggedItemBase):
+    content_object = models.ForeignKey('Project')
+
+
 class Project(models.Model):
     project_volunteers = models.ManyToManyField(
         Contributor,
@@ -35,6 +39,8 @@ class Project(models.Model):
     project_issue_area.remote_field.related_name = "+"
     project_technologies = TaggableManager(blank=True, through=TaggedTechnologies)
     project_technologies.remote_field.related_name = "+"
+    project_organization = TaggableManager(blank=True, through=TaggedOrganization)
+    project_organization.remote_field.related_name = "+"
     project_location = models.CharField(max_length=200)
     project_name = models.CharField(max_length=200)
     project_url = models.CharField(max_length=2083, blank=True)
@@ -59,6 +65,7 @@ class Project(models.Model):
             'project_description': self.project_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
+            'project_organization': Tag.hydrate_to_json(self.id, list(self.project_organization.all().values())),
             'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
             'project_technologies': Tag.hydrate_to_json(self.id, list(self.project_technologies.all().values())),
             'project_positions': list(map(lambda position: position.to_json(), positions)),

@@ -4,12 +4,17 @@ import ProjectSearchDispatcher from '../stores/ProjectSearchDispatcher.js';
 import TagDispatcher from '../stores/TagDispatcher.js';
 import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
 import ProjectSearchContainer from '../componentsBySection/FindProjects/ProjectSearchContainer.jsx';
+import {FindProjectsArgs} from "../stores/ProjectSearchStore.js";
+import urls from "../utils/url.js";
 import React from 'react';
+import _ from 'lodash'
 
 class FindProjectsController extends React.PureComponent<{||}> {
 
   componentWillMount(): void {
-    ProjectSearchDispatcher.dispatch({type: 'INIT'});
+    let args: FindProjectsArgs = urls.arguments(document.location.search);
+    args = _.pick(args, ['keyword','issues','tech', 'role', 'org']);
+    ProjectSearchDispatcher.dispatch({type: 'INIT', findProjectsArgs: !_.isEmpty(args) ? args : null});
     TagDispatcher.dispatch({type: 'INIT'});
   }
 

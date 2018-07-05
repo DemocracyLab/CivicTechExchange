@@ -7,7 +7,8 @@ const TagCategory = {
   SOFTWARE_LICENSE: "Software License",
   STATUS: "Status",
   TECHNOLOGIES_USED: "Technologies Used",
-  ROLE: "Role"
+  ROLE: "Role",
+  ORGANIZATION: "Organization"
 };
 
 export default TagCategory;

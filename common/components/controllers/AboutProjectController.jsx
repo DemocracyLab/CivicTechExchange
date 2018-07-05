@@ -77,6 +77,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                         {project && !_.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name}
                       </div>
                     </div>
+                    <div className="row">
+                      {this._renderProjectCommunity()}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -176,6 +179,14 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       return <div className="col">
         <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
         {this.state.project.project_location}
+      </div>
+    }
+  }
+  
+  _renderProjectCommunity(): React$Node {
+    if(this.state.project && !_.isEmpty(this.state.project.project_organization)) {
+      return <div className="col">
+        Community: {this.state.project.project_organization[0].display_name}
       </div>
     }
   }
