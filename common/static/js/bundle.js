@@ -74590,12 +74590,13 @@ var EditProjectController = function (_React$PureComponent) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stores_TagDispatcher_js__ = __webpack_require__(388);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__componentsBySection_FindProjects_ProjectCardsContainer_jsx__ = __webpack_require__(389);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__componentsBySection_FindProjects_ProjectSearchContainer_jsx__ = __webpack_require__(391);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchStore_js__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_url_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__componentsBySection_FindProjects_ProjectFilterContainer_jsx__ = __webpack_require__(395);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchStore_js__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_url_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_lodash__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -74603,6 +74604,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -74625,25 +74627,26 @@ var FindProjectsController = function (_React$PureComponent) {
   _createClass(FindProjectsController, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
-      var args = __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].arguments(document.location.search);
-      args = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.pick(args, ['keyword', 'issues', 'tech', 'role', 'org']);
-      __WEBPACK_IMPORTED_MODULE_0__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({ type: 'INIT', findProjectsArgs: !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(args) ? args : null });
+      var args = __WEBPACK_IMPORTED_MODULE_6__utils_url_js__["a" /* default */].arguments(document.location.search);
+      args = __WEBPACK_IMPORTED_MODULE_8_lodash___default.a.pick(args, ['keyword', 'issues', 'tech', 'role', 'org']);
+      __WEBPACK_IMPORTED_MODULE_0__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({ type: 'INIT', findProjectsArgs: !__WEBPACK_IMPORTED_MODULE_8_lodash___default.a.isEmpty(args) ? args : null });
       __WEBPACK_IMPORTED_MODULE_1__stores_TagDispatcher_js__["a" /* default */].dispatch({ type: 'INIT' });
     }
   }, {
     key: 'render',
     value: function render() {
-      return __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
+      return __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
         'div',
         { className: 'FindProjectsController-root' },
-        __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__componentsBySection_FindProjects_ProjectSearchContainer_jsx__["a" /* default */], null),
-        __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__componentsBySection_FindProjects_ProjectCardsContainer_jsx__["a" /* default */], null)
+        __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__componentsBySection_FindProjects_ProjectSearchContainer_jsx__["a" /* default */], null),
+        __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__componentsBySection_FindProjects_ProjectFilterContainer_jsx__["a" /* default */], null),
+        __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__componentsBySection_FindProjects_ProjectCardsContainer_jsx__["a" /* default */], null)
       );
     }
   }]);
 
   return FindProjectsController;
-}(__WEBPACK_IMPORTED_MODULE_6_react___default.a.PureComponent);
+}(__WEBPACK_IMPORTED_MODULE_7_react___default.a.PureComponent);
 
 /* harmony default export */ __webpack_exports__["a"] = (FindProjectsController);
 
@@ -74940,7 +74943,7 @@ var ProjectCardsContainer = function (_React$Component) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
         'div',
-        null,
+        { className: 'ProjectCardContainer' },
         this._renderCards()
       );
     }
@@ -75096,11 +75099,10 @@ var ProjectCard = function (_React$PureComponent) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ProjectFilterContainer_jsx__ = __webpack_require__(392);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ProjectTagContainer_jsx__ = __webpack_require__(396);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ProjectSearchBar_jsx__ = __webpack_require__(398);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ProjectTagContainer_jsx__ = __webpack_require__(392);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ProjectSearchBar_jsx__ = __webpack_require__(394);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -75108,7 +75110,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 
 
 
@@ -75126,23 +75127,22 @@ var ProjectSearchContainer = function (_React$PureComponent) {
   _createClass(ProjectSearchContainer, [{
     key: 'render',
     value: function render() {
-      return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
+      return __WEBPACK_IMPORTED_MODULE_2_react___default.a.createElement(
         'div',
         null,
-        __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
+        __WEBPACK_IMPORTED_MODULE_2_react___default.a.createElement(
           'p',
           null,
           'Welcome to DemocracyLab! Use the filters and search bar below to find tech-for-good projects in Seattle.'
         ),
-        __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ProjectSearchBar_jsx__["a" /* default */], null),
-        __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__ProjectTagContainer_jsx__["a" /* default */], null),
-        __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_0__ProjectFilterContainer_jsx__["a" /* default */], null)
+        __WEBPACK_IMPORTED_MODULE_2_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__ProjectSearchBar_jsx__["a" /* default */], null),
+        __WEBPACK_IMPORTED_MODULE_2_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_0__ProjectTagContainer_jsx__["a" /* default */], null)
       );
     }
   }]);
 
   return ProjectSearchContainer;
-}(__WEBPACK_IMPORTED_MODULE_3_react___default.a.PureComponent);
+}(__WEBPACK_IMPORTED_MODULE_2_react___default.a.PureComponent);
 
 /* harmony default export */ __webpack_exports__["a"] = (ProjectSearchContainer);
 
@@ -75151,484 +75151,12 @@ var ProjectSearchContainer = function (_React$PureComponent) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__ = __webpack_require__(393);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__ = __webpack_require__(54);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
-
-
-var ProjectFilterContainer = function (_React$PureComponent) {
-  _inherits(ProjectFilterContainer, _React$PureComponent);
-
-  function ProjectFilterContainer() {
-    _classCallCheck(this, ProjectFilterContainer);
-
-    return _possibleConstructorReturn(this, (ProjectFilterContainer.__proto__ || Object.getPrototypeOf(ProjectFilterContainer)).apply(this, arguments));
-  }
-
-  _createClass(ProjectFilterContainer, [{
-    key: "render",
-    value: function render() {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "div",
-        { className: "ProjectFilterContainer-root" },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "div",
-          { className: "ProjectFilterContainer-label" },
-          "Filter By:"
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ISSUES, title: "Issue Areas" }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED, title: "Technology Used" }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ROLE, title: "Roles Needed" }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorDropdown_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION, title: "Communities" })
-      );
-    }
-  }]);
-
-  return ProjectFilterContainer;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent);
-
-/* harmony default export */ __webpack_exports__["a"] = (ProjectFilterContainer);
-
-/***/ }),
-/* 393 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_flux_utils__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_flux_utils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_flux_utils__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__selection_SelectorDropdown_jsx__ = __webpack_require__(394);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchStore_js__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_metrics__ = __webpack_require__(165);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash__);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
-
-
-
-
-
-
-
-
-/**
- * @category: Tag category to pull from
- * @title: Title of the dropdown
- */
-
-/**
- * Dropdown selector for tags
- */
-var TagSelectorDropdown = function (_React$Component) {
-  _inherits(TagSelectorDropdown, _React$Component);
-
-  function TagSelectorDropdown(props) {
-    _classCallCheck(this, TagSelectorDropdown);
-
-    var _this = _possibleConstructorReturn(this, (TagSelectorDropdown.__proto__ || Object.getPrototypeOf(TagSelectorDropdown)).call(this, props));
-
-    _this.state = { tags: null };
-
-    // TODO: Use Flux to get tags in a single request
-    __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].fetchTagsByCategory(_this.props.category, function (tags) {
-      _this.setState({
-        tags: tags,
-        hasSubcategories: __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.every(tags, function (tag) {
-          return !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(tag.subcategory);
-        })
-      });
-    });
-    _this._displayTag = _this._displayTag.bind(_this);
-    _this._tagEnabled = _this._tagEnabled.bind(_this);
-    return _this;
-  }
-
-  _createClass(TagSelectorDropdown, [{
-    key: 'selectTag',
-    value: function selectTag(tag) {
-      __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
-        type: 'ADD_TAG',
-        tag: tag.tag_name
-      });
-      __WEBPACK_IMPORTED_MODULE_6__utils_metrics__["a" /* default */].addTagFilterEvent(tag);
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        null,
-        this.state.tags ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__selection_SelectorDropdown_jsx__["a" /* default */], {
-          title: this.props.title,
-          options: this.state.tags,
-          optionCategory: this.state.hasSubcategories && function (tag) {
-            return tag.subcategory;
-          },
-          optionDisplay: function optionDisplay(tag) {
-            return _this2._displayTag(tag);
-          },
-          optionEnabled: function optionEnabled(tag) {
-            return _this2._tagEnabled(tag);
-          },
-          onOptionSelect: this.selectTag.bind(this)
-        }) : null
-      );
-    }
-  }, {
-    key: '_tagEnabled',
-    value: function _tagEnabled(tag) {
-      // Disable tags that are already selected
-      return !this.state.selectedTags || !this.state.selectedTags[tag.tag_name];
-    }
-  }, {
-    key: '_displayTag',
-    value: function _displayTag(tag) {
-      // const tagCount: number = this.state.tagCounts[tag.tag_name] || 0;
-      // let tagDisplay: string = tag.display_name;
-      // if(tagCount > 0) {
-      //   tagDisplay += " (" + tagCount + ")";
-      // }
-      // return tagDisplay;
-      return tag.display_name;
-    }
-  }], [{
-    key: 'getStores',
-    value: function getStores() {
-      return [__WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchStore_js__["a" /* default */]];
-    }
-  }, {
-    key: 'calculateState',
-    value: function calculateState(prevState) {
-      return {
-        selectedTags: __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.mapKeys(__WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchStore_js__["a" /* default */].getTags().toArray(), function (tag) {
-          return tag.tag_name;
-        })
-      };
-    }
-  }]);
-
-  return TagSelectorDropdown;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1_flux_utils__["Container"].create(TagSelectorDropdown));
-
-/***/ }),
-/* 394 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_ContextualDropdown_jsx__ = __webpack_require__(395);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash__);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
-
-
-/**
- * @title: Title of the dropdown
- * @options: List of options that dropdown selector displays
- * @optionCategory: Selector for categorizing options (Turns into a 2-level selector)
- * @optionEnabled: Determines whether any given option is selectable
- * @optionDisplay: How to display option
- * @onOptionSelect: Callback for when option is selected
- */
-
-/**
- * Generic dropdown selector that supports either 1 or 2 levels
- */
-var SelectorDropdown = function (_React$PureComponent) {
-  _inherits(SelectorDropdown, _React$PureComponent);
-
-  function SelectorDropdown(props) {
-    _classCallCheck(this, SelectorDropdown);
-
-    var _this = _possibleConstructorReturn(this, (SelectorDropdown.__proto__ || Object.getPrototypeOf(SelectorDropdown)).call(this));
-
-    var constants = {
-      chevronRight: '\u25B8',
-      chevronDown: '\u25BE',
-      width: 185
-    };
-    _this.constants = constants;
-
-    _this.state = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.assign({
-      chevronX: 0,
-      showDropdown: false,
-      optionFlatList: null,
-      optionCategoryTree: null,
-      optionCategoryCoords: {}
-    }, _this.initializeOptions(props));
-
-    _this.isReady = _this.isReady.bind(_this);
-    _this.selectOption = _this.selectOption.bind(_this);
-    return _this;
-  }
-
-  _createClass(SelectorDropdown, [{
-    key: 'initializeOptions',
-    value: function initializeOptions(props) {
-      if (!__WEBPACK_IMPORTED_MODULE_2_lodash___default.a.isEmpty(props.options)) {
-        if (props.optionCategory && __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.some(props.options, props.optionCategory)) {
-          return { optionCategoryTree: __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.groupBy(props.options, props.optionCategory) };
-        } else {
-          return { optionFlatList: props.options };
-        }
-      }
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState(this.initializeOptions(nextProps));
-    }
-  }, {
-    key: 'isReady',
-    value: function isReady() {
-      return this.state.optionFlatList || this.state.optionCategoryTree;
-    }
-  }, {
-    key: 'expandCategory',
-    value: function expandCategory(category) {
-      this.setState({
-        categoryShown: this.state.categoryShown !== category ? category : null
-      });
-    }
-  }, {
-    key: 'selectOption',
-    value: function selectOption(option) {
-      this.props.onOptionSelect(option);
-      this.setState({ showDropdown: false });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        'span',
-        { style: { cursor: 'pointer' } },
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'span',
-          { onClick: function onClick() {
-              return _this2.isReady() && _this2.setState({ showDropdown: !_this2.state.showDropdown });
-            } },
-          this.props.title,
-          ' ',
-          ' ',
-          this._renderChevron()
-        ),
-        this.state.showDropdown ? this._renderDropdown() : null
-      );
-    }
-  }, {
-    key: '_renderDropdown',
-    value: function _renderDropdown() {
-      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_0__common_ContextualDropdown_jsx__["a" /* default */],
-        { showContextualArrow: true, xPos: this.state.chevronX },
-        this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList)
-      );
-    }
-  }, {
-    key: '_renderOptions',
-    value: function _renderOptions(options) {
-      var _this3 = this;
-
-      var sortedOptions = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.sortBy(options, this.props.optionDisplay);
-
-      return sortedOptions.map(function (option, i) {
-        var enabled = _this3.props.optionEnabled(option);
-        var classes = "DropDownMenuItem-root " + (enabled ? "enabled" : "disabled");
-        return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'div',
-          {
-            key: i,
-            className: classes,
-            onClick: function onClick() {
-              return enabled && _this3.selectOption(option);
-            }
-          },
-          _this3.props.optionDisplay(option)
-        );
-      });
-    }
-  }, {
-    key: '_renderCategories',
-    value: function _renderCategories() {
-      var _this4 = this;
-
-      return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).sort().map(function (category, i) {
-        var isExpanded = category === _this4.state.categoryShown;
-        var hasEnabledItems = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.some(_this4.state.optionCategoryTree[category], _this4.props.optionEnabled);
-        var classes = "DropDownCategoryItem-root" + (isExpanded ? "" : " unselected") + (hasEnabledItems ? "" : " disabled");
-        return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'div',
-          {
-            key: i,
-            ref: _this4._onCategoryMount.bind(_this4, category),
-            className: classes,
-            onClick: _this4.expandCategory.bind(_this4, category)
-          },
-          category,
-          ' ',
-          ' ',
-          isExpanded ? _this4.constants.chevronDown : _this4.constants.chevronRight,
-          isExpanded ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_0__common_ContextualDropdown_jsx__["a" /* default */],
-            { xPos: _this4.state.optionCategoryCoords[category].width, yPos: -_this4.state.optionCategoryCoords[category].height },
-            _this4._renderOptions(_this4.state.optionCategoryTree[category])
-          ) : null
-        );
-      });
-    }
-  }, {
-    key: '_renderChevron',
-    value: function _renderChevron() {
-      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        'span',
-        {
-          ref: this._onChevronMount.bind(this) },
-        this.constants.chevronDown
-      );
-    }
-  }, {
-    key: '_onCategoryMount',
-    value: function _onCategoryMount(category, categoryElement) {
-      if (categoryElement) {
-        this.state.optionCategoryCoords[category] = categoryElement.getBoundingClientRect();
-      }
-    }
-  }, {
-    key: '_onChevronMount',
-    value: function _onChevronMount(chevronElement) {
-      var chevronX = chevronElement ? chevronElement.getBoundingClientRect().left - this.constants.width / 2 : 0;
-      this.setState({ chevronX: chevronX });
-    }
-  }]);
-
-  return SelectorDropdown;
-}(__WEBPACK_IMPORTED_MODULE_1_react___default.a.PureComponent);
-
-/* harmony default export */ __webpack_exports__["a"] = (SelectorDropdown);
-
-/***/ }),
-/* 395 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
-
-var ContextualDropdown = function (_React$PureComponent) {
-  _inherits(ContextualDropdown, _React$PureComponent);
-
-  function ContextualDropdown() {
-    _classCallCheck(this, ContextualDropdown);
-
-    var _this = _possibleConstructorReturn(this, (ContextualDropdown.__proto__ || Object.getPrototypeOf(ContextualDropdown)).call(this));
-
-    _this.state = {
-      contextualArrowX: 0
-    };
-    return _this;
-  }
-
-  _createClass(ContextualDropdown, [{
-    key: 'render',
-    value: function render() {
-      var style = __WEBPACK_IMPORTED_MODULE_1_lodash___default.a.pickBy({
-        left: this.props.xPos,
-        top: this.props.yPos
-      }, __WEBPACK_IMPORTED_MODULE_1_lodash___default.a.identity);
-
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        {
-          className: 'ContextualDropdown-root',
-          ref: this._onDropDownMount.bind(this),
-          style: style },
-        this.props.showContextualArrow ? this._renderContextualArrow() : null,
-        this.props.children
-      );
-    }
-  }, {
-    key: '_onDropDownMount',
-    value: function _onDropDownMount(dropDownElement) {
-      var contextualArrowX = dropDownElement ? dropDownElement.getBoundingClientRect().width / 2 : 0;
-      this.setState({ contextualArrowX: contextualArrowX });
-    }
-  }, {
-    key: '_renderContextualArrow',
-    value: function _renderContextualArrow() {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', {
-        className: 'ContextualDropdown-contextualArrow',
-        style: { left: this.state.contextualArrowX }
-      });
-    }
-  }]);
-
-  return ContextualDropdown;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent);
-
-/* harmony default export */ __webpack_exports__["a"] = (ContextualDropdown);
-
-/***/ }),
-/* 396 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_immutable__ = __webpack_require__(78);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_immutable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_immutable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_flux_utils__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_flux_utils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_flux_utils__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stores_ProjectSearchStore_js__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ProjectTag_jsx__ = __webpack_require__(397);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ProjectTag_jsx__ = __webpack_require__(393);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_react__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -75689,7 +75217,7 @@ var ProjectTagContainer = function (_React$Component) {
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1_flux_utils__["Container"].create(ProjectTagContainer));
 
 /***/ }),
-/* 397 */
+/* 393 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -75755,7 +75283,7 @@ var ProjectTag = function (_React$PureComponent) {
 /* harmony default export */ __webpack_exports__["a"] = (ProjectTag);
 
 /***/ }),
-/* 398 */
+/* 394 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -75849,6 +75377,483 @@ var ProjectSearchBar = function (_React$Component) {
 }(__WEBPACK_IMPORTED_MODULE_3_react___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_flux_utils__["Container"].create(ProjectSearchBar));
+
+/***/ }),
+/* 395 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__ = __webpack_require__(396);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__ = __webpack_require__(54);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+var ProjectFilterContainer = function (_React$PureComponent) {
+  _inherits(ProjectFilterContainer, _React$PureComponent);
+
+  function ProjectFilterContainer() {
+    _classCallCheck(this, ProjectFilterContainer);
+
+    return _possibleConstructorReturn(this, (ProjectFilterContainer.__proto__ || Object.getPrototypeOf(ProjectFilterContainer)).apply(this, arguments));
+  }
+
+  _createClass(ProjectFilterContainer, [{
+    key: "render",
+    value: function render() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        "div",
+        { className: "ProjectFilterContainer-root" },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "div",
+          { className: "ProjectFilterContainer-label" },
+          "Filter By:"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ISSUES, title: "Issue Areas" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED, title: "Technology Used" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ROLE, title: "Roles Needed" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_2__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION, title: "Communities" })
+      );
+    }
+  }]);
+
+  return ProjectFilterContainer;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent);
+
+/* harmony default export */ __webpack_exports__["a"] = (ProjectFilterContainer);
+
+/***/ }),
+/* 396 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_flux_utils__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_flux_utils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_flux_utils__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__selection_SelectorCollapsible_jsx__ = __webpack_require__(397);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchStore_js__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_metrics__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @category: Tag category to pull from
+ * @title: Title of the dropdown
+ */
+
+/**
+ * Dropdown selector for tags
+ */
+var TagSelectorCollapsible = function (_React$Component) {
+  _inherits(TagSelectorCollapsible, _React$Component);
+
+  function TagSelectorCollapsible(props) {
+    _classCallCheck(this, TagSelectorCollapsible);
+
+    var _this = _possibleConstructorReturn(this, (TagSelectorCollapsible.__proto__ || Object.getPrototypeOf(TagSelectorCollapsible)).call(this, props));
+
+    _this.state = { tags: null };
+
+    // TODO: Use Flux to get tags in a single request
+    __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].fetchTagsByCategory(_this.props.category, function (tags) {
+      _this.setState({
+        tags: tags,
+        hasSubcategories: __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.every(tags, function (tag) {
+          return !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(tag.subcategory);
+        })
+      });
+    });
+    _this._displayTag = _this._displayTag.bind(_this);
+    _this._tagEnabled = _this._tagEnabled.bind(_this);
+    return _this;
+  }
+
+  _createClass(TagSelectorCollapsible, [{
+    key: 'selectTag',
+    value: function selectTag(tag) {
+      var tagInState = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.has(this.state.selectedTags, tag.tag_name);
+      //if tag is NOT currently in state, add it, otherwise remove
+      if (!tagInState) {
+        __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
+          type: 'ADD_TAG',
+          tag: tag.tag_name
+        });
+        __WEBPACK_IMPORTED_MODULE_6__utils_metrics__["a" /* default */].addTagFilterEvent(tag);
+      } else {
+        __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
+          type: 'REMOVE_TAG',
+          tag: tag
+        });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        null,
+        this.state.tags ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__selection_SelectorCollapsible_jsx__["a" /* default */], {
+          title: this.props.title,
+          options: this.state.tags,
+          optionCategory: this.state.hasSubcategories && function (tag) {
+            return tag.subcategory;
+          },
+          optionDisplay: function optionDisplay(tag) {
+            return _this2._displayTag(tag);
+          },
+          optionEnabled: function optionEnabled(tag) {
+            return _this2._tagEnabled(tag);
+          },
+          onOptionSelect: this.selectTag.bind(this)
+        }) : null
+      );
+    }
+  }, {
+    key: '_tagEnabled',
+    value: function _tagEnabled(tag) {
+      //return true if tag is in this.state.selectedTags, else implicitly false
+      return __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.has(this.state.selectedTags, tag.tag_name);
+    }
+  }, {
+    key: '_displayTag',
+    value: function _displayTag(tag) {
+      return tag.display_name;
+    }
+  }], [{
+    key: 'getStores',
+    value: function getStores() {
+      return [__WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchStore_js__["a" /* default */]];
+    }
+  }, {
+    key: 'calculateState',
+    value: function calculateState(prevState) {
+      return {
+        selectedTags: __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.mapKeys(__WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchStore_js__["a" /* default */].getTags().toArray(), function (tag) {
+          return tag.tag_name;
+        })
+      };
+    }
+  }]);
+
+  return TagSelectorCollapsible;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1_flux_utils__["Container"].create(TagSelectorCollapsible));
+
+/***/ }),
+/* 397 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__ = __webpack_require__(398);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+/**
+ * @title: Title of the dropdown
+ * @options: List of options that dropdown selector displays
+ * @optionCategory: Selector for categorizing options (Turns into a 2-level selector)
+ * @optionEnabled: Determines whether any given option is selectable
+ * @optionDisplay: How to display option
+ * @onOptionSelect: Callback for when option is selected
+ */
+
+/**
+ * Generic dropdown selector that supports either 1 or 2 levels
+ */
+var SelectorCollapsible = function (_React$PureComponent) {
+  _inherits(SelectorCollapsible, _React$PureComponent);
+
+  function SelectorCollapsible(props) {
+    _classCallCheck(this, SelectorCollapsible);
+
+    var _this = _possibleConstructorReturn(this, (SelectorCollapsible.__proto__ || Object.getPrototypeOf(SelectorCollapsible)).call(this));
+
+    var constants = {
+      chevronRight: '\u25B8',
+      chevronDown: '\u25BE',
+      width: 185
+    };
+    _this.constants = constants;
+
+    _this.state = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.assign({
+      chevronX: 0,
+      showDropdown: false,
+      optionFlatList: null,
+      optionCategoryTree: null,
+      optionCategoryCoords: {}
+    }, _this.initializeOptions(props));
+
+    _this.isReady = _this.isReady.bind(_this);
+    _this.selectOption = _this.selectOption.bind(_this);
+    return _this;
+  }
+
+  _createClass(SelectorCollapsible, [{
+    key: 'initializeOptions',
+    value: function initializeOptions(props) {
+      if (!__WEBPACK_IMPORTED_MODULE_2_lodash___default.a.isEmpty(props.options)) {
+        if (props.optionCategory && __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.some(props.options, props.optionCategory)) {
+          return { optionCategoryTree: __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.groupBy(props.options, props.optionCategory) };
+        } else {
+          return { optionFlatList: props.options };
+        }
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState(this.initializeOptions(nextProps));
+    }
+  }, {
+    key: 'isReady',
+    value: function isReady() {
+      return this.state.optionFlatList || this.state.optionCategoryTree;
+    }
+  }, {
+    key: 'expandCategory',
+    value: function expandCategory(category) {
+      this.setState({
+        categoryShown: this.state.categoryShown !== category ? category : null
+      });
+    }
+  }, {
+    key: 'selectOption',
+    value: function selectOption(option) {
+      this.props.onOptionSelect(option);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+        'span',
+        { className: 'CollapsibleCategoryContainer' },
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'span',
+          { className: 'CollapsibleCategoryHeader', onClick: function onClick() {
+              return _this2.isReady() && _this2.setState({ showDropdown: !_this2.state.showDropdown });
+            } },
+          this.props.title,
+          ' ',
+          ' ',
+          this._renderChevron()
+        ),
+        this.state.showDropdown ? this._renderDropdown() : null
+      );
+    }
+  }, {
+    key: '_renderDropdown',
+    value: function _renderDropdown() {
+      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+        __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
+        { showContextualArrow: true, xPos: this.state.chevronX },
+        this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList)
+      );
+    }
+  }, {
+    key: '_renderOptions',
+    value: function _renderOptions(options) {
+      var _this3 = this;
+
+      var sortedOptions = __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.sortBy(options, this.props.optionDisplay);
+
+      return sortedOptions.map(function (option, i) {
+        var classes = "CollapsibleMenuItem";
+        return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'label',
+          {
+            key: i,
+            className: classes
+          },
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', checked: _this3.props.optionEnabled(option), onChange: function onChange() {
+              return _this3.selectOption(option);
+            } }),
+          _this3.props.optionDisplay(option)
+        );
+      });
+    }
+  }, {
+    key: '_renderCategories',
+    value: function _renderCategories() {
+      var _this4 = this;
+
+      return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.keys(this.state.optionCategoryTree).sort().map(function (category, i) {
+        var isExpanded = category === _this4.state.categoryShown;
+        var classes = "CollapsibleCategoryItem-root" + (isExpanded ? "" : " unselected");
+        return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'div',
+          {
+            key: i,
+            ref: _this4._onCategoryMount.bind(_this4, category),
+            className: classes
+          },
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'span',
+            { className: 'CollapsibleCategorySubheader', onClick: _this4.expandCategory.bind(_this4, category) },
+            category,
+            ' ',
+            ' ',
+            isExpanded ? _this4.constants.chevronDown : _this4.constants.chevronRight
+          ),
+          isExpanded ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
+            null,
+            _this4._renderOptions(_this4.state.optionCategoryTree[category])
+          ) : null
+        );
+      });
+    }
+  }, {
+    key: '_renderChevron',
+    value: function _renderChevron() {
+      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+        'span',
+        {
+          ref: this._onChevronMount.bind(this) },
+        this.constants.chevronDown
+      );
+    }
+  }, {
+    key: '_onCategoryMount',
+    value: function _onCategoryMount(category, categoryElement) {
+      if (categoryElement) {
+        this.state.optionCategoryCoords[category] = categoryElement.getBoundingClientRect();
+      }
+    }
+  }, {
+    key: '_onChevronMount',
+    value: function _onChevronMount(chevronElement) {
+      var chevronX = chevronElement ? chevronElement.getBoundingClientRect().left - this.constants.width / 2 : 0;
+      this.setState({ chevronX: chevronX });
+    }
+  }]);
+
+  return SelectorCollapsible;
+}(__WEBPACK_IMPORTED_MODULE_1_react___default.a.PureComponent);
+
+/* harmony default export */ __webpack_exports__["a"] = (SelectorCollapsible);
+
+/***/ }),
+/* 398 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+var ContextualCollapsible = function (_React$PureComponent) {
+  _inherits(ContextualCollapsible, _React$PureComponent);
+
+  function ContextualCollapsible() {
+    _classCallCheck(this, ContextualCollapsible);
+
+    var _this = _possibleConstructorReturn(this, (ContextualCollapsible.__proto__ || Object.getPrototypeOf(ContextualCollapsible)).call(this));
+
+    _this.state = {
+      contextualArrowX: 0
+    };
+    return _this;
+  }
+
+  _createClass(ContextualCollapsible, [{
+    key: 'render',
+    value: function render() {
+      var style = __WEBPACK_IMPORTED_MODULE_1_lodash___default.a.pickBy({
+        left: this.props.xPos,
+        top: this.props.yPos
+      }, __WEBPACK_IMPORTED_MODULE_1_lodash___default.a.identity);
+
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        {
+          className: 'ContextualCollapsible-root',
+          ref: this._onDropDownMount.bind(this),
+          style: style },
+        this.props.showContextualArrow ? this._renderContextualArrow() : null,
+        this.props.children
+      );
+    }
+  }, {
+    key: '_onDropDownMount',
+    value: function _onDropDownMount(dropDownElement) {
+      var contextualArrowX = dropDownElement ? dropDownElement.getBoundingClientRect().width / 2 : 0;
+      this.setState({ contextualArrowX: contextualArrowX });
+    }
+    //TODO: determine if this style and associated state needs to stay at all (left: values aren't generally useful in the collapsible)
+
+  }, {
+    key: '_renderContextualArrow',
+    value: function _renderContextualArrow() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', {
+        className: 'ContextualCollapsible-contextualArrow',
+        style: { left: this.state.contextualArrowX }
+      });
+    }
+  }]);
+
+  return ContextualCollapsible;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent);
+
+/* harmony default export */ __webpack_exports__["a"] = (ContextualCollapsible);
 
 /***/ }),
 /* 399 */

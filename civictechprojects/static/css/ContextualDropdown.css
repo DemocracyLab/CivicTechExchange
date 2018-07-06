@@ -1,11 +1,9 @@
 .ContextualDropdown-root {
   background: white;
-  border: solid 0.5px #cecece;
   margin-top: 10px;
   padding-bottom: 15px;
   padding-top: 15px;
   position: absolute;
-  width: fit-content;
 }
 
 .ContextualDropdown-contextualArrow {
