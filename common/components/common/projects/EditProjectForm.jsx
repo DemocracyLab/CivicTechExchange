@@ -155,26 +155,25 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           <ImageUploadFormElement form_id="project_thumbnail_location" currentImage={this.state.formFields.project_thumbnail}/>
         </div>
         
-        <h2 className="form-group subheader">DETAILS</h2>
         <div className="form-group">
-          <label htmlFor="project_name">Project Name</label>
+          <label htmlFor="project_name"><b>Project Name</b></label>
           <input type="text" className="form-control" id="project_name" name="project_name" maxLength="60"
                  value={this.state.formFields.project_name} onChange={this.onFormFieldChange.bind(this, "project_name")}/>
         </div>
         
         <div className="form-group">
-          <label htmlFor="project_location">Project Location</label>
+          <label htmlFor="project_location"><b>Project Location</b></label>
           <input type="text" className="form-control" id="project_location" name="project_location" maxLength="200"
                  value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}/>
         </div>
         <div className="form-group">
-          <label htmlFor="project_url">Website URL</label>
+          <label htmlFor="project_url"><b>Website URL</b></label>
           <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
                  value={this.state.formFields.project_url} onChange={this.onFormFieldChange.bind(this, "project_url")}/>
         </div>
   
         <div className="form-group">
-          <label htmlFor="project_organization">Community</label>
+          <label htmlFor="project_organization"><b>Community</b></label>
           <TagSelector
             elementId="project_organization"
             value={this.state.formFields.project_organization}
@@ -185,7 +184,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
         
         <div className="form-group">
-          <label htmlFor="project_issue_area">Issue Areas</label>
+          <label htmlFor="project_issue_area"><b>Issue Areas</b></label>
           <TagSelector
             elementId="project_issue_area"
             value={this.state.formFields.project_issue_area}
@@ -196,7 +195,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
   
         <div className="form-group">
-          <label htmlFor="project_technologies">Technology Used</label>
+          <label htmlFor="project_technologies"><b>Technology Used</b></label>
           <TagSelector
             elementId="project_technologies"
             value={this.state.formFields.project_technologies}
@@ -207,7 +206,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
         
         <div className="form-group">
-          <label htmlFor="project_description">Describe This Project</label>
+          <label htmlFor="project_description"><b>Describe This Project</b></label>
           <div className="character-count">
             { (this.state.formFields.project_description || "").length} / 3000
           </div>
@@ -216,15 +215,18 @@ class EditProjectForm extends React.PureComponent<Props,State> {
                     value={this.state.formFields.project_description} onChange={this.onFormFieldChange.bind(this, "project_description")}></textarea>
         </div>
   
-        <h2 className="form-group subheader">OPEN POSITIONS</h2>
         <PositionList elementid="project_positions" positions={this.state.formFields.project_positions}/>
         
-        <h2 className="form-group subheader">LINKS</h2>
-        <LinkList elementid="project_links" links={this.state.formFields.project_links}/>
-        
-        <h2 className="form-group subheader">FILES</h2>
-        <FileUploadList elementid="project_files" files={this.state.formFields.project_files}/>
-  
+        <div className="form-group">
+          <label>Links</label>
+          <LinkList elementid="project_links" links={this.state.formFields.project_links}/>
+        </div>
+
+        <div className="form-group">
+          <label>Files</label>
+          <FileUploadList elementid="project_files" files={this.state.formFields.project_files}/>
+        </div>       
+
         <FormValidation
           validations={this.state.validations}
           onValidationCheck={this.onValidationCheck.bind(this)}

@@ -33866,17 +33866,16 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__components_forms_ImageUploadFormElement_jsx__["a" /* default */], { form_id: 'project_thumbnail_location', currentImage: this.state.formFields.project_thumbnail })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          { className: 'form-group subheader' },
-          'DETAILS'
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           { className: 'form-group' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_name' },
-            'Project Name'
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'b',
+              null,
+              'Project Name'
+            )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_name', name: 'project_name', maxLength: '60',
             value: this.state.formFields.project_name, onChange: this.onFormFieldChange.bind(this, "project_name") })
@@ -33887,7 +33886,11 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_location' },
-            'Project Location'
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'b',
+              null,
+              'Project Location'
+            )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_location', name: 'project_location', maxLength: '200',
             value: this.state.formFields.project_location, onChange: this.onFormFieldChange.bind(this, "project_location") })
@@ -33898,7 +33901,11 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_url' },
-            'Website URL'
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'b',
+              null,
+              'Website URL'
+            )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_url', name: 'project_url', maxLength: '2075',
             value: this.state.formFields.project_url, onChange: this.onFormFieldChange.bind(this, "project_url") })
@@ -33909,7 +33916,11 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_organization' },
-            'Community'
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'b',
+              null,
+              'Community'
+            )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__tags_TagSelector_jsx__["a" /* default */], {
             elementId: 'project_organization',
@@ -33925,7 +33936,11 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_issue_area' },
-            'Issue Areas'
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'b',
+              null,
+              'Issue Areas'
+            )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__tags_TagSelector_jsx__["a" /* default */], {
             elementId: 'project_issue_area',
@@ -33941,7 +33956,11 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_technologies' },
-            'Technology Used'
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'b',
+              null,
+              'Technology Used'
+            )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__tags_TagSelector_jsx__["a" /* default */], {
             elementId: 'project_technologies',
@@ -33957,7 +33976,11 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_description' },
-            'Describe This Project'
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'b',
+              null,
+              'Describe This Project'
+            )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
@@ -33969,24 +33992,27 @@ var EditProjectForm = function (_React$PureComponent) {
             placeholder: 'This will appear as project introduction', rows: '3', maxLength: '3000',
             value: this.state.formFields.project_description, onChange: this.onFormFieldChange.bind(this, "project_description") })
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          { className: 'form-group subheader' },
-          'OPEN POSITIONS'
-        ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_11__forms_PositionList_jsx__["a" /* default */], { elementid: 'project_positions', positions: this.state.formFields.project_positions }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          { className: 'form-group subheader' },
-          'LINKS'
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'label',
+            null,
+            'Links'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__components_forms_LinkList_jsx__["a" /* default */], { elementid: 'project_links', links: this.state.formFields.project_links })
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__components_forms_LinkList_jsx__["a" /* default */], { elementid: 'project_links', links: this.state.formFields.project_links }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          { className: 'form-group subheader' },
-          'FILES'
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'label',
+            null,
+            'Files'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__components_forms_FileUploadList_jsx__["a" /* default */], { elementid: 'project_files', files: this.state.formFields.project_files })
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__components_forms_FileUploadList_jsx__["a" /* default */], { elementid: 'project_files', files: this.state.formFields.project_files }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7__components_forms_FormValidation_jsx__["a" /* default */], {
           validations: this.state.validations,
           onValidationCheck: this.onValidationCheck.bind(this),
@@ -68865,7 +68891,7 @@ Value.propTypes = {
 };
 
 /*!
-  Copyright (c) 2018 Jed Watson.
+  Copyright (c) 2017 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/react-select
 */
@@ -69421,8 +69447,8 @@ var Select$1 = function (_React$Component) {
 					break;
 				case 46:
 					// delete
+					event.preventDefault();
 					if (!this.state.inputValue && this.props.deleteRemoves) {
-						event.preventDefault();
 						this.popValue();
 					}
 					break;
@@ -69853,7 +69879,7 @@ var Select$1 = function (_React$Component) {
 			}
 			return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
 				'div',
-				{ className: className, key: 'input-wrap', style: { display: 'inline-block' } },
+				{ className: className, key: 'input-wrap' },
 				__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('input', _extends({ id: this.props.id }, inputProps))
 			);
 		}
@@ -74232,18 +74258,26 @@ var PositionList = function (_React$PureComponent) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
-        null,
+        { className: 'form-group' },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', id: this.props.elementid, name: this.props.elementid }),
-        this._renderPositions(),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'label',
+          { htmlFor: 'add_project_button' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'b',
+            null,
+            'Open positions'
+          )
+        ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
           {
-            bsStyle: 'primary',
-            bsSize: 'large',
+            id: 'add_project_button',
             onClick: this.createNewPosition.bind(this)
           },
-          'Add'
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
         ),
+        this._renderPositions(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__PositionEntryModal_jsx__["a" /* default */], {
           showModal: this.state.showAddEditModal,
           existingPosition: this.state.existingPosition,

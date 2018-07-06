@@ -96,18 +96,17 @@ class PositionList extends React.PureComponent<Props,State>  {
   
   render(): React$Node {
     return (
-      <div>
+      <div className="form-group">
         <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
-        
-        {this._renderPositions()}
-        
+        <label htmlFor="add_project_button"><b>Open positions</b></label>
         <Button
-            bsStyle="primary"
-            bsSize="large"
+            id="add_project_button"
             onClick={this.createNewPosition.bind(this)}
         >
-          Add
+          <i className="fa fa-plus" aria-hidden="true"></i>
         </Button>
+
+        {this._renderPositions()}
 
         <PositionEntryModal
           showModal={this.state.showAddEditModal}
