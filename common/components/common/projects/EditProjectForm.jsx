@@ -217,10 +217,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   
         <PositionList elementid="project_positions" positions={this.state.formFields.project_positions}/>
         
-        <div className="form-group">
-          <label>Links</label>
-          <LinkList elementid="project_links" links={this.state.formFields.project_links}/>
-        </div>
+        <LinkList elementid="project_links" links={this.state.formFields.project_links}/>
 
         <div className="form-group">
           <label>Files</label>
