@@ -29120,11 +29120,7 @@ var LinkList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'label',
           null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'b',
-            null,
-            'Links \xA0'
-          ),
+          'Project Links \xA0',
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
             {
@@ -33002,7 +32998,7 @@ var FileUploadList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', id: this.props.elementid, name: this.props.elementid }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_upload_FileUploadButton_jsx__["a" /* default */], {
           acceptedFileTypes: '*',
-          buttonText: 'Upload File',
+          buttonText: 'Project Files',
           onFileUpload: this.handleFileSelection.bind(this)
         }),
         this._renderFiles(),
@@ -33081,12 +33077,8 @@ var FileUploadButton = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'label',
           null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'b',
-            null,
-            this.props.buttonText,
-            ' \xA0'
-          ),
+          this.props.buttonText,
+          ' \xA0',
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
             {
@@ -33898,11 +33890,7 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_name' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'b',
-              null,
-              'Project Name'
-            )
+            'Project Name'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_name', name: 'project_name', maxLength: '60',
             value: this.state.formFields.project_name, onChange: this.onFormFieldChange.bind(this, "project_name") })
@@ -33913,11 +33901,7 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_location' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'b',
-              null,
-              'Project Location'
-            )
+            'Project Location'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_location', name: 'project_location', maxLength: '200',
             value: this.state.formFields.project_location, onChange: this.onFormFieldChange.bind(this, "project_location") })
@@ -33928,11 +33912,7 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_url' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'b',
-              null,
-              'Website URL'
-            )
+            'Website URL'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_url', name: 'project_url', maxLength: '2075',
             value: this.state.formFields.project_url, onChange: this.onFormFieldChange.bind(this, "project_url") })
@@ -33943,11 +33923,7 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_organization' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'b',
-              null,
-              'Community'
-            )
+            'Community'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__tags_TagSelector_jsx__["a" /* default */], {
             elementId: 'project_organization',
@@ -33963,11 +33939,7 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_issue_area' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'b',
-              null,
-              'Issue Areas'
-            )
+            'Issue Areas'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__tags_TagSelector_jsx__["a" /* default */], {
             elementId: 'project_issue_area',
@@ -33983,11 +33955,7 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_technologies' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'b',
-              null,
-              'Technology Used'
-            )
+            'Technology Used'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__tags_TagSelector_jsx__["a" /* default */], {
             elementId: 'project_technologies',
@@ -34003,11 +33971,7 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { htmlFor: 'project_description' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'b',
-              null,
-              'Describe This Project'
-            )
+            'Describe This Project'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
@@ -74284,11 +74248,7 @@ var PositionList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'label',
           null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'b',
-            null,
-            'Open positions \xA0'
-          ),
+          'Open Positions \xA0',
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
             {

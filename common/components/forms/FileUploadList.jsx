@@ -78,7 +78,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
         
         <FileUploadButton
           acceptedFileTypes="*"
-          buttonText="Upload File"
+          buttonText="Project Files"
           onFileUpload={this.handleFileSelection.bind(this)}
         />
 

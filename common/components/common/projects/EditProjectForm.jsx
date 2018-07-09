@@ -156,24 +156,24 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
         
         <div className="form-group">
-          <label htmlFor="project_name"><b>Project Name</b></label>
+          <label htmlFor="project_name">Project Name</label>
           <input type="text" className="form-control" id="project_name" name="project_name" maxLength="60"
                  value={this.state.formFields.project_name} onChange={this.onFormFieldChange.bind(this, "project_name")}/>
         </div>
         
         <div className="form-group">
-          <label htmlFor="project_location"><b>Project Location</b></label>
+          <label htmlFor="project_location">Project Location</label>
           <input type="text" className="form-control" id="project_location" name="project_location" maxLength="200"
                  value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}/>
         </div>
         <div className="form-group">
-          <label htmlFor="project_url"><b>Website URL</b></label>
+          <label htmlFor="project_url">Website URL</label>
           <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
                  value={this.state.formFields.project_url} onChange={this.onFormFieldChange.bind(this, "project_url")}/>
         </div>
   
         <div className="form-group">
-          <label htmlFor="project_organization"><b>Community</b></label>
+          <label htmlFor="project_organization">Community</label>
           <TagSelector
             elementId="project_organization"
             value={this.state.formFields.project_organization}
@@ -184,7 +184,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
         
         <div className="form-group">
-          <label htmlFor="project_issue_area"><b>Issue Areas</b></label>
+          <label htmlFor="project_issue_area">Issue Areas</label>
           <TagSelector
             elementId="project_issue_area"
             value={this.state.formFields.project_issue_area}
@@ -195,7 +195,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
   
         <div className="form-group">
-          <label htmlFor="project_technologies"><b>Technology Used</b></label>
+          <label htmlFor="project_technologies">Technology Used</label>
           <TagSelector
             elementId="project_technologies"
             value={this.state.formFields.project_technologies}
@@ -206,7 +206,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
         
         <div className="form-group">
-          <label htmlFor="project_description"><b>Describe This Project</b></label>
+          <label htmlFor="project_description">Describe This Project</label>
           <div className="character-count">
             { (this.state.formFields.project_description || "").length} / 3000
           </div>
