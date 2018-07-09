@@ -29119,21 +29119,20 @@ var LinkList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', id: this.props.elementid, name: this.props.elementid }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'label',
-          { htmlFor: 'add_link_button' },
+          null,
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'b',
             null,
             'Links \xA0'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
+            {
+              bsSize: 'small',
+              onClick: this.createNewLink.bind(this)
+            },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
           )
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-          {
-            bsSize: 'small',
-            id: 'add_link_button',
-            onClick: this.createNewLink.bind(this)
-          },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
         ),
         this._renderLinks(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__LinkEntryModal_jsx__["a" /* default */], { showModal: this.state.showAddEditModal,
@@ -33001,12 +33000,12 @@ var FileUploadList = function (_React$PureComponent) {
         'div',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', id: this.props.elementid, name: this.props.elementid }),
-        this._renderFiles(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_upload_FileUploadButton_jsx__["a" /* default */], {
           acceptedFileTypes: '*',
           buttonText: 'Upload File',
           onFileUpload: this.handleFileSelection.bind(this)
         }),
+        this._renderFiles(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__common_confirmation_ConfirmationModal_jsx__["a" /* default */], {
           showModal: this.state.showDeleteModal,
           message: 'Do you want to delete this file?',
@@ -74284,21 +74283,20 @@ var PositionList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', id: this.props.elementid, name: this.props.elementid }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'label',
-          { htmlFor: 'add_project_button' },
+          null,
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'b',
             null,
             'Open positions \xA0'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
+            {
+              bsSize: 'small',
+              onClick: this.createNewPosition.bind(this)
+            },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
           )
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-          {
-            bsSize: 'small',
-            id: 'add_project_button',
-            onClick: this.createNewPosition.bind(this)
-          },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
         ),
         this._renderPositions(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__PositionEntryModal_jsx__["a" /* default */], {

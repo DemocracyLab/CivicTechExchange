@@ -98,16 +98,14 @@ class LinkList extends React.PureComponent<Props,State>  {
       <div>
         <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
         
-        <label htmlFor="add_link_button"><b>Links &nbsp;</b></label>
-
-        <Button
+        <label><b>Links &nbsp;</b>
+          <Button
             bsSize="small"
-            id="add_link_button"
             onClick={this.createNewLink.bind(this)}
-        >
-          <i className="fa fa-plus" aria-hidden="true"></i>
-        </Button>
-        
+          >
+            <i className="fa fa-plus" aria-hidden="true"></i>
+          </Button>
+        </label>
         {this._renderLinks()}
 
         <LinkEntryModal showModal={this.state.showAddEditModal}
