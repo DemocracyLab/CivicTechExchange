@@ -95,7 +95,7 @@ class LinkList extends React.PureComponent<Props,State>  {
   
   render(): React$Node {
     return (
-      <div className="form-group">
+      <div>
         <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
         
         <label htmlFor="add_link_button"><b>Links &nbsp;</b></label>

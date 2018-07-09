@@ -29115,7 +29115,7 @@ var LinkList = function (_React$PureComponent) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
-        { className: 'form-group' },
+        null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', id: this.props.elementid, name: this.props.elementid }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'label',
@@ -33046,6 +33046,7 @@ var FileUploadList = function (_React$PureComponent) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__ = __webpack_require__(21);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -33053,6 +33054,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -33076,8 +33078,25 @@ var FileUploadButton = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'button', value: this.props.buttonText, onClick: this._handleClick.bind(this) }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { ref: 'fileInput', type: 'file', style: { display: "none" }, accept: this.props.acceptedFileTypes, onChange: this._handleFileSelection.bind(this) })
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { ref: 'fileInput', type: 'file', style: { display: "none" }, accept: this.props.acceptedFileTypes, onChange: this._handleFileSelection.bind(this) }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'label',
+          null,
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'b',
+            null,
+            this.props.buttonText,
+            ' \xA0'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
+            {
+              bsSize: 'small',
+              onClick: this._handleClick.bind(this)
+            },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
+          )
+        )
       );
     }
   }, {
@@ -34001,16 +34020,19 @@ var EditProjectForm = function (_React$PureComponent) {
             placeholder: 'This will appear as project introduction', rows: '3', maxLength: '3000',
             value: this.state.formFields.project_description, onChange: this.onFormFieldChange.bind(this, "project_description") })
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_11__forms_PositionList_jsx__["a" /* default */], { elementid: 'project_positions', positions: this.state.formFields.project_positions }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__components_forms_LinkList_jsx__["a" /* default */], { elementid: 'project_links', links: this.state.formFields.project_links }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           { className: 'form-group' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'label',
-            null,
-            'Files'
-          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_11__forms_PositionList_jsx__["a" /* default */], { elementid: 'project_positions', positions: this.state.formFields.project_positions })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__components_forms_LinkList_jsx__["a" /* default */], { elementid: 'project_links', links: this.state.formFields.project_links })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'form-group' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__components_forms_FileUploadList_jsx__["a" /* default */], { elementid: 'project_files', files: this.state.formFields.project_files })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7__components_forms_FormValidation_jsx__["a" /* default */], {
@@ -74258,7 +74280,7 @@ var PositionList = function (_React$PureComponent) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
-        { className: 'form-group' },
+        null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', id: this.props.elementid, name: this.props.elementid }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'label',

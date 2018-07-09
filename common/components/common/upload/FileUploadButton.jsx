@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import {Button} from 'react-bootstrap';
 import type { S3Data } from './S3Data.jsx'
 
 export type FileUploadData = {|
@@ -31,8 +32,16 @@ class FileUploadButton extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div>
-        <input type="button" value={this.props.buttonText} onClick={this._handleClick.bind(this)} />
         <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
+
+        <label><b>{this.props.buttonText} &nbsp;</b>
+          <Button
+            bsSize="small"
+            onClick={this._handleClick.bind(this)}
+          >
+            <i className="fa fa-plus" aria-hidden="true"></i>
+          </Button>
+        </label>
       </div>
     );
   }
