@@ -143,8 +143,33 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     if(this.state.formFields.project_url) {
       this.state.formFields.project_url = url.appendHttpIfMissingProtocol(this.state.formFields.project_url);
     }
-   // add link_ fields to project_links array
-   console.log('this.state.formFields.link_coderepo: ', this.state.formFields.link_coderepo);
+   // create array for explicit link types (TODO: make this less repetitive)
+   var eLinks = [
+      { name: "link_coderepo", url: this.state.formFields.link_coderepo },
+      { name: "link_messaging", url: this.state.formFields.link_messaging },
+      { name: "link_projmanage", url: this.state.formFields.link_projmanage },
+      { name: "link_filerepo", url: this.state.formFields.link_filerepo }
+    ];
+   //create empty array for output
+   var eLinksArray = []
+//create objects for links array
+  eLinks.forEach(function(item) {
+    if(item.url != '') {
+      eLinksArray.push({
+        linkName: item.name,
+        linkUrl: item.url,
+        visibility: "PUBLIC",
+      })
+    }
+  });
+  //append eLinksArray to a copy of state's array of links (TODO: concat is slow, consider using Array.push)
+  var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
+  console.log('combinedArray: ', combinedArray)
+  // setState new combined array
+  this.setState({ formFields: { project_links: combinedArray }});
+  console.log(this.state.formFields.project_links);
+  alert('combinedArray and projectlinks maybe, possibly, logged)');
+
 
    // force react to update component
     this.forceUpdate();
