@@ -31,7 +31,11 @@ type FormFields = {|
   project_positions?: Array<PositionInfo>,
   project_links: Array<LinkInfo>,
   project_files: Array<FileInfo>,
-  project_thumbnail?: FileInfo
+  project_thumbnail?: FileInfo,
+  link_coderepo: ?string,
+  link_messaging: ?string,
+  link_projmanage: ?string,
+  link_filerepo: ?string
 |};
 
 type Props = {|
@@ -50,7 +54,7 @@ type State = {|
 class EditProjectForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
-  
+
     this.state = {
       error: "",
       formIsValid: false,
@@ -60,7 +64,11 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         project_url: "",
         project_description: "",
         project_links: [],
-        project_files: []
+        project_files: [],
+        link_coderepo: "",
+        link_messaging: "",
+        link_projmanage: "",
+        link_filerepo: ""
       },
       validations: [
         {
@@ -74,19 +82,19 @@ class EditProjectForm extends React.PureComponent<Props,State> {
       ]
     };
   }
-  
+
   onValidationCheck(formIsValid: boolean): void {
     if(formIsValid !== this.state.formIsValid) {
       this.setState({formIsValid});
     }
   }
-  
+
   componentDidMount(): void {
     if(this.props.projectId) {
       ProjectAPIUtils.fetchProjectDetails(this.props.projectId, this.loadProjectDetails.bind(this), this.handleLoadProjectError.bind(this));
     }
   }
-  
+
   loadProjectDetails(project: ProjectDetailsAPIData): void {
     if(project.project_creator != window.DLAB_GLOBAL_CONTEXT.userID) {
       this.setState({
@@ -105,39 +113,47 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_links: _.cloneDeep(project.project_links),
           project_files: _.cloneDeep(project.project_files),
           project_positions: _.cloneDeep(project.project_positions),
-          project_thumbnail: project.project_thumbnail
+          project_thumbnail: project.project_thumbnail,
+          link_coderepo: '',
+          link_messaging: '',
+          link_projmanage: '',
+          link_filerepo: ''
         }
       });
     }
   }
-  
+
   handleLoadProjectError(error: APIError): void {
     this.setState({
       error: "Failed to load project information"
     });
   }
-  
+
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.formFields[formFieldName] = event.target.value;
     this.forceUpdate();
   }
-  
+
   onTagChange(formFieldName: string, value: $ReadOnlyArray<TagDefinition>): void {
     this.state.formFields[formFieldName] = value;
   }
-  
+
   onSubmit(): void {
     //Sanitize project url if necessary
     if(this.state.formFields.project_url) {
       this.state.formFields.project_url = url.appendHttpIfMissingProtocol(this.state.formFields.project_url);
     }
+   // add link_ fields to project_links array
+   console.log('this.state.formFields.link_coderepo: ', this.state.formFields.link_coderepo);
+
+   // force react to update component
     this.forceUpdate();
   }
-  
+
   render(): React$Node {
     return this.state.error ? this._renderError() : this._renderForm();
   }
-  
+
   _renderError(): React$Node {
     return (
       <div className="EditProjectForm-error">
@@ -145,7 +161,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
       </div>
     );
   }
-  
+
   _renderLocationDropdown(): React$Node{
     return <div className="form-group">
       <label htmlFor="project_location">Project Location</label>
@@ -159,24 +175,24 @@ class EditProjectForm extends React.PureComponent<Props,State> {
       </select>
     </div>;
   }
-  
+
   _renderForm(): React$Node {
     return (
       <div className="EditProjectForm-root">
-        
+
         <DjangoCSRFToken/>
-        
+
         <div className="form-group">
           <ImageUploadFormElement form_id="project_thumbnail_location" currentImage={this.state.formFields.project_thumbnail}/>
         </div>
-        
+
         <h2 className="form-group subheader">DETAILS</h2>
         <div className="form-group">
           <label htmlFor="project_name">Project Name</label>
           <input type="text" className="form-control" id="project_name" name="project_name" maxLength="60"
                  value={this.state.formFields.project_name} onChange={this.onFormFieldChange.bind(this, "project_name")}/>
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="project_url">Website URL</label>
           <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
@@ -184,7 +200,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
 
         {this._renderLocationDropdown()}
-  
+
         <div className="form-group">
           <label htmlFor="project_organization">Community</label>
           <TagSelector
@@ -195,7 +211,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             onSelection={this.onTagChange.bind(this, "project_organization")}
           />
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="project_issue_area">Issue Areas</label>
           <TagSelector
@@ -206,7 +222,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             onSelection={this.onTagChange.bind(this, "project_issue_area")}
           />
         </div>
-  
+
         <div className="form-group">
           <label htmlFor="project_technologies">Technology Used</label>
           <TagSelector
@@ -217,7 +233,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             onSelection={this.onTagChange.bind(this, "project_technologies")}
           />
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="project_description">Describe This Project</label>
           <div className="character-count">
@@ -227,22 +243,46 @@ class EditProjectForm extends React.PureComponent<Props,State> {
                     placeholder="This will appear as project introduction" rows="3" maxLength="3000"
                     value={this.state.formFields.project_description} onChange={this.onFormFieldChange.bind(this, "project_description")}></textarea>
         </div>
-  
+
+        <div className="form-group">
+          <label htmlFor="link_coderepo">Code Repository <span className="label-hint">(e.g. Github)</span></label>
+          <input type="text" className="form-control" id="link_coderepo" name="link_coderepo" maxLength="2075"
+                 value={this.state.formFields.link_coderepo} onChange={this.onFormFieldChange.bind(this, "link_coderepo")}/>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="link_messaging">Messaging <span className="label-hint">(e.g. Slack)</span></label>
+          <input type="text" className="form-control" id="link_messaging" name="link_messaging" maxLength="2075"
+                 value={this.state.formFields.link_messaging} onChange={this.onFormFieldChange.bind(this, "link_messaging")}/>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="link_projmanage">Project Management <span className="label-hint">(e.g. Trello)</span></label>
+          <input type="text" className="form-control" id="link_projmanage" name="link_projmanage" maxLength="2075"
+                 value={this.state.formFields.link_projmanage} onChange={this.onFormFieldChange.bind(this, "link_projmanage")}/>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="link_filerepo">File Repository <span className="label-hint">(e.g. Google Drive)</span></label>
+          <input type="text" className="form-control" id="link_filerepo" name="link_filerepo" maxLength="2075"
+                 value={this.state.formFields.link_filerepo} onChange={this.onFormFieldChange.bind(this, "link_filerepo")}/>
+        </div>
+
         <h2 className="form-group subheader">OPEN POSITIONS</h2>
         <PositionList elementid="project_positions" positions={this.state.formFields.project_positions}/>
-        
+
         <h2 className="form-group subheader">LINKS</h2>
         <LinkList elementid="project_links" links={this.state.formFields.project_links}/>
-        
+
         <h2 className="form-group subheader">FILES</h2>
         <FileUploadList elementid="project_files" files={this.state.formFields.project_files}/>
-  
+
         <FormValidation
           validations={this.state.validations}
           onValidationCheck={this.onValidationCheck.bind(this)}
           formState={this.state.formFields}
         />
-        
+
         <div className="form-group pull-right">
           <div className='text-right'>
             <input disabled={!this.state.formIsValid} type="submit" className="btn_outline save_btn"

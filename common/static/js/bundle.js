@@ -33768,7 +33768,11 @@ var EditProjectForm = function (_React$PureComponent) {
         project_url: "",
         project_description: "",
         project_links: [],
-        project_files: []
+        project_files: [],
+        link_coderepo: "",
+        link_messaging: "",
+        link_projmanage: "",
+        link_filerepo: ""
       },
       validations: [{
         checkFunc: function checkFunc(formFields) {
@@ -33819,7 +33823,11 @@ var EditProjectForm = function (_React$PureComponent) {
             project_links: __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.cloneDeep(project.project_links),
             project_files: __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.cloneDeep(project.project_files),
             project_positions: __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.cloneDeep(project.project_positions),
-            project_thumbnail: project.project_thumbnail
+            project_thumbnail: project.project_thumbnail,
+            link_coderepo: '',
+            link_messaging: '',
+            link_projmanage: '',
+            link_filerepo: ''
           }
         });
       }
@@ -33849,6 +33857,10 @@ var EditProjectForm = function (_React$PureComponent) {
       if (this.state.formFields.project_url) {
         this.state.formFields.project_url = __WEBPACK_IMPORTED_MODULE_9__utils_url_js__["a" /* default */].appendHttpIfMissingProtocol(this.state.formFields.project_url);
       }
+      // add link_ fields to project_links array
+      console.log('this.state.formFields.link_coderepo: ', this.state.formFields.link_coderepo);
+
+      // force react to update component
       this.forceUpdate();
     }
   }, {
@@ -34013,6 +34025,70 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { className: 'form-control', id: 'project_description', name: 'project_description',
             placeholder: 'This will appear as project introduction', rows: '3', maxLength: '3000',
             value: this.state.formFields.project_description, onChange: this.onFormFieldChange.bind(this, "project_description") })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'label',
+            { htmlFor: 'link_coderepo' },
+            'Code Repository ',
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'span',
+              { className: 'label-hint' },
+              '(e.g. Github)'
+            )
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'link_coderepo', name: 'link_coderepo', maxLength: '2075',
+            value: this.state.formFields.link_coderepo, onChange: this.onFormFieldChange.bind(this, "link_coderepo") })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'label',
+            { htmlFor: 'link_messaging' },
+            'Messaging ',
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'span',
+              { className: 'label-hint' },
+              '(e.g. Slack)'
+            )
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'link_messaging', name: 'link_messaging', maxLength: '2075',
+            value: this.state.formFields.link_messaging, onChange: this.onFormFieldChange.bind(this, "link_messaging") })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'label',
+            { htmlFor: 'link_projmanage' },
+            'Project Management ',
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'span',
+              { className: 'label-hint' },
+              '(e.g. Trello)'
+            )
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'link_projmanage', name: 'link_projmanage', maxLength: '2075',
+            value: this.state.formFields.link_projmanage, onChange: this.onFormFieldChange.bind(this, "link_projmanage") })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'label',
+            { htmlFor: 'link_filerepo' },
+            'File Repository ',
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'span',
+              { className: 'label-hint' },
+              '(e.g. Google Drive)'
+            )
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'link_filerepo', name: 'link_filerepo', maxLength: '2075',
+            value: this.state.formFields.link_filerepo, onChange: this.onFormFieldChange.bind(this, "link_filerepo") })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'h2',
@@ -68912,7 +68988,7 @@ Value.propTypes = {
 };
 
 /*!
-  Copyright (c) 2018 Jed Watson.
+  Copyright (c) 2017 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/react-select
 */
@@ -69468,8 +69544,8 @@ var Select$1 = function (_React$Component) {
 					break;
 				case 46:
 					// delete
+					event.preventDefault();
 					if (!this.state.inputValue && this.props.deleteRemoves) {
-						event.preventDefault();
 						this.popValue();
 					}
 					break;
@@ -69900,7 +69976,7 @@ var Select$1 = function (_React$Component) {
 			}
 			return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
 				'div',
-				{ className: className, key: 'input-wrap', style: { display: 'inline-block' } },
+				{ className: className, key: 'input-wrap' },
 				__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('input', _extends({ id: this.props.id }, inputProps))
 			);
 		}
