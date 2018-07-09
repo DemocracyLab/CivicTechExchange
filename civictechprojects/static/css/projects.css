@@ -250,3 +250,14 @@ th, td {
   padding: 10px;
   margin-bottom: 10px;
 }
+
+.EditProjectForm-root Button:hover, label:hover {
+  cursor: pointer;
+}
+
+.EditProjectForm-root Button {
+  font-size: 0.75rem;
+  padding: 0 0.25rem;
+  border-radius: 1rem;
+  background-color: var(--pumpkin-orange);
+}
