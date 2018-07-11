@@ -33769,10 +33769,10 @@ var EditProjectForm = function (_React$PureComponent) {
         project_description: "",
         project_links: [],
         project_files: [],
-        link_coderepo: "",
-        link_messaging: "",
-        link_projmanage: "",
-        link_filerepo: ""
+        link_coderepo: " ",
+        link_messaging: " ",
+        link_projmanage: " ",
+        link_filerepo: " "
       },
       validations: [{
         checkFunc: function checkFunc(formFields) {
@@ -33872,7 +33872,7 @@ var EditProjectForm = function (_React$PureComponent) {
       var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
       // setState new combined array
       this.setState({ formFields: { project_links: combinedArray } });
-      // force react to update component 
+      // force react to update component
       this.forceUpdate();
     }
   }, {
@@ -33894,6 +33894,7 @@ var EditProjectForm = function (_React$PureComponent) {
       linkState['project_links'] = array;
 
       //finally, set state with both project_links and link_ items
+      //TODO: fix this so I'm not passing the object by reference which doesn't rerender unless I forceUpdate
       this.setState({ formFields: linkState });
       this.forceUpdate();
     }
@@ -34057,7 +34058,7 @@ var EditProjectForm = function (_React$PureComponent) {
             ' / 3000'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { className: 'form-control', id: 'project_description', name: 'project_description',
-            placeholder: 'This will appear as project introduction', rows: '3', maxLength: '3000',
+            placeholder: 'This will appear as project introduction', rows: '6', maxLength: '3000',
             value: this.state.formFields.project_description, onChange: this.onFormFieldChange.bind(this, "project_description") })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(

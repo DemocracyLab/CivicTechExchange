@@ -184,6 +184,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
      linkState['project_links'] = array;
 
      //finally, set state with both project_links and link_ items
+     //TODO: fix this so I'm not passing the object by reference which doesn't rerender unless I forceUpdate
      this.setState({ formFields: linkState });
      this.forceUpdate();
   }
@@ -278,7 +279,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             { (this.state.formFields.project_description || "").length} / 3000
           </div>
           <textarea className="form-control" id="project_description" name="project_description"
-                    placeholder="This will appear as project introduction" rows="3" maxLength="3000"
+                    placeholder="This will appear as project introduction" rows="6" maxLength="3000"
                     value={this.state.formFields.project_description} onChange={this.onFormFieldChange.bind(this, "project_description")}></textarea>
         </div>
 
