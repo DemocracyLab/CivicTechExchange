@@ -211,7 +211,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             { (this.state.formFields.project_description || "").length} / 3000
           </div>
           <textarea className="form-control" id="project_description" name="project_description"
-                    placeholder="This will appear as project introduction" rows="3" maxLength="3000"
+                    placeholder="This will appear as project introduction" rows="6" maxLength="3000"
                     value={this.state.formFields.project_description} onChange={this.onFormFieldChange.bind(this, "project_description")}></textarea>
         </div>
   
