@@ -79,6 +79,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
         <FileUploadButton
           acceptedFileTypes="*"
           buttonText="Project Files"
+          faIconClass="fa fa-plus"
           onFileUpload={this.handleFileSelection.bind(this)}
         />
 

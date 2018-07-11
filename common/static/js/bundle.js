@@ -32999,6 +32999,7 @@ var FileUploadList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_upload_FileUploadButton_jsx__["a" /* default */], {
           acceptedFileTypes: '*',
           buttonText: 'Project Files',
+          faIconClass: 'fa fa-plus',
           onFileUpload: this.handleFileSelection.bind(this)
         }),
         this._renderFiles(),
@@ -33070,14 +33071,7 @@ var FileUploadButton = function (_React$PureComponent) {
   _createClass(FileUploadButton, [{
     key: 'render',
     value: function render() {
-      if (this.props.thumbnail_image == "true") {
-        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'button', value: this.props.buttonText, onClick: this._handleClick.bind(this), className: 'upload-img-btn' }),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { ref: 'fileInput', type: 'file', style: { display: "none" }, accept: this.props.acceptedFileTypes, onChange: this._handleFileSelection.bind(this) })
-        );
-      } else {
+      if (this.props.faIconClass && this.props.buttonText) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           null,
@@ -33093,9 +33087,16 @@ var FileUploadButton = function (_React$PureComponent) {
                 bsSize: 'small',
                 onClick: this._handleClick.bind(this)
               },
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: this.props.faIconClass, 'aria-hidden': 'true' })
             )
           )
+        );
+      } else if (this.props.buttonText) {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          null,
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'button', value: this.props.buttonText, onClick: this._handleClick.bind(this), className: 'upload-img-btn' }),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { ref: 'fileInput', type: 'file', style: { display: "none" }, accept: this.props.acceptedFileTypes, onChange: this._handleFileSelection.bind(this) })
         );
       }
     }
@@ -34092,7 +34093,7 @@ var ImageUploadFormElement = function (_React$PureComponent) {
         'div',
         null,
         this.state.currentImage ? this._renderThumbnail() : this._renderThumbnailPlaceholder(),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_upload_FileUploadButton_jsx__["a" /* default */], { acceptedFileTypes: 'image/*', buttonText: 'Upload Project Image', thumbnail_image: 'true', onFileUpload: this._handleFileSelection.bind(this) }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_upload_FileUploadButton_jsx__["a" /* default */], { acceptedFileTypes: 'image/*', buttonText: 'Upload Project Image', onFileUpload: this._handleFileSelection.bind(this) }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', name: this.props.form_id, id: this.props.form_id })
       );
     }

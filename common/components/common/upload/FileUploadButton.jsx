@@ -13,7 +13,8 @@ export type FileUploadData = {|
 type Props = {|
   onFileUpload: (FileUploadData) => void,
   buttonText: string,
-  acceptedFileTypes: string
+  acceptedFileTypes: string,
+  faIconClass: string
 |};
 
 type State = {|
@@ -30,14 +31,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
   }
   
   render(): React$Node {
-    if(this.props.thumbnail_image == "true"){
-      return (
-        <div>
-          <input type="button" value={this.props.buttonText} onClick={this._handleClick.bind(this)} className="upload-img-btn"/>
-          <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
-        </div>
-      );
-    } else {
+    if(this.props.faIconClass && this.props.buttonText){
       return (
         <div>
           <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
@@ -47,9 +41,16 @@ class FileUploadButton extends React.PureComponent<Props, State> {
               bsSize="small"
               onClick={this._handleClick.bind(this)}
             >
-              <i className="fa fa-plus" aria-hidden="true"></i>
+              <i className={this.props.faIconClass} aria-hidden="true"></i>
             </Button>
           </label>
+        </div>
+      );
+    } else if (this.props.buttonText){
+      return (
+        <div>
+          <input type="button" value={this.props.buttonText} onClick={this._handleClick.bind(this)} className="upload-img-btn"/>
+          <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
         </div>
       );
     }
