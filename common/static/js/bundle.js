@@ -33767,12 +33767,17 @@ var EditProjectForm = function (_React$PureComponent) {
         project_location: "",
         project_url: "",
         project_description: "",
+        project_organization: [],
+        project_issue_area: [],
+        project_technologies: [],
+        project_positions: [],
+        project_thumbnail: "",
         project_links: [],
         project_files: [],
-        link_coderepo: " ",
-        link_messaging: " ",
-        link_projmanage: " ",
-        link_filerepo: " "
+        link_coderepo: "",
+        link_messaging: "",
+        link_projmanage: "",
+        link_filerepo: ""
       },
       validations: [{
         checkFunc: function checkFunc(formFields) {
