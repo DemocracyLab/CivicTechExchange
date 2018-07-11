@@ -34,18 +34,18 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
     this.handleClose = this.handleClose.bind(this);
   }
-  
+
   componentDidMount() {
     var projectId = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
     ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
   }
-  
+
   loadProjectDetails(project: ProjectDetailsAPIData) {
     this.setState({
       project: project
     });
   }
-  
+
   handleClose() {
     this.setState({ showContactModal: false });
   }
@@ -53,7 +53,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return this.state.project ? this._renderDetails() : <div>Loading...</div>
   }
-  
+
   _renderDetails(): React$Node {
     const project = this.state.project;
     return (
@@ -112,8 +112,8 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
               : null
           }
-          
-  
+
+
           <div className="row" style={{margin: "30px 40px 0 40px"}}>
             <div className="col">
               <h2 className="form-group subheader">PROJECT DETAILS</h2>
@@ -122,7 +122,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               </div>
             </div>
           </div>
-        
+
           <NotificationModal
             showModal={this.state.showPositionModal}
             message={this.state.shownPosition && this.state.shownPosition.description}
@@ -130,7 +130,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             headerText={this.state.shownPosition && this.state.shownPosition.roleTag.display_name}
             onClickButton={() => this.setState({showPositionModal: false})}
           />
-        
+
           {
             project && !_.isEmpty(project.project_positions)
               ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
@@ -138,12 +138,12 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     <h2 className="form-group subheader">OPEN POSITIONS</h2>
                     <div className="Text-section">
                       {this._renderPositions()}
-                    </div>  
+                    </div>
                   </div>
                 </div>
               : null
           }
-  
+
           {
             project && !_.isEmpty(project.project_links)
               ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
@@ -156,7 +156,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
               : null
           }
-          
+
           {
             project && !_.isEmpty(project.project_files)
               ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
@@ -173,7 +173,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </div>
     );
   }
-  
+
   _renderProjectLocation(): React$Node {
     if(this.state.project && this.state.project.project_location && (this.state.project.project_location !== Locations.OTHER)) {
       return <div className="col">
@@ -182,7 +182,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </div>
     }
   }
-  
+
   _renderProjectCommunity(): React$Node {
     if(this.state.project && !_.isEmpty(this.state.project.project_organization)) {
       return <div className="col">
@@ -190,7 +190,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </div>
     }
   }
-  
+
   _renderProjectHomepageLink(): React$Node {
     if(this.state.project && this.state.project.project_url) {
       return <div className="col">
@@ -204,20 +204,20 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   _renderTechnologies(): ?Array<React$Node> {
     const project = this.state.project;
-    return project && project.project_technologies && 
+    return project && project.project_technologies &&
       <TagsDisplay tags={project && project.project_technologies}/>
   }
-  
-  
+
+
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
     return project && project.project_links && project.project_links.map((link, i) =>
       <div key={i}>
-        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName}</a>
+        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{this._legibleName(link.linkName)}</a>
       </div>
     );
   }
-  
+
   _renderFiles(): ?Array<React$Node> {
     const project = this.state.project;
     return project && project.project_files && project.project_files.map((file, i) =>
@@ -226,7 +226,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </div>
     );
   }
-  
+
   _renderPositionsOld(): ?Array<React$Node> {
     const project = this.state.project;
     return project && project.project_positions && project.project_positions.map((position, i) =>
@@ -235,7 +235,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </div>
     );
   }
-  
+
   _renderPositions(): ?Array<React$Node> {
     const project = this.state.project;
     return project && project.project_positions && project.project_positions.map((position, i) => {
@@ -251,9 +251,29 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         );
     });
   }
-  
-  
-  
+
+  _legibleName(input) {
+    // Replaces link.name for display in specific cases
+    //TODO: see if I can get a legibleName field in the backend for a ternary instead of this
+    switch (input) {
+      case 'link_coderepo':
+        return "Code Repository"
+        break;
+      case 'link_filerepo':
+        return "File Repository"
+        break;
+      case 'link_messaging':
+        return "Messaging"
+        break;
+      case "link_projmanage":
+        return "Project Management"
+        break;
+      default:
+        return input;
+    }
+
+  }
+
   showPositionModal(position: PositionInfo): void {
     this.setState({
       showPositionModal: true,

@@ -33865,7 +33865,7 @@ var EditProjectForm = function (_React$PureComponent) {
       var eLinksArray = [];
       //create objects for project_links array, skipping empty fields
       eLinks.forEach(function (item) {
-        if (item.url != '') {
+        if (item.url && item.url != '') {
           eLinksArray.push({
             linkName: item.name,
             linkUrl: item.url,
@@ -67879,6 +67879,8 @@ var AboutProjectController = function (_React$PureComponent) {
   }, {
     key: '_renderLinks',
     value: function _renderLinks() {
+      var _this3 = this;
+
       var project = this.state.project;
       return project && project.project_links && project.project_links.map(function (link, i) {
         return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
@@ -67887,7 +67889,7 @@ var AboutProjectController = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'a',
             { href: link.linkUrl, target: '_blank', rel: 'noopener noreferrer' },
-            link.linkName
+            _this3._legibleName(link.linkName)
           )
         );
       });
@@ -67911,7 +67913,7 @@ var AboutProjectController = function (_React$PureComponent) {
   }, {
     key: '_renderPositionsOld',
     value: function _renderPositionsOld() {
-      var _this3 = this;
+      var _this4 = this;
 
       var project = this.state.project;
       return project && project.project_positions && project.project_positions.map(function (position, i) {
@@ -67920,7 +67922,7 @@ var AboutProjectController = function (_React$PureComponent) {
           { key: i },
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'span',
-            { className: 'pseudo-link', onClick: _this3.showPositionModal.bind(_this3, position) },
+            { className: 'pseudo-link', onClick: _this4.showPositionModal.bind(_this4, position) },
             position.roleTag.display_name
           )
         );
@@ -67946,6 +67948,28 @@ var AboutProjectController = function (_React$PureComponent) {
           )
         );
       });
+    }
+  }, {
+    key: '_legibleName',
+    value: function _legibleName(input) {
+      // Replaces link.name for display in specific cases
+      //TODO: see if I can get a legibleName field in the backend for a ternary instead of this
+      switch (input) {
+        case 'link_coderepo':
+          return "Code Repository";
+          break;
+        case 'link_filerepo':
+          return "File Repository";
+          break;
+        case 'link_messaging':
+          return "Messaging";
+          break;
+        case "link_projmanage":
+          return "Project Management";
+          break;
+        default:
+          return input;
+      }
     }
   }, {
     key: 'showPositionModal',

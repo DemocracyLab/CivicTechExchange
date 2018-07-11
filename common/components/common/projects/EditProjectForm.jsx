@@ -156,7 +156,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
    var eLinksArray = []
 //create objects for project_links array, skipping empty fields
   eLinks.forEach(function(item) {
-    if(item.url != '') {
+    if(item.url && item.url != '') {
       eLinksArray.push({
         linkName: item.name,
         linkUrl: item.url,
