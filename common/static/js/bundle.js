@@ -33820,16 +33820,13 @@ var EditProjectForm = function (_React$PureComponent) {
             project_organization: project.project_organization,
             project_issue_area: project.project_issue_area,
             project_technologies: project.project_technologies,
-            project_links: __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.cloneDeep(project.project_links),
             project_files: __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.cloneDeep(project.project_files),
             project_positions: __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.cloneDeep(project.project_positions),
-            project_thumbnail: project.project_thumbnail,
-            link_coderepo: '',
-            link_messaging: '',
-            link_projmanage: '',
-            link_filerepo: ''
+            project_thumbnail: project.project_thumbnail
           }
         });
+        //this will set formFields.project_links and formFields.links_*
+        this.filterSpecificLinks(__WEBPACK_IMPORTED_MODULE_12_lodash___default.a.cloneDeep(project.project_links));
       }
     }
   }, {
@@ -33861,7 +33858,7 @@ var EditProjectForm = function (_React$PureComponent) {
       var eLinks = [{ name: "link_coderepo", url: this.state.formFields.link_coderepo }, { name: "link_messaging", url: this.state.formFields.link_messaging }, { name: "link_projmanage", url: this.state.formFields.link_projmanage }, { name: "link_filerepo", url: this.state.formFields.link_filerepo }];
       //create empty array for output
       var eLinksArray = [];
-      //create objects for links array
+      //create objects for project_links array, skipping empty fields
       eLinks.forEach(function (item) {
         if (item.url != '') {
           eLinksArray.push({
@@ -33871,15 +33868,33 @@ var EditProjectForm = function (_React$PureComponent) {
           });
         }
       });
-      //append eLinksArray to a copy of state's array of links (TODO: concat is slow, consider using Array.push)
+      //append eLinksArray to a copy of state's array of links (TODO: concat is slow, consider using Array.push?)
       var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
-      console.log('combinedArray: ', combinedArray);
       // setState new combined array
       this.setState({ formFields: { project_links: combinedArray } });
-      console.log(this.state.formFields.project_links);
-      alert('combinedArray and projectlinks maybe, possibly, logged)');
+      // force react to update component 
+      this.forceUpdate();
+    }
+  }, {
+    key: 'filterSpecificLinks',
+    value: function filterSpecificLinks(array) {
+      //this function updates the entire state.formFields object at once to avoid nested state update issues
 
-      // force react to update component
+      //find specific link_ items and remove from main links array
+      var specificLinks = __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.remove(array, function (n) {
+        return n.linkName.startsWith("link_");
+      });
+      //copy the formFields state to work with
+      var linkState = this.state.formFields;
+      //pull out the link_ item key:values and append to state copy
+      specificLinks.forEach(function (item) {
+        linkState[item.linkName] = item.linkUrl;
+      });
+      //add the other links to state copy
+      linkState['project_links'] = array;
+
+      //finally, set state with both project_links and link_ items
+      this.setState({ formFields: linkState });
       this.forceUpdate();
     }
   }, {

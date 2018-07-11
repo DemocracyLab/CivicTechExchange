@@ -65,10 +65,10 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         project_description: "",
         project_links: [],
         project_files: [],
-        link_coderepo: "",
-        link_messaging: "",
-        link_projmanage: "",
-        link_filerepo: ""
+        link_coderepo: " ",
+        link_messaging: " ",
+        link_projmanage: " ",
+        link_filerepo: " "
       },
       validations: [
         {
@@ -110,16 +110,13 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_organization: project.project_organization,
           project_issue_area: project.project_issue_area,
           project_technologies: project.project_technologies,
-          project_links: _.cloneDeep(project.project_links),
           project_files: _.cloneDeep(project.project_files),
           project_positions: _.cloneDeep(project.project_positions),
           project_thumbnail: project.project_thumbnail,
-          link_coderepo: '',
-          link_messaging: '',
-          link_projmanage: '',
-          link_filerepo: ''
         }
       });
+      //this will set formFields.project_links and formFields.links_*
+      this.filterSpecificLinks(_.cloneDeep(project.project_links));
     }
   }
 
@@ -152,7 +149,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     ];
    //create empty array for output
    var eLinksArray = []
-//create objects for links array
+//create objects for project_links array, skipping empty fields
   eLinks.forEach(function(item) {
     if(item.url != '') {
       eLinksArray.push({
@@ -162,17 +159,33 @@ class EditProjectForm extends React.PureComponent<Props,State> {
       })
     }
   });
-  //append eLinksArray to a copy of state's array of links (TODO: concat is slow, consider using Array.push)
+  //append eLinksArray to a copy of state's array of links (TODO: concat is slow, consider using Array.push?)
   var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
-  console.log('combinedArray: ', combinedArray)
   // setState new combined array
   this.setState({ formFields: { project_links: combinedArray }});
-  console.log(this.state.formFields.project_links);
-  alert('combinedArray and projectlinks maybe, possibly, logged)');
-
-
    // force react to update component
     this.forceUpdate();
+  }
+
+  filterSpecificLinks(array) {
+    //this function updates the entire state.formFields object at once to avoid nested state update issues
+
+    //find specific link_ items and remove from main links array
+    var specificLinks = _.remove(array, function(n) {
+      return n.linkName.startsWith("link_")
+    });
+    //copy the formFields state to work with
+    var linkState = this.state.formFields
+    //pull out the link_ item key:values and append to state copy
+    specificLinks.forEach(function(item) {
+      linkState[item.linkName] = item.linkUrl;
+     });
+     //add the other links to state copy
+     linkState['project_links'] = array;
+
+     //finally, set state with both project_links and link_ items
+     this.setState({ formFields: linkState });
+     this.forceUpdate();
   }
 
   render(): React$Node {
