@@ -18,6 +18,7 @@ from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 
+from pprint import pprint
 
 def tags(request):
     url_parts = request.GET.urlencode()
@@ -128,6 +129,15 @@ def index(request):
         context = {}
 
     return HttpResponse(template.render(context, request))
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def add_alert(request):
+    # TODO: Implement
+    body = json.loads(request.body)
+    pprint(body)
+    return HttpResponse(status=200)
 
 
 def my_projects(request):
