@@ -251,7 +251,7 @@ th, td {
   margin-bottom: 10px;
 }
 
-.EditProjectForm-root Button:hover, label:hover, .upload-img-btn {
+.EditProjectForm-root Button:hover, .upload-img-btn {
   cursor: pointer;
 }
 

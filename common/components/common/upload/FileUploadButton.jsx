@@ -36,14 +36,13 @@ class FileUploadButton extends React.PureComponent<Props, State> {
         <div>
           <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
 
-          <label>{this.props.buttonText} &nbsp;
-            <Button
-              bsSize="small"
-              onClick={this._handleClick.bind(this)}
-            >
-              <i className={this.props.faIconClass} aria-hidden="true"></i>
-            </Button>
-          </label>
+          <label>{this.props.buttonText} &nbsp;</label>
+          <Button
+            bsSize="small"
+            onClick={this._handleClick.bind(this)}
+          >
+            <i className={this.props.faIconClass} aria-hidden="true"></i>
+          </Button>
         </div>
       );
     } else if (this.props.buttonText){
