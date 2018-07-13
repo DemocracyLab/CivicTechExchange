@@ -21,9 +21,9 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
   }
   
   openAlertSignup() {
-    // TODO: Set search filters
     this.setState({
       showAlertSignupModal: true,
+      searchFilters: document.location.search
     });
   }
   
@@ -39,12 +39,11 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
       	</p>
         
         <AlertSignupModal
-          filters={this.state.searchFilters}
+          searchFilters={this.state.searchFilters}
           showModal={this.state.showAlertSignupModal}
           handleClose={this.handleCloseAlertSignup.bind(this)}
         />
         <Button onClick={this.openAlertSignup.bind(this)}>Sign Up for Alerts</Button>
-        
         
         <ProjectSearchBar />
         <ProjectTagContainer />

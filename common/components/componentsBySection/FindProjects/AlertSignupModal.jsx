@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import metrics from "../../utils/metrics.js";
 import {Modal, Button} from 'react-bootstrap';
 import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
 import Select from 'react-select'
@@ -45,7 +44,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
         email: "",
         country: countries.find(country => country.label === Countries.US),
         postal_code: "",
-        filters: this.props.searchFilters
+        filters: props.searchFilters
       }
     };
     this.closeModal = this.closeModal.bind(this, this.props.handleClose);
@@ -53,7 +52,12 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
   }
     
   componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ showModal: nextProps.showModal });
+    let formFields: FormFields = this.state.formFields;
+    formFields.filters = nextProps.searchFilters;
+    this.setState({
+      showModal: nextProps.showModal,
+      formFields: formFields
+    });
   }
   
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
@@ -62,7 +66,6 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
   }
 
   handleSubmit() {
-    // TODO: Metrics
     ProjectAPIUtils.post("/alert/create/",
       {
         email: this.state.formFields.email,

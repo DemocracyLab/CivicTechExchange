@@ -75137,7 +75137,10 @@ var ProjectSearchContainer = function (_React$PureComponent) {
   _createClass(ProjectSearchContainer, [{
     key: 'openAlertSignup',
     value: function openAlertSignup() {
-      this.setState({ showAlertSignupModal: true });
+      this.setState({
+        showAlertSignupModal: true,
+        searchFilters: document.location.search
+      });
     }
   }, {
     key: 'handleCloseAlertSignup',
@@ -75156,7 +75159,7 @@ var ProjectSearchContainer = function (_React$PureComponent) {
           'Welcome to DemocracyLab! Use the filters and search bar below to find tech-for-good projects in Seattle.'
         ),
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__AlertSignupModal_jsx__["a" /* default */], {
-          filters: this.state.searchFilters,
+          searchFilters: this.state.searchFilters,
           showModal: this.state.showAlertSignupModal,
           handleClose: this.handleCloseAlertSignup.bind(this)
         }),
@@ -75420,8 +75423,6 @@ var ProjectSearchBar = function (_React$Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_ProjectAPIUtils_js__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_select__ = __webpack_require__(172);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__constants_Countries_js__ = __webpack_require__(396);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -75429,7 +75430,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 
 
 
@@ -75462,7 +75462,7 @@ var AlertSignupModal = function (_React$PureComponent) {
           return country.label === __WEBPACK_IMPORTED_MODULE_5__constants_Countries_js__["a" /* Countries */].US;
         }),
         postal_code: "",
-        filters: _this.props.searchFilters
+        filters: props.searchFilters
       }
     };
     _this.closeModal = _this.closeModal.bind(_this, _this.props.handleClose);
@@ -75473,7 +75473,12 @@ var AlertSignupModal = function (_React$PureComponent) {
   _createClass(AlertSignupModal, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      this.setState({ showModal: nextProps.showModal });
+      var formFields = this.state.formFields;
+      formFields.filters = nextProps.searchFilters;
+      this.setState({
+        showModal: nextProps.showModal,
+        formFields: formFields
+      });
     }
   }, {
     key: 'onFormFieldChange',
@@ -75502,6 +75507,7 @@ var AlertSignupModal = function (_React$PureComponent) {
   }, {
     key: 'closeModal',
     value: function closeModal() {
+      // TODO: Reset parameters
       this.props.handleClose();
     }
   }, {
@@ -75639,7 +75645,7 @@ var Countries = {
   BR: "Brazil",
   VG: "British Virgin Islands",
   IO: "British Indian Ocean Territory",
-  BN: "Brunei Darussalam",
+  BN: "Brunei",
   BG: "Bulgaria",
   BF: "Burkina Faso",
   BI: "Burundi",
@@ -75678,7 +75684,7 @@ var Countries = {
   ER: "Eritrea",
   EE: "Estonia",
   ET: "Ethiopia",
-  FK: "Falkland Islands (Malvinas)",
+  FK: "Falkland Islands",
   FO: "Faroe Islands",
   FJ: "Fiji",
   FI: "Finland",
@@ -75704,7 +75710,7 @@ var Countries = {
   GY: "Guyana",
   HT: "Haiti",
   HM: "Heard and Mcdonald Islands",
-  VA: "Holy See (Vatican City State)",
+  VA: "Vatican City",
   HN: "Honduras",
   HU: "Hungary",
   IS: "Iceland",
@@ -75821,7 +75827,7 @@ var Countries = {
   SZ: "Swaziland",
   SE: "Sweden",
   CH: "Switzerland",
-  SY: "Syrian Arab Republic (Syria)",
+  SY: "Syria",
   TW: "Taiwan",
   TJ: "Tajikistan",
   TZ: "Tanzania",
@@ -75845,7 +75851,7 @@ var Countries = {
   UY: "Uruguay",
   UZ: "Uzbekistan",
   VU: "Vanuatu",
-  VE: "Venezuela (Bolivarian Republic)",
+  VE: "Venezuela",
   VN: "Vietnam",
   VI: "Virgin Islands",
   WF: "Wallis and Futuna Islands",
