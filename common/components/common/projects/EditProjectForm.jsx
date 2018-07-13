@@ -166,9 +166,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   }
 
   filterSpecificLinks(array) {
-    //this function updates the entire state.formFields object at once to avoid nested state update issues
-
-    //find specific link_ items and remove from main links array
+    //this function updates the entire state.formFields object at once
     var specificLinks = _.remove(array, function(n) {
       return n.linkName.startsWith("link_")
     });
@@ -181,8 +179,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
      //add the other links to state copy
      linkState['project_links'] = array;
 
-     //finally, set state with both project_links and link_ items
-     //TODO: fix this so I'm not passing the object by reference which doesn't rerender unless I forceUpdate
+     //TODO: see if there's a way to do this without the forceUpdate - passing by reference problem?
      this.setState({ formFields: linkState });
      this.forceUpdate();
   }
