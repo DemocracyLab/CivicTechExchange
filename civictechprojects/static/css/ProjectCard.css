@@ -11,7 +11,7 @@
 
 .ProjectCard-root > div.borderbottom {
   padding: 5px;
-  border-bottom: solid 1px; 
+  border-bottom: solid 1px;
 }
 
 .ProjectCard-description {
@@ -29,7 +29,7 @@
 
 .ProjectCard-name {
   height: 140px;
-  
+
 }
 
 .ProjectCard-name > h3{
@@ -42,4 +42,9 @@
 
 .ProjectCard-value {
   color: #6b6e70;
+}
+
+.ProjectCardContainer {
+ display: inline-block;
+ width: calc(100% - 290px);
 }

@@ -4,7 +4,7 @@ import React from 'react'
 import {Container} from 'flux/utils';
 import type {TagDefinition} from '../../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js';
-import SelectorDropdown from "../selection/SelectorDropdown.jsx";
+import SelectorCollapsible from "../selection/SelectorCollapsible.jsx";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
 import metrics from "../../utils/metrics";
@@ -29,7 +29,7 @@ type State = {|
 /**
  * Dropdown selector for tags
  */
-class TagSelectorDropdown extends React.Component<Props, State> {
+class TagSelectorCollapsible extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {tags: null};
@@ -55,12 +55,22 @@ class TagSelectorDropdown extends React.Component<Props, State> {
     };
   }
 
+
   selectTag(tag: TagDefinition): void {
-    ProjectSearchDispatcher.dispatch({
-      type: 'ADD_TAG',
-      tag: tag.tag_name,
-    });
-    metrics.addTagFilterEvent(tag);
+    var tagInState = _.has(this.state.selectedTags, tag.tag_name);
+    //if tag is NOT currently in state, add it, otherwise remove
+    if(!tagInState) {
+      ProjectSearchDispatcher.dispatch({
+        type: 'ADD_TAG',
+        tag: tag.tag_name,
+      });
+      metrics.addTagFilterEvent(tag);
+    } else {
+      ProjectSearchDispatcher.dispatch({
+        type: 'REMOVE_TAG',
+        tag: tag,
+      });
+    }
   }
 
   render(): React$Node {
@@ -68,7 +78,7 @@ class TagSelectorDropdown extends React.Component<Props, State> {
       <div>
         { this.state.tags
           ? (
-            <SelectorDropdown
+            <SelectorCollapsible
               title={this.props.title}
               options={this.state.tags}
               optionCategory={this.state.hasSubcategories && (tag => tag.subcategory)}
@@ -83,20 +93,15 @@ class TagSelectorDropdown extends React.Component<Props, State> {
     );
   }
 
+
   _tagEnabled(tag: TagDefinition): boolean {
-    // Disable tags that are already selected
-    return !this.state.selectedTags || !this.state.selectedTags[tag.tag_name];
+    //return true if tag is in this.state.selectedTags, else implicitly false
+    return _.has(this.state.selectedTags, tag.tag_name)
   }
 
   _displayTag(tag: TagDefinition): string {
-    // const tagCount: number = this.state.tagCounts[tag.tag_name] || 0;
-    // let tagDisplay: string = tag.display_name;
-    // if(tagCount > 0) {
-    //   tagDisplay += " (" + tagCount + ")";
-    // }
-    // return tagDisplay;
     return tag.display_name;
   }
 }
 
-export default Container.create(TagSelectorDropdown);
+export default Container.create(TagSelectorCollapsible);

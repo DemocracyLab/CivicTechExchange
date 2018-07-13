@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import TagSelectorDropdown from "../../common/tags/TagSelectorDropdown.jsx";
+import TagSelectorCollapsible from "../../common/tags/TagSelectorCollapsible.jsx";
 import TagCategory from "../../common/tags/TagCategory.jsx";
 
 class ProjectFilterContainer extends React.PureComponent<{||}> {
@@ -11,10 +11,10 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
         <div className="ProjectFilterContainer-label">
           Filter By:
         </div>
-        <TagSelectorDropdown category={TagCategory.ISSUES} title="Issue Areas" />
-        <TagSelectorDropdown category={TagCategory.TECHNOLOGIES_USED} title="Technology Used" />
-        <TagSelectorDropdown category={TagCategory.ROLE} title="Roles Needed" />
-        <TagSelectorDropdown category={TagCategory.ORGANIZATION} title="Communities" />
+        <TagSelectorCollapsible category={TagCategory.ISSUES} title="Issue Areas" />
+        <TagSelectorCollapsible category={TagCategory.TECHNOLOGIES_USED} title="Technology Used" />
+        <TagSelectorCollapsible category={TagCategory.ROLE} title="Roles Needed" />
+        <TagSelectorCollapsible category={TagCategory.ORGANIZATION} title="Communities" />
       </div>
     );
   }

@@ -1,18 +1,24 @@
 .ProjectFilterContainer-root {
   background-color: #f7f7f7;
-  border: solid 1px #cecece;
   border-top: 0;
-  padding: 11px 51px 31px 51px;
+  padding: 10px;
+  width: 280px;
+  margin-right: 10px;
+  /* add total width of content + padding + margin for ProjectCard container */
+  display: inline-block;
+  min-height: 100%;
+  vertical-align: top;
 }
 
 .ProjectFilterContainer-label {
   color: #727272;
-  font-size: 12px;
+  font-size: 16px;
   margin-right: 50px;
   margin-top: 2px;
+  width: 100%;
+
 }
 
 .ProjectFilterContainer-root > div {
-  float: left;
-  margin-right: 50px;
+  display: block;
 }

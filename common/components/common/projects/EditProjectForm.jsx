@@ -17,6 +17,7 @@ import url from '../../utils/url.js'
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import PositionList from "../../forms/PositionList.jsx";
 import _ from 'lodash'
+import {Locations} from "../../constants/ProjectConstants";
 
 
 type FormFields = {|
@@ -145,6 +146,20 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     );
   }
   
+  _renderLocationDropdown(): React$Node{
+    return <div className="form-group">
+      <label htmlFor="project_location">Project Location</label>
+      <select name="project_location" id="project_location" className="form-control" value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}>
+        {!this.state.formFields.project_location ? <option value=""></option> : null}
+        <option value="Redmond, WA">Redmond, WA</option>
+        <option value="Kirkland, WA">Kirkland, WA</option>
+        <option value="Bellevue, WA">Bellevue, WA</option>
+        <option value="Seattle, WA">Seattle, WA</option>
+        <option value={Locations.OTHER}>{Locations.OTHER}</option>
+      </select>
+    </div>;
+  }
+  
   _renderForm(): React$Node {
     return (
       <div className="EditProjectForm-root">
@@ -167,10 +182,12 @@ class EditProjectForm extends React.PureComponent<Props,State> {
                  value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}/>
         </div>
         <div className="form-group">
-          <label>Website URL</label>
+          <label htmlFor="project_url">Website URL</label>
           <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
                  value={this.state.formFields.project_url} onChange={this.onFormFieldChange.bind(this, "project_url")}/>
         </div>
+
+        {this._renderLocationDropdown()}
   
         <div className="form-group">
           <label>Community</label>
