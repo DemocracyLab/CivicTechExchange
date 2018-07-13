@@ -32999,7 +32999,7 @@ var FileUploadList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_upload_FileUploadButton_jsx__["a" /* default */], {
           acceptedFileTypes: '*',
           buttonText: 'Project Files',
-          faIconClass: 'fa fa-plus',
+          iconClass: 'fa fa-plus',
           onFileUpload: this.handleFileSelection.bind(this)
         }),
         this._renderFiles(),
@@ -33071,7 +33071,7 @@ var FileUploadButton = function (_React$PureComponent) {
   _createClass(FileUploadButton, [{
     key: 'render',
     value: function render() {
-      if (this.props.faIconClass && this.props.buttonText) {
+      if (this.props.iconClass && this.props.buttonText) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           null,
@@ -33088,7 +33088,7 @@ var FileUploadButton = function (_React$PureComponent) {
               bsSize: 'small',
               onClick: this._handleClick.bind(this)
             },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: this.props.faIconClass, 'aria-hidden': 'true' })
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: this.props.iconClass, 'aria-hidden': 'true' })
           )
         );
       } else if (this.props.buttonText) {

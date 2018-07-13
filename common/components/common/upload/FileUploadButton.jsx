@@ -14,7 +14,7 @@ type Props = {|
   onFileUpload: (FileUploadData) => void,
   buttonText: string,
   acceptedFileTypes: string,
-  faIconClass: string
+  iconClass: string
 |};
 
 type State = {|
@@ -31,7 +31,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
   }
   
   render(): React$Node {
-    if(this.props.faIconClass && this.props.buttonText){
+    if(this.props.iconClass && this.props.buttonText){
       return (
         <div>
           <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
@@ -41,7 +41,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
             bsSize="small"
             onClick={this._handleClick.bind(this)}
           >
-            <i className={this.props.faIconClass} aria-hidden="true"></i>
+            <i className={this.props.iconClass} aria-hidden="true"></i>
           </Button>
         </div>
       );
