@@ -147,12 +147,11 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     }
    // create input array
    var eLinks = ['link_coderepo','link_messaging','link_filerepo','link_projmanage'].map(name => ({linkName: name, linkUrl: this.state.formFields[name]}))
-   console.log(eLinks);
    //create output array
    var eLinksArray = [];
 //create objects for project_links array, skipping empty fields
   eLinks.forEach(function(item) {
-    if(item.linkUrl && !_.isEmpty(item.linkUrl)) {
+    if(!_.isEmpty(item.linkUrl)) {
       eLinksArray.push({
         linkName: item.linkName,
         linkUrl: item.linkUrl,
@@ -164,8 +163,6 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
   // setState new combined array
   this.setState({ formFields: { project_links: combinedArray }});
-   // force react to update component
-    this.forceUpdate();
   }
 
   filterSpecificLinks(array) {
