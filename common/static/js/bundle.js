@@ -33855,30 +33855,32 @@ var EditProjectForm = function (_React$PureComponent) {
   }, {
     key: 'onSubmit',
     value: function onSubmit() {
+      var _this2 = this;
+
       //Sanitize project url if necessary
       if (this.state.formFields.project_url) {
         this.state.formFields.project_url = __WEBPACK_IMPORTED_MODULE_9__utils_url_js__["a" /* default */].appendHttpIfMissingProtocol(this.state.formFields.project_url);
       }
-      // create array for explicit link types (TODO: make this less repetitive)
-      var eLinks = [{ name: "link_coderepo", url: this.state.formFields.link_coderepo }, { name: "link_messaging", url: this.state.formFields.link_messaging }, { name: "link_projmanage", url: this.state.formFields.link_projmanage }, { name: "link_filerepo", url: this.state.formFields.link_filerepo }];
-      //create empty array for output
+      // create input array
+      var eLinks = ['link_coderepo', 'link_messaging', 'link_filerepo', 'link_projmanage'].map(function (name) {
+        return { linkName: name, linkUrl: _this2.state.formFields[name] };
+      });
+      //create output array
       var eLinksArray = [];
       //create objects for project_links array, skipping empty fields
       eLinks.forEach(function (item) {
-        if (item.url && item.url != '') {
+        if (!__WEBPACK_IMPORTED_MODULE_12_lodash___default.a.isEmpty(item.linkUrl)) {
           eLinksArray.push({
-            linkName: item.name,
-            linkUrl: item.url,
+            linkName: item.linkName,
+            linkUrl: item.linkUrl,
             visibility: "PUBLIC"
           });
         }
       });
-      //append eLinksArray to a copy of state's array of links (TODO: concat is slow, consider using Array.push?)
+      //combine arrays prior to sending to backend
       var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
       // setState new combined array
       this.setState({ formFields: { project_links: combinedArray } });
-      // force react to update component
-      this.forceUpdate();
     }
   }, {
     key: 'filterSpecificLinks',
@@ -67952,23 +67954,17 @@ var AboutProjectController = function (_React$PureComponent) {
   }, {
     key: '_legibleName',
     value: function _legibleName(input) {
-      // Replaces link.name for display in specific cases
-      //TODO: see if I can get a legibleName field in the backend for a ternary instead of this
-      switch (input) {
-        case 'link_coderepo':
-          return "Code Repository";
-          break;
-        case 'link_filerepo':
-          return "File Repository";
-          break;
-        case 'link_messaging':
-          return "Messaging";
-          break;
-        case "link_projmanage":
-          return "Project Management";
-          break;
-        default:
-          return input;
+      //replaces specific linkNames for readability
+      var linkNames = {
+        'link_coderepo': "Code Repository",
+        'link_messaging': "Messaging",
+        'link_filerepo': "File Repository",
+        'link_projmanage': "Project Management"
+      };
+      if (input in linkNames) {
+        return linkNames[input];
+      } else {
+        return input;
       }
     }
   }, {

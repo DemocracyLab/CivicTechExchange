@@ -253,25 +253,18 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   _legibleName(input) {
-    // Replaces link.name for display in specific cases
-    //TODO: see if I can get a legibleName field in the backend for a ternary instead of this
-    switch (input) {
-      case 'link_coderepo':
-        return "Code Repository"
-        break;
-      case 'link_filerepo':
-        return "File Repository"
-        break;
-      case 'link_messaging':
-        return "Messaging"
-        break;
-      case "link_projmanage":
-        return "Project Management"
-        break;
-      default:
-        return input;
+    //replaces specific linkNames for readability
+    const linkNames= {
+      'link_coderepo': "Code Repository",
+      'link_messaging': "Messaging",
+      'link_filerepo': "File Repository",
+      'link_projmanage': "Project Management"
+    };
+    if(input in linkNames) {
+      return linkNames[input]
+    } else {
+      return input
     }
-
   }
 
   showPositionModal(position: PositionInfo): void {

@@ -149,20 +149,20 @@ class EditProjectForm extends React.PureComponent<Props,State> {
    var eLinks = ['link_coderepo','link_messaging','link_filerepo','link_projmanage'].map(name => ({linkName: name, linkUrl: this.state.formFields[name]}))
    //create output array
    var eLinksArray = [];
-//create objects for project_links array, skipping empty fields
-  eLinks.forEach(function(item) {
-    if(!_.isEmpty(item.linkUrl)) {
-      eLinksArray.push({
-        linkName: item.linkName,
-        linkUrl: item.linkUrl,
-        visibility: "PUBLIC",
-      })
-    }
-  });
-  //append eLinksArray to a copy of state's array of links (TODO: concat is slow, consider using Array.push?)
-  var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
-  // setState new combined array
-  this.setState({ formFields: { project_links: combinedArray }});
+  //create objects for project_links array, skipping empty fields
+    eLinks.forEach(function(item) {
+      if(!_.isEmpty(item.linkUrl)) {
+        eLinksArray.push({
+          linkName: item.linkName,
+          linkUrl: item.linkUrl,
+          visibility: "PUBLIC",
+        })
+      }
+    });
+    //combine arrays prior to sending to backend
+    var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
+    // setState new combined array
+    this.setState({ formFields: { project_links: combinedArray }});
   }
 
   filterSpecificLinks(array) {
