@@ -145,21 +145,17 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     if(this.state.formFields.project_url) {
       this.state.formFields.project_url = url.appendHttpIfMissingProtocol(this.state.formFields.project_url);
     }
-   // create array for explicit link types (TODO: make this less repetitive)
-   var eLinks = [
-      { name: "link_coderepo", url: this.state.formFields.link_coderepo },
-      { name: "link_messaging", url: this.state.formFields.link_messaging },
-      { name: "link_projmanage", url: this.state.formFields.link_projmanage },
-      { name: "link_filerepo", url: this.state.formFields.link_filerepo }
-    ];
-   //create empty array for output
-   var eLinksArray = []
+   // create input array
+   var eLinks = ['link_coderepo','link_messaging','link_filerepo','link_projmanage'].map(name => ({linkName: name, linkUrl: this.state.formFields[name]}))
+   console.log(eLinks);
+   //create output array
+   var eLinksArray = [];
 //create objects for project_links array, skipping empty fields
   eLinks.forEach(function(item) {
-    if(item.url && item.url != '') {
+    if(item.linkUrl && !_.isEmpty(item.linkUrl)) {
       eLinksArray.push({
-        linkName: item.name,
-        linkUrl: item.url,
+        linkName: item.linkName,
+        linkUrl: item.linkUrl,
         visibility: "PUBLIC",
       })
     }
