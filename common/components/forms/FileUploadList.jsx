@@ -76,13 +76,14 @@ class FileUploadList extends React.PureComponent<Props,State>  {
       <div>
         <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
         
-        {this._renderFiles()}
-        
         <FileUploadButton
           acceptedFileTypes="*"
-          buttonText="Upload File"
+          buttonText="Project Files"
+          iconClass="fa fa-plus"
           onFileUpload={this.handleFileSelection.bind(this)}
         />
+
+        {this._renderFiles()}
         
         <ConfirmationModal
           showModal={this.state.showDeleteModal}

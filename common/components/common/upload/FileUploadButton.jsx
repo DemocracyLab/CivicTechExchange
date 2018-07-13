@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import {Button} from 'react-bootstrap';
 import type { S3Data } from './S3Data.jsx'
 
 export type FileUploadData = {|
@@ -12,7 +13,8 @@ export type FileUploadData = {|
 type Props = {|
   onFileUpload: (FileUploadData) => void,
   buttonText: string,
-  acceptedFileTypes: string
+  acceptedFileTypes: string,
+  iconClass: string
 |};
 
 type State = {|
@@ -29,12 +31,28 @@ class FileUploadButton extends React.PureComponent<Props, State> {
   }
   
   render(): React$Node {
-    return (
-      <div>
-        <input type="button" value={this.props.buttonText} onClick={this._handleClick.bind(this)} />
-        <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
-      </div>
-    );
+    if(this.props.iconClass && this.props.buttonText){
+      return (
+        <div>
+          <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
+
+          <label>{this.props.buttonText} &nbsp;</label>
+          <Button
+            bsSize="small"
+            onClick={this._handleClick.bind(this)}
+          >
+            <i className={this.props.iconClass} aria-hidden="true"></i>
+          </Button>
+        </div>
+      );
+    } else if (this.props.buttonText){
+      return (
+        <div>
+          <input type="button" value={this.props.buttonText} onClick={this._handleClick.bind(this)} className="upload-img-btn"/>
+          <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
+        </div>
+      );
+    }
   }
   
   _handleClick(): void {
