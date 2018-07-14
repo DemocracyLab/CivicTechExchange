@@ -10,7 +10,7 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition
+from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition, UserAlert
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
@@ -134,9 +134,9 @@ def index(request):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def add_alert(request):
-    # TODO: Implement
     body = json.loads(request.body)
-    pprint(body)
+    UserAlert.create_or_update(
+        email=body['email'], filters=body['filters'], country=body['country'], postal_code=body['postal_code'])
     return HttpResponse(status=200)
 
 
