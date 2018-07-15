@@ -43,7 +43,10 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
           showModal={this.state.showAlertSignupModal}
           handleClose={this.handleCloseAlertSignup.bind(this)}
         />
-        <Button onClick={this.openAlertSignup.bind(this)}>Sign Up for Alerts</Button>
+        <Button className="alert-signup" onClick={this.openAlertSignup.bind(this)}>
+          <i className="fa fa-bell" aria-hidden="true"></i>
+          Sign Up for Alerts
+        </Button>
         
         <ProjectSearchBar />
         <ProjectTagContainer />

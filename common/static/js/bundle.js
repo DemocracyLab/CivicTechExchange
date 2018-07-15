@@ -75165,7 +75165,8 @@ var ProjectSearchContainer = function (_React$PureComponent) {
         }),
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_3_react_bootstrap__["a" /* Button */],
-          { onClick: this.openAlertSignup.bind(this) },
+          { className: 'alert-signup', onClick: this.openAlertSignup.bind(this) },
+          __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('i', { className: 'fa fa-bell', 'aria-hidden': 'true' }),
           'Sign Up for Alerts'
         ),
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__ProjectSearchBar_jsx__["a" /* default */], null),
