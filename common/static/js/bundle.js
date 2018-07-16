@@ -33899,6 +33899,7 @@ var EditProjectForm = function (_React$PureComponent) {
       //create objects for project_links array, skipping empty fields
       eLinks.forEach(function (item) {
         if (!__WEBPACK_IMPORTED_MODULE_12_lodash___default.a.isEmpty(item.linkUrl)) {
+          item.linkUrl = __WEBPACK_IMPORTED_MODULE_9__utils_url_js__["a" /* default */].appendHttpIfMissingProtocol(item.linkUrl);
           eLinksArray.push({
             linkName: item.linkName,
             linkUrl: item.linkUrl,
@@ -33910,13 +33911,15 @@ var EditProjectForm = function (_React$PureComponent) {
       var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
       // setState new combined array
       this.setState({ formFields: { project_links: combinedArray } });
+      //testing whether this is important to Chrome saving, TODO: remove if not
+      this.forceUpdate();
     }
   }, {
     key: 'filterSpecificLinks',
     value: function filterSpecificLinks(array) {
       //this function updates the entire state.formFields object at once
       var specificLinks = __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.remove(array, function (n) {
-        return n.linkName.startsWith("link_");
+        return n.linkName in linkNames;
       });
       //copy the formFields state to work with
       var linkState = this.state.formFields;
@@ -34014,13 +34017,7 @@ var EditProjectForm = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           { className: 'form-group' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'label',
-            null,
-            'Project Location'
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_location', name: 'project_location', maxLength: '200',
-            value: this.state.formFields.project_location, onChange: this.onFormFieldChange.bind(this, "project_location") })
+          this._renderLocationDropdown()
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
@@ -34033,7 +34030,6 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'project_url', name: 'project_url', maxLength: '2075',
             value: this.state.formFields.project_url, onChange: this.onFormFieldChange.bind(this, "project_url") })
         ),
-        this._renderLocationDropdown(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           { className: 'form-group' },
@@ -67990,11 +67986,7 @@ var AboutProjectController = function (_React$PureComponent) {
         'link_filerepo': "File Repository",
         'link_projmanage': "Project Management"
       };
-      if (input in linkNames) {
-        return linkNames[input];
-      } else {
-        return input;
-      }
+      return linkNames[input] || input;
     }
   }, {
     key: 'showPositionModal',
