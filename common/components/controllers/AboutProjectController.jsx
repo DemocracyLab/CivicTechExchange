@@ -13,6 +13,7 @@ import _ from 'lodash'
 
 import React from 'react';
 import {Locations} from "../constants/ProjectConstants.js";
+import {LinkNames} from "../constants/LinkConstants.js";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -254,13 +255,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   _legibleName(input) {
     //replaces specific linkNames for readability
-    const linkNames= {
-      'link_coderepo': "Code Repository",
-      'link_messaging': "Messaging",
-      'link_filerepo': "File Repository",
-      'link_projmanage': "Project Management"
-    };
-    return linkNames[input] || input;
+    return LinkNames[input] || input;
   }
 
   showPositionModal(position: PositionInfo): void {
