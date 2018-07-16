@@ -73,9 +73,9 @@ th, td {
     --pumpkin-orange: #fc8a04;
     --text-box-grey: #f2f2f2;
   }
-  
+
   /* Text styles */
-  
+
   h1 {
     font-family: HiraginoSans-W5;
     font-size: 32px;
@@ -83,7 +83,7 @@ th, td {
     color: #231f1f;
     color: var(--black);
   }
-  
+
   h2 {
     font-family: HiraginoSans-W5;
     font-size: 26px;
@@ -91,7 +91,7 @@ th, td {
     color: #231f1f;
     color: var(--black);
   }
-  
+
   h3 {
     font-family: HiraginoSans-W5;
     font-size: 18px;
@@ -99,7 +99,7 @@ th, td {
     color: #231f1f;
     color: var(--black);
   }
-  
+
   body {
     font-family: Helvetica;
     font-size: 16px;
@@ -223,7 +223,7 @@ th, td {
     color: #ffffff;
     vertical-align:middle;
     display:inline-block;
-    line-height:47px;    
+    line-height:47px;
   }
 
   .project-status {
@@ -243,7 +243,7 @@ th, td {
     color: #231f1f;
     color: var(--black);
   }
-  
+
 .Text-section {
   background-color: white;
   border: solid 1px #cecece;
@@ -265,4 +265,9 @@ th, td {
   padding: 0 0.25rem;
   border-radius: 1rem;
   background-color: var(--pumpkin-orange);
+}
+
+.EditProjectForm-root .label-hint {
+  text-transform: none;
+  font-style: italic;
 }
