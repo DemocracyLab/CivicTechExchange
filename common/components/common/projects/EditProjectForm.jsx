@@ -152,6 +152,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   //create objects for project_links array, skipping empty fields
     eLinks.forEach(function(item) {
       if(!_.isEmpty(item.linkUrl)) {
+        item.linkUrl = url.appendHttpIfMissingProtocol(item.linkUrl);
         eLinksArray.push({
           linkName: item.linkName,
           linkUrl: item.linkUrl,
@@ -163,12 +164,14 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
     // setState new combined array
     this.setState({ formFields: { project_links: combinedArray }});
+    //testing whether this is important to Chrome saving, TODO: remove if not
+    this.forceUpdate();
   }
 
   filterSpecificLinks(array) {
     //this function updates the entire state.formFields object at once
     var specificLinks = _.remove(array, function(n) {
-      return n.linkName.startsWith("link_")
+      return n.linkName in linkNames;
     });
     //copy the formFields state to work with
     var linkState = this.state.formFields
@@ -227,17 +230,15 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
 
         <div className="form-group">
-          <label>Project Location</label>
-          <input type="text" className="form-control" id="project_location" name="project_location" maxLength="200"
-                 value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}/>
+          {this._renderLocationDropdown()}
         </div>
+
         <div className="form-group">
           <label htmlFor="project_url">Website URL</label>
           <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
                  value={this.state.formFields.project_url} onChange={this.onFormFieldChange.bind(this, "project_url")}/>
         </div>
 
-        {this._renderLocationDropdown()}
 
         <div className="form-group">
           <label>Community</label>
@@ -317,7 +318,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <div className="form-group">
           <FileUploadList elementid="project_files" files={this.state.formFields.project_files}/>
         </div>
-        
+
         <FormValidation
           validations={this.state.validations}
           onValidationCheck={this.onValidationCheck.bind(this)}
