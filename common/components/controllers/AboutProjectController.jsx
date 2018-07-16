@@ -260,11 +260,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       'link_filerepo': "File Repository",
       'link_projmanage': "Project Management"
     };
-    if(input in linkNames) {
-      return linkNames[input]
-    } else {
-      return input
-    }
+    return linkNames[input] || input;
   }
 
   showPositionModal(position: PositionInfo): void {
