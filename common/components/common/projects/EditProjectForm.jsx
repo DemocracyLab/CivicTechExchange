@@ -166,8 +166,6 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
     // setState new combined array
     this.setState({ formFields: { project_links: combinedArray }});
-    //testing whether this is important to Chrome saving, TODO: remove if not
-    this.forceUpdate();
   }
 
   filterSpecificLinks(array) {
