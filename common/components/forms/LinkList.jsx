@@ -37,8 +37,9 @@ class LinkList extends React.PureComponent<Props,State>  {
   
   componentWillReceiveProps(nextProps: Props): void {
     if(nextProps.links) {
-      this.setState({links: nextProps.links || []});
-      this.updateLinkField();
+      this.setState({links: nextProps.links || []}, function() {
+        this.updateLinkField();
+      });
     }
   }
 

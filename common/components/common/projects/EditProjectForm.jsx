@@ -163,9 +163,10 @@ class EditProjectForm extends React.PureComponent<Props,State> {
       }
     });
     //combine arrays prior to sending to backend
-    var combinedArray = this.state.formFields.project_links.concat(eLinksArray);
-    // setState new combined array
-    this.setState({ formFields: { project_links: combinedArray }});
+    let formFields = this.state.formFields;
+    formFields.project_links = formFields.project_links.concat(eLinksArray);
+    this.setState({ formFields: formFields});
+    this.forceUpdate();
   }
 
   filterSpecificLinks(array) {
@@ -174,7 +175,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
       return n.linkName in LinkNames;
     });
     //copy the formFields state to work with
-    var linkState = this.state.formFields
+    var linkState = this.state.formFields;
     //pull out the link_ item key:values and append to state copy
     specificLinks.forEach(function(item) {
       linkState[item.linkName] = item.linkUrl;
