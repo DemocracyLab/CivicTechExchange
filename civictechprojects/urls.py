@@ -35,5 +35,7 @@ urlpatterns = [
     url(r'^index/$', views.index),
     url(r'^project/(?P<project_id>[0-9]+)/$', views.project, name='project'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
-    url(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner')
+    url(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner'),
+    url(r'^alert/create/$', views.add_alert, name='add_alert')
+
 ]
