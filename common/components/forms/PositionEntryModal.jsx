@@ -25,7 +25,7 @@ type State = {|
 class PositionEntryModal extends React.PureComponent<Props,State> {
   close: Function;
   save: Function;
-  
+
   constructor(props: Props): void {
     super(props);
     this.state = {
@@ -35,7 +35,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
         descriptionUrl: ""
       }
     };
-  
+
     this.close = this.close.bind(this);
     this.save = this.save.bind(this);
   }
@@ -55,17 +55,17 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
       });
     }
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({ showModal: nextProps.showModal });
     this.resetModal(nextProps.existingPosition);
   }
-  
+
   close(): void {
     this.setState({showModal: false});
     this.props.onCancel();
   }
-  
+
   save(): void {
     if(this.state.positionInfo.descriptionUrl) {
       this.state.positionInfo.descriptionUrl = url.appendHttpIfMissingProtocol(this.state.positionInfo.descriptionUrl);
@@ -73,17 +73,17 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
     this.props.onSavePosition(this.state.positionInfo);
     this.close();
   }
-  
+
   onRoleChange(role: $ReadOnlyArray<TagDefinition>): void {
     this.state.positionInfo.roleTag = role[0];
     this.forceUpdate();
   }
-  
+
   onDescriptionChange(event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.positionInfo.descriptionUrl = event.target.value;
     this.forceUpdate();
   }
-  
+
   render(): React$Node {
     return (
       <div>
@@ -103,9 +103,9 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
                       onSelection={this.onRoleChange.bind(this)}
                     />
                   </div>
-  
+
                 <div className="form-group">
-                  <label htmlFor="link-position-description">Link to Description</label>
+                  <label htmlFor="link-position-description">Link to Description <span className="modal-hint"><a href="https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit" rel="noopener noreferrer" target="_blank">(Example template)</a></span></label>
                   <input type="text" className="form-control" id="link-position-description" maxLength="2075" value={this.state.positionInfo.descriptionUrl} onChange={this.onDescriptionChange.bind(this)}/>
                 </div>
               </Modal.Body>
