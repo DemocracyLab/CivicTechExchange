@@ -282,3 +282,24 @@ class ProjectFile(models.Model):
 class FileCategory(Enum):
     THUMBNAIL = 'THUMBNAIL'
     ETC = 'ETC'
+
+
+class UserAlert(models.Model):
+    email = models.EmailField()
+    filters = models.CharField(max_length=2083)
+    country = models.CharField(max_length=2)
+    postal_code = models.CharField(max_length=20)
+
+    def __str__(self):
+        return str(self.email)
+
+    @staticmethod
+    def create_or_update(email, filters, country, postal_code):
+        alert = UserAlert.objects.filter(email=email).first()
+        if alert is None:
+            alert = UserAlert()
+            alert.email = email
+        alert.filters = filters
+        alert.country = country
+        alert.postal_code = postal_code
+        alert.save()

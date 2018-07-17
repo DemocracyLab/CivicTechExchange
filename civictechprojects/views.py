@@ -10,7 +10,7 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition
+from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition, UserAlert
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
@@ -18,6 +18,7 @@ from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 
+from pprint import pprint
 
 def tags(request):
     url_parts = request.GET.urlencode()
@@ -128,6 +129,15 @@ def index(request):
         context = {}
 
     return HttpResponse(template.render(context, request))
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def add_alert(request):
+    body = json.loads(request.body)
+    UserAlert.create_or_update(
+        email=body['email'], filters=body['filters'], country=body['country'], postal_code=body['postal_code'])
+    return HttpResponse(status=200)
 
 
 def my_projects(request):
