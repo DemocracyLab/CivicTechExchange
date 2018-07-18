@@ -33,3 +33,8 @@
   background-color: #dddddd;
   cursor: no-drop;
 }
+
+.LogInController-forgotPassword {
+  text-align: center;
+  font-size: 11px;
+}
