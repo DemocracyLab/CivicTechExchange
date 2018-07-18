@@ -271,3 +271,8 @@ th, td {
   text-transform: none;
   font-style: italic;
 }
+
+.modal-hint {
+  font-size: 0.8rem;
+  font-style: italic;
+}
