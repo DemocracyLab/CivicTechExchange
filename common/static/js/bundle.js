@@ -75691,6 +75691,18 @@ var AlertSignupModal = function (_React$PureComponent) {
       this.forceUpdate();
     }
   }, {
+    key: 'handleCountrySelection',
+    value: function handleCountrySelection(selectedValue) {
+      var formFields = this.state.formFields;
+      formFields.country = selectedValue;
+      this.setState({ formFields: formFields }, function () {
+        this.forceUpdate();
+      });
+      // const selectedValues = this.props.allowMultiSelect ? selectedValueOrValues : [selectedValueOrValues];
+      // var tags:TagDefinition = Object.seal(selectedValues.map(value => this.state.tagMap[value.value]));
+      // this.props.onSelection(tags);
+    }
+  }, {
     key: 'handleSubmit',
     value: function handleSubmit() {
       var _this2 = this;
@@ -75765,6 +75777,7 @@ var AlertSignupModal = function (_React$PureComponent) {
                 name: 'country',
                 options: this.state.countries,
                 value: this.state.formFields.country,
+                onChange: this.handleCountrySelection.bind(this),
                 className: 'form-control',
                 simpleValue: false,
                 clearable: false,

@@ -64,6 +64,14 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
     this.state.formFields[formFieldName] = event.target.value;
     this.forceUpdate();
   }
+  
+  handleCountrySelection(selectedValue: string): void {
+    let formFields: FormFields = this.state.formFields;
+    formFields.country = selectedValue;
+    this.setState({formFields: formFields}, function() {
+      this.forceUpdate();
+    });
+  }
 
   handleSubmit() {
     ProjectAPIUtils.post("/alert/create/",
@@ -108,6 +116,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
                     name="country"
                     options={this.state.countries}
                     value={this.state.formFields.country}
+                    onChange={this.handleCountrySelection.bind(this)}
                     className="form-control"
                     simpleValue={false}
                     clearable={false}
