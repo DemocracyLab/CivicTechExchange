@@ -39,25 +39,27 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
     const countries: $ReadOnlyArray<CountryOption> = Object.keys(Countries).map(countryCode => ({"value": countryCode, "label": Countries[countryCode]}));
     this.state = {
       showModal: false,
-      countries: countries,
-      formFields: {
-        email: "",
-        country: countries.find(country => country.label === Countries.US),
-        postal_code: "",
-        filters: props.searchFilters
-      }
+      countries: countries
     };
+    this.state.formFields = this.resetFormFields(props);
     this.closeModal = this.closeModal.bind(this, this.props.handleClose);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-    
+  
   componentWillReceiveProps(nextProps: Props): void {
-    let formFields: FormFields = this.state.formFields;
-    formFields.filters = nextProps.searchFilters;
     this.setState({
       showModal: nextProps.showModal,
-      formFields: formFields
+      formFields: this.resetFormFields(nextProps)
     });
+  }
+  
+  resetFormFields(props: Props): FormFields {
+    return {
+      email: "",
+      country: this.state.countries.find(country => country.label === Countries.US),
+      postal_code: "",
+      filters: props.searchFilters
+    };
   }
   
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
