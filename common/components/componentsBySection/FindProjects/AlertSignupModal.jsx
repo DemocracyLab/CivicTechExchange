@@ -106,8 +106,8 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
                 <p>Enter your email address and location to sign up for relevant alerts.  As new projects are added that meet your search parameters, we will send them your way!</p>
   
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <input type="text" className="form-control" id="email" name="email" maxLength="254"
+                  <label htmlFor="email_useralert">Email</label>
+                  <input type="text" className="form-control" id="email_useralert" name="email_useralert" maxLength="254"
                          value={this.state.formFields.email} onChange={this.onFormFieldChange.bind(this, "email")}/>
                 </div>
                 

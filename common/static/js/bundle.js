@@ -75659,16 +75659,9 @@ var AlertSignupModal = function (_React$PureComponent) {
     });
     _this.state = {
       showModal: false,
-      countries: countries,
-      formFields: {
-        email: "",
-        country: countries.find(function (country) {
-          return country.label === __WEBPACK_IMPORTED_MODULE_4__constants_Countries_js__["a" /* Countries */].US;
-        }),
-        postal_code: "",
-        filters: props.searchFilters
-      }
+      countries: countries
     };
+    _this.state.formFields = _this.resetFormFields(props);
     _this.closeModal = _this.closeModal.bind(_this, _this.props.handleClose);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     return _this;
@@ -75677,12 +75670,22 @@ var AlertSignupModal = function (_React$PureComponent) {
   _createClass(AlertSignupModal, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      var formFields = this.state.formFields;
-      formFields.filters = nextProps.searchFilters;
       this.setState({
         showModal: nextProps.showModal,
-        formFields: formFields
+        formFields: this.resetFormFields(nextProps)
       });
+    }
+  }, {
+    key: 'resetFormFields',
+    value: function resetFormFields(props) {
+      return {
+        email: "",
+        country: this.state.countries.find(function (country) {
+          return country.label === __WEBPACK_IMPORTED_MODULE_4__constants_Countries_js__["a" /* Countries */].US;
+        }),
+        postal_code: "",
+        filters: props.searchFilters
+      };
     }
   }, {
     key: 'onFormFieldChange',
@@ -75698,9 +75701,6 @@ var AlertSignupModal = function (_React$PureComponent) {
       this.setState({ formFields: formFields }, function () {
         this.forceUpdate();
       });
-      // const selectedValues = this.props.allowMultiSelect ? selectedValueOrValues : [selectedValueOrValues];
-      // var tags:TagDefinition = Object.seal(selectedValues.map(value => this.state.tagMap[value.value]));
-      // this.props.onSelection(tags);
     }
   }, {
     key: 'handleSubmit',
@@ -75758,10 +75758,10 @@ var AlertSignupModal = function (_React$PureComponent) {
               { className: 'form-group' },
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'label',
-                { htmlFor: 'email' },
+                { htmlFor: 'email_useralert' },
                 'Email'
               ),
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'email', name: 'email', maxLength: '254',
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'email_useralert', name: 'email_useralert', maxLength: '254',
                 value: this.state.formFields.email, onChange: this.onFormFieldChange.bind(this, "email") })
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
