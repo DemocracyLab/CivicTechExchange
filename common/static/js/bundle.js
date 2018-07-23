@@ -75668,9 +75668,10 @@ var AlertSignupModal = function (_React$PureComponent) {
     }
   }, {
     key: 'handleSubmit',
-    value: function handleSubmit() {
+    value: function handleSubmit(event) {
       var _this2 = this;
 
+      event.preventDefault();
       __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].post("/alert/create/", {
         email: this.state.formFields.email,
         filters: this.state.formFields.filters,
@@ -75701,76 +75702,80 @@ var AlertSignupModal = function (_React$PureComponent) {
             style: { paddingTop: '20%' }
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Header,
-            null,
+            'form',
+            { onSubmit: this.handleSubmit },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Title,
+              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Header,
               null,
-              'Sign Up For Alerts'
-            )
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Body,
-            null,
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Title,
+                null,
+                'Sign Up For Alerts'
+              )
+            ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'p',
+              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Body,
               null,
-              'Enter your email address and location to sign up for relevant alerts.  As new projects are added that meet your search parameters, we will send them your way!'
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'div',
-              { className: 'form-group' },
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'label',
-                { htmlFor: 'email' },
-                'Email'
+                'p',
+                null,
+                'Enter your email address and location to sign up for relevant alerts.  As new projects are added that meet your search parameters, we will send them your way!'
               ),
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'email', name: 'email', maxLength: '254',
-                value: this.state.formFields.email, onChange: this.onFormFieldChange.bind(this, "email") })
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'div',
-              { className: 'form-group' },
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'label',
-                { htmlFor: 'country' },
-                'Country'
+                'div',
+                { className: 'form-group' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                  'label',
+                  { htmlFor: 'email' },
+                  'Email'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'email', name: 'email', maxLength: '254',
+                  value: this.state.formFields.email, onChange: this.onFormFieldChange.bind(this, "email") })
               ),
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_select__["a" /* default */], {
-                id: 'country',
-                name: 'country',
-                options: this.state.countries,
-                value: this.state.formFields.country,
-                className: 'form-control',
-                simpleValue: false,
-                clearable: false,
-                multi: false
-              })
-            ),
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'div',
-              { className: 'form-group' },
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'label',
-                { htmlFor: 'postal_code' },
-                'Zip/Postal Code'
+                'div',
+                { className: 'form-group' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                  'label',
+                  { htmlFor: 'country' },
+                  'Country'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_select__["a" /* default */], {
+                  id: 'country',
+                  name: 'country',
+                  options: this.state.countries,
+                  value: this.state.formFields.country,
+                  className: 'form-control',
+                  simpleValue: false,
+                  clearable: false,
+                  multi: false
+                })
               ),
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'postal_code', name: 'postal_code', maxLength: '10',
-                value: this.state.formFields.postal_code, onChange: this.onFormFieldChange.bind(this, "postal_code") })
-            )
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Footer,
-            null,
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-              { onClick: this.closeModal },
-              "Cancel"
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'form-group' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                  'label',
+                  { htmlFor: 'postal_code' },
+                  'Zip/Postal Code'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'postal_code', name: 'postal_code', maxLength: '10',
+                  value: this.state.formFields.postal_code, onChange: this.onFormFieldChange.bind(this, "postal_code") })
+              )
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-              { disabled: !this.state.formFields.email || !this.state.formFields.postal_code, onClick: this.handleSubmit },
-              'Submit'
+              __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Footer,
+              null,
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
+                { onClick: this.closeModal },
+                "Cancel"
+              ),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
+                { disabled: !this.state.formFields.email || !this.state.formFields.postal_code, type: 'submit', onClick: this.handleSubmit },
+                'Submit'
+              )
             )
           )
         )

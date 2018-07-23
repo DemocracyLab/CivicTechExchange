@@ -50,7 +50,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
     this.closeModal = this.closeModal.bind(this, this.props.handleClose);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-    
+
   componentWillReceiveProps(nextProps: Props): void {
     let formFields: FormFields = this.state.formFields;
     formFields.filters = nextProps.searchFilters;
@@ -59,13 +59,14 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
       formFields: formFields
     });
   }
-  
+
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.formFields[formFieldName] = event.target.value;
     this.forceUpdate();
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
     ProjectAPIUtils.post("/alert/create/",
       {
         email: this.state.formFields.email,
@@ -89,18 +90,19 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
                  onHide={this.closeModal}
                  style={{paddingTop:'20%'}}
           >
+            <form onSubmit={this.handleSubmit}>
               <Modal.Header >
                   <Modal.Title>Sign Up For Alerts</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <p>Enter your email address and location to sign up for relevant alerts.  As new projects are added that meet your search parameters, we will send them your way!</p>
-  
+
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
                   <input type="text" className="form-control" id="email" name="email" maxLength="254"
                          value={this.state.formFields.email} onChange={this.onFormFieldChange.bind(this, "email")}/>
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="country">Country</label>
                   <Select
@@ -114,7 +116,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
                     multi={false}
                   />
                 </div>
-  
+
                 <div className="form-group">
                   <label htmlFor="postal_code">Zip/Postal Code</label>
                   <input type="text" className="form-control" id="postal_code" name="postal_code" maxLength="10"
@@ -123,8 +125,9 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button disabled={!this.state.formFields.email || !this.state.formFields.postal_code} onClick={this.handleSubmit}>Submit</Button>
+                <Button disabled={!this.state.formFields.email || !this.state.formFields.postal_code} type="submit" onClick={this.handleSubmit}>Submit</Button>
               </Modal.Footer>
+            </form>
           </Modal>
       </div>
     );
