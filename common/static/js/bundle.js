@@ -75686,7 +75686,6 @@ var AlertSignupModal = function (_React$PureComponent) {
   }, {
     key: 'closeModal',
     value: function closeModal() {
-      alert('closeModal fired');
       this.props.handleClose();
     }
   }, {
