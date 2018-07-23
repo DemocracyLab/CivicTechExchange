@@ -34406,11 +34406,15 @@ var TagSelector = function (_React$PureComponent) {
       var _this3 = this;
 
       this.setState({ selected: selectedValueOrValues });
-      var selectedValues = this.props.allowMultiSelect ? selectedValueOrValues : [selectedValueOrValues];
-      var tags = Object.seal(selectedValues.map(function (value) {
-        return _this3.state.tagMap[value.value];
-      }));
-      this.props.onSelection(tags);
+      if (selectedValueOrValues) {
+        var selectedValues = this.props.allowMultiSelect ? selectedValueOrValues : [selectedValueOrValues];
+        var tags = Object.seal(selectedValues.map(function (value) {
+          return _this3.state.tagMap[value.value];
+        }));
+        this.props.onSelection(tags);
+      } else {
+        this.props.onSelection(null);
+      }
     }
   }, {
     key: 'render',

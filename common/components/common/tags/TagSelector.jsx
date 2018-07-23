@@ -70,9 +70,13 @@ class TagSelector extends React.PureComponent<Props, State> {
   
   handleSelection(selectedValueOrValues: TagDefinition | $ReadOnlyArray<TagDefinition>): void {
     this.setState({selected: selectedValueOrValues});
-    const selectedValues = this.props.allowMultiSelect ? selectedValueOrValues : [selectedValueOrValues];
-    var tags:TagDefinition = Object.seal(selectedValues.map(value => this.state.tagMap[value.value]));
-    this.props.onSelection(tags);
+    if(selectedValueOrValues) {
+      const selectedValues = this.props.allowMultiSelect ? selectedValueOrValues : [selectedValueOrValues];
+      var tags: TagDefinition = Object.seal(selectedValues.map(value => this.state.tagMap[value.value]));
+      this.props.onSelection(tags);
+    } else {
+      this.props.onSelection(null);
+    }
   }
   
   render(): React$Node {

@@ -94,17 +94,9 @@ class ProjectCreationForm(ModelForm):
         project.project_name = form.data.get('project_name')
         project.project_url = form.data.get('project_url')
 
-        issue_areas = form.data.get('project_issue_area')
-        if issue_areas and len(issue_areas) != 0:
-            Tag.merge_tags_field(project.project_issue_area, issue_areas)
-
-        project_technologies = form.data.get('project_technologies')
-        if project_technologies and len(project_technologies) != 0:
-            Tag.merge_tags_field(project.project_technologies, project_technologies)
-
-        project_organizations = form.data.get('project_organization')
-        if project_organizations and len(project_organizations) != 0:
-            Tag.merge_tags_field(project.project_organization, project_organizations)
+        Tag.merge_tags_field(project.project_issue_area, form.data.get('project_issue_area'))
+        Tag.merge_tags_field(project.project_technologies, form.data.get('project_technologies'))
+        Tag.merge_tags_field(project.project_organization, form.data.get('project_organization'))
 
         project.save()
 
