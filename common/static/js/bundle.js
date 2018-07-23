@@ -34430,7 +34430,7 @@ var TagSelector = function (_React$PureComponent) {
           onChange: this.handleSelection.bind(this),
           className: 'form-control',
           simpleValue: false,
-          clearable: false,
+          clearable: !this.props.allowMultiSelect,
           multi: this.props.allowMultiSelect,
           joinValues: true
         })
