@@ -65,7 +65,8 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
     this.forceUpdate();
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
     ProjectAPIUtils.post("/alert/create/",
       {
         email: this.state.formFields.email,

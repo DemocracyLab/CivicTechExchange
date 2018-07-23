@@ -75668,9 +75668,10 @@ var AlertSignupModal = function (_React$PureComponent) {
     }
   }, {
     key: 'handleSubmit',
-    value: function handleSubmit() {
+    value: function handleSubmit(event) {
       var _this2 = this;
 
+      event.preventDefault();
       __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].post("/alert/create/", {
         email: this.state.formFields.email,
         filters: this.state.formFields.filters,
