@@ -46,7 +46,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.isDisabled = this.isDisabled.bind(this);
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({
       showModal: nextProps.showModal,
@@ -76,7 +76,8 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
     });
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
     ProjectAPIUtils.post("/alert/create/",
       {
         email: this.state.formFields.email,
@@ -107,18 +108,19 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
                  onHide={this.closeModal}
                  style={{paddingTop:'20%'}}
           >
+            <form onSubmit={this.handleSubmit}>
               <Modal.Header >
                   <Modal.Title>Sign Up For Alerts</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <p>Enter your email address and location to sign up for relevant alerts.  As new projects are added that meet your search parameters, we will send them your way!</p>
-  
+
                 <div className="form-group">
                   <label htmlFor="email_useralert">Email</label>
                   <input type="text" className="form-control" id="email_useralert" name="email_useralert" maxLength="254"
                          value={this.state.formFields.email} onChange={this.onFormFieldChange.bind(this, "email")}/>
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="country">Country</label>
                   <Select
@@ -133,7 +135,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
                     multi={false}
                   />
                 </div>
-  
+
                 <div className="form-group">
                   <label htmlFor="postal_code">Zip/Postal Code</label>
                   <input type="text" className="form-control" id="postal_code" name="postal_code" maxLength="10"
@@ -142,8 +144,9 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button disabled={this.isDisabled()} onClick={this.handleSubmit}>Submit</Button>
+                <Button disabled={this.isDisabled()} type="submit" onClick={this.handleSubmit}>Submit</Button>
               </Modal.Footer>
+            </form>
           </Modal>
       </div>
     );
