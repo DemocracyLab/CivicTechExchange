@@ -42,6 +42,7 @@ class Tag(models.Model):
 
     @staticmethod
     def merge_tags_field(tags_field, tag_entries):
+        tag_entries = tag_entries or ""
         tag_entry_slugs = set(tag_entries.split(','))
         existing_tag_slugs = set(tags_field.slugs())
 

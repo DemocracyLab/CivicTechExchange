@@ -1,5 +1,6 @@
 // @flow
 import _ from 'lodash'
+import NavigationDispatcher from "../stores/NavigationDispatcher.js";
 
 const regex = {
   protocol: new RegExp("^(f|ht)tps?://", "i"),
@@ -7,7 +8,15 @@ const regex = {
 }
 
 class urlHelper {
-  static section(section: string, args: ?Object) {
+  static navigateToSection(section: string): void {
+    NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: section,
+      url: urlHelper.section(section)
+    });
+  }
+  
+  static section(section: string, args: ?Object): string {
     var sectionUrl = "?section=" + section;
     if(args) {
       sectionUrl += _.reduce(args, function(argsString, value, key) {

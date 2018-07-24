@@ -2,6 +2,8 @@
 
 import DjangoCSRFToken from 'django-react-csrftoken'
 import React from 'react';
+import url from "../utils/url.js";
+import Section from "../enums/Section.js";
 
 type State = {|
   username: string,
@@ -40,6 +42,9 @@ class LogInController extends React.Component<{||}, State> {
             </div>
             <div>
               Password:
+              <span className="LogInController-forgotPassword" onClick = {url.navigateToSection.bind(this, Section.ResetPassword)} >
+                <a href = "" className="LogInController-forgotPassword"> Forgot Password? </a>
+              </span>
             </div>
             <div>
               <input
@@ -55,6 +60,8 @@ class LogInController extends React.Component<{||}, State> {
               type="submit">
               Sign In
             </button>
+  
+          
             {/* <div
               name="error"
               type="text">
