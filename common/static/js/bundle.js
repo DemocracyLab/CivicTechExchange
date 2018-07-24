@@ -75668,6 +75668,7 @@ var AlertSignupModal = function (_React$PureComponent) {
     _this.state.formFields = _this.resetFormFields(props);
     _this.closeModal = _this.closeModal.bind(_this, _this.props.handleClose);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.isDisabled = _this.isDisabled.bind(_this);
     return _this;
   }
 
@@ -75722,6 +75723,13 @@ var AlertSignupModal = function (_React$PureComponent) {
         return null;
       } /* TODO: Report error to user */
       );
+    }
+  }, {
+    key: 'isDisabled',
+    value: function isDisabled() {
+      // Require email and a zip code (unless a country other than the US)
+      // TODO: Require postal codes for the other countries that use them
+      return !this.state.formFields.email || this.state.formFields.country.label === __WEBPACK_IMPORTED_MODULE_4__constants_Countries_js__["a" /* Countries */].US && !this.state.formFields.postal_code;
     }
   }, {
     key: 'closeModal',
@@ -75810,7 +75818,7 @@ var AlertSignupModal = function (_React$PureComponent) {
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-              { disabled: !this.state.formFields.email || !this.state.formFields.postal_code, onClick: this.handleSubmit },
+              { disabled: this.isDisabled(), onClick: this.handleSubmit },
               'Submit'
             )
           )

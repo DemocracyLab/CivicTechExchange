@@ -44,6 +44,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
     this.state.formFields = this.resetFormFields(props);
     this.closeModal = this.closeModal.bind(this, this.props.handleClose);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.isDisabled = this.isDisabled.bind(this);
   }
   
   componentWillReceiveProps(nextProps: Props): void {
@@ -86,6 +87,13 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
       response => this.closeModal(),
       response => null /* TODO: Report error to user */
       );
+  }
+  
+  isDisabled(): boolean {
+    // Require email and a zip code (unless a country other than the US)
+    // TODO: Require postal codes for the other countries that use them
+    return !this.state.formFields.email ||
+      (this.state.formFields.country.label === Countries.US && !this.state.formFields.postal_code);
   }
 
   closeModal(){
@@ -134,7 +142,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button disabled={!this.state.formFields.email || !this.state.formFields.postal_code} onClick={this.handleSubmit}>Submit</Button>
+                <Button disabled={this.isDisabled()} onClick={this.handleSubmit}>Submit</Button>
               </Modal.Footer>
           </Modal>
       </div>
