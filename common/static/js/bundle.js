@@ -75159,7 +75159,7 @@ var ProjectCardsContainer = function (_React$Component) {
   }, {
     key: '_renderCards',
     value: function _renderCards() {
-      return !this.state.projects ? 'Loading projects ...' : this.state.projects.size === 0 ? 'No projects match the provided criteria' : this.state.projects.map(function (project, index) {
+      return !this.state.projects ? 'Loading projects ...' : this.state.projects.size === 0 ? 'No projects match the provided criteria.  Sign up for Alerts to be notified when projects matching this criteria are added.' : this.state.projects.map(function (project, index) {
         return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ProjectCard_jsx__["a" /* default */], {
           project: project,
           key: index
