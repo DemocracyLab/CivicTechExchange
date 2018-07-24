@@ -36,5 +36,6 @@
 
 .LogInController-forgotPassword {
   text-align: center;
-  font-size: 11px;
+  float: right;
+  font-size: 13px;
 }

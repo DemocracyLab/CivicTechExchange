@@ -41359,7 +41359,16 @@ var LogInController = function (_React$Component) {
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
             null,
-            'Password:'
+            'Password:',
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              'span',
+              { className: 'LogInController-forgotPassword', onClick: __WEBPACK_IMPORTED_MODULE_2__utils_url_js__["a" /* default */].navigateToSection.bind(this, __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].ResetPassword) },
+              __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+                'a',
+                { href: '', className: 'LogInController-forgotPassword' },
+                ' Forgot Password? '
+              )
+            )
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
@@ -41380,15 +41389,6 @@ var LogInController = function (_React$Component) {
               disabled: !this.state.username || !this.state.password,
               type: 'submit' },
             'Sign In'
-          ),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'span',
-            { className: 'LogInController-forgotPassword', onClick: __WEBPACK_IMPORTED_MODULE_2__utils_url_js__["a" /* default */].navigateToSection.bind(this, __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].ResetPassword) },
-            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-              'a',
-              { href: '', className: 'LogInController-forgotPassword' },
-              ' Forgot Password? '
-            )
           )
         )
       );

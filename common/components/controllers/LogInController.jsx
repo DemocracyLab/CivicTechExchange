@@ -42,6 +42,9 @@ class LogInController extends React.Component<{||}, State> {
             </div>
             <div>
               Password:
+              <span className="LogInController-forgotPassword" onClick = {url.navigateToSection.bind(this, Section.ResetPassword)} >
+                <a href = "" className="LogInController-forgotPassword"> Forgot Password? </a>
+              </span>
             </div>
             <div>
               <input
@@ -58,9 +61,6 @@ class LogInController extends React.Component<{||}, State> {
               Sign In
             </button>
   
-            <span className="LogInController-forgotPassword" onClick = {url.navigateToSection.bind(this, Section.ResetPassword)} >
-              <a href = "" className="LogInController-forgotPassword"> Forgot Password? </a>
-            </span>
           
             {/* <div
               name="error"
