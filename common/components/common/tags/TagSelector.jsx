@@ -90,9 +90,10 @@ class TagSelector extends React.PureComponent<Props, State> {
           onChange={this.handleSelection.bind(this)}
           className="form-control"
           simpleValue={false}
-          clearable={!this.props.allowMultiSelect}
-          multi={this.props.allowMultiSelect}
-          joinValues={true}
+          isClearable={!this.props.allowMultiSelect}
+          isMulti={this.props.allowMultiSelect}
+          delimiter=","
+          backspaceRemovesValue={true}
         />
       </div>
     );
