@@ -136,7 +136,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             project && !_.isEmpty(project.project_positions)
               ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
                   <div className='col'>
-                    <h2 className="form-group subheader">OPEN POSITIONS</h2>
+                    <h2 className="form-group subheader">SKILLS NEEDED</h2>
                     <div className="Text-section">
                       {this._renderPositions()}
                     </div>
@@ -228,29 +228,30 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     );
   }
 
-  _renderPositionsOld(): ?Array<React$Node> {
-    const project = this.state.project;
-    return project && project.project_positions && project.project_positions.map((position, i) =>
-      <div key={i}>
-        <span className="pseudo-link" onClick={this.showPositionModal.bind(this,position)}>{position.roleTag.display_name}</span>
-      </div>
-    );
-  }
-
   _renderPositions(): ?Array<React$Node> {
     const project = this.state.project;
-    return project && project.project_positions && project.project_positions.map((position, i) => {
-      const positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;
-      return (
-          <div key={i}>
-          {
-            position.descriptionUrl
-            ? <a href={position.descriptionUrl} target="_blank" rel="noopener noreferrer">{positionDisplay}</a>
-            : <span>{positionDisplay}</span>
-          }
-          </div>
-        );
-    });
+    return project && project.project_positions && project.project_positions
+      .sort(function(a, b) {
+	      let nameA=(a.roleTag.subcategory + a.roleTag.display_name).toLowerCase();
+        let nameB=(b.roleTag.subcategory + b.roleTag.display_name).toLowerCase();
+        if (nameA < nameB)
+          return -1;
+        if (nameA > nameB)
+            return 1;
+        return 0;
+      })
+      .map((position, i) => {
+        const positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;
+        return (
+            <div key={i}>
+            {
+              position.descriptionUrl
+              ? <a href={position.descriptionUrl} target="_blank" rel="noopener noreferrer">{positionDisplay}</a>
+              : <span>{positionDisplay}</span>
+            }
+            </div>
+          );
+      });
   }
 
   _legibleName(input) {

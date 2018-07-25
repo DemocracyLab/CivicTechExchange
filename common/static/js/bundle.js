@@ -74724,7 +74724,7 @@ var AboutProjectController = function (_React$PureComponent) {
               __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                 'h2',
                 { className: 'form-group subheader' },
-                'OPEN POSITIONS'
+                'SKILLS NEEDED'
               ),
               __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                 'div',
@@ -74853,28 +74853,16 @@ var AboutProjectController = function (_React$PureComponent) {
       });
     }
   }, {
-    key: '_renderPositionsOld',
-    value: function _renderPositionsOld() {
-      var _this4 = this;
-
-      var project = this.state.project;
-      return project && project.project_positions && project.project_positions.map(function (position, i) {
-        return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
-          'div',
-          { key: i },
-          __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
-            'span',
-            { className: 'pseudo-link', onClick: _this4.showPositionModal.bind(_this4, position) },
-            position.roleTag.display_name
-          )
-        );
-      });
-    }
-  }, {
     key: '_renderPositions',
     value: function _renderPositions() {
       var project = this.state.project;
-      return project && project.project_positions && project.project_positions.map(function (position, i) {
+      return project && project.project_positions && project.project_positions.sort(function (a, b) {
+        var nameA = (a.roleTag.subcategory + a.roleTag.display_name).toLowerCase();
+        var nameB = (b.roleTag.subcategory + b.roleTag.display_name).toLowerCase();
+        if (nameA < nameB) return -1;
+        if (nameA > nameB) return 1;
+        return 0;
+      }).map(function (position, i) {
         var positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;
         return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
           'div',
@@ -82091,7 +82079,7 @@ var PositionList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'label',
           null,
-          'Open Positions \xA0'
+          'Skills Needed \xA0'
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
