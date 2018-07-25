@@ -34170,6 +34170,8 @@ var EditProjectForm = function (_React$PureComponent) {
   }, {
     key: '_renderLocationDropdown',
     value: function _renderLocationDropdown() {
+      var presetLocations = ["Seattle, WA", "Redmond, WA", "Kirkland, WA", "Bellevue, WA", __WEBPACK_IMPORTED_MODULE_13__constants_ProjectConstants__["a" /* Locations */].OTHER];
+
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         { className: 'form-group' },
@@ -34181,32 +34183,18 @@ var EditProjectForm = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'select',
           { name: 'project_location', id: 'project_location', className: 'form-control', value: this.state.formFields.project_location, onChange: this.onFormFieldChange.bind(this, "project_location") },
-          !this.state.formFields.project_location ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('option', { value: '' }) : null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          !__WEBPACK_IMPORTED_MODULE_12_lodash___default.a.includes(presetLocations, this.state.formFields.project_location) ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'option',
-            { value: 'Redmond, WA' },
-            'Redmond, WA'
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'option',
-            { value: 'Kirkland, WA' },
-            'Kirkland, WA'
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'option',
-            { value: 'Bellevue, WA' },
-            'Bellevue, WA'
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'option',
-            { value: 'Seattle, WA' },
-            'Seattle, WA'
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'option',
-            { value: __WEBPACK_IMPORTED_MODULE_13__constants_ProjectConstants__["a" /* Locations */].OTHER },
-            __WEBPACK_IMPORTED_MODULE_13__constants_ProjectConstants__["a" /* Locations */].OTHER
-          )
+            { value: this.state.formFields.project_location },
+            this.state.formFields.project_location
+          ) : null,
+          presetLocations.map(function (location) {
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'option',
+              { key: location, value: location },
+              location
+            );
+          })
         )
       );
     }
