@@ -2,9 +2,9 @@
 
 import type {FluxReduceStore} from 'flux/utils';
 import {Container} from 'flux/utils';
+import {List} from 'immutable'
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
-import {List} from 'immutable'
 import type {TagDefinition} from "../../utils/ProjectAPIUtils.js";
 import React from 'react';
 
@@ -13,6 +13,9 @@ type State = {|
 |};
 
 class ResetSearchButton extends React.Component<{||}, State> {
+  constructor(props) {
+    super(props);
+  }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [ProjectSearchStore];
@@ -28,7 +31,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
     return (
       <div>
         <button
-          className="ProjectSearchBar-clear"
+          className="ResetSearch"
           onClick={this._clearFilters.bind(this)}>
           Reset Filters
         </button>
@@ -41,11 +44,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
       type: 'SET_KEYWORD',
       keyword: '',
     })
-    console.log(ProjectSearchStore);
-  //   ProjectSearchDispatcher.dispatch({
-  //     type: 'REMOVE_TAG',
-  //     tag: this.props.tag,
-  // })
+    if(this.props) { console.log(this.props) };
     }
 }
 

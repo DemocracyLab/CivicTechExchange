@@ -8,3 +8,14 @@
 .ProjectTagContainer-noTags {
   padding: 25px 50px 50px 25px;
 }
+
+button.ResetSearch {
+  background-color: #86c232;
+  border: 0;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  float: right;
+  font-size: 14px;
+  padding: 8px 31px 10px 32px;
+}

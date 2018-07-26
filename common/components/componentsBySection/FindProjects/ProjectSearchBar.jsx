@@ -4,7 +4,6 @@ import type {FluxReduceStore} from 'flux/utils';
 import {Container} from 'flux/utils';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
-import ResetSearchButton from './ResetSearchButton.js';
 import React from 'react';
 
 type State = {|
@@ -39,7 +38,6 @@ class ProjectSearchBar extends React.Component<{||}, State> {
           onClick={this._onSubmitKeyword.bind(this)}>
           Search Projects
         </button>
-        <ResetSearchButton />
       </div>
     );
   }
