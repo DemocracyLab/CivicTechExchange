@@ -16,7 +16,7 @@
   margin-top: 24px;
 }
 
-.ProjectSearchBar-submit {
+.ProjectSearchBar-submit, .ProjectSearchBar-clear {
   background-color: #86c232;
   border: 0;
   border-radius: 5px;
