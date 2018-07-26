@@ -81,6 +81,7 @@ def password_reset(request):
     if user is not None:
         user.send_password_reset_email()
     else:
+        # Failing silently to not alert
         print('Attempt to reset password for unregistered email: ' + username)
 
     # TODO: Give the user an identical message whether email exists or not to prevent email harvesting
