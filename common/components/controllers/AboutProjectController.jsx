@@ -230,7 +230,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   _renderPositions(): ?Array<React$Node> {
     const project = this.state.project;
-    return project && project.project_positions && _.chain(project.project_positions).sortBy('roleTag.tag_name').value()
+    return project && project.project_positions && _.chain(project.project_positions).sortBy(['roleTag.subcategory', 'roleTag.display_name']).value()
       .map((position, i) => {
         const positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;
         return (

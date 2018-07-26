@@ -74856,7 +74856,7 @@ var AboutProjectController = function (_React$PureComponent) {
     key: '_renderPositions',
     value: function _renderPositions() {
       var project = this.state.project;
-      return project && project.project_positions && __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.chain(project.project_positions).sortBy('roleTag.tag_name').value().map(function (position, i) {
+      return project && project.project_positions && __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.chain(project.project_positions).sortBy(['roleTag.subcategory', 'roleTag.display_name']).value().map(function (position, i) {
         var positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;
         return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
           'div',
