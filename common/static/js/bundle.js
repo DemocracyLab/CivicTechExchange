@@ -41315,9 +41315,6 @@ var LogInController = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      console.log(this.state);
-      debugger;
-
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
         { className: 'LogInController-root' },
