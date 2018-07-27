@@ -2,11 +2,14 @@
   background-color: white;
   border: solid 1px #cecece;
   border-top: none;
+  clear: both;
+  min-height: 95px;
+  overflow: hidden;
   padding: 25px 50px 15px 25px;
 }
 
 .ProjectTagContainer-noTags {
-  padding: 25px 50px 50px 25px;
+
 }
 
 button.ResetSearch {
@@ -15,7 +18,8 @@ button.ResetSearch {
   border-radius: 5px;
   color: white;
   cursor: pointer;
-  float: right;
+  display: inline-block;
   font-size: 14px;
-  padding: 8px 31px 10px 32px;
+  float: right;
+  padding: 10px 30px;
 }

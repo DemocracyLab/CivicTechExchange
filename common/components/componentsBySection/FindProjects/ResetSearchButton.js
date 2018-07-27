@@ -1,5 +1,5 @@
 // @flow
-
+//usage: <ResetSearchButton tags="">  until I make the component update every time flux store does
 import type {FluxReduceStore} from 'flux/utils';
 import {Container} from 'flux/utils';
 import {List} from 'immutable'
@@ -52,8 +52,6 @@ class ResetSearchButton extends React.Component<{||}, State> {
         })
       });
     }
-
-
 }
 
 export default ResetSearchButton;
