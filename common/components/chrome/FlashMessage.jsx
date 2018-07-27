@@ -13,7 +13,7 @@ class FlashMessage extends React.PureComponent<{||}> {
   }
 
   _renderMessages(): React$Node {
-    return window.DLAB_GLOBAL_CONTEXT.messages.map((msg, i) => {
+    return window.DLAB_MESSAGES.map((msg, i) => {
       return (
           <div key={i} className={msg.level}>
             {msg.message}

@@ -64,10 +64,10 @@
         })
         : {};
 
-      window.DLAB_GLOBAL_CONTEXT.messages = []
+      window.DLAB_MESSAGES = []
       {% for message in messages %}
-        window.DLAB_GLOBAL_CONTEXT.messages.push({message: '{{message}}', level: '{{message.tags}}'})
-      {% endfor %}        
+        window.DLAB_MESSAGES.push({message: '{{message}}', level: '{{message.tags}}'})
+      {% endfor %}
     </script>
     <div id="MainController" data-elementId="brief_description" data-maxLength="3000" class="__react-root">Loading . . .</div>
   </body>

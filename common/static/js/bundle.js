@@ -84938,7 +84938,7 @@ var FlashMessage = function (_React$PureComponent) {
   }, {
     key: '_renderMessages',
     value: function _renderMessages() {
-      return window.DLAB_GLOBAL_CONTEXT.messages.map(function (msg, i) {
+      return window.DLAB_MESSAGES.map(function (msg, i) {
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           { key: i, className: msg.level },

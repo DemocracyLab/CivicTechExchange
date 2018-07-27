@@ -124,7 +124,6 @@ def index(request):
             'emailVerified': contributor.email_verified,
             'firstName': request.user.first_name,
             'lastName': request.user.last_name,
-            'messages': messages
         })
     else:
         context = {}
