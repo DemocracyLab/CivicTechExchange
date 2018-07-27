@@ -1,5 +1,6 @@
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -84,7 +85,7 @@ def password_reset(request):
         # Failing silently to not alert
         print('Attempt to reset password for unregistered email: ' + username)
 
-    # TODO: Give the user a message
+    messages.add_message(request, messages.INFO, 'Your request to reset your password has been received. If an account with that email exists, an email will be sent with a link to reset your password.')
     print("We got to the end of password_reset")
     return redirect('/')
 

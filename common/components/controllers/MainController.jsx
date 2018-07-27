@@ -6,6 +6,7 @@ import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
 import Section from '../enums/Section.js';
 import SubHeader from '../chrome/SubHeader.jsx';
+import FlashMessage from '../chrome/FlashMessage.jsx';
 import url from '../../components/utils/url.js'
 
 class MainController extends React.Component<{||}> {
@@ -20,6 +21,7 @@ class MainController extends React.Component<{||}> {
     return [
       <MainHeader key='main_header'/>,
       <SubHeader key='sub_header'/>,
+      <FlashMessage key='flash_message'/>,
       <SectionController key='section_controller'/>,
     ];
   }
