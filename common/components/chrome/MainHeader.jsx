@@ -49,44 +49,12 @@ class MainHeader extends React.PureComponent<{||}> {
           )
       : (
           <span className = "MainHeader-links">
-              <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
-              <span onClick = {this._onLogInClick}>
-              <a href = "" > Log In </a>
-              </span> |{' '}
-
-              <span onClick = {this._onSignUpClick} >
-              <a href = "" > Sign Up </a>
-              </span> |{' '}
-  
-              <span onClick = {this._onResetPasswordClick} >
-              <a href = "" > Forgot Password </a>
-              </span>
+            <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
+            <a href = {url.section(Section.LogIn)} > Log In </a> |{' '}
+            <a href = {url.section(Section.SignUp)} > Sign Up </a> |{' '}
+            <a href = {url.section(Section.ResetPassword)} > Forgot Password </a>
           </span>
         );
-  }
-
-  _onLogInClick(): void {
-      NavigationDispatcher.dispatch({
-      type: 'SET_SECTION',
-      section: Section.LogIn,
-      url: url.section(Section.LogIn)
-    });
-  }
-
-  _onSignUpClick(): void {
-    NavigationDispatcher.dispatch({
-      type: 'SET_SECTION',
-      section: Section.SignUp,
-      url: url.section(Section.SignUp)
-    });
-  }
-  
-  _onResetPasswordClick(): void {
-    NavigationDispatcher.dispatch({
-      type: 'SET_SECTION',
-      section: Section.ResetPassword,
-      url: url.section(Section.ResetPassword)
-    });
   }
 }
 
