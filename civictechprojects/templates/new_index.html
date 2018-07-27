@@ -7,6 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.0.0/cjs/react.development.js" defer></script>
     <link rel="stylesheet" type="text/css" href="/static/css/AlertSignupModal.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/ContextualCollapsible.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/FlashMessage.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/FindProjectsController.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/CollapsibleMenuItem.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/LandingController.css"/>
@@ -62,6 +63,11 @@
           lastName: '{{lastName}}',
         })
         : {};
+
+      window.DLAB_GLOBAL_CONTEXT.messages = []
+      {% for message in messages %}
+        window.DLAB_GLOBAL_CONTEXT.messages.push({message: '{{message}}', level: '{{message.tags}}'})
+      {% endfor %}        
     </script>
     <div id="MainController" data-elementId="brief_description" data-maxLength="3000" class="__react-root">Loading . . .</div>
   </body>
