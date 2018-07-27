@@ -84,7 +84,7 @@ def password_reset(request):
         # Failing silently to not alert
         print('Attempt to reset password for unregistered email: ' + username)
 
-    # TODO: Give the user a message
+    # TODO: Give the user an identical message whether email exists or not to prevent email harvesting
     print("We got to the end of password_reset")
     return redirect('/')
 
