@@ -75522,9 +75522,13 @@ var ResetSearchButton = function (_React$Component) {
         type: 'SET_KEYWORD',
         keyword: ''
       });
-      if (this.props) {
-        console.log(this.props);
-      };
+      var tagsToRemove = this.props.tags.toArray();
+      tagsToRemove.forEach(function (tag) {
+        __WEBPACK_IMPORTED_MODULE_2__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
+          type: 'REMOVE_TAG',
+          tag: tag
+        });
+      });
     }
   }], [{
     key: 'getStores',

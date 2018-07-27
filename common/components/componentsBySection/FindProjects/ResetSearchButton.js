@@ -43,9 +43,17 @@ class ResetSearchButton extends React.Component<{||}, State> {
     ProjectSearchDispatcher.dispatch({
       type: 'SET_KEYWORD',
       keyword: '',
-    })
-    if(this.props) { console.log(this.props) };
+    });
+    let tagsToRemove = this.props.tags.toArray();
+    tagsToRemove.forEach(function(tag) {
+      ProjectSearchDispatcher.dispatch({
+        type: 'REMOVE_TAG',
+        tag: tag,
+        })
+      });
     }
+
+
 }
 
 export default ResetSearchButton;
