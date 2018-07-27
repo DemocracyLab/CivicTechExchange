@@ -2,10 +2,6 @@
 
 import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
-import {DropdownButton, MenuItem} from 'react-bootstrap';
-import Section from '../enums/Section.js';
-import CurrentUser from '../utils/CurrentUser.js';
-import url from '../utils/url.js';
 
 class FlashMessage extends React.PureComponent<{||}> {
   render(): React$Node {
