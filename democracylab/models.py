@@ -50,7 +50,8 @@ class Contributor(User):
 
 
 def get_contributor_by_username(username):
-    return Contributor.objects.get_by_natural_key(username)
+    # using .first instead of .get_by_natural_key returns None instead of raising if object does not exist
+    return Contributor.objects.filter(email=username).first()
 
 
 def get_request_contributor(request):
