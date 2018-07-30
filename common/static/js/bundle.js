@@ -20174,7 +20174,7 @@ var ProjectSearchStore = function (_ReduceStore) {
         case 'SET_KEYWORD':
           return this._loadProjects(this._addKeywordToState(state, action.keyword));
         case 'CLEAR_FILTERS':
-          return this._clearFilters(state);
+          return this._loadProjects(this._clearFilters(state));
         case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
           var _projects = action.projectsResponse.projects.map(__WEBPACK_IMPORTED_MODULE_3__utils_ProjectAPIUtils_js__["a" /* default */].projectFromAPIData);
           var allTags = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.mapKeys(action.projectsResponse.tags, function (tag) {
@@ -20254,10 +20254,8 @@ var ProjectSearchStore = function (_ReduceStore) {
   }, {
     key: '_clearFilters',
     value: function _clearFilters(state) {
-      console.log('before: ', state);
       state = state.set('keyword', '');
       state = state.set('tags', Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])());
-      console.log('after: ', state);
       return state;
     }
   }, {
@@ -75423,7 +75421,7 @@ var ProjectTagContainer = function (_React$Component) {
         this.state.tags.map(function (tag) {
           return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__ProjectTag_jsx__["a" /* default */], { key: tag.tag_name, tag: tag });
         }),
-        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_0__ResetSearchButton_js__["a" /* default */], { tags: this.state.tags })
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_0__ResetSearchButton_js__["a" /* default */], null)
       );
     }
   }], [{
