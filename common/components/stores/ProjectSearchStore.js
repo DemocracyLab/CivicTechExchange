@@ -88,7 +88,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'SET_KEYWORD':
         return this._loadProjects(this._addKeywordToState(state, action.keyword));
       case 'CLEAR_FILTERS':
-        return this._clearFilters(state);
+        return this._loadProjects(this._clearFilters(state));
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
         let projects = action.projectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData);
         let allTags = _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name);

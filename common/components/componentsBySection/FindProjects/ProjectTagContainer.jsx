@@ -38,7 +38,7 @@ class ProjectTagContainer extends React.Component<{||}, State> {
             tag => <ProjectTag key={tag.tag_name} tag={tag}/>,
           )
         }
-        <ResetSearchButton tags={this.state.tags}/>
+        <ResetSearchButton />
       </div>
     );
   }
