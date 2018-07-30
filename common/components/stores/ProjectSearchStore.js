@@ -88,8 +88,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'SET_KEYWORD':
         return this._loadProjects(this._addKeywordToState(state, action.keyword));
       case 'CLEAR_FILTERS':
-        console.log('CLEAR_FILTERS dispatch returned by flux');
-        return state;
+        return this._clearFilters(state);
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
         let projects = action.projectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData);
         let allTags = _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name);
@@ -152,6 +151,12 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   _addKeywordToState(state: State, keyword: string): State {
     state = state.set('keyword', keyword);
+    return state;
+  }
+
+  _clearFilters(state: State): State {
+    state = state.set('keyword', '');
+    state = state.set('tags', List());
     return state;
   }
 
