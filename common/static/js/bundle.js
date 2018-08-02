@@ -29186,7 +29186,6 @@ var LinkList = function (_React$PureComponent) {
       var _this3 = this;
 
       return this.state.links.filter(function (link, i) {
-        console.log(link.linkName);
         return !(link.linkName in __WEBPACK_IMPORTED_MODULE_4__constants_LinkConstants_js__["a" /* LinkNames */]);
       }).map(function (link, i) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(

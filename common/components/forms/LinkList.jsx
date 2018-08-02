@@ -127,7 +127,6 @@ class LinkList extends React.PureComponent<Props,State>  {
 
   _renderLinks(): Array<React$Node> {
     return this.state.links.filter((link, i) => {
-      console.log(link.linkName)
       return !(link.linkName in LinkNames)
     }).map((link,i) =>
       <div key={i}>
