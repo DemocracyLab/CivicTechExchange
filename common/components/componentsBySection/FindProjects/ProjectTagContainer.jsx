@@ -2,7 +2,7 @@
 
 import type {FluxReduceStore} from 'flux/utils';
 // import type {Tag} from '../../stores/TagStore.js';
-import ResetSearchButton from './ResetSearchButton.js';
+import ResetSearchButton from './ResetSearchButton.jsx';
 import {List} from 'immutable'
 import {Container} from 'flux/utils';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
