@@ -5,6 +5,7 @@ import {Button} from 'react-bootstrap';
 import LinkEntryModal from './LinkEntryModal.jsx'
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
 import type { LinkInfo } from './LinkInfo.jsx'
+import {LinkNames} from "../constants/LinkConstants.js";
 import _ from 'lodash'
 
 
@@ -34,7 +35,7 @@ class LinkList extends React.PureComponent<Props,State>  {
       linkToDelete: null
     };
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     if(nextProps.links) {
       this.setState({links: nextProps.links || []}, function() {
@@ -47,27 +48,27 @@ class LinkList extends React.PureComponent<Props,State>  {
     this.state.existingLink = null;
     this.openModal();
   }
-  
+
   onModalCancel(): void {
     this.setState({showAddEditModal: false})
   }
-  
+
   editLink(linkData: LinkInfo): void {
     this.state.existingLink = linkData;
     this.openModal();
   }
-  
+
   saveLink(linkData: LinkInfo): void {
     if(!this.state.existingLink) {
       this.state.links.push(linkData);
     } else {
       _.assign(this.state.existingLink, linkData);
     }
-  
+
     this.setState({showAddEditModal: false});
     this.updateLinkField();
   }
-  
+
   updateLinkField(): void {
     this.refs.hiddenFormField.value = JSON.stringify(this.state.links);
   }
@@ -75,14 +76,14 @@ class LinkList extends React.PureComponent<Props,State>  {
   openModal(): void {
     this.setState({showAddEditModal: true});
   }
-  
+
   askForDeleteConfirmation(linkToDelete: LinkInfo): void {
     this.setState({
       linkToDelete: linkToDelete,
       showDeleteModal: true
     })
   }
-  
+
   confirmDelete(confirmed: boolean): void {
     if(confirmed) {
       _.remove(this.state.links, (link) => link.linkUrl === this.state.linkToDelete.linkUrl);
@@ -93,12 +94,12 @@ class LinkList extends React.PureComponent<Props,State>  {
       linkToDelete: null
     })
   }
-  
+
   render(): React$Node {
     return (
       <div>
         <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
-        
+
         <label>Project Links &nbsp;</label>
         <Button
           bsSize="small"
@@ -106,7 +107,7 @@ class LinkList extends React.PureComponent<Props,State>  {
         >
           <i className="fa fa-plus" aria-hidden="true"></i>
         </Button>
-        
+
         {this._renderLinks()}
 
         <LinkEntryModal showModal={this.state.showAddEditModal}
@@ -114,7 +115,7 @@ class LinkList extends React.PureComponent<Props,State>  {
           onSaveLink={this.saveLink.bind(this)}
           onCancelLink={this.onModalCancel.bind(this)}
         />
-        
+
         <ConfirmationModal
           showModal={this.state.showDeleteModal}
           message="Do you want to delete this link?"
@@ -123,9 +124,12 @@ class LinkList extends React.PureComponent<Props,State>  {
       </div>
     );
   }
-  
+
   _renderLinks(): Array<React$Node> {
-    return this.state.links.map((link,i) =>
+    return this.state.links.filter((link, i) => {
+      console.log(link.linkName)
+      return !(link.linkName in LinkNames)
+    }).map((link,i) =>
       <div key={i}>
         <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName}</a>
         <i className="fa fa-pencil-square-o fa-1" aria-hidden="true" onClick={this.editLink.bind(this,link)}></i>
