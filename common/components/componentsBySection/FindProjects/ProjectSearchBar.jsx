@@ -1,7 +1,6 @@
 // @flow
 
 import type {FluxReduceStore} from 'flux/utils';
-
 import {Container} from 'flux/utils';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
@@ -19,7 +18,7 @@ class ProjectSearchBar extends React.Component<{||}, State> {
 
   static calculateState(prevState: State): State {
     return {
-      keyword: ProjectSearchStore.getKeyword(),
+      keyword: ProjectSearchStore.getKeyword() || '',
     };
   }
 
