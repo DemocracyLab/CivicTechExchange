@@ -42,6 +42,8 @@ export type ProjectSearchActionType = {
   type: 'SET_KEYWORD',
   keyword: string,
 } | {
+  type: 'CLEAR_FILTERS',
+} | {
   type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
   projectsResponse: FindProjectsResponse,
 };
@@ -85,6 +87,8 @@ class ProjectSearchStore extends ReduceStore<State> {
         return this._loadProjects(state);
       case 'SET_KEYWORD':
         return this._loadProjects(this._addKeywordToState(state, action.keyword));
+      case 'CLEAR_FILTERS':
+        return this._loadProjects(this._clearFilters(state));
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
         let projects = action.projectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData);
         let allTags = _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name);
@@ -99,7 +103,7 @@ class ProjectSearchStore extends ReduceStore<State> {
         return state;
     }
   }
-  
+
   _updateFindProjectArgs(state: State): State {
     if(state.projectsData && state.projectsData.allTags) {
       const findProjectsArgs: FindProjectsArgs = _.pickBy({
@@ -109,28 +113,28 @@ class ProjectSearchStore extends ReduceStore<State> {
         role: this._getTagCategoryParams(state, TagCategory.ROLE),
         org: this._getTagCategoryParams(state, TagCategory.ORGANIZATION)
       }, _.identity);
-  
+
       state = state.set('findProjectsArgs',findProjectsArgs);
     }
-    
+
     return state;
   }
-  
+
   _updateWindowUrl(state: State) {
     const windowUrl: string = urls.constructWithQueryString(urls.section(Section.FindProjects), state.findProjectsArgs);
     history.pushState({},null,windowUrl);
   }
-  
+
   _initializeFilters(state: State, findProjectsArgs: FindProjectsArgs): State {
     state = this._addTagFilters(state, findProjectsArgs.issues);
     state = this._addTagFilters(state, findProjectsArgs.role);
     state = this._addTagFilters(state, findProjectsArgs.tech);
     state = this._addTagFilters(state, findProjectsArgs.org);
     state = this._addKeywordToState(state, findProjectsArgs.keyword);
-    
+
     return state;
   }
-  
+
   _addTagFilters(state: State, filter:string): State {
     if(filter) {
       filter.split(",").forEach((tag) => {
@@ -139,17 +143,23 @@ class ProjectSearchStore extends ReduceStore<State> {
     }
     return state;
   }
-  
+
   _addTagToState(state: State, tag: string): State {
     const newTags:$ReadOnlyArray<string> = state.tags.concat(tag);
     return state.set('tags', newTags);
   }
-  
+
   _addKeywordToState(state: State, keyword: string): State {
     state = state.set('keyword', keyword);
     return state;
   }
-  
+
+  _clearFilters(state: State): State {
+    state = state.set('keyword', '');
+    state = state.set('tags', List());
+    return state;
+  }
+
   _loadProjects(state: State): State {
     state = this._updateFindProjectArgs(state);
     this._updateWindowUrl(state);
@@ -179,7 +189,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     const state: State = this.getState();
     return state.projectsData && state.projectsData.projects;
   }
-  
+
   getTags(inProgressState: ?State): List<TagDefinition> {
     const state: State = inProgressState || this.getState();
     if(state.projectsData && state.projectsData.allTags && state.tags) {
