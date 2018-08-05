@@ -82724,7 +82724,7 @@ var ProjectSearchContainer = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
           'p',
           null,
-          'Welcome to DemocracyLab! Use the filters and search bar below to find tech-for-good projects in Seattle.'
+          'Welcome to DemocracyLab! Use the filters and search bar below to find volunteer opportunities with tech-for-good projects in Seattle.'
         ),
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__AlertSignupModal_jsx__["a" /* default */], {
           searchFilters: this.state.searchFilters,
