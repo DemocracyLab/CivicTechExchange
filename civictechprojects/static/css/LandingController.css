@@ -22,6 +22,18 @@
   width: 51%;
 }
 
+.LandingController-footer-link a {
+  color: white;
+  text-transform: uppercase;
+}
+
+.LandingController-footer-link::after {
+  content: " . ";
+}
+.LandingController-footer-link:last-of-type::after {
+  content: "";
+}
+
 .LandingController-landingTextContainer {
   margin-top: 71px;
   margin-bottom: 400px;
