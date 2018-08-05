@@ -35,7 +35,7 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
     return (
       <div>
       	<p>
-        	Welcome to DemocracyLab! Use the filters and search bar below to find tech-for-good projects in Seattle.
+        	Welcome to DemocracyLab! Use the filters and search bar below to find volunteer opportunities with tech-for-good projects in Seattle.
       	</p>
         
         <AlertSignupModal
