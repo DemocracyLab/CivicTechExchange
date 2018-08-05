@@ -55,12 +55,18 @@ class LandingController extends React.PureComponent<{||}> {
   }
 
   _renderFooter(): React$Node {
+    //arrayLinks will be pulled from an env variable, so will change to something like WINDOW.DLAB_GLOBAL_CONTEXT_FOOTERLINKS
+    let envFooterData ='[{"u":"http://www.democracylab.org","n":"Home"},{"u":"/about","n":"About"},{"u":"/blog","n":"Blog"}]'
+    let parsedFooterData = JSON.parse(envFooterData)
+    let footerLinks = parsedFooterData.map((link, i) =>
+    <span className="LandingController-footer-link" key={i}>
+     <a href={link.u}>{link.n}</a>
+    </span>)
     return (
       <div className="LandingController-footer">
-        HELP . BLOG . TWITTER . TERMS & RISKS
+        {footerLinks}
       </div>
     )
   }
 }
-
 export default LandingController;
