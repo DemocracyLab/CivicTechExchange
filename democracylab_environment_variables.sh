@@ -19,4 +19,4 @@ export DJANGO_SECRET_KEY="d!01@gn+%1ql1n(*)8xo+nx$$&n@mg$0_)9g+!(t-2vncaq!j8"
 export DJANGO_DEBUG=True
 
 # Configure footer links
-export FOOTER_LINKS='[{"u":"http://www.democracylab.org","n":"Home"},{"u":"/about","n":"About"},{"u":"/blog","n":"Blog"}]'
+export FOOTER_LINKS='[{"u":"http://www.democracylab.org","n":"About"},{"u":"mailto:hello@democracylab.org","n":"Contact Us"}]'
