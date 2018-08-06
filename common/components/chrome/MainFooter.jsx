@@ -1,16 +1,12 @@
 // @flow
 
-import cx from '../utils/cx';
 import React from 'react';
 import _ from 'lodash';
 
 class MainFooter extends React.PureComponent<{||}> {
   
-  _cx: cx;
-  
   constructor(): void {
     super();
-    this._cx = new cx('LandingController-');
   }
   
   render(): React$Node {
@@ -27,7 +23,7 @@ class MainFooter extends React.PureComponent<{||}> {
       let envFooterData = window.DLAB_FOOTER_LINKS;
       let parsedFooterData = JSON.parse(_.unescape(envFooterData));
       footerLinks = parsedFooterData.map((link, i) =>
-        <span className="LandingController-footer-link" key={i}>
+        <span className="MainFooter-footer-link" key={i}>
          <a href={link.u} target="_blank" rel="noopener noreferrer">{link.n}</a>
         </span>
       );
@@ -37,7 +33,7 @@ class MainFooter extends React.PureComponent<{||}> {
 
     return (
       footerLinks
-        ? <div className="LandingController-footer"> {footerLinks} </div>
+        ? <div className="MainFooter-footer"> {footerLinks} </div>
         : null
     )
   }

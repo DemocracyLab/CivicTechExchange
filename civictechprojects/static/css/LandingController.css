@@ -4,34 +4,11 @@
   justify-content: center;
 }
 
-.LandingController-footer {
-  background-color: #222629;
-  bottom: 0;
-  color: white;
-  font-weight: bold;
-  padding: 19px;
-  position: fixed;
-  text-align: center;
-  width: 100%;
-}
-
 .LandingController-landingText {
   color: white;
   font-weight: bold;
   text-align: center;
   width: 51%;
-}
-
-.LandingController-footer-link a {
-  color: white;
-  text-transform: uppercase;
-}
-
-.LandingController-footer-link::after {
-  content: " . ";
-}
-.LandingController-footer-link:last-of-type::after {
-  content: "";
 }
 
 .LandingController-landingTextContainer {

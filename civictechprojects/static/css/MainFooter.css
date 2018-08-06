@@ -1,0 +1,22 @@
+.MainFooter-footer {
+  background-color: #222629;
+  bottom: 0;
+  color: white;
+  font-weight: bold;
+  padding: 19px;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
+
+.MainFooter-footer-link a {
+  color: white;
+  text-transform: uppercase;
+}
+
+.MainFooter-footer-link::after {
+  content: " . ";
+}
+.MainFooter-footer-link:last-of-type::after {
+  content: "";
+}
