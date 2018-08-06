@@ -2,6 +2,7 @@
 
 import cx from '../utils/cx';
 import React from 'react';
+import _ from 'lodash';
 
 class MainFooter extends React.PureComponent<{||}> {
   
@@ -21,17 +22,23 @@ class MainFooter extends React.PureComponent<{||}> {
   }
   
   _renderFooter(): React$Node {
-    let envFooterData = window.DLAB_FOOTER_LINKS;
-    let parsedFooterData = JSON.parse(_.unescape(envFooterData));
-    let footerLinks = parsedFooterData.map((link, i) =>
-      <span className="LandingController-footer-link" key={i}>
-       <a href={link.u} target="_blank" rel="noopener noreferrer">{link.n}</a>
-      </span>
-    );
+    let footerLinks = null;
+    try {
+      let envFooterData = window.DLAB_FOOTER_LINKS;
+      let parsedFooterData = JSON.parse(_.unescape(envFooterData));
+      footerLinks = parsedFooterData.map((link, i) =>
+        <span className="LandingController-footer-link" key={i}>
+         <a href={link.u} target="_blank" rel="noopener noreferrer">{link.n}</a>
+        </span>
+      );
+    } catch(ex) {
+      console.error("Failed to parse footer links. ", ex);
+    }
+
     return (
-      <div className="LandingController-footer">
-        {footerLinks}
-      </div>
+      footerLinks
+        ? <div className="LandingController-footer"> {footerLinks} </div>
+        : null
     )
   }
 }
