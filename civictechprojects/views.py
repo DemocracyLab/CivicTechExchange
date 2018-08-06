@@ -120,9 +120,9 @@ def index(request):
     if request.user.is_authenticated():
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
-        context['emailVerified'] = contributor.email_verified,
-        context['firstName'] = contributor.first_name,
-        context['lastName'] = contributor.last_name,
+        context['emailVerified'] = contributor.email_verified
+        context['firstName'] = contributor.first_name
+        context['lastName'] = contributor.last_name
 
     return HttpResponse(template.render(context, request))
 

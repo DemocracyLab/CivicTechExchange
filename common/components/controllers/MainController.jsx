@@ -8,6 +8,7 @@ import Section from '../enums/Section.js';
 import SubHeader from '../chrome/SubHeader.jsx';
 import FlashMessage from '../chrome/FlashMessage.jsx';
 import url from '../../components/utils/url.js'
+import MainFooter from "../chrome/MainFooter.jsx";
 
 class MainController extends React.Component<{||}> {
   componentWillMount(): void {
@@ -23,6 +24,7 @@ class MainController extends React.Component<{||}> {
       <SubHeader key='sub_header'/>,
       <FlashMessage key='flash_message'/>,
       <SectionController key='section_controller'/>,
+      <MainFooter/>
     ];
   }
 }

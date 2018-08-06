@@ -2,6 +2,7 @@
 
 import cx from '../utils/cx';
 import React from 'react';
+import MainFooter from "../chrome/MainFooter.jsx";
 
 class LandingController extends React.PureComponent<{||}> {
 
@@ -16,7 +17,7 @@ class LandingController extends React.PureComponent<{||}> {
     return (
       <div>
         {this._renderSupremeCourt()}
-        {this._renderFooter()}
+        <MainFooter/>
       </div>
     );
   }
@@ -52,20 +53,6 @@ class LandingController extends React.PureComponent<{||}> {
         </div>
       </div>
     );
-  }
-
-  _renderFooter(): React$Node {
-    let envFooterData = window.DLAB_FOOTER_LINKS;
-    let parsedFooterData = JSON.parse(_.unescape(envFooterData));
-    let footerLinks = parsedFooterData.map((link, i) =>
-    <span className="LandingController-footer-link" key={i}>
-     <a href={link.u}>{link.n}</a>
-    </span>);
-    return (
-      <div className="LandingController-footer">
-        {footerLinks}
-      </div>
-    )
   }
 }
 export default LandingController;
