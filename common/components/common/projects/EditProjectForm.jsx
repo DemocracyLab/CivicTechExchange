@@ -272,7 +272,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
 
         <div className="form-group">
           <label>Project Stage</label>
-          <Tag Selector
+          <TagSelector
             elementId="project_stage"
             value={this.state.formFields.project_stage}
             category={TagCategory.PROJECT_STAGE}
