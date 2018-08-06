@@ -18452,6 +18452,7 @@ var ProjectAPIUtils = function () {
         description: apiData.project_description,
         id: apiData.project_id,
         issueArea: apiData.project_issue_area && apiData.project_issue_area.length != 0 ? apiData.project_issue_area[0].display_name : 'None',
+        state: apiData.project_state && apiData.project_state.length != 0 ? apiData.project_state[0].display_name : 'None',
         location: apiData.project_location,
         name: apiData.project_name,
         thumbnail: apiData.project_thumbnail,
