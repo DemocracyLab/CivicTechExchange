@@ -25,7 +25,7 @@ class MainFooter extends React.PureComponent<{||}> {
     let parsedFooterData = JSON.parse(_.unescape(envFooterData));
     let footerLinks = parsedFooterData.map((link, i) =>
       <span className="LandingController-footer-link" key={i}>
-       <a href={link.u}>{link.n}</a>
+       <a href={link.u} target="_blank" rel="noopener noreferrer">{link.n}</a>
       </span>
     );
     return (

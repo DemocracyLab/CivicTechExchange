@@ -41255,7 +41255,7 @@ var MainFooter = function (_React$PureComponent) {
           { className: 'LandingController-footer-link', key: i },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'a',
-            { href: link.u },
+            { href: link.u, target: '_blank', rel: 'noopener noreferrer' },
             link.n
           )
         );
