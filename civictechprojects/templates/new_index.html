@@ -64,7 +64,9 @@
         })
         : {};
 
-      window.DLAB_MESSAGES = []
+      window.DLAB_FOOTER_LINKS = '{{footerLinks}}'
+
+      window.DLAB_MESSAGES = [];
       {% for message in messages %}
         window.DLAB_MESSAGES.push({message: '{{message}}', level: '{{message.tags}}'})
       {% endfor %}

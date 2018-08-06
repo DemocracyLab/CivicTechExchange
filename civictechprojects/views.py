@@ -116,17 +116,13 @@ def get_project(request, project_id):
 @ensure_csrf_cookie
 def index(request):
     template = loader.get_template('new_index.html')
+    context = {'footerLinks': settings.FOOTER_LINKS}
     if request.user.is_authenticated():
         contributor = Contributor.objects.get(id=request.user.id)
-        context = (
-        {
-            'userID': request.user.id,
-            'emailVerified': contributor.email_verified,
-            'firstName': request.user.first_name,
-            'lastName': request.user.last_name,
-        })
-    else:
-        context = {}
+        context['userID'] = request.user.id
+        context['emailVerified'] = contributor.email_verified,
+        context['firstName'] = contributor.first_name,
+        context['lastName'] = contributor.last_name,
 
     return HttpResponse(template.render(context, request))
 

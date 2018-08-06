@@ -130,6 +130,7 @@ EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
 
+FOOTER_LINKS = os.environ['FOOTER_LINKS']
 
 # TODO: Set to True in production
 # SESSION_COOKIE_SECURE = True
