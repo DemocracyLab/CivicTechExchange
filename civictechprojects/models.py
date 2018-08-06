@@ -17,6 +17,8 @@ from taggit.models import TaggedItemBase
 class TaggedIssueAreas(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
+class TaggedStage(TaggedItemBase):
+    content_object = models.ForeignKey('Project')
 
 class TaggedTechnologies(TaggedItemBase):
     content_object = models.ForeignKey('Project')
@@ -37,6 +39,8 @@ class Project(models.Model):
     project_description = models.CharField(max_length=3000, blank=True)
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
     project_issue_area.remote_field.related_name = "+"
+    project_stage = TaggableManager(blank=True, through=TaggedStage)
+    project_stage.remote_field.related_name = "+"
     project_technologies = TaggableManager(blank=True, through=TaggedTechnologies)
     project_technologies.remote_field.related_name = "+"
     project_organization = TaggableManager(blank=True, through=TaggedOrganization)
@@ -67,6 +71,7 @@ class Project(models.Model):
             'project_location': self.project_location,
             'project_organization': Tag.hydrate_to_json(self.id, list(self.project_organization.all().values())),
             'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
+            'project_stage': Tag.hydrate_to_json(self.id, list(self.project_stage.all().values())),
             'project_technologies': Tag.hydrate_to_json(self.id, list(self.project_technologies.all().values())),
             'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
