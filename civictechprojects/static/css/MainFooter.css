@@ -16,11 +16,5 @@
 .MainFooter-footer-link a {
   color: white;
   text-transform: uppercase;
-}
-
-.MainFooter-footer-link::after {
   padding-right: 30px;
-}
-.MainFooter-footer-link:last-of-type::after {
-  content: "";
 }
