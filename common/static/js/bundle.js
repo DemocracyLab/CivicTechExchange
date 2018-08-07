@@ -82670,7 +82670,9 @@ var ProjectCard = function (_React$PureComponent) {
         'a',
         { style: styles,
           className: 'ProjectCard-root',
-          href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }) },
+          href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }),
+          target: '_blank', rel: 'noopener noreferrer'
+        },
         this.props.project && this.props.project.claimed ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'checkbox', src: 'https://i.imgur.com/yXgKEHY.jpg', align: 'right' }) : null,
         this._renderName(),
         this._renderIssueAndLocation()

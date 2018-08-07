@@ -28,7 +28,9 @@ class ProjectCard extends React.PureComponent<Props> {
     return (
       <a style={styles}
         className="ProjectCard-root"
-        href={url.section(Section.AboutProject, {id: this.props.project.id})}>
+        href={url.section(Section.AboutProject, {id: this.props.project.id})}
+         target="_blank" rel="noopener noreferrer"
+      >
         {
           this.props.project && this.props.project.claimed
           ? <img className="checkbox" src="https://i.imgur.com/yXgKEHY.jpg" align="right"/>
