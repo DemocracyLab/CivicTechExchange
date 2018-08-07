@@ -63,7 +63,7 @@ class ProjectAPIUtils {
         apiData.project_issue_area && apiData.project_issue_area.length != 0
           ? apiData.project_issue_area[0].display_name
           : 'None',
-      state:
+      stage:
         apiData.project_stage && apiData.project_stage.length !=0
           ? apiData.project_stage[0].display_name
           : 'None',
