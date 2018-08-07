@@ -29,7 +29,7 @@ export type ProjectAPIData = {|
   +project_id: number,
   +project_description: string,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
-  +project_state: $ReadOnlyArray<TagDefinition>,
+  +project_stage: $ReadOnlyArray<TagDefinition>,
   +project_location: string,
   +project_name: string,
   +project_thumbnail: FileInfo,
@@ -44,7 +44,7 @@ export type ProjectDetailsAPIData = {|
   +project_url: string,
   +project_organization: $ReadOnlyArray<TagDefinition>,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
-  +project_state: $ReadOnlyArray<TagDefinition>,
+  +project_stage: $ReadOnlyArray<TagDefinition>,
   +project_technologies: $ReadOnlyArray<TagDefinition>,
   +project_positions: $ReadOnlyArray<PositionInfo>,
   +project_location: string,
@@ -64,8 +64,8 @@ class ProjectAPIUtils {
           ? apiData.project_issue_area[0].display_name
           : 'None',
       state:
-        apiData.project_state && apiData.project_state.length !=0
-          ? apiData.project_state[0].display_name
+        apiData.project_stage && apiData.project_stage.length !=0
+          ? apiData.project_stage[0].display_name
           : 'None',
       location: apiData.project_location,
       name: apiData.project_name,
