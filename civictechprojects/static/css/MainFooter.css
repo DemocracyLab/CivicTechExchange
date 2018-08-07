@@ -19,7 +19,7 @@
 }
 
 .MainFooter-footer-link::after {
-  content: " . ";
+  padding-right: 30px;
 }
 .MainFooter-footer-link:last-of-type::after {
   content: "";
