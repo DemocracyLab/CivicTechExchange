@@ -271,17 +271,6 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
 
         <div className="form-group">
-          <label>Project Stage</label>
-          <TagSelector
-            elementId="project_stage"
-            value={this.state.formFields.project_stage}
-            category={TagCategory.PROJECT_STAGE}
-            allowMultiSelect={false}
-            onSelection={this.onTagChange.bind(this, "project_stage")}
-          />
-        </div>
-
-        <div className="form-group">
           <label>Technology Used</label>
           <TagSelector
             elementId="project_technologies"
@@ -289,6 +278,17 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             category={TagCategory.TECHNOLOGIES_USED}
             allowMultiSelect={true}
             onSelection={this.onTagChange.bind(this, "project_technologies")}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Project Stage</label>
+          <TagSelector
+            elementId="project_stage"
+            value={this.state.formFields.project_stage}
+            category={TagCategory.PROJECT_STAGE}
+            allowMultiSelect={false}
+            onSelection={this.onTagChange.bind(this, "project_stage")}
           />
         </div>
 
