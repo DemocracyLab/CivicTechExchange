@@ -34313,7 +34313,7 @@ var EditProjectForm = function (_React$PureComponent) {
             ' / 3000'
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { className: 'form-control', id: 'project_description', name: 'project_description',
-            placeholder: 'This will appear as project introduction', rows: '6', maxLength: '3000',
+            placeholder: 'Tell us what you\'re doing and why it\'s important', rows: '6', maxLength: '3000',
             value: this.state.formFields.project_description, onChange: this.onFormFieldChange.bind(this, "project_description") })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
