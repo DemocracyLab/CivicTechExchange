@@ -70798,6 +70798,15 @@ var AboutProjectController = function (_React$PureComponent) {
                     __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                       'div',
                       { className: 'row' },
+                      __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                        'div',
+                        { className: 'col' },
+                        project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_stage) && project.project_stage[0].display_name
+                      )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                      'div',
+                      { className: 'row' },
                       this._renderProjectCommunity()
                     )
                   )

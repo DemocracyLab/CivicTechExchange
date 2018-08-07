@@ -79,6 +79,11 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                       </div>
                     </div>
                     <div className="row">
+                      <div className="col">
+                        {project && !_.isEmpty(project.project_stage) && project.project_stage[0].display_name}
+                      </div>
+                    </div>
+                    <div className="row">
                       {this._renderProjectCommunity()}
                     </div>
                   </div>
