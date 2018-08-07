@@ -35,7 +35,7 @@ class SectionController extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div>
+      <div className="SectionBody">
         {this._getController()}
       </div>
     );
