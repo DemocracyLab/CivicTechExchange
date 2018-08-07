@@ -23,7 +23,6 @@ class TaggedStage(TaggedItemBase):
 class TaggedTechnologies(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
-
 class TaggedOrganization(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
