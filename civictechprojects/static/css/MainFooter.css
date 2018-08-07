@@ -3,10 +3,14 @@
   bottom: 0;
   color: white;
   font-weight: bold;
-  padding: 19px;
+  padding: 10px;
   position: fixed;
   text-align: center;
   width: 100%;
+}
+
+.SectionBody {
+  padding-bottom: 100px;
 }
 
 .MainFooter-footer-link a {

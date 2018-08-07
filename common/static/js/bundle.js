@@ -73390,7 +73390,7 @@ var SectionController = function (_React$Component) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
         'div',
-        null,
+        { className: 'SectionBody' },
         this._getController()
       );
     }
