@@ -32,11 +32,11 @@ class SubHeader extends React.Component<{||}, State> {
     };
   }
   
-  navigateToCreateProject(): void {
+  navigateToSection(section: string): void {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
-      section: Section.CreateProject,
-      url: url.section(Section.CreateProject)
+      section: section,
+      url: url.section(section)
     });
   }
 
@@ -50,9 +50,7 @@ class SubHeader extends React.Component<{||}, State> {
       <div className={this._cx.get('root')}>
         {this._renderSectionLinks()}
         <span className={this._cx.get('rightContent')}>
-          {
-            CurrentUser.isLoggedIn() ? this._renderCreateProjectButton() : null
-          }
+          {this._renderCreateProjectButton()}
         </span>
       </div>
     );
@@ -74,8 +72,9 @@ class SubHeader extends React.Component<{||}, State> {
   }
   
   _renderCreateProjectButton(): ?React$Node {
+    const section: string = CurrentUser.isLoggedIn() ? Section.CreateProject : Section.LogIn;
     return (
-      <span className={this._cx.get('createProject')} onClick={this.navigateToCreateProject.bind(this)}>
+      <span className={this._cx.get('createProject')} onClick={this.navigateToSection.bind(this, section)}>
         Create a Project
       </span>
     )

@@ -84889,12 +84889,12 @@ var SubHeader = function (_React$Component) {
   _inherits(SubHeader, _React$Component);
 
   _createClass(SubHeader, [{
-    key: 'navigateToCreateProject',
-    value: function navigateToCreateProject() {
+    key: 'navigateToSection',
+    value: function navigateToSection(section) {
       __WEBPACK_IMPORTED_MODULE_3__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
         type: 'SET_SECTION',
-        section: __WEBPACK_IMPORTED_MODULE_8__enums_Section_js__["a" /* default */].CreateProject,
-        url: __WEBPACK_IMPORTED_MODULE_9__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_8__enums_Section_js__["a" /* default */].CreateProject)
+        section: section,
+        url: __WEBPACK_IMPORTED_MODULE_9__utils_url_js__["a" /* default */].section(section)
       });
     }
   }], [{
@@ -84930,7 +84930,7 @@ var SubHeader = function (_React$Component) {
         __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
           'span',
           { className: this._cx.get('rightContent') },
-          __WEBPACK_IMPORTED_MODULE_2__components_utils_CurrentUser_js__["a" /* default */].isLoggedIn() ? this._renderCreateProjectButton() : null
+          this._renderCreateProjectButton()
         )
       );
     }
@@ -84954,9 +84954,10 @@ var SubHeader = function (_React$Component) {
   }, {
     key: '_renderCreateProjectButton',
     value: function _renderCreateProjectButton() {
+      var section = __WEBPACK_IMPORTED_MODULE_2__components_utils_CurrentUser_js__["a" /* default */].isLoggedIn() ? __WEBPACK_IMPORTED_MODULE_8__enums_Section_js__["a" /* default */].CreateProject : __WEBPACK_IMPORTED_MODULE_8__enums_Section_js__["a" /* default */].LogIn;
       return __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
         'span',
-        { className: this._cx.get('createProject'), onClick: this.navigateToCreateProject.bind(this) },
+        { className: this._cx.get('createProject'), onClick: this.navigateToSection.bind(this, section) },
         'Create a Project'
       );
     }
