@@ -47,6 +47,7 @@ urlpatterns = [
     url(r'^', include('civictechprojects.urls')),
     url(r'^$', RedirectView.as_view(url='/index/', permanent=True)),
     url(r'^admin/', admin.site.urls),
+    url(r'^platform$', RedirectView.as_view(url='http://connect.democracylab.org/platform/', permanent=True)),
     url(r'^.*$', RedirectView.as_view(url='/index/', permanent=True)),
     # url(
     #     r'check_email/(?P<user_email>.*)$',
