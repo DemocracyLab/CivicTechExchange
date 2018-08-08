@@ -47,6 +47,7 @@ urlpatterns = [
     url(r'^', include('civictechprojects.urls')),
     url(r'^$', RedirectView.as_view(url='/index/', permanent=True)),
     url(r'^admin/', admin.site.urls),
+    url(r'^.*$', RedirectView.as_view(url='/index/', permanent=True)),
     # url(
     #     r'check_email/(?P<user_email>.*)$',
     #     views.check_email,
