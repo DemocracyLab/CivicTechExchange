@@ -84767,7 +84767,7 @@ var MainHeader = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["f" /* MenuItem */], { divider: true }),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["f" /* MenuItem */],
-          { href: '/logout' },
+          { href: '/logout/' },
           'Logout'
         )
       ) : __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(

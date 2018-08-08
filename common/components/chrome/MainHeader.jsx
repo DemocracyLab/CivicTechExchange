@@ -44,7 +44,7 @@ class MainHeader extends React.PureComponent<{||}> {
         >
           <MenuItem href="mailto:hello@democracylab.org">Contact Us</MenuItem>
           <MenuItem divider />
-          <MenuItem href="/logout">Logout</MenuItem>
+          <MenuItem href="/logout/">Logout</MenuItem>
         </DropdownButton>
           )
       : (
