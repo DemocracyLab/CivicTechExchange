@@ -1,3 +1,7 @@
 .FindProjectsController-root {
   margin: 70px 80px 70px 80px;
 }
+
+p.IntroText {
+  font-weight: bold;
+}
