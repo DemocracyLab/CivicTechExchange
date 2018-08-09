@@ -34,7 +34,7 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return (
       <div>
-      	<p>
+      	<p className="IntroText">
         	Welcome to DemocracyLab! Use the filters and search bar below to find volunteer opportunities with tech-for-good projects in Seattle.
       	</p>
         
