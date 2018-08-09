@@ -6,6 +6,7 @@ import {DropdownButton, MenuItem} from 'react-bootstrap';
 import Section from '../enums/Section.js';
 import CurrentUser from '../utils/CurrentUser.js';
 import url from '../utils/url.js';
+import FooterLinks from "../utils/FooterLinks.js";
 
 class MainHeader extends React.PureComponent<{||}> {
   render(): React$Node {
@@ -42,29 +43,41 @@ class MainHeader extends React.PureComponent<{||}> {
           noCaret
           id="dropdown-no-caret"
         >
-          <MenuItem href="mailto:hello@democracylab.org">Contact Us</MenuItem>
+          {this._renderFooterMenuLinks()}
           <MenuItem divider />
           <MenuItem href="/logout">Logout</MenuItem>
         </DropdownButton>
           )
       : (
           <span className = "MainHeader-links">
-              <a href="mailto:hello@democracylab.org">Contact Us</a> |{' '}
-              <span onClick = {this._onLogInClick}>
+            {this._renderFooterLinks()}
+            <span onClick = {this._onLogInClick}>
               <a href = "" > Log In </a>
-              </span> |{' '}
+            </span> |{' '}
 
-              <span onClick = {this._onSignUpClick} >
+            <span onClick = {this._onSignUpClick} >
               <a href = "" > Sign Up </a>
-              </span> |{' '}
-  
-              <span onClick = {this._onResetPasswordClick} >
+            </span> |{' '}
+
+            <span onClick = {this._onResetPasswordClick} >
               <a href = "" > Forgot Password </a>
-              </span>
+            </span>
           </span>
         );
   }
-
+  
+  _renderFooterLinks(): $ReadOnlyArray<React$Node> {
+    return FooterLinks.list().map((link,i) => {
+      return <span key={i}><a href={link.url}>{link.name}</a> |{' '}</span>
+    });
+  }
+  
+  _renderFooterMenuLinks(): $ReadOnlyArray<React$Node> {
+    return FooterLinks.list().map((link,i) => {
+      return <MenuItem href={link.url} key={i}>{link.name}</MenuItem>
+    });
+  }
+  
   _onLogInClick(): void {
       NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
