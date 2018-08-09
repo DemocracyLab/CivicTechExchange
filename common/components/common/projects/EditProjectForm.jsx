@@ -29,6 +29,7 @@ type FormFields = {|
   project_description: ?string,
   project_organization?: Array<TagDefinition>,
   project_issue_area?: Array<TagDefinition>,
+  project_stage?: Array<TagDefinition>,
   project_technologies?: Array<TagDefinition>,
   project_positions?: Array<PositionInfo>,
   project_links: Array<LinkInfo>,
@@ -67,6 +68,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         project_description: "",
         project_organization: [],
         project_issue_area: [],
+        project_stage: [],
         project_technologies: [],
         project_positions: [],
         project_thumbnail: "",
@@ -116,6 +118,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_description: project.project_description,
           project_organization: project.project_organization,
           project_issue_area: project.project_issue_area,
+          project_stage: project.project_stage,
           project_technologies: project.project_technologies,
           project_files: _.cloneDeep(project.project_files),
           project_positions: _.cloneDeep(project.project_positions),
@@ -208,7 +211,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
       "Bellevue, WA",
       Locations.OTHER
     ];
-    
+
     return <div className="form-group">
       <label htmlFor="project_location">Project Location</label>
       <select name="project_location" id="project_location" className="form-control" value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}>
@@ -275,6 +278,17 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             category={TagCategory.TECHNOLOGIES_USED}
             allowMultiSelect={true}
             onSelection={this.onTagChange.bind(this, "project_technologies")}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Project Stage</label>
+          <TagSelector
+            elementId="project_stage"
+            value={this.state.formFields.project_stage}
+            category={TagCategory.PROJECT_STAGE}
+            allowMultiSelect={false}
+            onSelection={this.onTagChange.bind(this, "project_stage")}
           />
         </div>
 

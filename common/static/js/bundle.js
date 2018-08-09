@@ -18452,6 +18452,7 @@ var ProjectAPIUtils = function () {
         description: apiData.project_description,
         id: apiData.project_id,
         issueArea: apiData.project_issue_area && apiData.project_issue_area.length != 0 ? apiData.project_issue_area[0].display_name : 'None',
+        stage: apiData.project_stage && apiData.project_stage.length != 0 ? apiData.project_stage[0].display_name : 'None',
         location: apiData.project_location,
         name: apiData.project_name,
         thumbnail: apiData.project_thumbnail,
@@ -34031,6 +34032,7 @@ var EditProjectForm = function (_React$PureComponent) {
         project_description: "",
         project_organization: [],
         project_issue_area: [],
+        project_stage: [],
         project_technologies: [],
         project_positions: [],
         project_thumbnail: "",
@@ -34086,6 +34088,7 @@ var EditProjectForm = function (_React$PureComponent) {
             project_description: project.project_description,
             project_organization: project.project_organization,
             project_issue_area: project.project_issue_area,
+            project_stage: project.project_stage,
             project_technologies: project.project_technologies,
             project_files: __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.cloneDeep(project.project_files),
             project_positions: __WEBPACK_IMPORTED_MODULE_12_lodash___default.a.cloneDeep(project.project_positions),
@@ -34296,6 +34299,22 @@ var EditProjectForm = function (_React$PureComponent) {
             category: __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED,
             allowMultiSelect: true,
             onSelection: this.onTagChange.bind(this, "project_technologies")
+          })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'label',
+            null,
+            'Project Stage'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__tags_TagSelector_jsx__["a" /* default */], {
+            elementId: 'project_stage',
+            value: this.state.formFields.project_stage,
+            category: __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].PROJECT_STAGE,
+            allowMultiSelect: false,
+            onSelection: this.onTagChange.bind(this, "project_stage")
           })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -74716,7 +74735,16 @@ var AboutProjectController = function (_React$PureComponent) {
                       __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                         'div',
                         { className: 'col' },
-                        project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name
+                        project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_issue_area) ? "Issue Area: " + project.project_issue_area[0].display_name : null
+                      )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                      'div',
+                      { className: 'row' },
+                      __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                        'div',
+                        { className: 'col' },
+                        project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_stage) ? "Project Stage: " + project.project_stage[0].display_name : null
                       )
                     ),
                     __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
