@@ -74735,7 +74735,7 @@ var AboutProjectController = function (_React$PureComponent) {
                       __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                         'div',
                         { className: 'col' },
-                        project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_issue_area) && project.project_issue_area[0].display_name
+                        project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_issue_area) ? "Issue Area: " + project.project_issue_area[0].display_name : null
                       )
                     ),
                     __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
@@ -74744,7 +74744,7 @@ var AboutProjectController = function (_React$PureComponent) {
                       __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                         'div',
                         { className: 'col' },
-                        project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_stage) && project.project_stage[0].display_name
+                        project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_stage) ? "Project Stage: " + project.project_stage[0].display_name : null
                       )
                     ),
                     __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
