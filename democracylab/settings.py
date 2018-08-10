@@ -132,6 +132,8 @@ ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
 
 FOOTER_LINKS = os.environ.get('FOOTER_LINKS', '')
 
+PROJECT_DESCRIPTION_EXAMPLE_URL = os.environ.get('PROJECT_DESCRIPTION_EXAMPLE_URL', '')
+
 SECURE_SSL_REDIRECT = os.environ.get('DL_SECURE_SSL_REDIRECT', False) == 'True'
 
 # TODO: Set to True in productions

@@ -279,7 +279,18 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
 
         <div className="form-group">
-          <label>Describe This Project</label>
+          <label>
+            Describe This Project { }
+            {
+              window.PROJECT_DESCRIPTION_EXAMPLE_URL
+              ? (
+                  <a className="label-hint" target="_blank" rel="noopener noreferrer" href={window.PROJECT_DESCRIPTION_EXAMPLE_URL}>
+                    (Example)
+                  </a>
+                )
+              : null
+            }
+          </label>
           <div className="character-count">
             { (this.state.formFields.project_description || "").length} / 3000
           </div>

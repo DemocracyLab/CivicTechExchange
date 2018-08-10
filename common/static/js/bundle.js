@@ -34304,7 +34304,12 @@ var EditProjectForm = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             null,
-            'Describe This Project'
+            'Describe This Project ',
+            window.PROJECT_DESCRIPTION_EXAMPLE_URL ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'a',
+              { className: 'label-hint', target: '_blank', rel: 'noopener noreferrer', href: window.PROJECT_DESCRIPTION_EXAMPLE_URL },
+              '(Example)'
+            ) : null
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
