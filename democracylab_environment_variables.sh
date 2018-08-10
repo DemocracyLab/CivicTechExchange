@@ -20,3 +20,6 @@ export DJANGO_DEBUG=True
 
 # Configure footer links
 export FOOTER_LINKS='[{"u":"http://connect.democracylab.org","n":"About"},{"u":"mailto:hello@democracylab.org","n":"Contact Us"}]'
+
+# Configure project description example link
+export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/index/?section=AboutProject&id=1'
