@@ -6,6 +6,7 @@ import React from 'react';
 import Section from '../../../components/enums/Section.js';
 import url from '../../utils/url.js';
 import {Locations} from "../../constants/ProjectConstants.js";
+import cdn from "../../utils/cdn.js";
 
 type Props = {|
   +project: Project,
@@ -33,7 +34,7 @@ class ProjectCard extends React.PureComponent<Props> {
       >
         {
           this.props.project && this.props.project.claimed
-          ? <img className="checkbox" src="https://i.imgur.com/yXgKEHY.jpg" align="right"/>
+          ? <img className="checkbox" src={cdn.image("verified_check.jpg")} align="right"/>
           : null
         }
         {this._renderName()}

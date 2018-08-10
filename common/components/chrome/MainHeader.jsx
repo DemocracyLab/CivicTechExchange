@@ -7,6 +7,7 @@ import Section from '../enums/Section.js';
 import CurrentUser from '../utils/CurrentUser.js';
 import url from '../utils/url.js';
 import FooterLinks from "../utils/FooterLinks.js";
+import cdn from "../utils/cdn.js";
 
 class MainHeader extends React.PureComponent<{||}> {
   render(): React$Node {
@@ -15,7 +16,7 @@ class MainHeader extends React.PureComponent<{||}> {
         <span onClick={this._onHomeButtonClick}>
           <img
             className="MainHeader-logo"
-            src="https://i.imgur.com/NhoAjjN.png"
+            src={cdn.image("dl_logo.png")}
           />
         </span>
         <span className="MainHeader-rightContent">
