@@ -31,6 +31,10 @@ class ProjectCreationForm(ModelForm):
         if issue_areas and len(issue_areas) != 0:
             project.project_issue_area.add(issue_areas)
 
+        project_stage = form.data.get('project_stage')
+        if project_stage and len(project_stage) != 0:
+            project.project_stage.add(project_stage)
+
         project_technologies = form.data.get('project_technologies')
         if len(project_technologies) > 0:
             for tech in project_technologies.split(','):
@@ -95,6 +99,7 @@ class ProjectCreationForm(ModelForm):
         project.project_url = form.data.get('project_url')
 
         Tag.merge_tags_field(project.project_issue_area, form.data.get('project_issue_area'))
+        Tag.merge_tags_field(project.project_stage, form.data.get('project_stage'))
         Tag.merge_tags_field(project.project_technologies, form.data.get('project_technologies'))
         Tag.merge_tags_field(project.project_organization, form.data.get('project_organization'))
 

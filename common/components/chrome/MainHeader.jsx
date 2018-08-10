@@ -46,7 +46,7 @@ class MainHeader extends React.PureComponent<{||}> {
         >
           {this._renderFooterMenuLinks()}
           <MenuItem divider />
-          <MenuItem href="/logout">Logout</MenuItem>
+          <MenuItem href="/logout/">Logout</MenuItem>
         </DropdownButton>
           )
       : (

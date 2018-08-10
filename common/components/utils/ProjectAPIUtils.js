@@ -29,6 +29,7 @@ export type ProjectAPIData = {|
   +project_id: number,
   +project_description: string,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
+  +project_stage: $ReadOnlyArray<TagDefinition>,
   +project_location: string,
   +project_name: string,
   +project_thumbnail: FileInfo,
@@ -43,6 +44,7 @@ export type ProjectDetailsAPIData = {|
   +project_url: string,
   +project_organization: $ReadOnlyArray<TagDefinition>,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
+  +project_stage: $ReadOnlyArray<TagDefinition>,
   +project_technologies: $ReadOnlyArray<TagDefinition>,
   +project_positions: $ReadOnlyArray<PositionInfo>,
   +project_location: string,
@@ -61,13 +63,17 @@ class ProjectAPIUtils {
         apiData.project_issue_area && apiData.project_issue_area.length != 0
           ? apiData.project_issue_area[0].display_name
           : 'None',
+      stage:
+        apiData.project_stage && apiData.project_stage.length !=0
+          ? apiData.project_stage[0].display_name
+          : 'None',
       location: apiData.project_location,
       name: apiData.project_name,
       thumbnail: apiData.project_thumbnail,
       claimed: apiData.project_claimed
     };
   }
-  
+
   static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
     fetch(new Request('/api/project/' + id + '/'))
       .then(response => {
@@ -82,7 +88,7 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
-  
+
   static fetchTagsByCategory(tagCategory: string, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): void {
     fetch(new Request('/api/tags?category=' + tagCategory))
       .then(response => response.json())
@@ -92,13 +98,13 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
-  
+
   static post(url: string, body: {||},successCallback: (APIResponse) => void, errCallback: (APIError) => void) {
     const doError = (response) => errCallback && errCallback({
       errorCode: response.status,
       errorMessage: JSON.stringify(response)
     });
-    
+
     fetch(new Request(url, {method:"POST", body:JSON.stringify(body), credentials:"include", headers: {
       'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
@@ -106,7 +112,7 @@ class ProjectAPIUtils {
       .then(response => ProjectAPIUtils.isSuccessResponse(response) ? successCallback() : doError(response))
       .catch(response => doError(response));
   }
-  
+
   static isSuccessResponse(response:APIResponse): boolean {
     return response.status < 400;
   }
