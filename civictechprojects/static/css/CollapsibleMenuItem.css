@@ -1,5 +1,6 @@
 .CollapsibleCategoryItem-root {
   cursor: pointer;
+  margin-left:10px;
 }
 
 .CollapsibleMenuItem:hover {
