@@ -3,15 +3,20 @@
   margin-left:10px;
 }
 
-.CollapsibleMenuItem:hover {
-  color: white;
-  background-color: #61892f;
+.CollapsibleCategoryItem-root:last-child {
+  margin-bottom: 10px;
 }
 
 .CollapsibleMenuItem {
   width: 100%;
   padding: 0px 10px;
 }
-.CollapsibleCategoryItem-root:last-child {
-  margin-bottom: 10px;
+
+.CollapsibleMenuItem:hover {
+  color: white;
+  background-color: #61892f;
+}
+
+.CollapsibleMenuItem > input[type=checkbox] {
+  margin-right: 5px;
 }
