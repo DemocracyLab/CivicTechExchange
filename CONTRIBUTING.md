@@ -2,7 +2,7 @@
 
 Thanks for contributing to DemocracyLab! We're glad you want to help us make our platform even better.
 
-When contributing to this repository, please make sure you have followed the [https://docs.google.com/document/d/1OLQPFFJ8oz_BxpuxRxKKdZ2brmlUkVN3ICTdbA_axxY/edit#](Contributor Guide). If you have any questions, please reach out to us on Slack.
+When contributing to this repository, please make sure you have followed the [Contributor Guide](https://docs.google.com/document/d/1OLQPFFJ8oz_BxpuxRxKKdZ2brmlUkVN3ICTdbA_axxY/edit#). If you have any questions, please reach out to us on Slack.
 
 ## Pull Request Process
 
