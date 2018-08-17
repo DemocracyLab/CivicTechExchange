@@ -7,7 +7,7 @@ Our platform connects skilled volunteers with technology-for-good projects, resu
 
 ## Getting Started
 
-DemocracyLab uses [VolunteerMatch](https://www.volunteermatch.org/search/org1097749.jsp) to list contributor positions we're specifically looking for, but we'd be glad to talk to you no matter what your skillset is. [mailto:hello@democracylab.org](Say hello)!
+DemocracyLab uses [VolunteerMatch](https://www.volunteermatch.org/search/org1097749.jsp) to list contributor positions we're specifically looking for, but we'd be glad to talk to you no matter what your skillset is. [Say hello](mailto:hello@democracylab.org)!
 
 DemocracyLab's [Contributor Guide](https://docs.google.com/document/d/1OLQPFFJ8oz_BxpuxRxKKdZ2brmlUkVN3ICTdbA_axxY/) will get you up and running with a copy of our project for development and testing purposes. We encourage any contributors to follow the links in our Contributor Guide to join our Slack and take a look at our Trello board. Come talk to your fellow volunteers, get any help you need, and see what we're working on!
 
