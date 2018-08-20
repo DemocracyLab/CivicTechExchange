@@ -62,11 +62,11 @@ class LogInController extends React.Component<{||}, State> {
             </button>
   
           
-            {/* <div
+            <div
               name="error"
               type="text">
-              {(!this.state.username && !this.state.password) ? this.state.errorMessage : null}
-            </div> */}
+                {(this.state.messages)}
+            </div>
         </form>
       </div>
     );
