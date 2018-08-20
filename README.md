@@ -7,9 +7,9 @@ Our platform connects skilled volunteers with technology-for-good projects, resu
 
 ## Getting Started
 
-DemocracyLab uses [VolunteerMatch](https://www.volunteermatch.org/search/org1097749.jsp) to list contributor positions we're specifically looking for, but we'd be glad to talk to you no matter what your skillset is. [Say hello](mailto:hello@democracylab.org)!
+First, [join our Slack](https://join.slack.com/t/democracylab-org/shared_invite/enQtMjQyNDMxOTY2NjA4LTU3MTYyM2EwYTRmMDYwNzUyNjg4YTk1NjEyZTg0ZjgxNzYwY2E5ODIyMTNjZGZkOTI5NTAyZTMwNTNiMWRiZTA)! We communicate and coordinate our work there. For developers, reach out in the `#developers` channel to @marlon-keating, engineering lead, and let us know you want to contribute. We'll get back to you as soon as we can.
 
-DemocracyLab's [Contributor Guide](https://docs.google.com/document/d/1OLQPFFJ8oz_BxpuxRxKKdZ2brmlUkVN3ICTdbA_axxY/) will get you up and running with a copy of our project for development and testing purposes. We encourage any contributors to follow the links in our Contributor Guide to join our Slack and take a look at our Trello board. Come talk to your fellow volunteers, get any help you need, and see what we're working on!
+Next, follow DemocracyLab's [Contributor Guide](https://docs.google.com/document/d/1OLQPFFJ8oz_BxpuxRxKKdZ2brmlUkVN3ICTdbA_axxY/). This guide will get you up and running with a copy of our project for development and testing purposes as quickly as possible. If you have questions, just put them in Slack and we'll get them sorted out.
 
 ## Built With
 
