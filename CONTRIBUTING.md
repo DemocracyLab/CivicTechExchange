@@ -18,13 +18,13 @@ Our [Slack](https://join.slack.com/t/democracylab-org/shared_invite/enQtMjQyNDMx
 
 1. Create a branch with `git checkout -b branchname` where the name is something descriptive about the issue your branch will fix, then make your changes and test them to make sure they work.
 2. When you're ready to submit, merge the latest version of master, to make sure your branch is up to date:
-  ```
-  git checkout master
-  git pull origin master
-  git checkout _<feature branch>_
-  git merge master
-  ```
-3. Resolve any merge conflicts if they exist, then test to make sure your feature branch still works correctly. Please make sure your PR includes the `bundle.js` file (it's required for deployment) and then `git push origin _<_feature branch>_`
+    ```
+    git checkout master
+    git pull origin master
+    git checkout <feature branch>
+    git merge master
+    ```
+3. Resolve any merge conflicts if they exist, then test to make sure your feature branch still works correctly. Please make sure your PR includes the `bundle.js` file (it's required for deployment) and then `git push origin <feature branch>`
 4. On Github, create a pull request from your feature branch. Make sure to summarize your changes you made, and if there's anything specific you want reviewed or tested, note that in the PR.
 5. Post in Slack (in `#developers`) that your PR is ready for review! All pull requests must be reviewed and approved prior to merging. If any changes are requested, those will be made through the Github review system.  
 6. When approved, your branch will be merged into master and you're done! Thanks for contributing! :)
