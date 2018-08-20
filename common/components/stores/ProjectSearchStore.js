@@ -18,7 +18,8 @@ export type FindProjectsArgs = {|
   issues: string,
   tech: string,
   role: string,
-  org: string
+  org: string,
+  stage: string
 |};
 
 type FindProjectsResponse = {|
@@ -111,7 +112,8 @@ class ProjectSearchStore extends ReduceStore<State> {
         issues: this._getTagCategoryParams(state, TagCategory.ISSUES),
         tech: this._getTagCategoryParams(state, TagCategory.TECHNOLOGIES_USED),
         role: this._getTagCategoryParams(state, TagCategory.ROLE),
-        org: this._getTagCategoryParams(state, TagCategory.ORGANIZATION)
+        org: this._getTagCategoryParams(state, TagCategory.ORGANIZATION),
+        stage: this._getTagCategoryParams(state, TagCategory.PROJECT_STAGE)
       }, _.identity);
 
       state = state.set('findProjectsArgs',findProjectsArgs);
@@ -130,6 +132,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = this._addTagFilters(state, findProjectsArgs.role);
     state = this._addTagFilters(state, findProjectsArgs.tech);
     state = this._addTagFilters(state, findProjectsArgs.org);
+    state = this._addTagFilters(state, findProjectArgs.stage);
     state = this._addKeywordToState(state, findProjectsArgs.keyword);
 
     return state;
