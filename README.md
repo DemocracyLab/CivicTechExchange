@@ -1,9 +1,8 @@
-# CivicTechExchange
+# Civic Tech Exchange
 
 Welcome to DemocracyLab! DemocracyLab is creating an online hub for civic innovation that that will engage stakeholders by using marketplace dynamics to allocate effort, resources, and attention. The result will be an increase in participation, collaboration and transparency within the civic tech movement, and the evolution of new civic innovations capable of addressing society’s significant challenges.
 
 Our platform connects skilled volunteers with technology-for-good projects, resulting in better civic technologies, more active citizens, and more efficient institutions.
-
 
 ## Getting Started
 
@@ -13,22 +12,13 @@ Next, follow DemocracyLab's [Contributor Guide](https://docs.google.com/document
 
 ## Built With
 
-* [React](https://reactjs.org) - Frontend framework
-* [Django](https://djangoproject.com) - Backend server
-* [Heroku](https://heroku.com) - Deployed host
+* [React](https://reactjs.org)
+* [Flux](https://facebook.github.io/flux/)
+* [Django](https://djangoproject.com)
 
 ## Contributing
 
-Please read the Getting Started section of this README and our  [CONTRIBUTING.md](https://github.com/DemocracyLab/CivicTechExchange/blob/master/CONTRIBUTING.md) for details on the process for submitting pull requests to us.
-
-
-## Authors
-
-???
-
-## License
-
-???
+Please read the Getting Started section of this README and our  [Contributing Guide](https://github.com/DemocracyLab/CivicTechExchange/blob/master/CONTRIBUTING.md) for details on the process for submitting pull requests to us.
 
 
 ## Acknowledgments

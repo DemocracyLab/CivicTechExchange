@@ -4,7 +4,7 @@ Thanks for your interest in contributing to DemocracyLab! We're glad you want to
 
 ## What do I need first?
 
-Make sure you've followed our [Contributor Guide](https://docs.google.com/document/d/1OLQPFFJ8oz_BxpuxRxKKdZ2brmlUkVN3ICTdbA_axxY/edit#) to get the DemocracyLab developer environment set up correctly.
+Make sure you've followed our [Contributor Guide](https://docs.google.com/document/d/1OLQPFFJ8oz_BxpuxRxKKdZ2brmlUkVN3ICTdbA_axxY/edit#) to get the DemocracyLab developer environment set up correctly. This guide will also tell you our process for creating and submitting a feature branch on Github.
 
 ## Where's the best place to ask a question?
 
@@ -16,8 +16,8 @@ Our [Slack](https://join.slack.com/t/democracylab-org/shared_invite/enQtMjQyNDMx
 
 ## Pull Request Process
 
-1. Create a branch with `git checkout -b branchname` where the name is something descriptive about the issue your branch will fix, then make and test your changes if possible.
-2. Merge the latest version of master, to make sure your branch is up to date:
+1. Create a branch with `git checkout -b branchname` where the name is something descriptive about the issue your branch will fix, then make your changes and test them to make sure they work.
+2. When you're ready to submit, merge the latest version of master, to make sure your branch is up to date:
   ```
   git checkout master
   git pull origin master
