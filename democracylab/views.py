@@ -18,7 +18,7 @@ def login_view(request):
             login(request, user)
             return redirect('/')
         else:
-            messages.error(request, 'username or password not correct')
+            messages.error(request, 'Incorrect Email or Password')
             return redirect('/index/?section=LogIn')
     else:
         return redirect('/index/?section=LogIn')
