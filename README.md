@@ -23,4 +23,4 @@ Please read the Getting Started section of this README and our  [Contributing Gu
 
 ## Acknowledgments
 
-* **Billie Thompson** - *README and CONTRIBUTING templates* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Billie Thompson** - *Readme and Contributing Guides templates* - [PurpleBooth](https://github.com/PurpleBooth)
