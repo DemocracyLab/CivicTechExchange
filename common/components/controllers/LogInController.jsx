@@ -60,13 +60,6 @@ class LogInController extends React.Component<{||}, State> {
               type="submit">
               Sign In
             </button>
-  
-          
-            {/* <div
-              name="error"
-              type="text">
-              {(!this.state.username && !this.state.password) ? this.state.errorMessage : null}
-            </div> */}
         </form>
       </div>
     );
