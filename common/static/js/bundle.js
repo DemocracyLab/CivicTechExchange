@@ -39192,6 +39192,13 @@ var LogInController = function (_React$Component) {
               disabled: !this.state.username || !this.state.password,
               type: 'submit' },
             'Sign In'
+          ),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'div',
+            {
+              name: 'error',
+              type: 'text' },
+            this.state.messages
           )
         )
       );
