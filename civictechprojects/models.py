@@ -48,7 +48,7 @@ class Project(models.Model):
     project_name = models.CharField(max_length=200)
     project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
-    project_date_modified = models.DateTimeField(auto_now=True)
+    project_date_modified = models.DateTimeField(auto_now=True, null=True)
     is_searchable = models.BooleanField(default=True)
 
     def __str__(self):
