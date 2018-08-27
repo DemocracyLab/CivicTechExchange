@@ -9,7 +9,7 @@ from time import time
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
+from django.db.models import Q, Count
 from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition, UserAlert
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
@@ -26,9 +26,13 @@ def tags(request):
         url_parts, keep_blank_values=0, strict_parsing=0)
     if 'category' in query_terms:
         category = query_terms.get('category')[0]
-        tags = get_tags_by_category(category)
+        #TOFIX this returns 1 every time because it's counting the wrong thing. It needs to count projects and annotate tags, not count tags/annotate tags.
+        queryset = get_tags_by_category(category)
+        tags = queryset.annotate(num_times=Count('category'))
     else:
-        tags = Tag.objects
+        queryset = Tag.objects
+        #TOFIX as above, not correct but unblocks front end
+        tags = queryset.annotate(num_times=Count('category'))
     return HttpResponse(
         json.dumps(
             list(tags.values())
