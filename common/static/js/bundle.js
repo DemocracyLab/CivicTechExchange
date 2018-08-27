@@ -39192,13 +39192,6 @@ var LogInController = function (_React$Component) {
               disabled: !this.state.username || !this.state.password,
               type: 'submit' },
             'Sign In'
-          ),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'div',
-            {
-              name: 'error',
-              type: 'text' },
-            this.state.messages
           )
         )
       );
@@ -79059,7 +79052,10 @@ var SelectorCollapsible = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', checked: _this3.props.optionEnabled(option), onChange: function onChange() {
               return _this3.selectOption(option);
             } }),
-          _this3.props.optionDisplay(option)
+          _this3.props.optionDisplay(option),
+          ' (',
+          option.num_times,
+          ')'
         );
       });
     }

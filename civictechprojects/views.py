@@ -30,8 +30,8 @@ def tags(request):
         queryset = get_tags_by_category(category)
         tags = queryset.annotate(num_times=Count('category'))
     else:
-        queryset = Tag.objects
         #TOFIX as above, not correct but unblocks front end
+        queryset = Tag.objects
         tags = queryset.annotate(num_times=Count('category'))
     return HttpResponse(
         json.dumps(
