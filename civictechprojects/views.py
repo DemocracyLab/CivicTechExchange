@@ -27,20 +27,20 @@ def tags(request):
     if 'category' in query_terms:
         category = query_terms.get('category')[0]
         queryset = get_tags_by_category(category)
-        tags = queryset.annotate(num_times=Count('category'))
-    else:
         activetagdict = projects_tag_counts()
-        queryset = Tag.objects.all()
         querydict = {tag.tag_name:tag for tag in queryset}
         resultdict = {}
 
         for slug in querydict.keys():
-            resultdict[slug] = activetagdict[slug] if slug in activetagdict else 0
-    
-        tags = queryset.annotate(num_times=Count('category'))
+            resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+            resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+        tags = resultdict
+    else:
+        queryset = Tag.objects.all()
+        tags = list(queryset.values())
     return HttpResponse(
         json.dumps(
-            list(tags.values())
+            tags
         )
     )
 
