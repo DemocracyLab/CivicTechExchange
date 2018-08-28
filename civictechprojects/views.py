@@ -35,11 +35,8 @@ def tags(request):
         resultdict = {}
 
         for slug in querydict.keys():
-            resultdict[slug] = activetagdict[slug] or '0'
-        pprint(resultdict)
-
-        #use resultdict value to populate num_times in tagset
-
+            resultdict[slug] = activetagdict[slug] if slug in activetagdict else 0
+    
         tags = queryset.annotate(num_times=Count('category'))
     return HttpResponse(
         json.dumps(
