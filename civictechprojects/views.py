@@ -152,6 +152,7 @@ def projects_list(request):
         url_parts = request.GET.urlencode()
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
+        print(query_params)
         project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
         project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
         project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
@@ -159,8 +160,11 @@ def projects_list(request):
         project_list = apply_tag_filters(project_list, query_params, 'stage', projects_by_stage)
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
+        if 'sortField' in query_params:
+            project_list = projects_by_sortField(project_list.distinct(), query_params['sortField'][0])
 
-    response = json.dumps(projects_with_filter_counts(project_list.distinct().order_by('project_name')))
+
+    response = json.dumps(projects_with_filter_counts(project_list))
     return HttpResponse(response)
 
 
@@ -181,6 +185,11 @@ def clean_nonexistent_tags(tags, tag_dict):
 
 def projects_by_keyword(keyword):
     return Project.objects.filter(Q(project_description__icontains=keyword) | Q(project_name__icontains=keyword))
+
+
+def projects_by_sortField(project_list, sortField):
+    print(sortField)
+    return project_list.order_by('-project_name')
 
 
 def projects_by_issue_areas(tags):

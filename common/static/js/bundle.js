@@ -19194,6 +19194,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var DEFAULT_STATE = {
   keyword: '',
+  sortField: '',
   tags: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(),
   projectsData: {},
   findProjectsArgs: {}
@@ -19245,6 +19246,8 @@ var ProjectSearchStore = function (_ReduceStore) {
           return this._loadProjects(state);
         case 'SET_KEYWORD':
           return this._loadProjects(this._addKeywordToState(state, action.keyword));
+        case 'SET_SORT':
+          return this._loadProjects(this._addSortFieldToState(state, action.sortField));
         case 'CLEAR_FILTERS':
           return this._loadProjects(this._clearFilters(state));
         case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
@@ -19271,6 +19274,7 @@ var ProjectSearchStore = function (_ReduceStore) {
       if (state.projectsData && state.projectsData.allTags) {
         var _findProjectsArgs = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.pickBy({
           keyword: state.keyword,
+          sortField: state.sortField,
           issues: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ISSUES),
           tech: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED),
           role: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ROLE),
@@ -19298,6 +19302,7 @@ var ProjectSearchStore = function (_ReduceStore) {
       state = this._addTagFilters(state, findProjectsArgs.org);
       state = this._addTagFilters(state, findProjectArgs.stage);
       state = this._addKeywordToState(state, findProjectsArgs.keyword);
+      state = this._addSortFieldToState(state, findProjectsArgs.sortField);
 
       return state;
     }
@@ -19326,9 +19331,16 @@ var ProjectSearchStore = function (_ReduceStore) {
       return state;
     }
   }, {
+    key: '_addSortFieldToState',
+    value: function _addSortFieldToState(state, sortField) {
+      state = state.set('sortField', sortField);
+      return state;
+    }
+  }, {
     key: '_clearFilters',
     value: function _clearFilters(state) {
       state = state.set('keyword', '');
+      state = state.set('sortField', '');
       state = state.set('tags', Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])());
       return state;
     }
@@ -19338,6 +19350,7 @@ var ProjectSearchStore = function (_ReduceStore) {
       state = this._updateFindProjectArgs(state);
       this._updateWindowUrl(state);
 
+      console.log(state.findProjectsArgs);
       var url = __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].constructWithQueryString('/api/projects', state.findProjectsArgs);
       fetch(new Request(url)).then(function (response) {
         return response.json();
@@ -19363,6 +19376,11 @@ var ProjectSearchStore = function (_ReduceStore) {
     key: 'getKeyword',
     value: function getKeyword() {
       return this.getState().keyword;
+    }
+  }, {
+    key: 'getSortField',
+    value: function getSortField() {
+      return this.getState().sortField;
     }
   }, {
     key: 'getProjects',
@@ -78587,7 +78605,7 @@ var FindProjectsController = function (_React$PureComponent) {
     key: 'componentWillMount',
     value: function componentWillMount() {
       var args = __WEBPACK_IMPORTED_MODULE_6__utils_url_js__["a" /* default */].arguments(document.location.search);
-      args = __WEBPACK_IMPORTED_MODULE_8_lodash___default.a.pick(args, ['keyword', 'issues', 'tech', 'role', 'org', 'stage']);
+      args = __WEBPACK_IMPORTED_MODULE_8_lodash___default.a.pick(args, ['keyword', 'sortField', 'issues', 'tech', 'role', 'org', 'stage']);
       __WEBPACK_IMPORTED_MODULE_0__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({ type: 'INIT', findProjectsArgs: !__WEBPACK_IMPORTED_MODULE_8_lodash___default.a.isEmpty(args) ? args : null });
       __WEBPACK_IMPORTED_MODULE_1__stores_TagDispatcher_js__["a" /* default */].dispatch({ type: 'INIT' });
     }
@@ -78775,7 +78793,8 @@ var ProjectCard = function (_React$PureComponent) {
             'h3',
             null,
             this.props.project.name
-          )
+          ),
+          this.props.project.date_modified
         )
       );
     }
@@ -79182,6 +79201,26 @@ var ProjectSearchBar = function (_React$Component) {
             className: 'ProjectSearchBar-submit',
             onClick: this._onSubmitKeyword.bind(this) },
           'Search Projects'
+        ),
+        'Choose a sort method:',
+        __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
+          'select',
+          { onChange: this._handleSubmitSort.bind(this) },
+          __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
+            'option',
+            { disabled: true, selected: true, value: true },
+            'select a sort option'
+          ),
+          __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
+            'option',
+            { value: 'dateModified' },
+            'Date Modified'
+          ),
+          __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
+            'option',
+            { value: 'name' },
+            'Name'
+          )
         )
       );
     }
@@ -79200,6 +79239,22 @@ var ProjectSearchBar = function (_React$Component) {
         keyword: this.state.keyword
       });
       window.FB.AppEvents.logEvent('searchByKeyword', null, { keyword: this.state.keyword });
+    }
+  }, {
+    key: '_handleSubmitSort',
+    value: function _handleSubmitSort(e) {
+      this.setState({ sortField: e.target.value }, function () {
+        this._onSubmitSortField();
+      });
+    }
+  }, {
+    key: '_onSubmitSortField',
+    value: function _onSubmitSortField() {
+      __WEBPACK_IMPORTED_MODULE_1__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
+        type: 'SET_SORT',
+        sortField: this.state.sortField
+      });
+      window.FB.AppEvents.logEvent('sortByField', null, { sortField: this.state.sortField });
     }
   }], [{
     key: 'getStores',

@@ -33,8 +33,7 @@ export type ProjectAPIData = {|
   +project_location: string,
   +project_name: string,
   +project_thumbnail: FileInfo,
-  +project_claimed: boolean,
-  +project_date_modified: Date
+  +project_claimed: boolean
 |};
 
 export type ProjectDetailsAPIData = {|
@@ -52,7 +51,8 @@ export type ProjectDetailsAPIData = {|
   +project_name: string,
   +project_thumbnail: FileInfo,
   +project_links: $ReadOnlyArray<LinkInfo>,
-  +project_files: $ReadOnlyArray<FileInfo>
+  +project_files: $ReadOnlyArray<FileInfo>,
+  +project_date_modified: Date
 |};
 
 class ProjectAPIUtils {

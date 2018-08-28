@@ -52,6 +52,7 @@ class ProjectCard extends React.PureComponent<Props> {
             <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
           </div>
             <h3>{this.props.project.name}</h3>
+            {this.props.project.date_modified}
         </div>
       </div>
     );

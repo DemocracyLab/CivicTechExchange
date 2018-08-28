@@ -4,7 +4,7 @@ import type {FluxReduceStore} from 'flux/utils';
 import {Container} from 'flux/utils';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 
 type State = {|
   keyword: string,
@@ -38,6 +38,12 @@ class ProjectSearchBar extends React.Component<{||}, State> {
           onClick={this._onSubmitKeyword.bind(this)}>
           Search Projects
         </button>
+        Choose a sort method:
+        <select onChange={this._handleSubmitSort.bind(this)}>
+          <option disabled selected value>select a sort option</option>
+          <option value="dateModified">Date Modified</option>
+          <option value="name">Name</option>
+        </select>
       </div>
     );
   }
@@ -57,6 +63,24 @@ class ProjectSearchBar extends React.Component<{||}, State> {
       'searchByKeyword',
       null,
       {keyword: this.state.keyword},
+    );
+  }
+
+  _handleSubmitSort(e: SyntheticEvent<HTMLSelectElement>): void {
+    this.setState({sortField: e.target.value}, function () {
+      this._onSubmitSortField();
+    });
+  }
+
+  _onSubmitSortField(): void {
+    ProjectSearchDispatcher.dispatch({
+      type: 'SET_SORT',
+      sortField: this.state.sortField,
+    });
+    window.FB.AppEvents.logEvent(
+      'sortByField',
+      null,
+      {sortField: this.state.sortField},
     );
   }
 }

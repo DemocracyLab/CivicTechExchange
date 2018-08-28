@@ -15,6 +15,7 @@ import _ from 'lodash'
 
 export type FindProjectsArgs = {|
   keyword: string,
+  sortField: string,
   issues: string,
   tech: string,
   role: string,
@@ -43,6 +44,9 @@ export type ProjectSearchActionType = {
   type: 'SET_KEYWORD',
   keyword: string,
 } | {
+  type: 'SET_SORT',
+  sortField: string,
+} | {
   type: 'CLEAR_FILTERS',
 } | {
   type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
@@ -51,6 +55,7 @@ export type ProjectSearchActionType = {
 
 const DEFAULT_STATE = {
   keyword: '',
+  sortField: '',
   tags: List(),
   projectsData: {},
   findProjectsArgs: {}
@@ -58,6 +63,7 @@ const DEFAULT_STATE = {
 
 class State extends Record(DEFAULT_STATE) {
   keyword: string;
+  sortField: string;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
   findProjectsArgs: FindProjectsArgs;
@@ -88,6 +94,8 @@ class ProjectSearchStore extends ReduceStore<State> {
         return this._loadProjects(state);
       case 'SET_KEYWORD':
         return this._loadProjects(this._addKeywordToState(state, action.keyword));
+      case 'SET_SORT':
+        return this._loadProjects(this._addSortFieldToState(state, action.sortField));
       case 'CLEAR_FILTERS':
         return this._loadProjects(this._clearFilters(state));
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
@@ -109,6 +117,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     if(state.projectsData && state.projectsData.allTags) {
       const findProjectsArgs: FindProjectsArgs = _.pickBy({
         keyword: state.keyword,
+        sortField: state.sortField,
         issues: this._getTagCategoryParams(state, TagCategory.ISSUES),
         tech: this._getTagCategoryParams(state, TagCategory.TECHNOLOGIES_USED),
         role: this._getTagCategoryParams(state, TagCategory.ROLE),
@@ -134,6 +143,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = this._addTagFilters(state, findProjectsArgs.org);
     state = this._addTagFilters(state, findProjectArgs.stage);
     state = this._addKeywordToState(state, findProjectsArgs.keyword);
+    state = this._addSortFieldToState(state, findProjectsArgs.sortField);
 
     return state;
   }
@@ -157,8 +167,14 @@ class ProjectSearchStore extends ReduceStore<State> {
     return state;
   }
 
+  _addSortFieldToState(state: State, sortField: string): State {
+    state = state.set('sortField', sortField);
+    return state;
+  }
+
   _clearFilters(state: State): State {
     state = state.set('keyword', '');
+    state = state.set('sortField', '');
     state = state.set('tags', List());
     return state;
   }
@@ -167,6 +183,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = this._updateFindProjectArgs(state);
     this._updateWindowUrl(state);
 
+    console.log(state.findProjectsArgs);
     const url: string = urls.constructWithQueryString('/api/projects', state.findProjectsArgs);
     fetch(new Request(url))
       .then(response => response.json())
@@ -186,6 +203,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getKeyword(): string {
     return this.getState().keyword;
+  }
+
+  getSortField(): string {
+    return this.getState().sortField;
   }
 
   getProjects(): List<Project> {
