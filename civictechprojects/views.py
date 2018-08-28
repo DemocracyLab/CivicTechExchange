@@ -26,12 +26,20 @@ def tags(request):
         url_parts, keep_blank_values=0, strict_parsing=0)
     if 'category' in query_terms:
         category = query_terms.get('category')[0]
-        #TOFIX this returns 1 every time because it's counting the wrong thing. It needs to count projects and annotate tags, not count tags/annotate tags.
         queryset = get_tags_by_category(category)
         tags = queryset.annotate(num_times=Count('category'))
     else:
-        #TOFIX as above, not correct but unblocks front end
-        queryset = Tag.objects
+        activetagdict = projects_tag_counts()
+        queryset = Tag.objects.all()
+        querydict = {tag.tag_name:tag for tag in queryset}
+        resultdict = {}
+
+        for slug in querydict.keys():
+            resultdict[slug] = activetagdict[slug] or '0'
+        pprint(resultdict)
+
+        #use resultdict value to populate num_times in tagset
+
         tags = queryset.annotate(num_times=Count('category'))
     return HttpResponse(
         json.dumps(
@@ -51,7 +59,6 @@ def to_rows(items, width):
             rows.append([])
             row_number += 1
     return rows
-
 
 def to_tag_map(tags):
     tag_map = ((tag.tag_name, tag.display_name) for tag in tags)
