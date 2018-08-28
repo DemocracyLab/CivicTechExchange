@@ -183,7 +183,6 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = this._updateFindProjectArgs(state);
     this._updateWindowUrl(state);
 
-    console.log(state.findProjectsArgs);
     const url: string = urls.constructWithQueryString('/api/projects', state.findProjectsArgs);
     fetch(new Request(url))
       .then(response => response.json())

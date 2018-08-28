@@ -152,7 +152,6 @@ def projects_list(request):
         url_parts = request.GET.urlencode()
         query_params = urlparse.parse_qs(
             url_parts, keep_blank_values=0, strict_parsing=0)
-        print(query_params)
         project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
         project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
         project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
@@ -188,8 +187,7 @@ def projects_by_keyword(keyword):
 
 
 def projects_by_sortField(project_list, sortField):
-    print(sortField)
-    return project_list.order_by('-project_name')
+    return project_list.order_by(sortField)
 
 
 def projects_by_issue_areas(tags):
