@@ -48,6 +48,15 @@ class Contributor(User):
         )
         email_msg.send()
 
+    def hydrate_to_json(self):
+        user = {
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name
+        }
+
+        return user
+
 
 def get_contributor_by_username(username):
     # using .first instead of .get_by_natural_key returns None instead of raising if object does not exist

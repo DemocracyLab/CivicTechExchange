@@ -17,6 +17,7 @@ import LogInController from './LogInController.jsx'
 import SignUpController from './SignUpController.jsx'
 import ResetPasswordController from "./ResetPasswordController.jsx";
 import ChangePasswordController from "./ChangePasswordController.jsx";
+import EditProfileController from "./EditProfileController.jsx";
 
 type State = {|
   section: SectionType,
@@ -42,6 +43,7 @@ class SectionController extends React.Component<{||}, State> {
   }
 
   _getController(): React$Node {
+    EditProfileController
     switch (this.state.section) {
       case Section.AboutProject:
         return <AboutProjectController />;
@@ -62,7 +64,9 @@ class SectionController extends React.Component<{||}, State> {
       case Section.ResetPassword:
         return <ResetPasswordController />;
       case Section.ChangePassword:
-        return <ChangePasswordController />
+        return <ChangePasswordController />;
+      case Section.EditProfile:
+        return <EditProfileController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }
