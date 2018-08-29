@@ -10,6 +10,11 @@ const SectionLinkConfigs = [
     section: Section.MyProjects,
     title: 'MY PROJECTS',
     showOnlyWhenLoggedIn: true
+  },
+  {
+    section: Section.EditProfile,
+    title: 'MY PROFILE',
+    showOnlyWhenLoggedIn: true
   }
 ];
 

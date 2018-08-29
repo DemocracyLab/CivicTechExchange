@@ -81282,6 +81282,10 @@ var SectionLinkConfigs = [{
   section: __WEBPACK_IMPORTED_MODULE_0__enums_Section_js__["a" /* default */].MyProjects,
   title: 'MY PROJECTS',
   showOnlyWhenLoggedIn: true
+}, {
+  section: __WEBPACK_IMPORTED_MODULE_0__enums_Section_js__["a" /* default */].EditProfile,
+  title: 'MY PROFILE',
+  showOnlyWhenLoggedIn: true
 }];
 
 /* harmony default export */ __webpack_exports__["a"] = (SectionLinkConfigs);
