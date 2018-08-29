@@ -78863,8 +78863,8 @@ var TagSelectorCollapsible = function (_React$Component) {
         null,
         this.state.tags ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__selection_SelectorCollapsible_jsx__["a" /* default */], {
           title: this.props.title,
-          options: this.state.tags,
-          optionCategory: this.state.hasSubcategories && function (tag) {
+          options: this.state.tags //maybe pull out options.num_times directly and pass as prop?
+          , optionCategory: this.state.hasSubcategories && function (tag) {
             return tag.subcategory;
           },
           optionDisplay: function optionDisplay(tag) {
@@ -79043,20 +79043,22 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return sortedOptions.map(function (option, i) {
         var classes = "CollapsibleMenuItem";
-        return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'label',
-          {
-            key: i,
-            className: classes
-          },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', checked: _this3.props.optionEnabled(option), onChange: function onChange() {
-              return _this3.selectOption(option);
-            } }),
-          _this3.props.optionDisplay(option),
-          ' (',
-          option.num_times,
-          ')'
-        );
+        if (option.num_times > 0) {
+          return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'label',
+            {
+              key: i,
+              className: classes
+            },
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', checked: _this3.props.optionEnabled(option), onChange: function onChange() {
+                return _this3.selectOption(option);
+              } }),
+            _this3.props.optionDisplay(option),
+            ' (',
+            option.num_times,
+            ')'
+          );
+        }
       });
     }
   }, {

@@ -116,12 +116,13 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
 
     return sortedOptions.map( (option, i) => {
       const classes = "CollapsibleMenuItem"
-      return <label
+      if (option.num_times > 0) { return <label
         key={i}
         className={classes}
         ><input type="checkbox" checked={this.props.optionEnabled(option)} onChange={() => this.selectOption(option)}></input>
-        {this.props.optionDisplay(option)} ({option.num_times}) //not sure if I want to handle conditional render here or in TagSelectorCollapsible. if here, chain .filter() on map or use react conditional if options.num_times > 0
+        {this.props.optionDisplay(option)} ({option.num_times})
       </label>
+    }
     });
   }
 
