@@ -78975,10 +78975,17 @@ var SelectorCollapsible = function (_React$PureComponent) {
     key: 'initializeOptions',
     value: function initializeOptions(props) {
       if (!__WEBPACK_IMPORTED_MODULE_2_lodash___default.a.isEmpty(props.options)) {
-        if (props.optionCategory && __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.some(props.options, props.optionCategory)) {
-          return { optionCategoryTree: __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.groupBy(props.options, props.optionCategory) };
+
+        var filteredOptions = Object.keys(props.options).filter(function (key) {
+          return props.options[key]['num_times'] > 0;
+        }).map(function (key) {
+          return props.options[key];
+        });
+
+        if (props.optionCategory && __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.some(filteredOptions, props.optionCategory)) {
+          return { optionCategoryTree: __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.groupBy(filteredOptions, props.optionCategory) };
         } else {
-          return { optionFlatList: props.options };
+          return { optionFlatList: filteredOptions };
         }
       }
     }
@@ -79043,22 +79050,21 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return sortedOptions.map(function (option, i) {
         var classes = "CollapsibleMenuItem";
-        if (option.num_times > 0) {
-          return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'label',
-            {
-              key: i,
-              className: classes
-            },
-            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', checked: _this3.props.optionEnabled(option), onChange: function onChange() {
-                return _this3.selectOption(option);
-              } }),
-            _this3.props.optionDisplay(option),
-            ' (',
-            option.num_times,
-            ')'
-          );
-        }
+        // to filter just entries and not category headers, use  if (option.num_times > 0) { return ... }
+        return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'label',
+          {
+            key: i,
+            className: classes
+          },
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', checked: _this3.props.optionEnabled(option), onChange: function onChange() {
+              return _this3.selectOption(option);
+            } }),
+          _this3.props.optionDisplay(option),
+          ' (',
+          option.num_times,
+          ')'
+        );
       });
     }
   }, {

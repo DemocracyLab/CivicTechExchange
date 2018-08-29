@@ -65,10 +65,17 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
 
   initializeOptions(props: Props) {
     if(!_.isEmpty(props.options)) {
-      if(props.optionCategory && _.some(props.options, props.optionCategory)) {
-        return {optionCategoryTree:_.groupBy(props.options, props.optionCategory)};
+
+      let filteredOptions = Object.keys(props.options).filter(function(key) {
+        return props.options[key]['num_times'] > 0;
+      }).map(function(key) {
+        return props.options[key]
+      });
+
+      if(props.optionCategory && _.some(filteredOptions, props.optionCategory)) {
+        return {optionCategoryTree:_.groupBy(filteredOptions, props.optionCategory)};
       } else {
-        return {optionFlatList: props.options};
+        return {optionFlatList: filteredOptions};
       }
     }
   }
@@ -116,13 +123,13 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
 
     return sortedOptions.map( (option, i) => {
       const classes = "CollapsibleMenuItem"
-      if (option.num_times > 0) { return <label
+      // to filter just entries and not category headers, use  if (option.num_times > 0) { return ... }
+      return <label
         key={i}
         className={classes}
         ><input type="checkbox" checked={this.props.optionEnabled(option)} onChange={() => this.selectOption(option)}></input>
         {this.props.optionDisplay(option)} ({option.num_times})
       </label>
-    }
     });
   }
 
