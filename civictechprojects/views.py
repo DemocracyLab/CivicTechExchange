@@ -18,8 +18,6 @@ from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 
-from pprint import pprint
-
 def tags(request):
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
