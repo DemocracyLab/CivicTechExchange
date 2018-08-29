@@ -141,7 +141,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = this._addTagFilters(state, findProjectsArgs.role);
     state = this._addTagFilters(state, findProjectsArgs.tech);
     state = this._addTagFilters(state, findProjectsArgs.org);
-    state = this._addTagFilters(state, findProjectArgs.stage);
+    state = this._addTagFilters(state, findProjectsArgs.stage);
     state = this._addKeywordToState(state, findProjectsArgs.keyword);
     state = this._addSortFieldToState(state, findProjectsArgs.sortField);
 
