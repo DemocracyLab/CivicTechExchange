@@ -39192,13 +39192,6 @@ var LogInController = function (_React$Component) {
               disabled: !this.state.username || !this.state.password,
               type: 'submit' },
             'Sign In'
-          ),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'div',
-            {
-              name: 'error',
-              type: 'text' },
-            this.state.messages
           )
         )
       );
@@ -78870,8 +78863,8 @@ var TagSelectorCollapsible = function (_React$Component) {
         null,
         this.state.tags ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__selection_SelectorCollapsible_jsx__["a" /* default */], {
           title: this.props.title,
-          options: this.state.tags,
-          optionCategory: this.state.hasSubcategories && function (tag) {
+          options: this.state.tags //maybe pull out options.num_times directly and pass as prop?
+          , optionCategory: this.state.hasSubcategories && function (tag) {
             return tag.subcategory;
           },
           optionDisplay: function optionDisplay(tag) {
@@ -78982,10 +78975,17 @@ var SelectorCollapsible = function (_React$PureComponent) {
     key: 'initializeOptions',
     value: function initializeOptions(props) {
       if (!__WEBPACK_IMPORTED_MODULE_2_lodash___default.a.isEmpty(props.options)) {
-        if (props.optionCategory && __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.some(props.options, props.optionCategory)) {
-          return { optionCategoryTree: __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.groupBy(props.options, props.optionCategory) };
+
+        var filteredOptions = Object.keys(props.options).filter(function (key) {
+          return props.options[key]['num_times'] > 0;
+        }).map(function (key) {
+          return props.options[key];
+        });
+
+        if (props.optionCategory && __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.some(filteredOptions, props.optionCategory)) {
+          return { optionCategoryTree: __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.groupBy(filteredOptions, props.optionCategory) };
         } else {
-          return { optionFlatList: props.options };
+          return { optionFlatList: filteredOptions };
         }
       }
     }
@@ -79050,6 +79050,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return sortedOptions.map(function (option, i) {
         var classes = "CollapsibleMenuItem";
+        // to filter just entries and not category headers, use  if (option.num_times > 0) { return ... }
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'label',
           {
@@ -79059,7 +79060,10 @@ var SelectorCollapsible = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', checked: _this3.props.optionEnabled(option), onChange: function onChange() {
               return _this3.selectOption(option);
             } }),
-          _this3.props.optionDisplay(option)
+          _this3.props.optionDisplay(option),
+          ' (',
+          option.num_times,
+          ')'
         );
       });
     }

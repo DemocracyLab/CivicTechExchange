@@ -80,7 +80,7 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
           ? (
             <SelectorCollapsible
               title={this.props.title}
-              options={this.state.tags}
+              options={this.state.tags} //maybe pull out options.num_times directly and pass as prop?
               optionCategory={this.state.hasSubcategories && (tag => tag.subcategory)}
               optionDisplay={tag => this._displayTag(tag)}
               optionEnabled={tag => this._tagEnabled(tag)}
