@@ -78975,13 +78975,9 @@ var SelectorCollapsible = function (_React$PureComponent) {
     key: 'initializeOptions',
     value: function initializeOptions(props) {
       if (!__WEBPACK_IMPORTED_MODULE_2_lodash___default.a.isEmpty(props.options)) {
-
-        var filteredOptions = Object.keys(props.options).filter(function (key) {
-          return props.options[key]['num_times'] > 0;
-        }).map(function (key) {
-          return props.options[key];
+        var filteredOptions = props.options.filter(function (key) {
+          return key.num_times > 0;
         });
-
         if (props.optionCategory && __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.some(filteredOptions, props.optionCategory)) {
           return { optionCategoryTree: __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.groupBy(filteredOptions, props.optionCategory) };
         } else {
@@ -79050,7 +79046,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return sortedOptions.map(function (option, i) {
         var classes = "CollapsibleMenuItem";
-        // to filter just entries and not category headers, use  if (option.num_times > 0) { return ... }
+        // to filter just entries and not category headers, use a conditional if (option.num_times > 0) { return ... }
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'label',
           {
