@@ -115,7 +115,7 @@ def user_edit(request, user_id):
 
     pprint(request.POST)
 
-    return redirect('/index/?section=EditProfile&id=' + user_id)
+    return redirect('/index/?section=EditProfile')
 
 
 def user_details(request, user_id):

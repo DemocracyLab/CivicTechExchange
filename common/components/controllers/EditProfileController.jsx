@@ -8,7 +8,8 @@ import type {UserAPIData} from "../utils/UserAPIUtils.js";
 
 type FormFields = {|
   +first_name: string,
-  +last_name: string
+  +last_name: string,
+  +about_me: string
 |};
 
 type State = {|
@@ -25,7 +26,8 @@ class EditProfileController extends React.PureComponent<{||},State> {
     this.state = {
       formFields: {
         first_name: "",
-        last_name: ""
+        last_name: "",
+        about_me: ""
       }
     }
     
@@ -40,7 +42,8 @@ class EditProfileController extends React.PureComponent<{||},State> {
     this.setState({
       formFields: {
         first_name: user.first_name,
-        last_name: user.last_name
+        last_name: user.last_name,
+        about_me: user.about_me
       }
     });
   }
@@ -61,7 +64,18 @@ class EditProfileController extends React.PureComponent<{||},State> {
           <form action={`/api/user/edit/${window.DLAB_GLOBAL_CONTEXT.userID}/`} method="post">
             <div className="EditProjectForm-root">
               <DjangoCSRFToken/>
-    
+  
+              <div className="form-group">
+                <label>
+                  ABOUT ME
+                </label>
+                <div className="character-count">
+                  { (this.state.formFields.about_me || "").length} / 2000
+                </div>
+                <textarea className="form-control" id="about_me" name="about_me" rows="6" maxLength="2000"
+                          value={this.state.formFields.about_me} onChange={this.onFormFieldChange.bind(this, "about_me")}/>
+              </div>
+              
               <div className="form-group">
                 <label>First Name</label>
                 <input type="text" className="form-control" id="first_name" name="first_name" maxLength="30"

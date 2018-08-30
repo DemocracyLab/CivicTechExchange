@@ -80795,7 +80795,8 @@ var EditProfileController = function (_React$PureComponent) {
     _this.state = {
       formFields: {
         first_name: "",
-        last_name: ""
+        last_name: "",
+        about_me: ""
       }
     };
 
@@ -80814,7 +80815,8 @@ var EditProfileController = function (_React$PureComponent) {
       this.setState({
         formFields: {
           first_name: user.first_name,
-          last_name: user.last_name
+          last_name: user.last_name,
+          about_me: user.about_me
         }
       });
     }
@@ -80845,6 +80847,23 @@ var EditProfileController = function (_React$PureComponent) {
               'div',
               { className: 'EditProjectForm-root' },
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_django_react_csrftoken___default.a, null),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'form-group' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                  'label',
+                  null,
+                  'ABOUT ME'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                  'div',
+                  { className: 'character-count' },
+                  (this.state.formFields.about_me || "").length,
+                  ' / 2000'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { className: 'form-control', id: 'about_me', name: 'about_me', rows: '6', maxLength: '2000',
+                  value: this.state.formFields.about_me, onChange: this.onFormFieldChange.bind(this, "about_me") })
+              ),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'form-group' },
