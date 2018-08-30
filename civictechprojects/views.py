@@ -18,6 +18,7 @@ from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 
+#TODO: Add a flag so not all category queries ask for tag counts
 def tags(request):
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
@@ -32,7 +33,7 @@ def tags(request):
         for slug in querydict.keys():
             resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
             resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-        tags = resultdict
+        tags = list(resultdict.values())
     else:
         queryset = Tag.objects.all()
         tags = list(queryset.values())
