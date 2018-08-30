@@ -7,6 +7,7 @@ import Section from '../../../components/enums/Section.js';
 import url from '../../utils/url.js';
 import {Locations} from "../../constants/ProjectConstants.js";
 import cdn from "../../utils/cdn.js";
+import Moment from 'react-moment';
 
 type Props = {|
   +project: Project,
@@ -39,7 +40,7 @@ class ProjectCard extends React.PureComponent<Props> {
         }
         {this._renderName()}
         {this._renderIssueAndLocation()}
-        
+
       </a>
     );
   }
@@ -52,7 +53,6 @@ class ProjectCard extends React.PureComponent<Props> {
             <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
           </div>
             <h3>{this.props.project.name}</h3>
-            {this.props.project.date_modified}
         </div>
       </div>
     );
@@ -72,8 +72,24 @@ class ProjectCard extends React.PureComponent<Props> {
           ? this._renderLabelAndValue('Location: ', this.props.project.location)
           : this._renderLabelAndValue('Location: ', null)
         }
+        {
+          this._renderDateModified()
+        }
       </div>
     );
+  }
+
+  _renderDateModified(): React$Node {
+    return (
+      <div className="ProjectCard-subtext">
+        <span className="ProjectCard-label">
+          Last Updated:&nbsp;
+        </span>
+        <span className="ProjectCard-value">
+          <Moment format="MMM D, YYYY">{this.props.project.date_modified}</Moment>
+        </span>
+      </div>
+    )
   }
 
   _renderLabelAndValue(label: string, value: string): React$Node {
