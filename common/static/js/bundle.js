@@ -78863,8 +78863,8 @@ var TagSelectorCollapsible = function (_React$Component) {
         null,
         this.state.tags ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__selection_SelectorCollapsible_jsx__["a" /* default */], {
           title: this.props.title,
-          options: this.state.tags //maybe pull out options.num_times directly and pass as prop?
-          , optionCategory: this.state.hasSubcategories && function (tag) {
+          options: this.state.tags,
+          optionCategory: this.state.hasSubcategories && function (tag) {
             return tag.subcategory;
           },
           optionDisplay: function optionDisplay(tag) {
