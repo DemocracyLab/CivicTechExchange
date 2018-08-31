@@ -2,14 +2,17 @@
 
 import React from 'react'
 import DjangoCSRFToken from 'django-react-csrftoken'
-import url from '../utils/url.js';
 import UserAPIUtils from "../utils/UserAPIUtils.js";
 import type {UserAPIData} from "../utils/UserAPIUtils.js";
+import {CountrySelector, defaultCountryCode} from "../common/selection/CountrySelector.jsx";
+
 
 type FormFields = {|
   +first_name: string,
   +last_name: string,
-  +about_me: string
+  +about_me: string,
+  +postal_code: string,
+  +country: string
 |};
 
 type State = {|
@@ -22,15 +25,15 @@ type State = {|
 class EditProfileController extends React.PureComponent<{||},State> {
   constructor(props: {||}): void {
     super(props);
-  
     this.state = {
       formFields: {
         first_name: "",
         last_name: "",
-        about_me: ""
+        about_me: "",
+        postal_code: "",
+        country: defaultCountryCode
       }
     }
-    
   }
   
   componentDidMount(): void {
@@ -43,7 +46,9 @@ class EditProfileController extends React.PureComponent<{||},State> {
       formFields: {
         first_name: user.first_name,
         last_name: user.last_name,
-        about_me: user.about_me
+        about_me: user.about_me,
+        postal_code: user.postal_code,
+        country: user.country || defaultCountryCode
       }
     });
   }
@@ -51,6 +56,14 @@ class EditProfileController extends React.PureComponent<{||},State> {
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.formFields[formFieldName] = event.target.value;
     this.forceUpdate();
+  }
+  
+  handleCountrySelection(selectedValue: string): void {
+    let formFields: FormFields = this.state.formFields;
+    formFields.country = selectedValue;
+    this.setState({formFields: formFields}, function() {
+      this.forceUpdate();
+    });
   }
   
   onSubmit(): void {
@@ -86,6 +99,20 @@ class EditProfileController extends React.PureComponent<{||},State> {
                 <label>Last Name</label>
                 <input type="text" className="form-control" id="last_name" name="last_name" maxLength="30"
                        value={this.state.formFields.last_name} onChange={this.onFormFieldChange.bind(this, "last_name")}/>
+              </div>
+  
+              <div className="form-group">
+                <label>Country</label>
+                <CountrySelector
+                  countryCode={this.state.formFields.country}
+                  onSelection={this.handleCountrySelection.bind(this)}
+                />
+              </div>
+  
+              <div className="form-group">
+                <label htmlFor="postal_code">Zip/Postal Code</label>
+                <input type="text" className="form-control" id="postal_code" name="postal_code" maxLength="10"
+                       value={this.state.formFields.postal_code} onChange={this.onFormFieldChange.bind(this, "postal_code")}/>
               </div>
   
               <div className="form-group pull-right">
