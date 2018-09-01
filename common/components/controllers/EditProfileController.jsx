@@ -5,12 +5,15 @@ import DjangoCSRFToken from 'django-react-csrftoken'
 import UserAPIUtils from "../utils/UserAPIUtils.js";
 import type {UserAPIData} from "../utils/UserAPIUtils.js";
 import {CountrySelector, defaultCountryCode} from "../common/selection/CountrySelector.jsx";
+import TagCategory from "../common/tags/TagCategory.jsx";
+import TagSelector from "../common/tags/TagSelector.jsx";
 
 
 type FormFields = {|
   +first_name: string,
   +last_name: string,
   +about_me: string,
+  +technologies_used: Array<TagDefinition>,
   +postal_code: string,
   +country: string
 |};
@@ -30,6 +33,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
         first_name: "",
         last_name: "",
         about_me: "",
+        technologies_used: [],
         postal_code: "",
         country: defaultCountryCode
       }
@@ -56,6 +60,10 @@ class EditProfileController extends React.PureComponent<{||},State> {
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.formFields[formFieldName] = event.target.value;
     this.forceUpdate();
+  }
+  
+  onTagChange(formFieldName: string, value: string): void {
+    this.state.formFields[formFieldName] = value;
   }
   
   handleCountrySelection(selectedValue: string): void {
@@ -99,6 +107,17 @@ class EditProfileController extends React.PureComponent<{||},State> {
                 <label>Last Name</label>
                 <input type="text" className="form-control" id="last_name" name="last_name" maxLength="30"
                        value={this.state.formFields.last_name} onChange={this.onFormFieldChange.bind(this, "last_name")}/>
+              </div>
+  
+              <div className="form-group">
+                <label>Technologies Used</label>
+                <TagSelector
+                  elementId="technologies_used"
+                  value={this.state.formFields.technologies_used}
+                  category={TagCategory.TECHNOLOGIES_USED}
+                  allowMultiSelect={true}
+                  onSelection={this.onTagChange.bind(this, "technologies_used")}
+                />
               </div>
   
               <div className="form-group">
