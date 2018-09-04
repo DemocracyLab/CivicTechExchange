@@ -41,14 +41,14 @@ class TagSelector extends React.PureComponent<Props, State> {
           label: tag.subcategory ? `${tag.subcategory}: ${tag.display_name}` : tag.display_name
         }
       });
-      this.setState({
+      this.setState(
+        {
         tagMap: tagMap,
         displayList: _.sortBy(displayList, ['label'])
-      });
-      this.initializeSelectedTags(props);
+      }, function() {this.initializeSelectedTags(props)} //initalize as setState callback
+      );
     });
   }
-
   initializeSelectedTags(props: Props):void {
     if(props.value) {
       const displayTags: $ReadOnlyArray<TagOption> = props.value[0]
@@ -59,7 +59,9 @@ class TagSelector extends React.PureComponent<Props, State> {
   }
 
   getDisplayTag(tag: TagDefinition): TagOption {
+    if(this.state.displayList) {
     return this.state.displayList.find(displayTag => displayTag.value === tag.tag_name);
+    }
   }
 
   componentWillReceiveProps(nextProps: Props): void {
