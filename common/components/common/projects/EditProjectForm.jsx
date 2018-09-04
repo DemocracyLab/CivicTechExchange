@@ -342,7 +342,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
 
         <div className="form-group">
-          <LinkList elementid="project_links" links={this.state.formFields.project_links}/>
+          <LinkList elementid="project_links" title="Project Links" links={this.state.formFields.project_links}/>
         </div>
 
         <div className="form-group">

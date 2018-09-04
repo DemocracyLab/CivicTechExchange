@@ -7,6 +7,8 @@ import type {UserAPIData} from "../utils/UserAPIUtils.js";
 import {CountrySelector, defaultCountryCode} from "../common/selection/CountrySelector.jsx";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import TagSelector from "../common/tags/TagSelector.jsx";
+import LinkList from "../forms/LinkList.jsx";
+import {LinkInfo} from "../forms/LinkInfo.jsx";
 
 
 type FormFields = {|
@@ -15,7 +17,8 @@ type FormFields = {|
   +about_me: string,
   +technologies_used: Array<TagDefinition>,
   +postal_code: string,
-  +country: string
+  +country: string,
+  +user_links: Array<LinkInfo>
 |};
 
 type State = {|
@@ -35,7 +38,8 @@ class EditProfileController extends React.PureComponent<{||},State> {
         about_me: "",
         technologies_used: [],
         postal_code: "",
-        country: defaultCountryCode
+        country: defaultCountryCode,
+        user_links: []
       }
     }
   }
@@ -132,6 +136,10 @@ class EditProfileController extends React.PureComponent<{||},State> {
                 <label htmlFor="postal_code">Zip/Postal Code</label>
                 <input type="text" className="form-control" id="postal_code" name="postal_code" maxLength="10"
                        value={this.state.formFields.postal_code} onChange={this.onFormFieldChange.bind(this, "postal_code")}/>
+              </div>
+  
+              <div className="form-group">
+                <LinkList elementid="user_links" title="Links" links={this.state.formFields.user_links}/>
               </div>
   
               <div className="form-group pull-right">

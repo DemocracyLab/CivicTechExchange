@@ -11,7 +11,8 @@ import _ from 'lodash'
 
 type Props = {|
   links: Array<LinkInfo>,
-  elementid: string
+  elementid: string,
+  title: ?string
 |};
 type State = {|
   showAddEditModal: boolean,
@@ -100,7 +101,7 @@ class LinkList extends React.PureComponent<Props,State>  {
       <div>
         <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
 
-        <label>Project Links &nbsp;</label>
+        <label>{this.props.title || "Links"} &nbsp;</label>
         <Button
           bsSize="small"
           onClick={this.createNewLink.bind(this)}
