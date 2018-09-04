@@ -228,7 +228,9 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <DjangoCSRFToken/>
 
         <div className="form-group">
-          <ImageUploadFormElement form_id="project_thumbnail_location" currentImage={this.state.formFields.project_thumbnail}/>
+          <ImageUploadFormElement form_id="project_thumbnail_location"
+                                  buttonText="Upload Project Image"
+                                  currentImage={this.state.formFields.project_thumbnail}/>
         </div>
 
         <div className="form-group">

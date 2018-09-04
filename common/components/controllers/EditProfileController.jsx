@@ -9,9 +9,12 @@ import TagCategory from "../common/tags/TagCategory.jsx";
 import TagSelector from "../common/tags/TagSelector.jsx";
 import LinkList from "../forms/LinkList.jsx";
 import {LinkInfo} from "../forms/LinkInfo.jsx";
+import {FileInfo} from "../common/FileInfo.jsx";
+import ImageUploadFormElement from "../forms/ImageUploadFormElement.jsx";
 
 
 type FormFields = {|
+  +user_thumbnail?: FileInfo,
   +first_name: string,
   +last_name: string,
   +about_me: string,
@@ -33,6 +36,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
     super(props);
     this.state = {
       formFields: {
+        user_thumbnail: "",
         first_name: "",
         last_name: "",
         about_me: "",
@@ -90,6 +94,12 @@ class EditProfileController extends React.PureComponent<{||},State> {
             <div className="EditProjectForm-root">
               <DjangoCSRFToken/>
   
+              <div className="form-group">
+                <ImageUploadFormElement form_id="user_thumbnail_location"
+                                        buttonText="Upload Your Picture"
+                                        currentImage={this.state.formFields.user_thumbnail}/>
+              </div>
+              
               <div className="form-group">
                 <label>
                   ABOUT ME
