@@ -18499,8 +18499,9 @@ var ProjectAPIUtils = function () {
     }
   }, {
     key: 'fetchTagsByCategory',
-    value: function fetchTagsByCategory(tagCategory, callback, errCallback) {
-      fetch(new Request('/api/tags?category=' + tagCategory)).then(function (response) {
+    value: function fetchTagsByCategory(tagCategory, getCounts, callback, errCallback) {
+      fetch(new Request('/api/tags?category=' + tagCategory + '&getCounts=' + getCounts || 'false')) //default to false if call doesn't pass a getCounts arg
+      .then(function (response) {
         return response.json();
       }).then(function (tags) {
         return callback(tags);
@@ -33019,7 +33020,7 @@ var TagSelector = function (_React$PureComponent) {
 
     _this.state = {};
 
-    __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].fetchTagsByCategory(_this.props.category, function (tags) {
+    __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].fetchTagsByCategory(_this.props.category, false, function (tags) {
       var tagMap = __WEBPACK_IMPORTED_MODULE_3_lodash___default.a.mapKeys(tags, function (tag) {
         return tag.tag_name;
       });
@@ -33032,8 +33033,10 @@ var TagSelector = function (_React$PureComponent) {
       _this.setState({
         tagMap: tagMap,
         displayList: __WEBPACK_IMPORTED_MODULE_3_lodash___default.a.sortBy(displayList, ['label'])
-      });
-      _this.initializeSelectedTags(props);
+      }, function () {
+        this.initializeSelectedTags(props);
+      } //initalize as setState callback
+      );
     });
     return _this;
   }
@@ -33053,9 +33056,11 @@ var TagSelector = function (_React$PureComponent) {
   }, {
     key: 'getDisplayTag',
     value: function getDisplayTag(tag) {
-      return this.state.displayList.find(function (displayTag) {
-        return displayTag.value === tag.tag_name;
-      });
+      if (this.state.displayList) {
+        return this.state.displayList.find(function (displayTag) {
+          return displayTag.value === tag.tag_name;
+        });
+      }
     }
   }, {
     key: 'componentWillReceiveProps',
@@ -78822,7 +78827,8 @@ var TagSelectorCollapsible = function (_React$Component) {
     _this.state = { tags: null };
 
     // TODO: Use Flux to get tags in a single request
-    __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].fetchTagsByCategory(_this.props.category, function (tags) {
+    // passing true to fetchTagsByCategory asks backend to return num_times in API response
+    __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].fetchTagsByCategory(_this.props.category, true, function (tags) {
       _this.setState({
         tags: tags,
         hasSubcategories: __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.every(tags, function (tag) {
