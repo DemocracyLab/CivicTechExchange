@@ -33,7 +33,7 @@ class TagSelector extends React.PureComponent<Props, State> {
     super(props);
     this.state = {};
 
-    ProjectAPIUtils.fetchTagsByCategory(this.props.category, tags => {
+    ProjectAPIUtils.fetchTagsByCategory(this.props.category, false, tags => {
       const tagMap = _.mapKeys(tags, (tag) => tag.tag_name);
       const displayList = tags.map(function(tag){
         return {
