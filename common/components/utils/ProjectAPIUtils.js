@@ -89,8 +89,8 @@ class ProjectAPIUtils {
       }));
   }
 
-  static fetchTagsByCategory(tagCategory: string, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): void {
-    fetch(new Request('/api/tags?category=' + tagCategory))
+  static fetchTagsByCategory(tagCategory: string, getCounts: boolean, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): void {
+    fetch(new Request('/api/tags?category=' + tagCategory + '&getCounts=' + getCounts || 'false')) //default to false if call doesn't pass a getCounts arg
       .then(response => response.json())
       .then(tags => callback(tags))
       .catch(response => errCallback && errCallback({
