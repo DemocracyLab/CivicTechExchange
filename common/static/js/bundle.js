@@ -95462,35 +95462,7 @@ var ProjectFilterContainer = function (_React$PureComponent) {
           { className: "ProjectFilterContainer-label" },
           "Sort By:"
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "select",
-          { onChange: this._handleSubmitSort.bind(this) },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            "option",
-            { disabled: true, selected: true, value: true },
-            "---"
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            "option",
-            { value: "project_date_modified" },
-            "Date Modified - Ascending"
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            "option",
-            { value: "-project_date_modified" },
-            "Date Modified - Descending"
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            "option",
-            { value: "project_name" },
-            "Name - Ascending"
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            "option",
-            { value: "-project_name" },
-            "Name - Descending"
-          )
-        ),
+        this._renderSortFieldDropdown(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "div",
           { className: "ProjectFilterContainer-label" },
@@ -95510,8 +95482,8 @@ var ProjectFilterContainer = function (_React$PureComponent) {
       );
     }
   }, {
-    key: "_handleSubmitSort",
-    value: function _handleSubmitSort(e) {
+    key: "_handleSubmitSortField",
+    value: function _handleSubmitSortField(e) {
       this.setState({ sortField: e.target.value }, function () {
         this._onSubmitSortField();
       });
@@ -95540,6 +95512,39 @@ var ProjectFilterContainer = function (_React$PureComponent) {
         location: this.state.location
       });
       window.FB.AppEvents.logEvent('filter_by_location', null, { location: this.state.location });
+    }
+  }, {
+    key: "_renderSortFieldDropdown",
+    value: function _renderSortFieldDropdown() {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        "select",
+        { onChange: this._handleSubmitSortField.bind(this) },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "option",
+          { disabled: true, selected: true, value: true },
+          "---"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "option",
+          { value: "project_date_modified" },
+          "Date Modified - Ascending"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "option",
+          { value: "-project_date_modified" },
+          "Date Modified - Descending"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "option",
+          { value: "project_name" },
+          "Name - Ascending"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "option",
+          { value: "-project_name" },
+          "Name - Descending"
+        )
+      );
     }
   }, {
     key: "_renderLocationDropdown",

@@ -13,13 +13,7 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
         <div className="ProjectFilterContainer-label">
           Sort By:
         </div>
-        <select onChange={this._handleSubmitSort.bind(this)}>
-          <option disabled selected value>---</option>
-          <option value="project_date_modified">Date Modified - Ascending</option>
-          <option value="-project_date_modified">Date Modified - Descending</option>
-          <option value="project_name">Name - Ascending</option>
-          <option value="-project_name">Name - Descending</option>
-        </select>
+        {this._renderSortFieldDropdown()}
         <div className="ProjectFilterContainer-label">
           Location:
         </div>
@@ -36,7 +30,7 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
     );
   }
 
-  _handleSubmitSort(e: SyntheticEvent<HTMLSelectElement>): void {
+  _handleSubmitSortField(e: SyntheticEvent<HTMLSelectElement>): void {
     this.setState({sortField: e.target.value}, function () {
       this._onSubmitSortField();
     });
@@ -70,6 +64,16 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
       null,
       {location: this.state.location},
     );
+  }
+
+  _renderSortFieldDropdown(): React$Node{
+    return  <select onChange={this._handleSubmitSortField.bind(this)}>
+              <option disabled selected value>---</option>
+              <option value="project_date_modified">Date Modified - Ascending</option>
+              <option value="-project_date_modified">Date Modified - Descending</option>
+              <option value="project_name">Name - Ascending</option>
+              <option value="-project_name">Name - Descending</option>
+            </select>
   }
 
   _renderLocationDropdown(): React$Node{
