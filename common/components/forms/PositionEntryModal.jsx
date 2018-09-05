@@ -106,7 +106,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
 
                 <div className="form-group">
                   <label htmlFor="link-position-description">Link to Description <span className="modal-hint"><a href="https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit" rel="noopener noreferrer" target="_blank">(Example template)</a></span></label>
-                  <input type="text" className="form-control" id="link-position-description" maxLength="2075" value={this.state.positionInfo.descriptionUrl} onChange={this.onDescriptionChange.bind(this)}/>
+                  <input type="text" className="form-control" id="link-position-description" maxLength="2075" value={this.state.positionInfo.descriptionUrl} onChange={this.onDescriptionChange.bind(this)} placeholder="http://"/>
                 </div>
               </Modal.Body>
               <Modal.Footer>
