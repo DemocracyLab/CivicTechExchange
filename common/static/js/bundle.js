@@ -93855,7 +93855,7 @@ var PositionEntryModal = function (_React$PureComponent) {
                   )
                 )
               ),
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'link-position-description', maxLength: '2075', value: this.state.positionInfo.descriptionUrl, onChange: this.onDescriptionChange.bind(this) })
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'link-position-description', maxLength: '2075', value: this.state.positionInfo.descriptionUrl, onChange: this.onDescriptionChange.bind(this), placeholder: 'http://' })
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
