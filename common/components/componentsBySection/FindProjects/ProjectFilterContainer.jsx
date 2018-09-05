@@ -77,17 +77,9 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
   }
 
   _renderLocationDropdown(): React$Node{
-    const presetLocations: $ReadOnlyArray<string> = [
-      "Seattle, WA",
-      "Redmond, WA",
-      "Kirkland, WA",
-      "Bellevue, WA",
-      Locations.OTHER
-    ];
-
     return  <select onChange={this._handleSubmitLocation.bind(this)}>
               <option disabled selected value>---</option>
-              {presetLocations.map(location => <option key={location} value={location}>{location}</option>)}
+              {Locations.PRESET_LOCATIONS.map(location => <option key={location} value={location}>{location}</option>)}
             </select>;
   }
 }

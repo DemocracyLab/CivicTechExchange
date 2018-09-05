@@ -30579,7 +30579,8 @@ module.exports = exports['default'];
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Locations; });
 var Locations = {
-  OTHER: "Other"
+  OTHER: "Other",
+  PRESET_LOCATIONS: ["Seattle, WA", "Redmond, WA", "Kirkland, WA", "Bellevue, WA", "Other"]
 };
 
 /***/ }),
@@ -37202,8 +37203,6 @@ var EditProjectForm = function (_React$PureComponent) {
   }, {
     key: '_renderLocationDropdown',
     value: function _renderLocationDropdown() {
-      var presetLocations = ["Seattle, WA", "Redmond, WA", "Kirkland, WA", "Bellevue, WA", __WEBPACK_IMPORTED_MODULE_13__constants_ProjectConstants__["a" /* Locations */].OTHER];
-
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         { className: 'form-group' },
@@ -37215,12 +37214,12 @@ var EditProjectForm = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'select',
           { name: 'project_location', id: 'project_location', className: 'form-control', value: this.state.formFields.project_location, onChange: this.onFormFieldChange.bind(this, "project_location") },
-          !__WEBPACK_IMPORTED_MODULE_12_lodash___default.a.includes(presetLocations, this.state.formFields.project_location) ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          !__WEBPACK_IMPORTED_MODULE_12_lodash___default.a.includes(__WEBPACK_IMPORTED_MODULE_13__constants_ProjectConstants__["a" /* Locations */].PRESET_LOCATIONS, this.state.formFields.project_location) ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'option',
             { value: this.state.formFields.project_location },
             this.state.formFields.project_location
           ) : null,
-          presetLocations.map(function (location) {
+          __WEBPACK_IMPORTED_MODULE_13__constants_ProjectConstants__["a" /* Locations */].PRESET_LOCATIONS.map(function (location) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'option',
               { key: location, value: location },
@@ -95549,8 +95548,6 @@ var ProjectFilterContainer = function (_React$PureComponent) {
   }, {
     key: "_renderLocationDropdown",
     value: function _renderLocationDropdown() {
-      var presetLocations = ["Seattle, WA", "Redmond, WA", "Kirkland, WA", "Bellevue, WA", __WEBPACK_IMPORTED_MODULE_4__constants_ProjectConstants__["a" /* Locations */].OTHER];
-
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "select",
         { onChange: this._handleSubmitLocation.bind(this) },
@@ -95559,7 +95556,7 @@ var ProjectFilterContainer = function (_React$PureComponent) {
           { disabled: true, selected: true, value: true },
           "---"
         ),
-        presetLocations.map(function (location) {
+        __WEBPACK_IMPORTED_MODULE_4__constants_ProjectConstants__["a" /* Locations */].PRESET_LOCATIONS.map(function (location) {
           return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "option",
             { key: location, value: location },
