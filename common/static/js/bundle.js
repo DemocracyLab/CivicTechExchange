@@ -93639,7 +93639,7 @@ var PositionList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'label',
           null,
-          'Skills Needed \xA0'
+          'Roles Needed \xA0'
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
@@ -93817,7 +93817,7 @@ var PositionEntryModal = function (_React$PureComponent) {
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Title,
               null,
-              'Position Details'
+              'Role Details'
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -93829,7 +93829,7 @@ var PositionEntryModal = function (_React$PureComponent) {
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'label',
                 { htmlFor: 'project_technologies' },
-                'Position'
+                'Role'
               ),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__common_tags_TagSelector_jsx__["a" /* default */], {
                 value: [this.state.positionInfo.roleTag],

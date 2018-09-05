@@ -91,11 +91,11 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
                  onHide={this.close}
           >
               <Modal.Header closeButton>
-                  <Modal.Title>Position Details</Modal.Title>
+                  <Modal.Title>Role Details</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                   <div className="form-group">
-                    <label htmlFor="project_technologies">Position</label>
+                    <label htmlFor="project_technologies">Role</label>
                     <TagSelector
                       value={[this.state.positionInfo.roleTag]}
                       category={TagCategory.ROLE}
