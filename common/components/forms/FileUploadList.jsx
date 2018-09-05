@@ -11,7 +11,8 @@ import _ from 'lodash'
 
 type Props = {|
   files: Array<FileInfo>,
-  elementid: string
+  elementid: string,
+  title: ?string
 |};
 type State = {|
   showDeleteModal: boolean,
@@ -27,6 +28,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
     super(props);
     this.state = {
       files: this.props.files || [],
+      title: "",
       showDeleteModal: false,
       fileToDelete: null
     };
@@ -78,7 +80,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
         
         <FileUploadButton
           acceptedFileTypes="*"
-          buttonText="Project Files"
+          buttonText={this.props.title || "Files"}
           iconClass="fa fa-plus"
           onFileUpload={this.handleFileSelection.bind(this)}
         />

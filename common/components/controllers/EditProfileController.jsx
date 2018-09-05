@@ -11,6 +11,7 @@ import LinkList from "../forms/LinkList.jsx";
 import {LinkInfo} from "../forms/LinkInfo.jsx";
 import {FileInfo} from "../common/FileInfo.jsx";
 import ImageUploadFormElement from "../forms/ImageUploadFormElement.jsx";
+import FileUploadList from "../forms/FileUploadList.jsx";
 
 
 type FormFields = {|
@@ -21,7 +22,8 @@ type FormFields = {|
   +technologies_used: Array<TagDefinition>,
   +postal_code: string,
   +country: string,
-  +user_links: Array<LinkInfo>
+  +user_links: Array<LinkInfo>,
+  +user_files: Array<FileInfo>
 |};
 
 type State = {|
@@ -43,7 +45,8 @@ class EditProfileController extends React.PureComponent<{||},State> {
         technologies_used: [],
         postal_code: "",
         country: defaultCountryCode,
-        user_links: []
+        user_links: [],
+        user_files: []
       }
     }
   }
@@ -150,6 +153,10 @@ class EditProfileController extends React.PureComponent<{||},State> {
   
               <div className="form-group">
                 <LinkList elementid="user_links" title="Links" links={this.state.formFields.user_links}/>
+              </div>
+  
+              <div className="form-group">
+                <FileUploadList elementid="user_files" title="Files" files={this.state.formFields.user_files}/>
               </div>
   
               <div className="form-group pull-right">

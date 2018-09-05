@@ -348,7 +348,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
 
         <div className="form-group">
-          <FileUploadList elementid="project_files" files={this.state.formFields.project_files}/>
+          <FileUploadList elementid="project_files" title="Project Files" files={this.state.formFields.project_files}/>
         </div>
 
         <FormValidation
