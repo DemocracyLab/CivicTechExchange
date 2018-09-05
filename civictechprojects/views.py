@@ -38,7 +38,6 @@ def tags(request):
                 resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
             tags = list(resultdict.values())
         else:
-            queryset = get_tags_by_category(category)
             tags = list(queryset.values())
     else:
         queryset = Tag.objects.all()
