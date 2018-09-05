@@ -86,7 +86,7 @@ class ProjectCard extends React.PureComponent<Props> {
           Last Updated:&nbsp;
         </span>
         <span className="ProjectCard-value">
-          <Moment format="MMM D, YYYY">{this.props.project.date_modified}</Moment>
+          <Moment format="MMM D, YYYY, h:mm a">{this.props.project.date_modified}</Moment>
         </span>
       </div>
     )
