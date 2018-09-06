@@ -12,13 +12,17 @@ import {LinkInfo} from "../forms/LinkInfo.jsx";
 import {FileInfo} from "../common/FileInfo.jsx";
 import ImageUploadFormElement from "../forms/ImageUploadFormElement.jsx";
 import FileUploadList from "../forms/FileUploadList.jsx";
+import url from "../utils/url.js";
+import _ from 'lodash';
 
+const UserLinkNames = ['link_linkedin'];
 
 type FormFields = {|
   +user_thumbnail?: FileInfo,
   +first_name: string,
   +last_name: string,
   +about_me: string,
+  +link_linkedin: string,
   +technologies_used: Array<TagDefinition>,
   +postal_code: string,
   +country: string,
@@ -42,6 +46,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
         first_name: "",
         last_name: "",
         about_me: "",
+        link_linkedin: "",
         technologies_used: [],
         postal_code: "",
         country: defaultCountryCode,
@@ -49,6 +54,8 @@ class EditProfileController extends React.PureComponent<{||},State> {
         user_files: []
       }
     }
+  
+
   }
   
   componentDidMount(): void {
@@ -62,10 +69,16 @@ class EditProfileController extends React.PureComponent<{||},State> {
         first_name: user.first_name,
         last_name: user.last_name,
         about_me: user.about_me,
+        user_links: user.user_links,
         postal_code: user.postal_code,
         country: user.country || defaultCountryCode
       }
     });
+  
+    //this will set formFields.user_links and formFields.links_*
+    this.filterSpecificLinks(JSON.parse(
+      '[{"linkUrl":"http://www.google.com","linkName":"GOOGLE","visibility":"PUBLIC"},{"linkName":"link_linkedin","linkUrl":"http://www.linkedin.com","visibility":"PUBLIC"}]'
+    ));
   }
   
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
@@ -86,7 +99,45 @@ class EditProfileController extends React.PureComponent<{||},State> {
   }
   
   onSubmit(): void {
-    // TODO: Do any pre-submit processing here
+    // create input array
+    var eLinks = UserLinkNames.map(name => ({linkName: name, linkUrl: this.state.formFields[name]}))
+    //create output array
+    var eLinksArray = [];
+    //create objects for project_links array, skipping empty fields
+    eLinks.forEach(function(item) {
+      if(!_.isEmpty(item.linkUrl)) {
+        item.linkUrl = url.appendHttpIfMissingProtocol(item.linkUrl);
+        eLinksArray.push({
+          linkName: item.linkName,
+          linkUrl: item.linkUrl,
+          visibility: "PUBLIC",
+        })
+      }
+    });
+    //combine arrays prior to sending to backend
+    let formFields = this.state.formFields;
+    formFields.user_links = formFields.user_links.concat(eLinksArray);
+    this.setState({ formFields: formFields});
+    this.forceUpdate();
+  }
+  
+  filterSpecificLinks(array) {
+    //this function updates the entire state.formFields object at once
+    var specificLinks = _.remove(array, function(n) {
+      return _.includes(UserLinkNames, n.linkName);
+    });
+    //copy the formFields state to work with
+    var linkState = this.state.formFields;
+    //pull out the link_ item key:values and append to state copy
+    specificLinks.forEach(function(item) {
+      linkState[item.linkName] = item.linkUrl;
+    });
+    //add the other links to state copy
+    linkState['user_links'] = array;
+    
+    //TODO: see if there's a way to do this without the forceUpdate - passing by reference problem?
+    this.setState({ formFields: linkState });
+    this.forceUpdate();
   }
   
   render(): React$Node {
@@ -124,6 +175,12 @@ class EditProfileController extends React.PureComponent<{||},State> {
                 <label>Last Name</label>
                 <input type="text" className="form-control" id="last_name" name="last_name" maxLength="30"
                        value={this.state.formFields.last_name} onChange={this.onFormFieldChange.bind(this, "last_name")}/>
+              </div>
+  
+              <div className="form-group">
+                <label htmlFor="link_linkedin">LinkedIn</label>
+                <input type="text" className="form-control" id="link_linkedin" name="link_linkedin" maxLength="2075"
+                       value={this.state.formFields.link_linkedin} onChange={this.onFormFieldChange.bind(this, "link_linkedin")}/>
               </div>
   
               <div className="form-group">
