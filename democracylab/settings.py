@@ -103,7 +103,7 @@ LOGIN_REDIRECT_URL = '/'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'active_tag_counts',
+        'LOCATION': 'default_db_cache',
     }
 }
 
