@@ -94006,7 +94006,7 @@ var FindProjectsController = function (_React$PureComponent) {
     key: 'componentWillMount',
     value: function componentWillMount() {
       var args = __WEBPACK_IMPORTED_MODULE_6__utils_url_js__["a" /* default */].arguments(document.location.search);
-      args = __WEBPACK_IMPORTED_MODULE_8_lodash___default.a.pick(args, ['keyword', 'sortField', 'issues', 'tech', 'role', 'org', 'stage']);
+      args = __WEBPACK_IMPORTED_MODULE_8_lodash___default.a.pick(args, ['keyword', 'sortField', 'location', 'issues', 'tech', 'role', 'org', 'stage']);
       __WEBPACK_IMPORTED_MODULE_0__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({ type: 'INIT', findProjectsArgs: !__WEBPACK_IMPORTED_MODULE_8_lodash___default.a.isEmpty(args) ? args : null });
       __WEBPACK_IMPORTED_MODULE_1__stores_TagDispatcher_js__["a" /* default */].dispatch({ type: 'INIT' });
     }
@@ -95444,13 +95444,24 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ProjectFilterContainer = function (_React$PureComponent) {
   _inherits(ProjectFilterContainer, _React$PureComponent);
 
-  function ProjectFilterContainer() {
+  function ProjectFilterContainer(props) {
     _classCallCheck(this, ProjectFilterContainer);
 
-    return _possibleConstructorReturn(this, (ProjectFilterContainer.__proto__ || Object.getPrototypeOf(ProjectFilterContainer)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (ProjectFilterContainer.__proto__ || Object.getPrototypeOf(ProjectFilterContainer)).call(this, props));
+
+    _this.state = {};
+    return _this;
   }
 
   _createClass(ProjectFilterContainer, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var urlParams = new URLSearchParams(window.location.search);
+
+      this.setState({ sortField: urlParams.get('sortField') }, function () {});
+      this.setState({ location: urlParams.get('location') }, function () {});
+    }
+  }, {
     key: "render",
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -95520,27 +95531,27 @@ var ProjectFilterContainer = function (_React$PureComponent) {
         { onChange: this._handleSubmitSortField.bind(this) },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "option",
-          { disabled: true, selected: true, value: true },
+          { disabled: true, selected: this.state.sortField === '' || this.state.sortField === null, value: true },
           "---"
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "option",
-          { value: "project_date_modified" },
+          { selected: this.state.sortField === 'project_date_modified', value: "project_date_modified" },
           "Date Modified - Ascending"
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "option",
-          { value: "-project_date_modified" },
+          { selected: this.state.sortField === '-project_date_modified', value: "-project_date_modified" },
           "Date Modified - Descending"
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "option",
-          { value: "project_name" },
+          { selected: this.state.sortField === 'project_name', value: "project_name" },
           "Name - Ascending"
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "option",
-          { value: "-project_name" },
+          { selected: this.state.sortField === '-project_name', value: "-project_name" },
           "Name - Descending"
         )
       );
@@ -95548,18 +95559,20 @@ var ProjectFilterContainer = function (_React$PureComponent) {
   }, {
     key: "_renderLocationDropdown",
     value: function _renderLocationDropdown() {
+      var _this2 = this;
+
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "select",
         { onChange: this._handleSubmitLocation.bind(this) },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "option",
-          { disabled: true, selected: true, value: true },
+          { disabled: true, selected: this.state.location === '' || this.state.location === null, value: true },
           "---"
         ),
         __WEBPACK_IMPORTED_MODULE_4__constants_ProjectConstants__["a" /* Locations */].PRESET_LOCATIONS.map(function (location) {
           return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "option",
-            { key: location, value: location },
+            { key: location, selected: _this2.state.location === location, value: location },
             location
           );
         })

@@ -7,6 +7,18 @@ import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import {Locations} from "../../constants/ProjectConstants";
 
 class ProjectFilterContainer extends React.PureComponent<{||}> {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  componentDidMount() {
+    var urlParams = new URLSearchParams(window.location.search);
+    
+    this.setState({sortField: urlParams.get('sortField')}, function () {});
+    this.setState({location: urlParams.get('location')}, function () {});
+  }
+
   render(): React$Node {
     return (
       <div className="ProjectFilterContainer-root">
@@ -68,18 +80,18 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
 
   _renderSortFieldDropdown(): React$Node{
     return  <select onChange={this._handleSubmitSortField.bind(this)}>
-              <option disabled selected value>---</option>
-              <option value="project_date_modified">Date Modified - Ascending</option>
-              <option value="-project_date_modified">Date Modified - Descending</option>
-              <option value="project_name">Name - Ascending</option>
-              <option value="-project_name">Name - Descending</option>
-            </select>
+              <option disabled selected={this.state.sortField === '' || this.state.sortField === null} value>---</option>
+              <option selected={this.state.sortField === 'project_date_modified'} value="project_date_modified">Date Modified - Ascending</option>
+              <option selected={this.state.sortField === '-project_date_modified'} value="-project_date_modified">Date Modified - Descending</option>
+              <option selected={this.state.sortField === 'project_name'} value="project_name">Name - Ascending</option>
+              <option selected={this.state.sortField === '-project_name'} value="-project_name">Name - Descending</option>
+            </select>;
   }
 
   _renderLocationDropdown(): React$Node{
     return  <select onChange={this._handleSubmitLocation.bind(this)}>
-              <option disabled selected value>---</option>
-              {Locations.PRESET_LOCATIONS.map(location => <option key={location} value={location}>{location}</option>)}
+              <option disabled selected={this.state.location === '' || this.state.location === null}  value>---</option>
+              {Locations.PRESET_LOCATIONS.map(location => <option key={location} selected={this.state.location === location} value={location}>{location}</option>)}
             </select>;
   }
 }

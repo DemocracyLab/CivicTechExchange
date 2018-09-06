@@ -14,7 +14,7 @@ class FindProjectsController extends React.PureComponent<{||}> {
 
   componentWillMount(): void {
     let args: FindProjectsArgs = urls.arguments(document.location.search);
-    args = _.pick(args, ['keyword','sortField','issues','tech', 'role', 'org', 'stage']);
+    args = _.pick(args, ['keyword','sortField','location','issues','tech', 'role', 'org', 'stage']);
     ProjectSearchDispatcher.dispatch({type: 'INIT', findProjectsArgs: !_.isEmpty(args) ? args : null});
     TagDispatcher.dispatch({type: 'INIT'});
   }
