@@ -91,11 +91,11 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
                  onHide={this.close}
           >
               <Modal.Header closeButton>
-                  <Modal.Title>Position Details</Modal.Title>
+                  <Modal.Title>Role Details</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                   <div className="form-group">
-                    <label htmlFor="project_technologies">Position</label>
+                    <label htmlFor="project_technologies">Role</label>
                     <TagSelector
                       value={[this.state.positionInfo.roleTag]}
                       category={TagCategory.ROLE}
@@ -106,7 +106,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
 
                 <div className="form-group">
                   <label htmlFor="link-position-description">Link to Description <span className="modal-hint"><a href="https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit" rel="noopener noreferrer" target="_blank">(Example template)</a></span></label>
-                  <input type="text" className="form-control" id="link-position-description" maxLength="2075" value={this.state.positionInfo.descriptionUrl} onChange={this.onDescriptionChange.bind(this)}/>
+                  <input type="text" className="form-control" id="link-position-description" maxLength="2075" value={this.state.positionInfo.descriptionUrl} onChange={this.onDescriptionChange.bind(this)} placeholder="http://"/>
                 </div>
               </Modal.Body>
               <Modal.Footer>
