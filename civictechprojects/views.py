@@ -22,7 +22,7 @@ from django.views.decorators.cache import cache_page
 
 #TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
 
-@cache_page(300) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
+@cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
 def tags(request):
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
