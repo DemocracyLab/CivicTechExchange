@@ -26318,7 +26318,7 @@ var LinkList = function (_React$PureComponent) {
       var _this3 = this;
 
       return this.state.links.filter(function (link, i) {
-        return !(link.linkName in __WEBPACK_IMPORTED_MODULE_4__constants_LinkConstants_js__["a" /* LinkNames */]);
+        return __WEBPACK_IMPORTED_MODULE_5_lodash___default.a.includes(_this3.props.hiddenLinkNames, link.linkName);
       }).map(function (link, i) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
@@ -27713,7 +27713,10 @@ var FileUploadList = function (_React$PureComponent) {
   }, {
     key: 'updateHiddenField',
     value: function updateHiddenField() {
-      this.refs.hiddenFormField.value = JSON.stringify(this.state.files);
+      // Serialize as a single value instead of array if this is a single-select list
+      var valueToSerialize = JSON.stringify(this.props.singleFileOnly && this.state.files.length > 0 ? this.state.files[0] : this.state.files);
+
+      this.refs.hiddenFormField.value = valueToSerialize;
     }
   }, {
     key: 'askForDeleteConfirmation',
@@ -27757,12 +27760,7 @@ var FileUploadList = function (_React$PureComponent) {
         'div',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', id: this.props.elementid, name: this.props.elementid }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_upload_FileUploadButton_jsx__["a" /* default */], {
-          acceptedFileTypes: '*',
-          buttonText: this.props.title || "Files",
-          iconClass: 'fa fa-plus',
-          onFileUpload: this.handleFileSelection.bind(this)
-        }),
+        this._renderUploadButton(),
         this._renderFiles(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__common_confirmation_ConfirmationModal_jsx__["a" /* default */], {
           showModal: this.state.showDeleteModal,
@@ -27770,6 +27768,23 @@ var FileUploadList = function (_React$PureComponent) {
           onSelection: this.confirmDelete.bind(this)
         })
       );
+    }
+  }, {
+    key: '_renderUploadButton',
+    value: function _renderUploadButton() {
+      var hideButton = this.props.singleFileOnly && this.state.files && this.state.files.length > 0;
+
+      return hideButton ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'label',
+        null,
+        this.props.title || "File",
+        ' \xA0'
+      ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_upload_FileUploadButton_jsx__["a" /* default */], {
+        acceptedFileTypes: '*',
+        buttonText: this.props.title || "Files",
+        iconClass: 'fa fa-plus',
+        onFileUpload: this.handleFileSelection.bind(this)
+      });
     }
   }, {
     key: '_renderFiles',
@@ -81002,6 +81017,15 @@ var EditProfileController = function (_React$PureComponent) {
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'link_linkedin', name: 'link_linkedin', maxLength: '2075',
                   value: this.state.formFields.link_linkedin, onChange: this.onFormFieldChange.bind(this, "link_linkedin") })
+              ),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'form-group' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_10__forms_FileUploadList_jsx__["a" /* default */], {
+                  elementid: 'user_resume_file',
+                  title: 'Upload Resume',
+                  singleFileOnly: true,
+                  files: this.state.formFields.user_resume_file })
               ),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',

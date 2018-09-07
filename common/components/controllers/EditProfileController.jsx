@@ -23,6 +23,7 @@ type FormFields = {|
   +last_name: string,
   +about_me: string,
   +link_linkedin: string,
+  +user_resume_file: Array<FileInfo>,
   +technologies_used: Array<TagDefinition>,
   +postal_code: string,
   +country: string,
@@ -181,6 +182,14 @@ class EditProfileController extends React.PureComponent<{||},State> {
                 <label htmlFor="link_linkedin">LinkedIn</label>
                 <input type="text" className="form-control" id="link_linkedin" name="link_linkedin" maxLength="2075"
                        value={this.state.formFields.link_linkedin} onChange={this.onFormFieldChange.bind(this, "link_linkedin")}/>
+              </div>
+  
+              <div className="form-group">
+                <FileUploadList
+                  elementid="user_resume_file"
+                  title="Upload Resume"
+                  singleFileOnly={true}
+                  files={this.state.formFields.user_resume_file}/>
               </div>
   
               <div className="form-group">
