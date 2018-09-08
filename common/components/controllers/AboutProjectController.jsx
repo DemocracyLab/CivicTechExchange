@@ -176,6 +176,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               : null
           }
         </div>
+        <div>
+          <i>Last Updated:</i> {project.project_date_modified}
+        </div>
       </div>
     );
   }

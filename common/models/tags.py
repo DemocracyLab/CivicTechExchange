@@ -30,15 +30,18 @@ class Tag(models.Model):
         # TODO: Remove project id from this if we don't end up using it
         tags = map(lambda tag_slug: Tag.get_by_name(tag_slug['slug']), tag_entries)
         existing_tags = filter(lambda tag: tag is not None, tags)
-        hydrated_tags = list(map(lambda tag: {
-            'id': project_id,
+        hydrated_tags = list(map(lambda tag: Tag.hydrate_tag_model(tag), existing_tags))
+        return hydrated_tags
+
+    @staticmethod
+    def hydrate_tag_model(tag):
+        return {
             'display_name': tag.display_name,
             'tag_name': tag.tag_name,
             'caption': tag.caption,
             'category': tag.category,
             'subcategory': tag.subcategory,
-            'parent': tag.parent}, existing_tags))
-        return hydrated_tags
+            'parent': tag.parent}
 
     @staticmethod
     def merge_tags_field(tags_field, tag_entries):

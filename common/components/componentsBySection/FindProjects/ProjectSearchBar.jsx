@@ -4,7 +4,7 @@ import type {FluxReduceStore} from 'flux/utils';
 import {Container} from 'flux/utils';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 
 type State = {|
   keyword: string,

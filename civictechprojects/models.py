@@ -48,6 +48,7 @@ class Project(models.Model):
     project_name = models.CharField(max_length=200)
     project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
+    project_date_modified = models.DateTimeField(auto_now=True, null=True)
     is_searchable = models.BooleanField(default=True)
 
     def __str__(self):
@@ -74,7 +75,8 @@ class Project(models.Model):
             'project_technologies': Tag.hydrate_to_json(self.id, list(self.project_technologies.all().values())),
             'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
-            'project_links': list(map(lambda link: link.to_json(), links))
+            'project_links': list(map(lambda link: link.to_json(), links)),
+            'project_date_modified': self.project_date_modified.__str__()
         }
 
         if len(thumbnail_files) > 0:

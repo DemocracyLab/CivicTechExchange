@@ -9,7 +9,7 @@ from time import time
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
+from django.db.models import Q, Count
 from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition, UserAlert
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
@@ -18,20 +18,27 @@ from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 
-from pprint import pprint
-
 def tags(request):
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
         url_parts, keep_blank_values=0, strict_parsing=0)
     if 'category' in query_terms:
         category = query_terms.get('category')[0]
-        tags = get_tags_by_category(category)
+        queryset = get_tags_by_category(category)
+        activetagdict = projects_tag_counts()
+        querydict = {tag.tag_name:tag for tag in queryset}
+        resultdict = {}
+
+        for slug in querydict.keys():
+            resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+            resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+        tags = resultdict
     else:
-        tags = Tag.objects
+        queryset = Tag.objects.all()
+        tags = list(queryset.values())
     return HttpResponse(
         json.dumps(
-            list(tags.values())
+            tags
         )
     )
 
@@ -47,7 +54,6 @@ def to_rows(items, width):
             rows.append([])
             row_number += 1
     return rows
-
 
 def to_tag_map(tags):
     tag_map = ((tag.tag_name, tag.display_name) for tag in tags)
@@ -159,8 +165,11 @@ def projects_list(request):
         project_list = apply_tag_filters(project_list, query_params, 'stage', projects_by_stage)
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
+        if 'sortField' in query_params:
+            project_list = projects_by_sortField(project_list.distinct(), query_params['sortField'][0])
 
-    response = json.dumps(projects_with_filter_counts(project_list.distinct().order_by('project_name')))
+
+    response = json.dumps(projects_with_filter_counts(project_list))
     return HttpResponse(response)
 
 
@@ -181,6 +190,10 @@ def clean_nonexistent_tags(tags, tag_dict):
 
 def projects_by_keyword(keyword):
     return Project.objects.filter(Q(project_description__icontains=keyword) | Q(project_name__icontains=keyword))
+
+
+def projects_by_sortField(project_list, sortField):
+    return project_list.order_by(sortField)
 
 
 def projects_by_issue_areas(tags):
