@@ -4,6 +4,7 @@ import React from 'react'
 import Select from 'react-select'
 import type {TagDefinition} from '../../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js';
+import Promise from 'bluebird'
 import _ from 'lodash'
 
 type TagOption = {|
@@ -22,7 +23,7 @@ type State = {|
   displayList: Array<TagOption>,
   tagMap: {[key: string]: TagDefinition},
   selected?: TagDefinition,
-  initialized: boolean
+  loadTagsPromise: Promise<Array<TagOption>>
 |};
 
 /**
@@ -31,40 +32,47 @@ type State = {|
 class TagSelector extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.state = {};
-    
-    ProjectAPIUtils.fetchTagsByCategory(this.props.category, (tags) => {
-      const tagMap = _.mapKeys(tags, (tag) => tag.tag_name);
-      const displayList = tags.map(function(tag){
+  
+    // TODO: Convert callback into .then clause
+    const loadTagsPromise = ProjectAPIUtils.fetchTagsByCategory(this.props.category, (tagMap: ) => {
+      let displayList: Array<TagOption> = _.values(tagMap).map(function(tag){
         return {
           value: tag.tag_name,
-          label: tag.subcategory ? `${tag.subcategory}: ${tag.display_name}` : tag.display_name
+          label: tag.subcategory ? tag.subcategory + ": " + tag.display_name : tag.display_name
         }
       });
+      displayList = _.sortBy(displayList, ['label']);
       this.setState({
         tagMap: tagMap,
-        displayList: _.sortBy(displayList, ['label'])
+        displayList: displayList
       });
-      this.initializeSelectedTags(props);
+      
+      return displayList;
     });
+  
+    this.state = {
+      loadTagsPromise: loadTagsPromise
+    };
   }
   
-  initializeSelectedTags(props: Props):void {
+  initializeSelectedTags(props: Props, displayList: Array<TagOption>):void {
     if(props.value) {
       const displayTags: $ReadOnlyArray<TagOption> = props.value[0]
-        ? props.value.map(tag => this.getDisplayTag(tag))
+        ? props.value.map(tag => this.getDisplayTag(tag, displayList))
         : [null];
       this.setState({selected : props.allowMultiSelect ? displayTags : displayTags[0]});
     }
   }
   
-  getDisplayTag(tag: TagDefinition): TagOption {
-    return this.state.displayList.find(displayTag => displayTag.value === tag.tag_name);
+  getDisplayTag(tag: TagDefinition, displayList: Array<TagOption>): TagOption {
+    return displayList.find(displayTag => displayTag.value === tag.tag_name);
   }
   
   componentWillReceiveProps(nextProps: Props): void {
-    if(!this.state.initialized && !_.isEmpty(nextProps.value)) {
-      this.initializeSelectedTags(nextProps);
+    if(!_.isEmpty(nextProps.value)) {
+      this.state.loadTagsPromise.then(tagOptions => {
+        this.initializeSelectedTags(nextProps, tagOptions);
+      });
     }
   }
   

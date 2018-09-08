@@ -90,9 +90,9 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
-
-  static fetchTagsByCategory(tagCategory: string, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): void {
-    fetch(new Request('/api/tags?category=' + tagCategory))
+  
+  static fetchTagsByCategory(tagCategory: string, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): Promise<$ReadOnlyArray<TagDefinition>> {
+    return fetch(new Request('/api/tags?category=' + tagCategory))
       .then(response => response.json())
       .then(tags => callback(tags))
       .catch(response => errCallback && errCallback({
