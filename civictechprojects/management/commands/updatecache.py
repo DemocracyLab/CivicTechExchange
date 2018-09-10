@@ -12,7 +12,8 @@ class Command(BaseCommand):
         cache.clear()
         #define endpoints
         endpoints = ['Issue(s) Addressed', 'Technologies Used', 'Role', 'Organization', 'Project Stage']
-        #define URL parts for loop
+        #define URL parts for loop.
+        #TODO: Get domain dynamically, not hardcoded.
         domain = 'http://democracylab.org'
         url1 = '/api/tags?category='
         url2 = '&getCounts=true'
