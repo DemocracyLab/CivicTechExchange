@@ -23865,6 +23865,7 @@ var ProjectSearchStore = function (_ReduceStore) {
     value: function _clearFilters(state) {
       state = state.set('keyword', '');
       state = state.set('sortField', '');
+      state = state.set('location', '');
       state = state.set('tags', Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])());
       return state;
     }

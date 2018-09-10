@@ -190,6 +190,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   _clearFilters(state: State): State {
     state = state.set('keyword', '');
     state = state.set('sortField', '');
+    state = state.set('location', '');
     state = state.set('tags', List());
     return state;
   }
