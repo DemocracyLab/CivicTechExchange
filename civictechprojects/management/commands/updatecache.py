@@ -13,9 +13,10 @@ class Command(BaseCommand):
         #define endpoints
         endpoints = ['Issue(s) Addressed', 'Technologies Used', 'Role', 'Organization', 'Project Stage']
         #define URL parts for loop
-        url1 = 'http://democracylab.org/api/tags?category='
+        domain = 'http://democracylab.org'
+        url1 = '/api/tags?category='
         url2 = '&getCounts=true'
         #HTTP GET to trigger caching in views.py (aka regenerate cached API endpoints)
         for category in endpoints:
-            res = requests.get(url1 + category + url2)
+            res = requests.get(domain + url1 + category + url2)
             self.stdout.write(self.style.SUCCESS('Successfully returned API endpoint:' + category))
