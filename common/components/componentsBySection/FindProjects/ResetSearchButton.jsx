@@ -9,6 +9,7 @@ import React from 'react';
 type State = {|
   keyword: string,
   tags: List<TagDefinition>,
+  location: string
 |};
 
 class ResetSearchButton extends React.Component<{||}, State> {
@@ -21,6 +22,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
     return {
       keyword: ProjectSearchStore.getKeyword() || '',
       tags: ProjectSearchStore.getTags() || [],
+      location: ProjectSearchStore.getLocation() || ''
     };
   }
 
@@ -29,7 +31,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
       <div  >
         <button
           className="ResetSearch"
-          disabled={!(this.state.keyword || this.state.tags.size > 0) }
+          disabled={!(this.state.keyword || this.state.tags.size > 0 || this.state.location) }
           onClick={this._clearFilters.bind(this)}>
           Reset Filters
         </button>

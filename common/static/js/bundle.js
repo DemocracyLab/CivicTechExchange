@@ -23907,6 +23907,11 @@ var ProjectSearchStore = function (_ReduceStore) {
       return this.getState().sortField;
     }
   }, {
+    key: 'getLocation',
+    value: function getLocation() {
+      return this.getState().location;
+    }
+  }, {
     key: 'getProjects',
     value: function getProjects() {
       var state = this.getState();
@@ -30581,7 +30586,7 @@ module.exports = exports['default'];
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Locations; });
 var Locations = {
   OTHER: "Other",
-  PRESET_LOCATIONS: ["Seattle, WA", "Redmond, WA", "Kirkland, WA", "Bellevue, WA", "Other"]
+  PRESET_LOCATIONS: ["Seattle, WA", "Redmond, WA", "Kirkland, WA", "Bellevue, WA", "Baltimore, MD", "Other"]
 };
 
 /***/ }),
@@ -94743,6 +94748,7 @@ var ResetSearchButton = function (_React$Component) {
   _createClass(ResetSearchButton, [{
     key: 'render',
     value: function render() {
+      console.log(this.state);
       return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
         'div',
         null,
@@ -94750,7 +94756,7 @@ var ResetSearchButton = function (_React$Component) {
           'button',
           {
             className: 'ResetSearch',
-            disabled: !(this.state.keyword || this.state.tags.size > 0),
+            disabled: !(this.state.keyword || this.state.tags.size > 0 || this.state.location),
             onClick: this._clearFilters.bind(this) },
           'Reset Filters'
         )
@@ -94773,7 +94779,8 @@ var ResetSearchButton = function (_React$Component) {
     value: function calculateState(prevState) {
       return {
         keyword: __WEBPACK_IMPORTED_MODULE_2__stores_ProjectSearchStore_js__["a" /* default */].getKeyword() || '',
-        tags: __WEBPACK_IMPORTED_MODULE_2__stores_ProjectSearchStore_js__["a" /* default */].getTags() || []
+        tags: __WEBPACK_IMPORTED_MODULE_2__stores_ProjectSearchStore_js__["a" /* default */].getTags() || [],
+        location: __WEBPACK_IMPORTED_MODULE_2__stores_ProjectSearchStore_js__["a" /* default */].getLocation() || ''
       };
     }
   }]);
@@ -95513,7 +95520,7 @@ var ProjectFilterContainer = function (_React$PureComponent) {
         type: 'SET_SORT',
         sortField: this.state.sortField
       });
-      window.FB.AppEvents.logEvent('sortByField', null, { sortField: this.state.sortField });
+      window.FB.AppEvents.logEvent('sort_by_field', null, { sortField: this.state.sortField });
     }
   }, {
     key: "_onSubmitLocation",
@@ -95567,7 +95574,7 @@ var ProjectFilterContainer = function (_React$PureComponent) {
         { onChange: this._handleSubmitLocation.bind(this) },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "option",
-          { disabled: true, selected: this.state.location === '' || this.state.location === null, value: true },
+          { selected: this.state.location === '' || this.state.location === null, value: true },
           "---"
         ),
         __WEBPACK_IMPORTED_MODULE_4__constants_ProjectConstants__["a" /* Locations */].PRESET_LOCATIONS.map(function (location) {

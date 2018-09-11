@@ -11,7 +11,7 @@ import React from 'react';
 import type {TagDefinition} from "../../utils/ProjectAPIUtils.js";
 
 type State = {|
-  tags: List<TagDefinition>,
+  tags: List<TagDefinition>
 |};
 
 class ProjectTagContainer extends React.Component<{||}, State> {
@@ -22,7 +22,7 @@ class ProjectTagContainer extends React.Component<{||}, State> {
 
   static calculateState(prevState: State): State {
     return {
-      tags: ProjectSearchStore.getTags() || [],
+      tags: ProjectSearchStore.getTags() || []
     };
   }
 

@@ -102,7 +102,7 @@ class ProjectSearchStore extends ReduceStore<State> {
         return this._loadProjects(this._addKeywordToState(state, action.keyword));
       case 'SET_SORT':
         return this._loadProjects(this._addSortFieldToState(state, action.sortField));
-        case 'SET_LOCATION':
+      case 'SET_LOCATION':
         return this._loadProjects(this._addLocationToState(state, action.location));
       case 'CLEAR_FILTERS':
         return this._loadProjects(this._clearFilters(state));
@@ -222,6 +222,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getSortField(): string {
     return this.getState().sortField;
+  }
+
+  getLocation(): string {
+    return this.getState().location;
   }
 
   getProjects(): List<Project> {

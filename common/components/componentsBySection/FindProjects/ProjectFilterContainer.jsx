@@ -60,7 +60,7 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
       sortField: this.state.sortField,
     });
     window.FB.AppEvents.logEvent(
-      'sortByField',
+      'sort_by_field',
       null,
       {sortField: this.state.sortField},
     );
@@ -90,7 +90,7 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
 
   _renderLocationDropdown(): React$Node{
     return  <select onChange={this._handleSubmitLocation.bind(this)}>
-              <option disabled selected={this.state.location === '' || this.state.location === null}  value>---</option>
+              <option selected={this.state.location === '' || this.state.location === null}  value>---</option>
               {Locations.PRESET_LOCATIONS.map(location => <option key={location} selected={this.state.location === location} value={location}>{location}</option>)}
             </select>;
   }
