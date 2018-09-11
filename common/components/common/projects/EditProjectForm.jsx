@@ -204,19 +204,11 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   }
 
   _renderLocationDropdown(): React$Node{
-    const presetLocations: $ReadOnlyArray<string> = [
-      "Seattle, WA",
-      "Redmond, WA",
-      "Kirkland, WA",
-      "Bellevue, WA",
-      Locations.OTHER
-    ];
-
     return <div className="form-group">
       <label htmlFor="project_location">Project Location</label>
       <select name="project_location" id="project_location" className="form-control" value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}>
-        {!_.includes(presetLocations, this.state.formFields.project_location) ? <option value={this.state.formFields.project_location}>{this.state.formFields.project_location}</option> : null}
-        {presetLocations.map(location => <option key={location} value={location}>{location}</option>)}
+        {!_.includes(Locations.PRESET_LOCATIONS, this.state.formFields.project_location) ? <option value={this.state.formFields.project_location}>{this.state.formFields.project_location}</option> : null}
+        {Locations.PRESET_LOCATIONS.map(location => <option key={location} value={location}>{location}</option>)}
       </select>
     </div>;
   }

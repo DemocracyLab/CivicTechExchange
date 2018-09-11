@@ -176,6 +176,8 @@ def projects_list(request):
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
         if 'sortField' in query_params:
             project_list = projects_by_sortField(project_list.distinct(), query_params['sortField'][0])
+        if 'location' in query_params:
+            project_list = projects_by_location(project_list.distinct(), query_params['location'][0])
 
 
     response = json.dumps(projects_with_filter_counts(project_list))
@@ -203,6 +205,10 @@ def projects_by_keyword(keyword):
 
 def projects_by_sortField(project_list, sortField):
     return project_list.order_by(sortField)
+
+
+def projects_by_location(project_list, location):
+    return project_list.filter(Q(project_location__icontains=location))
 
 
 def projects_by_issue_areas(tags):
