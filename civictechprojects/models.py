@@ -90,30 +90,36 @@ class Project(models.Model):
 
 class ProjectLink(models.Model):
     # TODO: Add ForeignKey pointing to Contributor, see https://stackoverflow.com/a/20935513/6326903
-    link_project = models.ForeignKey(Project, related_name='links')
+    link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True)
+    link_user = models.ForeignKey(Contributor, related_name='links', blank=True, null=True)
     link_name = models.CharField(max_length=200, blank=True)
     link_url = models.CharField(max_length=2083)
     link_visibility = models.CharField(max_length=50)
 
     @staticmethod
-    def create(project, url, name, visibility):
+    def create(owner, url, name, visibility):
         # TODO: Validate input
         link = ProjectLink()
-        link.link_project = project
         link.link_url = url
         link.link_name = name
         link.link_visibility = visibility
+
+        if type(owner) is Project:
+            link.link_project = owner
+        else:
+            link.link_user = owner
+
         return link
 
     @staticmethod
-    def merge_changes(project, links):
+    def merge_changes(owner, links):
         updated_links = list(filter(lambda link: 'id' in link, links))
-        ProjectLink.remove_links_not_in_list(project, updated_links)
+        ProjectLink.remove_links_not_in_list(owner, updated_links)
         for link_json in links:
-            link = ProjectLink.from_json(project, link_json)
+            link = ProjectLink.from_json(owner, link_json)
 
             if not link.id:
-                ProjectLink.create(project,
+                ProjectLink.create(owner,
                                    link.link_url,
                                    link.link_name,
                                    link.link_visibility).save()
@@ -125,8 +131,11 @@ class ProjectLink(models.Model):
                 existing_link.save()
 
     @staticmethod
-    def remove_links_not_in_list(project, links):
-        existing_links = ProjectLink.objects.filter(link_project=project.id)
+    def remove_links_not_in_list(owner, links):
+        if type(owner) is Project:
+            existing_links = ProjectLink.objects.filter(link_project=owner.id)
+        else:
+            existing_links = ProjectLink.objects.filter(link_user=owner.id)
         existing_link_ids = set(map(lambda link: link.id, existing_links))
         updated_link_ids = set(map(lambda link: link['id'], links))
         deleted_link_ids = list(existing_link_ids - updated_link_ids)
@@ -134,8 +143,8 @@ class ProjectLink(models.Model):
             ProjectLink.objects.get(id=link_id).delete()
 
     @staticmethod
-    def from_json(project, thumbnail_json):
-        link = ProjectLink.create(project=project,
+    def from_json(owner, thumbnail_json):
+        link = ProjectLink.create(owner=owner,
                                   url=thumbnail_json['linkUrl'],
                                   name=thumbnail_json['linkName'],
                                   visibility=thumbnail_json['visibility']
@@ -219,7 +228,8 @@ class ProjectPosition(models.Model):
 
 class ProjectFile(models.Model):
     # TODO: Add ForeignKey pointing to Contributor, see https://stackoverflow.com/a/20935513/6326903
-    file_project = models.ForeignKey(Project, related_name='files')
+    file_project = models.ForeignKey(Project, related_name='files', blank=True, null=True)
+    file_user = models.ForeignKey(Contributor, related_name='files', blank=True, null=True)
     file_visibility = models.CharField(max_length=50)
     file_name = models.CharField(max_length=200)
     file_key = models.CharField(max_length=200)

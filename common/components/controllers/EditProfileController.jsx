@@ -73,14 +73,12 @@ class EditProfileController extends React.PureComponent<{||},State> {
         user_links: user.user_links,
         postal_code: user.postal_code,
         country: user.country || defaultCountryCode,
-        user_technologies: user.user_technologies
+        user_technologies: user.user_technologies,
       }
     });
   
     //this will set formFields.user_links and formFields.links_*
-    this.filterSpecificLinks(JSON.parse(
-      '[{"linkUrl":"http://www.google.com","linkName":"GOOGLE","visibility":"PUBLIC"},{"linkName":"link_linkedin","linkUrl":"http://www.linkedin.com","visibility":"PUBLIC"}]'
-    ));
+    this.filterSpecificLinks(JSON.parse(user.user_technologies));
   }
   
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
@@ -219,7 +217,10 @@ class EditProfileController extends React.PureComponent<{||},State> {
               </div>
   
               <div className="form-group">
-                <LinkList elementid="user_links" title="Links" links={this.state.formFields.user_links}/>
+                <LinkList elementid="user_links"
+                          title="Links"
+                          hiddenLinkNames={["link_linkedin"]}
+                          links={this.state.formFields.user_links}/>
               </div>
   
               <div className="form-group">

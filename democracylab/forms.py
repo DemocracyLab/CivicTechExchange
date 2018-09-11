@@ -1,11 +1,14 @@
+import json
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import PermissionDenied
 from .models import Contributor
+from civictechprojects.models import ProjectLink, ProjectFile
 from common.models.tags import Tag
 
 
 #  'link_linkedin': 'http://www.linkedin.com',
 #  'user_files': '',
+
 #  'user_links': '[{"linkUrl":"http://www.google.com","linkName":"GOOGLE","visibility":"PUBLIC"},{"linkName":"link_linkedin","linkUrl":"http://www.linkedin.com","visibility":"PUBLIC"}]',
 #  'user_resume_file': '',
 #  'user_thumbnail_location': ''}
@@ -35,3 +38,13 @@ class DemocracyLabUserCreationForm(UserCreationForm):
         Tag.merge_tags_field(user.user_technologies, form.data.get('user_technologies'))
 
         user.save()
+
+        links_json_text = form.data.get('user_links')
+        if len(links_json_text) > 0:
+            links_json = json.loads(links_json_text)
+            ProjectLink.merge_changes(user, links_json)
+
+        # files_json_text = form.data.get('project_files')
+        # if len(files_json_text) > 0:
+        #     files_json = json.loads(files_json_text)
+        #     ProjectFile.merge_changes(project, files_json)

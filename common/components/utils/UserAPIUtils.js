@@ -15,6 +15,7 @@ export type APIError = {|
   +errorMessage: string
 |};
 
+// TODO: Update this definition
 export type UserAPIData = {|
   +id: number,
   +email: string,

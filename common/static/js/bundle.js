@@ -30740,13 +30740,16 @@ var LinkList = function (_React$PureComponent) {
         })
       );
     }
+
+    // TODO: Fix rendering
+
   }, {
     key: '_renderLinks',
     value: function _renderLinks() {
       var _this3 = this;
 
-      return this.state.links.filter(function (link, i) {
-        return __WEBPACK_IMPORTED_MODULE_5_lodash___default.a.includes(_this3.props.hiddenLinkNames, link.linkName);
+      return this.state.links.filter(function (link) {
+        return !__WEBPACK_IMPORTED_MODULE_5_lodash___default.a.includes(_this3.props.hiddenLinkNames, link.linkName);
       }).map(function (link, i) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
@@ -105761,7 +105764,7 @@ var EditProfileController = function (_React$PureComponent) {
       });
 
       //this will set formFields.user_links and formFields.links_*
-      this.filterSpecificLinks(JSON.parse('[{"linkUrl":"http://www.google.com","linkName":"GOOGLE","visibility":"PUBLIC"},{"linkName":"link_linkedin","linkUrl":"http://www.linkedin.com","visibility":"PUBLIC"}]'));
+      this.filterSpecificLinks(JSON.parse(user.user_technologies));
     }
   }, {
     key: 'onFormFieldChange',
@@ -105956,7 +105959,10 @@ var EditProfileController = function (_React$PureComponent) {
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'form-group' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__forms_LinkList_jsx__["a" /* default */], { elementid: 'user_links', title: 'Links', links: this.state.formFields.user_links })
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__forms_LinkList_jsx__["a" /* default */], { elementid: 'user_links',
+                  title: 'Links',
+                  hiddenLinkNames: ["link_linkedin"],
+                  links: this.state.formFields.user_links })
               ),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
@@ -105998,6 +106004,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 // TODO: Refactor these common types into separate file
+
+
+// TODO: Update this definition
 
 var UserAPIUtils = function () {
   function UserAPIUtils() {

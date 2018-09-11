@@ -8,6 +8,7 @@ from common.helpers.front_end import section_url
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
+import civictechprojects.models
 
 #  'user_files': '',
 #  'user_links': '[{"linkUrl":"http://www.google.com","linkName":"GOOGLE","visibility":"PUBLIC"},{"linkName":"link_linkedin","linkUrl":"http://www.linkedin.com","visibility":"PUBLIC"}]',
@@ -62,6 +63,8 @@ class Contributor(User):
         email_msg.send()
 
     def hydrate_to_json(self):
+        links = civictechprojects.models.ProjectLink.objects.filter(link_user=self.id)
+
         user = {
             'email': self.email,
             'first_name': self.first_name,
@@ -70,6 +73,7 @@ class Contributor(User):
             'country': self.country,
             'postal_code': self.postal_code,
             'user_technologies': Tag.hydrate_to_json(self.id, list(self.user_technologies.all().values())),
+            'user_links': list(map(lambda link: link.to_json(), links)),
         }
 
         return user

@@ -128,8 +128,8 @@ class LinkList extends React.PureComponent<Props,State>  {
   }
 
   _renderLinks(): Array<React$Node> {
-    return this.state.links.filter((link, i) => {
-      return _.includes(this.props.hiddenLinkNames, link.linkName)
+    return this.state.links.filter((link) => {
+      return !_.includes(this.props.hiddenLinkNames, link.linkName)
     }).map((link,i) =>
       <div key={i}>
         <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName}</a>
