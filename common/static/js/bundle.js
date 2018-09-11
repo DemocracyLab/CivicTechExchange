@@ -30740,9 +30740,6 @@ var LinkList = function (_React$PureComponent) {
         })
       );
     }
-
-    // TODO: Fix rendering
-
   }, {
     key: '_renderLinks',
     value: function _renderLinks() {
@@ -105759,7 +105756,8 @@ var EditProfileController = function (_React$PureComponent) {
           user_links: user.user_links,
           postal_code: user.postal_code,
           country: user.country || __WEBPACK_IMPORTED_MODULE_3__common_selection_CountrySelector_jsx__["b" /* defaultCountryCode */],
-          user_technologies: user.user_technologies
+          user_technologies: user.user_technologies,
+          user_files: user.user_files
         }
       });
 

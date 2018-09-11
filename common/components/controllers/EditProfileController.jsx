@@ -74,6 +74,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
         postal_code: user.postal_code,
         country: user.country || defaultCountryCode,
         user_technologies: user.user_technologies,
+        user_files: user.user_files,
       }
     });
   

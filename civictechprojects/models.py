@@ -238,27 +238,37 @@ class ProjectFile(models.Model):
     file_category = models.CharField(max_length=50)
 
     @staticmethod
-    def create(project, file_url, file_name, file_key, file_type, file_category, file_visibility):
+    def create(owner, file_url, file_name, file_key, file_type, file_category, file_visibility):
         # TODO: Validate input
         file = ProjectFile()
-        file.file_project = project
         file.file_url = file_url
         file.file_name = file_name
         file.file_key = file_key
         file.file_type = file_type
         file.file_category = file_category
         file.file_visibility = file_visibility
+
+        if type(owner) is Project:
+            file.file_project = owner
+        else:
+            file.file_user = owner
+
         return file
 
     @staticmethod
-    def merge_changes(project, files):
+    def merge_changes(owner, files):
         # Add new files
         added_files = filter(lambda file: 'id' not in file, files)
-        old_files = list(ProjectFile.objects.filter(file_project=project.id, file_category=FileCategory.ETC.value)
-                         .values())
+
+        if type(owner) is Project:
+            old_files = list(ProjectFile.objects.filter(file_project=owner.id, file_category=FileCategory.ETC.value)
+                             .values())
+        else:
+            old_files = list(ProjectFile.objects.filter(file_user=owner.id, file_category=FileCategory.ETC.value)
+                             .values())
 
         for file in added_files:
-            ProjectFile.from_json(project=project, file_category=FileCategory.ETC, file_json=file).save()
+            ProjectFile.from_json(owner=owner, file_category=FileCategory.ETC, file_json=file).save()
 
         # Remove files that were deleted
         old_file_ids = set(map(lambda file: file['id'], old_files))
@@ -269,21 +279,12 @@ class ProjectFile(models.Model):
             ProjectFile.objects.get(id=file_id).delete()
 
     @staticmethod
-    def remove_links_not_in_list(project, links):
-        existing_links = ProjectLink.objects.filter(link_project=project.id)
-        existing_link_ids = set(map(lambda link: link.id, existing_links))
-        updated_link_ids = set(map(lambda link: link['id'], links))
-        deleted_link_ids = list(existing_link_ids - updated_link_ids)
-        for link_id in deleted_link_ids:
-            ProjectLink.objects.get(id=link_id).delete()
-
-    @staticmethod
-    def from_json(project, file_category, file_json):
+    def from_json(owner, file_category, file_json):
         file_name_parts = file_json['fileName'].split('.')
         file_name = "".join(file_name_parts[:-1])
         file_type = file_name_parts[-1]
 
-        return ProjectFile.create(project=project,
+        return ProjectFile.create(owner=owner,
                                   file_url=file_json['publicUrl'],
                                   file_name=file_name,
                                   file_key=file_json['key'],
