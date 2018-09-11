@@ -9,6 +9,7 @@ import React from 'react';
 type State = {|
   keyword: string,
   tags: List<TagDefinition>,
+  sortField: string,
   location: string
 |};
 
@@ -22,6 +23,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
     return {
       keyword: ProjectSearchStore.getKeyword() || '',
       tags: ProjectSearchStore.getTags() || [],
+      sortField: ProjectSearchStore.getSortField() || '',
       location: ProjectSearchStore.getLocation() || ''
     };
   }
@@ -31,7 +33,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
       <div  >
         <button
           className="ResetSearch"
-          disabled={!(this.state.keyword || this.state.tags.size > 0 || this.state.location) }
+          disabled={!(this.state.keyword || this.state.tags.size > 0 || this.state.sortField || this.state.location) }
           onClick={this._clearFilters.bind(this)}>
           Reset Filters
         </button>

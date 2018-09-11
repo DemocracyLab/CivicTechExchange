@@ -1,15 +1,30 @@
 // @flow
+import type {FluxReduceStore} from 'flux/utils';
 
+import {Container} from 'flux/utils';
 import React from 'react';
 import TagSelectorCollapsible from "../../common/tags/TagSelectorCollapsible.jsx";
 import TagCategory from "../../common/tags/TagCategory.jsx";
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
+import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import {Locations} from "../../constants/ProjectConstants";
 
-class ProjectFilterContainer extends React.PureComponent<{||}> {
-  constructor(props) {
-    super(props);
-    this.state = {};
+type State = {|
+  sortField: string,
+  location: string
+|};
+
+class ProjectFilterContainer extends React.Component<{||}, State> {
+
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [ProjectSearchStore];
+  }
+
+  static calculateState(prevState: State): State {
+    return {
+      sortField: ProjectSearchStore.getSortField(),
+      location: ProjectSearchStore.getLocation()
+    };
   }
 
   componentDidMount() {
@@ -90,10 +105,10 @@ class ProjectFilterContainer extends React.PureComponent<{||}> {
 
   _renderLocationDropdown(): React$Node{
     return  <select onChange={this._handleSubmitLocation.bind(this)}>
-              <option selected={this.state.location === '' || this.state.location === null}  value>---</option>
+              <option disabled selected={this.state.location === '' || this.state.location === null}  value>---</option>
               {Locations.PRESET_LOCATIONS.map(location => <option key={location} selected={this.state.location === location} value={location}>{location}</option>)}
             </select>;
   }
 }
 
-export default ProjectFilterContainer;
+export default Container.create(ProjectFilterContainer);
