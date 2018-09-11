@@ -1,3 +1,11 @@
 export const Locations = {
-  OTHER: "Other"
+  OTHER: "Other",
+  PRESET_LOCATIONS: [
+    "Seattle, WA",
+    "Redmond, WA",
+    "Kirkland, WA",
+    "Bellevue, WA",
+    "Baltimore, MD",
+    "Other"
+  ]
 };
