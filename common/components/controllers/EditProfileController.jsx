@@ -48,7 +48,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
         last_name: "",
         about_me: "",
         link_linkedin: "",
-        technologies_used: [],
+        user_technologies: [],
         postal_code: "",
         country: defaultCountryCode,
         user_links: [],
@@ -72,7 +72,8 @@ class EditProfileController extends React.PureComponent<{||},State> {
         about_me: user.about_me,
         user_links: user.user_links,
         postal_code: user.postal_code,
-        country: user.country || defaultCountryCode
+        country: user.country || defaultCountryCode,
+        user_technologies: user.user_technologies
       }
     });
   
@@ -195,11 +196,11 @@ class EditProfileController extends React.PureComponent<{||},State> {
               <div className="form-group">
                 <label>Technologies Used</label>
                 <TagSelector
-                  elementId="technologies_used"
-                  value={this.state.formFields.technologies_used}
+                  elementId="user_technologies"
+                  value={this.state.formFields.user_technologies}
                   category={TagCategory.TECHNOLOGIES_USED}
                   allowMultiSelect={true}
-                  onSelection={this.onTagChange.bind(this, "technologies_used")}
+                  onSelection={this.onTagChange.bind(this, "user_technologies")}
                 />
               </div>
   

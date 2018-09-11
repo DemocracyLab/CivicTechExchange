@@ -34,7 +34,7 @@ class TagSelector extends React.PureComponent<Props, State> {
     super(props);
   
     // TODO: Convert callback into .then clause
-    const loadTagsPromise = ProjectAPIUtils.fetchTagsByCategory(this.props.category, (tagMap: ) => {
+    const loadTagsPromise = ProjectAPIUtils.fetchTagsByCategory(this.props.category, (tagMap: Array<TagOption>) => {
       let displayList: Array<TagOption> = _.values(tagMap).map(function(tag){
         return {
           value: tag.tag_name,

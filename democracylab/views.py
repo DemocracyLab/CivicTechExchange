@@ -111,9 +111,11 @@ def change_password(request):
 
 def user_edit(request, user_id):
     if not request.user.is_authenticated():
-        return redirect('/signup')
+        return redirect('/index/?section=LogIn')
 
     pprint(request.POST)
+
+    DemocracyLabUserCreationForm.edit_user(request, user_id)
 
     return redirect('/index/?section=EditProfile')
 

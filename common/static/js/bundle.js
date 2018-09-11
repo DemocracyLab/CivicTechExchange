@@ -22958,8 +22958,7 @@ var ProjectAPIUtils = function () {
       return fetch(new Request('/api/tags?category=' + tagCategory)).then(function (response) {
         return response.json();
       }).then(function (tags) {
-        var result = callback(tags);
-        return result;
+        return callback(tags);
       }).catch(function (response) {
         return errCallback && errCallback({
           errorCode: response.status,
@@ -32384,7 +32383,6 @@ var TagSelector = function (_React$PureComponent) {
     var _this = _possibleConstructorReturn(this, (TagSelector.__proto__ || Object.getPrototypeOf(TagSelector)).call(this, props));
 
     var loadTagsPromise = __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].fetchTagsByCategory(_this.props.category, function (tagMap) {
-      // const tagMap = _.mapKeys(tags, (tag) => tag.tag_name);
       var displayList = __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.values(tagMap).map(function (tag) {
         return {
           value: tag.tag_name,
@@ -105730,7 +105728,7 @@ var EditProfileController = function (_React$PureComponent) {
         last_name: "",
         about_me: "",
         link_linkedin: "",
-        technologies_used: [],
+        user_technologies: [],
         postal_code: "",
         country: __WEBPACK_IMPORTED_MODULE_3__common_selection_CountrySelector_jsx__["b" /* defaultCountryCode */],
         user_links: [],
@@ -105757,7 +105755,8 @@ var EditProfileController = function (_React$PureComponent) {
           about_me: user.about_me,
           user_links: user.user_links,
           postal_code: user.postal_code,
-          country: user.country || __WEBPACK_IMPORTED_MODULE_3__common_selection_CountrySelector_jsx__["b" /* defaultCountryCode */]
+          country: user.country || __WEBPACK_IMPORTED_MODULE_3__common_selection_CountrySelector_jsx__["b" /* defaultCountryCode */],
+          user_technologies: user.user_technologies
         }
       });
 
@@ -105923,11 +105922,11 @@ var EditProfileController = function (_React$PureComponent) {
                   'Technologies Used'
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__common_tags_TagSelector_jsx__["a" /* default */], {
-                  elementId: 'technologies_used',
-                  value: this.state.formFields.technologies_used,
+                  elementId: 'user_technologies',
+                  value: this.state.formFields.user_technologies,
                   category: __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED,
                   allowMultiSelect: true,
-                  onSelection: this.onTagChange.bind(this, "technologies_used")
+                  onSelection: this.onTagChange.bind(this, "user_technologies")
                 })
               ),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(

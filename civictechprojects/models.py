@@ -17,11 +17,14 @@ from taggit.models import TaggedItemBase
 class TaggedIssueAreas(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
+
 class TaggedStage(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
+
 class TaggedTechnologies(TaggedItemBase):
     content_object = models.ForeignKey('Project')
+
 
 class TaggedOrganization(TaggedItemBase):
     content_object = models.ForeignKey('Project')
@@ -86,6 +89,7 @@ class Project(models.Model):
 
 
 class ProjectLink(models.Model):
+    # TODO: Add ForeignKey pointing to Contributor, see https://stackoverflow.com/a/20935513/6326903
     link_project = models.ForeignKey(Project, related_name='links')
     link_name = models.CharField(max_length=200, blank=True)
     link_url = models.CharField(max_length=2083)
@@ -214,6 +218,7 @@ class ProjectPosition(models.Model):
 
 
 class ProjectFile(models.Model):
+    # TODO: Add ForeignKey pointing to Contributor, see https://stackoverflow.com/a/20935513/6326903
     file_project = models.ForeignKey(Project, related_name='files')
     file_visibility = models.CharField(max_length=50)
     file_name = models.CharField(max_length=200)
