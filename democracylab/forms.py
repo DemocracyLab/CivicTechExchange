@@ -2,7 +2,7 @@ import json
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import PermissionDenied
 from .models import Contributor
-from civictechprojects.models import ProjectLink, ProjectFile
+from civictechprojects.models import ProjectLink, ProjectFile, FileCategory
 from common.models.tags import Tag
 
 
@@ -48,3 +48,17 @@ class DemocracyLabUserCreationForm(UserCreationForm):
         if len(files_json_text) > 0:
             files_json = json.loads(files_json_text)
             ProjectFile.merge_changes(user, files_json)
+
+        user_thumbnail_location = form.data.get('user_thumbnail_location')
+        if len(user_thumbnail_location) > 0:
+            thumbnail_json = json.loads(user_thumbnail_location)
+            existing_thumbnail = ProjectFile.objects.filter(
+                file_user=user.id, file_category=FileCategory.THUMBNAIL.value).first()
+
+            if not existing_thumbnail:
+                thumbnail = ProjectFile.from_json(user, FileCategory.THUMBNAIL, thumbnail_json)
+                thumbnail.save()
+            elif not thumbnail_json['key'] == existing_thumbnail.file_key:
+                thumbnail = ProjectFile.from_json(user, FileCategory.THUMBNAIL, thumbnail_json)
+                thumbnail.save()
+                existing_thumbnail.delete()

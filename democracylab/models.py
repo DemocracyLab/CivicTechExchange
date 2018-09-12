@@ -79,6 +79,10 @@ class Contributor(User):
             'user_files': list(map(lambda file: file.to_json(), other_files)),
         }
 
+        thumbnail_files = list(files.filter(file_category=civictechprojects.models.FileCategory.THUMBNAIL.value))
+        if len(thumbnail_files) > 0:
+            user['user_thumbnail'] = thumbnail_files[0].to_json()
+
         return user
 
 

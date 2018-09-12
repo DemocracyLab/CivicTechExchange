@@ -55,8 +55,6 @@ class EditProfileController extends React.PureComponent<{||},State> {
         user_files: []
       }
     }
-  
-
   }
   
   componentDidMount(): void {
@@ -75,6 +73,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
         country: user.country || defaultCountryCode,
         user_technologies: user.user_technologies,
         user_files: user.user_files,
+        user_thumbnail: user.user_thumbnail
       }
     });
   
