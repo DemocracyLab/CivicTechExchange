@@ -99,6 +99,14 @@ DATABASES['default'].update(db_from_env)
 
 LOGIN_REDIRECT_URL = '/'
 
+#Caching number of tag counts only for now - change this if other things are db-cached
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'default_db_cache',
+    }
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 

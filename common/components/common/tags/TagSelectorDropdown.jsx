@@ -35,7 +35,7 @@ class TagSelectorDropdown extends React.Component<Props, State> {
     this.state = {tags: null};
 
     // TODO: Use Flux to get tags in a single request
-    ProjectAPIUtils.fetchTagsByCategory(this.props.category, tags => {
+    ProjectAPIUtils.fetchTagsByCategory(this.props.category, false, tags => {
       this.setState({
         tags: tags,
         hasSubcategories: _.every(tags, tag => !_.isEmpty(tag.subcategory))

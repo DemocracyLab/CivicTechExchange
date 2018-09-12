@@ -17,7 +17,12 @@ from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
+from distutils.util import strtobool
+from django.views.decorators.cache import cache_page
 
+#TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
+
+@cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
 def tags(request):
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
@@ -25,14 +30,18 @@ def tags(request):
     if 'category' in query_terms:
         category = query_terms.get('category')[0]
         queryset = get_tags_by_category(category)
-        activetagdict = projects_tag_counts()
-        querydict = {tag.tag_name:tag for tag in queryset}
-        resultdict = {}
+        countoption = bool(strtobool(query_terms.get('getCounts')[0]))
+        if countoption == True:
+            activetagdict = projects_tag_counts()
+            querydict = {tag.tag_name:tag for tag in queryset}
+            resultdict = {}
 
-        for slug in querydict.keys():
-            resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-            resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-        tags = resultdict
+            for slug in querydict.keys():
+                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+            tags = list(resultdict.values())
+        else:
+            tags = list(queryset.values())
     else:
         queryset = Tag.objects.all()
         tags = list(queryset.values())
