@@ -122,14 +122,5 @@ class ProjectCreationForm(ModelForm):
 
         project_thumbnail_location = form.data.get('project_thumbnail_location')
         if len(project_thumbnail_location) > 0:
-            thumbnail_json = json.loads(project_thumbnail_location)
-            existing_thumbnail = ProjectFile.objects.filter(
-                file_project=project.id, file_category=FileCategory.THUMBNAIL.value).first()
-
-            if not existing_thumbnail:
-                thumbnail = ProjectFile.from_json(project, FileCategory.THUMBNAIL, thumbnail_json)
-                thumbnail.save()
-            elif not thumbnail_json['key'] == existing_thumbnail.file_key:
-                thumbnail = ProjectFile.from_json(project, FileCategory.THUMBNAIL, thumbnail_json)
-                thumbnail.save()
-                existing_thumbnail.delete()
+            thumbnail_location_json = json.loads(project_thumbnail_location)
+            ProjectFile.replace_single_file(project, FileCategory.THUMBNAIL, thumbnail_location_json)

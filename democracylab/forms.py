@@ -6,13 +6,6 @@ from civictechprojects.models import ProjectLink, ProjectFile, FileCategory
 from common.models.tags import Tag
 
 
-#  'link_linkedin': 'http://www.linkedin.com',
-#  'user_files': '',
-
-#  'user_links': '[{"linkUrl":"http://www.google.com","linkName":"GOOGLE","visibility":"PUBLIC"},{"linkName":"link_linkedin","linkUrl":"http://www.linkedin.com","visibility":"PUBLIC"}]',
-#  'user_resume_file': '',
-#  'user_thumbnail_location': ''}
-
 class DemocracyLabUserCreationForm(UserCreationForm):
     class Meta:
         model = Contributor
@@ -49,18 +42,12 @@ class DemocracyLabUserCreationForm(UserCreationForm):
             files_json = json.loads(files_json_text)
             ProjectFile.merge_changes(user, files_json)
 
-        # TODO: Read in resume
-        # TODO: Refactor the code for reading in a single file type into a common spot
         user_thumbnail_location = form.data.get('user_thumbnail_location')
         if len(user_thumbnail_location) > 0:
-            thumbnail_json = json.loads(user_thumbnail_location)
-            existing_thumbnail = ProjectFile.objects.filter(
-                file_user=user.id, file_category=FileCategory.THUMBNAIL.value).first()
+            thumbnail_file_json = json.loads(user_thumbnail_location)
+            ProjectFile.replace_single_file(user, FileCategory.THUMBNAIL, thumbnail_file_json)
 
-            if not existing_thumbnail:
-                thumbnail = ProjectFile.from_json(user, FileCategory.THUMBNAIL, thumbnail_json)
-                thumbnail.save()
-            elif not thumbnail_json['key'] == existing_thumbnail.file_key:
-                thumbnail = ProjectFile.from_json(user, FileCategory.THUMBNAIL, thumbnail_json)
-                thumbnail.save()
-                existing_thumbnail.delete()
+        user_resume_file = form.data.get('user_resume_file')
+        if len(user_resume_file) > 0:
+            user_resume_file_json = json.loads(user_resume_file)
+            ProjectFile.replace_single_file(user, FileCategory.RESUME, user_resume_file_json)

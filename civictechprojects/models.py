@@ -279,6 +279,21 @@ class ProjectFile(models.Model):
             ProjectFile.objects.get(id=file_id).delete()
 
     @staticmethod
+    def replace_single_file(owner, file_category, file_json):
+        if type(owner) is Project:
+            existing_file = ProjectFile.objects.filter(file_project=owner.id, file_category=file_category.value).first()
+        else:
+            existing_file = ProjectFile.objects.filter(file_user=owner.id, file_category=file_category.value).first()
+
+        if not existing_file:
+            thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+            thumbnail.save()
+        elif not file_json['key'] == existing_file.file_key:
+            thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+            thumbnail.save()
+            existing_file.delete()
+
+    @staticmethod
     def from_json(owner, file_category, file_json):
         file_name_parts = file_json['fileName'].split('.')
         file_name = "".join(file_name_parts[:-1])
@@ -296,6 +311,7 @@ class ProjectFile(models.Model):
         return {
             'key': self.file_key,
             'fileName': self.file_name + '.' + self.file_type,
+            'fileCategory': self.file_category,
             'publicUrl': self.file_url,
             'visibility': self.file_visibility
         }
@@ -303,6 +319,7 @@ class ProjectFile(models.Model):
 
 class FileCategory(Enum):
     THUMBNAIL = 'THUMBNAIL'
+    RESUME = 'RESUME'
     ETC = 'ETC'
 
 
