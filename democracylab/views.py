@@ -9,8 +9,6 @@ import simplejson as json
 from .forms import DemocracyLabUserCreationForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
 
-from pprint import pprint
-
 
 def login_view(request):
     if request.method == 'POST':
@@ -113,11 +111,9 @@ def user_edit(request, user_id):
     if not request.user.is_authenticated():
         return redirect('/index/?section=LogIn')
 
-    pprint(request.POST)
-
     DemocracyLabUserCreationForm.edit_user(request, user_id)
 
-    return redirect('/index/?section=EditProfile')
+    return redirect('/index/?section=Profile&id=' + user_id)
 
 
 def user_details(request, user_id):

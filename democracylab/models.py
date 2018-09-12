@@ -65,7 +65,7 @@ class Contributor(User):
     def hydrate_to_json(self):
         links = civictechprojects.models.ProjectLink.objects.filter(link_user=self.id)
         files = civictechprojects.models.ProjectFile.objects.filter(file_user=self.id)
-        other_files = list(files.filter(file_category=civictechprojects.models.FileCategory.ETC.value))
+        other_files = list(filter(lambda file: file.file_category != civictechprojects.models.FileCategory.THUMBNAIL.value, files))
 
         user = {
             'email': self.email,

@@ -15,12 +15,18 @@ export type APIError = {|
   +errorMessage: string
 |};
 
-// TODO: Update this definition
 export type UserAPIData = {|
   +id: number,
   +email: string,
   +first_name: string,
-  +last_name: string
+  +last_name: string,
+  +about_me: string,
+  +postal_code: string,
+  +country: string,
+  +user_thumbnail: FileInfo,
+  +user_technologies: $ReadOnlyArray<TagDefinition>,
+  +user_links: $ReadOnlyArray<LinkInfo>,
+  +user_files: $ReadOnlyArray<FileInfo>,
 |};
 
 class UserAPIUtils {

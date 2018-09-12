@@ -49,6 +49,8 @@ class DemocracyLabUserCreationForm(UserCreationForm):
             files_json = json.loads(files_json_text)
             ProjectFile.merge_changes(user, files_json)
 
+        # TODO: Read in resume
+        # TODO: Refactor the code for reading in a single file type into a common spot
         user_thumbnail_location = form.data.get('user_thumbnail_location')
         if len(user_thumbnail_location) > 0:
             thumbnail_json = json.loads(user_thumbnail_location)
