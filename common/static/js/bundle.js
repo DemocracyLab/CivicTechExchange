@@ -105762,7 +105762,7 @@ var EditProfileController = function (_React$PureComponent) {
       });
 
       //this will set formFields.user_links and formFields.links_*
-      this.filterSpecificLinks(JSON.parse(user.user_technologies));
+      this.filterSpecificLinks(user.user_links);
     }
   }, {
     key: 'onFormFieldChange',
