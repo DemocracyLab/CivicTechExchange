@@ -2,6 +2,8 @@
   background-color: lightblue;
   border-radius: 5px;
   padding: 5px 5px 5px 5px;
+  display: inline-block;
+  margin: 2px;
 }
 
 span.Tag-Item + span.Tag-Item {
