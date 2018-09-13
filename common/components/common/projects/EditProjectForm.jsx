@@ -248,7 +248,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             elementId="project_organization"
             value={this.state.formFields.project_organization}
             category={TagCategory.ORGANIZATION}
-            allowMultiSelect={false}
+            allowMultiSelect={true}
             onSelection={this.onTagChange.bind(this, "project_organization")}
           />
         </div>

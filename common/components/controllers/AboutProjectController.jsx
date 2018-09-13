@@ -14,6 +14,7 @@ import _ from 'lodash'
 import React from 'react';
 import {Locations} from "../constants/ProjectConstants.js";
 import {LinkNames} from "../constants/LinkConstants.js";
+import {TagDefinition} from "../utils/ProjectAPIUtils";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -195,7 +196,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderProjectCommunity(): React$Node {
     if(this.state.project && !_.isEmpty(this.state.project.project_organization)) {
       return <div className="col">
-        Community: {this.state.project.project_organization[0].display_name}
+        Communities: {_.join(this.state.project.project_organization.map((tag: TagDefinition) => tag.display_name), ", ")}
       </div>
     }
   }
