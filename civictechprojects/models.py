@@ -31,11 +31,11 @@ class TaggedOrganization(TaggedItemBase):
 
 
 class Project(models.Model):
-    project_volunteers = models.ManyToManyField(
-        Contributor,
-        related_name='volunteers',
-        blank=True
-    )
+    # project_volunteers = models.ManyToManyField(
+    #     Contributor,
+    #     related_name='volunteers',
+    #     blank=True
+    # )
     # TODO: Change related name to 'created_projects' or something similar
     project_creator = models.ForeignKey(Contributor, related_name='creator')
     project_description = models.CharField(max_length=3000, blank=True)
@@ -342,3 +342,30 @@ class UserAlert(models.Model):
         alert.country = country
         alert.postal_code = postal_code
         alert.save()
+
+
+# TODO: Merge migrations
+class TaggedVolunteerRole(TaggedItemBase):
+    content_object = models.ForeignKey('VolunteerRelation')
+
+
+class VolunteerRelation(models.Model):
+    project = models.ForeignKey(Project, related_name='projects')
+    volunteer = models.ForeignKey(Contributor, related_name='volunteers')
+    role = TaggableManager(blank=True, through=TaggedVolunteerRole)
+    role.remote_field.related_name = "+"
+    application_text = models.CharField(max_length=10000, blank=True)
+    is_approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return 'Project: ' + str(self.project.project_name) + ',User: ' + str(self.volunteer.email)
+
+    @staticmethod
+    def create(project, volunteer, role, application_text):
+        relation = VolunteerRelation()
+        relation.project = project
+        relation.volunteer = volunteer
+        relation.application_text = application_text
+        relation.save()
+
+        relation.role.add(role)

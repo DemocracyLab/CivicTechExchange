@@ -10,7 +10,7 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q, Count
-from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition, UserAlert
+from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition, UserAlert, VolunteerRelation
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
@@ -19,6 +19,8 @@ from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
+
+from pprint import pprint
 
 #TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
 
@@ -273,6 +275,7 @@ def delete_uploaded_file(request, s3_key):
         # TODO: Log this
         return HttpResponse(status=401)
 
+
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def contact_project_owner(request, project_id):
@@ -293,6 +296,39 @@ def contact_project_owner(request, project_id):
             lastname=user.last_name,
             project=project.project_name),
         '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email),
+        settings.EMAIL_HOST_USER,
+        [project.project_creator.email],
+        {'Reply-To': user.email}
+    )
+    email_msg.send()
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def volunteer_with_project(request, project_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    project = Project.objects.get(id=project_id)
+    body = json.loads(request.body)
+    pprint(body)
+    message = body['message']
+    role = body['roleTag']
+    VolunteerRelation.create(project=project, volunteer=user, role=role, application_text=message)
+
+    user_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=Profile&id=' + str(user.id)
+    email_body = '{message} \n -- \n To view volunteer profile, see {url} \n'.format(message=message, user=user.email, url=user_profile_url)
+    email_msg = EmailMessage(
+        '{firstname} {lastname} would like to volunteer with {project}'.format(
+            firstname=user.first_name,
+            lastname=user.last_name,
+            project=project.project_name),
+        email_body,
         settings.EMAIL_HOST_USER,
         [project.project_creator.email],
         {'Reply-To': user.email}

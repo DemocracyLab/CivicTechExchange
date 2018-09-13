@@ -14,7 +14,8 @@ import _ from 'lodash'
 import React from 'react';
 import {Locations} from "../constants/ProjectConstants.js";
 import {LinkNames} from "../constants/LinkConstants.js";
-import {TagDefinition} from "../utils/ProjectAPIUtils";
+import {TagDefinition} from "../utils/ProjectAPIUtils.js";
+import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -101,6 +102,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
                 <div className="row">
                   <ContactProjectButton project={this.state.project}/>
+                </div>
+                <div className="row">
+                  <ProjectVolunteerButton project={this.state.project}/>
                   { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> }
                 </div>
               </div>
