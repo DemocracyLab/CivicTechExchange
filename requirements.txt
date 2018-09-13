@@ -17,6 +17,7 @@ psycopg2==2.7.3.2
 python-dateutil==2.6.1
 pytz==2017.3
 rcssmin==1.0.6
+requests==2.19.1
 rjsmin==1.0.12
 s3transfer==0.1.11
 simplejson==3.12.0
