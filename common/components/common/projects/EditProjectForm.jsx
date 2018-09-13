@@ -220,7 +220,9 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <DjangoCSRFToken/>
 
         <div className="form-group">
-          <ImageUploadFormElement form_id="project_thumbnail_location" currentImage={this.state.formFields.project_thumbnail}/>
+          <ImageUploadFormElement form_id="project_thumbnail_location"
+                                  buttonText="Upload Project Image"
+                                  currentImage={this.state.formFields.project_thumbnail}/>
         </div>
 
         <div className="form-group">
@@ -334,11 +336,11 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         </div>
 
         <div className="form-group">
-          <LinkList elementid="project_links" links={this.state.formFields.project_links}/>
+          <LinkList elementid="project_links" title="Project Links" links={this.state.formFields.project_links}/>
         </div>
 
         <div className="form-group">
-          <FileUploadList elementid="project_files" files={this.state.formFields.project_files}/>
+          <FileUploadList elementid="project_files" title="Project Files" files={this.state.formFields.project_files}/>
         </div>
 
         <FormValidation

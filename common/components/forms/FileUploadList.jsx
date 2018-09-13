@@ -11,7 +11,9 @@ import _ from 'lodash'
 
 type Props = {|
   files: Array<FileInfo>,
-  elementid: string
+  elementid: string,
+  title: ?string,
+  singleFileOnly: ?boolean
 |};
 type State = {|
   showDeleteModal: boolean,
@@ -27,6 +29,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
     super(props);
     this.state = {
       files: this.props.files || [],
+      title: "",
       showDeleteModal: false,
       fileToDelete: null
     };
@@ -40,7 +43,10 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   }
   
   updateHiddenField(): void {
-    this.refs.hiddenFormField.value = JSON.stringify(this.state.files);
+    // Serialize as a single value instead of array if this is a single-select list
+    const valueToSerialize: string = JSON.stringify(this.props.singleFileOnly && this.state.files.length > 0 ? this.state.files[0] : this.state.files);
+    
+    this.refs.hiddenFormField.value = valueToSerialize;
   }
   
   askForDeleteConfirmation(fileToDelete: FileInfo): void {
@@ -76,12 +82,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
       <div>
         <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
         
-        <FileUploadButton
-          acceptedFileTypes="*"
-          buttonText="Project Files"
-          iconClass="fa fa-plus"
-          onFileUpload={this.handleFileSelection.bind(this)}
-        />
+        {this._renderUploadButton()}
 
         {this._renderFiles()}
         
@@ -91,6 +92,19 @@ class FileUploadList extends React.PureComponent<Props,State>  {
           onSelection={this.confirmDelete.bind(this)}
         />
       </div>
+    );
+  }
+  
+  _renderUploadButton(): ?React$Node {
+    const hideButton: boolean = this.props.singleFileOnly && this.state.files && this.state.files.length > 0;
+    
+    return hideButton ? <label>{this.props.title || "File"} &nbsp;</label> : (
+      <FileUploadButton
+        acceptedFileTypes="*"
+        buttonText={this.props.title || "Files"}
+        iconClass="fa fa-plus"
+        onFileUpload={this.handleFileSelection.bind(this)}
+      />
     );
   }
   

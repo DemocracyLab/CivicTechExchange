@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+import simplejson as json
 
 from .forms import DemocracyLabUserCreationForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
@@ -104,6 +105,20 @@ def change_password(request):
         return redirect('/')
     else:
         return HttpResponse(status=401)
+
+
+def user_edit(request, user_id):
+    if not request.user.is_authenticated():
+        return redirect('/index/?section=LogIn')
+
+    DemocracyLabUserCreationForm.edit_user(request, user_id)
+
+    return redirect('/index/?section=Profile&id=' + user_id)
+
+
+def user_details(request, user_id):
+    user = Contributor.objects.get(id=user_id)
+    return HttpResponse(json.dumps(user.hydrate_to_json()))
 
     
 # TODO: Pass csrf token in ajax call so we can check for it

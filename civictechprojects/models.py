@@ -17,11 +17,14 @@ from taggit.models import TaggedItemBase
 class TaggedIssueAreas(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
+
 class TaggedStage(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
+
 class TaggedTechnologies(TaggedItemBase):
     content_object = models.ForeignKey('Project')
+
 
 class TaggedOrganization(TaggedItemBase):
     content_object = models.ForeignKey('Project')
@@ -86,30 +89,37 @@ class Project(models.Model):
 
 
 class ProjectLink(models.Model):
-    link_project = models.ForeignKey(Project, related_name='links')
+    # TODO: Add ForeignKey pointing to Contributor, see https://stackoverflow.com/a/20935513/6326903
+    link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True)
+    link_user = models.ForeignKey(Contributor, related_name='links', blank=True, null=True)
     link_name = models.CharField(max_length=200, blank=True)
     link_url = models.CharField(max_length=2083)
     link_visibility = models.CharField(max_length=50)
 
     @staticmethod
-    def create(project, url, name, visibility):
+    def create(owner, url, name, visibility):
         # TODO: Validate input
         link = ProjectLink()
-        link.link_project = project
         link.link_url = url
         link.link_name = name
         link.link_visibility = visibility
+
+        if type(owner) is Project:
+            link.link_project = owner
+        else:
+            link.link_user = owner
+
         return link
 
     @staticmethod
-    def merge_changes(project, links):
+    def merge_changes(owner, links):
         updated_links = list(filter(lambda link: 'id' in link, links))
-        ProjectLink.remove_links_not_in_list(project, updated_links)
+        ProjectLink.remove_links_not_in_list(owner, updated_links)
         for link_json in links:
-            link = ProjectLink.from_json(project, link_json)
+            link = ProjectLink.from_json(owner, link_json)
 
             if not link.id:
-                ProjectLink.create(project,
+                ProjectLink.create(owner,
                                    link.link_url,
                                    link.link_name,
                                    link.link_visibility).save()
@@ -121,8 +131,11 @@ class ProjectLink(models.Model):
                 existing_link.save()
 
     @staticmethod
-    def remove_links_not_in_list(project, links):
-        existing_links = ProjectLink.objects.filter(link_project=project.id)
+    def remove_links_not_in_list(owner, links):
+        if type(owner) is Project:
+            existing_links = ProjectLink.objects.filter(link_project=owner.id)
+        else:
+            existing_links = ProjectLink.objects.filter(link_user=owner.id)
         existing_link_ids = set(map(lambda link: link.id, existing_links))
         updated_link_ids = set(map(lambda link: link['id'], links))
         deleted_link_ids = list(existing_link_ids - updated_link_ids)
@@ -130,8 +143,8 @@ class ProjectLink(models.Model):
             ProjectLink.objects.get(id=link_id).delete()
 
     @staticmethod
-    def from_json(project, thumbnail_json):
-        link = ProjectLink.create(project=project,
+    def from_json(owner, thumbnail_json):
+        link = ProjectLink.create(owner=owner,
                                   url=thumbnail_json['linkUrl'],
                                   name=thumbnail_json['linkName'],
                                   visibility=thumbnail_json['visibility']
@@ -214,7 +227,9 @@ class ProjectPosition(models.Model):
 
 
 class ProjectFile(models.Model):
-    file_project = models.ForeignKey(Project, related_name='files')
+    # TODO: Add ForeignKey pointing to Contributor, see https://stackoverflow.com/a/20935513/6326903
+    file_project = models.ForeignKey(Project, related_name='files', blank=True, null=True)
+    file_user = models.ForeignKey(Contributor, related_name='files', blank=True, null=True)
     file_visibility = models.CharField(max_length=50)
     file_name = models.CharField(max_length=200)
     file_key = models.CharField(max_length=200)
@@ -223,27 +238,37 @@ class ProjectFile(models.Model):
     file_category = models.CharField(max_length=50)
 
     @staticmethod
-    def create(project, file_url, file_name, file_key, file_type, file_category, file_visibility):
+    def create(owner, file_url, file_name, file_key, file_type, file_category, file_visibility):
         # TODO: Validate input
         file = ProjectFile()
-        file.file_project = project
         file.file_url = file_url
         file.file_name = file_name
         file.file_key = file_key
         file.file_type = file_type
         file.file_category = file_category
         file.file_visibility = file_visibility
+
+        if type(owner) is Project:
+            file.file_project = owner
+        else:
+            file.file_user = owner
+
         return file
 
     @staticmethod
-    def merge_changes(project, files):
+    def merge_changes(owner, files):
         # Add new files
         added_files = filter(lambda file: 'id' not in file, files)
-        old_files = list(ProjectFile.objects.filter(file_project=project.id, file_category=FileCategory.ETC.value)
-                         .values())
+
+        if type(owner) is Project:
+            old_files = list(ProjectFile.objects.filter(file_project=owner.id, file_category=FileCategory.ETC.value)
+                             .values())
+        else:
+            old_files = list(ProjectFile.objects.filter(file_user=owner.id, file_category=FileCategory.ETC.value)
+                             .values())
 
         for file in added_files:
-            ProjectFile.from_json(project=project, file_category=FileCategory.ETC, file_json=file).save()
+            ProjectFile.from_json(owner=owner, file_category=FileCategory.ETC, file_json=file).save()
 
         # Remove files that were deleted
         old_file_ids = set(map(lambda file: file['id'], old_files))
@@ -254,21 +279,27 @@ class ProjectFile(models.Model):
             ProjectFile.objects.get(id=file_id).delete()
 
     @staticmethod
-    def remove_links_not_in_list(project, links):
-        existing_links = ProjectLink.objects.filter(link_project=project.id)
-        existing_link_ids = set(map(lambda link: link.id, existing_links))
-        updated_link_ids = set(map(lambda link: link['id'], links))
-        deleted_link_ids = list(existing_link_ids - updated_link_ids)
-        for link_id in deleted_link_ids:
-            ProjectLink.objects.get(id=link_id).delete()
+    def replace_single_file(owner, file_category, file_json):
+        if type(owner) is Project:
+            existing_file = ProjectFile.objects.filter(file_project=owner.id, file_category=file_category.value).first()
+        else:
+            existing_file = ProjectFile.objects.filter(file_user=owner.id, file_category=file_category.value).first()
+
+        if not existing_file:
+            thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+            thumbnail.save()
+        elif not file_json['key'] == existing_file.file_key:
+            thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+            thumbnail.save()
+            existing_file.delete()
 
     @staticmethod
-    def from_json(project, file_category, file_json):
+    def from_json(owner, file_category, file_json):
         file_name_parts = file_json['fileName'].split('.')
         file_name = "".join(file_name_parts[:-1])
         file_type = file_name_parts[-1]
 
-        return ProjectFile.create(project=project,
+        return ProjectFile.create(owner=owner,
                                   file_url=file_json['publicUrl'],
                                   file_name=file_name,
                                   file_key=file_json['key'],
@@ -280,6 +311,7 @@ class ProjectFile(models.Model):
         return {
             'key': self.file_key,
             'fileName': self.file_name + '.' + self.file_type,
+            'fileCategory': self.file_category,
             'publicUrl': self.file_url,
             'visibility': self.file_visibility
         }
@@ -287,6 +319,7 @@ class ProjectFile(models.Model):
 
 class FileCategory(Enum):
     THUMBNAIL = 'THUMBNAIL'
+    RESUME = 'RESUME'
     ETC = 'ETC'
 
 

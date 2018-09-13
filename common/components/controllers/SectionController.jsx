@@ -17,6 +17,8 @@ import LogInController from './LogInController.jsx'
 import SignUpController from './SignUpController.jsx'
 import ResetPasswordController from "./ResetPasswordController.jsx";
 import ChangePasswordController from "./ChangePasswordController.jsx";
+import EditProfileController from "./EditProfileController.jsx";
+import AboutUserController from "./AboutUserController.jsx";
 
 type State = {|
   section: SectionType,
@@ -62,7 +64,11 @@ class SectionController extends React.Component<{||}, State> {
       case Section.ResetPassword:
         return <ResetPasswordController />;
       case Section.ChangePassword:
-        return <ChangePasswordController />
+        return <ChangePasswordController />;
+      case Section.EditProfile:
+        return <EditProfileController />;
+      case Section.Profile:
+        return <AboutUserController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }

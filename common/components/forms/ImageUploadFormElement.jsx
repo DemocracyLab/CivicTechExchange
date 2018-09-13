@@ -9,6 +9,7 @@ import _ from 'lodash'
 
 type Props = {|
   form_id: string,
+  buttonText: ?string,
   currentImage: FileInfo
 |};
 
@@ -24,6 +25,7 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
     super();
     this.state = {
       currentImage: "",
+      buttonText: "",
       initialized: false
     };
   }
@@ -48,7 +50,7 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
           ? this._renderThumbnail()
           : this._renderThumbnailPlaceholder()
         }
-        <FileUploadButton acceptedFileTypes="image/*" buttonText="Upload Project Image" onFileUpload={this._handleFileSelection.bind(this)}/>
+        <FileUploadButton acceptedFileTypes="image/*" buttonText={this.props.buttonText || "Upload Image"} onFileUpload={this._handleFileSelection.bind(this)}/>
         <input type="hidden" ref="hiddenFormField" name={this.props.form_id} id={this.props.form_id} />
       </div>
     );

@@ -11,7 +11,9 @@ import _ from 'lodash'
 
 type Props = {|
   links: Array<LinkInfo>,
-  elementid: string
+  hiddenLinkNames: ?$ReadOnlyArray<string>,
+  elementid: string,
+  title: ?string
 |};
 type State = {|
   showAddEditModal: boolean,
@@ -100,7 +102,7 @@ class LinkList extends React.PureComponent<Props,State>  {
       <div>
         <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
 
-        <label>Project Links &nbsp;</label>
+        <label>{this.props.title || "Links"} &nbsp;</label>
         <Button
           bsSize="small"
           onClick={this.createNewLink.bind(this)}
@@ -126,8 +128,8 @@ class LinkList extends React.PureComponent<Props,State>  {
   }
 
   _renderLinks(): Array<React$Node> {
-    return this.state.links.filter((link, i) => {
-      return !(link.linkName in LinkNames)
+    return this.state.links.filter((link) => {
+      return !_.includes(this.props.hiddenLinkNames, link.linkName)
     }).map((link,i) =>
       <div key={i}>
         <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName}</a>

@@ -120,7 +120,8 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
                   <input type="text" className="form-control" id="email_useralert" name="email_useralert" maxLength="254"
                          value={this.state.formFields.email} onChange={this.onFormFieldChange.bind(this, "email")}/>
                 </div>
-
+                
+                {/*TODO: Use CountrySelector component*/}
                 <div className="form-group">
                   <label htmlFor="country">Country</label>
                   <Select
