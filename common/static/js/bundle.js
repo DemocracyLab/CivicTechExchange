@@ -104701,10 +104701,10 @@ var ProjectFilterContainer = function (_React$Component) {
           'Filter By:'
         ),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_3__common_tags_TagCategory_jsx__["a" /* default */].ISSUES, title: 'Issue Areas' }),
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_3__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED, title: 'Technology Used' }),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_3__common_tags_TagCategory_jsx__["a" /* default */].ROLE, title: 'Roles Needed' }),
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_3__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION, title: 'Communities' }),
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_3__common_tags_TagCategory_jsx__["a" /* default */].PROJECT_STAGE, title: 'Project Stage' })
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_3__common_tags_TagCategory_jsx__["a" /* default */].PROJECT_STAGE, title: 'Project Stage' }),
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_3__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED, title: 'Technologies Used' }),
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_tags_TagSelectorCollapsible_jsx__["a" /* default */], { category: __WEBPACK_IMPORTED_MODULE_3__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION, title: 'Communities' })
       );
     }
   }, {
