@@ -5,6 +5,8 @@ export const Locations = {
     "Redmond, WA",
     "Kirkland, WA",
     "Bellevue, WA",
+    "Tacoma, WA",
+    "Olympia, WA",
     "Baltimore, MD",
     "Other"
   ]

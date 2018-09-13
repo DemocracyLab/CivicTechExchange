@@ -30526,7 +30526,7 @@ var LinkNames = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Locations; });
 var Locations = {
   OTHER: "Other",
-  PRESET_LOCATIONS: ["Seattle, WA", "Redmond, WA", "Kirkland, WA", "Bellevue, WA", "Baltimore, MD", "Other"]
+  PRESET_LOCATIONS: ["Seattle, WA", "Redmond, WA", "Kirkland, WA", "Bellevue, WA", "Tacoma, WA", "Olympia, WA", "Baltimore, MD", "Other"]
 };
 
 /***/ }),
