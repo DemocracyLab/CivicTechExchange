@@ -65,13 +65,9 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
 
   initializeOptions(props: Props) {
     if(!_.isEmpty(props.options)) {
-
-      let filteredOptions = Object.keys(props.options).filter(function(key) {
-        return props.options[key]['num_times'] > 0;
-      }).map(function(key) {
-        return props.options[key]
-      });
-
+      let filteredOptions = props.options.filter(function(key) {
+          return key.num_times > 0;
+        })
       if(props.optionCategory && _.some(filteredOptions, props.optionCategory)) {
         return {optionCategoryTree:_.groupBy(filteredOptions, props.optionCategory)};
       } else {
@@ -123,7 +119,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
 
     return sortedOptions.map( (option, i) => {
       const classes = "CollapsibleMenuItem"
-      // to filter just entries and not category headers, use  if (option.num_times > 0) { return ... }
+      // to filter just entries and not category headers, use a conditional if (option.num_times > 0) { return ... }
       return <label
         key={i}
         className={classes}

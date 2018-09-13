@@ -34,7 +34,7 @@ class TagSelector extends React.PureComponent<Props, State> {
     super(props);
   
     // TODO: Convert callback into .then clause
-    const loadTagsPromise = ProjectAPIUtils.fetchTagsByCategory(this.props.category, (tagMap: Array<TagOption>) => {
+    const loadTagsPromise = ProjectAPIUtils.fetchTagsByCategory(this.props.category, false, (tagMap: Array<TagDefinition>) => {
       let displayList: Array<TagOption> = _.values(tagMap).map(function(tag){
         return {
           value: tag.tag_name,
@@ -43,7 +43,7 @@ class TagSelector extends React.PureComponent<Props, State> {
       });
       displayList = _.sortBy(displayList, ['label']);
       this.setState({
-        tagMap: tagMap,
+        tagMap: _.mapKeys(tagMap, (tag: TagDefinition) => tag.tag_name),
         displayList: displayList
       });
       
@@ -67,7 +67,7 @@ class TagSelector extends React.PureComponent<Props, State> {
   getDisplayTag(tag: TagDefinition, displayList: Array<TagOption>): TagOption {
     return displayList.find(displayTag => displayTag.value === tag.tag_name);
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     if(!_.isEmpty(nextProps.value)) {
       this.state.loadTagsPromise.then(tagOptions => {
@@ -75,7 +75,7 @@ class TagSelector extends React.PureComponent<Props, State> {
       });
     }
   }
-  
+
   handleSelection(selectedValueOrValues: TagDefinition | $ReadOnlyArray<TagDefinition>): void {
     this.setState({selected: selectedValueOrValues});
     if(selectedValueOrValues) {
@@ -86,7 +86,7 @@ class TagSelector extends React.PureComponent<Props, State> {
       this.props.onSelection(null);
     }
   }
-  
+
   render(): React$Node {
     return (
       <div>

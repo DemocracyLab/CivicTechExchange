@@ -17,7 +17,12 @@ from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
+from distutils.util import strtobool
+from django.views.decorators.cache import cache_page
 
+#TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
+
+@cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
 def tags(request):
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
@@ -25,14 +30,18 @@ def tags(request):
     if 'category' in query_terms:
         category = query_terms.get('category')[0]
         queryset = get_tags_by_category(category)
-        activetagdict = projects_tag_counts()
-        querydict = {tag.tag_name:tag for tag in queryset}
-        resultdict = {}
+        countoption = bool(strtobool(query_terms.get('getCounts')[0]))
+        if countoption == True:
+            activetagdict = projects_tag_counts()
+            querydict = {tag.tag_name:tag for tag in queryset}
+            resultdict = {}
 
-        for slug in querydict.keys():
-            resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-            resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-        tags = resultdict
+            for slug in querydict.keys():
+                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+            tags = list(resultdict.values())
+        else:
+            tags = list(queryset.values())
     else:
         queryset = Tag.objects.all()
         tags = list(queryset.values())
@@ -167,6 +176,8 @@ def projects_list(request):
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
         if 'sortField' in query_params:
             project_list = projects_by_sortField(project_list.distinct(), query_params['sortField'][0])
+        if 'location' in query_params:
+            project_list = projects_by_location(project_list.distinct(), query_params['location'][0])
 
 
     response = json.dumps(projects_with_filter_counts(project_list))
@@ -194,6 +205,10 @@ def projects_by_keyword(keyword):
 
 def projects_by_sortField(project_list, sortField):
     return project_list.order_by(sortField)
+
+
+def projects_by_location(project_list, location):
+    return project_list.filter(Q(project_location__icontains=location))
 
 
 def projects_by_issue_areas(tags):

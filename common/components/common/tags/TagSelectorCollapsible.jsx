@@ -35,7 +35,8 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
     this.state = {tags: null};
 
     // TODO: Use Flux to get tags in a single request
-    ProjectAPIUtils.fetchTagsByCategory(this.props.category, tags => {
+    // passing true to fetchTagsByCategory asks backend to return num_times in API response
+    ProjectAPIUtils.fetchTagsByCategory(this.props.category, true, tags => {
       this.setState({
         tags: tags,
         hasSubcategories: _.every(tags, tag => !_.isEmpty(tag.subcategory))
@@ -80,7 +81,7 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
           ? (
             <SelectorCollapsible
               title={this.props.title}
-              options={this.state.tags} //maybe pull out options.num_times directly and pass as prop?
+              options={this.state.tags}
               optionCategory={this.state.hasSubcategories && (tag => tag.subcategory)}
               optionDisplay={tag => this._displayTag(tag)}
               optionEnabled={tag => this._tagEnabled(tag)}
