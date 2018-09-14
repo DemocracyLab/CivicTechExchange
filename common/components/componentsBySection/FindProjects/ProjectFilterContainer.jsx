@@ -29,7 +29,7 @@ const sortOptions: $ReadOnlyArray<SelectOption>  = [{
 }, {
   value: "project_name", label: "Name - Ascending"
 }, {
-  value: "project_name", label: "Name - Descending"
+  value: "-project_name", label: "Name - Descending"
 }];
 
 const locationOptions: $ReadOnlyArray<SelectOption>  = [{value:"", label:"---"}].concat(

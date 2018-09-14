@@ -104685,7 +104685,7 @@ var sortOptions = [{
 }, {
   value: "project_name", label: "Name - Ascending"
 }, {
-  value: "project_name", label: "Name - Descending"
+  value: "-project_name", label: "Name - Descending"
 }];
 
 var locationOptions = [{ value: "", label: "---" }].concat(__WEBPACK_IMPORTED_MODULE_7__constants_ProjectConstants__["a" /* Locations */].PRESET_LOCATIONS.map(function (location) {
