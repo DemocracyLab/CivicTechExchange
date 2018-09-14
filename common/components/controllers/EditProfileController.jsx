@@ -12,10 +12,15 @@ import {LinkInfo} from "../forms/LinkInfo.jsx";
 import {FileInfo} from "../common/FileInfo.jsx";
 import ImageUploadFormElement from "../forms/ImageUploadFormElement.jsx";
 import FileUploadList from "../forms/FileUploadList.jsx";
+import {FileCategoryNames} from "../constants/FileConstants.js";
 import url from "../utils/url.js";
 import _ from 'lodash';
 
 const UserLinkNames = ['link_linkedin'];
+
+const UserFileTypes = {
+  RESUME: "RESUME"
+}
 
 type FormFields = {|
   +user_thumbnail?: FileInfo,
@@ -72,7 +77,8 @@ class EditProfileController extends React.PureComponent<{||},State> {
         postal_code: user.postal_code,
         country: user.country || defaultCountryCode,
         user_technologies: user.user_technologies,
-        user_files: user.user_files,
+        user_resume_file: user.user_files.filter((file: FileInfo) => file.fileCategory === UserFileTypes.RESUME),
+        user_files: user.user_files.filter((file: FileInfo) => file.fileCategory !== UserFileTypes.RESUME),
         user_thumbnail: user.user_thumbnail
       }
     });
