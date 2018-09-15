@@ -174,11 +174,14 @@ def projects_list(request):
         project_list = apply_tag_filters(project_list, query_params, 'stage', projects_by_stage)
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
-        if 'sortField' in query_params:
-            project_list = projects_by_sortField(project_list.distinct(), query_params['sortField'][0])
-        if 'location' in query_params:
-            project_list = projects_by_location(project_list.distinct(), query_params['location'][0])
 
+        if 'location' in query_params:
+            project_list = projects_by_location(project_list, query_params['location'][0])
+
+        project_list = project_list.distinct()
+
+        if 'sortField' in query_params:
+            project_list = projects_by_sortField(project_list, query_params['sortField'][0])
 
     response = json.dumps(projects_with_filter_counts(project_list))
     return HttpResponse(response)
