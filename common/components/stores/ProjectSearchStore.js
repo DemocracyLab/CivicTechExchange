@@ -153,7 +153,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = this._addTagFilters(state, findProjectsArgs.stage);
     state = this._addKeywordToState(state, findProjectsArgs.keyword);
     state = this._addSortFieldToState(state, findProjectsArgs.sortField);
-    state = this._addLocationToState(state, decodeURI(findProjectsArgs.location));
+    state = this._addLocationToState(state, findProjectsArgs.location && decodeURI(findProjectsArgs.location));
 
     return state;
   }
