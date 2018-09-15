@@ -20,17 +20,13 @@ type State = {|
   location: string
 |};
 
-const sortOptions: $ReadOnlyArray<SelectOption>  = [{
-  value: "", label: "---"
-}, {
-  value: "project_date_modified", label: "Date Modified - Ascending"
-}, {
-  value: "-project_date_modified", label: "Date Modified - Descending"
-}, {
-  value: "project_name", label: "Name - Ascending"
-}, {
-  value: "-project_name", label: "Name - Descending"
-}];
+const sortOptions: $ReadOnlyArray<SelectOption>  = [
+    {value: "", label: "---"},
+    // {value: "project_date_modified", label: "Date Modified - Ascending"},
+    {value: "-project_date_modified", label: "Date Modified"},
+    {value: "project_name", label: "Name - Ascending"},
+    {value: "-project_name", label: "Name - Descending"}
+  ];
 
 const locationOptions: $ReadOnlyArray<SelectOption>  = [{value:"", label:"---"}].concat(
   Locations.PRESET_LOCATIONS.map(location => ({value:location, label:location})));
