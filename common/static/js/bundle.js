@@ -104676,9 +104676,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var sortOptions = [{ value: "", label: "---" },
+var sortOptions = [
+// {value: "", label: "---"},
 // {value: "project_date_modified", label: "Date Modified - Ascending"},
-{ value: "-project_date_modified", label: "Date Modified" }, { value: "project_name", label: "Name - Ascending" }, { value: "-project_name", label: "Name - Descending" }];
+{ value: "", label: "Date Modified" }, { value: "project_name", label: "Name - Ascending" }, { value: "-project_name", label: "Name - Descending" }];
 
 var locationOptions = [{ value: "", label: "---" }].concat(__WEBPACK_IMPORTED_MODULE_7__constants_ProjectConstants__["a" /* Locations */].PRESET_LOCATIONS.map(function (location) {
   return { value: location, label: location };

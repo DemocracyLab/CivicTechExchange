@@ -182,6 +182,8 @@ def projects_list(request):
 
         if 'sortField' in query_params:
             project_list = projects_by_sortField(project_list, query_params['sortField'][0])
+        else:
+            project_list = projects_by_sortField(project_list, '-project_date_modified')
 
     response = json.dumps(projects_with_filter_counts(project_list))
     return HttpResponse(response)
