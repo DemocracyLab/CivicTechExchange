@@ -19,25 +19,25 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
       searchFilters: ""
     };
   }
-  
+
   openAlertSignup() {
     this.setState({
       showAlertSignupModal: true,
       searchFilters: document.location.search
     });
   }
-  
+
   handleCloseAlertSignup() {
     this.setState({showAlertSignupModal: false});
   }
-  
+
   render(): React$Node {
     return (
       <div>
       	<p className="IntroText">
-        	Welcome to DemocracyLab! Use the filters and search bar below to find volunteer opportunities with tech-for-good projects in Seattle.
+        	Welcome to DemocracyLab! Use the filters and search bar below to find volunteer opportunities with tech-for-good projects.
       	</p>
-        
+
         <AlertSignupModal
           searchFilters={this.state.searchFilters}
           showModal={this.state.showAlertSignupModal}
@@ -47,7 +47,7 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
           <i className="fa fa-bell" aria-hidden="true"></i>
           Sign Up for Alerts
         </Button>
-        
+
         <ProjectSearchBar />
         <ProjectTagContainer />
       </div>
