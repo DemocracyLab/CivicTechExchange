@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --config webpack.config.js && python manage.py collectstatic --noinput",
+    "sass": "node-sass civictechprojects/static/css/styles.scss -o civictechprojects/static/css/compiled",
     "flow": "flow",
     "postinstall": "webpack --config webpack.config.js && python manage.py collectstatic --noinput"
   },
@@ -20,6 +21,7 @@
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
+    "node-sass": "^4.9.3",
     "path": "^0.12.7",
     "react": "^16.4.2",
     "react-bootstrap": "^0.31.5",
