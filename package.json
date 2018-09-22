@@ -10,7 +10,8 @@
     "build": "webpack --config webpack.config.js && python manage.py collectstatic --noinput",
     "flow": "flow",
     "postinstall": "webpack --config webpack.config.js && python manage.py collectstatic --noinput",
-    "cypress": "node_modules/.bin/cypress open"
+    "cypress": "node_modules/.bin/cypress open",
+    "cypress:all": "node_modules/.bin/cypress run"
   },
   "dependencies": {
     "bluebird": "^3.5.2",
