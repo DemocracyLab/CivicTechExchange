@@ -9,7 +9,8 @@
   "scripts": {
     "build": "webpack --config webpack.config.js && python manage.py collectstatic --noinput",
     "flow": "flow",
-    "postinstall": "webpack --config webpack.config.js && python manage.py collectstatic --noinput"
+    "postinstall": "webpack --config webpack.config.js && python manage.py collectstatic --noinput",
+    "cypress": "node_modules/.bin/cypress open"
   },
   "dependencies": {
     "bluebird": "^3.5.2",
@@ -37,6 +38,7 @@
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "child_process": "^1.0.2",
+    "cypress": "^3.1.0",
     "fs": "0.0.1-security",
     "net": "^1.0.2",
     "sync-exec": "~0.6.2",
