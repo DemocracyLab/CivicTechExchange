@@ -1,0 +1,11 @@
+[
+    {
+        "model": "civictechexchange.Project",
+        "pk": 1,
+        "fields": {
+            "project_name": "foo",
+            "project_location": "Bellevue, WA",
+            "project_description": "testing"
+        }
+    }
+]

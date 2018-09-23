@@ -1,6 +1,10 @@
 [
     {
-        "username": "ldemocracy770@gmail.com",
-        "password": "D3mocracyLab!"
+        "model": "user",
+        "pk": 1,
+        "fields": {
+            "username": "ldemocracy770@gmail.com",
+            "password": "D3mocracyLab!"
+        }
     }
 ]

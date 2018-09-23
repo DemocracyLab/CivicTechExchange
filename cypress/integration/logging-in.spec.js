@@ -19,8 +19,8 @@ describe('Log In', function(){
       })
   
       it('redirects to Find Projects on success', function(){
-        cy.get('input[name=username]').type(this.users[0].username)
-        cy.get('input[name=password]').type(this.users[0].password).type('{enter}')
+        cy.get('input[name=username]').type(this.users[0].fields.username)
+        cy.get('input[name=password]').type(this.users[0].fields.password).type('{enter}')
   
         // we should be redirected to Find Projects
         cy.url().should('include', '/index/?section=FindProjects')
@@ -34,7 +34,7 @@ describe('Log In', function(){
       })
   
       it('can visit Find Projects', function(){
-        cy.loginByForm(this.users[0].username, this.users[0].password)
+        cy.loginByForm(this.users[0].fields.username, this.users[0].fields.password)
         cy.visit('/index/?section=FindProjects')
         cy.get('p.IntroText').should('contain', 'Welcome to DemocracyLab!')
       })

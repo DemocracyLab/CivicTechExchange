@@ -34,4 +34,4 @@ Cypress.Commands.add('loginByForm', (username, password) => {
     cy.visit('/index/?section=LogIn')
     cy.get('input[name=username]').type(username)
     cy.get('input[name=password]').type(password).type('{enter}')
-  })
+})
