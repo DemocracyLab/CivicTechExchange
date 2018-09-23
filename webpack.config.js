@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 // TODO: Figure out how to slim down the bundle .js
 module.exports = {
     entry: "./common/components/mount-components.js",
@@ -27,6 +28,7 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
             'fs': 'empty'
-        })
+        }),
+        new ContextReplacementPlugin(/moment[\/\\]locale$/, /en/)
     ]
 };
