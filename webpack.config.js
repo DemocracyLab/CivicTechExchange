@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 // TODO: Figure out how to slim down the bundle .js
 module.exports = {
     entry: "./common/components/mount-components.js",
@@ -10,8 +11,16 @@ module.exports = {
     },
     module: {
         rules: [
-            { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-            { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ }
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/
+            },
+            {
+                test: /\.jsx$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/
+            }
         ]
     },
     resolve: {
@@ -27,6 +36,8 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
             'fs': 'empty'
-        })
+        }),
+        new LodashModuleReplacementPlugin,
+        new webpack.optimize.UglifyJsPlugin
     ]
 };
