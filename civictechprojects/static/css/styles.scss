@@ -1,4 +1,6 @@
 @import '_vars';
+@import 'vendor/_react-select.min';
+// @import 'vendor/dropdown.css'; -- Part of Bootstrap3 for react-select dropdown rendering; not required unless we use dropdowns again (sep 20 2018)
 @import 'partials/_AlertSignupModal';
 @import 'partials/_ContextualCollapsible';
 @import 'partials/_FlashMessage';
@@ -19,6 +21,5 @@
 @import 'partials/_TagsDisplay';
 @import 'partials/_LogInController';
 @import 'partials/_projects';
-// @import 'vendor/dropdown.css'; -- Part of Bootstrap3 for react-select dropdown rendering; not required unless we use dropdowns again (sep 20 2018)
 @import 'partials/_project_signup';
 @import 'partials/_Global';
