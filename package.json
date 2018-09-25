@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --config webpack.config.js && python manage.py collectstatic --noinput",
-    "sass": "node-sass civictechprojects/static/css/styles.scss -o civictechprojects/static/css/compiled",
+    "sass": "node-sass civictechprojects/static/css/styles.scss -o civictechprojects/static/css/compiled --output-style compressed",
     "flow": "flow",
     "postinstall": "webpack --config webpack.config.js && python manage.py collectstatic --noinput"
   },
