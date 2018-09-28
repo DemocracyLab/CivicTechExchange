@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 // TODO: Figure out how to slim down the bundle .js
 module.exports = {
     entry: "./common/components/mount-components.js",
@@ -8,10 +9,17 @@ module.exports = {
         path: path.resolve(__dirname, "./common/static/js"),
         filename: "bundle.js"
     },
+    watch: true,
     module: {
-        rules: [
-            { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-            { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ }
+        loaders: [
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                query: {
+                  presets: ['react', 'babel-preset-react-hmre']
+                },
+            }
         ]
     },
     resolve: {
@@ -27,6 +35,11 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
             'fs': 'empty'
-        })
+        }),
+        new HtmlWebpackPlugin({
+            title: 'Dev DL',
+            template: 'civictechprojects/index.html'
+        }),
+        new webpack.HotModuleReplacementPlugin()
     ]
 };
