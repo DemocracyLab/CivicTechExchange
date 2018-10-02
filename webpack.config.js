@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 // TODO: Figure out how to slim down the bundle .js
 module.exports = {
     entry: "./common/components/mount-components.js",
@@ -38,6 +39,7 @@ module.exports = {
             'fs': 'empty'
         }),
         new LodashModuleReplacementPlugin,
-        new webpack.optimize.UglifyJsPlugin
+        new webpack.optimize.UglifyJsPlugin,
+        new ContextReplacementPlugin(/moment[\/\\]locale$/, /en/)
     ]
 };
