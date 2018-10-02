@@ -8,8 +8,8 @@
 @import "vendor/bootstrap/mixins";
 @import "vendor/bootstrap/root";
 @import "vendor/bootstrap/reboot";
+  //then import selected Bootstrap components (what we use)
 @import "vendor/bootstrap/type";
-  //then import selected Bootstrap components (only what we use)
 @import 'vendor/bootstrap/_buttons';
   //import DemocracyLab-written partials
 @import 'partials/AlertSignupModal';
