@@ -2,6 +2,7 @@
 @import '_vars';
   //import third-party CSS first, so we can use it and override it
 @import 'vendor/_react-select.min';
+@import 'vendor/bootstrap/_buttons';
   //import DemocracyLab-written partials
 @import 'partials/_AlertSignupModal';
 @import 'partials/_ContextualCollapsible';
