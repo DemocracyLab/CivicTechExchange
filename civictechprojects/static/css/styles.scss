@@ -1,6 +1,8 @@
+  //import variables first, to let them be globally accessible. Don't overwrite Bootstrap vars.
 @import '_vars';
+  //import third-party CSS first, so we can use it and override it
 @import 'vendor/_react-select.min';
-// @import 'vendor/dropdown.css'; -- Part of Bootstrap3 for react-select dropdown rendering; not required unless we use dropdowns again (sep 20 2018)
+  //import DemocracyLab-written partials
 @import 'partials/_AlertSignupModal';
 @import 'partials/_ContextualCollapsible';
 @import 'partials/_FlashMessage';
@@ -20,6 +22,10 @@
 @import 'partials/_SubHeader';
 @import 'partials/_TagsDisplay';
 @import 'partials/_LogInController';
+@import 'partials/_Global';
+
+
+//TODO: Test these. If we don't use them delete and remove from this file before PR.
+// @import 'vendor/dropdown.css'; -- Part of Bootstrap3 for react-select dropdown rendering; not required unless we use dropdowns again (sep 20 2018)
 // @import 'partials/_projects'; -- doesn't seem to be used. remove?
 // @import 'partials/_project_signup'; -- doesn't seem to be used. remove?
-@import 'partials/_Global';
