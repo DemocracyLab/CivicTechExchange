@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
-// TODO: Investigate pulling the SASS compile in here instead of as an npm script
+const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+// TODO: Figure out how to move sass build in here instead of npm script for performance
 module.exports = {
     entry: "./common/components/mount-components.js",
     target: 'web',
@@ -27,6 +28,7 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
             'fs': 'empty'
-        })
+        }),
+        new ContextReplacementPlugin(/moment[\/\\]locale$/, /en/)
     ]
 };
