@@ -10,7 +10,9 @@
 @import "vendor/bootstrap/reboot";
   //then import selected Bootstrap components (what we use)
 @import "vendor/bootstrap/type";
-@import 'vendor/bootstrap/_buttons';
+@import 'vendor/bootstrap/buttons';
+@import 'vendor/bootstrap/modal';
+@import 'vendor/bootstrap/dropdown';
   //import DemocracyLab-written partials
 @import 'partials/AlertSignupModal';
 @import 'partials/ContextualCollapsible';
