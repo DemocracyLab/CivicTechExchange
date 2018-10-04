@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-// TODO: Figure out how to slim down the bundle .js
+// TODO: Investigate pulling the SASS compile in here instead of as an npm script
 module.exports = {
     entry: "./common/components/mount-components.js",
     target: 'web',
