@@ -166,3 +166,26 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'custom_error_handler': {
+            'class': 'democracylab.logging.CustomErrorHandler'
+        }
+    },
+    'loggers': {
+        # Override global logger
+        '': {
+            'handlers': ['custom_error_handler'],
+            'level': 'ERROR',
+            'propagate': True
+        },
+    },
+}
