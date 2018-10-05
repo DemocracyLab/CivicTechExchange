@@ -30,9 +30,6 @@ def signup(request):
         form = DemocracyLabUserCreationForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data.get('email')
-            # TODO: Remove this test line
-            if email == 'crash@me.plz':
-                x = 1/0
             raw_password = form.cleaned_data.get('password1')
             # TODO: Form validation
             contributor = Contributor(
