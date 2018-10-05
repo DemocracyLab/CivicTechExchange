@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import dj_database_url
 from distutils.util import strtobool
+# from .logging import CustomErrorHandler
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -166,3 +167,26 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'custom_error_handler': {
+            'class': 'democracylab.logging.CustomErrorHandler'
+        }
+    },
+    'loggers': {
+        # Override global logger
+        '': {
+            'handlers': ['custom_error_handler'],
+            'level': 'ERROR',
+            'propagate': True
+        },
+    },
+}
