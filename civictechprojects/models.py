@@ -286,10 +286,11 @@ class ProjectFile(models.Model):
         else:
             existing_file = ProjectFile.objects.filter(file_user=owner.id, file_category=file_category.value).first()
 
-        if is_json_field_empty(file_json) and existing_file:
+        is_empty_field = is_json_field_empty(file_json)
+        if is_empty_field and existing_file:
             # Remove existing file
             existing_file.delete()
-        else:
+        elif not is_empty_field:
             if not existing_file:
                 # Add new file
                 thumbnail = ProjectFile.from_json(owner, file_category, file_json)
