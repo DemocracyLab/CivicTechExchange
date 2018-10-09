@@ -1,13 +1,17 @@
-//DemocracyLab site color variables
-$dl-bg: #f6f7f8; //offwhite site background color
-$dl-component-bg: #ffffff; //individual component background
-$dl-black: #222629; //nav bar background, etc
-$dl-orange: #ffa500; // nav bar selected color, create project btn
+//pattern for variable names: generic-to-specific.
+//when possible name variables after function
 
-//Component color variables
-$dl-btn-confirm: #86c232; // standard confirm button green
-$dl-btn-confirm-border: #61892f; //darker green accent for btn-confirm
-$dl-project-tag-bg: #add8e6; //"technologies used" tags on project page
-$btn-disabled: #808080; // any button in a disabled state
-$msg-error: #ffcfcf; //replaces flash-message RGBA; for error alerts only
-$msg-info: #24c1ff; //replaces flash-message RGBA; for all non-error messages
+//color palette variables
+$color-black: #222629; //nav bar background, etc
+$color-orange: #ffa500; // orange
+$color-green: #86c232;
+$color-green-dark: #61892f;
+$color-text-light: #ffffff;
+$color-text-dark: #222629;
+$color-disabled: #808080; // any item (e.g. button) in a disabled state
+
+//component variables
+$background-default: #f6f7f8; //offwhite site background color
+$background-component: #ffffff; //individual component background
+$background-info: #add8e6;
+$background-error: #ffcfcf;
