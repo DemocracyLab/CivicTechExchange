@@ -23,7 +23,7 @@
 @import 'partials/LandingController';
 @import 'partials/MainHeader';
 @import 'partials/MainFooter';
-@import 'partials/project_signup'; // has a modal opacity rule required for bootstrap-modals?
+@import 'partials/project_signup'; // has a modal opacity rule required for bootstrap-modals, maybe pull that out if we dont use the rest of this
 @import 'partials/MyProjectCard';
 @import 'partials/MyProjectsController';
 @import 'partials/ProjectCard';
@@ -39,6 +39,6 @@
 
 
 //TODO: Test these. If we don't use them delete and remove from this file before PR.
-// @import 'vendor/dropdown.css'; -- Part of Bootstrap3 for react-select dropdown rendering; not required unless we use dropdowns again (sep 20 2018)
+// @import 'vendor/dropdown.css'; -- Part of Bootstrap3 for react-select dropdown rendering; not required? We can probably use bootstrap 4 _dropdown?
 // @import 'partials/project'; -- note singular - s doesn't seem to be used. remove?
 // @import 'partials/projects'; -- note plural. what's this?
