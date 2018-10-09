@@ -1,17 +1,17 @@
 //pattern for variable names: generic-to-specific.
 //when possible name variables after function
 
-//color palette variables
-$color-black: #222629; //nav bar background, etc
-$color-orange: #ffa500; // orange
+//colors
+$color-orange: #f79e02; // brand
 $color-green: #86c232;
 $color-green-dark: #61892f;
 $color-text-light: #ffffff;
 $color-text-dark: #222629;
-$color-disabled: #808080; // any item (e.g. button) in a disabled state
+$color-disabled: #808080; // any item in a disabled state
 
-//component variables
-$background-default: #f6f7f8; //offwhite site background color
-$background-component: #ffffff; //individual component background
-$background-info: #add8e6;
-$background-error: #ffcfcf;
+//background colors
+$color-background-default: #f6f7f8; //site body
+$color-background-dark: #222629; //nav bar, footer
+$color-background-light: #ffffff; //individual components
+$color-background-info: #add8e6; // info messages
+$color-background-error: #ffcfcf; //error messages
