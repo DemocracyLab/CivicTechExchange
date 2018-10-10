@@ -48,6 +48,7 @@ def signup(request):
         else:
             # TODO inform client of form invalidity
             print('Invalid form', form.errors.as_json())
+            messages.error(request, form.errors.as_json(escape_html=True))
             return redirect('/index/?section=SignUp')
     else:
         return redirect('/index/?section=SignUp')
