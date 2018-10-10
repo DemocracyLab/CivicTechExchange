@@ -17,7 +17,7 @@
 }
 
 .ProjectSearchBar-submit {
-  background-color: #86c232;
+  background-color: $color-green;
   border: 0;
   border-radius: 5px;
   color: white;
@@ -30,6 +30,6 @@
 }
 
 button.ProjectSearchBar-submit:disabled {
-  background-color: #ededed;
+  background-color: $color-grey-disabled;
   color: #7a7a7a;
 }

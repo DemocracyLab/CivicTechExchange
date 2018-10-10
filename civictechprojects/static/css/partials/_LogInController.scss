@@ -18,7 +18,7 @@
 }
 
 .LogInController-signInButton {
-  background-color: #86c232;
+  background-color: $color-green;
   border: none;
   border-radius: 5px;
   color: white;
@@ -30,7 +30,7 @@
 }
 
 .LogInController-signInButton:disabled {
-  background-color: #dddddd;
+  background-color: $color-grey-disabled;
   cursor: no-drop;
 }
 

@@ -1,5 +1,5 @@
 //import variables first (be aware of Bootstrap var names)
-@import '_vars';
+@import 'vars';
 //import third-party CSS, so we can use it and override it
   //import required Bootstrap (foundation elements)
 @import "vendor/bootstrap/functions";
@@ -13,7 +13,7 @@
 @import 'vendor/bootstrap/dropdown';
 @import 'vendor/bootstrap/modal';
   //import other third party CSS
-@import 'vendor/_react-select.min';
+@import 'vendor/react-select.min';
 //import DemocracyLab-written partials
 @import 'partials/AlertSignupModal';
 @import 'partials/ContextualCollapsible';

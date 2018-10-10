@@ -38,32 +38,32 @@
   width: 174px;
   height: 35px;
   background: none;
-  border: solid 1px #61892f;
+  border: solid 1px $color-green-dark;
   border-radius: 5px;
   text-align: center;
-  color: #61892f;
+  color: $color-green-dark;
 }
 
 .upload_btn_sm {
   width: 81px;
   height: 27px;
   background: none;
-  border: solid 1px #61892f;
+  border: solid 1px $color-green-dark;
   border-radius: 5px;
   text-align: center;
-  color: #61892f;
+  color: $color-green-dark;
 }
 .save_btn {
   width: 130px;
   height: 35px;
   border-radius: 5px;
-  background-color: #86c232;
+  background-color: $color-green;
   border: 0px;
   color: #ffffff;
 }
 
 input[type="submit"]:disabled {
-  background: grey;
+  background: $color-grey-disabled;
 }
 
 div.modal {

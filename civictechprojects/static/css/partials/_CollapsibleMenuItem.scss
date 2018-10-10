@@ -14,7 +14,7 @@
 
 .CollapsibleMenuItem:hover {
   color: white;
-  background-color: #61892f;
+  background-color: $color-green-dark;
 }
 
 .CollapsibleMenuItem > input[type=checkbox] {
