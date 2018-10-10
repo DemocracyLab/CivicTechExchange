@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
-// TODO: Figure out how to slim down the bundle .js
+// TODO: Figure out how to move sass build in here instead of npm script for performance
 module.exports = {
     entry: "./common/components/mount-components.js",
     target: 'web',
