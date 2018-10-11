@@ -2,7 +2,7 @@
   background-color: $color-orange;
   border: none;
   border-radius: 5px;
-  color:white;
+  color: $color-text-light;
   display: inline-table;
   font-size: 15px;
   margin-top: 6px;
@@ -20,7 +20,7 @@
 }
 
 .SubHeader-sectionButton {
-  color: white;
+  color: $color-text-light;
   display: inline-block;
   font-weight: bold;
   margin-top: 18px;

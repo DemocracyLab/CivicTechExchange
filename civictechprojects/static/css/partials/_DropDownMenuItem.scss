@@ -5,7 +5,7 @@
 }
 
 .DropDownCategoryItem-root.unselected:hover {
-  color: white;
+  color: $color-text-light;
   background-color: $color-green-dark;
 }
 
@@ -20,6 +20,6 @@
 }
 
 .DropDownMenuItem-root:hover {
-  color: white;
+  color: $color-text-light;
   background-color: $color-green-dark;
 }

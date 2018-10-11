@@ -1,7 +1,7 @@
 .MainFooter-footer {
   background-color: #222629;
   bottom: 0;
-  color: white;
+  color: $color-text-light;
   font-weight: bold;
   padding: 10px;
   position: fixed;
@@ -14,7 +14,7 @@
 }
 
 .MainFooter-footer-link a {
-  color: white;
+  color: $color-text-light;
   text-transform: uppercase;
   padding-right: 30px;
 }

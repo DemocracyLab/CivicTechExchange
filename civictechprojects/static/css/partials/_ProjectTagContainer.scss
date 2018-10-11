@@ -1,5 +1,5 @@
 .ProjectTagContainer-root {
-  background-color: white;
+  background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
   border-top: none;
   clear: both;
@@ -17,7 +17,7 @@ button.ResetSearch {
   background-color: $color-green;
   border: 0;
   border-radius: 5px;
-  color: white;
+  color: $color-text-light;
   cursor: pointer;
   display: inline-block;
   font-size: 14px;

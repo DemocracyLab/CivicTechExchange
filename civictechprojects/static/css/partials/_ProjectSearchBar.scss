@@ -1,5 +1,5 @@
 .ProjectSearchBar-root {
-  background-color: white;
+  background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
   height: 64px;
 }
@@ -20,7 +20,7 @@
   background-color: $color-green;
   border: 0;
   border-radius: 5px;
-  color: white;
+  color: $color-text-light;
   cursor: pointer;
   float: right;
   font-size: 14px;

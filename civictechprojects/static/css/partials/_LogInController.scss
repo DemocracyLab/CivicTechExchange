@@ -1,5 +1,5 @@
 .LogInController-root {
-  background-color: white;
+  background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
   font-weight: 300;
   margin: 168px 25%;
@@ -21,7 +21,7 @@
   background-color: $color-green;
   border: none;
   border-radius: 5px;
-  color: white;
+  color: $color-text-light;
   cursor: pointer;
   font-size: 19px;
   height: 42px;
