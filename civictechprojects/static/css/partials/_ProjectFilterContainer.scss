@@ -1,5 +1,5 @@
 .ProjectFilterContainer-root {
-  background-color: #f7f7f7;
+  background-color: $color-background-default;
   border-top: 0;
   padding: 10px;
   width: 280px;
@@ -11,7 +11,7 @@
 }
 
 .ProjectFilterContainer-label {
-  color: #727272;
+  color: $color-text-dark;
   font-size: 16px;
   margin-right: 50px;
   margin-top: 2px;

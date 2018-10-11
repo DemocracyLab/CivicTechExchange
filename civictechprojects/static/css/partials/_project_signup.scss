@@ -17,7 +17,7 @@
 }
 
 .wrapper-gray {
-  background-color: #f6f7f8;
+  background-color: $color-background-default;
 }
 
 .upload_img {
@@ -59,7 +59,7 @@
   border-radius: 5px;
   background-color: $color-green;
   border: 0px;
-  color: #ffffff;
+  color: $color-text-light;
 }
 
 input[type="submit"]:disabled {
