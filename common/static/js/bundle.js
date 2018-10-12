@@ -91754,7 +91754,7 @@ var MainHeader = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_4__utils_CurrentUser_js__["a" /* default */].isLoggedIn() ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["c" /* DropdownButton */],
         {
-          style: { cursor: "pointer", textDecoration: "none", color: "black" },
+          className: 'MainHeader-dropdownButton',
           bsStyle: 'link',
           title: __WEBPACK_IMPORTED_MODULE_4__utils_CurrentUser_js__["a" /* default */].firstName() + ' ' + __WEBPACK_IMPORTED_MODULE_4__utils_CurrentUser_js__["a" /* default */].lastName(),
           noCaret: true,
