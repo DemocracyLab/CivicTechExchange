@@ -35522,7 +35522,7 @@ var LinkList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
           {
-            className: 'btn-background-grey',
+            className: 'btn-background-project',
             bsSize: 'small',
             onClick: this.createNewLink.bind(this)
           },
@@ -37025,7 +37025,7 @@ var FileUploadList = function (_React$PureComponent) {
         this.props.title || "File",
         ' \xA0'
       ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_upload_FileUploadButton_jsx__["a" /* default */], {
-        className: 'btn-background-grey',
+        className: 'btn-background-project',
         acceptedFileTypes: '*',
         buttonText: this.props.title || "Files",
         iconClass: 'fa fa-plus',
@@ -41576,6 +41576,7 @@ var FileUploadButton = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
             {
+              className: 'btn-background-project',
               bsSize: 'small',
               onClick: this._handleClick.bind(this)
             },
@@ -88538,7 +88539,7 @@ var PositionList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
           {
-            className: 'btn-background-grey',
+            className: 'btn-background-project',
             bsSize: 'small',
             onClick: this.createNewPosition.bind(this)
           },
