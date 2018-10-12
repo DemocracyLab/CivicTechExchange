@@ -104,7 +104,7 @@ class LinkList extends React.PureComponent<Props,State>  {
 
         <label>{this.props.title || "Links"} &nbsp;</label>
         <Button
-          className="background-grey"
+          className="btn-background-grey"
           bsSize="small"
           onClick={this.createNewLink.bind(this)}
         >

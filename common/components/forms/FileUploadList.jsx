@@ -100,7 +100,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
 
     return hideButton ? <label>{this.props.title || "File"} &nbsp;</label> : (
       <FileUploadButton
-        className="background-grey"
+        className="btn-background-grey"
         acceptedFileTypes="*"
         buttonText={this.props.title || "Files"}
         iconClass="fa fa-plus"
