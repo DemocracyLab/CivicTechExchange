@@ -42,7 +42,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     return (
       <div className="AboutProjectController-root">
         <div className="container-fluid">
-          <div style={{backgroundColor: "white"}}>
+          <div className="background-light">
             <div className="row" style={{margin: "30px 0 0 0", padding: "10px 0"}}>
               <div className="col-sm-5">
                 <div className="row">
@@ -146,7 +146,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     //replaces specific linkNames for readability
     return LinkNames[input] || input;
   }
-  
+
   _legibleFileName(input: FileInfo) {
     //replaces specific file names for readability
     return FileCategoryNames[input.fileCategory] || input.fileName;

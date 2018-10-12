@@ -34,7 +34,7 @@ class PositionList extends React.PureComponent<Props,State>  {
       positionToDelete: null
     };
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     if(nextProps.positions) {
       this.setState({positions: nextProps.positions || []});
@@ -45,26 +45,26 @@ class PositionList extends React.PureComponent<Props,State>  {
   createNewPosition(): void {
     this.openModal(null);
   }
-  
+
   onModalCancel(): void {
     this.setState({showAddEditModal: false})
   }
-  
+
   editPosition(position: PositionInfo): void {
     this.openModal(position);
   }
-  
+
   savePosition(position: PositionInfo): void {
     if(!this.state.existingPosition) {
       this.state.positions.push(position);
     } else {
       _.assign(this.state.existingPosition, position);
     }
-  
+
     this.setState({showAddEditModal: false});
     this.updatePositionsField();
   }
-  
+
   updatePositionsField(): void {
     this.refs.hiddenFormField.value = JSON.stringify(this.state.positions);
   }
@@ -75,14 +75,14 @@ class PositionList extends React.PureComponent<Props,State>  {
       existingPosition: position
     });
   }
-  
+
   askForDeleteConfirmation(positionToDelete: number): void {
     this.setState({
       positionToDelete: positionToDelete,
       showDeleteModal: true
     })
   }
-  
+
   confirmDelete(confirmed: boolean): void {
     if(confirmed) {
       this.state.positions.splice(this.state.positionToDelete, 1);
@@ -93,13 +93,14 @@ class PositionList extends React.PureComponent<Props,State>  {
       positionToDelete: null
     })
   }
-  
+
   render(): React$Node {
     return (
       <div>
         <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
         <label>Roles Needed &nbsp;</label>
         <Button
+          className="background-grey"
           bsSize="small"
           onClick={this.createNewPosition.bind(this)}
         >
@@ -114,7 +115,7 @@ class PositionList extends React.PureComponent<Props,State>  {
           onSavePosition={this.savePosition.bind(this)}
           onCancel={this.onModalCancel.bind(this)}
         />
-        
+
         <ConfirmationModal
           showModal={this.state.showDeleteModal}
           message="Do you want to delete this position?"
@@ -123,7 +124,7 @@ class PositionList extends React.PureComponent<Props,State>  {
       </div>
     );
   }
-  
+
   _renderPositions(): Array<React$Node> {
     return this.state.positions.map((position,i) => {
       const positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;

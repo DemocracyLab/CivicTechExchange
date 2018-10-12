@@ -77938,7 +77938,7 @@ var AboutProjectController = function (_React$PureComponent) {
           { className: 'container-fluid' },
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'div',
-            { style: { backgroundColor: "white" } },
+            { className: 'background-light' },
             __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
               'div',
               { className: 'row', style: { margin: "30px 0 0 0", padding: "10px 0" } },
@@ -91508,7 +91508,7 @@ var AboutUserController = function (_React$PureComponent) {
           { className: 'container-fluid' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
-            { style: { backgroundColor: "white" } },
+            { className: 'background-light' },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'div',
               { className: 'row', style: { margin: "30px 0 0 0", padding: "10px 0" } },
