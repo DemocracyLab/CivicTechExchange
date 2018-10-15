@@ -1,4 +1,7 @@
 body {
-  background-color: #f6f7f8;
+  background-color: $color-background-default;
 }
-
+//these are "helper classes" with one declaration each
+.background-light {
+  background-color: $color-background-light;
+}

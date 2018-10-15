@@ -1,6 +1,6 @@
 .ProjectTagContainer-root {
-  background-color: white;
-  border: solid 1px #cecece;
+  background-color: $color-background-light;
+  border: solid 1px $color-grey-frame-border;
   border-top: none;
   clear: both;
   min-height: 95px;
@@ -14,10 +14,10 @@
 
 /*if the reset search button is used elsewhere, split this out of ProjectTagContainer.css */
 button.ResetSearch {
-  background-color: #86c232;
+  background-color: $color-green;
   border: 0;
   border-radius: 5px;
-  color: white;
+  color: $color-text-light;
   cursor: pointer;
   display: inline-block;
   font-size: 14px;
@@ -25,5 +25,5 @@ button.ResetSearch {
   padding: 10px 30px;
 }
 button.ResetSearch:disabled {
-  background-color: #dddddd;
+  background-color: $color-grey-disabled;
 }

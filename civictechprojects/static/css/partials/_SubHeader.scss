@@ -1,8 +1,8 @@
 .SubHeader-createProject {
-  background-color:orange;
+  background-color: $color-orange;
   border: none;
   border-radius: 5px;
-  color:white;
+  color: $color-text-light;
   display: inline-table;
   font-size: 15px;
   margin-top: 6px;
@@ -14,13 +14,13 @@
 }
 
 .SubHeader-root {
-  background-color: #222629;
+  background-color: $color-background-dark;
   height: 50px;
   padding: 0 80px 0 80px;
 }
 
 .SubHeader-sectionButton {
-  color: white;
+  color: $color-text-light;
   display: inline-block;
   font-weight: bold;
   margin-top: 18px;
