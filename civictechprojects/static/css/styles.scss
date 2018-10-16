@@ -7,6 +7,7 @@
 @import "vendor/bootstrap/mixins";
 @import "vendor/bootstrap/root";
 @import "vendor/bootstrap/reboot";
+@import 'vendor/bootstrap/grid';
   //then import selected Bootstrap components (what we use)
 @import "vendor/bootstrap/type";
 @import 'vendor/bootstrap/buttons';
