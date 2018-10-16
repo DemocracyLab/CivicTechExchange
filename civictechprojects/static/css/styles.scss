@@ -13,7 +13,9 @@
 @import 'vendor/bootstrap/dropdown';
 @import 'vendor/bootstrap/modal';
   //import other third party CSS
-@import 'vendor/react-select.min';
+@import 'vendor/_react-select.min';
+  //import Bootstrap3 dropdown (TODO: refactor to use Bootstrap 4)
+@import 'vendor/dropdown';
 //import DemocracyLab-written partials
 @import 'partials/AlertSignupModal';
 @import 'partials/ContextualCollapsible';
