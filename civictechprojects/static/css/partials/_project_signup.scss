@@ -17,53 +17,53 @@
 }
 
 .wrapper-gray {
-  background-color: #f6f7f8;
+  background-color: $color-background-default;
 }
 
 .upload_img {
   width: 41px;
   height: 41px;
   object-fit: contain;
-  background-color: #979797;
+  background-color: $color-grey-medium;
 }
 
 .upload_img_bdr {
   width: 80px;
   height: 81px;
   border-radius: 5px;
-  border: solid 1px #979797;
+  border: solid 1px $color-grey-frame-border;
 }
 
 .upload_btn {
   width: 174px;
   height: 35px;
   background: none;
-  border: solid 1px #61892f;
+  border: solid 1px $color-green-dark;
   border-radius: 5px;
   text-align: center;
-  color: #61892f;
+  color: $color-green-dark;
 }
 
 .upload_btn_sm {
   width: 81px;
   height: 27px;
   background: none;
-  border: solid 1px #61892f;
+  border: solid 1px $color-green-dark;
   border-radius: 5px;
   text-align: center;
-  color: #61892f;
+  color: $color-green-dark;
 }
 .save_btn {
   width: 130px;
   height: 35px;
   border-radius: 5px;
-  background-color: #86c232;
+  background-color: $color-green;
   border: 0px;
-  color: #ffffff;
+  color: $color-text-light;
 }
 
 input[type="submit"]:disabled {
-  background: grey;
+  background: $color-grey-disabled;
 }
 
 div.modal {

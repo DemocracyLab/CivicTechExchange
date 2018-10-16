@@ -1,6 +1,6 @@
 .ProjectCard-root {
-  background-color: white;
-  border: solid 1px #868e96;
+  background-color: $color-background-light;
+  border: solid 1px $color-grey-frame-border;
   color: inherit;
   display: inline-table;
   margin-right: 20px;
@@ -24,7 +24,7 @@
 }
 
 .ProjectCard-label {
-  color: #222629;
+  color: $color-text-dark;
 }
 
 .ProjectCard-name {
@@ -41,7 +41,7 @@
 }
 
 .ProjectCard-value {
-  color: #6b6e70;
+  color: $color-grey-frame-border;
 }
 
 .ProjectCardContainer {

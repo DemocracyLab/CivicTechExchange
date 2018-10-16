@@ -1,6 +1,6 @@
 .ProjectSearchBar-root {
-  background-color: white;
-  border: solid 1px #cecece;
+  background-color: $color-background-light;
+  border: solid 1px $color-grey-frame-border;
   height: 64px;
 }
 
@@ -17,10 +17,10 @@
 }
 
 .ProjectSearchBar-submit {
-  background-color: #86c232;
+  background-color: $color-green;
   border: 0;
   border-radius: 5px;
-  color: white;
+  color: $color-text-light;
   cursor: pointer;
   float: right;
   font-size: 14px;
@@ -30,6 +30,6 @@
 }
 
 button.ProjectSearchBar-submit:disabled {
-  background-color: #ededed;
-  color: #7a7a7a;
+  background-color: $color-grey-disabled;
+  color: $color-text-light;
 }

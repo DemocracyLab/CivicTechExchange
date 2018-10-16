@@ -7,7 +7,7 @@
 }
 
 .MyProjectCard-header {
-  color: #717171;
+  color: $color-text-dark;
 }
 
 .MyProjectCard-projectName {
@@ -15,8 +15,8 @@
 }
 
 .MyProjectCard-table {
-  background-color: white;
-  border: solid 1px #6b6e70;
+  background-color: $color-background-light;
+  border: solid 1px $color-grey-frame-border;
   margin: 20px 80px;
   padding: 16px;
   width: 1120px;

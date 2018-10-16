@@ -38,7 +38,7 @@ class MainHeader extends React.PureComponent<{||}> {
     return CurrentUser.isLoggedIn()
       ? (
         <DropdownButton
-          style={{cursor: "pointer",  textDecoration: "none", color: "black"}}
+          className="MainHeader-dropdownButton"
           bsStyle="link"
           title={CurrentUser.firstName() + ' ' + CurrentUser.lastName()}
           noCaret
@@ -66,19 +66,19 @@ class MainHeader extends React.PureComponent<{||}> {
           </span>
         );
   }
-  
+
   _renderFooterLinks(): $ReadOnlyArray<React$Node> {
     return FooterLinks.list().map((link,i) => {
       return <span key={i}><a href={link.url}>{link.name}</a> |{' '}</span>
     });
   }
-  
+
   _renderFooterMenuLinks(): $ReadOnlyArray<React$Node> {
     return FooterLinks.list().map((link,i) => {
       return <MenuItem href={link.url} key={i}>{link.name}</MenuItem>
     });
   }
-  
+
   _onLogInClick(): void {
       NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
@@ -94,7 +94,7 @@ class MainHeader extends React.PureComponent<{||}> {
       url: url.section(Section.SignUp)
     });
   }
-  
+
   _onResetPasswordClick(): void {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
