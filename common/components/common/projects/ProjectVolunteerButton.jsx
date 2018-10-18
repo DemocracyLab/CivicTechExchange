@@ -4,7 +4,6 @@ import React from 'react';
 import {Button} from 'react-bootstrap';
 import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
-import url from '../../utils/url.js';
 import ProjectVolunteerModal from "./ProjectVolunteerModal.jsx";
 
 type Props = {|
@@ -18,7 +17,7 @@ type State = {|
 |};
 
 /**
- * Button to open Modal for sending messages to project owners
+ * Button to open Modal for volunteering to join a project
  */
 class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   constructor(props: Props): void {

@@ -20,8 +20,6 @@ from common.models.tags import Tag
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
-from pprint import pprint
-
 #TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
 
 @cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
@@ -316,7 +314,6 @@ def volunteer_with_project(request, project_id):
 
     project = Project.objects.get(id=project_id)
     body = json.loads(request.body)
-    pprint(body)
     message = body['message']
     role = body['roleTag']
     VolunteerRelation.create(project=project, volunteer=user, role=role, application_text=message)

@@ -36,6 +36,21 @@ export type ProjectAPIData = {|
   +project_claimed: boolean
 |};
 
+export type VolunteerUserData = {|
+  +id: number,
+  +first_name: string,
+  +last_name: string,
+  +user_thumbnail: FileInfo
+|}
+
+export type VolunteerDetailsAPIData = {|
+  +application_id: number,
+  +user: VolunteerUserData,
+  +application_text: string,
+  +roleTag: TagDefinition,
+  +isApproved: boolean
+|}
+
 export type ProjectDetailsAPIData = {|
   +project_id: number,
   +project_description: string,
@@ -52,6 +67,7 @@ export type ProjectDetailsAPIData = {|
   +project_thumbnail: FileInfo,
   +project_links: $ReadOnlyArray<LinkInfo>,
   +project_files: $ReadOnlyArray<FileInfo>,
+  +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date
 |};
 

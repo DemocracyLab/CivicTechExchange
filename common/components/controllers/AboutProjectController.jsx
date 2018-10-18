@@ -16,6 +16,7 @@ import {Locations} from "../constants/ProjectConstants.js";
 import {LinkNames} from "../constants/LinkConstants.js";
 import {TagDefinition} from "../utils/ProjectAPIUtils.js";
 import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
+import VolunteerCard from "../common/volunteers/VolunteerCard.jsx";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -154,6 +155,19 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
               : null
           }
+  
+          {
+            project && !_.isEmpty(project.project_volunteers)
+              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
+                <div className='col'>
+                  <h2 className="form-group subheader">VOLUNTEERS</h2>
+                  <div className="Text-section">
+                    {this._renderVolunteers()}
+                  </div>
+                </div>
+              </div>
+              : null
+          }
 
           {
             project && !_.isEmpty(project.project_links)
@@ -256,6 +270,13 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </div>
           );
       });
+  }
+  
+  _renderVolunteers(): ?Array<React$Node> {
+    const project = this.state.project;
+    return project && project.project_volunteers && project.project_volunteers.map((volunteer, i) =>
+      <VolunteerCard key={i} volunteer={volunteer}/>
+    );
   }
 
   _legibleName(input) {

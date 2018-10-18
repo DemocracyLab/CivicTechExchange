@@ -31,11 +31,6 @@ class TaggedOrganization(TaggedItemBase):
 
 
 class Project(models.Model):
-    # project_volunteers = models.ManyToManyField(
-    #     Contributor,
-    #     related_name='volunteers',
-    #     blank=True
-    # )
     # TODO: Change related name to 'created_projects' or something similar
     project_creator = models.ForeignKey(Contributor, related_name='creator')
     project_description = models.CharField(max_length=3000, blank=True)
@@ -63,6 +58,7 @@ class Project(models.Model):
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_project=self.id)
         positions = ProjectPosition.objects.filter(position_project=self.id)
+        volunteers = VolunteerRelation.objects.filter(project=self.id)
 
         project = {
             'project_id': self.id,
@@ -79,6 +75,7 @@ class Project(models.Model):
             'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links)),
+            'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__()
         }
 
@@ -89,7 +86,6 @@ class Project(models.Model):
 
 
 class ProjectLink(models.Model):
-    # TODO: Add ForeignKey pointing to Contributor, see https://stackoverflow.com/a/20935513/6326903
     link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True)
     link_user = models.ForeignKey(Contributor, related_name='links', blank=True, null=True)
     link_name = models.CharField(max_length=200, blank=True)
@@ -344,7 +340,6 @@ class UserAlert(models.Model):
         alert.save()
 
 
-# TODO: Merge migrations
 class TaggedVolunteerRole(TaggedItemBase):
     content_object = models.ForeignKey('VolunteerRelation')
 
@@ -359,6 +354,20 @@ class VolunteerRelation(models.Model):
 
     def __str__(self):
         return 'Project: ' + str(self.project.project_name) + ',User: ' + str(self.volunteer.email)
+
+    def to_json(self):
+        volunteer = self.volunteer
+
+        # TODO: Get user
+        volunteer_json = {
+            'application_id': self.id,
+            'user': volunteer.hydrate_to_tile_json(),
+            'application_text': self.application_text,
+            'roleTag': Tag.hydrate_to_json(volunteer.id, self.role.all().values())[0],
+            'isApproved': self.is_approved
+        }
+
+        return volunteer_json
 
     @staticmethod
     def create(project, volunteer, role, application_text):

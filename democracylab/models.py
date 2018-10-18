@@ -85,6 +85,21 @@ class Contributor(User):
 
         return user
 
+    def hydrate_to_tile_json(self):
+        files = civictechprojects.models.ProjectFile.objects.filter(file_user=self.id)
+
+        user = {
+            'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+        }
+
+        thumbnail_files = list(files.filter(file_category=civictechprojects.models.FileCategory.THUMBNAIL.value))
+        if len(thumbnail_files) > 0:
+            user['user_thumbnail'] = thumbnail_files[0].to_json()
+
+        return user
+
 
 def get_contributor_by_username(username):
     # using .first instead of .get_by_natural_key returns None instead of raising if object does not exist

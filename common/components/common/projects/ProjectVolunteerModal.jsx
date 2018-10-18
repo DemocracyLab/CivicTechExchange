@@ -25,7 +25,7 @@ type State = {|
 |};
 
 /**
- * Modal for sending messages to project owners
+ * Modal for volunteering to join a project
  */
 
 class ProjectVolunteerModal extends React.PureComponent<Props, State> {
