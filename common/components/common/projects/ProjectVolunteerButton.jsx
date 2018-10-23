@@ -87,6 +87,8 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
               />
             </div>
           );       
+        } else {
+          return null;
         }
       } else {
         return (

@@ -1,22 +1,17 @@
 // @flow
 
 import React from 'react';
-import Section from '../../enums/Section.js';
-import url from '../../utils/url.js';
 import {Button} from 'react-bootstrap';
 import {UserAPIData} from "../../utils/UserAPIUtils.js";
-import {TagDefinition} from "../../utils/ProjectAPIUtils.js";
+import {TagDefinition, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 
 type Props = {|
   +volunteer: VolunteerDetailsAPIData,
+  +isProjectAdmin: boolean
 |};
 
-const style = {
-  textDecoration: 'none'
-}
-
 class VolunteerCard extends React.PureComponent<Props> {
-
+  
   render(): React$Node {
     const volunteer: ?UserAPIData = this.props.volunteer.user;
     const roleTag: ?TagDefinition = this.props.volunteer.roleTag;
@@ -44,22 +39,32 @@ class VolunteerCard extends React.PureComponent<Props> {
                 </tr>
                 <tr>{roleTag && roleTag.display_name}</tr>
               </td>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">
-                  Approved
-                </tr>
-                <tr>
-                  {this.props.volunteer && this.props.volunteer.isApproved}
-                </tr>
-              </td>
-              <td className="MyProjectCard-column">
-                  <Button className="MyProjectCard-button" href={url.section(Section.Profile, {id: volunteer.id})} bsStyle="info">View</Button>
-              </td>
+              {this._renderApplicationButtons()}
             </tr>
           </tbody>
         </table>
       </div>
     );
+  }
+  
+  _renderApplicationButtons(): ?Array<React$Node>  {
+    return (this.props.volunteer && this.props.volunteer.isApproved
+      ? [
+          (<td className="MyProjectCard-column">
+            <Button className="MyProjectCard-button" bsStyle="danger">Remove</Button>
+          </td>)
+        ]
+      : [
+          (<td className="MyProjectCard-column">
+            <Button className="MyProjectCard-button">Application</Button>
+          </td>),
+          (<td className="MyProjectCard-column">
+            <Button className="MyProjectCard-button" bsStyle="info">Accept</Button>
+          </td>),
+          (<td className="MyProjectCard-column">
+            <Button className="MyProjectCard-button" bsStyle="danger">Reject</Button>
+          </td>)
+      ]);
   }
 }
 
