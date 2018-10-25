@@ -46,9 +46,17 @@ def signup(request):
             contributor.send_verification_email()
             return redirect('/')
         else:
-            # TODO inform client of form invalidity
-            print('Invalid form', form.errors.as_json())
-            messages.error(request, form.errors.as_json(escape_html=True))
+            errors = json.loads(form.errors.as_json())
+
+            # inform server console of form invalidity
+            print('Invalid form', errors)
+
+            # inform client of form invalidity
+            for fieldName in errors:
+                fieldErrors = errors[fieldName]
+                for fieldError in fieldErrors:
+                    messages.error(request, fieldError['message'])
+
             return redirect('/index/?section=SignUp')
     else:
         return redirect('/index/?section=SignUp')
