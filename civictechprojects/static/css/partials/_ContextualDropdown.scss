@@ -1,5 +1,5 @@
 .ContextualDropdown-root {
-  background: white;
+  background-color: $color-background-light;
   margin-top: 10px;
   padding-bottom: 15px;
   padding-top: 15px;
@@ -7,8 +7,8 @@
 }
 
 .ContextualDropdown-contextualArrow {
-  background: white;
-  border: solid 0.5px #cecece;
+  background-color: $color-background-light;
+  border: solid 1px $color-grey-frame-border;
   border-bottom: 0;
   border-right: 0;
   height: 10px;

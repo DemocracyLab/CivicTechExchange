@@ -23,3 +23,9 @@
 .MainHeader-links {
   float: right;
 }
+
+.MainHeader-dropdownButton {
+  cursor: pointer;
+  text-decoration: none;
+  color: $color-text-dark;
+}

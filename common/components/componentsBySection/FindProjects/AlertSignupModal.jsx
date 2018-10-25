@@ -53,7 +53,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
       formFields: this.resetFormFields(nextProps)
     });
   }
-  
+
   resetFormFields(props: Props): FormFields {
     return {
       email: "",
@@ -62,12 +62,12 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
       filters: props.searchFilters
     };
   }
-  
+
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.formFields[formFieldName] = event.target.value;
     this.forceUpdate();
   }
-  
+
   handleCountrySelection(selectedValue: string): void {
     let formFields: FormFields = this.state.formFields;
     formFields.country = selectedValue;
@@ -89,7 +89,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
       response => null /* TODO: Report error to user */
       );
   }
-  
+
   isDisabled(): boolean {
     // Require email and a zip code (unless a country other than the US)
     // TODO: Require postal codes for the other countries that use them
@@ -106,7 +106,6 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
       <div>
           <Modal show={this.state.showModal}
                  onHide={this.closeModal}
-                 style={{paddingTop:'20%'}}
           >
             <form onSubmit={this.handleSubmit}>
               <Modal.Header >
@@ -120,7 +119,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
                   <input type="text" className="form-control" id="email_useralert" name="email_useralert" maxLength="254"
                          value={this.state.formFields.email} onChange={this.onFormFieldChange.bind(this, "email")}/>
                 </div>
-                
+
                 {/*TODO: Use CountrySelector component*/}
                 <div className="form-group">
                   <label htmlFor="country">Country</label>

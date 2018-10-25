@@ -35478,6 +35478,7 @@ var LinkList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
           {
+            className: 'btn-background-project',
             bsSize: 'small',
             onClick: this.createNewLink.bind(this)
           },
@@ -36951,6 +36952,7 @@ var FileUploadList = function (_React$PureComponent) {
         this.props.title || "File",
         ' \xA0'
       ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__common_upload_FileUploadButton_jsx__["a" /* default */], {
+        className: 'btn-background-project',
         acceptedFileTypes: '*',
         buttonText: this.props.title || "Files",
         iconClass: 'fa fa-plus',
@@ -41745,6 +41747,7 @@ var FileUploadButton = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
             {
+              className: 'btn-background-project',
               bsSize: 'small',
               onClick: this._handleClick.bind(this)
             },
@@ -78741,11 +78744,11 @@ var LinkEntryModal = function (_React$PureComponent) {
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Header,
-            { closeButton: true },
+            null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Title,
               null,
-              'Modal heading'
+              'Add Link'
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -80514,7 +80517,7 @@ var AboutProjectController = function (_React$PureComponent) {
           { className: 'container-fluid' },
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'div',
-            { style: { backgroundColor: "white" } },
+            { className: 'background-light' },
             __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
               'div',
               { className: 'row', style: { margin: "30px 0 0 0", padding: "10px 0" } },
@@ -91707,6 +91710,7 @@ var PositionList = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
           {
+            className: 'btn-background-project',
             bsSize: 'small',
             onClick: this.createNewPosition.bind(this)
           },
@@ -91876,7 +91880,7 @@ var PositionEntryModal = function (_React$PureComponent) {
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Header,
-            { closeButton: true },
+            null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Title,
               null,
@@ -92890,8 +92894,7 @@ var AlertSignupModal = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */],
           { show: this.state.showModal,
-            onHide: this.closeModal,
-            style: { paddingTop: '20%' }
+            onHide: this.closeModal
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'form',
@@ -94679,7 +94682,7 @@ var AboutUserController = function (_React$PureComponent) {
           { className: 'container-fluid' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
-            { style: { backgroundColor: "white" } },
+            { className: 'background-light' },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'div',
               { className: 'row', style: { margin: "30px 0 0 0", padding: "10px 0" } },
@@ -94925,7 +94928,7 @@ var MainHeader = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_4__utils_CurrentUser_js__["a" /* default */].isLoggedIn() ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["c" /* DropdownButton */],
         {
-          style: { cursor: "pointer", textDecoration: "none", color: "black" },
+          className: 'MainHeader-dropdownButton',
           bsStyle: 'link',
           title: __WEBPACK_IMPORTED_MODULE_4__utils_CurrentUser_js__["a" /* default */].firstName() + ' ' + __WEBPACK_IMPORTED_MODULE_4__utils_CurrentUser_js__["a" /* default */].lastName(),
           noCaret: true,

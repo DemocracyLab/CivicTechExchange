@@ -1,22 +1,27 @@
-//import variables first (be aware of Bootstrap var names)
-@import '_vars';
+//import our variables first
+@import 'vars';
 //import third-party CSS, so we can use it and override it
   //import required Bootstrap (foundation elements)
-@import "vendor/bootstrap/functions";
-@import "vendor/bootstrap/variables";
-@import "vendor/bootstrap/mixins";
-@import "vendor/bootstrap/root";
-@import "vendor/bootstrap/reboot";
+@import 'vendor/bootstrap/functions';
+@import 'vendor/bootstrap/variables';
+@import 'vendor/bootstrap/mixins';
+@import 'vendor/bootstrap/root';
+@import 'vendor/bootstrap/reboot';
+@import 'vendor/bootstrap/grid';
   //then import selected Bootstrap components (what we use)
-@import "vendor/bootstrap/type";
+@import 'vendor/bootstrap/type';
 @import 'vendor/bootstrap/buttons';
 @import 'vendor/bootstrap/dropdown';
 @import 'vendor/bootstrap/modal';
+@import 'vendor/bootstrap/forms';
   //import other third party CSS
 @import 'vendor/_react-select.min';
+  //import Bootstrap3 dropdown (TODO: refactor to use Bootstrap 4)
+@import 'vendor/dropdown';
 //import DemocracyLab-written partials
 @import 'partials/AlertSignupModal';
 @import 'partials/ContextualCollapsible';
+@import 'partials/EditProjectForm';
 @import 'partials/FlashMessage';
 @import 'partials/FindProjectsController';
 @import 'partials/CollapsibleMenuItem';
@@ -35,10 +40,5 @@
 @import 'partials/SubHeader';
 @import 'partials/TagsDisplay';
 @import 'partials/LogInController';
+@import 'partials/ModalPosition';
 @import 'partials/Global';
-
-
-//TODO: Test these. If we don't use them delete and remove from this file before PR.
-// @import 'vendor/dropdown.css'; -- Part of Bootstrap3 for react-select dropdown rendering; not required? We can probably use bootstrap 4 _dropdown?
-// @import 'partials/project'; -- note singular - s doesn't seem to be used. remove?
-// @import 'partials/projects'; -- note plural. what's this?

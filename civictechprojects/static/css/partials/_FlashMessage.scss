@@ -4,15 +4,14 @@
   }
 
 .FlashMessage-root div {
-    padding: 0.5em 1em;
-    margin: 0.5em 0;
-  }  
+    padding: 8px 16px;
+    margin: 8px 0;
+  }
 
 .FlashMessage-root .info {
-  background-color: rgba(0, 183, 255, 0.856)
+  background-color: $color-background-info;
 }
 
 .FlashMessage-root .error {
-  background-color: rgba(255, 0, 0, 0.192)
+  background-color: $color-background-error;
 }
-  

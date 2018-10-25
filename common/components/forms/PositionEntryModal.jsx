@@ -39,7 +39,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
     this.close = this.close.bind(this);
     this.save = this.save.bind(this);
   }
-  
+
   resetModal(existingPosition: ?PositionInfo): void {
     if(existingPosition) {
       this.setState({
@@ -90,7 +90,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
           <Modal show={this.state.showModal}
                  onHide={this.close}
           >
-              <Modal.Header closeButton>
+              <Modal.Header>
                   <Modal.Title>Role Details</Modal.Title>
               </Modal.Header>
               <Modal.Body>

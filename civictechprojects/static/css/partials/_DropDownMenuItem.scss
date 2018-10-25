@@ -5,8 +5,8 @@
 }
 
 .DropDownCategoryItem-root.unselected:hover {
-  color: white;
-  background-color: #61892f;
+  color: $color-text-light;
+  background-color: $color-green-dark;
 }
 
 .DropDownMenuItem-root {
@@ -16,10 +16,10 @@
 }
 
 .DropDownMenuItem-root.disabled,.DropDownCategoryItem-root.disabled{
-  color: grey;
+  color: $color-grey-disabled;
 }
 
 .DropDownMenuItem-root:hover {
-  color: white;
-  background-color: #61892f;
+  color: $color-text-light;
+  background-color: $color-green-dark;
 }
