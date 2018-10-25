@@ -34,9 +34,11 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return (
       <div>
-      	<p className="IntroText">
-        	Welcome to DemocracyLab! Use the filters and search bar below to find volunteer opportunities with tech-for-good projects.
-      	</p>
+        <div className="IntroText">
+        	<p>
+          	Welcome to DemocracyLab! Use the filters and search bar below to find volunteer opportunities with tech-for-good projects.
+        	</p>
+        </div>
 
         <AlertSignupModal
           searchFilters={this.state.searchFilters}
