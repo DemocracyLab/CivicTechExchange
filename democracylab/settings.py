@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import ast
 import dj_database_url
 from distutils.util import strtobool
 
@@ -83,19 +84,18 @@ WSGI_APPLICATION = 'democracylab.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# TODO: Make this into environment variable
-DATABASES = {"default":{"ENGINE":"django.db.backends.postgresql","NAME":"democracylab","USER":"democracylab","PASSWORD":"dem0cracyLab!","HOST":"127.0.0.1","PORT":"5432"}}
+DL_DATABASE = os.environ.get('DL_DATABASE', '')
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': 'p0stgres!',
-#         'HOST': '127.0.0.1',
-#         'PORT': '5432',
-#     }
-# }
+DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'p0stgres!',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+}
 
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
