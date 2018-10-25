@@ -21,7 +21,7 @@ class FindProjectsController extends React.PureComponent<{||}> {
 
   render(): React$Node {
     return (
-      <div className="FindProjectsController-root">
+      <div className="FindProjectsController-root container"> //.container for Bootstrap grid
         <ProjectSearchContainer />
         <ProjectFilterContainer />
         <ProjectCardsContainer />
