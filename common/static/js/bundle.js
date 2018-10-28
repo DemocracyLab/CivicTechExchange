@@ -88980,7 +88980,7 @@ var ProjectCardsContainer = function (_React$Component) {
           { className: 'container-fluid' },
           __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
             'div',
-            { 'class': 'row' },
+            { className: 'row' },
             this._renderCards()
           )
         )
@@ -89063,16 +89063,20 @@ var ProjectCard = function (_React$PureComponent) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
-        { className: 'ProjectCard-root col-12 col-md-6' },
+        { className: 'col-12 col-md-6' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'a',
-          {
-            className: '',
-            href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }),
-            target: '_blank', rel: 'noopener noreferrer' },
-          this.props.project && this.props.project.claimed ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'checkbox', src: __WEBPACK_IMPORTED_MODULE_5__utils_cdn_js__["a" /* default */].image("verified_check.jpg"), align: 'right' }) : null,
-          this._renderName(),
-          this._renderIssueAndLocation()
+          'div',
+          { className: 'ProjectCard-root' },
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'a',
+            {
+              className: '',
+              href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }),
+              target: '_blank', rel: 'noopener noreferrer' },
+            this.props.project && this.props.project.claimed ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'checkbox', src: __WEBPACK_IMPORTED_MODULE_5__utils_cdn_js__["a" /* default */].image("verified_check.jpg"), align: 'right' }) : null,
+            this._renderName(),
+            this._renderIssueAndLocation()
+          )
         )
       );
     }

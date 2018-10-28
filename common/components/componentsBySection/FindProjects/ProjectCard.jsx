@@ -24,19 +24,21 @@ class ProjectCard extends React.PureComponent<Props> {
 
   render(): React$Node {
     return (
-      <div className="ProjectCard-root col-12 col-md-6">
-        <a
-          className=""
-          href={url.section(Section.AboutProject, {id: this.props.project.id})}
-          target="_blank" rel="noopener noreferrer">
-          {
-            this.props.project && this.props.project.claimed
-            ? <img className="checkbox" src={cdn.image("verified_check.jpg")} align="right"/>
-            : null
-          }
-          {this._renderName()}
-          {this._renderIssueAndLocation()}
-        </a>
+      <div className="col-12 col-md-6">
+        <div className="ProjectCard-root">
+          <a
+            className=""
+            href={url.section(Section.AboutProject, {id: this.props.project.id})}
+            target="_blank" rel="noopener noreferrer">
+            {
+              this.props.project && this.props.project.claimed
+              ? <img className="checkbox" src={cdn.image("verified_check.jpg")} align="right"/>
+              : null
+            }
+            {this._renderName()}
+            {this._renderIssueAndLocation()}
+          </a>
+        </div>
       </div>
     );
   }
