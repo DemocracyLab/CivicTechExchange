@@ -40,18 +40,18 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
   static calculateState(prevState: State): State {
     const sortField = ProjectSearchStore.getSortField();
     const location = ProjectSearchStore.getLocation();
-    
+
     const state = {
       sortField: sortField ? sortOptions.find(option => option.value === sortField) : sortOptions[0],
       location: location ? locationOptions.find(option => option.value === location) : locationOptions[0],
     };
-    
+
     return state;
   }
 
   render(): React$Node {
     return (
-      <div className="ProjectFilterContainer-root">
+      <div className="ProjectFilterContainer-root col-12 col-md-3">
         <div className="ProjectFilterContainer-label">
           Sort By:
         </div>
@@ -107,7 +107,7 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
       {location: this.state.location},
     );
   }
-  
+
   _renderSortFieldDropdown(): React$Node{
     return <Select
       options={sortOptions}

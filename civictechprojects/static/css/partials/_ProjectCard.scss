@@ -1,12 +1,6 @@
 .ProjectCard-root {
   background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
-  color: inherit;
-  display: inline-table;
-  margin-right: 20px;
-  margin-top: 20px;
-  margin-bottom: 30px;
-  width: 250px;
 }
 
 .ProjectCard-root > div.borderbottom {
@@ -42,9 +36,4 @@
 
 .ProjectCard-value {
   color: $color-grey-frame-border;
-}
-
-.ProjectCardContainer {
- display: inline-block;
- width: calc(100% - 290px);
 }

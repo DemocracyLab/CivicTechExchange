@@ -88901,10 +88901,14 @@ var FindProjectsController = function (_React$PureComponent) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
         'div',
-        { className: 'FindProjectsController-root' },
+        { className: 'FindProjectsController-root container' },
         __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__componentsBySection_FindProjects_ProjectSearchContainer_jsx__["a" /* default */], null),
-        __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__componentsBySection_FindProjects_ProjectFilterContainer_jsx__["a" /* default */], null),
-        __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__componentsBySection_FindProjects_ProjectCardsContainer_jsx__["a" /* default */], null)
+        __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
+          'div',
+          { className: 'row' },
+          __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__componentsBySection_FindProjects_ProjectFilterContainer_jsx__["a" /* default */], null),
+          __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__componentsBySection_FindProjects_ProjectCardsContainer_jsx__["a" /* default */], null)
+        )
       );
     }
   }]);
@@ -88970,8 +88974,16 @@ var ProjectCardsContainer = function (_React$Component) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
         'div',
-        { className: 'ProjectCardContainer' },
-        this._renderCards()
+        { className: 'ProjectCardContainer col-12 col-md-9' },
+        __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
+          'div',
+          { className: 'container-fluid' },
+          __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
+            'div',
+            { 'class': 'row' },
+            this._renderCards()
+          )
+        )
       );
     }
   }, {
@@ -89034,10 +89046,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var styles = {
-  textDecoration: 'none'
-};
-
 var ProjectCard = function (_React$PureComponent) {
   _inherits(ProjectCard, _React$PureComponent);
 
@@ -89054,15 +89062,18 @@ var ProjectCard = function (_React$PureComponent) {
     key: 'render',
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        'a',
-        { style: styles,
-          className: 'ProjectCard-root',
-          href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }),
-          target: '_blank', rel: 'noopener noreferrer'
-        },
-        this.props.project && this.props.project.claimed ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'checkbox', src: __WEBPACK_IMPORTED_MODULE_5__utils_cdn_js__["a" /* default */].image("verified_check.jpg"), align: 'right' }) : null,
-        this._renderName(),
-        this._renderIssueAndLocation()
+        'div',
+        { className: 'ProjectCard-root col-12 col-md-6' },
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'a',
+          {
+            className: '',
+            href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }),
+            target: '_blank', rel: 'noopener noreferrer' },
+          this.props.project && this.props.project.claimed ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'checkbox', src: __WEBPACK_IMPORTED_MODULE_5__utils_cdn_js__["a" /* default */].image("verified_check.jpg"), align: 'right' }) : null,
+          this._renderName(),
+          this._renderIssueAndLocation()
+        )
       );
     }
   }, {
@@ -89256,9 +89267,13 @@ var ProjectSearchContainer = function (_React$PureComponent) {
         'div',
         null,
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
-          'p',
-          { className: 'IntroText' },
-          'Welcome to DemocracyLab! Use the filters and search bar below to find volunteer opportunities with tech-for-good projects.'
+          'div',
+          { className: 'IntroText col-12' },
+          __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
+            'p',
+            null,
+            'Welcome to DemocracyLab! Use the filters and search bar below to find volunteer opportunities with tech-for-good projects.'
+          )
         ),
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__AlertSignupModal_jsx__["a" /* default */], {
           searchFilters: this.state.searchFilters,
@@ -89328,7 +89343,7 @@ var ProjectTagContainer = function (_React$Component) {
       return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
         'div',
         {
-          className: 'ProjectTagContainer-root' + (this.state.tags.size === 0 ? '  ProjectTagContainer-noTags' : '') },
+          className: 'ProjectTagContainer-root col-12' + (this.state.tags.size === 0 ? '  ProjectTagContainer-noTags' : '') },
         this.state.tags.map(function (tag) {
           return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__ProjectTag_jsx__["a" /* default */], { key: tag.tag_name, tag: tag });
         }),
@@ -89543,7 +89558,7 @@ var ProjectSearchBar = function (_React$Component) {
 
       return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(
         'div',
-        { className: 'ProjectSearchBar-root' },
+        { className: 'ProjectSearchBar-root col-12' },
         __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('i', { className: 'fa fa-search' }),
         __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement('input', {
           className: 'ProjectSearchBar-input',
@@ -89869,7 +89884,7 @@ var ProjectFilterContainer = function (_React$Component) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
-        { className: 'ProjectFilterContainer-root' },
+        { className: 'ProjectFilterContainer-root col-12 col-md-3' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           { className: 'ProjectFilterContainer-label' },

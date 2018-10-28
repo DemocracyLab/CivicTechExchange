@@ -24,7 +24,7 @@ class ProjectSearchBar extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="ProjectSearchBar-root">
+      <div className="ProjectSearchBar-root col-12">
         <i className="fa fa-search"></i>
         <input
           className="ProjectSearchBar-input"

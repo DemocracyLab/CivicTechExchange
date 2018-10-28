@@ -27,8 +27,12 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="ProjectCardContainer">
-        {this._renderCards()}
+      <div className="ProjectCardContainer col-12 col-md-9">
+        <div className="container-fluid">
+          <div class="row">
+            {this._renderCards()}
+          </div>
+        </div>
       </div>
     );
   }

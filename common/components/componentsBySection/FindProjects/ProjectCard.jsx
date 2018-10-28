@@ -13,10 +13,6 @@ type Props = {|
   +project: Project,
 |};
 
-const styles = {
-  textDecoration: 'none'
-}
-
 class ProjectCard extends React.PureComponent<Props> {
 
   _cx: cx;
@@ -28,20 +24,20 @@ class ProjectCard extends React.PureComponent<Props> {
 
   render(): React$Node {
     return (
-      <a style={styles}
-        className="ProjectCard-root"
-        href={url.section(Section.AboutProject, {id: this.props.project.id})}
-        target="_blank" rel="noopener noreferrer"
-      >
-        {
-          this.props.project && this.props.project.claimed
-          ? <img className="checkbox" src={cdn.image("verified_check.jpg")} align="right"/>
-          : null
-        }
-        {this._renderName()}
-        {this._renderIssueAndLocation()}
-
-      </a>
+      <div className="ProjectCard-root col-12 col-md-6">
+        <a
+          className=""
+          href={url.section(Section.AboutProject, {id: this.props.project.id})}
+          target="_blank" rel="noopener noreferrer">
+          {
+            this.props.project && this.props.project.claimed
+            ? <img className="checkbox" src={cdn.image("verified_check.jpg")} align="right"/>
+            : null
+          }
+          {this._renderName()}
+          {this._renderIssueAndLocation()}
+        </a>
+      </div>
     );
   }
 
@@ -67,7 +63,7 @@ class ProjectCard extends React.PureComponent<Props> {
             this.props.project.issueArea,
           )
         }
-        { 
+        {
           (this.props.project.location !== Locations.OTHER)
           ? this._renderLabelAndValue('Location: ', this.props.project.location)
           : this._renderLabelAndValue('Location: ', null)
