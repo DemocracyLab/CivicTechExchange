@@ -29,7 +29,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     return (
       <div className="ProjectCardContainer col-12 col-md-9">
         <div className="container-fluid">
-          <div class="row">
+          <div className="row">
             {this._renderCards()}
           </div>
         </div>
