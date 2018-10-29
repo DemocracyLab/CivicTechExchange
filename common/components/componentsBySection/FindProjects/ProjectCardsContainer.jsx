@@ -41,7 +41,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     return !this.state.projects
       ? 'Loading projects ...'
       : this.state.projects.size === 0
-        ? 'No projects match the provided criteria.  Sign up for Alerts to be notified when projects matching this criteria are added.'
+        ? 'No projects match the provided criteria.  Sign up for an alert to be notified when matching projects are added or try a different set of filters.'
         : this.state.projects.map(
           (project, index) =>
             <ProjectCard
