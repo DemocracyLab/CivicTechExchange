@@ -26,9 +26,7 @@ class ProjectCard extends React.PureComponent<Props> {
     return (
       <div className="col-12 col-md-6">
         <div className="ProjectCard-root">
-          <a
-            className=""
-            href={url.section(Section.AboutProject, {id: this.props.project.id})}
+          <a href={url.section(Section.AboutProject, {id: this.props.project.id})}
             target="_blank" rel="noopener noreferrer">
             {
               this.props.project && this.props.project.claimed
@@ -84,7 +82,7 @@ class ProjectCard extends React.PureComponent<Props> {
           Last Updated:&nbsp;
         </span>
         <span className="ProjectCard-value">
-          <Moment format="MMM D, YYYY, h:mm a">{this.props.project.date_modified}</Moment>
+          <Moment fromNow>{this.props.project.date_modified}</Moment>
         </span>
       </div>
     )

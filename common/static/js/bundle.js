@@ -88989,7 +88989,7 @@ var ProjectCardsContainer = function (_React$Component) {
   }, {
     key: '_renderCards',
     value: function _renderCards() {
-      return !this.state.projects ? 'Loading projects ...' : this.state.projects.size === 0 ? 'No projects match the provided criteria.  Sign up for Alerts to be notified when projects matching this criteria are added.' : this.state.projects.map(function (project, index) {
+      return !this.state.projects ? 'Loading projects ...' : this.state.projects.size === 0 ? 'No projects match the provided criteria.  Sign up for an alert to be notified when matching projects are added or try a different set of filters.' : this.state.projects.map(function (project, index) {
         return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ProjectCard_jsx__["a" /* default */], {
           project: project,
           key: index
@@ -89069,9 +89069,7 @@ var ProjectCard = function (_React$PureComponent) {
           { className: 'ProjectCard-root' },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'a',
-            {
-              className: '',
-              href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }),
+            { href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }),
               target: '_blank', rel: 'noopener noreferrer' },
             this.props.project && this.props.project.claimed ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'checkbox', src: __WEBPACK_IMPORTED_MODULE_5__utils_cdn_js__["a" /* default */].image("verified_check.jpg"), align: 'right' }) : null,
             this._renderName(),
@@ -89129,7 +89127,7 @@ var ProjectCard = function (_React$PureComponent) {
           { className: 'ProjectCard-value' },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_6_react_moment___default.a,
-            { format: 'MMM D, YYYY, h:mm a' },
+            { fromNow: true },
             this.props.project.date_modified
           )
         )
