@@ -28,11 +28,7 @@ class ProjectCard extends React.PureComponent<Props> {
         <div className="ProjectCard-root">
           <a href={url.section(Section.AboutProject, {id: this.props.project.id})}
             target="_blank" rel="noopener noreferrer">
-            {
-              this.props.project && this.props.project.claimed
-              ? <img className="checkbox" src={cdn.image("verified_check.jpg")} align="right"/>
-              : null
-            }
+            {this._renderImage()}
             {this._renderName()}
             {this._renderIssueAndLocation()}
           </a>
@@ -43,13 +39,16 @@ class ProjectCard extends React.PureComponent<Props> {
 
   _renderName(): React$Node {
     return (
-      <div className="borderbottom">
-        <div className="ProjectCard-name" >
-          <div>
-            <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
-          </div>
-            <h3>{this.props.project.name}</h3>
-        </div>
+      <div class="ProjectCard-name">
+          <h3>{this.props.project.name}</h3>
+      </div>
+    );
+  }
+
+  _renderImage(): React$Node {
+    return (
+      <div class="ProjectCard-image">
+        <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
       </div>
     );
   }
@@ -77,13 +76,8 @@ class ProjectCard extends React.PureComponent<Props> {
 
   _renderDateModified(): React$Node {
     return (
-      <div className="ProjectCard-subtext">
-        <span className="ProjectCard-label">
-          Last Updated:&nbsp;
-        </span>
-        <span className="ProjectCard-value">
+      <div className="ProjectCard-datemodified">
           <Moment fromNow>{this.props.project.date_modified}</Moment>
-        </span>
       </div>
     )
   }
