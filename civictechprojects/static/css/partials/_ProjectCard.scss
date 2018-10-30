@@ -3,6 +3,13 @@
   border: solid 1px $color-grey-frame-border;
   margin: 10px -5px;
 }
+.ProjectCard-root a {
+  text-decoration: none;
+  color: $color-text-dark;
+}
+.ProjectCard-info {
+
+}
 .ProjectCard-description {
 
 }
@@ -12,5 +19,11 @@
 }
 
 .ProjectCard-image {
+
+}
+.ProjectCard-skills {
+
+}
+.ProjectCard-issueArea {
 
 }

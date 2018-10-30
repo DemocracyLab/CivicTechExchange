@@ -47,33 +47,42 @@ class ProjectCard extends React.PureComponent<Props> {
 
   _renderProjectDescription(): React$Node {
     return (
-      <div className="ProjectCard-description">
+      <div className="ProjectCard-info">
         <div className="ProjectCard-name">
             <h3>{this.props.project.name}</h3>
         </div>
         <div className="ProjectCard-issueArea">
             {this.props.project.issueArea}
         </div>
-          )
-        }
-
+        <div className="ProjectCard-description">
+          <p>About the project text. This will be the first x characters of the Project Description field, truncated if required. This is placeholder text, but you knew that.</p>
+        </div>
+        <div className="ProjectCard-skills">
+          <ul>
+            <li>Skill Needed #1</li>
+            <li>Skill Needed #2</li>
+            <li>Skill Needed #3</li>
+            <li>Skill Needed #4</li>
+          </ul>
+        </div>
       </div>
     );
   }
   _renderSubInfo(): React$Node {
     return (
       <div className="ProjectCard-subinfo">
-      <ul>
-        <li>
-          {this.props.project.location}
-        </li>
-        <li>
-          <Moment fromNow>{this.props.project.date_modified}</Moment>
-        </li>
-        <li>
-          {this.props.project.project_url}
-        </li>
-      </ul>
+        <ul>
+          <li>
+            {this.props.project.location}
+          </li>
+          <li>
+          placeholderwebsite.com
+          </li>
+          <li>
+            <Moment fromNow>{this.props.project.date_modified}</Moment>
+          </li>
+        </ul>
+      </div>
     )
   }
 }

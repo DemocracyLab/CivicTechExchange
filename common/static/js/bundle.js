@@ -89071,91 +89071,111 @@ var ProjectCard = function (_React$PureComponent) {
             'a',
             { href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }),
               target: '_blank', rel: 'noopener noreferrer' },
-            this.props.project && this.props.project.claimed ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'checkbox', src: __WEBPACK_IMPORTED_MODULE_5__utils_cdn_js__["a" /* default */].image("verified_check.jpg"), align: 'right' }) : null,
-            this._renderName(),
-            this._renderIssueAndLocation()
+            this._renderImage(),
+            this._renderSubInfo(),
+            this._renderProjectDescription()
           )
         )
       );
     }
   }, {
-    key: '_renderName',
-    value: function _renderName() {
+    key: '_renderImage',
+    value: function _renderImage() {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
-        { className: 'borderbottom' },
+        { className: 'ProjectCard-image' },
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl })
+      );
+    }
+  }, {
+    key: '_renderProjectDescription',
+    value: function _renderProjectDescription() {
+      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+        'div',
+        { className: 'ProjectCard-info' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           { className: 'ProjectCard-name' },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'div',
-            null,
-            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl })
-          ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'h3',
             null,
             this.props.project.name
           )
-        )
-      );
-    }
-  }, {
-    key: '_renderIssueAndLocation',
-    value: function _renderIssueAndLocation() {
-      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        'div',
-        { className: 'ProjectCard-issueAndLocation' },
-        this._renderLabelAndValue('Issue Area: ', this.props.project.issueArea),
-        this.props.project.location !== __WEBPACK_IMPORTED_MODULE_4__constants_ProjectConstants_js__["a" /* Locations */].OTHER ? this._renderLabelAndValue('Location: ', this.props.project.location) : this._renderLabelAndValue('Location: ', null),
-        this._renderDateModified()
-      );
-    }
-  }, {
-    key: '_renderDateModified',
-    value: function _renderDateModified() {
-      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        'div',
-        { className: 'ProjectCard-subtext' },
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'span',
-          { className: 'ProjectCard-label' },
-          'Last Updated:\xA0'
         ),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'span',
-          { className: 'ProjectCard-value' },
+          'div',
+          { className: 'ProjectCard-issueArea' },
+          this.props.project.issueArea
+        ),
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'div',
+          { className: 'ProjectCard-description' },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_6_react_moment___default.a,
-            { fromNow: true },
-            this.props.project.date_modified
+            'p',
+            null,
+            'About the project text. This will be the first x characters of the Project Description field, truncated if required. This is placeholder text, but you knew that.'
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'div',
+          { className: 'ProjectCard-skills' },
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'ul',
+            null,
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              'li',
+              null,
+              'Skill Needed #1'
+            ),
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              'li',
+              null,
+              'Skill Needed #2'
+            ),
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              'li',
+              null,
+              'Skill Needed #3'
+            ),
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              'li',
+              null,
+              'Skill Needed #4'
+            )
           )
         )
       );
     }
   }, {
-    key: '_renderLabelAndValue',
-    value: function _renderLabelAndValue(label, value) {
+    key: '_renderSubInfo',
+    value: function _renderSubInfo() {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
-        { className: 'ProjectCard-subtext' },
+        { className: 'ProjectCard-subinfo' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'span',
-          { className: 'ProjectCard-label' },
-          label
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'span',
-          { className: 'ProjectCard-value' },
-          value ? value : null
+          'ul',
+          null,
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'li',
+            null,
+            this.props.project.location
+          ),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'li',
+            null,
+            'placeholderwebsite.com'
+          ),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'li',
+            null,
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              __WEBPACK_IMPORTED_MODULE_6_react_moment___default.a,
+              { fromNow: true },
+              this.props.project.date_modified
+            )
+          )
         )
       );
-    }
-  }, {
-    key: '_renderDescription',
-    value: function _renderDescription() {
-      var maxDescriptionLength = 300;
-      return this.props.project.description.length > maxDescriptionLength ? this.props.project.description.slice(0, maxDescriptionLength) + '...' : this.props.project.description;
     }
   }]);
 
