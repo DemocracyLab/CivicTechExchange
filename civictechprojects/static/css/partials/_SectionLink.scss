@@ -1,0 +1,19 @@
+.SectionLink-root {
+  color: $color-text-light;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 23px 40px;
+  padding-bottom: 8px;
+}
+
+.SectionLink-root h3 {
+  font-size: 1.2rem;
+}
+
+.SectionLink-active {
+  height: 25px;
+  border-bottom: $color-orange 3px solid;
+  color: $color-orange;
+}

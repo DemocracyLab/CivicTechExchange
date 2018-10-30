@@ -4,6 +4,7 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
+from common.helpers.form_helpers import is_json_field_empty
 
 
 # Without the following two classes, the following error occurs:
@@ -281,13 +282,20 @@ class ProjectFile(models.Model):
         else:
             existing_file = ProjectFile.objects.filter(file_user=owner.id, file_category=file_category.value).first()
 
-        if not existing_file:
-            thumbnail = ProjectFile.from_json(owner, file_category, file_json)
-            thumbnail.save()
-        elif not file_json['key'] == existing_file.file_key:
-            thumbnail = ProjectFile.from_json(owner, file_category, file_json)
-            thumbnail.save()
+        is_empty_field = is_json_field_empty(file_json)
+        if is_empty_field and existing_file:
+            # Remove existing file
             existing_file.delete()
+        elif not is_empty_field:
+            if not existing_file:
+                # Add new file
+                thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+                thumbnail.save()
+            elif not file_json['key'] == existing_file.file_key:
+                # Replace existing file
+                thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+                thumbnail.save()
+                existing_file.delete()
 
     @staticmethod
     def from_json(owner, file_category, file_json):

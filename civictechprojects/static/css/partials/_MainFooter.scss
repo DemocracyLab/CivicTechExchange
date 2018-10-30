@@ -1,0 +1,20 @@
+.MainFooter-footer {
+  background-color: $color-background-dark;
+  bottom: 0;
+  color: $color-text-light;
+  font-weight: bold;
+  padding: 10px;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
+
+.SectionBody {
+  padding-bottom: 100px;
+}
+
+.MainFooter-footer-link a {
+  color: $color-text-light;
+  text-transform: uppercase;
+  padding-right: 30px;
+}

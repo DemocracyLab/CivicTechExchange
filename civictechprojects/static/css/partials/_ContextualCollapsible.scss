@@ -1,0 +1,29 @@
+.ContextualCollapsible-root {
+  background: none;
+  border: none;
+  margin-top: 10px;
+  position: static;
+}
+
+.ContextualCollapsible-contextualArrow {
+  background-color: $color-background-light;
+  border: solid 1px $color-grey-frame-border;
+  border-bottom: 0;
+  border-right: 0;
+  height: 10px;
+  position: absolute;
+  top: -6px;
+  transform-origin: center;
+  transform: rotate(45deg);
+  width: 10px;
+}
+
+.CollapsibleCategoryContainer, .CollapsibleCategoryHeader {
+  cursor: pointer;
+}
+.CollapsibleCategoryHeader {
+  font-size: 1.2rem;
+}
+.CollapsibleCategoryHeader, .CollapsibleCategorySubheader {
+  font-weight: bold;
+}

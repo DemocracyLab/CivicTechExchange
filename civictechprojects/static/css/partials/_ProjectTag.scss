@@ -1,0 +1,14 @@
+.ProjectTag-root {
+  background-color: $color-green-dark;
+  border-radius: 5px;
+  color: $color-text-light;
+  display: inline-block;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  padding: 11px 14px 10px 9px;
+}
+
+.ProjectTag-closeButton {
+  cursor: pointer;
+  margin-left: 18px;
+}

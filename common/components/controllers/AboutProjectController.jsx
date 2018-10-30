@@ -62,7 +62,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     return (
       <div className="AboutProjectController-root">
         <div className="container-fluid">
-          <div style={{backgroundColor: "white"}}>
+          <div className="background-light">
             <div className="row" style={{margin: "30px 0 0 0", padding: "10px 0"}}>
               <div className="col-sm-5">
                 <div className="row">

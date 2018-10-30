@@ -22,14 +22,14 @@ type State = {|
 |};
 
 class FileUploadButton extends React.PureComponent<Props, State> {
-  
+
   constructor(): void {
     super();
     this.state = {
       s3Key: ""
     };
   }
-  
+
   render(): React$Node {
     if(this.props.iconClass && this.props.buttonText){
       return (
@@ -38,6 +38,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
 
           <label>{this.props.buttonText} &nbsp;</label>
           <Button
+            className="btn-background-project"
             bsSize="small"
             onClick={this._handleClick.bind(this)}
           >
@@ -54,20 +55,20 @@ class FileUploadButton extends React.PureComponent<Props, State> {
       );
     }
   }
-  
+
   _handleClick(): void {
     this.refs.fileInput.click();
   }
-  
+
   _handleFileSelection(): void {
     this.launchPresignedUploadToS3(this.refs.fileInput.files[0]);
   }
-  
+
   launchPresignedUploadToS3(file: File): void {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", `/presign_s3/upload/project/thumbnail?file_name=${file.name}&file_type=${file.type}`);
     var instance = this;
-    
+
     xhr.onreadystatechange = function(){
       if(xhr.readyState === 4){
         if(xhr.status === 200){
@@ -81,11 +82,11 @@ class FileUploadButton extends React.PureComponent<Props, State> {
     };
     xhr.send();
   }
-  
+
   uploadFileToS3(file: File, s3Data: S3Data, url: string){
     var xhr = new XMLHttpRequest();
     xhr.open("POST", s3Data.url);
-    
+
     var postData = new FormData();
     for(var key in s3Data.fields){
       postData.append(key, s3Data.fields[key]);
@@ -93,7 +94,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
     postData.append('file', file);
     this.state.s3Key = s3Data.fields.key;
     var instance = this;
-    
+
     xhr.onreadystatechange = function() {
       if(xhr.readyState === 4){
         if(xhr.status === 200 || xhr.status === 204){
@@ -111,7 +112,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
     };
     xhr.send(postData);
   }
-  
+
 }
 
 export default FileUploadButton;

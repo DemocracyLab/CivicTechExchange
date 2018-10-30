@@ -1,0 +1,22 @@
+.CollapsibleCategoryItem-root {
+  cursor: pointer;
+  margin-left:10px;
+}
+
+.CollapsibleCategoryItem-root:last-child {
+  margin-bottom: 10px;
+}
+
+.CollapsibleMenuItem {
+  width: 100%;
+  padding: 0px 10px;
+}
+
+.CollapsibleMenuItem:hover {
+  color: $color-text-light;
+  background-color: $color-green-dark;
+}
+
+.CollapsibleMenuItem > input[type=checkbox] {
+  margin-right: 5px;
+}

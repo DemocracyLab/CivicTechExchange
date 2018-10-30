@@ -1,0 +1,27 @@
+.MyProjectCard-root {
+  color: inherit;
+}
+
+.MyProjectCard-column {
+  width: 250px;
+}
+
+.MyProjectCard-header {
+  color: $color-text-dark;
+}
+
+.MyProjectCard-projectName {
+  font-weight: bold;
+}
+
+.MyProjectCard-table {
+  background-color: $color-background-light;
+  border: solid 1px $color-grey-frame-border;
+  margin: 20px 80px;
+  padding: 16px;
+  width: 1120px;
+}
+
+.MyProjectCard-button {
+  margin: 5px;
+}

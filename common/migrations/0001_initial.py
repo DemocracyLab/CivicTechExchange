@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-from common.helpers.tags import import_tags_from_csv
 
 
 class Migration(migrations.Migration):
@@ -25,5 +24,5 @@ class Migration(migrations.Migration):
                 ('subcategory', models.CharField(blank=True, max_length=200)),
                 ('parent', models.CharField(blank=True, max_length=100)),
             ]
-        ), migrations.RunPython(import_tags_from_csv)
+        )
     ]

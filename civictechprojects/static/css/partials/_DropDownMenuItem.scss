@@ -1,0 +1,25 @@
+.DropDownCategoryItem-root {
+  cursor: pointer;
+  padding-left: 15px;
+  padding-right: 29px;
+}
+
+.DropDownCategoryItem-root.unselected:hover {
+  color: $color-text-light;
+  background-color: $color-green-dark;
+}
+
+.DropDownMenuItem-root {
+  cursor: pointer;
+  padding-left: 15px;
+  padding-right: 29px;
+}
+
+.DropDownMenuItem-root.disabled,.DropDownCategoryItem-root.disabled{
+  color: $color-grey-disabled;
+}
+
+.DropDownMenuItem-root:hover {
+  color: $color-text-light;
+  background-color: $color-green-dark;
+}

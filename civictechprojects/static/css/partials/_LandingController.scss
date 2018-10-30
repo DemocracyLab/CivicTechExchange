@@ -1,0 +1,50 @@
+.LandingController-centerer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.LandingController-landingText {
+  color: $color-text-light;
+  font-weight: bold;
+  text-align: center;
+  width: 51%;
+}
+
+.LandingController-landingTextContainer {
+  margin-top: 71px;
+  margin-bottom: 400px;
+}
+
+.LandingController-letsGetStarted {
+  font-size: 48px;
+  margin-top: 0;
+}
+
+.LandingController-signUp {
+  background-color: $color-green;
+  border-radius: 5px;
+  display: inline-table;
+  font-size: 19px;
+  padding: 10px 36px 10px 36px;
+  width: auto;
+}
+
+.LandingController-signUpContainer {
+  width: 100%;
+}
+
+.LandingController-supremeCourtBanner {
+  background-image: url(https://dprhz3gr7kco1.cloudfront.net/img/dl_landing_banner.png);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
+
+.LandingController-useYourSkills {
+  font-size: 36px;
+  line-height: 1.5;
+  margin-bottom: 0;
+}

@@ -3,16 +3,33 @@ import type {FluxReduceStore} from 'flux/utils';
 
 import {Container} from 'flux/utils';
 import React from 'react';
+import Select from 'react-select'
 import TagSelectorCollapsible from "../../common/tags/TagSelectorCollapsible.jsx";
 import TagCategory from "../../common/tags/TagCategory.jsx";
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import {Locations} from "../../constants/ProjectConstants";
 
+type SelectOption = {|
+  label: string,
+  value: string
+|};
+
 type State = {|
   sortField: string,
   location: string
 |};
+
+const sortOptions: $ReadOnlyArray<SelectOption>  = [
+    // {value: "", label: "---"},
+    // {value: "project_date_modified", label: "Date Modified - Ascending"},
+    {value: "", label: "Date Modified"},
+    {value: "project_name", label: "Name - Ascending"},
+    {value: "-project_name", label: "Name - Descending"}
+  ];
+
+const locationOptions: $ReadOnlyArray<SelectOption>  = [{value:"", label:"---"}].concat(
+  Locations.PRESET_LOCATIONS.map(location => ({value:location, label:location})));
 
 class ProjectFilterContainer extends React.Component<{||}, State> {
 
@@ -21,17 +38,15 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
   }
 
   static calculateState(prevState: State): State {
-    return {
-      sortField: ProjectSearchStore.getSortField(),
-      location: ProjectSearchStore.getLocation()
-    };
-  }
-
-  componentDidMount() {
-    var urlParams = new URLSearchParams(window.location.search);
+    const sortField = ProjectSearchStore.getSortField();
+    const location = ProjectSearchStore.getLocation();
     
-    this.setState({sortField: urlParams.get('sortField')}, function () {});
-    this.setState({location: urlParams.get('location')}, function () {});
+    const state = {
+      sortField: sortField ? sortOptions.find(option => option.value === sortField) : sortOptions[0],
+      location: location ? locationOptions.find(option => option.value === location) : locationOptions[0],
+    };
+    
+    return state;
   }
 
   render(): React$Node {
@@ -57,14 +72,14 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
     );
   }
 
-  _handleSubmitSortField(e: SyntheticEvent<HTMLSelectElement>): void {
-    this.setState({sortField: e.target.value}, function () {
+  _handleSubmitSortField(sortOption: SelectOption): void {
+    this.setState({sortField: sortOption.value}, function () {
       this._onSubmitSortField();
     });
   }
 
-  _handleSubmitLocation(e: SyntheticEvent<HTMLSelectElement>): void {
-    this.setState({location: e.target.value}, function () {
+  _handleSubmitLocation(location: SelectOption): void {
+    this.setState({location: location.value}, function () {
       this._onSubmitLocation();
     });
   }
@@ -92,22 +107,29 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
       {location: this.state.location},
     );
   }
-
+  
   _renderSortFieldDropdown(): React$Node{
-    return  <select onChange={this._handleSubmitSortField.bind(this)}>
-              <option disabled selected={this.state.sortField === '' || this.state.sortField === null} value>---</option>
-              <option selected={this.state.sortField === 'project_date_modified'} value="project_date_modified">Date Modified - Ascending</option>
-              <option selected={this.state.sortField === '-project_date_modified'} value="-project_date_modified">Date Modified - Descending</option>
-              <option selected={this.state.sortField === 'project_name'} value="project_name">Name - Ascending</option>
-              <option selected={this.state.sortField === '-project_name'} value="-project_name">Name - Descending</option>
-            </select>;
+    return <Select
+      options={sortOptions}
+      value={this.state && this.state.sortField}
+      onChange={this._handleSubmitSortField.bind(this)}
+      className="form-control"
+      simpleValue={true}
+      isClearable={false}
+      isMulti={false}
+    />
   }
 
   _renderLocationDropdown(): React$Node{
-    return  <select onChange={this._handleSubmitLocation.bind(this)}>
-              <option disabled selected={this.state.location === '' || this.state.location === null}  value>---</option>
-              {Locations.PRESET_LOCATIONS.map(location => <option key={location} selected={this.state.location === location} value={location}>{location}</option>)}
-            </select>;
+    return <Select
+      options={locationOptions}
+      value={this.state && this.state.location}
+      onChange={this._handleSubmitLocation.bind(this)}
+      className="form-control"
+      simpleValue={true}
+      isClearable={false}
+      isMulti={false}
+    />
   }
 }
 

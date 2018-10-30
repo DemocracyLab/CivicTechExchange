@@ -1,0 +1,31 @@
+.MainHeader-root {
+  font-size: 12px;
+  height: 54px;
+}
+
+.MainHeader-logo {
+  cursor: pointer;
+  width: 200px;
+  height: 100%;
+}
+
+.MainHeader-profilePicture {
+  border-radius: 5px;
+  margin-right: 40px;
+  vertical-align: middle;
+  width: 40px;
+}
+
+.MainHeader-rightContent {
+  float: right;
+}
+
+.MainHeader-links {
+  float: right;
+}
+
+.MainHeader-dropdownButton {
+  cursor: pointer;
+  text-decoration: none;
+  color: $color-text-dark;
+}

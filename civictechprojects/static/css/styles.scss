@@ -1,0 +1,44 @@
+//import our variables first
+@import 'vars';
+//import third-party CSS, so we can use it and override it
+  //import required Bootstrap (foundation elements)
+@import 'vendor/bootstrap/functions';
+@import 'vendor/bootstrap/variables';
+@import 'vendor/bootstrap/mixins';
+@import 'vendor/bootstrap/root';
+@import 'vendor/bootstrap/reboot';
+@import 'vendor/bootstrap/grid';
+  //then import selected Bootstrap components (what we use)
+@import 'vendor/bootstrap/type';
+@import 'vendor/bootstrap/buttons';
+@import 'vendor/bootstrap/dropdown';
+@import 'vendor/bootstrap/modal';
+@import 'vendor/bootstrap/forms';
+  //import other third party CSS
+@import 'vendor/_react-select.min';
+  //import Bootstrap3 dropdown (TODO: refactor to use Bootstrap 4)
+@import 'vendor/dropdown';
+//import DemocracyLab-written partials
+@import 'partials/AlertSignupModal';
+@import 'partials/ContextualCollapsible';
+@import 'partials/EditProjectForm';
+@import 'partials/FlashMessage';
+@import 'partials/FindProjectsController';
+@import 'partials/CollapsibleMenuItem';
+@import 'partials/LandingController';
+@import 'partials/MainHeader';
+@import 'partials/MainFooter';
+@import 'partials/project_signup'; // has a modal opacity rule required for bootstrap-modals, maybe pull that out if we dont use the rest of this
+@import 'partials/MyProjectCard';
+@import 'partials/MyProjectsController';
+@import 'partials/ProjectCard';
+@import 'partials/ProjectFilterContainer';
+@import 'partials/ProjectSearchBar';
+@import 'partials/ProjectTag';
+@import 'partials/ProjectTagContainer';
+@import 'partials/SectionLink';
+@import 'partials/SubHeader';
+@import 'partials/TagsDisplay';
+@import 'partials/LogInController';
+@import 'partials/ModalPosition';
+@import 'partials/Global';

@@ -1,0 +1,11 @@
+.Tag-Item {
+  background-color: $color-background-info;
+  border-radius: 5px;
+  padding: 5px 5px 5px 5px;
+  display: inline-block;
+  margin: 2px;
+}
+
+span.Tag-Item + span.Tag-Item {
+  margin-left: 10px;
+}

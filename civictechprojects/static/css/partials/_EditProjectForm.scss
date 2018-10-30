@@ -1,0 +1,4 @@
+//overrides a very particular user agent stylesheet declaration
+.btn-background-project, .btn-background-project input[type="button" i] {
+    background-color: $color-grey-medium;
+}

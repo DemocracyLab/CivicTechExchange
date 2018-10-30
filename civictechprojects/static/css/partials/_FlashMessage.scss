@@ -1,0 +1,17 @@
+.FlashMessage-root {
+    width: 90%;
+    margin: auto;
+  }
+
+.FlashMessage-root div {
+    padding: 8px 16px;
+    margin: 8px 0;
+  }
+
+.FlashMessage-root .info {
+  background-color: $color-background-info;
+}
+
+.FlashMessage-root .error {
+  background-color: $color-background-error;
+}
