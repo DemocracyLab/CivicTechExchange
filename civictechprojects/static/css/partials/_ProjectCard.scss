@@ -4,37 +4,10 @@
   margin: 10px -5px;
 }
 
-.ProjectCard-root > div.borderbottom {
-  padding: 5px;
-  border-bottom: solid 1px;
-}
-
-.ProjectCard-description {
-  white-space: pre-wrap;
-  line-height: 1.5;
-}
-
-.ProjectCard-issueAndLocation {
-  border-bottom: solid 1px;
-}
-
-.ProjectCard-label {
-  color: $color-text-dark;
-}
-
 .ProjectCard-name {
-  height: 140px;
 
 }
 
-.ProjectCard-name > h3{
-  font-size: 1.2rem;
-}
-
-.ProjectCard-subtext {
-  font-size: 12px;
-}
-
-.ProjectCard-value {
-  color: $color-grey-frame-border;
+.ProjectCard-image {
+  
 }
