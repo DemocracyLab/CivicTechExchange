@@ -29,77 +29,52 @@ class ProjectCard extends React.PureComponent<Props> {
           <a href={url.section(Section.AboutProject, {id: this.props.project.id})}
             target="_blank" rel="noopener noreferrer">
             {this._renderImage()}
-            {this._renderName()}
-            {this._renderIssueAndLocation()}
+            {this._renderSubInfo()}
+            {this._renderProjectDescription()}
           </a>
         </div>
       </div>
     );
   }
 
-  _renderName(): React$Node {
-    return (
-      <div class="ProjectCard-name">
-          <h3>{this.props.project.name}</h3>
-      </div>
-    );
-  }
-
   _renderImage(): React$Node {
     return (
-      <div class="ProjectCard-image">
-        <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
+      <div className="ProjectCard-image">
+      <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
       </div>
     );
   }
 
-  _renderIssueAndLocation(): React$Node {
+  _renderProjectDescription(): React$Node {
     return (
-      <div className="ProjectCard-issueAndLocation">
-        {
-          this._renderLabelAndValue(
-            'Issue Area: ',
-            this.props.project.issueArea,
+      <div className="ProjectCard-description">
+        <div className="ProjectCard-name">
+            <h3>{this.props.project.name}</h3>
+        </div>
+        <div className="ProjectCard-issueArea">
+            {this.props.project.issueArea}
+        </div>
           )
         }
-        {
-          (this.props.project.location !== Locations.OTHER)
-          ? this._renderLabelAndValue('Location: ', this.props.project.location)
-          : this._renderLabelAndValue('Location: ', null)
-        }
-        {
-          this._renderDateModified()
-        }
+
       </div>
     );
   }
-
-  _renderDateModified(): React$Node {
+  _renderSubInfo(): React$Node {
     return (
-      <div className="ProjectCard-datemodified">
+      <div className="ProjectCard-subinfo">
+      <ul>
+        <li>
+          {this.props.project.location}
+        </li>
+        <li>
           <Moment fromNow>{this.props.project.date_modified}</Moment>
-      </div>
+        </li>
+        <li>
+          {this.props.project.project_url}
+        </li>
+      </ul>
     )
-  }
-
-  _renderLabelAndValue(label: string, value: string): React$Node {
-      return (
-        <div className="ProjectCard-subtext">
-          <span className="ProjectCard-label">
-            {label}
-          </span>
-          <span className="ProjectCard-value">
-            {value ? value : null}
-          </span>
-        </div>
-      );
-  }
-
-  _renderDescription(): string {
-    const maxDescriptionLength = 300;
-    return this.props.project.description.length > maxDescriptionLength
-      ? this.props.project.description.slice(0, maxDescriptionLength) + '...'
-      : this.props.project.description;
   }
 }
 
