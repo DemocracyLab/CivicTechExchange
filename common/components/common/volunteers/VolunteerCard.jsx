@@ -4,6 +4,8 @@ import React from 'react';
 import {Button} from 'react-bootstrap';
 import {UserAPIData} from "../../utils/UserAPIUtils.js";
 import {TagDefinition, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
+import url from "../../utils/url.js";
+import Section from "../../enums/Section.js";
 
 type Props = {|
   +volunteer: VolunteerDetailsAPIData,
@@ -21,9 +23,13 @@ class VolunteerCard extends React.PureComponent<Props> {
           <tbody>
             <tr>
               <td className="MyProjectCard-column">
-                <div>
+                <a
+                   href={url.section(Section.Profile, {id: volunteer.id})}
+                   target="_blank" rel="noopener noreferrer"
+                >
+                  {/*TODO: Change to pointer when hovering over image*/}
                   <img className="upload_img upload_img_bdr" src={volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl}/>
-                </div>
+                </a>
               </td>
               <td className="MyProjectCard-column">
                 <tr className="MyProjectCard-header">
