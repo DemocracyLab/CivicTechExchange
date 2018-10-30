@@ -28,7 +28,6 @@ class ProjectCard extends React.PureComponent<Props> {
         <div className="ProjectCard-root">
           <a href={url.section(Section.AboutProject, {id: this.props.project.id})}
             target="_blank" rel="noopener noreferrer">
-            {this._renderImage()}
             {this._renderSubInfo()}
             {this._renderProjectDescription()}
           </a>
@@ -36,15 +35,6 @@ class ProjectCard extends React.PureComponent<Props> {
       </div>
     );
   }
-
-  _renderImage(): React$Node {
-    return (
-      <div className="ProjectCard-image">
-      <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
-      </div>
-    );
-  }
-
   _renderProjectDescription(): React$Node {
     return (
       <div className="ProjectCard-info">
@@ -71,6 +61,9 @@ class ProjectCard extends React.PureComponent<Props> {
   _renderSubInfo(): React$Node {
     return (
       <div className="ProjectCard-subinfo">
+        <div className="ProjectCard-image">
+          <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
+        </div>
         <ul>
           <li>
             {this.props.project.location}

@@ -89071,20 +89071,10 @@ var ProjectCard = function (_React$PureComponent) {
             'a',
             { href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }),
               target: '_blank', rel: 'noopener noreferrer' },
-            this._renderImage(),
             this._renderSubInfo(),
             this._renderProjectDescription()
           )
         )
-      );
-    }
-  }, {
-    key: '_renderImage',
-    value: function _renderImage() {
-      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        'div',
-        { className: 'ProjectCard-image' },
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl })
       );
     }
   }, {
@@ -89152,6 +89142,11 @@ var ProjectCard = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
         { className: 'ProjectCard-subinfo' },
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'div',
+          { className: 'ProjectCard-image' },
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl })
+        ),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'ul',
           null,
