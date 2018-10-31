@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react';
-import url from '../../utils/url.js';
 import VolunteerCard from "./VolunteerCard.jsx";
 import {VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
+import NotificationModal from "../notification/NotificationModal.jsx";
 import _ from 'lodash'
 
 type Props = {|
@@ -12,24 +12,51 @@ type Props = {|
 |};
 
 type State = {|
-  +volunteers: ?Array<VolunteerDetailsAPIData>
+  +volunteers: ?Array<VolunteerDetailsAPIData>,
+  +showApplicationModal: boolean,
+  +applicationModalText: string
 |};
 
 class VolunteerSection extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.state = {volunteers:_.cloneDeep(props.volunteers)}
-    // this.handleShow = this.handleShow.bind(this);
+    this.state = {
+      volunteers:_.cloneDeep(props.volunteers),
+      showApplicationModal: false,
+      applicationModalText: ""
+    };
+  
+    this.openApplicationModal = this.openApplicationModal.bind(this);
   }
   
   componentWillReceiveProps(nextProps: Props): void {
     this.setState(this.getButtonDisplaySetup(nextProps));
   }
   
+  openApplicationModal(volunteer: VolunteerDetailsAPIData) {
+    this.setState({
+      showApplicationModal: true,
+      applicationModalText: volunteer.application_text
+    });
+  }
+  
+  closeApplicationModal() {
+    this.setState({
+      showApplicationModal: false
+    });
+  }
+  
   render(): React$Node {
-    const approvedAndPendingVolunteers = _.partition(this.state.volunteers, volunteer => volunteer.isApproved);
+    const approvedAndPendingVolunteers: Array<Array<VolunteerDetailsAPIData>> = _.partition(this.state.volunteers, volunteer => volunteer.isApproved);
     return (
       <div>
+        <NotificationModal
+          showModal={this.state.showApplicationModal}
+          message={this.state.applicationModalText}
+          buttonText="Close"
+          onClickButton={this.closeApplicationModal.bind(this)}
+        />
+      
         {this._renderPendingVolunteers(approvedAndPendingVolunteers[1])}
         {this._renderApprovedVolunteers(approvedAndPendingVolunteers[0])}
       </div>
@@ -56,7 +83,12 @@ class VolunteerSection extends React.PureComponent<Props, State> {
             <div className="Text-section">
               {
                 volunteers.map((volunteer,i) =>
-                  <VolunteerCard key={i} volunteer={volunteer} isProjectAdmin={this.state.isProjectAdmin}/>)
+                  <VolunteerCard
+                    key={i}
+                    volunteer={volunteer}
+                    isProjectAdmin={this.state.isProjectAdmin}
+                    onOpenApplication={this.openApplicationModal}
+                  />)
               }
             </div>
           </div>

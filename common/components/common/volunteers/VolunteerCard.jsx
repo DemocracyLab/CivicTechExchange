@@ -9,7 +9,8 @@ import Section from "../../enums/Section.js";
 
 type Props = {|
   +volunteer: VolunteerDetailsAPIData,
-  +isProjectAdmin: boolean
+  +isProjectAdmin: boolean,
+  +onOpenApplication: (VolunteerDetailsAPIData) => void
 |};
 
 class VolunteerCard extends React.PureComponent<Props> {
@@ -62,7 +63,7 @@ class VolunteerCard extends React.PureComponent<Props> {
         ]
       : [
           (<td className="MyProjectCard-column">
-            <Button className="MyProjectCard-button">Application</Button>
+            <Button className="MyProjectCard-button" onClick={() => this.props.onOpenApplication(this.props.volunteer)}>Application</Button>
           </td>),
           (<td className="MyProjectCard-column">
             <Button className="MyProjectCard-button" bsStyle="info">Accept</Button>
