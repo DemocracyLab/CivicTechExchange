@@ -8,7 +8,14 @@
   color: $color-text-dark;
 }
 .ProjectCard-info {
-
+  width: 67%;
+  display: inline-block;
+  vertical-align: top;
+}
+.ProjectCard-subinfo {
+  width: 33%;
+  display: inline-block;
+  vertical-align: top;
 }
 .ProjectCard-description {
 
@@ -19,7 +26,11 @@
 }
 
 .ProjectCard-image {
-
+ background-color: $color-background-default;
+}
+.ProjectCard-image img {
+  width: 100%;
+  height: 100%;
 }
 .ProjectCard-skills {
 
@@ -27,3 +38,8 @@
 .ProjectCard-issueArea {
 
 }
+/*
+card ratio approximately 1.62:1
+image is ~50% height of left column
+left column is ~33% width of card container
+*/
