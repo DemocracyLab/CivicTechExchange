@@ -62,7 +62,7 @@ class ProjectCard extends React.PureComponent<Props> {
     return (
       <div className="ProjectCard-subinfo">
         <div className="ProjectCard-image">
-          <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
+          <img src={this.props.project && this.props.project.thumbnail ? this.props.project.thumbnail.publicUrl : '/static/images/projectlogo-default.png'}/>
         </div>
         <ul>
           <li>

@@ -89145,7 +89145,7 @@ var ProjectCard = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           { className: 'ProjectCard-image' },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl })
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { src: this.props.project && this.props.project.thumbnail ? this.props.project.thumbnail.publicUrl : '/static/images/projectlogo-default.png' })
         ),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'ul',
