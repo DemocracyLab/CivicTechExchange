@@ -24,7 +24,7 @@ class ProjectCard extends React.PureComponent<Props> {
 
   render(): React$Node {
     return (
-      <div className="col-12 col-lg-6">
+      <div className="col-12 col-md-6">
         <div className="ProjectCard-root">
           <a href={url.section(Section.AboutProject, {id: this.props.project.id})}
             target="_blank" rel="noopener noreferrer">
