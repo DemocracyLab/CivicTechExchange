@@ -89063,7 +89063,7 @@ var ProjectCard = function (_React$PureComponent) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
-        { className: 'col-12 col-md-6' },
+        { className: 'col-12 col-lg-6' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'div',
           { className: 'ProjectCard-root' },

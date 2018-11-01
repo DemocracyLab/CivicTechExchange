@@ -6,23 +6,32 @@
 .ProjectCard-root a {
   text-decoration: none;
   color: $color-text-dark;
+  display: flex;
 }
 .ProjectCard-info {
   width: 67%;
   display: inline-block;
   vertical-align: top;
+  padding-left: 1rem;
 }
 .ProjectCard-subinfo {
   width: 33%;
   display: inline-block;
   vertical-align: top;
+  border-right: 2px solid $color-grey-frame-border;
+}
+.ProjectCard-subinfo ul {
+  color: $color-grey-medium;
+  margin: 0;
+  padding-left: 1rem;
+  list-style-type: none;
 }
 .ProjectCard-description {
-
 }
 
-.ProjectCard-name {
-
+.ProjectCard-name h3 {
+  font-size: 1.3rem;
+  margin-top: 0.5rem;
 }
 
 .ProjectCard-image {
@@ -32,8 +41,16 @@
   width: 100%;
   height: 100%;
 }
-.ProjectCard-skills {
-
+.ProjectCard-skills ul {
+  padding-left: 0;
+}
+.ProjectCard-skills ul li {
+  display: inline;
+  list-style-type: none;
+  background: $color-grey-medium;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  margin: 0.25rem;
 }
 .ProjectCard-issueArea {
 
