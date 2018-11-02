@@ -323,6 +323,7 @@ def volunteer_with_project(request, project_id):
     role = body['roleTag']
     VolunteerRelation.create(project=project, volunteer=user, role=role, application_text=message)
 
+    # TODO: Include what role they are volunteering for
     user_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=Profile&id=' + str(user.id)
     email_body = '{message} \n -- \n To view volunteer profile, see {url} \n'.format(message=message, user=user.email, url=user_profile_url)
     email_msg = EmailMessage(
@@ -337,3 +338,16 @@ def volunteer_with_project(request, project_id):
     )
     email_msg.send()
     return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def accept_project_volunteer(request, application_id):
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    if request.user.username == volunteer_relation.project.project_creator.username:
+        # Set approved flag
+        volunteer_relation.is_approved = True
+        volunteer_relation.save()
+        return HttpResponse(status=200)
+    else:
+        raise PermissionDenied()
