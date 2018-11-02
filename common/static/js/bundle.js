@@ -89110,27 +89110,32 @@ var ProjectCard = function (_React$PureComponent) {
           'div',
           { className: 'ProjectCard-skills' },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'span',
+            { 'class': 'ProjectCard-sectiontext' },
+            'Skills Needed'
+          ),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'ul',
             null,
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               'li',
               null,
-              'Skill Needed #1'
+              'UX Designer'
             ),
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               'li',
               null,
-              'Skill Needed #2'
+              'Front-End Developer'
             ),
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               'li',
               null,
-              'Skill Needed #3'
+              'Database Admin'
             ),
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               'li',
               null,
-              'Skill Needed #4'
+              'Marketing'
             )
           )
         )
