@@ -8,6 +8,7 @@ import url from '../../utils/url.js';
 import {Locations} from "../../constants/ProjectConstants.js";
 import cdn from "../../utils/cdn.js";
 import Moment from 'react-moment';
+import Truncate from "../../utils/truncate.js";
 
 type Props = {|
   +project: Project,
@@ -45,7 +46,7 @@ class ProjectCard extends React.PureComponent<Props> {
             {this.props.project.issueArea}
         </div>
         <div className="ProjectCard-description">
-          <p>{this.props.project.description}</p>
+          <p>{Truncate.stringTruncate(this.props.project.description, 50)}</p>
         </div>
         <div className="ProjectCard-skills">
         <span class="ProjectCard-sectiontext">Skills Needed</span>
