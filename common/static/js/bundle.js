@@ -89103,7 +89103,7 @@ var ProjectCard = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'p',
             null,
-            'About the project text. This will be the first x characters of the Project Description field, truncated if required. This is placeholder text, but you knew that.'
+            this.props.project.description
           )
         ),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(

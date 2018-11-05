@@ -45,7 +45,7 @@ class ProjectCard extends React.PureComponent<Props> {
             {this.props.project.issueArea}
         </div>
         <div className="ProjectCard-description">
-          <p>About the project text. This will be the first x characters of the Project Description field, truncated if required. This is placeholder text, but you knew that.</p>
+          <p>{this.props.project.description}</p>
         </div>
         <div className="ProjectCard-skills">
         <span class="ProjectCard-sectiontext">Skills Needed</span>
