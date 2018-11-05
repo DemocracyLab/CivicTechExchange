@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner'),
     url(r'^volunteer/(?P<project_id>[0-9]+)/$', views.volunteer_with_project, name='volunteer_with_project'),
     url(r'^volunteer/approve/(?P<application_id>[0-9]+)/$', views.accept_project_volunteer, name='accept_project_volunteer'),
+    url(r'^volunteer/reject/(?P<application_id>[0-9]+)/$', views.reject_project_volunteer, name='reject_project_volunteer'),
     url(r'^alert/create/$', views.add_alert, name='add_alert')
 
 ]

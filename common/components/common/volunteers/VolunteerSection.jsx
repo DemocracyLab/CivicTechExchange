@@ -6,6 +6,7 @@ import {VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import NotificationModal from "../notification/NotificationModal.jsx";
 import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import FeedbackModal from "../FeedbackModal.jsx";
 import _ from 'lodash'
 
 type Props = {|
@@ -13,10 +14,15 @@ type Props = {|
   +isProjectAdmin: boolean
 |};
 
+type RejectVolunteerParams = {|
+  rejection_message: string
+|};
+
 type State = {|
   +volunteers: ?Array<VolunteerDetailsAPIData>,
   +showApproveModal: boolean,
-  +volunteerToApprove: VolunteerDetailsAPIData,
+  +showRejectModal: boolean,
+  +volunteerToActUpon: ?VolunteerDetailsAPIData,
   +showApplicationModal: boolean,
   +applicationModalText: string
 |};
@@ -27,12 +33,13 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     this.state = {
       volunteers:_.cloneDeep(props.volunteers),
       showApproveModal: false,
+      showRejectModal: false,
       showApplicationModal: false,
       applicationModalText: ""
     };
-  
     this.openApplicationModal = this.openApplicationModal.bind(this);
     this.openApproveModal = this.openApproveModal.bind(this);
+    this.openRejectModal = this.openRejectModal.bind(this);
   }
   
   componentWillReceiveProps(nextProps: Props): void {
@@ -55,14 +62,14 @@ class VolunteerSection extends React.PureComponent<Props, State> {
   openApproveModal(volunteer: VolunteerDetailsAPIData): void {
     this.setState({
       showApproveModal: true,
-      volunteerToApprove: volunteer
+      volunteerToActUpon: volunteer
     });
   }
   
   closeApproveModal(approved: boolean):void {
     if(approved) {
-      ProjectAPIUtils.post("/volunteer/approve/" + this.state.volunteerToApprove.application_id,{},() => {
-        this.state.volunteerToApprove.isApproved = true;
+      ProjectAPIUtils.post("/volunteer/approve/" + this.state.volunteerToActUpon.application_id + "/",{},() => {
+        this.state.volunteerToActUpon.isApproved = true;
         this.setState({
           showApproveModal: false
         });
@@ -71,6 +78,30 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     } else {
       this.setState({
         showApproveModal: false
+      });
+    }
+  }
+  
+  openRejectModal(volunteer: VolunteerDetailsAPIData): void {
+    this.setState({
+      showRejectModal: true,
+      volunteerToActUpon: volunteer
+    });
+  }
+  
+  closeRejectModal(confirmRejected: boolean, rejectionMessage: string):void {
+    if(confirmRejected) {
+      const params: RejectVolunteerParams = {rejection_message: rejectionMessage};
+      ProjectAPIUtils.post("/volunteer/reject/" + this.state.volunteerToActUpon.application_id + "/",params,() => {
+        _.remove(this.state.volunteers, (volunteer: VolunteerDetailsAPIData) => volunteer.application_id === this.state.volunteerToActUpon.application_id);
+        this.setState({
+          showRejectModal: false
+        });
+        this.forceUpdate();
+      });
+    } else {
+      this.setState({
+        showRejectModal: false
       });
     }
   }
@@ -90,6 +121,15 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           showModal={this.state.showApproveModal}
           message="Do you want to approve this Volunteer joining the project?"
           onSelection={this.closeApproveModal.bind(this)}
+        />
+  
+        <FeedbackModal
+          showModal={this.state.showRejectModal}
+          headerText="Reject Application"
+          messagePrompt="State the reasons you wish to reject this applicant"
+          confirmButtonText="Confirm"
+          maxCharacterCount={3000}
+          onConfirm={this.closeRejectModal.bind(this)}
         />
       
         {this._renderPendingVolunteers(approvedAndPendingVolunteers[1])}
@@ -124,6 +164,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
                     isProjectAdmin={this.state.isProjectAdmin}
                     onOpenApplication={this.openApplicationModal}
                     onApproveButton={this.openApproveModal}
+                    onRejectButton={this.openRejectModal}
                   />)
               }
             </div>

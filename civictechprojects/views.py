@@ -351,3 +351,26 @@ def accept_project_volunteer(request, application_id):
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def reject_project_volunteer(request, application_id):
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    if request.user.username == volunteer_relation.project.project_creator.username:
+        body = json.loads(request.body)
+        message = body['rejection_message']
+        email_body_template = 'The project owner for {project_name} has declined your application for the following reason:\n{message}'
+        email_body = email_body_template.format(project_name=volunteer_relation.project.project_name,message=message)
+        email_msg = EmailMessage(
+            'Your application to join ' + volunteer_relation.project.project_name,
+            email_body,
+            settings.EMAIL_HOST_USER,
+            [volunteer_relation.volunteer.email],
+            {'Reply-To': volunteer_relation.project.project_creator.email}
+        )
+        email_msg.send()
+        volunteer_relation.delete()
+        return HttpResponse(status=200)
+    else:
+        raise PermissionDenied()
