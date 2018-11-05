@@ -71,7 +71,7 @@ class ProjectCard extends React.PureComponent<Props> {
             {this.props.project.location}
           </li>
           <li>
-          placeholderwebsite.com
+          {this.props.project.url}
           </li>
           <li>
             <Moment fromNow>{this.props.project.date_modified}</Moment>

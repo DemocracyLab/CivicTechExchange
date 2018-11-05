@@ -18121,7 +18121,8 @@ var ProjectAPIUtils = function () {
         name: apiData.project_name,
         thumbnail: apiData.project_thumbnail,
         claimed: apiData.project_claimed,
-        date_modified: apiData.project_date_modified
+        date_modified: apiData.project_date_modified,
+        url: apiData.project_url
       };
     }
   }, {
@@ -23700,7 +23701,8 @@ var ProjectSearchStore = function (_ReduceStore) {
           tech: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED),
           role: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ROLE),
           org: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION),
-          stage: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].PROJECT_STAGE)
+          stage: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].PROJECT_STAGE),
+          url: state.url
         }, __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.identity);
 
         state = state.set('findProjectsArgs', _findProjectsArgs);
