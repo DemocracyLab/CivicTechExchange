@@ -2,12 +2,12 @@
 
 class Truncate {
 
-  static stringTruncate(str: string, length: number) {
+  static stringT(str: string, length: number) {
     var dots = str.length > length ? "..." : "";
     return str.substring(0, length) + dots;
   }
 
-  static arrayTruncate(arr: array, length: number) {
+  static arrayT(arr: array, length: number) {
     if (arr.length > length) {
      let result = arr.slice(0, length-1)
      result.push("...")
@@ -15,6 +15,9 @@ class Truncate {
     } else {
       return arr;
     }
+  }
+  static urlPrefixT(url: string) {
+    return url.replace(/^https?\:\/\//i, "");
   }
 }
 

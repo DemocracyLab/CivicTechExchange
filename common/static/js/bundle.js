@@ -89167,7 +89167,7 @@ var ProjectCard = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'li',
             null,
-            'placeholderwebsite.com'
+            __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].urlPrefix(this.props.project.url)
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'li',
@@ -89263,6 +89263,11 @@ var Truncate = function () {
       } else {
         return arr;
       }
+    }
+  }, {
+    key: "urlPrefix",
+    value: function urlPrefix(url) {
+      return url.replace(/^https?\:\/\//i, "");
     }
   }]);
 

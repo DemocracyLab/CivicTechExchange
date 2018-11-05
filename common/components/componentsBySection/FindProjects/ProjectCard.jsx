@@ -46,7 +46,7 @@ class ProjectCard extends React.PureComponent<Props> {
             {this.props.project.issueArea}
         </div>
         <div className="ProjectCard-description">
-          <p>{Truncate.stringTruncate(this.props.project.description, 50)}</p>
+          <p>{Truncate.stringT(this.props.project.description, 50)}</p>
         </div>
         <div className="ProjectCard-skills">
         <span class="ProjectCard-sectiontext">Skills Needed</span>
@@ -71,7 +71,7 @@ class ProjectCard extends React.PureComponent<Props> {
             {this.props.project.location}
           </li>
           <li>
-          {this.props.project.url}
+          {Truncate.urlPrefixT(this.props.project.url)}
           </li>
           <li>
             <Moment fromNow>{this.props.project.date_modified}</Moment>
