@@ -91455,6 +91455,7 @@ var VolunteerCard = function (_React$PureComponent) {
     value: function render() {
       var volunteer = this.props.volunteer.user;
       var roleTag = this.props.volunteer.roleTag;
+      var volunteerUrl = __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_5__enums_Section_js__["a" /* default */].Profile, { id: volunteer.id });
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         { className: 'MyProjectCard-root' },
@@ -91473,7 +91474,7 @@ var VolunteerCard = function (_React$PureComponent) {
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                   'a',
                   {
-                    href: __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_5__enums_Section_js__["a" /* default */].Profile, { id: volunteer.id }),
+                    href: volunteerUrl,
                     target: '_blank', rel: 'noopener noreferrer'
                   },
                   __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl })
@@ -91490,7 +91491,14 @@ var VolunteerCard = function (_React$PureComponent) {
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                   'tr',
                   { className: 'MyProjectCard-projectName' },
-                  volunteer && volunteer.first_name + " " + volunteer.last_name
+                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'a',
+                    {
+                      href: volunteerUrl,
+                      target: '_blank', rel: 'noopener noreferrer'
+                    },
+                    volunteer && volunteer.first_name + " " + volunteer.last_name
+                  )
                 )
               ),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(

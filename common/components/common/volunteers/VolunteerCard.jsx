@@ -20,16 +20,14 @@ class VolunteerCard extends React.PureComponent<Props> {
   render(): React$Node {
     const volunteer: ?UserAPIData = this.props.volunteer.user;
     const roleTag: ?TagDefinition = this.props.volunteer.roleTag;
+    const volunteerUrl:string = url.section(Section.Profile, {id: volunteer.id});
     return (
       <div className="MyProjectCard-root">
          <table className="MyProjectCard-table">
           <tbody>
             <tr>
               <td className="MyProjectCard-column">
-                <a
-                   href={url.section(Section.Profile, {id: volunteer.id})}
-                   target="_blank" rel="noopener noreferrer"
-                >
+                <a href={volunteerUrl} target="_blank" rel="noopener noreferrer">
                   {/*TODO: Change to pointer when hovering over image*/}
                   <img className="upload_img upload_img_bdr" src={volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl}/>
                 </a>
@@ -39,7 +37,9 @@ class VolunteerCard extends React.PureComponent<Props> {
                   Name
                 </tr>
                 <tr className="MyProjectCard-projectName">
-                  {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
+                  <a href={volunteerUrl} target="_blank" rel="noopener noreferrer">
+                    {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
+                  </a>
                 </tr>
               </td>
               <td className="MyProjectCard-column">
