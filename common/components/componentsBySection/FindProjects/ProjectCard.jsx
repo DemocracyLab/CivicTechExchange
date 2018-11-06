@@ -50,14 +50,21 @@ class ProjectCard extends React.PureComponent<Props> {
         </div>
         <div className="ProjectCard-skills">
         <span className="ProjectCard-sectiontext">Skills Needed</span>
-          <ul>
-            <li>UX Designer</li>
-            <li>Front-End Developer</li>
-            <li>Database Admin</li>
-            <li>Marketing</li>
-          </ul>
+          {this._renderSkillList(4)}
         </div>
       </div>
+    );
+  }
+  _renderSkillList(numskills): React$Node {
+    //take array of skills needed from props, truncate if required, and map to list items
+    const skills = Truncate.arrayT(this.props.project.positions, numskills)
+    let index = 0; //super hacky unique key indexes goooo
+    return (
+      <ul>
+        {skills.map((skills) =>
+          <li key={index++}>{skills}</li>
+        )}
+      </ul>
     );
   }
   _renderSubInfo(): React$Node {

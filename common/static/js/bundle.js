@@ -18123,7 +18123,7 @@ var ProjectAPIUtils = function () {
         claimed: apiData.project_claimed,
         date_modified: apiData.project_date_modified,
         url: apiData.project_url,
-        positions: apiData.project_positions && apiData.project_positions.length != 0 ? ProjectAPIUtils.getSkillNames(apiData.project_positions) : 'None'
+        positions: apiData.project_positions && apiData.project_positions.length != 0 ? ProjectAPIUtils.getSkillNames(apiData.project_positions) : ['None']
       };
     }
   }, {
@@ -89129,31 +89129,26 @@ var ProjectCard = function (_React$PureComponent) {
             { className: 'ProjectCard-sectiontext' },
             'Skills Needed'
           ),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'ul',
-            null,
-            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-              'li',
-              null,
-              'UX Designer'
-            ),
-            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-              'li',
-              null,
-              'Front-End Developer'
-            ),
-            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-              'li',
-              null,
-              'Database Admin'
-            ),
-            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-              'li',
-              null,
-              'Marketing'
-            )
-          )
+          this._renderSkillList(4)
         )
+      );
+    }
+  }, {
+    key: '_renderSkillList',
+    value: function _renderSkillList(numskills) {
+      //take array of skills needed from props, truncate if required, and map to list items
+      var skills = __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].arrayT(this.props.project.positions, numskills);
+      var index = 0; //super hacky unique key indexes goooo
+      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+        'ul',
+        null,
+        skills.map(function (skills) {
+          return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+            'li',
+            { key: index++ },
+            skills
+          );
+        })
       );
     }
   }, {

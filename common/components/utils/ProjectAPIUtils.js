@@ -78,7 +78,7 @@ class ProjectAPIUtils {
       url: apiData.project_url,
       positions: apiData.project_positions && apiData.project_positions.length !=0
           ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
-          : 'None',
+          : ['None'],
     };
   }
 
