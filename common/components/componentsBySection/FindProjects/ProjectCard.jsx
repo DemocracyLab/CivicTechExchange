@@ -49,7 +49,7 @@ class ProjectCard extends React.PureComponent<Props> {
           <p>{Truncate.stringT(this.props.project.description, 50)}</p>
         </div>
         <div className="ProjectCard-skills">
-        <span class="ProjectCard-sectiontext">Skills Needed</span>
+        <span className="ProjectCard-sectiontext">Skills Needed</span>
           <ul>
             <li>UX Designer</li>
             <li>Front-End Developer</li>

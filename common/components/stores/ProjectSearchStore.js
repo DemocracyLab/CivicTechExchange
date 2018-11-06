@@ -133,7 +133,8 @@ class ProjectSearchStore extends ReduceStore<State> {
         role: this._getTagCategoryParams(state, TagCategory.ROLE),
         org: this._getTagCategoryParams(state, TagCategory.ORGANIZATION),
         stage: this._getTagCategoryParams(state, TagCategory.PROJECT_STAGE),
-        url: state.url
+        url: state.url,
+        positions: state.positions
       }, _.identity);
 
       state = state.set('findProjectsArgs',findProjectsArgs);

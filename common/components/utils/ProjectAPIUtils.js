@@ -33,7 +33,9 @@ export type ProjectAPIData = {|
   +project_location: string,
   +project_name: string,
   +project_thumbnail: FileInfo,
-  +project_claimed: boolean
+  +project_claimed: boolean,
+  +project_url: string,
+  +project_positions: $ReadOnlyArray<PositionInfo>,
 |};
 
 export type ProjectDetailsAPIData = {|
@@ -73,8 +75,19 @@ class ProjectAPIUtils {
       thumbnail: apiData.project_thumbnail,
       claimed: apiData.project_claimed,
       date_modified: apiData.project_date_modified,
-      url: apiData.project_url
+      url: apiData.project_url,
+      positions: apiData.project_positions && apiData.project_positions.length !=0
+          ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
+          : 'None',
     };
+  }
+
+  static getSkillNames(positions: array) {
+    let output = [];
+    positions.forEach(function(data) {
+      output.push(data.roleTag.display_name)
+    })
+    return output;
   }
 
   static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {

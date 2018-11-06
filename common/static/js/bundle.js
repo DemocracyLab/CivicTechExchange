@@ -18122,8 +18122,18 @@ var ProjectAPIUtils = function () {
         thumbnail: apiData.project_thumbnail,
         claimed: apiData.project_claimed,
         date_modified: apiData.project_date_modified,
-        url: apiData.project_url
+        url: apiData.project_url,
+        positions: apiData.project_positions && apiData.project_positions.length != 0 ? ProjectAPIUtils.getSkillNames(apiData.project_positions) : 'None'
       };
+    }
+  }, {
+    key: 'getSkillNames',
+    value: function getSkillNames(positions) {
+      var output = [];
+      positions.forEach(function (data) {
+        output.push(data.roleTag.display_name);
+      });
+      return output;
     }
   }, {
     key: 'fetchProjectDetails',
@@ -23702,7 +23712,8 @@ var ProjectSearchStore = function (_ReduceStore) {
           role: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ROLE),
           org: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ORGANIZATION),
           stage: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].PROJECT_STAGE),
-          url: state.url
+          url: state.url,
+          positions: state.positions
         }, __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.identity);
 
         state = state.set('findProjectsArgs', _findProjectsArgs);
@@ -89107,7 +89118,7 @@ var ProjectCard = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'p',
             null,
-            __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].stringTruncate(this.props.project.description, 50)
+            __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].stringT(this.props.project.description, 50)
           )
         ),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
@@ -89115,7 +89126,7 @@ var ProjectCard = function (_React$PureComponent) {
           { className: 'ProjectCard-skills' },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'span',
-            { 'class': 'ProjectCard-sectiontext' },
+            { className: 'ProjectCard-sectiontext' },
             'Skills Needed'
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
@@ -89167,7 +89178,7 @@ var ProjectCard = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'li',
             null,
-            __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].urlPrefix(this.props.project.url)
+            __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].urlPrefixT(this.props.project.url)
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'li',
@@ -89248,14 +89259,14 @@ var Truncate = function () {
   }
 
   _createClass(Truncate, null, [{
-    key: "stringTruncate",
-    value: function stringTruncate(str, length) {
+    key: "stringT",
+    value: function stringT(str, length) {
       var dots = str.length > length ? "..." : "";
       return str.substring(0, length) + dots;
     }
   }, {
-    key: "arrayTruncate",
-    value: function arrayTruncate(arr, length) {
+    key: "arrayT",
+    value: function arrayT(arr, length) {
       if (arr.length > length) {
         var result = arr.slice(0, length - 1);
         result.push("...");
@@ -89265,8 +89276,8 @@ var Truncate = function () {
       }
     }
   }, {
-    key: "urlPrefix",
-    value: function urlPrefix(url) {
+    key: "urlPrefixT",
+    value: function urlPrefixT(url) {
       return url.replace(/^https?\:\/\//i, "");
     }
   }]);
