@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import ast
 import dj_database_url
 from distutils.util import strtobool
 
@@ -83,7 +84,9 @@ WSGI_APPLICATION = 'democracylab.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
+DL_DATABASE = os.environ.get('DL_DATABASE', '')
+
+DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
