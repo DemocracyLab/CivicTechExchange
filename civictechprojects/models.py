@@ -85,6 +85,30 @@ class Project(models.Model):
 
         return project
 
+    def hydrate_to_tile_json(self):
+        files = ProjectFile.objects.filter(file_project=self.id)
+        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+        positions = ProjectPosition.objects.filter(position_project=self.id)
+
+        project = {
+            'project_id': self.id,
+            'project_name': self.project_name,
+            'project_creator': self.project_creator.id,
+            'project_claimed': not self.project_creator.is_admin_contributor(),
+            'project_description': self.project_description,
+            'project_url': self.project_url,
+            'project_location': self.project_location,
+            'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
+            'project_stage': Tag.hydrate_to_json(self.id, list(self.project_stage.all().values())),
+            'project_positions': list(map(lambda position: position.to_json(), positions)),
+            'project_date_modified': self.project_date_modified.__str__()
+        }
+
+        if len(thumbnail_files) > 0:
+            project['project_thumbnail'] = thumbnail_files[0].to_json()
+
+        return project
+
 
 class ProjectLink(models.Model):
     link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True)
