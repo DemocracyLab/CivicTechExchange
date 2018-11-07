@@ -29,33 +29,47 @@ class ProjectCard extends React.PureComponent<Props> {
         <div className="ProjectCard-root">
           <a href={url.section(Section.AboutProject, {id: this.props.project.id})}
             target="_blank" rel="noopener noreferrer">
+            {this._renderLogo()}
             {this._renderSubInfo()}
+            {this._renderTitleAndIssue()}
             {this._renderProjectDescription()}
+            {this._renderSkillsNeeded()}
           </a>
         </div>
       </div>
     );
   }
+  _renderLogo(): React$Node {
+    return (
+      <div className="ProjectCard-logo">
+        <img src={this.props.project && this.props.project.thumbnail ? this.props.project.thumbnail.publicUrl : '/static/images/projectlogo-default.png'}/>
+      </div>
+    )
+  }
+  _renderTitleAndIssue(): React$Node {
+    return (
+      <div className="ProjectCard-title">
+        <h3>{this.props.project.name}</h3>
+        <h4>{this.props.project.issueArea}</h4>
+      </div>
+    )
+  }
   _renderProjectDescription(): React$Node {
     return (
-      <div className="ProjectCard-info">
-        <div className="ProjectCard-name">
-            <h3>{this.props.project.name}</h3>
-        </div>
-        <div className="ProjectCard-issueArea">
-            {this.props.project.issueArea}
-        </div>
         <div className="ProjectCard-description">
-          <p>{Truncate.stringT(this.props.project.description, 50)}</p>
+          <p>{Truncate.stringT(this.props.project.description, 100)}</p>
         </div>
-        <div className="ProjectCard-skills">
-        <span className="ProjectCard-sectiontext">Skills Needed</span>
-          {this._renderSkillList(4)}
-        </div>
-      </div>
     );
   }
-  _renderSkillList(numskills): React$Node {
+  _renderSkillsNeeded(): React$Node {
+    return (
+    <div className="ProjectCard-skills">
+    <h4>Skills Needed</h4>
+      {this._generateSkillList(4)}
+    </div>
+    )
+  }
+  _generateSkillList(numskills): React$Node {
     //take array of skills needed from props, truncate if required, and map to list items
     const skills = Truncate.arrayT(this.props.project.positions, numskills)
     let index = 0; //super hacky unique key indexes goooo
@@ -70,9 +84,6 @@ class ProjectCard extends React.PureComponent<Props> {
   _renderSubInfo(): React$Node {
     return (
       <div className="ProjectCard-subinfo">
-        <div className="ProjectCard-image">
-          <img src={this.props.project && this.props.project.thumbnail ? this.props.project.thumbnail.publicUrl : '/static/images/projectlogo-default.png'}/>
-        </div>
         <ul>
           <li>
             {this.props.project.location}

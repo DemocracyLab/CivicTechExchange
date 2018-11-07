@@ -89086,9 +89086,39 @@ var ProjectCard = function (_React$PureComponent) {
             'a',
             { href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }),
               target: '_blank', rel: 'noopener noreferrer' },
+            this._renderLogo(),
             this._renderSubInfo(),
-            this._renderProjectDescription()
+            this._renderTitleAndIssue(),
+            this._renderProjectDescription(),
+            this._renderSkillsNeeded()
           )
+        )
+      );
+    }
+  }, {
+    key: '_renderLogo',
+    value: function _renderLogo() {
+      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+        'div',
+        { className: 'ProjectCard-logo' },
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { src: this.props.project && this.props.project.thumbnail ? this.props.project.thumbnail.publicUrl : '/static/images/projectlogo-default.png' })
+      );
+    }
+  }, {
+    key: '_renderTitleAndIssue',
+    value: function _renderTitleAndIssue() {
+      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+        'div',
+        { className: 'ProjectCard-title' },
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'h3',
+          null,
+          this.props.project.name
+        ),
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'h4',
+          null,
+          this.props.project.issueArea
         )
       );
     }
@@ -89097,45 +89127,31 @@ var ProjectCard = function (_React$PureComponent) {
     value: function _renderProjectDescription() {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
-        { className: 'ProjectCard-info' },
+        { className: 'ProjectCard-description' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'div',
-          { className: 'ProjectCard-name' },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'h3',
-            null,
-            this.props.project.name
-          )
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'div',
-          { className: 'ProjectCard-issueArea' },
-          this.props.project.issueArea
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'div',
-          { className: 'ProjectCard-description' },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'p',
-            null,
-            __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].stringT(this.props.project.description, 50)
-          )
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'div',
-          { className: 'ProjectCard-skills' },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'span',
-            { className: 'ProjectCard-sectiontext' },
-            'Skills Needed'
-          ),
-          this._renderSkillList(4)
+          'p',
+          null,
+          __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].stringT(this.props.project.description, 100)
         )
       );
     }
   }, {
-    key: '_renderSkillList',
-    value: function _renderSkillList(numskills) {
+    key: '_renderSkillsNeeded',
+    value: function _renderSkillsNeeded() {
+      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+        'div',
+        { className: 'ProjectCard-skills' },
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'h4',
+          null,
+          'Skills Needed'
+        ),
+        this._generateSkillList(4)
+      );
+    }
+  }, {
+    key: '_generateSkillList',
+    value: function _generateSkillList(numskills) {
       //take array of skills needed from props, truncate if required, and map to list items
       var skills = __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].arrayT(this.props.project.positions, numskills);
       var index = 0; //super hacky unique key indexes goooo
@@ -89157,11 +89173,6 @@ var ProjectCard = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
         { className: 'ProjectCard-subinfo' },
-        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'div',
-          { className: 'ProjectCard-image' },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('img', { src: this.props.project && this.props.project.thumbnail ? this.props.project.thumbnail.publicUrl : '/static/images/projectlogo-default.png' })
-        ),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'ul',
           null,

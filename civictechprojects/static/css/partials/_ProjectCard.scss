@@ -1,24 +1,10 @@
 .ProjectCard-root {
   background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
-  margin: 10px -5px;
 }
 .ProjectCard-root a {
   text-decoration: none;
   color: $color-text-dark;
-  display: flex;
-}
-.ProjectCard-info {
-  width: 67%;
-  display: inline-block;
-  vertical-align: top;
-  padding: 0 0.5rem;
-}
-.ProjectCard-subinfo {
-  width: 33%;
-  display: inline-block;
-  vertical-align: top;
-  border-right: 2px solid $color-grey-frame-border;
 }
 .ProjectCard-subinfo ul {
   color: $color-text-dark;
@@ -29,25 +15,21 @@
   overflow-wrap: break-word;
 }
 .ProjectCard-subinfo li {
-  margin: 0.25rem 0;
+  margin-top: 0.25rem;
 }
-.ProjectCard-description {
+.ProjectCard-subinfo li:first-of-type {
+  margin-top: 0;
 }
-
-.ProjectCard-name h3 {
+.ProjectCard-title h3 {
   font-size: 1.2rem;
   margin-top: 0.5rem;
 }
-
-.ProjectCard-image {
+.ProjectCard-title h4 {
+  color: $color-text-dark;
+  font-size: 0.875rem;
+}
+.ProjectCard-logo {
  background-color: $color-background-default;
-}
-.ProjectCard-image img {
-  width: 100%;
-  height: 100%;
-}
-.ProjectCard-skills ul {
-  padding-left: 0;
 }
 .ProjectCard-skills ul li {
   display: inline-block;
@@ -57,12 +39,3 @@
   padding: 0.25rem 0.5rem;
   margin: 0.25rem;
 }
-.ProjectCard-issueArea {
-  color: $color-text-dark;
-  font-size: 0.875rem;
-}
-/*
-card ratio approximately 1.62:1
-image is ~50% height of left column
-left column is ~33% width of card container
-*/
