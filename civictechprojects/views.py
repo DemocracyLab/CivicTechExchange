@@ -157,7 +157,7 @@ def add_alert(request):
 def my_projects(request):
     projects = Project.objects.filter(project_creator_id=request.user.id)
     return HttpResponse(json.dumps([
-        project.hydrate_to_json() for project in projects
+        project.hydrate_to_tile_json() for project in projects
     ]))
 
 
@@ -239,7 +239,7 @@ def projects_by_roles(tags):
 
 def projects_with_filter_counts(projects):
     return {
-        'projects': [project.hydrate_to_json() for project in projects],
+        'projects': [project.hydrate_to_tile_json() for project in projects],
         'tags': list(Tag.objects.values())
     }
 
