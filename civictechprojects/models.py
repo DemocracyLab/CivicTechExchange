@@ -97,7 +97,6 @@ class Project(models.Model):
             'project_id': self.id,
             'project_name': self.project_name,
             'project_creator': self.project_creator.id,
-            'project_claimed': not self.project_creator.is_admin_contributor(),
             'project_description': self.project_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
