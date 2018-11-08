@@ -88987,10 +88987,10 @@ var ProjectCardsContainer = function (_React$Component) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
         'div',
-        { className: 'ProjectCardContainer col-12 col-md-9' },
+        { className: 'ProjectCardContainer col-12 col-md-9 p-0 m-0' },
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
           'div',
-          { className: 'container-fluid' },
+          { className: 'container-fluid pl-0 pr-0' },
           __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
             'div',
             { className: 'row' },
@@ -89351,7 +89351,7 @@ var ProjectSearchContainer = function (_React$PureComponent) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
         'div',
-        null,
+        { className: 'row' },
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
           'div',
           { className: 'IntroText col-12' },

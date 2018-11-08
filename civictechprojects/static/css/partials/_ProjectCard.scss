@@ -3,10 +3,22 @@
   border: solid 1px $color-grey-frame-border;
   border-radius: 6px;
   box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.15);
+  margin-top: 1rem;
 }
 .ProjectCard-root a {
   text-decoration: none;
   color: $color-text-dark;
+  display: grid;
+  grid-template-columns: 32% 3% 32% 32%;
+  grid-template-rows: auto;
+}
+.ProjectCard-description {
+  grid-column: 1 / span 4;
+  grid-row: 3;
+}
+.ProjectCard-subinfo {
+  grid-column: 3 / span 4;
+  grid-row: 2;
 }
 .ProjectCard-subinfo ul {
   color: $color-text-dark;
@@ -22,6 +34,10 @@
 .ProjectCard-subinfo li:first-of-type {
   margin-top: 0;
 }
+.ProjectCard-title {
+  grid-column: 3 / span 4;
+  grid-row: 1 / 2;
+}
 .ProjectCard-title h3 {
   font-size: 1.2rem;
   margin-top: 0.5rem;
@@ -32,6 +48,15 @@
 }
 .ProjectCard-logo {
   background-color: $color-background-default;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+.ProjectCard-logo img {
+  max-width: 100%;
+}
+.ProjectCard-skills {
+  grid-column: 1 / span 4;
+  grid-row: 4;
 }
 .ProjectCard-skills ul li {
   display: inline-block;
