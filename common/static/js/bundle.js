@@ -89111,7 +89111,7 @@ var ProjectCard = function (_React$PureComponent) {
         'div',
         { className: 'ProjectCard-title' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'h3',
+          'h2',
           null,
           this.props.project.name
         ),
@@ -89142,7 +89142,7 @@ var ProjectCard = function (_React$PureComponent) {
         'div',
         { className: 'ProjectCard-skills' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-          'h4',
+          'h3',
           null,
           'Skills Needed'
         ),

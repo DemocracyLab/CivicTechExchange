@@ -49,7 +49,7 @@ class ProjectCard extends React.PureComponent<Props> {
   _renderTitleAndIssue(): React$Node {
     return (
       <div className="ProjectCard-title">
-        <h3>{this.props.project.name}</h3>
+        <h2>{this.props.project.name}</h2>
         <h4>{this.props.project.issueArea}</h4>
       </div>
     )
@@ -64,7 +64,7 @@ class ProjectCard extends React.PureComponent<Props> {
   _renderSkillsNeeded(): React$Node {
     return (
     <div className="ProjectCard-skills">
-    <h4>Skills Needed</h4>
+    <h3>Skills Needed</h3>
       {this._generateSkillList(4)}
     </div>
     )

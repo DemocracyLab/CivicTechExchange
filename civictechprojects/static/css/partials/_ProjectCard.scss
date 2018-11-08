@@ -5,19 +5,32 @@
   box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.15);
   margin-top: 1rem;
 }
+.ProjectCard-root h2 {
+  font-size: 1.375rem;
+  margin-top: 0.5rem;
+}
+.ProjectCard-root h3 {
+  font-size: 1.0rem;
+  font-weight: bold;
+}
+.ProjectCard-root h4 {
+  color: $color-text-dark;
+  font-size: 0.875rem;
+}
 .ProjectCard-root a {
   text-decoration: none;
   color: $color-text-dark;
   display: grid;
-  grid-template-columns: 32% 3% 32% 32%;
+  grid-template-columns: 30% 2% 34% 34%;
   grid-template-rows: auto;
 }
 .ProjectCard-description {
-  grid-column: 1 / span 4;
+  grid-column: 1 / 5;
   grid-row: 3;
+  padding-left: 8px; /* only on mobile */
 }
 .ProjectCard-subinfo {
-  grid-column: 3 / span 4;
+  grid-column: 3 / 5;
   grid-row: 2;
 }
 .ProjectCard-subinfo ul {
@@ -37,28 +50,23 @@
   margin-right: 0.375rem;
 }
 .ProjectCard-title {
-  grid-column: 3 / span 4;
+  grid-column: 3 / 5;
   grid-row: 1 / 2;
 }
-.ProjectCard-title h3 {
-  font-size: 1.2rem;
-  margin-top: 0.5rem;
-}
-.ProjectCard-title h4 {
-  color: $color-text-dark;
-  font-size: 0.875rem;
-}
 .ProjectCard-logo {
-  background-color: $color-background-default;
   grid-column: 1;
-  grid-row: 1 / span 2;
+  grid-row: 1 / 3;
 }
 .ProjectCard-logo img {
   max-width: 100%;
 }
 .ProjectCard-skills {
-  grid-column: 1 / span 4;
+  grid-column: 1 / 5;
   grid-row: 4;
+  padding: 0 0 0 8px;
+}
+.ProjectCard-skills ul {
+  padding: 0;
 }
 .ProjectCard-skills ul li {
   display: inline-block;
@@ -66,5 +74,58 @@
   background: $color-grey-medium;
   border-radius: 1rem;
   padding: 0.25rem 0.5rem;
-  margin: 0.25rem;
+  margin: 0.25rem 0.5rem 0.25rem 0;
+}
+
+@include media-breakpoint-up(sm) {
+  .ProjectCard-subinfo {
+    margin-left: 0.5rem;
+  }
+  .ProjectCard-description {
+    grid-column: 3 / 5;
+    grid-row: 2 / 4;
+    padding: 0;
+  }
+  .ProjectCard-subinfo {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .ProjectCard-subinfo li {
+    margin-top: 0.875rem;
+  }
+  .ProjectCard-subinfo li:first-of-type {
+    margin-top: 0;
+  }
+  .ProjectCard-skills {
+    grid-column: 3 / 5;
+    grid-row: 3;
+    padding: 0;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .ProjectCard-description, .ProjectCard-subinfo, .ProjectCard-skills {
+    margin-left: 0.5rem;
+  }
+  .ProjectCard-description {
+    grid-row: 3;
+    grid-column: 1 / 5;
+  }
+  .ProjectCard-skills {
+    grid-row: 4;
+    grid-column: 1 / 5;
+  }
+  .ProjectCard-subinfo {
+    grid-row: 5;
+    grid-column: 1 / 5;
+    margin-top: 0.5rem;
+  }
+  .ProjectCard-subinfo li {
+    display: inline;
+    margin-top: 0;
+    padding-right: 1rem;
+  }
+  .ProjectCard-subinfo li:last-of-type {
+    padding-right: 0;
+  }
 }
