@@ -1,6 +1,6 @@
 // @flow
 
-import type {Project} from '../stores/ProjectSearchStore.js';
+// import type {Project} from '../stores/ProjectSearchStore.js';
 import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 import {PositionInfo} from "../forms/PositionInfo.jsx";
@@ -27,6 +27,7 @@ export type TagDefinition = {|
 
 export type ProjectData = {|
   +id: number,
+  +ownerId: number,
   +description: string,
   +issueArea: $ReadOnlyArray<TagDefinition>,
   +stage: $ReadOnlyArray<TagDefinition>,
@@ -39,6 +40,7 @@ export type ProjectData = {|
 
 export type ProjectAPIData = {|
   +project_id: number,
+  +project_creator: number,
   +project_description: string,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
   +project_stage: $ReadOnlyArray<TagDefinition>,
@@ -100,6 +102,7 @@ class ProjectAPIUtils {
       location: apiData.project_location,
       name: apiData.project_name,
       thumbnail: apiData.project_thumbnail,
+      ownerId: apiData.project_creator,
       claimed: apiData.project_claimed,
       date_modified: apiData.project_date_modified
     };
