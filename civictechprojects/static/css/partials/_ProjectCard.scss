@@ -22,17 +22,19 @@
 }
 .ProjectCard-subinfo ul {
   color: $color-text-dark;
-  margin: 0;
-  padding: 0 0.5rem;
   list-style-type: none;
   font-size: 0.875rem;
   overflow-wrap: break-word;
+  padding: 0;
 }
 .ProjectCard-subinfo li {
   margin-top: 0.25rem;
 }
 .ProjectCard-subinfo li:first-of-type {
   margin-top: 0;
+}
+.ProjectCard-subinfo li svg {
+  margin-right: 0.375rem;
 }
 .ProjectCard-title {
   grid-column: 3 / span 4;
