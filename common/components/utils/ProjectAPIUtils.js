@@ -25,6 +25,18 @@ export type TagDefinition = {|
   parent: string,
 |};
 
+export type ProjectData = {|
+  +id: number,
+  +description: string,
+  +issueArea: $ReadOnlyArray<TagDefinition>,
+  +stage: $ReadOnlyArray<TagDefinition>,
+  +location: string,
+  +name: string,
+  +thumbnail: FileInfo,
+  +claimed: boolean,
+  +date_modified: string
+|};
+
 export type ProjectAPIData = {|
   +project_id: number,
   +project_description: string,
@@ -33,7 +45,8 @@ export type ProjectAPIData = {|
   +project_location: string,
   +project_name: string,
   +project_thumbnail: FileInfo,
-  +project_claimed: boolean
+  +project_claimed: boolean,
+  +project_date_modified: string
 |};
 
 export type VolunteerUserData = {|
@@ -72,7 +85,7 @@ export type ProjectDetailsAPIData = {|
 |};
 
 class ProjectAPIUtils {
-  static projectFromAPIData(apiData: ProjectAPIData): Project {
+  static projectFromAPIData(apiData: ProjectAPIData): ProjectData {
     return {
       description: apiData.project_description,
       id: apiData.project_id,

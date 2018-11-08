@@ -1,17 +1,23 @@
 // @flow
 
-import type {Project} from '../stores/ProjectSearchStore.js';
+import {ProjectData} from "../utils/ProjectAPIUtils.js";
 import CurrentUser from '../utils/CurrentUser.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import MyProjectCard from '../componentsBySection/MyProjects/MyProjectCard.jsx';
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx';
+import {ProjectAPIData} from "../utils/ProjectAPIUtils.js";
 import React from 'react';
 import _ from 'lodash';
-import DjangoCSRFToken from 'django-react-csrftoken';
 
+type MyProjectsAPIResponse = {|
+  owned_projects: $ReadOnlyArray<ProjectAPIData>,
+  volunteering_projects: $ReadOnlyArray<ProjectAPIData>
+|};
 
 type State = {|
-  projects: $ReadOnlyArray<Project>,
+  ownedProjects: ?$ReadOnlyArray<ProjectData>,
+  volunteeringProjects: ?$ReadOnlyArray<ProjectData>,
+  showConfirmDeleteModal: boolean
 |};
 
 class MyProjectsController extends React.PureComponent<{||}, State> {
@@ -19,8 +25,9 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
     this.state = {
-      projects: [],
-      showConfirmDeleteModal: false,
+      ownedProjects: null,
+      volunteeringProjects: null,
+      showConfirmDeleteModal: false
     };
   }
 
@@ -28,10 +35,13 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener(
       'load',
-      () =>
+      () => {
+        const myProjectsApiResponse: MyProjectsAPIResponse = JSON.parse(xhr.response);
         this.setState({
-          projects: JSON.parse(xhr.response)
-            .map(ProjectAPIUtils.projectFromAPIData)}),
+          ownedProjects: myProjectsApiResponse.owned_projects.map(ProjectAPIUtils.projectFromAPIData),
+          volunteeringProjects: myProjectsApiResponse.volunteering_projects.map(ProjectAPIUtils.projectFromAPIData)
+        });
+      }
     );
     xhr.open('GET', '/api/my_projects');
     xhr.send();
@@ -41,7 +51,7 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
     this.setState({
       showConfirmDeleteModal: true,
       projectToDelete: project,
-    })
+    });
   }
 
   removeProjectFromList(): void {
@@ -77,17 +87,26 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
           message="Are you sure you want to delete this project?"
           onSelection={this.confirmDeleteProject.bind(this)}
           />
-
-          {this.state.projects.map(project => {
-            return <MyProjectCard
-              key={project.name}
-              project={project}
-              onProjectClickDelete={this.clickDeleteProject.bind(this)}
-            />;
-          })}
+          {!_.isEmpty(this.state.ownedProjects) && this.renderProjectCollection("Owned Projects", this.state.ownedProjects)}
+          {!_.isEmpty(this.state.volunteeringProjects) && this.renderProjectCollection("Volunteering With", this.state.volunteeringProjects)}
         </div>
       )
       : <p><a href="/login">Login</a> to see a list of your projects.</p>;
+  }
+  
+  renderProjectCollection(title:string, projects: $ReadOnlyArray<ProjectData>): React$Node{
+    return (
+      <div>
+        <h3>{title}</h3>
+        {projects.map(project => {
+          return <MyProjectCard
+            key={project.name}
+            project={project}
+            onProjectClickDelete={this.clickDeleteProject.bind(this)}
+          />;
+        })}
+      </div>
+    );
   }
 }
 
