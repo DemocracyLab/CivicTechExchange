@@ -88,17 +88,17 @@ class ProjectCard extends React.PureComponent<Props> {
         <ul>
         {this.props.project.location &&
           <li>
-          <i className="fas fa-map-marker-alt"></i>{this.props.project.location}
+          <i className="fas fa-map-marker-alt fa-fw"></i>{this.props.project.location}
           </li>
         }
         {this.props.project.url &&
           <li>
-          <i className="fas fa-globe-americas"></i>{Truncate.urlPrefixT(this.props.project.url)}
+          <i className="fas fa-globe-americas fa-fw"></i>{Truncate.urlPrefixT(this.props.project.url)}
           </li>
         }
         {this.props.project.date_modified &&
           <li>
-            <i className="fas fa-clock"></i><Moment fromNow>{this.props.project.date_modified}</Moment>
+            <i className="fas fa-clock fa-fw"></i><Moment fromNow>{this.props.project.date_modified}</Moment>
           </li>
         }
         </ul>
