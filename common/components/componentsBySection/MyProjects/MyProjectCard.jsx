@@ -67,7 +67,6 @@ class MyProjectCard extends React.PureComponent<Props, State> {
     ];
   
     buttons = buttons.concat(
-      // this.props.project && (this.props.project.ownerId === CurrentUser.userID())
       this.state.isOwner
       ? [
           <Button className="MyProjectCard-button" href={url.section(Section.EditProject, id)} bsStyle="info">Edit</Button>,

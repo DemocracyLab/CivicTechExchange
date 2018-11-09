@@ -94786,9 +94786,7 @@ var MyProjectCard = function (_React$PureComponent) {
         'View'
       )];
 
-      buttons = buttons.concat(
-      // this.props.project && (this.props.project.ownerId === CurrentUser.userID())
-      this.state.isOwner ? [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      buttons = buttons.concat(this.state.isOwner ? [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_3_react_bootstrap__["a" /* Button */],
         { className: 'MyProjectCard-button', href: __WEBPACK_IMPORTED_MODULE_2__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_1__enums_Section_js__["a" /* default */].EditProject, id), bsStyle: 'info' },
         'Edit'

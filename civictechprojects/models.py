@@ -377,8 +377,8 @@ class TaggedVolunteerRole(TaggedItemBase):
 
 
 class VolunteerRelation(models.Model):
-    project = models.ForeignKey(Project, related_name='projects')
-    volunteer = models.ForeignKey(Contributor, related_name='volunteers')
+    project = models.ForeignKey(Project, related_name='volunteer_relations')
+    volunteer = models.ForeignKey(Contributor, related_name='volunteer_relations')
     role = TaggableManager(blank=True, through=TaggedVolunteerRole)
     role.remote_field.related_name = "+"
     application_text = models.CharField(max_length=10000, blank=True)
