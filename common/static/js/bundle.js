@@ -89170,25 +89170,26 @@ var ProjectCard = function (_React$PureComponent) {
   }, {
     key: '_renderSubInfo',
     value: function _renderSubInfo() {
+      //only renders a list item for ones where we have data, otherwise skip
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
         { className: 'ProjectCard-subinfo' },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'ul',
           null,
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          this.props.project.location && __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'li',
             null,
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('i', { className: 'fas fa-map-marker-alt' }),
             this.props.project.location
           ),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          this.props.project.url && __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'li',
             null,
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('i', { className: 'fas fa-globe-americas' }),
             __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].urlPrefixT(this.props.project.url)
           ),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          this.props.project.date_modified && __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'li',
             null,
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('i', { className: 'fas fa-clock' }),

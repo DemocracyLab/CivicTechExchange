@@ -82,18 +82,25 @@ class ProjectCard extends React.PureComponent<Props> {
     );
   }
   _renderSubInfo(): React$Node {
+    //only renders a list item for ones where we have data, otherwise skip
     return (
       <div className="ProjectCard-subinfo">
         <ul>
+        {this.props.project.location &&
           <li>
           <i className="fas fa-map-marker-alt"></i>{this.props.project.location}
           </li>
+        }
+        {this.props.project.url &&
           <li>
           <i className="fas fa-globe-americas"></i>{Truncate.urlPrefixT(this.props.project.url)}
           </li>
+        }
+        {this.props.project.date_modified &&
           <li>
             <i className="fas fa-clock"></i><Moment fromNow>{this.props.project.date_modified}</Moment>
           </li>
+        }
         </ul>
       </div>
     )
