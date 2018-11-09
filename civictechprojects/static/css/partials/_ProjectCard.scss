@@ -37,7 +37,7 @@
   color: $color-text-dark;
   list-style-type: none;
   font-size: 0.875rem;
-  overflow-wrap: break-word;
+  word-break: break-all; //break long items to stay in container
   padding: 0;
 }
 .ProjectCard-subinfo li {
