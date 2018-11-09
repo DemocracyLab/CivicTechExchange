@@ -78,17 +78,18 @@
 }
 
 @include media-breakpoint-up(sm) {
-  .ProjectCard-subinfo {
-    margin-left: 0.5rem;
+  .Project-Card-title {
+    grid-row: 1;
   }
   .ProjectCard-description {
     grid-column: 3 / 5;
-    grid-row: 2 / 4;
+    grid-row: 2;
     padding: 0;
   }
   .ProjectCard-subinfo {
     grid-column: 1;
     grid-row: 3;
+    margin-left: 0.5rem;
   }
   .ProjectCard-subinfo li {
     margin-top: 0.875rem;
