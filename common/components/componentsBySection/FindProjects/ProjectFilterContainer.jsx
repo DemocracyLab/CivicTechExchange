@@ -9,11 +9,8 @@ import TagCategory from "../../common/tags/TagCategory.jsx";
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import {Locations} from "../../constants/ProjectConstants";
+import {SelectOption} from "../../types/SelectOption.jsx";
 
-type SelectOption = {|
-  label: string,
-  value: string
-|};
 
 type State = {|
   sortField: string,

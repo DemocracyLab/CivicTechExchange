@@ -323,9 +323,10 @@ def volunteer_with_project(request, project_id):
 
     project = Project.objects.get(id=project_id)
     body = json.loads(request.body)
+    projected_end_date = body['projectedEndDate']
     message = body['message']
     role = body['roleTag']
-    VolunteerRelation.create(project=project, volunteer=user, role=role, application_text=message)
+    VolunteerRelation.create(project=project, volunteer=user, projected_end_date=projected_end_date, role=role, application_text=message)
 
     # TODO: Include what role they are volunteering for
     user_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=Profile&id=' + str(user.id)

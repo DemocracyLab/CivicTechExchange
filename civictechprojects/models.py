@@ -383,9 +383,10 @@ class VolunteerRelation(models.Model):
     role.remote_field.related_name = "+"
     application_text = models.CharField(max_length=10000, blank=True)
     is_approved = models.BooleanField(default=False)
+    projected_end_date = models.DateTimeField(auto_now=False, null=True)
 
     def __str__(self):
-        return 'Project: ' + str(self.project.project_name) + ',User: ' + str(self.volunteer.email)
+        return 'Project: ' + str(self.project.project_name) + ', User: ' + str(self.volunteer.email)
 
     def to_json(self):
         volunteer = self.volunteer
@@ -402,10 +403,11 @@ class VolunteerRelation(models.Model):
         return volunteer_json
 
     @staticmethod
-    def create(project, volunteer, role, application_text):
+    def create(project, volunteer, projected_end_date, role, application_text):
         relation = VolunteerRelation()
         relation.project = project
         relation.volunteer = volunteer
+        relation.projected_end_date = projected_end_date
         relation.application_text = application_text
         relation.save()
 
