@@ -161,7 +161,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
                   <VolunteerCard
                     key={i}
                     volunteer={volunteer}
-                    isProjectAdmin={this.state.isProjectAdmin}
+                    isProjectAdmin={this.props.isProjectAdmin}
                     onOpenApplication={this.openApplicationModal}
                     onApproveButton={this.openApproveModal}
                     onRejectButton={this.openRejectModal}

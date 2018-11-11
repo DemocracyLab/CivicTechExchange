@@ -48,7 +48,7 @@ class VolunteerCard extends React.PureComponent<Props> {
                 </tr>
                 <tr>{roleTag && roleTag.display_name}</tr>
               </td>
-              {this._renderApplicationButtons()}
+              {this.props.isProjectAdmin ? this._renderApplicationButtons() : null}
             </tr>
           </tbody>
         </table>

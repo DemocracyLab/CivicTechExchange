@@ -91475,7 +91475,7 @@ var VolunteerSection = function (_React$PureComponent) {
               return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__VolunteerCard_jsx__["a" /* default */], {
                 key: i,
                 volunteer: volunteer,
-                isProjectAdmin: _this4.state.isProjectAdmin,
+                isProjectAdmin: _this4.props.isProjectAdmin,
                 onOpenApplication: _this4.openApplicationModal,
                 onApproveButton: _this4.openApproveModal,
                 onRejectButton: _this4.openRejectModal
@@ -91587,7 +91587,7 @@ var VolunteerCard = function (_React$PureComponent) {
                   roleTag && roleTag.display_name
                 )
               ),
-              this._renderApplicationButtons()
+              this.props.isProjectAdmin ? this._renderApplicationButtons() : null
             )
           )
         )
