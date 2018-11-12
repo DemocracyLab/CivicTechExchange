@@ -89005,7 +89005,9 @@ var ProjectCardsContainer = function (_React$Component) {
       return !this.state.projects ? 'Loading projects ...' : this.state.projects.size === 0 ? 'No projects match the provided criteria.  Sign up for an alert to be notified when matching projects are added or try a different set of filters.' : this.state.projects.map(function (project, index) {
         return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ProjectCard_jsx__["a" /* default */], {
           project: project,
-          key: index
+          key: index,
+          textlen: 140,
+          skillslen: 4
         });
       });
     }
@@ -89131,7 +89133,7 @@ var ProjectCard = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'p',
           null,
-          __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].stringT(this.props.project.description, 140)
+          __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].stringT(this.props.project.description, this.props.textlen)
         )
       );
     }
@@ -89146,7 +89148,7 @@ var ProjectCard = function (_React$PureComponent) {
           null,
           'Skills Needed'
         ),
-        this._generateSkillList(4)
+        this._generateSkillList(this.props.skillslen)
       );
     }
   }, {

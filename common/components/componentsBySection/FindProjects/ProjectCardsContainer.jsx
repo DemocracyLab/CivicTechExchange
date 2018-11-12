@@ -47,6 +47,8 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
             <ProjectCard
               project={project}
               key={index}
+              textlen={140}
+              skillslen={4}          
             />
         );
   }

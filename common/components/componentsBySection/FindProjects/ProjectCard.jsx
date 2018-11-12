@@ -57,7 +57,7 @@ class ProjectCard extends React.PureComponent<Props> {
   _renderProjectDescription(): React$Node {
     return (
         <div className="ProjectCard-description">
-          <p>{Truncate.stringT(this.props.project.description, 140)}</p>
+          <p>{Truncate.stringT(this.props.project.description, this.props.textlen)}</p>
         </div>
     );
   }
@@ -65,7 +65,7 @@ class ProjectCard extends React.PureComponent<Props> {
     return (
     <div className="ProjectCard-skills">
     <h3>Skills Needed</h3>
-      {this._generateSkillList(4)}
+      {this._generateSkillList(this.props.skillslen)}
     </div>
     )
   }
