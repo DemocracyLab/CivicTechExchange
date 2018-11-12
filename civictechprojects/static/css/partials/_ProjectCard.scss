@@ -3,10 +3,11 @@
   border: solid 1px $color-grey-frame-border;
   border-radius: 6px;
   box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.15);
+  color: $color-text-dark;
   margin-top: 1rem;
 }
 .ProjectCard-root h2 {
-  font-size: 1.375rem;
+  font-size: 1.333rem;
   margin-top: 0.5rem;
 }
 .ProjectCard-root h3 {
@@ -14,7 +15,6 @@
   font-weight: bold;
 }
 .ProjectCard-root h4 {
-  color: $color-text-dark;
   font-size: 0.875rem;
 }
 .ProjectCard-root a {
@@ -34,7 +34,7 @@
   grid-row: 2;
 }
 .ProjectCard-subinfo ul {
-  color: $color-text-dark;
+  color: $color-text-grey;
   list-style-type: none;
   font-size: 0.875rem;
   word-break: break-all; //break long items to stay in container
@@ -105,6 +105,9 @@
 }
 
 @include media-breakpoint-up(lg) {
+  .ProjectCard-root {
+    height: calc(100% - 1rem) /* height is 100% - margin) */
+  }
   .ProjectCard-description, .ProjectCard-subinfo, .ProjectCard-skills {
     margin-left: 0.5rem;
   }
