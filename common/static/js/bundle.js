@@ -89131,7 +89131,7 @@ var ProjectCard = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'p',
           null,
-          __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].stringT(this.props.project.description, 100)
+          __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].stringT(this.props.project.description, 140)
         )
       );
     }
