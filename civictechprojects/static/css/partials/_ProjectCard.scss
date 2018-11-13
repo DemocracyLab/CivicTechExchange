@@ -47,6 +47,7 @@
 }
 .ProjectCard-subinfo li:first-of-type {
   margin-top: 0;
+  padding-top: 0.25rem;
 }
 .ProjectCard-subinfo li svg {
   margin-right: 0.375rem;
@@ -133,6 +134,9 @@
     display: inline;
     margin-top: 0;
     padding-right: 1rem;
+  }
+  .ProjectCard-subinfo li:first-of-type {
+    padding-top: 0;
   }
   .ProjectCard-subinfo li:last-of-type {
     padding-right: 0;
