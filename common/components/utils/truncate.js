@@ -10,7 +10,7 @@ class Truncate {
   static arrayT(arr: array, length: number) {
     if (arr.length > length) {
      let result = arr.slice(0, length-1)
-     result.push("...")
+     result.push(arr.length - 3 + " more")
      return result;
     } else {
       return arr;

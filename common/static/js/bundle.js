@@ -89281,7 +89281,7 @@ var Truncate = function () {
     value: function arrayT(arr, length) {
       if (arr.length > length) {
         var result = arr.slice(0, length - 1);
-        result.push("...");
+        result.push(arr.length - 3 + " more");
         return result;
       } else {
         return arr;
