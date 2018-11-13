@@ -51,7 +51,7 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="ProjectFilterContainer-root col-12 col-md-3">
+      <div className="ProjectFilterContainer-root col-12 col-md-3 col-xxl-2">
         <div className="ProjectFilterContainer-label">
           Sort By:
         </div>

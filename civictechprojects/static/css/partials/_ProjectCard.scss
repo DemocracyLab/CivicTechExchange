@@ -109,6 +109,9 @@
   .ProjectCard-root {
     height: calc(100% - 1rem) /* height is 100% - margin) */
   }
+}
+
+@include media-breakpoint-between(lg, xl) {
   .ProjectCard-description, .ProjectCard-subinfo, .ProjectCard-skills {
     margin-left: 0.5rem;
   }
