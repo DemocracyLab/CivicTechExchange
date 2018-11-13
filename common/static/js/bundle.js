@@ -94875,21 +94875,19 @@ var MyProjectCard = function (_React$PureComponent) {
         'View'
       )];
 
-      buttons = buttons.concat(this.state.isOwner ? [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_3_react_bootstrap__["a" /* Button */],
-        { className: 'MyProjectCard-button', href: __WEBPACK_IMPORTED_MODULE_2__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_1__enums_Section_js__["a" /* default */].EditProject, id), bsStyle: 'info' },
-        'Edit'
-      ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_3_react_bootstrap__["a" /* Button */],
-        { className: 'MyProjectCard-button', bsStyle: 'danger', onClick: function onClick() {
-            return _this2.props.onProjectClickDelete(_this2.props.project);
-          } },
-        'Delete'
-      )] : [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_3_react_bootstrap__["a" /* Button */],
-        { className: 'MyProjectCard-button', bsStyle: 'danger' },
-        'Leave Project'
-      )]);
+      if (this.state.isOwner) {
+        buttons = buttons.concat([__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_3_react_bootstrap__["a" /* Button */],
+          { className: 'MyProjectCard-button', href: __WEBPACK_IMPORTED_MODULE_2__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_1__enums_Section_js__["a" /* default */].EditProject, id), bsStyle: 'info' },
+          'Edit'
+        ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_3_react_bootstrap__["a" /* Button */],
+          { className: 'MyProjectCard-button', bsStyle: 'danger', onClick: function onClick() {
+              return _this2.props.onProjectClickDelete(_this2.props.project);
+            } },
+          'Delete'
+        )]);
+      }
 
       return buttons;
     }
