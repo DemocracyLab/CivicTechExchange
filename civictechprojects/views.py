@@ -379,3 +379,31 @@ def reject_project_volunteer(request, application_id):
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def leave_project(request, project_id):
+    volunteer_relation = VolunteerRelation.objects.filter(project_id=project_id, volunteer_id=request.user.id).first()
+    if request.user.id == volunteer_relation.volunteer.id:
+        body = json.loads(request.body)
+        message = body['departure_message']
+        email_body = '{volunteer_name} is leaving {project_name} for the following reason:\n{message}'.format(
+            volunteer_name=volunteer_relation.volunteer.full_name(),
+            project_name=volunteer_relation.project.project_name,
+            message=message)
+        email_subject = '{volunteer_name} is leaving {project_name}'.format(
+            volunteer_name=volunteer_relation.volunteer.full_name(),
+            project_name=volunteer_relation.project.project_name)
+        email_msg = EmailMessage(
+            email_subject,
+            email_body,
+            settings.EMAIL_HOST_USER,
+            [volunteer_relation.project.project_creator.email],
+            {'Reply-To': volunteer_relation.volunteer.email}
+        )
+        email_msg.send()
+        volunteer_relation.delete()
+        return HttpResponse(status=200)
+    else:
+        raise PermissionDenied()

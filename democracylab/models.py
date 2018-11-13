@@ -30,6 +30,9 @@ class Contributor(User):
     def is_admin_contributor(self):
         return self.email == settings.ADMIN_EMAIL
 
+    def full_name(self):
+        return self.first_name + ' ' + self.last_name
+
     def send_verification_email(self):
         # Get token
         user = Contributor.objects.get(id=self.id)
