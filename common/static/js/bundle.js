@@ -18123,7 +18123,7 @@ var ProjectAPIUtils = function () {
         claimed: apiData.project_claimed,
         date_modified: apiData.project_date_modified,
         url: apiData.project_url,
-        positions: apiData.project_positions && apiData.project_positions.length != 0 ? ProjectAPIUtils.getSkillNames(apiData.project_positions) : ['None']
+        positions: apiData.project_positions && apiData.project_positions.length != 0 ? ProjectAPIUtils.getSkillNames(apiData.project_positions) : ['Contact Project for Details']
       };
     }
   }, {
