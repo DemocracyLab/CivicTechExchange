@@ -383,6 +383,29 @@ def reject_project_volunteer(request, application_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
+def dismiss_project_volunteer(request, application_id):
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    if request.user.username == volunteer_relation.project.project_creator.username:
+        body = json.loads(request.body)
+        message = body['dismissal_message']
+        email_body = 'The owner for {project_name} has removed you from the project for the following reason:\n{message}'.format(
+            project_name=volunteer_relation.project.project_name, message=message)
+        email_msg = EmailMessage(
+            'You have been dismissed from ' + volunteer_relation.project.project_name,
+            email_body,
+            settings.EMAIL_HOST_USER,
+            [volunteer_relation.volunteer.email],
+            {'Reply-To': volunteer_relation.project.project_creator.email}
+        )
+        email_msg.send()
+        volunteer_relation.delete()
+        return HttpResponse(status=200)
+    else:
+        raise PermissionDenied()
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
 def leave_project(request, project_id):
     volunteer_relation = VolunteerRelation.objects.filter(project_id=project_id, volunteer_id=request.user.id).first()
     if request.user.id == volunteer_relation.volunteer.id:

@@ -91479,12 +91479,14 @@ var VolunteerSection = function (_React$PureComponent) {
       volunteers: __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.cloneDeep(props.volunteers),
       showApproveModal: false,
       showRejectModal: false,
+      showDismissModal: false,
       showApplicationModal: false,
       applicationModalText: ""
     };
     _this.openApplicationModal = _this.openApplicationModal.bind(_this);
     _this.openApproveModal = _this.openApproveModal.bind(_this);
     _this.openRejectModal = _this.openRejectModal.bind(_this);
+    _this.openDismissModal = _this.openDismissModal.bind(_this);
     return _this;
   }
 
@@ -91566,6 +91568,36 @@ var VolunteerSection = function (_React$PureComponent) {
       }
     }
   }, {
+    key: "openDismissModal",
+    value: function openDismissModal(volunteer) {
+      this.setState({
+        showDismissModal: true,
+        volunteerToActUpon: volunteer
+      });
+    }
+  }, {
+    key: "closeDismissModal",
+    value: function closeDismissModal(confirmDismissed, dismissalMessage) {
+      var _this4 = this;
+
+      if (confirmDismissed) {
+        var params = { dismissal_message: dismissalMessage };
+        __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].post("/volunteer/dismiss/" + this.state.volunteerToActUpon.application_id + "/", params, function () {
+          __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.remove(_this4.state.volunteers, function (volunteer) {
+            return volunteer.application_id === _this4.state.volunteerToActUpon.application_id;
+          });
+          _this4.setState({
+            showDismissModal: false
+          });
+          _this4.forceUpdate();
+        });
+      } else {
+        this.setState({
+          showDismissModal: false
+        });
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var approvedAndPendingVolunteers = __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.partition(this.state.volunteers, function (volunteer) {
@@ -91593,6 +91625,14 @@ var VolunteerSection = function (_React$PureComponent) {
           maxCharacterCount: 3000,
           onConfirm: this.closeRejectModal.bind(this)
         }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__FeedbackModal_jsx__["a" /* default */], {
+          showModal: this.state.showDismissModal,
+          headerText: "Dismiss Volunteer",
+          messagePrompt: "State the reasons you wish to dismiss this volunteer",
+          confirmButtonText: "Confirm",
+          maxCharacterCount: 3000,
+          onConfirm: this.closeDismissModal.bind(this)
+        }),
         this._renderPendingVolunteers(approvedAndPendingVolunteers[1]),
         this._renderApprovedVolunteers(approvedAndPendingVolunteers[0])
       );
@@ -91610,7 +91650,7 @@ var VolunteerSection = function (_React$PureComponent) {
   }, {
     key: "_renderVolunteerSection",
     value: function _renderVolunteerSection(volunteers, header) {
-      var _this4 = this;
+      var _this5 = this;
 
       return !__WEBPACK_IMPORTED_MODULE_6_lodash___default.a.isEmpty(volunteers) ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
@@ -91630,10 +91670,11 @@ var VolunteerSection = function (_React$PureComponent) {
               return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__VolunteerCard_jsx__["a" /* default */], {
                 key: i,
                 volunteer: volunteer,
-                isProjectAdmin: _this4.props.isProjectAdmin,
-                onOpenApplication: _this4.openApplicationModal,
-                onApproveButton: _this4.openApproveModal,
-                onRejectButton: _this4.openRejectModal
+                isProjectAdmin: _this5.props.isProjectAdmin,
+                onOpenApplication: _this5.openApplicationModal,
+                onApproveButton: _this5.openApproveModal,
+                onRejectButton: _this5.openRejectModal,
+                onDismissButton: _this5.openDismissModal
               });
             })
           )
@@ -91758,7 +91799,9 @@ var VolunteerCard = function (_React$PureComponent) {
         { className: 'MyProjectCard-column' },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-          { className: 'MyProjectCard-button', bsStyle: 'danger' },
+          { className: 'MyProjectCard-button', bsStyle: 'danger', onClick: function onClick() {
+              return _this2.props.onDismissButton(_this2.props.volunteer);
+            } },
           'Remove'
         )
       )] : [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(

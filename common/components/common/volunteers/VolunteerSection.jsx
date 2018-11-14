@@ -18,10 +18,15 @@ type RejectVolunteerParams = {|
   rejection_message: string
 |};
 
+type DismissVolunteerParams = {|
+  dismissal_message: string
+|};
+
 type State = {|
   +volunteers: ?Array<VolunteerDetailsAPIData>,
   +showApproveModal: boolean,
   +showRejectModal: boolean,
+  +showDismissModal: boolean,
   +volunteerToActUpon: ?VolunteerDetailsAPIData,
   +showApplicationModal: boolean,
   +applicationModalText: string
@@ -34,12 +39,14 @@ class VolunteerSection extends React.PureComponent<Props, State> {
       volunteers:_.cloneDeep(props.volunteers),
       showApproveModal: false,
       showRejectModal: false,
+      showDismissModal: false,
       showApplicationModal: false,
       applicationModalText: ""
     };
     this.openApplicationModal = this.openApplicationModal.bind(this);
     this.openApproveModal = this.openApproveModal.bind(this);
     this.openRejectModal = this.openRejectModal.bind(this);
+    this.openDismissModal = this.openDismissModal.bind(this);
   }
   
   componentWillReceiveProps(nextProps: Props): void {
@@ -106,6 +113,30 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     }
   }
   
+  openDismissModal(volunteer: VolunteerDetailsAPIData): void {
+    this.setState({
+      showDismissModal: true,
+      volunteerToActUpon: volunteer
+    });
+  }
+  
+  closeDismissModal(confirmDismissed: boolean, dismissalMessage: string):void {
+    if(confirmDismissed) {
+      const params: DismissVolunteerParams = {dismissal_message: dismissalMessage};
+      ProjectAPIUtils.post("/volunteer/dismiss/" + this.state.volunteerToActUpon.application_id + "/",params,() => {
+        _.remove(this.state.volunteers, (volunteer: VolunteerDetailsAPIData) => volunteer.application_id === this.state.volunteerToActUpon.application_id);
+        this.setState({
+          showDismissModal: false
+        });
+        this.forceUpdate();
+      });
+    } else {
+      this.setState({
+        showDismissModal: false
+      });
+    }
+  }
+  
   render(): React$Node {
     const approvedAndPendingVolunteers: Array<Array<VolunteerDetailsAPIData>> = _.partition(this.state.volunteers, volunteer => volunteer.isApproved);
     return (
@@ -130,6 +161,15 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           confirmButtonText="Confirm"
           maxCharacterCount={3000}
           onConfirm={this.closeRejectModal.bind(this)}
+        />
+  
+        <FeedbackModal
+          showModal={this.state.showDismissModal}
+          headerText="Dismiss Volunteer"
+          messagePrompt="State the reasons you wish to dismiss this volunteer"
+          confirmButtonText="Confirm"
+          maxCharacterCount={3000}
+          onConfirm={this.closeDismissModal.bind(this)}
         />
       
         {this._renderPendingVolunteers(approvedAndPendingVolunteers[1])}
@@ -165,6 +205,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
                     onOpenApplication={this.openApplicationModal}
                     onApproveButton={this.openApproveModal}
                     onRejectButton={this.openRejectModal}
+                    onDismissButton={this.openDismissModal}
                   />)
               }
             </div>

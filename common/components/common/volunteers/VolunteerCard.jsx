@@ -12,7 +12,8 @@ type Props = {|
   +isProjectAdmin: boolean,
   +onOpenApplication: (VolunteerDetailsAPIData) => void,
   +onApproveButton: (VolunteerDetailsAPIData) => void,
-  +onRejectButton: (VolunteerDetailsAPIData) => void
+  +onRejectButton: (VolunteerDetailsAPIData) => void,
+  +onDismissButton: (VolunteerDetailsAPIData) => void
 |};
 
 class VolunteerCard extends React.PureComponent<Props> {
@@ -60,7 +61,9 @@ class VolunteerCard extends React.PureComponent<Props> {
     return (this.props.volunteer && this.props.volunteer.isApproved
       ? [
           (<td className="MyProjectCard-column">
-            <Button className="MyProjectCard-button" bsStyle="danger">Remove</Button>
+            <Button className="MyProjectCard-button" bsStyle="danger" onClick={() => this.props.onDismissButton(this.props.volunteer)}>
+              Remove
+            </Button>
           </td>)
         ]
       : [
