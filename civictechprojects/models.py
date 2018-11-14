@@ -391,7 +391,6 @@ class VolunteerRelation(models.Model):
     def to_json(self):
         volunteer = self.volunteer
 
-        # TODO: Get user
         volunteer_json = {
             'application_id': self.id,
             'user': volunteer.hydrate_to_tile_json(),

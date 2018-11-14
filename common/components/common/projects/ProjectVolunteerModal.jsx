@@ -112,8 +112,8 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
           onSelection={this.receiveSendConfirmation}
         />
           <Modal show={this.state.showModal}
-                 onHide={this.closeModal}
-                 style={{paddingTop:'20%'}}
+             onHide={this.closeModal}
+             style={{paddingTop:'20%'}}
           >
               <Modal.Header >
                   <Modal.Title>Volunteer Application</Modal.Title>
