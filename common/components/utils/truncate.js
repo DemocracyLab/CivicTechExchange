@@ -4,7 +4,7 @@ class Truncate {
 
   static stringT(str: string, length: number) {
     var dots = str.length > length ? "..." : "";
-    return (str + dots).substring(0, length);
+    return str.substring(0, length - dots.length) + dots;
   }
 
   static arrayT(arr: array, length: number) {
