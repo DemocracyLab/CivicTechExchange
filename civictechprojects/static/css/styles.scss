@@ -1,7 +1,8 @@
 //import our variables first
 @import 'vars';
-//import third-party CSS, so we can use it and override it. IMPORTANT: Load override first, per documentation.
-@import 'bootstrapoverride'; 
+//import third-party CSS, so we can use it and override it.
+// IMPORTANT: Load our bootstrap overrides first, per documentation.
+@import 'bootstrapoverride';
   //import required Bootstrap (foundation elements)
 @import 'vendor/bootstrap/functions';
 @import 'vendor/bootstrap/variables';

@@ -5,7 +5,6 @@
   box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.15);
   color: $color-text-dark;
   margin-top: 1rem;
-  padding: 0.25rem;
 }
 .ProjectCard-root h2 {
   font-size: 1.333rem;
@@ -29,7 +28,8 @@
 .ProjectCard-description {
   grid-column: 1 / 5;
   grid-row: 3;
-  padding-left: 8px; /* only on mobile */
+  padding-left: 0.5rem; /* only on mobile */
+  padding-right: 0.5rem; /* always */
 }
 .ProjectCard-subinfo {
   grid-column: 3 / 5;
@@ -105,6 +105,9 @@
     grid-row: 3;
     padding: 0;
   }
+  .ProjectCard-logo, .ProjectCard-subinfo {
+    border-right: 1px solid $color-grey-medium;
+  }
 }
 
 @include media-breakpoint-up(lg) {
@@ -116,6 +119,9 @@
 @include media-breakpoint-between(lg, xl) {
   .ProjectCard-description, .ProjectCard-subinfo, .ProjectCard-skills {
     margin-left: 0.5rem;
+  }
+  .ProjectCard-logo, .ProjectCard-subinfo {
+    border-right: none;
   }
   .ProjectCard-description {
     grid-row: 3;
