@@ -33,7 +33,6 @@ export type ProjectAPIData = {|
   +project_location: string,
   +project_name: string,
   +project_thumbnail: FileInfo,
-  +project_claimed: boolean,
   +project_url: string,
   +project_positions: $ReadOnlyArray<PositionInfo>,
 |};
@@ -76,18 +75,16 @@ class ProjectAPIUtils {
       claimed: apiData.project_claimed,
       date_modified: apiData.project_date_modified,
       url: apiData.project_url,
-      positions: apiData.project_positions && apiData.project_positions.length !=0
+      positions: !_.isEmpty(apiData.project_positions)
           ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
           : ['Contact Project for Details'],
     };
   }
 
   static getSkillNames(positions: array) {
-    let output = [];
-    positions.forEach(function(data) {
-      output.push(data.roleTag.display_name)
-    })
-    return output;
+    return positions.map(function(data) {
+      return data.roleTag.display_name
+    });
   }
 
   static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {

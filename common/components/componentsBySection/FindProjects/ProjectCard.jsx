@@ -9,6 +9,7 @@ import {Locations} from "../../constants/ProjectConstants.js";
 import cdn from "../../utils/cdn.js";
 import Moment from 'react-moment';
 import Truncate from "../../utils/truncate.js";
+import urlHelper from "../../utils/url.js"
 
 type Props = {|
   +project: Project,
@@ -72,11 +73,10 @@ class ProjectCard extends React.PureComponent<Props> {
   _generateSkillList(numskills): React$Node {
     //take array of skills needed from props, truncate if required, and map to list items
     const skills = Truncate.arrayT(this.props.project.positions, numskills)
-    let index = 0; //super hacky unique key indexes goooo
     return (
       <ul>
-        {skills.map((skills) =>
-          <li key={index++}>{skills}</li>
+        {skills.map((skills, i) =>
+          <li key={i}>{skills}</li>
         )}
       </ul>
     );
@@ -88,17 +88,20 @@ class ProjectCard extends React.PureComponent<Props> {
         <ul>
         {this.props.project.location &&
           <li>
-          <i className="fas fa-map-marker-alt fa-fw"></i>{this.props.project.location}
+            <i className="fas fa-map-marker-alt fa-fw"></i>
+            {this.props.project.location}
           </li>
         }
         {this.props.project.url &&
           <li>
-          <i className="fas fa-globe-americas fa-fw"></i>{Truncate.urlPrefixT(this.props.project.url)}
+            <i className="fas fa-globe-americas fa-fw"></i>
+            {urlHelper.beautify(this.props.project.url)}
           </li>
         }
         {this.props.project.date_modified &&
           <li>
-            <i className="fas fa-clock fa-fw"></i><Moment fromNow>{this.props.project.date_modified}</Moment>
+            <i className="fas fa-clock fa-fw"></i>
+            <Moment fromNow>{this.props.project.date_modified}</Moment>
           </li>
         }
         </ul>

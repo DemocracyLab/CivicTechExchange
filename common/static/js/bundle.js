@@ -18123,17 +18123,15 @@ var ProjectAPIUtils = function () {
         claimed: apiData.project_claimed,
         date_modified: apiData.project_date_modified,
         url: apiData.project_url,
-        positions: apiData.project_positions && apiData.project_positions.length != 0 ? ProjectAPIUtils.getSkillNames(apiData.project_positions) : ['Contact Project for Details']
+        positions: !_.isEmpty(apiData.project_positions) ? ProjectAPIUtils.getSkillNames(apiData.project_positions) : ['Contact Project for Details']
       };
     }
   }, {
     key: 'getSkillNames',
     value: function getSkillNames(positions) {
-      var output = [];
-      positions.forEach(function (data) {
-        output.push(data.roleTag.display_name);
+      return positions.map(function (data) {
+        return data.roleTag.display_name;
       });
-      return output;
     }
   }, {
     key: 'fetchProjectDetails',
@@ -89063,6 +89061,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+
 var ProjectCard = function (_React$PureComponent) {
   _inherits(ProjectCard, _React$PureComponent);
 
@@ -89156,14 +89155,13 @@ var ProjectCard = function (_React$PureComponent) {
     value: function _generateSkillList(numskills) {
       //take array of skills needed from props, truncate if required, and map to list items
       var skills = __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].arrayT(this.props.project.positions, numskills);
-      var index = 0; //super hacky unique key indexes goooo
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'ul',
         null,
-        skills.map(function (skills) {
+        skills.map(function (skills, i) {
           return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'li',
-            { key: index++ },
+            { key: i },
             skills
           );
         })
@@ -89189,7 +89187,7 @@ var ProjectCard = function (_React$PureComponent) {
             'li',
             null,
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('i', { className: 'fas fa-globe-americas fa-fw' }),
-            __WEBPACK_IMPORTED_MODULE_7__utils_truncate_js__["a" /* default */].urlPrefixT(this.props.project.url)
+            __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].beautify(this.props.project.url)
           ),
           this.props.project.date_modified && __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'li',
@@ -89274,7 +89272,7 @@ var Truncate = function () {
     key: "stringT",
     value: function stringT(str, length) {
       var dots = str.length > length ? "..." : "";
-      return str.substring(0, length) + dots;
+      return (str + dots).substring(0, length);
     }
   }, {
     key: "arrayT",
@@ -89286,11 +89284,6 @@ var Truncate = function () {
       } else {
         return arr;
       }
-    }
-  }, {
-    key: "urlPrefixT",
-    value: function urlPrefixT(url) {
-      return url.replace(/^https?\:\/\//i, "");
     }
   }]);
 

@@ -4,7 +4,7 @@ class Truncate {
 
   static stringT(str: string, length: number) {
     var dots = str.length > length ? "..." : "";
-    return str.substring(0, length) + dots;
+    return (str + dots).substring(0, length);
   }
 
   static arrayT(arr: array, length: number) {
@@ -15,9 +15,6 @@ class Truncate {
     } else {
       return arr;
     }
-  }
-  static urlPrefixT(url: string) {
-    return url.replace(/^https?\:\/\//i, "");
   }
 }
 
