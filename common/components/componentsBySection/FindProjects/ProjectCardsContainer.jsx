@@ -27,8 +27,12 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="ProjectCardContainer">
-        {this._renderCards()}
+      <div className="ProjectCardContainer col-12 col-md-9 col-xxl-10 p-0 m-0">
+        <div className="container-fluid pl-0 pr-0">
+          <div className="row">
+            {this._renderCards()}
+          </div>
+        </div>
       </div>
     );
   }
@@ -37,12 +41,14 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     return !this.state.projects
       ? 'Loading projects ...'
       : this.state.projects.size === 0
-        ? 'No projects match the provided criteria.  Sign up for Alerts to be notified when projects matching this criteria are added.'
+        ? 'No projects match the provided criteria.  Sign up for an alert to be notified when matching projects are added or try a different set of filters.'
         : this.state.projects.map(
           (project, index) =>
             <ProjectCard
               project={project}
               key={index}
+              textlen={140}
+              skillslen={4}
             />
         );
   }

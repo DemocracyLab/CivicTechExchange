@@ -1,6 +1,8 @@
 //import our variables first
 @import 'vars';
-//import third-party CSS, so we can use it and override it
+//import third-party CSS, so we can use it and override it.
+// IMPORTANT: Load our bootstrap overrides first, per documentation.
+@import 'bootstrapoverride';
   //import required Bootstrap (foundation elements)
 @import 'vendor/bootstrap/functions';
 @import 'vendor/bootstrap/variables';
@@ -14,6 +16,8 @@
 @import 'vendor/bootstrap/dropdown';
 @import 'vendor/bootstrap/modal';
 @import 'vendor/bootstrap/forms';
+@import 'vendor/bootstrap/utilities';
+@import 'vendor/bootstrap/print';
   //import other third party CSS
 @import 'vendor/_react-select.min';
   //import Bootstrap3 dropdown (TODO: refactor to use Bootstrap 4)
