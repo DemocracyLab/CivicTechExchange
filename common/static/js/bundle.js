@@ -80769,6 +80769,24 @@ var AboutProjectController = function (_React$PureComponent) {
               )
             )
           ) : null,
+          project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_short_description) ? __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+            'div',
+            { className: 'row', style: { margin: "30px 40px 0 40px" } },
+            __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+              'div',
+              { className: 'col' },
+              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                'h2',
+                { className: 'form-group subheader' },
+                'PROJECT SUMMARY'
+              ),
+              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                'div',
+                { className: 'Text-section', style: { whiteSpace: "pre-wrap" } },
+                project.project_short_description
+              )
+            )
+          ) : null,
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'div',
             { className: 'row', style: { margin: "30px 40px 0 40px" } },
@@ -80783,7 +80801,6 @@ var AboutProjectController = function (_React$PureComponent) {
               __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
                 'div',
                 { className: 'Text-section', style: { whiteSpace: "pre-wrap" } },
-                project && project.project_short_description ? project.project_short_description + "\n\n" : null,
                 project && project.project_description
               )
             )

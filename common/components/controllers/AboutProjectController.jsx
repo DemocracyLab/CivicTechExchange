@@ -123,13 +123,24 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
               : null
           }
-
+  
+          {
+            project && !_.isEmpty(project.project_short_description)
+            ? < div className="row" style={{margin: "30px 40px 0 40px"}}>
+                <div className="col">
+                  <h2 className="form-group subheader">PROJECT SUMMARY</h2>
+                  <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
+                    {project.project_short_description}
+                  </div>
+                </div>
+              </div>
+            : null
+          }
 
           <div className="row" style={{margin: "30px 40px 0 40px"}}>
             <div className="col">
               <h2 className="form-group subheader">PROJECT DETAILS</h2>
               <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
-                {project && project.project_short_description ? project.project_short_description + "\n\n" : null}
                 {project && project.project_description}
               </div>
             </div>
