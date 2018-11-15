@@ -14,7 +14,9 @@ import _ from 'lodash'
 import React from 'react';
 import {Locations} from "../constants/ProjectConstants.js";
 import {LinkNames} from "../constants/LinkConstants.js";
-import {TagDefinition} from "../utils/ProjectAPIUtils";
+import {TagDefinition} from "../utils/ProjectAPIUtils.js";
+import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
+import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -26,7 +28,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   constructor(): void {
     super();
-
     this.state = {
       project: null,
       showContactModal: false,
@@ -101,6 +102,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
                 <div className="row">
                   <ContactProjectButton project={this.state.project}/>
+                </div>
+                <div className="row">
+                  <ProjectVolunteerButton project={this.state.project}/>
                   { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> }
                 </div>
               </div>
@@ -148,6 +152,15 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     </div>
                   </div>
                 </div>
+              : null
+          }
+  
+          {
+            project && !_.isEmpty(project.project_volunteers)
+              ? <VolunteerSection
+                  volunteers={project.project_volunteers}
+                  isProjectAdmin={CurrentUser.userID() === project.project_creator}
+                />
               : null
           }
 
@@ -253,6 +266,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
           );
       });
   }
+  
 
   _legibleName(input) {
     //replaces specific linkNames for readability

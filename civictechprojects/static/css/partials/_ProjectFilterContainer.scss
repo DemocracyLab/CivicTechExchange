@@ -1,20 +1,18 @@
 .ProjectFilterContainer-root {
   background-color: $color-background-default;
-  border-top: 0;
-  padding: 10px;
-  width: 280px;
-  margin-right: 10px;
-  /* add total width of content + padding + margin for ProjectCard container */
-  display: inline-block;
   min-height: 100%;
   vertical-align: top;
+}
+
+.ProjectFilterContainer-root .form-control {
+  padding: 0;
 }
 
 .ProjectFilterContainer-label {
   color: $color-text-dark;
   font-size: 16px;
   margin-right: 50px;
-  margin-top: 2px;
+  margin-top: 12px;
   width: 100%;
 
 }

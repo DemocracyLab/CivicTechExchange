@@ -21,10 +21,12 @@ class FindProjectsController extends React.PureComponent<{||}> {
 
   render(): React$Node {
     return (
-      <div className="FindProjectsController-root">
+      <div className="FindProjectsController-root container">
         <ProjectSearchContainer />
-        <ProjectFilterContainer />
-        <ProjectCardsContainer />
+        <div className="row">
+          <ProjectFilterContainer />
+          <ProjectCardsContainer />
+        </div>
       </div>
     );
   }

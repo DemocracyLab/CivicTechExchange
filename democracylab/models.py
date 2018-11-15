@@ -30,6 +30,9 @@ class Contributor(User):
     def is_admin_contributor(self):
         return self.email == settings.ADMIN_EMAIL
 
+    def full_name(self):
+        return self.first_name + ' ' + self.last_name
+
     def send_verification_email(self):
         # Get token
         user = Contributor.objects.get(id=self.id)
@@ -77,6 +80,21 @@ class Contributor(User):
             'user_technologies': Tag.hydrate_to_json(self.id, list(self.user_technologies.all().values())),
             'user_links': list(map(lambda link: link.to_json(), links)),
             'user_files': list(map(lambda file: file.to_json(), other_files)),
+        }
+
+        thumbnail_files = list(files.filter(file_category=civictechprojects.models.FileCategory.THUMBNAIL.value))
+        if len(thumbnail_files) > 0:
+            user['user_thumbnail'] = thumbnail_files[0].to_json()
+
+        return user
+
+    def hydrate_to_tile_json(self):
+        files = civictechprojects.models.ProjectFile.objects.filter(file_user=self.id)
+
+        user = {
+            'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
         }
 
         thumbnail_files = list(files.filter(file_category=civictechprojects.models.FileCategory.THUMBNAIL.value))
