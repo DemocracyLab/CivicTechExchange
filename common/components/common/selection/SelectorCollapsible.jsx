@@ -109,7 +109,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
   _renderDropdown(): React$Node {
     return (
       <div>
-        {this.props.optionCategory ? null : this._renderSelectAll()}
+        {this.props.optionCategory ? null : this._renderSelectAll(this.state.optionFlatList)}
         <ContextualCollapsible showContextualArrow={true} xPos={this.state.chevronX}>
           { this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList) }
         </ContextualCollapsible>
@@ -146,7 +146,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
         {category} { } {isExpanded ? this.constants.chevronDown : this.constants.chevronRight}</span>
         { isExpanded
           ? <span>
-            {this._renderSelectAll()}
+            {this._renderSelectAll(this.state.optionCategoryTree[category])}
             <ContextualCollapsible>
               { this._renderOptions(this.state.optionCategoryTree[category]) }
             </ContextualCollapsible>
@@ -156,18 +156,24 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       </div>
     });
   }
-  _renderSelectAll(): React$Node {
+  _renderSelectAll(category): React$Node {
     return (
       <span>
         <label className="CollapsibleMenuItem">
-          <input type="checkbox" className="ContextualCollapsible-selectAll" onChange={this._selectAll()}>
+          <input type="checkbox" className="ContextualCollapsible-selectAll" onChange={this._selectAll(category)}>
           </input>Select All
         </label>
       </span>
     )
   }
-  _selectAll(): React$Node {
-    console.log(this.state)
+  _selectAll(category): React$Node {
+    //get list of tags
+      category.map(function(tag) {
+       return tag.tag_name
+    })
+    //find a way to access list of selected tags in TagSelectorCollapsible
+    // if tag in the above map isn't selected, select it, and then check the Select All box
+    // otherwise remove any tags from the above map from list of selected tags and uncheck the box
   }
 
   _renderChevron(): React$Node {

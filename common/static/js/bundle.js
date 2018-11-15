@@ -91320,7 +91320,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'div',
         null,
-        this.props.optionCategory ? null : this._renderSelectAll(),
+        this.props.optionCategory ? null : this._renderSelectAll(this.state.optionFlatList),
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
           { showContextualArrow: true, xPos: this.state.chevronX },
@@ -91380,7 +91380,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
           isExpanded ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'span',
             null,
-            _this4._renderSelectAll(),
+            _this4._renderSelectAll(_this4.state.optionCategoryTree[category]),
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
               null,
@@ -91392,22 +91392,25 @@ var SelectorCollapsible = function (_React$PureComponent) {
     }
   }, {
     key: '_renderSelectAll',
-    value: function _renderSelectAll() {
+    value: function _renderSelectAll(category) {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'span',
         null,
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'label',
           { className: 'CollapsibleMenuItem' },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', className: 'ContextualCollapsible-selectAll', onChange: this._selectAll() }),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', className: 'ContextualCollapsible-selectAll', onChange: this._selectAll(category) }),
           'Select All'
         )
       );
     }
   }, {
     key: '_selectAll',
-    value: function _selectAll() {
-      console.log(this.state);
+    value: function _selectAll(category) {
+      //pass each tag in category to TagSelectorCollapsible onOptionSelect fn
+      category.map(function (tag) {
+        this.selectOption(tag.tag_name);
+      });
     }
   }, {
     key: '_renderChevron',
