@@ -34,7 +34,8 @@ type State = {|
   optionFlatList: ?$ReadOnlyArray<T>,
   optionCategoryTree: ?{ [key: string]: $ReadOnlyArray<T> },
   optionCategoryCoords: { [key: string]: ClientRect},
-  categoryShown: string
+  categoryShown: string,
+  isAllChecked: boolean
 |};
 
 /**
@@ -56,7 +57,8 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       showDropdown: false,
       optionFlatList: null,
       optionCategoryTree: null,
-      optionCategoryCoords: {}
+      optionCategoryCoords: {},
+      isAllChecked: false
     }, this.initializeOptions(props));
 
     this.isReady = this.isReady.bind(this);
@@ -160,20 +162,24 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
     return (
       <span>
         <label className="CollapsibleMenuItem">
-          <input type="checkbox" className="ContextualCollapsible-selectAll" onChange={this._selectAll(category)}>
+          <input type="checkbox" className="ContextualCollapsible-selectAll" checked={this.state.isAllChecked} onChange={this._handleSelectAll(category)}>
           </input>Select All
         </label>
       </span>
     )
   }
-  _selectAll(category): React$Node {
-    //get list of tags
-      category.map(function(tag) {
-       return tag.tag_name
-    })
-    //find a way to access list of selected tags in TagSelectorCollapsible
-    // if tag in the above map isn't selected, select it, and then check the Select All box
-    // otherwise remove any tags from the above map from list of selected tags and uncheck the box
+
+  _handleSelectAll(category): React$Node {
+    //this feels like a mess, but find what tags are selected or not and then either select or unselect the remainder
+    if(this.state.isAllChecked) {
+      let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === true)
+      toUpdate.forEach((tag) => { this.selectOption(tag); });
+      this.setState({isAllChecked: !isAllChecked})
+    } else {
+      let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === false)
+      toUpdate.forEach((tag) => { this.selectOption(tag); });
+      this.setState({isAllChecked: !isAllChecked})
+    }
   }
 
   _renderChevron(): React$Node {

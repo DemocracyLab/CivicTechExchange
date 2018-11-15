@@ -91249,7 +91249,8 @@ var SelectorCollapsible = function (_React$PureComponent) {
       showDropdown: false,
       optionFlatList: null,
       optionCategoryTree: null,
-      optionCategoryCoords: {}
+      optionCategoryCoords: {},
+      isAllChecked: false
     }, _this.initializeOptions(props));
 
     _this.isReady = _this.isReady.bind(_this);
@@ -91399,18 +91400,34 @@ var SelectorCollapsible = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'label',
           { className: 'CollapsibleMenuItem' },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', className: 'ContextualCollapsible-selectAll', onChange: this._selectAll(category) }),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', className: 'ContextualCollapsible-selectAll', checked: this.state.isAllChecked, onChange: this._handleSelectAll(category) }),
           'Select All'
         )
       );
     }
   }, {
-    key: '_selectAll',
-    value: function _selectAll(category) {
-      //pass each tag in category to TagSelectorCollapsible onOptionSelect fn
-      category.map(function (tag) {
-        this.selectOption(tag.tag_name);
-      });
+    key: '_handleSelectAll',
+    value: function _handleSelectAll(category) {
+      var _this5 = this;
+
+      //this feels like a mess, but find what tags are selected or not and then either select or unselect the remainder
+      if (this.state.isAllChecked) {
+        var toUpdate = category.filter(function (tag) {
+          return _this5.props.optionEnabled(tag) === true;
+        });
+        toUpdate.forEach(function (tag) {
+          _this5.selectOption(tag);
+        });
+        this.setState({ isAllChecked: !isAllChecked });
+      } else {
+        var _toUpdate = category.filter(function (tag) {
+          return _this5.props.optionEnabled(tag) === false;
+        });
+        _toUpdate.forEach(function (tag) {
+          _this5.selectOption(tag);
+        });
+        this.setState({ isAllChecked: !isAllChecked });
+      }
     }
   }, {
     key: '_renderChevron',
