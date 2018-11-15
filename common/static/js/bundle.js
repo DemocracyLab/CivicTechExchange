@@ -91465,12 +91465,17 @@ var ContextualCollapsible = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'label',
             { className: 'CollapsibleMenuItem' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'checkbox', className: 'ContextualCollapsible-selectAll' }),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'checkbox', className: 'ContextualCollapsible-selectAll', onChange: this._selectAll() }),
             'Select All'
           )
         ),
         this.props.children
       );
+    }
+  }, {
+    key: '_selectAll',
+    value: function _selectAll() {
+      console.log(this.props.children);
     }
   }, {
     key: '_onDropDownMount',
