@@ -27,6 +27,7 @@ type FormFields = {|
   project_location: ?string,
   project_url: ?string,
   project_description: ?string,
+  project_short_description: ?string,
   project_organization?: Array<TagDefinition>,
   project_issue_area?: Array<TagDefinition>,
   project_stage?: Array<TagDefinition>,
@@ -66,6 +67,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         project_location: "",
         project_url: "",
         project_description: "",
+        project_short_description: "",
         project_organization: [],
         project_issue_area: [],
         project_stage: [],
@@ -116,6 +118,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_location: project.project_location,
           project_url: project.project_url,
           project_description: project.project_description,
+          project_short_description: project.project_short_description,
           project_organization: project.project_organization,
           project_issue_area: project.project_issue_area,
           project_stage: project.project_stage,
@@ -284,6 +287,18 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             allowMultiSelect={false}
             onSelection={this.onTagChange.bind(this, "project_stage")}
           />
+        </div>
+  
+        <div className="form-group">
+          <label>
+            Short Description
+          </label>
+          <div className="character-count">
+            { (this.state.formFields.project_short_description || "").length} / 140
+          </div>
+          <textarea className="form-control" id="project_short_description" name="project_short_description"
+                    placeholder="Give a one-sentence description of this project" rows="2" maxLength="140"
+                    value={this.state.formFields.project_short_description} onChange={this.onFormFieldChange.bind(this, "project_short_description")}></textarea>
         </div>
 
         <div className="form-group">

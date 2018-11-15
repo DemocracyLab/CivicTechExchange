@@ -129,6 +129,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             <div className="col">
               <h2 className="form-group subheader">PROJECT DETAILS</h2>
               <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
+                {project && project.project_short_description ? project.project_short_description + "\n\n" : null}
                 {project && project.project_description}
               </div>
             </div>
