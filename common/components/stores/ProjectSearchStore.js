@@ -21,7 +21,8 @@ export type FindProjectsArgs = {|
   tech: string,
   role: string,
   org: string,
-  stage: string
+  stage: string,
+  url: string
 |};
 
 type FindProjectsResponse = {|
@@ -131,7 +132,9 @@ class ProjectSearchStore extends ReduceStore<State> {
         tech: this._getTagCategoryParams(state, TagCategory.TECHNOLOGIES_USED),
         role: this._getTagCategoryParams(state, TagCategory.ROLE),
         org: this._getTagCategoryParams(state, TagCategory.ORGANIZATION),
-        stage: this._getTagCategoryParams(state, TagCategory.PROJECT_STAGE)
+        stage: this._getTagCategoryParams(state, TagCategory.PROJECT_STAGE),
+        url: state.url,
+        positions: state.positions
       }, _.identity);
 
       state = state.set('findProjectsArgs',findProjectsArgs);

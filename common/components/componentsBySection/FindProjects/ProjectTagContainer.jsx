@@ -30,7 +30,7 @@ class ProjectTagContainer extends React.Component<{||}, State> {
     return (
       <div
         className={
-          'ProjectTagContainer-root'
+          'ProjectTagContainer-root col-12'
             + (this.state.tags.size === 0 ? '  ProjectTagContainer-noTags' : '')
         }>
         {

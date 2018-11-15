@@ -47,8 +47,9 @@ export type ProjectAPIData = {|
   +project_location: string,
   +project_name: string,
   +project_thumbnail: FileInfo,
-  +project_claimed: boolean,
-  +project_date_modified: string
+  +project_date_modified: string,
+  +project_url: string,
+  +project_positions: $ReadOnlyArray<PositionInfo>
 |};
 
 export type VolunteerUserData = {|
@@ -104,8 +105,18 @@ class ProjectAPIUtils {
       thumbnail: apiData.project_thumbnail,
       ownerId: apiData.project_creator,
       claimed: apiData.project_claimed,
-      date_modified: apiData.project_date_modified
+      date_modified: apiData.project_date_modified,
+      url: apiData.project_url,
+      positions: !_.isEmpty(apiData.project_positions)
+          ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
+          : ['Contact Project for Details'],
     };
+  }
+
+  static getSkillNames(positions: array) {
+    return positions.map(function(data) {
+      return data.roleTag.display_name
+    });
   }
 
   static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
@@ -122,7 +133,7 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
-  
+
   static fetchTagsByCategory(tagCategory: string, getCounts: boolean, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): Promise<$ReadOnlyArray<TagDefinition>> {
     return fetch(new Request('/api/tags?category=' + tagCategory + '&getCounts=' + getCounts || 'false')) //default to false if call doesn't pass a getCounts arg
       .then(response => response.json())

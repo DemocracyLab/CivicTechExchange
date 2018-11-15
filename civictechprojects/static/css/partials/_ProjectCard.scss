@@ -1,50 +1,150 @@
 .ProjectCard-root {
   background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
-  color: inherit;
-  display: inline-table;
-  margin-right: 20px;
-  margin-top: 20px;
-  margin-bottom: 30px;
-  width: 250px;
-}
-
-.ProjectCard-root > div.borderbottom {
-  padding: 5px;
-  border-bottom: solid 1px;
-}
-
-.ProjectCard-description {
-  white-space: pre-wrap;
-  line-height: 1.5;
-}
-
-.ProjectCard-issueAndLocation {
-  border-bottom: solid 1px;
-}
-
-.ProjectCard-label {
+  border-radius: 6px;
+  box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.15);
   color: $color-text-dark;
+  margin-top: 1rem;
+}
+.ProjectCard-root h2 {
+  font-size: 1.333rem;
+  margin-top: 0.5rem;
+}
+.ProjectCard-root h3 {
+  font-size: 1.0rem;
+  font-weight: bold;
+}
+.ProjectCard-root h4 {
+  font-size: 0.875rem;
+  color: $color-text-grey;
+}
+.ProjectCard-root a {
+  text-decoration: none;
+  color: $color-text-dark;
+  display: grid;
+  grid-template-columns: 30% 2% 34% 34%;
+  grid-template-rows: auto;
+}
+.ProjectCard-description {
+  grid-column: 1 / 5;
+  grid-row: 3;
+  padding-left: 0.5rem; /* only on mobile */
+  padding-right: 0.5rem; /* always */
+}
+.ProjectCard-subinfo {
+  grid-column: 3 / 5;
+  grid-row: 2;
+}
+.ProjectCard-subinfo ul {
+  color: $color-text-grey;
+  list-style-type: none;
+  font-size: 0.875rem;
+  word-break: break-all; //break long items to stay in container
+  padding: 0;
+}
+.ProjectCard-subinfo li {
+  margin-top: 0.25rem;
+}
+.ProjectCard-subinfo li:first-of-type {
+  margin-top: 0;
+  padding-top: 0.25rem;
+}
+.ProjectCard-subinfo li svg {
+  margin-right: 0.375rem;
+}
+.ProjectCard-title {
+  grid-column: 3 / 5;
+  grid-row: 1 / 2;
+}
+.ProjectCard-logo {
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+.ProjectCard-logo img {
+  max-width: 100%;
+}
+.ProjectCard-skills {
+  grid-column: 1 / 5;
+  grid-row: 4;
+  padding: 0 0 0 8px;
+}
+.ProjectCard-skills ul {
+  padding: 0;
+}
+.ProjectCard-skills ul li {
+  display: inline-block;
+  list-style-type: none;
+  background: $color-grey-medium;
+  border-radius: 1rem;
+  padding: 0.25rem 0.5rem;
+  margin: 0.25rem 0.5rem 0.25rem 0;
 }
 
-.ProjectCard-name {
-  height: 140px;
-
+@include media-breakpoint-up(sm) {
+  .Project-Card-title {
+    grid-row: 1;
+  }
+  .ProjectCard-description {
+    grid-column: 3 / 5;
+    grid-row: 2;
+    padding: 0;
+  }
+  .ProjectCard-subinfo {
+    grid-column: 1;
+    grid-row: 3;
+    margin-left: 0.5rem;
+  }
+  .ProjectCard-subinfo li {
+    margin-top: 0.875rem;
+  }
+  .ProjectCard-subinfo li:first-of-type {
+    margin-top: 0;
+  }
+  .ProjectCard-skills {
+    grid-column: 3 / 5;
+    grid-row: 3;
+    padding: 0;
+  }
+  .ProjectCard-logo, .ProjectCard-subinfo {
+    border-right: 1px solid $color-grey-medium;
+  }
 }
 
-.ProjectCard-name > h3{
-  font-size: 1.2rem;
+@include media-breakpoint-up(lg) {
+  .ProjectCard-root {
+    height: calc(100% - 1rem) /* height is 100% - margin) */
+  }
 }
 
-.ProjectCard-subtext {
-  font-size: 12px;
-}
-
-.ProjectCard-value {
-  color: $color-grey-frame-border;
-}
-
-.ProjectCardContainer {
- display: inline-block;
- width: calc(100% - 290px);
+@include media-breakpoint-between(lg, xl) {
+  .ProjectCard-description, .ProjectCard-subinfo, .ProjectCard-skills {
+    margin-left: 0.5rem;
+  }
+  .ProjectCard-logo, .ProjectCard-subinfo {
+    border-right: none;
+  }
+  .ProjectCard-description {
+    grid-row: 3;
+    grid-column: 1 / 5;
+  }
+  .ProjectCard-skills {
+    grid-row: 4;
+    grid-column: 1 / 5;
+  }
+  .ProjectCard-subinfo {
+    grid-row: 5;
+    grid-column: 1 / 5;
+    margin-top: 0.5rem;
+  }
+  .ProjectCard-subinfo li {
+    display: inline;
+    margin-top: 0;
+    padding-right: 1rem;
+  }
+  .ProjectCard-subinfo li:first-of-type {
+    padding-top: 0;
+  }
+  .ProjectCard-subinfo li:last-of-type {
+    padding-right: 0;
+  }
 }

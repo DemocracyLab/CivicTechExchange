@@ -8,14 +8,12 @@ import url from '../../utils/url.js';
 import {Locations} from "../../constants/ProjectConstants.js";
 import cdn from "../../utils/cdn.js";
 import Moment from 'react-moment';
+import Truncate from "../../utils/truncate.js";
+import urlHelper from "../../utils/url.js"
 
 type Props = {|
   +project: Project,
 |};
-
-const styles = {
-  textDecoration: 'none'
-}
 
 class ProjectCard extends React.PureComponent<Props> {
 
@@ -28,88 +26,87 @@ class ProjectCard extends React.PureComponent<Props> {
 
   render(): React$Node {
     return (
-      <a style={styles}
-        className="ProjectCard-root"
-        href={url.section(Section.AboutProject, {id: this.props.project.id})}
-        target="_blank" rel="noopener noreferrer"
-      >
-        {
-          this.props.project && this.props.project.claimed
-          ? <img className="checkbox" src={cdn.image("verified_check.jpg")} align="right"/>
-          : null
-        }
-        {this._renderName()}
-        {this._renderIssueAndLocation()}
-
-      </a>
-    );
-  }
-
-  _renderName(): React$Node {
-    return (
-      <div className="borderbottom">
-        <div className="ProjectCard-name" >
-          <div>
-            <img className="upload_img upload_img_bdr" src={this.props.project && this.props.project.thumbnail && this.props.project.thumbnail.publicUrl}/>
-          </div>
-            <h3>{this.props.project.name}</h3>
+      <div className="col-12 col-lg-6">
+        <div className="ProjectCard-root">
+          <a href={url.section(Section.AboutProject, {id: this.props.project.id})}
+            target="_blank" rel="noopener noreferrer">
+            {this._renderLogo()}
+            {this._renderSubInfo()}
+            {this._renderTitleAndIssue()}
+            {this._renderProjectDescription()}
+            {this._renderSkillsNeeded()}
+          </a>
         </div>
       </div>
     );
   }
-
-  _renderIssueAndLocation(): React$Node {
+  _renderLogo(): React$Node {
     return (
-      <div className="ProjectCard-issueAndLocation">
-        {
-          this._renderLabelAndValue(
-            'Issue Area: ',
-            this.props.project.issueArea,
-          )
-        }
-        { 
-          (this.props.project.location !== Locations.OTHER)
-          ? this._renderLabelAndValue('Location: ', this.props.project.location)
-          : this._renderLabelAndValue('Location: ', null)
-        }
-        {
-          this._renderDateModified()
-        }
-      </div>
-    );
-  }
-
-  _renderDateModified(): React$Node {
-    return (
-      <div className="ProjectCard-subtext">
-        <span className="ProjectCard-label">
-          Last Updated:&nbsp;
-        </span>
-        <span className="ProjectCard-value">
-          <Moment format="MMM D, YYYY, h:mm a">{this.props.project.date_modified}</Moment>
-        </span>
+      <div className="ProjectCard-logo">
+        <img src={this.props.project && this.props.project.thumbnail ? this.props.project.thumbnail.publicUrl : '/static/images/projectlogo-default.png'}/>
       </div>
     )
   }
-
-  _renderLabelAndValue(label: string, value: string): React$Node {
-      return (
-        <div className="ProjectCard-subtext">
-          <span className="ProjectCard-label">
-            {label}
-          </span>
-          <span className="ProjectCard-value">
-            {value ? value : null}
-          </span>
-        </div>
-      );
+  _renderTitleAndIssue(): React$Node {
+    return (
+      <div className="ProjectCard-title">
+        <h2>{this.props.project.name}</h2>
+        <h4>{this.props.project.issueArea}</h4>
+      </div>
+    )
   }
-
-  _renderDescription(): string {
-    const maxDescriptionLength = 300;
-    return this.props.project.description.length > maxDescriptionLength
-      ? this.props.project.description.slice(0, maxDescriptionLength) + '...'
-      : this.props.project.description;
+  _renderProjectDescription(): React$Node {
+    return (
+        <div className="ProjectCard-description">
+          <p>{Truncate.stringT(this.props.project.description, this.props.textlen)}</p>
+        </div>
+    );
+  }
+  _renderSkillsNeeded(): React$Node {
+    return (
+    <div className="ProjectCard-skills">
+    <h3>Skills Needed</h3>
+      {this._generateSkillList(this.props.skillslen)}
+    </div>
+    )
+  }
+  _generateSkillList(numskills): React$Node {
+    //take array of skills needed from props, truncate if required, and map to list items
+    const skills = Truncate.arrayT(this.props.project.positions, numskills)
+    return (
+      <ul>
+        {skills.map((skills, i) =>
+          <li key={i}>{skills}</li>
+        )}
+      </ul>
+    );
+  }
+  _renderSubInfo(): React$Node {
+    //only renders a list item for ones where we have data, otherwise skip
+    return (
+      <div className="ProjectCard-subinfo">
+        <ul>
+        {this.props.project.location &&
+          <li>
+            <i className="fas fa-map-marker-alt fa-fw"></i>
+            {this.props.project.location}
+          </li>
+        }
+        {this.props.project.url &&
+          <li>
+            <i className="fas fa-globe-americas fa-fw"></i>
+            {urlHelper.beautify(this.props.project.url)}
+          </li>
+        }
+        {this.props.project.date_modified &&
+          <li>
+            <i className="fas fa-clock fa-fw"></i>
+            <Moment fromNow>{this.props.project.date_modified}</Moment>
+          </li>
+        }
+        </ul>
+      </div>
+    )
   }
 }
 
