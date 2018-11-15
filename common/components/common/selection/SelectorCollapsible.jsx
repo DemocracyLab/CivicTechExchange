@@ -108,9 +108,12 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
 
   _renderDropdown(): React$Node {
     return (
-      <ContextualCollapsible showContextualArrow={true} xPos={this.state.chevronX}>
-        { this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList) }
-      </ContextualCollapsible>
+      <div>
+        {this.props.optionCategory ? null : this._renderSelectAll()}
+        <ContextualCollapsible showContextualArrow={true} xPos={this.state.chevronX}>
+          { this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList) }
+        </ContextualCollapsible>
+      </div>
     );
   }
 
@@ -142,13 +145,29 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       <span className="CollapsibleCategorySubheader" onClick={this.expandCategory.bind(this, category)}>
         {category} { } {isExpanded ? this.constants.chevronDown : this.constants.chevronRight}</span>
         { isExpanded
-          ? <ContextualCollapsible>
+          ? <span>
+            {this._renderSelectAll()}
+            <ContextualCollapsible>
               { this._renderOptions(this.state.optionCategoryTree[category]) }
             </ContextualCollapsible>
+            </span>
           : null
         }
       </div>
     });
+  }
+  _renderSelectAll(): React$Node {
+    return (
+      <span>
+        <label className="CollapsibleMenuItem">
+          <input type="checkbox" className="ContextualCollapsible-selectAll" onChange={this._selectAll()}>
+          </input>Select All
+        </label>
+      </span>
+    )
+  }
+  _selectAll(): React$Node {
+    console.log(this.state)
   }
 
   _renderChevron(): React$Node {

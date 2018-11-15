@@ -34,15 +34,11 @@ class ContextualCollapsible extends React.PureComponent<Props, State> {
         ref={this._onDropDownMount.bind(this)}
         style={style}>
         {this.props.showContextualArrow ? this._renderContextualArrow() : null}
-        <div><label className="CollapsibleMenuItem"><input type="checkbox" className="ContextualCollapsible-selectAll" onChange={this._selectAll()}></input>Select All</label></div>
         {this.props.children}
       </div>
     );
   }
 
-  _selectAll(): React$Node {
-    console.log(this.props.children);
-  }
 
   _onDropDownMount(dropDownElement: ?React$ElementRef<*>): void {
     const contextualArrowX = dropDownElement

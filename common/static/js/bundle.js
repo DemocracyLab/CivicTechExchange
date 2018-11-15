@@ -91318,9 +91318,14 @@ var SelectorCollapsible = function (_React$PureComponent) {
     key: '_renderDropdown',
     value: function _renderDropdown() {
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
-        { showContextualArrow: true, xPos: this.state.chevronX },
-        this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList)
+        'div',
+        null,
+        this.props.optionCategory ? null : this._renderSelectAll(),
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
+          { showContextualArrow: true, xPos: this.state.chevronX },
+          this.props.optionCategory ? this._renderCategories() : this._renderOptions(this.state.optionFlatList)
+        )
       );
     }
   }, {
@@ -91373,12 +91378,36 @@ var SelectorCollapsible = function (_React$PureComponent) {
             isExpanded ? _this4.constants.chevronDown : _this4.constants.chevronRight
           ),
           isExpanded ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
+            'span',
             null,
-            _this4._renderOptions(_this4.state.optionCategoryTree[category])
+            _this4._renderSelectAll(),
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              __WEBPACK_IMPORTED_MODULE_0__common_ContextualCollapsible_jsx__["a" /* default */],
+              null,
+              _this4._renderOptions(_this4.state.optionCategoryTree[category])
+            )
           ) : null
         );
       });
+    }
+  }, {
+    key: '_renderSelectAll',
+    value: function _renderSelectAll() {
+      return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+        'span',
+        null,
+        __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+          'label',
+          { className: 'CollapsibleMenuItem' },
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', className: 'ContextualCollapsible-selectAll', onChange: this._selectAll() }),
+          'Select All'
+        )
+      );
+    }
+  }, {
+    key: '_selectAll',
+    value: function _selectAll() {
+      console.log(this.state);
     }
   }, {
     key: '_renderChevron',
@@ -91459,23 +91488,8 @@ var ContextualCollapsible = function (_React$PureComponent) {
           ref: this._onDropDownMount.bind(this),
           style: style },
         this.props.showContextualArrow ? this._renderContextualArrow() : null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'div',
-          null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'label',
-            { className: 'CollapsibleMenuItem' },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'checkbox', className: 'ContextualCollapsible-selectAll', onChange: this._selectAll() }),
-            'Select All'
-          )
-        ),
         this.props.children
       );
-    }
-  }, {
-    key: '_selectAll',
-    value: function _selectAll() {
-      console.log(this.props.children);
     }
   }, {
     key: '_onDropDownMount',
