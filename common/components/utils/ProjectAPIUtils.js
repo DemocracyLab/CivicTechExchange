@@ -1,6 +1,6 @@
 // @flow
 
-import type {Project} from '../stores/ProjectSearchStore.js';
+// import type {Project} from '../stores/ProjectSearchStore.js';
 import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 import {PositionInfo} from "../forms/PositionInfo.jsx";
@@ -25,17 +25,47 @@ export type TagDefinition = {|
   parent: string,
 |};
 
+export type ProjectData = {|
+  +id: number,
+  +ownerId: number,
+  +description: string,
+  +issueArea: $ReadOnlyArray<TagDefinition>,
+  +stage: $ReadOnlyArray<TagDefinition>,
+  +location: string,
+  +name: string,
+  +thumbnail: FileInfo,
+  +claimed: boolean,
+  +date_modified: string
+|};
+
 export type ProjectAPIData = {|
   +project_id: number,
+  +project_creator: number,
   +project_description: string,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
   +project_stage: $ReadOnlyArray<TagDefinition>,
   +project_location: string,
   +project_name: string,
   +project_thumbnail: FileInfo,
+  +project_date_modified: string,
   +project_url: string,
-  +project_positions: $ReadOnlyArray<PositionInfo>,
+  +project_positions: $ReadOnlyArray<PositionInfo>
 |};
+
+export type VolunteerUserData = {|
+  +id: number,
+  +first_name: string,
+  +last_name: string,
+  +user_thumbnail: FileInfo
+|}
+
+export type VolunteerDetailsAPIData = {|
+  +application_id: number,
+  +user: VolunteerUserData,
+  +application_text: string,
+  +roleTag: TagDefinition,
+  +isApproved: boolean
+|}
 
 export type ProjectDetailsAPIData = {|
   +project_id: number,
@@ -53,11 +83,12 @@ export type ProjectDetailsAPIData = {|
   +project_thumbnail: FileInfo,
   +project_links: $ReadOnlyArray<LinkInfo>,
   +project_files: $ReadOnlyArray<FileInfo>,
+  +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date
 |};
 
 class ProjectAPIUtils {
-  static projectFromAPIData(apiData: ProjectAPIData): Project {
+  static projectFromAPIData(apiData: ProjectAPIData): ProjectData {
     return {
       description: apiData.project_description,
       id: apiData.project_id,
@@ -72,6 +103,7 @@ class ProjectAPIUtils {
       location: apiData.project_location,
       name: apiData.project_name,
       thumbnail: apiData.project_thumbnail,
+      ownerId: apiData.project_creator,
       claimed: apiData.project_claimed,
       date_modified: apiData.project_date_modified,
       url: apiData.project_url,
