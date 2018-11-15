@@ -81657,8 +81657,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["g" /* Modal */],
           { show: this.state.showModal,
-            onHide: this.closeModal,
-            style: { paddingTop: '20%' }
+            onHide: this.closeModal
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["g" /* Modal */].Header,
