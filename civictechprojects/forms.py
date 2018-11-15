@@ -19,6 +19,7 @@ class ProjectCreationForm(ModelForm):
         project = Project.objects.create(
             project_creator=get_request_contributor(request),
             project_description=form.data.get('project_description'),
+            project_short_description=form.data.get('project_short_description'),
             project_location=form.data.get('project_location'),
             project_name=form.data.get('project_name'),
             project_url=form.data.get('project_url'),
@@ -94,6 +95,7 @@ class ProjectCreationForm(ModelForm):
 
         form = ProjectCreationForm(request.POST)
         project.project_description = form.data.get('project_description')
+        project.project_short_description = form.data.get('project_short_description')
         project.project_location = form.data.get('project_location')
         project.project_name = form.data.get('project_name')
         project.project_url = form.data.get('project_url')

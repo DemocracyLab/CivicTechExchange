@@ -44270,6 +44270,7 @@ var EditProjectForm = function (_React$PureComponent) {
         project_location: "",
         project_url: "",
         project_description: "",
+        project_short_description: "",
         project_organization: [],
         project_issue_area: [],
         project_stage: [],
@@ -44326,6 +44327,7 @@ var EditProjectForm = function (_React$PureComponent) {
             project_location: project.project_location,
             project_url: project.project_url,
             project_description: project.project_description,
+            project_short_description: project.project_short_description,
             project_organization: project.project_organization,
             project_issue_area: project.project_issue_area,
             project_stage: project.project_stage,
@@ -44556,6 +44558,24 @@ var EditProjectForm = function (_React$PureComponent) {
             allowMultiSelect: false,
             onSelection: this.onTagChange.bind(this, "project_stage")
           })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'form-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'label',
+            null,
+            'Short Description'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            { className: 'character-count' },
+            (this.state.formFields.project_short_description || "").length,
+            ' / 140'
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { className: 'form-control', id: 'project_short_description', name: 'project_short_description',
+            placeholder: 'Give a one-sentence description of this project', rows: '2', maxLength: '140',
+            value: this.state.formFields.project_short_description, onChange: this.onFormFieldChange.bind(this, "project_short_description") })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
@@ -80746,6 +80766,24 @@ var AboutProjectController = function (_React$PureComponent) {
                 'div',
                 { className: 'Text-section' },
                 this._renderTechnologies()
+              )
+            )
+          ) : null,
+          project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_short_description) ? __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+            'div',
+            { className: 'row', style: { margin: "30px 40px 0 40px" } },
+            __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+              'div',
+              { className: 'col' },
+              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                'h2',
+                { className: 'form-group subheader' },
+                'PROJECT SUMMARY'
+              ),
+              __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
+                'div',
+                { className: 'Text-section', style: { whiteSpace: "pre-wrap" } },
+                project.project_short_description
               )
             )
           ) : null,
