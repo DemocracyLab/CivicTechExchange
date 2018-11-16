@@ -33,7 +33,6 @@ urlpatterns = [
     url(r'^api/my_projects', views.my_projects),
     url(r'^api/tags', views.tags),
     url(r'^index/$', views.index),
-    url(r'^project/(?P<project_id>[0-9]+)/$', views.project, name='project'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
     url(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner'),
     url(r'^volunteer/(?P<project_id>[0-9]+)/$', views.volunteer_with_project, name='volunteer_with_project'),

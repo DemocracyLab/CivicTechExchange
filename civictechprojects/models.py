@@ -35,6 +35,7 @@ class Project(models.Model):
     # TODO: Change related name to 'created_projects' or something similar
     project_creator = models.ForeignKey(Contributor, related_name='creator')
     project_description = models.CharField(max_length=3000, blank=True)
+    project_short_description = models.CharField(max_length=140, blank=True)
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
     project_issue_area.remote_field.related_name = "+"
     project_stage = TaggableManager(blank=True, through=TaggedStage)
@@ -67,6 +68,7 @@ class Project(models.Model):
             'project_creator': self.project_creator.id,
             'project_claimed': not self.project_creator.is_admin_contributor(),
             'project_description': self.project_description,
+            'project_short_description': self.project_short_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
             'project_organization': Tag.hydrate_to_json(self.id, list(self.project_organization.all().values())),
@@ -94,7 +96,7 @@ class Project(models.Model):
             'project_id': self.id,
             'project_name': self.project_name,
             'project_creator': self.project_creator.id,
-            'project_description': self.project_description,
+            'project_description': self.project_short_description if self.project_short_description else self.project_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
             'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),

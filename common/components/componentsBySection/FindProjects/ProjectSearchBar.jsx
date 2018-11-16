@@ -4,6 +4,7 @@ import type {FluxReduceStore} from 'flux/utils';
 import {Container} from 'flux/utils';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
+import GlyphStyles from "../../utils/glyphs.js";
 import React, { SyntheticEvent } from 'react';
 
 type State = {|
@@ -25,7 +26,7 @@ class ProjectSearchBar extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className="ProjectSearchBar-root col-12">
-        <i className="fa fa-search"></i>
+        <i className={GlyphStyles.Search}></i>
         <input
           className="ProjectSearchBar-input"
           onChange={e => this.setState({keyword: e.target.value})}
