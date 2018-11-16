@@ -162,7 +162,12 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
     return (
       <span>
         <label className="CollapsibleMenuItem">
-          <input type="checkbox" className="ContextualCollapsible-selectAll" checked={this.state.isAllChecked} onChange={this._handleSelectAll(category)}>
+          <
+            input type="checkbox"
+            className="ContextualCollapsible-selectAll"
+            checked={this.state.isAllChecked}
+            onChange={this._handleSelectAll.bind(this,category)}
+          >
           </input>Select All
         </label>
       </span>
@@ -174,11 +179,11 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
     if(this.state.isAllChecked) {
       let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === true)
       toUpdate.forEach((tag) => { this.selectOption(tag); });
-      this.setState({isAllChecked: !isAllChecked})
+      this.setState({isAllChecked: !this.state.isAllChecked})
     } else {
       let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === false)
       toUpdate.forEach((tag) => { this.selectOption(tag); });
-      this.setState({isAllChecked: !isAllChecked})
+      this.setState({isAllChecked: !this.state.isAllChecked})
     }
   }
 

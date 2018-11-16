@@ -91400,7 +91400,11 @@ var SelectorCollapsible = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'label',
           { className: 'CollapsibleMenuItem' },
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox', className: 'ContextualCollapsible-selectAll', checked: this.state.isAllChecked, onChange: this._handleSelectAll(category) }),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox',
+            className: 'ContextualCollapsible-selectAll',
+            checked: this.state.isAllChecked,
+            onChange: this._handleSelectAll.bind(this, category)
+          }),
           'Select All'
         )
       );
@@ -91418,7 +91422,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
         toUpdate.forEach(function (tag) {
           _this5.selectOption(tag);
         });
-        this.setState({ isAllChecked: !isAllChecked });
+        this.setState({ isAllChecked: !this.state.isAllChecked });
       } else {
         var _toUpdate = category.filter(function (tag) {
           return _this5.props.optionEnabled(tag) === false;
@@ -91426,7 +91430,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
         _toUpdate.forEach(function (tag) {
           _this5.selectOption(tag);
         });
-        this.setState({ isAllChecked: !isAllChecked });
+        this.setState({ isAllChecked: !this.state.isAllChecked });
       }
     }
   }, {
