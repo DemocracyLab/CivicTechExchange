@@ -26,7 +26,7 @@ class ProjectSearchBar extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className="ProjectSearchBar-root col-12">
-        <i className={GlyphStyles.Search}/>
+        <i className={GlyphStyles.Search}></i>
         <input
           className="ProjectSearchBar-input"
           onChange={e => this.setState({keyword: e.target.value})}

@@ -213,7 +213,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderProjectLocation(): React$Node {
     if(this.state.project && this.state.project.project_location && (this.state.project.project_location !== Locations.OTHER)) {
       return <div className="col">
-        <i className={GlyphStyles.MapMarker} aria-hidden="true"/>
+        <i className={GlyphStyles.MapMarker} aria-hidden="true"></i>
         {this.state.project.project_location}
       </div>
     }
@@ -230,7 +230,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderProjectHomepageLink(): React$Node {
     if(this.state.project && this.state.project.project_url) {
       return <div className="col">
-        <i className={GlyphStyles.Globe} aria-hidden="true"/>
+        <i className={GlyphStyles.Globe} aria-hidden="true"></i>
         <a href={this.state.project.project_url} target="_blank" rel="noopener noreferrer">
           {this.state.project.project_url.length > 100 ? "Project Homepage" : url.beautify(this.state.project.project_url)}
         </a>

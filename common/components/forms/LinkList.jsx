@@ -108,7 +108,7 @@ class LinkList extends React.PureComponent<Props,State>  {
           bsSize="small"
           onClick={this.createNewLink.bind(this)}
         >
-          <i className={GlyphStyles.Add} aria-hidden="true"/>
+          <i className={GlyphStyles.Add} aria-hidden="true"></i>
         </Button>
 
         {this._renderLinks()}
@@ -134,8 +134,8 @@ class LinkList extends React.PureComponent<Props,State>  {
     }).map((link,i) =>
       <div key={i}>
         <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName}</a>
-        <i className={GlyphStyles.Edit} aria-hidden="true" onClick={this.editLink.bind(this,link)}/>
-        <i className={GlyphStyles.Delete} aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,link)}/>
+        <i className={GlyphStyles.Edit} aria-hidden="true" onClick={this.editLink.bind(this,link)}></i>
+        <i className={GlyphStyles.Delete} aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,link)}></i>
       </div>
     );
   }

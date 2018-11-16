@@ -87,19 +87,19 @@ class ProjectCard extends React.PureComponent<Props> {
         <ul>
         {this.props.project.location &&
           <li>
-            <i className={GlyphStyles.MapMarker}/>
+            <i className={GlyphStyles.MapMarker}></i>
             {this.props.project.location}
           </li>
         }
         {this.props.project.url &&
           <li>
-            <i className={GlyphStyles.Globe}/>
+            <i className={GlyphStyles.Globe}></i>
             {urlHelper.beautify(this.props.project.url)}
           </li>
         }
         {this.props.project.date_modified &&
           <li>
-            <i className={GlyphStyles.Clock}/>
+            <i className={GlyphStyles.Clock}></i>
             <Moment fromNow>{this.props.project.date_modified}</Moment>
           </li>
         }

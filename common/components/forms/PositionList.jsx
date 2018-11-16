@@ -105,7 +105,7 @@ class PositionList extends React.PureComponent<Props,State>  {
           bsSize="small"
           onClick={this.createNewPosition.bind(this)}
         >
-          <i className={GlyphStyles.Add} aria-hidden="true"/>
+          <i className={GlyphStyles.Add} aria-hidden="true"></i>
         </Button>
 
         {this._renderPositions()}
@@ -136,8 +136,8 @@ class PositionList extends React.PureComponent<Props,State>  {
             ? <a href={position.descriptionUrl} target="_blank" rel="noopener noreferrer">{positionDisplay}</a>
             : <span>{positionDisplay}</span>
           }
-          <i className={GlyphStyles.Edit} aria-hidden="true" onClick={this.editPosition.bind(this, position)}/>
-          <i className={GlyphStyles.Delete} aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this, i)}/>
+          <i className={GlyphStyles.Edit} aria-hidden="true" onClick={this.editPosition.bind(this, position)}></i>
+          <i className={GlyphStyles.Delete} aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this, i)}></i>
         </div>
       )
     });
