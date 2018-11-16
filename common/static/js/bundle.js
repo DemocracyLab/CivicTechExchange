@@ -80980,14 +80980,6 @@ var AboutProjectController = function (_React$PureComponent) {
       //replaces specific linkNames for readability
       return __WEBPACK_IMPORTED_MODULE_10__constants_LinkConstants_js__["a" /* LinkNames */][input] || input;
     }
-
-    // showPositionModal(position: PositionInfo): void {
-    //   this.setState({
-    //     showPositionModal: true,
-    //     shownPosition: position
-    //   });
-    // }
-
   }]);
 
   return AboutProjectController;
