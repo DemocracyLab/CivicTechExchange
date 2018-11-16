@@ -40,7 +40,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   componentDidMount() {
-    var projectId = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
+    const projectId = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
     ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
   }
 
@@ -284,13 +284,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _legibleName(input) {
     //replaces specific linkNames for readability
     return LinkNames[input] || input;
-  }
-
-  showPositionModal(position: PositionInfo): void {
-    this.setState({
-      showPositionModal: true,
-      shownPosition: position
-    });
   }
 }
 

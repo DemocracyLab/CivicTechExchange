@@ -37609,19 +37609,9 @@ var ImageUploadFormElement = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         null,
-        this.state.currentImage ? this._renderThumbnail() : this._renderThumbnailPlaceholder(),
+        this.state.currentImage && this._renderThumbnail(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__common_upload_FileUploadButton_jsx__["a" /* default */], { acceptedFileTypes: 'image/*', buttonText: this.props.buttonText || "Upload Image", onFileUpload: this._handleFileSelection.bind(this) }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'hidden', ref: 'hiddenFormField', name: this.props.form_id, id: this.props.form_id })
-      );
-    }
-  }, {
-    key: '_renderThumbnailPlaceholder',
-    value: function _renderThumbnailPlaceholder() {
-      // TODO: Fix this icon styling or remove placeholder
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'span',
-        { ref: 'thumbnailPlaceholder', className: 'upload_img upload_img_bdr' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: 'fa fa-folder-open-o fa-3x', 'aria-hidden': 'true' })
       );
     }
   }, {
@@ -80990,14 +80980,14 @@ var AboutProjectController = function (_React$PureComponent) {
       //replaces specific linkNames for readability
       return __WEBPACK_IMPORTED_MODULE_10__constants_LinkConstants_js__["a" /* LinkNames */][input] || input;
     }
-  }, {
-    key: 'showPositionModal',
-    value: function showPositionModal(position) {
-      this.setState({
-        showPositionModal: true,
-        shownPosition: position
-      });
-    }
+
+    // showPositionModal(position: PositionInfo): void {
+    //   this.setState({
+    //     showPositionModal: true,
+    //     shownPosition: position
+    //   });
+    // }
+
   }]);
 
   return AboutProjectController;
