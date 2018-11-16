@@ -17,6 +17,7 @@ import {LinkNames} from "../constants/LinkConstants.js";
 import {TagDefinition} from "../utils/ProjectAPIUtils.js";
 import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
 import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
+import GlyphStyles from "../utils/glyphs.js";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -39,7 +40,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   componentDidMount() {
-    var projectId = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
+    const projectId = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
     ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
   }
 
@@ -212,7 +213,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderProjectLocation(): React$Node {
     if(this.state.project && this.state.project.project_location && (this.state.project.project_location !== Locations.OTHER)) {
       return <div className="col">
-        <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
+        <i className={GlyphStyles.MapMarker} aria-hidden="true"></i>
         {this.state.project.project_location}
       </div>
     }
@@ -229,7 +230,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderProjectHomepageLink(): React$Node {
     if(this.state.project && this.state.project.project_url) {
       return <div className="col">
-        <i className="fa fa-link fa-1" aria-hidden="true"></i>
+        <i className={GlyphStyles.Globe} aria-hidden="true"></i>
         <a href={this.state.project.project_url} target="_blank" rel="noopener noreferrer">
           {this.state.project.project_url.length > 100 ? "Project Homepage" : url.beautify(this.state.project.project_url)}
         </a>
@@ -283,13 +284,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _legibleName(input) {
     //replaces specific linkNames for readability
     return LinkNames[input] || input;
-  }
-
-  showPositionModal(position: PositionInfo): void {
-    this.setState({
-      showPositionModal: true,
-      shownPosition: position
-    });
   }
 }
 

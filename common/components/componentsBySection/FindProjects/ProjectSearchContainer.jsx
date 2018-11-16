@@ -3,6 +3,7 @@
 import ProjectTagContainer from './ProjectTagContainer.jsx';
 import ProjectSearchBar from './ProjectSearchBar.jsx';
 import AlertSignupModal from "./AlertSignupModal.jsx";
+import GlyphStyles from "../../utils/glyphs.js";
 import {Button} from 'react-bootstrap';
 import React from 'react';
 
@@ -46,7 +47,7 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
           handleClose={this.handleCloseAlertSignup.bind(this)}
         />
         <Button className="alert-signup" onClick={this.openAlertSignup.bind(this)}>
-          <i className="fa fa-bell" aria-hidden="true"></i>
+          <i className={GlyphStyles.Alert} aria-hidden="true"></i>
           Sign Up for Alerts
         </Button>
 

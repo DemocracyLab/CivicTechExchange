@@ -45,22 +45,10 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
   render(): React$Node {
     return (
       <div>
-        {
-          this.state.currentImage
-          ? this._renderThumbnail()
-          : this._renderThumbnailPlaceholder()
-        }
+        {this.state.currentImage && this._renderThumbnail()}
         <FileUploadButton acceptedFileTypes="image/*" buttonText={this.props.buttonText || "Upload Image"} onFileUpload={this._handleFileSelection.bind(this)}/>
         <input type="hidden" ref="hiddenFormField" name={this.props.form_id} id={this.props.form_id} />
       </div>
-    );
-  }
-  
-  _renderThumbnailPlaceholder() : React$Node {
-    return (
-      <span ref="thumbnailPlaceholder" className="upload_img upload_img_bdr">
-          <i className="fa fa-folder-open-o fa-3x" aria-hidden="true"></i>
-      </span>
     );
   }
   
