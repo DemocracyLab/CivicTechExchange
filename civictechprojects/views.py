@@ -105,24 +105,6 @@ def project_delete(request, project_id):
     return HttpResponse(status=204)
 
 
-# TODO: Remove when React implementation complete
-def project(request, project_id):
-    project = Project.objects.get(id=project_id)
-    template = loader.get_template('project.html')
-    files = ProjectFile.objects.filter(file_project=project_id)
-    thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
-    other_files = list(files.filter(file_category=FileCategory.ETC.value))
-    links = ProjectLink.objects.filter(link_project=project_id)
-    context = {
-        'project': project,
-        'files': map(lambda file: file.to_json(), other_files),
-        'links': map(lambda link: link.to_json(), links),
-    }
-    if len(thumbnail_files) > 0:
-        context['thumbnail'] = thumbnail_files[0].to_json()
-    return HttpResponse(template.render(context, request))
-
-
 def get_project(request, project_id):
     project = Project.objects.get(id=project_id)
     return HttpResponse(json.dumps(project.hydrate_to_json()))
