@@ -57,6 +57,7 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
   }
   
   _renderThumbnailPlaceholder() : React$Node {
+    // TODO: Fix this icon styling or remove placeholder
     return (
       <span ref="thumbnailPlaceholder" className="upload_img upload_img_bdr">
           <i className="fa fa-folder-open-o fa-3x" aria-hidden="true"></i>

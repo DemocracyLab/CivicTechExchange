@@ -8,6 +8,7 @@ import FileUploadButton from '../common/upload/FileUploadButton.jsx'
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
 import { deleteFromS3 } from '../utils/s3.js'
 import _ from 'lodash'
+import GlyphStyles from "../utils/glyphs";
 
 type Props = {|
   files: Array<FileInfo>,
@@ -103,7 +104,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
         className="btn-background-project"
         acceptedFileTypes="*"
         buttonText={this.props.title || "Files"}
-        iconClass="fa fa-plus"
+        iconClass={GlyphStyles.Add}
         onFileUpload={this.handleFileSelection.bind(this)}
       />
     );
@@ -113,7 +114,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
     return this.state.files.map((file,i) =>
       <div key={i}>
         <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">{file.fileName}</a>
-        <i className="fa fa-trash-o fa-1" aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,file)}></i>
+        <i className={GlyphStyles.Delete} aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,file)}/>
       </div>
     );
   }

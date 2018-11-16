@@ -5,6 +5,7 @@ import {Button} from 'react-bootstrap';
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
 import {PositionInfo} from "./PositionInfo.jsx";
 import PositionEntryModal from "./PositionEntryModal.jsx";
+import GlyphStyles from "../utils/glyphs.js";
 import _ from 'lodash'
 
 
@@ -104,7 +105,7 @@ class PositionList extends React.PureComponent<Props,State>  {
           bsSize="small"
           onClick={this.createNewPosition.bind(this)}
         >
-          <i className="fa fa-plus" aria-hidden="true"></i>
+          <i className={GlyphStyles.Add} aria-hidden="true"/>
         </Button>
 
         {this._renderPositions()}
@@ -135,8 +136,8 @@ class PositionList extends React.PureComponent<Props,State>  {
             ? <a href={position.descriptionUrl} target="_blank" rel="noopener noreferrer">{positionDisplay}</a>
             : <span>{positionDisplay}</span>
           }
-          <i className="fa fa-pencil-square-o fa-1" aria-hidden="true" onClick={this.editPosition.bind(this, position)}/>
-          <i className="fa fa-trash-o fa-1" aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this, i)}/>
+          <i className={GlyphStyles.Edit} aria-hidden="true" onClick={this.editPosition.bind(this, position)}/>
+          <i className={GlyphStyles.Delete} aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this, i)}/>
         </div>
       )
     });

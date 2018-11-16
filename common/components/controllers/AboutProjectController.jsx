@@ -17,6 +17,7 @@ import {LinkNames} from "../constants/LinkConstants.js";
 import {TagDefinition} from "../utils/ProjectAPIUtils.js";
 import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
 import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
+import GlyphStyles from "../utils/glyphs.js";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -212,7 +213,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderProjectLocation(): React$Node {
     if(this.state.project && this.state.project.project_location && (this.state.project.project_location !== Locations.OTHER)) {
       return <div className="col">
-        <i className="fa fa-map-marker fa-1" aria-hidden="true"></i>
+        <i className={GlyphStyles.MapMarker} aria-hidden="true"/>
         {this.state.project.project_location}
       </div>
     }
@@ -229,7 +230,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderProjectHomepageLink(): React$Node {
     if(this.state.project && this.state.project.project_url) {
       return <div className="col">
-        <i className="fa fa-link fa-1" aria-hidden="true"></i>
+        <i className={GlyphStyles.Globe} aria-hidden="true"/>
         <a href={this.state.project.project_url} target="_blank" rel="noopener noreferrer">
           {this.state.project.project_url.length > 100 ? "Project Homepage" : url.beautify(this.state.project.project_url)}
         </a>

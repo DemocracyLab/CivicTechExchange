@@ -5,7 +5,7 @@ import {Button} from 'react-bootstrap';
 import LinkEntryModal from './LinkEntryModal.jsx'
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
 import type { LinkInfo } from './LinkInfo.jsx'
-import {LinkNames} from "../constants/LinkConstants.js";
+import GlyphStyles from "../utils/glyphs.js";
 import _ from 'lodash'
 
 
@@ -108,7 +108,7 @@ class LinkList extends React.PureComponent<Props,State>  {
           bsSize="small"
           onClick={this.createNewLink.bind(this)}
         >
-          <i className="fa fa-plus" aria-hidden="true"></i>
+          <i className={GlyphStyles.Add} aria-hidden="true"/>
         </Button>
 
         {this._renderLinks()}
@@ -134,8 +134,8 @@ class LinkList extends React.PureComponent<Props,State>  {
     }).map((link,i) =>
       <div key={i}>
         <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName}</a>
-        <i className="fa fa-pencil-square-o fa-1" aria-hidden="true" onClick={this.editLink.bind(this,link)}></i>
-        <i className="fa fa-trash-o fa-1" aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,link)}></i>
+        <i className={GlyphStyles.Edit} aria-hidden="true" onClick={this.editLink.bind(this,link)}/>
+        <i className={GlyphStyles.Delete} aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,link)}/>
       </div>
     );
   }

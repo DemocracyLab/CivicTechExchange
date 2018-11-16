@@ -5,11 +5,10 @@ import type {Project} from '../../stores/ProjectSearchStore.js';
 import React from 'react';
 import Section from '../../../components/enums/Section.js';
 import url from '../../utils/url.js';
-import {Locations} from "../../constants/ProjectConstants.js";
-import cdn from "../../utils/cdn.js";
 import Moment from 'react-moment';
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js"
+import GlyphStyles from "../../utils/glyphs.js";
 
 type Props = {|
   +project: Project,
@@ -88,19 +87,19 @@ class ProjectCard extends React.PureComponent<Props> {
         <ul>
         {this.props.project.location &&
           <li>
-            <i className="fas fa-map-marker-alt fa-fw"></i>
+            <i className={GlyphStyles.MapMarker}/>
             {this.props.project.location}
           </li>
         }
         {this.props.project.url &&
           <li>
-            <i className="fas fa-globe-americas fa-fw"></i>
+            <i className={GlyphStyles.Globe}/>
             {urlHelper.beautify(this.props.project.url)}
           </li>
         }
         {this.props.project.date_modified &&
           <li>
-            <i className="fas fa-clock fa-fw"></i>
+            <i className={GlyphStyles.Clock}/>
             <Moment fromNow>{this.props.project.date_modified}</Moment>
           </li>
         }
