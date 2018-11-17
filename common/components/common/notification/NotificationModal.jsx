@@ -37,7 +37,7 @@ class NotificationModal extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div>
-          <Modal show={this.state.showModal}>
+          <Modal show={this.state.showModal} className="wide-dialog">
               <Modal.Header style={{whiteSpace: "pre-wrap"}}>
                   <Modal.Title>{this.props.headerText}</Modal.Title>
               </Modal.Header>

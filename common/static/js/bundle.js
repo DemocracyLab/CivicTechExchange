@@ -37299,7 +37299,7 @@ var NotificationModal = function (_React$PureComponent) {
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */],
-          { show: this.state.showModal },
+          { show: this.state.showModal, className: 'wide-dialog' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Header,
             { style: { whiteSpace: "pre-wrap" } },
