@@ -81728,11 +81728,18 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
                 null,
                 'Message:'
               ),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'character-count' },
+                (this.state.message || "").length,
+                ' / 3000'
+              ),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["d" /* FormControl */], { componentClass: 'textarea',
                 placeholder: 'I\'m interested in helping with this project because...',
                 rows: '4',
                 cols: '50',
                 name: 'message',
+                maxLength: '3000',
                 value: this.state.message,
                 onChange: this.handleChange })
             )
