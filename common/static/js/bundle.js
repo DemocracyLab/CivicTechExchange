@@ -44123,7 +44123,7 @@ var FeedbackModal = function (_React$PureComponent) {
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-              { onClick: this.confirm.bind(this, true) },
+              { disabled: this.props.requireMessage && !this.state.feedbackText, onClick: this.confirm.bind(this, true) },
               this.props.confirmButtonText
             )
           )
@@ -81476,6 +81476,7 @@ var ProjectVolunteerButton = function (_React$PureComponent) {
                 messagePrompt: 'State the reasons you wish to leave this project (Optional)',
                 confirmButtonText: 'Confirm',
                 maxCharacterCount: 3000,
+                requireMessage: false,
                 onConfirm: this.confirmLeaveProject.bind(this)
               })
             );
@@ -81605,7 +81606,6 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
       roleTag: null,
       showConfirmationModal: false
     };
-    // this.closeModal = this.closeModal.bind(this);
     _this.handleChange = _this.handleChange.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.askForSendConfirmation = _this.askForSendConfirmation.bind(_this);
@@ -91652,6 +91652,7 @@ var VolunteerSection = function (_React$PureComponent) {
           messagePrompt: "State the reasons you wish to reject this applicant",
           confirmButtonText: "Confirm",
           maxCharacterCount: 3000,
+          requireMessage: true,
           onConfirm: this.closeRejectModal.bind(this)
         }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__FeedbackModal_jsx__["a" /* default */], {
@@ -91660,6 +91661,7 @@ var VolunteerSection = function (_React$PureComponent) {
           messagePrompt: "State the reasons you wish to dismiss this volunteer",
           confirmButtonText: "Confirm",
           maxCharacterCount: 3000,
+          requireMessage: true,
           onConfirm: this.closeDismissModal.bind(this)
         }),
         this._renderPendingVolunteers(approvedAndPendingVolunteers[1]),
