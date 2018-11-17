@@ -18864,6 +18864,11 @@ var CurrentUser = function () {
     value: function lastName() {
       return window.DLAB_GLOBAL_CONTEXT.lastName;
     }
+  }, {
+    key: "isStaff",
+    value: function isStaff() {
+      return window.DLAB_GLOBAL_CONTEXT.isStaff;
+    }
   }]);
 
   return CurrentUser;
@@ -81085,7 +81090,7 @@ var ContactProjectButton = function (_React$PureComponent) {
     value: function render() {
       if (this.state) {
         if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isLoggedIn()) {
-          if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].userID() === this.props.project.project_creator) {
+          if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].userID() === this.props.project.project_creator || __WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isStaff()) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               'div',
               null,

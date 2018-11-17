@@ -21,6 +21,10 @@ class CurrentUser {
   static lastName(): string {
     return window.DLAB_GLOBAL_CONTEXT.lastName;
   }
+
+  static isStaff() : string {
+    return window.DLAB_GLOBAL_CONTEXT.isStaff;
+  }
 }
 
 export default CurrentUser;

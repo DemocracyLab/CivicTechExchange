@@ -76,7 +76,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   render(): ?React$Node {
     if(this.state) {
       if(CurrentUser.isLoggedIn()) {
-        if(CurrentUser.userID() === this.props.project.project_creator){
+        if(CurrentUser.userID() === this.props.project.project_creator || CurrentUser.isStaff()){
           return (
             <div>
               {this._renderEditProjectButton()}
