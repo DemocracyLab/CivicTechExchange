@@ -81601,9 +81601,11 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
       showModal: false,
       isSending: false,
       message: "",
+      daysToVolunteerForOption: null,
+      roleTag: null,
       showConfirmationModal: false
     };
-    _this.closeModal = _this.closeModal.bind(_this, _this.props.handleClose);
+    // this.closeModal = this.closeModal.bind(this);
     _this.handleChange = _this.handleChange.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.askForSendConfirmation = _this.askForSendConfirmation.bind(_this);
@@ -81657,7 +81659,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
         projectedEndDate: __WEBPACK_IMPORTED_MODULE_10_moment___default()().utc().add(this.state.daysToVolunteerForOption.value, 'days').format(),
         roleTag: this.state.roleTag.tag_name
       }, function (response) {
-        return _this2.closeModal();
+        return _this2.closeModal(true);
       }, function (response) {
         return null;
       } /* TODO: Report error to user */
@@ -81665,9 +81667,9 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
     }
   }, {
     key: 'closeModal',
-    value: function closeModal() {
+    value: function closeModal(submitted) {
       this.setState({ isSending: false });
-      this.props.handleClose();
+      this.props.handleClose(submitted);
     }
   }, {
     key: 'render',
@@ -81683,7 +81685,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["g" /* Modal */],
           { show: this.state.showModal,
-            onHide: this.closeModal
+            onHide: this.closeModal.bind(this, false)
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["g" /* Modal */].Header,
@@ -81740,12 +81742,14 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["a" /* Button */],
-              { onClick: this.closeModal },
+              { onClick: this.closeModal.bind(this, false) },
               "Cancel"
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["a" /* Button */],
-              { disabled: this.state.isSending || !this.state.roleTag, onClick: this.askForSendConfirmation },
+              {
+                disabled: this.state.isSending || !this.state.roleTag || !this.state.daysToVolunteerForOption || !this.state.message,
+                onClick: this.askForSendConfirmation },
               this.state.isSending ? "Sending" : "Send"
             )
           )

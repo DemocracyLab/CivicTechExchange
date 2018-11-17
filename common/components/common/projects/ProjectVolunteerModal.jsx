@@ -23,8 +23,8 @@ type State = {|
   showModal: boolean,
   isSending: boolean,
   message: string,
-  daysToVolunteerForOption: SelectOption,
-  roleTag: TagDefinition,
+  daysToVolunteerForOption: ?SelectOption,
+  roleTag: ?TagDefinition,
   showConfirmationModal: boolean
 |};
 
@@ -47,9 +47,10 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
       showModal: false,
       isSending: false,
       message: "",
+      daysToVolunteerForOption: null,
+      roleTag: null,
       showConfirmationModal: false
     };
-    this.closeModal = this.closeModal.bind(this, this.props.handleClose);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.askForSendConfirmation = this.askForSendConfirmation.bind(this);
@@ -93,14 +94,14 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
         projectedEndDate: moment().utc().add(this.state.daysToVolunteerForOption.value, 'days').format(),
         roleTag: this.state.roleTag.tag_name
       },
-      response => this.closeModal(),
+      response => this.closeModal(true),
       response => null /* TODO: Report error to user */
       );
   }
 
-  closeModal(){
+  closeModal(submitted: boolean){
     this.setState({isSending:false});
-    this.props.handleClose();
+    this.props.handleClose(submitted);
   }
 
   render(): React$Node {
@@ -112,7 +113,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
           onSelection={this.receiveSendConfirmation}
         />
           <Modal show={this.state.showModal}
-             onHide={this.closeModal}
+             onHide={this.closeModal.bind(this, false)}
           >
               <Modal.Header >
                   <Modal.Title>Volunteer Application</Modal.Title>
@@ -141,8 +142,11 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
                 </FormGroup>
               </Modal.Body>
               <Modal.Footer>
-                <Button onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button disabled={this.state.isSending || !this.state.roleTag} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
+                <Button onClick={this.closeModal.bind(this, false)}>{"Cancel"}</Button>
+                <Button
+                  disabled={this.state.isSending || !this.state.roleTag || !this.state.daysToVolunteerForOption || !this.state.message}
+                  onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}
+                </Button>
               </Modal.Footer>
           </Modal>
       </div>
