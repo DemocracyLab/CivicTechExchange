@@ -81,7 +81,7 @@ class ProjectCreationForm(ModelForm):
     def delete_project(request, project_id):
         project = Project.objects.get(id=project_id)
 
-        if not request.user.username == project.project_creator.username:
+        if not (request.user.username == project.project_creator.username or request.user.is_staff):
             raise PermissionDenied()
 
         project.delete()
@@ -90,7 +90,7 @@ class ProjectCreationForm(ModelForm):
     def edit_project(request, project_id):
         project = Project.objects.get(id=project_id)
 
-        if not request.user.username == project.project_creator.username:
+        if not (request.user.username == project.project_creator.username or request.user.is_staff):
             raise PermissionDenied()
 
         form = ProjectCreationForm(request.POST)
