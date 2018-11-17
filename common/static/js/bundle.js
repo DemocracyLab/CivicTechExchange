@@ -37299,7 +37299,7 @@ var NotificationModal = function (_React$PureComponent) {
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */],
-          { show: this.state.showModal },
+          { show: this.state.showModal, className: 'wide-dialog' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["g" /* Modal */].Header,
             { style: { whiteSpace: "pre-wrap" } },
@@ -44123,7 +44123,7 @@ var FeedbackModal = function (_React$PureComponent) {
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-              { onClick: this.confirm.bind(this, true) },
+              { disabled: this.props.requireMessage && !this.state.feedbackText, onClick: this.confirm.bind(this, true) },
               this.props.confirmButtonText
             )
           )
@@ -81476,6 +81476,7 @@ var ProjectVolunteerButton = function (_React$PureComponent) {
                 messagePrompt: 'State the reasons you wish to leave this project (Optional)',
                 confirmButtonText: 'Confirm',
                 maxCharacterCount: 3000,
+                requireMessage: false,
                 onConfirm: this.confirmLeaveProject.bind(this)
               })
             );
@@ -81601,9 +81602,10 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
       showModal: false,
       isSending: false,
       message: "",
+      daysToVolunteerForOption: null,
+      roleTag: null,
       showConfirmationModal: false
     };
-    _this.closeModal = _this.closeModal.bind(_this, _this.props.handleClose);
     _this.handleChange = _this.handleChange.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.askForSendConfirmation = _this.askForSendConfirmation.bind(_this);
@@ -81657,7 +81659,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
         projectedEndDate: __WEBPACK_IMPORTED_MODULE_10_moment___default()().utc().add(this.state.daysToVolunteerForOption.value, 'days').format(),
         roleTag: this.state.roleTag.tag_name
       }, function (response) {
-        return _this2.closeModal();
+        return _this2.closeModal(true);
       }, function (response) {
         return null;
       } /* TODO: Report error to user */
@@ -81665,9 +81667,9 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
     }
   }, {
     key: 'closeModal',
-    value: function closeModal() {
+    value: function closeModal(submitted) {
       this.setState({ isSending: false });
-      this.props.handleClose();
+      this.props.handleClose(submitted);
     }
   }, {
     key: 'render',
@@ -81683,7 +81685,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["g" /* Modal */],
           { show: this.state.showModal,
-            onHide: this.closeModal
+            onHide: this.closeModal.bind(this, false)
           },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["g" /* Modal */].Header,
@@ -81726,11 +81728,18 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
                 null,
                 'Message:'
               ),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'character-count' },
+                (this.state.message || "").length,
+                ' / 3000'
+              ),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["d" /* FormControl */], { componentClass: 'textarea',
                 placeholder: 'I\'m interested in helping with this project because...',
                 rows: '4',
                 cols: '50',
                 name: 'message',
+                maxLength: '3000',
                 value: this.state.message,
                 onChange: this.handleChange })
             )
@@ -81740,12 +81749,14 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["a" /* Button */],
-              { onClick: this.closeModal },
+              { onClick: this.closeModal.bind(this, false) },
               "Cancel"
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["a" /* Button */],
-              { disabled: this.state.isSending || !this.state.roleTag, onClick: this.askForSendConfirmation },
+              {
+                disabled: this.state.isSending || !this.state.roleTag || !this.state.daysToVolunteerForOption || !this.state.message,
+                onClick: this.askForSendConfirmation },
               this.state.isSending ? "Sending" : "Send"
             )
           )
@@ -91648,6 +91659,7 @@ var VolunteerSection = function (_React$PureComponent) {
           messagePrompt: "State the reasons you wish to reject this applicant",
           confirmButtonText: "Confirm",
           maxCharacterCount: 3000,
+          requireMessage: true,
           onConfirm: this.closeRejectModal.bind(this)
         }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__FeedbackModal_jsx__["a" /* default */], {
@@ -91656,6 +91668,7 @@ var VolunteerSection = function (_React$PureComponent) {
           messagePrompt: "State the reasons you wish to dismiss this volunteer",
           confirmButtonText: "Confirm",
           maxCharacterCount: 3000,
+          requireMessage: true,
           onConfirm: this.closeDismissModal.bind(this)
         }),
         this._renderPendingVolunteers(approvedAndPendingVolunteers[1]),

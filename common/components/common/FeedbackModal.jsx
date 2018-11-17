@@ -6,6 +6,7 @@ import {Modal, Button} from 'react-bootstrap';
 type Props = {|
   showModal: boolean,
   headerText: string,
+  requireMessage: boolean,
   messagePrompt: string,
   confirmButtonText: string,
   maxCharacterCount: number,
@@ -61,7 +62,9 @@ class FeedbackModal extends React.PureComponent<Props, State> {
               </Modal.Body>
               <Modal.Footer>
                   <Button onClick={this.confirm.bind(this, false)}>Cancel</Button>
-                  <Button onClick={this.confirm.bind(this, true)}>{this.props.confirmButtonText}</Button>
+                  <Button disabled={this.props.requireMessage && !this.state.feedbackText} onClick={this.confirm.bind(this, true)}>
+                    {this.props.confirmButtonText}
+                  </Button>
               </Modal.Footer>
           </Modal>
       </div>

@@ -160,6 +160,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           messagePrompt="State the reasons you wish to reject this applicant"
           confirmButtonText="Confirm"
           maxCharacterCount={3000}
+          requireMessage={true}
           onConfirm={this.closeRejectModal.bind(this)}
         />
   
@@ -169,6 +170,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           messagePrompt="State the reasons you wish to dismiss this volunteer"
           confirmButtonText="Confirm"
           maxCharacterCount={3000}
+          requireMessage={true}
           onConfirm={this.closeDismissModal.bind(this)}
         />
       
