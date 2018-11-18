@@ -81088,40 +81088,6 @@ var ContactProjectButton = function (_React$PureComponent) {
       this.setState({ showContactModal: false });
     }
   }, {
-    key: 'render',
-    value: function render() {
-      if (this.state) {
-        if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isLoggedIn()) {
-          if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].userID() === this.props.project.project_creator || __WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isStaff()) {
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'div',
-              null,
-              this._renderEditProjectButton()
-            );
-          } else {
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'div',
-              null,
-              this._renderContactProjectButton(),
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__ContactProjectModal_jsx__["a" /* default */], {
-                projectId: this.state.project && this.state.project.project_id,
-                showModal: this.state.showContactModal,
-                handleClose: this.handleClose
-              })
-            );
-          }
-        } else {
-          return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'div',
-            null,
-            this._renderLinkToSignInButton()
-          );
-        }
-      } else {
-        return null;
-      }
-    }
-  }, {
     key: '_renderEditProjectButton',
     value: function _renderEditProjectButton() {
       var id = { 'id': this.props.project.project_id };
@@ -81167,6 +81133,55 @@ var ContactProjectButton = function (_React$PureComponent) {
         },
         'Sign in to Contact Project'
       );
+    }
+  }, {
+    key: 'displayEditProjectButton',
+    value: function displayEditProjectButton() {
+      if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].userID() === this.props.project.project_creator || __WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isStaff()) {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          null,
+          this._renderEditProjectButton()
+        );
+      }
+    }
+  }, {
+    key: 'displayContactProjectButton',
+    value: function displayContactProjectButton() {
+      if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].userID() !== this.props.project.project_creator) {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          null,
+          this._renderContactProjectButton(),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__ContactProjectModal_jsx__["a" /* default */], {
+            projectId: this.state.project && this.state.project.project_id,
+            showModal: this.state.showContactModal,
+            handleClose: this.handleClose
+          })
+        );
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      if (this.state) {
+        if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isLoggedIn()) {
+          return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            null,
+            this.displayEditProjectButton(),
+            this.displayContactProjectButton()
+          );
+        } else {
+          return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'div',
+            null,
+            this._renderLinkToSignInButton()
+          );
+        }
+      } else {
+        return null;
+      }
     }
   }]);
 
