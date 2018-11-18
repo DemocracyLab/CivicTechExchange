@@ -1,3 +1,7 @@
+$break-small: 498px;
+$break-large: 1200px;
+
+
 .MainHeader-root {
   font-size: 12px;
   height: 54px;
@@ -21,8 +25,30 @@
 }
 
 .MainHeader-links {
+  @media screen and (max-width: $break-small) {
+    display: none;
+  }  
   float: right;
 }
+
+.MainHeader-hamburger {
+  @media screen and (max-width: $break-small) {
+    display: block;
+  }  
+  display: none; 
+}
+
+.MainHeader-navDrawer {
+  margin-top: 25px;
+  width: 43.72vw;
+}
+
+.MainHeader-drawerSpan {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 25px;
+}
+
 
 .MainHeader-dropdownButton {
   cursor: pointer;
