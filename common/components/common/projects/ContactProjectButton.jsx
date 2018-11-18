@@ -117,16 +117,17 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     );
   }
 
-  displayEditProjectButton() {
+  displayEditProjectButton(): ?React$Node {
     if (CurrentUser.userID() === this.props.project.project_creator || CurrentUser.isStaff()) {
       return (
       <div>
         {this._renderEditProjectButton()}
-      </div>)
+      </div>
+      );
     }
   }
 
-  displayContactProjectButton() {
+  displayContactProjectButton(): ?React$Node {
     if (CurrentUser.userID() !== this.props.project.project_creator) {
     return (
       <div>
@@ -136,7 +137,8 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
           showModal={this.state.showContactModal}
           handleClose={this.handleClose}
         />
-      </div>)
+      </div>
+      );
     }
   }
 
