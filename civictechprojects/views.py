@@ -123,6 +123,7 @@ def index(request):
         context['emailVerified'] = contributor.email_verified
         context['firstName'] = contributor.first_name
         context['lastName'] = contributor.last_name
+        context['isStaff'] = contributor.is_staff
 
     return HttpResponse(template.render(context, request))
 
