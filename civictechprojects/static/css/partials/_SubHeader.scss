@@ -6,6 +6,9 @@ $break-medLarge: 600px;
 
 
 .SubHeader-createProject {
+  @media screen and (max-width: $break-medium) {
+    float: none;
+  } 
   background-color: $color-orange;
   border: none;
   border-radius: 5px;
@@ -18,6 +21,7 @@ $break-medLarge: 600px;
   text-decoration: inherit;
   width: auto;
   cursor: pointer;
+  float: right;
 }
 
 .SubHeader-root {
