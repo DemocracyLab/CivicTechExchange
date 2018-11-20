@@ -41,6 +41,7 @@ $break-large: 1200px;
 .MainHeader-navDrawer {
   margin-top: 25px;
   width: 43.72vw;
+  min-width: 200px;
 }
 
 .MainHeader-drawerSpan {
@@ -51,7 +52,16 @@ $break-large: 1200px;
 
 
 .MainHeader-dropdownButton {
+  @media screen and (max-width: $break-small) {
+    display: none;
+  }
   cursor: pointer;
   text-decoration: none;
   color: $color-text-dark;
+}
+
+.MainHeader-name {
+  text-align: center;
+  margin-left: 25px;
+  margin-bottom: 25px;
 }

@@ -1,10 +1,21 @@
+$break-small: 498px;
+$break-medium: 860px;
+$break-large: 1200px;
+$break-medLarge: 600px;
+
+
 .SectionLink-root {
+  @media screen and (max-width: $break-medLarge) {
+    margin: 5px;
+    padding-bottom: 0px;
+    
+  } 
   color: $color-text-light;
   cursor: pointer;
   display: inline-block;
   font-size: 12px;
   font-weight: bold;
-  margin: 23px 40px;
+  margin: 23px 4%;
   padding-bottom: 8px;
 }
 
@@ -12,8 +23,7 @@
   font-size: 1.2rem;
 }
 
-.SectionLink-active {
-  height: 25px;
+.SectionLink-active h3 {
   border-bottom: $color-orange 3px solid;
   color: $color-orange;
 }

@@ -2,7 +2,7 @@
 
 import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
-import {DropdownButton, MenuItem} from 'react-bootstrap';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
 import Section from '../enums/Section.js';
 import CurrentUser from '../utils/CurrentUser.js';
 import url from '../utils/url.js';
@@ -13,6 +13,7 @@ import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import Drawer from '@material-ui/core/Drawer'
 import MenuIcon from '@material-ui/icons/Menu';
+import Typography from '@material-ui/core/Typography'
 
 type State = {|
   left: boolean,
@@ -24,7 +25,7 @@ class MainHeader extends React.PureComponent<{||}> {
   constructor(): void {
     super();
     this.state = {
-     left: false
+      left: false
     };
     this._toggleDrawer = this._toggleDrawer.bind(this);
   }
@@ -59,48 +60,78 @@ class MainHeader extends React.PureComponent<{||}> {
   _renderHero(): React$Node {
     return CurrentUser.isLoggedIn()
       ? (
-        <DropdownButton
-          className="MainHeader-dropdownButton"
-          bsStyle="link"
-          title={CurrentUser.firstName() + ' ' + CurrentUser.lastName()}
-          noCaret
-          id="dropdown-no-caret"
-        >
-          {this._renderFooterMenuLinks()}
-          <MenuItem divider />
-          <MenuItem href="/logout/">Logout</MenuItem>
-        </DropdownButton>
-          )
-          : ( 
         <React.Fragment>
+
           <div className="MainHeader-hamburger" onClick={() => this._toggleDrawer('left', true)}>
-          <IconButton >
-            <MenuIcon />
-          </IconButton>
+            <IconButton >
+              <MenuIcon />
+            </IconButton>
           </div>
-            <Drawer open={this.state.left} onClose={() => this._toggleDrawer('left', false)}>
-          <div
-            tabIndex={0}
-            role="button"
-            onClick={() => this._toggleDrawer('left', false)}
-            onKeyDown={() => this._toggleDrawer('left', false)}
+
+          <Drawer open={this.state.left} onClose={() => this._toggleDrawer('left', false)}>
+            <div
+              tabIndex={0}
+              role="button"
+              onClick={() => this._toggleDrawer('left', false)}
+              onKeyDown={() => this._toggleDrawer('left', false)}
+            >
+              <div className="MainHeader-navDrawer">
+                <Typography className="MainHeader-name" variant='overline'>{CurrentUser.firstName() + ' ' + CurrentUser.lastName()}</Typography>
+                {this._renderFooterDrawerLinks()}
+                <span className={'MainHeader-drawerSpan'} onClick={this._onResetPasswordClick} >
+                  <a href="/logout/"> Logout </a>
+                </span>
+              </div>
+            </div>
+          </Drawer>
+
+          <DropdownButton
+            className="MainHeader-dropdownButton"
+            bsStyle="link"
+            title={CurrentUser.firstName() + ' ' + CurrentUser.lastName()}
+            noCaret
+            id="dropdown-no-caret"
           >
-          <div className="MainHeader-navDrawer">
-            {this._renderFooterDrawerLinks()}
-            <span className={'MainHeader-drawerSpan'} onClick={this._onLogInClick}>
-              <a href="" > Log In </a>
-            </span>
-            <Divider />
-            <span className={'MainHeader-drawerSpan'} onClick={this._onSignUpClick} >
-              <a href="" > Sign Up </a>
-            </span>
-            <Divider />
-            <span className={'MainHeader-drawerSpan'} onClick={this._onResetPasswordClick} >
-              <a href="" > Forgot Password </a>
-            </span>
+            {this._renderFooterMenuLinks()}
+            <MenuItem divider />
+            <MenuItem href="/logout/">Logout</MenuItem>
+          </DropdownButton>
+        </React.Fragment>
+
+      )
+      : (
+        <React.Fragment>
+
+          <div className="MainHeader-hamburger" onClick={() => this._toggleDrawer('left', true)}>
+            <IconButton >
+              <MenuIcon />
+            </IconButton>
           </div>
-          </div>
-        </Drawer>
+
+          <Drawer open={this.state.left} onClose={() => this._toggleDrawer('left', false)}>
+            <div
+              tabIndex={0}
+              role="button"
+              onClick={() => this._toggleDrawer('left', false)}
+              onKeyDown={() => this._toggleDrawer('left', false)}
+            >
+              <div className="MainHeader-navDrawer">
+                {this._renderFooterDrawerLinks()}
+                <span className={'MainHeader-drawerSpan'} onClick={this._onLogInClick}>
+                  <a href="" > Log In </a>
+                </span>
+                <Divider />
+                <span className={'MainHeader-drawerSpan'} onClick={this._onSignUpClick} >
+                  <a href="" > Sign Up </a>
+                </span>
+                <Divider />
+                <span className={'MainHeader-drawerSpan'} onClick={this._onResetPasswordClick} >
+                  <a href="" > Forgot Password </a>
+                </span>
+              </div>
+            </div>
+          </Drawer>
+
           <span className="MainHeader-links">
             {this._renderFooterLinks()}
             <span onClick={this._onLogInClick}>
@@ -116,21 +147,21 @@ class MainHeader extends React.PureComponent<{||}> {
             </span>
           </span>
         </ React.Fragment>
-        );
+      );
   }
 
   _toggleDrawer(side: string, open: boolean): void {
-    this.setState({[side]: open}, () => console.log(this.state))
+    this.setState({ [side]: open })
   }
 
   _renderFooterLinks(): $ReadOnlyArray<React$Node> {
-    return FooterLinks.list().map((link,i) => {
+    return FooterLinks.list().map((link, i) => {
       return <span key={i}><a href={link.url}>{link.name}</a> |{' '}</span>
     });
   }
 
   _renderFooterMenuLinks(): $ReadOnlyArray<React$Node> {
-    return FooterLinks.list().map((link,i) => {
+    return FooterLinks.list().map((link, i) => {
       return <MenuItem href={link.url} key={i}>{link.name}</MenuItem>
     });
   }
@@ -147,7 +178,7 @@ class MainHeader extends React.PureComponent<{||}> {
   }
 
   _onLogInClick(): void {
-      NavigationDispatcher.dispatch({
+    NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: Section.LogIn,
       url: url.section(Section.LogIn)
