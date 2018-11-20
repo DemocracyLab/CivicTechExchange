@@ -5,7 +5,7 @@ from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCate
 from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
-from form_helpers import is_creator_or_staff
+from common.helpers.form_helpers import is_creator_or_staff
 
 class ProjectCreationForm(ModelForm):
     class Meta:
