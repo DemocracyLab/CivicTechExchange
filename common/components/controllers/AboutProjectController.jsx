@@ -19,8 +19,6 @@ import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.js
 import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 import GlyphStyles from "../utils/glyphs.js";
 
-import {Button} from "@material-ui/core";
-
 type State = {|
   project: ?ProjectDetailsAPIData,
   showPositionModal: boolean,
@@ -119,7 +117,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
                   <div className='col'>
                     <h2 className="form-group subheader">TECHNOLOGIES USED</h2>
-                    <Button>hi</Button>
                     <div className="Text-section">
                       {this._renderTechnologies()}
                     </div>

@@ -1,3 +1,8 @@
+$break-small: 498px;
+$break-medLarge: 600px;
+$break-medium: 860px;
+$break-large: 1200px;
+
 .ProjectSearchBar-root {
   background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
@@ -17,6 +22,10 @@
 }
 
 .ProjectSearchBar-submit {
+  @media screen and (max-width: $break-small) {
+    padding: 8px 4px 8px 4px;
+    margin-right: 0px;
+} 
   background-color: $color-green;
   border: 0;
   border-radius: 5px;
@@ -26,7 +35,7 @@
   font-size: 14px;
   padding: 8px 31px 10px 32px;
   margin-right: 34px;
-  margin-top: 16px;
+  margin-top: 16px
 }
 
 button.ProjectSearchBar-submit:disabled {
