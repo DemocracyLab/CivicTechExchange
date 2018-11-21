@@ -91429,6 +91429,11 @@ var SelectorCollapsible = function (_React$PureComponent) {
       );
     }
   }, {
+    key: 'updateAllState',
+    value: function updateAllState() {
+      this.setState({ isAllChecked: !this.state.isAllChecked });
+    }
+  }, {
     key: '_handleSelectAll',
     value: function _handleSelectAll(category) {
       var _this5 = this;
@@ -91441,7 +91446,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
         toUpdate.forEach(function (tag) {
           _this5.selectOption(tag);
         });
-        this.setState({ isAllChecked: !this.state.isAllChecked });
+        this.updateAllState();
       } else {
         var _toUpdate = category.filter(function (tag) {
           return _this5.props.optionEnabled(tag) === false;
@@ -91449,7 +91454,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
         _toUpdate.forEach(function (tag) {
           _this5.selectOption(tag);
         });
-        this.setState({ isAllChecked: !this.state.isAllChecked });
+        this.updateAllState();
       }
     }
   }, {
