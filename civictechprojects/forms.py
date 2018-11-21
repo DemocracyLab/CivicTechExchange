@@ -5,7 +5,7 @@ from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCate
 from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
-
+from common.helpers.form_helpers import is_creator_or_staff
 
 class ProjectCreationForm(ModelForm):
     class Meta:
@@ -81,7 +81,7 @@ class ProjectCreationForm(ModelForm):
     def delete_project(request, project_id):
         project = Project.objects.get(id=project_id)
 
-        if not request.user.username == project.project_creator.username:
+        if not is_creator_or_staff(request.user, project):
             raise PermissionDenied()
 
         project.delete()
@@ -90,7 +90,7 @@ class ProjectCreationForm(ModelForm):
     def edit_project(request, project_id):
         project = Project.objects.get(id=project_id)
 
-        if not request.user.username == project.project_creator.username:
+        if not is_creator_or_staff(request.user, project):
             raise PermissionDenied()
 
         form = ProjectCreationForm(request.POST)

@@ -11,6 +11,7 @@ import TagSelector from '../tags/TagSelector.jsx'
 import DjangoCSRFToken from 'django-react-csrftoken'
 import FormValidation from '../../../components/forms/FormValidation.jsx'
 import type {Validator} from '../../../components/forms/FormValidation.jsx'
+import CurrentUser from "../../utils/CurrentUser.js"
 import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
 import type {APIError, TagDefinition, ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
 import url from '../../utils/url.js'
@@ -107,7 +108,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   }
 
   loadProjectDetails(project: ProjectDetailsAPIData): void {
-    if(project.project_creator != window.DLAB_GLOBAL_CONTEXT.userID) {
+    if(project.project_creator != window.DLAB_GLOBAL_CONTEXT.userID && !CurrentUser.isStaff()) {
       this.setState({
         error: "You are not authorized to edit this Project"
       });
