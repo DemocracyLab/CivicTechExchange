@@ -91177,20 +91177,28 @@ var TagSelectorCollapsible = function (_React$Component) {
 
   _createClass(TagSelectorCollapsible, [{
     key: 'selectTag',
-    value: function selectTag(tag) {
-      var tagInState = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.has(this.state.selectedTags, tag.tag_name);
-      //if tag is NOT currently in state, add it, otherwise remove
-      if (!tagInState) {
-        __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
-          type: 'ADD_TAG',
-          tag: tag.tag_name
-        });
-        __WEBPACK_IMPORTED_MODULE_6__utils_metrics__["a" /* default */].addTagFilterEvent(tag);
+    value: function selectTag(tag, opts) {
+      //allows for opts object to be passed in, used to tell this function when passing multiple add/removes
+      // expect opts to be an object formatted like { multiple: true }
+      var opts = opts || {};
+      if (opts.multiple) {
+        console.log('successful pass of opts.multiple');
+        console.log(tag);
       } else {
-        __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
-          type: 'REMOVE_TAG',
-          tag: tag
-        });
+        var tagInState = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.has(this.state.selectedTags, tag.tag_name);
+        //if tag is NOT currently in state, add it, otherwise remove
+        if (!tagInState) {
+          __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
+            type: 'ADD_TAG',
+            tag: tag.tag_name
+          });
+          __WEBPACK_IMPORTED_MODULE_6__utils_metrics__["a" /* default */].addTagFilterEvent(tag);
+        } else {
+          __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
+            type: 'REMOVE_TAG',
+            tag: tag
+          });
+        }
       }
     }
   }, {
@@ -91345,8 +91353,8 @@ var SelectorCollapsible = function (_React$PureComponent) {
     }
   }, {
     key: 'selectOption',
-    value: function selectOption(option) {
-      this.props.onOptionSelect(option);
+    value: function selectOption(option, opts) {
+      this.props.onOptionSelect(option, opts);
     }
   }, {
     key: 'render',
@@ -91478,17 +91486,13 @@ var SelectorCollapsible = function (_React$PureComponent) {
         var toUpdate = category.filter(function (tag) {
           return _this5.props.optionEnabled(tag) === true;
         });
-        toUpdate.forEach(function (tag) {
-          _this5.selectOption(tag);
-        });
+        this.selectOption(toUpdate, { multiple: true });
         this.updateAllState();
       } else {
         var _toUpdate = category.filter(function (tag) {
           return _this5.props.optionEnabled(tag) === false;
         });
-        _toUpdate.forEach(function (tag) {
-          _this5.selectOption(tag);
-        });
+        this.selectOption(_toUpdate, { multiple: true });
         this.updateAllState();
       }
     }

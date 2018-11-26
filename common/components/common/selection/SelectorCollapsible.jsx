@@ -92,8 +92,8 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
     });
   }
 
-  selectOption(option: T):void {
-    this.props.onOptionSelect(option);
+  selectOption(option: T, opts:object):void {
+    this.props.onOptionSelect(option, opts);
   }
 
   render(): React$Node {
@@ -181,11 +181,11 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
     //this feels like a mess, but find what tags are selected or not and then either select or unselect the remainder
     if(this.state.isAllChecked) {
       let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === true)
-      toUpdate.forEach((tag) => { this.selectOption(tag); });
+      this.selectOption(toUpdate, {multiple: true} );
       this.updateAllState();
     } else {
       let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === false)
-      toUpdate.forEach((tag) => { this.selectOption(tag); });
+      this.selectOption(toUpdate, {multiple: true} );
       this.updateAllState();
     }
   }

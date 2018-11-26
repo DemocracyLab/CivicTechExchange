@@ -57,7 +57,14 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
   }
 
 
-  selectTag(tag: TagDefinition): void {
+  selectTag(tag: TagDefinition, opts): void {
+    //allows for opts object to be passed in, used to tell this function when passing multiple add/removes
+    // expect opts to be an object formatted like { multiple: true }
+    var opts = opts || {};
+    if (opts.multiple) {
+      console.log('successful pass of opts.multiple')
+      console.log(tag);
+    } else {
     var tagInState = _.has(this.state.selectedTags, tag.tag_name);
     //if tag is NOT currently in state, add it, otherwise remove
     if(!tagInState) {
@@ -71,6 +78,7 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
         type: 'REMOVE_TAG',
         tag: tag,
       });
+    }
     }
   }
 
