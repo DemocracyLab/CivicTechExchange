@@ -5,10 +5,7 @@ $break-medLarge: 600px;
 
 
 
-.SubHeader-createProject {
-  @media screen and (max-width: $break-medium) {
-    float: none;
-  } 
+.SubHeader-createProject { 
   background-color: $color-orange;
   border: none;
   border-radius: 5px;
@@ -21,68 +18,84 @@ $break-medLarge: 600px;
   text-decoration: inherit;
   width: auto;
   cursor: pointer;
-  float: right;
+  float: none;
 }
 
 .SubHeader-root {
-  @media screen and (max-width: $break-medium) {
-    height: 100px;
-  } 
-  @media screen and (max-width: $break-medLarge) {
-    height: 150px;
-  } 
   background-color: $color-background-dark;
-  height: 50px;
+  height: 150px;
   padding: 0 5% 0 5%;
   margin-bottom: 5%;
 }
 
 .SubHeader-sectionButton {
-  @media screen and (max-width: $break-medium) {
-    height: inline-block; 
-    margin: auto;
-  } 
   color: $color-text-light;
   display: inline-block;
   font-weight: bold;
-  margin-top: 18px;
+  margin: auto;
   padding-right: 40px;
 }
 
 .SubHeader-rightContent {
-  @media screen and (max-width: $break-medium) {
-    display: flex; 
-    justify-content: center;
-    width: 100%;
-    height: 50%;
-  } 
-  @media screen and (max-width: $break-medLarge) {
-    display: flex; 
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 50%;
-    height:100%;
-  } 
-  width: 30%;
-  float: right;
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height:100%;
+    float: right;
 }
 
 .SubHeader-leftContent {
-  @media screen and (max-width: $break-medium) {
-    display: flex; 
-    justify-content: center;
-    width: 100%;
-    height: 50%;
-  } 
-  @media screen and (max-width: $break-medLarge) {
+    float: left;
     display: flex; 
     flex-direction: column;
     align-items: start;
     justify-content: center;
     width: 50%;
     height:100%;
-  } 
-  width: 70%;
-  float: left;
+}
+
+@include media-breakpoint-up(sm) {
+  .SubHeader-root {
+    height: 100px;
+  }
+
+  .SubHeader-rightContent {
+    width: 100%;
+    height: 50%;
+  }
+
+  .SubHeader-leftContent {
+    flex-direction: row;    
+    width: 100%;
+    height: 50%;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .SubHeader-createProject {
+    float: right;    
+  }
+
+  .SubHeader-root {
+    height: 50px;
+  }
+
+  .SubHeader-sectionButton {
+    margin-top: 18px;    
+  }
+
+  .SubHeader-rightContent {
+    width: 19%;
+    display: block;
+    height: 100%;
+  }
+
+  .SubHeader-leftContent {
+    width: 81%;
+    height: 100%;
+    float: left;
+  }
+
 }

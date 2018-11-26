@@ -1,22 +1,11 @@
-$break-small: 498px;
-$break-medium: 860px;
-$break-large: 1200px;
-$break-medLarge: 600px;
-
-
 .SectionLink-root {
-  @media screen and (max-width: $break-medLarge) {
-    margin: 5px;
-    padding-bottom: 0px;
-    
-  } 
   color: $color-text-light;
   cursor: pointer;
   display: inline-block;
   font-size: 12px;
   font-weight: bold;
-  margin: 23px 4%;
-  padding-bottom: 8px;
+  margin: 5px;
+  padding-bottom: 0px;
 }
 
 .SectionLink-root h3 {
@@ -26,4 +15,17 @@ $break-medLarge: 600px;
 .SectionLink-active h3 {
   border-bottom: $color-orange 3px solid;
   color: $color-orange;
+}
+
+@include media-breakpoint-up(md) {
+  .SectionLink-root {
+    margin: 13px 4%;
+    padding-bottom: 8px;
+  }
+}
+
+@include media-breakpoint-between(sm,md) {
+  .SectionLink-root {
+    margin: 10px 18px 0px 18px;    
+  }
 }
