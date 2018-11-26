@@ -14,7 +14,6 @@ import IconButton from '@material-ui/core/IconButton'
 import Drawer from '@material-ui/core/Drawer'
 import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button';
 
 type State = {|
   left: boolean,
