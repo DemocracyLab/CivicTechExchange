@@ -1,5 +1,5 @@
-$break-small: 498px;
-$break-large: 1200px;
+// $break-small: 498px;
+// $break-large: 1200px;
 
 
 .MainHeader-root {
@@ -25,17 +25,12 @@ $break-large: 1200px;
 }
 
 .MainHeader-links {
-  @media screen and (max-width: $break-small) {
-    display: none;
-  }  
+  display: none;
   float: right;
 }
 
-.MainHeader-hamburger {
-  @media screen and (max-width: $break-small) {
-    display: block;
-  }  
-  display: none; 
+.MainHeader-hamburger { 
+  display: block; 
 }
 
 .MainHeader-navDrawer {
@@ -52,9 +47,7 @@ $break-large: 1200px;
 
 
 .MainHeader-dropdownButton {
-  @media screen and (max-width: $break-small) {
-    display: none;
-  }
+  display: none;
   cursor: pointer;
   text-decoration: none;
   color: $color-text-dark;
@@ -64,4 +57,18 @@ $break-large: 1200px;
   text-align: center;
   margin-left: 25px;
   margin-bottom: 25px;
+}
+
+@include media-breakpoint-up(sm) {
+  .MainHeader-dropdownButton {
+    display: block;
+  }
+
+  .MainHeader-hamburger {
+    display: none;
+  }
+
+  .MainHeader-links {
+    display: block;
+  }
 }
