@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Drawer from '@material-ui/core/Drawer'
 import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button';
 
 type State = {|
   left: boolean,
@@ -78,9 +79,11 @@ class MainHeader extends React.PureComponent<{||}> {
               <div className="MainHeader-navDrawer">
                 <Typography className="MainHeader-name" variant='overline'>{CurrentUser.firstName() + ' ' + CurrentUser.lastName()}</Typography>
                 {this._renderFooterDrawerLinks()}
-                <span className={'MainHeader-drawerSpan'} onClick={this._onResetPasswordClick} >
-                  <a href="/logout/"> Logout </a>
-                </span>
+                <a href="/logout/">
+                  <div className={'MainHeader-drawerDiv'}>
+                    Logout
+                  </div>
+                </a>
               </div>
             </div>
           </Drawer>
@@ -117,17 +120,17 @@ class MainHeader extends React.PureComponent<{||}> {
             >
               <div className="MainHeader-navDrawer">
                 {this._renderFooterDrawerLinks()}
-                <span className={'MainHeader-drawerSpan'} onClick={this._onLogInClick}>
+                <div className={'MainHeader-drawerDiv'} onClick={this._onLogInClick}>
                   <a href="" > Log In </a>
-                </span>
+                </div>
                 <Divider />
-                <span className={'MainHeader-drawerSpan'} onClick={this._onSignUpClick} >
+                <div className={'MainHeader-drawerDiv'} onClick={this._onSignUpClick} >
                   <a href="" > Sign Up </a>
-                </span>
+                </div>
                 <Divider />
-                <span className={'MainHeader-drawerSpan'} onClick={this._onResetPasswordClick} >
+                <div className={'MainHeader-drawerDiv'} onClick={this._onResetPasswordClick} >
                   <a href="" > Forgot Password </a>
-                </span>
+                </div>
               </div>
             </div>
           </Drawer>
@@ -170,7 +173,7 @@ class MainHeader extends React.PureComponent<{||}> {
     return FooterLinks.list().map((link, i) => {
       return (
         <React.Fragment>
-          <span className='MainHeader-drawerSpan' key={i}><a href={link.url}>{link.name}</a></span>
+          <a href={link.url}><div className='MainHeader-drawerDiv' key={i}>{link.name}</div></a>
           <Divider />
         </React.Fragment>
       )
