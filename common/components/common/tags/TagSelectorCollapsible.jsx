@@ -58,9 +58,8 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
 
 
   selectTag(tag: TagDefinition, opts): void {
-    //allows for opts object to be passed in, used to tell this function when passing multiple add/removes
-    // expect opts to be an object formatted like { multiple: true }
-    var opts = opts || {};
+    //opts is optional, if passed in expect opts to be an object formatted like { multiple: true } and can have multiple keys
+    let opts = opts || {}; //to avoid undefined error create an empty object if opts isn't passed in
     if (opts.multiple) {
       console.log('successful pass of opts.multiple')
       console.log(tag);
