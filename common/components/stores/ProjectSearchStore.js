@@ -106,7 +106,11 @@ class ProjectSearchStore extends ReduceStore<State> {
         state = state.set('tags', state.tags.filter(tag => tag !== action.tag.tag_name));
         return this._loadProjects(state);
       case 'REMOVE_MANY_TAGS':
-        return
+        state = state.set('tags', action.tag.forEach(function(name) {
+          state.tags.filter(tag => tag !== name)
+         })
+       );
+       return this._loadProjects(state);
       case 'SET_KEYWORD':
         return this._loadProjects(this._addKeywordToState(state, action.keyword));
       case 'SET_SORT':
