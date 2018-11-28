@@ -43,6 +43,12 @@ export type ProjectSearchActionType = {
   type: 'REMOVE_TAG',
   tag: Tag,
 } | {
+  type: 'ADD_MANY_TAGS',
+  tag: Tag,
+} | {
+  type: 'REMOVE_MANY_TAGS',
+  tag: Tag,
+} | {
   type: 'SET_KEYWORD',
   keyword: string,
 } | {
@@ -99,6 +105,13 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'REMOVE_TAG':
         state = state.set('tags', state.tags.filter(tag => tag !== action.tag.tag_name));
         return this._loadProjects(state);
+      case 'ADD_MANY_TAGS': //action.tag is an array, get names out of it
+        let tagnames = action.tag.map(function(t) {
+            return t.tag_name
+        });
+        return this._loadProjects(this._addTagToState(state, tagnames))
+      case 'REMOVE_MANY_TAGS':
+        return 'something'
       case 'SET_KEYWORD':
         return this._loadProjects(this._addKeywordToState(state, action.keyword));
       case 'SET_SORT':

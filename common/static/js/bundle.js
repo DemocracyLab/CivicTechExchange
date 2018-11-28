@@ -23805,6 +23805,14 @@ var ProjectSearchStore = function (_ReduceStore) {
             return tag !== action.tag.tag_name;
           }));
           return this._loadProjects(state);
+        case 'ADD_MANY_TAGS':
+          //action.tag is an array, get names out of it
+          var tagnames = action.tag.map(function (t) {
+            return t.tag_name;
+          });
+          return this._loadProjects(this._addTagToState(state, tagnames));
+        case 'REMOVE_MANY_TAGS':
+          return 'something';
         case 'SET_KEYWORD':
           return this._loadProjects(this._addKeywordToState(state, action.keyword));
         case 'SET_SORT':
@@ -91177,13 +91185,18 @@ var TagSelectorCollapsible = function (_React$Component) {
 
   _createClass(TagSelectorCollapsible, [{
     key: 'selectTag',
-    value: function selectTag(tag, opts) {
-      //allows for opts object to be passed in, used to tell this function when passing multiple add/removes
-      // expect opts to be an object formatted like { multiple: true }
-      var opts = opts || {};
-      if (opts.multiple) {
-        console.log('successful pass of opts.multiple');
-        console.log(tag);
+    value: function selectTag(tags, opts) {
+      //opts is optional, if passed in expect opts to be an object formatted like { multiple: true, type: ACTION_TO_TAKE }
+      var opts = opts || {}; //to avoid undefined error create an empty object if opts isn't passed in
+      if (opts.multiple && opts.type) {
+        console.log('opts multiple: ', opts.multiple);
+        console.log('opts type: ', opts.type);
+        console.log('tags sent: ', tags);
+        __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
+          type: opts.type,
+          tag: tags
+        });
+        //TODO: Add metrics event for multiple tag filtering
       } else {
         var tagInState = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.has(this.state.selectedTags, tag.tag_name);
         //if tag is NOT currently in state, add it, otherwise remove
@@ -91486,13 +91499,13 @@ var SelectorCollapsible = function (_React$PureComponent) {
         var toUpdate = category.filter(function (tag) {
           return _this5.props.optionEnabled(tag) === true;
         });
-        this.selectOption(toUpdate, { multiple: true });
+        this.selectOption(toUpdate, { multiple: true, type: "REMOVE_MANY_TAGS" });
         this.updateAllState();
       } else {
         var _toUpdate = category.filter(function (tag) {
           return _this5.props.optionEnabled(tag) === false;
         });
-        this.selectOption(_toUpdate, { multiple: true });
+        this.selectOption(_toUpdate, { multiple: true, type: "ADD_MANY_TAGS" });
         this.updateAllState();
       }
     }
