@@ -105,13 +105,8 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'REMOVE_TAG':
         state = state.set('tags', state.tags.filter(tag => tag !== action.tag.tag_name));
         return this._loadProjects(state);
-      case 'ADD_MANY_TAGS': //action.tag is an array, get names out of it
-        let tagnames = action.tag.map(function(t) {
-            return t.tag_name
-        });
-        return this._loadProjects(this._addTagToState(state, tagnames))
       case 'REMOVE_MANY_TAGS':
-        return 'something'
+        return
       case 'SET_KEYWORD':
         return this._loadProjects(this._addKeywordToState(state, action.keyword));
       case 'SET_SORT':
@@ -184,6 +179,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _addTagToState(state: State, tag: string): State {
+    //tag does not have to be a string, this works for an array of strings as in ADD_MANY_TAGS
     const newTags:$ReadOnlyArray<string> = state.tags.concat(tag);
     return state.set('tags', newTags);
   }

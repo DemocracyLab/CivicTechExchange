@@ -61,12 +61,12 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
     //opts is optional, if passed in expect opts to be an object formatted like { multiple: true, type: ACTION_TO_TAKE }
     var opts = opts || {}; //to avoid undefined error create an empty object if opts isn't passed in
     if (opts.multiple && opts.type) {
-      console.log('opts multiple: ', opts.multiple);
-      console.log('opts type: ', opts.type);
-      console.log('tags sent: ', tags);
+      let tagnames = tags.map(function(t) {
+          return t.tag_name
+      });
       ProjectSearchDispatcher.dispatch({
         type: opts.type,
-        tag: tags,
+        tag: tagnames,
       });
       //TODO: Add metrics event for multiple tag filtering
     } else {

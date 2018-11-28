@@ -185,7 +185,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       this.updateAllState();
     } else {
       let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === false)
-      this.selectOption(toUpdate, {multiple: true, type: "ADD_MANY_TAGS"} );
+      this.selectOption(toUpdate, {multiple: true, type: "ADD_TAG"} );
       this.updateAllState();
     }
   }

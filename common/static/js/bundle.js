@@ -23805,14 +23805,8 @@ var ProjectSearchStore = function (_ReduceStore) {
             return tag !== action.tag.tag_name;
           }));
           return this._loadProjects(state);
-        case 'ADD_MANY_TAGS':
-          //action.tag is an array, get names out of it
-          var tagnames = action.tag.map(function (t) {
-            return t.tag_name;
-          });
-          return this._loadProjects(this._addTagToState(state, tagnames));
         case 'REMOVE_MANY_TAGS':
-          return 'something';
+          return;
         case 'SET_KEYWORD':
           return this._loadProjects(this._addKeywordToState(state, action.keyword));
         case 'SET_SORT':
@@ -23896,6 +23890,7 @@ var ProjectSearchStore = function (_ReduceStore) {
   }, {
     key: '_addTagToState',
     value: function _addTagToState(state, tag) {
+      //tag does not have to be a string, this works for an array of strings as in ADD_MANY_TAGS
       var newTags = state.tags.concat(tag);
       return state.set('tags', newTags);
     }
@@ -91189,12 +91184,12 @@ var TagSelectorCollapsible = function (_React$Component) {
       //opts is optional, if passed in expect opts to be an object formatted like { multiple: true, type: ACTION_TO_TAKE }
       var opts = opts || {}; //to avoid undefined error create an empty object if opts isn't passed in
       if (opts.multiple && opts.type) {
-        console.log('opts multiple: ', opts.multiple);
-        console.log('opts type: ', opts.type);
-        console.log('tags sent: ', tags);
+        var tagnames = tags.map(function (t) {
+          return t.tag_name;
+        });
         __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
           type: opts.type,
-          tag: tags
+          tag: tagnames
         });
         //TODO: Add metrics event for multiple tag filtering
       } else {
@@ -91505,7 +91500,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
         var _toUpdate = category.filter(function (tag) {
           return _this5.props.optionEnabled(tag) === false;
         });
-        this.selectOption(_toUpdate, { multiple: true, type: "ADD_MANY_TAGS" });
+        this.selectOption(_toUpdate, { multiple: true, type: "ADD_TAG" });
         this.updateAllState();
       }
     }
