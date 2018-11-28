@@ -73,40 +73,6 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     this.setState({ showContactModal: false });
   }
 
-  render(): ?React$Node {
-    if(this.state) {
-      if(CurrentUser.isLoggedIn()) {
-        if(CurrentUser.userID() === this.props.project.project_creator){
-          return (
-            <div>
-              {this._renderEditProjectButton()}
-            </div>
-          );
-        } else {
-          return (
-            <div>
-              {this._renderContactProjectButton()}
-              <ContactProjectModal
-                projectId={this.state.project && this.state.project.project_id}
-                showModal={this.state.showContactModal}
-                handleClose={this.handleClose}
-              />
-            </div>
-          );       
-        }
-      } else {
-        return (
-          <div>
-            {this._renderLinkToSignInButton()}
-          </div>
-        );
-      }
-    } else {
-      return null;
-    }
-  }
-
-
   _renderEditProjectButton(): React$Node {
     const id = {'id':this.props.project.project_id};
     return (
@@ -149,6 +115,51 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
         Sign in to Contact Project
       </Button>
     );
+  }
+
+  displayEditProjectButton(): ?React$Node {
+    if (CurrentUser.userID() === this.props.project.project_creator || CurrentUser.isStaff()) {
+      return (
+      <div>
+        {this._renderEditProjectButton()}
+      </div>
+      );
+    }
+  }
+
+  displayContactProjectButton(): ?React$Node {
+    if (CurrentUser.userID() !== this.props.project.project_creator) {
+    return (
+      <div>
+        {this._renderContactProjectButton()}
+        <ContactProjectModal
+          projectId={this.state.project && this.state.project.project_id}
+          showModal={this.state.showContactModal}
+          handleClose={this.handleClose}
+        />
+      </div>
+      );
+    }
+  }
+
+  render(): ?React$Node {
+    if(this.state) {
+      if(CurrentUser.isLoggedIn()) {
+        return (
+        <div>
+          {this.displayEditProjectButton()}
+          {this.displayContactProjectButton()}
+        </div>)
+      } else {
+        return (
+          <div>
+            {this._renderLinkToSignInButton()}
+          </div>
+        );
+      }
+    } else {
+      return null;
+    }
   }
 }
 

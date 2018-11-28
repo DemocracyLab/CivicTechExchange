@@ -117,12 +117,16 @@ def index(request):
         'FOOTER_LINKS': settings.FOOTER_LINKS,
         'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL
     }
+    if settings.HOTJAR_APPLICATION_ID:
+        context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
+                                                          {'HOTJAR_APPLICATION_ID': settings.HOTJAR_APPLICATION_ID})
     if request.user.is_authenticated():
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
         context['emailVerified'] = contributor.email_verified
         context['firstName'] = contributor.first_name
         context['lastName'] = contributor.last_name
+        context['isStaff'] = contributor.is_staff
 
     return HttpResponse(template.render(context, request))
 
