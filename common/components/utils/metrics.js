@@ -9,21 +9,22 @@ const tagCategoryEventMapping: { [key: string]: string } = _.fromPairs([
   [TagCategory.ROLE, "addOpenRoleTag"]
 ]);
 
+function _logEvent(eventName: string, parameters: ?{ [key: string]: string }): void {
+  window.FB.AppEvents.logEvent(eventName, null, parameters);
+}
+
 class metrics {
   static addTagFilterEvent(tag: TagDefinition): void {
-    window.FB.AppEvents.logEvent(
-      tagCategoryEventMapping[tag.category],
-      null,
-      {tagName: tag.tag_name}
-    );
+    _logEvent(tagCategoryEventMapping[tag.category], {tagName: tag.tag_name});
   }
   
-  static logUserContactedProjectOwner(userId: number, projectId: number) {
+  static logUserContactedProjectOwner(userId: number, projectId: number): void {
     var params = {};
     params['userId'] = userId;
     params['projectId'] = projectId;
     window.FB.AppEvents.logEvent('UserContactedProjectOwner', null, params);
   }
+
 }
 
 export default metrics
