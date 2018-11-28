@@ -6,11 +6,11 @@ class CurrentUser {
     return Number(window.DLAB_GLOBAL_CONTEXT.userID) || null;
   }
 
-  static isLoggedIn(): bool {
+  static isLoggedIn(): boolean {
     return Boolean(this.userID());
   }
   
-  static isEmailVerified(): bool {
+  static isEmailVerified(): boolean {
     return Boolean(window.DLAB_GLOBAL_CONTEXT.emailVerified);
   }
 
@@ -20,6 +20,10 @@ class CurrentUser {
 
   static lastName(): string {
     return window.DLAB_GLOBAL_CONTEXT.lastName;
+  }
+
+  static isStaff() : boolean {
+    return window.DLAB_GLOBAL_CONTEXT.isStaff;
   }
 }
 
