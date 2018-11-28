@@ -18,11 +18,12 @@ class metrics {
     _logEvent(tagCategoryEventMapping[tag.category], {tagName: tag.tag_name});
   }
   
+  static logUserClickContactProjectOwner(userId: number, projectId: number): void {
+    _logEvent("UserClickContactProjectOwner", {userId: userId, projectId: projectId});
+  }
+  
   static logUserContactedProjectOwner(userId: number, projectId: number): void {
-    var params = {};
-    params['userId'] = userId;
-    params['projectId'] = projectId;
-    window.FB.AppEvents.logEvent('UserContactedProjectOwner', null, params);
+    _logEvent("UserContactedProjectOwner", {userId: userId, projectId: projectId});
   }
 
 }
