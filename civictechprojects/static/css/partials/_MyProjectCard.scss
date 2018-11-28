@@ -16,18 +16,31 @@
 
 .MyProjectCard-img {
   float: left;
+  border: none;
+  border-radius: 0px;
+  margin-right: 10px;
 }
 
 .MyProjectCard-volunteerName {
   font-weight: bold;
+  padding-top: 10px;
 }
 
 .MyProjectCard-volunteerRole  {
   font-weight: normal;
 }
 
-.MyProjectCard-dropdownButton {
-  display: inline-block;
+div.MyProjectCard-dropdownButton {
+  display: inline;
+  font-size: 1.5em;
+}
+
+.MyProjectCard-danger {
+  background-color: red;
+}
+
+.MyProjectCard-success {
+  background-color: lightgreen;
 }
 
 .MyProjectCard-table {

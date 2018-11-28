@@ -37,11 +37,12 @@ class VolunteerCard extends React.PureComponent<Props> {
     return (this.props.volunteer
       ? 
         (<DropdownButton
-          className="MyProjectCard-dropdownButton"
+          bsClass="MyProjectCard-dropdownButton dropdown"
           bsStyle="default"
+          bsSize="small"
           title="..."
           noCaret
-          id="dropdown-no-caret"
+          id="volunteercard-no-caret"
         >
           {this._renderApplicationMenuLinks()}
         </DropdownButton>)
@@ -53,12 +54,12 @@ class VolunteerCard extends React.PureComponent<Props> {
   _renderApplicationMenuLinks(): ?Array<React$Node>  {
     return (this.props.volunteer && this.props.volunteer.isApproved
       ? [
-          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
+          (<MenuItem className="MyProjectCard-danger" onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
         ]
       : [
           (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key="2">Application</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3">Accept</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4">Reject</MenuItem>)
+          (<MenuItem className="MyProjectCard-success" onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3">Accept</MenuItem>),
+          (<MenuItem className="MyProjectCard-danger" onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4">Reject</MenuItem>)
       ]);
   }
 }

@@ -91814,11 +91814,12 @@ var VolunteerCard = function (_React$PureComponent) {
       return this.props.volunteer ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["c" /* DropdownButton */],
         {
-          className: 'MyProjectCard-dropdownButton',
+          bsClass: 'MyProjectCard-dropdownButton dropdown',
           bsStyle: 'default',
+          bsSize: 'small',
           title: '...',
           noCaret: true,
-          id: 'dropdown-no-caret'
+          id: 'volunteercard-no-caret'
         },
         this._renderApplicationMenuLinks()
       ) : null;
@@ -91830,7 +91831,7 @@ var VolunteerCard = function (_React$PureComponent) {
 
       return this.props.volunteer && this.props.volunteer.isApproved ? [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-        { onSelect: function onSelect() {
+        { className: 'MyProjectCard-danger', onSelect: function onSelect() {
             return _this2.props.onDismissButton(_this2.props.volunteer);
           }, key: '1' },
         'Remove'
@@ -91842,13 +91843,13 @@ var VolunteerCard = function (_React$PureComponent) {
         'Application'
       ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-        { onSelect: function onSelect() {
+        { className: 'MyProjectCard-success', onSelect: function onSelect() {
             return _this2.props.onApproveButton(_this2.props.volunteer);
           }, key: '3' },
         'Accept'
       ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-        { onSelect: function onSelect() {
+        { className: 'MyProjectCard-danger', onSelect: function onSelect() {
             return _this2.props.onRejectButton(_this2.props.volunteer);
           }, key: '4' },
         'Reject'
