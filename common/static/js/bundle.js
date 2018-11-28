@@ -91700,7 +91700,7 @@ var VolunteerSection = function (_React$PureComponent) {
   }, {
     key: "_renderApprovedVolunteers",
     value: function _renderApprovedVolunteers(approvedVolunteers) {
-      return !__WEBPACK_IMPORTED_MODULE_6_lodash___default.a.isEmpty(approvedVolunteers) ? this._renderVolunteerSection(approvedVolunteers, "VOLUNTEERS") : null;
+      return !__WEBPACK_IMPORTED_MODULE_6_lodash___default.a.isEmpty(approvedVolunteers) ? this._renderVolunteerSection(approvedVolunteers, "TEAM") : null;
     }
   }, {
     key: "_renderPendingVolunteers",
@@ -91793,107 +91793,65 @@ var VolunteerCard = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         { className: 'MyProjectCard-root' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr MyProjectCard-img', src: volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'table',
-          { className: 'MyProjectCard-table' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'tbody',
-            null,
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              'tr',
-              null,
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'td',
-                { className: 'MyProjectCard-column' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                  'a',
-                  { href: volunteerUrl, target: '_blank', rel: 'noopener noreferrer' },
-                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr', src: volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl })
-                )
-              ),
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'td',
-                { className: 'MyProjectCard-column' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                  'tr',
-                  { className: 'MyProjectCard-header' },
-                  'Name'
-                ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                  'tr',
-                  { className: 'MyProjectCard-projectName' },
-                  __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'a',
-                    { href: volunteerUrl, target: '_blank', rel: 'noopener noreferrer' },
-                    volunteer && volunteer.first_name + " " + volunteer.last_name
-                  )
-                )
-              ),
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'td',
-                { className: 'MyProjectCard-column' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                  'tr',
-                  { className: 'MyProjectCard-header' },
-                  'Role'
-                ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                  'tr',
-                  null,
-                  roleTag && roleTag.display_name
-                )
-              ),
-              this.props.isProjectAdmin ? this._renderApplicationButtons() : null
-            )
-          )
+          'a',
+          { className: 'MyProjectCard-volunteerName', href: volunteerUrl, target: '_blank', rel: 'noopener noreferrer' },
+          volunteer && volunteer.first_name + " " + volunteer.last_name
+        ),
+        ' ',
+        this.props.isProjectAdmin ? this._renderShowApplicationMenu() : null,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'p',
+          { className: 'MyProjectCard-volunteerRole' },
+          roleTag && roleTag.display_name
         )
       );
     }
   }, {
-    key: '_renderApplicationButtons',
-    value: function _renderApplicationButtons() {
+    key: '_renderShowApplicationMenu',
+    value: function _renderShowApplicationMenu() {
+      return this.props.volunteer ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["c" /* DropdownButton */],
+        {
+          className: 'MyProjectCard-dropdownButton',
+          bsStyle: 'default',
+          title: '...',
+          noCaret: true,
+          id: 'dropdown-no-caret'
+        },
+        this._renderApplicationMenuLinks()
+      ) : null;
+    }
+  }, {
+    key: '_renderApplicationMenuLinks',
+    value: function _renderApplicationMenuLinks() {
       var _this2 = this;
 
       return this.props.volunteer && this.props.volunteer.isApproved ? [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'td',
-        { className: 'MyProjectCard-column' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-          { className: 'MyProjectCard-button', bsStyle: 'danger', onClick: function onClick() {
-              return _this2.props.onDismissButton(_this2.props.volunteer);
-            } },
-          'Remove'
-        )
+        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
+        { onSelect: function onSelect() {
+            return _this2.props.onDismissButton(_this2.props.volunteer);
+          }, key: '1' },
+        'Remove'
       )] : [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'td',
-        { className: 'MyProjectCard-column' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-          { className: 'MyProjectCard-button', onClick: function onClick() {
-              return _this2.props.onOpenApplication(_this2.props.volunteer);
-            } },
-          'Application'
-        )
+        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
+        { onSelect: function onSelect() {
+            return _this2.props.onOpenApplication(_this2.props.volunteer);
+          }, key: '2' },
+        'Application'
       ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'td',
-        { className: 'MyProjectCard-column' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-          { className: 'MyProjectCard-button', bsStyle: 'info', onClick: function onClick() {
-              return _this2.props.onApproveButton(_this2.props.volunteer);
-            } },
-          'Accept'
-        )
+        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
+        { onSelect: function onSelect() {
+            return _this2.props.onApproveButton(_this2.props.volunteer);
+          }, key: '3' },
+        'Accept'
       ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'td',
-        { className: 'MyProjectCard-column' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-          { className: 'MyProjectCard-button', bsStyle: 'danger', onClick: function onClick() {
-              return _this2.props.onRejectButton(_this2.props.volunteer);
-            } },
-          'Reject'
-        )
+        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
+        { onSelect: function onSelect() {
+            return _this2.props.onRejectButton(_this2.props.volunteer);
+          }, key: '4' },
+        'Reject'
       )];
     }
   }]);

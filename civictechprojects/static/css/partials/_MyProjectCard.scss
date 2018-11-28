@@ -14,6 +14,22 @@
   font-weight: bold;
 }
 
+.MyProjectCard-img {
+  float: left;
+}
+
+.MyProjectCard-volunteerName {
+  font-weight: bold;
+}
+
+.MyProjectCard-volunteerRole  {
+  font-weight: normal;
+}
+
+.MyProjectCard-dropdownButton {
+  display: inline-block;
+}
+
 .MyProjectCard-table {
   background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;

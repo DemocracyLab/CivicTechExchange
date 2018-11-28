@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {UserAPIData} from "../../utils/UserAPIUtils.js";
 import {TagDefinition, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import url from "../../utils/url.js";
@@ -24,64 +24,41 @@ class VolunteerCard extends React.PureComponent<Props> {
     const volunteerUrl:string = url.section(Section.Profile, {id: volunteer.id});
     return (
       <div className="MyProjectCard-root">
-         <table className="MyProjectCard-table">
-          <tbody>
-            <tr>
-              <td className="MyProjectCard-column">
-                <a href={volunteerUrl} target="_blank" rel="noopener noreferrer">
-                  {/*TODO: Change to pointer when hovering over image*/}
-                  <img className="upload_img upload_img_bdr" src={volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl}/>
-                </a>
-              </td>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">
-                  Name
-                </tr>
-                <tr className="MyProjectCard-projectName">
-                  <a href={volunteerUrl} target="_blank" rel="noopener noreferrer">
-                    {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
-                  </a>
-                </tr>
-              </td>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">
-                  Role
-                </tr>
-                <tr>{roleTag && roleTag.display_name}</tr>
-              </td>
-              {this.props.isProjectAdmin ? this._renderApplicationButtons() : null}
-            </tr>
-          </tbody>
-        </table>
+        <img className="upload_img upload_img_bdr MyProjectCard-img" src={volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl}/>
+        <a className="MyProjectCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
+        {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
+        </a> {this.props.isProjectAdmin ? this._renderShowApplicationMenu() : null}
+        <p className="MyProjectCard-volunteerRole">{roleTag && roleTag.display_name}</p>
       </div>
     );
   }
   
-  _renderApplicationButtons(): ?Array<React$Node>  {
+  _renderShowApplicationMenu(): ?React$Node {
+    return (this.props.volunteer
+      ? 
+        (<DropdownButton
+          className="MyProjectCard-dropdownButton"
+          bsStyle="default"
+          title="..."
+          noCaret
+          id="dropdown-no-caret"
+        >
+          {this._renderApplicationMenuLinks()}
+        </DropdownButton>)
+      : 
+        null
+      );
+  }
+
+  _renderApplicationMenuLinks(): ?Array<React$Node>  {
     return (this.props.volunteer && this.props.volunteer.isApproved
       ? [
-          (<td className="MyProjectCard-column">
-            <Button className="MyProjectCard-button" bsStyle="danger" onClick={() => this.props.onDismissButton(this.props.volunteer)}>
-              Remove
-            </Button>
-          </td>)
+          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
         ]
       : [
-          (<td className="MyProjectCard-column">
-            <Button className="MyProjectCard-button" onClick={() => this.props.onOpenApplication(this.props.volunteer)}>
-              Application
-            </Button>
-          </td>),
-          (<td className="MyProjectCard-column">
-            <Button className="MyProjectCard-button" bsStyle="info" onClick={() => this.props.onApproveButton(this.props.volunteer)}>
-              Accept
-            </Button>
-          </td>),
-          (<td className="MyProjectCard-column">
-            <Button className="MyProjectCard-button" bsStyle="danger" onClick={() => this.props.onRejectButton(this.props.volunteer)}>
-              Reject
-            </Button>
-          </td>)
+          (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key="2">Application</MenuItem>),
+          (<MenuItem onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3">Accept</MenuItem>),
+          (<MenuItem onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4">Reject</MenuItem>)
       ]);
   }
 }
