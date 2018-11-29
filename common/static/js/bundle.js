@@ -91792,38 +91792,37 @@ var VolunteerCard = function (_React$PureComponent) {
       var volunteerUrl = __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_5__enums_Section_js__["a" /* default */].Profile, { id: volunteer.id });
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
-        { className: 'MyProjectCard-root' },
+        { className: 'VolunteerCard-root' },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'a',
-          { className: 'MyProjectCard-volunteerName', href: volunteerUrl, target: '_blank', rel: 'noopener noreferrer' },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr MyProjectCard-img', src: volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl })
+          { className: 'VolunteerCard-volunteerName', href: volunteerUrl, target: '_blank', rel: 'noopener noreferrer' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr VolunteerCard-img', src: volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'a',
-          { className: 'MyProjectCard-volunteerName', href: volunteerUrl, target: '_blank', rel: 'noopener noreferrer' },
+          { className: 'VolunteerCard-volunteerName', href: volunteerUrl, target: '_blank', rel: 'noopener noreferrer' },
           volunteer && volunteer.first_name + " " + volunteer.last_name
         ),
-        ' ',
-        this.props.isProjectAdmin ? this._renderShowApplicationMenu() : null,
+        this.props.isProjectAdmin ? this._renderShowApplicationMenu(volunteer) : null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'p',
-          { className: 'MyProjectCard-volunteerRole' },
+          { className: 'VolunteerCard-volunteerRole' },
           roleTag && roleTag.display_name
         )
       );
     }
   }, {
     key: '_renderShowApplicationMenu',
-    value: function _renderShowApplicationMenu() {
+    value: function _renderShowApplicationMenu(volunteer) {
       return this.props.volunteer ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["c" /* DropdownButton */],
         {
-          bsClass: 'MyProjectCard-dropdownButton dropdown',
+          bsClass: 'VolunteerCard-dropdownButton dropdown',
           bsStyle: 'default',
           bsSize: 'small',
           title: '...',
           noCaret: true,
-          id: 'volunteercard-no-caret'
+          id: 'volunteercard-' + volunteer.id
         },
         this._renderApplicationMenuLinks()
       ) : null;
@@ -91835,7 +91834,7 @@ var VolunteerCard = function (_React$PureComponent) {
 
       return this.props.volunteer && this.props.volunteer.isApproved ? [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-        { className: 'MyProjectCard-danger', onSelect: function onSelect() {
+        { className: 'VolunteerCard-danger', onSelect: function onSelect() {
             return _this2.props.onDismissButton(_this2.props.volunteer);
           }, key: '1' },
         'Remove'
@@ -91847,13 +91846,13 @@ var VolunteerCard = function (_React$PureComponent) {
         'Application'
       ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-        { className: 'MyProjectCard-success', onSelect: function onSelect() {
+        { className: 'VolunteerCard-success', onSelect: function onSelect() {
             return _this2.props.onApproveButton(_this2.props.volunteer);
           }, key: '3' },
         'Accept'
       ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-        { className: 'MyProjectCard-danger', onSelect: function onSelect() {
+        { className: 'VolunteerCard-danger', onSelect: function onSelect() {
             return _this2.props.onRejectButton(_this2.props.volunteer);
           }, key: '4' },
         'Reject'

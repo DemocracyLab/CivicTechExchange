@@ -1,8 +1,5 @@
 .MyProjectCard-root {
   color: inherit;
-  clear: both;
-  height: 101px;
-  padding-bottom: 20px;
 }
 
 .MyProjectCard-column {
@@ -15,35 +12,6 @@
 
 .MyProjectCard-projectName {
   font-weight: bold;
-}
-
-.MyProjectCard-img {
-  float: left;
-  border: none;
-  border-radius: 0px;
-  margin-right: 10px;
-}
-
-.MyProjectCard-volunteerName {
-  font-weight: bold;
-  padding-top: 10px;
-}
-
-.MyProjectCard-volunteerRole  {
-  font-weight: normal;
-}
-
-div.MyProjectCard-dropdownButton {
-  display: inline;
-  font-size: 1.5em;
-}
-
-.MyProjectCard-danger {
-  background-color: red;
-}
-
-.MyProjectCard-success {
-  background-color: lightgreen;
 }
 
 .MyProjectCard-table {

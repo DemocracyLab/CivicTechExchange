@@ -23,28 +23,31 @@ class VolunteerCard extends React.PureComponent<Props> {
     const roleTag: ?TagDefinition = this.props.volunteer.roleTag;
     const volunteerUrl:string = url.section(Section.Profile, {id: volunteer.id});
     return (
-      <div className="MyProjectCard-root">
-        <a className="MyProjectCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
-        <img className="upload_img upload_img_bdr MyProjectCard-img" src={volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl}/>
+      <div className="VolunteerCard-root">
+        <a className="VolunteerCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
+          <img className="upload_img upload_img_bdr VolunteerCard-img" src={volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl}/>
         </a>
-        <a className="MyProjectCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
-        {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
-        </a> {this.props.isProjectAdmin ? this._renderShowApplicationMenu() : null}
-        <p className="MyProjectCard-volunteerRole">{roleTag && roleTag.display_name}</p>
+        <a className="VolunteerCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
+          {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
+        </a> 
+        {this.props.isProjectAdmin ? this._renderShowApplicationMenu(volunteer) : null}
+        <p className="VolunteerCard-volunteerRole">
+          {roleTag && roleTag.display_name}
+        </p>
       </div>
     );
   }
   
-  _renderShowApplicationMenu(): ?React$Node {
+  _renderShowApplicationMenu(volunteer): ?React$Node {
     return (this.props.volunteer
       ? 
         (<DropdownButton
-          bsClass="MyProjectCard-dropdownButton dropdown"
+          bsClass="VolunteerCard-dropdownButton dropdown"
           bsStyle="default"
           bsSize="small"
           title="..."
           noCaret
-          id="volunteercard-no-caret"
+          id={`volunteercard-${volunteer.id}`}
         >
           {this._renderApplicationMenuLinks()}
         </DropdownButton>)
@@ -56,12 +59,12 @@ class VolunteerCard extends React.PureComponent<Props> {
   _renderApplicationMenuLinks(): ?Array<React$Node>  {
     return (this.props.volunteer && this.props.volunteer.isApproved
       ? [
-          (<MenuItem className="MyProjectCard-danger" onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
+          (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
         ]
       : [
           (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key="2">Application</MenuItem>),
-          (<MenuItem className="MyProjectCard-success" onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3">Accept</MenuItem>),
-          (<MenuItem className="MyProjectCard-danger" onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4">Reject</MenuItem>)
+          (<MenuItem className="VolunteerCard-success" onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3">Accept</MenuItem>),
+          (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4">Reject</MenuItem>)
       ]);
   }
 }
