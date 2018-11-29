@@ -31,6 +31,14 @@ function _logEvent(eventName: string, parameters: ?{ [key: string]: string }): v
 }
 
 class metrics {
+  static logSigninAttempt(): void {
+    _logEvent("UserSigninAttempt");
+  }
+  
+  static logSignupAttempt(): void {
+    _logEvent("UserSignupAttempt");
+  }
+
   static logNavigateToProjectProfile(projectId: string): void {
     _logEvent("navigateToProjectProfile", {projectId: projectId});
   }
