@@ -1,6 +1,7 @@
 // @flow
 import {TagDefinition} from "./ProjectAPIUtils.js";
 import TagCategory from "../common/tags/TagCategory.jsx";
+import Async from "./async.js";
 import _ from 'lodash'
 
 const tagCategoryEventMapping: { [key: string]: string } = _.fromPairs([
@@ -11,8 +12,22 @@ const tagCategoryEventMapping: { [key: string]: string } = _.fromPairs([
   [TagCategory.PROJECT_STAGE, "addProjectStageTag"]
 ]);
 
+let facebookMetrics = null;
+
 function _logEvent(eventName: string, parameters: ?{ [key: string]: string }): void {
-  window.FB.AppEvents.logEvent(eventName, null, parameters);
+  if(facebookMetrics) {
+    facebookMetrics.logEvent(eventName, null, parameters);
+  } else {
+    // If Facebook metrics hasn't initialized yet, log the event once it's ready
+    Async.doWhenReady(
+      () => window.FB && window.FB.AppEvents,
+      (appEvents) => {
+        facebookMetrics = appEvents;
+        facebookMetrics.logEvent(eventName, null, parameters);
+      },
+      1000
+    );
+  }
 }
 
 class metrics {

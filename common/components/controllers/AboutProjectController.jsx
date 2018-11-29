@@ -43,8 +43,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   componentDidMount() {
     const projectId: string = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
     ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
-    // TODO: Uncomment after waiting for FB initialization
-    // metrics.logNavigateToProjectProfile(projectId);
+    metrics.logNavigateToProjectProfile(projectId);
   }
 
   loadProjectDetails(project: ProjectDetailsAPIData) {
