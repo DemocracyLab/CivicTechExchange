@@ -6,7 +6,9 @@ import _ from 'lodash'
 const tagCategoryEventMapping: { [key: string]: string } = _.fromPairs([
   [TagCategory.ISSUES, "addIssueAreaTag"],
   [TagCategory.TECHNOLOGIES_USED, "addTechUsedTag"],
-  [TagCategory.ROLE, "addOpenRoleTag"]
+  [TagCategory.ROLE, "addOpenRoleTag"],
+  [TagCategory.ORGANIZATION, "addCommunityTag"],
+  [TagCategory.PROJECT_STAGE, "addProjectStageTag"]
 ]);
 
 function _logEvent(eventName: string, parameters: ?{ [key: string]: string }): void {
@@ -14,8 +16,24 @@ function _logEvent(eventName: string, parameters: ?{ [key: string]: string }): v
 }
 
 class metrics {
-  static addTagFilterEvent(tag: TagDefinition): void {
+  static logNavigateToProjectProfile(projectId: string): void {
+    _logEvent("navigateToProjectProfile", {projectId: projectId});
+  }
+  
+  static logSearchFilterByTagEvent(tag: TagDefinition): void {
     _logEvent(tagCategoryEventMapping[tag.category], {tagName: tag.tag_name});
+  }
+  
+  static logSearchByKeywordEvent(keyword: string): void {
+    _logEvent("searchByKeyword", {keyword: keyword});
+  }
+  
+  static logSearchByLocationEvent(location: string): void {
+    _logEvent("filter_by_location", {location: location});
+  }
+  
+  static logSearchChangeSortEvent(sortField: string): void {
+    _logEvent("sort_by_field", {sortField: sortField});
   }
   
   static logUserClickContactProjectOwner(userId: number, projectId: number): void {

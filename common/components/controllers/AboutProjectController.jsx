@@ -18,6 +18,7 @@ import {TagDefinition} from "../utils/ProjectAPIUtils.js";
 import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
 import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 import GlyphStyles from "../utils/glyphs.js";
+import metrics from "../utils/metrics.js";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -40,8 +41,10 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   componentDidMount() {
-    const projectId = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
+    const projectId: string = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
     ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
+    // TODO: Uncomment after waiting for FB initialization
+    // metrics.logNavigateToProjectProfile(projectId);
   }
 
   loadProjectDetails(project: ProjectDetailsAPIData) {
