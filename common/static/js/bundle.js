@@ -91793,7 +91793,11 @@ var VolunteerCard = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         { className: 'MyProjectCard-root' },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr MyProjectCard-img', src: volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'a',
+          { className: 'MyProjectCard-volunteerName', href: volunteerUrl, target: '_blank', rel: 'noopener noreferrer' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'upload_img upload_img_bdr MyProjectCard-img', src: volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl })
+        ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'a',
           { className: 'MyProjectCard-volunteerName', href: volunteerUrl, target: '_blank', rel: 'noopener noreferrer' },

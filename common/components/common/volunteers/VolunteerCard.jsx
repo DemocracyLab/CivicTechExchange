@@ -24,7 +24,9 @@ class VolunteerCard extends React.PureComponent<Props> {
     const volunteerUrl:string = url.section(Section.Profile, {id: volunteer.id});
     return (
       <div className="MyProjectCard-root">
+        <a className="MyProjectCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
         <img className="upload_img upload_img_bdr MyProjectCard-img" src={volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl}/>
+        </a>
         <a className="MyProjectCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
         {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
         </a> {this.props.isProjectAdmin ? this._renderShowApplicationMenu() : null}
