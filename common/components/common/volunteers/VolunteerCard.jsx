@@ -47,7 +47,6 @@ class VolunteerCard extends React.PureComponent<Props> {
           bsSize="small"
           title="..."
           noCaret
-          id={`volunteercard-${volunteer.id}`}
         >
           {this._renderApplicationMenuLinks()}
         </DropdownButton>)

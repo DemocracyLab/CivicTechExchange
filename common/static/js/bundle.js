@@ -91821,8 +91821,7 @@ var VolunteerCard = function (_React$PureComponent) {
           bsStyle: 'default',
           bsSize: 'small',
           title: '...',
-          noCaret: true,
-          id: 'volunteercard-' + volunteer.id
+          noCaret: true
         },
         this._renderApplicationMenuLinks()
       ) : null;
