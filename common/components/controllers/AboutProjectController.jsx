@@ -16,6 +16,7 @@ import {Locations} from "../constants/ProjectConstants.js";
 import {LinkNames} from "../constants/LinkConstants.js";
 import {TagDefinition} from "../utils/ProjectAPIUtils.js";
 import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
+import ProjectOwnersSection from "../common/owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 import GlyphStyles from "../utils/glyphs.js";
 
@@ -168,6 +169,14 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               : null
           }
   
+          {
+            project && !_.isEmpty(project.project_owners)
+              ? <ProjectOwnersSection
+                owners={project.project_owners}
+                />
+              : null
+          }
+
           {
             project && !_.isEmpty(project.project_volunteers)
               ? <VolunteerSection
