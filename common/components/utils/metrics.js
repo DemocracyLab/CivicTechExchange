@@ -38,6 +38,14 @@ class metrics {
   static logSignupAttempt(): void {
     _logEvent("UserSignupAttempt");
   }
+  
+  static logUserAlertButtonClick(): void {
+    _logEvent("userAlertButtonClick");
+  }
+  
+  static logUserAlertCreate(filters: string, postalCode: string, country: string): void {
+    _logEvent("userAlertCreate", {filters: filters, postalCode: postalCode, country: country});
+  }
 
   static logNavigateToProjectProfile(projectId: string): void {
     _logEvent("navigateToProjectProfile", {projectId: projectId});
