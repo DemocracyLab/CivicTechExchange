@@ -1,0 +1,35 @@
+.VolunteerCard-root { //
+  color: inherit;
+  clear: both;
+  height: 101px;
+  padding-bottom: 20px;
+}
+
+.VolunteerCard-img { //
+  float: left;
+  border: none;
+  border-radius: 0px;
+  margin-right: 10px;
+}
+
+.VolunteerCard-volunteerName { //
+  font-weight: bold;
+  padding-top: 10px;
+}
+
+.VolunteerCard-volunteerRole  { //
+  font-weight: normal;
+}
+
+div.VolunteerCard-dropdownButton {  //
+  display: inline;
+  font-size: 1.5em;
+}
+
+.VolunteerCard-danger { //
+  background-color: red;
+}
+
+.VolunteerCard-success { //
+  background-color: lightgreen;
+}

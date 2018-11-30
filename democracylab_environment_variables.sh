@@ -23,3 +23,6 @@ export FOOTER_LINKS='[{"u":"http://connect.democracylab.org","n":"About"},{"u":"
 
 # Configure project description example link
 export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/index/?section=AboutProject&id=1'
+
+# ONLY FOR USE IN PRODUCTION
+#export HOTJAR_APPLICATION_ID=1097784

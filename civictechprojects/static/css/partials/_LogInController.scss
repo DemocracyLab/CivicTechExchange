@@ -2,8 +2,10 @@
   background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
   font-weight: 300;
-  margin: 168px 25%;
-  padding: 58px 145px;
+  width: 90%;
+  max-width: 800px;
+  margin: 168px auto;
+  padding: 58px 5%;
 }
 
 .LogInController-input {
@@ -11,10 +13,12 @@
   height: 40px;
   margin-bottom: 10px;
   width: 100%;
+  min-width: 200px;
 }
 
 .LogInController-greeting {
   margin-bottom: 27px;
+  min-width: 200px;
 }
 
 .LogInController-signInButton {

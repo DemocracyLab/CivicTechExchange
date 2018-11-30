@@ -21,11 +21,50 @@
 }
 
 .MainHeader-links {
+  display: none;
   float: right;
 }
 
+.MainHeader-hamburger { 
+  display: block; 
+}
+
+.MainHeader-navDrawer {
+  margin-top: 25px;
+  width: 43.72vw;
+  min-width: 200px;
+}
+
+.MainHeader-drawerDiv {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-left: 25px;
+}
+
+
 .MainHeader-dropdownButton {
+  display: none;
   cursor: pointer;
   text-decoration: none;
   color: $color-text-dark;
+}
+
+.MainHeader-name {
+  text-align: center;
+  margin-left: 25px;
+  margin-bottom: 25px;
+}
+
+@include media-breakpoint-up(sm) {
+  .MainHeader-dropdownButton {
+    display: block;
+  }
+
+  .MainHeader-hamburger {
+    display: none;
+  }
+
+  .MainHeader-links {
+    display: block;
+  }
 }

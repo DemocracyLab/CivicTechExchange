@@ -182,7 +182,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
   
   _renderApprovedVolunteers(approvedVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
     return !_.isEmpty(approvedVolunteers)
-      ? this._renderVolunteerSection(approvedVolunteers, "VOLUNTEERS")
+      ? this._renderVolunteerSection(approvedVolunteers, "TEAM")
       : null;
   }
   

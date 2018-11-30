@@ -48,7 +48,9 @@ class SubHeader extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className={this._cx.get('root')}>
+       <div className={this._cx.get('leftContent')}>
         {this._renderSectionLinks()}
+        </div>
         <span className={this._cx.get('rightContent')}>
           {this._renderCreateProjectButton()}
         </span>
