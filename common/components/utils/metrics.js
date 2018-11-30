@@ -82,7 +82,26 @@ class metrics {
   static logUserContactedProjectOwner(userId: number, projectId: number): void {
     _logEvent("UserContactedProjectOwner", {userId: userId, projectId: projectId});
   }
-
+  
+  static logVolunteerClickVolunteerButton(userId: number, projectId: number): void {
+    _logEvent("VolunteerClickVolunteerButton", {userId: userId, projectId: projectId});
+  }
+  
+  static logVolunteerClickVolunteerSubmit(userId: number, projectId: number): void {
+    _logEvent("VolunteerClickVolunteerSubmit", {userId: userId, projectId: projectId});
+  }
+  
+  static logVolunteerClickVolunteerSubmitConfirm(userId: number, projectId: number): void {
+    _logEvent("VolunteerClickVolunteerSubmitConfirm", {userId: userId, projectId: projectId});
+  }
+  
+  static logVolunteerClickLeaveButton(userId: number, projectId: number): void {
+    _logEvent("VolunteerClickLeaveButton", {userId: userId, projectId: projectId});
+  }
+  
+  static logVolunteerClickLeaveConfirm(userId: number, projectId: number): void {
+    _logEvent("VolunteerClickLeaveConfirm", {userId: userId, projectId: projectId});
+  }
 }
 
 export default metrics
