@@ -46,6 +46,14 @@ class metrics {
   static logUserAlertCreate(filters: string, postalCode: string, country: string): void {
     _logEvent("userAlertCreate", {filters: filters, postalCode: postalCode, country: country});
   }
+  
+  static logUserProfileEditEntry(userId: number): void {
+    _logEvent("userProfileEditEntry", {userId: userId});
+  }
+  
+  static logUserProfileEditSave(userId: number): void {
+    _logEvent("userProfileEditSave", {userId: userId});
+  }
 
   static logNavigateToProjectProfile(projectId: string): void {
     _logEvent("navigateToProjectProfile", {projectId: projectId});
