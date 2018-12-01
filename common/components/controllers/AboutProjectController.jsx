@@ -61,7 +61,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   _renderDetails(): React$Node {
-    const project = this.state.project;
+    const project: ProjectDetailsAPIData = this.state.project;
     return (
       <div className="AboutProjectController-root">
         <div className="container-fluid">
@@ -175,6 +175,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               ? <VolunteerSection
                   volunteers={project.project_volunteers}
                   isProjectAdmin={CurrentUser.userID() === project.project_creator}
+                  projectId={project.project_id}
                 />
               : null
           }

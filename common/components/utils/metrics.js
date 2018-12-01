@@ -102,6 +102,18 @@ class metrics {
   static logVolunteerClickLeaveConfirm(userId: number, projectId: number): void {
     _logEvent("VolunteerClickLeaveConfirm", {userId: userId, projectId: projectId});
   }
+  
+  static logProjectApproveVolunteer(userId: number, projectId: number): void {
+    _logEvent("ProjectApproveVolunteer", {userId: userId, projectId: projectId});
+  }
+  
+  static logProjectRejectVolunteer(userId: number, projectId: number): void {
+    _logEvent("ProjectRejectVolunteer", {userId: userId, projectId: projectId});
+  }
+  
+  static logProjectDismissVolunteer(userId: number, projectId: number): void {
+    _logEvent("ProjectDismissVolunteer", {userId: userId, projectId: projectId});
+  }
 }
 
 export default metrics
