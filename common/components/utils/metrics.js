@@ -75,6 +75,26 @@ class metrics {
     _logEvent("sort_by_field", {sortField: sortField});
   }
   
+  static logProjectClickCreate(userId: number): void {
+    _logEvent("projectClickCreate", {userId: userId});
+  }
+  
+  static logProjectCreated(userId: number): void {
+    _logEvent("projectCreated", {userId: userId});
+  }
+  
+  static logProjectClickEdit(userId: number, projectId: number): void {
+    _logEvent("projectClickEdit", {userId: userId, projectId: projectId});
+  }
+  
+  static logProjectEdited(userId: number, projectId: number): void {
+    _logEvent("projectEdited", {userId: userId, projectId: projectId});
+  }
+  
+  static logProjectDeleted(userId: number, projectId: number): void {
+    _logEvent("projectDeleted", {userId: userId, projectId: projectId});
+  }
+  
   static logUserClickContactProjectOwner(userId: number, projectId: number): void {
     _logEvent("UserClickContactProjectOwner", {userId: userId, projectId: projectId});
   }

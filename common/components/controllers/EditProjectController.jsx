@@ -3,6 +3,8 @@
 import React from 'react';
 import EditProjectForm from '../common/projects/EditProjectForm.jsx'
 import url from '../utils/url.js'
+import CurrentUser from "../utils/CurrentUser.js";
+import metrics from "../utils/metrics.js";
 
 type State = {|
   projectId: number
@@ -20,8 +22,8 @@ class EditProjectController extends React.PureComponent<{||},State> {
     }
   }
   
-  logProjectEdited() {
-    window.FB.AppEvents.logEvent('projectEdited');
+  logProjectEdited(): void {
+    metrics.logProjectEdited(CurrentUser.userID(), this.state.projectId);
   }
   
   render(): React$Node {
