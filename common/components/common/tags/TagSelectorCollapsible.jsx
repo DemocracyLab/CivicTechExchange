@@ -59,7 +59,7 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
 
   selectTag(tags, opts): void {
     //opts is optional, if passed in expect opts to be an object formatted like { multiple: true, type: ACTION_TO_TAKE }
-    var opts = opts || {}; //to avoid undefined error create an empty object if opts isn't passed in
+    var opts = opts || {}; //to avoid undefined error, create an empty object if opts isn't passed in. TODO: make this work with let instead of var
     if (opts.multiple && opts.type) {
       let tagnames = tags.map(function(t) {
           return t.tag_name
