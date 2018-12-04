@@ -7,6 +7,7 @@ import CurrentUser from "../../utils/CurrentUser.js";
 import ProjectVolunteerModal from "./ProjectVolunteerModal.jsx";
 import FeedbackModal from "../FeedbackModal.jsx";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import metrics from "../../utils/metrics.js";
 import _ from 'lodash'
 
 type LeaveProjectParams = {|
@@ -68,10 +69,12 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   }
   
   handleShowJoinModal() {
+    metrics.logVolunteerClickVolunteerButton(CurrentUser.userID(), this.props.project.project_id);
     this.setState({ showJoinModal: true });
   }
   
   handleShowLeaveModal() {
+    metrics.logVolunteerClickLeaveButton(CurrentUser.userID(), this.props.project.project_id);
     this.setState({ showLeaveProjectModal: true });
   }
   
@@ -87,6 +90,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
     if(confirmLeaving) {
       const params: LeaveProjectParams = {departure_message: departureMessage};
       ProjectAPIUtils.post("/volunteer/leave/" + this.props.project.project_id + "/",params,() => {
+        metrics.logVolunteerClickLeaveConfirm(CurrentUser.userID(), this.props.project.project_id);
         window.location.reload(true);
       });
     } else {

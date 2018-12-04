@@ -65,7 +65,7 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
         type: 'ADD_TAG',
         tag: tag.tag_name,
       });
-      metrics.addTagFilterEvent(tag);
+      metrics.logSearchFilterByTagEvent(tag);
     } else {
       ProjectSearchDispatcher.dispatch({
         type: 'REMOVE_TAG',

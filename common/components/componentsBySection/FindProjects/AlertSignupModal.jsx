@@ -5,6 +5,7 @@ import {Modal, Button} from 'react-bootstrap';
 import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
 import Select from 'react-select'
 import {Countries} from "../../constants/Countries.js";
+import metrics from "../../utils/metrics.js";
 
 type CountryOption = {|
   value: string,
@@ -88,6 +89,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
       response => this.closeModal(),
       response => null /* TODO: Report error to user */
       );
+    metrics.logUserAlertCreate(this.state.formFields.filters,this.state.formFields.postal_code,this.state.formFields.country.value);
   }
 
   isDisabled(): boolean {

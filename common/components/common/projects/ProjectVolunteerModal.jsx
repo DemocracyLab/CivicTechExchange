@@ -71,6 +71,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
   }
 
   askForSendConfirmation(): void {
+    metrics.logVolunteerClickVolunteerSubmit(CurrentUser.userID(), this.props.projectId);
     this.setState({showConfirmationModal:true});
   }
 
@@ -87,7 +88,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
   
   handleSubmit() {
     this.setState({isSending:true});
-    metrics.logUserContactedProjectOwner(CurrentUser.userID(), this.props.projectId);
+    metrics.logVolunteerClickVolunteerSubmitConfirm(CurrentUser.userID(), this.props.projectId);
     ProjectAPIUtils.post("/volunteer/" + this.props.projectId + "/",
       {
         message: this.state.message,

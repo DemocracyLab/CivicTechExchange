@@ -4,6 +4,7 @@ import React from 'react';
 import CurrentUser from '../../components/utils/CurrentUser.js';
 import EditProjectForm from '../common/projects/EditProjectForm.jsx'
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
+import metrics from "../utils/metrics.js";
 
 type State = {|
   showEmailConfirmationModal: boolean,
@@ -23,8 +24,14 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     };
   }
   
-  logProjectCreated() {
-    window.FB.AppEvents.logEvent('projectCreated');
+  componentDidMount(): void {
+    if(CurrentUser.isLoggedIn() && CurrentUser.isEmailVerified()) {
+      metrics.logProjectClickCreate(CurrentUser.userID());
+    }
+  }
+  
+  logProjectCreated(): void {
+    metrics.logProjectCreated(CurrentUser.userID());
   }
   
   render(): React$Node {

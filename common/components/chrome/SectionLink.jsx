@@ -6,6 +6,7 @@ import cx from '../utils/cx';
 import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
 import url from '../utils/url.js';
+import metrics from "../utils/metrics.js";
 
 type Props = {|
   +activeSection: SectionType,
@@ -46,11 +47,7 @@ class SectionLink extends React.PureComponent<Props> {
       section: this.props.section,
       url: url.section(this.props.section)
     });
-    window.FB.AppEvents.logEvent(
-      'sectionLinkClick',
-      null,
-      {section: this.props.section},
-    );
+    metrics.logSectionNavigation(this.props.section);
   }
 }
 
