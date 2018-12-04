@@ -23806,6 +23806,7 @@ var ProjectSearchStore = function (_ReduceStore) {
           }));
           return this._loadProjects(state);
         case 'REMOVE_MANY_TAGS':
+          //TODO: Fix this function, it's breaking something. Async error? 
           state = state.set('tags', action.tag.forEach(function (name) {
             state.tags.filter(function (tag) {
               return tag !== name;
@@ -91187,7 +91188,7 @@ var TagSelectorCollapsible = function (_React$Component) {
     key: 'selectTag',
     value: function selectTag(tags, opts) {
       //opts is optional, if passed in expect opts to be an object formatted like { multiple: true, type: ACTION_TO_TAKE }
-      var opts = opts || {}; //to avoid undefined error create an empty object if opts isn't passed in
+      var opts = opts || {}; //to avoid undefined error, create an empty object if opts isn't passed in. TODO: make this work with let instead of var
       if (opts.multiple && opts.type) {
         var tagnames = tags.map(function (t) {
           return t.tag_name;
