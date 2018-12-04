@@ -18129,7 +18129,7 @@ function _logEvent(eventName, parameters) {
     }, function (appEvents) {
       facebookMetrics = appEvents;
       facebookMetrics.logEvent(eventName, null, parameters);
-    }, 1000);
+    }, 1000, 5);
   }
 }
 
@@ -84256,15 +84256,19 @@ var async = function () {
      * readyFunc: Function that returns the value that will be passed into the execution function
      * doFunc: Function that executes when the value returned by readyFunc is truthy
      * timeout: Milliseconds to wait between tries
+     * maxRetries(optional): Number of times to attempt a retry
      */
-    value: function doWhenReady(readyFunc, doFunc, timeout) {
+    value: function doWhenReady(readyFunc, doFunc, timeout, maxRetries) {
       var value = readyFunc();
+      var numTries = 0;
       if (!value) {
         var intervalId = null;
         var checkFunc = function checkFunc() {
           value = readyFunc();
           if (value) {
             doFunc(value);
+          }
+          if (value || maxRetries && ++numTries > maxRetries) {
             window.clearInterval(intervalId);
           }
         };
@@ -109296,11 +109300,6 @@ var SectionLink = function (_React$PureComponent) {
         url: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(this.props.section)
       });
       __WEBPACK_IMPORTED_MODULE_4__utils_metrics_js__["a" /* default */].logSectionNavigation(this.props.section);
-      // window.FB.AppEvents.logEvent(
-      //   'sectionLinkClick',
-      //   null,
-      //   {section: this.props.section},
-      // );
     }
   }]);
 

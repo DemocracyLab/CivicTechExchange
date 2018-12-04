@@ -26,7 +26,8 @@ function _logEvent(eventName: string, parameters: ?{ [key: string]: string }): v
         facebookMetrics = appEvents;
         facebookMetrics.logEvent(eventName, null, parameters);
       },
-      1000
+      1000,
+      5
     );
   }
 }
