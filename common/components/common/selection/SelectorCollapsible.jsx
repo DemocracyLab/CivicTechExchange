@@ -174,6 +174,8 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
     )
   }
    updateAllState(): React$Node {
+     //TODO: Refactor how select all handles itself, this is placeholder
+     //a better way to do this is to just have the select all checkbox check or uncheck if all the boxes in its category are checked or not, implicit state instead of this
      this.setState({isAllChecked: !this.state.isAllChecked})
    }
 

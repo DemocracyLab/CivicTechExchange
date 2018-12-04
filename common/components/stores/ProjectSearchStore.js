@@ -106,12 +106,7 @@ class ProjectSearchStore extends ReduceStore<State> {
         state = state.set('tags', state.tags.filter(tag => tag !== action.tag.tag_name));
         return this._loadProjects(state);
       case 'REMOVE_MANY_TAGS':
-        //TODO: Fix this function, it's breaking something. Async error? 
-        state = state.set('tags', action.tag.forEach(function(name) {
-            state.tags.filter(tag => tag !== name)
-          })
-        );
-        return this._loadProjects(state);
+        return this._loadProjects(this._removeTagsFromState(state, action.tag));
       case 'SET_KEYWORD':
         return this._loadProjects(this._addKeywordToState(state, action.keyword));
       case 'SET_SORT':
@@ -187,6 +182,13 @@ class ProjectSearchStore extends ReduceStore<State> {
     //tag does not have to be a string, this works for an array of strings as in ADD_MANY_TAGS
     const newTags:$ReadOnlyArray<string> = state.tags.concat(tag);
     return state.set('tags', newTags);
+  }
+
+  _removeTagsFromState(state: State, tags: array): State {
+    const filtered = tags.forEach(function(name) {
+        state.tags.filter(tag => tag !== name)
+      })
+    return state.set('tags', filtered || []);
   }
 
   _addKeywordToState(state: State, keyword: string): State {

@@ -23806,13 +23806,7 @@ var ProjectSearchStore = function (_ReduceStore) {
           }));
           return this._loadProjects(state);
         case 'REMOVE_MANY_TAGS':
-          //TODO: Fix this function, it's breaking something. Async error? 
-          state = state.set('tags', action.tag.forEach(function (name) {
-            state.tags.filter(function (tag) {
-              return tag !== name;
-            });
-          }));
-          return this._loadProjects(state);
+          return this._loadProjects(this._removeTagsFromState(state, action.tag));
         case 'SET_KEYWORD':
           return this._loadProjects(this._addKeywordToState(state, action.keyword));
         case 'SET_SORT':
@@ -23899,6 +23893,16 @@ var ProjectSearchStore = function (_ReduceStore) {
       //tag does not have to be a string, this works for an array of strings as in ADD_MANY_TAGS
       var newTags = state.tags.concat(tag);
       return state.set('tags', newTags);
+    }
+  }, {
+    key: '_removeTagsFromState',
+    value: function _removeTagsFromState(state, tags) {
+      var filtered = tags.forEach(function (name) {
+        state.tags.filter(function (tag) {
+          return tag !== name;
+        });
+      });
+      return state.set('tags', filtered || []);
     }
   }, {
     key: '_addKeywordToState',
@@ -91186,11 +91190,11 @@ var TagSelectorCollapsible = function (_React$Component) {
 
   _createClass(TagSelectorCollapsible, [{
     key: 'selectTag',
-    value: function selectTag(tags, opts) {
+    value: function selectTag(tag, opts) {
       //opts is optional, if passed in expect opts to be an object formatted like { multiple: true, type: ACTION_TO_TAKE }
       var opts = opts || {}; //to avoid undefined error, create an empty object if opts isn't passed in. TODO: make this work with let instead of var
       if (opts.multiple && opts.type) {
-        var tagnames = tags.map(function (t) {
+        var tagnames = tag.map(function (t) {
           return t.tag_name;
         });
         __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
@@ -91488,6 +91492,8 @@ var SelectorCollapsible = function (_React$PureComponent) {
   }, {
     key: 'updateAllState',
     value: function updateAllState() {
+      //TODO: Refactor how select all handles itself, this is placeholder
+      //a better way to do this is to just have the select all checkbox check or uncheck if all the boxes in its category are checked or not, implicit state instead of this
       this.setState({ isAllChecked: !this.state.isAllChecked });
     }
   }, {
