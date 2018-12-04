@@ -2,6 +2,7 @@
 import {TagDefinition} from "./ProjectAPIUtils.js";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import Async from "./async.js";
+import {SectionType} from "../enums/Section.js";
 import _ from 'lodash'
 
 const tagCategoryEventMapping: { [key: string]: string } = _.fromPairs([
@@ -133,6 +134,10 @@ class metrics {
   
   static logProjectDismissVolunteer(userId: number, projectId: number): void {
     _logEvent("ProjectDismissVolunteer", {userId: userId, projectId: projectId});
+  }
+  
+  static logSectionNavigation(section: SectionType): void {
+    _logEvent("sectionLinkClick", {section: section});
   }
 }
 
