@@ -413,34 +413,3 @@ class VolunteerRelation(models.Model):
         relation.save()
 
         relation.role.add(role)
-
-class OwnerRelation(models.Model):
-    project = models.ForeignKey(Project, related_name='owner_relations')
-    owner = models.ForeignKey(Contributor, related_name='owner_relations')
-
-    def __str__(self):
-        return 'Project: ' + str(self.project.project_name) + ', Owners: ' + str(self.volunteer.email)
-
-    def to_json(self):
-        volunteer = self.volunteer
-
-        volunteer_json = {
-            'application_id': self.id,
-            'user': volunteer.hydrate_to_tile_json(),
-            'application_text': self.application_text,
-            'roleTag': Tag.hydrate_to_json(volunteer.id, self.role.all().values())[0],
-            'isApproved': self.is_approved
-        }
-
-        return volunteer_json
-
-    @staticmethod
-    def create(project, volunteer, projected_end_date, role, application_text):
-        relation = VolunteerRelation()
-        relation.project = project
-        relation.volunteer = volunteer
-        relation.projected_end_date = projected_end_date
-        relation.application_text = application_text
-        relation.save()
-
-        relation.role.add(role)
