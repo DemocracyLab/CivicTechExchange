@@ -7,6 +7,7 @@ import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
 import type { LinkInfo } from './LinkInfo.jsx'
 import GlyphStyles from "../utils/glyphs.js";
 import _ from 'lodash'
+import LinkListing from './ReformatLinkListing';
 
 
 type Props = {|
@@ -136,6 +137,7 @@ class LinkList extends React.PureComponent<Props,State>  {
         <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName}</a>
         <i className={GlyphStyles.Edit} aria-hidden="true" onClick={this.editLink.bind(this,link)}></i>
         <i className={GlyphStyles.Delete} aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,link)}></i>
+        <LinkListing/>
       </div>
     );
   }
