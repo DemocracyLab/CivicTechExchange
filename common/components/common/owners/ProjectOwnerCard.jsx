@@ -9,19 +9,12 @@ import Section from "../../enums/Section.js";
 
 type Props = {|
   +owner: VolunteerUserData,
-  // +isProjectAdmin: boolean,
-  // +onOpenApplication: (VolunteerDetailsAPIData) => void,
-  // +onApproveButton: (VolunteerDetailsAPIData) => void,
-  // +onRejectButton: (VolunteerDetailsAPIData) => void,
-  // +onDismissButton: (VolunteerDetailsAPIData) => void
 |};
 
 class ProjectOwnerCard extends React.PureComponent<Props> {
   
   render(): React$Node {
-    console.log('ProjectOwnerCard render', this.props)
     const owner: ?VolunteerUserData = this.props.owner;
-    // const roleTag: ?TagDefinition = this.props.volunteer.roleTag;
     const ownerUrl:string = owner.user_thumbnail && owner.user_thumbnail.publicUrl;
     return (
       <div className="VolunteerCard-root">
@@ -38,35 +31,6 @@ class ProjectOwnerCard extends React.PureComponent<Props> {
       </div>
     );
   }
-  
-  // _renderShowApplicationMenu(volunteer): ?React$Node {
-  //   return (this.props.volunteer
-  //     ? 
-  //       (<DropdownButton
-  //         bsClass="VolunteerCard-dropdownButton dropdown"
-  //         bsStyle="default"
-  //         bsSize="small"
-  //         title="..."
-  //         noCaret
-  //       >
-  //         {this._renderApplicationMenuLinks()}
-  //       </DropdownButton>)
-  //     : 
-  //       null
-  //     );
-  // }
-
-  // _renderApplicationMenuLinks(): ?Array<React$Node>  {
-  //   return (this.props.volunteer && this.props.volunteer.isApproved
-  //     ? [
-  //         (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
-  //       ]
-  //     : [
-  //         (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key="2">Application</MenuItem>),
-  //         (<MenuItem className="VolunteerCard-success" onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3">Accept</MenuItem>),
-  //         (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4">Reject</MenuItem>)
-  //     ]);
-  // }
 }
 
 export default ProjectOwnerCard;
