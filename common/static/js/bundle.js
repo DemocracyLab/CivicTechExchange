@@ -81395,7 +81395,6 @@ var AboutProjectController = function (_React$PureComponent) {
   }, {
     key: 'render',
     value: function render() {
-      debugger;
       return this.state.project ? this._renderDetails() : __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
         'div',
         null,
@@ -91678,19 +91677,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-// import NotificationModal from "../notification/NotificationModal.jsx";
-// import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
-// import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
-// import FeedbackModal from "../FeedbackModal.jsx";
 
-
-// type RejectVolunteerParams = {|
-//   rejection_message: string
-// |};
-
-// type DismissVolunteerParams = {|
-//   dismissal_message: string
-// |};
 
 var ProjectOwnersSection = function (_React$PureComponent) {
   _inherits(ProjectOwnersSection, _React$PureComponent);
@@ -91702,113 +91689,13 @@ var ProjectOwnersSection = function (_React$PureComponent) {
 
     _this.state = {
       owners: __WEBPACK_IMPORTED_MODULE_3_lodash___default.a.cloneDeep(props.owners)
-      // showApproveModal: false,
-      // showRejectModal: false,
-      // showDismissModal: false,
-      // showApplicationModal: false,
-      // applicationModalText: ""
     };
-
-    // this.openApplicationModal = this.openApplicationModal.bind(this);
-    // this.openApproveModal = this.openApproveModal.bind(this);
-    // this.openRejectModal = this.openRejectModal.bind(this);
-    // this.openDismissModal = this.openDismissModal.bind(this);
     return _this;
   }
-
-  // componentWillReceiveProps(nextProps: Props): void {
-  //   this.setState(this.getButtonDisplaySetup(nextProps));
-  // }
-
-  // openApplicationModal(volunteer: VolunteerDetailsAPIData): void {
-  //   this.setState({
-  //     showApplicationModal: true,
-  //     applicationModalText: volunteer.application_text
-  //   });
-  // }
-
-  // closeApplicationModal(): void {
-  //   this.setState({
-  //     showApplicationModal: false
-  //   });
-  // }
-
-  // openApproveModal(volunteer: VolunteerDetailsAPIData): void {
-  //   this.setState({
-  //     showApproveModal: true,
-  //     volunteerToActUpon: volunteer
-  //   });
-  // }
-
-  // closeApproveModal(approved: boolean):void {
-  //   if(approved) {
-  //     ProjectAPIUtils.post("/volunteer/approve/" + this.state.volunteerToActUpon.application_id + "/",{},() => {
-  //       this.state.volunteerToActUpon.isApproved = true;
-  //       this.setState({
-  //         showApproveModal: false
-  //       });
-  //       this.forceUpdate();
-  //     });
-  //   } else {
-  //     this.setState({
-  //       showApproveModal: false
-  //     });
-  //   }
-  // }
-
-  // openRejectModal(volunteer: VolunteerDetailsAPIData): void {
-  //   this.setState({
-  //     showRejectModal: true,
-  //     volunteerToActUpon: volunteer
-  //   });
-  // }
-
-  // closeRejectModal(confirmRejected: boolean, rejectionMessage: string):void {
-  //   if(confirmRejected) {
-  //     const params: RejectVolunteerParams = {rejection_message: rejectionMessage};
-  //     ProjectAPIUtils.post("/volunteer/reject/" + this.state.volunteerToActUpon.application_id + "/",params,() => {
-  //       _.remove(this.state.volunteers, (volunteer: VolunteerDetailsAPIData) => volunteer.application_id === this.state.volunteerToActUpon.application_id);
-  //       this.setState({
-  //         showRejectModal: false
-  //       });
-  //       this.forceUpdate();
-  //     });
-  //   } else {
-  //     this.setState({
-  //       showRejectModal: false
-  //     });
-  //   }
-  // }
-
-  // openDismissModal(volunteer: VolunteerDetailsAPIData): void {
-  //   this.setState({
-  //     showDismissModal: true,
-  //     volunteerToActUpon: volunteer
-  //   });
-  // }
-
-  // closeDismissModal(confirmDismissed: boolean, dismissalMessage: string):void {
-  //   if(confirmDismissed) {
-  //     const params: DismissVolunteerParams = {dismissal_message: dismissalMessage};
-  //     ProjectAPIUtils.post("/volunteer/dismiss/" + this.state.volunteerToActUpon.application_id + "/",params,() => {
-  //       _.remove(this.state.volunteers, (volunteer: VolunteerDetailsAPIData) => volunteer.application_id === this.state.volunteerToActUpon.application_id);
-  //       this.setState({
-  //         showDismissModal: false
-  //       });
-  //       this.forceUpdate();
-  //     });
-  //   } else {
-  //     this.setState({
-  //       showDismissModal: false
-  //     });
-  //   }
-  // }
 
   _createClass(ProjectOwnersSection, [{
     key: "render",
     value: function render() {
-      console.log('ProjectOwnersSection render');
-      // const approvedAnd/PendingVolunteers: Array<Array<VolunteerDetailsAPIData>> = _.partition(this.state.volunteers, volunteer => volunteer.isApproved);
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
         null,
@@ -91820,13 +91707,6 @@ var ProjectOwnersSection = function (_React$PureComponent) {
     value: function _renderProjectOwners() {
       return !__WEBPACK_IMPORTED_MODULE_3_lodash___default.a.isEmpty(this.state.owners) ? this._renderOwnersSection(this.state.owners, "OWNERS") : null;
     }
-
-    // _renderPendingVolunteers(pendingVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
-    //   return this.props.isProjectAdmin &&  !_.isEmpty(pendingVolunteers)
-    //     ? this._renderVolunteerSection(pendingVolunteers, "AWAITING REVIEW")
-    //     : null;
-    // }
-
   }, {
     key: "_renderOwnersSection",
     value: function _renderOwnersSection(owners, header) {
@@ -91848,11 +91728,6 @@ var ProjectOwnersSection = function (_React$PureComponent) {
               return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__ProjectOwnerCard_jsx__["a" /* default */], {
                 key: i,
                 owner: owner
-                // isProjectAdmin={this.props.isProjectAdmin}
-                // onOpenApplication={this.openApplicationModal}
-                // onApproveButton={this.openApproveModal}
-                // onRejectButton={this.openRejectModal}
-                // onDism`issButton={this.openDismissModal}
               });
             })
           )
@@ -91905,9 +91780,7 @@ var ProjectOwnerCard = function (_React$PureComponent) {
   _createClass(ProjectOwnerCard, [{
     key: 'render',
     value: function render() {
-      console.log('ProjectOwnerCard render', this.props);
       var owner = this.props.owner;
-      // const roleTag: ?TagDefinition = this.props.volunteer.roleTag;
       var ownerUrl = owner.user_thumbnail && owner.user_thumbnail.publicUrl;
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
@@ -91929,36 +91802,6 @@ var ProjectOwnerCard = function (_React$PureComponent) {
         )
       );
     }
-
-    // _renderShowApplicationMenu(volunteer): ?React$Node {
-    //   return (this.props.volunteer
-    //     ? 
-    //       (<DropdownButton
-    //         bsClass="VolunteerCard-dropdownButton dropdown"
-    //         bsStyle="default"
-    //         bsSize="small"
-    //         title="..."
-    //         noCaret
-    //       >
-    //         {this._renderApplicationMenuLinks()}
-    //       </DropdownButton>)
-    //     : 
-    //       null
-    //     );
-    // }
-
-    // _renderApplicationMenuLinks(): ?Array<React$Node>  {
-    //   return (this.props.volunteer && this.props.volunteer.isApproved
-    //     ? [
-    //         (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
-    //       ]
-    //     : [
-    //         (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key="2">Application</MenuItem>),
-    //         (<MenuItem className="VolunteerCard-success" onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3">Accept</MenuItem>),
-    //         (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4">Reject</MenuItem>)
-    //     ]);
-    // }
-
   }]);
 
   return ProjectOwnerCard;
@@ -92068,6 +91911,33 @@ var VolunteerSection = function (_React$PureComponent) {
       }
     }
   }, {
+    key: "openPromotionModal",
+    value: function openPromotionModal(voluteer) {
+      this.setState({
+        showPromotionModal: true,
+        volunteerToActUpon: volunteer
+      });
+    }
+  }, {
+    key: "closePromotionModal",
+    value: function closePromotionModal(promoted) {
+      var _this3 = this;
+
+      if (promoted) {
+        __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].post("/owner/approve/" + this.state.volunteerToActUpon.application_id + "/", {}, function () {
+          _this3.state.volunteerToActUpon.isCoOwner = true;
+          _this3.setState({
+            showPromotionModal: false
+          });
+          _this3.forceUpdate();
+        });
+      } else {
+        this.setState({
+          showPromotionModal: false
+        });
+      }
+    }
+  }, {
     key: "openRejectModal",
     value: function openRejectModal(volunteer) {
       this.setState({
@@ -92078,18 +91948,18 @@ var VolunteerSection = function (_React$PureComponent) {
   }, {
     key: "closeRejectModal",
     value: function closeRejectModal(confirmRejected, rejectionMessage) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (confirmRejected) {
         var params = { rejection_message: rejectionMessage };
         __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].post("/volunteer/reject/" + this.state.volunteerToActUpon.application_id + "/", params, function () {
-          __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.remove(_this3.state.volunteers, function (volunteer) {
-            return volunteer.application_id === _this3.state.volunteerToActUpon.application_id;
+          __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.remove(_this4.state.volunteers, function (volunteer) {
+            return volunteer.application_id === _this4.state.volunteerToActUpon.application_id;
           });
-          _this3.setState({
+          _this4.setState({
             showRejectModal: false
           });
-          _this3.forceUpdate();
+          _this4.forceUpdate();
         });
       } else {
         this.setState({
@@ -92108,18 +91978,18 @@ var VolunteerSection = function (_React$PureComponent) {
   }, {
     key: "closeDismissModal",
     value: function closeDismissModal(confirmDismissed, dismissalMessage) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (confirmDismissed) {
         var params = { dismissal_message: dismissalMessage };
         __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].post("/volunteer/dismiss/" + this.state.volunteerToActUpon.application_id + "/", params, function () {
-          __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.remove(_this4.state.volunteers, function (volunteer) {
-            return volunteer.application_id === _this4.state.volunteerToActUpon.application_id;
+          __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.remove(_this5.state.volunteers, function (volunteer) {
+            return volunteer.application_id === _this5.state.volunteerToActUpon.application_id;
           });
-          _this4.setState({
+          _this5.setState({
             showDismissModal: false
           });
-          _this4.forceUpdate();
+          _this5.forceUpdate();
         });
       } else {
         this.setState({
@@ -92128,10 +91998,43 @@ var VolunteerSection = function (_React$PureComponent) {
       }
     }
   }, {
+    key: "openDemotionModal",
+    value: function openDemotionModal(volunteer) {
+      this.setState({
+        showDemotionModal: true,
+        volunteerToActUpon: volunteer
+      });
+    }
+  }, {
+    key: "closeDemotionModal",
+    value: function closeDemotionModal(confirmDemoted, demotionMessage) {
+      var _this6 = this;
+
+      if (confirmDemoted) {
+        var params = { demotion_message: demotionMessage };
+        __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].post("volunteer/demote/" + this.state.volunteerToActUpon + "/", params, function () {
+          __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.remove(_this6.state.owners, function (owner) {
+            return volunteer.application_id === _this6.state.volunteerToActUpon.application_id;
+          });
+          _this6.setState({
+            showDemotionModal: false
+          });
+          _this6.forceUpdate();
+        });
+      } else {
+        this.setState({
+          showDemotionModal: false
+        });
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var approvedAndPendingVolunteers = __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.partition(this.state.volunteers, function (volunteer) {
         return volunteer.isApproved;
+      });
+      var coOwnerVolunteers = __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.filter(this.state.volunteers, function (volunteer) {
+        return volunteer.isCoOwner;
       });
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
@@ -92146,6 +92049,11 @@ var VolunteerSection = function (_React$PureComponent) {
           showModal: this.state.showApproveModal,
           message: "Do you want to approve this Volunteer joining the project?",
           onSelection: this.closeApproveModal.bind(this)
+        }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__confirmation_ConfirmationModal_jsx__["a" /* default */], {
+          showModal: this.state.showPromotionModal,
+          message: "Do you want to promote this Volunteer to Project Co-Owner?",
+          onSelection: this.closePromotionModal.bind(this)
         }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__FeedbackModal_jsx__["a" /* default */], {
           showModal: this.state.showRejectModal,
@@ -92165,9 +92073,24 @@ var VolunteerSection = function (_React$PureComponent) {
           requireMessage: true,
           onConfirm: this.closeDismissModal.bind(this)
         }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__FeedbackModal_jsx__["a" /* default */], {
+          showMOdal: this.state.showDemotionModal,
+          headerText: "Demote Co-Owner",
+          messagePrompt: "State the reasons for demoting this co-owner",
+          confirmButtonText: "Confirm",
+          maxCharacterCount: 3000,
+          requireMessage: true,
+          onConfirm: this.closeDemotionModal.bind(this)
+        }),
+        this._renderCoOwnerVolunteers(coOwnerVolunteers),
         this._renderPendingVolunteers(approvedAndPendingVolunteers[1]),
         this._renderApprovedVolunteers(approvedAndPendingVolunteers[0])
       );
+    }
+  }, {
+    key: "_renderCoOwnerVolunteers",
+    value: function _renderCoOwnerVolunteers(coOwnerVolunteers) {
+      return !__WEBPACK_IMPORTED_MODULE_6_lodash___default.a.isEmpty(coOwnerVolunteers) ? this._renderVolunteerSection(coOwnerVolunteers, "CO-OWNERS") : null;
     }
   }, {
     key: "_renderApprovedVolunteers",
@@ -92182,7 +92105,7 @@ var VolunteerSection = function (_React$PureComponent) {
   }, {
     key: "_renderVolunteerSection",
     value: function _renderVolunteerSection(volunteers, header) {
-      var _this5 = this;
+      var _this7 = this;
 
       return !__WEBPACK_IMPORTED_MODULE_6_lodash___default.a.isEmpty(volunteers) ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
@@ -92202,11 +92125,13 @@ var VolunteerSection = function (_React$PureComponent) {
               return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__VolunteerCard_jsx__["a" /* default */], {
                 key: i,
                 volunteer: volunteer,
-                isProjectAdmin: _this5.props.isProjectAdmin,
-                onOpenApplication: _this5.openApplicationModal,
-                onApproveButton: _this5.openApproveModal,
-                onRejectButton: _this5.openRejectModal,
-                onDismissButton: _this5.openDismissModal
+                isProjectAdmin: _this7.props.isProjectAdmin,
+                onOpenApplication: _this7.openApplicationModal,
+                onApproveButton: _this7.openApproveModal,
+                onRejectButton: _this7.openRejectModal,
+                onDismissButton: _this7.openDismissModal,
+                onPromoteButton: _this7.openPromotionModal,
+                onDemotionButton: _this7.openDemotionModal
               });
             })
           )

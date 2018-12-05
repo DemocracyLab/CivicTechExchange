@@ -22,6 +22,10 @@ type DismissVolunteerParams = {|
   dismissal_message: string
 |};
 
+type DemoteVolunteerParams = {|
+  demotion_message: string
+|}
+
 type State = {|
   +volunteers: ?Array<VolunteerDetailsAPIData>,
   +showApproveModal: boolean,
@@ -91,14 +95,14 @@ class VolunteerSection extends React.PureComponent<Props, State> {
   
   openPromotionModal(voluteer: VolunteerDetailsAPIData): void {
     this.setState({
-      showPromotionMOdal: true,
+      showPromotionModal: true,
       volunteerToActUpon: volunteer
     });
   }
 
   closePromotionModal(promoted: boolean): void {
     if (promoted) {
-      ProjectAPIUtils.post("/owner/approve/" + this.state.volunteerToActUpon + "/", {}, () => {
+      ProjectAPIUtils.post("/owner/approve/" + this.state.volunteerToActUpon.application_id + "/", {}, () => {
         this.state.volunteerToActUpon.isCoOwner = true;
         this.setState({
           showPromotionModal: false
@@ -160,8 +164,33 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     }
   }
   
+  openDemotionModal(volunteer: VolunteerDetailsAPIData): void {
+    this.setState({
+      showDemotionModal: true,
+      volunteerToActUpon: volunteer
+    });
+  }
+
+  closeDemotionModal(confirmDemoted: boolean, demotionMessage: string): void {
+    if (confirmDemoted) {
+      const params: DemoteVolunteerParams = { demotion_message: demotionMessage };
+      ProjectAPIUtils.post("volunteer/demote/" + this.state.volunteerToActUpon + "/", params, () => {
+        _.remove(this.state.owners, (owner: VolunteerDetailsAPIData) => volunteer.application_id === this.state.volunteerToActUpon.application_id);
+        this.setState({
+          showDemotionModal: false
+        });
+        this.forceUpdate();
+      })
+    } else {
+      this.setState({
+        showDemotionModal: false
+      });
+    }
+  }
+
   render(): React$Node {
     const approvedAndPendingVolunteers: Array<Array<VolunteerDetailsAPIData>> = _.partition(this.state.volunteers, volunteer => volunteer.isApproved);
+    const coOwnerVolunteers: Array<VolunteerDetailsAPIData> = _.filter(this.state.volunteers, volunteer => volunteer.isCoOwner);
     return (
       <div>
         <NotificationModal
@@ -180,7 +209,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
         <ConfirmationModal
           showModal={this.state.showPromotionModal}
           message="Do you want to promote this Volunteer to Project Co-Owner?"
-          onSelection={this.closePromotionModal.bind(this)]}
+          onSelection={this.closePromotionModal.bind(this)}
         />
 
         <FeedbackModal
@@ -203,12 +232,31 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           onConfirm={this.closeDismissModal.bind(this)}
         />
       
+        <FeedbackModal
+          showMOdal={this.state.showDemotionModal}
+          headerText="Demote Co-Owner"
+          messagePrompt="State the reasons for demoting this co-owner"
+          confirmButtonText="Confirm"
+          maxCharacterCount={3000}
+          requireMessage={true}
+          onConfirm={this.closeDemotionModal.bind(this)}
+        />
+
+        {/* <h2 className="form-group subheader">co-owners start</h2> */}
+        {this._renderCoOwnerVolunteers(coOwnerVolunteers)}
+        {/* <h2 className="form-group subheader">co-owners ende</h2> */}
         {this._renderPendingVolunteers(approvedAndPendingVolunteers[1])}
         {this._renderApprovedVolunteers(approvedAndPendingVolunteers[0])}
       </div>
     );
   }
   
+  _renderCoOwnerVolunteers(coOwnerVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
+    return !_.isEmpty(coOwnerVolunteers)
+      ? this._renderVolunteerSection(coOwnerVolunteers, "CO-OWNERS")
+      : null;
+  }
+
   _renderApprovedVolunteers(approvedVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
     return !_.isEmpty(approvedVolunteers)
       ? this._renderVolunteerSection(approvedVolunteers, "TEAM")
@@ -237,6 +285,8 @@ class VolunteerSection extends React.PureComponent<Props, State> {
                     onApproveButton={this.openApproveModal}
                     onRejectButton={this.openRejectModal}
                     onDismissButton={this.openDismissModal}
+                    onPromoteButton={this.openPromotionModal}
+                    onDemotionButton={this.openDemotionModal}
                   />)
               }
             </div>
