@@ -33,7 +33,9 @@ type State = {|
   +showDismissModal: boolean,
   +volunteerToActUpon: ?VolunteerDetailsAPIData,
   +showApplicationModal: boolean,
-  +applicationModalText: string
+  +applicationModalText: string,
+  +showPromotionModal: boolean,
+  +showDemotionModal: boolean
 |};
 
 class VolunteerSection extends React.PureComponent<Props, State> {
@@ -45,12 +47,16 @@ class VolunteerSection extends React.PureComponent<Props, State> {
       showRejectModal: false,
       showDismissModal: false,
       showApplicationModal: false,
+      showPromotionModal: false,
+      showDemotionModal: false,
       applicationModalText: ""
     };
     this.openApplicationModal = this.openApplicationModal.bind(this);
     this.openApproveModal = this.openApproveModal.bind(this);
     this.openRejectModal = this.openRejectModal.bind(this);
     this.openDismissModal = this.openDismissModal.bind(this);
+    this.openPromotionModal = this.openPromotionModal.bind(this);
+    this.openDemotionModal = this.openDemotionModal.bind(this);
   }
   
   componentWillReceiveProps(nextProps: Props): void {
@@ -102,7 +108,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
 
   closePromotionModal(promoted: boolean): void {
     if (promoted) {
-      ProjectAPIUtils.post("/owner/approve/" + this.state.volunteerToActUpon.application_id + "/", {}, () => {
+      ProjectAPIUtils.post("/volunteer/promote/" + this.state.volunteerToActUpon.application_id + "/", {}, () => {
         this.state.volunteerToActUpon.isCoOwner = true;
         this.setState({
           showPromotionModal: false
@@ -189,7 +195,10 @@ class VolunteerSection extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
-    const approvedAndPendingVolunteers: Array<Array<VolunteerDetailsAPIData>> = _.partition(this.state.volunteers, volunteer => volunteer.isApproved);
+
+    const approvedAndPendingVolunteers: Array<Array<VolunteerDetailsAPIData>> = _.partition(
+      this.state.volunteers.filter(volunteer => !volunteer.isCoOwner), 
+      volunteer => volunteer.isApproved);
     const coOwnerVolunteers: Array<VolunteerDetailsAPIData> = _.filter(this.state.volunteers, volunteer => volunteer.isCoOwner);
     return (
       <div>
@@ -242,9 +251,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           onConfirm={this.closeDemotionModal.bind(this)}
         />
 
-        {/* <h2 className="form-group subheader">co-owners start</h2> */}
         {this._renderCoOwnerVolunteers(coOwnerVolunteers)}
-        {/* <h2 className="form-group subheader">co-owners ende</h2> */}
         {this._renderPendingVolunteers(approvedAndPendingVolunteers[1])}
         {this._renderApprovedVolunteers(approvedAndPendingVolunteers[0])}
       </div>
@@ -285,7 +292,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
                     onApproveButton={this.openApproveModal}
                     onRejectButton={this.openRejectModal}
                     onDismissButton={this.openDismissModal}
-                    onPromoteButton={this.openPromotionModal}
+                    onPromotionButton={this.openPromotionModal}
                     onDemotionButton={this.openDemotionModal}
                   />)
               }

@@ -91854,12 +91854,16 @@ var VolunteerSection = function (_React$PureComponent) {
       showRejectModal: false,
       showDismissModal: false,
       showApplicationModal: false,
+      showPromotionModal: false,
+      showDemotionModal: false,
       applicationModalText: ""
     };
     _this.openApplicationModal = _this.openApplicationModal.bind(_this);
     _this.openApproveModal = _this.openApproveModal.bind(_this);
     _this.openRejectModal = _this.openRejectModal.bind(_this);
     _this.openDismissModal = _this.openDismissModal.bind(_this);
+    _this.openPromotionModal = _this.openPromotionModal.bind(_this);
+    _this.openDemotionModal = _this.openDemotionModal.bind(_this);
     return _this;
   }
 
@@ -91924,7 +91928,7 @@ var VolunteerSection = function (_React$PureComponent) {
       var _this3 = this;
 
       if (promoted) {
-        __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].post("/owner/approve/" + this.state.volunteerToActUpon.application_id + "/", {}, function () {
+        __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].post("/volunteer/promote/" + this.state.volunteerToActUpon.application_id + "/", {}, function () {
           _this3.state.volunteerToActUpon.isCoOwner = true;
           _this3.setState({
             showPromotionModal: false
@@ -92030,7 +92034,10 @@ var VolunteerSection = function (_React$PureComponent) {
   }, {
     key: "render",
     value: function render() {
-      var approvedAndPendingVolunteers = __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.partition(this.state.volunteers, function (volunteer) {
+
+      var approvedAndPendingVolunteers = __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.partition(this.state.volunteers.filter(function (volunteer) {
+        return !volunteer.isCoOwner;
+      }), function (volunteer) {
         return volunteer.isApproved;
       });
       var coOwnerVolunteers = __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.filter(this.state.volunteers, function (volunteer) {
@@ -92130,7 +92137,7 @@ var VolunteerSection = function (_React$PureComponent) {
                 onApproveButton: _this7.openApproveModal,
                 onRejectButton: _this7.openRejectModal,
                 onDismissButton: _this7.openDismissModal,
-                onPromoteButton: _this7.openPromotionModal,
+                onPromotionButton: _this7.openPromotionModal,
                 onDemotionButton: _this7.openDemotionModal
               });
             })
@@ -92228,31 +92235,58 @@ var VolunteerCard = function (_React$PureComponent) {
     value: function _renderApplicationMenuLinks() {
       var _this2 = this;
 
-      return this.props.volunteer && this.props.volunteer.isApproved ? [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-        { className: 'VolunteerCard-danger', onSelect: function onSelect() {
-            return _this2.props.onDismissButton(_this2.props.volunteer);
-          }, key: '1' },
-        'Remove'
-      )] : [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-        { onSelect: function onSelect() {
-            return _this2.props.onOpenApplication(_this2.props.volunteer);
-          }, key: '2' },
-        'Application'
-      ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-        { className: 'VolunteerCard-success', onSelect: function onSelect() {
-            return _this2.props.onApproveButton(_this2.props.volunteer);
-          }, key: '3' },
-        'Accept'
-      ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-        { className: 'VolunteerCard-danger', onSelect: function onSelect() {
-            return _this2.props.onRejectButton(_this2.props.volunteer);
-          }, key: '4' },
-        'Reject'
-      )];
+      if (this.props.volunteer && this.props.volunteer.isCoOwner) {
+        return [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
+          { className: 'VolunteerCard-danger', onSelect: function onSelect() {
+              return _this2.props.onDemotionButton(_this2.props.volunteer);
+            }, key: '0' },
+          'Demote'
+        ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
+          { className: 'VolunteerCard-danger', onSelect: function onSelect() {
+              return _this2.props.onDismissButton(_this2.props.volunteer);
+            }, key: '1' },
+          'Remove'
+        )];
+      }
+      if (this.props.volunteer && this.props.volunteer.isApproved) {
+        return [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
+          { className: 'VolunteerCard-success', onSelect: function onSelect() {
+              return _this2.props.onPromotionButton(_this2.props.volunteer);
+            }, key: '0' },
+          'Promote'
+        ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
+          { className: 'VolunteerCard-danger', onSelect: function onSelect() {
+              return _this2.props.onDismissButton(_this2.props.volunteer);
+            }, key: '1' },
+          'Remove'
+        )];
+      }
+      if (this.props.volunteer) {
+        return [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
+          { onSelect: function onSelect() {
+              return _this2.props.onOpenApplication(_this2.props.volunteer);
+            }, key: '2' },
+          'Application'
+        ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
+          { className: 'VolunteerCard-success', onSelect: function onSelect() {
+              return _this2.props.onApproveButton(_this2.props.volunteer);
+            }, key: '3' },
+          'Accept'
+        ), __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
+          { className: 'VolunteerCard-danger', onSelect: function onSelect() {
+              return _this2.props.onRejectButton(_this2.props.volunteer);
+            }, key: '4' },
+          'Reject'
+        )];
+      }
+      return null;
     }
   }]);
 
