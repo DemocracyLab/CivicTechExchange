@@ -343,6 +343,17 @@ def accept_project_volunteer(request, application_id):
     else:
         raise PermissionDenied()
 
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def promote_project_volunteer(request, application_id):
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    if request.user.username == volunteer_relation.project.project_creator.username:
+        # Set co_owner flag
+        volunteer_relation.is_co_owner = True
+        volunteer_relation.save()
+        return HttpResponse(status=200)
+    else:
+        raise PermissionDenied()
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
@@ -389,6 +400,28 @@ def dismiss_project_volunteer(request, application_id):
     else:
         raise PermissionDenied()
 
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def demote_project_volunteer(request, application_id):
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    if request.user.username == volunteer_relation.project.project_creator.username:
+        body = json.loads(request.body)
+        message = body['demotion_message']
+        email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
+            project_name=volunteer_relation.project.project_name, message=message)
+        email_msg = EmailMessage(
+            'You have been removed as a co-owner from ' + volunteer_relation.project.project_name,
+            email_body,
+            settings.EMAIL_HOST_USER,
+            [volunteer_relation.volunteer.email],
+            {'Reply-To': volunteer_relation.project.project_creator.email}
+        )
+        email_msg.send()
+        volunteer_relation.is_co_owner = False
+        volunteer_relation.save()
+        return HttpResponse(status=200)
+    else:
+        raise PermissionDenied()
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt

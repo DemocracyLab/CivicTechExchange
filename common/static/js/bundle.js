@@ -91916,7 +91916,7 @@ var VolunteerSection = function (_React$PureComponent) {
     }
   }, {
     key: "openPromotionModal",
-    value: function openPromotionModal(voluteer) {
+    value: function openPromotionModal(volunteer) {
       this.setState({
         showPromotionModal: true,
         volunteerToActUpon: volunteer
@@ -92016,10 +92016,11 @@ var VolunteerSection = function (_React$PureComponent) {
 
       if (confirmDemoted) {
         var params = { demotion_message: demotionMessage };
-        __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].post("volunteer/demote/" + this.state.volunteerToActUpon + "/", params, function () {
-          __WEBPACK_IMPORTED_MODULE_6_lodash___default.a.remove(_this6.state.owners, function (owner) {
+        __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].post("/volunteer/demote/" + this.state.volunteerToActUpon.application_id + "/", params, function () {
+          var volunteer = _this6.state.volunteers.find(function (volunteer) {
             return volunteer.application_id === _this6.state.volunteerToActUpon.application_id;
           });
+          volunteer.isCoOwner = false;
           _this6.setState({
             showDemotionModal: false
           });
@@ -92081,7 +92082,7 @@ var VolunteerSection = function (_React$PureComponent) {
           onConfirm: this.closeDismissModal.bind(this)
         }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__FeedbackModal_jsx__["a" /* default */], {
-          showMOdal: this.state.showDemotionModal,
+          showModal: this.state.showDemotionModal,
           headerText: "Demote Co-Owner",
           messagePrompt: "State the reasons for demoting this co-owner",
           confirmButtonText: "Confirm",
@@ -92238,7 +92239,7 @@ var VolunteerCard = function (_React$PureComponent) {
       if (this.props.volunteer && this.props.volunteer.isCoOwner) {
         return [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-          { className: 'VolunteerCard-danger', onSelect: function onSelect() {
+          { className: 'VolunteerCard-caution', onSelect: function onSelect() {
               return _this2.props.onDemotionButton(_this2.props.volunteer);
             }, key: '0' },
           'Demote'
@@ -92253,7 +92254,7 @@ var VolunteerCard = function (_React$PureComponent) {
       if (this.props.volunteer && this.props.volunteer.isApproved) {
         return [__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["f" /* MenuItem */],
-          { className: 'VolunteerCard-success', onSelect: function onSelect() {
+          { className: 'VolunteerCard-caution', onSelect: function onSelect() {
               return _this2.props.onPromotionButton(_this2.props.volunteer);
             }, key: '0' },
           'Promote'

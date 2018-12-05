@@ -40,6 +40,8 @@ urlpatterns = [
     url(r'^volunteer/approve/(?P<application_id>[0-9]+)/$', views.accept_project_volunteer, name='accept_project_volunteer'),
     url(r'^volunteer/reject/(?P<application_id>[0-9]+)/$', views.reject_project_volunteer, name='reject_project_volunteer'),
     url(r'^volunteer/dismiss/(?P<application_id>[0-9]+)/$', views.dismiss_project_volunteer, name='dismiss_project_volunteer'),
+    url(r'^volunteer/promote/(?P<application_id>[0-9]+)/$', views.promote_project_volunteer, name='promote_project_volunteer'),
+    url(r'^volunteer/demote/(?P<application_id>[0-9]+)/$', views.demote_project_volunteer, name='demote_project_volunteer'),
     url(r'^alert/create/$', views.add_alert, name='add_alert')
 
 ]

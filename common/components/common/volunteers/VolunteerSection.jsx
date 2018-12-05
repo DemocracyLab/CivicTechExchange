@@ -99,7 +99,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     }
   }
   
-  openPromotionModal(voluteer: VolunteerDetailsAPIData): void {
+  openPromotionModal(volunteer: VolunteerDetailsAPIData): void {
     this.setState({
       showPromotionModal: true,
       volunteerToActUpon: volunteer
@@ -179,14 +179,15 @@ class VolunteerSection extends React.PureComponent<Props, State> {
 
   closeDemotionModal(confirmDemoted: boolean, demotionMessage: string): void {
     if (confirmDemoted) {
-      const params: DemoteVolunteerParams = { demotion_message: demotionMessage };
-      ProjectAPIUtils.post("volunteer/demote/" + this.state.volunteerToActUpon + "/", params, () => {
-        _.remove(this.state.owners, (owner: VolunteerDetailsAPIData) => volunteer.application_id === this.state.volunteerToActUpon.application_id);
+      const params: DemoteVolunteerParams = {demotion_message: demotionMessage};
+      ProjectAPIUtils.post("/volunteer/demote/" + this.state.volunteerToActUpon.application_id + "/", params, () => {
+        const volunteer = this.state.volunteers.find(volunteer => volunteer.application_id === this.state.volunteerToActUpon.application_id);
+        volunteer.isCoOwner = false;
         this.setState({
           showDemotionModal: false
         });
         this.forceUpdate();
-      })
+      });
     } else {
       this.setState({
         showDemotionModal: false
@@ -242,7 +243,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
         />
       
         <FeedbackModal
-          showMOdal={this.state.showDemotionModal}
+          showModal={this.state.showDemotionModal}
           headerText="Demote Co-Owner"
           messagePrompt="State the reasons for demoting this co-owner"
           confirmButtonText="Confirm"
