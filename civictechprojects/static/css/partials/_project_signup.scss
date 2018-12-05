@@ -70,3 +70,46 @@ input[type="submit"]:disabled {
 div.modal {
   opacity: 1
 }
+
+/// new
+
+.AboutProjects-root {
+  width: 90vw;
+  height: 1750px;
+  margin: auto;
+  max-width: 1080px
+}
+
+.AboutProjects-container {
+  height: 100%
+}
+
+.AboutProjects-paper {
+  height: 100%;
+}
+
+.AboutProjects-iconContainer {
+  height: 15%;
+}
+
+.AboutProjects-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.AboutProjects-details {
+  height: 15%;
+}
+
+.AboutProjects-links {
+  height: 30%;
+}
+
+.AboutProjects-communities {
+  height: 10%;
+}
+
+.AboutProjects-teams {
+  height: 30%;
+}
