@@ -100,10 +100,28 @@ div.modal {
 
 .AboutProjects-details {
   height: 15%;
+  margin-top: 10px;
+}
+
+.AboutProjects-icon-row {
+  display: flex;
+  flex-direction: row;
+  margin-left: 15px;
+}
+.AboutProjects-icon-text {
+  margin-left: 10px;
 }
 
 .AboutProjects-links {
   height: 30%;
+}
+.AboutProjects-links-icon-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between; 
+  width: 90%;
+  margin: auto;
 }
 
 .AboutProjects-communities {

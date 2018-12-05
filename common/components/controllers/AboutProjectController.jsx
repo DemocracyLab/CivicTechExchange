@@ -5,9 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
-import {Earth} from 'mdi-material-ui';
-
-
+import {Earth, MapMarker, Clock, Domain, ChartBar, Key, Meetup, GithubCircle, Slack, Trello, GoogleDrive} from 'mdi-material-ui';
+import Tooltip from '@material-ui/core/Tooltip';
 class AboutProjectController extends React.Component {
 
  constructor(props){
@@ -47,13 +46,57 @@ class AboutProjectController extends React.Component {
               <Divider />
 
               <Grid className='AboutProjects-details'>
-                <Earth />
+                <div className="AboutProjects-icon-row">
+                  <MapMarker/>
+                  <p className="AboutProjects-icon-text">{project && project.project_location}</p>
+                </div>
+                <div className="AboutProjects-icon-row">
+                  <Earth/>
+                  <p className="AboutProjects-icon-text">{project && project.project_url}</p>
+                </div>
+                <div className="AboutProjects-icon-row">
+                  <Clock/>
+                  <p className="AboutProjects-icon-text">Updated 6 days ago</p>
+                </div>
+                <div className="AboutProjects-icon-row">
+                  <Domain/>
+                  <p className="AboutProjects-icon-text">Non profit</p>
+                </div>
+                <div className="AboutProjects-icon-row">
+                  <ChartBar/>
+                  <p className="AboutProjects-icon-text">{project && project.project_stage && project.project_stage[0].tag_name}</p>
+                </div>
+                <div className="AboutProjects-icon-row">
+                  <Key/>
+                  <p className="AboutProjects-icon-text">MIT License</p>
+                </div>
               </Grid>
+                
 
               <Divider />
 
               <Grid className='AboutProjects-links'>
-                greetings
+                <p>Links</p>
+                <div className="AboutProjects-links-icon-container">
+                  <Tooltip title="meetup">
+                    <Meetup/>
+                  </Tooltip>
+                  <Tooltip title="github">
+                    <GithubCircle/>
+                  </Tooltip>
+                  <Tooltip title="slack">
+                    <Slack/>
+                  </Tooltip>
+                  <Tooltip title="trello">
+                    <Trello/>
+                  </Tooltip>
+                  <Tooltip title="googleDrive">
+                    <GoogleDrive/>
+                  </Tooltip>
+                  <Tooltip title="website">
+                    <Earth/>
+                  </Tooltip>
+                </div>
               </Grid>
 
               <Divider />
