@@ -89,6 +89,29 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     }
   }
   
+  openPromotionModal(voluteer: VolunteerDetailsAPIData): void {
+    this.setState({
+      showPromotionMOdal: true,
+      volunteerToActUpon: volunteer
+    });
+  }
+
+  closePromotionModal(promoted: boolean): void {
+    if (promoted) {
+      ProjectAPIUtils.post("/owner/approve/" + this.state.volunteerToActUpon + "/", {}, () => {
+        this.state.volunteerToActUpon.isCoOwner = true;
+        this.setState({
+          showPromotionModal: false
+        });
+        this.forceUpdate();
+      });
+    } else {
+      this.setState({
+        showPromotionModal: false
+      });
+    }
+  }
+
   openRejectModal(volunteer: VolunteerDetailsAPIData): void {
     this.setState({
       showRejectModal: true,
@@ -154,6 +177,12 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           onSelection={this.closeApproveModal.bind(this)}
         />
   
+        <ConfirmationModal
+          showModal={this.state.showPromotionModal}
+          message="Do you want to promote this Volunteer to Project Co-Owner?"
+          onSelection={this.closePromotionModal.bind(this)]}
+        />
+
         <FeedbackModal
           showModal={this.state.showRejectModal}
           headerText="Reject Application"
