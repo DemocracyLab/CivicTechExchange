@@ -91927,7 +91927,7 @@ var ProjectOwnersSection = function (_React$PureComponent) {
   }, {
     key: "_renderProjectOwners",
     value: function _renderProjectOwners() {
-      return !__WEBPACK_IMPORTED_MODULE_3_lodash___default.a.isEmpty(this.state.owners) ? this._renderOwnersSection(this.state.owners, "OWNERS") : null;
+      return !__WEBPACK_IMPORTED_MODULE_3_lodash___default.a.isEmpty(this.state.owners) ? this._renderOwnersSection(this.state.owners, "PROJECT OWNER") : null;
     }
   }, {
     key: "_renderOwnersSection",
