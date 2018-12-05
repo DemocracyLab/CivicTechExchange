@@ -7,11 +7,14 @@ import NotificationModal from "../notification/NotificationModal.jsx";
 import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import FeedbackModal from "../FeedbackModal.jsx";
+import metrics from "../../utils/metrics.js";
+import CurrentUser from "../../utils/CurrentUser.js";
 import _ from 'lodash'
 
 type Props = {|
   +volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
-  +isProjectAdmin: boolean
+  +isProjectAdmin: boolean,
+  +projectId: string
 |};
 
 type RejectVolunteerParams = {|
@@ -86,6 +89,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
   closeApproveModal(approved: boolean):void {
     if(approved) {
       ProjectAPIUtils.post("/volunteer/approve/" + this.state.volunteerToActUpon.application_id + "/",{},() => {
+        metrics.logProjectApproveVolunteer(CurrentUser.userID(), this.props.projectId);
         this.state.volunteerToActUpon.isApproved = true;
         this.setState({
           showApproveModal: false
@@ -133,6 +137,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     if(confirmRejected) {
       const params: RejectVolunteerParams = {rejection_message: rejectionMessage};
       ProjectAPIUtils.post("/volunteer/reject/" + this.state.volunteerToActUpon.application_id + "/",params,() => {
+        metrics.logProjectRejectVolunteer(CurrentUser.userID(), this.props.projectId);
         _.remove(this.state.volunteers, (volunteer: VolunteerDetailsAPIData) => volunteer.application_id === this.state.volunteerToActUpon.application_id);
         this.setState({
           showRejectModal: false
@@ -157,6 +162,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     if(confirmDismissed) {
       const params: DismissVolunteerParams = {dismissal_message: dismissalMessage};
       ProjectAPIUtils.post("/volunteer/dismiss/" + this.state.volunteerToActUpon.application_id + "/",params,() => {
+        metrics.logProjectDismissVolunteer(CurrentUser.userID(), this.props.projectId);
         _.remove(this.state.volunteers, (volunteer: VolunteerDetailsAPIData) => volunteer.application_id === this.state.volunteerToActUpon.application_id);
         this.setState({
           showDismissModal: false

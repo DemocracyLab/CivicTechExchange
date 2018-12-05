@@ -5,6 +5,7 @@ import ProjectSearchBar from './ProjectSearchBar.jsx';
 import AlertSignupModal from "./AlertSignupModal.jsx";
 import GlyphStyles from "../../utils/glyphs.js";
 import {Button} from 'react-bootstrap';
+import metrics from "../../utils/metrics.js";
 import React from 'react';
 
 type State = {|
@@ -26,6 +27,7 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
       showAlertSignupModal: true,
       searchFilters: document.location.search
     });
+    metrics.logUserAlertButtonClick();
   }
 
   handleCloseAlertSignup() {

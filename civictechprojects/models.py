@@ -412,6 +412,7 @@ class VolunteerRelation(models.Model):
         relation.volunteer = volunteer
         relation.projected_end_date = projected_end_date
         relation.application_text = application_text
+        relation.is_co_owner = False
         relation.save()
 
         relation.role.add(role)

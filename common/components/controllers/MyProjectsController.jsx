@@ -6,6 +6,7 @@ import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import MyProjectCard from '../componentsBySection/MyProjects/MyProjectCard.jsx';
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx';
 import {ProjectAPIData} from "../utils/ProjectAPIUtils.js";
+import metrics from "../utils/metrics.js";
 import React from 'react';
 import _ from 'lodash';
 
@@ -15,8 +16,8 @@ type MyProjectsAPIResponse = {|
 |};
 
 type State = {|
-  ownedProjects: ?$ReadOnlyArray<ProjectData>,
-  volunteeringProjects: ?$ReadOnlyArray<ProjectData>,
+  ownedProjects: ?Array<ProjectData>,
+  volunteeringProjects: ?Array<ProjectData>,
   showConfirmDeleteModal: boolean
 |};
 
@@ -47,7 +48,7 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
     xhr.send();
   }
 
-  clickDeleteProject(project: Project): void {
+  clickDeleteProject(project: ProjectData): void {
     this.setState({
       showConfirmDeleteModal: true,
       projectToDelete: project,
@@ -55,8 +56,9 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
   }
 
   removeProjectFromList(): void {
+    metrics.logProjectDeleted(CurrentUser.userID(), this.state.projectToDelete.id);
     this.setState({
-      projects: _.pull(this.state.projects, this.state.projectToDelete)
+      ownedProjects: _.pull(this.state.ownedProjects, this.state.projectToDelete)
     });
     this.forceUpdate();
   }

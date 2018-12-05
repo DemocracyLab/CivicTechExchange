@@ -71,10 +71,6 @@ def merge_tags_with_existing(tags):
                 print('Adding tag ' + tag.tag_name)
                 tag.save()
 
-        # Delete removed tags
-        for key in indexed_tags:
-            delete_tag_and_references(indexed_tags[key])
-
 
 # Remove any project tags that aren't part of the canonical list
 def remove_tags_not_in_list():
