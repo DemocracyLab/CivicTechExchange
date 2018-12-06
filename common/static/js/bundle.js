@@ -91251,6 +91251,7 @@ var TagSelectorCollapsible = function (_React$Component) {
     key: '_AllChecked',
     value: function _AllChecked() {
       //this is still not finished. what I want is for this to handle Select All in situations with and without subcategories.
+      //it seems to be one interaction behind based on the debug console logs
       var selectedTagCount = Object.keys(this.state.selectedTags);
       console.log('selectedTagCount: ', selectedTagCount);
       var activeTagCount = this.state.tags.filter(function (key) {
@@ -91521,14 +91522,13 @@ var SelectorCollapsible = function (_React$PureComponent) {
           return _this5.props.optionEnabled(tag) === true;
         });
         this.selectOption(toUpdate, { multiple: true, type: "REMOVE_MANY_TAGS" });
-        this.props.AllChecked();
       } else {
         var _toUpdate = category.filter(function (tag) {
           return _this5.props.optionEnabled(tag) === false;
         });
         this.selectOption(_toUpdate, { multiple: true, type: "ADD_TAG" });
-        this.props.AllChecked();
       }
+      this.props.AllChecked();
     }
   }, {
     key: '_renderChevron',

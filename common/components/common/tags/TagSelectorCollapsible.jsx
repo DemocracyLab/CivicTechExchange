@@ -113,6 +113,7 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
 
   _AllChecked(): void {
     //this is still not finished. what I want is for this to handle Select All in situations with and without subcategories.
+    //it seems to be one interaction behind based on the debug console logs
     let selectedTagCount = Object.keys(this.state.selectedTags)
     console.log('selectedTagCount: ', selectedTagCount)
     let activeTagCount = this.state.tags.filter(function(key) {
