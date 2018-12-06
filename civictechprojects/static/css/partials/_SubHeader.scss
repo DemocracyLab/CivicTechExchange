@@ -1,4 +1,4 @@
-.SubHeader-createProject {
+.SubHeader-createProject { 
   background-color: $color-orange;
   border: none;
   border-radius: 5px;
@@ -11,22 +11,85 @@
   text-decoration: inherit;
   width: auto;
   cursor: pointer;
+  float: none;
 }
 
 .SubHeader-root {
   background-color: $color-background-dark;
-  height: 50px;
-  padding: 0 80px 0 80px;
+  height: 150px;
+  padding: 0 5% 0 5%;
+  margin-bottom: 5%;
 }
 
 .SubHeader-sectionButton {
   color: $color-text-light;
   display: inline-block;
   font-weight: bold;
-  margin-top: 18px;
+  margin: auto;
   padding-right: 40px;
 }
 
 .SubHeader-rightContent {
-  float: right;
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height:100%;
+    float: right;
+}
+
+.SubHeader-leftContent {
+    float: left;
+    display: flex; 
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    width: 50%;
+    height:100%;
+}
+
+@include media-breakpoint-up(sm) {
+  .SubHeader-root {
+    height: 100px;
+  }
+
+  .SubHeader-rightContent {
+    width: 100%;
+    height: 50%;
+  }
+
+  .SubHeader-leftContent {
+    flex-direction: row;    
+    width: 100%;
+    height: 50%;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .SubHeader-createProject {
+    float: right;    
+  }
+
+  .SubHeader-root {
+    height: 50px;
+  }
+
+  .SubHeader-sectionButton {
+    margin-top: 18px;    
+  }
+
+  .SubHeader-rightContent {
+    width: 19%;
+    display: block;
+    height: 100%;
+  }
+
+  .SubHeader-leftContent {
+    width: 81%;
+    height: 100%;
+    float: left;
+    justify-content: flex-start;        
+  }
+
 }

@@ -78,6 +78,7 @@ class Project(models.Model):
             'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links)),
+            'project_owners': [self.project_creator.hydrate_to_tile_json()],
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__()
         }

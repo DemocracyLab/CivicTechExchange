@@ -84,6 +84,7 @@ export type ProjectDetailsAPIData = {|
   +project_thumbnail: FileInfo,
   +project_links: $ReadOnlyArray<LinkInfo>,
   +project_files: $ReadOnlyArray<FileInfo>,
+  +project_owners: $ReadONlyArray<VolunteerUserData>,
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date
 |};

@@ -69,8 +69,8 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
         type: opts.type,
         tag: tagnames,
       });
-      //TODO: Add metrics event for multiple tag filtering
     } else {
+      metrics.logSearchFilterByTagEvent(tag);
       var tagInState = _.has(this.state.selectedTags, tag.tag_name);
       //if tag is NOT currently in state, add it, otherwise remove
       if(!tagInState) {

@@ -13,6 +13,8 @@
     "postinstall": "webpack --config webpack.config.js && python manage.py collectstatic --noinput"
   },
   "dependencies": {
+    "@material-ui/core": "^3.5.1",
+    "@material-ui/icons": "^3.0.1",
     "bluebird": "^3.5.2",
     "django-react-csrftoken": "^1.0.4",
     "flow-bin": "^0.59.0",

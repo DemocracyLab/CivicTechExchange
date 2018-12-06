@@ -5,6 +5,7 @@ import {Container} from 'flux/utils';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import GlyphStyles from "../../utils/glyphs.js";
+import metrics from "../../utils/metrics.js";
 import React, { SyntheticEvent } from 'react';
 
 type State = {|
@@ -54,11 +55,7 @@ class ProjectSearchBar extends React.Component<{||}, State> {
       type: 'SET_KEYWORD',
       keyword: this.state.keyword,
     });
-    window.FB.AppEvents.logEvent(
-      'searchByKeyword',
-      null,
-      {keyword: this.state.keyword},
-    );
+    metrics.logSearchByKeywordEvent(this.state.keyword);
   }
 }
 
