@@ -35,7 +35,6 @@ type State = {|
   optionCategoryTree: ?{ [key: string]: $ReadOnlyArray<T> },
   optionCategoryCoords: { [key: string]: ClientRect},
   categoryShown: string,
-  isAllChecked: boolean
 |};
 
 /**
@@ -58,7 +57,6 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       optionFlatList: null,
       optionCategoryTree: null,
       optionCategoryCoords: {},
-      isAllChecked: false
     }, this.initializeOptions(props));
 
     this.isReady = this.isReady.bind(this);
@@ -124,7 +122,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
 
     return sortedOptions.map( (option, i) => {
       const classes = "CollapsibleMenuItem"
-      // to filter just entries and not category headers, use a conditional if (option.num_times > 0) { return ... }
+      // to filter just entries and not entries + categories, use a conditional if (option.num_times > 0) { return ... }
       return <label
         key={i}
         className={classes}
@@ -165,7 +163,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
           <
             input type="checkbox"
             className="ContextualCollapsible-selectAll"
-            checked={this.state.isAllChecked}
+            checked={this.props.isAllChecked}
             onChange={this._handleSelectAll.bind(this,category)}
           >
           </input>Select All
@@ -173,22 +171,17 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       </span>
     )
   }
-   updateAllState(): React$Node {
-     //TODO: Refactor how select all handles itself, this is placeholder
-     //a better way to do this is to just have the select all checkbox check or uncheck if all the boxes in its category are checked or not, implicit state instead of this
-     this.setState({isAllChecked: !this.state.isAllChecked})
-   }
 
   _handleSelectAll(category): React$Node {
     //this feels like a mess, but find what tags are selected or not and then either select or unselect the remainder
-    if(this.state.isAllChecked) {
+    if(this.props.isAllChecked) {
       let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === true)
       this.selectOption(toUpdate, {multiple: true, type: "REMOVE_MANY_TAGS"} );
-      this.updateAllState();
+      this.props.AllChecked();
     } else {
       let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === false)
       this.selectOption(toUpdate, {multiple: true, type: "ADD_TAG"} );
-      this.updateAllState();
+      this.props.AllChecked();
     }
   }
 

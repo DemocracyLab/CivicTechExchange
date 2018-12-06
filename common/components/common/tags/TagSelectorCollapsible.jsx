@@ -23,7 +23,8 @@ type State = {|
   tags: ?$ReadOnlyArray<TagDefinition>,
   tagCounts: ?{ [key: string]: number },
   selectedTags: ?{ [key: string]: boolean },
-  hasSubcategories: boolean
+  hasSubcategories: boolean,
+  isAllChecked: boolean
 |};
 
 /**
@@ -32,7 +33,7 @@ type State = {|
 class TagSelectorCollapsible extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.state = {tags: null};
+    this.state = {tags: null, isAllChecked: false};
 
     // TODO: Use Flux to get tags in a single request
     // passing true to fetchTagsByCategory asks backend to return num_times in API response
@@ -70,21 +71,22 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
       });
       //TODO: Add metrics event for multiple tag filtering
     } else {
-    var tagInState = _.has(this.state.selectedTags, tag.tag_name);
-    //if tag is NOT currently in state, add it, otherwise remove
-    if(!tagInState) {
-      ProjectSearchDispatcher.dispatch({
-        type: 'ADD_TAG',
-        tag: tag.tag_name,
-      });
-      metrics.addTagFilterEvent(tag);
-    } else {
-      ProjectSearchDispatcher.dispatch({
-        type: 'REMOVE_TAG',
-        tag: tag,
-      });
+      var tagInState = _.has(this.state.selectedTags, tag.tag_name);
+      //if tag is NOT currently in state, add it, otherwise remove
+      if(!tagInState) {
+        ProjectSearchDispatcher.dispatch({
+          type: 'ADD_TAG',
+          tag: tag.tag_name,
+        });
+        metrics.addTagFilterEvent(tag);
+      } else {
+        ProjectSearchDispatcher.dispatch({
+          type: 'REMOVE_TAG',
+          tag: tag,
+        });
+      }
     }
-    }
+    this._AllChecked()
   }
 
   render(): React$Node {
@@ -99,6 +101,8 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
               optionDisplay={tag => this._displayTag(tag)}
               optionEnabled={tag => this._tagEnabled(tag)}
               onOptionSelect={this.selectTag.bind(this)}
+              isAllChecked={this.state.isAllChecked}
+              AllChecked={this._AllChecked.bind(this)}
             />
             )
           : null
@@ -107,6 +111,23 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
     );
   }
 
+  _AllChecked(): void {
+    //this is still not finished. what I want is for this to handle Select All in situations with and without subcategories.
+    let selectedTagCount = Object.keys(this.state.selectedTags)
+    console.log('selectedTagCount: ', selectedTagCount)
+    let activeTagCount = this.state.tags.filter(function(key) {
+        return key.num_times > 0;
+      })
+    console.log('activeTagCount: ', activeTagCount)
+    if(selectedTagCount.length === activeTagCount.length) {
+      this.setState({isAllChecked: true});
+      console.log('conditional for isAllChecked: true');
+    } else {
+      this.setState({isAllChecked: false});
+      console.log('conditional for isAllChecked: false');
+
+    }
+  }
 
   _tagEnabled(tag: TagDefinition): boolean {
     //return true if tag is in this.state.selectedTags, else implicitly false

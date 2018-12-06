@@ -23897,6 +23897,7 @@ var ProjectSearchStore = function (_ReduceStore) {
   }, {
     key: '_removeTagsFromState',
     value: function _removeTagsFromState(state, tags) {
+      //TODO: Find out if we can combine REMOVE_TAG and REMOVE_MANY_TAGS into one function
       var filtered = tags.forEach(function (name) {
         state.tags.filter(function (tag) {
           return tag !== name;
@@ -91171,7 +91172,7 @@ var TagSelectorCollapsible = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (TagSelectorCollapsible.__proto__ || Object.getPrototypeOf(TagSelectorCollapsible)).call(this, props));
 
-    _this.state = { tags: null };
+    _this.state = { tags: null, isAllChecked: false };
 
     // TODO: Use Flux to get tags in a single request
     // passing true to fetchTagsByCategory asks backend to return num_times in API response
@@ -91218,6 +91219,7 @@ var TagSelectorCollapsible = function (_React$Component) {
           });
         }
       }
+      this._AllChecked();
     }
   }, {
     key: 'render',
@@ -91239,9 +91241,29 @@ var TagSelectorCollapsible = function (_React$Component) {
           optionEnabled: function optionEnabled(tag) {
             return _this2._tagEnabled(tag);
           },
-          onOptionSelect: this.selectTag.bind(this)
+          onOptionSelect: this.selectTag.bind(this),
+          isAllChecked: this.state.isAllChecked,
+          AllChecked: this._AllChecked.bind(this)
         }) : null
       );
+    }
+  }, {
+    key: '_AllChecked',
+    value: function _AllChecked() {
+      //this is still not finished. what I want is for this to handle Select All in situations with and without subcategories.
+      var selectedTagCount = Object.keys(this.state.selectedTags);
+      console.log('selectedTagCount: ', selectedTagCount);
+      var activeTagCount = this.state.tags.filter(function (key) {
+        return key.num_times > 0;
+      });
+      console.log('activeTagCount: ', activeTagCount);
+      if (selectedTagCount.length === activeTagCount.length) {
+        this.setState({ isAllChecked: true });
+        console.log('conditional for isAllChecked: true');
+      } else {
+        this.setState({ isAllChecked: false });
+        console.log('conditional for isAllChecked: false');
+      }
     }
   }, {
     key: '_tagEnabled',
@@ -91329,8 +91351,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
       showDropdown: false,
       optionFlatList: null,
       optionCategoryTree: null,
-      optionCategoryCoords: {},
-      isAllChecked: false
+      optionCategoryCoords: {}
     }, _this.initializeOptions(props));
 
     _this.isReady = _this.isReady.bind(_this);
@@ -91418,7 +91439,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return sortedOptions.map(function (option, i) {
         var classes = "CollapsibleMenuItem";
-        // to filter just entries and not category headers, use a conditional if (option.num_times > 0) { return ... }
+        // to filter just entries and not entries + categories, use a conditional if (option.num_times > 0) { return ... }
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'label',
           {
@@ -91482,7 +91503,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
           { className: 'CollapsibleMenuItem' },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox',
             className: 'ContextualCollapsible-selectAll',
-            checked: this.state.isAllChecked,
+            checked: this.props.isAllChecked,
             onChange: this._handleSelectAll.bind(this, category)
           }),
           'Select All'
@@ -91490,30 +91511,23 @@ var SelectorCollapsible = function (_React$PureComponent) {
       );
     }
   }, {
-    key: 'updateAllState',
-    value: function updateAllState() {
-      //TODO: Refactor how select all handles itself, this is placeholder
-      //a better way to do this is to just have the select all checkbox check or uncheck if all the boxes in its category are checked or not, implicit state instead of this
-      this.setState({ isAllChecked: !this.state.isAllChecked });
-    }
-  }, {
     key: '_handleSelectAll',
     value: function _handleSelectAll(category) {
       var _this5 = this;
 
       //this feels like a mess, but find what tags are selected or not and then either select or unselect the remainder
-      if (this.state.isAllChecked) {
+      if (this.props.isAllChecked) {
         var toUpdate = category.filter(function (tag) {
           return _this5.props.optionEnabled(tag) === true;
         });
         this.selectOption(toUpdate, { multiple: true, type: "REMOVE_MANY_TAGS" });
-        this.updateAllState();
+        this.props.AllChecked();
       } else {
         var _toUpdate = category.filter(function (tag) {
           return _this5.props.optionEnabled(tag) === false;
         });
         this.selectOption(_toUpdate, { multiple: true, type: "ADD_TAG" });
-        this.updateAllState();
+        this.props.AllChecked();
       }
     }
   }, {
