@@ -19,6 +19,7 @@ import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.js
 import ProjectOwnersSection from "../common/owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 import GlyphStyles from "../utils/glyphs.js";
+import metrics from "../utils/metrics.js";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -41,8 +42,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   componentDidMount() {
-    const projectId = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
+    const projectId: string = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
     ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
+    metrics.logNavigateToProjectProfile(projectId);
   }
 
   loadProjectDetails(project: ProjectDetailsAPIData) {
@@ -60,7 +62,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   _renderDetails(): React$Node {
-    const project = this.state.project;
+    const project: ProjectDetailsAPIData = this.state.project;
     return (
       <div className="AboutProjectController-root">
         <div className="container-fluid">
@@ -182,6 +184,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               ? <VolunteerSection
                   volunteers={project.project_volunteers}
                   isProjectAdmin={CurrentUser.userID() === project.project_creator}
+                  projectId={project.project_id}
                 />
               : null
           }

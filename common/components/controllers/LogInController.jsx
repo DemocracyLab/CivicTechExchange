@@ -4,6 +4,7 @@ import DjangoCSRFToken from 'django-react-csrftoken'
 import React from 'react';
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
+import metrics from "../utils/metrics.js";
 
 type State = {|
   username: string,
@@ -57,7 +58,9 @@ class LogInController extends React.Component<{||}, State> {
             <button
               className="LogInController-signInButton"
               disabled={!this.state.username || !this.state.password}
-              type="submit">
+              type="submit"
+              onClick={() => metrics.logSigninAttempt()}
+            >
               Sign In
             </button>
         </form>

@@ -10,6 +10,7 @@ import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import {Locations} from "../../constants/ProjectConstants";
 import {SelectOption} from "../../types/SelectOption.jsx";
+import metrics from "../../utils/metrics.js";
 
 
 type State = {|
@@ -86,11 +87,7 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
       type: 'SET_SORT',
       sortField: this.state.sortField,
     });
-    window.FB.AppEvents.logEvent(
-      'sort_by_field',
-      null,
-      {sortField: this.state.sortField},
-    );
+    metrics.logSearchChangeSortEvent(this.state.sortField);
   }
 
   _onSubmitLocation(): void {
@@ -98,11 +95,7 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
       type: 'SET_LOCATION',
       location: this.state.location,
     });
-    window.FB.AppEvents.logEvent(
-      'filter_by_location',
-      null,
-      {location: this.state.location},
-    );
+    metrics.logSearchByLocationEvent(this.state.location);
   }
 
   _renderSortFieldDropdown(): React$Node{

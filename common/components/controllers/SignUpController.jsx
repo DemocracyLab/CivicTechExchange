@@ -4,6 +4,7 @@ import DjangoCSRFToken from 'django-react-csrftoken'
 import React from 'react';
 import type {Validator} from '../forms/FormValidation.jsx'
 import FormValidation from '../forms/FormValidation.jsx'
+import metrics from "../utils/metrics.js";
 import _ from 'lodash'
 
 type Props = {|
@@ -161,7 +162,9 @@ class SignUpController extends React.Component<Props, State> {
           <button
             className="LogInController-signInButton"
             disabled={!this.state.isValid}
-            type="submit">
+            type="submit"
+            onClick={() => metrics.logSignupAttempt()}
+          >
             Create Account
           </button>
         </form>
