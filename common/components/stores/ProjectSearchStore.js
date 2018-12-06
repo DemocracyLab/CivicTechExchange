@@ -185,6 +185,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _removeTagsFromState(state: State, tags: array): State {
+    //TODO: Find out if we can combine REMOVE_TAG and REMOVE_MANY_TAGS into one function
     const filtered = tags.forEach(function(name) {
         state.tags.filter(tag => tag !== name)
       })
