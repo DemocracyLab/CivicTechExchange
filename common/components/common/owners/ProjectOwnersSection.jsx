@@ -31,7 +31,7 @@ class ProjectOwnersSection extends React.PureComponent<Props, State> {
   
   _renderProjectOwners(): ?React$Node {
     return !_.isEmpty(this.state.owners)
-      ? this._renderOwnersSection(this.state.owners, "OWNERS")
+      ? this._renderOwnersSection(this.state.owners, "PROJECT OWNER")
       : null;
   }
   

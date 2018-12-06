@@ -385,6 +385,7 @@ class VolunteerRelation(models.Model):
     role.remote_field.related_name = "+"
     application_text = models.CharField(max_length=10000, blank=True)
     is_approved = models.BooleanField(default=False)
+    is_co_owner = models.BooleanField(default=False)
     projected_end_date = models.DateTimeField(auto_now=False, null=True)
 
     def __str__(self):
@@ -398,7 +399,8 @@ class VolunteerRelation(models.Model):
             'user': volunteer.hydrate_to_tile_json(),
             'application_text': self.application_text,
             'roleTag': Tag.hydrate_to_json(volunteer.id, self.role.all().values())[0],
-            'isApproved': self.is_approved
+            'isApproved': self.is_approved,
+            'isCoOwner': self.is_co_owner
         }
 
         return volunteer_json
@@ -410,6 +412,7 @@ class VolunteerRelation(models.Model):
         relation.volunteer = volunteer
         relation.projected_end_date = projected_end_date
         relation.application_text = application_text
+        relation.is_co_owner = False
         relation.save()
 
         relation.role.add(role)
