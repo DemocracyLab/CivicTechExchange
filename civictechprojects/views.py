@@ -255,7 +255,7 @@ def presign_project_thumbnail_upload(request):
         raw_key=s3_key, file_name=file_name, file_type=file_type, acl="public-read")
 
 
-def request_is_authorized(request, volunteer_relation):
+def volunteer_operation_is_authorized(request, volunteer_relation):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project)
     authorized_usernames = ([volunteer_relation.project.project_creator.username] 
         + list(map(lambda co: co.volunteer.username, list(filter(lambda v: v.is_co_owner, project_volunteers)))))
@@ -345,7 +345,7 @@ def volunteer_with_project(request, project_id):
 @csrf_exempt
 def accept_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request_is_authorized(request, volunteer_relation):
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         # Set approved flag
         volunteer_relation.is_approved = True
         volunteer_relation.save()
@@ -357,7 +357,7 @@ def accept_project_volunteer(request, application_id):
 @csrf_exempt
 def promote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request_is_authorized(request, volunteer_relation):
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         # Set co_owner flag
         volunteer_relation.is_co_owner = True
         volunteer_relation.save()
@@ -369,7 +369,7 @@ def promote_project_volunteer(request, application_id):
 @csrf_exempt
 def reject_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request_is_authorized(request, volunteer_relation):
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['rejection_message']
         email_body_template = 'The project owner for {project_name} has declined your application for the following reason:\n{message}'
@@ -392,7 +392,7 @@ def reject_project_volunteer(request, application_id):
 @csrf_exempt
 def dismiss_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request_is_authorized(request, volunteer_relation):
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['dismissal_message']
         email_body = 'The owner for {project_name} has removed you from the project for the following reason:\n{message}'.format(
@@ -414,7 +414,7 @@ def dismiss_project_volunteer(request, application_id):
 @csrf_exempt
 def demote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request_is_authorized(request, volunteer_relation):
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['demotion_message']
         email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
