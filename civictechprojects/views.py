@@ -347,6 +347,7 @@ def accept_project_volunteer(request, application_id):
 @csrf_exempt
 def promote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    print('promote_project_volunteer, request username', request.user.username, 'creator:', volunteer_relation.project.project_creator.username)
     if request.user.username == volunteer_relation.project.project_creator.username:
         # Set co_owner flag
         volunteer_relation.is_co_owner = True

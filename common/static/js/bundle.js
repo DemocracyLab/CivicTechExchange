@@ -81553,6 +81553,25 @@ var AboutProjectController = function (_React$PureComponent) {
       this.setState({ showContactModal: false });
     }
   }, {
+    key: 'volunteerIsCoOwner',
+    value: function volunteerIsCoOwner(project) {
+      var currentUserId = __WEBPACK_IMPORTED_MODULE_5__utils_CurrentUser_js__["a" /* default */].userID();
+      if (currentUserId === project.project_creator) return false;
+      return project.project_volunteers.find(function (volunteer) {
+        return volunteer.user.id === currentUserId;
+      }).isCoOwner;
+      // console.log('currentUserId', currentUserId, 'lastName', CurrentUser.lastName())
+      // if (currentUserId === project.project_creator) {
+      //   console.log('project creator. returning false')
+      //   return false;
+      // }
+      // console.log('vol 0', project.project_volunteers[0])
+      // const thisVolunteer = project.project_volunteers.find(volunteer => volunteer.user.id === currentUserId)
+      // console.log('is co owner?', thisVolunteer.isCoOwner)
+      // if (project.project_volunteers.map(volunteer => volunteer.user.id).includes(currentUserId)) return true;
+      // return false;
+    }
+  }, {
     key: 'render',
     value: function render() {
       return this.state.project ? this._renderDetails() : __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
@@ -81743,6 +81762,7 @@ var AboutProjectController = function (_React$PureComponent) {
           project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_volunteers) ? __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_13__common_volunteers_VolunteerSection_jsx__["a" /* default */], {
             volunteers: project.project_volunteers,
             isProjectAdmin: __WEBPACK_IMPORTED_MODULE_5__utils_CurrentUser_js__["a" /* default */].userID() === project.project_creator,
+            isProjectCoOwner: this.volunteerIsCoOwner(project),
             projectId: project.project_id
           }) : null,
           project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_links) ? __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
@@ -92338,7 +92358,7 @@ var VolunteerSection = function (_React$PureComponent) {
   }, {
     key: "_renderPendingVolunteers",
     value: function _renderPendingVolunteers(pendingVolunteers) {
-      return this.props.isProjectAdmin && !__WEBPACK_IMPORTED_MODULE_8_lodash___default.a.isEmpty(pendingVolunteers) ? this._renderVolunteerSection(pendingVolunteers, "AWAITING REVIEW") : null;
+      return (this.props.isProjectAdmin || this.props.isProjectCoOwner) && !__WEBPACK_IMPORTED_MODULE_8_lodash___default.a.isEmpty(pendingVolunteers) ? this._renderVolunteerSection(pendingVolunteers, "AWAITING REVIEW") : null;
     }
   }, {
     key: "_renderVolunteerSection",
@@ -92364,6 +92384,7 @@ var VolunteerSection = function (_React$PureComponent) {
                 key: i,
                 volunteer: volunteer,
                 isProjectAdmin: _this7.props.isProjectAdmin,
+                isProjectCoOwner: _this7.props.isProjectCoOwner,
                 onOpenApplication: _this7.openApplicationModal,
                 onApproveButton: _this7.openApproveModal,
                 onRejectButton: _this7.openRejectModal,
@@ -92438,7 +92459,7 @@ var VolunteerCard = function (_React$PureComponent) {
           { className: 'VolunteerCard-volunteerName', href: volunteerUrl, target: '_blank', rel: 'noopener noreferrer' },
           volunteer && volunteer.first_name + " " + volunteer.last_name
         ),
-        this.props.isProjectAdmin ? this._renderShowApplicationMenu(volunteer) : null,
+        this.props.isProjectAdmin || this.props.isProjectCoOwner ? this._renderShowApplicationMenu(volunteer) : null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'p',
           { className: 'VolunteerCard-volunteerRole' },

@@ -26,8 +26,10 @@ class CurrentUser {
     return window.DLAB_GLOBAL_CONTEXT.isStaff;
   }
 
-  static isCoOwner(): boolean {
-    
+  static isCoOwner(project: ProjectDetailsAPIData) {
+    const currentUserId = CurrentUser.userID()
+    if (currentUserId === project.project_creator) return false;
+    return project.project_volunteers.find(volunteer => volunteer.user.id === currentUserId).isCoOwner
   }
 }
 

@@ -14,6 +14,7 @@ import _ from 'lodash'
 type Props = {|
   +volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +isProjectAdmin: boolean,
+  +isProjectCoOwner: boolean,
   +projectId: string
 |};
 
@@ -278,7 +279,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
   }
   
   _renderPendingVolunteers(pendingVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
-    return this.props.isProjectAdmin &&  !_.isEmpty(pendingVolunteers)
+    return (this.props.isProjectAdmin || this.props.isProjectCoOwner) &&  !_.isEmpty(pendingVolunteers)
       ? this._renderVolunteerSection(pendingVolunteers, "AWAITING REVIEW")
       : null;
   }
@@ -295,6 +296,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
                     key={i}
                     volunteer={volunteer}
                     isProjectAdmin={this.props.isProjectAdmin}
+                    isProjectCoOwner={this.props.isProjectCoOwner}
                     onOpenApplication={this.openApplicationModal}
                     onApproveButton={this.openApproveModal}
                     onRejectButton={this.openRejectModal}
