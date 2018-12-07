@@ -18819,34 +18819,43 @@ var CurrentUser = function () {
   }
 
   _createClass(CurrentUser, null, [{
-    key: "userID",
+    key: 'userID',
     value: function userID() {
       return Number(window.DLAB_GLOBAL_CONTEXT.userID) || null;
     }
   }, {
-    key: "isLoggedIn",
+    key: 'isLoggedIn',
     value: function isLoggedIn() {
       return Boolean(this.userID());
     }
   }, {
-    key: "isEmailVerified",
+    key: 'isEmailVerified',
     value: function isEmailVerified() {
       return Boolean(window.DLAB_GLOBAL_CONTEXT.emailVerified);
     }
   }, {
-    key: "firstName",
+    key: 'firstName',
     value: function firstName() {
       return window.DLAB_GLOBAL_CONTEXT.firstName;
     }
   }, {
-    key: "lastName",
+    key: 'lastName',
     value: function lastName() {
       return window.DLAB_GLOBAL_CONTEXT.lastName;
     }
   }, {
-    key: "isStaff",
+    key: 'isStaff',
     value: function isStaff() {
       return window.DLAB_GLOBAL_CONTEXT.isStaff;
+    }
+  }, {
+    key: 'isCoOwner',
+    value: function isCoOwner(project) {
+      var currentUserId = this.userID();
+      if (currentUserId === project.project_creator) return false;
+      return project.project_volunteers.find(function (volunteer) {
+        return volunteer.user.id === currentUserId;
+      }).isCoOwner;
     }
   }]);
 
@@ -81553,25 +81562,6 @@ var AboutProjectController = function (_React$PureComponent) {
       this.setState({ showContactModal: false });
     }
   }, {
-    key: 'volunteerIsCoOwner',
-    value: function volunteerIsCoOwner(project) {
-      var currentUserId = __WEBPACK_IMPORTED_MODULE_5__utils_CurrentUser_js__["a" /* default */].userID();
-      if (currentUserId === project.project_creator) return false;
-      return project.project_volunteers.find(function (volunteer) {
-        return volunteer.user.id === currentUserId;
-      }).isCoOwner;
-      // console.log('currentUserId', currentUserId, 'lastName', CurrentUser.lastName())
-      // if (currentUserId === project.project_creator) {
-      //   console.log('project creator. returning false')
-      //   return false;
-      // }
-      // console.log('vol 0', project.project_volunteers[0])
-      // const thisVolunteer = project.project_volunteers.find(volunteer => volunteer.user.id === currentUserId)
-      // console.log('is co owner?', thisVolunteer.isCoOwner)
-      // if (project.project_volunteers.map(volunteer => volunteer.user.id).includes(currentUserId)) return true;
-      // return false;
-    }
-  }, {
     key: 'render',
     value: function render() {
       return this.state.project ? this._renderDetails() : __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
@@ -81762,7 +81752,7 @@ var AboutProjectController = function (_React$PureComponent) {
           project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_volunteers) ? __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_13__common_volunteers_VolunteerSection_jsx__["a" /* default */], {
             volunteers: project.project_volunteers,
             isProjectAdmin: __WEBPACK_IMPORTED_MODULE_5__utils_CurrentUser_js__["a" /* default */].userID() === project.project_creator,
-            isProjectCoOwner: this.volunteerIsCoOwner(project),
+            isProjectCoOwner: __WEBPACK_IMPORTED_MODULE_5__utils_CurrentUser_js__["a" /* default */].isCoOwner(project),
             projectId: project.project_id
           }) : null,
           project && !__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isEmpty(project.project_links) ? __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
@@ -82077,7 +82067,7 @@ var ContactProjectButton = function (_React$PureComponent) {
   }, {
     key: 'displayEditProjectButton',
     value: function displayEditProjectButton() {
-      if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].userID() === this.props.project.project_creator || __WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isStaff()) {
+      if (__WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].userID() === this.props.project.project_creator || __WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isCoOwner(this.props.project) || __WEBPACK_IMPORTED_MODULE_2__utils_CurrentUser_js__["a" /* default */].isStaff()) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           null,
@@ -92384,7 +92374,7 @@ var VolunteerSection = function (_React$PureComponent) {
                 key: i,
                 volunteer: volunteer,
                 isProjectAdmin: _this7.props.isProjectAdmin,
-                isProjectCoOwner: _this7.props.isProjectCoOwner,
+                isProjectCoOwner: _this7.props.isProjectCoOwner && !(header === "CO-OWNERS"),
                 onOpenApplication: _this7.openApplicationModal,
                 onApproveButton: _this7.openApproveModal,
                 onRejectButton: _this7.openRejectModal,

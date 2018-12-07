@@ -296,7 +296,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
                     key={i}
                     volunteer={volunteer}
                     isProjectAdmin={this.props.isProjectAdmin}
-                    isProjectCoOwner={this.props.isProjectCoOwner}
+                    isProjectCoOwner={this.props.isProjectCoOwner && !(header === "CO-OWNERS")}
                     onOpenApplication={this.openApplicationModal}
                     onApproveButton={this.openApproveModal}
                     onRejectButton={this.openRejectModal}

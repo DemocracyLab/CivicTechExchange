@@ -57,12 +57,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     this.setState({ showContactModal: false });
   }
 
-  volunteerIsCoOwner(project: ProjectDetailsAPIData) {
-    const currentUserId = CurrentUser.userID()
-    if (currentUserId === project.project_creator) return false;
-    return project.project_volunteers.find(volunteer => volunteer.user.id === currentUserId).isCoOwner
-  }
-
   render(): React$Node {
     return this.state.project ? this._renderDetails() : <div>Loading...</div>
   }
@@ -190,7 +184,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               ? <VolunteerSection
                   volunteers={project.project_volunteers}
                   isProjectAdmin={CurrentUser.userID() === project.project_creator}
-                  isProjectCoOwner={this.volunteerIsCoOwner(project)}
+                  isProjectCoOwner={CurrentUser.isCoOwner(project)}
                   projectId={project.project_id}
                 />
               : null

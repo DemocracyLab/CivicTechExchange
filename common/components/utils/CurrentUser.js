@@ -1,5 +1,7 @@
 // @flow
 
+import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
+
 class CurrentUser {
 
   static userID(): ?number {
@@ -27,7 +29,7 @@ class CurrentUser {
   }
 
   static isCoOwner(project: ProjectDetailsAPIData) {
-    const currentUserId = CurrentUser.userID()
+    const currentUserId = this.userID()
     if (currentUserId === project.project_creator) return false;
     return project.project_volunteers.find(volunteer => volunteer.user.id === currentUserId).isCoOwner
   }
