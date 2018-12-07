@@ -9,6 +9,7 @@ import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import FeedbackModal from "../FeedbackModal.jsx";
 import metrics from "../../utils/metrics.js";
 import CurrentUser from "../../utils/CurrentUser.js";
+import {CoOwnerHeading} from "../../constants/ProjectConstants.js"
 import _ from 'lodash'
 
 type Props = {|
@@ -268,7 +269,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
   
   _renderCoOwnerVolunteers(coOwnerVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
     return !_.isEmpty(coOwnerVolunteers)
-      ? this._renderVolunteerSection(coOwnerVolunteers, "CO-OWNERS")
+      ? this._renderVolunteerSection(coOwnerVolunteers, CoOwnerHeading)
       : null;
   }
 
@@ -296,7 +297,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
                     key={i}
                     volunteer={volunteer}
                     isProjectAdmin={this.props.isProjectAdmin}
-                    isProjectCoOwner={this.props.isProjectCoOwner && !(header === "CO-OWNERS")} //Co-owners can't edit CO-OWNERS
+                    isProjectCoOwner={this.props.isProjectCoOwner && !(header === CoOwnerHeading)} //Co-owners can't edit CO-OWNERS
                     onOpenApplication={this.openApplicationModal}
                     onApproveButton={this.openApproveModal}
                     onRejectButton={this.openRejectModal}
