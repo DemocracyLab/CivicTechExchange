@@ -257,7 +257,8 @@ def presign_project_thumbnail_upload(request):
 
 def request_is_authorized(request, volunteer_relation):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project)
-    authorized_usernames = [volunteer_relation.project.project_creator.username] + list(map(lambda co: co.volunteer.username, list(filter(lambda v: v.is_co_owner, project_volunteers))))
+    authorized_usernames = ([volunteer_relation.project.project_creator.username] 
+        + list(map(lambda co: co.volunteer.username, list(filter(lambda v: v.is_co_owner, project_volunteers)))))
     return request.user.username in authorized_usernames 
 
 
