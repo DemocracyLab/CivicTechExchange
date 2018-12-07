@@ -29,9 +29,10 @@ class CurrentUser {
   }
 
   static isCoOwner(project: ProjectDetailsAPIData) {
-    const currentUserId = this.userID()
-    if (currentUserId === project.project_creator) return false;
-    return project.project_volunteers.find(volunteer => volunteer.user.id === currentUserId).isCoOwner
+    const currentUserId = this.userID();
+    if (!currentUserId || currentUserId === project.project_creator) return false;
+    const thisVolunteer = project.project_volunteers.find(volunteer => volunteer.user.id === currentUserId);
+    return thisVolunteer && thisVolunteer.isCoOwner;
   }
 }
 

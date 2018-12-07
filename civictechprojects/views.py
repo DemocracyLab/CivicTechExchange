@@ -283,6 +283,9 @@ def contact_project_owner(request, project_id):
     message = body['message']
 
     project = Project.objects.get(id=project_id)
+    project_volunteers = VolunteerRelation.objects.filter(project=project_id)
+    co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
+
     email_msg = EmailMessage(
         '{firstname} {lastname} would like to connect with {project}'.format(
             firstname=user.first_name,
@@ -290,7 +293,7 @@ def contact_project_owner(request, project_id):
             project=project.project_name),
         '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email),
         settings.EMAIL_HOST_USER,
-        [project.project_creator.email],
+        [project.project_creator.email] + co_owner_emails,
         {'Reply-To': user.email}
     )
     email_msg.send()

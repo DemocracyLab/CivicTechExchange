@@ -109,7 +109,6 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   }
 
   loadProjectDetails(project: ProjectDetailsAPIData): void {
-    console.log(project)
     if(project.project_creator !== CurrentUser.userID() && !CurrentUser.isStaff()) {
       this.setState({
         error: "You are not authorized to edit this Project"

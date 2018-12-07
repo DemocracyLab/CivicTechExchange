@@ -18852,10 +18852,11 @@ var CurrentUser = function () {
     key: 'isCoOwner',
     value: function isCoOwner(project) {
       var currentUserId = this.userID();
-      if (currentUserId === project.project_creator) return false;
-      return project.project_volunteers.find(function (volunteer) {
+      if (!currentUserId || currentUserId === project.project_creator) return false;
+      var thisVolunteer = project.project_volunteers.find(function (volunteer) {
         return volunteer.user.id === currentUserId;
-      }).isCoOwner;
+      });
+      return thisVolunteer && thisVolunteer.isCoOwner;
     }
   }]);
 
