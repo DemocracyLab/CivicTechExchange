@@ -28,8 +28,9 @@ class CurrentUser {
     return window.DLAB_GLOBAL_CONTEXT.isStaff;
   }
 
-  static isCoOwner(project: ProjectDetailsAPIData) {
+  static isCoOwner(project: ProjectDetailsAPIData): boolean {
     const currentUserId = this.userID();
+    // NOTE: Co-Owners are distinct from the project creator for authorization purposes.
     if (!currentUserId || currentUserId === project.project_creator) return false;
     const thisVolunteer = project.project_volunteers.find(volunteer => volunteer.user.id === currentUserId);
     return thisVolunteer && thisVolunteer.isCoOwner;

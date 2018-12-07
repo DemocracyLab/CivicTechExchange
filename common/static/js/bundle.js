@@ -18852,6 +18852,7 @@ var CurrentUser = function () {
     key: 'isCoOwner',
     value: function isCoOwner(project) {
       var currentUserId = this.userID();
+      // NOTE: Co-Owners are distinct from the project creator for authorization purposes.
       if (!currentUserId || currentUserId === project.project_creator) return false;
       var thisVolunteer = project.project_volunteers.find(function (volunteer) {
         return volunteer.user.id === currentUserId;
@@ -46226,7 +46227,6 @@ var EditProjectForm = function (_React$PureComponent) {
   }, {
     key: 'loadProjectDetails',
     value: function loadProjectDetails(project) {
-      console.log(project);
       if (project.project_creator !== __WEBPACK_IMPORTED_MODULE_8__utils_CurrentUser_js__["a" /* default */].userID() && !__WEBPACK_IMPORTED_MODULE_8__utils_CurrentUser_js__["a" /* default */].isStaff()) {
         this.setState({
           error: "You are not authorized to edit this Project"
@@ -92375,8 +92375,8 @@ var VolunteerSection = function (_React$PureComponent) {
                 key: i,
                 volunteer: volunteer,
                 isProjectAdmin: _this7.props.isProjectAdmin,
-                isProjectCoOwner: _this7.props.isProjectCoOwner && !(header === "CO-OWNERS"),
-                onOpenApplication: _this7.openApplicationModal,
+                isProjectCoOwner: _this7.props.isProjectCoOwner && !(header === "CO-OWNERS") //Co-owners can't edit CO-OWNERS
+                , onOpenApplication: _this7.openApplicationModal,
                 onApproveButton: _this7.openApproveModal,
                 onRejectButton: _this7.openRejectModal,
                 onDismissButton: _this7.openDismissModal,
