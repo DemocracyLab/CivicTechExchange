@@ -64,7 +64,8 @@ export type VolunteerDetailsAPIData = {|
   +user: VolunteerUserData,
   +application_text: string,
   +roleTag: TagDefinition,
-  +isApproved: boolean
+  +isApproved: boolean,
+  +isCoOwner: boolean
 |}
 
 export type ProjectDetailsAPIData = {|
