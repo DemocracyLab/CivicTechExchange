@@ -25,6 +25,10 @@ class CurrentUser {
   static isStaff() : boolean {
     return window.DLAB_GLOBAL_CONTEXT.isStaff;
   }
+
+  static isCoOwner(): boolean {
+    
+  }
 }
 
 export default CurrentUser;
