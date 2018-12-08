@@ -9,8 +9,9 @@ import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import FeedbackModal from "../FeedbackModal.jsx";
 import metrics from "../../utils/metrics.js";
 import CurrentUser from "../../utils/CurrentUser.js";
-import {CoOwnerHeading} from "../../constants/ProjectConstants.js"
 import _ from 'lodash'
+
+const CoOwnerHeading = "CO-OWNERS"
 
 type Props = {|
   +volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,

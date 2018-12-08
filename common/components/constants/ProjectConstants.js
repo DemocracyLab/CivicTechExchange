@@ -11,5 +11,3 @@ export const Locations = {
     "Other"
   ]
 };
-
-export const CoOwnerHeading = "CO-OWNERS"
