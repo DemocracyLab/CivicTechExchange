@@ -11,9 +11,12 @@ import metrics from "../../utils/metrics.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import _ from 'lodash'
 
+const CoOwnerHeading = "CO-OWNERS"
+
 type Props = {|
   +volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +isProjectAdmin: boolean,
+  +isProjectCoOwner: boolean,
   +projectId: string
 |};
 
@@ -267,7 +270,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
   
   _renderCoOwnerVolunteers(coOwnerVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
     return !_.isEmpty(coOwnerVolunteers)
-      ? this._renderVolunteerSection(coOwnerVolunteers, "CO-OWNERS")
+      ? this._renderVolunteerSection(coOwnerVolunteers, CoOwnerHeading)
       : null;
   }
 
@@ -278,7 +281,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
   }
   
   _renderPendingVolunteers(pendingVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
-    return this.props.isProjectAdmin &&  !_.isEmpty(pendingVolunteers)
+    return (this.props.isProjectAdmin || this.props.isProjectCoOwner) &&  !_.isEmpty(pendingVolunteers)
       ? this._renderVolunteerSection(pendingVolunteers, "AWAITING REVIEW")
       : null;
   }
@@ -295,6 +298,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
                     key={i}
                     volunteer={volunteer}
                     isProjectAdmin={this.props.isProjectAdmin}
+                    isProjectCoOwner={this.props.isProjectCoOwner && !(header === CoOwnerHeading)} //Co-owners can't edit CO-OWNERS
                     onOpenApplication={this.openApplicationModal}
                     onApproveButton={this.openApproveModal}
                     onRejectButton={this.openRejectModal}

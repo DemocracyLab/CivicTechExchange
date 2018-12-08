@@ -10,6 +10,7 @@ import Section from "../../enums/Section.js";
 type Props = {|
   +volunteer: VolunteerDetailsAPIData,
   +isProjectAdmin: boolean,
+  +isProjectCoOwner: boolean,
   +onOpenApplication: (VolunteerDetailsAPIData) => void,
   +onApproveButton: (VolunteerDetailsAPIData) => void,
   +onRejectButton: (VolunteerDetailsAPIData) => void,
@@ -32,7 +33,7 @@ class VolunteerCard extends React.PureComponent<Props> {
         <a className="VolunteerCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
           {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
         </a> 
-        {this.props.isProjectAdmin ? this._renderShowApplicationMenu(volunteer) : null}
+        {(this.props.isProjectAdmin || this.props.isProjectCoOwner) ? this._renderShowApplicationMenu(volunteer) : null}
         <p className="VolunteerCard-volunteerRole">
           {roleTag && roleTag.display_name}
         </p>

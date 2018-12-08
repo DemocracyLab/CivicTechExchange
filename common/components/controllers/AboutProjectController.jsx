@@ -184,6 +184,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               ? <VolunteerSection
                   volunteers={project.project_volunteers}
                   isProjectAdmin={CurrentUser.userID() === project.project_creator}
+                  isProjectCoOwner={CurrentUser.isCoOwner(project)}
                   projectId={project.project_id}
                 />
               : null

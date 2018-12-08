@@ -120,7 +120,9 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   }
 
   displayEditProjectButton(): ?React$Node {
-    if (CurrentUser.userID() === this.props.project.project_creator || CurrentUser.isStaff()) {
+    if (CurrentUser.userID() === this.props.project.project_creator 
+      || CurrentUser.isCoOwner(this.props.project)
+      || CurrentUser.isStaff()) {
       return (
       <div>
         {this._renderEditProjectButton()}

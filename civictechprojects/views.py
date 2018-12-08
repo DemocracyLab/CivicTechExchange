@@ -255,6 +255,13 @@ def presign_project_thumbnail_upload(request):
         raw_key=s3_key, file_name=file_name, file_type=file_type, acl="public-read")
 
 
+def volunteer_operation_is_authorized(request, volunteer_relation):
+    project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project)
+    authorized_usernames = ([volunteer_relation.project.project_creator.username] 
+        + list(map(lambda co: co.volunteer.username, list(filter(lambda v: v.is_co_owner, project_volunteers)))))
+    return request.user.username in authorized_usernames 
+
+
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def delete_uploaded_file(request, s3_key):
@@ -283,6 +290,9 @@ def contact_project_owner(request, project_id):
     message = body['message']
 
     project = Project.objects.get(id=project_id)
+    project_volunteers = VolunteerRelation.objects.filter(project=project_id)
+    co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
+
     email_msg = EmailMessage(
         '{firstname} {lastname} would like to connect with {project}'.format(
             firstname=user.first_name,
@@ -290,7 +300,7 @@ def contact_project_owner(request, project_id):
             project=project.project_name),
         '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email),
         settings.EMAIL_HOST_USER,
-        [project.project_creator.email],
+        [project.project_creator.email] + co_owner_emails,
         {'Reply-To': user.email}
     )
     email_msg.send()
@@ -335,7 +345,7 @@ def volunteer_with_project(request, project_id):
 @csrf_exempt
 def accept_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request.user.username == volunteer_relation.project.project_creator.username:
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         # Set approved flag
         volunteer_relation.is_approved = True
         volunteer_relation.save()
@@ -347,7 +357,7 @@ def accept_project_volunteer(request, application_id):
 @csrf_exempt
 def promote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request.user.username == volunteer_relation.project.project_creator.username:
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         # Set co_owner flag
         volunteer_relation.is_co_owner = True
         volunteer_relation.save()
@@ -359,7 +369,7 @@ def promote_project_volunteer(request, application_id):
 @csrf_exempt
 def reject_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request.user.username == volunteer_relation.project.project_creator.username:
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['rejection_message']
         email_body_template = 'The project owner for {project_name} has declined your application for the following reason:\n{message}'
@@ -382,7 +392,7 @@ def reject_project_volunteer(request, application_id):
 @csrf_exempt
 def dismiss_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request.user.username == volunteer_relation.project.project_creator.username:
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['dismissal_message']
         email_body = 'The owner for {project_name} has removed you from the project for the following reason:\n{message}'.format(
@@ -404,7 +414,7 @@ def dismiss_project_volunteer(request, application_id):
 @csrf_exempt
 def demote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request.user.username == volunteer_relation.project.project_creator.username:
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['demotion_message']
         email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
