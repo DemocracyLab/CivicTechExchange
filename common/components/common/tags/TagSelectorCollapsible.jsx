@@ -111,8 +111,8 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // only update chart if the data has changed
-    if (Object.keys(prevState.selectedTags) !== Object.keys(this.state.selectedTags)) {
+    // only update if the data has changed    
+    if (Object.keys(prevState.selectedTags).length !== Object.keys(this.state.selectedTags).length) {
       this._allCheckboxControl();
     }
   }
