@@ -94876,12 +94876,14 @@ var TagSelectorCollapsible = function (_React$Component) {
     });
     _this._displayTag = _this._displayTag.bind(_this);
     _this._tagEnabled = _this._tagEnabled.bind(_this);
+    _this._allCheckboxControl = _this._allCheckboxControl.bind(_this);
     return _this;
   }
 
   _createClass(TagSelectorCollapsible, [{
     key: 'selectTag',
     value: function selectTag(tag, opts) {
+      //TODO: metrics event for multiple tags at once
       //opts is optional, if passed in expect opts to be an object formatted like { multiple: true, type: ACTION_TO_TAKE }
       var opts = opts || {}; //to avoid undefined error, create an empty object if opts isn't passed in. TODO: make this work with let instead of var
       if (opts.multiple && opts.type) {
@@ -94893,7 +94895,6 @@ var TagSelectorCollapsible = function (_React$Component) {
           tag: tagnames
         });
       } else {
-        __WEBPACK_IMPORTED_MODULE_6__utils_metrics__["a" /* default */].logSearchFilterByTagEvent(tag);
         var tagInState = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.has(this.state.selectedTags, tag.tag_name);
         //if tag is NOT currently in state, add it, otherwise remove
         if (!tagInState) {
@@ -94901,7 +94902,7 @@ var TagSelectorCollapsible = function (_React$Component) {
             type: 'ADD_TAG',
             tag: tag.tag_name
           });
-          __WEBPACK_IMPORTED_MODULE_6__utils_metrics__["a" /* default */].addTagFilterEvent(tag);
+          __WEBPACK_IMPORTED_MODULE_6__utils_metrics__["a" /* default */].logSearchFilterByTagEvent(tag);
         } else {
           __WEBPACK_IMPORTED_MODULE_5__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
             type: 'REMOVE_TAG',
@@ -94909,7 +94910,6 @@ var TagSelectorCollapsible = function (_React$Component) {
           });
         }
       }
-      this._AllChecked();
     }
   }, {
     key: 'render',
@@ -94932,21 +94932,28 @@ var TagSelectorCollapsible = function (_React$Component) {
             return _this2._tagEnabled(tag);
           },
           onOptionSelect: this.selectTag.bind(this),
-          isAllChecked: this.state.isAllChecked,
-          AllChecked: this._AllChecked.bind(this)
+          isAllChecked: this.state.isAllChecked
         }) : null
       );
     }
   }, {
-    key: '_AllChecked',
-    value: function _AllChecked() {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      // only update chart if the data has changed
+      if (Object.keys(prevState.selectedTags) !== Object.keys(this.state.selectedTags)) {
+        this._allCheckboxControl();
+      }
+    }
+  }, {
+    key: '_allCheckboxControl',
+    value: function _allCheckboxControl() {
       //this is still not finished. what I want is for this to handle Select All in situations with and without subcategories.
       //it seems to be one interaction behind based on the debug console logs
       var selectedTagCount = Object.keys(this.state.selectedTags);
       console.log('selectedTagCount: ', selectedTagCount);
-      var activeTagCount = this.state.tags.filter(function (key) {
+      var activeTagCount = this.state.tags ? this.state.tags.filter(function (key) {
         return key.num_times > 0;
-      });
+      }) : 0;
       console.log('activeTagCount: ', activeTagCount);
       if (selectedTagCount.length === activeTagCount.length) {
         this.setState({ isAllChecked: true });
@@ -95206,6 +95213,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
     value: function _handleSelectAll(category) {
       var _this5 = this;
 
+      console.log('selectall handled');
       //this feels like a mess, but find what tags are selected or not and then either select or unselect the remainder
       if (this.props.isAllChecked) {
         var toUpdate = category.filter(function (tag) {
@@ -95218,7 +95226,6 @@ var SelectorCollapsible = function (_React$PureComponent) {
         });
         this.selectOption(_toUpdate, { multiple: true, type: "ADD_TAG" });
       }
-      this.props.AllChecked();
     }
   }, {
     key: '_renderChevron',

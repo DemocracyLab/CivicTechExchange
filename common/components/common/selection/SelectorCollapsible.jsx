@@ -173,6 +173,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
   }
 
   _handleSelectAll(category): React$Node {
+    console.log('selectall handled')
     //this feels like a mess, but find what tags are selected or not and then either select or unselect the remainder
     if(this.props.isAllChecked) {
       let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === true)
@@ -181,7 +182,6 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === false)
       this.selectOption(toUpdate, {multiple: true, type: "ADD_TAG"} );
     }
-    this.props.AllChecked();
   }
 
   _renderChevron(): React$Node {
