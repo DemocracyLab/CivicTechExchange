@@ -94939,16 +94939,19 @@ var TagSelectorCollapsible = function (_React$Component) {
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
-      // only update if the data has changed    
-      if (Object.keys(prevState.selectedTags).length !== Object.keys(this.state.selectedTags).length) {
+      // only update if the data has changed
+      var prevLength = Object.keys(prevState.selectedTags).length;
+      var curLength = Object.keys(this.state.selectedTags).length;
+      console.log("prevState length: ", prevLength);
+      console.log("this.state length: ", curLength);
+      if (prevLength !== curLength) {
         this._allCheckboxControl();
       }
     }
   }, {
     key: '_allCheckboxControl',
     value: function _allCheckboxControl() {
-      //this is still not finished. what I want is for this to handle Select All in situations with and without subcategories.
-      //it seems to be one interaction behind based on the debug console logs
+      // handle checking or unchecking any given Select All checkbox
       var selectedTagCount = Object.keys(this.state.selectedTags);
       console.log('selectedTagCount: ', selectedTagCount);
       var activeTagCount = this.state.tags ? this.state.tags.filter(function (key) {
