@@ -5,7 +5,8 @@ import React from 'react';
 import type {Validator} from '../forms/FormValidation.jsx'
 import FormValidation from '../forms/FormValidation.jsx'
 import metrics from "../utils/metrics.js";
-import _ from 'lodash'
+import moment from 'moment';
+import _ from 'lodash';
 
 type Props = {|
   +errors: {+[key: string]: $ReadOnlyArray<string>},
@@ -61,7 +62,7 @@ class SignUpController extends React.Component<Props, State> {
           checkFunc: (state: State) => {
             return this.hasNumberPattern.test(state.password1)
               && this.hasLetterPattern.test(state.password1)
-              && this.hasSpecialCharacterPattern.test(state.password1);                  
+              && this.hasSpecialCharacterPattern.test(state.password1);
           },
           errorMessage: "Password must contain at least one letter, one number, and one special character (examples: !,@,$,&)"
         },
@@ -149,7 +150,7 @@ class SignUpController extends React.Component<Props, State> {
           <input name="username" value={this.state.email} type="hidden" />
           <input
             name="date_joined"
-            value={new Date().toLocaleDateString()}
+            value={moment().utc().format('MM/DD/YYYY')}
             type="hidden"
           />
 
