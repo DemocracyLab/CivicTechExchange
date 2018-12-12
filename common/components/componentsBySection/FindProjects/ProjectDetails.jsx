@@ -2,11 +2,13 @@
 import React from 'react';
 import Divider from '@material-ui/core/Divider';
 import {Earth, MapMarker, Clock, Domain, ChartBar, Key} from 'mdi-material-ui';
+import Moment from 'react-moment';
 
 type Props = {|
     projectLocation: string,
     projectUrl: string,
     projectStage: string,
+    dateModified: string,
 |}
 
 class ProjectDetails extends React.PureComponent<Props, State> {
@@ -16,6 +18,7 @@ class ProjectDetails extends React.PureComponent<Props, State> {
             projectLocation: props.projectLocation,
             projectUrl: props.projectUrl,
             projectStage: props.projectStage,
+            dateModified: props.dateModified,
         }
     }
 
@@ -32,7 +35,7 @@ class ProjectDetails extends React.PureComponent<Props, State> {
                 </div>
                 <div className="AboutProjects-icon-row">
                   <Clock/>
-                  <p className="AboutProjects-icon-text">Updated 6 days ago</p>
+                  <p className="AboutProjects-icon-text">   <Moment fromNow>{this.state.dateModified}</Moment></p>
                 </div>
                 <div className="AboutProjects-icon-row">
                   <Domain/>

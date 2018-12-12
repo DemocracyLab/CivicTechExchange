@@ -59,7 +59,10 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <Divider />
 
               <Grid className='AboutProjects-details'>
-                <ProjectDetails projectLocation={project && project.project_location} projectUrl={project && project.project_url} projectStage={project && project.project_stage && project.project_stage[0].tag_name}/>
+                <ProjectDetails projectLocation={project && project.project_location}
+                projectUrl={project && project.project_url}
+                projectStage={project && project.project_stage && project.project_stage[0].tag_name}
+                dateModified={project && project.project_date_modified}/>
               </Grid>
                 
 
