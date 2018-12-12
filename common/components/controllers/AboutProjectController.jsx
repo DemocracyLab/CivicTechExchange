@@ -7,16 +7,26 @@ import Divider from '@material-ui/core/Divider';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import {Earth, MapMarker, Clock, Domain, ChartBar, Key, Meetup, GithubCircle, Slack, Trello, GoogleDrive} from 'mdi-material-ui';
 import Tooltip from '@material-ui/core/Tooltip';
-class AboutProjectController extends React.Component {
 
- constructor(props){
-  super(props);
-  this.state = {
+type State = {|
+  project: ?ProjectDetailsAPIData,
+  showPositionModal: boolean,
+  shownPosition: ?PositionInfo
+|};
+
+class AboutProjectController extends React.PureComponent<{||}, State> {
+
+  constructor(): void{
+    super();
+    this.state = {
     project: null,
+    showContactModal: false,
+    showPositionModal: false,
+    shownPosition: null
   }  
  }
 
-    componentDidMount() {
+  componentDidMount() {
     const projectId = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
     ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
 
@@ -28,10 +38,12 @@ class AboutProjectController extends React.Component {
     });
   }
 
-  render() {
-    const project = this.state.project;
+  render(): $React$Node {
+    return this.state.project ? this._renderDetails() : <div>Loading...</div>
+  }
 
-    console.log(project);
+  _renderDetails(): React$Node {
+    const project = this.state.project;
     return (
       <div className='AboutProjects-root'>
         <Grid container className='AboutProjects-container' spacing={8}>
@@ -102,13 +114,22 @@ class AboutProjectController extends React.Component {
               <Divider />
 
               <Grid className='AboutProjects-communities'>
-                salutations
+                <p>Communities</p>
+                <ul>
+                  {
+                    project &&
+                    project.project_organization &&
+                    project.project_organization.map((org, i) => {
+                      return <li key={i}>{org.display_name}.</li>
+                    })
+                  }
+                </ul>
               </Grid>
 
               <Divider />
 
               <Grid className='AboutProjects-team'>
-                hey
+                <p>Team</p>
               </Grid>
 
             </Paper>
