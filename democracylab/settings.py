@@ -148,7 +148,7 @@ PROJECT_DESCRIPTION_EXAMPLE_URL = os.environ.get('PROJECT_DESCRIPTION_EXAMPLE_UR
 SECURE_SSL_REDIRECT = os.environ.get('DL_SECURE_SSL_REDIRECT', False) == 'True'
 
 # Note: This environment variable should only be applied in Production
-HOTJAR_APPLICATION_ID = os.environ.get('HOTJAR_APPLICATION_ID', '')\
+HOTJAR_APPLICATION_ID = os.environ.get('HOTJAR_APPLICATION_ID', '')
 
 GOOGLE_PROPERTY_ID = os.environ.get('GOOGLE_PROPERTY_ID', '')
 
