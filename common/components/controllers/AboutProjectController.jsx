@@ -7,6 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import {Earth, MapMarker, Clock, Domain, ChartBar, Key, Meetup, GithubCircle, Slack, Trello, GoogleDrive} from 'mdi-material-ui';
 import Tooltip from '@material-ui/core/Tooltip';
+import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.jsx';
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -58,30 +59,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <Divider />
 
               <Grid className='AboutProjects-details'>
-                <div className="AboutProjects-icon-row">
-                  <MapMarker/>
-                  <p className="AboutProjects-icon-text">{project && project.project_location}</p>
-                </div>
-                <div className="AboutProjects-icon-row">
-                  <Earth/>
-                  <p className="AboutProjects-icon-text">{project && project.project_url}</p>
-                </div>
-                <div className="AboutProjects-icon-row">
-                  <Clock/>
-                  <p className="AboutProjects-icon-text">Updated 6 days ago</p>
-                </div>
-                <div className="AboutProjects-icon-row">
-                  <Domain/>
-                  <p className="AboutProjects-icon-text">Non profit</p>
-                </div>
-                <div className="AboutProjects-icon-row">
-                  <ChartBar/>
-                  <p className="AboutProjects-icon-text">{project && project.project_stage && project.project_stage[0].tag_name}</p>
-                </div>
-                <div className="AboutProjects-icon-row">
-                  <Key/>
-                  <p className="AboutProjects-icon-text">MIT License</p>
-                </div>
+                <ProjectDetails projectLocation={project && project.project_location} projectUrl={project && project.project_url} projectStage={project && project.project_stage && project.project_stage[0].tag_name}/>
               </Grid>
                 
 
