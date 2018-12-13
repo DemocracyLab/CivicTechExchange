@@ -120,6 +120,11 @@ def index(request):
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
                                                           {'HOTJAR_APPLICATION_ID': settings.HOTJAR_APPLICATION_ID})
+
+    if settings.GOOGLE_PROPERTY_ID:
+        context['googleScript'] = loader.render_to_string('scripts/google_snippet.txt',
+                                                          {'GOOGLE_PROPERTY_ID': settings.GOOGLE_PROPERTY_ID})
+
     if request.user.is_authenticated():
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
