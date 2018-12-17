@@ -157,6 +157,8 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
     });
   }
   _renderSelectAll(category): React$Node {
+    //TODO: replace this absurdly hacky method of generating a subcategory/category name
+    //it works because we can rely on the _.groupBy() and filteredOptions in this.initializeOptions, idx 0 of any given cat/subcat is guaranteed to exist (no empty categories allowed) and return the right value due to grouping.
     let selectAllId = category[0].subcategory || category[0].category
     return (
       <span>
@@ -164,10 +166,8 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
           <
             input type="checkbox"
             className="ContextualCollapsible-selectAll"
-            checked={this.state[selectAllId]}
+            checked={this._selectAllController.bind(this, category)}
             onChange={this._handleSelectAll.bind(this, category)}
-            //TODO: replace this absurdly hacky method of generating a subcategory/category name
-            //because we can rely on the _.groupBy() and filteredOptions in this.initializeOptions, idx 0 of any given cat/subcat is guaranteed to exist (no empty categories allowed) and return the right value due to grouping.
             id={selectAllId}
           >
           </input>Select All
@@ -178,8 +178,11 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
 
   _selectAllController(category) {
     //return true or false if number of selected items in category = total items in category
-    let selectAllId = category[0].subcategory || category[0].category
-    let selectedTagCount = category.filter(tag => this.props.optionEnabled(tag) === true)
+    let selectedTagCount = this.props.selectedByCategory[category].length
+    console.log('category: ', category)
+    console.log('category.length', category.length)
+    console.log('selectAllId', selectAllId)
+    console.log('selectedTagCount: ', selectedTagCount)
     if (selectedTagCount.length === category.length) {
       this.setState({
         [selectAllId]: true
@@ -201,7 +204,6 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       let toUpdate = category.filter(tag => this.props.optionEnabled(tag) === false)
       this.selectOption(toUpdate, {multiple: true, type: "ADD_TAG"} );
     }
-    this._selectAllController(category);
   }
 
   _renderChevron(): React$Node {
@@ -225,7 +227,7 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
       : 0;
     this.setState({chevronX});
   }
-  //
+  // this is from when I had the state controlling checkboxes in TagSelectorCollapsible, for ref
   // componentDidUpdate(prevProps, prevState) {
   //   // only update if the data has changed
   //   let prevLength = Object.keys(prevState.selectedTags).length
@@ -240,17 +242,14 @@ class SelectorCollapsible<T> extends React.PureComponent<Props<T>, State> {
   // _allCheckboxControl(): void {
   //   // handle checking or unchecking any given Select All checkbox
   //   let selectedTagCount = Object.keys(this.state.selectedTags)
-  //   console.log('selectedTagCount: ', selectedTagCount)
   //   let activeTagCount = this.state.tags ? this.state.tags.filter(function(key) {
   //       return key.num_times > 0;
   //     }) : 0;
   //   console.log('activeTagCount: ', activeTagCount)
   //   if(selectedTagCount.length === activeTagCount.length) {
   //     this.setState({isAllChecked: true});
-  //     console.log('conditional for isAllChecked: true');
   //   } else {
   //     this.setState({isAllChecked: false});
-  //     console.log('conditional for isAllChecked: false');
   //   }
   // }
 }

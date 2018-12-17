@@ -24,7 +24,6 @@ type State = {|
   tagCounts: ?{ [key: string]: number },
   selectedTags: ?{ [key: string]: boolean },
   hasSubcategories: boolean,
-  isAllChecked: boolean
 |};
 
 /**
@@ -33,7 +32,7 @@ type State = {|
 class TagSelectorCollapsible extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.state = {tags: null, isAllChecked: false};
+    this.state = {tags: null};
 
     // TODO: Use Flux to get tags in a single request
     // passing true to fetchTagsByCategory asks backend to return num_times in API response. TODO: make that an options object or something so it's clearer
@@ -100,12 +99,22 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
               optionDisplay={tag => this._displayTag(tag)}
               optionEnabled={tag => this._tagEnabled(tag)}
               onOptionSelect={this.selectTag.bind(this)}
+              selectedByCategory={this._selectedByCategory()}
             />
             )
           : null
         }
       </div>
     );
+  }
+  _selectedByCategory(): void {
+    //using this.state.selectedTags get a count for each category/subcategory on what's selected
+    //so I can compare selectedLength to categoryLength in SelectorCollapsible.jsx
+    let subcat = _.countBy(this.state.selectedTags, 'subcategory' );
+    let cat = _.countBy(this.state.selectedTags, 'category');
+    let result = _.merge(cat, subcat)
+    return result;
+    //should be formatted like {"Issue Area(s): 5", "Data: 2"}
   }
 
   _tagEnabled(tag: TagDefinition): boolean {

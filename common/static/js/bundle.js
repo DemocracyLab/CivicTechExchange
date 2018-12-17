@@ -94862,7 +94862,7 @@ var TagSelectorCollapsible = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (TagSelectorCollapsible.__proto__ || Object.getPrototypeOf(TagSelectorCollapsible)).call(this, props));
 
-    _this.state = { tags: null, isAllChecked: false };
+    _this.state = { tags: null };
 
     // TODO: Use Flux to get tags in a single request
     // passing true to fetchTagsByCategory asks backend to return num_times in API response. TODO: make that an options object or something so it's clearer
@@ -94930,9 +94930,21 @@ var TagSelectorCollapsible = function (_React$Component) {
           optionEnabled: function optionEnabled(tag) {
             return _this2._tagEnabled(tag);
           },
-          onOptionSelect: this.selectTag.bind(this)
+          onOptionSelect: this.selectTag.bind(this),
+          selectedByCategory: this._selectedByCategory()
         }) : null
       );
+    }
+  }, {
+    key: '_selectedByCategory',
+    value: function _selectedByCategory() {
+      //using this.state.selectedTags get a count for each category/subcategory on what's selected
+      //so I can compare selectedLength to categoryLength in SelectorCollapsible.jsx
+      var subcat = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.countBy(this.state.selectedTags, 'subcategory');
+      var cat = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.countBy(this.state.selectedTags, 'category');
+      var result = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.merge(cat, subcat);
+      return result;
+      //should be formatted like {"Issue Area(s): 5", "Data: 2"}
     }
   }, {
     key: '_tagEnabled',
@@ -95166,6 +95178,8 @@ var SelectorCollapsible = function (_React$PureComponent) {
   }, {
     key: '_renderSelectAll',
     value: function _renderSelectAll(category) {
+      //TODO: replace this absurdly hacky method of generating a subcategory/category name
+      //it works because we can rely on the _.groupBy() and filteredOptions in this.initializeOptions, idx 0 of any given cat/subcat is guaranteed to exist (no empty categories allowed) and return the right value due to grouping.
       var selectAllId = category[0].subcategory || category[0].category;
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'span',
@@ -95175,11 +95189,9 @@ var SelectorCollapsible = function (_React$PureComponent) {
           { className: 'CollapsibleMenuItem' },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox',
             className: 'ContextualCollapsible-selectAll',
-            checked: this.state[selectAllId],
-            onChange: this._handleSelectAll.bind(this, category)
-            //TODO: replace this absurdly hacky method of generating a subcategory/category name
-            //because we can rely on the _.groupBy() and filteredOptions in this.initializeOptions, idx 0 of any given cat/subcat is guaranteed to exist (no empty categories allowed) and return the right value due to grouping.
-            , id: selectAllId
+            checked: this._selectAllController.bind(this, category),
+            onChange: this._handleSelectAll.bind(this, category),
+            id: selectAllId
           }),
           'Select All'
         )
@@ -95188,13 +95200,12 @@ var SelectorCollapsible = function (_React$PureComponent) {
   }, {
     key: '_selectAllController',
     value: function _selectAllController(category) {
-      var _this5 = this;
-
       //return true or false if number of selected items in category = total items in category
-      var selectAllId = category[0].subcategory || category[0].category;
-      var selectedTagCount = category.filter(function (tag) {
-        return _this5.props.optionEnabled(tag) === true;
-      });
+      var selectedTagCount = this.props.selectedByCategory[category].length;
+      console.log('category: ', category);
+      console.log('category.length', category.length);
+      console.log('selectAllId', selectAllId);
+      console.log('selectedTagCount: ', selectedTagCount);
       if (selectedTagCount.length === category.length) {
         this.setState(_defineProperty({}, selectAllId, true));
       } else {
@@ -95204,21 +95215,20 @@ var SelectorCollapsible = function (_React$PureComponent) {
   }, {
     key: '_handleSelectAll',
     value: function _handleSelectAll(category, event) {
-      var _this6 = this;
+      var _this5 = this;
 
       //this feels like a mess, but find what tags are selected or not and then either select or unselect the remainder
       if (this.state[event.target.id]) {
         var toUpdate = category.filter(function (tag) {
-          return _this6.props.optionEnabled(tag) === true;
+          return _this5.props.optionEnabled(tag) === true;
         });
         this.selectOption(toUpdate, { multiple: true, type: "REMOVE_MANY_TAGS" });
       } else {
         var _toUpdate = category.filter(function (tag) {
-          return _this6.props.optionEnabled(tag) === false;
+          return _this5.props.optionEnabled(tag) === false;
         });
         this.selectOption(_toUpdate, { multiple: true, type: "ADD_TAG" });
       }
-      this._selectAllController(category);
     }
   }, {
     key: '_renderChevron',
@@ -95243,7 +95253,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
       var chevronX = chevronElement ? chevronElement.getBoundingClientRect().left - this.constants.width / 2 : 0;
       this.setState({ chevronX: chevronX });
     }
-    //
+    // this is from when I had the state controlling checkboxes in TagSelectorCollapsible, for ref
     // componentDidUpdate(prevProps, prevState) {
     //   // only update if the data has changed
     //   let prevLength = Object.keys(prevState.selectedTags).length
@@ -95258,17 +95268,14 @@ var SelectorCollapsible = function (_React$PureComponent) {
     // _allCheckboxControl(): void {
     //   // handle checking or unchecking any given Select All checkbox
     //   let selectedTagCount = Object.keys(this.state.selectedTags)
-    //   console.log('selectedTagCount: ', selectedTagCount)
     //   let activeTagCount = this.state.tags ? this.state.tags.filter(function(key) {
     //       return key.num_times > 0;
     //     }) : 0;
     //   console.log('activeTagCount: ', activeTagCount)
     //   if(selectedTagCount.length === activeTagCount.length) {
     //     this.setState({isAllChecked: true});
-    //     console.log('conditional for isAllChecked: true');
     //   } else {
     //     this.setState({isAllChecked: false});
-    //     console.log('conditional for isAllChecked: false');
     //   }
     // }
 
