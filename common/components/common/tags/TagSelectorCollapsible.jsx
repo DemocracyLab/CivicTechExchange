@@ -36,7 +36,7 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
     this.state = {tags: null, isAllChecked: false};
 
     // TODO: Use Flux to get tags in a single request
-    // passing true to fetchTagsByCategory asks backend to return num_times in API response
+    // passing true to fetchTagsByCategory asks backend to return num_times in API response. TODO: make that an options object or something so it's clearer
     ProjectAPIUtils.fetchTagsByCategory(this.props.category, true, tags => {
       this.setState({
         tags: tags,
@@ -45,7 +45,6 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
     });
     this._displayTag = this._displayTag.bind(this);
     this._tagEnabled = this._tagEnabled.bind(this);
-    this._allCheckboxControl = this._allCheckboxControl.bind(this);
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -101,41 +100,12 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
               optionDisplay={tag => this._displayTag(tag)}
               optionEnabled={tag => this._tagEnabled(tag)}
               onOptionSelect={this.selectTag.bind(this)}
-              isAllChecked={this.state.isAllChecked}
             />
             )
           : null
         }
       </div>
     );
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    // only update if the data has changed
-    let prevLength = Object.keys(prevState.selectedTags).length
-    let curLength = Object.keys(this.state.selectedTags).length
-    console.log("prevState length: ", prevLength)
-    console.log("this.state length: ", curLength)
-    if (prevLength !== curLength) {
-      this._allCheckboxControl();
-    }
-  }
-
-  _allCheckboxControl(): void {
-    // handle checking or unchecking any given Select All checkbox
-    let selectedTagCount = Object.keys(this.state.selectedTags)
-    console.log('selectedTagCount: ', selectedTagCount)
-    let activeTagCount = this.state.tags ? this.state.tags.filter(function(key) {
-        return key.num_times > 0;
-      }) : 0;
-    console.log('activeTagCount: ', activeTagCount)
-    if(selectedTagCount.length === activeTagCount.length) {
-      this.setState({isAllChecked: true});
-      console.log('conditional for isAllChecked: true');
-    } else {
-      this.setState({isAllChecked: false});
-      console.log('conditional for isAllChecked: false');
-    }
   }
 
   _tagEnabled(tag: TagDefinition): boolean {

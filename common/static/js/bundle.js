@@ -94865,7 +94865,7 @@ var TagSelectorCollapsible = function (_React$Component) {
     _this.state = { tags: null, isAllChecked: false };
 
     // TODO: Use Flux to get tags in a single request
-    // passing true to fetchTagsByCategory asks backend to return num_times in API response
+    // passing true to fetchTagsByCategory asks backend to return num_times in API response. TODO: make that an options object or something so it's clearer
     __WEBPACK_IMPORTED_MODULE_2__utils_ProjectAPIUtils_js__["a" /* default */].fetchTagsByCategory(_this.props.category, true, function (tags) {
       _this.setState({
         tags: tags,
@@ -94876,7 +94876,6 @@ var TagSelectorCollapsible = function (_React$Component) {
     });
     _this._displayTag = _this._displayTag.bind(_this);
     _this._tagEnabled = _this._tagEnabled.bind(_this);
-    _this._allCheckboxControl = _this._allCheckboxControl.bind(_this);
     return _this;
   }
 
@@ -94931,40 +94930,9 @@ var TagSelectorCollapsible = function (_React$Component) {
           optionEnabled: function optionEnabled(tag) {
             return _this2._tagEnabled(tag);
           },
-          onOptionSelect: this.selectTag.bind(this),
-          isAllChecked: this.state.isAllChecked
+          onOptionSelect: this.selectTag.bind(this)
         }) : null
       );
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
-      // only update if the data has changed
-      var prevLength = Object.keys(prevState.selectedTags).length;
-      var curLength = Object.keys(this.state.selectedTags).length;
-      console.log("prevState length: ", prevLength);
-      console.log("this.state length: ", curLength);
-      if (prevLength !== curLength) {
-        this._allCheckboxControl();
-      }
-    }
-  }, {
-    key: '_allCheckboxControl',
-    value: function _allCheckboxControl() {
-      // handle checking or unchecking any given Select All checkbox
-      var selectedTagCount = Object.keys(this.state.selectedTags);
-      console.log('selectedTagCount: ', selectedTagCount);
-      var activeTagCount = this.state.tags ? this.state.tags.filter(function (key) {
-        return key.num_times > 0;
-      }) : 0;
-      console.log('activeTagCount: ', activeTagCount);
-      if (selectedTagCount.length === activeTagCount.length) {
-        this.setState({ isAllChecked: true });
-        console.log('conditional for isAllChecked: true');
-      } else {
-        this.setState({ isAllChecked: false });
-        console.log('conditional for isAllChecked: false');
-      }
     }
   }, {
     key: '_tagEnabled',
@@ -95009,6 +94977,8 @@ var TagSelectorCollapsible = function (_React$Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -95140,7 +95110,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
 
       return sortedOptions.map(function (option, i) {
         var classes = "CollapsibleMenuItem";
-        // to filter just entries and not entries + categories, use a conditional if (option.num_times > 0) { return ... }
+        // to filter just entries and not entries + categories, use a conditional if (option.num_times > 0) { return ... } here instead of initializeOptions (though removing items + empty categories is usually desired)
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           'label',
           {
@@ -95196,6 +95166,7 @@ var SelectorCollapsible = function (_React$PureComponent) {
   }, {
     key: '_renderSelectAll',
     value: function _renderSelectAll(category) {
+      var selectAllId = category[0].subcategory || category[0].category;
       return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         'span',
         null,
@@ -95204,31 +95175,50 @@ var SelectorCollapsible = function (_React$PureComponent) {
           { className: 'CollapsibleMenuItem' },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { type: 'checkbox',
             className: 'ContextualCollapsible-selectAll',
-            checked: this.props.isAllChecked,
+            checked: this.state[selectAllId],
             onChange: this._handleSelectAll.bind(this, category)
+            //TODO: replace this absurdly hacky method of generating a subcategory/category name
+            //because we can rely on the _.groupBy() and filteredOptions in this.initializeOptions, idx 0 of any given cat/subcat is guaranteed to exist (no empty categories allowed) and return the right value due to grouping.
+            , id: selectAllId
           }),
           'Select All'
         )
       );
     }
   }, {
-    key: '_handleSelectAll',
-    value: function _handleSelectAll(category) {
+    key: '_selectAllController',
+    value: function _selectAllController(category) {
       var _this5 = this;
 
-      console.log('selectall handled');
+      //return true or false if number of selected items in category = total items in category
+      var selectAllId = category[0].subcategory || category[0].category;
+      var selectedTagCount = category.filter(function (tag) {
+        return _this5.props.optionEnabled(tag) === true;
+      });
+      if (selectedTagCount.length === category.length) {
+        this.setState(_defineProperty({}, selectAllId, true));
+      } else {
+        this.setState(_defineProperty({}, selectAllId, false));
+      }
+    }
+  }, {
+    key: '_handleSelectAll',
+    value: function _handleSelectAll(category, event) {
+      var _this6 = this;
+
       //this feels like a mess, but find what tags are selected or not and then either select or unselect the remainder
-      if (this.props.isAllChecked) {
+      if (this.state[event.target.id]) {
         var toUpdate = category.filter(function (tag) {
-          return _this5.props.optionEnabled(tag) === true;
+          return _this6.props.optionEnabled(tag) === true;
         });
         this.selectOption(toUpdate, { multiple: true, type: "REMOVE_MANY_TAGS" });
       } else {
         var _toUpdate = category.filter(function (tag) {
-          return _this5.props.optionEnabled(tag) === false;
+          return _this6.props.optionEnabled(tag) === false;
         });
         this.selectOption(_toUpdate, { multiple: true, type: "ADD_TAG" });
       }
+      this._selectAllController(category);
     }
   }, {
     key: '_renderChevron',
@@ -95253,6 +95243,35 @@ var SelectorCollapsible = function (_React$PureComponent) {
       var chevronX = chevronElement ? chevronElement.getBoundingClientRect().left - this.constants.width / 2 : 0;
       this.setState({ chevronX: chevronX });
     }
+    //
+    // componentDidUpdate(prevProps, prevState) {
+    //   // only update if the data has changed
+    //   let prevLength = Object.keys(prevState.selectedTags).length
+    //   let curLength = Object.keys(this.state.selectedTags).length
+    //   console.log("prevState length: ", prevLength)
+    //   console.log("this.state length: ", curLength)
+    //   if (prevLength !== curLength) {
+    //     this._allCheckboxControl();
+    //   }
+    // }
+    //
+    // _allCheckboxControl(): void {
+    //   // handle checking or unchecking any given Select All checkbox
+    //   let selectedTagCount = Object.keys(this.state.selectedTags)
+    //   console.log('selectedTagCount: ', selectedTagCount)
+    //   let activeTagCount = this.state.tags ? this.state.tags.filter(function(key) {
+    //       return key.num_times > 0;
+    //     }) : 0;
+    //   console.log('activeTagCount: ', activeTagCount)
+    //   if(selectedTagCount.length === activeTagCount.length) {
+    //     this.setState({isAllChecked: true});
+    //     console.log('conditional for isAllChecked: true');
+    //   } else {
+    //     this.setState({isAllChecked: false});
+    //     console.log('conditional for isAllChecked: false');
+    //   }
+    // }
+
   }]);
 
   return SelectorCollapsible;
