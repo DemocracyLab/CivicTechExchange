@@ -7,15 +7,16 @@ import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
 import CurrentUser from "../../utils/CurrentUser.js";
 import ConfirmationModal from '../../common/confirmation/ConfirmationModal.jsx';
 import TagCategory from "../tags/TagCategory.jsx";
-import TagSelector from "../tags/TagSelector.jsx";
+import TagSelector,{tagOptionDisplay} from "../tags/TagSelector.jsx";
 import {TagDefinition} from "../../utils/ProjectAPIUtils.js";
 import {SelectOption} from "../../types/SelectOption.jsx";
 import Select from 'react-select'
 import moment from 'moment';
-
+import _ from 'lodash';
 
 type Props = {|
   projectId: number,
+  positions: $ReadOnlyArray<PositionInfo>,
   showModal: boolean,
   handleClose: () => void
 |};
@@ -24,6 +25,7 @@ type State = {|
   isSending: boolean,
   message: string,
   daysToVolunteerForOption: ?SelectOption,
+  existingPositionOption: ?SelectOption,
   roleTag: ?TagDefinition,
   showConfirmationModal: boolean
 |};
@@ -35,6 +37,8 @@ const volunteerPeriodsInDays: $ReadOnlyArray<SelectOption> = [
   ["3 months - 6 months",180],
   ["6 months - 1 year",365]
 ].map((textDaysPair) => ({label:textDaysPair[0], value:textDaysPair[1]}));
+
+const OtherRoleOption: SelectOption = {label:"Other", value:"Other"};
 
 /**
  * Modal for volunteering to join a project
@@ -82,6 +86,12 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
     this.setState({showConfirmationModal: false});
   }
   
+  handleExistingPositionSelection(positionOption: SelectOption): void {
+    if(!_.isEmpty(positionOption.value)) {
+      this.setState({existingPositionOption: positionOption});
+    }
+  }
+  
   handleVolunteerPeriodSelection(daysToVolunteerForOption: SelectOption): void {
     this.setState({daysToVolunteerForOption: daysToVolunteerForOption});
   }
@@ -93,7 +103,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
       {
         message: this.state.message,
         projectedEndDate: moment().utc().add(this.state.daysToVolunteerForOption.value, 'days').format(),
-        roleTag: this.state.roleTag.tag_name
+        roleTag: this._selectedTag()
       },
       response => this.closeModal(true),
       response => null /* TODO: Report error to user */
@@ -121,15 +131,10 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
               </Modal.Header>
               <Modal.Body>
                 <FormGroup>
-                  <div className="form-group">
-                    <label htmlFor="project_technologies">Role You are Applying For</label>
-                    <TagSelector
-                      value={[this.state.roleTag]}
-                      category={TagCategory.ROLE}
-                      allowMultiSelect={false}
-                      onSelection={this.onRoleChange.bind(this)}
-                    />
-                  </div>
+                  {!_.isEmpty(this.props.positions) ? this._renderExistingPositionDropdown() : null}
+                  {_.isEmpty(this.props.positions) || (this.state.existingPositionOption && (this.state.existingPositionOption.value === OtherRoleOption.value))
+                    ? this._renderOtherRoleDropdown()
+                    : null}
                   <ControlLabel>How long do you expect to be able to contribute to this project?</ControlLabel>
                   {this._renderVolunteerPeriodDropdown()}
                   <ControlLabel>Message:</ControlLabel>
@@ -149,11 +154,51 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
               <Modal.Footer>
                 <Button onClick={this.closeModal.bind(this, false)}>{"Cancel"}</Button>
                 <Button
-                  disabled={this.state.isSending || !this.state.roleTag || !this.state.daysToVolunteerForOption || !this.state.message}
+                  disabled={this.state.isSending || !(this._selectedTag()) || !this.state.daysToVolunteerForOption || !this.state.message}
                   onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}
                 </Button>
               </Modal.Footer>
           </Modal>
+      </div>
+    );
+  }
+  
+  _selectedTag(): TagDefinition{
+    return this.state.existingPositionOption && (this.state.existingPositionOption.value !== OtherRoleOption.value)
+      ? this.state.existingPositionOption.value
+      : this.state.roleTag && this.state.roleTag.tag_name;
+  }
+  
+  _renderExistingPositionDropdown(): React$Node{
+    const positionOptions: $ReadOnlyArray<SelectOption> =
+      [{value:"", label:"---"}].concat(
+      this.props.positions.map( (position: PositionInfo) => ({value:position.roleTag.tag_name, label:tagOptionDisplay(position.roleTag)})).concat(
+      OtherRoleOption));
+    return (
+    <div className="form-group">
+      <label htmlFor="project_technologies">Position to Apply For</label>
+        <Select
+          options={positionOptions}
+          onChange={this.handleExistingPositionSelection.bind(this)}
+          className="form-control"
+          simpleValue={true}
+          isClearable={false}
+          isMulti={false}
+        />
+    </div>
+    );
+  }
+  
+  _renderOtherRoleDropdown(): React$Node{
+    return (
+      <div className="form-group">
+        <label htmlFor="project_technologies">Role You are Applying For</label>
+        <TagSelector
+          value={[this.state.roleTag]}
+          category={TagCategory.ROLE}
+          allowMultiSelect={false}
+          onSelection={this.onRoleChange.bind(this)}
+        />
       </div>
     );
   }

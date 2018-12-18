@@ -109,6 +109,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
               {this._renderVolunteerButton()}
               <ProjectVolunteerModal
                 projectId={this.state.project && this.state.project.project_id}
+                positions={this.state.project && this.state.project.project_positions}
                 showModal={this.state.showJoinModal}
                 handleClose={this.confirmJoinProject}
               />
