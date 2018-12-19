@@ -132,9 +132,18 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     <ContactProjectButton project={project}/>
                    {/* { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> } */}
                   </Grid>
+              <div className="AboutProjects_tabs"><a href="#">Details</a><a href="#">Skills Needed</a><a href="#">Positions</a></div>
+                  
               </Grid>
-
               <Divider />
+
+              <Grid className='AboutProjects-description-details'>
+              <p>{project.project_description}</p>
+              <Grid className='AboutProjects-skills-container' container direction='row'>
+                <div className='AboutProjects-skills'>{project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.tag_name.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')}</p>)}</div>
+                <Grid item xs={6}></Grid>
+                </Grid>
+              </Grid>
             </Paper>
           </Grid>
 
