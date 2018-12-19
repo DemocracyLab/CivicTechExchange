@@ -44,21 +44,22 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
     if(existingPosition) {
       this.setState({
         "positionInfo": _.cloneDeep(existingPosition)
-      });
-      this.forceUpdate();
+      }, function() {this.forceUpdate();});
     } else {
       this.setState({
         "positionInfo": {
           roleTag: null,
-          descriptionUrl: ""
+          descriptionUrl: "",
+          description: ""
         }
       });
     }
   }
 
   componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ showModal: nextProps.showModal });
-    this.resetModal(nextProps.existingPosition);
+    this.setState({ showModal: nextProps.showModal },function() {
+      this.resetModal(nextProps.existingPosition);
+    });
   }
 
   close(): void {
@@ -79,8 +80,13 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
     this.forceUpdate();
   }
 
-  onDescriptionChange(event: SyntheticInputEvent<HTMLInputElement>): void {
+  onDescriptionUrlChange(event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.positionInfo.descriptionUrl = event.target.value;
+    this.forceUpdate();
+  }
+  
+  onDescriptionTextChange(event: SyntheticInputEvent<HTMLInputElement>): void {
+    this.state.positionInfo.description = event.target.value;
     this.forceUpdate();
   }
 
@@ -103,15 +109,36 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
                       onSelection={this.onRoleChange.bind(this)}
                     />
                   </div>
-
+  
                 <div className="form-group">
-                  <label htmlFor="link-position-description">Link to Description <span className="modal-hint"><a href="https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit" rel="noopener noreferrer" target="_blank">(Example template)</a></span></label>
-                  <input type="text" className="form-control" id="link-position-description" maxLength="2075" value={this.state.positionInfo.descriptionUrl} onChange={this.onDescriptionChange.bind(this)} placeholder="http://"/>
+                  <label htmlFor="position-description">
+                    Position Description
+                    <span className="modal-hint">
+                      {/*TODO: Make this example document path configurable*/}
+                      <a href="https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit" rel="noopener noreferrer" target="_blank">
+                        (Example template)
+                      </a>
+                    </span>
+                  </label>
+                  <div className="character-count">
+                    { (this.state.positionInfo.description || "").length} / 3000
+                  </div>
+                  <textarea className="form-control" id="position-description" name="position-description"
+                            placeholder="Describe the position's qualifications and responsibilities" rows="4" maxLength="3000"
+                            value={this.state.positionInfo.description} onChange={this.onDescriptionTextChange.bind(this)}></textarea>
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="link-position-description-url">Link to Description (Optional)</label>
+                  <input type="text" className="form-control" id="link-position-description-url" maxLength="2075" value={this.state.positionInfo.descriptionUrl} onChange={this.onDescriptionUrlChange.bind(this)} placeholder="http://"/>
                 </div>
               </Modal.Body>
               <Modal.Footer>
                   <Button onClick={this.close}>Close</Button>
-                  <Button disabled={!this.state.positionInfo.roleTag} onClick={this.save}>Save</Button>
+                  <Button disabled={!this.state.positionInfo.roleTag || !(this.state.positionInfo.descriptionUrl || this.state.positionInfo.description)}
+                          onClick={this.save}>
+                    Save
+                  </Button>
               </Modal.Footer>
           </Modal>
       </div>

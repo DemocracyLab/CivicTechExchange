@@ -209,6 +209,7 @@ class ProjectPosition(models.Model):
     def create_from_json(project, position_json):
         position = ProjectPosition()
         position.position_project = project
+        position.position_description = position_json['description']
         position.description_url = position_json['descriptionUrl']
         position.save()
 
@@ -218,6 +219,7 @@ class ProjectPosition(models.Model):
 
     @staticmethod
     def update_from_json(position, position_json):
+        position.position_description = position_json['description']
         position.description_url = position_json['descriptionUrl']
         new_role = position_json['roleTag']['tag_name']
         Tag.merge_tags_field(position.position_role, new_role)

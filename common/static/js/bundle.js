@@ -96280,13 +96280,15 @@ var PositionEntryModal = function (_React$PureComponent) {
       if (existingPosition) {
         this.setState({
           "positionInfo": __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.cloneDeep(existingPosition)
+        }, function () {
+          this.forceUpdate();
         });
-        this.forceUpdate();
       } else {
         this.setState({
           "positionInfo": {
             roleTag: null,
-            descriptionUrl: ""
+            descriptionUrl: "",
+            description: ""
           }
         });
       }
@@ -96294,8 +96296,9 @@ var PositionEntryModal = function (_React$PureComponent) {
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      this.setState({ showModal: nextProps.showModal });
-      this.resetModal(nextProps.existingPosition);
+      this.setState({ showModal: nextProps.showModal }, function () {
+        this.resetModal(nextProps.existingPosition);
+      });
     }
   }, {
     key: 'close',
@@ -96319,9 +96322,15 @@ var PositionEntryModal = function (_React$PureComponent) {
       this.forceUpdate();
     }
   }, {
-    key: 'onDescriptionChange',
-    value: function onDescriptionChange(event) {
+    key: 'onDescriptionUrlChange',
+    value: function onDescriptionUrlChange(event) {
       this.state.positionInfo.descriptionUrl = event.target.value;
+      this.forceUpdate();
+    }
+  }, {
+    key: 'onDescriptionTextChange',
+    value: function onDescriptionTextChange(event) {
+      this.state.positionInfo.description = event.target.value;
       this.forceUpdate();
     }
   }, {
@@ -96367,8 +96376,8 @@ var PositionEntryModal = function (_React$PureComponent) {
               { className: 'form-group' },
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'label',
-                { htmlFor: 'link-position-description' },
-                'Link to Description ',
+                { htmlFor: 'position-description' },
+                'Position Description',
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                   'span',
                   { className: 'modal-hint' },
@@ -96379,7 +96388,25 @@ var PositionEntryModal = function (_React$PureComponent) {
                   )
                 )
               ),
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'link-position-description', maxLength: '2075', value: this.state.positionInfo.descriptionUrl, onChange: this.onDescriptionChange.bind(this), placeholder: 'http://' })
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'character-count' },
+                (this.state.positionInfo.description || "").length,
+                ' / 3000'
+              ),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { className: 'form-control', id: 'position-description', name: 'position-description',
+                placeholder: 'Describe the position\'s qualifications and responsibilities', rows: '4', maxLength: '3000',
+                value: this.state.positionInfo.description, onChange: this.onDescriptionTextChange.bind(this) })
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'div',
+              { className: 'form-group' },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'label',
+                { htmlFor: 'link-position-description-url' },
+                'Link to Description (Optional)'
+              ),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', id: 'link-position-description-url', maxLength: '2075', value: this.state.positionInfo.descriptionUrl, onChange: this.onDescriptionUrlChange.bind(this), placeholder: 'http://' })
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -96392,7 +96419,8 @@ var PositionEntryModal = function (_React$PureComponent) {
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
-              { disabled: !this.state.positionInfo.roleTag, onClick: this.save },
+              { disabled: !this.state.positionInfo.roleTag || !(this.state.positionInfo.descriptionUrl || this.state.positionInfo.description),
+                onClick: this.save },
               'Save'
             )
           )
