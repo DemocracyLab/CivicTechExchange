@@ -38,16 +38,8 @@ class ProjectDetails extends React.PureComponent<Props, State> {
                   <p className="AboutProjects-icon-text">   <Moment fromNow>{this.state.dateModified}</Moment></p>
                 </div>
                 <div className="AboutProjects-icon-row">
-                  <Domain/>
-                  <p className="AboutProjects-icon-text">Non profit</p>
-                </div>
-                <div className="AboutProjects-icon-row">
                   <ChartBar/>
                   <p className="AboutProjects-icon-text">{this.state.projectStage}</p>
-                </div>
-                <div className="AboutProjects-icon-row">
-                  <Key/>
-                  <p className="AboutProjects-icon-text">MIT License</p>
                 </div>
           </React.Fragment>
       )

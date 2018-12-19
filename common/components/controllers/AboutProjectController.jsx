@@ -8,6 +8,8 @@ import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import {Earth, MapMarker, Clock, Domain, ChartBar, Key, Meetup, GithubCircle, Slack, Trello, GoogleDrive} from 'mdi-material-ui';
 import Tooltip from '@material-ui/core/Tooltip';
 import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.jsx';
+import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
+import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -45,6 +47,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   _renderDetails(): React$Node {
     const project = this.state.project;
+    console.log(project);
     return (
       <div className='AboutProjects-root'>
         <Grid container className='AboutProjects-container' spacing={8}>
@@ -118,7 +121,20 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
           <Grid item xs={9}>
             <Paper className='AboutProjects-paper' elevation={1}>
+              <Grid className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
+                  <Grid className='AboutProjects-description' item xs={9}>
+                    <h3>{project && project.project_name}</h3>
+                    <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
+                    <p>{project && project.project_short_description}</p>
+                  </Grid>
 
+                  <Grid className='AboutProjects-owner' item xs={3}>
+                    <ContactProjectButton project={project}/>
+                   {/* { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> } */}
+                  </Grid>
+              </Grid>
+
+              <Divider />
             </Paper>
           </Grid>
 
