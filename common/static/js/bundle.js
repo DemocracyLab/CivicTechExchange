@@ -96378,15 +96378,15 @@ var PositionEntryModal = function (_React$PureComponent) {
                 'label',
                 { htmlFor: 'position-description' },
                 'Position Description',
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                window.POSITION_DESCRIPTION_EXAMPLE_URL ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                   'span',
                   { className: 'modal-hint' },
                   __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'a',
-                    { href: 'https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit', rel: 'noopener noreferrer', target: '_blank' },
+                    { href: window.POSITION_DESCRIPTION_EXAMPLE_URL, rel: 'noopener noreferrer', target: '_blank' },
                     '(Example template)'
                   )
-                )
+                ) : null
               ),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',

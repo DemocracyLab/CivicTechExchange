@@ -113,12 +113,15 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
                 <div className="form-group">
                   <label htmlFor="position-description">
                     Position Description
-                    <span className="modal-hint">
-                      {/*TODO: Make this example document path configurable*/}
-                      <a href="https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit" rel="noopener noreferrer" target="_blank">
-                        (Example template)
-                      </a>
-                    </span>
+                    { window.POSITION_DESCRIPTION_EXAMPLE_URL
+                      ? (
+                        <span className="modal-hint">
+                          <a href={window.POSITION_DESCRIPTION_EXAMPLE_URL} rel="noopener noreferrer" target="_blank">
+                            (Example template)
+                          </a>
+                        </span>)
+                      : null
+                    }
                   </label>
                   <div className="character-count">
                     { (this.state.positionInfo.description || "").length} / 3000
