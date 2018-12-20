@@ -95363,7 +95363,7 @@ var AboutPositionEntry = function (_React$PureComponent) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
-        null,
+        { className: "Position-entry" },
         this._renderHeader(),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "div",

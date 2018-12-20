@@ -13,7 +13,7 @@ type Props = {|
 class AboutPositionEntry extends React.PureComponent<Props> {
   render(): React$Node {
     return (
-      <div>
+      <div className="Position-entry">
         {this._renderHeader()}
         <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
           <CollapsibleTextSection
