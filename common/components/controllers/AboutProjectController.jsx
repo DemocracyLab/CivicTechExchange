@@ -20,6 +20,7 @@ import ProjectOwnersSection from "../common/owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 import GlyphStyles from "../utils/glyphs.js";
 import metrics from "../utils/metrics.js";
+import AboutPositionEntry from "../common/positions/AboutPositionEntry.jsx";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -280,16 +281,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     const project = this.state.project;
     return project && project.project_positions && _.chain(project.project_positions).sortBy(['roleTag.subcategory', 'roleTag.display_name']).value()
       .map((position, i) => {
-        const positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;
-        return (
-            <div key={i}>
-            {
-              position.descriptionUrl
-              ? <a href={position.descriptionUrl} target="_blank" rel="noopener noreferrer">{positionDisplay}</a>
-              : <span>{positionDisplay}</span>
-            }
-            </div>
-          );
+        return <AboutPositionEntry key={i} position={position}/>;
       });
   }
   
