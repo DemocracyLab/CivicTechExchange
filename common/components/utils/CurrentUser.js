@@ -35,6 +35,17 @@ class CurrentUser {
     const thisVolunteer = project.project_volunteers.find(volunteer => volunteer.user.id === currentUserId);
     return thisVolunteer && thisVolunteer.isCoOwner;
   }
+  
+  static canVolunteerForProject(project: ProjectDetailsAPIData): boolean {
+    return project.project_claimed
+      && CurrentUser.isLoggedIn()
+      && CurrentUser.isEmailVerified()
+      && !CurrentUser._getVolunteerStatus(project);
+  }
+  
+  static _getVolunteerStatus(project: ProjectDetailsAPIData): ?VolunteerDetailsAPIData {
+    return project.project_volunteers && project.project_volunteers.find(volunteer => volunteer.user.id === CurrentUser.userID());
+  }
 }
 
 export default CurrentUser;

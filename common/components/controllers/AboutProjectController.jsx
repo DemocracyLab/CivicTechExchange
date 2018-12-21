@@ -21,9 +21,12 @@ import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 import GlyphStyles from "../utils/glyphs.js";
 import metrics from "../utils/metrics.js";
 import AboutPositionEntry from "../common/positions/AboutPositionEntry.jsx";
+import ProjectVolunteerModal from "../common/projects/ProjectVolunteerModal.jsx";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
+  showJoinModal: boolean,
+  positionToJoin: ?PositionInfo,
   showPositionModal: boolean,
   shownPosition: ?PositionInfo
 |};
@@ -35,6 +38,8 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     this.state = {
       project: null,
       showContactModal: false,
+      showJoinModal: false,
+      positionToJoin: null,
       showPositionModal: false,
       shownPosition: null
     };
@@ -52,6 +57,22 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     this.setState({
       project: project
     });
+  }
+  
+  handleShowVolunteerModal(position: ?PositionInfo) {
+    let stateUpdate = {showJoinModal: true};
+    if (position) {
+      stateUpdate.positionToJoin = position;
+    }
+    this.setState(stateUpdate);
+  }
+  
+  confirmJoinProject(confirmJoin: boolean) {
+    if(confirmJoin) {
+      window.location.reload(true);
+    } else {
+      this.setState({showJoinModal: false});
+    }
   }
 
   handleClose() {
@@ -109,7 +130,17 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                   <ContactProjectButton project={this.state.project}/>
                 </div>
                 <div className="row">
-                  <ProjectVolunteerButton project={this.state.project}/>
+                  <ProjectVolunteerModal
+                    projectId={this.state.project && this.state.project.project_id}
+                    positions={this.state.project && this.state.project.project_positions}
+                    positionToJoin={this.state.positionToJoin}
+                    showModal={this.state.showJoinModal}
+                    handleClose={this.confirmJoinProject.bind(this)}
+                  />
+                  <ProjectVolunteerButton
+                    project={this.state.project}
+                    onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
+                  />
                   { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> }
                 </div>
               </div>
@@ -278,10 +309,15 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   _renderPositions(): ?Array<React$Node> {
-    const project = this.state.project;
+    const project: ProjectDetailsAPIData = this.state.project;
+    const canApply: boolean = CurrentUser.canVolunteerForProject(project);
     return project && project.project_positions && _.chain(project.project_positions).sortBy(['roleTag.subcategory', 'roleTag.display_name']).value()
       .map((position, i) => {
-        return <AboutPositionEntry key={i} position={position}/>;
+        return <AboutPositionEntry
+          key={i}
+          position={position}
+          onClickApply={canApply ? this.handleShowVolunteerModal.bind(this, position) : null}
+        />;
       });
   }
   

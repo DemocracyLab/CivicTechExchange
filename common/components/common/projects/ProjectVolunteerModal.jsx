@@ -17,6 +17,7 @@ import _ from 'lodash';
 type Props = {|
   projectId: number,
   positions: $ReadOnlyArray<PositionInfo>,
+  positionToJoin: ?PositionInfo,
   showModal: boolean,
   handleClose: () => void
 |};
@@ -51,6 +52,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
       showModal: false,
       isSending: false,
       message: "",
+      positionToJoin: null,
       daysToVolunteerForOption: null,
       roleTag: null,
       showConfirmationModal: false
@@ -60,9 +62,11 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
     this.askForSendConfirmation = this.askForSendConfirmation.bind(this);
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
   }
-    
+  
   componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ showModal: nextProps.showModal });
+    this.setState({
+      showModal: nextProps.showModal,
+    });
   }
   
   handleChange(event: SyntheticInputEvent<HTMLInputElement>): void {
@@ -111,7 +115,10 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
   }
 
   closeModal(submitted: boolean){
-    this.setState({isSending:false});
+    this.setState({
+      isSending: false,
+      existingPositionOption: null
+    });
     this.props.handleClose(submitted);
   }
 
@@ -174,11 +181,14 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
       [{value:"", label:"---"}].concat(
       this.props.positions.map( (position: PositionInfo) => ({value:position.roleTag.tag_name, label:tagOptionDisplay(position.roleTag)})).concat(
       OtherRoleOption));
+    const initialSelection: SelectOption = this.state.existingPositionOption
+      || (this.props.positionToJoin && positionOptions.find((option) => option.value === this.props.positionToJoin.roleTag.tag_name));
     return (
     <div className="form-group">
       <label htmlFor="project_technologies">Position to Apply For</label>
         <Select
           options={positionOptions}
+          value={initialSelection}
           onChange={this.handleExistingPositionSelection.bind(this)}
           className="form-control"
           simpleValue={true}
