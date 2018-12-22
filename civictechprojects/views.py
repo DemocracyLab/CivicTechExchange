@@ -298,16 +298,15 @@ def contact_project_owner(request, project_id):
     project = Project.objects.get(id=project_id)
     project_volunteers = VolunteerRelation.objects.filter(project=project_id)
     co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
-
     email_msg = EmailMessage(
-        '{firstname} {lastname} would like to connect with {project}'.format(
+        subject='{firstname} {lastname} would like to connect with {project}'.format(
             firstname=user.first_name,
             lastname=user.last_name,
             project=project.project_name),
-        '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email),
-        settings.EMAIL_HOST_USER,
-        [project.project_creator.email] + co_owner_emails,
-        {'Reply-To': user.email}
+        body='{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email),
+        from_email=settings.EMAIL_HOST_USER,
+        to=[project.project_creator.email] + co_owner_emails,
+        headers={'Reply-To': user.email}
     )
     email_msg.send()
     return HttpResponse(status=200)
@@ -334,14 +333,14 @@ def volunteer_with_project(request, project_id):
     user_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=Profile&id=' + str(user.id)
     email_body = '{message} \n -- \n To view volunteer profile, see {url} \n'.format(message=message, user=user.email, url=user_profile_url)
     email_msg = EmailMessage(
-        '{firstname} {lastname} would like to volunteer with {project}'.format(
+        subject='{firstname} {lastname} would like to volunteer with {project}'.format(
             firstname=user.first_name,
             lastname=user.last_name,
             project=project.project_name),
-        email_body,
-        settings.EMAIL_HOST_USER,
-        [project.project_creator.email],
-        {'Reply-To': user.email}
+        body=email_body,
+        from_email=settings.EMAIL_HOST_USER,
+        to=[project.project_creator.email],
+        headers={'Reply-To': user.email}
     )
     email_msg.send()
     return HttpResponse(status=200)
@@ -381,11 +380,11 @@ def reject_project_volunteer(request, application_id):
         email_body_template = 'The project owner for {project_name} has declined your application for the following reason:\n{message}'
         email_body = email_body_template.format(project_name=volunteer_relation.project.project_name,message=message)
         email_msg = EmailMessage(
-            'Your application to join ' + volunteer_relation.project.project_name,
-            email_body,
-            settings.EMAIL_HOST_USER,
-            [volunteer_relation.volunteer.email],
-            {'Reply-To': volunteer_relation.project.project_creator.email}
+            subject='Your application to join ' + volunteer_relation.project.project_name,
+            body=email_body,
+            from_email=settings.EMAIL_HOST_USER,
+            to=[volunteer_relation.volunteer.email],
+            headers={'Reply-To': volunteer_relation.project.project_creator.email}
         )
         email_msg.send()
         volunteer_relation.delete()
@@ -404,11 +403,11 @@ def dismiss_project_volunteer(request, application_id):
         email_body = 'The owner for {project_name} has removed you from the project for the following reason:\n{message}'.format(
             project_name=volunteer_relation.project.project_name, message=message)
         email_msg = EmailMessage(
-            'You have been dismissed from ' + volunteer_relation.project.project_name,
-            email_body,
-            settings.EMAIL_HOST_USER,
-            [volunteer_relation.volunteer.email],
-            {'Reply-To': volunteer_relation.project.project_creator.email}
+            subject='You have been dismissed from ' + volunteer_relation.project.project_name,
+            body=email_body,
+            from_email=settings.EMAIL_HOST_USER,
+            to=[volunteer_relation.volunteer.email],
+            headers={'Reply-To': volunteer_relation.project.project_creator.email}
         )
         email_msg.send()
         volunteer_relation.delete()
@@ -426,11 +425,11 @@ def demote_project_volunteer(request, application_id):
         email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
             project_name=volunteer_relation.project.project_name, message=message)
         email_msg = EmailMessage(
-            'You have been removed as a co-owner from ' + volunteer_relation.project.project_name,
-            email_body,
-            settings.EMAIL_HOST_USER,
-            [volunteer_relation.volunteer.email],
-            {'Reply-To': volunteer_relation.project.project_creator.email}
+            subject='You have been removed as a co-owner from ' + volunteer_relation.project.project_name,
+            body=email_body,
+            from_email=settings.EMAIL_HOST_USER,
+            to=[volunteer_relation.volunteer.email],
+            headers={'Reply-To': volunteer_relation.project.project_creator.email}
         )
         email_msg.send()
         volunteer_relation.is_co_owner = False
@@ -454,11 +453,11 @@ def leave_project(request, project_id):
             volunteer_name=volunteer_relation.volunteer.full_name(),
             project_name=volunteer_relation.project.project_name)
         email_msg = EmailMessage(
-            email_subject,
-            email_body,
-            settings.EMAIL_HOST_USER,
-            [volunteer_relation.project.project_creator.email],
-            {'Reply-To': volunteer_relation.volunteer.email}
+            subject=email_subject,
+            body=email_body,
+            from_email=settings.EMAIL_HOST_USER,
+            to=[volunteer_relation.project.project_creator.email],
+            headers={'Reply-To': volunteer_relation.volunteer.email}
         )
         email_msg.send()
         volunteer_relation.delete()

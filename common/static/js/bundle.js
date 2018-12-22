@@ -85307,7 +85307,6 @@ var AboutPositionEntry = function (_React$PureComponent) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react_bootstrap__["a" /* Button */],
           {
-            className: 'ProjectSearchBar-submit',
             type: 'button',
             title: 'Apply to this position',
             onClick: this.handleClickApply.bind(this)

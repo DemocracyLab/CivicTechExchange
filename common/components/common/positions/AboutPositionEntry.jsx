@@ -38,7 +38,6 @@ class AboutPositionEntry extends React.PureComponent<Props> {
     return (
       <div className="apply-position-button">
         <Button
-          className="ProjectSearchBar-submit"
           type="button"
           title="Apply to this position"
           onClick={this.handleClickApply.bind(this)}
