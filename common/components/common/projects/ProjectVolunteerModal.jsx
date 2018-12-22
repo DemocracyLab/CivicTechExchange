@@ -26,6 +26,8 @@ type State = {|
   isSending: boolean,
   message: string,
   daysToVolunteerForOption: ?SelectOption,
+  positionOptions: $ReadOnlyArray<SelectOption>,
+  initialPositionSelection: ?SelectOption,
   existingPositionOption: ?SelectOption,
   roleTag: ?TagDefinition,
   showConfirmationModal: boolean
@@ -64,9 +66,22 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
   }
   
   componentWillReceiveProps(nextProps: Props): void {
-    this.setState({
+    const positionOptions: $ReadOnlyArray<SelectOption> =
+      [{value:"", label:"---"}].concat(
+      nextProps.positions.map( (position: PositionInfo) => ({value:position.roleTag.tag_name, label:tagOptionDisplay(position.roleTag)})).concat(
+      OtherRoleOption));
+  
+    let state: State = {
       showModal: nextProps.showModal,
-    });
+      positionOptions: positionOptions
+    };
+    
+    if(nextProps.positionToJoin) {
+      const initialPositionSelection: SelectOption = this.state.existingPositionOption
+        || (nextProps.positionToJoin && positionOptions.find((option) => option.value === nextProps.positionToJoin.roleTag.tag_name));
+      state.existingPositionOption = state.initialPositionSelection = initialPositionSelection;
+    }
+    this.setState(state);
   }
   
   handleChange(event: SyntheticInputEvent<HTMLInputElement>): void {
@@ -178,18 +193,12 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
   }
   
   _renderExistingPositionDropdown(): React$Node{
-    const positionOptions: $ReadOnlyArray<SelectOption> =
-      [{value:"", label:"---"}].concat(
-      this.props.positions.map( (position: PositionInfo) => ({value:position.roleTag.tag_name, label:tagOptionDisplay(position.roleTag)})).concat(
-      OtherRoleOption));
-    const initialSelection: SelectOption = this.state.existingPositionOption
-      || (this.props.positionToJoin && positionOptions.find((option) => option.value === this.props.positionToJoin.roleTag.tag_name));
     return (
     <div className="form-group">
       <label htmlFor="project_technologies">Position to Apply For</label>
         <Select
-          options={positionOptions}
-          value={initialSelection}
+          options={this.state.positionOptions}
+          value={this.state.initialPositionSelection}
           onChange={this.handleExistingPositionSelection.bind(this)}
           className="form-control"
           simpleValue={true}

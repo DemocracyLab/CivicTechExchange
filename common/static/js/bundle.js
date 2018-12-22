@@ -95298,9 +95298,22 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
   _createClass(ProjectVolunteerModal, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      this.setState({
-        showModal: nextProps.showModal
-      });
+      var positionOptions = [{ value: "", label: "---" }].concat(nextProps.positions.map(function (position) {
+        return { value: position.roleTag.tag_name, label: Object(__WEBPACK_IMPORTED_MODULE_7__tags_TagSelector_jsx__["b" /* tagOptionDisplay */])(position.roleTag) };
+      }).concat(OtherRoleOption));
+
+      var state = {
+        showModal: nextProps.showModal,
+        positionOptions: positionOptions
+      };
+
+      if (nextProps.positionToJoin) {
+        var _initialPositionSelection = this.state.existingPositionOption || nextProps.positionToJoin && positionOptions.find(function (option) {
+          return option.value === nextProps.positionToJoin.roleTag.tag_name;
+        });
+        state.existingPositionOption = state.initialPositionSelection = _initialPositionSelection;
+      }
+      this.setState(state);
     }
   }, {
     key: 'handleChange',
@@ -95454,14 +95467,6 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
   }, {
     key: '_renderExistingPositionDropdown',
     value: function _renderExistingPositionDropdown() {
-      var _this3 = this;
-
-      var positionOptions = [{ value: "", label: "---" }].concat(this.props.positions.map(function (position) {
-        return { value: position.roleTag.tag_name, label: Object(__WEBPACK_IMPORTED_MODULE_7__tags_TagSelector_jsx__["b" /* tagOptionDisplay */])(position.roleTag) };
-      }).concat(OtherRoleOption));
-      var initialSelection = this.state.existingPositionOption || this.props.positionToJoin && positionOptions.find(function (option) {
-        return option.value === _this3.props.positionToJoin.roleTag.tag_name;
-      });
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         { className: 'form-group' },
@@ -95471,8 +95476,8 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
           'Position to Apply For'
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_9_react_select__["a" /* default */], {
-          options: positionOptions,
-          value: initialSelection,
+          options: this.state.positionOptions,
+          value: this.state.initialPositionSelection,
           onChange: this.handleExistingPositionSelection.bind(this),
           className: 'form-control',
           simpleValue: true,
