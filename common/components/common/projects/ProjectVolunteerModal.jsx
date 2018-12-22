@@ -171,6 +171,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
   }
   
   _selectedTag(): TagDefinition{
+    // TODO: Make sure this works on initial selection
     return this.state.existingPositionOption && (this.state.existingPositionOption.value !== OtherRoleOption.value)
       ? this.state.existingPositionOption.value
       : this.state.roleTag && this.state.roleTag.tag_name;

@@ -84807,11 +84807,6 @@ var VolunteerSection = function (_React$PureComponent) {
   }
 
   _createClass(VolunteerSection, [{
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState(this.getButtonDisplaySetup(nextProps));
-    }
-  }, {
     key: "openApplicationModal",
     value: function openApplicationModal(volunteer) {
       this.setState({
@@ -95453,6 +95448,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
   }, {
     key: '_selectedTag',
     value: function _selectedTag() {
+      // TODO: Make sure this works on initial selection
       return this.state.existingPositionOption && this.state.existingPositionOption.value !== OtherRoleOption.value ? this.state.existingPositionOption.value : this.state.roleTag && this.state.roleTag.tag_name;
     }
   }, {
