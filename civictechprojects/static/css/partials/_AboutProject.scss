@@ -1,7 +1,9 @@
 .Position-entry {
-  background-color: white;
+  background-color: $color-text-light;
   margin-bottom: 10px;
+  min-height: 50px;
   max-width: 800px;
+  padding: 5px;
 }
 
 .Position-entry h3 {
@@ -18,5 +20,5 @@
   font-size: 14px;
   padding: 8px 4px 8px 4px;
   margin-right: 5px;
-  margin-top: -35px;
+  margin-top: -40px;
 }

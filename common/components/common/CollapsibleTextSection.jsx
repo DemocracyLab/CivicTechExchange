@@ -50,7 +50,7 @@ class CollapsibleTextSection extends React.PureComponent<Props,State> {
   
   _renderExpandCollapse(): React$Node {
     return (
-      <span className="expand-toggle" onClick = {this.toggleExpansion.bind(this)} style={{"padding-left": "10px"}}>
+      <span className="expand-toggle" onClick = {this.toggleExpansion.bind(this)} style={{"paddingLeft": "10px"}}>
         {this.state.expanded ? "Read Less" : "Read More"}
       </span>
     );

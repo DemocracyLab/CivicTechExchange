@@ -85401,7 +85401,7 @@ var CollapsibleTextSection = function (_React$PureComponent) {
     value: function _renderExpandCollapse() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "span",
-        { className: "expand-toggle", onClick: this.toggleExpansion.bind(this), style: { "padding-left": "10px" } },
+        { className: "expand-toggle", onClick: this.toggleExpansion.bind(this), style: { "paddingLeft": "10px" } },
         this.state.expanded ? "Read Less" : "Read More"
       );
     }
