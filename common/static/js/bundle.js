@@ -45390,6 +45390,9 @@ var FeedbackModal = function (_React$PureComponent) {
     key: 'confirm',
     value: function confirm(confirmation) {
       this.props.onConfirm(confirmation, this.state.feedbackText);
+      if (confirmation) {
+        this.setState({ feedbackText: "" });
+      }
     }
   }, {
     key: 'render',
