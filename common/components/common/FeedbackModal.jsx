@@ -39,6 +39,7 @@ class FeedbackModal extends React.PureComponent<Props, State> {
   }
   
   confirm(confirmation: boolean): void {
+    // TODO: Erase contents of feedback
     this.props.onConfirm(confirmation, this.state.feedbackText);
   }
   

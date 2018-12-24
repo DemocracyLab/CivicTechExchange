@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.mail import EmailMessage
-from civictechprojects.models import Project
+from civictechprojects.models import Project, VolunteerRelation
 
 
 def send_project_creation_notification(project):
@@ -16,5 +16,31 @@ def send_project_creation_notification(project):
         ),
         settings.DEFAULT_FROM_EMAIL,
         [settings.ADMIN_EMAIL]
+    )
+    email_msg.send()
+
+
+def send_to_project_owners(project, sender, subject, body):
+    project_volunteers = VolunteerRelation.objects.filter(project=project.id)
+    co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
+    email_msg = EmailMessage(
+        subject=subject,
+        body=body,
+        from_email=settings.EMAIL_HOST_USER,
+        to=[project.project_creator.email] + co_owner_emails,
+        reply_to=[sender.email]
+    )
+    email_msg.send()
+
+
+def send_to_project_volunteer(volunteer_relation, subject, body):
+    project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project.id)
+    co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
+    email_msg = EmailMessage(
+        subject=subject,
+        body=body,
+        from_email=settings.EMAIL_HOST_USER,
+        to=[volunteer_relation.volunteer.email],
+        reply_to=[volunteer_relation.project.project_creator.email] + co_owner_emails,
     )
     email_msg.send()
