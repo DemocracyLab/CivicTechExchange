@@ -198,7 +198,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
       <label htmlFor="project_technologies">Position to Apply For</label>
         <Select
           options={this.state.positionOptions}
-          value={this.state.initialPositionSelection}
+          value={this.state.existingPositionOption || this.state.initialPositionSelection}
           onChange={this.handleExistingPositionSelection.bind(this)}
           className="form-control"
           simpleValue={true}
@@ -217,6 +217,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
           value={[this.state.roleTag]}
           category={TagCategory.ROLE}
           allowMultiSelect={false}
+          isClearable={false}
           onSelection={this.onRoleChange.bind(this)}
         />
       </div>

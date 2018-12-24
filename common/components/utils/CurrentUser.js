@@ -27,12 +27,16 @@ class CurrentUser {
   static isStaff() : boolean {
     return window.DLAB_GLOBAL_CONTEXT.isStaff;
   }
+  
+  static isOwner(project: ProjectDetailsAPIData): boolean {
+    return this.userID() === project.project_creator;
+  }
 
   static isCoOwner(project: ProjectDetailsAPIData): boolean {
-    const currentUserId = this.userID();
+    // const currentUserId = this.userID();
     // NOTE: Co-Owners are distinct from the project creator for authorization purposes.
-    if (!currentUserId || currentUserId === project.project_creator) return false;
-    const thisVolunteer = project.project_volunteers.find(volunteer => volunteer.user.id === currentUserId);
+    if (CurrentUser.isOwner(project)) return false;
+    const thisVolunteer = CurrentUser._getVolunteerStatus(project);
     return thisVolunteer && thisVolunteer.isCoOwner;
   }
   
@@ -40,7 +44,8 @@ class CurrentUser {
     return project.project_claimed
       && CurrentUser.isLoggedIn()
       && CurrentUser.isEmailVerified()
-      && !CurrentUser._getVolunteerStatus(project);
+      && !CurrentUser._getVolunteerStatus(project)
+      && !CurrentUser.isOwner(project);
   }
   
   static _getVolunteerStatus(project: ProjectDetailsAPIData): ?VolunteerDetailsAPIData {

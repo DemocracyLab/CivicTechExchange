@@ -18849,20 +18849,23 @@ var CurrentUser = function () {
       return window.DLAB_GLOBAL_CONTEXT.isStaff;
     }
   }, {
+    key: 'isOwner',
+    value: function isOwner(project) {
+      return this.userID() === project.project_creator;
+    }
+  }, {
     key: 'isCoOwner',
     value: function isCoOwner(project) {
-      var currentUserId = this.userID();
+      // const currentUserId = this.userID();
       // NOTE: Co-Owners are distinct from the project creator for authorization purposes.
-      if (!currentUserId || currentUserId === project.project_creator) return false;
-      var thisVolunteer = project.project_volunteers.find(function (volunteer) {
-        return volunteer.user.id === currentUserId;
-      });
+      if (CurrentUser.isOwner(project)) return false;
+      var thisVolunteer = CurrentUser._getVolunteerStatus(project);
       return thisVolunteer && thisVolunteer.isCoOwner;
     }
   }, {
     key: 'canVolunteerForProject',
     value: function canVolunteerForProject(project) {
-      return project.project_claimed && CurrentUser.isLoggedIn() && CurrentUser.isEmailVerified() && !CurrentUser._getVolunteerStatus(project);
+      return project.project_claimed && CurrentUser.isLoggedIn() && CurrentUser.isEmailVerified() && !CurrentUser._getVolunteerStatus(project) && !CurrentUser.isOwner(project);
     }
   }, {
     key: '_getVolunteerStatus',
@@ -95480,7 +95483,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_9_react_select__["a" /* default */], {
           options: this.state.positionOptions,
-          value: this.state.initialPositionSelection,
+          value: this.state.existingPositionOption || this.state.initialPositionSelection,
           onChange: this.handleExistingPositionSelection.bind(this),
           className: 'form-control',
           simpleValue: true,
@@ -95504,6 +95507,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
           value: [this.state.roleTag],
           category: __WEBPACK_IMPORTED_MODULE_6__tags_TagCategory_jsx__["a" /* default */].ROLE,
           allowMultiSelect: false,
+          isClearable: false,
           onSelection: this.onRoleChange.bind(this)
         })
       );
