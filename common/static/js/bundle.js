@@ -83594,11 +83594,10 @@ var AboutProjectController = function (_React$PureComponent) {
   }, {
     key: 'handleShowVolunteerModal',
     value: function handleShowVolunteerModal(position) {
-      var stateUpdate = { showJoinModal: true };
-      if (position) {
-        stateUpdate.positionToJoin = position;
-      }
-      this.setState(stateUpdate);
+      this.setState({
+        showJoinModal: true,
+        positionToJoin: position
+      });
     }
   }, {
     key: 'confirmJoinProject',
@@ -95303,7 +95302,8 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
   _createClass(ProjectVolunteerModal, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      var positionOptions = [{ value: "", label: "---" }].concat(nextProps.positions.map(function (position) {
+      var noPositionOption = { value: "", label: "---" };
+      var positionOptions = [noPositionOption].concat(nextProps.positions.map(function (position) {
         return { value: position.roleTag.tag_name, label: Object(__WEBPACK_IMPORTED_MODULE_7__tags_TagSelector_jsx__["b" /* tagOptionDisplay */])(position.roleTag) };
       }).concat(OtherRoleOption));
 
@@ -95313,10 +95313,12 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
       };
 
       if (nextProps.positionToJoin) {
-        var _initialPositionSelection = this.state.existingPositionOption || nextProps.positionToJoin && positionOptions.find(function (option) {
+        var _initialPositionSelection = nextProps.positionToJoin && positionOptions.find(function (option) {
           return option.value === nextProps.positionToJoin.roleTag.tag_name;
         });
         state.existingPositionOption = state.initialPositionSelection = _initialPositionSelection;
+      } else {
+        state.existingPositionOption = noPositionOption;
       }
       this.setState(state);
     }

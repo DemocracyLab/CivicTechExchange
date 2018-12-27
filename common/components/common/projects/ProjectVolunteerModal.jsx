@@ -66,8 +66,9 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
   }
   
   componentWillReceiveProps(nextProps: Props): void {
+    const noPositionOption: SelectOption = {value:"", label:"---"};
     const positionOptions: $ReadOnlyArray<SelectOption> =
-      [{value:"", label:"---"}].concat(
+      [noPositionOption].concat(
       nextProps.positions.map( (position: PositionInfo) => ({value:position.roleTag.tag_name, label:tagOptionDisplay(position.roleTag)})).concat(
       OtherRoleOption));
   
@@ -77,9 +78,11 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
     };
     
     if(nextProps.positionToJoin) {
-      const initialPositionSelection: SelectOption = this.state.existingPositionOption
-        || (nextProps.positionToJoin && positionOptions.find((option) => option.value === nextProps.positionToJoin.roleTag.tag_name));
+      const initialPositionSelection: SelectOption = nextProps.positionToJoin && positionOptions.find(
+        (option) => option.value === nextProps.positionToJoin.roleTag.tag_name);
       state.existingPositionOption = state.initialPositionSelection = initialPositionSelection;
+    } else {
+      state.existingPositionOption = noPositionOption;
     }
     this.setState(state);
   }

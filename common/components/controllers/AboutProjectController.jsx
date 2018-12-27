@@ -60,11 +60,10 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
   
   handleShowVolunteerModal(position: ?PositionInfo) {
-    let stateUpdate = {showJoinModal: true};
-    if (position) {
-      stateUpdate.positionToJoin = position;
-    }
-    this.setState(stateUpdate);
+    this.setState({
+      showJoinModal: true,
+      positionToJoin: position
+    });
   }
   
   confirmJoinProject(confirmJoin: boolean) {
