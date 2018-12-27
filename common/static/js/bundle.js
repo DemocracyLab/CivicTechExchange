@@ -18856,7 +18856,6 @@ var CurrentUser = function () {
   }, {
     key: 'isCoOwner',
     value: function isCoOwner(project) {
-      // const currentUserId = this.userID();
       // NOTE: Co-Owners are distinct from the project creator for authorization purposes.
       if (CurrentUser.isOwner(project)) return false;
       var thisVolunteer = CurrentUser._getVolunteerStatus(project);
@@ -46386,7 +46385,7 @@ var EditProjectForm = function (_React$PureComponent) {
   }, {
     key: 'loadProjectDetails',
     value: function loadProjectDetails(project) {
-      if (project.project_creator !== __WEBPACK_IMPORTED_MODULE_8__utils_CurrentUser_js__["a" /* default */].userID() && !__WEBPACK_IMPORTED_MODULE_8__utils_CurrentUser_js__["a" /* default */].isStaff()) {
+      if (!__WEBPACK_IMPORTED_MODULE_8__utils_CurrentUser_js__["a" /* default */].isOwner(project) && !__WEBPACK_IMPORTED_MODULE_8__utils_CurrentUser_js__["a" /* default */].isCoOwner(project) && !__WEBPACK_IMPORTED_MODULE_8__utils_CurrentUser_js__["a" /* default */].isStaff()) {
         this.setState({
           error: "You are not authorized to edit this Project"
         });

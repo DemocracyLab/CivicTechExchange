@@ -33,7 +33,6 @@ class CurrentUser {
   }
 
   static isCoOwner(project: ProjectDetailsAPIData): boolean {
-    // const currentUserId = this.userID();
     // NOTE: Co-Owners are distinct from the project creator for authorization purposes.
     if (CurrentUser.isOwner(project)) return false;
     const thisVolunteer = CurrentUser._getVolunteerStatus(project);
