@@ -1,0 +1,24 @@
+.Position-entry {
+  background-color: $color-text-light;
+  margin-bottom: 10px;
+  min-height: 50px;
+  max-width: 800px;
+  padding: 5px;
+}
+
+.Position-entry h3 {
+  font-weight: bold;
+}
+
+.Position-entry button {
+  background-color: $color-green;
+  border: 0;
+  border-radius: 5px;
+  color: $color-text-light;
+  cursor: pointer;
+  float: right;
+  font-size: 14px;
+  padding: 8px 4px 8px 4px;
+  margin-right: 5px;
+  margin-top: -40px;
+}

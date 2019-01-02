@@ -26,6 +26,10 @@ type State = {|
   loadTagsPromise: Promise<Array<TagOption>>
 |};
 
+export function tagOptionDisplay(tag: TagDefinition) {
+  return tag.subcategory ? tag.subcategory + ": " + tag.display_name : tag.display_name;
+}
+
 /**
  * Dropdown selector for tags
  */
@@ -38,7 +42,7 @@ class TagSelector extends React.PureComponent<Props, State> {
       let displayList: Array<TagOption> = _.values(tagMap).map(function(tag){
         return {
           value: tag.tag_name,
-          label: tag.subcategory ? tag.subcategory + ": " + tag.display_name : tag.display_name
+          label: tagOptionDisplay(tag)
         }
       });
       displayList = _.sortBy(displayList, ['label']);

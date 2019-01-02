@@ -65,10 +65,6 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     this.openDemotionModal = this.openDemotionModal.bind(this);
   }
   
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState(this.getButtonDisplaySetup(nextProps));
-  }
-  
   openApplicationModal(volunteer: VolunteerDetailsAPIData): void {
     this.setState({
       showApplicationModal: true,
