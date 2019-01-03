@@ -112,6 +112,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
   closePromotionModal(promoted: boolean): void {
     if (promoted) {
       ProjectAPIUtils.post("/volunteer/promote/" + this.state.volunteerToActUpon.application_id + "/", {}, () => {
+        metrics.logProjectPromoteVolunteer(CurrentUser.userID(), this.props.projectId);
         this.state.volunteerToActUpon.isCoOwner = true;
         this.setState({
           showPromotionModal: false
