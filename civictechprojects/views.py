@@ -338,10 +338,12 @@ def volunteer_with_project(request, project_id):
 @csrf_exempt
 def accept_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    project = volunteer_relation.project
     if volunteer_operation_is_authorized(request, volunteer_relation):
         # Set approved flag
         volunteer_relation.is_approved = True
         volunteer_relation.save()
+        project.save()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -350,10 +352,12 @@ def accept_project_volunteer(request, application_id):
 @csrf_exempt
 def promote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    project = volunteer_relation.project
     if volunteer_operation_is_authorized(request, volunteer_relation):
         # Set co_owner flag
         volunteer_relation.is_co_owner = True
         volunteer_relation.save()
+        project.save()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -362,6 +366,7 @@ def promote_project_volunteer(request, application_id):
 @csrf_exempt
 def reject_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    project = volunteer_relation.project
     if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['rejection_message']
@@ -371,6 +376,7 @@ def reject_project_volunteer(request, application_id):
                                   subject='Your application to join ' + volunteer_relation.project.project_name,
                                   body=email_body)
         volunteer_relation.delete()
+        project.save()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -380,6 +386,7 @@ def reject_project_volunteer(request, application_id):
 @csrf_exempt
 def dismiss_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    project = volunteer_relation.project
     if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['dismissal_message']
@@ -389,6 +396,7 @@ def dismiss_project_volunteer(request, application_id):
                                   subject='You have been dismissed from ' + volunteer_relation.project.project_name,
                                   body=email_body)
         volunteer_relation.delete()
+        project.save()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -397,9 +405,11 @@ def dismiss_project_volunteer(request, application_id):
 @csrf_exempt
 def demote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    project = volunteer_relation.project
     if volunteer_operation_is_authorized(request, volunteer_relation):
         volunteer_relation.is_co_owner = False
         volunteer_relation.save()
+        project.save()
         body = json.loads(request.body)
         message = body['demotion_message']
         email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
@@ -415,6 +425,7 @@ def demote_project_volunteer(request, application_id):
 @csrf_exempt
 def leave_project(request, project_id):
     volunteer_relation = VolunteerRelation.objects.filter(project_id=project_id, volunteer_id=request.user.id).first()
+    project = volunteer_relation.project
     if request.user.id == volunteer_relation.volunteer.id:
         body = json.loads(request.body)
         message = body['departure_message']
@@ -430,6 +441,7 @@ def leave_project(request, project_id):
                                subject=email_subject,
                                body=email_body)
         volunteer_relation.delete()
+        project.save()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
