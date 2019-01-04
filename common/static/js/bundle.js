@@ -18560,7 +18560,7 @@ var metrics = function () {
     }
   }, {
     key: "logProjectPromoteVolunteer",
-    value: function logProjectPromoteVolunteer(userId, projectId, number) {
+    value: function logProjectPromoteVolunteer(userId, projectId) {
       _logEvent("ProjectPromoteVolunteer", { userId: userId, projectId: projectId });
     }
   }, {
