@@ -137,7 +137,7 @@ class metrics {
     _logEvent("ProjectDismissVolunteer", {userId: userId, projectId: projectId});
   }
   
-  static logProjectPromoteVolunteer(userId: number, projectId, number): void {
+  static logProjectPromoteVolunteer(userId: number, projectId: number): void {
     _logEvent("ProjectPromoteVolunteer", {userId: userId, projectId: projectId});
   }
   
