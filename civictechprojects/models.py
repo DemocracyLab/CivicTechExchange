@@ -407,6 +407,9 @@ class VolunteerRelation(models.Model):
 
         return volunteer_json
 
+    def update_project_timestamp(self):
+        self.project.save()
+        
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
         relation = VolunteerRelation()
