@@ -15,7 +15,7 @@ class ProjectOwnerCard extends React.PureComponent<Props> {
   
   render(): React$Node {
     const owner: ?VolunteerUserData = this.props.owner;
-    const ownerUrl:string = owner.user_thumbnail && owner.user_thumbnail.publicUrl;
+    const ownerUrl:string = url.section(Section.Profile, {id: owner.id});
     return (
       <div className="VolunteerCard-root">
         <a className="VolunteerCard-volunteerName" href={ownerUrl} target="_blank" rel="noopener noreferrer">
@@ -24,7 +24,6 @@ class ProjectOwnerCard extends React.PureComponent<Props> {
         <a className="VolunteerCard-volunteerName" href={ownerUrl} target="_blank" rel="noopener noreferrer">
           {owner && (owner.first_name + " " + owner.last_name)}
         </a> 
-        {/* {this.props.isProjectAdmin ? this._renderShowApplicationMenu(volunteer) : null} */}
         <p className="VolunteerCard-volunteerRole">
           Project Owner
         </p>
