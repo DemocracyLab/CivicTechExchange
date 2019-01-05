@@ -82765,7 +82765,6 @@ var ProjectOwnerCard = function (_React$PureComponent) {
     key: 'render',
     value: function render() {
       var owner = this.props.owner;
-      // const ownerUrl:string = owner.user_thumbnail && owner.user_thumbnail.publicUrl;
       var ownerUrl = __WEBPACK_IMPORTED_MODULE_4__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_5__enums_Section_js__["a" /* default */].Profile, { id: owner.id });
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
