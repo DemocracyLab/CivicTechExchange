@@ -1,5 +1,7 @@
 // @flow
 
+import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
+
 class CurrentUser {
 
   static userID(): ?number {
@@ -24,6 +26,29 @@ class CurrentUser {
 
   static isStaff() : boolean {
     return window.DLAB_GLOBAL_CONTEXT.isStaff;
+  }
+  
+  static isOwner(project: ProjectDetailsAPIData): boolean {
+    return this.userID() === project.project_creator;
+  }
+
+  static isCoOwner(project: ProjectDetailsAPIData): boolean {
+    // NOTE: Co-Owners are distinct from the project creator for authorization purposes.
+    if (CurrentUser.isOwner(project)) return false;
+    const thisVolunteer = CurrentUser._getVolunteerStatus(project);
+    return thisVolunteer && thisVolunteer.isCoOwner;
+  }
+  
+  static canVolunteerForProject(project: ProjectDetailsAPIData): boolean {
+    return project.project_claimed
+      && CurrentUser.isLoggedIn()
+      && CurrentUser.isEmailVerified()
+      && !CurrentUser._getVolunteerStatus(project)
+      && !CurrentUser.isOwner(project);
+  }
+  
+  static _getVolunteerStatus(project: ProjectDetailsAPIData): ?VolunteerDetailsAPIData {
+    return project.project_volunteers && project.project_volunteers.find(volunteer => volunteer.user.id === CurrentUser.userID());
   }
 }
 

@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {UserAPIData} from "../../utils/UserAPIUtils.js";
 import {TagDefinition, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import url from "../../utils/url.js";
@@ -10,10 +10,13 @@ import Section from "../../enums/Section.js";
 type Props = {|
   +volunteer: VolunteerDetailsAPIData,
   +isProjectAdmin: boolean,
+  +isProjectCoOwner: boolean,
   +onOpenApplication: (VolunteerDetailsAPIData) => void,
   +onApproveButton: (VolunteerDetailsAPIData) => void,
   +onRejectButton: (VolunteerDetailsAPIData) => void,
-  +onDismissButton: (VolunteerDetailsAPIData) => void
+  +onDismissButton: (VolunteerDetailsAPIData) => void,
+  +onPromotionButton: (VolunteerDetailsAPIData) => void,
+  +onDemotionButton: (VolunteerDetailsAPIData) => void
 |};
 
 class VolunteerCard extends React.PureComponent<Props> {
@@ -23,66 +26,59 @@ class VolunteerCard extends React.PureComponent<Props> {
     const roleTag: ?TagDefinition = this.props.volunteer.roleTag;
     const volunteerUrl:string = url.section(Section.Profile, {id: volunteer.id});
     return (
-      <div className="MyProjectCard-root">
-         <table className="MyProjectCard-table">
-          <tbody>
-            <tr>
-              <td className="MyProjectCard-column">
-                <a href={volunteerUrl} target="_blank" rel="noopener noreferrer">
-                  {/*TODO: Change to pointer when hovering over image*/}
-                  <img className="upload_img upload_img_bdr" src={volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl}/>
-                </a>
-              </td>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">
-                  Name
-                </tr>
-                <tr className="MyProjectCard-projectName">
-                  <a href={volunteerUrl} target="_blank" rel="noopener noreferrer">
-                    {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
-                  </a>
-                </tr>
-              </td>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">
-                  Role
-                </tr>
-                <tr>{roleTag && roleTag.display_name}</tr>
-              </td>
-              {this.props.isProjectAdmin ? this._renderApplicationButtons() : null}
-            </tr>
-          </tbody>
-        </table>
+      <div className="VolunteerCard-root">
+        <a className="VolunteerCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
+          <img className="upload_img upload_img_bdr VolunteerCard-img" src={volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl}/>
+        </a>
+        <a className="VolunteerCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
+          {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
+        </a> 
+        {(this.props.isProjectAdmin || this.props.isProjectCoOwner) ? this._renderShowApplicationMenu(volunteer) : null}
+        <p className="VolunteerCard-volunteerRole">
+          {roleTag && roleTag.display_name}
+        </p>
       </div>
     );
   }
   
-  _renderApplicationButtons(): ?Array<React$Node>  {
-    return (this.props.volunteer && this.props.volunteer.isApproved
-      ? [
-          (<td className="MyProjectCard-column">
-            <Button className="MyProjectCard-button" bsStyle="danger" onClick={() => this.props.onDismissButton(this.props.volunteer)}>
-              Remove
-            </Button>
-          </td>)
+  _renderShowApplicationMenu(volunteer): ?React$Node {
+    return (this.props.volunteer
+      ? 
+        (<DropdownButton
+          bsClass="VolunteerCard-dropdownButton dropdown"
+          bsStyle="default"
+          bsSize="small"
+          title="..."
+          noCaret
+        >
+          {this._renderApplicationMenuLinks()}
+        </DropdownButton>)
+      : 
+        null
+      );
+  }
+
+  _renderApplicationMenuLinks(): ?Array<React$Node>  {
+    if (this.props.volunteer && this.props.volunteer.isCoOwner) {
+      return [
+          (<MenuItem className="VolunteerCard-caution" onSelect={() => this.props.onDemotionButton(this.props.volunteer)} key="0">Demote</MenuItem>),
+          (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
         ]
-      : [
-          (<td className="MyProjectCard-column">
-            <Button className="MyProjectCard-button" onClick={() => this.props.onOpenApplication(this.props.volunteer)}>
-              Application
-            </Button>
-          </td>),
-          (<td className="MyProjectCard-column">
-            <Button className="MyProjectCard-button" bsStyle="info" onClick={() => this.props.onApproveButton(this.props.volunteer)}>
-              Accept
-            </Button>
-          </td>),
-          (<td className="MyProjectCard-column">
-            <Button className="MyProjectCard-button" bsStyle="danger" onClick={() => this.props.onRejectButton(this.props.volunteer)}>
-              Reject
-            </Button>
-          </td>)
-      ]);
+    }
+    if (this.props.volunteer && this.props.volunteer.isApproved) {
+        return [
+          (<MenuItem className="VolunteerCard-caution" onSelect={() => this.props.onPromotionButton(this.props.volunteer)} key="0">Promote</MenuItem>),
+          (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
+        ]
+    }
+    if (this.props.volunteer) {
+      return [
+          (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key="2">Application</MenuItem>),
+          (<MenuItem className="VolunteerCard-success" onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3">Accept</MenuItem>),
+          (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4">Reject</MenuItem>)
+      ];
+    }
+    return null;
   }
 }
 

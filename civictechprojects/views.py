@@ -1,7 +1,6 @@
 from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
-from django.core.mail import EmailMessage
 from django.conf import settings
 from django.template import loader
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -17,8 +16,10 @@ from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
+from democracylab.emails import send_to_project_owners, send_to_project_volunteer
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
+
 
 #TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
 
@@ -115,8 +116,17 @@ def index(request):
     template = loader.get_template('new_index.html')
     context = {
         'FOOTER_LINKS': settings.FOOTER_LINKS,
-        'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL
+        'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL,
+        'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL
     }
+    if settings.HOTJAR_APPLICATION_ID:
+        context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
+                                                          {'HOTJAR_APPLICATION_ID': settings.HOTJAR_APPLICATION_ID})
+
+    if settings.GOOGLE_PROPERTY_ID:
+        context['googleScript'] = loader.render_to_string('scripts/google_snippet.txt',
+                                                          {'GOOGLE_PROPERTY_ID': settings.GOOGLE_PROPERTY_ID})
+
     if request.user.is_authenticated():
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
@@ -252,6 +262,13 @@ def presign_project_thumbnail_upload(request):
         raw_key=s3_key, file_name=file_name, file_type=file_type, acl="public-read")
 
 
+def volunteer_operation_is_authorized(request, volunteer_relation):
+    project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project)
+    authorized_usernames = ([volunteer_relation.project.project_creator.username] 
+        + list(map(lambda co: co.volunteer.username, list(filter(lambda v: v.is_co_owner, project_volunteers)))))
+    return request.user.username in authorized_usernames 
+
+
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def delete_uploaded_file(request, s3_key):
@@ -280,17 +297,12 @@ def contact_project_owner(request, project_id):
     message = body['message']
 
     project = Project.objects.get(id=project_id)
-    email_msg = EmailMessage(
-        '{firstname} {lastname} would like to connect with {project}'.format(
-            firstname=user.first_name,
-            lastname=user.last_name,
-            project=project.project_name),
-        '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email),
-        settings.EMAIL_HOST_USER,
-        [project.project_creator.email],
-        {'Reply-To': user.email}
-    )
-    email_msg.send()
+    email_subject = '{firstname} {lastname} would like to connect with {project}'.format(
+                    firstname=user.first_name,
+                    lastname=user.last_name,
+                    project=project.project_name)
+    email_body = '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email)
+    send_to_project_owners(project=project, sender=user, subject=email_subject, body=email_body)
     return HttpResponse(status=200)
 
 
@@ -313,18 +325,12 @@ def volunteer_with_project(request, project_id):
 
     # TODO: Include what role they are volunteering for
     user_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=Profile&id=' + str(user.id)
+    email_subject = '{firstname} {lastname} would like to volunteer with {project}'.format(
+        firstname=user.first_name,
+        lastname=user.last_name,
+        project=project.project_name)
     email_body = '{message} \n -- \n To view volunteer profile, see {url} \n'.format(message=message, user=user.email, url=user_profile_url)
-    email_msg = EmailMessage(
-        '{firstname} {lastname} would like to volunteer with {project}'.format(
-            firstname=user.first_name,
-            lastname=user.last_name,
-            project=project.project_name),
-        email_body,
-        settings.EMAIL_HOST_USER,
-        [project.project_creator.email],
-        {'Reply-To': user.email}
-    )
-    email_msg.send()
+    send_to_project_owners(project=project, sender=user, subject=email_subject, body=email_body)
     return HttpResponse(status=200)
 
 
@@ -332,32 +338,41 @@ def volunteer_with_project(request, project_id):
 @csrf_exempt
 def accept_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request.user.username == volunteer_relation.project.project_creator.username:
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         # Set approved flag
         volunteer_relation.is_approved = True
         volunteer_relation.save()
+        volunteer_relation.update_project_timestamp()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
 
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def promote_project_volunteer(request, application_id):
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    if volunteer_operation_is_authorized(request, volunteer_relation):
+        # Set co_owner flag
+        volunteer_relation.is_co_owner = True
+        volunteer_relation.save()
+        volunteer_relation.update_project_timestamp()
+        return HttpResponse(status=200)
+    else:
+        raise PermissionDenied()
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def reject_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request.user.username == volunteer_relation.project.project_creator.username:
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['rejection_message']
         email_body_template = 'The project owner for {project_name} has declined your application for the following reason:\n{message}'
         email_body = email_body_template.format(project_name=volunteer_relation.project.project_name,message=message)
-        email_msg = EmailMessage(
-            'Your application to join ' + volunteer_relation.project.project_name,
-            email_body,
-            settings.EMAIL_HOST_USER,
-            [volunteer_relation.volunteer.email],
-            {'Reply-To': volunteer_relation.project.project_creator.email}
-        )
-        email_msg.send()
+        send_to_project_volunteer(volunteer_relation=volunteer_relation,
+                                  subject='Your application to join ' + volunteer_relation.project.project_name,
+                                  body=email_body)
+        volunteer_relation.update_project_timestamp()
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
@@ -368,24 +383,38 @@ def reject_project_volunteer(request, application_id):
 @csrf_exempt
 def dismiss_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
-    if request.user.username == volunteer_relation.project.project_creator.username:
+    if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['dismissal_message']
         email_body = 'The owner for {project_name} has removed you from the project for the following reason:\n{message}'.format(
             project_name=volunteer_relation.project.project_name, message=message)
-        email_msg = EmailMessage(
-            'You have been dismissed from ' + volunteer_relation.project.project_name,
-            email_body,
-            settings.EMAIL_HOST_USER,
-            [volunteer_relation.volunteer.email],
-            {'Reply-To': volunteer_relation.project.project_creator.email}
-        )
-        email_msg.send()
+        send_to_project_volunteer(volunteer_relation=volunteer_relation,
+                                  subject='You have been dismissed from ' + volunteer_relation.project.project_name,
+                                  body=email_body)
+        volunteer_relation.update_project_timestamp()
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
 
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def demote_project_volunteer(request, application_id):
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    if volunteer_operation_is_authorized(request, volunteer_relation):
+        volunteer_relation.is_co_owner = False
+        volunteer_relation.save()
+        volunteer_relation.update_project_timestamp()
+        body = json.loads(request.body)
+        message = body['demotion_message']
+        email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
+            project_name=volunteer_relation.project.project_name, message=message)
+        send_to_project_volunteer(volunteer_relation=volunteer_relation,
+                                  subject='You have been removed as a co-owner from ' + volunteer_relation.project.project_name,
+                                  body=email_body)
+        return HttpResponse(status=200)
+    else:
+        raise PermissionDenied()
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
@@ -401,14 +430,11 @@ def leave_project(request, project_id):
         email_subject = '{volunteer_name} is leaving {project_name}'.format(
             volunteer_name=volunteer_relation.volunteer.full_name(),
             project_name=volunteer_relation.project.project_name)
-        email_msg = EmailMessage(
-            email_subject,
-            email_body,
-            settings.EMAIL_HOST_USER,
-            [volunteer_relation.project.project_creator.email],
-            {'Reply-To': volunteer_relation.volunteer.email}
-        )
-        email_msg.send()
+        send_to_project_owners(project=volunteer_relation.project,
+                               sender=volunteer_relation.volunteer,
+                               subject=email_subject,
+                               body=email_body)
+        volunteer_relation.update_project_timestamp()
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:

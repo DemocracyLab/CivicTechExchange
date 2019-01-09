@@ -64,7 +64,8 @@ export type VolunteerDetailsAPIData = {|
   +user: VolunteerUserData,
   +application_text: string,
   +roleTag: TagDefinition,
-  +isApproved: boolean
+  +isApproved: boolean,
+  +isCoOwner: boolean
 |}
 
 export type ProjectDetailsAPIData = {|
@@ -84,6 +85,7 @@ export type ProjectDetailsAPIData = {|
   +project_thumbnail: FileInfo,
   +project_links: $ReadOnlyArray<LinkInfo>,
   +project_files: $ReadOnlyArray<FileInfo>,
+  +project_owners: $ReadONlyArray<VolunteerUserData>,
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date
 |};

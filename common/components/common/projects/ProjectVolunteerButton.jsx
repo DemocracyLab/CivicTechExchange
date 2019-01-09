@@ -4,9 +4,10 @@ import React from 'react';
 import {Button} from 'react-bootstrap';
 import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
-import ProjectVolunteerModal from "./ProjectVolunteerModal.jsx";
 import FeedbackModal from "../FeedbackModal.jsx";
+import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import metrics from "../../utils/metrics.js";
 import _ from 'lodash'
 
 type LeaveProjectParams = {|
@@ -14,7 +15,9 @@ type LeaveProjectParams = {|
 |};
 
 type Props = {|
-  project: ?ProjectDetailsAPIData
+  project: ?ProjectDetailsAPIData,
+  positionToJoin: ?PositionInfo,
+  onVolunteerClick: () => void
 |};
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -35,7 +38,6 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
 
     this.handleShowJoinModal = this.handleShowJoinModal.bind(this);
     this.handleShowLeaveModal = this.handleShowLeaveModal.bind(this);
-    this.confirmJoinProject = this.confirmJoinProject.bind(this);
   }
   
   getButtonDisplaySetup(props: Props): State {
@@ -44,7 +46,6 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
     const newState = {
       project: project,
       isAlreadyVolunteering: _.some(props.project.project_volunteers, (volunteer: VolunteerDetailsAPIData) => volunteer.user.id === CurrentUser.userID()),
-      showJoinModal: false,
       buttonDisabled: false,
       buttonTitle: ""
     };
@@ -68,25 +69,20 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   }
   
   handleShowJoinModal() {
-    this.setState({ showJoinModal: true });
+    metrics.logVolunteerClickVolunteerButton(CurrentUser.userID(), this.props.project.project_id);
+    this.props.onVolunteerClick();
   }
   
   handleShowLeaveModal() {
+    metrics.logVolunteerClickLeaveButton(CurrentUser.userID(), this.props.project.project_id);
     this.setState({ showLeaveProjectModal: true });
-  }
-  
-  confirmJoinProject(confirmJoin: boolean) {
-    if(confirmJoin) {
-      window.location.reload(true);
-    } else {
-      this.setState({showJoinModal: false});
-    }
   }
   
   confirmLeaveProject(confirmLeaving: boolean, departureMessage: string):void {
     if(confirmLeaving) {
       const params: LeaveProjectParams = {departure_message: departureMessage};
       ProjectAPIUtils.post("/volunteer/leave/" + this.props.project.project_id + "/",params,() => {
+        metrics.logVolunteerClickLeaveConfirm(CurrentUser.userID(), this.props.project.project_id);
         window.location.reload(true);
       });
     } else {
@@ -103,11 +99,6 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
           return (
             <div>
               {this._renderVolunteerButton()}
-              <ProjectVolunteerModal
-                projectId={this.state.project && this.state.project.project_id}
-                showModal={this.state.showJoinModal}
-                handleClose={this.confirmJoinProject}
-              />
               <FeedbackModal
                 showModal={this.state.showLeaveProjectModal}
                 headerText="Leave Project"

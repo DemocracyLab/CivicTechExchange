@@ -10,7 +10,8 @@
 
     <link rel="icon" type="image/png" href="https://dprhz3gr7kco1.cloudfront.net/img/dl_identity_node_mark.png">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-
+    {{ hotjarScript }}
+    {{ googleScript }}
   </head>
   <body>
     <script>
@@ -46,6 +47,7 @@
       window.DLAB_FOOTER_LINKS = '{{FOOTER_LINKS}}';
 
       window.PROJECT_DESCRIPTION_EXAMPLE_URL = '{{PROJECT_DESCRIPTION_EXAMPLE_URL}}';
+      window.POSITION_DESCRIPTION_EXAMPLE_URL = '{{POSITION_DESCRIPTION_EXAMPLE_URL}}';
 
       window.DLAB_MESSAGES = [];
       {% for message in messages %}

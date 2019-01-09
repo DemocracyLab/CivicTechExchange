@@ -1,7 +1,7 @@
-//import our variables first
+  //import our variables first
 @import 'vars';
-//import third-party CSS, so we can use it and override it.
-// IMPORTANT: Load our bootstrap overrides first, per documentation.
+  //import third-party CSS, so we can use it and override it.
+  // IMPORTANT: Load our bootstrap overrides first, per Bootstrap's documentation.
 @import 'bootstrapoverride';
   //import required Bootstrap (foundation elements)
 @import 'vendor/bootstrap/functions';
@@ -22,7 +22,7 @@
 @import 'vendor/_react-select.min';
   //import Bootstrap3 dropdown (TODO: refactor to use Bootstrap 4)
 @import 'vendor/dropdown';
-//import DemocracyLab-written partials
+  //import DemocracyLab component partials
 @import 'partials/AlertSignupModal';
 @import 'partials/ContextualCollapsible';
 @import 'partials/EditProjectForm';
@@ -46,4 +46,6 @@
 @import 'partials/LogInController';
 @import 'partials/ModalPosition';
 @import 'partials/Global';
+@import 'partials/VolunteerCard';
+@import 'partials/CollapsibleText';
 @import 'partials/AboutProject';

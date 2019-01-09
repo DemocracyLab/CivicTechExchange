@@ -7,6 +7,7 @@ import CurrentUser from "../../utils/CurrentUser.js";
 import Section from '../../enums/Section.js';
 import url from '../../utils/url.js';
 import ContactProjectModal from "./ContactProjectModal.jsx";
+import metrics from "../../utils/metrics";
 
 type Props = {|
   project: ?ProjectDetailsAPIData
@@ -66,6 +67,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   }
   
   handleShow() {
+    metrics.logUserClickContactProjectOwner(CurrentUser.userID(), this.props.project.project_id);
     this.setState({ showContactModal: true });
   }
   
@@ -118,7 +120,9 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   }
 
   displayEditProjectButton(): ?React$Node {
-    if (CurrentUser.userID() === this.props.project.project_creator || CurrentUser.isStaff()) {
+    if (CurrentUser.userID() === this.props.project.project_creator 
+      || CurrentUser.isCoOwner(this.props.project)
+      || CurrentUser.isStaff()) {
       return (
       <div>
         {this._renderEditProjectButton()}

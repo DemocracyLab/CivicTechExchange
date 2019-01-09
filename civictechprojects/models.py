@@ -78,6 +78,7 @@ class Project(models.Model):
             'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links)),
+            'project_owners': [self.project_creator.hydrate_to_tile_json()],
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__()
         }
@@ -208,6 +209,7 @@ class ProjectPosition(models.Model):
     def create_from_json(project, position_json):
         position = ProjectPosition()
         position.position_project = project
+        position.position_description = position_json['description']
         position.description_url = position_json['descriptionUrl']
         position.save()
 
@@ -217,6 +219,7 @@ class ProjectPosition(models.Model):
 
     @staticmethod
     def update_from_json(position, position_json):
+        position.position_description = position_json['description']
         position.description_url = position_json['descriptionUrl']
         new_role = position_json['roleTag']['tag_name']
         Tag.merge_tags_field(position.position_role, new_role)
@@ -384,6 +387,7 @@ class VolunteerRelation(models.Model):
     role.remote_field.related_name = "+"
     application_text = models.CharField(max_length=10000, blank=True)
     is_approved = models.BooleanField(default=False)
+    is_co_owner = models.BooleanField(default=False)
     projected_end_date = models.DateTimeField(auto_now=False, null=True)
 
     def __str__(self):
@@ -397,11 +401,15 @@ class VolunteerRelation(models.Model):
             'user': volunteer.hydrate_to_tile_json(),
             'application_text': self.application_text,
             'roleTag': Tag.hydrate_to_json(volunteer.id, self.role.all().values())[0],
-            'isApproved': self.is_approved
+            'isApproved': self.is_approved,
+            'isCoOwner': self.is_co_owner
         }
 
         return volunteer_json
 
+    def update_project_timestamp(self):
+        self.project.save()
+        
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
         relation = VolunteerRelation()
@@ -409,6 +417,7 @@ class VolunteerRelation(models.Model):
         relation.volunteer = volunteer
         relation.projected_end_date = projected_end_date
         relation.application_text = application_text
+        relation.is_co_owner = False
         relation.save()
 
         relation.role.add(role)

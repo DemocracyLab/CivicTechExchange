@@ -20,6 +20,7 @@ import PositionList from "../../forms/PositionList.jsx";
 import _ from 'lodash'
 import {Locations} from "../../constants/ProjectConstants";
 import {LinkNames} from "../../constants/LinkConstants.js";
+import metrics from "../../utils/metrics.js";
 
 
 
@@ -108,11 +109,12 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   }
 
   loadProjectDetails(project: ProjectDetailsAPIData): void {
-    if(project.project_creator != window.DLAB_GLOBAL_CONTEXT.userID && !CurrentUser.isStaff()) {
+    if(!CurrentUser.isOwner(project) && !CurrentUser.isCoOwner(project) && !CurrentUser.isStaff()) {
       this.setState({
         error: "You are not authorized to edit this Project"
       });
     } else {
+      metrics.logProjectClickEdit(CurrentUser.userID(), this.props.projectId);
       this.setState({
         formFields: {
           project_name: project.project_name,
@@ -155,9 +157,9 @@ class EditProjectForm extends React.PureComponent<Props,State> {
       this.state.formFields.project_url = url.appendHttpIfMissingProtocol(this.state.formFields.project_url);
     }
    // create input array
-   var eLinks = ['link_coderepo','link_messaging','link_filerepo','link_projmanage'].map(name => ({linkName: name, linkUrl: this.state.formFields[name]}))
+   let eLinks = ['link_coderepo','link_messaging','link_filerepo','link_projmanage'].map(name => ({linkName: name, linkUrl: this.state.formFields[name]}));
    //create output array
-   var eLinksArray = [];
+   let eLinksArray = [];
   //create objects for project_links array, skipping empty fields
     eLinks.forEach(function(item) {
       if(!_.isEmpty(item.linkUrl)) {

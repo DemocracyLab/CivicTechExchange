@@ -12,15 +12,16 @@ import {LinkInfo} from "../forms/LinkInfo.jsx";
 import {FileInfo} from "../common/FileInfo.jsx";
 import ImageUploadFormElement from "../forms/ImageUploadFormElement.jsx";
 import FileUploadList from "../forms/FileUploadList.jsx";
-import {FileCategoryNames} from "../constants/FileConstants.js";
 import url from "../utils/url.js";
+import metrics from "../utils/metrics.js";
+import CurrentUser from "../utils/CurrentUser.js";
 import _ from 'lodash';
 
 const UserLinkNames = ['link_linkedin'];
 
 const UserFileTypes = {
   RESUME: "RESUME"
-}
+};
 
 type FormFields = {|
   +user_thumbnail?: FileInfo,
@@ -85,6 +86,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
   
     //this will set formFields.user_links and formFields.links_*
     this.filterSpecificLinks(user.user_links);
+    metrics.logUserProfileEditEntry(CurrentUser.userID());
   }
   
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
@@ -125,6 +127,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
     formFields.user_links = formFields.user_links.concat(eLinksArray);
     this.setState({ formFields: formFields});
     this.forceUpdate();
+    metrics.logUserProfileEditSave(CurrentUser.userID());
   }
   
   filterSpecificLinks(array) {

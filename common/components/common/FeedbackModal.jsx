@@ -40,6 +40,9 @@ class FeedbackModal extends React.PureComponent<Props, State> {
   
   confirm(confirmation: boolean): void {
     this.props.onConfirm(confirmation, this.state.feedbackText);
+    if(confirmation) {
+      this.setState({feedbackText: ""});
+    }
   }
   
   render(): React$Node {

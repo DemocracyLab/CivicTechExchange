@@ -11,10 +11,12 @@ import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.j
 import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
 import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
 import {LinkNames} from "../constants/LinkConstants.js";
-
+//TODO: Re-add Metrics events
 
 type State = {|
   project: ?ProjectDetailsAPIData,
+  showJoinModal: boolean,
+  positionToJoin: ?PositionInfo,
   showPositionModal: boolean,
   shownPosition: ?PositionInfo,
   tabs: object
@@ -34,11 +36,11 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       skills: false,
       positions: false,
     }
-  }  
+  }
  }
 
   componentDidMount() {
-    const projectId = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
+    const projectId: string = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
     ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
 
   }
@@ -47,6 +49,21 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     this.setState({
       project: project,
     });
+  }
+
+  handleShowVolunteerModal(position: ?PositionInfo) {
+    this.setState({
+      showJoinModal: true,
+      positionToJoin: position
+    });
+  }
+
+  confirmJoinProject(confirmJoin: boolean) {
+    if(confirmJoin) {
+      window.location.reload(true);
+    } else {
+      this.setState({showJoinModal: false});
+    }
   }
 
   changeHighlighted(tab) {
@@ -58,7 +75,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
     tabs[tab] = true;
     this.setState({tabs});
-  } 
+  }
 
   render(): $React$Node {
     return this.state.project ? this._renderDetails() : <div>Loading...</div>
@@ -86,7 +103,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 projectStage={project && project.project_stage && project.project_stage[0].display_name}
                 dateModified={project && project.project_date_modified}/>
               </Grid>
-                
+
 
               <Divider />
 
@@ -137,7 +154,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#skills-needed">Skills Needed</a>
                 <a  onClick={() => this.changeHighlighted('positions')} className={this.state.tabs.positions ? 'AboutProjects_aHighlighted' : 'none'} href="#AboutProjects-positions-available">Positions</a>
               </div>
-                  
+
               </Grid>
               <Divider />
 
@@ -326,7 +343,7 @@ export default AboutProjectController;
 //                 </div>
 //               : null
 //           }
-  
+
 //           {
 //             project && !_.isEmpty(project.project_short_description)
 //             ? < div className="row" style={{margin: "30px 40px 0 40px"}}>
@@ -369,7 +386,7 @@ export default AboutProjectController;
 //                 </div>
 //               : null
 //           }
-  
+
 //           {
 //             project && !_.isEmpty(project.project_volunteers)
 //               ? <VolunteerSection
@@ -481,11 +498,10 @@ export default AboutProjectController;
 //           );
 //       });
 //   }
-  
+
 
 //   _legibleName(input) {
 //     //replaces specific linkNames for readability
 //     return LinkNames[input] || input;
 //   }
 // }
-
