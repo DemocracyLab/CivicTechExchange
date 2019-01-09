@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator
 from django.conf import settings
 from django.template import loader
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -182,7 +183,17 @@ def projects_list(request):
         else:
             project_list = projects_by_sortField(project_list, '-project_date_modified')
 
-    response = json.dumps(projects_with_filter_counts(project_list))
+        project_paginator = Paginator(project_list, 2)
+        project_pages = project_paginator.num_pages
+
+        if 'page' in query_params:
+            project_list_page = project_paginator.page(query_params['page'][0])
+        else:
+            project_list_page = project_paginator.page(1)
+
+
+    response = json.dumps(projects_with_meta_data(project_list_page, project_pages))
+
     return HttpResponse(response)
 
 
@@ -234,10 +245,12 @@ def projects_by_roles(tags):
     return Project.objects.filter(positions__in=positions)
 
 
-def projects_with_filter_counts(projects):
+def projects_with_meta_data(projects, project_pages):
+    print('num_pages', project_pages)
     return {
         'projects': [project.hydrate_to_tile_json() for project in projects],
-        'tags': list(Tag.objects.values())
+        'tags': list(Tag.objects.values()),
+        'numPages': project_pages
     }
 
 

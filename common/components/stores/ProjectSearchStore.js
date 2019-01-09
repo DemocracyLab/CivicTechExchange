@@ -17,6 +17,7 @@ export type FindProjectsArgs = {|
   keyword: string,
   sortField: string,
   location: string,
+  page: string,
   issues: string,
   tech: string,
   role: string,
@@ -62,6 +63,8 @@ const DEFAULT_STATE = {
   keyword: '',
   sortField: '',
   location: '',
+  page: '1',
+  numPages: '',
   tags: List(),
   projectsData: {},
   findProjectsArgs: {}
@@ -71,6 +74,8 @@ class State extends Record(DEFAULT_STATE) {
   keyword: string;
   sortField: string;
   location: string;
+  page: string;
+  numPages: string;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
   findProjectsArgs: FindProjectsArgs;
@@ -205,11 +210,12 @@ class ProjectSearchStore extends ReduceStore<State> {
     const url: string = urls.constructWithQueryString('/api/projects', state.findProjectsArgs);
     fetch(new Request(url))
       .then(response => response.json())
-      .then(getProjectsResponse =>
+      .then(getProjectsResponse => {
+        console.log(getProjectsResponse);
         ProjectSearchDispatcher.dispatch({
           type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
           projectsResponse: getProjectsResponse
-        }),
+        })}
       );
     return state.set('projectsData', null);
   }

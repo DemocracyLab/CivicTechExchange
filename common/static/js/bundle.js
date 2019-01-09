@@ -24625,6 +24625,8 @@ var DEFAULT_STATE = {
   keyword: '',
   sortField: '',
   location: '',
+  page: '1',
+  pageInfo: {},
   tags: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(),
   projectsData: {},
   findProjectsArgs: {}
@@ -24797,7 +24799,8 @@ var ProjectSearchStore = function (_ReduceStore) {
       fetch(new Request(url)).then(function (response) {
         return response.json();
       }).then(function (getProjectsResponse) {
-        return __WEBPACK_IMPORTED_MODULE_1__ProjectSearchDispatcher_js__["a" /* default */].dispatch({
+        console.log(getProjectsResponse);
+        __WEBPACK_IMPORTED_MODULE_1__ProjectSearchDispatcher_js__["a" /* default */].dispatch({
           type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
           projectsResponse: getProjectsResponse
         });
@@ -94135,7 +94138,7 @@ var FindProjectsController = function (_React$PureComponent) {
     key: 'componentWillMount',
     value: function componentWillMount() {
       var args = __WEBPACK_IMPORTED_MODULE_6__utils_url_js__["a" /* default */].arguments(document.location.search);
-      args = __WEBPACK_IMPORTED_MODULE_8_lodash___default.a.pick(args, ['keyword', 'sortField', 'location', 'issues', 'tech', 'role', 'org', 'stage']);
+      args = __WEBPACK_IMPORTED_MODULE_8_lodash___default.a.pick(args, ['keyword', 'sortField', 'location', 'page', 'issues', 'tech', 'role', 'org', 'stage']);
       __WEBPACK_IMPORTED_MODULE_0__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({ type: 'INIT', findProjectsArgs: !__WEBPACK_IMPORTED_MODULE_8_lodash___default.a.isEmpty(args) ? args : null });
       __WEBPACK_IMPORTED_MODULE_1__stores_TagDispatcher_js__["a" /* default */].dispatch({ type: 'INIT' });
     }
