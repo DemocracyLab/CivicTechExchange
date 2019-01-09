@@ -24626,7 +24626,7 @@ var DEFAULT_STATE = {
   sortField: '',
   location: '',
   page: '1',
-  pageInfo: {},
+  numPages: 1,
   tags: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(),
   projectsData: {},
   findProjectsArgs: {}
@@ -24686,6 +24686,7 @@ var ProjectSearchStore = function (_ReduceStore) {
           return this._loadProjects(this._clearFilters(state));
         case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
           var _projects = action.projectsResponse.projects.map(__WEBPACK_IMPORTED_MODULE_3__utils_ProjectAPIUtils_js__["a" /* default */].projectFromAPIData);
+          var _numPages = action.projectsResponse.numPages;
           var allTags = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.mapKeys(action.projectsResponse.tags, function (tag) {
             return tag.tag_name;
           });
@@ -24695,6 +24696,7 @@ var ProjectSearchStore = function (_ReduceStore) {
           }));
           return state.set('projectsData', {
             projects: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(_projects),
+            numPages: _numPages,
             allTags: allTags
           });
         default:
@@ -24837,6 +24839,12 @@ var ProjectSearchStore = function (_ReduceStore) {
     value: function getProjects() {
       var state = this.getState();
       return state.projectsData && state.projectsData.projects;
+    }
+  }, {
+    key: 'getProjectPages',
+    value: function getProjectPages() {
+      var state = this.getState();
+      return state.projectsData && state.projectsData.numPages;
     }
   }, {
     key: 'getTags',
@@ -94228,6 +94236,15 @@ var ProjectCardsContainer = function (_React$Component) {
             'div',
             { className: 'row' },
             this._renderCards()
+          ),
+          __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
+            'div',
+            null,
+            __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
+              'p',
+              null,
+              'Project Pages: ' + this.state.project_pages
+            )
           )
         )
       );
@@ -94253,7 +94270,8 @@ var ProjectCardsContainer = function (_React$Component) {
     key: 'calculateState',
     value: function calculateState(prevState) {
       return {
-        projects: __WEBPACK_IMPORTED_MODULE_3__stores_ProjectSearchStore_js__["a" /* default */].getProjects()
+        projects: __WEBPACK_IMPORTED_MODULE_3__stores_ProjectSearchStore_js__["a" /* default */].getProjects(),
+        project_pages: __WEBPACK_IMPORTED_MODULE_3__stores_ProjectSearchStore_js__["a" /* default */].getProjectPages()
       };
     }
   }]);

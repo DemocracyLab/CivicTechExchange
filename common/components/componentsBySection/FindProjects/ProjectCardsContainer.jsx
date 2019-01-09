@@ -22,6 +22,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   static calculateState(prevState: State): State {
     return {
       projects: ProjectSearchStore.getProjects(),
+      project_pages: ProjectSearchStore.getProjectPages(),
     };
   }
 
@@ -31,6 +32,9 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
         <div className="container-fluid pl-0 pr-0">
           <div className="row">
             {this._renderCards()}
+          </div>
+          <div>
+            <p>{ `Project Pages: ${this.state.project_pages}` }</p>
           </div>
         </div>
       </div>

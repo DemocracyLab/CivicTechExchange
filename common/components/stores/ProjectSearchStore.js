@@ -28,6 +28,7 @@ export type FindProjectsArgs = {|
 
 type FindProjectsResponse = {|
   +projects: $ReadOnlyArray<ProjectAPIData>,
+  +numPages: number,
 |};
 
 type FindProjectsData = {|
@@ -64,7 +65,7 @@ const DEFAULT_STATE = {
   sortField: '',
   location: '',
   page: '1',
-  numPages: '',
+  numPages: 1,
   tags: List(),
   projectsData: {},
   findProjectsArgs: {}
@@ -75,7 +76,7 @@ class State extends Record(DEFAULT_STATE) {
   sortField: string;
   location: string;
   page: string;
-  numPages: string;
+  numPages: number;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
   findProjectsArgs: FindProjectsArgs;
@@ -114,11 +115,13 @@ class ProjectSearchStore extends ReduceStore<State> {
         return this._loadProjects(this._clearFilters(state));
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
         let projects = action.projectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData);
+        let numPages = action.projectsResponse.numPages;
         let allTags = _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name);
         // Remove all tag filters that don't match an existing tag name
         state = state.set('tags', state.tags.filter(tag => allTags[tag]));
         return state.set('projectsData', {
           projects: List(projects),
+          numPages: numPages,
           allTags: allTags,
         });
       default:
@@ -240,6 +243,11 @@ class ProjectSearchStore extends ReduceStore<State> {
   getProjects(): List<Project> {
     const state: State = this.getState();
     return state.projectsData && state.projectsData.projects;
+  }
+
+  getProjectPages(): number {
+    const state: State = this.getState();
+    return state.projectsData && state.projectsData.numPages;
   }
 
   getTags(inProgressState: ?State): List<TagDefinition> {
