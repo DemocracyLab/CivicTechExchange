@@ -17,7 +17,7 @@ def send_project_creation_notification(project):
         settings.DEFAULT_FROM_EMAIL,
         [settings.ADMIN_EMAIL]
     )
-    email_msg.send()
+    send_email(email_msg)
 
 
 def send_to_project_owners(project, sender, subject, body):
@@ -30,7 +30,7 @@ def send_to_project_owners(project, sender, subject, body):
         to=[project.project_creator.email] + co_owner_emails,
         reply_to=[sender.email]
     )
-    email_msg.send()
+    send_email(email_msg)
 
 
 def send_to_project_volunteer(volunteer_relation, subject, body):
@@ -43,4 +43,24 @@ def send_to_project_volunteer(volunteer_relation, subject, body):
         to=[volunteer_relation.volunteer.email],
         reply_to=[volunteer_relation.project.project_creator.email] + co_owner_emails,
     )
-    email_msg.send()
+    send_email(email_msg)
+
+
+def send_email(email_msg):
+    if not settings.FAKE_EMAILS:
+        email_msg.send()
+    else:
+        test_email_subject = 'TEST EMAIL: ' + email_msg.subject
+        test_email_body = 'Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\n---\n{body}'.format(
+            environment=settings.PROTOCOL_DOMAIN,
+            to_line=email_msg.to,
+            reply_to=email_msg.reply_to,
+            body=email_msg.body
+        )
+        test_email_msg = EmailMessage(
+            subject=test_email_subject,
+            body=test_email_body,
+            from_email=settings.EMAIL_HOST_USER,
+            to=[settings.ADMIN_EMAIL]
+        )
+        test_email_msg.send()

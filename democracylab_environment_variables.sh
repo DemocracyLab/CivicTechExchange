@@ -27,5 +27,8 @@ export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/index/?sect
 # Configure position description example link
 export POSITION_DESCRIPTION_EXAMPLE_URL='https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit'
 
+# If True, emails won't be sent to their recipients, but to the ADMIN_EMAIL address (with metadata for debugging)
+export FAKE_EMAILS=True
+
 # ONLY FOR USE IN PRODUCTION
 #export HOTJAR_APPLICATION_ID=1097784
