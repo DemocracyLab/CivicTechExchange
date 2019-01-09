@@ -10,6 +10,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.jsx';
 import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
 import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
+import {LinkNames} from "../constants/LinkConstants.js";
+
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -81,7 +83,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <Grid className='AboutProjects-details'>
                 <ProjectDetails projectLocation={project && project.project_location}
                 projectUrl={project && project.project_url}
-                projectStage={project && project.project_stage && project.project_stage[0].tag_name}
+                projectStage={project && project.project_stage && project.project_stage[0].display_name}
                 dateModified={project && project.project_date_modified}/>
               </Grid>
                 
@@ -90,26 +92,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
               <Grid className='AboutProjects-links'>
                 <p>Links</p>
-                <div className="AboutProjects-links-icon-container">
-                  <Tooltip title="meetup">
-                    <Meetup/>
-                  </Tooltip>
-                  <Tooltip title="github">
-                    <GithubCircle/>
-                  </Tooltip>
-                  <Tooltip title="slack">
-                    <Slack/>
-                  </Tooltip>
-                  <Tooltip title="trello">
-                    <Trello/>
-                  </Tooltip>
-                  <Tooltip title="googleDrive">
-                    <GoogleDrive/>
-                  </Tooltip>
-                  <Tooltip title="website">
-                    <Earth/>
-                  </Tooltip>
-                </div>
+                {project && !_.isEmpty(project.project_links) && this._renderLinks()}
               </Grid>
 
               <Divider />
@@ -178,6 +161,20 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         </Grid>
       </div>
     )
+  }
+
+  _renderLinks(): ?Array<React$Node> {
+    const project = this.state.project;
+    return project && project.project_links && project.project_links.map((link, i) =>
+      <div key={i}>
+        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{this._legibleName(link.linkName)}</a>
+      </div>
+    );
+  }
+
+    _legibleName(input) {
+    //replaces specific linkNames for readability
+    return LinkNames[input] || input;
   }
 }
 
