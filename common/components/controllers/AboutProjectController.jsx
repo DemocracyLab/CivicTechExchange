@@ -135,7 +135,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <div className="AboutProjects_tabs">
                 <a  onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
                 <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#skills-needed">Skills Needed</a>
-                <a  onClick={() => this.changeHighlighted('positions')} className={this.state.tabs.positions ? 'AboutProjects_aHighlighted' : 'none'} href="#">Positions</a>
+                <a  onClick={() => this.changeHighlighted('positions')} className={this.state.tabs.positions ? 'AboutProjects_aHighlighted' : 'none'} href="#AboutProjects-positions-available">Positions</a>
               </div>
                   
               </Grid>
@@ -154,6 +154,11 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 </div>
                 <Grid item xs={6}></Grid>
                 </Grid>
+              </Grid>
+              <Divider/>
+              <Grid id='AboutProjects-positions-available' container>
+              {project && !_.isEmpty(project.project_positions) && this._renderPositions()}
+
               </Grid>
             </Paper>
           </Grid>
@@ -176,6 +181,23 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     //replaces specific linkNames for readability
     return LinkNames[input] || input;
   }
+
+  _renderPositions(): ?Array<React$Node> {
+        const project = this.state.project;
+        return project && project.project_positions && _.chain(project.project_positions).sortBy(['roleTag.subcategory', 'roleTag.display_name']).value()
+          .map((position, i) => {
+            const positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;
+            return (
+                <div key={i}>
+                {
+                  position.descriptionUrl
+                  ? <a href={position.descriptionUrl} target="_blank" rel="noopener noreferrer">{positionDisplay}</a>
+                  : <span>{positionDisplay}</span>
+                }
+                </div>
+              );
+          });
+      }
 }
 
 export default AboutProjectController;

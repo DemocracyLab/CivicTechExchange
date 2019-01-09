@@ -54,10 +54,15 @@
   
   .AboutProjects-communities {
     height: 10%;
+     p {
+       padding-left: 15px;
+     }
   }
   
-  .AboutProjects-teams {
-    height: 30%;
+  .AboutProjects-team {
+    p {
+      padding-left: 15px;
+    }
   }
 
   .AboutProjects-intro {
