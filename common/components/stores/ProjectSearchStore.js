@@ -136,6 +136,7 @@ class ProjectSearchStore extends ReduceStore<State> {
         keyword: state.keyword,
         sortField: state.sortField,
         location: state.location,
+        page: state.page,
         issues: this._getTagCategoryParams(state, TagCategory.ISSUES),
         tech: this._getTagCategoryParams(state, TagCategory.TECHNOLOGIES_USED),
         role: this._getTagCategoryParams(state, TagCategory.ROLE),
@@ -213,12 +214,11 @@ class ProjectSearchStore extends ReduceStore<State> {
     const url: string = urls.constructWithQueryString('/api/projects', state.findProjectsArgs);
     fetch(new Request(url))
       .then(response => response.json())
-      .then(getProjectsResponse => {
-        console.log(getProjectsResponse);
+      .then(getProjectsResponse =>
         ProjectSearchDispatcher.dispatch({
           type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
           projectsResponse: getProjectsResponse
-        })}
+        })
       );
     return state.set('projectsData', null);
   }

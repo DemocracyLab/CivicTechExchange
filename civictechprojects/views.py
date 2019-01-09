@@ -183,7 +183,7 @@ def projects_list(request):
         else:
             project_list = projects_by_sortField(project_list, '-project_date_modified')
 
-        project_paginator = Paginator(project_list, 3)
+        project_paginator = Paginator(project_list, 1)
         project_pages = project_paginator.num_pages
 
         if 'page' in query_params:
@@ -246,7 +246,6 @@ def projects_by_roles(tags):
 
 
 def projects_with_meta_data(projects, project_pages):
-    print('num_pages', project_pages)
     return {
         'projects': [project.hydrate_to_tile_json() for project in projects],
         'tags': list(Tag.objects.values()),

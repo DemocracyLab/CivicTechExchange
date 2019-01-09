@@ -6,6 +6,7 @@ import cx from '../utils/cx';
 import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
 import url from '../utils/url.js';
+import Section from '../enums/Section.js';
 import metrics from "../utils/metrics.js";
 
 type Props = {|
@@ -45,7 +46,7 @@ class SectionLink extends React.PureComponent<Props> {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: this.props.section,
-      url: url.section(this.props.section)
+      url: url.section(this.props.section, this.props.section === Section.FindProjects ? {page: 1} : {})
     });
     metrics.logSectionNavigation(this.props.section);
   }

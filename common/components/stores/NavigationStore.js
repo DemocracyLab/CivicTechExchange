@@ -10,15 +10,18 @@ import Section from '../enums/Section.js';
 export type NavigationActionType = {
   type: 'SET_SECTION',
   section: SectionType,
+  page: number,
   url: string
 };
 
 const DEFAULT_STATE = {
   section: Section.FindProjects,
+  page: 1,
 };
 
 class State extends Record(DEFAULT_STATE) {
   section: SectionType;
+  page: number;
   url: string;
 }
 
