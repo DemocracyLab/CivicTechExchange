@@ -82,12 +82,27 @@
     justify-self: flex-start;
     align-self: flex-end;
     width: 100%;
-    padding: 0px 0px 10px 15px;
+    padding: 0px 0px 0px 15px;
         a {
+          padding-bottom: 2px;
           font-size: 24px;
           margin-right: 40px;
           color: #888;
           transition: 300ms;
+          cursor: pointer;
+          &:hover {
+            color: black;
+            text-decoration: none;
+          }
+        }
+        .AboutProjects_aHighlighted {
+          border-bottom: 3px solid $color-orange;
+          padding-bottom: 2px;
+          font-size: 24px;
+          margin-right: 40px;
+          color: #000;
+          transition: 300ms;
+          cursor: pointer;          
           &:hover {
             color: black;
             text-decoration: none;
@@ -96,14 +111,47 @@
   }
 
   .AboutProjects-description-details {
-    padding: 25px 0 0 15px;
-  }
-  .AboutProjects-skills {
-    width: 50%;
-    p {
-      background: #888;
-      border-radius: 20px;
-      padding: 2px;
-    }
+    padding: 25px 15px 0 15px;
   }
 
+  .AboutProjects-skills {
+    width: 49.5%;
+    margin-right: .5%;
+    p {
+      display: inline-block;
+      background: #DDD;
+      border-radius: 20px;
+      padding: 4px 10px 4px 10px;
+      margin: 4px;
+    }
+
+    .AboutProjects-skills-title {
+      padding-left: 0px;
+      float: left;
+      background: #FFF;
+      font-weight: bold;
+      width: 100%;
+    }
+  
+  }
+
+  .AboutProjects-technologies {
+    width: 49.5%;
+    margin-left: .5%;
+    
+    p {
+      display: inline-block;
+      background: #DDD;
+      border-radius: 20px;
+      padding: 4px 10px 4px 10px;
+      margin: 4px;
+    }
+
+    .AboutProjects-tech-title {
+      padding-left: 0px;      
+      float: left;
+      background: #FFF;
+      font-weight: bold;
+      width: 100%;
+    }
+  }

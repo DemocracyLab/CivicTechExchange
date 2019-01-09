@@ -14,7 +14,8 @@ import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.js
 type State = {|
   project: ?ProjectDetailsAPIData,
   showPositionModal: boolean,
-  shownPosition: ?PositionInfo
+  shownPosition: ?PositionInfo,
+  tabs: object
 |};
 
 class AboutProjectController extends React.PureComponent<{||}, State> {
@@ -25,7 +26,12 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     project: null,
     showContactModal: false,
     showPositionModal: false,
-    shownPosition: null
+    shownPosition: null,
+    tabs: {
+      details: true,
+      skills: false,
+      positions: false,
+    }
   }  
  }
 
@@ -37,9 +43,20 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   loadProjectDetails(project) {
     this.setState({
-      project: project
+      project: project,
     });
   }
+
+  changeHighlighted(tab) {
+   let tabs = {
+      details: false,
+      skills: false,
+      positions: false,
+    }
+
+    tabs[tab] = true;
+    this.setState({tabs});
+  } 
 
   render(): $React$Node {
     return this.state.project ? this._renderDetails() : <div>Loading...</div>
@@ -47,7 +64,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   _renderDetails(): React$Node {
     const project = this.state.project;
-    console.log(project);
+    // console.log(project);
     return (
       <div className='AboutProjects-root'>
         <Grid container className='AboutProjects-container' spacing={8}>
@@ -132,15 +149,26 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     <ContactProjectButton project={project}/>
                    {/* { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> } */}
                   </Grid>
-              <div className="AboutProjects_tabs"><a href="#">Details</a><a href="#">Skills Needed</a><a href="#">Positions</a></div>
+              <div className="AboutProjects_tabs">
+                <a  onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
+                <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#skills-needed">Skills Needed</a>
+                <a  onClick={() => this.changeHighlighted('positions')} className={this.state.tabs.positions ? 'AboutProjects_aHighlighted' : 'none'} href="#">Positions</a>
+              </div>
                   
               </Grid>
               <Divider />
 
               <Grid className='AboutProjects-description-details'>
-              <p>{project.project_description}</p>
+              <p id='project-details'>{project.project_description}</p>
               <Grid className='AboutProjects-skills-container' container direction='row'>
-                <div className='AboutProjects-skills'>{project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.tag_name.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')}</p>)}</div>
+                <div className='AboutProjects-skills'>
+                  <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
+                  {project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.tag_name.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')}</p>)}
+                </div>
+                <div className='AboutProjects-technologies'>
+                  <p className='AboutProjects-tech-title'>Technologies Used</p>
+                  {project && project.project_technologies && project.project_technologies.map(tech => <p>{tech.display_name}</p>)}
+                </div>
                 <Grid item xs={6}></Grid>
                 </Grid>
               </Grid>
