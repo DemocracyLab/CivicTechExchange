@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
+import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import {Earth, MapMarker, Clock, Domain, ChartBar, Key, Meetup, GithubCircle, Slack, Trello, GoogleDrive} from 'mdi-material-ui';
 import Tooltip from '@material-ui/core/Tooltip';
 import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.jsx';
@@ -19,14 +20,13 @@ import GlyphStyles from "../utils/glyphs.js";
 import CurrentUser from "../utils/CurrentUser.js";
 import ProjectOwnersSection from "../common/owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
+import NotificationModal from "../common/notification/NotificationModal.jsx";
+import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 
 //TODO: reenable these as I need them if I need them (from master merge)
-// import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 // import type {PositionInfo} from "../forms/PositionInfo.jsx";
-// import NotificationModal from "../common/notification/NotificationModal.jsx";
 // import TagsDisplay from '../common/tags/TagsDisplay.jsx'
 // import url from '../utils/url.js'
-// import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 // import {Locations} from "../constants/ProjectConstants.js";
 // import {TagDefinition} from "../utils/ProjectAPIUtils.js";
 
@@ -101,7 +101,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   _renderDetails(): React$Node {
     const project = this.state.project;
-    // console.log(project);
     return (
       <div className='AboutProjects-root'>
         <Grid container className='AboutProjects-container' spacing={8}>
@@ -183,7 +182,20 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
                   <Grid className='AboutProjects-owner' item xs={3}>
                     <ContactProjectButton project={project}/>
-                   {/* { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> } */}
+                    <div>
+                      <ProjectVolunteerModal
+                        projectId={this.state.project && this.state.project.project_id}
+                        positions={this.state.project && this.state.project.project_positions}
+                        positionToJoin={this.state.positionToJoin}
+                        showModal={this.state.showJoinModal}
+                        handleClose={this.confirmJoinProject.bind(this)}
+                      />
+                      <ProjectVolunteerButton
+                        project={this.state.project}
+                        onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
+                      />
+                      { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> }
+                    </div>
                   </Grid>
               <div className="AboutProjects_tabs">
                 <a  onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
