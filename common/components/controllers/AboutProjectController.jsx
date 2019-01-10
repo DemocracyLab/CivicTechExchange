@@ -24,6 +24,7 @@ import NotificationModal from "../common/notification/NotificationModal.jsx";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 
 //TODO: reenable these as I need them if I need them (from master merge)
+//TODO: also I need to validate all the active ones, we may not need them all
 // import type {PositionInfo} from "../forms/PositionInfo.jsx";
 // import TagsDisplay from '../common/tags/TagsDisplay.jsx'
 // import url from '../utils/url.js'
@@ -60,7 +61,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   componentDidMount() {
     const projectId: string = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
     ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
-
+    metrics.logNavigateToProjectProfile(projectId);
   }
 
   loadProjectDetails(project) {
