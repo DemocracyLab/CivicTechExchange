@@ -16,7 +16,7 @@ from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from democracylab.emails import send_to_project_owners, send_to_project_volunteer
+from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
@@ -321,26 +321,13 @@ def volunteer_with_project(request, project_id):
     projected_end_date = body['projectedEndDate']
     message = body['message']
     role = body['roleTag']
-    VolunteerRelation.create(
+    volunteer_relation = VolunteerRelation.create(
         project=project,
         volunteer=user,
         projected_end_date=projected_end_date,
         role=role,
         application_text=message)
-
-    role_details = Tag.get_by_name(role)
-    role_text = "{subcategory}: {name}".format(subcategory=role_details.subcategory, name=role_details.display_name)
-    project_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
-    email_subject = '{firstname} {lastname} would like to volunteer with {project} as {role}'.format(
-        firstname=user.first_name,
-        lastname=user.last_name,
-        project=project.project_name,
-        role=role_text)
-    email_body = '{message} \n -- \n To review this volunteer, see {url}'.format(
-        message=message,
-        user=user.email,
-        url=project_profile_url)
-    send_to_project_owners(project=project, sender=user, subject=email_subject, body=email_body)
+    send_volunteer_application_email(volunteer_relation)
     return HttpResponse(status=200)
 
 

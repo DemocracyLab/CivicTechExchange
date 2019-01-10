@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.mail import EmailMessage
-from civictechprojects.models import Project, VolunteerRelation
+from common.models.tags import Tag
+from civictechprojects.models import VolunteerRelation
 
 
 def send_project_creation_notification(project):
@@ -44,6 +45,25 @@ def send_to_project_volunteer(volunteer_relation, subject, body):
         reply_to=[volunteer_relation.project.project_creator.email] + co_owner_emails,
     )
     send_email(email_msg)
+
+
+def send_volunteer_application_email(volunteer_relation, is_reminder=False):
+    project = volunteer_relation.project
+    user = volunteer_relation.volunteer
+    role_details = Tag.from_field(volunteer_relation.role)
+    role_text = "{subcategory}: {name}".format(subcategory=role_details.subcategory, name=role_details.display_name)
+    project_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
+    email_subject = '{is_reminder}{firstname} {lastname} would like to volunteer with {project} as {role}'.format(
+        is_reminder='REMINDER: ' if is_reminder else '',
+        firstname=user.first_name,
+        lastname=user.last_name,
+        project=project.project_name,
+        role=role_text)
+    email_body = '{message} \n -- \n To review this volunteer, see {url}'.format(
+        message=volunteer_relation.application_text,
+        user=user.email,
+        url=project_profile_url)
+    send_to_project_owners(project=project, sender=user, subject=email_subject, body=email_body)
 
 
 def send_email(email_msg):

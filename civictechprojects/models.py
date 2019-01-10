@@ -425,3 +425,4 @@ class VolunteerRelation(models.Model):
         relation.save()
 
         relation.role.add(role)
+        return relation

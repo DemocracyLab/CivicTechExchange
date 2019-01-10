@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
+from democracylab.emails import send_volunteer_application_email
 
 # TODO: Make this configurable
 # This array specifies how many days we should space our reminder emails.  In this case, the first reminder comes after
@@ -13,7 +14,10 @@ class Command(BaseCommand):
         pending_volunteer_applications = VolunteerRelation.objects.filter(is_approved=False)
         for volunteer in pending_volunteer_applications:
             if time_for_reminder(volunteer):
-                print("Pending application ", volunteer.__str__(), " should get a reminder")
+                send_volunteer_application_email(volunteer, is_reminder=True)
+                volunteer.reminder_count += 1
+                volunteer.last_reminder_date = timezone.now()
+                volunteer.save()
 
 
 def time_for_reminder(volunteer):
