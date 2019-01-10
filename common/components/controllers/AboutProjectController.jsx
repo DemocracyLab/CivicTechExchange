@@ -183,20 +183,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
                   <Grid className='AboutProjects-owner' item xs={3}>
                     <ContactProjectButton project={project}/>
-                    <div>
-                      <ProjectVolunteerModal
-                        projectId={this.state.project && this.state.project.project_id}
-                        positions={this.state.project && this.state.project.project_positions}
-                        positionToJoin={this.state.positionToJoin}
-                        showModal={this.state.showJoinModal}
-                        handleClose={this.confirmJoinProject.bind(this)}
-                      />
-                      <ProjectVolunteerButton
-                        project={this.state.project}
-                        onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
-                      />
-                      { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> }
-                    </div>
                   </Grid>
               <div className="AboutProjects_tabs">
                 <a  onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
