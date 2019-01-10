@@ -17,6 +17,8 @@ import AboutPositionEntry from "../common/positions/AboutPositionEntry.jsx";
 import ProjectVolunteerModal from "../common/projects/ProjectVolunteerModal.jsx";
 import GlyphStyles from "../utils/glyphs.js";
 import CurrentUser from "../utils/CurrentUser.js";
+import ProjectOwnersSection from "../common/owners/ProjectOwnersSection.jsx";
+import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 
 //TODO: reenable these as I need them if I need them (from master merge)
 // import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
@@ -27,9 +29,6 @@ import CurrentUser from "../utils/CurrentUser.js";
 // import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 // import {Locations} from "../constants/ProjectConstants.js";
 // import {TagDefinition} from "../utils/ProjectAPIUtils.js";
-// import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
-// import ProjectOwnersSection from "../common/owners/ProjectOwnersSection.jsx";
-// import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 
 
 type State = {|
@@ -150,23 +149,24 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
               <Grid className='AboutProjects-team'>
                 <p>Team</p>
-                <ul>
                   {
-                    project &&
-                    project.project_owners &&
-                    project.project_owners.map((name, i) => {
-                      return <li key={i}>{name.first_name} {name.last_name}</li>
-                    })
+                    project && !_.isEmpty(project.project_owners)
+                    ? <ProjectOwnersSection
+                      owners={project.project_owners}
+                      />
+                    : null
                   }
-                  {
-                    project &&
-                    project.project_volunteers &&
-                    project.project_volunteers.map((name, i) => {
-                      return <li key={i}>{name.first_name} {name.last_name}</li>
-                    })
-                  }
-                  </ul>
 
+                  {
+                  project && !_.isEmpty(project.project_volunteers)
+                    ? <VolunteerSection
+                        volunteers={project.project_volunteers}
+                        isProjectAdmin={CurrentUser.userID() === project.project_creator}
+                        isProjectCoOwner={CurrentUser.isCoOwner(project)}
+                        projectId={project.project_id}
+                      />
+                    : null
+                  }
               </Grid>
 
             </Paper>
