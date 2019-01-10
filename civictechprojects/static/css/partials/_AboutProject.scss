@@ -117,11 +117,13 @@
 
   .AboutProjects-description-details {
     padding: 25px 15px 0 15px;
+
+      #project-details {
+        white-space: pre-wrap;
+      }
   }
 
-  .AboutProjects-description-details #project-details {
-    white-space: pre-wrap;
-  }
+
 
   .AboutProjects-skills {
     width: 49.5%;
