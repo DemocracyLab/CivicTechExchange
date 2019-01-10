@@ -121,7 +121,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     project &&
                     project.project_organization &&
                     project.project_organization.map((org, i) => {
-                      return <li key={i}>{org.display_name}.</li>
+                      return <li key={i}>{org.display_name}</li>
                     })
                   }
                 </ul>
@@ -131,6 +131,23 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
               <Grid className='AboutProjects-team'>
                 <p>Team</p>
+                <ul>
+                  {
+                    project &&
+                    project.project_owners &&
+                    project.project_owners.map((name, i) => {
+                      return <li key={i}>{name.first_name} {name.last_name}</li>
+                    })
+                  }
+                  {
+                    project &&
+                    project.project_volunteers &&
+                    project.project_volunteers.map((name, i) => {
+                      return <li key={i}>{name.first_name} {name.last_name}</li>
+                    })
+                  }
+                  </ul>
+
               </Grid>
 
             </Paper>
