@@ -176,7 +176,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <Divider />
 
               <Grid className='AboutProjects-description-details'>
-              <p id='project-details'>{project.project_description}</p>
+                <div id='project-details'>{project.project_description}</div>
               <Grid className='AboutProjects-skills-container' container direction='row'>
                 <div className='AboutProjects-skills'>
                   <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
