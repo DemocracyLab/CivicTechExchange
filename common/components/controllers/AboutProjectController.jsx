@@ -25,11 +25,11 @@ import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 
 //TODO: reenable these as I need them if I need them (from master merge)
 //TODO: also I need to validate all the active ones, we may not need them all
-// import type {PositionInfo} from "../forms/PositionInfo.jsx";
-// import TagsDisplay from '../common/tags/TagsDisplay.jsx'
-// import url from '../utils/url.js'
-// import {Locations} from "../constants/ProjectConstants.js";
-// import {TagDefinition} from "../utils/ProjectAPIUtils.js";
+import type {PositionInfo} from "../forms/PositionInfo.jsx";
+import TagsDisplay from '../common/tags/TagsDisplay.jsx'
+import url from '../utils/url.js'
+import {Locations} from "../constants/ProjectConstants.js";
+import {TagDefinition} from "../utils/ProjectAPIUtils.js";
 
 
 type State = {|
@@ -118,7 +118,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <Grid className='AboutProjects-details'>
                 <ProjectDetails projectLocation={project && project.project_location}
                 projectUrl={project && project.project_url}
-                projectStage={project && project.project_stage && project.project_stage[0].display_name}
+                projectStage={project && !_.isEmpty(project.project_stage) ? project.project_stage[0].display_name : null}
                 dateModified={project && project.project_date_modified}/>
               </Grid>
 
