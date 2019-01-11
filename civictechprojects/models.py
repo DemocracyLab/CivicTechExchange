@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from enum import Enum
 from democracylab.models import Contributor
 from common.models.tags import Tag
@@ -389,6 +390,9 @@ class VolunteerRelation(models.Model):
     is_approved = models.BooleanField(default=False)
     is_co_owner = models.BooleanField(default=False)
     projected_end_date = models.DateTimeField(auto_now=False, null=True)
+    application_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+    last_reminder_date = models.DateTimeField(auto_now=False, null=True)
+    reminder_count = models.IntegerField(default=0)
 
     def __str__(self):
         return 'Project: ' + str(self.project.project_name) + ', User: ' + str(self.volunteer.email)
@@ -421,3 +425,4 @@ class VolunteerRelation(models.Model):
         relation.save()
 
         relation.role.add(role)
+        return relation
