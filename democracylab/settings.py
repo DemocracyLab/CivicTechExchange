@@ -142,6 +142,8 @@ PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
 FAKE_EMAILS = os.environ.get('FAKE_EMAILS', False) == 'True'
 
+APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
+
 FOOTER_LINKS = os.environ.get('FOOTER_LINKS', '')
 
 PROJECT_DESCRIPTION_EXAMPLE_URL = os.environ.get('PROJECT_DESCRIPTION_EXAMPLE_URL', '')
