@@ -25,22 +25,30 @@ class ProjectDetails extends React.PureComponent<Props, State> {
     render(): $React$Node {
       return(
           <React.Fragment>
+          {this.state.projectLocation &&
               <div className="AboutProjects-icon-row">
-                  <MapMarker/>
-                  <p className="AboutProjects-icon-text">{this.state.projectLocation}</p>
-                </div>
-                <div className="AboutProjects-icon-row">
-                  <Earth/>
-                  <p className="AboutProjects-icon-text">{this.state.projectUrl}</p>
-                </div>
-                <div className="AboutProjects-icon-row">
-                  <Clock/>
-                  <p className="AboutProjects-icon-text"><Moment fromNow>{this.state.dateModified}</Moment></p>
-                </div>
-                <div className="AboutProjects-icon-row">
-                  <ChartBar/>
-                  <p className="AboutProjects-icon-text">{this.state.projectStage}</p>
-                </div>
+                <MapMarker/>
+                <p className="AboutProjects-icon-text">{this.state.projectLocation}</p>
+              </div>
+          }
+          {this.state.projectUrl &&
+              <div className="AboutProjects-icon-row">
+                <Earth/>
+                <p className="AboutProjects-icon-text">{this.state.projectUrl}</p>
+              </div>
+          }
+          {this.state.dateModified &&
+              <div className="AboutProjects-icon-row">
+                <Clock/>
+                <p className="AboutProjects-icon-text"><Moment fromNow>{this.state.dateModified}</Moment></p>
+              </div>
+          }
+          {this.state.projectStage &&
+              <div className="AboutProjects-icon-row">
+                <ChartBar/>
+                <p className="AboutProjects-icon-text">{this.state.projectStage}</p>
+              </div>
+          }
           </React.Fragment>
       )
     }
