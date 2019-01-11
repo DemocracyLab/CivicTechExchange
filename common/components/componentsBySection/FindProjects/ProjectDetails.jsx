@@ -35,7 +35,7 @@ class ProjectDetails extends React.PureComponent<Props, State> {
                 </div>
                 <div className="AboutProjects-icon-row">
                   <Clock/>
-                  <p className="AboutProjects-icon-text">   <Moment fromNow>{this.state.dateModified}</Moment></p>
+                  <p className="AboutProjects-icon-text"><Moment fromNow>{this.state.dateModified}</Moment></p>
                 </div>
                 <div className="AboutProjects-icon-row">
                   <ChartBar/>
