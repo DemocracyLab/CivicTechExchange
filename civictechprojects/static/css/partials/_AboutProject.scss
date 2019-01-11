@@ -1,6 +1,6 @@
 .AboutProjects-root {
     width: 90vw;
-    height: 1750px;
+    min-height: 1750px; /*convert percent at 17.5 x num */
     margin: auto;
     max-width: 1080px;
   }
@@ -14,7 +14,7 @@
   }
 
   .AboutProjects-iconContainer {
-    height: 15%;
+    height: 262px;
     margin: auto;
     width: 90%;
   }
@@ -26,7 +26,7 @@
   }
 
   .AboutProjects-details {
-    height: 10%;
+    height: 175px;
     margin-top: 10px;
   }
 
@@ -53,7 +53,7 @@
   }
 
   .AboutProjects-communities {
-    height: 10%;
+    height: 175px;
      p {
        padding-left: 15px;
      }
@@ -66,7 +66,7 @@
   }
 
   .AboutProjects-intro {
-      height: 15%;
+      height: 262px;
   }
 
   .AboutProjects-description {
