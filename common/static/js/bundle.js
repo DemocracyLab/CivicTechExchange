@@ -47106,10 +47106,9 @@ var NavigationStore = function (_ReduceStore) {
   }, {
     key: 'reduce',
     value: function reduce(state, action) {
-      console.log(action.type);
       switch (action.type) {
         case 'SET_SECTION':
-          history.replaceState({}, '', action.url);
+          history.pushState({}, '', action.url);
           return state.set('section', action.section);
         default:
           action;
@@ -47208,16 +47207,7 @@ var LogInController = function (_React$Component) {
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
             null,
-            'Password:',
-            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-              'span',
-              { className: 'LogInController-forgotPassword', onClick: __WEBPACK_IMPORTED_MODULE_2__utils_url_js__["a" /* default */].navigateToSection.bind(this, __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].ResetPassword) },
-              __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-                'a',
-                { href: '', className: 'LogInController-forgotPassword' },
-                ' Forgot Password? '
-              )
-            )
+            'Password:'
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
@@ -47233,16 +47223,34 @@ var LogInController = function (_React$Component) {
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { name: 'prevPage', value: this.state.prevPage, type: 'hidden' }),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'button',
-            {
-              className: 'LogInController-signInButton',
-              disabled: !this.state.username || !this.state.password,
-              type: 'submit',
-              onClick: function onClick() {
-                return __WEBPACK_IMPORTED_MODULE_4__utils_metrics_js__["a" /* default */].logSigninAttempt();
-              }
-            },
-            'Sign In'
+            'div',
+            { className: 'LogInController-bottomSection' },
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              'a',
+              { href: '', className: 'LogInController-createAccount', onClick: __WEBPACK_IMPORTED_MODULE_2__utils_url_js__["a" /* default */].navigateToSection.bind(this, __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].SignUp) },
+              ' Don\'t Have an Account? '
+            ),
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              'span',
+              { className: 'LogInController-forgotPassword', onClick: __WEBPACK_IMPORTED_MODULE_2__utils_url_js__["a" /* default */].navigateToSection.bind(this, __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].ResetPassword) },
+              __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+                'a',
+                { href: '', className: 'LogInController-forgotPassword' },
+                ' Forgot Password? '
+              )
+            ),
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              'button',
+              {
+                className: 'LogInController-signInButton',
+                disabled: !this.state.username || !this.state.password,
+                type: 'submit',
+                onClick: function onClick() {
+                  return __WEBPACK_IMPORTED_MODULE_4__utils_metrics_js__["a" /* default */].logSigninAttempt();
+                }
+              },
+              'Sign In'
+            )
           )
         )
       );
@@ -80423,7 +80431,6 @@ var SectionController = function (_React$Component) {
   _createClass(SectionController, [{
     key: 'render',
     value: function render() {
-      console.log('running!!!!!');
       return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
         'div',
         { className: 'SectionBody' },
@@ -80475,7 +80482,6 @@ var SectionController = function (_React$Component) {
   }, {
     key: 'calculateState',
     value: function calculateState(prevState) {
-      console.log(__WEBPACK_IMPORTED_MODULE_7__stores_NavigationStore_js__["a" /* default */].getSection());
       return {
         section: __WEBPACK_IMPORTED_MODULE_7__stores_NavigationStore_js__["a" /* default */].getSection()
       };
@@ -97105,7 +97111,6 @@ var MainHeader = function (_React$PureComponent) {
     value: function _renderHero() {
       var _this2 = this;
 
-      var prev = window.location.href.includes('LogIn') ? '' : '&prev=' + window.location.href.split('?section=')[1];
       return __WEBPACK_IMPORTED_MODULE_4__utils_CurrentUser_js__["a" /* default */].isLoggedIn() ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.Fragment,
         null,
@@ -97215,7 +97220,7 @@ var MainHeader = function (_React$PureComponent) {
                 { className: 'MainHeader-drawerDiv', onClick: this._onLogInClick },
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   'a',
-                  { href: '/index/?section=LogIn' + prev },
+                  { href: '' },
                   ' Log In '
                 )
               ),
@@ -97225,7 +97230,7 @@ var MainHeader = function (_React$PureComponent) {
                 { className: 'MainHeader-drawerDiv', onClick: this._onSignUpClick },
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   'a',
-                  { href: '/index/?section=SignUp' },
+                  { href: '' },
                   ' Sign Up '
                 )
               ),
@@ -97235,7 +97240,7 @@ var MainHeader = function (_React$PureComponent) {
                 { className: 'MainHeader-drawerDiv', onClick: this._onResetPasswordClick },
                 __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                   'a',
-                  { href: 'index/?section=ResetPassword' },
+                  { href: '' },
                   ' Forgot Password '
                 )
               )
@@ -97251,7 +97256,7 @@ var MainHeader = function (_React$PureComponent) {
             { onClick: this._onLogInClick },
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               'a',
-              { href: '/index/?section=LogIn' + prev },
+              { href: '' },
               ' Log In '
             )
           ),
@@ -97259,10 +97264,10 @@ var MainHeader = function (_React$PureComponent) {
           ' ',
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'span',
-            null,
+            { onClick: this._onSignUpClick },
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               'a',
-              { href: '/index/?section=SignUp' },
+              { href: '' },
               ' Sign Up '
             )
           ),
@@ -97270,10 +97275,10 @@ var MainHeader = function (_React$PureComponent) {
           ' ',
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'span',
-            null,
+            { onClick: this._onResetPasswordClick },
             __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
               'a',
-              { href: '/index/?section=ResetPassword' },
+              { href: '' },
               ' Forgot Password '
             )
           )
@@ -97331,6 +97336,33 @@ var MainHeader = function (_React$PureComponent) {
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8__material_ui_core_Divider___default.a, null)
         );
+      });
+    }
+  }, {
+    key: '_onLogInClick',
+    value: function _onLogInClick() {
+      __WEBPACK_IMPORTED_MODULE_0__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
+        type: 'SET_SECTION',
+        section: __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].LogIn,
+        url: __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].LogIn)
+      });
+    }
+  }, {
+    key: '_onSignUpClick',
+    value: function _onSignUpClick() {
+      __WEBPACK_IMPORTED_MODULE_0__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
+        type: 'SET_SECTION',
+        section: __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].SignUp,
+        url: __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].SignUp)
+      });
+    }
+  }, {
+    key: '_onResetPasswordClick',
+    value: function _onResetPasswordClick() {
+      __WEBPACK_IMPORTED_MODULE_0__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
+        type: 'SET_SECTION',
+        section: __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].ResetPassword,
+        url: __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].ResetPassword)
       });
     }
   }]);

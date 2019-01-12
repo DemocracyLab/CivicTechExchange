@@ -32,10 +32,9 @@ class NavigationStore extends ReduceStore<State> {
   }
 
   reduce(state: State, action: NavigationActionType): State {
-    console.log(action.type);
     switch (action.type) {
       case 'SET_SECTION':
-        history.replaceState({}, '', action.url);
+        history.pushState({}, '', action.url);
         return state.set('section', action.section);
       default:
         (action: empty);

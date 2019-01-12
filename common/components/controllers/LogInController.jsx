@@ -44,9 +44,6 @@ class LogInController extends React.Component<{||}, State> {
             </div>
             <div>
               Password:
-              <span className="LogInController-forgotPassword" onClick = {url.navigateToSection.bind(this, Section.ResetPassword)} >
-                <a href = "" className="LogInController-forgotPassword"> Forgot Password? </a>
-              </span>
             </div>
             <div>
               <input
@@ -57,14 +54,20 @@ class LogInController extends React.Component<{||}, State> {
               />
             </div>
             <input name="prevPage" value={this.state.prevPage} type="hidden" />
-            <button
+            <div className="LogInController-bottomSection">
+              <a href = "" className="LogInController-createAccount" onClick = {url.navigateToSection.bind(this, Section.SignUp)}> Don't Have an Account? </a>
+              <span className="LogInController-forgotPassword" onClick = {url.navigateToSection.bind(this, Section.ResetPassword)} >
+                <a href = "" className="LogInController-forgotPassword"> Forgot Password? </a>
+              </span>
+              <button
               className="LogInController-signInButton"
               disabled={!this.state.username || !this.state.password}
               type="submit"
               onClick={() => metrics.logSigninAttempt()}
-            >
-              Sign In
-            </button>
+              >
+                Sign In
+              </button>
+            </div>
         </form>
       </div>
     );
