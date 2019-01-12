@@ -24666,7 +24666,7 @@ var ProjectSearchStore = function (_ReduceStore) {
             initialState = this._initializeFilters(initialState, action.findProjectsArgs);
           }
           initialState = initialState.set('findProjectsArgs', action.findProjectsArgs || {});
-          return this._loadProjects(initialState);
+          return this._loadProjects(initialState, true);
         case 'ADD_TAG':
           return this._loadProjects(this._addTagToState(state, action.tag));
         case 'REMOVE_TAG':
@@ -24789,9 +24789,12 @@ var ProjectSearchStore = function (_ReduceStore) {
     }
   }, {
     key: '_loadProjects',
-    value: function _loadProjects(state) {
+    value: function _loadProjects(state, noUpdateUrl) {
       state = this._updateFindProjectArgs(state);
-      this._updateWindowUrl(state);
+
+      if (!noUpdateUrl) {
+        this._updateWindowUrl(state);
+      }
 
       var url = __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].constructWithQueryString('/api/projects', state.findProjectsArgs);
       fetch(new Request(url)).then(function (response) {
