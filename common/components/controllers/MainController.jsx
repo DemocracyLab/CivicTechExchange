@@ -14,7 +14,12 @@ class MainController extends React.Component<{||}> {
   componentWillMount(): void {
     const args = url.arguments(window.location.href);
     if (args.section) {
-      NavigationDispatcher.dispatch({type: 'SET_SECTION', section: args.section, url:window.location.href});
+      NavigationDispatcher.dispatch({
+        type: 'SET_SECTION',
+        section: args.section,
+        url: window.location.href,
+        fromUrl: true
+      });
     }
   }
 

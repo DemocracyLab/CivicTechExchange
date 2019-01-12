@@ -10,7 +10,8 @@ import Section from '../enums/Section.js';
 export type NavigationActionType = {
   type: 'SET_SECTION',
   section: SectionType,
-  url: string
+  url: string,
+  fromUrl: ?boolean
 };
 
 const DEFAULT_STATE = {
@@ -34,7 +35,11 @@ class NavigationStore extends ReduceStore<State> {
   reduce(state: State, action: NavigationActionType): State {
     switch (action.type) {
       case 'SET_SECTION':
-        history.pushState({}, '', action.url);
+        if(action.fromUrl) {
+          history.replaceState({}, '', action.url);
+        } else {
+          history.pushState({}, '', action.url);
+        }
         return state.set('section', action.section);
       default:
         (action: empty);
