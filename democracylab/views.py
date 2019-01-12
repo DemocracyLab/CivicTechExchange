@@ -21,7 +21,7 @@ def login_view(request):
             return redirect('/index/?section=' + prev_page)
         else:
             messages.error(request, 'Incorrect Email or Password')
-            return redirect('/index/?section=LogIn&prev=' + prev_page )
+            return redirect('/index/?section=LogIn&prev=' + prev_page)
     else:
         return redirect('/index/?section=LogIn')
 

@@ -30,12 +30,14 @@ class SectionController extends React.Component<{||}, State> {
   }
 
   static calculateState(prevState: State): State {
+    console.log(NavigationStore.getSection());  
     return {
       section: NavigationStore.getSection(),
     };
   }
 
   render(): React$Node {
+    console.log('running!!!!!')
     return (
       <div className="SectionBody">
         {this._getController()}

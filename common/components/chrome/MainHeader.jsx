@@ -58,6 +58,7 @@ class MainHeader extends React.PureComponent<{||}> {
   }
 
   _renderHero(): React$Node {
+   let prev = window.location.href.includes('LogIn') ? '' : `&prev=${window.location.href.split('?section=')[1]}`;
     return CurrentUser.isLoggedIn()
       ? (
         <React.Fragment>
@@ -120,15 +121,15 @@ class MainHeader extends React.PureComponent<{||}> {
               <div className="MainHeader-navDrawer">
                 {this._renderFooterDrawerLinks()}
                 <div className={'MainHeader-drawerDiv'} onClick={this._onLogInClick}>
-                  <a href="" > Log In </a>
+                  <a href={`/index/?section=LogIn` + prev} > Log In </a>
                 </div>
                 <Divider />
                 <div className={'MainHeader-drawerDiv'} onClick={this._onSignUpClick} >
-                  <a href="" > Sign Up </a>
+                  <a href="/index/?section=SignUp" > Sign Up </a>
                 </div>
                 <Divider />
                 <div className={'MainHeader-drawerDiv'} onClick={this._onResetPasswordClick} >
-                  <a href="" > Forgot Password </a>
+                  <a href="index/?section=ResetPassword" > Forgot Password </a>
                 </div>
               </div>
             </div>
@@ -137,15 +138,15 @@ class MainHeader extends React.PureComponent<{||}> {
           <span className="MainHeader-links">
             {this._renderFooterLinks()}
             <span onClick={this._onLogInClick}>
-              <a href="" > Log In </a>
+              <a href={`/index/?section=LogIn` + prev} > Log In </a>
             </span> |{' '}
 
-            <span onClick={this._onSignUpClick} >
-              <a href="" > Sign Up </a>
+            <span>
+              <a href="/index/?section=SignUp" > Sign Up </a>
             </span> |{' '}
 
-            <span onClick={this._onResetPasswordClick} >
-              <a href="" > Forgot Password </a>
+            <span>
+              <a href="/index/?section=ResetPassword" > Forgot Password </a>
             </span>
           </span>
         </ React.Fragment>
@@ -176,31 +177,6 @@ class MainHeader extends React.PureComponent<{||}> {
           <Divider />
         </React.Fragment>
       )
-    });
-  }
-
-  _onLogInClick(): void {
-   let prev = window.location.href.includes('LogIn') ? '' : `&prev=${window.location.href.split('?section=')[1]}`;
-    NavigationDispatcher.dispatch({
-      type: 'SET_SECTION',
-      section: Section.LogIn,
-      url: url.section(Section.LogIn + prev) 
-    });
-  }
-
-  _onSignUpClick(): void {
-    NavigationDispatcher.dispatch({
-      type: 'SET_SECTION',
-      section: Section.SignUp,
-      url: url.section(Section.SignUp)
-    });
-  }
-
-  _onResetPasswordClick(): void {
-    NavigationDispatcher.dispatch({
-      type: 'SET_SECTION',
-      section: Section.ResetPassword,
-      url: url.section(Section.ResetPassword)
     });
   }
 }
