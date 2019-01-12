@@ -15,10 +15,20 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.views.generic import TemplateView
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import ProjectSitemap
+
 
 from . import views
 
 urlpatterns = [
+
+    url(
+        r'^sitemap\.xml$',
+        sitemap,
+        {'sitemaps': {'projects': ProjectSitemap()}},
+        name='django.contrib.sitemaps.views.sitemap'
+    ),
     url(r'^googlebb20bcf8545e7046.html$', TemplateView.as_view(template_name="googlebb20bcf8545e7046.html")),
     url(r'^projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
     url(r'^projects/delete/(?P<project_id>[0-9]+)/$', views.project_delete, name='project_delete'),
