@@ -18,6 +18,7 @@ class LogInController extends React.Component<{||}, State> {
     this.state = {
       username: '',
       password: '',
+      prevPage: window.location.href.split('&prev=')[1] || '',
       // errorMessage: url.arguments.(document.location.search)
     };
   }
@@ -55,6 +56,7 @@ class LogInController extends React.Component<{||}, State> {
                 type="password"
               />
             </div>
+            <input name="prevPage" value={this.state.prevPage} type="hidden" />
             <button
               className="LogInController-signInButton"
               disabled={!this.state.username || !this.state.password}

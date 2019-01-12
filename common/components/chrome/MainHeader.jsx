@@ -180,10 +180,11 @@ class MainHeader extends React.PureComponent<{||}> {
   }
 
   _onLogInClick(): void {
+   let prev = window.location.href.includes('LogIn') ? '' : `&prev=${window.location.href.split('?section=')[1]}`;
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: Section.LogIn,
-      url: url.section(Section.LogIn)
+      url: url.section(Section.LogIn + prev) 
     });
   }
 

@@ -14,13 +14,14 @@ def login_view(request):
     if request.method == 'POST':
         email = request.POST['username']
         password = request.POST['password']
+        prev_page = request.POST['prevPage']
         user = authenticate(username=email, password=password)
         if user is not None and user.is_authenticated:
             login(request, user)
-            return redirect('/')
+            return redirect('/index/?section=' + prev_page)
         else:
             messages.error(request, 'Incorrect Email or Password')
-            return redirect('/index/?section=LogIn')
+            return redirect('/index/?section=LogIn&prev=' + prev_page )
     else:
         return redirect('/index/?section=LogIn')
 
