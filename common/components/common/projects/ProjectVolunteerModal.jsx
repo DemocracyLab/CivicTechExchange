@@ -242,6 +242,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
   _renderVolunteerPeriodDropdown(): React$Node{
     return <Select
       options={volunteerPeriodsInDays}
+      value={this.state.daysToVolunteerForOption}
       onChange={this.handleVolunteerPeriodSelection.bind(this)}
       className="form-control"
       simpleValue={true}

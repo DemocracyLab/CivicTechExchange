@@ -95539,6 +95539,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
     value: function _renderVolunteerPeriodDropdown() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_9_react_select__["a" /* default */], {
         options: volunteerPeriodsInDays,
+        value: this.state.daysToVolunteerForOption,
         onChange: this.handleVolunteerPeriodSelection.bind(this),
         className: 'form-control',
         simpleValue: true,
