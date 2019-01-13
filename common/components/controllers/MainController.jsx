@@ -11,7 +11,16 @@ import url from '../../components/utils/url.js'
 import MainFooter from "../chrome/MainFooter.jsx";
 
 class MainController extends React.Component<{||}> {
+  constructor() {
+    super();
+    window.addEventListener("popstate", this.loadPage.bind(this));
+  }
+  
   componentWillMount(): void {
+    this.loadPage();
+  }
+  
+  loadPage(): void {
     const args = url.arguments(window.location.href);
     if (args.section) {
       NavigationDispatcher.dispatch({

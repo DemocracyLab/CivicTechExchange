@@ -82200,12 +82200,20 @@ var MainController = function (_React$Component) {
   function MainController() {
     _classCallCheck(this, MainController);
 
-    return _possibleConstructorReturn(this, (MainController.__proto__ || Object.getPrototypeOf(MainController)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (MainController.__proto__ || Object.getPrototypeOf(MainController)).call(this));
+
+    window.addEventListener("popstate", _this.loadPage.bind(_this));
+    return _this;
   }
 
   _createClass(MainController, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
+      this.loadPage();
+    }
+  }, {
+    key: 'loadPage',
+    value: function loadPage() {
       var args = __WEBPACK_IMPORTED_MODULE_7__components_utils_url_js__["a" /* default */].arguments(window.location.href);
       if (args.section) {
         __WEBPACK_IMPORTED_MODULE_2__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
