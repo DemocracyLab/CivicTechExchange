@@ -112,7 +112,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
-        href="../login"
+        href={`/index/?section=LogIn&prev=${window.location.href.split('?section=')[1]}`} 
       >
         Sign in to Contact Project
       </Button>

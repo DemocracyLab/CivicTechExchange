@@ -24666,7 +24666,7 @@ var ProjectSearchStore = function (_ReduceStore) {
             initialState = this._initializeFilters(initialState, action.findProjectsArgs);
           }
           initialState = initialState.set('findProjectsArgs', action.findProjectsArgs || {});
-          return this._loadProjects(initialState);
+          return this._loadProjects(initialState, true);
         case 'ADD_TAG':
           return this._loadProjects(this._addTagToState(state, action.tag));
         case 'REMOVE_TAG':
@@ -24789,9 +24789,12 @@ var ProjectSearchStore = function (_ReduceStore) {
     }
   }, {
     key: '_loadProjects',
-    value: function _loadProjects(state) {
+    value: function _loadProjects(state, noUpdateUrl) {
       state = this._updateFindProjectArgs(state);
-      this._updateWindowUrl(state);
+
+      if (!noUpdateUrl) {
+        this._updateWindowUrl(state);
+      }
 
       var url = __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].constructWithQueryString('/api/projects', state.findProjectsArgs);
       fetch(new Request(url)).then(function (response) {
@@ -47199,7 +47202,11 @@ var NavigationStore = function (_ReduceStore) {
     value: function reduce(state, action) {
       switch (action.type) {
         case 'SET_SECTION':
-          history.pushState({}, '', action.url);
+          if (action.fromUrl) {
+            history.replaceState({}, '', action.url);
+          } else {
+            history.pushState({}, '', action.url);
+          }
           return state.set('section', action.section);
         default:
           action;
@@ -47254,7 +47261,8 @@ var LogInController = function (_React$Component) {
 
     _this.state = {
       username: '',
-      password: ''
+      password: '',
+      prevPage: window.location.href.split('&prev=')[1] || ''
       // errorMessage: url.arguments.(document.location.search)
     };
     return _this;
@@ -47297,16 +47305,7 @@ var LogInController = function (_React$Component) {
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
             null,
-            'Password:',
-            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-              'span',
-              { className: 'LogInController-forgotPassword', onClick: __WEBPACK_IMPORTED_MODULE_2__utils_url_js__["a" /* default */].navigateToSection.bind(this, __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].ResetPassword) },
-              __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-                'a',
-                { href: '', className: 'LogInController-forgotPassword' },
-                ' Forgot Password? '
-              )
-            )
+            'Password:'
           ),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'div',
@@ -47320,17 +47319,36 @@ var LogInController = function (_React$Component) {
               type: 'password'
             })
           ),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('input', { name: 'prevPage', value: this.state.prevPage, type: 'hidden' }),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
-            'button',
-            {
-              className: 'LogInController-signInButton',
-              disabled: !this.state.username || !this.state.password,
-              type: 'submit',
-              onClick: function onClick() {
-                return __WEBPACK_IMPORTED_MODULE_4__utils_metrics_js__["a" /* default */].logSigninAttempt();
-              }
-            },
-            'Sign In'
+            'div',
+            { className: 'LogInController-bottomSection' },
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              'a',
+              { href: '', className: 'LogInController-createAccount', onClick: __WEBPACK_IMPORTED_MODULE_2__utils_url_js__["a" /* default */].navigateToSection.bind(this, __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].SignUp) },
+              ' Don\'t Have an Account? '
+            ),
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              'span',
+              { className: 'LogInController-forgotPassword', onClick: __WEBPACK_IMPORTED_MODULE_2__utils_url_js__["a" /* default */].navigateToSection.bind(this, __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].ResetPassword) },
+              __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+                'a',
+                { href: '', className: 'LogInController-forgotPassword' },
+                ' Forgot Password? '
+              )
+            ),
+            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+              'button',
+              {
+                className: 'LogInController-signInButton',
+                disabled: !this.state.username || !this.state.password,
+                type: 'submit',
+                onClick: function onClick() {
+                  return __WEBPACK_IMPORTED_MODULE_4__utils_metrics_js__["a" /* default */].logSigninAttempt();
+                }
+              },
+              'Sign In'
+            )
           )
         )
       );
@@ -82182,15 +82200,28 @@ var MainController = function (_React$Component) {
   function MainController() {
     _classCallCheck(this, MainController);
 
-    return _possibleConstructorReturn(this, (MainController.__proto__ || Object.getPrototypeOf(MainController)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (MainController.__proto__ || Object.getPrototypeOf(MainController)).call(this));
+
+    window.addEventListener("popstate", _this.loadPage.bind(_this));
+    return _this;
   }
 
   _createClass(MainController, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
+      this.loadPage();
+    }
+  }, {
+    key: 'loadPage',
+    value: function loadPage() {
       var args = __WEBPACK_IMPORTED_MODULE_7__components_utils_url_js__["a" /* default */].arguments(window.location.href);
       if (args.section) {
-        __WEBPACK_IMPORTED_MODULE_2__stores_NavigationDispatcher_js__["a" /* default */].dispatch({ type: 'SET_SECTION', section: args.section, url: window.location.href });
+        __WEBPACK_IMPORTED_MODULE_2__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
+          type: 'SET_SECTION',
+          section: args.section,
+          url: window.location.href,
+          fromUrl: true
+        });
       }
     }
   }, {
@@ -84120,7 +84151,7 @@ var ContactProjectButton = function (_React$PureComponent) {
           type: 'button',
           disabled: this.state.buttonDisabled,
           title: this.state.buttonTitle,
-          href: '../login'
+          href: '/index/?section=LogIn&prev=' + window.location.href.split('?section=')[1]
         },
         'Sign in to Contact Project'
       );
@@ -84585,7 +84616,7 @@ var ProjectVolunteerButton = function (_React$PureComponent) {
           type: 'button',
           disabled: this.state.buttonDisabled,
           title: this.state.buttonTitle,
-          href: '../login'
+          href: '/index/?section=LogIn&prev=' + window.location.href.split('?section=')[1]
         },
         'Sign in to Volunteer'
       );
@@ -97029,7 +97060,7 @@ var ProjectCard = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'a',
             { href: __WEBPACK_IMPORTED_MODULE_3__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_2__components_enums_Section_js__["a" /* default */].AboutProject, { id: this.props.project.id }),
-              target: '_blank', rel: 'noopener noreferrer' },
+              rel: 'noopener noreferrer' },
             this._renderLogo(),
             this._renderSubInfo(),
             this._renderTitleAndIssue(),
