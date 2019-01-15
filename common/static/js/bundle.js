@@ -95302,6 +95302,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.askForSendConfirmation = _this.askForSendConfirmation.bind(_this);
     _this.receiveSendConfirmation = _this.receiveSendConfirmation.bind(_this);
+    _this._fieldsFilled = _this._fieldsFilled.bind(_this);
     return _this;
   }
 
@@ -95327,6 +95328,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
         state.existingPositionOption = noPositionOption;
       }
       this.setState(state);
+      this.forceUpdate();
     }
   }, {
     key: 'handleChange',
@@ -95463,7 +95465,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["a" /* Button */],
               {
-                disabled: this.state.isSending || !this._selectedTag() || !this.state.daysToVolunteerForOption || !this.state.message,
+                disabled: this.state.isSending || !this._fieldsFilled(),
                 onClick: this.askForSendConfirmation },
               this.state.isSending ? "Sending" : "Send"
             )
@@ -95472,10 +95474,24 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
       );
     }
   }, {
+    key: '_fieldsFilled',
+    value: function _fieldsFilled() {
+      return this._selectedTag() && this.state.daysToVolunteerForOption && this.state.message;
+    }
+  }, {
+    key: '_selectedExistingPositionTag',
+    value: function _selectedExistingPositionTag() {
+      return this.state.existingPositionOption && this.state.existingPositionOption.value !== OtherRoleOption.value ? this.state.existingPositionOption.value : null;
+    }
+  }, {
+    key: '_selectedOtherRoleTag',
+    value: function _selectedOtherRoleTag() {
+      return this.state.roleTag && this.state.roleTag.tag_name;
+    }
+  }, {
     key: '_selectedTag',
     value: function _selectedTag() {
-      // TODO: Make sure this works on initial selection
-      return this.state.existingPositionOption && this.state.existingPositionOption.value !== OtherRoleOption.value ? this.state.existingPositionOption.value : this.state.roleTag && this.state.roleTag.tag_name;
+      return this._selectedExistingPositionTag() || this._selectedOtherRoleTag();
     }
   }, {
     key: '_renderExistingPositionDropdown',
@@ -95524,6 +95540,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
     value: function _renderVolunteerPeriodDropdown() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_9_react_select__["a" /* default */], {
         options: volunteerPeriodsInDays,
+        value: this.state.daysToVolunteerForOption,
         onChange: this.handleVolunteerPeriodSelection.bind(this),
         className: 'form-control',
         simpleValue: true,
