@@ -95328,6 +95328,7 @@ var ProjectVolunteerModal = function (_React$PureComponent) {
         state.existingPositionOption = noPositionOption;
       }
       this.setState(state);
+      this.forceUpdate();
     }
   }, {
     key: 'handleChange',

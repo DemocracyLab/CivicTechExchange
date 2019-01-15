@@ -86,6 +86,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
       state.existingPositionOption = noPositionOption;
     }
     this.setState(state);
+    this.forceUpdate();
   }
   
   handleChange(event: SyntheticInputEvent<HTMLInputElement>): void {
