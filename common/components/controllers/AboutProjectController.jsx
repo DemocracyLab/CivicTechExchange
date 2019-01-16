@@ -131,6 +131,13 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               </Grid>
 
               <Divider />
+              
+            { project && !_.isEmpty(project.project_files) &&
+              <Grid className='AboutProjects-files'>
+                <p>Files</p>
+                 {this._renderFiles()}
+              </Grid>
+            }
 
               <Grid className='AboutProjects-communities'>
                 <p>Communities</p>
@@ -218,6 +225,15 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         </Grid>
       </div>
     )
+  }
+
+  _renderFiles(): ?Array<React$Node> {
+    const project = this.state.project;
+    return project && project.project_files && project.project_files.map((file, i) =>
+      <div key={i}>
+        <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">{file.fileName}</a>
+      </div>
+    );
   }
 
   _renderLinks(): ?Array<React$Node> {
