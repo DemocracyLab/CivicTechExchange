@@ -183,7 +183,7 @@ def projects_list(request):
         else:
             project_list = projects_by_sortField(project_list, '-project_date_modified')
 
-        project_paginator = Paginator(project_list, 1)
+        project_paginator = Paginator(project_list, settings.PROJECTS_PER_PAGE)
 
         if 'page' in query_params:
             project_list_page = project_paginator.page(query_params['page'][0])
