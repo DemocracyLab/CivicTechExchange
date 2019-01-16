@@ -93,7 +93,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           initialState = this._initializeFilters(initialState, action.findProjectsArgs);
         }
         initialState = initialState.set('findProjectsArgs', action.findProjectsArgs || {});
-        return this._loadProjects(initialState);
+        return this._loadProjects(initialState, true);
       case 'ADD_TAG':
         return this._loadProjects(this._addTagToState(state, action.tag));
       case 'REMOVE_TAG':
@@ -145,7 +145,7 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   _updateWindowUrl(state: State) {
     const windowUrl: string = urls.constructWithQueryString(urls.section(Section.FindProjects), state.findProjectsArgs);
-    history.pushState({},null,windowUrl);
+    history.pushState({}, null, windowUrl);
   }
 
   _initializeFilters(state: State, findProjectsArgs: FindProjectsArgs): State {
@@ -198,9 +198,12 @@ class ProjectSearchStore extends ReduceStore<State> {
     return state;
   }
 
-  _loadProjects(state: State): State {
+  _loadProjects(state: State, noUpdateUrl: ?boolean): State {
     state = this._updateFindProjectArgs(state);
-    this._updateWindowUrl(state);
+    
+    if(!noUpdateUrl) {
+      this._updateWindowUrl(state);
+    }
 
     const url: string = urls.constructWithQueryString('/api/projects', state.findProjectsArgs);
     fetch(new Request(url))

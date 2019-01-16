@@ -25,6 +25,15 @@ class Tag(models.Model):
         return tag
 
     @staticmethod
+    def from_field(tag_manager_field):
+        field_values = tag_manager_field.all().values()
+        tag_count = len(field_values)
+        if tag_count > 1:
+            return list(map(lambda tag: Tag.get_by_name(tag['slug']), field_values))
+        elif tag_count == 1:
+            return Tag.get_by_name(field_values[0]['slug'])
+
+    @staticmethod
     def hydrate_to_json(project_id, tag_entries):
         # TODO: Use in-memory cache for tags
         # TODO: Remove project id from this if we don't end up using it

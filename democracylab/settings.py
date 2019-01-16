@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     'rest_framework',
     'taggit'
 ]
@@ -140,6 +141,9 @@ EMAIL_HOST_USER = 'democracylabreset@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
+FAKE_EMAILS = os.environ.get('FAKE_EMAILS', False) == 'True'
+
+APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
 
 FOOTER_LINKS = os.environ.get('FOOTER_LINKS', '')
 
