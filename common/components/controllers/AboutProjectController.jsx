@@ -122,37 +122,45 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 dateModified={project && project.project_date_modified}/>
               </Grid>
 
-
               <Divider />
 
-              <Grid className='AboutProjects-links'>
-                <p>Links</p>
-                {project && !_.isEmpty(project.project_links) && this._renderLinks()}
-              </Grid>
-
-              <Divider />
-              
-            { project && !_.isEmpty(project.project_files) &&
-              <Grid className='AboutProjects-files'>
-                <p>Files</p>
-                 {this._renderFiles()}
-              </Grid>
+            {project && !_.isEmpty(project.project_links) &&
+              <React.Fragment>
+                <Grid className='AboutProjects-links'>
+                  <p>Links</p>
+                  {this._renderLinks()}
+                </Grid>
+                <Divider />
+              </React.Fragment>
             }
 
+
+
+            { project && !_.isEmpty(project.project_files) &&
+              <React.Fragment>
+                <Grid className='AboutProjects-files'>
+                  <p>Files</p>
+                   {this._renderFiles()}
+                </Grid>
+                <Divider />
+              </React.Fragment>
+            }
+
+          {project && !_.isEmpty(project.project_organization) &&
+            <React.Fragment>
               <Grid className='AboutProjects-communities'>
                 <p>Communities</p>
                 <ul>
                   {
-                    project &&
-                    project.project_organization &&
                     project.project_organization.map((org, i) => {
                       return <li key={i}>{org.display_name}</li>
                     })
                   }
                 </ul>
               </Grid>
-
               <Divider />
+            </React.Fragment>
+          }
 
               <Grid className='AboutProjects-team'>
                 <p>Team</p>
