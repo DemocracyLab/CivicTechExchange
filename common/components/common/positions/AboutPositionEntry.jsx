@@ -21,8 +21,10 @@ class AboutPositionEntry extends React.PureComponent<Props> {
   render(): React$Node {
     return (
         <div className="Position-entry">
+          <div className="Position-header">
           {this._renderHeader()}
           {this.props.onClickApply ? this._renderApplyButton() : null}
+          </div>
           <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
             <CollapsibleTextSection
               text={this.props.position.description}
