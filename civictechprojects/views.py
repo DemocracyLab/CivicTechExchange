@@ -184,12 +184,13 @@ def projects_list(request):
             project_list = projects_by_sortField(project_list, '-project_date_modified')
 
         project_paginator = Paginator(project_list, 1)
-        project_pages = project_paginator.num_pages
 
         if 'page' in query_params:
             project_list_page = project_paginator.page(query_params['page'][0])
+            project_pages = project_paginator.num_pages
         else:
-            project_list_page = project_paginator.page(1)
+            project_list_page = project_list
+            project_pages = 0
 
 
     response = json.dumps(projects_with_meta_data(project_list_page, project_pages))

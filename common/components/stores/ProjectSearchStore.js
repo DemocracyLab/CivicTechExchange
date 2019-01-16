@@ -64,7 +64,6 @@ const DEFAULT_STATE = {
   keyword: '',
   sortField: '',
   location: '',
-  page: '1',
   numPages: 1,
   tags: List(),
   projectsData: {},
@@ -75,7 +74,6 @@ class State extends Record(DEFAULT_STATE) {
   keyword: string;
   sortField: string;
   location: string;
-  page: string;
   numPages: number;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;

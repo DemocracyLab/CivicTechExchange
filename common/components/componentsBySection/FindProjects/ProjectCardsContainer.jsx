@@ -8,9 +8,14 @@ import {List} from 'immutable'
 import ProjectCard from './ProjectCard.jsx';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import React from 'react';
+// import { url } from 'inspector';
+import url from '../../utils/url.js';
+import Section from '../../enums/Section.js';
 
 type State = {|
-  projects: List<Project>
+  projects: List<Project>,
+  project_pages: number,
+  current_page: number
 |};
 
 class ProjectCardsContainer extends React.Component<{||}, State> {
@@ -23,6 +28,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     return {
       projects: ProjectSearchStore.getProjects(),
       project_pages: ProjectSearchStore.getProjectPages(),
+      // current_page: prevState.current_page ? prevState.current_page++ : 1,
     };
   }
 
@@ -35,6 +41,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
           </div>
           <div>
             <p>{ `Project Pages: ${this.state.project_pages}` }</p>
+            <a href={url.section(Section.FindProjects, { page: this.state.current_page ? this.state.current_page++ : 2 })}>Next Page</a>
           </div>
         </div>
       </div>

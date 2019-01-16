@@ -24625,7 +24625,7 @@ var DEFAULT_STATE = {
   keyword: '',
   sortField: '',
   location: '',
-  page: '1',
+  // page: '1',
   numPages: 1,
   tags: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(),
   projectsData: {},
@@ -94201,6 +94201,8 @@ var TagDispatcher = new __WEBPACK_IMPORTED_MODULE_0_flux__["Dispatcher"]();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__stores_ProjectSearchStore_js__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_url_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__enums_Section_js__ = __webpack_require__(22);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -94212,6 +94214,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+
+
+// import { url } from 'inspector';
 
 
 
@@ -94245,6 +94250,11 @@ var ProjectCardsContainer = function (_React$Component) {
               'p',
               null,
               'Project Pages: ' + this.state.project_pages
+            ),
+            __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
+              'a',
+              { href: __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_6__enums_Section_js__["a" /* default */].FindProjects, { page: this.state.current_page ? this.state.current_page++ : 2 }) },
+              'Next Page'
             )
           )
         )
@@ -94273,6 +94283,7 @@ var ProjectCardsContainer = function (_React$Component) {
       return {
         projects: __WEBPACK_IMPORTED_MODULE_3__stores_ProjectSearchStore_js__["a" /* default */].getProjects(),
         project_pages: __WEBPACK_IMPORTED_MODULE_3__stores_ProjectSearchStore_js__["a" /* default */].getProjectPages()
+        // current_page: prevState.current_page ? prevState.current_page++ : 1,
       };
     }
   }]);
