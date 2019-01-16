@@ -34,7 +34,7 @@ class MainController extends React.Component<{||}> {
 
   render(): React$Node {
     return [
-      <MainHeader key='main_header'/>,
+      // <MainHeader key='main_header'/>,
       <SubHeader key='sub_header'/>,
       <FlashMessage key='flash_message'/>,
       <SectionController key='section_controller'/>,

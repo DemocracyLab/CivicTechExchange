@@ -4,6 +4,7 @@ import type {FluxReduceStore} from 'flux/utils';
 import type {SectionType} from '../enums/Section.js';
 
 import {Container} from 'flux/utils';
+import cdn from "../utils/cdn.js";
 import cx from '../utils/cx';
 import CurrentUser from '../../components/utils/CurrentUser.js';
 import NavigationDispatcher from '../stores/NavigationDispatcher.js'
@@ -48,14 +49,51 @@ class SubHeader extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className={this._cx.get('root')}>
-       <div className={this._cx.get('leftContent')}>
-        {this._renderSectionLinks()}
+       <div className="SubHeader-logo-container" onClick={this._onHomeButtonClick}>
+          <img
+            className="SubHeader-logo"
+            src={cdn.image("dl_logo.png")}
+          />
         </div>
-        <span className={this._cx.get('rightContent')}>
-          {this._renderCreateProjectButton()}
-        </span>
+        <div className={this._cx.get('leftContent')}>
+          {this._renderSectionLinks()}
+        </div>
+        <div className={this._cx.get('rightContent')}>
+          {/* {this._renderCreateProjectButton()} */}
+          {
+            CurrentUser.isLoggedIn() ?
+            this._renderLogOutButton() :
+            this._renderLogInButton()
+          }
+        </div>
       </div>
     );
+  }
+
+  _onHomeButtonClick(): void {
+    NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: Section.FindProjects,
+      url: url.section(Section.FindProjects)
+    });
+  }
+
+  _renderLogInButton(): void {
+    return (
+      <button onClick={this._onLogInClick} className='SubHeader-log-btns'>
+        Log In
+      </button>
+    );
+  }
+
+  _renderLogOutButton(): void {
+    return (
+    <a href='/logout/'>
+      <button className='SubHeader-log-btns'>
+        Log Out
+      </button>
+    </a>
+    )
   }
 
   _renderSectionLinks(): React$Node {
@@ -80,6 +118,18 @@ class SubHeader extends React.Component<{||}, State> {
         Create a Project
       </span>
     )
+  }
+
+  _onLogInClick(): void {
+    NavigationDispatcher.dispatch({
+      type: 'SET_SECTION',
+      section: Section.LogIn,
+      url: url.section(Section.LogIn)
+    });
+  }
+
+  _onLogOutClick(): void {
+    history.replaceState({}, '', '/logout')
   }
 
 }

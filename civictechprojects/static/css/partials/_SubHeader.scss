@@ -1,95 +1,133 @@
-.SubHeader-createProject { 
-  background-color: $color-orange;
-  border: none;
-  border-radius: 5px;
-  color: $color-text-light;
-  display: inline-table;
-  font-size: 15px;
-  margin-top: 6px;
-  margin-bottom: 5px;
-  padding: 8px 8px;
-  text-decoration: inherit;
-  width: auto;
-  cursor: pointer;
-  float: none;
+.SubHeader-logo-container {
+  width: 200px;
 }
 
+
+.SubHeader-logo {
+  cursor: pointer;
+  width: 200px;
+  height: 100%;
+}
+
+// .SubHeader-createProject { 
+//   background-color: $color-orange;
+//   border: none;
+//   border-radius: 5px;
+//   color: $color-text-light;
+//   display: inline-table;
+//   font-size: 15px;
+//   margin-top: 6px;
+//   margin-bottom: 5px;
+//   padding: 8px 8px;
+//   text-decoration: inherit;
+//   width: 125px;
+//   cursor: pointer;
+//   float: none;
+// }
+
 .SubHeader-root {
-  background-color: $color-background-dark;
-  height: 150px;
+  display: flex;
+  flex-direction: row;
+
+  background-color: $color-background-default;
+  height: 60px;
   padding: 0 5% 0 5%;
   margin-bottom: 5%;
 }
 
-.SubHeader-sectionButton {
-  color: $color-text-light;
-  display: inline-block;
-  font-weight: bold;
-  margin: auto;
-  padding-right: 40px;
+// .SubHeader-sectionButton {
+//   color: $color-text-light;
+//   display: inline-block;
+//   font-weight: bold;
+//   margin: auto;
+//   padding-right: 40px;
+// }
+
+.SubHeader-leftContent {
+  display: flex; 
+  // flex-direction: column;
+  // float: right;
+  // align-items: flex-start;
+  // justify-content: center;
+  // width: 50%;
+  // height:100%;
+
+  width: 81%;
+  height: 100%;
+  float: left;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-direction: row;
 }
 
 .SubHeader-rightContent {
+  align-items: flex-end;  
   display: flex; 
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 50%;
-  height:100%;
-    float: right;
+  height: 100%;  
+  justify-content: flex-end;
+  // width: 50%;
+
+  width: 20%;
+  // display: block;
 }
 
-.SubHeader-leftContent {
-    float: left;
-    display: flex; 
-    flex-direction: column;
-    align-items: start;
-    justify-content: center;
-    width: 50%;
-    height:100%;
+.SubHeader-log-btns {
+  background-color: transparent;
+  border: 1px solid $color-text-grey;
+  border-radius: 5px;
+  color: $color-text-grey;
+  padding: 6px 12px;
+  transition: 300ms;
+
+  &:hover {
+    background-color: $color-orange;
+    color: $color-text-light;
+    border-color: $color-text-light;
+  }
 }
 
 @include media-breakpoint-up(sm) {
-  .SubHeader-root {
-    height: 100px;
-  }
+  // .SubHeader-root {
+  //   height: 100px;
+  // }
 
-  .SubHeader-rightContent {
-    width: 100%;
-    height: 50%;
-  }
+  // .SubHeader-rightContent {
+  //   width: 100%;
+  //   height: 50%;
+  // }
 
-  .SubHeader-leftContent {
-    flex-direction: row;    
-    width: 100%;
-    height: 50%;
-  }
+  // .SubHeader-leftContent {
+  //   flex-direction: row;    
+  //   width: 100%;
+  //   height: 50%;
+  // }
 }
 
 @include media-breakpoint-up(md) {
-  .SubHeader-createProject {
-    float: right;    
-  }
+  // .SubHeader-createProject {
+  //   float: right;    
+  // }
 
-  .SubHeader-root {
-    height: 50px;
-  }
+  // .SubHeader-root {
+  //   height: 50px;
+  // }
 
-  .SubHeader-sectionButton {
-    margin-top: 18px;    
-  }
+  // .SubHeader-sectionButton {
+  //   margin-top: 18px;    
+  // }
 
-  .SubHeader-rightContent {
-    width: 19%;
-    display: block;
-    height: 100%;
-  }
+  // .SubHeader-rightContent {
+  //   width: 19%;
+  //   display: block;
+  //   height: 100%;
+  // }
 
-  .SubHeader-leftContent {
-    width: 81%;
-    height: 100%;
-    float: left;
-    justify-content: flex-start;        
-  }
+  // .SubHeader-leftContent {
+  //   width: 81%;
+  //   height: 100%;
+  //   float: left;
+  //   justify-content: flex-end;        
+  // }
 
 }
