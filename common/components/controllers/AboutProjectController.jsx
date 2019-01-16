@@ -187,7 +187,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <div className="AboutProjects_tabs">
                 <a  onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
                 <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#skills-needed">Skills Needed</a>
-                <a  onClick={() => this.changeHighlighted('positions')} className={this.state.tabs.positions ? 'AboutProjects_aHighlighted' : 'none'} href="#AboutProjects-positions-available">Positions</a>
+                <a  onClick={() => this.changeHighlighted('positions')} className={this.state.tabs.positions ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Positions</a>
               </div>
 
               </Grid>
@@ -209,7 +209,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               </Grid>
               <Divider/>
               <Grid className='AboutProjects-positions-available' container>
-              {project && !_.isEmpty(project.project_positions) && this._renderPositions()}
+              <div id="positions-available">{project && !_.isEmpty(project.project_positions) && this._renderPositions()}</div>
 
               </Grid>
             </Paper>
