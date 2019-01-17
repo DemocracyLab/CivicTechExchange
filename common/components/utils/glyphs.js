@@ -8,7 +8,8 @@ const GlyphStyles: {[key: string]: string} = {
   MapMarker: "fas fa-map-marker-alt fa-fw",
   Globe:"fas fa-globe-americas fa-fw",
   Clock: "fas fa-clock fa-fw",
-  Search: "fa fa-search"
+  Search: "fa fa-search",
+  Github: "fab fa-github"
 };
 
 export default GlyphStyles;

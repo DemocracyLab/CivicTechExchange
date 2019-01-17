@@ -24538,7 +24538,8 @@ var GlyphStyles = {
   MapMarker: "fas fa-map-marker-alt fa-fw",
   Globe: "fas fa-globe-americas fa-fw",
   Clock: "fas fa-clock fa-fw",
-  Search: "fa fa-search"
+  Search: "fa fa-search",
+  Github: "fab fa-github"
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (GlyphStyles);
@@ -83961,6 +83962,7 @@ var AboutProjectController = function (_React$PureComponent) {
         return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
           'div',
           { key: i },
+          __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('i', { className: __WEBPACK_IMPORTED_MODULE_14__utils_glyphs_js__["a" /* default */].Github, 'aria-hidden': 'true' }),
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'a',
             { href: link.linkUrl, target: '_blank', rel: 'noopener noreferrer' },
@@ -83969,6 +83971,13 @@ var AboutProjectController = function (_React$PureComponent) {
         );
       });
     }
+
+    // _linkIcons():  ?Array<React$Node> {
+    //   return <i className={GlyphStyles.Github} aria-hidden="true"></i>
+    //   // const project = this.state.project;
+    //   // if(project.project_links )
+    // }
+
   }, {
     key: '_renderFiles',
     value: function _renderFiles() {

@@ -227,6 +227,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                   <div className='col'>
                     <h2 className="form-group subheader">LINKS</h2>
                     <div className="Text-section">
+                    {/* <i class="fa fa-github" aria-hidden="true"></i> */}
                       {this._renderLinks()}
                     </div>
                   </div>
@@ -293,10 +294,20 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     const project = this.state.project;
     return project && project.project_links && project.project_links.map((link, i) =>
       <div key={i}>
-        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{this._legibleName(link.linkName)}</a>
+      <i className={GlyphStyles.Github} aria-hidden="true"></i>
+        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">
+
+        {/* <i className="fab fa-github" aria-hidden="true"></i> */}
+        {this._legibleName(link.linkName)}</a>
       </div>
     );
   }
+
+  // _linkIcons():  ?Array<React$Node> {
+  //   return <i className={GlyphStyles.Github} aria-hidden="true"></i>
+  //   // const project = this.state.project;
+  //   // if(project.project_links )
+  // }
 
   _renderFiles(): ?Array<React$Node> {
     const project = this.state.project;
