@@ -8,6 +8,9 @@ import {List} from 'immutable'
 import ProjectCard from './ProjectCard.jsx';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import React from 'react';
+// import {Pagination} from 'react-bootstrap';
+import { Pager } from 'react-bootstrap';
+
 // import { url } from 'inspector';
 import url from '../../utils/url.js';
 import Section from '../../enums/Section.js';
@@ -20,15 +23,22 @@ type State = {|
 
 class ProjectCardsContainer extends React.Component<{||}, State> {
 
+  // static componentDidMount(): void {
+  //   console.log('componentDidMount (ProjectCardsContainer)');
+  //   this.setSate({ current_page: 1 });
+  // }
+
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    console.log('getStores');
     return [ProjectSearchStore];
   }
 
   static calculateState(prevState: State): State {
+    console.log('calculateState');
     return {
       projects: ProjectSearchStore.getProjects(),
       project_pages: ProjectSearchStore.getProjectPages(),
-      // current_page: prevState.current_page ? prevState.current_page++ : 1,
+      current_page: 1
     };
   }
 
@@ -40,8 +50,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
             {this._renderCards()}
           </div>
           <div>
-            <p>{ `Project Pages: ${this.state.project_pages}` }</p>
-            <a href={url.section(Section.FindProjects, { page: this.state.current_page ? this.state.current_page++ : 2 })}>Next Page</a>
+            {this._renderPagination()}
           </div>
         </div>
       </div>
@@ -62,6 +71,44 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
               skillslen={4}
             />
         );
+  }
+
+  // _itemStatus(pageNumber: number): object {
+  //   // if (pageNumber > this.state.project_pages) return 'disabled';
+  //   if (pageNumber === this.state.current_page) return { active: true };
+  //   return { active: false };
+  // }
+
+  _handleGoToPreviousPage(): void {
+    this.setState((prevState) => {
+      const newState = Object.create(prevState);
+      const prevPage = newState.current_page - 1;
+      newState.current_page = prevPage >= 1 ? prevPage : 1;
+      return newState;
+    });
+  }
+
+  _handleGoToNextPage(e: object): void {
+    this.setState((prevState) => {
+      const newState = Object.create(prevState);
+      const nextPage = newState.current_page + 1;
+      newState.current_page = nextPage <= newState.project_pages ? nextPage : newState.project_pages;
+      return newState;
+    });
+  }
+
+  _renderPagination(): React$Node {
+    return (
+      <Pager>
+        <Pager.Item previous href="#" onClick={this._handleGoToPreviousPage.bind(this)}>
+          &larr; Previous Page
+        </Pager.Item>
+        <p>current page: {this.state.current_page}</p>
+        <Pager.Item next href="#" onClick={this._handleGoToNextPage.bind(this)}>
+          Next Page &rarr;
+        </Pager.Item>
+      </Pager>
+    );
   }
 }
 

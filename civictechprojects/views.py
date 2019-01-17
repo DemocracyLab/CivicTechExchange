@@ -190,7 +190,7 @@ def projects_list(request):
             project_pages = project_paginator.num_pages
         else:
             project_list_page = project_list
-            project_pages = 0
+            project_pages = 1
 
 
     response = json.dumps(projects_with_meta_data(project_list_page, project_pages))
