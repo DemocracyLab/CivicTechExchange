@@ -1,0 +1,23 @@
+{
+  "name": "DemocracyLab",
+  "description": "Building online infrastructure to empower the civic tech movement. Our initial iteration connects volunteers to tech-for-good projects.",
+  "license": "MIT",
+  "status": "Production",
+  "type": "Web app",
+  "homepage": "https://www.democracylab.org",
+  "repository": "https://github.com/DemocracyLab/CivicTechExchange",
+  "thumbnail": "https://democracylab-marlok.s3.amazonaws.com/thumbnails%2Fmark%40democracylab.org%2Fdl_idnty_node_mark.png_1517778401.9664516.png",
+  "geography": [],
+  "contact": {
+    "name": "Mark Frischmuth",
+    "email": "mark@democracylab.org",
+    "url": ""
+  },
+  "partners": [],
+  "data": [],
+  "tags": [],
+  "links": [
+    "https://www.democracylab.org/index/?section=AboutProject&id=1"
+  ],
+  "id": "https://raw.githubusercontent.com/DCgov/civic.json/master/schemas/schema-v1.json"
+}
