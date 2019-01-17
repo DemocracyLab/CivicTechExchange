@@ -3,6 +3,7 @@ import React from 'react';
 import Divider from '@material-ui/core/Divider';
 import {Earth, MapMarker, Clock, Domain, ChartBar, Key} from 'mdi-material-ui';
 import Moment from 'react-moment';
+import urlHelper from '../../utils/url.js'
 
 type Props = {|
     projectLocation: string,
@@ -34,7 +35,7 @@ class ProjectDetails extends React.PureComponent<Props, State> {
           {this.state.projectUrl &&
               <div className="AboutProjects-icon-row">
                 <Earth/>
-                <p className="AboutProjects-icon-text">{this.state.projectUrl}</p>
+                <p className="AboutProjects-icon-text"><a href={this.state.projectUrl}>{urlHelper.beautify(this.state.projectUrl)}</a></p>
               </div>
           }
           {this.state.dateModified &&

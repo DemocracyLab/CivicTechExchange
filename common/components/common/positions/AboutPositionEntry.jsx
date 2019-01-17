@@ -26,6 +26,11 @@ class AboutPositionEntry extends React.PureComponent<Props> {
           {this.props.onClickApply ? this._renderApplyButton() : null}
           </div>
           <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
+          { this.props.position.descriptionUrl &&
+              <div className="Description-link"><a href={this.props.position.descriptionUrl}>
+                Position description
+              </a></div>
+          }
             <CollapsibleTextSection
               text={this.props.position.description}
               expanded={false}
@@ -40,7 +45,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
   _renderApplyButton(): ?React$Node {
     return (
       <div className="apply-position-button">
-        <Button
+        <Button className="btn btn-theme"
           type="button"
           title="Apply to this position"
           onClick={this.handleClickApply.bind(this)}
@@ -53,18 +58,11 @@ class AboutPositionEntry extends React.PureComponent<Props> {
 
   _renderHeader(): ?React$Node {
     const headerText: string = tagOptionDisplay(this.props.position.roleTag);
-    return this.props.position.descriptionUrl
-      ?
-        (<h3 className="form-group subheader">
-          <a href={this.props.position.descriptionUrl}>
-            {headerText}
-          </a>
-        </h3>)
-      :
-        (<h3 className="form-group subheader">
+    return (
+        <h3 className="form-group subheader">
           {headerText}
-        </h3>)
-      ;
+        </h3>
+      )
   }
 }
 

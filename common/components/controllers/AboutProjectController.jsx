@@ -104,7 +104,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     const project = this.state.project;
     return (
       <div className='AboutProjects-root'>
-        <Grid container className='AboutProjects-container' spacing={0}>
+        <Grid container className='AboutProjects-container AboutProjects-infoColumn' spacing={0}>
 
           <Grid item xs={3}>
             <Paper className='AboutProjects-paper' elevation={1}>
@@ -127,7 +127,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             {project && !_.isEmpty(project.project_links) &&
               <React.Fragment>
                 <Grid className='AboutProjects-links'>
-                  <p>Links</p>
+                  <h4>Links</h4>
                   {this._renderLinks()}
                 </Grid>
                 <Divider />
@@ -139,7 +139,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             { project && !_.isEmpty(project.project_files) &&
               <React.Fragment>
                 <Grid className='AboutProjects-files'>
-                  <p>Files</p>
+                  <h4>Files</h4>
                    {this._renderFiles()}
                 </Grid>
                 <Divider />
@@ -149,7 +149,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
           {project && !_.isEmpty(project.project_organization) &&
             <React.Fragment>
               <Grid className='AboutProjects-communities'>
-                <p>Communities</p>
+                <h4>Communities</h4>
                 <ul>
                   {
                     project.project_organization.map((org, i) => {
@@ -163,7 +163,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
           }
 
               <Grid className='AboutProjects-team'>
-                <p>Team</p>
+                <h4>Team</h4>
                   {
                     project && !_.isEmpty(project.project_owners)
                     ? <ProjectOwnersSection
@@ -191,7 +191,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             <Paper className='AboutProjects-paper' elevation={1}>
               <Grid className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
                   <Grid className='AboutProjects-description' item xs={9}>
-                    <h3>{project && project.project_name}</h3>
+                    <h1>{project && project.project_name}</h1>
                     <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
                     <p>{project && project.project_short_description}</p>
                   </Grid>
@@ -247,7 +247,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
     return project && project.project_links && project.project_links.map((link, i) =>
-      <div key={i}>
+      <div className="Link-listitem"key={i}>
         <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{this._legibleName(link.linkName)}</a>
       </div>
     );

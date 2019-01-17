@@ -3,6 +3,22 @@
     min-height: 1750px; /*convert percent at 17.5 x num */
     margin: auto;
     max-width: 1080px;
+
+    /* this whole section is potentially placeholder */
+    a {
+      color: $color-orange;
+      text-decoration: none;
+    }
+    a:hover {
+      color: $color-orange-darker;
+      text-decoration: underline;
+    }
+    a[type="button"] {
+      color: $color-text-light;
+    }
+    a[type="button"]:hover {
+      color: $color-text-light;
+    }
   }
 
   .AboutProjects-container {
@@ -11,6 +27,14 @@
 
   .AboutProjects-paper {
     height: 100%;
+  }
+
+  .AboutProjects-infoColumn {
+    h4 {
+      font-size: 1rem;
+      font-weight: bold;
+      margin: 0.25rem 0 0.75rem 0;
+    }
   }
 
   .AboutProjects-iconContainer {
@@ -26,23 +50,22 @@
   }
 
   .AboutProjects-details {
-    height: 175px;
     margin-top: 10px;
   }
 
   .AboutProjects-icon-row {
     display: flex;
     flex-direction: row;
-    margin-left: 15px;
     word-break: break-all;
   }
   .AboutProjects-icon-text {
     margin-left: 10px;
   }
 
-  .AboutProjects-links {
-    padding-left: 15px;
+  .AboutProjects-details, .AboutProjects-links, .AboutProjects-files, .AboutProjects-communities, .AboutProjects-team {
+    margin: 10px 5px 10px 15px;
   }
+
   .AboutProjects-links-icon-container {
     display: flex;
     flex-direction: row;
@@ -50,19 +73,6 @@
     justify-content: space-between;
     width: 90%;
     margin: auto;
-  }
-
-  .AboutProjects-communities {
-    height: 175px;
-     p {
-       padding-left: 15px;
-     }
-  }
-
-  .AboutProjects-team {
-    p {
-      padding-left: 15px;
-    }
   }
 
   .AboutProjects-intro {
@@ -73,12 +83,21 @@
     padding-top: 10px;
     padding-left: 15px;
 
+    h1 {
+      font-size: 1.75rem;
+    }
+
     h3 {
         margin-bottom: 0;
+        font-size: 20px;
+        font-weight: bold;
     }
 
     .AboutProjects-description-issue {
         color: #888;
+    }
+    .Description-link {
+      margin-bottom: 0.5rem;
     }
 
   }
@@ -116,7 +135,7 @@
   }
 
   .AboutProjects-description-details {
-    padding: 25px 15px 25px 15px;
+    padding: 25px;
 
       #project-details {
         white-space: pre-wrap;
@@ -170,14 +189,14 @@
   }
 
   .AboutProjects-positions-available {
-    padding: 25px 15px 0 15px;
+    padding: 25px;
 
     .form-group {
       margin-bottom: 0; /* margin is handled by Position-header here */
     }
 
     .Position-entry {
-      padding: 25px 0;
+      padding: 12px 0;
     }
     .Position-header {
       display: flex;
@@ -185,5 +204,25 @@
       margin-bottom: 1rem;
       align-items: flex-start;
     }
+  }
 
+  .AboutProjects-team {
+
+    .upload_img_bdr {
+      height: 60px;
+      width: 60px;
+    }
+  }
+
+  .AboutProjects-communities {
+    li {
+      list-style-type: none;
+    }
+  }
+
+  .AboutProjects-links  {
+    /* revisit this padding when icons are in */
+    .Link-listitem {
+      padding: 0.125rem 0;
+    }
   }
