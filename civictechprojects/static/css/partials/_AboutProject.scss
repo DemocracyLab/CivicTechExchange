@@ -96,8 +96,9 @@
     .AboutProjects-description-issue {
         color: #888;
     }
-    .Description-link {
-      margin-bottom: 0.5rem;
+    .Position-description-link {
+      margin-top: 4px;
+      margin-bottom: 4px;
     }
 
   }
@@ -135,7 +136,7 @@
   }
 
   .AboutProjects-description-details {
-    padding: 25px;
+    padding: 25px 75px 25px 25px; /*consider max-width instead of padding here */
 
       #project-details {
         white-space: pre-wrap;
@@ -189,10 +190,10 @@
   }
 
   .AboutProjects-positions-available {
-    padding: 25px;
+    padding: 25px 75px 25px 25px; /*as with description-details consider maxwidth */
 
     .form-group {
-      margin-bottom: 0; /* margin is handled by Position-header here */
+      margin-bottom: 0; /* margin is handled outside form-group on project page */
     }
 
     .Position-entry {
@@ -201,8 +202,10 @@
     .Position-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 1rem;
       align-items: flex-start;
+    }
+    .Text-section {
+      margin-top: 1rem;
     }
   }
 

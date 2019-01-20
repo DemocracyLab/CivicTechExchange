@@ -1,11 +1,11 @@
-// @flow
+ // @flow
 
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import CollapsibleTextSection from "../CollapsibleTextSection.jsx";
 import {tagOptionDisplay} from "../tags/TagSelector.jsx";
-
+import GlyphStyles from "../../utils/glyphs.js";
 
 type Props = {|
   +position: PositionInfo,
@@ -25,12 +25,13 @@ class AboutPositionEntry extends React.PureComponent<Props> {
           {this._renderHeader()}
           {this.props.onClickApply ? this._renderApplyButton() : null}
           </div>
-          <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
           { this.props.position.descriptionUrl &&
-              <div className="Description-link"><a href={this.props.position.descriptionUrl}>
-                Position description
+              <div className="Position-description-link"><a href={this.props.position.descriptionUrl}>
+                <i className={GlyphStyles.Globe}></i> Position description
               </a></div>
           }
+          <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
+
             <CollapsibleTextSection
               text={this.props.position.description}
               expanded={false}

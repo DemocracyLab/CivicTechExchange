@@ -106,7 +106,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       <div className='AboutProjects-root'>
         <Grid container className='AboutProjects-container AboutProjects-infoColumn' spacing={0}>
 
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={3}>
             <Paper className='AboutProjects-paper' elevation={1}>
 
               <Grid className='AboutProjects-iconContainer'>
@@ -187,7 +187,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </Paper>
           </Grid>
 
-          <Grid item xs={9}>
+          <Grid item xs={12} sm={9}>
             <Paper className='AboutProjects-paper' elevation={1}>
               <Grid className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
                   <Grid className='AboutProjects-description' item xs={9}>
