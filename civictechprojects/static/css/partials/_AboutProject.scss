@@ -1,6 +1,9 @@
+// MUI "md" breakpoint is 960px, closest value to Bootstrap's 992 we break on at the homepage
+//TODO: standardize on _one_ set of breakpoints...
+
 .AboutProjects-root {
-    width: 90vw;
-    min-height: 1750px; /*convert percent at 17.5 x num */
+    width: 96vw;
+    min-height: 1750px;
     margin: auto;
     max-width: 1080px;
 
@@ -136,7 +139,7 @@
   }
 
   .AboutProjects-description-details {
-    padding: 25px 75px 25px 25px; /*consider max-width instead of padding here */
+    padding: 25px 10px; /*consider max-width instead of padding here */
 
       #project-details {
         white-space: pre-wrap;
@@ -148,8 +151,6 @@
 
 
   .AboutProjects-skills {
-    width: 49.5%;
-    margin-right: .5%;
     p {
       display: inline-block;
       background: $color-grey-medium;
@@ -169,9 +170,6 @@
   }
 
   .AboutProjects-technologies {
-    width: 49.5%;
-    margin-left: .5%;
-
     p {
       display: inline-block;
       background: #DDD;
@@ -190,7 +188,7 @@
   }
 
   .AboutProjects-positions-available {
-    padding: 25px 75px 25px 25px; /*as with description-details consider maxwidth */
+    padding: 25px 10px; /*as with description-details consider maxwidth */
 
     .form-group {
       margin-bottom: 0; /* margin is handled outside form-group on project page */
@@ -227,5 +225,29 @@
     /* revisit this padding when icons are in */
     .Link-listitem {
       padding: 0.125rem 0;
+    }
+  }
+
+  //MUI objects are set to xs=12 sm=3/9 which matches 600 break (md is 960)
+  //TODO: standardize and use proper mixins (breakpoint-md-up etc)
+  //This media query consists of mostly pre-existing style declarations moved here so we can get this CSS to be mobile-first, mostly
+
+  @media all and (min-width: 600px) {
+    .AboutProjects-root {
+      width: 90vw;
+    }
+
+    .AboutProjects-description-details, .AboutProjects-positions-available {
+      padding: 25px 75px 25px 25px;
+    }
+
+    .AboutProjects-technologies {
+      width: 49.5%;
+      margin-left: .5%;
+    }
+
+    .AboutProjects-skills {
+      width: 49.5%;
+      margin-right: .5%;
     }
   }

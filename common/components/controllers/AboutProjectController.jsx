@@ -1,5 +1,6 @@
 // @flow
 
+//TODO: validate all the active imports, these are the result of a messy merge
 import React from 'react';
 import _ from 'lodash'
 import Grid from '@material-ui/core/Grid';
@@ -22,9 +23,6 @@ import ProjectOwnersSection from "../common/owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 import NotificationModal from "../common/notification/NotificationModal.jsx";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
-
-//TODO: reenable these as I need them if I need them (from master merge)
-//TODO: also I need to validate all the active ones, we may not need them all
 import type {PositionInfo} from "../forms/PositionInfo.jsx";
 import TagsDisplay from '../common/tags/TagsDisplay.jsx'
 import url from '../utils/url.js'
