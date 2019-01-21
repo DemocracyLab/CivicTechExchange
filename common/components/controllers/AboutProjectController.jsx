@@ -102,9 +102,8 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     const project = this.state.project;
     return (
       <div className='AboutProjects-root'>
-        <Grid container className='AboutProjects-container AboutProjects-infoColumn' spacing={0}>
-
-          <Grid item xs={12} sm={3}>
+        <Grid container className='AboutProjects-container' spacing={0}>
+          <Grid item xs={12} sm={3} className="AboutProjects-infoColumn">
             <Paper className='AboutProjects-paper' elevation={1}>
 
               <Grid className='AboutProjects-iconContainer'>
