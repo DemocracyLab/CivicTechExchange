@@ -184,7 +184,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </Paper>
           </Grid>
 
-          <Grid item xs={12} sm={9}>
+          <Grid item xs={12} sm={9} className="AboutProjects-mainColumn">
             <Paper className='AboutProjects-paper' elevation={1}>
               <Grid className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
                   <Grid className='AboutProjects-description' item xs={12} sm={9}>
@@ -197,9 +197,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     <ContactProjectButton project={project}/>
                   </Grid>
               <div className="AboutProjects_tabs">
-                <a  onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
+                <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
                 <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#skills-needed">Skills Needed</a>
-                <a  onClick={() => this.changeHighlighted('positions')} className={this.state.tabs.positions ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Positions</a>
+                <a onClick={() => this.changeHighlighted('positions')} className={this.state.tabs.positions ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Positions</a>
               </div>
 
               </Grid>

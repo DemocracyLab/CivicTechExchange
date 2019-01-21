@@ -26,6 +26,7 @@
 
   .AboutProjects-container {
     height: 100%;
+    display: grid;
   }
 
   .AboutProjects-paper {
@@ -79,7 +80,7 @@
   }
 
   .AboutProjects-intro {
-      height: 262px;
+      height: 100%;
   }
 
   .AboutProjects-description {
@@ -112,6 +113,8 @@
     width: 100%;
     padding: 0px 0px 0px 15px;
         a {
+          line-height: 1;
+          margin-bottom: 16px;
           padding-bottom: 2px;
           font-size: 24px;
           margin-right: 40px;
@@ -236,6 +239,18 @@
     .AboutProjects-root {
       width: 90vw;
     }
+    .AboutProjects-container {
+      display: flex;
+    }
+    .AboutProjects-intro {
+      height: 262px;
+    }
+    .AboutProjects_tabs {
+          a {
+            line-height: inherit;
+            margin-bottom: 0;
+          }
+        }
 
     .AboutProjects-description-details, .AboutProjects-positions-available {
       padding: 25px 75px 25px 25px;
@@ -251,3 +266,23 @@
       margin-right: .5%;
     }
   }
+
+//TODO: Integrate the below query into the root of the stylesheet if it works. This is for layout.
+
+@media all and (max-width: 600px) {
+  .AboutProjects-container {
+    display: grid !important;
+  }
+  .AboutProjects-infoColumn {
+    grid-row: 2;
+  }
+  .AboutProjects-mainColumn {
+    grid-row: 1;
+  }
+  .AboutProjects-iconContainer {
+    display: none;
+  }
+  .AboutProjects_tabs a {
+    display: block;
+  }
+}
