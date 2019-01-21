@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import _ from 'lodash';
 import FooterLinks from "../utils/FooterLinks.js";
 
 class MainFooter extends React.PureComponent<{||}> {
@@ -21,8 +20,14 @@ class MainFooter extends React.PureComponent<{||}> {
   _renderFooter(): React$Node {
     const footerLinks: $ReadOnlyArray<FooterLink> = FooterLinks.list().map((link, i) =>
       <span className="MainFooter-footer-link" key={i}>
-         <a href={link.url} target="_blank" rel="noopener noreferrer">{link.name}</a>
-        </span>
+       <a href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={FooterLinks.logClick.bind(this, link)}
+       >
+         {link.name}
+       </a>
+      </span>
     );
     
     return (

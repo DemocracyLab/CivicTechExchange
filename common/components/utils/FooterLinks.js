@@ -1,5 +1,8 @@
 // @flow
 
+import metrics from "./metrics.js";
+import CurrentUser from "./CurrentUser.js";
+
 type DLAB_FOOTER_LINK = {|
   u: string,
   n: string
@@ -20,6 +23,10 @@ class FooterLinks {
       console.error("Failed to parse footer links. ", ex);
       return [];
     }
+  }
+  
+  static logClick(link: FooterLink): void {
+    metrics.logClickHeaderLink(link.url, CurrentUser.userID());
   }
 }
 

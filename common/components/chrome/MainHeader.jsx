@@ -158,13 +158,32 @@ class MainHeader extends React.PureComponent<{||}> {
 
   _renderFooterLinks(): $ReadOnlyArray<React$Node> {
     return FooterLinks.list().map((link, i) => {
-      return <span key={i}><a href={link.url}>{link.name}</a> |{' '}</span>
+      return (
+        <span key={i}>
+          <a
+            href={link.url}
+            target="_blank" rel="noopener noreferrer"
+            onClick={FooterLinks.logClick.bind(this, link)}
+          >
+            {link.name}
+          </a>
+          {' | '}
+        </span>
+      );
     });
   }
 
   _renderFooterMenuLinks(): $ReadOnlyArray<React$Node> {
     return FooterLinks.list().map((link, i) => {
-      return <MenuItem href={link.url} key={i}>{link.name}</MenuItem>
+      return (
+        <MenuItem
+          href={link.url}
+          key={i}
+          onClick={FooterLinks.logClick.bind(this, link)}
+        >
+          {link.name}
+        </MenuItem>
+      );
     });
   }
 
