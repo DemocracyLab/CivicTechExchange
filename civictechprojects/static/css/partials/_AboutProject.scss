@@ -193,6 +193,10 @@
   .AboutProjects-positions-available {
     padding: 25px 10px; /*as with description-details consider maxwidth */
 
+    #positions-available {
+      width: 100%; /* fixes element repositioning error with read more expand/collapse */
+    }
+
     .form-group {
       margin-bottom: 0; /* margin is handled outside form-group on project page */
     }

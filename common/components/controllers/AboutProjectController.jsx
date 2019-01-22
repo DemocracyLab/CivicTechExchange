@@ -228,7 +228,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <Divider/>
               <Grid className='AboutProjects-positions-available' container>
               <div id="positions-available">{project && !_.isEmpty(project.project_positions) && this._renderPositions()}</div>
-
               </Grid>
             </Paper>
           </Grid>
