@@ -24,14 +24,15 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Popper from '@material-ui/core/Popper';
 import Divider from '@material-ui/core/Divider';
-
-
-
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
+import Drawer from '@material-ui/core/Drawer';
 
 type State = {|
   +activeSection: SectionType,
   user: ?UserAPIData,
-    dropdown: boolean,  
+    dropdown: boolean,
+      slider: boolean,
 |};
 
 class SubHeader extends React.Component<{||}, State > {
@@ -63,9 +64,12 @@ class SubHeader extends React.Component<{||}, State > {
     this.state = {
       user: null,
       dropdown: false,
+      slider: false,
     }
     this._toggleDropdown = this._toggleDropdown.bind(this);
     this._closeDropdown = this._closeDropdown.bind(this);
+    this._renderHamburgerSlider = this._renderHamburgerSlider.bind(this);
+    this._toggleSlider = this._toggleSlider.bind(this)
   }
 
   componentDidMount() {
@@ -73,7 +77,6 @@ class SubHeader extends React.Component<{||}, State > {
   }
 
   loadUserDetails(user: UserAPIData) {
-    user.user_thumbnail ='https://democracylab-marlok.s3.amazonaws.com/thumbnails%2Fkhoawin92%40gmail.com%2Fkhoapic3.jpg_1547007539.953181.jpeg'
     this.setState({
       user: user
     });
@@ -88,6 +91,7 @@ class SubHeader extends React.Component<{||}, State > {
             src={cdn.image("dl_logo.png")}
           />
         </div>
+          {this._renderHamburgerSlider()}
         <div className={this._cx.get('rightContent')}>
           {this._renderSectionLinks()}
           {this._renderHeaderLinks()}
@@ -123,7 +127,6 @@ class SubHeader extends React.Component<{||}, State > {
   }
 
   _renderAccountInfo(): void {
-    console.log(this.state.user);
     return (
       <div className="SubHeader-userImg-container">
         <button
@@ -146,13 +149,13 @@ class SubHeader extends React.Component<{||}, State > {
                     <p className="SubHeader-dropdown-name">{`${this.state.user.first_name} ${this.state.user.last_name}`}</p>
                     <MenuItem onClick={(e) => this.navigateToSection(e, 'EditProfile')}>My Profile</MenuItem>
                     <MenuItem onClick={(e) => this.navigateToSection(e, 'MyProjects')}>My Projects</MenuItem>
-                    </MenuList>
-                    <Divider />
-                    <a href="/logout" onClick={this._closeDropdown}>
-                      <MenuItem>
-                        Sign Out
-                      </MenuItem>
-                    </a>
+                  </MenuList>
+                  <Divider />
+                  <a href="/logout" onClick={this._closeDropdown}>
+                    <MenuItem>
+                      Sign Out  
+                    </MenuItem>
+                  </a>
                 </ClickAwayListener>
               </Paper>
             </Grow>
@@ -170,9 +173,93 @@ class SubHeader extends React.Component<{||}, State > {
     if (this.anchorEl.contains(event.target)) {
       return;
     };
-
     this.setState({ dropdown: false });
   };
+
+  _renderHamburgerSlider(): React$Node {
+    return (
+      <React.Fragment>
+        <div className="SubHeader-hamburger" onClick={() => this._toggleSlider(true)}>
+          <IconButton >
+            <MenuIcon />
+          </IconButton>
+        </div>
+        <Drawer open={this.state.slider} onClose={() => this._toggleSlider(false)} styles={{overflow: 'hidden'}}>
+          <div
+            tabIndex={0}
+            role="button"
+            onClick={() => this._toggleSlider(false)}
+            onKeyDown={() => this._toggleSlider(false)}
+          >
+            <div className="SubHeader-navDrawer">
+            {
+              CurrentUser.isLoggedIn() &&
+              <div>
+                <div className='SubHeader-slider-icon'>
+                  {this._renderIcon()}
+                </div>
+                <p className='SubHeader-slider-name'>{CurrentUser.firstName() + ' ' + CurrentUser.lastName()} </p>
+                <a href="" onClick={() => this._navigateToSection('MyProfile')}>
+                  <div className={'SubHeader-drawerDiv'} >
+                    My Profile
+                  </div>
+                </a>
+                <Divider />
+                <a href="" onClick={() => this._navigateToSection('MyProjects')}>
+                  <div className={'SubHeader-drawerDiv'} >
+                    My Projects
+                  </div>
+                </a>
+                <Divider />
+              </div>
+              
+            }
+              <a href="" onClick={() => this._navigateToSection('FindProjects')}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Find Projects
+                </div>
+              </a>
+              <Divider />
+              <a href="http://connect.democracylab.org" target="_blank" rel="noopener noreferrer">
+                <div className={'SubHeader-drawerDiv'} onClick={() => this._navigateToSection('FindProjects')}>
+                  About
+                </div>
+              </a>
+              <Divider />
+              <a href="mailto:hello@democracylab.org" target="_blank" rel="noopener noreferrer">
+                <div className={'SubHeader-drawerDiv'} onClick={() => this._navigateToSection('FindProjects')}>
+                  Contact Us
+                </div>
+              </a>
+              <Divider />
+              {
+                !CurrentUser.isLoggedIn() &&
+                <React.Fragment>
+                  <div className={'SubHeader-drawerDiv'} onClick={() => this._navigateToSection('LogIn')}>
+                    <a href="" > Log In </a>
+                  </div>
+                  <Divider />
+                </React.Fragment>
+              }
+              {
+                CurrentUser.isLoggedIn() &&
+                  <a href="/logout/">
+                    <div className={'SubHeader-drawerDiv'}>
+                      Logout
+                    </div>
+                  </a>
+              }
+            </div>
+          </div>
+        </Drawer>
+      </React.Fragment>
+
+    )
+  }
+
+  _toggleSlider(open: boolean): void {
+    this.setState({ slider: open })
+  }
 
   _renderHeaderLinks(): React$Node {
     return FooterLinks.list().map((link, i) =>
@@ -187,8 +274,8 @@ class SubHeader extends React.Component<{||}, State > {
   _renderIcon(): React$Node {
     return (
       this.state.user && this.state.user.user_thumbnail ?
-      <img className="SubHeader-userImg"src={this.state.user.user_thumbnail}/> :
-      <Person className="SubHeader-userIcon"/>
+        <img className="SubHeader-userImg" src={this.state.user.user_thumbnail} /> :
+        <Person className="SubHeader-userIcon" />
     );
   }
  
