@@ -103,7 +103,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       <div className='AboutProjects-root'>
         <Grid container className='AboutProjects-container' spacing={0}>
           <Grid item xs={12} sm={3} className="AboutProjects-infoColumn">
-            <Paper className='AboutProjects-paper' elevation={1}>
+            <Paper className='AboutProjects-paper' elevation={1} square={true}>
 
               <Grid className='AboutProjects-iconContainer'>
                 <img className='AboutProjects-icon'src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
@@ -184,7 +184,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
           </Grid>
 
           <Grid item xs={12} sm={9} className="AboutProjects-mainColumn">
-            <Paper className='AboutProjects-paper' elevation={1}>
+            <Paper className='AboutProjects-paper' elevation={1} square={true}>
               <Grid className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
                   <Grid className='AboutProjects-description' item xs={12} sm={9}>
                     <h1>{project && project.project_name}</h1>

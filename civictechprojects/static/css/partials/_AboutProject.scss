@@ -246,6 +246,15 @@
     .AboutProjects-container {
       display: flex;
     }
+    .AboutProjects-infoColumn {
+      border-radius: 5px 0 0 5px;
+    }
+    .AboutProjects-mainColumn {
+      border-radius: 0 5px 5px 0;
+    }
+    .AboutProjects-paper {
+      border-radius: inherit; /* inherits from parent declarations above */
+    }
     .AboutProjects-intro {
       height: 262px;
     }
