@@ -192,6 +192,14 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     <p>{project && project.project_short_description}</p>
                   </Grid>
 
+                  <ProjectVolunteerModal
+                    projectId={this.state.project && this.state.project.project_id}
+                    positions={this.state.project && this.state.project.project_positions}
+                    positionToJoin={this.state.positionToJoin}
+                    showModal={this.state.showJoinModal}
+                    handleClose={this.confirmJoinProject.bind(this)}
+                  />
+
                   <Grid className='AboutProjects-owner' item xs={12} sm={3}>
                     <ContactProjectButton project={project}/>
                   </Grid>
