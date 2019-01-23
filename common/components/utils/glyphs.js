@@ -9,7 +9,8 @@ const GlyphStyles: {[key: string]: string} = {
   Globe:"fas fa-globe-americas fa-fw",
   Clock: "fas fa-clock fa-fw",
   Search: "fa fa-search",
-  Github: "fab fa-github"
+  Github: "fab fa-github",
+  Trello: "fab fa-trello"
 };
 
 export default GlyphStyles;

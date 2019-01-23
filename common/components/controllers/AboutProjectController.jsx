@@ -227,7 +227,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                   <div className='col'>
                     <h2 className="form-group subheader">LINKS</h2>
                     <div className="Text-section">
-                    {/* <i class="fa fa-github" aria-hidden="true"></i> */}
+                    {/* <i class="fab fa-github" aria-hidden="true"></i> */}
                       {this._renderLinks()}
                     </div>
                   </div>
@@ -292,22 +292,49 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
-    return project && project.project_links && project.project_links.map((link, i) =>
+    const glyphLinkUrl = project && project.project_links && project.project_links.map((link) => link.linkUrl);
+    console.log('glyphLinkUrl:',glyphLinkUrl);
+    const glyphValue = this._compareFunc(this._renderGlyph(glyphLinkUrl));
+    console.log('glyphValue:',glyphValue);
+    return project && project.project_links && project.project_links.map((link, i) => 
+
+
       <div key={i}>
-      <i className={GlyphStyles.Github} aria-hidden="true"></i>
+            <i className={glyphValue} aria-hidden="true"></i>
+
         <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">
 
-        {/* <i className="fab fa-github" aria-hidden="true"></i> */}
         {this._legibleName(link.linkName)}</a>
       </div>
-    );
+  );
   }
 
-  // _linkIcons():  ?Array<React$Node> {
-  //   return <i className={GlyphStyles.Github} aria-hidden="true"></i>
-  //   // const project = this.state.project;
-  //   // if(project.project_links )
-  // }
+  _renderGlyph(input): ?Array<React$Node> {
+    let glyphArr = [];
+    for(let glyph in GlyphStyles){
+      for(let i = 0; i < input.length; i++){
+        if(input[i].includes(glyph.toLowerCase())){
+        glyphArr.push(glyph);
+        } 
+      } 
+    }
+    console.log('glyphArr:',glyphArr);
+    return glyphArr;
+      }
+
+  _compareFunc(input): ?Array<React$Node> {
+    let item;
+    for(let i = 0; i < input.length; i++){
+      if( GlyphStyles.hasOwnProperty(input[i]) ) {
+          item = GlyphStyles[input[i]];
+          console.log( 'item:',item );
+          
+      }
+    }
+    return item;
+  }
+
+
 
   _renderFiles(): ?Array<React$Node> {
     const project = this.state.project;

@@ -24539,7 +24539,8 @@ var GlyphStyles = {
   Globe: "fas fa-globe-americas fa-fw",
   Clock: "fas fa-clock fa-fw",
   Search: "fa fa-search",
-  Github: "fab fa-github"
+  Github: "fab fa-github",
+  Trello: "fab fa-trello"
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (GlyphStyles);
@@ -83958,11 +83959,17 @@ var AboutProjectController = function (_React$PureComponent) {
       var _this3 = this;
 
       var project = this.state.project;
+      var glyphLinkUrl = project && project.project_links && project.project_links.map(function (link) {
+        return link.linkUrl;
+      });
+      console.log('glyphLinkUrl:', glyphLinkUrl);
+      var glyphValue = this._compareFunc(this._renderGlyph(glyphLinkUrl));
+      console.log('glyphValue:', glyphValue);
       return project && project.project_links && project.project_links.map(function (link, i) {
         return __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
           'div',
           { key: i },
-          __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('i', { className: __WEBPACK_IMPORTED_MODULE_14__utils_glyphs_js__["a" /* default */].Github, 'aria-hidden': 'true' }),
+          __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement('i', { className: glyphValue, 'aria-hidden': 'true' }),
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(
             'a',
             { href: link.linkUrl, target: '_blank', rel: 'noopener noreferrer' },
@@ -83971,13 +83978,32 @@ var AboutProjectController = function (_React$PureComponent) {
         );
       });
     }
-
-    // _linkIcons():  ?Array<React$Node> {
-    //   return <i className={GlyphStyles.Github} aria-hidden="true"></i>
-    //   // const project = this.state.project;
-    //   // if(project.project_links )
-    // }
-
+  }, {
+    key: '_renderGlyph',
+    value: function _renderGlyph(input) {
+      var glyphArr = [];
+      for (var glyph in __WEBPACK_IMPORTED_MODULE_14__utils_glyphs_js__["a" /* default */]) {
+        for (var i = 0; i < input.length; i++) {
+          if (input[i].includes(glyph.toLowerCase())) {
+            glyphArr.push(glyph);
+          }
+        }
+      }
+      console.log('glyphArr:', glyphArr);
+      return glyphArr;
+    }
+  }, {
+    key: '_compareFunc',
+    value: function _compareFunc(input) {
+      var item = void 0;
+      for (var i = 0; i < input.length; i++) {
+        if (__WEBPACK_IMPORTED_MODULE_14__utils_glyphs_js__["a" /* default */].hasOwnProperty(input[i])) {
+          item = __WEBPACK_IMPORTED_MODULE_14__utils_glyphs_js__["a" /* default */][input[i]];
+          console.log('item:', item);
+        }
+      }
+      return item;
+    }
   }, {
     key: '_renderFiles',
     value: function _renderFiles() {
