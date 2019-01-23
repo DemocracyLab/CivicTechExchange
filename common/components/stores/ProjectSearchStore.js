@@ -17,7 +17,7 @@ export type FindProjectsArgs = {|
   keyword: string,
   sortField: string,
   location: string,
-  page: string,
+  page: number,
   issues: string,
   tech: string,
   role: string,
@@ -54,6 +54,9 @@ export type ProjectSearchActionType = {
   type: 'SET_LOCATION',
   location: string,
 } | {
+  type: 'SET_PAGE',
+  page: number,
+} | {
   type: 'CLEAR_FILTERS',
 } | {
   type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
@@ -64,7 +67,8 @@ const DEFAULT_STATE = {
   keyword: '',
   sortField: '',
   location: '',
-  numPages: 1,
+  numPages: -1,
+  page: 1,
   tags: List(),
   projectsData: {},
   findProjectsArgs: {}
@@ -75,6 +79,7 @@ class State extends Record(DEFAULT_STATE) {
   sortField: string;
   location: string;
   numPages: number;
+  page: number;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
   findProjectsArgs: FindProjectsArgs;
@@ -109,6 +114,8 @@ class ProjectSearchStore extends ReduceStore<State> {
         return this._loadProjects(this._addSortFieldToState(state, action.sortField));
       case 'SET_LOCATION':
         return this._loadProjects(this._addLocationToState(state, action.location));
+      case 'SET_PAGE':
+        return this._loadProjects(this._setPageNumberInState(state, action.page));
       case 'CLEAR_FILTERS':
         return this._loadProjects(this._clearFilters(state));
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
@@ -129,8 +136,9 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _updateFindProjectArgs(state: State): State {
+    let findProjectsArgs: FindProjectsArgs;
     if(state.projectsData && state.projectsData.allTags) {
-      const findProjectsArgs: FindProjectsArgs = _.pickBy({
+      findProjectsArgs = _.pickBy({
         keyword: state.keyword,
         sortField: state.sortField,
         location: state.location,
@@ -143,9 +151,11 @@ class ProjectSearchStore extends ReduceStore<State> {
         url: state.url,
         positions: state.positions
       }, _.identity);
-
-      state = state.set('findProjectsArgs',findProjectsArgs);
+    } else {
+      findProjectsArgs = { page: state.page };
     }
+
+    state = state.set('findProjectsArgs',findProjectsArgs);
 
     return state;
   }
@@ -164,6 +174,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = this._addKeywordToState(state, findProjectsArgs.keyword);
     state = this._addSortFieldToState(state, findProjectsArgs.sortField);
     state = this._addLocationToState(state, findProjectsArgs.location && decodeURI(findProjectsArgs.location));
+    state = this._setPageNumberInState(state, findProjectsArgs.page);
 
     return state;
   }
@@ -197,6 +208,11 @@ class ProjectSearchStore extends ReduceStore<State> {
     return state;
   }
 
+  _setPageNumberInState(state: State, page: number): State {
+    state = state.set('page', page);
+    return state;
+  }
+
   _clearFilters(state: State): State {
     state = state.set('keyword', '');
     state = state.set('sortField', '');
@@ -209,7 +225,8 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = this._updateFindProjectArgs(state);
     this._updateWindowUrl(state);
 
-    const url: string = urls.constructWithQueryString('/api/projects', state.findProjectsArgs);
+    const url: string = urls.constructWithQueryString('/api/projects', 
+      Object.assign({}, state.findProjectsArgs));
     fetch(new Request(url))
       .then(response => response.json())
       .then(getProjectsResponse =>
@@ -246,6 +263,10 @@ class ProjectSearchStore extends ReduceStore<State> {
   getProjectPages(): number {
     const state: State = this.getState();
     return state.projectsData && state.projectsData.numPages;
+  }
+
+  getCurrentPage(): number {
+    return parseInt(this.getState().page, 10);
   }
 
   getTags(inProgressState: ?State): List<TagDefinition> {

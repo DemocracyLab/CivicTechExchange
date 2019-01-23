@@ -13,10 +13,8 @@ import _ from 'lodash'
 class FindProjectsController extends React.PureComponent<{||}> {
 
   componentWillMount(): void {
-    console.log('FindProjectsController compWillMount document.location.search', document.location.search);
     let args: FindProjectsArgs = urls.arguments(document.location.search);
     args = _.pick(args, ['keyword','sortField','location','page','issues','tech', 'role', 'org', 'stage']);
-    console.log('args', args);
     ProjectSearchDispatcher.dispatch({type: 'INIT', findProjectsArgs: !_.isEmpty(args) ? args : null});
     TagDispatcher.dispatch({type: 'INIT'});
   }

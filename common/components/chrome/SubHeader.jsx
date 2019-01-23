@@ -36,7 +36,7 @@ class SubHeader extends React.Component<{||}, State> {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: section,
-      url: url.section(section, {page: 1})
+      url: url.section(section)
     });
   }
 

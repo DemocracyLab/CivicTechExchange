@@ -14,7 +14,11 @@ class MainController extends React.Component<{||}> {
   componentWillMount(): void {
     const args = url.arguments(window.location.href);
     if (args.section) {
-      NavigationDispatcher.dispatch({type: 'SET_SECTION', section: args.section, url:window.location.href});
+      if (args.section === Section.FindProjects) {
+        NavigationDispatcher.dispatch({type: 'SET_SECTION', section: args.section, page: 1, url:window.location.href});
+      } else {
+        NavigationDispatcher.dispatch({type: 'SET_SECTION', section: args.section, url:window.location.href});
+      }
     }
   }
 

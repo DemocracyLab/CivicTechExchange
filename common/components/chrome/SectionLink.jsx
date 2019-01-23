@@ -46,7 +46,7 @@ class SectionLink extends React.PureComponent<Props> {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: this.props.section,
-      url: url.section(this.props.section, this.props.section === Section.FindProjects ? {page: 1} : {})
+      url: url.section(this.props.section)
     });
     metrics.logSectionNavigation(this.props.section);
   }

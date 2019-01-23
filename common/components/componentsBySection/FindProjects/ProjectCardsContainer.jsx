@@ -7,6 +7,7 @@ import {Container} from 'flux/utils';
 import {List} from 'immutable'
 import ProjectCard from './ProjectCard.jsx';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
+import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
 // import {Pagination} from 'react-bootstrap';
 import { Pager } from 'react-bootstrap';
@@ -23,22 +24,15 @@ type State = {|
 
 class ProjectCardsContainer extends React.Component<{||}, State> {
 
-  // static componentDidMount(): void {
-  //   console.log('componentDidMount (ProjectCardsContainer)');
-  //   this.setSate({ current_page: 1 });
-  // }
-
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    console.log('getStores');
     return [ProjectSearchStore];
   }
 
   static calculateState(prevState: State): State {
-    console.log('calculateState');
     return {
       projects: ProjectSearchStore.getProjects(),
       project_pages: ProjectSearchStore.getProjectPages(),
-      current_page: 1
+      current_page: ProjectSearchStore.getCurrentPage(),
     };
   }
 
@@ -80,36 +74,45 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   // }
 
   _handleGoToPreviousPage(): void {
-    this.setState((prevState) => {
-      const newState = Object.create(prevState);
-      const prevPage = newState.current_page - 1;
-      newState.current_page = prevPage >= 1 ? prevPage : 1;
-      return newState;
+    this.setState({current_page: this.state.current_page - 1 > 0 
+      ? this.state.current_page - 1 
+      : this.state.current_page }, function () {
+      this._onChangePage();
     });
   }
 
   _handleGoToNextPage(e: object): void {
-    this.setState((prevState) => {
-      const newState = Object.create(prevState);
-      const nextPage = newState.current_page + 1;
-      newState.current_page = nextPage <= newState.project_pages ? nextPage : newState.project_pages;
-      return newState;
+    this.setState({current_page: this.state.current_page + 1 <= this.state.project_pages 
+      ? this.state.current_page + 1 
+      : this.state.current_page }, function () {
+      this._onChangePage();
+    });
+  }
+
+  _onChangePage(): void {
+    ProjectSearchDispatcher.dispatch({
+      type: 'SET_PAGE',
+      page: this.state.current_page,
     });
   }
 
   _renderPagination(): React$Node {
     return (
-      <Pager>
+      this.state.projects && this.state.projects.size !== 0
+      ? <Pager>
         <Pager.Item previous href="#" onClick={this._handleGoToPreviousPage.bind(this)}>
           &larr; Previous Page
         </Pager.Item>
-        <p>current page: {this.state.current_page}</p>
+        <p>Page {this.state.current_page} of {this.state.project_pages}</p>
         <Pager.Item next href="#" onClick={this._handleGoToNextPage.bind(this)}>
           Next Page &rarr;
         </Pager.Item>
       </Pager>
+      : null
     );
   }
 }
+
+
 
 export default Container.create(ProjectCardsContainer);
