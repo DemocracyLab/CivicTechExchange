@@ -48,7 +48,7 @@ class SubHeader extends React.Component<{||}, State > {
       activeSection: NavigationStore.getSection(),
     };
   }
-  
+
   navigateToSection(e, section: string): void {
     this._closeDropdown(e);
     NavigationDispatcher.dispatch({
@@ -100,7 +100,7 @@ class SubHeader extends React.Component<{||}, State > {
               this._renderAccountInfo() :
               this._renderLogInButton()
           }
-          <a href='#' className='SubHeader-donate-btn-container'>
+          <a href='https://connect.democracylab.org/donatenow' className='SubHeader-donate-btn-container'>
             <button className='SubHeader-donate-btn'>
               Donate
             </button>
@@ -153,7 +153,7 @@ class SubHeader extends React.Component<{||}, State > {
                   <Divider />
                   <a href="/logout" onClick={this._closeDropdown}>
                     <MenuItem>
-                      Sign Out  
+                      Sign Out
                     </MenuItem>
                   </a>
                 </ClickAwayListener>
@@ -170,7 +170,7 @@ class SubHeader extends React.Component<{||}, State > {
   };
 
   _closeDropdown(event): void {
-    if (this.anchorEl.contains(event.target)) {
+    if (this.anchorEl && this.anchorEl.contains(event.target)) {
       return;
     };
     this.setState({ dropdown: false });
@@ -199,35 +199,35 @@ class SubHeader extends React.Component<{||}, State > {
                   {this._renderIcon()}
                 </div>
                 <p className='SubHeader-slider-name'>{CurrentUser.firstName() + ' ' + CurrentUser.lastName()} </p>
-                <a href="" onClick={() => this._navigateToSection('MyProfile')}>
+                <a href="" onClick={(e) => this.navigateToSection(e, 'EditProfile')}>
                   <div className={'SubHeader-drawerDiv'} >
                     My Profile
                   </div>
                 </a>
                 <Divider />
-                <a href="" onClick={() => this._navigateToSection('MyProjects')}>
+                <a href="" onClick={(e) => this.navigateToSection(e, 'MyProjects')}>
                   <div className={'SubHeader-drawerDiv'} >
                     My Projects
                   </div>
                 </a>
                 <Divider />
               </div>
-              
+
             }
-              <a href="" onClick={() => this._navigateToSection('FindProjects')}>
+              <a href="" onClick={(e) => this.navigateToSection(e, 'FindProjects')}>
                 <div className={'SubHeader-drawerDiv'} >
                   Find Projects
                 </div>
               </a>
               <Divider />
               <a href="http://connect.democracylab.org" target="_blank" rel="noopener noreferrer">
-                <div className={'SubHeader-drawerDiv'} onClick={() => this._navigateToSection('FindProjects')}>
+                <div className={'SubHeader-drawerDiv'} onClick={(e) => this.navigateToSection(e, 'FindProjects')}>
                   About
                 </div>
               </a>
               <Divider />
               <a href="mailto:hello@democracylab.org" target="_blank" rel="noopener noreferrer">
-                <div className={'SubHeader-drawerDiv'} onClick={() => this._navigateToSection('FindProjects')}>
+                <div className={'SubHeader-drawerDiv'} onClick={(e) => this.navigateToSection(e, 'FindProjects')}>
                   Contact Us
                 </div>
               </a>
@@ -235,7 +235,7 @@ class SubHeader extends React.Component<{||}, State > {
               {
                 !CurrentUser.isLoggedIn() &&
                 <React.Fragment>
-                  <div className={'SubHeader-drawerDiv'} onClick={() => this._navigateToSection('LogIn')}>
+                  <div className={'SubHeader-drawerDiv'} onClick={this._onLogInClick}>
                     <a href="" > Log In </a>
                   </div>
                   <Divider />
@@ -262,23 +262,31 @@ class SubHeader extends React.Component<{||}, State > {
   }
 
   _renderHeaderLinks(): React$Node {
-    return FooterLinks.list().map((link, i) =>
-      <div className="SectionLink-root" key={i}>
-        <a className="SubHeader-anchor" href={link.url} target="_blank" rel="noopener noreferrer">
-          <h3>{link.name}</h3>
-        </a>
-      </div>
+    //TODO: Extract the links into a component much like FooterLinks
+    return (
+      <React.Fragment>
+        <div className="SectionLink-root">
+          <a className="SubHeader-anchor" href="https://connect.democracylab.org/" rel="noopener noreferrer">
+            <h3>About</h3>
+          </a>
+        </div>
+        <div className="SectionLink-root">
+          <a className="SubHeader-anchor" href="mailto:hello@democracylab.org" rel="noopener noreferrer">
+          <h3>Contact Us</h3>
+          </a>
+        </div>
+      </React.Fragment>
     );
   }
 
   _renderIcon(): React$Node {
     return (
-      this.state.user && this.state.user.user_thumbnail ?
-        <img className="SubHeader-userImg" src={this.state.user.user_thumbnail} /> :
+      this.state.user && !_.isEmpty(this.state.user.user_thumbnail) ?
+        <img className="SubHeader-userImg" src={this.state.user.user_thumbnail.publicUrl} /> :
         <Person className="SubHeader-userIcon" />
     );
   }
- 
+
   _renderSectionLinks(): React$Node {
     const SectionsToShow = SectionLinkConfigs
       .filter(config => !config.showOnlyWhenLoggedIn);
