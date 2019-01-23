@@ -9,12 +9,7 @@ import ProjectCard from './ProjectCard.jsx';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
-// import {Pagination} from 'react-bootstrap';
 import { Pager } from 'react-bootstrap';
-
-// import { url } from 'inspector';
-import url from '../../utils/url.js';
-import Section from '../../enums/Section.js';
 
 type State = {|
   projects: List<Project>,
