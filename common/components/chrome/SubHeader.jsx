@@ -27,6 +27,7 @@ import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
+import {FooterLink} from "../utils/FooterLinks.js";
 
 type State = {|
   +activeSection: SectionType,
@@ -100,11 +101,7 @@ class SubHeader extends React.Component<{||}, State > {
               this._renderAccountInfo() :
               this._renderLogInButton()
           }
-          <a href='https://connect.democracylab.org/donatenow' className='SubHeader-donate-btn-container'>
-            <button className='SubHeader-donate-btn'>
-              Donate
-            </button>
-          </a>
+          {this._renderHeaderButtons()}
         </div>
       </div>
     );
@@ -269,8 +266,7 @@ class SubHeader extends React.Component<{||}, State > {
   }
 
   _renderHeaderLinks(): React$Node {
-    //TODO: Don't show Donate link
-    const headerLinks: $ReadOnlyArray<React$Node> = FooterLinks.list();
+    const headerLinks: $ReadOnlyArray<FooterLink> = FooterLinks.list().filter((link) => !link.isButton);
     return (
       <React.Fragment>
         {
@@ -286,6 +282,24 @@ class SubHeader extends React.Component<{||}, State > {
         }
       </React.Fragment>
     );
+  }
+  
+  _renderHeaderButtons(): React$Node {
+    const headerButtonLinks: $ReadOnlyArray<React$Node> = FooterLinks.list().filter((link) => link.isButton);
+    return (
+      headerButtonLinks.map((link) => {
+        return (
+          <a key={link.url}
+             href={link.url}
+             target="_blank" rel="noopener noreferrer"
+             className="SubHeader-donate-btn-container">
+            <button className="SubHeader-donate-btn">
+              {link.name}
+            </button>
+          </a>
+        );
+      })
+    )
   }
 
   _renderIcon(): React$Node {
