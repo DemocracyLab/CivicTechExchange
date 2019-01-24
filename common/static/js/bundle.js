@@ -110044,7 +110044,7 @@ var SubHeader = function (_React$Component) {
     value: function _closeDropdown(event) {
       if (this.anchorEl && this.anchorEl.contains(event.target)) {
         return;
-      };
+      }
       this.setState({ dropdown: false });
     }
   }, {
@@ -110252,17 +110252,6 @@ var SubHeader = function (_React$Component) {
       });
     }
   }, {
-    key: '_renderHeaderMenuLinks',
-    value: function _renderHeaderMenuLinks() {
-      return __WEBPACK_IMPORTED_MODULE_4__utils_FooterLinks_js__["a" /* default */].list().map(function (link, i) {
-        return __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_15__material_ui_core_MenuItem___default.a,
-          { href: link.url, key: i },
-          link.name
-        );
-      });
-    }
-  }, {
     key: '_onLogInClick',
     value: function _onLogInClick() {
       __WEBPACK_IMPORTED_MODULE_5__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
@@ -110270,11 +110259,6 @@ var SubHeader = function (_React$Component) {
         section: __WEBPACK_IMPORTED_MODULE_10__enums_Section_js__["a" /* default */].LogIn,
         url: __WEBPACK_IMPORTED_MODULE_11__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_10__enums_Section_js__["a" /* default */].LogIn)
       });
-    }
-  }, {
-    key: '_onLogOutClick',
-    value: function _onLogOutClick() {
-      history.replaceState({}, '', '/logout');
     }
   }]);
 

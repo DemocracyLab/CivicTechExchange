@@ -65,7 +65,7 @@ class SubHeader extends React.Component<{||}, State > {
       user: null,
       dropdown: false,
       slider: false,
-    }
+    };
     this._toggleDropdown = this._toggleDropdown.bind(this);
     this._closeDropdown = this._closeDropdown.bind(this);
     this._renderHamburgerSlider = this._renderHamburgerSlider.bind(this);
@@ -172,7 +172,7 @@ class SubHeader extends React.Component<{||}, State > {
   _closeDropdown(event): void {
     if (this.anchorEl && this.anchorEl.contains(event.target)) {
       return;
-    };
+    }
     this.setState({ dropdown: false });
   };
 
@@ -301,22 +301,12 @@ class SubHeader extends React.Component<{||}, State > {
       );
   }
 
-  _renderHeaderMenuLinks(): $ReadOnlyArray<React$Node> {
-    return FooterLinks.list().map((link, i) => {
-      return <MenuItem href={link.url} key={i}>{link.name}</MenuItem>
-    });
-  }
-
   _onLogInClick(): void {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: Section.LogIn,
       url: url.section(Section.LogIn)
     });
-  }
-
-  _onLogOutClick(): void {
-    history.replaceState({}, '', '/logout')
   }
 }
 
