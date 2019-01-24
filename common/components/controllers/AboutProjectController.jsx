@@ -216,7 +216,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <Grid className='AboutProjects-skills-container' container direction='row'>
                 <div className='AboutProjects-skills'>
                   <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
-                  {project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.tag_name.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')}</p>)}
+                  {project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.display_name}</p>)}
                 </div>
                 <div className='AboutProjects-technologies'>
                   <p className='AboutProjects-tech-title'>Technologies Used</p>
