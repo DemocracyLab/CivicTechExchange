@@ -144,6 +144,10 @@ class metrics {
   static logSectionNavigation(section: SectionType): void {
     _logEvent("sectionLinkClick", {section: section});
   }
+  
+  static logClickHeaderLink(url: string, userId: ?number): void {
+    _logEvent("headerLinkClick", {url: url, userId: userId || 0});
+  }
 }
 
 export default metrics
