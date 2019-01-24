@@ -20,7 +20,7 @@ class ProjectOwnersSection extends React.PureComponent<Props, State> {
       owners:_.cloneDeep(props.owners),
     };
   }
-  
+
   render(): React$Node {
     return (
       <div>
@@ -28,19 +28,16 @@ class ProjectOwnersSection extends React.PureComponent<Props, State> {
       </div>
     );
   }
-  
+
   _renderProjectOwners(): ?React$Node {
     return !_.isEmpty(this.state.owners)
       ? this._renderOwnersSection(this.state.owners, "PROJECT OWNER")
       : null;
   }
-  
+
   _renderOwnersSection(owners: ?Array<VolunteerUserData>, header: string): React$Node {
       return !_.isEmpty(owners)
-      ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
-          <div className='col'>
-            <h2 className="form-group subheader">{header}</h2>
-            <div className="Text-section">
+      ?   <div className="Text-section ProjectOwners-projectOwnersList">
               {
                 owners.map((owner,i) =>
                   <ProjectOwnerCard
@@ -49,11 +46,9 @@ class ProjectOwnersSection extends React.PureComponent<Props, State> {
                  />)
               }
             </div>
-          </div>
-        </div>
       : null;
   }
-  
+
 }
 
 export default ProjectOwnersSection;
