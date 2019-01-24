@@ -110166,29 +110166,7 @@ var SubHeader = function (_React$Component) {
                 )
               ),
               __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_20__material_ui_core_Divider___default.a, null),
-              __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
-                'a',
-                { href: 'http://connect.democracylab.org', target: '_blank', rel: 'noopener noreferrer' },
-                __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
-                  'div',
-                  { className: 'SubHeader-drawerDiv', onClick: function onClick(e) {
-                      return _this3.navigateToSection(e, 'FindProjects');
-                    } },
-                  'About'
-                )
-              ),
-              __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_20__material_ui_core_Divider___default.a, null),
-              __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
-                'a',
-                { href: 'mailto:hello@democracylab.org', target: '_blank', rel: 'noopener noreferrer' },
-                __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
-                  'div',
-                  { className: 'SubHeader-drawerDiv', onClick: function onClick(e) {
-                      return _this3.navigateToSection(e, 'FindProjects');
-                    } },
-                  'Contact Us'
-                )
-              ),
+              this._renderHamburgerFooterLinks(),
               __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_20__material_ui_core_Divider___default.a, null),
               !__WEBPACK_IMPORTED_MODULE_3__components_utils_CurrentUser_js__["a" /* default */].isLoggedIn() && __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_9_react___default.a.Fragment,
@@ -110219,6 +110197,26 @@ var SubHeader = function (_React$Component) {
       );
     }
   }, {
+    key: '_renderHamburgerFooterLinks',
+    value: function _renderHamburgerFooterLinks() {
+      return __WEBPACK_IMPORTED_MODULE_4__utils_FooterLinks_js__["a" /* default */].list().map(function (link) {
+        return __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_9_react___default.a.Fragment,
+          null,
+          __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
+            'a',
+            { key: link.url, href: link.url, target: '_blank', rel: 'noopener noreferrer' },
+            __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
+              'div',
+              { className: 'SubHeader-drawerDiv' },
+              link.name
+            )
+          ),
+          __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_20__material_ui_core_Divider___default.a, null)
+        );
+      });
+    }
+  }, {
     key: '_toggleSlider',
     value: function _toggleSlider(open) {
       this.setState({ slider: open });
@@ -110226,36 +110224,26 @@ var SubHeader = function (_React$Component) {
   }, {
     key: '_renderHeaderLinks',
     value: function _renderHeaderLinks() {
-      //TODO: Extract the links into a component much like FooterLinks
+      //TODO: Don't show Donate link
+      var headerLinks = __WEBPACK_IMPORTED_MODULE_4__utils_FooterLinks_js__["a" /* default */].list();
       return __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_9_react___default.a.Fragment,
         null,
-        __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
-          'div',
-          { className: 'SectionLink-root' },
-          __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
-            'a',
-            { className: 'SubHeader-anchor', href: 'https://connect.democracylab.org/', rel: 'noopener noreferrer' },
+        headerLinks.map(function (link) {
+          return __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
+            'div',
+            { key: link.url, className: 'SectionLink-root' },
             __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
-              'h3',
-              null,
-              'About'
+              'a',
+              { className: 'SubHeader-anchor', href: link.url, target: '_blank', rel: 'noopener noreferrer' },
+              __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
+                'h3',
+                null,
+                link.name
+              )
             )
-          )
-        ),
-        __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
-          'div',
-          { className: 'SectionLink-root' },
-          __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
-            'a',
-            { className: 'SubHeader-anchor', href: 'mailto:hello@democracylab.org', rel: 'noopener noreferrer' },
-            __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
-              'h3',
-              null,
-              'Contact Us'
-            )
-          )
-        )
+          );
+        })
       );
     }
   }, {

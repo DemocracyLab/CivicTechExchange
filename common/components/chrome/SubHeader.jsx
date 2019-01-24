@@ -220,17 +220,9 @@ class SubHeader extends React.Component<{||}, State > {
                 </div>
               </a>
               <Divider />
-              <a href="http://connect.democracylab.org" target="_blank" rel="noopener noreferrer">
-                <div className={'SubHeader-drawerDiv'} onClick={(e) => this.navigateToSection(e, 'FindProjects')}>
-                  About
-                </div>
-              </a>
-              <Divider />
-              <a href="mailto:hello@democracylab.org" target="_blank" rel="noopener noreferrer">
-                <div className={'SubHeader-drawerDiv'} onClick={(e) => this.navigateToSection(e, 'FindProjects')}>
-                  Contact Us
-                </div>
-              </a>
+              
+              {this._renderHamburgerFooterLinks()}
+              
               <Divider />
               {
                 !CurrentUser.isLoggedIn() &&
@@ -256,25 +248,42 @@ class SubHeader extends React.Component<{||}, State > {
 
     )
   }
+  
+  _renderHamburgerFooterLinks(): $ReadOnlyArray<React$Node> {
+    return FooterLinks.list().map((link) => {
+      return (
+        <React.Fragment>
+          <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">
+            <div className={'SubHeader-drawerDiv'}>
+              {link.name}
+            </div>
+          </a>
+          <Divider />
+        </React.Fragment>
+      );
+    });
+  }
 
   _toggleSlider(open: boolean): void {
     this.setState({ slider: open })
   }
 
   _renderHeaderLinks(): React$Node {
-    //TODO: Extract the links into a component much like FooterLinks
+    //TODO: Don't show Donate link
+    const headerLinks: $ReadOnlyArray<React$Node> = FooterLinks.list();
     return (
       <React.Fragment>
-        <div className="SectionLink-root">
-          <a className="SubHeader-anchor" href="https://connect.democracylab.org/" rel="noopener noreferrer">
-            <h3>About</h3>
-          </a>
-        </div>
-        <div className="SectionLink-root">
-          <a className="SubHeader-anchor" href="mailto:hello@democracylab.org" rel="noopener noreferrer">
-          <h3>Contact Us</h3>
-          </a>
-        </div>
+        {
+          headerLinks.map((link) => {
+            return (
+              <div key={link.url} className="SectionLink-root">
+                <a className="SubHeader-anchor" href={link.url} target="_blank" rel="noopener noreferrer">
+                  <h3>{link.name}</h3>
+                </a>
+              </div>
+            );
+          })
+        }
       </React.Fragment>
     );
   }
