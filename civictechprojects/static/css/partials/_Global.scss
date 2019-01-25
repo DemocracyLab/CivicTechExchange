@@ -1,6 +1,27 @@
 body {
   background-color: $color-background-default;
 }
+
+// uses democracyLab orange for a "themed button", use class="btn btn-theme"
+.btn-theme {
+  background-color: $color-orange;
+  color: $color-text-light;
+
+  a[type="button"] {
+    color: $color-text-light;
+    text-decoration: none;
+  }
+}
+.btn-theme:hover {
+  background-color: $color-orange-darker;
+  color: $color-text-light;
+
+  a[type="button"] {
+    color: $color-text-light;
+    text-decoration: underline;
+  }
+}
+
 //these are "helper classes" with one declaration each
 .background-light {
   background-color: $color-background-light;

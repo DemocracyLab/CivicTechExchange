@@ -2,3 +2,6 @@ span.expand-toggle {
   cursor: pointer;
   color: $color-orange;
 }
+.expand-toggle:hover {
+  text-decoration: underline;
+}
