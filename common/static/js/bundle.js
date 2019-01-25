@@ -97292,15 +97292,6 @@ var ProjectSearchContainer = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
         'div',
         { className: 'row' },
-        __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
-          'div',
-          { className: 'IntroText col-12' },
-          __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
-            'p',
-            null,
-            'Welcome to DemocracyLab! Use the filters and search bar below to find volunteer opportunities with tech-for-good projects.'
-          )
-        ),
         __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__AlertSignupModal_jsx__["a" /* default */], {
           searchFilters: this.state.searchFilters,
           showModal: this.state.showAlertSignupModal,
