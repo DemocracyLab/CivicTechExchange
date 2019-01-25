@@ -250,7 +250,7 @@ class MainHeader extends React.Component<{||}, State > {
     return FooterLinks.list().map((link) => {
       return (
         <React.Fragment>
-          <a key={link.url} href={link.url}>
+          <a key={link.url} href={link.url} onClick={FooterLinks.logClick.bind(this, link)}>
             <div className={'SubHeader-drawerDiv'}>
               {link.name}
             </div>
@@ -273,7 +273,7 @@ class MainHeader extends React.Component<{||}, State > {
           headerLinks.map((link) => {
             return (
               <div key={link.url} className="SectionLink-root">
-                <a className="SubHeader-anchor" href={link.url}>
+                <a className="SubHeader-anchor" href={link.url} onClick={FooterLinks.logClick.bind(this, link)}>
                   <h3>{link.name}</h3>
                 </a>
               </div>
@@ -291,7 +291,9 @@ class MainHeader extends React.Component<{||}, State > {
         return (
           <a key={link.url}
              href={link.url}
-             className="SubHeader-donate-btn-container">
+             className="SubHeader-donate-btn-container"
+             onClick={FooterLinks.logClick.bind(this, link)}
+          >
             <button className="SubHeader-donate-btn">
               {link.name}
             </button>
