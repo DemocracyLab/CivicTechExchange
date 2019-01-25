@@ -2,12 +2,18 @@
   background-color: $color-text-grey;
   color: $color-text-light;
   width: 100%;
-  height: 1080px;
+  height: 100vh;
 }
 
 .SplashScreen-content {
+  position: relative;
   text-align: center;
+  transform: translateY(-50%);
   top: 50%;
+}
+
+.SplashScreen-section {
+  padding-bottom: 15px;
 }
 
 .SplashScreen-find-projects-btn {
@@ -16,7 +22,6 @@
   background-color: transparent;
   border-radius: 5px;
   padding: 6px 12px;
-  margin: 0px 0px 0px 15px;
   transition: 300ms;
   cursor: pointer;
   min-width: 80px;
@@ -25,4 +30,15 @@
     color: $color-text-light;
     border-color: $color-text-light;
   }
+}
+
+.SplashScreen-create-project-btn {
+  border: 1px solid $color-orange;
+  color: $color-text-light;
+  background-color: $color-orange;
+  border-radius: 5px;
+  padding: 6px 12px;
+  margin: 0px 0px 0px 15px;
+  cursor: pointer;
+  min-width: 80px;
 }

@@ -38,7 +38,8 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
     return (
       <div className="row">
         <div className="IntroText col-12">
-        	<p>
+        	{/*TODO: Remove this text*/}
+          <p>
           	Welcome to DemocracyLab! Use the filters and search bar below to find volunteer opportunities with tech-for-good projects.
         	</p>
         </div>
