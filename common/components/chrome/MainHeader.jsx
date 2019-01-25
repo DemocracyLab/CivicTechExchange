@@ -250,7 +250,7 @@ class MainHeader extends React.Component<{||}, State > {
     return FooterLinks.list().map((link) => {
       return (
         <React.Fragment>
-          <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">
+          <a key={link.url} href={link.url}>
             <div className={'SubHeader-drawerDiv'}>
               {link.name}
             </div>
@@ -273,7 +273,7 @@ class MainHeader extends React.Component<{||}, State > {
           headerLinks.map((link) => {
             return (
               <div key={link.url} className="SectionLink-root">
-                <a className="SubHeader-anchor" href={link.url} target="_blank" rel="noopener noreferrer">
+                <a className="SubHeader-anchor" href={link.url}>
                   <h3>{link.name}</h3>
                 </a>
               </div>
@@ -291,7 +291,6 @@ class MainHeader extends React.Component<{||}, State > {
         return (
           <a key={link.url}
              href={link.url}
-             target="_blank" rel="noopener noreferrer"
              className="SubHeader-donate-btn-container">
             <button className="SubHeader-donate-btn">
               {link.name}

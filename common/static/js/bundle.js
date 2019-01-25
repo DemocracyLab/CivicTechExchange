@@ -47318,8 +47318,6 @@ var MainFooter = function (_React$PureComponent) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "a",
             { href: link.url,
-              target: "_blank",
-              rel: "noopener noreferrer",
               onClick: __WEBPACK_IMPORTED_MODULE_1__utils_FooterLinks_js__["a" /* default */].logClick.bind(_this2, link)
             },
             link.name
@@ -100513,7 +100511,7 @@ var MainHeader = function (_React$Component) {
           null,
           __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
             'a',
-            { key: link.url, href: link.url, target: '_blank', rel: 'noopener noreferrer' },
+            { key: link.url, href: link.url },
             __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
               'div',
               { className: 'SubHeader-drawerDiv' },
@@ -100544,7 +100542,7 @@ var MainHeader = function (_React$Component) {
             { key: link.url, className: 'SectionLink-root' },
             __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
               'a',
-              { className: 'SubHeader-anchor', href: link.url, target: '_blank', rel: 'noopener noreferrer' },
+              { className: 'SubHeader-anchor', href: link.url },
               __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
                 'h3',
                 null,
@@ -100566,7 +100564,6 @@ var MainHeader = function (_React$Component) {
           'a',
           { key: link.url,
             href: link.url,
-            target: '_blank', rel: 'noopener noreferrer',
             className: 'SubHeader-donate-btn-container' },
           __WEBPACK_IMPORTED_MODULE_9_react___default.a.createElement(
             'button',
