@@ -21,8 +21,6 @@ class MainFooter extends React.PureComponent<{||}> {
     const footerLinks: $ReadOnlyArray<FooterLink> = FooterLinks.list().map((link, i) =>
       <span className="MainFooter-footer-link" key={i}>
        <a href={link.url}
-          target="_blank"
-          rel="noopener noreferrer"
           onClick={FooterLinks.logClick.bind(this, link)}
        >
          {link.name}

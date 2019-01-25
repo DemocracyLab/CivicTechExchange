@@ -5,12 +5,14 @@ import CurrentUser from "./CurrentUser.js";
 
 type DLAB_FOOTER_LINK = {|
   u: string,
-  n: string
+  n: string,
+  isButton: ?boolean
 |};
 
 export type FooterLink = {|
   url: string,
-  name: string
+  name: string,
+  isButton: boolean
 |};
 
 class FooterLinks {
@@ -18,7 +20,7 @@ class FooterLinks {
     try {
       const envFooterData:string = window.DLAB_FOOTER_LINKS;
       const envLinks: $ReadOnlyArray<DLAB_FOOTER_LINK> = JSON.parse(_.unescape(envFooterData));
-      return envLinks.map( (link:DLAB_FOOTER_LINK) => ({url:link.u, name:link.n}));
+      return envLinks.map( (link:DLAB_FOOTER_LINK) => ({url:link.u, name:link.n, isButton:link.isButton}));
     } catch(ex) {
       console.error("Failed to parse footer links. ", ex);
       return [];
