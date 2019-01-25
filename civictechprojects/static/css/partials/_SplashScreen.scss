@@ -10,6 +10,7 @@
   text-align: center;
   transform: translateY(-50%);
   top: 50%;
+  padding: 0 10px;
 }
 
 .SplashScreen-section {
@@ -22,6 +23,7 @@
   background-color: transparent;
   border-radius: 5px;
   padding: 6px 12px;
+  margin-bottom: 10px;
   transition: 300ms;
   cursor: pointer;
   min-width: 80px;
@@ -38,7 +40,7 @@
   background-color: $color-orange;
   border-radius: 5px;
   padding: 6px 12px;
-  margin: 0px 0px 0px 15px;
+  margin: 0px 0px 10px 15px;
   cursor: pointer;
   min-width: 80px;
 }
