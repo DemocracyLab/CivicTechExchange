@@ -61,11 +61,7 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
         <div className="ProjectFilterContainer-label">
           Filter By:
         </div>
-        <TagSelectorCollapsible category={TagCategory.ISSUES} title="Issue Areas" />
-        <TagSelectorCollapsible category={TagCategory.ROLE} title="Roles Needed" />
-        <TagSelectorCollapsible category={TagCategory.PROJECT_STAGE} title="Project Stage" />
-        <TagSelectorCollapsible category={TagCategory.TECHNOLOGIES_USED} title="Technologies Used" />
-        <TagSelectorCollapsible category={TagCategory.ORGANIZATION} title="Communities" />
+        <TagSelectorCollapsible title="All Filters" />
       </div>
     );
   }
