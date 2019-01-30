@@ -9,7 +9,6 @@ import ProjectCard from './ProjectCard.jsx';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
-import { Pager } from 'react-bootstrap';
 
 type State = {|
   projects: List<Project>,
@@ -62,13 +61,8 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
         );
   }
 
-  // _itemStatus(pageNumber: number): object {
-  //   // if (pageNumber > this.state.project_pages) return 'disabled';
-  //   if (pageNumber === this.state.current_page) return { active: true };
-  //   return { active: false };
-  // }
-
-  _handleGoToPreviousPage(): void {
+  _handleGoToPreviousPage(e: object): void {
+    e.preventDefault();
     this.setState({current_page: this.state.current_page - 1 > 0 
       ? this.state.current_page - 1 
       : this.state.current_page }, function () {
@@ -77,6 +71,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   }
 
   _handleGoToNextPage(e: object): void {
+    e.preventDefault();
     this.setState({current_page: this.state.current_page + 1 <= this.state.project_pages 
       ? this.state.current_page + 1 
       : this.state.current_page }, function () {
@@ -91,18 +86,39 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     });
   }
 
+  _fillPageSelect(active_page, max_pages) {
+    const pages = [];
+    for (let page = 1; page <= max_pages; page++) { pages.push({value: page, label: page}) }
+    return (
+      <select className="page_select" value={active_page}>
+        {pages.map(page => {
+          return(<option value={page.value}>{page.label}</option>);
+        })}
+      </select>
+    );
+  }
+
+  _handlePageSelect(e) {
+    e.preventDefault();
+    return this.setState({current_page: e.target.value}, this._onChangePage);
+  }
+
   _renderPagination(): React$Node {
     return (
       this.state.projects && this.state.projects.size !== 0
-      ? <Pager>
-        <Pager.Item previous href="#" onClick={this._handleGoToPreviousPage.bind(this)}>
+      ? <div className="page_selection_footer">
+        <button className="page_button" onClick={this._handleGoToPreviousPage.bind(this)}>
           &larr; Previous Page
-        </Pager.Item>
-        <p>Page {this.state.current_page} of {this.state.project_pages}</p>
-        <Pager.Item next href="#" onClick={this._handleGoToNextPage.bind(this)}>
+        </button>
+        <form className="page_select_form" onChange={this._handlePageSelect.bind(this)}>
+        <span>Page </span>
+        {this._fillPageSelect.bind(this)(this.state.current_page, this.state.project_pages)}
+        <span> of </span>{this.state.project_pages}
+        </form>
+        <button className="page_button" onClick={this._handleGoToNextPage.bind(this)}>
           Next Page &rarr;
-        </Pager.Item>
-      </Pager>
+        </button>
+      </div>
       : null
     );
   }

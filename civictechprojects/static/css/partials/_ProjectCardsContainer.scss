@@ -1,0 +1,25 @@
+.page_selection_footer {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 15px;
+
+    .page_button {
+        background-color: $color-green;
+        border: 0;
+        border-radius: 5px;
+        color: $color-text-light;
+        cursor: pointer;
+        font-size: 14px;
+        width: 150px;
+    }
+
+    .page_select_form {
+        font-size: 14px;
+        padding: 8px 4px 8px 4px;
+    }
+
+    .page_select {
+        font-weight: bold;
+    }
+}
+
