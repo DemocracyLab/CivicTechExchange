@@ -10,7 +10,12 @@ const GlyphStyles: {[key: string]: string} = {
   Clock: "fas fa-clock fa-fw",
   Search: "fa fa-search",
   Github: "fab fa-github",
-  Trello: "fab fa-trello"
+  GeneralCode: "fas fa-code",
+  Trello: "fab fa-trello",
+  LinkedIn: "fab fa-linkedin",
+  Messaging: "far fa-comment-alt",
+  Folder: "far fa-folder",
+  Tasks: "fas fa-tasks"
 };
 
 export default GlyphStyles;

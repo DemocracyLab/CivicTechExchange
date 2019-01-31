@@ -22,6 +22,7 @@ import GlyphStyles from "../utils/glyphs.js";
 import metrics from "../utils/metrics.js";
 import AboutPositionEntry from "../common/positions/AboutPositionEntry.jsx";
 import ProjectVolunteerModal from "../common/projects/ProjectVolunteerModal.jsx";
+import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -292,35 +293,10 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
-    const glyphLinkUrl = project && project.project_links && project.project_links.map((link) => link.linkUrl);
-    console.log('glyphLinkUrl:',glyphLinkUrl);
-    const glyphValue = this._compareFunc(this._renderGlyph(glyphLinkUrl));
-    console.log('glyphValue:',glyphValue);
-    return project && project.project_links && project.project_links.map((link, i) => 
-
-
-      <div key={i}>
-            <i className={glyphValue} aria-hidden="true"></i>
-
-        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">
-
-        {this._legibleName(link.linkName)}</a>
-      </div>
-  );
+    return project && project.project_links && project.project_links.map((link, i) =>
+      <IconLinkDisplay key={i} link={link}/>
+    );
   }
-
-  _renderGlyph(input): ?Array<React$Node> {
-    let glyphArr = [];
-    for(let glyph in GlyphStyles){
-      for(let i = 0; i < input.length; i++){
-        if(input[i].includes(glyph.toLowerCase())){
-        glyphArr.push(glyph);
-        } 
-      } 
-    }
-    console.log('glyphArr:',glyphArr);
-    return glyphArr;
-      }
 
   _compareFunc(input): ?Array<React$Node> {
     let item;
