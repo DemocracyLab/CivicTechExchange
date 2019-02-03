@@ -7,6 +7,7 @@ import {FileCategoryNames} from "../constants/FileConstants.js";
 import {UserAPIData} from "../utils/UserAPIUtils.js";
 import UserAPIUtils from "../utils/UserAPIUtils.js";
 import {FileInfo} from "../common/FileInfo.jsx";
+import Avatar from "../common/avatar.jsx"
 import _ from 'lodash'
 
 type State = {|
@@ -47,7 +48,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
               <div className="col-sm-5">
                 <div className="row">
                   <div className="col-sm-auto">
-                    <img className="upload_img upload_img_bdr" src={user && user.user_thumbnail && user.user_thumbnail.publicUrl} />
+                    <Avatar user={user} size={50} />
                   </div>
                   <div className="col">
                     <div className="row">

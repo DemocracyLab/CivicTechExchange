@@ -6,24 +6,25 @@ import {UserAPIData} from "../../utils/UserAPIUtils.js";
 import {TagDefinition, VolunteerUserData} from "../../utils/ProjectAPIUtils.js";
 import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
+import Avatar from "../avatar.jsx"
 
 type Props = {|
   +owner: VolunteerUserData,
 |};
 
 class ProjectOwnerCard extends React.PureComponent<Props> {
-  
+
   render(): React$Node {
     const owner: ?VolunteerUserData = this.props.owner;
     const ownerUrl:string = url.section(Section.Profile, {id: owner.id});
     return (
       <div className="VolunteerCard-root">
         <a className="VolunteerCard-volunteerName" href={ownerUrl} target="_blank" rel="noopener noreferrer">
-          <img className="upload_img upload_img_bdr VolunteerCard-img" src={owner && owner.user_thumbnail && owner.user_thumbnail.publicUrl}/>
+          <Avatar user={owner} size={50} />
         </a>
         <a className="VolunteerCard-volunteerName" href={ownerUrl} target="_blank" rel="noopener noreferrer">
           {owner && (owner.first_name + " " + owner.last_name)}
-        </a> 
+        </a>
         <p className="VolunteerCard-volunteerRole">
           Project Owner
         </p>

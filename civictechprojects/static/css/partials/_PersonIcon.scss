@@ -1,0 +1,18 @@
+.PersonIcon {
+  margin: 0px 0px 0px 5px;
+}
+
+.Icon-container {
+  height: 60px;
+  width: 60px;
+  margin: 0px 10px 0px 0px;
+  float: left;
+  cursor: pointer;
+  svg {
+    border-radius: 50%;
+    color: $color-text-light;
+    background: $color-text-grey;
+    opacity: .5;
+    transition: 300ms;
+  }
+}
