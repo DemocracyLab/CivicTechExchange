@@ -19,7 +19,7 @@ export DJANGO_SECRET_KEY="d!01@gn+%1ql1n(*)8xo+nx$$&n@mg$0_)9g+!(t-2vncaq!j8"
 export DJANGO_DEBUG=True
 
 # Configure footer links
-export FOOTER_LINKS='[{"u":"http://connect.democracylab.org","n":"About"},{"u":"mailto:hello@democracylab.org","n":"Contact Us"}]'
+export FOOTER_LINKS='[{"u":"https://connect.democracylab.org","n":"About"},{"u":"https://connect.democracylab.org/donatenow","n":"Donate", "isButton":"true"},{"u":"mailto:hello@democracylab.org","n":"Contact Us"}]'
 
 # Configure project description example link
 export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/index/?section=AboutProject&id=1'

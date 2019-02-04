@@ -1,52 +1,51 @@
 // @flow
 
-import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
-import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
-import type {PositionInfo} from "../forms/PositionInfo.jsx";
-import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
-import NotificationModal from "../common/notification/NotificationModal.jsx";
-import TagsDisplay from '../common/tags/TagsDisplay.jsx'
-import url from '../utils/url.js'
-import CurrentUser from "../utils/CurrentUser.js";
-import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
-import _ from 'lodash'
-
+//TODO: validate all the active imports, these are the result of a messy merge
 import React from 'react';
-import {Locations} from "../constants/ProjectConstants.js";
-import {LinkNames} from "../constants/LinkConstants.js";
-import {TagDefinition} from "../utils/ProjectAPIUtils.js";
+import _ from 'lodash'
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
+import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
+import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
+import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.jsx';
+import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
 import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
-import ProjectOwnersSection from "../common/owners/ProjectOwnersSection.jsx";
-import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
-import GlyphStyles from "../utils/glyphs.js";
+import {LinkNames} from "../constants/LinkConstants.js";
 import metrics from "../utils/metrics.js";
 import AboutPositionEntry from "../common/positions/AboutPositionEntry.jsx";
 import ProjectVolunteerModal from "../common/projects/ProjectVolunteerModal.jsx";
+import CurrentUser from "../utils/CurrentUser.js";
+import ProjectOwnersSection from "../common/owners/ProjectOwnersSection.jsx";
+import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
+import type {PositionInfo} from "../forms/PositionInfo.jsx";
 import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
+
 
 type State = {|
   project: ?ProjectDetailsAPIData,
   showJoinModal: boolean,
   positionToJoin: ?PositionInfo,
   showPositionModal: boolean,
-  shownPosition: ?PositionInfo
+  shownPosition: ?PositionInfo,
+  tabs: object
 |};
 
 class AboutProjectController extends React.PureComponent<{||}, State> {
 
-  constructor(): void {
+  constructor(): void{
     super();
     this.state = {
-      project: null,
-      showContactModal: false,
-      showJoinModal: false,
-      positionToJoin: null,
-      showPositionModal: false,
-      shownPosition: null
-    };
-
-    this.handleClose = this.handleClose.bind(this);
+    project: null,
+    showContactModal: false,
+    showPositionModal: false,
+    shownPosition: null,
+    tabs: {
+      details: true,
+      skills: false,
+    }
   }
+ }
 
   componentDidMount() {
     const projectId: string = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
@@ -54,19 +53,19 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     metrics.logNavigateToProjectProfile(projectId);
   }
 
-  loadProjectDetails(project: ProjectDetailsAPIData) {
+  loadProjectDetails(project) {
     this.setState({
-      project: project
+      project: project,
     });
   }
-  
+
   handleShowVolunteerModal(position: ?PositionInfo) {
     this.setState({
       showJoinModal: true,
       positionToJoin: position
     });
   }
-  
+
   confirmJoinProject(confirmJoin: boolean) {
     if(confirmJoin) {
       window.location.reload(true);
@@ -75,61 +74,116 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     }
   }
 
-  handleClose() {
-    this.setState({ showContactModal: false });
+  changeHighlighted(tab) {
+   let tabs = {
+      details: false,
+      skills: false,
+      positions: false,
+    }
+
+    tabs[tab] = true;
+    this.setState({tabs});
   }
 
-  render(): React$Node {
+  render(): $React$Node {
     return this.state.project ? this._renderDetails() : <div>Loading...</div>
   }
 
   _renderDetails(): React$Node {
-    const project: ProjectDetailsAPIData = this.state.project;
+    const project = this.state.project;
     return (
-      <div className="AboutProjectController-root">
-        <div className="container-fluid">
-          <div className="background-light">
-            <div className="row" style={{margin: "30px 0 0 0", padding: "10px 0"}}>
-              <div className="col-sm-5">
-                <div className="row">
-                  <div className="col-sm-auto">
-                    <img className="upload_img upload_img_bdr" src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
-                  </div>
-                  <div className="col">
-                    <div className="row">
-                      <div className="col">
-                        {project && project.project_name}
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col">
-                        {project && !_.isEmpty(project.project_issue_area) ? "Issue Area: " + project.project_issue_area[0].display_name : null}
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col">
-                        {project && !_.isEmpty(project.project_stage) ? "Project Stage: " + project.project_stage[0].display_name : null}
-                      </div>
-                    </div>
-                    <div className="row">
-                      {this._renderProjectCommunity()}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col">
-              </div>
-              <div className="col col-sm-3">
-                <div className="row">
-                  {this._renderProjectHomepageLink()}
-                </div>
-                <div className="row">
-                  {this._renderProjectLocation()}
-                </div>
-                <div className="row">
-                  <ContactProjectButton project={this.state.project}/>
-                </div>
-                <div className="row">
+      <div className='AboutProjects-root'>
+        <Grid container className='AboutProjects-container' spacing={0}>
+          <Grid item xs={12} sm={3} className="AboutProjects-infoColumn">
+            <Paper className='AboutProjects-paper' elevation={1} square={true}>
+
+              <Grid className='AboutProjects-iconContainer'>
+                <img className='AboutProjects-icon'src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
+              </Grid>
+
+              <Divider />
+
+              <Grid className='AboutProjects-details'>
+                <ProjectDetails projectLocation={project && project.project_location}
+                projectUrl={project && project.project_url}
+                projectStage={project && !_.isEmpty(project.project_stage) ? project.project_stage[0].display_name : null}
+                dateModified={project && project.project_date_modified}/>
+              </Grid>
+
+              <Divider />
+
+            {project && !_.isEmpty(project.project_links) &&
+              <React.Fragment>
+                <Grid className='AboutProjects-links'>
+                  <h4>Links</h4>
+                  {this._renderLinks()}
+                </Grid>
+                <Divider />
+              </React.Fragment>
+            }
+
+
+
+            { project && !_.isEmpty(project.project_files) &&
+              <React.Fragment>
+                <Grid className='AboutProjects-files'>
+                  <h4>Files</h4>
+                   {this._renderFiles()}
+                </Grid>
+                <Divider />
+              </React.Fragment>
+            }
+
+          {project && !_.isEmpty(project.project_organization) &&
+            <React.Fragment>
+              <Grid className='AboutProjects-communities'>
+                <h4>Communities</h4>
+                <ul>
+                  {
+                    project.project_organization.map((org, i) => {
+                      return <li key={i}>{org.display_name}</li>
+                    })
+                  }
+                </ul>
+              </Grid>
+              <Divider />
+            </React.Fragment>
+          }
+
+              <Grid className='AboutProjects-team'>
+                <h4>Team</h4>
+                  {
+                    project && !_.isEmpty(project.project_owners)
+                    ? <ProjectOwnersSection
+                      owners={project.project_owners}
+                      />
+                    : null
+                  }
+
+                  {
+                  project && !_.isEmpty(project.project_volunteers)
+                    ? <VolunteerSection
+                        volunteers={project.project_volunteers}
+                        isProjectAdmin={CurrentUser.userID() === project.project_creator}
+                        isProjectCoOwner={CurrentUser.isCoOwner(project)}
+                        projectId={project.project_id}
+                      />
+                    : null
+                  }
+              </Grid>
+
+            </Paper>
+          </Grid>
+
+          <Grid item xs={12} sm={9} className="AboutProjects-mainColumn">
+            <Paper className='AboutProjects-paper' elevation={1} square={true}>
+              <Grid className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
+                  <Grid className='AboutProjects-description' item xs={12} sm={9}>
+                    <h1>{project && project.project_name}</h1>
+                    <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
+                    <p>{project && project.project_short_description}</p>
+                  </Grid>
+
                   <ProjectVolunteerModal
                     projectId={this.state.project && this.state.project.project_id}
                     positions={this.state.project && this.state.project.project_positions}
@@ -137,180 +191,47 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     showModal={this.state.showJoinModal}
                     handleClose={this.confirmJoinProject.bind(this)}
                   />
-                  <ProjectVolunteerButton
-                    project={this.state.project}
-                    onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
-                  />
-                  { CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified() && <VerifyEmailBlurb/> }
-                </div>
+
+                  <Grid className='AboutProjects-owner' item xs={12} sm={3}>
+                    <ContactProjectButton project={project}/>
+                    <ProjectVolunteerButton
+                      project={project}
+                      onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
+                    />
+                  </Grid>
+              <div className="AboutProjects_tabs">
+                <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
+                <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#skills-needed">Skills Needed</a>
               </div>
-            </div>
-          </div>
 
-          {
-            project && !_.isEmpty(project.project_technologies)
-              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
-                  <div className='col'>
-                    <h2 className="form-group subheader">TECHNOLOGIES USED</h2>
-                    <div className="Text-section">
-                      {this._renderTechnologies()}
-                    </div>
-                  </div>
+              </Grid>
+              <Divider />
+
+              <Grid className='AboutProjects-description-details'>
+                <div id='project-details'>{project.project_description}</div>
+              <Grid className='AboutProjects-skills-container' container direction='row'>
+                <div className='AboutProjects-skills'>
+                  <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
+                  {project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.display_name}</p>)}
                 </div>
-              : null
-          }
-  
-          {
-            project && !_.isEmpty(project.project_short_description)
-            ? < div className="row" style={{margin: "30px 40px 0 40px"}}>
-                <div className="col">
-                  <h2 className="form-group subheader">PROJECT SUMMARY</h2>
-                  <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
-                    {project.project_short_description}
-                  </div>
+                <div className='AboutProjects-technologies'>
+                  <p className='AboutProjects-tech-title'>Technologies Used</p>
+                  {project && project.project_technologies && project.project_technologies.map(tech => <p>{tech.display_name}</p>)}
                 </div>
-              </div>
-            : null
-          }
+                <Grid item xs={6}></Grid>
+                </Grid>
+              </Grid>
+              <Divider/>
+              <Grid className='AboutProjects-positions-available' container>
+              <div id="positions-available">{project && !_.isEmpty(project.project_positions) && this._renderPositions()}</div>
+              </Grid>
+            </Paper>
+          </Grid>
 
-          <div className="row" style={{margin: "30px 40px 0 40px"}}>
-            <div className="col">
-              <h2 className="form-group subheader">PROJECT DETAILS</h2>
-              <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
-                {project && project.project_description}
-              </div>
-            </div>
-          </div>
-
-          <NotificationModal
-            showModal={this.state.showPositionModal}
-            message={this.state.shownPosition && this.state.shownPosition.description}
-            buttonText="Close"
-            headerText={this.state.shownPosition && this.state.shownPosition.roleTag.display_name}
-            onClickButton={() => this.setState({showPositionModal: false})}
-          />
-
-          {
-            project && !_.isEmpty(project.project_positions)
-              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
-                  <div className='col'>
-                    <h2 className="form-group subheader">SKILLS NEEDED</h2>
-                    <div className="Text-section">
-                      {this._renderPositions()}
-                    </div>
-                  </div>
-                </div>
-              : null
-          }
-  
-          {
-            project && !_.isEmpty(project.project_owners)
-              ? <ProjectOwnersSection
-                owners={project.project_owners}
-                />
-              : null
-          }
-
-          {
-            project && !_.isEmpty(project.project_volunteers)
-              ? <VolunteerSection
-                  volunteers={project.project_volunteers}
-                  isProjectAdmin={CurrentUser.userID() === project.project_creator}
-                  isProjectCoOwner={CurrentUser.isCoOwner(project)}
-                  projectId={project.project_id}
-                />
-              : null
-          }
-
-          {
-            project && !_.isEmpty(project.project_links)
-              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
-                  <div className='col'>
-                    <h2 className="form-group subheader">LINKS</h2>
-                    <div className="Text-section">
-                    {/* <i class="fab fa-github" aria-hidden="true"></i> */}
-                      {this._renderLinks()}
-                    </div>
-                  </div>
-                </div>
-              : null
-          }
-
-          {
-            project && !_.isEmpty(project.project_files)
-              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
-                  <div className='col'>
-                    <h2 className="form-group subheader">FILES</h2>
-                    <div className="Text-section">
-                      {this._renderFiles()}
-                    </div>
-                  </div>
-                </div>
-              : null
-          }
-        </div>
-        <div>
-          <i>Last Updated:</i> {project.project_date_modified}
-        </div>
+        </Grid>
       </div>
-    );
+    )
   }
-
-  _renderProjectLocation(): React$Node {
-    if(this.state.project && this.state.project.project_location && (this.state.project.project_location !== Locations.OTHER)) {
-      return <div className="col">
-        <i className={GlyphStyles.MapMarker} aria-hidden="true"></i>
-        {this.state.project.project_location}
-      </div>
-    }
-  }
-
-  _renderProjectCommunity(): React$Node {
-    if(this.state.project && !_.isEmpty(this.state.project.project_organization)) {
-      return <div className="col">
-        Communities: {_.join(this.state.project.project_organization.map((tag: TagDefinition) => tag.display_name), ", ")}
-      </div>
-    }
-  }
-
-  _renderProjectHomepageLink(): React$Node {
-    if(this.state.project && this.state.project.project_url) {
-      return <div className="col">
-        <i className={GlyphStyles.Globe} aria-hidden="true"></i>
-        <a href={this.state.project.project_url} target="_blank" rel="noopener noreferrer">
-          {this.state.project.project_url.length > 100 ? "Project Homepage" : url.beautify(this.state.project.project_url)}
-        </a>
-      </div>
-    }
-  }
-
-  _renderTechnologies(): ?Array<React$Node> {
-    const project = this.state.project;
-    return project && project.project_technologies &&
-      <TagsDisplay tags={project && project.project_technologies}/>
-  }
-
-
-  _renderLinks(): ?Array<React$Node> {
-    const project = this.state.project;
-    return project && project.project_links && project.project_links.map((link, i) =>
-      <IconLinkDisplay key={i} link={link}/>
-    );
-  }
-
-  _compareFunc(input): ?Array<React$Node> {
-    let item;
-    for(let i = 0; i < input.length; i++){
-      if( GlyphStyles.hasOwnProperty(input[i]) ) {
-          item = GlyphStyles[input[i]];
-          console.log( 'item:',item );
-          
-      }
-    }
-    return item;
-  }
-
-
 
   _renderFiles(): ?Array<React$Node> {
     const project = this.state.project;
@@ -318,6 +239,13 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       <div key={i}>
         <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">{file.fileName}</a>
       </div>
+    );
+  }
+
+  _renderLinks(): ?Array<React$Node> {
+    const project = this.state.project;
+    return project && project.project_links && project.project_links.map((link, i) =>
+      <IconLinkDisplay key={i} link={link}/>
     );
   }
 
@@ -332,8 +260,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
           onClickApply={canApply ? this.handleShowVolunteerModal.bind(this, position) : null}
         />;
       });
-  }
-
+    }
 }
 
 export default AboutProjectController;

@@ -1,95 +1,212 @@
-.SubHeader-createProject { 
-  background-color: $color-orange;
-  border: none;
-  border-radius: 5px;
-  color: $color-text-light;
-  display: inline-table;
-  font-size: 15px;
-  margin-top: 6px;
-  margin-bottom: 5px;
-  padding: 8px 8px;
-  text-decoration: inherit;
-  width: auto;
+.SubHeader-logo-container {
+  float: left;
+  display: flex;
+  width: 200px;
+  align-items: center;
+  justify-content: center;
+}
+
+.SubHeader-logo {
   cursor: pointer;
-  float: none;
+  width: 140px;
 }
 
 .SubHeader-root {
-  background-color: $color-background-dark;
-  height: 150px;
+  display: flex;
+  flex-direction: row;
+  background-color: $color-background-default;
+  height: $header-height;
   padding: 0 5% 0 5%;
-  margin-bottom: 5%;
-}
-
-.SubHeader-sectionButton {
-  color: $color-text-light;
-  display: inline-block;
-  font-weight: bold;
-  margin: auto;
-  padding-right: 40px;
+  margin-bottom: 5px;
 }
 
 .SubHeader-rightContent {
-  display: flex; 
-  flex-direction: column;
+  display: none; 
+  flex-direction: row;
+  height: 100%;  
+  justify-content: flex-end;
+  width: 85%;
+  a {
+    text-decoration: none;
+    color: $color-text-grey;
+  }
+}
+
+.SubHeader-log-btns {
+  align-self: center;
+  background-color: transparent;
+  border: 1px solid $color-text-grey;
+  border-radius: 5px;
+  color: $color-text-grey;
+  cursor: pointer;  
+  margin: 0px 6px;
+  min-width: 80px;
+  padding: 6px 12px;
+  transition: 300ms;
+  &:hover {
+    background-color: $color-orange;
+    color: $color-text-light;
+    border-color: $color-text-light;
+  }
+}
+
+.SubHeader-donate-btn-container {
+    align-self: center;    
+}
+
+.SubHeader-donate-btn {
+  border: 1px solid $color-orange;
+  color: $color-orange;
+  background-color: transparent;
+  border-radius: 5px;
+  padding: 6px 12px;
+  margin: 0px 0px 0px 15px;
+  transition: 300ms;
+  cursor: pointer;
+  min-width: 80px;
+  &:hover {
+    background-color: $color-orange;    
+    color: $color-text-light;
+    border-color: $color-text-light;
+  }
+}
+
+.SubHeader-userImg-container {
+  align-self: center;
+  display: flex;
+  height: 38px;
+  width: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  margin: 0px 5px 0px 35px;
   align-items: center;
   justify-content: center;
-  width: 50%;
-  height:100%;
-    float: right;
-}
-
-.SubHeader-leftContent {
-    float: left;
-    display: flex; 
-    flex-direction: column;
-    align-items: start;
-    justify-content: center;
-    width: 50%;
-    height:100%;
-}
-
-@include media-breakpoint-up(sm) {
-  .SubHeader-root {
-    height: 100px;
-  }
-
-  .SubHeader-rightContent {
+  cursor: pointer;
+  svg {
+    height: 100%;
     width: 100%;
-    height: 50%;
-  }
-
-  .SubHeader-leftContent {
-    flex-direction: row;    
-    width: 100%;
-    height: 50%;
+    border-radius: 50%; 
+    color: $color-text-light;
+    background: $color-text-grey;
+    opacity: .5;
+    transition: 300ms;    
   }
 }
+
+.SubHeader-user-btn {
+  background-color: transparent;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px;
+  opacity: .75;
+  transition: 300ms;
+  &:hover {
+    opacity: 1;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+.SubHeader-userImg {
+  height: 38px;
+  width: 38px;
+  border-radius: 50%;  
+  transition: 300ms;
+}
+
+.SubHeader-dropdown-menu {
+  width: 200px;
+  margin-left: -145px;
+  margin-top: 10px;
+  &:before {
+    content: '';
+    position: relative;
+    top: -27px;
+    left: 164px;
+    border-color: $color-background-light transparent;
+    border-style: solid;
+    border-width: 0px 10px 10px 10px;
+    height: 0px;
+    width: 0px;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+
+.SubHeader-dropdown-name {
+  padding-left: 16px;
+  padding-right: 15px;
+  color: $color-text-grey;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.SubHeader-hamburger {
+  display: flex;
+  width: 80%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.SubHeader-navDrawer {
+  margin-top: 25px;
+  width: 43.72vw;
+  min-width: 200px;
+
+  a {
+    color: $color-text-grey;
+    transition: 300ms;
+    &:hover {
+      text-decoration: none;
+      color: $color-orange;
+    }
+  }
+}
+
+.SubHeader-slider-name {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.SubHeader-slider-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%; 
+    color: $color-text-light;
+    background: $color-text-grey;
+  }
+  img {
+    width: 75px;
+    height: 75px;
+  }
+}
+
+.SubHeader-drawerDiv {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 25px;
+}
+
+// @include media-breakpoint-up(sm) {
+// }
 
 @include media-breakpoint-up(md) {
-  .SubHeader-createProject {
-    float: right;    
+  .SubHeader-hamburger {
+    display: none;
   }
-
-  .SubHeader-root {
-    height: 50px;
-  }
-
-  .SubHeader-sectionButton {
-    margin-top: 18px;    
-  }
-
+  
   .SubHeader-rightContent {
-    width: 19%;
-    display: block;
-    height: 100%;
+    display: flex;
   }
-
-  .SubHeader-leftContent {
-    width: 81%;
-    height: 100%;
-    float: left;
-    justify-content: flex-start;        
-  }
-
 }

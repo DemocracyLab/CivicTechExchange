@@ -130,7 +130,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       ? (
         // TODO: Make this its own component and hook up to My Projects page
         <Button
-          className="ProjectSearchBar-submit"
+          className="ProjectSearchBar-submit btn btn-theme"
           type="button"
           bsStyle="danger"
           onClick={this.handleShowLeaveModal}
@@ -140,7 +140,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       )
       : (
         <Button
-          className="ProjectSearchBar-submit"
+          className="ProjectSearchBar-submit btn btn-theme"
           type="button"
           disabled={this.state.buttonDisabled}
           title={this.state.buttonTitle}
@@ -154,7 +154,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   _renderLinkToSignInButton(): React$Node {
     return (
       <Button
-        className="ProjectSearchBar-submit"
+        className="ProjectSearchBar-submit btn btn-theme"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
