@@ -333,12 +333,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         />;
       });
   }
-  
 
-  _legibleName(input) {
-    //replaces specific linkNames for readability
-    return LinkNames[input] || input;
-  }
 }
 
 export default AboutProjectController;
