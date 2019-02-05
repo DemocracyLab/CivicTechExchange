@@ -14,7 +14,9 @@ type Props = {|
 |};
 
 type State = {|
-  displayConfig: ?LinkSourceDisplayConfig,
+  siteDisplayConfig: ?LinkSourceDisplayConfig,
+  linkTypeDisplayConfig: ?LinkSourceDisplayConfig,
+  glyphStyle: ?string,
   topText: ?string,
   topTitle: ?string,
   bottomText: ?string,
@@ -33,12 +35,16 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
   }
   
   initializeState(props: Props): State {
-    const displayConfig: LinkSourceDisplayConfig = this.getLinkDisplayConfig(props.link);
-    const topText: string = this.getTopText(props.link, displayConfig);
-    const bottomText: string = displayConfig.sourceTypeDisplayName;
+    const siteDisplayConfig: LinkSourceDisplayConfig = this.getSiteDisplayConfig(props.link);
+    const linkTypeDisplayConfig: LinkSourceDisplayConfig = this.getLinkTypeDisplayConfig(props.link);
+    const glyphStyle: string = this.getGlyphStyle(siteDisplayConfig, linkTypeDisplayConfig);
+    const topText: string = this.getTopText(props.link, siteDisplayConfig, linkTypeDisplayConfig);
+    const bottomText: string = linkTypeDisplayConfig.sourceTypeDisplayName;
   
     return {
-      displayConfig: displayConfig,
+      siteDisplayConfig: siteDisplayConfig,
+      linkTypeDisplayConfig: linkTypeDisplayConfig,
+      glyphStyle: glyphStyle,
       topText: Truncate.stringT(topText, textLength),
       topTitle: topText.length >= textLength ? topText : null,
       bottomText: bottomText
@@ -46,12 +52,12 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
   }
   
   render(): ?React$Node {
-    if(this.state.displayConfig) {
+    if(this.state.linkTypeDisplayConfig) {
       return (
         <div className="IconLink-root">
           <a href={this.props.link.linkUrl}>
             <div className="IconLink-left">
-              <i className={Glyph(this.state.displayConfig.iconClass, GlyphSizes.X2)} aria-hidden="true"></i>
+              <i className={Glyph(this.state.glyphStyle, GlyphSizes.X2)} aria-hidden="true"></i>
             </div>
             <div className="IconLink-right">
               <p className="IconLink-topText" title={this.state.topTitle}>
@@ -67,30 +73,29 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
     }
   }
   
-  getLinkDisplayConfig(link: LinkInfo): LinkSourceDisplayConfig {
-    //Check regexes for any specific website match
+  getSiteDisplayConfig(link: LinkInfo): ?LinkSourceDisplayConfig {
     const regexConfig: ?LinkSourceDisplayConfig = LinkDisplayConfigurationByUrl.find(
       (config:LinkSourceDisplayConfig) => config.sourceUrlPattern.test(link.linkUrl)
     );
-    
-    if(regexConfig) {
-      return regexConfig;
-    } else {
-      //Then check for default configuration by link type
-      return DefaultLinkDisplayConfigurations[link.linkName] || DefaultLinkDisplayConfigurations.other;
-    }
+  
+    return regexConfig;
   }
   
-  getTopText(link: LinkInfo, displayConfig: LinkSourceDisplayConfig): string {
+  getLinkTypeDisplayConfig(link: LinkInfo): LinkSourceDisplayConfig {
+    return DefaultLinkDisplayConfigurations[link.linkName] || DefaultLinkDisplayConfigurations.other;
+  }
+  
+  getGlyphStyle(siteDisplayConfig: ?LinkSourceDisplayConfig, linkTypeDisplayConfig: ?LinkSourceDisplayConfig): string {
+    return siteDisplayConfig ? siteDisplayConfig.iconClass : linkTypeDisplayConfig.iconClass;
+  }
+  
+  getTopText(link: LinkInfo, siteDisplayConfig: ?LinkSourceDisplayConfig): string {
     let topText: string;
-    if(displayConfig.sourceDisplayName) {
-      // If a link to a known website, show that name
-      topText = displayConfig.sourceDisplayName;
-    } else if ((link.linkName in LinkNames) || !link.linkName) {
-      // Else, show link name or prettified url
-      topText = urlHelper.beautify(link.linkUrl);
+  
+    if (link.linkName in LinkNames) {
+      topText = siteDisplayConfig ? siteDisplayConfig.sourceDisplayName : LinkNames[link.linkName];
     } else {
-      topText = link.linkName;
+      topText = link.linkName ? link.linkName : urlHelper.beautify(link.linkUrl);
     }
     
     return topText;

@@ -9,6 +9,7 @@ export type LinkSourceDisplayConfig = {|
   +iconClass: string
 |};
 
+// TODO: Remove sourceTypeDisplayName
 export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConfig> = [
   {
     sourceUrlPattern: new RegExp("github\\.com"),
