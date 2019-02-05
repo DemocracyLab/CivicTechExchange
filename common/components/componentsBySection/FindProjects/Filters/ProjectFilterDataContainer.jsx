@@ -33,22 +33,28 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     super(props);
     this.state = {tags: null};
 
-    // TODO: Use Flux to get tags in a single request
     // passing true to fetchTagsByCategory asks backend to return num_times in API response
     ProjectAPIUtils.fetchAllTags(true, tags => {
-      //Generating category and subcategory total item counts before setting state
+      //Need to do some calculations before setting state to both tags and tagCounts:
+
+      //Remove tags with num_times=0 before setting state to avoid filtering later
+      let filteredTags = tags.filter(function(key) {
+          return key.num_times > 0;
+        })
+
+      //Generate category and subcategory total item counts
       let subcatCount = _.countBy(tags, 'subcategory' );
       let catCount = _.countBy(tags, 'category');
       let countMergeResult = _.merge(catCount, subcatCount)
-      //TODO: remove empty categories I don't need
-      //once calculated, set state
+       //remove unneeded count of empty category/subcategory entries
+      delete countMergeResult['']
+
+      //last, set state with our computed data
       this.setState({
-        tags: tags,
-        hasSubcategories: _.every(tags, tag => !_.isEmpty(tag.subcategory)),
+        tags: filteredTags,
         tagCounts: countMergeResult
       });
     });
-    this._displayTag = this._displayTag.bind(this);
     this._tagEnabled = this._tagEnabled.bind(this);
   }
 
@@ -64,12 +70,12 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
 
 
   selectTag(tag: TagDefinition): void {
-    var tagInState = _.has(this.state.selectedTags, tag.tag_name);
+    var tagInState = _.has(this.state.selectedTags, tag);
     //if tag is NOT currently in state, add it, otherwise remove
     if(!tagInState) {
       ProjectSearchDispatcher.dispatch({
         type: 'ADD_TAG',
-        tag: tag.tag_name,
+        tag: tag,
       });
       metrics.logSearchFilterByTagEvent(tag);
     } else {
@@ -81,33 +87,34 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
   }
 
   render(): React$Node {
+    //test code, to be removed - this fn should render an as yet undefined <ChildComponent>
+
     return (
       <div>
-        { this.state.tags
-          ? (
-            <SelectorCollapsible
-              title={this.props.title}
-              options={this.state.tags}
-              optionCategory={this.state.hasSubcategories && (tag => tag.subcategory)}
-              optionDisplay={tag => this._displayTag(tag)}
-              optionEnabled={tag => this._tagEnabled(tag)}
-              onOptionSelect={this.selectTag.bind(this)}
-            />
-            )
-          : null
-        }
+        { this.state.tags ? this._testRenderTags() : null }
+        <p>--- VERY GOOD DIVIDER LINE ---</p>
+        { this.state.tags ? this._testRenderCategories(): null }
       </div>
     );
   }
 
+  _testRenderTags(): void {
+    const listItems = this.state.tags && this.state.tags.map((tag) =>
+      <li>{tag.display_name} - {tag.num_times}</li>
+    );
+    return <ul>{listItems}</ul>
+
+  }
+  _testRenderCategories(): void {
+    const categoryCount = this.state.tagCounts && Object.keys(this.state.tagCounts).map((key) =>
+     <li key={key}>{key} - {this.state.tagCounts[key]}</li>
+   );
+    return <ul>{categoryCount}</ul>
+  }
 
   _tagEnabled(tag: TagDefinition): boolean {
     //return true if tag is in this.state.selectedTags, else implicitly false
-    return _.has(this.state.selectedTags, tag.tag_name)
-  }
-
-  _displayTag(tag: TagDefinition): string {
-    return tag.display_name;
+    return _.has(this.state.selectedTags, tag)
   }
 }
 
