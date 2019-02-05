@@ -18,4 +18,19 @@ const GlyphStyles: {[key: string]: string} = {
   Tasks: "fas fa-tasks"
 };
 
+export const GlyphSizes: {[key: string]: string} = {
+  XS: "fa-xs",
+  SM: "fa-sm",
+  LG: "fa-lg",
+  X2: "fa-2x",
+  X3: "fa-3x",
+  X5: "fa-5x",
+  X7: "fa-7x",
+  X10: "fa-10x"
+};
+
+export function Glyph(style: string, size: ?string): string {
+  return style + (size ? " " + size : "");
+}
+
 export default GlyphStyles;

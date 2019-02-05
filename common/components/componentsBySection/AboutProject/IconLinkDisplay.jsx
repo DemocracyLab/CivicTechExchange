@@ -3,6 +3,8 @@
 import React from 'react';
 import {LinkInfo} from "../../forms/LinkInfo.jsx";
 import {LinkSourceDisplayConfig, LinkDisplayConfigurationByUrl, DefaultLinkDisplayConfigurations} from "../../constants/LinkConstants.js";
+import {Glyph, GlyphSizes} from "../../utils/glyphs.js";
+import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js";
 
 type Props = {|
@@ -44,13 +46,17 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
       return (
         <div className="IconLink-root">
           <a href={this.props.link.linkUrl}>
-            <i className={this.state.displayConfig.iconClass} aria-hidden="true"></i>
-            <p className="IconLink-topText">
-              {this.state.topText}
-            </p>
-            <p className="IconLink-bottomText">
-              {this.state.bottomText}
-            </p>
+            <div className="IconLink-left">
+              <i className={Glyph(this.state.displayConfig.iconClass, GlyphSizes.LG)} aria-hidden="true"></i>
+            </div>
+            <div className="IconLink-right">
+              <p className="IconLink-topText">
+                {this.state.topText}
+              </p>
+              <p className="IconLink-bottomText">
+                {this.state.bottomText}
+              </p>
+            </div>
           </a>
         </div>
       );
@@ -73,10 +79,11 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
   
   getTopText(link: LinkInfo, displayConfig: LinkSourceDisplayConfig): string {
     // If a link to a known website, show that name
+    
     if(displayConfig.sourceDisplayName) {
       return displayConfig.sourceDisplayName;
     } else {
-      return urlHelper.beautify(link.linkUrl);
+      return Truncate.stringT(urlHelper.beautify(link.linkUrl), 30);
     }
     
     // Else, show prettified url
