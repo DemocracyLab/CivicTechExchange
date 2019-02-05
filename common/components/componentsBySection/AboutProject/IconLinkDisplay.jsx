@@ -7,6 +7,8 @@ import {Glyph, GlyphSizes} from "../../utils/glyphs.js";
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js";
 
+const textLength: number = 25;
+
 type Props = {|
   +link: LinkInfo
 |};
@@ -37,8 +39,8 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
   
     return {
       displayConfig: displayConfig,
-      topText: Truncate.stringT(topText, 40),
-      topTitle: topText.length >= 40 ? topText : null,
+      topText: Truncate.stringT(topText, textLength),
+      topTitle: topText.length >= textLength ? topText : null,
       bottomText: bottomText
     };
   }
@@ -49,7 +51,7 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
         <div className="IconLink-root">
           <a href={this.props.link.linkUrl}>
             <div className="IconLink-left">
-              <i className={Glyph(this.state.displayConfig.iconClass, GlyphSizes.LG)} aria-hidden="true"></i>
+              <i className={Glyph(this.state.displayConfig.iconClass, GlyphSizes.X2)} aria-hidden="true"></i>
             </div>
             <div className="IconLink-right">
               <p className="IconLink-topText" title={this.state.topTitle}>
