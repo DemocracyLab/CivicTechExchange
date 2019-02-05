@@ -14,7 +14,8 @@ type Props = {|
 type State = {|
   displayConfig: ?LinkSourceDisplayConfig,
   topText: ?string,
-  bottomText: ?string
+  topTitle: ?string,
+  bottomText: ?string,
 |};
 
 class IconLinkDisplay extends React.PureComponent<Props, State> {
@@ -36,7 +37,8 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
   
     return {
       displayConfig: displayConfig,
-      topText: topText,
+      topText: Truncate.stringT(topText, 40),
+      topTitle: topText.length >= 40 ? topText : null,
       bottomText: bottomText
     };
   }
@@ -50,7 +52,7 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
               <i className={Glyph(this.state.displayConfig.iconClass, GlyphSizes.LG)} aria-hidden="true"></i>
             </div>
             <div className="IconLink-right">
-              <p className="IconLink-topText">
+              <p className="IconLink-topText" title={this.state.topTitle}>
                 {this.state.topText}
               </p>
               <p className="IconLink-bottomText">
@@ -78,16 +80,18 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
   }
   
   getTopText(link: LinkInfo, displayConfig: LinkSourceDisplayConfig): string {
-    // If a link to a known website, show that name
+    let topText: string;
     if(displayConfig.sourceDisplayName) {
-      return displayConfig.sourceDisplayName;
+      // If a link to a known website, show that name
+      topText = displayConfig.sourceDisplayName;
     } else if ((link.linkName in LinkNames) || !link.linkName) {
-      return Truncate.stringT(urlHelper.beautify(link.linkUrl), 30);
+      // Else, show link name or prettified url
+      topText = urlHelper.beautify(link.linkUrl);
     } else {
-      return link.linkName;
+      topText = link.linkName;
     }
     
-    // Else, show prettified url
+    return topText;
   }
 }
 
