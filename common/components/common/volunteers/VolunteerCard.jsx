@@ -81,16 +81,6 @@ class VolunteerCard extends React.PureComponent<Props> {
     }
     return null;
   }
-
-  _renderAvatar(user): React$Node {
-    return (
-      <span className="SubHeader-userImg-container">
-        {user.user_thumbnail ?
-        <img className="upload_img upload_img_bdr VolunteerCard-img" src={user.user_thumbnail.publicUrl}/> :
-        <Person className="SubHeader-userIcon VolunteerCard-img" />}
-      </span>
-    );
-  }
 }
 
 export default VolunteerCard;
