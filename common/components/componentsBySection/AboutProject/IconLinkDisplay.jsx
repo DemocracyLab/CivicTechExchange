@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {LinkInfo} from "../../forms/LinkInfo.jsx";
-import {LinkSourceDisplayConfig, LinkDisplayConfigurationByUrl, DefaultLinkDisplayConfigurations} from "../../constants/LinkConstants.js";
+import {LinkSourceDisplayConfig, LinkDisplayConfigurationByUrl, DefaultLinkDisplayConfigurations, LinkNames} from "../../constants/LinkConstants.js";
 import {Glyph, GlyphSizes} from "../../utils/glyphs.js";
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js";
@@ -79,11 +79,12 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
   
   getTopText(link: LinkInfo, displayConfig: LinkSourceDisplayConfig): string {
     // If a link to a known website, show that name
-    
     if(displayConfig.sourceDisplayName) {
       return displayConfig.sourceDisplayName;
-    } else {
+    } else if ((link.linkName in LinkNames) || !link.linkName) {
       return Truncate.stringT(urlHelper.beautify(link.linkUrl), 30);
+    } else {
+      return link.linkName;
     }
     
     // Else, show prettified url
