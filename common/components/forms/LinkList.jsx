@@ -133,7 +133,7 @@ class LinkList extends React.PureComponent<Props,State>  {
       return !_.includes(this.props.hiddenLinkNames, link.linkName)
     }).map((link,i) =>
       <div key={i}>
-        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName}</a>
+        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName || link.linkUrl}</a>
         <i className={GlyphStyles.Edit} aria-hidden="true" onClick={this.editLink.bind(this,link)}></i>
         <i className={GlyphStyles.Delete} aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,link)}></i>
       </div>
