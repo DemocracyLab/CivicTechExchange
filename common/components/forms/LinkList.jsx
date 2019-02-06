@@ -5,13 +5,13 @@ import {Button} from 'react-bootstrap';
 import LinkEntryModal from './LinkEntryModal.jsx'
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
 import type { LinkInfo } from './LinkInfo.jsx'
+import {DefaultLinkDisplayConfigurations} from "../constants/LinkConstants.js";
 import GlyphStyles from "../utils/glyphs.js";
 import _ from 'lodash'
 
 
 type Props = {|
   links: Array<LinkInfo>,
-  hiddenLinkNames: ?$ReadOnlyArray<string>,
   elementid: string,
   title: ?string
 |};
@@ -130,7 +130,7 @@ class LinkList extends React.PureComponent<Props,State>  {
 
   _renderLinks(): Array<React$Node> {
     return this.state.links.filter((link) => {
-      return !_.includes(this.props.hiddenLinkNames, link.linkName)
+      return !(link.linkName in DefaultLinkDisplayConfigurations);
     }).map((link,i) =>
       <div key={i}>
         <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{link.linkName || link.linkUrl}</a>

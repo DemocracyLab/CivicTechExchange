@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {LinkInfo} from "../../forms/LinkInfo.jsx";
-import {LinkSourceDisplayConfig, LinkDisplayConfigurationByUrl, DefaultLinkDisplayConfigurations, LinkNames} from "../../constants/LinkConstants.js";
+import {LinkSourceDisplayConfig, LinkDisplayConfigurationByUrl, DefaultLinkDisplayConfigurations} from "../../constants/LinkConstants.js";
 import {Glyph, GlyphSizes} from "../../utils/glyphs.js";
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js";
@@ -46,7 +46,7 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
       linkTypeDisplayConfig: linkTypeDisplayConfig,
       glyphStyle: glyphStyle,
       topText: Truncate.stringT(topText, textLength),
-      topTitle: topText.length >= textLength ? topText : null,
+      topTitle: topText.length > textLength ? topText : null,
       bottomText: bottomText
     };
   }
@@ -92,8 +92,10 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
   getTopText(link: LinkInfo, siteDisplayConfig: ?LinkSourceDisplayConfig): string {
     let topText: string;
   
-    if (link.linkName in LinkNames) {
-      topText = siteDisplayConfig ? siteDisplayConfig.sourceDisplayName : LinkNames[link.linkName];
+    if (link.linkName in DefaultLinkDisplayConfigurations) {
+      topText = siteDisplayConfig
+        ? siteDisplayConfig.sourceDisplayName
+        : DefaultLinkDisplayConfigurations[link.linkName];
     } else {
       topText = link.linkName ? link.linkName : urlHelper.beautify(link.linkUrl);
     }

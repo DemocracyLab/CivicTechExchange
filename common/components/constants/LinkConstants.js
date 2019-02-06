@@ -9,36 +9,30 @@ export type LinkSourceDisplayConfig = {|
   +iconClass: string
 |};
 
-// TODO: Remove sourceTypeDisplayName
 export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConfig> = [
   {
     sourceUrlPattern: new RegExp("github\\.com"),
     sourceDisplayName: "GitHub",
-    sourceTypeDisplayName: "Code Repository",
     iconClass: GlyphStyles.Github
   },
   {
     sourceUrlPattern: new RegExp("meetup\\.com"),
     sourceDisplayName: "Meetup",
-    sourceTypeDisplayName: "Organizer",
     iconClass: GlyphStyles.Meetup
   },
   {
     sourceUrlPattern: new RegExp("slack\\.com"),
     sourceDisplayName: "Slack",
-    sourceTypeDisplayName: "Messaging",
     iconClass: GlyphStyles.Slack
   },
   {
     sourceUrlPattern: new RegExp("trello\\.com"),
     sourceDisplayName: "Trello",
-    sourceTypeDisplayName: "Project Management",
     iconClass: GlyphStyles.Trello
   },
   {
     sourceUrlPattern: new RegExp("drive\\.google\\.com"),
     sourceDisplayName: "Google Drive",
-    sourceTypeDisplayName: "File Repository",
     iconClass: GlyphStyles.GoogleDrive
   },
 ];
@@ -68,13 +62,4 @@ export const DefaultLinkDisplayConfigurations:  { [key: string]: LinkSourceDispl
     sourceTypeDisplayName: "Website",
     iconClass:  GlyphStyles.Globe
   }
-};
-
-// TODO: Remove and use DefaultLinkDisplayConfigurations
-export const LinkNames = {
-  'link_coderepo': "Code Repository",
-  'link_messaging': "Messaging",
-  'link_filerepo': "File Repository",
-  'link_projmanage': "Project Management",
-  'link_linkedin' : "LinkedIn"
 };

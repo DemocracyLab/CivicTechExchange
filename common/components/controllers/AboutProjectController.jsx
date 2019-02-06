@@ -11,7 +11,6 @@ import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.jsx';
 import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
 import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
-import {LinkNames} from "../constants/LinkConstants.js";
 import metrics from "../utils/metrics.js";
 import AboutPositionEntry from "../common/positions/AboutPositionEntry.jsx";
 import ProjectVolunteerModal from "../common/projects/ProjectVolunteerModal.jsx";
