@@ -52,7 +52,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     metrics.logNavigateToProjectProfile(projectId);
   }
 
-  loadProjectDetails(project) {
+  loadProjectDetails(project: ProjectDetailsAPIData) {
+    document.title = project.project_name + " | DemocracyLab";
+    
     this.setState({
       project: project,
     });
