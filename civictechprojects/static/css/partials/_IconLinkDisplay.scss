@@ -1,0 +1,34 @@
+.IconLink-root {
+  display: flex;
+  padding-bottom: 20px;
+}
+
+.IconLink-root p {
+  margin: 0 0 0 0;
+  font-size: 16px;
+}
+
+.IconLink-root i {
+  color: $color-text-dark;
+}
+
+.IconLink-left {
+  float: left;
+  width: 40px;
+}
+
+.IconLink-right {
+  float: right;
+  margin-top: -5px;
+}
+
+.IconLink-topText {
+  color: $color-text-dark;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.IconLink-bottomText {
+  color: $color-text-grey;
+  margin-bottom: 5px;
+}

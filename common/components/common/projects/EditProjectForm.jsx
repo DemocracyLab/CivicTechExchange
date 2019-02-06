@@ -19,7 +19,7 @@ import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import PositionList from "../../forms/PositionList.jsx";
 import _ from 'lodash'
 import {Locations} from "../../constants/ProjectConstants";
-import {LinkNames} from "../../constants/LinkConstants.js";
+import {DefaultLinkDisplayConfigurations} from "../../constants/LinkConstants.js";
 import metrics from "../../utils/metrics.js";
 
 
@@ -180,11 +180,11 @@ class EditProjectForm extends React.PureComponent<Props,State> {
 
   filterSpecificLinks(array) {
     //this function updates the entire state.formFields object at once
-    var specificLinks = _.remove(array, function(n) {
-      return n.linkName in LinkNames;
+    let specificLinks = _.remove(array, function(n) {
+      return n.linkName in DefaultLinkDisplayConfigurations;
     });
     //copy the formFields state to work with
-    var linkState = this.state.formFields;
+    let linkState = this.state.formFields;
     //pull out the link_ item key:values and append to state copy
     specificLinks.forEach(function(item) {
       linkState[item.linkName] = item.linkUrl;
