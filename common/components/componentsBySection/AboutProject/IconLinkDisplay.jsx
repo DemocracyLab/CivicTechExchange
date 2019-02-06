@@ -7,7 +7,7 @@ import {Glyph, GlyphSizes} from "../../utils/glyphs.js";
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js";
 
-const textLength: number = 25;
+const textLength: number = 20;
 
 type Props = {|
   +link: LinkInfo
@@ -93,9 +93,7 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
     let topText: string;
   
     if (link.linkName in DefaultLinkDisplayConfigurations) {
-      topText = siteDisplayConfig
-        ? siteDisplayConfig.sourceDisplayName
-        : DefaultLinkDisplayConfigurations[link.linkName];
+      topText = siteDisplayConfig ? siteDisplayConfig.sourceDisplayName : urlHelper.beautify(link.linkUrl);
     } else {
       topText = link.linkName ? link.linkName : urlHelper.beautify(link.linkUrl);
     }
