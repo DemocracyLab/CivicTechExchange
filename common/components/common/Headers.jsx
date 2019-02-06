@@ -5,7 +5,8 @@ import Helmet from 'react-helmet';
 
 type Props = {|
   +title: string,
-  +description: string
+  +description: string,
+  +thumbnailUrl: ?string
 |};
 
 class Headers extends React.PureComponent<Props> {
@@ -14,6 +15,9 @@ class Headers extends React.PureComponent<Props> {
       <Helmet>
         <title>{this.props.title}</title>
         <meta name="description" content={this.props.description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={this.props.title} />
+        <meta property="og:image" content={this.props.thumbnailUrl} />
       </Helmet>
     );
   }

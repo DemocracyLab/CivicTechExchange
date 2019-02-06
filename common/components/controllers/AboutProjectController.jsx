@@ -243,6 +243,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       <Headers
         title={title}
         description={description}
+        thumbnailUrl={project.project_thumbnail.publicUrl}
       />
     );
   }
