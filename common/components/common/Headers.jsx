@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Helmet from 'react-helmet';
+import cdn from "../utils/cdn.js";
 
 type Props = {|
   +title: string,
@@ -17,7 +18,7 @@ class Headers extends React.PureComponent<Props> {
         <meta name="description" content={this.props.description} />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={this.props.title} />
-        <meta property="og:image" content={this.props.thumbnailUrl} />
+        <meta property="og:image" content={this.props.thumbnailUrl || cdn.image("dl_logo.png")} />
       </Helmet>
     );
   }
