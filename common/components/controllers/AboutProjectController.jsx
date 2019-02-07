@@ -18,6 +18,8 @@ import CurrentUser from "../utils/CurrentUser.js";
 import ProjectOwnersSection from "../common/owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 import type {PositionInfo} from "../forms/PositionInfo.jsx";
+import Headers from "../common/Headers.jsx";
+import Truncate from "../utils/truncate.js";
 import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 
 
@@ -52,7 +54,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     metrics.logNavigateToProjectProfile(projectId);
   }
 
-  loadProjectDetails(project) {
+  loadProjectDetails(project: ProjectDetailsAPIData) {
     this.setState({
       project: project,
     });
@@ -92,6 +94,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     const project = this.state.project;
     return (
       <div className='AboutProjects-root'>
+        {this._renderHeader(project)}
         <Grid container className='AboutProjects-container' spacing={0}>
           <Grid item xs={12} sm={3} className="AboutProjects-infoColumn">
             <Paper className='AboutProjects-paper' elevation={1} square={true}>
@@ -230,6 +233,19 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         </Grid>
       </div>
     )
+  }
+  
+  _renderHeader(project: ProjectDetailsAPIData): React$Node {
+    const title: string = project.project_name + " | DemocracyLab";
+    const description: string = project.project_short_description || Truncate.stringT(project.project_description, 300);
+    
+    return (
+      <Headers
+        title={title}
+        description={description}
+        thumbnailUrl={project.project_thumbnail && project.project_thumbnail.publicUrl}
+      />
+    );
   }
 
   _renderFiles(): ?Array<React$Node> {

@@ -7,6 +7,7 @@ import ProjectSearchContainer from '../componentsBySection/FindProjects/ProjectS
 import ProjectFilterContainer from '../componentsBySection/FindProjects/ProjectFilterContainer.jsx';
 import {FindProjectsArgs} from "../stores/ProjectSearchStore.js";
 import SplashScreen from "../componentsBySection/FindProjects/SplashScreen.jsx";
+import Headers from "../common/Headers.jsx";
 import urls from "../utils/url.js";
 import React from 'react';
 import _ from 'lodash'
@@ -36,6 +37,10 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return (
       <React.Fragment>
+        <Headers
+          title="DemocracyLab"
+          description="Optimizing the connection between skilled volunteers and tech-for-good projects"
+        />
         {this.state.showSplash ? <SplashScreen onClickFindProjects={this._onClickFindProjects.bind(this)}/> : null}
         <div className="FindProjectsController-root container">
           <ProjectSearchContainer />
