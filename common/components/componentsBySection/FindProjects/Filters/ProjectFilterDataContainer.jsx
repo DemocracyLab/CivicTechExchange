@@ -99,9 +99,12 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
   }
 
   _testRenderTags(): void {
-    const listItems = this.state.tags && this.state.tags.map((tag) =>
+    let listItems = this.state.tags && this.state.tags.map((tag) =>
       <li>{tag.display_name} - {tag.num_times}</li>
     );
+    if(listItems) {
+      let listItems = _.groupBy(listItems, 'category')
+    }
     return <ul>{listItems}</ul>
 
   }
