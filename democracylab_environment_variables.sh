@@ -30,5 +30,10 @@ export POSITION_DESCRIPTION_EXAMPLE_URL='https://docs.google.com/document/d/142N
 # If True, emails won't be sent to their recipients, but to the ADMIN_EMAIL address (with metadata for debugging)
 export FAKE_EMAILS=True
 
+export AWS_ACCESS_KEY_ID=AKIAIU6OWKO72U5V3TUA
+export AWS_SECRET_ACCESS_KEY=+Ez0xciQwssORjrRcLKqAPt4BitmfuPjidAFa92m
+export S3_BUCKET=democracylab-marlok
+export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
+
 # ONLY FOR USE IN PRODUCTION
 #export HOTJAR_APPLICATION_ID=1097784

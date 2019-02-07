@@ -11,7 +11,6 @@ import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.jsx';
 import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
 import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
-import {LinkNames} from "../constants/LinkConstants.js";
 import metrics from "../utils/metrics.js";
 import AboutPositionEntry from "../common/positions/AboutPositionEntry.jsx";
 import ProjectVolunteerModal from "../common/projects/ProjectVolunteerModal.jsx";
@@ -21,6 +20,7 @@ import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
 import type {PositionInfo} from "../forms/PositionInfo.jsx";
 import Headers from "../common/Headers.jsx";
 import Truncate from "../utils/truncate.js";
+import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 
 
 type State = {|
@@ -260,15 +260,8 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
     return project && project.project_links && project.project_links.map((link, i) =>
-      <div className="Link-listitem"key={i}>
-        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{this._legibleName(link.linkName)}</a>
-      </div>
+      <IconLinkDisplay key={i} link={link}/>
     );
-  }
-
-    _legibleName(input) {
-    //replaces specific linkNames for readability
-    return LinkNames[input] || input;
   }
 
   _renderPositions(): ?Array<React$Node> {
