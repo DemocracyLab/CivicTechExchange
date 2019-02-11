@@ -30,8 +30,10 @@ export POSITION_DESCRIPTION_EXAMPLE_URL='https://docs.google.com/document/d/142N
 # If True, emails won't be sent to their recipients, but to the ADMIN_EMAIL address (with metadata for debugging)
 export FAKE_EMAILS=True
 
-export AWS_ACCESS_KEY_ID=AKIAIU6OWKO72U5V3TUA
-export AWS_SECRET_ACCESS_KEY=+Ez0xciQwssORjrRcLKqAPt4BitmfuPjidAFa92m
+# This array specifies how many days we should space our reminder emails.  In this case, the first reminder comes after
+# two days, the second after seven days, and none after that
+export APPLICATION_REMINDER_PERIODS='[2,7,-1]'
+
 export S3_BUCKET=democracylab-marlok
 export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
 
