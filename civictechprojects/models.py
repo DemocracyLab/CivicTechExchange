@@ -49,6 +49,7 @@ class Project(models.Model):
     project_name = models.CharField(max_length=200)
     project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
+    project_date_created = models.DateTimeField(null=True)
     project_date_modified = models.DateTimeField(auto_now=True, null=True)
     is_searchable = models.BooleanField(default=True)
 
@@ -391,6 +392,7 @@ class VolunteerRelation(models.Model):
     is_co_owner = models.BooleanField(default=False)
     projected_end_date = models.DateTimeField(auto_now=False, null=True)
     application_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+    approved_date = models.DateTimeField(auto_now=False, null=True)
     last_reminder_date = models.DateTimeField(auto_now=False, null=True)
     reminder_count = models.IntegerField(default=0)
 
