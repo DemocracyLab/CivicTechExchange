@@ -80,11 +80,15 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
   _renderFilterCategories(): void {
     //iterate through this.state.sortedTags into key/value pairs, one per component
     //first get category names in an array to iterate over
-    //TODO: Figure out how to organize this in the way we want somehow? Worst case, fix the order in a const
-    let categories = Object.keys(this.state.sortedTags)
+
+    //TODO: Figure out how to organize this without const, if possible
+    //TODO: Change Database "Role" field to match 1:1 to display name we want ("Roles Needed" or whatever) as the category headers are no longer manually defined and must match the role field
+
+    // const categories = Object.keys(this.state.sortedTags)
+    const fixedOrderCategories = ["Issue(s) Addressed", "Role", "Technologies Used", "Project Stage", "Organization"]
     //generate child components using each category key and pass the filter tags as props
-    //TODO: Find a better way or place to sort this, possibly in child component to manage subcategories? 
-      const displayFilters = categories.map(key =>
+    //TODO: Find a better way or place to sort this, possibly in child component to manage subcategories?
+      const displayFilters = fixedOrderCategories.map(key =>
             <RenderFilterCategory
               category={key}
               data={
