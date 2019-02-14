@@ -44,7 +44,10 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
       //remove unneeded count of empty category/subcategory entries
       delete countMergeResult['']
       //Group tags by category before generating child components
-      let sorted = _.groupBy(filteredTags, 'category');
+      let grouped = _.groupBy(filteredTags, 'category');
+      //TODO: Sort each category(/subcategory) by display_name for output to DOM
+      let sorted = grouped;
+
       //last, set state with our computed data
       this.setState({
         tags: filteredTags,
@@ -80,10 +83,27 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     //TODO: Figure out how to organize this in the way we want somehow? Worst case, fix the order in a const
     let categories = Object.keys(this.state.sortedTags)
     //generate child components using each category key and pass the filter tags as props
+    //TODO: Find a better way or place to sort this, possibly in child component to manage subcategories? 
       const displayFilters = categories.map(key =>
-            <RenderFilterCategory category={key} data={this.state.sortedTags[key]} />
-          );
+            <RenderFilterCategory
+              category={key}
+              data={
+                this.state.sortedTags[key].sort(function(a, b) {
+                  let nameA = a.display_name.toUpperCase(); // ignore upper and lowercase
+                  let nameB = b.display_name.toUpperCase(); // ignore upper and lowercase
+                  if (nameA < nameB) {
+                    return -1;
+                  }
+                  if (nameA > nameB) {
+                    return 1;
+                  }
 
+                  // names must be equal
+                  return 0;
+                })
+              }
+            />
+          );
         return (
             <div>
                 {displayFilters}
@@ -91,5 +111,7 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
         )
     }
   }
+
+
 
 export default Container.create(ProjectFilterDataContainer);
