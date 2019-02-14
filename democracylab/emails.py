@@ -67,7 +67,9 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
 
 
 def send_email(email_msg):
+    # TODO: Pass in email account we want to use
     if not settings.FAKE_EMAILS:
+        email_msg.connection = settings.EMAIL_SUPPORT_ACCT
         email_msg.send()
     else:
         test_email_subject = 'TEST EMAIL: ' + email_msg.subject
@@ -84,3 +86,6 @@ def send_email(email_msg):
             to=[settings.ADMIN_EMAIL]
         )
         test_email_msg.send()
+
+
+

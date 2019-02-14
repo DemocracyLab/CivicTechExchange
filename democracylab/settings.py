@@ -14,6 +14,7 @@ import os
 import ast
 import dj_database_url
 from distutils.util import strtobool
+from django.core.mail.backends.smtp import EmailBackend
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -131,6 +132,26 @@ REST_FRAMEWORK = {
     ],
     'PAGE_SIZE': 10
 }
+
+
+def read_connection_config(config):
+    return config and EmailBackend(
+        host=config['host'],
+        port=int(config['port']),
+        username=config['username'],
+        password=config['password'],
+        use_tls=strtobool(config['use_tls']),
+        fail_silently=False,
+        use_ssl=strtobool(config['use_ssl']),
+        timeout=None,
+        ssl_keyfile=None,
+        ssl_certfile=None)
+
+EMAIL_SUPPORT_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_SUPPORT_ACCT', 'None')))
+EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_VOLUNTEER_ACCT', 'None')))
+
+# Default log to console in the absence of any account configurations
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DEFAULT_FROM_EMAIL = 'democracylabreset@gmail.com'
 SERVER_EMAIL = 'democracylabreset@gmail.com'
