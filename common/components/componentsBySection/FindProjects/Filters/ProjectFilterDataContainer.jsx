@@ -4,9 +4,9 @@ import React from 'react'
 import {Container} from 'flux/utils';
 import type {TagDefinition} from '../../../utils/ProjectAPIUtils.js';
 import ProjectAPIUtils from '../../../utils/ProjectAPIUtils.js';
-import SelectorCollapsible from "../../../common/selection/SelectorCollapsible.jsx";
 import ProjectSearchStore from "../../../stores/ProjectSearchStore.js";
 import ProjectSearchDispatcher from "../../../stores/ProjectSearchDispatcher.js";
+import RenderFilterCategory from "./RenderFilterCategory.jsx";
 import metrics from "../../../utils/metrics";
 import _ from 'lodash'
 
@@ -21,13 +21,10 @@ type Props = {|
 type State = {|
   tags: ?$ReadOnlyArray<TagDefinition>,
   tagCounts: ?{ [key: string]: number },
-  selectedTags: ?{ [key: string]: boolean },
-  hasSubcategories: boolean
+  // selectedTags: ?{ [key: string]: boolean },
+  // hasSubcategories: boolean
 |};
 
-/**
- * Dropdown selector for tags
- */
 class ProjectFilterDataContainer extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
@@ -35,27 +32,26 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
 
     // passing true to fetchTagsByCategory asks backend to return num_times in API response
     ProjectAPIUtils.fetchAllTags(true, tags => {
-      //Need to do some calculations before setting state to both tags and tagCounts:
-
-      //Remove tags with num_times=0 before setting state to avoid filtering later
+      //Need to do some work before setting state: Remove empty tags, generate cat/subcat totals, cleanup, then set state.
+      //Remove tags from API with num_times=0 before doing anything else
       let filteredTags = tags.filter(function(key) {
           return key.num_times > 0;
         })
-
       //Generate category and subcategory total item counts
-      let subcatCount = _.countBy(tags, 'subcategory' );
-      let catCount = _.countBy(tags, 'category');
+      let subcatCount = _.countBy(filteredTags, 'subcategory' );
+      let catCount = _.countBy(filteredTags, 'category');
       let countMergeResult = _.merge(catCount, subcatCount)
-       //remove unneeded count of empty category/subcategory entries
+      //remove unneeded count of empty category/subcategory entries
       delete countMergeResult['']
-
+      //Group tags by category before generating child components
+      let sorted = _.groupBy(filteredTags, 'category');
       //last, set state with our computed data
       this.setState({
         tags: filteredTags,
-        tagCounts: countMergeResult
+        tagCounts: countMergeResult,
+        sortedTags: sorted
       });
     });
-    this._tagEnabled = this._tagEnabled.bind(this);
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -69,56 +65,31 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
   }
 
 
-  selectTag(tag: TagDefinition): void {
-    var tagInState = _.has(this.state.selectedTags, tag);
-    //if tag is NOT currently in state, add it, otherwise remove
-    if(!tagInState) {
-      ProjectSearchDispatcher.dispatch({
-        type: 'ADD_TAG',
-        tag: tag,
-      });
-      metrics.logSearchFilterByTagEvent(tag);
-    } else {
-      ProjectSearchDispatcher.dispatch({
-        type: 'REMOVE_TAG',
-        tag: tag,
-      });
-    }
-  }
-
   render(): React$Node {
-    //test code, to be removed - this fn should render an as yet undefined <ChildComponent>
-
+    //should render a number of <RenderFilterCategory> child components
     return (
       <div>
-        { this.state.tags ? this._testRenderTags() : null }
-        <p>--- VERY GOOD DIVIDER LINE ---</p>
-        { this.state.tags ? this._testRenderCategories(): null }
+        { this.state.sortedTags ? this._renderFilterCategories() : null }
       </div>
     );
   }
 
-  _testRenderTags(): void {
-    let listItems = this.state.tags && this.state.tags.map((tag) =>
-      <li>{tag.display_name} - {tag.num_times}</li>
-    );
-    if(listItems) {
-      let listItems = _.groupBy(listItems, 'category')
+  _renderFilterCategories(): void {
+    //iterate through this.state.sortedTags into key/value pairs, one per component
+    //first get category names in an array to iterate over
+    //TODO: Figure out how to organize this in the way we want somehow? Worst case, fix the order in a const
+    let categories = Object.keys(this.state.sortedTags)
+    //generate child components using each category key and pass the filter tags as props
+      const displayFilters = categories.map(key =>
+            <RenderFilterCategory category={key} data={this.state.sortedTags[key]} />
+          );
+
+        return (
+            <div>
+                {displayFilters}
+            </div>
+        )
     }
-    return <ul>{listItems}</ul>
-
   }
-  _testRenderCategories(): void {
-    const categoryCount = this.state.tagCounts && Object.keys(this.state.tagCounts).map((key) =>
-     <li key={key}>{key} - {this.state.tagCounts[key]}</li>
-   );
-    return <ul>{categoryCount}</ul>
-  }
-
-  _tagEnabled(tag: TagDefinition): boolean {
-    //return true if tag is in this.state.selectedTags, else implicitly false
-    return _.has(this.state.selectedTags, tag)
-  }
-}
 
 export default Container.create(ProjectFilterDataContainer);
