@@ -1,7 +1,45 @@
 from django.conf import settings
+from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from common.models.tags import Tag
+from democracylab.models import Contributor
 from civictechprojects.models import VolunteerRelation
+from common.helpers.constants import FrontEndSection
+from common.helpers.front_end import section_url
+
+
+def send_verification_email(contributor):
+    # Get token
+    user = Contributor.objects.get(id=contributor.id)
+    verification_token = default_token_generator.make_token(user)
+    verification_url = settings.PROTOCOL_DOMAIN + '/verify_user/' + str(contributor.id) + '/' + verification_token
+    # Send email with token
+    email_msg = EmailMessage(
+        'Welcome to DemocracyLab',
+        'Click here to confirm your email address (or paste into your browser): ' + verification_url,
+        settings.EMAIL_HOST_USER,
+        [contributor.email]
+    )
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+
+
+def send_password_reset_email(contributor):
+    # Get token
+    user = Contributor.objects.get(id=contributor.id)
+    reset_parameters = {
+        'userId': contributor.id,
+        'token': default_token_generator.make_token(user)
+    }
+    reset_url = section_url(FrontEndSection.ChangePassword, reset_parameters)
+    print(reset_url)
+    # Send email with token
+    email_msg = EmailMessage(
+        'DemocracyLab Password Reset',
+        'Click here to change your password: ' + reset_url,
+        settings.EMAIL_HOST_USER,
+        [contributor.email]
+    )
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
 def send_project_creation_notification(project):
@@ -18,7 +56,7 @@ def send_project_creation_notification(project):
         settings.DEFAULT_FROM_EMAIL,
         [settings.ADMIN_EMAIL]
     )
-    send_email(email_msg)
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
 def send_to_project_owners(project, sender, subject, body):
@@ -31,7 +69,7 @@ def send_to_project_owners(project, sender, subject, body):
         to=[project.project_creator.email] + co_owner_emails,
         reply_to=[sender.email]
     )
-    send_email(email_msg)
+    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
 
 
 def send_to_project_volunteer(volunteer_relation, subject, body):
@@ -44,7 +82,7 @@ def send_to_project_volunteer(volunteer_relation, subject, body):
         to=[volunteer_relation.volunteer.email],
         reply_to=[volunteer_relation.project.project_creator.email] + co_owner_emails,
     )
-    send_email(email_msg)
+    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
 
 
 def send_volunteer_application_email(volunteer_relation, is_reminder=False):
@@ -66,10 +104,9 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
     send_to_project_owners(project=project, sender=user, subject=email_subject, body=email_body)
 
 
-def send_email(email_msg):
-    # TODO: Pass in email account we want to use
+def send_email(email_msg, email_acct=None):
     if not settings.FAKE_EMAILS:
-        email_msg.connection = settings.EMAIL_SUPPORT_ACCT
+        email_msg.connection = email_acct or settings.EMAIL_SUPPORT_ACCT
         email_msg.send()
     else:
         test_email_subject = 'TEST EMAIL: ' + email_msg.subject
