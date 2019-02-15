@@ -82,9 +82,9 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     //first get category names in an array to iterate over
 
 
-    //define the order we want our filters to be in (these must match database entries)
+    //define the order we want our filters to be in (these must match database "category" values to be valid)
     const fixedOrderCategories = ["Issue(s) Addressed", "Role", "Technologies Used", "Project Stage", "Organization"]
-    //get all the filters from API results in case of any not in the fixed order list
+    //get all the filters from API results so we display every filter category
     const apiCategories = Object.keys(this.state.sortedTags)
     //sort filters first by fixed order if applicable, then any others in alphabetical order
     //TODO: Extract this sort into another function for readability
@@ -105,21 +105,7 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
             <RenderFilterCategory
               categoryCounts={this.state.tagCounts} //for displaying "category total" numbers
               category={key}
-              data={
-                this.state.sortedTags[key].sort(function(a, b) {
-                  let nameA = a.display_name.toUpperCase(); // ignore upper and lowercase
-                  let nameB = b.display_name.toUpperCase(); // ignore upper and lowercase
-                  if (nameA < nameB) {
-                    return -1;
-                  }
-                  if (nameA > nameB) {
-                    return 1;
-                  }
-
-                  // names must be equal
-                  return 0;
-                })
-              }
+              data={_.sortBy(this.state.sortedTags[key], (tag) => tag.display_name.toUpperCase())}
               // subcategory={!_.isEmpty(this.state.sortedTags[key].subcategory)} //doesn't work
             />
           );
