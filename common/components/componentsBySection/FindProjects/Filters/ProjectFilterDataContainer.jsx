@@ -81,15 +81,29 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     //iterate through this.state.sortedTags into key/value pairs, one per component
     //first get category names in an array to iterate over
 
-    //TODO: Figure out how to organize this without const, if possible
-    //TODO: Change Database "Role" field to match 1:1 to display name we want ("Roles Needed" or whatever) as the category headers are no longer manually defined and must match the role field
 
-    // const categories = Object.keys(this.state.sortedTags)
+    //define the order we want our filters to be in (these must match database entries)
     const fixedOrderCategories = ["Issue(s) Addressed", "Role", "Technologies Used", "Project Stage", "Organization"]
-    //generate child components using each category key and pass the filter tags as props
-    //TODO: Find a better way or place to sort this, possibly in child component to manage subcategories?
-      const displayFilters = fixedOrderCategories.map(key =>
+    //get all the filters from API results in case of any not in the fixed order list
+    const apiCategories = Object.keys(this.state.sortedTags)
+    //sort filters first by fixed order if applicable, then any others in alphabetical order
+    //TODO: Extract this sort into another function for readability
+    const orderedFilters = apiCategories.map(function(x) {
+      var n = fixedOrderCategories.indexOf(x);
+      return [n < 0 ? fixedOrderCategories.length : n, x]
+    }).sort(function(a, b) {
+      return (a[0] - b[0]) || (a[1] > b[1] ? 1 : a[1] == b[1] ? 0 : -1);
+    }).map(function(x) {
+        return x[1]
+        // schwartzian transform from https://stackoverflow.com/questions/17420773
+    })
+
+    //generate child components based on sorted category order
+    //TODO: Pass in a "display_name" instead of using the category={key} from database
+    //TODO: Find a better way or extract this sort to its own function for code readability
+      const displayFilters = orderedFilters.map(key =>
             <RenderFilterCategory
+              categoryCounts={this.state.tagCounts} //for displaying "category total" numbers
               category={key}
               data={
                 this.state.sortedTags[key].sort(function(a, b) {
@@ -106,6 +120,7 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
                   return 0;
                 })
               }
+              // subcategory={!_.isEmpty(this.state.sortedTags[key].subcategory)} //doesn't work
             />
           );
         return (
