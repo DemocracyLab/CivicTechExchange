@@ -20,8 +20,8 @@ type Props = {|
 
 type State = {|
   tags: ?$ReadOnlyArray<TagDefinition>,
-  tagCounts: ?{ [key: string]: number },
-  // selectedTags: ?{ [key: string]: boolean },
+  filterCounts: ?{ [key: string]: number },
+  selectedTags: ?{ [key: string]: boolean },
   // hasSubcategories: boolean
 |};
 
@@ -37,21 +37,20 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
       let filteredTags = tags.filter(function(key) {
           return key.num_times > 0;
         })
-      //Generate category and subcategory total item counts
+      //Generate category and subcategory totals - this is number of FILTERS and not total number of PROJECTS
+      //So this may be used for "Select All" checkbox reference but will not be used for display of counts in DOM
       let subcatCount = _.countBy(filteredTags, 'subcategory' );
       let catCount = _.countBy(filteredTags, 'category');
       let countMergeResult = _.merge(catCount, subcatCount)
       //remove unneeded count of empty category/subcategory entries
       delete countMergeResult['']
       //Group tags by category before generating child components
-      let grouped = _.groupBy(filteredTags, 'category');
-      //TODO: Sort each category(/subcategory) by display_name for output to DOM
-      let sorted = grouped;
+      let sorted = _.groupBy(filteredTags, 'category');
 
       //last, set state with our computed data
       this.setState({
         tags: filteredTags,
-        tagCounts: countMergeResult,
+        filterCounts: countMergeResult,
         sortedTags: sorted
       });
     });
@@ -98,15 +97,13 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
         // schwartzian transform from https://stackoverflow.com/questions/17420773
     })
 
-    //generate child components based on sorted category order
-    //TODO: Pass in a "display_name" instead of using the category={key} from database
-    //TODO: Find a better way or extract this sort to its own function for code readability
+    //generate child components in sorted order
       const displayFilters = orderedFilters.map(key =>
             <RenderFilterCategory
               categoryCount={_.sumBy(this.state.sortedTags[key], 'num_times')} //for displaying "category total" numbers
               category={key}
               data={_.sortBy(this.state.sortedTags[key], (tag) => tag.display_name.toUpperCase())}
-              // subcategory={!_.isEmpty(this.state.sortedTags[key].subcategory)} //doesn't work
+              hasSubcategories={_.every(this.state.sortedTags[key], 'subcategory')} //doesn't work
             />
           );
         return (
