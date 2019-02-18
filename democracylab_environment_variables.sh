@@ -34,6 +34,10 @@ export FAKE_EMAILS=True
 # two days, the second after seven days, and none after that
 export APPLICATION_REMINDER_PERIODS='[2,7,-1]'
 
+# Sample email account configuration
+# export EMAIL_SUPPORT_ACCT='{"host":"smtp.gmail.com","port":"587","display_name":"DemocracyLab Support","username":"support@democracylab.org","password":"SECRET","use_tls":"True","use_ssl":"False"}'
+# export EMAIL_VOLUNTEER_ACCT='{"host":"smtp.gmail.com","port":"587","display_name":"DemocracyLab Volunteering","username":"volunteer@democracylab.org","password":"SECRET","use_tls":"True","use_ssl":"False"}'
+
 export S3_BUCKET=democracylab-marlok
 export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
 
