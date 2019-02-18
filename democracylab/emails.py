@@ -34,10 +34,10 @@ def send_password_reset_email(contributor):
     print(reset_url)
     # Send email with token
     email_msg = EmailMessage(
-        'DemocracyLab Password Reset',
-        'Click here to change your password: ' + reset_url,
-        settings.EMAIL_SUPPORT_ACCT['from_name'],
-        [contributor.email]
+        subject='DemocracyLab Password Reset',
+        body='Click here to change your password: ' + reset_url,
+        from_email=settings.EMAIL_SUPPORT_ACCT['from_name'],
+        to=[contributor.email]
     )
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
@@ -45,16 +45,16 @@ def send_password_reset_email(contributor):
 def send_project_creation_notification(project):
     project_url = settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
     email_msg = EmailMessage(
-        'New DemocracyLab Project: ' + project.project_name,
-        '{first_name} {last_name}({email}) has created the project "{project_name}": \n {project_url}'.format(
+        subject='New DemocracyLab Project: ' + project.project_name,
+        body='{first_name} {last_name}({email}) has created the project "{project_name}": \n {project_url}'.format(
             first_name=project.project_creator.first_name,
             last_name=project.project_creator.last_name,
             email=project.project_creator.email,
             project_name=project.project_name,
             project_url=project_url
         ),
-        settings.DEFAULT_FROM_EMAIL,
-        [settings.ADMIN_EMAIL]
+        from_email=settings.EMAIL_SUPPORT_ACCT['from_name'],
+        to=[settings.ADMIN_EMAIL]
     )
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
@@ -105,8 +105,9 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
 
 
 def send_email(email_msg, email_acct=None):
+    connection = email_acct['connection'] if email_acct else settings.EMAIL_SUPPORT_ACCT['connection']
     if not settings.FAKE_EMAILS:
-        email_msg.connection = email_acct['connection'] if email_acct else settings.EMAIL_SUPPORT_ACCT['connection']
+        email_msg.connection = connection
         email_msg.send()
     else:
         test_email_subject = 'TEST EMAIL: ' + email_msg.subject
@@ -119,9 +120,9 @@ def send_email(email_msg, email_acct=None):
         test_email_msg = EmailMessage(
             subject=test_email_subject,
             body=test_email_body,
-            from_email=settings.EMAIL_HOST_USER,
             to=[settings.ADMIN_EMAIL]
         )
+        test_email_msg.connection = connection
         test_email_msg.send()
 
 
