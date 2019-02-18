@@ -13,9 +13,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     super(props);
   }
 
-
-
-  _legibleName(input) {
+  _displayName(input) {
     //replaces specific db categorynames to display names we want
     return categoryDisplayNames[input] || input;
   }
@@ -26,7 +24,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
       );
     return (
         <React.Fragment>
-          <h4>{this._legibleName(this.props.category)}</h4>
+          <h4>{this._displayName(this.props.category)} - {this.props.categoryCount}</h4>
           <ul>{sortedTags}</ul>
         </React.Fragment>
     );

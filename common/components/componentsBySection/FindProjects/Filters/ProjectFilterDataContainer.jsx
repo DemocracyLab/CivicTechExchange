@@ -103,7 +103,7 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     //TODO: Find a better way or extract this sort to its own function for code readability
       const displayFilters = orderedFilters.map(key =>
             <RenderFilterCategory
-              categoryCounts={this.state.tagCounts} //for displaying "category total" numbers
+              categoryCount={_.sumBy(this.state.sortedTags[key], 'num_times')} //for displaying "category total" numbers
               category={key}
               data={_.sortBy(this.state.sortedTags[key], (tag) => tag.display_name.toUpperCase())}
               // subcategory={!_.isEmpty(this.state.sortedTags[key].subcategory)} //doesn't work
