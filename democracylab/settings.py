@@ -135,17 +135,20 @@ REST_FRAMEWORK = {
 
 
 def read_connection_config(config):
-    return config and EmailBackend(
-        host=config['host'],
-        port=int(config['port']),
-        username=config['username'],
-        password=config['password'],
-        use_tls=strtobool(config['use_tls']),
-        fail_silently=False,
-        use_ssl=strtobool(config['use_ssl']),
-        timeout=None,
-        ssl_keyfile=None,
-        ssl_certfile=None)
+    return config and {
+        'from_name': '{name} <{email_address}>'.format(name=config['display_name'], email_address=config['username']),
+        'connection': EmailBackend(
+            host=config['host'],
+            port=int(config['port']),
+            username=config['username'],
+            password=config['password'],
+            use_tls=strtobool(config['use_tls']),
+            fail_silently=False,
+            use_ssl=strtobool(config['use_ssl']),
+            timeout=None,
+            ssl_keyfile=None,
+            ssl_certfile=None)
+    }
 
 EMAIL_SUPPORT_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_SUPPORT_ACCT', 'None')))
 EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_VOLUNTEER_ACCT', 'None')))

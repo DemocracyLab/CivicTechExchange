@@ -17,7 +17,7 @@ def send_verification_email(contributor):
     email_msg = EmailMessage(
         'Welcome to DemocracyLab',
         'Click here to confirm your email address (or paste into your browser): ' + verification_url,
-        settings.EMAIL_HOST_USER,
+        settings.EMAIL_SUPPORT_ACCT['from_name'],
         [contributor.email]
     )
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
@@ -36,7 +36,7 @@ def send_password_reset_email(contributor):
     email_msg = EmailMessage(
         'DemocracyLab Password Reset',
         'Click here to change your password: ' + reset_url,
-        settings.EMAIL_HOST_USER,
+        settings.EMAIL_SUPPORT_ACCT['from_name'],
         [contributor.email]
     )
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
@@ -65,7 +65,7 @@ def send_to_project_owners(project, sender, subject, body):
     email_msg = EmailMessage(
         subject=subject,
         body=body,
-        from_email=settings.EMAIL_HOST_USER,
+        from_email=settings.EMAIL_VOLUNTEER_ACCT['from_name'],
         to=[project.project_creator.email] + co_owner_emails,
         reply_to=[sender.email]
     )
@@ -78,7 +78,7 @@ def send_to_project_volunteer(volunteer_relation, subject, body):
     email_msg = EmailMessage(
         subject=subject,
         body=body,
-        from_email=settings.EMAIL_HOST_USER,
+        from_email=settings.EMAIL_VOLUNTEER_ACCT['from_name'],
         to=[volunteer_relation.volunteer.email],
         reply_to=[volunteer_relation.project.project_creator.email] + co_owner_emails,
     )
@@ -106,7 +106,7 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
 
 def send_email(email_msg, email_acct=None):
     if not settings.FAKE_EMAILS:
-        email_msg.connection = email_acct or settings.EMAIL_SUPPORT_ACCT
+        email_msg.connection = email_acct['connection'] if email_acct else settings.EMAIL_SUPPORT_ACCT['connection']
         email_msg.send()
     else:
         test_email_subject = 'TEST EMAIL: ' + email_msg.subject
@@ -123,6 +123,5 @@ def send_email(email_msg, email_acct=None):
             to=[settings.ADMIN_EMAIL]
         )
         test_email_msg.send()
-
 
 
