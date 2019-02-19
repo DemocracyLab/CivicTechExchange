@@ -158,7 +158,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
-FAKE_EMAILS = os.environ.get('FAKE_EMAILS', False) == 'True'
+FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
 
 APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
 
