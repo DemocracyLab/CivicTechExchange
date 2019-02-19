@@ -1,9 +1,10 @@
 // @flow
 
 import React from 'react';
-// import _ from 'lodash'
+import _ from 'lodash';
 
 const categoryDisplayNames = {
+  //TODO: move to global constants file
   'Issue(s) Addressed': "Issue Areas",
   'Role': "Roles Needed",
 }
@@ -14,6 +15,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   }
 
   _displayName(input) {
+    //TODO: Refactor this to take (input, list) so we can feed different const values to it so it's utility, move to utility js, use it here and for LinkList
     //replaces specified database-generated names to chosen display names
     return categoryDisplayNames[input] || input;
   }
@@ -21,7 +23,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
 
   _renderWithSubcategories() {
     //if hasSubcategories is true, we need to group, sort, and render each subcategory much like categories are sorted and rendered in the parent component
-    //group by subcategories
+    //group by subcategories, then sort and map just like parent component but for subcategories
     let groupedSubcats = _.groupBy(this.props.data, 'subcategory');
     let sortedKeys = Object.keys(groupedSubcats).sort(); //default sort is alphabetical, what we want
 
@@ -32,25 +34,30 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
           </React.Fragment>
         );
       return (
-        <div>
-          <h4>{this._displayName(this.props.category)} - {this.props.categoryCount}</h4>
+        <React.Fragment>
+          <h4>{this._displayName(this.props.category)}</h4>
           {displaySubcategories}
-        </div>
+        </React.Fragment>
       )
   }
   _renderNoSubcategories() {
     //if a category has NO subcategories (hasSubcategories is false), render a single list
     return (
         <React.Fragment>
-          <h4>{this._displayName(this.props.category)} - {this.props.categoryCount}</h4>
+          <h4>{this._displayName(this.props.category)}</h4>
           {this._renderFilterList(this.props.data)}
         </React.Fragment>
     );
   }
 
   _renderFilterList(data) {
+    //this function renders individual clickable filter items regardless of category or subcategory status
     let sortedTags = Object.values(data).map((tag) =>
-      <li key={tag.category + '-' + tag.display_name}>{tag.display_name} - {tag.num_times}</li>
+      <li key={tag.category + '-' + tag.display_name}>
+        <label><input type="checkbox" checked={this.props.checkEnabled(tag)} onChange={() => this.props.selectOption(tag)}></input>
+          {tag.display_name} - {tag.num_times}
+        </label>
+      </li>
     );
     return <ul>{sortedTags}</ul>
   }

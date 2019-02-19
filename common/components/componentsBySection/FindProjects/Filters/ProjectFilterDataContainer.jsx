@@ -22,13 +22,16 @@ type State = {|
   tags: ?$ReadOnlyArray<TagDefinition>,
   filterCounts: ?{ [key: string]: number },
   selectedTags: ?{ [key: string]: boolean },
-  // hasSubcategories: boolean
 |};
 
 class ProjectFilterDataContainer extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.state = {tags: null};
+    this.state = {
+      tags: null,
+      selectedTags: null,
+      filterCounts: null
+    };
 
     // passing true to fetchTagsByCategory asks backend to return num_times in API response
     ProjectAPIUtils.fetchAllTags(true, tags => {
@@ -54,6 +57,8 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
         sortedTags: sorted
       });
     });
+    this._checkEnabled = this._checkEnabled.bind(this);
+    this._selectOption = this._selectOption.bind(this);
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -103,17 +108,42 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
               categoryCount={_.sumBy(this.state.sortedTags[key], 'num_times')} //for displaying "category total" numbers
               category={key}
               data={_.sortBy(this.state.sortedTags[key], (tag) => tag.display_name.toUpperCase())}
-              hasSubcategories={_.every(this.state.sortedTags[key], 'subcategory')} //doesn't work
+              hasSubcategories={_.every(this.state.sortedTags[key], 'subcategory')}
+              checkEnabled={this._checkEnabled}
+              selectOption={this._selectOption}
             />
           );
         return (
-            <div>
+            <div className="ProjectFilterDataContainer-root">
                 {displayFilters}
             </div>
         )
     }
-  }
 
+    _checkEnabled(tag: TagDefinition): boolean {
+      //return true if tag is in this.state.selectedTags, else implicitly false
+      return _.has(this.state.selectedTags, tag.tag_name)
+    }
+
+    _selectOption(tag: TagDefinition): void {
+      var tagInState = _.has(this.state.selectedTags, tag.tag_name);
+      //if tag is NOT currently in state, add it, otherwise remove
+      if(!tagInState) {
+        ProjectSearchDispatcher.dispatch({
+          type: 'ADD_TAG',
+          tag: tag.tag_name,
+        });
+        metrics.logSearchFilterByTagEvent(tag);
+      } else {
+        ProjectSearchDispatcher.dispatch({
+          type: 'REMOVE_TAG',
+          tag: tag,
+        });
+      }
+
+
+  }
+}
 
 
 export default Container.create(ProjectFilterDataContainer);

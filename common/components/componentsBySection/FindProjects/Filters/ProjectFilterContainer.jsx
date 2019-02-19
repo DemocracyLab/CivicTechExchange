@@ -62,7 +62,7 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
         <div className="ProjectFilterContainer-label">
           Filter By:
         </div>
-        <ProjectFilterDataContainer title="All Filters" />
+        <ProjectFilterDataContainer />
       </div>
     );
   }
