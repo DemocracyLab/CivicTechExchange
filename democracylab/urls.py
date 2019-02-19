@@ -41,8 +41,8 @@ urlpatterns = [
     ),
     url(
         r'^verify_user/$',
-        views.send_verification_email,
-        name="send_verification_email"
+        views.send_verification_email_request,
+        name="send_verification_email_request"
     ),
     url(r'^api/user/(?P<user_id>[0-9]+)/$', views.user_details, name='user_details'),
     url(r'^api/user/edit/(?P<user_id>[0-9]+)/$', views.user_edit, name='user_edit'),
