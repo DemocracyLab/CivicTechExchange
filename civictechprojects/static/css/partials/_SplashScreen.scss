@@ -18,13 +18,24 @@
 }
 
 .SplashScreen-find-projects-btn {
+  border: 1px solid $color-orange;
+  color: $color-text-light;
+  background-color: $color-orange;
+  border-radius: 5px;
+  padding: 6px 12px;
+  margin-bottom: 10px;
+  transition: 300ms;
+  cursor: pointer;
+  min-width: 80px;
+}
+
+.SplashScreen-create-project-btn {
   border: 1px solid $color-text-light;
   color: $color-text-light;
   background-color: transparent;
   border-radius: 5px;
   padding: 6px 12px;
-  margin-bottom: 10px;
-  transition: 300ms;
+  margin: 0px 0px 10px 15px;
   cursor: pointer;
   min-width: 80px;
   &:hover {
@@ -32,15 +43,4 @@
     color: $color-text-light;
     border-color: $color-text-light;
   }
-}
-
-.SplashScreen-create-project-btn {
-  border: 1px solid $color-orange;
-  color: $color-text-light;
-  background-color: $color-orange;
-  border-radius: 5px;
-  padding: 6px 12px;
-  margin: 0px 0px 10px 15px;
-  cursor: pointer;
-  min-width: 80px;
 }
