@@ -1,10 +1,9 @@
 // @flow
-const cdnUrl: string = "https://dprhz3gr7kco1.cloudfront.net";
 
 class cdn {
   static image(fileName: string): string {
-    return cdnUrl + "/img/" + fileName;
+    return window.STATIC_CDN_URL + "/img/" + fileName;
   }
 }
 
-export default cdn
+export default cdn;

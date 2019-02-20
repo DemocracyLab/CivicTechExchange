@@ -27,6 +27,9 @@ export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/index/?sect
 # Configure position description example link
 export POSITION_DESCRIPTION_EXAMPLE_URL='https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit'
 
+# Static asset CDN
+export STATIC_CDN_URL='https://d1agxr2dqkgkuy.cloudfront.net'
+
 # If True, emails won't be sent to their recipients, but to the ADMIN_EMAIL address (with metadata for debugging)
 export FAKE_EMAILS=True
 
