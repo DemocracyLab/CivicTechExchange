@@ -61,18 +61,15 @@
 //   min-height: 41px;
 // }
 
+/* needs to change based on expanded or collapsed state */
 .ProjectFilterContainer-subcategory {
   padding: 10px;
   margin-bottom: 10px;
-}
-.ProjectFilterContainer-subcategory-expanded {
   border: 1px solid $color-orange;
   border-radius: 5px;
 }
+
 /* This will be updated to display the 'peek' at the first few filters in another PR */
-.ProjectFilterContainer-category-collapsed, .ProjectFilterContainer-subcategory-collapsed {
+.ProjectFilterContainer-collapsed + ul {
   display: none;
-}
-.ProjectFilterCategory-category-expanded, .ProjectFilterContainer-subcategory-expanded {
-  display: block;
 }

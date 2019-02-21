@@ -12,6 +12,16 @@ const categoryDisplayNames = {
 class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
     super(props);
+    this.state = {isExpanded: false};
+
+    this._toggleExpanded = this._toggleExpanded.bind(this);
+  }
+
+//TODO: this toggles every subcategory at once, needs to only manipulate one at a time. pass a key?
+  _toggleExpanded() {
+    this.setState(state => ({
+      isExpanded: !state.isExpanded
+    }));
   }
 
   _displayName(input) {
@@ -26,16 +36,22 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     //group by subcategories, then sort and map just like parent component but for subcategories
     let groupedSubcats = _.groupBy(this.props.data, 'subcategory');
     let sortedKeys = Object.keys(groupedSubcats).sort(); //default sort is alphabetical, what we want
-
+    let className = 'ProjectFilterContainer-subcategory-header';
+      if (!this.state.isExpanded) {
+        className += ' ProjectFilterContainer-collapsed';
+      }
     const displaySubcategories = sortedKeys.map(key =>
           <div className="ProjectFilterContainer-subcategory">
-            <div className="ProjectFilterContainer-subcategory-header"><span>{key}</span><span>{_.sumBy(groupedSubcats[key], 'num_times')}</span></div>
+            <div className={className} onClick={this._toggleExpanded}>
+              <span>{key}</span><span>{_.sumBy(groupedSubcats[key], 'num_times')}</span>
+            </div>
             {this._renderFilterList(groupedSubcats[key])}
           </div>
         );
       return (
         <div className="ProjectFilterContainer-category">
-          <div className="ProjectFilterContainer-category-header">{this._displayName(this.props.category)}</div>
+          <div className="ProjectFilterContainer-category-header" onClick={this._toggleExpanded}>
+            {this._displayName(this.props.category)}</div>
           {displaySubcategories}
         </div>
       )
