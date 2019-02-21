@@ -120,7 +120,9 @@ def index(request):
     context = {
         'FOOTER_LINKS': settings.FOOTER_LINKS,
         'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL,
-        'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL
+        'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL,
+        'STATIC_CDN_URL': settings.STATIC_CDN_URL
+
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',

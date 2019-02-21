@@ -174,6 +174,10 @@ HOTJAR_APPLICATION_ID = os.environ.get('HOTJAR_APPLICATION_ID', '')
 
 GOOGLE_PROPERTY_ID = os.environ.get('GOOGLE_PROPERTY_ID', '')
 
+STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
+
+# TODO: Call out missing required environment variables
+
 # TODO: Set to True in productions
 # SESSION_COOKIE_SECURE = True
 

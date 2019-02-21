@@ -86,12 +86,14 @@ class MainHeader extends React.Component<{||}, State > {
   render(): React$Node {
     return (
       <div className={this._cx.get('root')}>
-        <div className="SubHeader-logo-container" onClick={this._onHomeButtonClick}>
-          <img
-            className="SubHeader-logo"
-            src={cdn.image("dl_logo.png")}
-          />
-        </div>
+        <a href={url.section(Section.FindProjects, {showSplash: 1})}>
+          <div className="SubHeader-logo-container">
+            <img
+              className="SubHeader-logo"
+              src={cdn.image("dl_logo.png")}
+            />
+          </div>
+        </a>
         {this._renderHamburgerSlider()}
         <div className={this._cx.get('rightContent')}>
           {this._renderSectionLinks()}
@@ -105,14 +107,6 @@ class MainHeader extends React.Component<{||}, State > {
         </div>
       </div>
     );
-  }
-  
-  _onHomeButtonClick(): void {
-    NavigationDispatcher.dispatch({
-      type: 'SET_SECTION',
-      section: Section.FindProjects,
-      url: url.section(Section.FindProjects)
-    });
   }
   
   _renderLogInButton(): void {
@@ -211,7 +205,7 @@ class MainHeader extends React.Component<{||}, State > {
                 </div>
                 
               }
-              <a href="" onClick={(e) => this.navigateToSection(e, 'FindProjects')}>
+              <a href={url.section(Section.FindProjects, {hideSplash: 1})}>
                 <div className={'SubHeader-drawerDiv'} >
                   Find Projects
                 </div>
@@ -329,7 +323,7 @@ class MainHeader extends React.Component<{||}, State > {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: Section.LogIn,
-      url: url.section(Section.LogIn)
+      url: url.section(Section.LogIn, url.getPreviousPageArg())
     });
   }
 }

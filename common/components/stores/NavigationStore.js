@@ -6,6 +6,7 @@ import {ReduceStore} from 'flux/utils';
 import NavigationDispatcher from './NavigationDispatcher.js';
 import {List, Record} from 'immutable'
 import Section from '../enums/Section.js';
+import url from "../utils/url.js";
 
 export type NavigationActionType = {
   type: 'SET_SECTION',
@@ -16,6 +17,7 @@ export type NavigationActionType = {
 
 const DEFAULT_STATE = {
   section: Section.FindProjects,
+  url: url.section(Section.FindProjects, {showSplash: 1})
 };
 
 class State extends Record(DEFAULT_STATE) {

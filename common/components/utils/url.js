@@ -53,6 +53,10 @@ class urlHelper {
     }
   }
   
+  static getPreviousPageArg(): { [key: string]: string } {
+    return {prev : window.location.href.split('?section=')[1]};
+  }
+  
   static appendHttpIfMissingProtocol(url: string): string {
     // TODO: Find a library that can handle this so we don't have to maintain regexes
     if (!regex.protocol.test(url)) {
