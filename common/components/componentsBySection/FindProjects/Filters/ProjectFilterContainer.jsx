@@ -1,7 +1,6 @@
 
 // @flow
 import type {FluxReduceStore} from 'flux/utils';
-
 import {Container} from 'flux/utils';
 import React from 'react';
 import Select from 'react-select'
@@ -9,6 +8,7 @@ import ProjectFilterDataContainer from "./ProjectFilterDataContainer.jsx";
 import TagCategory from "../../../common/tags/TagCategory.jsx";
 import ProjectSearchDispatcher from '../../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../../stores/ProjectSearchStore.js';
+import ResetSearchButton from '../ResetSearchButton.jsx';
 import {Locations} from "../../../constants/ProjectConstants";
 import {SelectOption} from "../../../types/SelectOption.jsx";
 import metrics from "../../../utils/metrics.js";

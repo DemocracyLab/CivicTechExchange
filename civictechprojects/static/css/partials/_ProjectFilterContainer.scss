@@ -1,5 +1,5 @@
 .ProjectFilterContainer-root {
-  background-color: $color-background-default;
+  background-color: $color-background-light;
   min-height: 100%;
   vertical-align: top;
 }
@@ -14,9 +14,65 @@
   margin-right: 50px;
   margin-top: 12px;
   width: 100%;
-
 }
 
+.ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
+  font-size: 18px;
+  font-weight: bold;
+}
+.ProjectFilterContainer-subcategory-header {
+  display: flex;
+  justify-content: space-between;
+}
 .ProjectFilterContainer-root > div {
+  display: block;
+}
+
+.ProjectFilterContainer-filter-list {
+  list-style-type: none;
+  padding-inline-start: 0;
+}
+
+
+.ProjectFilterContainer-filter-list li {
+  border: 1px solid $color-text-grey;
+  color: $color-text-grey;
+  border-radius: 5px;
+  margin-bottom: 12px;
+}
+.ProjectFilterContainer-filter-list label {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 10px;
+}
+
+.ProjectFilterContainer-filter-list label > input[type=checkbox]:checked {
+  background: $color-orange;
+  color: $color-text-light;
+}
+
+.ProjectFilterContainer-filter-list input[type=checkbox] {
+  display: none;
+}
+// .ProjectFilterContainer-reset {
+//   min-height: 41px;
+// }
+
+.ProjectFilterContainer-subcategory {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.ProjectFilterContainer-subcategory-expanded {
+  border: 1px solid $color-orange;
+  border-radius: 5px;
+}
+/* This will be updated to display the 'peek' at the first few filters in another PR */
+.ProjectFilterContainer-category-collapsed, .ProjectFilterContainer-subcategory-collapsed {
+  display: none;
+}
+.ProjectFilterCategory-category-expanded, .ProjectFilterContainer-subcategory-expanded {
   display: block;
 }

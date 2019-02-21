@@ -28,38 +28,39 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     let sortedKeys = Object.keys(groupedSubcats).sort(); //default sort is alphabetical, what we want
 
     const displaySubcategories = sortedKeys.map(key =>
-          <React.Fragment>
-            <h5>{key} - {_.sumBy(groupedSubcats[key], 'num_times')}</h5>
+          <div className="ProjectFilterContainer-subcategory">
+            <div className="ProjectFilterContainer-subcategory-header"><span>{key}</span><span>{_.sumBy(groupedSubcats[key], 'num_times')}</span></div>
             {this._renderFilterList(groupedSubcats[key])}
-          </React.Fragment>
+          </div>
         );
       return (
-        <React.Fragment>
-          <h4>{this._displayName(this.props.category)}</h4>
+        <div className="ProjectFilterContainer-category">
+          <div className="ProjectFilterContainer-category-header">{this._displayName(this.props.category)}</div>
           {displaySubcategories}
-        </React.Fragment>
+        </div>
       )
   }
   _renderNoSubcategories() {
     //if a category has NO subcategories (hasSubcategories is false), render a single list
     return (
-        <React.Fragment>
-          <h4>{this._displayName(this.props.category)}</h4>
+        <div className="ProjectFilterContainer-category">
+          <h2 className="ProjectFilterContainer-category-header">{this._displayName(this.props.category)}</h2>
           {this._renderFilterList(this.props.data)}
-        </React.Fragment>
+        </div>
     );
   }
 
   _renderFilterList(data) {
     //this function renders individual clickable filter items regardless of category or subcategory status
     let sortedTags = Object.values(data).map((tag) =>
-      <li key={tag.category + '-' + tag.display_name}>
-        <label><input type="checkbox" checked={this.props.checkEnabled(tag)} onChange={() => this.props.selectOption(tag)}></input>
-          {tag.display_name} - {tag.num_times}
+      <li key={tag.category + '-' + tag.display_name} className="ProjectFilterContainer-list-item">
+        <label>
+          <input type="checkbox" checked={this.props.checkEnabled(tag)} onChange={() => this.props.selectOption(tag)}></input>
+          <span className="ProjectFilterContainer-list-item-name">{tag.display_name}</span> <span className="ProjectFilterContainer-list-item-count">{tag.num_times}</span>
         </label>
       </li>
     );
-    return <ul>{sortedTags}</ul>
+    return <ul className="ProjectFilterContainer-filter-list">{sortedTags}</ul>
   }
 
   render(): React$Node {
