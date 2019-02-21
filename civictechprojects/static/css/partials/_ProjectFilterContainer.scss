@@ -61,15 +61,24 @@
 //   min-height: 41px;
 // }
 
-/* needs to change based on expanded or collapsed state */
+/* border color needs to change based on expanded or collapsed state */
 .ProjectFilterContainer-subcategory {
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid $color-orange;
   border-radius: 5px;
 }
 
 /* This will be updated to display the 'peek' at the first few filters in another PR */
 .ProjectFilterContainer-collapsed + ul {
   display: none;
+}
+
+/*:not selector is "if not collapsed (aka expanded), then apply these rules */
+.ProjectFilterContainer-subcategory {
+  border: 1px solid $color-orange;
+}
+
+/* change border to grey if subcategory also has collapsed class */
+.ProjectFilterContainer-subcategory.ProjectFilterContainer-collapsed {
+  border: 1px solid $color-text-grey;
 }
