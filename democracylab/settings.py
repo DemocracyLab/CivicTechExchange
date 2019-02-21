@@ -14,6 +14,7 @@ import os
 import ast
 import dj_database_url
 from distutils.util import strtobool
+from django.core.mail.backends.smtp import EmailBackend
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -132,16 +133,32 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-DEFAULT_FROM_EMAIL = 'democracylabreset@gmail.com'
-SERVER_EMAIL = 'democracylabreset@gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'democracylabreset@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+
+def read_connection_config(config):
+    return config and {
+        'from_name': '{name} <{email_address}>'.format(name=config['display_name'], email_address=config['username']),
+        'connection': EmailBackend(
+            host=config['host'],
+            port=int(config['port']),
+            username=config['username'],
+            password=config['password'],
+            use_tls=strtobool(config['use_tls']),
+            fail_silently=False,
+            use_ssl=strtobool(config['use_ssl']),
+            timeout=None,
+            ssl_keyfile=None,
+            ssl_certfile=None)
+    }
+
+EMAIL_SUPPORT_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_SUPPORT_ACCT', 'None')))
+EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_VOLUNTEER_ACCT', 'None')))
+
+# Default log to console in the absence of any account configurations
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
-FAKE_EMAILS = os.environ.get('FAKE_EMAILS', False) == 'True'
+FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
 
 APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
 

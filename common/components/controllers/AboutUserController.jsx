@@ -2,11 +2,13 @@
 
 import React from 'react';
 import TagsDisplay from '../common/tags/TagsDisplay.jsx'
-import {LinkNames} from "../constants/LinkConstants.js";
+import {DefaultLinkDisplayConfigurations} from "../constants/LinkConstants.js";
 import {FileCategoryNames} from "../constants/FileConstants.js";
 import {UserAPIData} from "../utils/UserAPIUtils.js";
 import UserAPIUtils from "../utils/UserAPIUtils.js";
 import {FileInfo} from "../common/FileInfo.jsx";
+import {LinkInfo} from "../forms/LinkInfo.jsx";
+import Avatar from "../common/avatar.jsx"
 import _ from 'lodash'
 
 type State = {|
@@ -47,7 +49,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
               <div className="col-sm-5">
                 <div className="row">
                   <div className="col-sm-auto">
-                    <img className="upload_img upload_img_bdr" src={user && user.user_thumbnail && user.user_thumbnail.publicUrl} />
+                    <Avatar user={user} size={50} />
                   </div>
                   <div className="col">
                     <div className="row">
@@ -128,7 +130,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     const user: UserAPIData = this.state.user;
     return user && user.user_links && user.user_links.map((link, i) =>
       <div key={i}>
-        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{this._legibleLinkName(link.linkName)}</a>
+        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{this._legibleLinkName(link)}</a>
       </div>
     );
   }
@@ -142,9 +144,11 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     );
   }
 
-  _legibleLinkName(input) {
-    //replaces specific linkNames for readability
-    return LinkNames[input] || input;
+  _legibleLinkName(link: LinkInfo) {
+    //replaces specific link Names for readability
+    return link.linkName in DefaultLinkDisplayConfigurations
+      ? DefaultLinkDisplayConfigurations[link.linkName].sourceTypeDisplayName
+      : link.linkName || link.linkUrl;
   }
 
   _legibleFileName(input: FileInfo) {

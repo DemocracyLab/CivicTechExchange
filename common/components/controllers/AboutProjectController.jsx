@@ -8,26 +8,19 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
-import {Earth, MapMarker, Clock, Domain, ChartBar, Key, Meetup, GithubCircle, Slack, Trello, GoogleDrive} from 'mdi-material-ui';
-import Tooltip from '@material-ui/core/Tooltip';
 import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.jsx';
 import ContactProjectButton from "../common/projects/ContactProjectButton.jsx";
 import ProjectVolunteerButton from "../common/projects/ProjectVolunteerButton.jsx";
-import {LinkNames} from "../constants/LinkConstants.js";
 import metrics from "../utils/metrics.js";
 import AboutPositionEntry from "../common/positions/AboutPositionEntry.jsx";
 import ProjectVolunteerModal from "../common/projects/ProjectVolunteerModal.jsx";
-import GlyphStyles from "../utils/glyphs.js";
 import CurrentUser from "../utils/CurrentUser.js";
 import ProjectOwnersSection from "../common/owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../common/volunteers/VolunteerSection.jsx";
-import NotificationModal from "../common/notification/NotificationModal.jsx";
-import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 import type {PositionInfo} from "../forms/PositionInfo.jsx";
-import TagsDisplay from '../common/tags/TagsDisplay.jsx'
-import url from '../utils/url.js'
-import {Locations} from "../constants/ProjectConstants.js";
-import {TagDefinition} from "../utils/ProjectAPIUtils.js";
+import Headers from "../common/Headers.jsx";
+import Truncate from "../utils/truncate.js";
+import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 
 
 type State = {|
@@ -61,7 +54,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     metrics.logNavigateToProjectProfile(projectId);
   }
 
-  loadProjectDetails(project) {
+  loadProjectDetails(project: ProjectDetailsAPIData) {
     this.setState({
       project: project,
     });
@@ -101,6 +94,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     const project = this.state.project;
     return (
       <div className='AboutProjects-root'>
+        {this._renderHeader(project)}
         <Grid container className='AboutProjects-container' spacing={0}>
           <Grid item xs={12} sm={3} className="AboutProjects-infoColumn">
             <Paper className='AboutProjects-paper' elevation={1} square={true}>
@@ -202,6 +196,10 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
                   <Grid className='AboutProjects-owner' item xs={12} sm={3}>
                     <ContactProjectButton project={project}/>
+                    <ProjectVolunteerButton
+                      project={project}
+                      onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
+                    />
                   </Grid>
               <div className="AboutProjects_tabs">
                 <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
@@ -236,6 +234,19 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </div>
     )
   }
+  
+  _renderHeader(project: ProjectDetailsAPIData): React$Node {
+    const title: string = project.project_name + " | DemocracyLab";
+    const description: string = project.project_short_description || Truncate.stringT(project.project_description, 300);
+    
+    return (
+      <Headers
+        title={title}
+        description={description}
+        thumbnailUrl={project.project_thumbnail && project.project_thumbnail.publicUrl}
+      />
+    );
+  }
 
   _renderFiles(): ?Array<React$Node> {
     const project = this.state.project;
@@ -249,15 +260,8 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
     return project && project.project_links && project.project_links.map((link, i) =>
-      <div className="Link-listitem"key={i}>
-        <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">{this._legibleName(link.linkName)}</a>
-      </div>
+      <IconLinkDisplay key={i} link={link}/>
     );
-  }
-
-    _legibleName(input) {
-    //replaces specific linkNames for readability
-    return LinkNames[input] || input;
   }
 
   _renderPositions(): ?Array<React$Node> {

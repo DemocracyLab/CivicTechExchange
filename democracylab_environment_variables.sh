@@ -30,5 +30,16 @@ export POSITION_DESCRIPTION_EXAMPLE_URL='https://docs.google.com/document/d/142N
 # If True, emails won't be sent to their recipients, but to the ADMIN_EMAIL address (with metadata for debugging)
 export FAKE_EMAILS=True
 
+# This array specifies how many days we should space our reminder emails.  In this case, the first reminder comes after
+# two days, the second after seven days, and none after that
+export APPLICATION_REMINDER_PERIODS='[2,7,-1]'
+
+# Sample email account configuration
+# export EMAIL_SUPPORT_ACCT='{"host":"smtp.gmail.com","port":"587","display_name":"DemocracyLab Support","username":"support@democracylab.org","password":"SECRET","use_tls":"True","use_ssl":"False"}'
+# export EMAIL_VOLUNTEER_ACCT='{"host":"smtp.gmail.com","port":"587","display_name":"DemocracyLab Volunteering","username":"volunteer@democracylab.org","password":"SECRET","use_tls":"True","use_ssl":"False"}'
+
+export S3_BUCKET=democracylab-marlok
+export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
+
 # ONLY FOR USE IN PRODUCTION
 #export HOTJAR_APPLICATION_ID=1097784

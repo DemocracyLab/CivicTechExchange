@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import simplejson as json
-
+from .emails import send_verification_email, send_password_reset_email
 from .forms import DemocracyLabUserCreationForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
 
@@ -44,7 +44,7 @@ def signup(request):
             contributor.save()
             user = authenticate(username=email, password=raw_password)
             login(request, user)
-            contributor.send_verification_email()
+            send_verification_email(contributor)
             return redirect('/')
         else:
             errors = json.loads(form.errors.as_json())
@@ -91,7 +91,7 @@ def password_reset(request):
     user = get_contributor_by_username(username)
 
     if user is not None:
-        user.send_password_reset_email()
+        send_password_reset_email(user)
     else:
         # Failing silently to not alert
         print('Attempt to reset password for unregistered email: ' + username)
@@ -133,13 +133,13 @@ def user_details(request, user_id):
     
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-def send_verification_email(request):
+def send_verification_email_request(request):
     if not request.user.is_authenticated():
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
     if not user.email_verified:
-        user.send_verification_email()
+        send_verification_email(user)
         return HttpResponse(status=200)
     else:
         # If user's email was already confirmed
