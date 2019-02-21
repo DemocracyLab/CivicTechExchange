@@ -323,7 +323,7 @@ class MainHeader extends React.Component<{||}, State > {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: Section.LogIn,
-      url: url.section(Section.LogIn)
+      url: url.section(Section.LogIn, url.getPreviousPageArg())
     });
   }
 }
