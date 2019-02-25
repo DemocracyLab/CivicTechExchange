@@ -34,6 +34,7 @@ type State = {|
   user: ?UserAPIData,
   dropdown: boolean,
   slider: boolean,
+  createProjectUrl: string
 |};
 
 class MainHeader extends React.Component<{||}, State > {
@@ -66,6 +67,7 @@ class MainHeader extends React.Component<{||}, State > {
       user: null,
       dropdown: false,
       slider: false,
+      createProjectUrl: url.sectionOrLogIn(Section.CreateProject)
     };
     this._toggleDropdown = this._toggleDropdown.bind(this);
     this._closeDropdown = this._closeDropdown.bind(this);
@@ -103,6 +105,7 @@ class MainHeader extends React.Component<{||}, State > {
               this._renderAccountInfo() :
               this._renderLogInButton()
           }
+          {this._renderCreateProjectButton()}
           {this._renderHeaderButtons()}
         </div>
       </div>
@@ -168,6 +171,7 @@ class MainHeader extends React.Component<{||}, State > {
   };
   
   _renderHamburgerSlider(): React$Node {
+    // TODO: Refactor into separate component
     return (
       <React.Fragment>
         <div className="SubHeader-hamburger" onClick={() => this._toggleSlider(true)}>
@@ -208,6 +212,13 @@ class MainHeader extends React.Component<{||}, State > {
               <a href={url.section(Section.FindProjects, {hideSplash: 1})}>
                 <div className={'SubHeader-drawerDiv'} >
                   Find Projects
+                </div>
+              </a>
+              <Divider />
+  
+              <a href={this.state.createProjectUrl}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Create Project
                 </div>
               </a>
               <Divider />
@@ -295,6 +306,19 @@ class MainHeader extends React.Component<{||}, State > {
         );
       })
     )
+  }
+  
+  _renderCreateProjectButton(): React$Node{
+    return (
+      <a key={this.state.createProjectUrl}
+        href={this.state.createProjectUrl}
+        className="SubHeader-donate-btn-container"
+      >
+        <button className="SubHeader-log-btns">
+          Create Project
+        </button>
+      </a>
+    );
   }
   
   _renderIcon(): React$Node {
