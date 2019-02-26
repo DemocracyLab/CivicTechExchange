@@ -54,7 +54,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     const displaySubcategories = sortedKeys.map(key =>
           <div className={this.state[key] ? 'ProjectFilterContainer-subcategory ProjectFilterContainer-expanded' : 'ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed'} key={key}>
             <div className="ProjectFilterContainer-subcategory-header"  id={key} onClick={(e) => this._handleChange(key, e)}>
-              <span>{key}</span><span>{_.sumBy(groupedSubcats[key], 'num_times')}</span>
+              <span>{key}</span><span className="ProjectFilterContainer-showtext">{this.state[key] ? "Show less" : _.sumBy(groupedSubcats[key], 'num_times')}</span>
             </div>
             {this._renderFilterList(groupedSubcats[key])}
           </div>
