@@ -11,17 +11,34 @@ const categoryDisplayNames = {
 
 class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
-    super(props);
-    this.state = {isExpanded: false};
+    super(props)
+    //get list of category keys to set initial state (for collapse/expand), then set all as false (collapsed)
+    //TODO: this is very similar to constructor for parent component - find a way to do or write this once, not twice
+    let c = Object.keys(_.groupBy(this.props.data, 'category')) || [] ;
+    let s = Object.keys(_.groupBy(this.props.data, 'subcategory')) || [];
+    let cs = _.concat(c, s);
+    //cs is now an array of each key we want to use for expand/collapse tracking
 
-    this._toggleExpanded = this._toggleExpanded.bind(this);
+    //make an object and push in each key set to false
+    const collector = {}
+    for (var key in cs) {
+      let val = cs[key]
+      collector[val] = false;
+    }
+    //set initial state once collector is populated
+    this.state = collector || {}
+
+    this._handleChange = this._handleChange.bind(this);
   }
 
-//TODO: this toggles every subcategory at once, needs to only manipulate one at a time. pass a key?
-  _toggleExpanded() {
-    this.setState(state => ({
-      isExpanded: !state.isExpanded
-    }));
+  //handle expand/collapse (generic; should work for all input types)
+  _handleChange(event) {
+    let name = event.target.id //this needs to match the database category/subcategory
+    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+    this.setState({
+      [name]: value
+    });
+    console.log(name, value);
   }
 
   _displayName(input) {
@@ -36,21 +53,24 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     //group by subcategories, then sort and map just like parent component but for subcategories
     let groupedSubcats = _.groupBy(this.props.data, 'subcategory');
     let sortedKeys = Object.keys(groupedSubcats).sort(); //default sort is alphabetical, what we want
-    let className = 'ProjectFilterContainer-subcategory-header';
+
+    let subcategoryClassName = 'ProjectFilterContainer-subcategory';
       if (!this.state.isExpanded) {
-        className += ' ProjectFilterContainer-collapsed';
+        subcategoryClassName += ' ProjectFilterContainer-collapsed';
+      } else {
+        subcategoryClassName += ' ProjectFilterContainer-expanded';
       }
     const displaySubcategories = sortedKeys.map(key =>
-          <div className="ProjectFilterContainer-subcategory">
-            <div className={className} onClick={this._toggleExpanded}>
+          <div className={subcategoryClassName} key={key}>
+            <div className="ProjectFilterContainer-subcategory-header" id={key} onClick={this._handleChange}>
               <span>{key}</span><span>{_.sumBy(groupedSubcats[key], 'num_times')}</span>
             </div>
             {this._renderFilterList(groupedSubcats[key])}
           </div>
         );
       return (
-        <div className="ProjectFilterContainer-category">
-          <div className="ProjectFilterContainer-category-header" onClick={this._toggleExpanded}>
+        <div className="ProjectFilterContainer-category" key={this.props.category}>
+          <div className="ProjectFilterContainer-category-header" id={this.props.category} onClick={this._handleChange}>
             {this._displayName(this.props.category)}</div>
           {displaySubcategories}
         </div>
@@ -70,10 +90,10 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     //this function renders individual clickable filter items regardless of category or subcategory status
     let sortedTags = Object.values(data).map((tag) =>
       <li key={tag.category + '-' + tag.display_name} className="ProjectFilterContainer-list-item">
-        <label>
-          <input type="checkbox" checked={this.props.checkEnabled(tag)} onChange={() => this.props.selectOption(tag)}></input>
-          <span className="ProjectFilterContainer-list-item-name">{tag.display_name}</span> <span className="ProjectFilterContainer-list-item-count">{tag.num_times}</span>
-        </label>
+          <input type="checkbox" id={tag.category + '-' + tag.display_name} checked={this.props.checkEnabled(tag)} onChange={() => this.props.selectOption(tag)}></input>
+          <label htmlFor={tag.category + '-' + tag.display_name}>
+            <span className="ProjectFilterContainer-list-item-name">{tag.display_name}</span> <span className="ProjectFilterContainer-list-item-count">{tag.num_times}</span>
+          </label>
       </li>
     );
     return <ul className="ProjectFilterContainer-filter-list">{sortedTags}</ul>

@@ -105,6 +105,7 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     //generate child components in sorted order
       const displayFilters = orderedFilters.map(key =>
             <RenderFilterCategory
+              key={key}
               categoryCount={_.sumBy(this.state.sortedTags[key], 'num_times')} //for displaying "category total" numbers
               category={key}
               data={_.sortBy(this.state.sortedTags[key], (tag) => tag.display_name.toUpperCase())}

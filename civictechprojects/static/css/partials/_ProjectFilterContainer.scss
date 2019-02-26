@@ -17,7 +17,7 @@
 }
 
 .ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
 }
 .ProjectFilterContainer-subcategory-header {
@@ -49,7 +49,7 @@
   padding: 12px 10px;
 }
 
-.ProjectFilterContainer-filter-list label > input[type=checkbox]:checked {
+.ProjectFilterContainer-filter-list input[type=checkbox]:checked + label {
   background: $color-orange;
   color: $color-text-light;
 }
@@ -69,16 +69,16 @@
 }
 
 /* This will be updated to display the 'peek' at the first few filters in another PR */
-.ProjectFilterContainer-collapsed + ul {
+.ProjectFilterContainer-collapsed > ul {
   display: none;
 }
 
-/*:not selector is "if not collapsed (aka expanded), then apply these rules */
-.ProjectFilterContainer-subcategory {
+/*if subcategory is expanded */
+.ProjectFilterContainer-subcategory.ProjectFilterContainer-expanded {
   border: 1px solid $color-orange;
 }
 
-/* change border to grey if subcategory also has collapsed class */
+/* if subcategory is collapsed */
 .ProjectFilterContainer-subcategory.ProjectFilterContainer-collapsed {
   border: 1px solid $color-text-grey;
 }
