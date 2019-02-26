@@ -29,15 +29,14 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     this.state = collector || {}
 
     this._handleChange = this._handleChange.bind(this);
-    this._selectClassName = this._selectClassName.bind(this);
   }
 
   //handle expand/collapse
   _handleChange(name, event) {
-    this.setState(prevState => ({
-      name: !prevState.name
-    }));
-    console.log(name);
+    const value = this.state[name];
+    this.setState({
+      [name]: !value
+    });
   }
 
   _displayName(input) {
@@ -46,17 +45,6 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     return categoryDisplayNames[input] || input;
   }
 
-  _selectClassName(key) {
-    let subcategoryClassName = 'ProjectFilterContainer-subcategory';
-      if (this.state[key]) {
-        subcategoryClassName += ' ProjectFilterContainer-expanded';
-      } else {
-        subcategoryClassName += ' ProjectFilterContainer-collapsed';
-      }
-     return subcategoryClassName;
-  }
-
-
   _renderWithSubcategories() {
     //if hasSubcategories is true, we need to group, sort, and render each subcategory much like categories are sorted and rendered in the parent component
     //group by subcategories, then sort and map just like parent component but for subcategories
@@ -64,8 +52,8 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     let sortedKeys = Object.keys(groupedSubcats).sort(); //default sort is alphabetical, what we want
 
     const displaySubcategories = sortedKeys.map(key =>
-          <div className={this._selectClassName(key)} key={key}>
-            <div className="ProjectFilterContainer-subcategory-header" id={key} onClick={(e) => this._handleChange(key, e)}>
+          <div className={this.state[key] ? 'ProjectFilterContainer-subcategory ProjectFilterContainer-expanded' : 'ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed'} key={key}>
+            <div className="ProjectFilterContainer-subcategory-header"  id={key} onClick={(e) => this._handleChange(key, e)}>
               <span>{key}</span><span>{_.sumBy(groupedSubcats[key], 'num_times')}</span>
             </div>
             {this._renderFilterList(groupedSubcats[key])}
