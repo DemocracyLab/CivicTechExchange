@@ -28,6 +28,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
 import {FooterLink} from "../utils/FooterLinks.js";
+import AlertHeader from "./AlertHeader.jsx";
 
 type State = {|
   +activeSection: SectionType,
@@ -87,26 +88,29 @@ class MainHeader extends React.Component<{||}, State > {
   
   render(): React$Node {
     return (
-      <div className={this._cx.get('root')}>
-        <a href={url.section(Section.FindProjects, {showSplash: 1})}>
-          <div className="SubHeader-logo-container">
-            <img
-              className="SubHeader-logo"
-              src={cdn.image("dl_logo.png")}
-            />
+      <div>
+        <AlertHeader/>
+        <div className={this._cx.get('root')}>
+          <a href={url.section(Section.FindProjects, {showSplash: 1})}>
+            <div className="SubHeader-logo-container">
+              <img
+                className="SubHeader-logo"
+                src={cdn.image("dl_logo.png")}
+              />
+            </div>
+          </a>
+          {this._renderHamburgerSlider()}
+          <div className={this._cx.get('rightContent')}>
+            {this._renderSectionLinks()}
+            {this._renderHeaderLinks()}
+            {
+              CurrentUser.isLoggedIn() ?
+                this._renderAccountInfo() :
+                this._renderLogInButton()
+            }
+            {this._renderCreateProjectButton()}
+            {this._renderHeaderButtons()}
           </div>
-        </a>
-        {this._renderHamburgerSlider()}
-        <div className={this._cx.get('rightContent')}>
-          {this._renderSectionLinks()}
-          {this._renderHeaderLinks()}
-          {
-            CurrentUser.isLoggedIn() ?
-              this._renderAccountInfo() :
-              this._renderLogInButton()
-          }
-          {this._renderCreateProjectButton()}
-          {this._renderHeaderButtons()}
         </div>
       </div>
     );

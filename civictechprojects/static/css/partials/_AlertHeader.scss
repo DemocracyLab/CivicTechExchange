@@ -1,0 +1,14 @@
+.AlertHeader-root {
+  background-color: $color-orange;
+  color: $color-text-light;
+  width: 100%;
+  height: 30px;
+}
+
+.AlertHeader-text {
+  float: left;
+}
+
+.AlertHeader-close {
+  float: right;
+}
