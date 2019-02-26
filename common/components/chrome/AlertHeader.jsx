@@ -21,7 +21,7 @@ function unescapeHtml(html: string): string {
 class AlertHeader extends React.PureComponent<Props, State> {
   constructor(): void {
     super();
-    this.state = {showHeader: !sessionStorage["hideAlertHeader"]};
+    this.state = {showHeader: window.HEADER_ALERT && !sessionStorage["hideAlertHeader"]};
   }
   
   hideHeader(): void {
