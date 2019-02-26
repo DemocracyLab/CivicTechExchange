@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import {Glyph,GlyphStyles, GlyphSizes} from "../utils/glyphs.js";
 
 type Props = {|
   onClickFindProjects: () => void
@@ -20,9 +21,7 @@ function unescapeHtml(html: string): string {
 class AlertHeader extends React.PureComponent<Props, State> {
   constructor(): void {
     super();
-    this.state = {showHeader: true};
-    // TODO: Uncomment when finished
-    // this.state = {showHeader: !sessionStorage["hideAlertHeader"]};
+    this.state = {showHeader: !sessionStorage["hideAlertHeader"]};
   }
   
   hideHeader(): void {
@@ -35,7 +34,7 @@ class AlertHeader extends React.PureComponent<Props, State> {
       <div className="AlertHeader-root">
         <div className="AlertHeader-text" dangerouslySetInnerHTML={{__html: unescapeHtml(window.HEADER_ALERT)}}/>
         <div className="AlertHeader-close" onClick={() => this.hideHeader()}>
-          X
+          <i className={Glyph(GlyphStyles.Close,GlyphSizes.LG)} aria-hidden="true"></i>
         </div>
       </div>
     );

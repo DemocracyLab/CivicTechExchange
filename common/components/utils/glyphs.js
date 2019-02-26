@@ -1,6 +1,7 @@
 // @flow
 
-const GlyphStyles: {[key: string]: string} = {
+export const GlyphStyles: {[key: string]: string} = {
+  Close: "fas fa-times",
   Delete: "far fa-trash-alt",
   Edit: "far fa-edit",
   Add: "fa fa-plus",

@@ -17,12 +17,13 @@
   padding-left: 10px;
 }
 
-.AlertHeader-text p {
+.AlertHeader-text p,i {
   text-align: center;
 }
 
 .AlertHeader-close {
   width: 30px;
   padding-right: 10px;
+  cursor: pointer;
 }
 
