@@ -29,22 +29,31 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     this.state = collector || {}
 
     this._handleChange = this._handleChange.bind(this);
+    this._selectClassName = this._selectClassName.bind(this);
   }
 
-  //handle expand/collapse (generic; should work for all input types)
-  _handleChange(event) {
-    let name = event.target.id //this needs to match the database category/subcategory
-    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-    this.setState({
-      [name]: value
-    });
-    console.log(name, value);
+  //handle expand/collapse
+  _handleChange(name, event) {
+    this.setState(prevState => ({
+      name: !prevState.name
+    }));
+    console.log(name);
   }
 
   _displayName(input) {
     //TODO: Refactor this to take (input, list) so we can feed different const values to it so it's utility, move to utility js, use it here and for LinkList
     //replaces specified database-generated names to chosen display names
     return categoryDisplayNames[input] || input;
+  }
+
+  _selectClassName(key) {
+    let subcategoryClassName = 'ProjectFilterContainer-subcategory';
+      if (this.state[key]) {
+        subcategoryClassName += ' ProjectFilterContainer-expanded';
+      } else {
+        subcategoryClassName += ' ProjectFilterContainer-collapsed';
+      }
+     return subcategoryClassName;
   }
 
 
@@ -54,15 +63,9 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     let groupedSubcats = _.groupBy(this.props.data, 'subcategory');
     let sortedKeys = Object.keys(groupedSubcats).sort(); //default sort is alphabetical, what we want
 
-    let subcategoryClassName = 'ProjectFilterContainer-subcategory';
-      if (!this.state.isExpanded) {
-        subcategoryClassName += ' ProjectFilterContainer-collapsed';
-      } else {
-        subcategoryClassName += ' ProjectFilterContainer-expanded';
-      }
     const displaySubcategories = sortedKeys.map(key =>
-          <div className={subcategoryClassName} key={key}>
-            <div className="ProjectFilterContainer-subcategory-header" id={key} onClick={this._handleChange}>
+          <div className={this._selectClassName(key)} key={key}>
+            <div className="ProjectFilterContainer-subcategory-header" id={key} onClick={(e) => this._handleChange(key, e)}>
               <span>{key}</span><span>{_.sumBy(groupedSubcats[key], 'num_times')}</span>
             </div>
             {this._renderFilterList(groupedSubcats[key])}
