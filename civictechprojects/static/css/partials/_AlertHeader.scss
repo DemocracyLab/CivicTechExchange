@@ -1,0 +1,28 @@
+.AlertHeader-root {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  background-color: $color-orange;
+  color: $color-text-light;
+  width: 100%;
+  line-height: 30px;
+}
+
+.AlertHeader-root div:last-child {
+  margin-left: auto;
+}
+
+.AlertHeader-text {
+  padding-left: 10px;
+}
+
+.AlertHeader-text p,i {
+  text-align: center;
+}
+
+.AlertHeader-close {
+  width: 30px;
+  padding-right: 10px;
+  cursor: pointer;
+}
+

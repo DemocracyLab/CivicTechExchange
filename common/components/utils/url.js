@@ -1,11 +1,13 @@
 // @flow
-import _ from 'lodash'
 import NavigationDispatcher from "../stores/NavigationDispatcher.js";
+import CurrentUser from "./CurrentUser.js";
+import Section from "../enums/Section.js";
+import _ from 'lodash'
 
 const regex = {
   protocol: new RegExp("^(f|ht)tps?://", "i"),
   argumentSplit: new RegExp("([^=]+)=(.*)")
-}
+};
 
 class urlHelper {
   static navigateToSection(section: string): void {
@@ -25,6 +27,12 @@ class urlHelper {
       );
     }
     return sectionUrl;
+  }
+  
+  static sectionOrLogIn(section: string): string {
+    return CurrentUser.isLoggedIn()
+      ? urlHelper.section(section)
+      : urlHelper.section(Section.LogIn, {"prev": section});
   }
   
   // Construct a url with properly-formatted query string for the given arguments
