@@ -19,7 +19,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     let cs = _.concat(c, s);
     //cs is now an array of each key we want to use for expand/collapse tracking
 
-    //make an object and push in each key set to false
+    //make an object and push in each key from cs, set all values to false
     const collector = {}
     for (var key in cs) {
       let val = cs[key]
@@ -33,6 +33,8 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
 
   //handle expand/collapse
   _handleChange(name, event) {
+    event.preventDefault();
+    event.stopPropagation();
     const value = this.state[name];
     this.setState({
       [name]: !value
@@ -53,10 +55,12 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     let categoryKey = this.props.category; //for the whole category's container element
     const displaySubcategories = sortedKeys.map(key =>
           <div className={this.state[key] ? 'ProjectFilterContainer-subcategory ProjectFilterContainer-expanded' : 'ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed'} key={key}>
-            <div className="ProjectFilterContainer-subcategory-header"  id={key} onClick={(e) => this._handleChange(categoryKey, e)}>
+            <div className="ProjectFilterContainer-subcategory-header"  id={key} onClick={(e) => this._handleChange(key, e)}>
               <span>{key}</span><span className="ProjectFilterContainer-showtext">{this.state[key] ? "show less" : _.sumBy(groupedSubcats[key], 'num_times')}</span>
             </div>
-            {this._renderFilterList(groupedSubcats[key])}
+            <div className="ProjectFilterContainer-content">
+              {this._renderFilterList(groupedSubcats[key])}
+            </div>
           </div>
         );
       return (
@@ -65,7 +69,9 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
             <span>{this._displayName(this.props.category)}</span>
             <span className="ProjectFilterContainer-showtext">{this.state[categoryKey] ? "show less" : "show more"}</span>
           </div>
-          {displaySubcategories}
+          <div className="ProjectFilterContainer-content">
+            {displaySubcategories}
+          </div>
         </div>
       )
   }
@@ -78,7 +84,9 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
             <span>{this._displayName(this.props.category)}</span>
             <span className="ProjectFilterContainer-showtext">{this.state[categoryKey] ? "show less" : "show more"}</span>
           </div>
-          {this._renderFilterList(this.props.data)}
+          <div className="ProjectFilterContainer-content">
+            {this._renderFilterList(this.props.data)}
+          </div>
         </div>
     );
   }
