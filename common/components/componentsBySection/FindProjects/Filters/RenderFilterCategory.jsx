@@ -50,28 +50,34 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     //group by subcategories, then sort and map just like parent component but for subcategories
     let groupedSubcats = _.groupBy(this.props.data, 'subcategory');
     let sortedKeys = Object.keys(groupedSubcats).sort(); //default sort is alphabetical, what we want
-
+    let categoryKey = this.props.category; //for the whole category's container element
     const displaySubcategories = sortedKeys.map(key =>
           <div className={this.state[key] ? 'ProjectFilterContainer-subcategory ProjectFilterContainer-expanded' : 'ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed'} key={key}>
-            <div className="ProjectFilterContainer-subcategory-header"  id={key} onClick={(e) => this._handleChange(key, e)}>
-              <span>{key}</span><span className="ProjectFilterContainer-showtext">{this.state[key] ? "Show less" : _.sumBy(groupedSubcats[key], 'num_times')}</span>
+            <div className="ProjectFilterContainer-subcategory-header"  id={key} onClick={(e) => this._handleChange(categoryKey, e)}>
+              <span>{key}</span><span className="ProjectFilterContainer-showtext">{this.state[key] ? "show less" : _.sumBy(groupedSubcats[key], 'num_times')}</span>
             </div>
             {this._renderFilterList(groupedSubcats[key])}
           </div>
         );
       return (
-        <div className="ProjectFilterContainer-category" key={this.props.category}>
-          <div className="ProjectFilterContainer-category-header" id={this.props.category} onClick={this._handleChange}>
-            {this._displayName(this.props.category)}</div>
+        <div className={this.state[categoryKey] ? 'ProjectFilterContainer-category ProjectFilterContainer-expanded' : 'ProjectFilterContainer-category ProjectFilterContainer-collapsed'} key={categoryKey}>
+          <div className="ProjectFilterContainer-category-header" id={this.props.category} onClick={(e) => this._handleChange(categoryKey, e)}>
+            <span>{this._displayName(this.props.category)}</span>
+            <span className="ProjectFilterContainer-showtext">{this.state[categoryKey] ? "show less" : "show more"}</span>
+          </div>
           {displaySubcategories}
         </div>
       )
   }
   _renderNoSubcategories() {
+    let categoryKey = this.props.category;
     //if a category has NO subcategories (hasSubcategories is false), render a single list
     return (
-        <div className="ProjectFilterContainer-category">
-          <h2 className="ProjectFilterContainer-category-header">{this._displayName(this.props.category)}</h2>
+        <div className={this.state[categoryKey] ? 'ProjectFilterContainer-category ProjectFilterContainer-expanded' : 'ProjectFilterContainer-category ProjectFilterContainer-collapsed'}>
+          <div className='ProjectFilterContainer-category-header' id={categoryKey} onClick={(e) => this._handleChange(categoryKey, e)}>
+            <span>{this._displayName(this.props.category)}</span>
+            <span className="ProjectFilterContainer-showtext">{this.state[categoryKey] ? "show less" : "show more"}</span>
+          </div>
           {this._renderFilterList(this.props.data)}
         </div>
     );
