@@ -14,8 +14,11 @@
 .SubHeader-root {
   display: flex;
   flex-direction: row;
-  background-color: $color-background-default;
+  position: fixed;
+  z-index: 99;
+  background-color: $color-background-light;
   height: $header-height;
+  width: 100%;
   padding: 0 5% 0 5%;
   margin-bottom: 5px;
 }
