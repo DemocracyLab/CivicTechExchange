@@ -164,6 +164,8 @@ APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMI
 
 FOOTER_LINKS = os.environ.get('FOOTER_LINKS', '')
 
+HEADER_ALERT = os.environ.get('HEADER_ALERT', '')
+
 PROJECT_DESCRIPTION_EXAMPLE_URL = os.environ.get('PROJECT_DESCRIPTION_EXAMPLE_URL', '')
 POSITION_DESCRIPTION_EXAMPLE_URL = os.environ.get('POSITION_DESCRIPTION_EXAMPLE_URL', '')
 
@@ -173,6 +175,10 @@ SECURE_SSL_REDIRECT = os.environ.get('DL_SECURE_SSL_REDIRECT', False) == 'True'
 HOTJAR_APPLICATION_ID = os.environ.get('HOTJAR_APPLICATION_ID', '')
 
 GOOGLE_PROPERTY_ID = os.environ.get('GOOGLE_PROPERTY_ID', '')
+
+STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
+
+# TODO: Call out missing required environment variables
 
 # TODO: Set to True in productions
 # SESSION_COOKIE_SECURE = True

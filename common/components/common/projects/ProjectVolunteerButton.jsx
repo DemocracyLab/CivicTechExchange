@@ -7,7 +7,9 @@ import CurrentUser from "../../utils/CurrentUser.js";
 import FeedbackModal from "../FeedbackModal.jsx";
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import Section from "../../enums/Section.js";
 import metrics from "../../utils/metrics.js";
+import url from "../../utils/url.js";
 import _ from 'lodash'
 
 type LeaveProjectParams = {|
@@ -158,7 +160,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
-        href={`/index/?section=LogIn&prev=${window.location.href.split('?section=')[1]}`}         
+        href={url.section(Section.LogIn, url.getPreviousPageArg())}
       >
         Sign in to Volunteer
       </Button>

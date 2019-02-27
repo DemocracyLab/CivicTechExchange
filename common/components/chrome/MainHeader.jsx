@@ -28,12 +28,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
 import {FooterLink} from "../utils/FooterLinks.js";
+import AlertHeader from "./AlertHeader.jsx";
 
 type State = {|
   +activeSection: SectionType,
   user: ?UserAPIData,
   dropdown: boolean,
   slider: boolean,
+  createProjectUrl: string
 |};
 
 class MainHeader extends React.Component<{||}, State > {
@@ -66,6 +68,7 @@ class MainHeader extends React.Component<{||}, State > {
       user: null,
       dropdown: false,
       slider: false,
+      createProjectUrl: url.sectionOrLogIn(Section.CreateProject)
     };
     this._toggleDropdown = this._toggleDropdown.bind(this);
     this._closeDropdown = this._closeDropdown.bind(this);
@@ -85,34 +88,32 @@ class MainHeader extends React.Component<{||}, State > {
   
   render(): React$Node {
     return (
-      <div className={this._cx.get('root')}>
-        <div className="SubHeader-logo-container" onClick={this._onHomeButtonClick}>
-          <img
-            className="SubHeader-logo"
-            src={cdn.image("dl_logo.png")}
-          />
-        </div>
-        {this._renderHamburgerSlider()}
-        <div className={this._cx.get('rightContent')}>
-          {this._renderSectionLinks()}
-          {this._renderHeaderLinks()}
-          {
-            CurrentUser.isLoggedIn() ?
-              this._renderAccountInfo() :
-              this._renderLogInButton()
-          }
-          {this._renderHeaderButtons()}
+      <div>
+        <AlertHeader/>
+        <div className={this._cx.get('root')}>
+          <a href={url.section(Section.FindProjects, {showSplash: 1})}>
+            <div className="SubHeader-logo-container">
+              <img
+                className="SubHeader-logo"
+                src={cdn.image("dl_logo.png")}
+              />
+            </div>
+          </a>
+          {this._renderHamburgerSlider()}
+          <div className={this._cx.get('rightContent')}>
+            {this._renderSectionLinks()}
+            {this._renderHeaderLinks()}
+            {
+              CurrentUser.isLoggedIn() ?
+                this._renderAccountInfo() :
+                this._renderLogInButton()
+            }
+            {this._renderCreateProjectButton()}
+            {this._renderHeaderButtons()}
+          </div>
         </div>
       </div>
     );
-  }
-  
-  _onHomeButtonClick(): void {
-    NavigationDispatcher.dispatch({
-      type: 'SET_SECTION',
-      section: Section.FindProjects,
-      url: url.section(Section.FindProjects)
-    });
   }
   
   _renderLogInButton(): void {
@@ -174,6 +175,7 @@ class MainHeader extends React.Component<{||}, State > {
   };
   
   _renderHamburgerSlider(): React$Node {
+    // TODO: Refactor into separate component
     return (
       <React.Fragment>
         <div className="SubHeader-hamburger" onClick={() => this._toggleSlider(true)}>
@@ -211,9 +213,16 @@ class MainHeader extends React.Component<{||}, State > {
                 </div>
                 
               }
-              <a href="" onClick={(e) => this.navigateToSection(e, 'FindProjects')}>
+              <a href={url.section(Section.FindProjects, {hideSplash: 1})}>
                 <div className={'SubHeader-drawerDiv'} >
                   Find Projects
+                </div>
+              </a>
+              <Divider />
+  
+              <a href={this.state.createProjectUrl}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Create Project
                 </div>
               </a>
               <Divider />
@@ -303,6 +312,19 @@ class MainHeader extends React.Component<{||}, State > {
     )
   }
   
+  _renderCreateProjectButton(): React$Node{
+    return (
+      <a key={this.state.createProjectUrl}
+        href={this.state.createProjectUrl}
+        className="SubHeader-donate-btn-container"
+      >
+        <button className="SubHeader-log-btns">
+          Create Project
+        </button>
+      </a>
+    );
+  }
+  
   _renderIcon(): React$Node {
     return (
       this.state.user && !_.isEmpty(this.state.user.user_thumbnail) ?
@@ -329,7 +351,7 @@ class MainHeader extends React.Component<{||}, State > {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: Section.LogIn,
-      url: url.section(Section.LogIn)
+      url: url.section(Section.LogIn, url.getPreviousPageArg())
     });
   }
 }

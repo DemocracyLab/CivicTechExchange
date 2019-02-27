@@ -23,11 +23,11 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
   }
 
   componentWillMount(): void {
-    let args: FindProjectsArgs = urls.arguments(document.location.search);
-    args = _.pick(args, ['keyword','sortField','location','issues','tech', 'role', 'org', 'stage']);
-    ProjectSearchDispatcher.dispatch({type: 'INIT', findProjectsArgs: !_.isEmpty(args) ? args : null});
+    const args = urls.arguments(document.location.search);
+    const searchArgs: FindProjectsArgs = _.pick(args, ['keyword','sortField','location','issues','tech', 'role', 'org', 'stage']);
+    ProjectSearchDispatcher.dispatch({type: 'INIT', findProjectsArgs: !_.isEmpty(searchArgs) ? searchArgs : null});
     TagDispatcher.dispatch({type: 'INIT'});
-    this.setState({showSplash: _.isEmpty(args)});
+    this.setState({showSplash: args.showSplash});
   }
 
   _onClickFindProjects(): void {
