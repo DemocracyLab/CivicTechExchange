@@ -203,7 +203,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                   </Grid>
               <div className="AboutProjects_tabs">
                 <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
-                {project && !_.isEmpty(project && project.project_positions) && <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#skills-needed">Skills Needed</a>}
+                {project && !_.isEmpty(project.project_positions) && <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#skills-needed">Skills Needed</a>}
               </div>
 
               </Grid>
@@ -212,11 +212,11 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <Grid className='AboutProjects-description-details'>
                 <div id='project-details'>{project.project_description}</div>
               <Grid className='AboutProjects-skills-container' container direction='row'>
-                {project && !_.isEmpty(project && project.project_positions) && <div className='AboutProjects-skills'>
+                {project && !_.isEmpty(project.project_positions) && <div className='AboutProjects-skills'>
                   <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
                   {project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.display_name}</p>)}
                 </div>}
-                {project && !_.isEmpty(project && project.project_technologies) && <div className='AboutProjects-technologies'>
+                {project && !_.isEmpty(project.project_technologies) && <div className='AboutProjects-technologies'>
                   <p className='AboutProjects-tech-title'>Technologies Used</p>
                   {project && project.project_technologies && project.project_technologies.map(tech => <p>{tech.display_name}</p>)}
                 </div>}
