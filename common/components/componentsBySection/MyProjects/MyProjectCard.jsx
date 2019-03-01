@@ -7,6 +7,7 @@ import {Button} from 'react-bootstrap';
 import {ProjectData} from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 
+//TODO: Update
 type Props = {|
   +project: ProjectData,
   +onProjectClickDelete: (ProjectData) => void,
@@ -20,7 +21,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
     this.state = {
-      isOwner: (props.project.ownerId === CurrentUser.userID())
+      isOwner: (props.project.isCoOwner || props.project.project_creator === CurrentUser.userID())
     };
   }
   
@@ -35,7 +36,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
                   Project Name
                 </tr>
                 <tr className="MyProjectCard-projectName">
-                  {this.props.project.name}
+                  {this.props.project.project_name}
                 </tr>
               </td>
               <td className="MyProjectCard-column">

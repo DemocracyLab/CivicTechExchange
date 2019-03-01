@@ -6,6 +6,7 @@ from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from common.helpers.form_helpers import is_json_field_empty
+from common.helpers.dictionaries import merge_dicts
 
 
 # Without the following two classes, the following error occurs:
@@ -110,6 +111,15 @@ class Project(models.Model):
 
         if len(thumbnail_files) > 0:
             project['project_thumbnail'] = thumbnail_files[0].to_json()
+
+        return project
+
+    def hydrate_to_list_json(self):
+        project = {
+            'project_id': self.id,
+            'project_name': self.project_name,
+            'project_creator': self.project_creator.id
+        }
 
         return project
 
@@ -402,6 +412,7 @@ class VolunteerRelation(models.Model):
     def to_json(self):
         volunteer = self.volunteer
 
+        # TODO: Add end date and application date
         volunteer_json = {
             'application_id': self.id,
             'user': volunteer.hydrate_to_tile_json(),
@@ -412,6 +423,11 @@ class VolunteerRelation(models.Model):
         }
 
         return volunteer_json
+
+    def hydrate_project_volunteer_info(self):
+        volunteer_json = self.to_json()
+        project_json = self.project.hydrate_to_list_json()
+        return merge_dicts(volunteer_json, project_json)
 
     def update_project_timestamp(self):
         self.project.save()
@@ -428,3 +444,5 @@ class VolunteerRelation(models.Model):
 
         relation.role.add(role)
         return relation
+
+

@@ -5,14 +5,25 @@ import CurrentUser from '../utils/CurrentUser.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import MyProjectCard from '../componentsBySection/MyProjects/MyProjectCard.jsx';
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx';
-import {ProjectAPIData} from "../utils/ProjectAPIUtils.js";
 import metrics from "../utils/metrics.js";
 import React from 'react';
 import _ from 'lodash';
 
+export type MyProjectData = {|
+  +project_id: number,
+  +project_name: string,
+  +project_creator: number,
+  +application_id: ?number,
+  +user: ?VolunteerUserData,
+  +application_text: ?string,
+  +roleTag: ?TagDefinition,
+  +isApproved: ?boolean,
+  +isCoOwner: ?boolean
+|};
+
 type MyProjectsAPIResponse = {|
-  owned_projects: $ReadOnlyArray<ProjectAPIData>,
-  volunteering_projects: $ReadOnlyArray<ProjectAPIData>
+  owned_projects: $ReadOnlyArray<MyProjectData>,
+  volunteering_projects: $ReadOnlyArray<MyProjectData>
 |};
 
 type State = {|
@@ -39,8 +50,8 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
       () => {
         const myProjectsApiResponse: MyProjectsAPIResponse = JSON.parse(xhr.response);
         this.setState({
-          ownedProjects: myProjectsApiResponse.owned_projects.map(ProjectAPIUtils.projectFromAPIData),
-          volunteeringProjects: myProjectsApiResponse.volunteering_projects.map(ProjectAPIUtils.projectFromAPIData)
+          ownedProjects: myProjectsApiResponse.owned_projects,
+          volunteeringProjects: myProjectsApiResponse.volunteering_projects
         });
       }
     );
