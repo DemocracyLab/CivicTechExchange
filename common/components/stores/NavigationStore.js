@@ -3,8 +3,8 @@
 import type {SectionType} from '../enums/Section.js';
 
 import {ReduceStore} from 'flux/utils';
-import NavigationDispatcher from './NavigationDispatcher.js';
-import {List, Record} from 'immutable'
+import UniversalDispatcher from './UniversalDispatcher.js';
+import {Record} from 'immutable'
 import Section from '../enums/Section.js';
 import url from "../utils/url.js";
 
@@ -27,7 +27,7 @@ class State extends Record(DEFAULT_STATE) {
 
 class NavigationStore extends ReduceStore<State> {
   constructor(): void {
-    super(NavigationDispatcher);
+    super(UniversalDispatcher);
   }
 
   getInitialState(): State {

@@ -1,6 +1,5 @@
 // @flow
 
-import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
 
 class FlashMessage extends React.PureComponent<{||}> {

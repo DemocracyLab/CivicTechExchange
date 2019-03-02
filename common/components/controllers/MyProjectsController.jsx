@@ -6,7 +6,7 @@ import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import MyProjectCard from '../componentsBySection/MyProjects/MyProjectCard.jsx';
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx';
 import MyProjectsStore,{MyProjectData, MyProjectsAPIResponse} from "../stores/MyProjectsStore.js";
-import MyProjectsDispatcher from "../stores/MyProjectsDispatcher.js";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import metrics from "../utils/metrics.js";
 import {Container} from 'flux/utils';
 import React from 'react';
@@ -43,7 +43,7 @@ class MyProjectsController extends React.Component<{||}, State> {
   }
   
   componentWillMount(): void {
-    MyProjectsDispatcher.dispatch({type: 'INIT'});
+    UniversalDispatcher.dispatch({type: 'INIT'});
   }
   
   clickDeleteProject(project: ProjectData): void {
