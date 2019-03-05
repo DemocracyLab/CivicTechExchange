@@ -2,6 +2,7 @@
 
 import React from 'react';
 import _ from 'lodash';
+import GlyphStyles from '../../../utils/glyphs.js'
 
 const categoryDisplayNames = {
   //TODO: move to global constants file
@@ -66,7 +67,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     const displaySubcategories = sortedKeys.map(key =>
           <div className={this.state[key] ? classSubcategoryExpanded : classSubcategoryCollapsed} key={key}>
             <div className="ProjectFilterContainer-subcategory-header"  id={key} onClick={(e) => this._handleChange(key, e)}>
-              <span>{key}</span><span className="ProjectFilterContainer-showtext">{this.state[key] ? "show less" : _.sumBy(groupedSubcats[key], 'num_times')}</span>
+              <span>{key}</span><span className="ProjectFilterContainer-showtext">{this.state[key] ? <i className={GlyphStyles.ChevronUp}></i> : <i className={GlyphStyles.ChevronDown}></i>}</span>
             </div>
             <div className="ProjectFilterContainer-content">
               {this._renderFilterList(groupedSubcats[key])}
@@ -77,7 +78,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
         <div className={this.state[categoryKey] ? classCategoryExpanded : classCategoryCollapsed} key={categoryKey}>
           <div className="ProjectFilterContainer-category-header" id={this.props.category} onClick={(e) => this._handleChange(categoryKey, e)}>
             <span>{this._displayName(this.props.category)}</span>
-            <span className="ProjectFilterContainer-showtext">{this.state[categoryKey] ? "show less" : "show more"}</span>
+            <span className="ProjectFilterContainer-showtext">{this.state[categoryKey] ? <i className={GlyphStyles.ChevronUp}></i> : <i className={GlyphStyles.ChevronDown}></i>}</span>
           </div>
           <div className="ProjectFilterContainer-content">
             {displaySubcategories}
@@ -92,7 +93,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
         <div className={this.state[categoryKey] ? classCategoryExpanded : classCategoryCollapsed}>
           <div className='ProjectFilterContainer-category-header' id={categoryKey} onClick={(e) => this._handleChange(categoryKey, e)}>
             <span>{this._displayName(this.props.category)}</span>
-            <span className="ProjectFilterContainer-showtext">{this.state[categoryKey] ? "show less" : "show more"}</span>
+            <span className="ProjectFilterContainer-showtext">{this.state[categoryKey] ? <i className={GlyphStyles.ChevronUp}></i> : <i className={GlyphStyles.ChevronDown}></i>}</span>
           </div>
           <div className="ProjectFilterContainer-content">
             {this._renderFilterList(this.props.data)}
