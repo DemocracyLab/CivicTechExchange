@@ -9,6 +9,13 @@ const categoryDisplayNames = {
   'Role': "Roles Needed",
 }
 
+//define CSS classes, keep it readable
+const classCategoryExpanded = 'ProjectFilterContainer-category ProjectFilterContainer-expanded';
+const classCategoryCollapsed = 'ProjectFilterContainer-category ProjectFilterContainer-collapsed';
+const classSubcategoryExpanded = 'ProjectFilterContainer-subcategory ProjectFilterContainer-expanded';
+const classSubcategoryCollapsed = 'ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed';
+
+
 class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
     super(props)
@@ -31,6 +38,8 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     this._handleChange = this._handleChange.bind(this);
   }
 
+
+
   //handle expand/collapse
   _handleChange(name, event) {
     event.preventDefault();
@@ -49,12 +58,13 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
 
   _renderWithSubcategories() {
     //if hasSubcategories is true, we need to group, sort, and render each subcategory much like categories are sorted and rendered in the parent component
+
     //group by subcategories, then sort and map just like parent component but for subcategories
     let groupedSubcats = _.groupBy(this.props.data, 'subcategory');
     let sortedKeys = Object.keys(groupedSubcats).sort(); //default sort is alphabetical, what we want
     let categoryKey = this.props.category; //for the whole category's container element
     const displaySubcategories = sortedKeys.map(key =>
-          <div className={this.state[key] ? 'ProjectFilterContainer-subcategory ProjectFilterContainer-expanded' : 'ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed'} key={key}>
+          <div className={this.state[key] ? classSubcategoryExpanded : classSubcategoryCollapsed} key={key}>
             <div className="ProjectFilterContainer-subcategory-header"  id={key} onClick={(e) => this._handleChange(key, e)}>
               <span>{key}</span><span className="ProjectFilterContainer-showtext">{this.state[key] ? "show less" : _.sumBy(groupedSubcats[key], 'num_times')}</span>
             </div>
@@ -64,7 +74,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
           </div>
         );
       return (
-        <div className={this.state[categoryKey] ? 'ProjectFilterContainer-category ProjectFilterContainer-expanded' : 'ProjectFilterContainer-category ProjectFilterContainer-collapsed'} key={categoryKey}>
+        <div className={this.state[categoryKey] ? classCategoryExpanded : classCategoryCollapsed} key={categoryKey}>
           <div className="ProjectFilterContainer-category-header" id={this.props.category} onClick={(e) => this._handleChange(categoryKey, e)}>
             <span>{this._displayName(this.props.category)}</span>
             <span className="ProjectFilterContainer-showtext">{this.state[categoryKey] ? "show less" : "show more"}</span>
@@ -79,7 +89,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     let categoryKey = this.props.category;
     //if a category has NO subcategories (hasSubcategories is false), render a single list
     return (
-        <div className={this.state[categoryKey] ? 'ProjectFilterContainer-category ProjectFilterContainer-expanded' : 'ProjectFilterContainer-category ProjectFilterContainer-collapsed'}>
+        <div className={this.state[categoryKey] ? classCategoryExpanded : classCategoryCollapsed}>
           <div className='ProjectFilterContainer-category-header' id={categoryKey} onClick={(e) => this._handleChange(categoryKey, e)}>
             <span>{this._displayName(this.props.category)}</span>
             <span className="ProjectFilterContainer-showtext">{this.state[categoryKey] ? "show less" : "show more"}</span>
