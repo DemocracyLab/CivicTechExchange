@@ -29,7 +29,6 @@ body {
 
 //use to clear -appearance settings, e.g. fix macOS/chrome bug with -webkit-appearance: button on react-bootstrap <Button href=""> components
 .clearAppearance {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
 }
