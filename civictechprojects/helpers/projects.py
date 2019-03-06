@@ -3,7 +3,7 @@ from common.helpers.dictionaries import merge_dicts
 from collections import Counter
 
 def projects_tag_counts():
-    projects = Project.objects.filter(is_searchable='True')
+    projects = Project.objects.filter(is_searchable=True)
     issues, technologies, stage, organization, positions = [], [], [], [], []
     if projects:
         for project in projects:
