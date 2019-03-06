@@ -183,7 +183,7 @@ class MainHeader extends React.Component<{||}, State > {
             <MenuIcon />
           </IconButton>
         </div>
-        <Drawer open={this.state.slider} onClose={() => this._toggleSlider(false)} styles={{overflow: 'hidden'}}>
+        <Drawer anchor="right" open={this.state.slider} onClose={() => this._toggleSlider(false)} styles={{overflow: 'hidden'}}>
           <div
             tabIndex={0}
             role="button"
