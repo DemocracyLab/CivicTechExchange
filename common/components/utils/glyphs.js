@@ -1,13 +1,14 @@
 // @flow
 
-const GlyphStyles: {[key: string]: string} = {
+export const GlyphStyles: {[key: string]: string} = {
+  Close: "fas fa-times",
   Delete: "far fa-trash-alt",
   Edit: "far fa-edit",
   Add: "fa fa-plus",
   Alert: "fa fa-bell",
-  MapMarker: "fas fa-map-marker-alt fa-fw",
+  MapMarker: "fas fa-map-marker-alt",
   Globe:"fas fa-globe-americas",
-  Clock: "fas fa-clock fa-fw",
+  Clock: "fas fa-clock",
   Search: "fa fa-search",
   Github: "fab fa-github",
   GeneralCode: "fas fa-code",

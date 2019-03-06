@@ -21,6 +21,9 @@ export DJANGO_DEBUG=True
 # Configure footer links
 export FOOTER_LINKS='[{"u":"https://connect.democracylab.org","n":"About"},{"u":"https://connect.democracylab.org/donatenow","n":"Donate", "isButton":"true"},{"u":"mailto:hello@democracylab.org","n":"Contact Us"}]'
 
+# Event Header
+export HEADER_ALERT="<p>You are invited to our upcoming event, St. Hat-trick's day!  Come with a team or join a new one on Saturday, March 16.  Be sure to RSVP on <a href='https://www.eventbrite.com/e/st-hack-tricks-day-tickets-54897293282'>Eventbrite</a>!</p>"
+
 # Configure project description example link
 export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/index/?section=AboutProject&id=1'
 

@@ -3,29 +3,13 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import Section from "../../enums/Section.js";
-import CurrentUser from "../../utils/CurrentUser.js";
-import urlHelper from "../../utils/url.js";
+import url from "../../utils/url.js";
 
 type Props = {|
   onClickFindProjects: () => void
 |};
 
-type State = {|
-  createProjectUrl: string
-|};
-
-class SplashScreen extends React.PureComponent<Props, State> {
-  constructor(): void {
-    super();
-  
-    const createProjectUrl: string = CurrentUser.isLoggedIn()
-      ? urlHelper.section(Section.CreateProject)
-      : urlHelper.section(Section.LogIn, {"prev": Section.CreateProject});
-    this.state = {
-      createProjectUrl: createProjectUrl
-    };
-  }
-  
+class SplashScreen extends React.PureComponent<Props> {
   _onClickFindProjects(): void {
     this.props.onClickFindProjects();
   }
@@ -42,7 +26,7 @@ class SplashScreen extends React.PureComponent<Props, State> {
             <Button className="SplashScreen-find-projects-btn" onClick={this._onClickFindProjects.bind(this)}>
               Find Civic-Tech Projects
             </Button>
-            <Button className="SplashScreen-create-project-btn" href={this.state.createProjectUrl}>
+            <Button className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.CreateProject)}>
               Create A Project
             </Button>
           </div>
