@@ -4,13 +4,13 @@ import React from 'react';
 import Section from '../../enums/Section.js';
 import url from '../../utils/url.js';
 import {Button} from 'react-bootstrap';
-import {ProjectData} from "../../utils/ProjectAPIUtils.js";
+import {MyProjectData} from "../../stores/MyProjectsStore.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 
 //TODO: Update
 type Props = {|
-  +project: ProjectData,
-  +onProjectClickDelete: (ProjectData) => void,
+  +project: MyProjectData,
+  +onProjectClickDelete: (MyProjectData) => void,
 |};
 
 type State = {|
@@ -62,7 +62,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
   }
   
   _renderButtons(): ?Array<React$Node>  {
-    const id = {'id':this.props.project.id};
+    const id = {'id':this.props.project.project_id};
     let buttons: ?Array<React$Node> = [
       <Button className="MyProjectCard-button" href={url.section(Section.AboutProject, id)} bsStyle="info">View</Button>
     ];
