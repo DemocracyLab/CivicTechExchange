@@ -120,6 +120,7 @@
     padding: 0px 0px 0px 15px;
         a {
           line-height: 1;
+          float:left;
           margin-bottom: 16px;
           padding-bottom: 2px;
           font-size: 24px;
@@ -305,6 +306,6 @@
     display: none;
   }
   .AboutProjects_tabs a {
-    display: block;
+    display: inline-block;
   }
 }
