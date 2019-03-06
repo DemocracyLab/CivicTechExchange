@@ -108,7 +108,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
       <li key={tag.category + '-' + tag.display_name} className="ProjectFilterContainer-list-item">
           <input type="checkbox" id={tag.category + '-' + tag.display_name} checked={this.props.checkEnabled(tag)} onChange={() => this.props.selectOption(tag)}></input>
           <label htmlFor={tag.category + '-' + tag.display_name}>
-            <span className="ProjectFilterContainer-list-item-name">{tag.display_name}</span> <span className="ProjectFilterContainer-list-item-count">{tag.num_times}</span>
+            <span className="ProjectFilterContainer-list-item-name">{tag.display_name}</span> <span className="ProjectFilterContainer-list-item-count">{this.props.checkEnabled(tag) ? <i className={GlyphStyles.Check}></i> : tag.num_times}</span>
           </label>
       </li>
     );

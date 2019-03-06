@@ -19,6 +19,7 @@
 .ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
   font-size: 16px;
   font-weight: bold;
+  padding: 8px 0;
 }
 .ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
   display: flex;
@@ -35,9 +36,7 @@
 
 
 .ProjectFilterContainer-filter-list li {
-  border: 1px solid $color-text-grey;
   color: $color-text-grey;
-  border-radius: 5px;
   margin-bottom: 12px;
 }
 .ProjectFilterContainer-filter-list label {
@@ -79,13 +78,13 @@
 }
 
 /*if subcategory is expanded */
-.ProjectFilterContainer-subcategory.ProjectFilterContainer-expanded {
-  border: 1px solid $color-orange;
+.ProjectFilterContainer-subcategory.ProjectFilterContainer-expanded ul {
+  border-left: 2px solid $color-text-grey;
 }
 
 /* if subcategory is collapsed */
-.ProjectFilterContainer-subcategory.ProjectFilterContainer-collapsed {
-  border: 1px solid $color-text-grey;
+.ProjectFilterContainer-subcategory.ProjectFilterContainer-collapsed ul {
+  border-left: none;
 }
 
 .ProjectFilterContainer-showtext {
