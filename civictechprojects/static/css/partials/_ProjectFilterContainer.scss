@@ -19,7 +19,7 @@
 .ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
   font-size: 16px;
   font-weight: bold;
-  padding: 8px 0;
+  padding: 12px 0;
 }
 .ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
   display: flex;
@@ -56,12 +56,10 @@
 .ProjectFilterContainer-filter-list input[type=checkbox] {
   display: none;
 }
-// .ProjectFilterContainer-reset {
-//   min-height: 41px;
-// }
 
-.ProjectFilterContainer-category {
-  padding: 8px 0;
+/* text offset from left edge */
+.ProjectFilterContainer-category-header {
+  padding-left: 5px;
 }
 
 /* border color needs to change based on expanded or collapsed state */
