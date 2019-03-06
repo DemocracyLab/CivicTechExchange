@@ -1,5 +1,5 @@
 // @flow
-import NavigationDispatcher from "../stores/NavigationDispatcher.js";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import CurrentUser from "./CurrentUser.js";
 import Section from "../enums/Section.js";
 import _ from 'lodash'
@@ -11,7 +11,7 @@ const regex = {
 
 class urlHelper {
   static navigateToSection(section: string): void {
-    NavigationDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: 'SET_SECTION',
       section: section,
       url: urlHelper.section(section)

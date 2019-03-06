@@ -156,9 +156,9 @@ def add_alert(request):
 def my_projects(request):
     owned_projects = Project.objects.filter(project_creator_id=request.user.id)
     contributor = get_request_contributor(request)
-    volunteering_projects = list(map(lambda volunteer_relation: volunteer_relation.project.hydrate_to_tile_json(), contributor.volunteer_relations.all()))
+    volunteering_projects = list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), contributor.volunteer_relations.all()))
     response = {
-        'owned_projects': [project.hydrate_to_tile_json() for project in owned_projects],
+        'owned_projects': [project.hydrate_to_list_json() for project in owned_projects],
         'volunteering_projects': volunteering_projects
     }
     return HttpResponse(json.dumps(response))

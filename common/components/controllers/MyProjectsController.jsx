@@ -5,23 +5,21 @@ import CurrentUser from '../utils/CurrentUser.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import MyProjectCard from '../componentsBySection/MyProjects/MyProjectCard.jsx';
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx';
-import {ProjectAPIData} from "../utils/ProjectAPIUtils.js";
+import MyProjectsStore,{MyProjectData, MyProjectsAPIResponse} from "../stores/MyProjectsStore.js";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import metrics from "../utils/metrics.js";
+import {Container} from 'flux/utils';
 import React from 'react';
 import _ from 'lodash';
 
-type MyProjectsAPIResponse = {|
-  owned_projects: $ReadOnlyArray<ProjectAPIData>,
-  volunteering_projects: $ReadOnlyArray<ProjectAPIData>
-|};
 
 type State = {|
-  ownedProjects: ?Array<ProjectData>,
-  volunteeringProjects: ?Array<ProjectData>,
+  ownedProjects: ?Array<MyProjectData>,
+  volunteeringProjects: ?Array<MyProjectData>,
   showConfirmDeleteModal: boolean
 |};
 
-class MyProjectsController extends React.PureComponent<{||}, State> {
+class MyProjectsController extends React.Component<{||}, State> {
 
   constructor(): void {
     super();
@@ -31,23 +29,23 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
       showConfirmDeleteModal: false
     };
   }
-
-  componentWillMount(): void {
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener(
-      'load',
-      () => {
-        const myProjectsApiResponse: MyProjectsAPIResponse = JSON.parse(xhr.response);
-        this.setState({
-          ownedProjects: myProjectsApiResponse.owned_projects.map(ProjectAPIUtils.projectFromAPIData),
-          volunteeringProjects: myProjectsApiResponse.volunteering_projects.map(ProjectAPIUtils.projectFromAPIData)
-        });
-      }
-    );
-    xhr.open('GET', '/api/my_projects');
-    xhr.send();
+  
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [MyProjectsStore];
   }
-
+  
+  static calculateState(prevState: State): State {
+    const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
+    return {
+      ownedProjects: myProjects && myProjects.owned_projects,
+      volunteeringProjects: myProjects && myProjects.volunteering_projects
+    };
+  }
+  
+  componentWillMount(): void {
+    UniversalDispatcher.dispatch({type: 'INIT'});
+  }
+  
   clickDeleteProject(project: ProjectData): void {
     this.setState({
       showConfirmDeleteModal: true,
@@ -94,6 +92,7 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
         </div>
       )
       : <p><a href="/login">Login</a> to see a list of your projects.</p>;
+      // TODO: Redirect to My Projects page after logging in
   }
   
   renderProjectCollection(title:string, projects: $ReadOnlyArray<ProjectData>): React$Node{
@@ -112,4 +111,4 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
   }
 }
 
-export default MyProjectsController;
+export default Container.create(MyProjectsController);
