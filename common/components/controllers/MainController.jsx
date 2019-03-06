@@ -35,7 +35,6 @@ class MainController extends React.Component<{||}> {
       <MainHeader key='main_header'/>,
       <FlashMessage key='flash_message'/>,
       <SectionController key='section_controller'/>,
-      <MainFooter/>
     ];
   }
 }
