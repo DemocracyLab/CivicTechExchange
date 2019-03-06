@@ -8,7 +8,6 @@ import cdn from "../utils/cdn.js";
 import cx from '../utils/cx';
 import CurrentUser from '../../components/utils/CurrentUser.js';
 import FooterLinks from "../utils/FooterLinks.js";
-import NavigationDispatcher from '../stores/NavigationDispatcher.js'
 import NavigationStore from '../stores/NavigationStore.js'
 import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import SectionLink from './SectionLink.jsx';
@@ -29,13 +28,17 @@ import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
 import {FooterLink} from "../utils/FooterLinks.js";
 import AlertHeader from "./AlertHeader.jsx";
+import MyProjectsStore, {MyProjectsAPIResponse} from "../stores/MyProjectsStore.js";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
+import _ from 'lodash'
 
 type State = {|
   +activeSection: SectionType,
   user: ?UserAPIData,
   dropdown: boolean,
   slider: boolean,
-  createProjectUrl: string
+  createProjectUrl: string,
+  showMyProjects: boolean
 |};
 
 class MainHeader extends React.Component<{||}, State > {
@@ -43,18 +46,20 @@ class MainHeader extends React.Component<{||}, State > {
   _cx: cx;
   
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [NavigationStore];
+    return [NavigationStore, MyProjectsStore];
   }
   
   static calculateState(prevState: State): State {
+    const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
     return {
       activeSection: NavigationStore.getSection(),
+      showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects))
     };
   }
   
   navigateToSection(e, section: string): void {
     this._closeDropdown(e);
-    NavigationDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: 'SET_SECTION',
       section: section,
       url: url.section(section)
@@ -68,6 +73,7 @@ class MainHeader extends React.Component<{||}, State > {
       user: null,
       dropdown: false,
       slider: false,
+      showMyProjects: false,
       createProjectUrl: url.sectionOrLogIn(Section.CreateProject)
     };
     this._toggleDropdown = this._toggleDropdown.bind(this);
@@ -77,6 +83,7 @@ class MainHeader extends React.Component<{||}, State > {
   }
   
   componentDidMount() {
+    UniversalDispatcher.dispatch({type: 'INIT'});
     UserAPIUtils.fetchUserDetails(window.DLAB_GLOBAL_CONTEXT.userID, this.loadUserDetails.bind(this));
   }
   
@@ -146,7 +153,7 @@ class MainHeader extends React.Component<{||}, State > {
                   <MenuList>
                     <p className="SubHeader-dropdown-name">{`${this.state.user.first_name} ${this.state.user.last_name}`}</p>
                     <MenuItem onClick={(e) => this.navigateToSection(e, 'EditProfile')}>My Profile</MenuItem>
-                    <MenuItem onClick={(e) => this.navigateToSection(e, 'MyProjects')}>My Projects</MenuItem>
+                    {this.state.showMyProjects && <MenuItem onClick={(e) => this.navigateToSection(e, 'MyProjects')}>My Projects</MenuItem>}
                   </MenuList>
                   <Divider />
                   <a href="/logout" onClick={this._closeDropdown}>
@@ -204,12 +211,17 @@ class MainHeader extends React.Component<{||}, State > {
                     </div>
                   </a>
                   <Divider />
-                  <a href="" onClick={(e) => this.navigateToSection(e, 'MyProjects')}>
-                    <div className={'SubHeader-drawerDiv'} >
-                      My Projects
-                    </div>
-                  </a>
-                  <Divider />
+                  
+                  {
+                    this.state.showMyProjects && [
+                    <a href="" onClick={(e) => this.navigateToSection(e, 'MyProjects')}>
+                      <div className={'SubHeader-drawerDiv'} >
+                        My Projects
+                      </div>
+                    </a>,
+                    <Divider />
+                    ]
+                  }
                 </div>
                 
               }
@@ -348,7 +360,7 @@ class MainHeader extends React.Component<{||}, State > {
   }
   
   _onLogInClick(): void {
-    NavigationDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: 'SET_SECTION',
       section: Section.LogIn,
       url: url.section(Section.LogIn, url.getPreviousPageArg())
