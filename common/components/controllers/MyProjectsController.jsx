@@ -1,6 +1,6 @@
 // @flow
 
-import {ProjectData} from "../utils/ProjectAPIUtils.js";
+// import {ProjectData} from "../utils/ProjectAPIUtils.js";
 import CurrentUser from '../utils/CurrentUser.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import MyProjectCard from '../componentsBySection/MyProjects/MyProjectCard.jsx';
@@ -9,6 +9,7 @@ import MyProjectsStore,{MyProjectData, MyProjectsAPIResponse} from "../stores/My
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import metrics from "../utils/metrics.js";
 import {Container} from 'flux/utils';
+import ProjectVolunteerRenewModal from "../common/projects/ProjectVolunteerRenewModal.jsx";
 import React from 'react';
 import _ from 'lodash';
 
@@ -16,7 +17,8 @@ import _ from 'lodash';
 type State = {|
   ownedProjects: ?Array<MyProjectData>,
   volunteeringProjects: ?Array<MyProjectData>,
-  showConfirmDeleteModal: boolean
+  showConfirmDeleteModal: boolean,
+  showRenewVolunteerModal: boolean
 |};
 
 class MyProjectsController extends React.Component<{||}, State> {
@@ -26,7 +28,8 @@ class MyProjectsController extends React.Component<{||}, State> {
     this.state = {
       ownedProjects: null,
       volunteeringProjects: null,
-      showConfirmDeleteModal: false
+      showConfirmDeleteModal: false,
+      showRenewVolunteerModal: false
     };
   }
   
@@ -46,10 +49,17 @@ class MyProjectsController extends React.Component<{||}, State> {
     UniversalDispatcher.dispatch({type: 'INIT'});
   }
   
-  clickDeleteProject(project: ProjectData): void {
+  clickDeleteProject(project: MyProjectData): void {
     this.setState({
       showConfirmDeleteModal: true,
       projectToDelete: project,
+    });
+  }
+  
+  clickRenewVolunteerWithProject(project: MyProjectData): void {
+    this.setState({
+      showRenewVolunteerModal: true,
+      applicationId: project.application_id
     });
   }
 
@@ -72,9 +82,15 @@ class MyProjectsController extends React.Component<{||}, State> {
         this.removeProjectFromList.bind(this)
         //TODO: handle errors
       );
-    };
+    }
     this.setState({
       showConfirmDeleteModal:false
+    });
+  }
+  
+  confirmVolunteerRenew(): void {
+    this.setState({
+      showRenewVolunteerModal: false
     });
   }
 
@@ -83,10 +99,18 @@ class MyProjectsController extends React.Component<{||}, State> {
       ? (
         <div className="MyProjectsController-root">
           
-          <ConfirmationModal showModal={this.state.showConfirmDeleteModal}
-          message="Are you sure you want to delete this project?"
-          onSelection={this.confirmDeleteProject.bind(this)}
+          <ConfirmationModal
+            showModal={this.state.showConfirmDeleteModal}
+            message="Are you sure you want to delete this project?"
+            onSelection={this.confirmDeleteProject.bind(this)}
           />
+  
+          <ProjectVolunteerRenewModal
+            showModal={this.state.showRenewVolunteerModal}
+            applicationId={this.state.applicationId}
+            handleClose={this.confirmVolunteerRenew.bind(this)}
+          />
+  
           {!_.isEmpty(this.state.ownedProjects) && this.renderProjectCollection("Owned Projects", this.state.ownedProjects)}
           {!_.isEmpty(this.state.volunteeringProjects) && this.renderProjectCollection("Volunteering With", this.state.volunteeringProjects)}
         </div>
@@ -95,7 +119,7 @@ class MyProjectsController extends React.Component<{||}, State> {
       // TODO: Redirect to My Projects page after logging in
   }
   
-  renderProjectCollection(title:string, projects: $ReadOnlyArray<ProjectData>): React$Node{
+  renderProjectCollection(title:string, projects: $ReadOnlyArray<MyProjectData>): React$Node{
     return (
       <div>
         <h3>{title}</h3>
@@ -104,6 +128,7 @@ class MyProjectsController extends React.Component<{||}, State> {
             key={project.name}
             project={project}
             onProjectClickDelete={this.clickDeleteProject.bind(this)}
+            onProjectClickRenew={this.clickRenewVolunteerWithProject.bind(this)}
           />;
         })}
       </div>

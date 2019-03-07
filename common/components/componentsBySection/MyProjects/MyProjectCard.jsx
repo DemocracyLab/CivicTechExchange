@@ -8,9 +8,12 @@ import {MyProjectData} from "../../stores/MyProjectsStore.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 
 //TODO: Update
+type MyProjectClickCallback = (MyProjectData) => void;
+
 type Props = {|
   +project: MyProjectData,
-  +onProjectClickDelete: (MyProjectData) => void,
+  +onProjectClickDelete: ?MyProjectClickCallback,
+  +onProjectClickRenew: ?MyProjectClickCallback
 |};
 
 type State = {|
@@ -72,6 +75,11 @@ class MyProjectCard extends React.PureComponent<Props, State> {
         [
             <Button className="MyProjectCard-button" href={url.section(Section.EditProject, id)} bsStyle="info">Edit</Button>,
             <Button className="MyProjectCard-button" bsStyle="danger" onClick={() => this.props.onProjectClickDelete(this.props.project)}>Delete</Button>
+        ]);
+    } else {
+      buttons = buttons.concat(
+        [
+          <Button className="MyProjectCard-button" bsStyle="warning" onClick={() => this.props.onProjectClickRenew(this.props.project)}>Renew</Button>,
         ]);
     }
     
