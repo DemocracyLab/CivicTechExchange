@@ -44,8 +44,20 @@ def tags(request):
         else:
             tags = list(queryset.values())
     else:
-        queryset = Tag.objects.all()
-        tags = list(queryset.values())
+        countoption = bool(strtobool(query_terms.get('getCounts')[0]))
+        if countoption == True:
+            queryset = Tag.objects.all()
+            activetagdict = projects_tag_counts()
+            querydict = {tag.tag_name:tag for tag in queryset}
+            resultdict = {}
+
+            for slug in querydict.keys():
+                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+            tags = list(resultdict.values())
+        else:
+            queryset = Tag.objects.all()
+            tags = list(queryset.values())
     return HttpResponse(
         json.dumps(
             tags
@@ -273,9 +285,9 @@ def presign_project_thumbnail_upload(request):
 
 def volunteer_operation_is_authorized(request, volunteer_relation):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project)
-    authorized_usernames = ([volunteer_relation.project.project_creator.username] 
+    authorized_usernames = ([volunteer_relation.project.project_creator.username]
         + list(map(lambda co: co.volunteer.username, list(filter(lambda v: v.is_co_owner, project_volunteers)))))
-    return request.user.username in authorized_usernames 
+    return request.user.username in authorized_usernames
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
