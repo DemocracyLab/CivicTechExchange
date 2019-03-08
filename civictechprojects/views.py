@@ -173,7 +173,7 @@ def my_projects(request):
         volunteering_projects = contributor.volunteer_relations.all()
         response = {
             'owned_projects': [project.hydrate_to_list_json() for project in owned_projects],
-            'volunteering_projects': volunteering_projects and list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), volunteering_projects))
+            'volunteering_projects': volunteering_projects.exists() and list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), volunteering_projects))
         }
     return HttpResponse(json.dumps(response))
 
