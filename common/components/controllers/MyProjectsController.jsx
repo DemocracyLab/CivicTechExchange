@@ -46,7 +46,7 @@ class MyProjectsController extends React.Component<{||}, State> {
     UniversalDispatcher.dispatch({type: 'INIT'});
   }
   
-  clickDeleteProject(project: ProjectData): void {
+  clickDeleteProject(project: MyProjectData): void {
     this.setState({
       showConfirmDeleteModal: true,
       projectToDelete: project,
@@ -54,7 +54,7 @@ class MyProjectsController extends React.Component<{||}, State> {
   }
 
   removeProjectFromList(): void {
-    metrics.logProjectDeleted(CurrentUser.userID(), this.state.projectToDelete.id);
+    metrics.logProjectDeleted(CurrentUser.userID(), this.state.projectToDelete.project_id);
     this.setState({
       ownedProjects: _.pull(this.state.ownedProjects, this.state.projectToDelete)
     });
@@ -63,7 +63,7 @@ class MyProjectsController extends React.Component<{||}, State> {
 
   confirmDeleteProject(confirmedDelete: boolean): void {
     if (confirmedDelete) {
-      const url = "/projects/delete/" + this.state.projectToDelete.id + "/";
+      const url = "/projects/delete/" + this.state.projectToDelete.project_id + "/";
       //TODO: this should be ProjectAPIUtils.delete, not post
       ProjectAPIUtils.post(
         url,
@@ -95,7 +95,7 @@ class MyProjectsController extends React.Component<{||}, State> {
       // TODO: Redirect to My Projects page after logging in
   }
   
-  renderProjectCollection(title:string, projects: $ReadOnlyArray<ProjectData>): React$Node{
+  renderProjectCollection(title:string, projects: $ReadOnlyArray<MyProjectData>): React$Node{
     return (
       <div>
         <h3>{title}</h3>
