@@ -347,12 +347,13 @@ def renew_volunteering_with_project(request, application_id):
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
-    if not user.email_verified:
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+
+    if not user.id == volunteer_relation.volunteer.id:
         return HttpResponse(status=403)
 
     body = json.loads(request.body)
     # message = body['message']
-    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     volunteer_relation.projected_end_date = body['projectedEndDate']
     volunteer_relation.save()
 
