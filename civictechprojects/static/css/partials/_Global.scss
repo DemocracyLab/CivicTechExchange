@@ -20,7 +20,7 @@ a.btn-theme:hover, a[type="button"].btn-theme:hover {
 }
 
 //use to clear specific button appearance settings, e.g. fix webkit-appearance problem on react-bootstrap <Button href=""> components
-button.clear-button-appearance, a.clear-button-appearance, a[type="button"].clear-button-apperance {
+button.clear-button-appearance, a.clear-button-appearance, a[type="button"].clear-button-appearance {
   -webkit-appearance: none;
   -moz-appearance: none;
 }
