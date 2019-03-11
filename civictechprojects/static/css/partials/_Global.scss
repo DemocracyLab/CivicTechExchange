@@ -6,29 +6,27 @@ body {
 .btn-theme {
   background-color: $color-orange;
   color: $color-text-light;
-
-  a[type="button"], a {
-    color: $color-text-light;
-    text-decoration: none;
-  }
+}
+.btn-theme a, .btn-theme a[type="button"] {
+  color: $color-text-light;
+  text-decoration: none;
 }
 .btn-theme:hover {
   background-color: $color-orange-darker;
   color: $color-text-light;
-
-  a[type="button"]:hover, a:hover {
-    color: $color-text-light;
-    text-decoration: underline;
-  }
 }
+a.btn-theme:hover, a[type="button"].btn-theme:hover {
+  text-decoration: none;
+}
+
+//use to clear specific button appearance settings, e.g. fix webkit-appearance problem on react-bootstrap <Button href=""> components
+button.clear-button-appearance, a.clear-button-appearance, a[type="button"].clear-button-apperance {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
 
 //these are "helper classes" with one declaration each
 .background-light {
   background-color: $color-background-light;
-}
-
-//use to clear -appearance settings, e.g. fix macOS/chrome bug with -webkit-appearance: button on react-bootstrap <Button href=""> components
-.clearAppearance {
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
 }

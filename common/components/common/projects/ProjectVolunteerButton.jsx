@@ -156,7 +156,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   _renderLinkToSignInButton(): React$Node {
     return (
       <Button
-        className="ProjectSearchBar-submit btn btn-theme clearAppearance"
+        className="ProjectSearchBar-submit btn btn-theme clear-button-appearance"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
