@@ -44,8 +44,20 @@ def tags(request):
         else:
             tags = list(queryset.values())
     else:
-        queryset = Tag.objects.all()
-        tags = list(queryset.values())
+        countoption = bool(strtobool(query_terms.get('getCounts')[0]))
+        if countoption == True:
+            queryset = Tag.objects.all()
+            activetagdict = projects_tag_counts()
+            querydict = {tag.tag_name:tag for tag in queryset}
+            resultdict = {}
+
+            for slug in querydict.keys():
+                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+            tags = list(resultdict.values())
+        else:
+            queryset = Tag.objects.all()
+            tags = list(queryset.values())
     return HttpResponse(
         json.dumps(
             tags
@@ -154,13 +166,15 @@ def add_alert(request):
 
 
 def my_projects(request):
-    owned_projects = Project.objects.filter(project_creator_id=request.user.id)
     contributor = get_request_contributor(request)
-    volunteering_projects = list(map(lambda volunteer_relation: volunteer_relation.project.hydrate_to_tile_json(), contributor.volunteer_relations.all()))
-    response = {
-        'owned_projects': [project.hydrate_to_tile_json() for project in owned_projects],
-        'volunteering_projects': volunteering_projects
-    }
+    response = {}
+    if contributor is not None:
+        owned_projects = Project.objects.filter(project_creator_id=contributor.id)
+        volunteering_projects = contributor.volunteer_relations.all()
+        response = {
+            'owned_projects': [project.hydrate_to_list_json() for project in owned_projects],
+            'volunteering_projects': volunteering_projects.exists() and list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), volunteering_projects))
+        }
     return HttpResponse(json.dumps(response))
 
 
@@ -273,9 +287,9 @@ def presign_project_thumbnail_upload(request):
 
 def volunteer_operation_is_authorized(request, volunteer_relation):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project)
-    authorized_usernames = ([volunteer_relation.project.project_creator.username] 
+    authorized_usernames = ([volunteer_relation.project.project_creator.username]
         + list(map(lambda co: co.volunteer.username, list(filter(lambda v: v.is_co_owner, project_volunteers)))))
-    return request.user.username in authorized_usernames 
+    return request.user.username in authorized_usernames
 
 
 # TODO: Pass csrf token in ajax call so we can check for it

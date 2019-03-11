@@ -136,7 +136,7 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
-
+  // fetch specific category of tags
   static fetchTagsByCategory(tagCategory: string, getCounts: boolean, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): Promise<$ReadOnlyArray<TagDefinition>> {
     return fetch(new Request('/api/tags?category=' + tagCategory + '&getCounts=' + getCounts || 'false')) //default to false if call doesn't pass a getCounts arg
       .then(response => response.json())
@@ -146,6 +146,17 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
+  // fetch all tags in one API request
+  static fetchAllTags(getCounts: boolean, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): Promise<$ReadOnlyArray<TagDefinition>> {
+    return fetch(new Request('/api/tags?getCounts=' + getCounts || 'false'))
+      .then(response => response.json())
+      .then(tags => callback(tags))
+      .catch(response => errCallback && errCallback({
+        errorCode: response.status,
+        errorMessage: JSON.stringify(response)
+      }));
+  }
+
 
   static post(url: string, body: {||},successCallback: (APIResponse) => void, errCallback: (APIError) => void) {
     const doError = (response) => errCallback && errCallback({

@@ -19,7 +19,10 @@ export const GlyphStyles: {[key: string]: string} = {
   GoogleDrive: "fab fa-google-drive",
   Folder: "far fa-folder",
   Tasks: "fas fa-tasks",
-  Meetup: "fab fa-meetup"
+  Meetup: "fab fa-meetup",
+  Check: "fas fa-check",
+  ChevronUp: "fas fa-chevron-up",
+  ChevronDown: "fas fa-chevron-down"
 };
 
 export const GlyphSizes: {[key: string]: string} = {
