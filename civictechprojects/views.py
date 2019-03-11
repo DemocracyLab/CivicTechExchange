@@ -363,6 +363,26 @@ def renew_volunteering_with_project(request, application_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
+def conclude_volunteering_with_project(request, application_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+
+    if not user.id == volunteer_relation.volunteer.id:
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    # message = body['message']
+    volunteer_relation.delete()
+
+    # TODO: Send email with message
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
 def accept_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     if volunteer_operation_is_authorized(request, volunteer_relation):

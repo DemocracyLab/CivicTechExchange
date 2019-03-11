@@ -1,6 +1,5 @@
 // @flow
 
-// import {ProjectData} from "../utils/ProjectAPIUtils.js";
 import CurrentUser from '../utils/CurrentUser.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import MyProjectCard from '../componentsBySection/MyProjects/MyProjectCard.jsx';
@@ -10,6 +9,7 @@ import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import metrics from "../utils/metrics.js";
 import {Container} from 'flux/utils';
 import ProjectVolunteerRenewModal from "../common/projects/ProjectVolunteerRenewModal.jsx";
+import ProjectVolunteerConcludeModal from "../common/projects/ProjectVolunteerConcludeModal.jsx";
 import React from 'react';
 import _ from 'lodash';
 
@@ -18,7 +18,8 @@ type State = {|
   ownedProjects: ?Array<MyProjectData>,
   volunteeringProjects: ?Array<MyProjectData>,
   showConfirmDeleteModal: boolean,
-  showRenewVolunteerModal: boolean
+  showRenewVolunteerModal: boolean,
+  showConcludeVolunteerModal: boolean
 |};
 
 class MyProjectsController extends React.Component<{||}, State> {
@@ -29,7 +30,8 @@ class MyProjectsController extends React.Component<{||}, State> {
       ownedProjects: null,
       volunteeringProjects: null,
       showConfirmDeleteModal: false,
-      showRenewVolunteerModal: false
+      showRenewVolunteerModal: false,
+      showConcludeVolunteerModal: false
     };
   }
   
@@ -59,6 +61,13 @@ class MyProjectsController extends React.Component<{||}, State> {
   clickRenewVolunteerWithProject(project: MyProjectData): void {
     this.setState({
       showRenewVolunteerModal: true,
+      applicationId: project.application_id
+    });
+  }
+  
+  clickConcludeVolunteerWithProject(project: MyProjectData): void {
+    this.setState({
+      showConcludeVolunteerModal: true,
       applicationId: project.application_id
     });
   }
@@ -93,6 +102,14 @@ class MyProjectsController extends React.Component<{||}, State> {
       showRenewVolunteerModal: false
     });
   }
+  
+  confirmVolunteerConclude(): void {
+    this.setState({
+      showConcludeVolunteerModal: false,
+      volunteeringProjects: this.state.volunteeringProjects.filter((project: MyProjectData) => this.state.applicationId !== project.application_id)
+    });
+    this.forceUpdate();
+  }
 
   render(): React$Node {
     return CurrentUser.isLoggedIn()
@@ -109,6 +126,12 @@ class MyProjectsController extends React.Component<{||}, State> {
             showModal={this.state.showRenewVolunteerModal}
             applicationId={this.state.applicationId}
             handleClose={this.confirmVolunteerRenew.bind(this)}
+          />
+  
+          <ProjectVolunteerConcludeModal
+            showModal={this.state.showConcludeVolunteerModal}
+            applicationId={this.state.applicationId}
+            handleClose={this.confirmVolunteerConclude.bind(this)}
           />
   
           {!_.isEmpty(this.state.ownedProjects) && this.renderProjectCollection("Owned Projects", this.state.ownedProjects)}
@@ -129,6 +152,7 @@ class MyProjectsController extends React.Component<{||}, State> {
             project={project}
             onProjectClickDelete={this.clickDeleteProject.bind(this)}
             onProjectClickRenew={this.clickRenewVolunteerWithProject.bind(this)}
+            onProjectClickConclude={this.clickConcludeVolunteerWithProject.bind(this)}
           />;
         })}
       </div>

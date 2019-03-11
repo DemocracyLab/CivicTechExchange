@@ -13,7 +13,8 @@ type MyProjectClickCallback = (MyProjectData) => void;
 type Props = {|
   +project: MyProjectData,
   +onProjectClickDelete: ?MyProjectClickCallback,
-  +onProjectClickRenew: ?MyProjectClickCallback
+  +onProjectClickRenew: ?MyProjectClickCallback,
+  +onProjectClickConclude: ?MyProjectClickCallback
 |};
 
 type State = {|
@@ -66,6 +67,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
   
   _renderButtons(): ?Array<React$Node>  {
     const id = {'id':this.props.project.project_id};
+    // TODO: Reorder buttons according to re-engagement spec
     let buttons: ?Array<React$Node> = [
       <Button className="MyProjectCard-button" href={url.section(Section.AboutProject, id)} bsStyle="info">View</Button>
     ];
@@ -80,6 +82,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
       buttons = buttons.concat(
         [
           <Button className="MyProjectCard-button" bsStyle="warning" onClick={() => this.props.onProjectClickRenew(this.props.project)}>Renew</Button>,
+          <Button className="MyProjectCard-button" bsStyle="danger" onClick={() => this.props.onProjectClickConclude(this.props.project)}>Conclude</Button>,
         ]);
     }
     
