@@ -1,10 +1,8 @@
 // @flow
 
-import ProjectTagContainer from './ProjectTagContainer.jsx';
-import ProjectSearchBar from './ProjectSearchBar.jsx';
+import SearchSortOptions from './Filters/SearchSortOptions.jsx';
+import ResetSearchButton from './ResetSearchButton.jsx';
 import AlertSignupModal from "./AlertSignupModal.jsx";
-import GlyphStyles from "../../utils/glyphs.js";
-import {Button} from 'react-bootstrap';
 import metrics from "../../utils/metrics.js";
 import React from 'react';
 
@@ -36,19 +34,13 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="row">
-        <AlertSignupModal
-          searchFilters={this.state.searchFilters}
-          showModal={this.state.showAlertSignupModal}
-          handleClose={this.handleCloseAlertSignup.bind(this)}
-        />
-        <Button className="alert-signup" onClick={this.openAlertSignup.bind(this)}>
-          <i className={GlyphStyles.Alert} aria-hidden="true"></i>
-          Sign Up for Alerts
-        </Button>
-
-        <ProjectSearchBar />
-        <ProjectTagContainer />
+      <div className="ProjectSearchContainer-root row">
+        <div className="ProjectSearchContainer-reset col-12 col-md-3 col-xxl-2">
+          <ResetSearchButton />
+        </div>
+        <div className="ProjectSearchContainer-search col-12 col-md-9 col-xxl-10">
+          <SearchSortOptions />
+        </div>
       </div>
     );
   }
