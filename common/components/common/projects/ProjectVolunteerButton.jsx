@@ -41,7 +41,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
     this.handleShowJoinModal = this.handleShowJoinModal.bind(this);
     this.handleShowLeaveModal = this.handleShowLeaveModal.bind(this);
   }
-  
+
   getButtonDisplaySetup(props: Props): State {
     // TODO: Don't show button for user who is already volunteering
     const project = props.project;
@@ -61,25 +61,25 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
     } else if(!project.project_claimed) {
       newState.buttonDisabled = true;
       newState.buttonTitle = "This project has not yet been claimed by its owner";
-    } 
-    
+    }
+
     return newState;
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState(this.getButtonDisplaySetup(nextProps));
   }
-  
+
   handleShowJoinModal() {
     metrics.logVolunteerClickVolunteerButton(CurrentUser.userID(), this.props.project.project_id);
     this.props.onVolunteerClick();
   }
-  
+
   handleShowLeaveModal() {
     metrics.logVolunteerClickLeaveButton(CurrentUser.userID(), this.props.project.project_id);
     this.setState({ showLeaveProjectModal: true });
   }
-  
+
   confirmLeaveProject(confirmLeaving: boolean, departureMessage: string):void {
     if(confirmLeaving) {
       const params: LeaveProjectParams = {departure_message: departureMessage};
@@ -111,7 +111,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
                 onConfirm={this.confirmLeaveProject.bind(this)}
               />
             </div>
-          );       
+          );
         } else {
           return null;
         }
@@ -126,7 +126,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       return null;
     }
   }
-  
+
   _renderVolunteerButton(): React$Node {
     return this.state.isAlreadyVolunteering
       ? (
@@ -156,7 +156,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   _renderLinkToSignInButton(): React$Node {
     return (
       <Button
-        className="ProjectSearchBar-submit btn btn-theme"
+        className="ProjectSearchBar-submit btn btn-theme clear-button-appearance"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
