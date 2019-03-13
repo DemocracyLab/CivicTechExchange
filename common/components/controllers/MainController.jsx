@@ -2,7 +2,7 @@
 
 import SectionController from './SectionController.jsx';
 import MainHeader from '../chrome/MainHeader.jsx';
-import NavigationDispatcher from '../stores/NavigationDispatcher.js';
+import UniversalDispatcher from '../stores/UniversalDispatcher.js';
 import React from 'react';
 import FlashMessage from '../chrome/FlashMessage.jsx';
 import url from '../../components/utils/url.js'
@@ -21,7 +21,7 @@ class MainController extends React.Component<{||}> {
   loadPage(): void {
     const args = url.arguments(window.location.href);
     if (args.section) {
-      NavigationDispatcher.dispatch({
+      UniversalDispatcher.dispatch({
         type: 'SET_SECTION',
         section: args.section,
         url: window.location.href,

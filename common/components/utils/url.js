@@ -1,5 +1,5 @@
 // @flow
-import NavigationDispatcher from "../stores/NavigationDispatcher.js";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import CurrentUser from "./CurrentUser.js";
 import Section from "../enums/Section.js";
 import _ from 'lodash'
@@ -11,7 +11,7 @@ const regex = {
 
 class urlHelper {
   static navigateToSection(section: string): void {
-    NavigationDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: 'SET_SECTION',
       section: section,
       url: urlHelper.section(section)
@@ -19,7 +19,7 @@ class urlHelper {
   }
   
   static section(section: string, args: ?Object): string {
-    var sectionUrl = "?section=" + section;
+    let sectionUrl = "?section=" + section;
     if(args) {
       sectionUrl += _.reduce(args, function(argsString, value, key) {
           return `${argsString}&${key}=${value}`;
@@ -50,10 +50,10 @@ class urlHelper {
     // Take argument section of url and split args into substrings
     const argStart = url.indexOf("?");
     if(argStart > -1) {
-      var args = url.slice(argStart + 1).split("&");
+      let args = url.slice(argStart + 1).split("&");
       // Pull the key and value out of each arg substring into array pairs of [key,value]
-      var argMatches = args.map(arg => regex.argumentSplit.exec(arg));
-      var argPairs = argMatches.map(argMatch => [argMatch[1], argMatch[2]]);
+      let argMatches = args.map(arg => regex.argumentSplit.exec(arg));
+      let argPairs = argMatches.map(argMatch => [argMatch[1], argMatch[2]]);
       // Construct object from array pairs
       return _.fromPairs(argPairs);
     } else {
@@ -62,7 +62,10 @@ class urlHelper {
   }
   
   static getPreviousPageArg(): { [key: string]: string } {
-    return {prev : window.location.href.split('?section=')[1]};
+    const url: string = window.location.href;
+    // If prev arg already exists, use that
+    const existingPrevSection: string = url.split('&prev=');
+    return existingPrevSection.length > 1 ? {prev: existingPrevSection[1]} : {prev : url.split('?section=')[1]};
   }
   
   static appendHttpIfMissingProtocol(url: string): string {

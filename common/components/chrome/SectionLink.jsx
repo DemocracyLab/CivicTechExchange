@@ -3,7 +3,7 @@
 import type {SectionType} from '../enums/Section.js';
 
 import cx from '../utils/cx';
-import NavigationDispatcher from '../stores/NavigationDispatcher.js';
+import UniversalDispatcher from '../stores/UniversalDispatcher.js';
 import React from 'react';
 import url from '../utils/url.js';
 import metrics from "../utils/metrics.js";
@@ -42,7 +42,7 @@ class SectionLink extends React.PureComponent<Props> {
   }
 
   _onChangeSection(): void {
-    NavigationDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: 'SET_SECTION',
       section: this.props.section,
       url: url.section(this.props.section)

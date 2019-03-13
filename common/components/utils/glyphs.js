@@ -6,9 +6,9 @@ export const GlyphStyles: {[key: string]: string} = {
   Edit: "far fa-edit",
   Add: "fa fa-plus",
   Alert: "fa fa-bell",
-  MapMarker: "fas fa-map-marker-alt fa-fw",
+  MapMarker: "fas fa-map-marker-alt",
   Globe:"fas fa-globe-americas",
-  Clock: "fas fa-clock fa-fw",
+  Clock: "fas fa-clock",
   Search: "fa fa-search",
   Github: "fab fa-github",
   GeneralCode: "fas fa-code",
@@ -19,7 +19,10 @@ export const GlyphStyles: {[key: string]: string} = {
   GoogleDrive: "fab fa-google-drive",
   Folder: "far fa-folder",
   Tasks: "fas fa-tasks",
-  Meetup: "fab fa-meetup"
+  Meetup: "fab fa-meetup",
+  Check: "fas fa-check",
+  ChevronUp: "fas fa-chevron-up",
+  ChevronDown: "fas fa-chevron-down"
 };
 
 export const GlyphSizes: {[key: string]: string} = {

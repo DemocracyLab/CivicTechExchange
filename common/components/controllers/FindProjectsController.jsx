@@ -4,7 +4,7 @@ import ProjectSearchDispatcher from '../stores/ProjectSearchDispatcher.js';
 import TagDispatcher from '../stores/TagDispatcher.js';
 import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
 import ProjectSearchContainer from '../componentsBySection/FindProjects/ProjectSearchContainer.jsx';
-import ProjectFilterContainer from '../componentsBySection/FindProjects/ProjectFilterContainer.jsx';
+import ProjectFilterContainer from '../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx';
 import {FindProjectsArgs} from "../stores/ProjectSearchStore.js";
 import SplashScreen from "../componentsBySection/FindProjects/SplashScreen.jsx";
 import Headers from "../common/Headers.jsx";
@@ -21,7 +21,7 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
     super();
     this.state = {showSplash: true};
   }
-  
+
   componentWillMount(): void {
     const args = urls.arguments(document.location.search);
     const searchArgs: FindProjectsArgs = _.pick(args, ['keyword','sortField','location','issues','tech', 'role', 'org', 'stage']);
@@ -29,7 +29,7 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
     TagDispatcher.dispatch({type: 'INIT'});
     this.setState({showSplash: args.showSplash});
   }
-  
+
   _onClickFindProjects(): void {
     this.setState({showSplash: false});
   }

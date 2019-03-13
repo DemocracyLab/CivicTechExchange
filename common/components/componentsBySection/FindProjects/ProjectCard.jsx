@@ -13,9 +13,10 @@ import GlyphStyles from "../../utils/glyphs.js";
 type Props = {|
   +project: Project,
 |};
+//fontawesome fixed width class
+const glyphFixedWidth = ' fa-fw'
 
 class ProjectCard extends React.PureComponent<Props> {
-
   _cx: cx;
 
   constructor(): void {
@@ -87,19 +88,19 @@ class ProjectCard extends React.PureComponent<Props> {
         <ul>
         {this.props.project.location &&
           <li>
-            <i className={GlyphStyles.MapMarker}></i>
+            <i className={GlyphStyles.MapMarker + glyphFixedWidth}></i>
             {this.props.project.location}
           </li>
         }
         {this.props.project.url &&
           <li>
-            <i className={GlyphStyles.Globe}></i>
+            <i className={GlyphStyles.Globe + glyphFixedWidth}></i>
             {urlHelper.beautify(this.props.project.url)}
           </li>
         }
         {this.props.project.date_modified &&
           <li>
-            <i className={GlyphStyles.Clock}></i>
+            <i className={GlyphStyles.Clock + glyphFixedWidth}></i>
             <Moment fromNow>{this.props.project.date_modified}</Moment>
           </li>
         }
