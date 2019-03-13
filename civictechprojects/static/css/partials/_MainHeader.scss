@@ -58,6 +58,7 @@
 .MainHeader {
   position: fixed;
   z-index: 99;
+  width: 100%;
 }
 
 @include media-breakpoint-up(sm) {
