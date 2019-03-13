@@ -104,7 +104,10 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
     send_to_project_owners(project=project, sender=user, subject=email_subject, body=email_body)
 
 
-def send_email(email_msg, email_acct=None):
+def send_email(email_msg, email_acct=None, is_html=False):
+    if is_html:
+        email_msg.content_subtype = "html"
+
     if not settings.FAKE_EMAILS:
         email_msg.connection = email_acct['connection'] if email_acct is not None else settings.EMAIL_SUPPORT_ACCT['connection']
         email_msg.send()
