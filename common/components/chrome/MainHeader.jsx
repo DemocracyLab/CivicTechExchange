@@ -95,7 +95,7 @@ class MainHeader extends React.Component<{||}, State > {
   
   render(): React$Node {
     return (
-      <div>
+      <div className='MainHeader'>
         <AlertHeader/>
         <div className={this._cx.get('root')}>
           <a href={url.section(Section.FindProjects, {showSplash: 1})}>

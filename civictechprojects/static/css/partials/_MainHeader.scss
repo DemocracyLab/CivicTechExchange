@@ -55,6 +55,11 @@
   margin-bottom: 25px;
 }
 
+.MainHeader {
+  position: fixed;
+  z-index: 99;
+}
+
 @include media-breakpoint-up(sm) {
   .MainHeader-dropdownButton {
     display: block;
