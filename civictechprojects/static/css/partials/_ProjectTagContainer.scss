@@ -8,18 +8,4 @@
   padding: 25px 50px 15px 25px;
 }
 
-/*if the reset search button is used elsewhere, split this out of ProjectTagContainer.css */
-button.ResetSearch {
-  background-color: $color-green;
-  border: 0;
-  border-radius: 5px;
-  color: $color-text-light;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 14px;
-  float: right;
-  padding: 10px 30px;
-}
-button.ResetSearch:disabled {
-  background-color: $color-grey-disabled;
-}
+//todo: Verify this can be deleted

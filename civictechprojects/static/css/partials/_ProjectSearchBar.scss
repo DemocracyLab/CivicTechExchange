@@ -2,11 +2,15 @@
 .ProjectSearchBar-root {
   background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
-  height: 64px;
+  height: 40px;
+  width: 100%;
+  display: flex;
 }
 
 .ProjectSearchBar-root > i {
   margin-left: 10px;
+  margin-top: 6px;
+  flex-grow: 0;
 }
 
 .ProjectSearchBar-input {
@@ -14,30 +18,6 @@
   font-size: 14px;
   outline-width: 0;
   margin-left: 10px;
-  margin-top: 24px;
-}
-
-.ProjectSearchBar-submit {
-  background-color: $color-green;
-  border: 0;
-  border-radius: 5px;
-  color: $color-text-light;
-  cursor: pointer;
-  float: right;
-  font-size: 14px;
-  padding: 8px 4px 8px 4px;
-  margin-right: 0px;
-  margin-top: 16px;
-}
-
-button.ProjectSearchBar-submit:disabled {
-  background-color: $color-grey-disabled;
-  color: $color-text-light;
-}
-
-@include media-breakpoint-up(sm) {
-  .ProjectSearchBar-submit {
-    padding: 8px 31px 10px 32px;
-    margin-right: 34px;
-  }
+  height: 100%;
+  flex-grow: 1;
 }
