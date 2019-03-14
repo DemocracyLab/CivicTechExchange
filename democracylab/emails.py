@@ -42,12 +42,12 @@ class HtmlEmailTemplate:
     def button(self, url, text):
         return self.add(EmailSection.Button, {'url': url, 'text': text})
 
-    def render(self, email_msg, context):
+    def render(self, email_msg, context=None):
         if self.hydrated_template is None:
             sections_text = ''.join(self.sections)
             self.hydrated_template = Template(HtmlEmailTemplate.base_template.render({"content": sections_text}))
         email_msg.content_subtype = "html"
-        email_msg.body = unescape(self.hydrated_template.render(Context(context)))
+        email_msg.body = unescape(self.hydrated_template.render(Context(context or {})))
         return email_msg
 
 
@@ -57,12 +57,16 @@ def send_verification_email(contributor):
     verification_token = default_token_generator.make_token(user)
     verification_url = settings.PROTOCOL_DOMAIN + '/verify_user/' + str(contributor.id) + '/' + verification_token
     # Send email with token
+    email_template = HtmlEmailTemplate()\
+        .header('Welcome to DemocracyLab')\
+        .paragraph('Please click here to confirm your email address')\
+        .button(url=verification_url, text='Confirm Email Address')
     email_msg = EmailMessage(
-        'Welcome to DemocracyLab',
-        'Click here to confirm your email address (or paste into your browser): ' + verification_url,
-        _get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
-        [contributor.email]
+        subject='Welcome to DemocracyLab',
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=[contributor.email]
     )
+    email_msg = email_template.render(email_msg)
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
