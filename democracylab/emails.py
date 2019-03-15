@@ -47,6 +47,8 @@ class HtmlEmailTemplate:
             sections_text = ''.join(self.sections)
             self.hydrated_template = Template(HtmlEmailTemplate.base_template.render({"content": sections_text}))
         email_msg.content_subtype = "html"
+        # For some reason xml markup characters in the template (<,>) get converted to entity codes (&lt; and &rt;)
+        # We unescape to convert the markup characters back
         email_msg.body = unescape(self.hydrated_template.render(Context(context or {})))
         return email_msg
 
