@@ -24,11 +24,12 @@ class SignedUpController extends React.Component<Props, State> {
         </div>
         <div className="LogInController-greeting">
           <h3>Check your email</h3>
-          <p>We've sent a message to {CurrentUser.email()}</p>
-          <p>with a link to verify your account.</p>
-          <br></br>
-          <p>Didn't get an email?</p>
-          <a href="/verify_user">Resend verification email</a>
+          <p>We've sent a message to {CurrentUser.email()} <br/> with a link to verify your account.</p>
+          <p>
+            Didn't get an email?
+            <br/>
+            <a href="/verify_user">Resend verification email</a>
+          </p>
         </div>
       </div>
     );
