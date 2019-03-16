@@ -65,3 +65,11 @@
   height: 60px;
   display: inline-block;
 }
+
+
+@include media-breakpoint-up(md) {
+  // This is where width of the screen > 768 px
+  .LogInController-greeting {
+    border: red solid 2px;
+  }
+}
