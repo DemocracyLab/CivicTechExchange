@@ -140,7 +140,10 @@ def send_verification_email_request(request):
     user = get_request_contributor(request)
     if not user.email_verified:
         send_verification_email(user)
-        return HttpResponse(status=200)
+        if request.method == 'GET':
+            return redirect('/index/?section=SignedUp&email=' + user.email)
+        else:
+            return HttpResponse(status=200)
     else:
         # If user's email was already confirmed
         return HttpResponse(status=403)
