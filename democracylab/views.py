@@ -45,7 +45,7 @@ def signup(request):
             user = authenticate(username=email, password=raw_password)
             login(request, user)
             send_verification_email(contributor)
-            return redirect('/')
+            return redirect('/index/?section=SignedUp')
         else:
             errors = json.loads(form.errors.as_json())
 
@@ -73,7 +73,7 @@ def verify_user(request, user_id, token):
         contributor = Contributor.objects.get(id=user_id)
         contributor.email_verified = True
         contributor.save()
-        return redirect('/')
+        return redirect('/index/?section=EmailVerified')
     else:
         return HttpResponse(status=401)
 
