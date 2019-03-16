@@ -1,0 +1,32 @@
+.EmailVerifiedController-root {
+    font-weight: 300;
+    width: 90%;
+    max-width: 800px;
+    margin: 168px auto;
+    padding: 58px 5%;
+    text-align: center;
+}
+
+.EmailVerified-find-projects-btn {
+    border: 1px solid $color-orange;
+    color: $color-text-light;
+    background-color: $color-orange;
+    border-radius: 5px;
+    padding: 6px 12px;
+    margin-bottom: 10px;
+    transition: 300ms;
+    cursor: pointer;
+    min-width: 80px;
+  }
+
+.EmailVerifiedController-logo {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1em;
+}
+
+.EmailVerifiedController-subhead {
+    margin: 1em auto;
+    width: 50%;
+}
