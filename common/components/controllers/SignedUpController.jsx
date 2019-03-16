@@ -17,6 +17,7 @@ class SignedUpController extends React.Component<Props, State> {
   render(): React$Node {
     return (
       <div className="LogInController-root">
+        <img src="/static/images/projectPlaceholder.png" />
         <div className="LogInController-greeting">
           <h3>Check your email</h3>
           <p>We've sent a message to ...@gmail.com</p>
