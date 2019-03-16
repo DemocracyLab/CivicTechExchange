@@ -18,7 +18,12 @@ class SignedUpController extends React.Component<Props, State> {
     return (
       <div className="LogInController-root">
         <div className="LogInController-greeting">
-          You have signed up!  Check your email.
+          <h3>Check your email</h3>
+          <p>We've sent a message to ...@gmail.com</p>
+          <p>with a link to verify your account.</p>
+          <br></br>
+          <p>Didn't get an email?</p>
+          <p>Resend verification email</p>
         </div>
       </div>
     );
