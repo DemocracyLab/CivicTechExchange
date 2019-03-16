@@ -56,10 +56,12 @@
 
 .LogInController-logo {
   width: 70px;
+  float: left;
 }
 
 .LogInController-logo img {
   border-radius: 50%;
   width: 60px;
   height: 60px;
+  display: inline-block;
 }
