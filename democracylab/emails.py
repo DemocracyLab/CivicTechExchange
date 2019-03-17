@@ -80,7 +80,6 @@ def send_password_reset_email(contributor):
         'token': default_token_generator.make_token(user)
     }
     reset_url = section_url(FrontEndSection.ChangePassword, reset_parameters)
-    print(reset_url)
     # Send email with token
     email_msg = EmailMessage(
         subject='DemocracyLab Password Reset',
