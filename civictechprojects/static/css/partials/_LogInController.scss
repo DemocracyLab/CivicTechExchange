@@ -55,7 +55,9 @@
 }
 
 .LogInController-logo {
-  width: 70px;
+  width: 450px;
+  padding-left: 170px;
+  padding-bottom: 20px;
   float: left;
 }
 
@@ -69,7 +71,9 @@
 
 @include media-breakpoint-up(md) {
   // This is where width of the screen > 768 px
-  .LogInController-greeting {
-    border: red solid 2px;
+  .LogInController-logo {
+    width: 70px;
+    padding-left: 10px;
+    padding-bottom: 0px;
   }
 }
