@@ -7,14 +7,14 @@ import moment from 'moment';
 import _ from 'lodash'
 
 type AlertShownStats = {|
-  lastShown: ?Date
+  lastHidden: number /* Time since alert was last hidden in Milliseconds */
 |};
 
 type AlertConfiguration = {|
-  name: string,
-  waitTimeBeforeShowAgain: string, /*ISO 8601 duration string*/
-  shouldShowAlert: () => boolean,
-  getAlertBody: () => React$Node
+  name: string, /* Identifier for tracking AlertShownStats in session storage */
+  waitTimeBeforeShowAgain: string, /* ISO 8601 duration string */
+  shouldShowAlert: () => boolean, /* Whether to show alert */
+  getAlertBody: () => React$Node /* Alert HTML body */
 |};
 
 type Props = {|
@@ -47,7 +47,7 @@ class AlertHeader extends React.PureComponent<Props, State> {
         },
         getAlertBody: this._renderEmailNotVerifiedAlert.bind(this)
       }, {
-        name: "event",
+        name: "eventAlert",
         waitTimeBeforeShowAgain: "P1D" /* 1 day */,
         shouldShowAlert: () => {
           return window.HEADER_ALERT
@@ -57,30 +57,38 @@ class AlertHeader extends React.PureComponent<Props, State> {
     ];
     const currentAlert = this.getCurrentAlert(alertConfigurations);
     this.state = {
-      showHeader: currentAlert !== null,
       currentAlert: currentAlert,
-      alertConfigurations: alertConfigurations,
+      showHeader: !_.isEmpty(currentAlert),
+      alertConfigurations: alertConfigurations
     };
   }
   
   hideHeader(): void {
     const alertShownStats: AlertShownStats = {
-      lastShown: moment.now()
+      lastHidden: moment.now().valueOf()
     };
     
-    sessionStorage[this.state.currentAlert.name] = alertShownStats;
+    sessionStorage[this.state.currentAlert.name] = JSON.stringify(alertShownStats);
     this.setState({showHeader: false});
   }
   
   getCurrentAlert(alertConfigurations: $ReadOnlyArray<AlertConfiguration>): AlertHeader {
     const currentAlert: AlertConfiguration = alertConfigurations.find((alertConfig) => {
-      // TODO: Check cookie to see if it should be hidden
-      // const alertShownStats: AlertShownStats = sessionStorage[alertConfig.name];
-      // const showedAlertRecently = alertShownStats && (moment.subtract()
-      return alertConfig.shouldShowAlert();
+      return alertConfig.shouldShowAlert() && this.shouldShowAlertAgain(alertConfig);
     });
     
     return currentAlert;
+  }
+  
+  shouldShowAlertAgain(alertConfig: AlertConfiguration): boolean {
+    const alertShownStats: AlertShownStats = sessionStorage[alertConfig.name] && JSON.parse(sessionStorage[alertConfig.name]);
+    if(!alertShownStats) {
+      return true;
+    }
+    
+    const durationSinceLastHidden = moment.duration(moment().diff(moment(alertShownStats.lastHidden)));
+    const durationBeforeShowAgain = moment.duration(alertConfig.waitTimeBeforeShowAgain);
+    return durationSinceLastHidden > durationBeforeShowAgain;
   }
   
   render(): ?React$Node {
