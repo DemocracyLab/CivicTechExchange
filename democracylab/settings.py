@@ -66,6 +66,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(PROJECT_ROOT, 'democracylab/templates'),
+            os.path.join(PROJECT_ROOT, 'democracylab/templates/emails'),
             os.path.join(PROJECT_ROOT, 'civictechprojects/templates'),
             os.path.join(PROJECT_ROOT, 'civictechprojects/templates/emails/volunteer')
         ],

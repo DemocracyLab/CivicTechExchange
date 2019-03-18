@@ -73,7 +73,7 @@ class MyProjectsController extends React.Component<{||}, State> {
   }
 
   removeProjectFromList(): void {
-    metrics.logProjectDeleted(CurrentUser.userID(), this.state.projectToDelete.id);
+    metrics.logProjectDeleted(CurrentUser.userID(), this.state.projectToDelete.project_id);
     this.setState({
       ownedProjects: _.pull(this.state.ownedProjects, this.state.projectToDelete)
     });
@@ -82,7 +82,7 @@ class MyProjectsController extends React.Component<{||}, State> {
 
   confirmDeleteProject(confirmedDelete: boolean): void {
     if (confirmedDelete) {
-      const url = "/projects/delete/" + this.state.projectToDelete.id + "/";
+      const url = "/projects/delete/" + this.state.projectToDelete.project_id + "/";
       //TODO: this should be ProjectAPIUtils.delete, not post
       ProjectAPIUtils.post(
         url,

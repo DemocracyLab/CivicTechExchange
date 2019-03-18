@@ -15,7 +15,6 @@ import _ from 'lodash'
  * @title: Title of the dropdown
  */
 type Props = {|
-  category: string,
   title: string
 |};
 
@@ -36,7 +35,7 @@ class TagSelectorCollapsible extends React.Component<Props, State> {
 
     // TODO: Use Flux to get tags in a single request
     // passing true to fetchTagsByCategory asks backend to return num_times in API response
-    ProjectAPIUtils.fetchTagsByCategory(this.props.category, true, tags => {
+    ProjectAPIUtils.fetchAllTags(true, tags => {
       this.setState({
         tags: tags,
         hasSubcategories: _.every(tags, tag => !_.isEmpty(tag.subcategory))

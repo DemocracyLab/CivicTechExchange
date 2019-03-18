@@ -84,7 +84,7 @@ class MainHeader extends React.Component<{||}, State > {
   
   componentDidMount() {
     UniversalDispatcher.dispatch({type: 'INIT'});
-    UserAPIUtils.fetchUserDetails(window.DLAB_GLOBAL_CONTEXT.userID, this.loadUserDetails.bind(this));
+    CurrentUser.isLoggedIn() && UserAPIUtils.fetchUserDetails(CurrentUser.userID(), this.loadUserDetails.bind(this));
   }
   
   loadUserDetails(user: UserAPIData) {
@@ -270,7 +270,7 @@ class MainHeader extends React.Component<{||}, State > {
   _renderHamburgerFooterLinks(): $ReadOnlyArray<React$Node> {
     return FooterLinks.list().map((link) => {
       return (
-        <React.Fragment>
+        <React.Fragment key={link.url}>
           <a key={link.url} href={link.url} onClick={FooterLinks.logClick.bind(this, link)}>
             <div className={'SubHeader-drawerDiv'}>
               {link.name}
