@@ -114,7 +114,7 @@ class AlertHeader extends React.PureComponent<Props, State> {
     return (
       <div className="AlertHeader-text">
         You have not verified your email yet.  Please check your email and click on the link to verify your account.
-        Didn't get an email?
+        Didn't get an email? { }
         <a href="/verify_user">Resend verification email</a>
       </div>
     );
