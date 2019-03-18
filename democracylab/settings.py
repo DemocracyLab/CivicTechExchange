@@ -67,8 +67,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(PROJECT_ROOT, 'democracylab/templates'),
             os.path.join(PROJECT_ROOT, 'democracylab/templates/emails'),
-            os.path.join(PROJECT_ROOT, 'civictechprojects/templates'),
-            os.path.join(PROJECT_ROOT, 'civictechprojects/templates/emails/volunteer')
+            os.path.join(PROJECT_ROOT, 'civictechprojects/templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
