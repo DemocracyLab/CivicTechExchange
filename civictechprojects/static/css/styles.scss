@@ -47,7 +47,6 @@
 @import 'partials/TagsDisplay';
 @import 'partials/LogInController';
 @import 'partials/ModalPosition';
-@import 'partials/Global';
 @import 'partials/VolunteerCard';
 @import 'partials/CollapsibleText';
 @import 'partials/AboutProject';
@@ -55,3 +54,5 @@
 @import 'partials/PersonIcon';
 @import 'partials/IconLinkDisplay';
 @import 'partials/AlertHeader';
+//Global should be last
+@import 'partials/Global';

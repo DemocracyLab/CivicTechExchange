@@ -103,14 +103,16 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
 
   _renderFilterList(data) {
     //this function renders individual clickable filter items regardless of category or subcategory status
-    let sortedTags = Object.values(data).map((tag) =>
-      <li key={tag.category + '-' + tag.display_name} className="ProjectFilterContainer-list-item">
-          <input type="checkbox" id={tag.category + '-' + tag.display_name} checked={this.props.checkEnabled(tag)} onChange={() => this.props.selectOption(tag)}></input>
-          <label htmlFor={tag.category + '-' + tag.display_name}>
-            <span className="ProjectFilterContainer-list-item-name">{tag.display_name}</span> <span className="ProjectFilterContainer-list-item-count">{this.props.checkEnabled(tag) ? <i className={GlyphStyles.Check}></i> : tag.num_times}</span>
-          </label>
-      </li>
-    );
+    let sortedTags = Object.values(data).map(tag => {
+      const key:string = tag.category + '-' + tag.tag_name;
+      return  (<li key={key} className="ProjectFilterContainer-list-item">
+                <input type="checkbox" id={key} checked={this.props.checkEnabled(tag)} onChange={() => this.props.selectOption(tag)}></input>
+                <label htmlFor={key}>
+                  <span className="ProjectFilterContainer-list-item-name">{tag.display_name}</span> <span className="ProjectFilterContainer-list-item-count">{this.props.checkEnabled(tag) ? <i className={GlyphStyles.Check}></i> : tag.num_times}</span>
+                </label>
+              </li>)
+      });
+
     return <ul className="ProjectFilterContainer-filter-list">{sortedTags}</ul>
   }
 

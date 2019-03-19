@@ -1,11 +1,56 @@
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
+from django.template import loader, Template, Context
+from enum import Enum
+from html.parser import unescape
 from common.models.tags import Tag
 from democracylab.models import Contributor
 from civictechprojects.models import VolunteerRelation
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
+
+
+class EmailSection(Enum):
+    Header = 'Header'
+    Button = 'Button'
+    Paragraph = 'Paragraph'
+
+
+class HtmlEmailTemplate:
+    base_template = loader.get_template('html_email_frame.html')
+    section_templates = {
+        EmailSection.Header: loader.get_template('html_email_header.html'),
+        EmailSection.Button: loader.get_template('html_email_button.html'),
+        EmailSection.Paragraph: loader.get_template('html_email_paragraph.html')
+    }
+
+    def __init__(self):
+        self.sections = []
+        self.hydrated_template = None
+
+    def add(self, section_type, section_content):
+        self.sections.append(HtmlEmailTemplate.section_templates[section_type].render(section_content))
+        return self
+
+    def header(self, text):
+        return self.add(EmailSection.Header, {'text': text})
+
+    def paragraph(self, text):
+        return self.add(EmailSection.Paragraph, {'text': text})
+
+    def button(self, url, text):
+        return self.add(EmailSection.Button, {'url': url, 'text': text})
+
+    def render(self, email_msg, context=None):
+        if self.hydrated_template is None:
+            sections_text = ''.join(self.sections)
+            self.hydrated_template = Template(HtmlEmailTemplate.base_template.render({"content": sections_text}))
+        email_msg.content_subtype = "html"
+        # For some reason xml markup characters in the template (<,>) get converted to entity codes (&lt; and &rt;)
+        # We unescape to convert the markup characters back
+        email_msg.body = unescape(self.hydrated_template.render(Context(context or {})))
+        return email_msg
 
 
 def send_verification_email(contributor):
@@ -14,12 +59,16 @@ def send_verification_email(contributor):
     verification_token = default_token_generator.make_token(user)
     verification_url = settings.PROTOCOL_DOMAIN + '/verify_user/' + str(contributor.id) + '/' + verification_token
     # Send email with token
+    email_template = HtmlEmailTemplate()\
+        .header('Welcome to DemocracyLab')\
+        .paragraph('Please click here to confirm your email address')\
+        .button(url=verification_url, text='Confirm Email Address')
     email_msg = EmailMessage(
-        'Welcome to DemocracyLab',
-        'Click here to confirm your email address (or paste into your browser): ' + verification_url,
-        _get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
-        [contributor.email]
+        subject='Welcome to DemocracyLab',
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=[contributor.email]
     )
+    email_msg = email_template.render(email_msg)
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
