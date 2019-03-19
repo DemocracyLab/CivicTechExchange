@@ -1,8 +1,8 @@
 
 .ProjectSearchBar-root {
-  background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
-  height: 40px;
+  border-radius: 5px;
+  height: 38px; /* 38 + 1px top and bottom border = 40 */
   width: 100%;
   display: flex;
 }
@@ -20,4 +20,5 @@
   margin-left: 10px;
   height: 100%;
   flex-grow: 1;
+  background: inherit;
 }
