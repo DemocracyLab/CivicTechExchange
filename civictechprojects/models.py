@@ -400,11 +400,14 @@ class VolunteerRelation(models.Model):
     application_text = models.CharField(max_length=10000, blank=True)
     is_approved = models.BooleanField(default=False)
     is_co_owner = models.BooleanField(default=False)
-    projected_end_date = models.DateTimeField(auto_now=False, null=True)
+    projected_end_date = models.DateTimeField(auto_now=False, null=True, blank=True)
     application_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
-    approved_date = models.DateTimeField(auto_now=False, null=True)
-    last_reminder_date = models.DateTimeField(auto_now=False, null=True)
+    approved_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    last_reminder_date = models.DateTimeField(auto_now=False, null=True, blank=True)
     reminder_count = models.IntegerField(default=0)
+    re_enrolled_last_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    re_enroll_last_reminder_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    re_enroll_reminder_count = models.IntegerField(default=0)
 
     def __str__(self):
         return 'Project: ' + str(self.project.project_name) + ', User: ' + str(self.volunteer.email)
