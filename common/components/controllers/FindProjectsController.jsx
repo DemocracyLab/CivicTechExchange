@@ -3,7 +3,6 @@
 import ProjectSearchDispatcher from '../stores/ProjectSearchDispatcher.js';
 import TagDispatcher from '../stores/TagDispatcher.js';
 import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
-import ProjectSearchContainer from '../componentsBySection/FindProjects/ProjectSearchContainer.jsx';
 import ProjectFilterContainer from '../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx';
 import {FindProjectsArgs} from "../stores/ProjectSearchStore.js";
 import SplashScreen from "../componentsBySection/FindProjects/SplashScreen.jsx";
@@ -43,7 +42,6 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
         />
         {this.state.showSplash ? <SplashScreen onClickFindProjects={this._onClickFindProjects.bind(this)}/> : null}
         <div className="FindProjectsController-root container">
-          <ProjectSearchContainer />
           <div className="row">
             <ProjectFilterContainer />
             <ProjectCardsContainer />

@@ -2,7 +2,7 @@
 
 import type {Project} from '../../stores/ProjectSearchStore.js';
 import type {FluxReduceStore} from 'flux/utils';
-
+import ProjectSearchSort from './ProjectSearchSort.jsx';
 import {Container} from 'flux/utils';
 import {List} from 'immutable'
 import ProjectCard from './ProjectCard.jsx';
@@ -29,6 +29,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     return (
       <div className="ProjectCardContainer col-12 col-md-9 col-xxl-10 p-0 m-0">
         <div className="container-fluid pl-0 pr-0">
+            <ProjectSearchSort />
           <div className="row">
             {this._renderCards()}
           </div>

@@ -1,3 +1,5 @@
+//TODO: delete this filf if we choose to remove alerts button. the file is unused right now.
+
 // @flow
 
 import ProjectSearchSort from './ProjectSearchSort.jsx';
