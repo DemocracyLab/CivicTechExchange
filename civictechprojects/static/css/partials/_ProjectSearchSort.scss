@@ -9,6 +9,11 @@
   background-color: inherit;
 }
 
+/*this should be controlled by react-select v2's style object in the future */
+.ProjectSearchSort__indicator-separator {
+  display: none;
+}
+
 @include media-breakpoint-up(lg) {
   .ProjectSearchSort-sortform {
     max-width: 22%;

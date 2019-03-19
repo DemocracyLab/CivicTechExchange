@@ -90,6 +90,7 @@ class ProjectSearchSort extends React.Component<{||}, State> {
       options={sortOptions}
       value={this.state && this.state.sortField}
       onChange={this._handleSubmitSortField.bind(this)}
+      classNamePrefix="ProjectSearchSort"
       className="form-control ProjectSearchSort-sortform"
       simpleValue={true}
       isClearable={false}
@@ -102,6 +103,7 @@ class ProjectSearchSort extends React.Component<{||}, State> {
       options={locationOptions}
       value={this.state && this.state.location}
       onChange={this._handleSubmitLocation.bind(this)}
+      classNamePrefix="ProjectSearchSort"
       className="form-control ProjectSearchSort-sortform"
       simpleValue={true}
       isClearable={false}
