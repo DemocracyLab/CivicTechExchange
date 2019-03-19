@@ -92,10 +92,13 @@
 .ProjectFilterContainer-showtext {
   font-size: 16px;
   font-weight: normal;
+  margin-right: 4px;
 }
 
 .ProjectFilterContainer-reset {
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 72px; /* needs to match height of ProjectSearchSort-container */
 }

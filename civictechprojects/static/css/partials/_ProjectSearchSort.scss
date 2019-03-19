@@ -1,8 +1,24 @@
 .ProjectSearchSort-container {
-  display: flex;
+  margin-bottom: 1rem;
 }
 
 .ProjectSearchSort-sortform {
   padding: 0;
   border: none;
+  background: inherit;
+  background-color: inherit;
+}
+
+@include media-breakpoint-up(lg) {
+  .ProjectSearchSort-sortform {
+    max-width: 22%;
+    margin-left: 0.5rem;
+  }
+  .ProjectSearchSort-container {
+    margin-bottom: 0;
+    display: flex;
+    height: 72px; /*needs to match height of .ProjectFilterContainer-reset */
+    align-items: center;
+    justify-content: space-between;
+  }
 }

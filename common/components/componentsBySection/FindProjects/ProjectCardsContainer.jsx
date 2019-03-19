@@ -28,9 +28,10 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className="ProjectCardContainer col-12 col-md-9 col-xxl-10 p-0 m-0">
-        <div className="container-fluid pl-0 pr-0">
+        <div className="container-fluid">
             <ProjectSearchSort />
           <div className="row">
+            {!_.isEmpty(this.state.projects) && <h2 className="ProjectCardContainer-header">Find and volunteer with the best tech-for-good projects</h2>}
             {this._renderCards()}
           </div>
         </div>

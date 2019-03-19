@@ -30,14 +30,14 @@ class ResetSearchButton extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div  >
+      <React.Fragment>
         <button
-          className="btn btn-theme reset-search-button"
+          className="btn btn-theme btn-block reset-search-button"
           disabled={!(this.state.keyword || this.state.tags.size > 0 || this.state.sortField || this.state.location) }
           onClick={this._clearFilters.bind(this)}>
-          Reset Filters
+          Clear Filters
         </button>
-      </div>
+      </React.Fragment>
     );
   }
   _clearFilters(): void {
