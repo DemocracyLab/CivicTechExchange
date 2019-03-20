@@ -1,7 +1,6 @@
 .EmailVerifiedController-root {
     font-weight: 300;
-    width: 90%;
-    max-width: 800px;
+    width: 800px;
     margin: 168px auto;
     padding: 58px 5%;
     text-align: center;
@@ -30,3 +29,10 @@
     margin: 1em auto;
     width: 50%;
 }
+
+@include media-breakpoint-up(md) {
+    .EmailVerifiedController-logo {
+        float: left;
+        margin-left: 50px;
+    }
+  }
