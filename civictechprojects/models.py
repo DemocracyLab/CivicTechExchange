@@ -416,14 +416,14 @@ class VolunteerRelation(models.Model):
     def to_json(self):
         volunteer = self.volunteer
 
-        # TODO: Add end date and application date
         volunteer_json = {
             'application_id': self.id,
             'user': volunteer.hydrate_to_tile_json(),
             'application_text': self.application_text,
             'roleTag': Tag.hydrate_to_json(volunteer.id, self.role.all().values())[0],
             'isApproved': self.is_approved,
-            'isCoOwner': self.is_co_owner
+            'isCoOwner': self.is_co_owner,
+            'isUpForRenewal': self.is_up_for_renewal()
         }
 
         return volunteer_json
