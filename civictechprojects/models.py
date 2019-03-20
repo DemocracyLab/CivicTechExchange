@@ -423,7 +423,8 @@ class VolunteerRelation(models.Model):
             'roleTag': Tag.hydrate_to_json(volunteer.id, self.role.all().values())[0],
             'isApproved': self.is_approved,
             'isCoOwner': self.is_co_owner,
-            'isUpForRenewal': self.is_up_for_renewal()
+            'isUpForRenewal': self.is_up_for_renewal(),
+            'projectedEndDate': self.projected_end_date.__str__()
         }
 
         return volunteer_json

@@ -32,7 +32,6 @@ class Contributor(User):
     def is_up_for_volunteering_renewal(self):
         from civictechprojects.models import VolunteerRelation
         volunteer_relations_up_for_renewal = list(filter(lambda vr: vr.is_up_for_renewal(), VolunteerRelation.get_by_user(self)))
-        print('Volunteering gigs up for renewal: ' + str(len(volunteer_relations_up_for_renewal)))
         return bool(volunteer_relations_up_for_renewal)
 
     def hydrate_to_json(self):

@@ -6,6 +6,7 @@ import url from '../../utils/url.js';
 import {Button} from 'react-bootstrap';
 import {MyProjectData} from "../../stores/MyProjectsStore.js";
 import CurrentUser from "../../utils/CurrentUser.js";
+import moment from 'moment';
 
 //TODO: Update
 type MyProjectClickCallback = (MyProjectData) => void;
@@ -50,10 +51,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
                 <tr>{this.state.isOwner ? "Project Lead" : "Volunteer"}</tr>
               </td>
               <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">
-                  Project Status
-                </tr>
-                <tr>In Progress</tr>
+                {this._renderProjectStatus()}
               </td>
               <td className="MyProjectCard-column">
                 {this._renderButtons()}
@@ -62,6 +60,23 @@ class MyProjectCard extends React.PureComponent<Props, State> {
           </tbody>
         </table>
       </div>
+    );
+  }
+  
+  _renderProjectStatus(): React$Node {
+    const header: string = this.state.isOwner ? "Project Status" : "Volunteer Status";
+    const status: string = this.state.isOwner ? "In Progress" : (
+      !this.props.project.isApproved ? "Awaiting Approval" : (
+        this.props.project.isUpForRenewal ? "Expires on " + moment(this.props.project.projectedEndDate).format("l") : "Active"
+      )
+    );
+    return (
+      <React.Fragment>
+        <tr className="MyProjectCard-header">
+          {header}
+        </tr>
+        <tr>{status}</tr>
+      </React.Fragment>
     );
   }
   
