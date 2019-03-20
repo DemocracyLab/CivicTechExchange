@@ -43,7 +43,7 @@ class AlertHeader extends React.PureComponent<Props, State> {
         name: "emailVerificationAlert",
         waitTimeBeforeShowAgain: "PT1M" /* 1 Minute */,
         shouldShowAlert: () => {
-          return !CurrentUser.isEmailVerified()
+          return CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified()
         },
         getAlertBody: this._renderEmailNotVerifiedAlert.bind(this)
       }, {
