@@ -6,14 +6,7 @@ import cdn,{Images} from "../utils/cdn.js";
 import url from '../utils/url.js'
 import Section from '../enums/Section.js'
 
-type Props = {|
-
-|};
-
-type State = {|
-|}
-
-class EmailVerifiedController extends React.Component<Props, State> {
+class EmailVerifiedController extends React.Component<{||}> {
   constructor(): void {
     super();
   }

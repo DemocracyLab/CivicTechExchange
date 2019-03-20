@@ -4,20 +4,13 @@ import React from 'react';
 import CurrentUser from "../utils/CurrentUser.js";
 import cdn,{Images} from "../utils/cdn.js";
 
-type Props = {|
-
-|};
-
-type State = {|
-|}
-
-class SignedUpController extends React.Component<Props, State> {
+class SignedUpController extends React.Component<{||}> {
   constructor(): void {
     super();
   }
 
   render(): React$Node {
-    // TODO: Give indication that email has been sent
+    // TODO: Give better indication that email has been sent when user clicks resend link
     return (
       <div className="SignedUpController-root">
         <div className="SignedUpController-logo">
