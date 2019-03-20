@@ -19,6 +19,9 @@ const classSubcategoryCollapsed = 'ProjectFilterContainer-subcategory ProjectFil
 class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
     super(props)
+    // This constructor creates state keys based on category or subcategory - each state key/value will indicate whether or not a given (sub)category is expanded (true) or collapsed (false)
+    // because this component is reused we have to dynamically generate key names here.
+
     //get list of category keys to set initial state (for collapse/expand), then set all as false (collapsed)
     //TODO: this is very similar to constructor for parent component - find a way to do or write this once, not twice
     let c = Object.keys(_.groupBy(this.props.data, 'category')) || [] ;
@@ -51,8 +54,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   }
 
   _displayName(input) {
-    //TODO: Refactor this to take (input, list) so we can feed different const values to it so it's utility, move to utility js, use it here and for LinkList
-    //replaces specified database-generated names to chosen display names
+    //replaces specified database-generated names with chosen display names; if there is no replacement specified, return input unchanged
     return categoryDisplayNames[input] || input;
   }
 
