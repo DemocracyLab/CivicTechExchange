@@ -2,6 +2,7 @@
 
 import React from 'react';
 import CurrentUser from "../utils/CurrentUser.js";
+import cdn,{Images} from "../utils/cdn.js";
 
 type Props = {|
 
@@ -20,7 +21,7 @@ class SignedUpController extends React.Component<Props, State> {
     return (
       <div className="SignedUpController-root">
         <div className="SignedUpController-logo">
-          <img src="/static/images/projectPlaceholder.png"/>
+          <img src={cdn.image(Images.DL_GLYPH)}/>
         </div>
         <div className="SignedUpController-greeting">
           <h3>Check your email</h3>
