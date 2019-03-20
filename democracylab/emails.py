@@ -60,15 +60,15 @@ def send_verification_email(contributor):
     verification_url = settings.PROTOCOL_DOMAIN + '/verify_user/' + str(contributor.id) + '/' + verification_token
     # Send email with token
     email_template = HtmlEmailTemplate()\
-        .header('Welcome to DemocracyLab')\
-        .paragraph('Please click here to confirm your email address')\
-        .button(url=verification_url, text='Confirm Email Address')
+        .header("Hi {{first_name}}, we're glad you're here.")\
+        .paragraph('Please confirm your email address by clicking the button below.')\
+        .button(url=verification_url, text='VERIFY YOUR EMAIL')
     email_msg = EmailMessage(
         subject='Welcome to DemocracyLab',
         from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
         to=[contributor.email]
     )
-    email_msg = email_template.render(email_msg)
+    email_msg = email_template.render(email_msg, {'first_name': user.first_name})
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
@@ -80,7 +80,6 @@ def send_password_reset_email(contributor):
         'token': default_token_generator.make_token(user)
     }
     reset_url = section_url(FrontEndSection.ChangePassword, reset_parameters)
-    print(reset_url)
     # Send email with token
     email_msg = EmailMessage(
         subject='DemocracyLab Password Reset',
