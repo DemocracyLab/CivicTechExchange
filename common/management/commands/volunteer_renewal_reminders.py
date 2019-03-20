@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from democracylab.emails import send_email,_get_account_from_email, HtmlEmailTemplate
+from democracylab.emails import send_email,_get_account_from_email, send_volunteer_conclude_email, HtmlEmailTemplate
 
 
 class Command(BaseCommand):
@@ -17,12 +17,17 @@ class Command(BaseCommand):
         approved_volunteer_applications = VolunteerRelation.objects.filter(is_approved=True)
         for volunteer_relation in approved_volunteer_applications:
             if volunteer_relation.is_up_for_renewal(now):
-                email_template = get_reminder_template_if_time(now, volunteer_relation)
-                if email_template:
-                    send_reminder_email(email_template, volunteer_relation)
-                    volunteer_relation.re_enroll_reminder_count += 1
-                    volunteer_relation.re_enroll_last_reminder_date = now
-                    volunteer_relation.save()
+                if now > volunteer_relation.projected_end_date:
+                    send_volunteer_conclude_email(volunteer_relation.volunteer, volunteer_relation.project.project_name)
+                    # TODO: Send conclude email to project owners
+                    volunteer_relation.delete()
+                else:
+                    email_template = get_reminder_template_if_time(now, volunteer_relation)
+                    if email_template:
+                        send_reminder_email(email_template, volunteer_relation)
+                        volunteer_relation.re_enroll_reminder_count += 1
+                        volunteer_relation.re_enroll_last_reminder_date = now
+                        volunteer_relation.save()
 
 
 def get_reminder_template_if_time(now, volunteer):

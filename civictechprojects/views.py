@@ -17,7 +17,8 @@ from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email
+from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email, \
+    send_volunteer_conclude_email
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
@@ -388,6 +389,8 @@ def conclude_volunteering_with_project(request, application_id):
 
     if not user.id == volunteer_relation.volunteer.id:
         return HttpResponse(status=403)
+
+    send_volunteer_conclude_email(user, volunteer_relation.project.project_name)
 
     body = json.loads(request.body)
     # message = body['message']
