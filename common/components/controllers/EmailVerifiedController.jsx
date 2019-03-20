@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Button} from 'react-bootstrap';
-import cdn from "../utils/cdn.js";
+import cdn,{Images} from "../utils/cdn.js";
 import url from '../utils/url.js'
 import Section from '../enums/Section.js'
 
@@ -23,8 +23,7 @@ class EmailVerifiedController extends React.Component<Props, State> {
       <div className="EmailVerifiedController-root">
         <img
           className="EmailVerifiedController-logo"
-          src="/static/images/projectPlaceholder.png"
-          //src={cdn.image("dl_logo.png")}
+          src={cdn.image(Images.DL_GLYPH)}
         />
         <h2>Your email has been verified</h2>
         <p className="EmailVerifiedController-subhead">Get started by finding tech-for-good projects that match your skill and interests.</p>
