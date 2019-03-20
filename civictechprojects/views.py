@@ -370,6 +370,7 @@ def renew_volunteering_with_project(request, application_id):
     body = json.loads(request.body)
     # message = body['message']
     volunteer_relation.projected_end_date = body['projectedEndDate']
+    volunteer_relation.re_enrolled_last_date = timezone.now()
     volunteer_relation.save()
 
     # TODO: Send email with message
