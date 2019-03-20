@@ -2,7 +2,6 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from datetime import timedelta
 from democracylab.emails import send_email,_get_account_from_email, HtmlEmailTemplate
 
 
@@ -17,20 +16,13 @@ class Command(BaseCommand):
         from civictechprojects.models import VolunteerRelation
         approved_volunteer_applications = VolunteerRelation.objects.filter(is_approved=True)
         for volunteer_relation in approved_volunteer_applications:
-            if approaching_renewal_period(now, volunteer_relation):
+            if volunteer_relation.is_up_for_renewal(now):
                 email_template = get_reminder_template_if_time(now, volunteer_relation)
                 if email_template:
                     send_reminder_email(email_template, volunteer_relation)
                     volunteer_relation.re_enroll_reminder_count += 1
                     volunteer_relation.re_enroll_last_reminder_date = now
                     volunteer_relation.save()
-
-
-volunteer_reminder_period = settings.VOLUNTEER_RENEW_REMINDER_PERIODS and timedelta(sum(settings.VOLUNTEER_RENEW_REMINDER_PERIODS))
-
-
-def approaching_renewal_period(now, volunteer):
-    return (volunteer.projected_end_date - now) < volunteer_reminder_period
 
 
 def get_reminder_template_if_time(now, volunteer):

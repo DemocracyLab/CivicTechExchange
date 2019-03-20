@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from enum import Enum
@@ -434,6 +435,10 @@ class VolunteerRelation(models.Model):
 
     def update_project_timestamp(self):
         self.project.save()
+
+    def is_up_for_renewal(self, now=None):
+        now = now or timezone.now()
+        return (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
         
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
@@ -448,4 +453,7 @@ class VolunteerRelation(models.Model):
         relation.role.add(role)
         return relation
 
+    @staticmethod
+    def get_by_user(user):
+        return VolunteerRelation.objects.filter(volunteer=user.id)
 

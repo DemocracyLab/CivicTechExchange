@@ -152,6 +152,7 @@ def index(request):
         context['firstName'] = contributor.first_name
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
+        context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
 
     return HttpResponse(template.render(context, request))
 

@@ -50,6 +50,10 @@ class CurrentUser {
   static _getVolunteerStatus(project: ProjectDetailsAPIData): ?VolunteerDetailsAPIData {
     return project.project_volunteers && project.project_volunteers.find(volunteer => volunteer.user.id === CurrentUser.userID());
   }
+  
+  static isVolunteeringUpForRenewal() : boolean {
+    return window.DLAB_GLOBAL_CONTEXT.volunteeringUpForRenewal;
+  }
 }
 
 export default CurrentUser;

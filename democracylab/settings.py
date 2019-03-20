@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
+#TODO: Call out any missing required environment variables during startup
 import os
 import ast
 import dj_database_url
+from datetime import timedelta
 from distutils.util import strtobool
 from django.core.mail.backends.smtp import EmailBackend
 
@@ -163,6 +164,7 @@ FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.g
 
 APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
 VOLUNTEER_RENEW_REMINDER_PERIODS = ast.literal_eval(os.environ.get('VOLUNTEER_RENEW_REMINDER_PERIODS', 'None'))
+VOLUNTEER_REMINDER_OVERALL_PERIOD = VOLUNTEER_RENEW_REMINDER_PERIODS and timedelta(sum(VOLUNTEER_RENEW_REMINDER_PERIODS))
 
 FOOTER_LINKS = os.environ.get('FOOTER_LINKS', '')
 
