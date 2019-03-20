@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
 import cdn,{Images} from "../utils/cdn.js";
 import url from '../utils/url.js'
 import Section from '../enums/Section.js'
@@ -14,15 +13,16 @@ class EmailVerifiedController extends React.Component<{||}> {
   render(): React$Node {
     return (
       <div className="EmailVerifiedController-root">
-        <img
-          className="EmailVerifiedController-logo"
-          src={cdn.image(Images.DL_GLYPH)}
-        />
-        <h2>Your email has been verified</h2>
-        <p className="EmailVerifiedController-subhead">Get started by finding tech-for-good projects that match your skill and interests.</p>
-        <a className="EmailVerified-find-projects-btn btn btn-default"href={url.section(Section.FindProjects, {showSplash: 1})}>
-        FIND PROJECTS
-        </a>
+        <div className="EmailVerifiedController-logo">
+          <img src={cdn.image(Images.DL_GLYPH)}/>
+        </div>
+        <div className="EmailVerifiedController-greeting">
+          <h3>Your email has been verified</h3>
+          <p>Get started by finding tech-for-good projects that match your skill and interests.</p>
+          <a className="EmailVerified-find-projects-btn btn btn-default" href={url.section(Section.FindProjects, {showSplash: 1})}>
+            FIND PROJECTS
+          </a>
+        </div>
       </div>
     );
   }

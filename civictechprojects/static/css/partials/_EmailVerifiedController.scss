@@ -1,9 +1,28 @@
 .EmailVerifiedController-root {
     font-weight: 300;
-    width: 800px;
+    width: 450px;
+    max-width: 800px;
     margin: 168px auto;
-    padding: 58px 5%;
-    text-align: center;
+}
+
+.EmailVerifiedController-greeting {
+    margin-bottom: 27px;
+    min-width: 380px;
+    padding-left: 100px;
+}
+
+.EmailVerifiedController-logo {
+    width: 450px;
+    padding-left: 170px;
+    padding-bottom: 20px;
+    float: left;
+}
+
+.EmailVerifiedController-logo img {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: inline-block;
 }
 
 .EmailVerified-find-projects-btn {
@@ -16,27 +35,13 @@
     transition: 300ms;
     cursor: pointer;
     min-width: 80px;
-  }
-
-.EmailVerifiedController-logo {
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    margin-bottom: 1em;
-}
-
-.EmailVerifiedController-subhead {
-    margin: 1em auto;
-    width: 50%;
 }
 
 @include media-breakpoint-up(md) {
+    // This is where width of the screen > 768 px
     .EmailVerifiedController-logo {
-        float: left;
-        margin-left: 50px;
+        width: 70px;
+        padding-left: 10px;
+        padding-bottom: 0px;
     }
-
-    .EmailVerifiedController-root h2 {
-        padding-right: 15%;
-    }
-  }
+}
