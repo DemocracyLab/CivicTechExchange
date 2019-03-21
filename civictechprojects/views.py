@@ -372,9 +372,10 @@ def renew_volunteering_with_project(request, application_id):
     body = json.loads(request.body)
     volunteer_relation.projected_end_date = body['projectedEndDate']
     volunteer_relation.re_enrolled_last_date = timezone.now()
+    volunteer_relation.re_enroll_reminder_count = 0
+    volunteer_relation.re_enroll_last_reminder_date = None
     volunteer_relation.save()
 
-    # TODO: Reset renewal count
     notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
 
