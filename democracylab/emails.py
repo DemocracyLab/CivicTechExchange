@@ -214,7 +214,7 @@ notify_volunteer_concluded_email_with_comments = HtmlEmailTemplate() \
     .paragraph('"{{comments}}"')
 
 
-def notify_project_owners_volunteer_concluded_email(volunteer_relation, comments):
+def notify_project_owners_volunteer_concluded_email(volunteer_relation, comments=None):
     email_template = notify_volunteer_concluded_email_with_comments if comments else notify_volunteer_concluded_email_no_comment
     project_name = volunteer_relation.project.project_name
 

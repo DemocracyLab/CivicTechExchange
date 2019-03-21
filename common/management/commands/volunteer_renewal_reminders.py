@@ -3,7 +3,8 @@ from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datetime, datetime_to_string
-from democracylab.emails import send_email,_get_account_from_email, send_volunteer_conclude_email, HtmlEmailTemplate
+from democracylab.emails import send_email,_get_account_from_email, send_volunteer_conclude_email, HtmlEmailTemplate, \
+    notify_project_owners_volunteer_concluded_email
 
 
 class Command(BaseCommand):
@@ -20,7 +21,7 @@ class Command(BaseCommand):
             if volunteer_relation.is_up_for_renewal(now):
                 if now > volunteer_relation.projected_end_date:
                     send_volunteer_conclude_email(volunteer_relation.volunteer, volunteer_relation.project.project_name)
-                    # TODO: Send conclude email to project owners
+                    notify_project_owners_volunteer_concluded_email(volunteer_relation)
                     volunteer_relation.delete()
                 else:
                     email_template = get_reminder_template_if_time(now, volunteer_relation)
