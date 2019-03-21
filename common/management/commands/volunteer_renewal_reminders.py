@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datetime, datetime_to_string
 from democracylab.emails import send_email,_get_account_from_email, send_volunteer_conclude_email, HtmlEmailTemplate
 
 
@@ -33,21 +34,22 @@ class Command(BaseCommand):
 def get_reminder_template_if_time(now, volunteer):
     reminder_interval_days = settings.VOLUNTEER_RENEW_REMINDER_PERIODS
 
-    time_of_last_enroll_or_reminder = volunteer.re_enroll_last_reminder_date or volunteer.re_enrolled_last_date or volunteer.application_date
-    days_since_last_reminder = (now - time_of_last_enroll_or_reminder).days
-    days_to_next_reminder = reminder_interval_days[min(volunteer.re_enroll_reminder_count, len(reminder_interval_days) - 1)]
-    return (days_to_next_reminder > 0) and (days_since_last_reminder >= days_to_next_reminder) and volunteer_reminder_emails[volunteer.re_enroll_reminder_count]
+    if not volunteer.re_enroll_last_reminder_date:
+        return volunteer_reminder_emails[0]
+    else:
+        days_since_last_reminder = (now - volunteer.re_enroll_last_reminder_date).days
+        days_to_next_reminder = reminder_interval_days[min(volunteer.re_enroll_reminder_count, len(reminder_interval_days) - 1)]
+        return (days_to_next_reminder > 0) and (days_since_last_reminder >= days_to_next_reminder) and volunteer_reminder_emails[volunteer.re_enroll_reminder_count]
 
 
 def send_reminder_email(email_template, volunteer_relation):
     project = volunteer_relation.project
     volunteer = volunteer_relation.volunteer
-    # TODO: Format dates nicely
     context = {
         'first_name': volunteer.first_name,
         'project_name': project.project_name,
-        'project_end_date': volunteer_relation.projected_end_date,
-        'volunteer_start_date': volunteer_relation.application_date
+        'project_end_date': datetime_to_string(datetime_field_to_datetime(volunteer_relation.projected_end_date), DateTimeFormats.DATE_LOCALIZED),
+        'volunteer_start_date': datetime_to_string(datetime_field_to_datetime(volunteer_relation.application_date), DateTimeFormats.DATE_LOCALIZED)
     }
 
     email_msg = EmailMessage(
@@ -82,7 +84,7 @@ def get_second_email_template():
                    "community, we wouldn't be able to do this without your help!") \
         .paragraph("We think you're a socially-conscious individual with a big heart and recognize that you're " 
                    "essential to the success of {{project_name}}.  We hope that you continue adding value to our " 
-                   "community by taking this time to renew your volunteer commitment at {{project_name}}") \
+                   "community by taking this time to renew your volunteer commitment at {{project_name}}.") \
         .button(url=review_commitment_url, text='RENEW TODAY')
 
 volunteer_reminder_emails = [get_first_email_template(), get_second_email_template()]
