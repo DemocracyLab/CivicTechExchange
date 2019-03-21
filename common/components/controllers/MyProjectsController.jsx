@@ -98,9 +98,13 @@ class MyProjectsController extends React.Component<{||}, State> {
   }
   
   confirmVolunteerRenew(): void {
+    const project: MyProjectData = this.state.volunteeringProjects.find((project: MyProjectData) => project.application_id === this.state.applicationId);
+    project.isUpForRenewal = false;
+    
     this.setState({
       showRenewVolunteerModal: false
     });
+    this.forceUpdate();
   }
   
   confirmVolunteerConclude(): void {
