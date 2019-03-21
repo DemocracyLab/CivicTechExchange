@@ -20,9 +20,7 @@ type State = {|
   message: ?string
 |};
 
-// TODO: Remove Less than 1 week option
 const volunteerPeriodsInDays: $ReadOnlyArray<SelectOption> = [
-  ["Less than 1 week",7],
   ["1 week - 1 month",30],
   ["1 month - 3 months",90],
   ["3 months - 6 months",180],
