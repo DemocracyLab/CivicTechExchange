@@ -236,21 +236,20 @@ def notify_project_owners_volunteer_concluded_email(volunteer_relation, comments
 def send_email(email_msg, email_acct=None):
     if not settings.FAKE_EMAILS:
         email_msg.connection = email_acct['connection'] if email_acct is not None else settings.EMAIL_SUPPORT_ACCT['connection']
-        email_msg.send()
     else:
         test_email_subject = 'TEST EMAIL: ' + email_msg.subject
-        test_email_body = 'Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\n---\n{body}'.format(
+        test_email_body = '<!--\n Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\n -->\n{body}'.format(
             environment=settings.PROTOCOL_DOMAIN,
             to_line=email_msg.to,
             reply_to=email_msg.reply_to,
             body=email_msg.body
         )
-        test_email_msg = EmailMessage(
-            subject=test_email_subject,
-            body=test_email_body,
-            to=[settings.ADMIN_EMAIL]
-        )
-        test_email_msg.send()
+        email_msg.subject = test_email_subject
+        email_msg.body = test_email_body
+        email_msg.to = [settings.ADMIN_EMAIL]
+        if settings.EMAIL_SUPPORT_ACCT:
+            email_msg.connection = settings.EMAIL_SUPPORT_ACCT['connection']
+    email_msg.send()
 
 
 def _get_co_owner_emails(project):
