@@ -10,6 +10,8 @@ import metrics from "../utils/metrics.js";
 import {Container} from 'flux/utils';
 import ProjectVolunteerRenewModal from "../common/projects/ProjectVolunteerRenewModal.jsx";
 import ProjectVolunteerConcludeModal from "../common/projects/ProjectVolunteerConcludeModal.jsx";
+import url from "../utils/url.js";
+import Section from "../enums/Section";
 import React from 'react';
 import _ from 'lodash';
 
@@ -146,8 +148,7 @@ class MyProjectsController extends React.Component<{||}, State> {
           {!_.isEmpty(this.state.volunteeringProjects) && this.renderProjectCollection("Volunteering With", this.state.volunteeringProjects)}
         </div>
       )
-      : <p><a href="/login">Login</a> to see a list of your projects.</p>;
-      // TODO: Redirect to My Projects page after logging in
+      : <p><a href={url.section(Section.LogIn, {"prev": Section.MyProjects})}>Login</a> to see a list of your projects.</p>;
   }
   
   renderProjectCollection(title:string, projects: $ReadOnlyArray<MyProjectData>): React$Node{
