@@ -374,6 +374,7 @@ def renew_volunteering_with_project(request, application_id):
     volunteer_relation.re_enrolled_last_date = timezone.now()
     volunteer_relation.save()
 
+    # TODO: Reset renewal count
     notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
 

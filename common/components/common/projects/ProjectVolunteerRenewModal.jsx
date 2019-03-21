@@ -11,7 +11,7 @@ import moment from 'moment';
 type Props = {|
   applicationId: number,
   showModal: boolean,
-  handleClose: () => void
+  handleClose: (boolean) => void
 |};
 type State = {|
   showModal: boolean,
@@ -77,11 +77,11 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
       );
   }
 
-  closeModal(){
+  closeModal(sent: boolean){
     this.setState({
       isSending: false
     });
-    this.props.handleClose();
+    this.props.handleClose(sent);
   }
 
   render(): React$Node {
@@ -112,7 +112,7 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
                 </FormGroup>
               </Modal.Body>
               <Modal.Footer>
-                <Button onClick={this.closeModal.bind(this)}>{"Cancel"}</Button>
+                <Button onClick={this.closeModal.bind(this, false)}>{"Cancel"}</Button>
                 <Button
                   disabled={this.state.isSending || !(this._fieldsFilled())}
                   onClick={this.handleSubmit}>{this.state.isSending ? "Sending" : "Send"}

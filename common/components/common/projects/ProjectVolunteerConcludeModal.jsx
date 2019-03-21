@@ -8,7 +8,7 @@ import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
 type Props = {|
   applicationId: number,
   showModal: boolean,
-  handleClose: () => void
+  handleClose: (boolean) => void
 |};
 type State = {|
   showModal: boolean,
@@ -58,11 +58,11 @@ class ProjectVolunteerConcludeModal extends React.PureComponent<Props, State> {
       );
   }
 
-  closeModal(){
+  closeModal(concluded: boolean){
     this.setState({
       isSending: false
     });
-    this.props.handleClose();
+    this.props.handleClose(concluded);
   }
 
   render(): React$Node {
@@ -91,7 +91,7 @@ class ProjectVolunteerConcludeModal extends React.PureComponent<Props, State> {
                 </FormGroup>
               </Modal.Body>
               <Modal.Footer>
-                <Button onClick={this.closeModal.bind(this)}>{"Cancel"}</Button>
+                <Button onClick={this.closeModal.bind(this, false)}>{"Cancel"}</Button>
                 <Button
                   onClick={this.handleSubmit}>{this.state.isSending ? "Sending" : "Send"}
                 </Button>
