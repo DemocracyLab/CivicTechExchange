@@ -32,7 +32,7 @@ class ProjectSearchBar extends React.Component<{||}, State> {
           className="ProjectSearchBar-input"
           onChange={e => this.setState({keyword: e.target.value})}
           onKeyPress={this._handleKeyPress.bind(this)}
-          placeholder="Search by project name or description..."
+          placeholder="Search tech-for-good projects"
           value={this.state.keyword}
         />
       </div>
