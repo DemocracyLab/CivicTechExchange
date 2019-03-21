@@ -51,6 +51,10 @@ class MyProjectsController extends React.Component<{||}, State> {
   
   componentWillMount(): void {
     UniversalDispatcher.dispatch({type: 'INIT'});
+    const args = url.arguments(window.location.href);
+    if ("from" in args && args.from === "renewal_notification_email") {
+      metrics.logVolunteerClickReviewCommitmentsInEmail(CurrentUser.userID());
+    }
   }
   
   clickDeleteProject(project: MyProjectData): void {
@@ -102,6 +106,7 @@ class MyProjectsController extends React.Component<{||}, State> {
   confirmVolunteerRenew(renewed: boolean): void {
     if(renewed) {
       const project: MyProjectData = this.state.volunteeringProjects.find((project: MyProjectData) => project.application_id === this.state.applicationId);
+      metrics.logVolunteerRenewed(CurrentUser.userID(), project.project_id);
       project.isUpForRenewal = false;
     }
     this.setState({
@@ -115,7 +120,8 @@ class MyProjectsController extends React.Component<{||}, State> {
       showConcludeVolunteerModal: false,
     };
     if(concluded) {
-      newState.volunteeringProjects = this.state.volunteeringProjects.filter((project: MyProjectData) => this.state.applicationId !== project.application_id);
+      const project: MyProjectData = _.remove(this.state.volunteeringProjects, (project: MyProjectData) => project.application_id === this.state.applicationId)[0];
+      metrics.logVolunteerConcluded(CurrentUser.userID(), project.project_id);
     }
     this.setState(newState);
     this.forceUpdate();

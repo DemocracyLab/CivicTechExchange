@@ -66,7 +66,7 @@ def send_reminder_email(email_template, volunteer_relation):
     send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
 
 
-review_commitment_url = settings.PROTOCOL_DOMAIN + '/index/?section=MyProjects'
+review_commitment_url = settings.PROTOCOL_DOMAIN + '/index/?section=MyProjects&from=renewal_notification_email'
 
 
 def get_first_email_template():
