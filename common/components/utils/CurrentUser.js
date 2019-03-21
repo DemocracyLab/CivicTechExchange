@@ -23,6 +23,10 @@ class CurrentUser {
   static lastName(): string {
     return window.DLAB_GLOBAL_CONTEXT.lastName;
   }
+  
+  static email(): string {
+    return window.DLAB_GLOBAL_CONTEXT.email;
+  }
 
   static isStaff() : boolean {
     return window.DLAB_GLOBAL_CONTEXT.isStaff;

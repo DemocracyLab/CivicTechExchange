@@ -145,6 +145,7 @@ def index(request):
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
         context['emailVerified'] = contributor.email_verified
+        context['email'] = contributor.email
         context['firstName'] = contributor.first_name
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
