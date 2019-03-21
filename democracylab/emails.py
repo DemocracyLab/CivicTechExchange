@@ -5,6 +5,7 @@ from django.template import loader, Template, Context
 from enum import Enum
 from html.parser import unescape
 from common.models.tags import Tag
+from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datetime, datetime_to_string
 from democracylab.models import Contributor
 from civictechprojects.models import VolunteerRelation
 from common.helpers.constants import FrontEndSection
@@ -174,6 +175,63 @@ def send_volunteer_conclude_email(volunteer, project_name):
     email_msg = volunteer_conclude_email_template.render(email_msg, context)
     send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
 
+notify_volunteer_renewed_email_no_comment = HtmlEmailTemplate() \
+    .paragraph("{{volunteer_name}} has renewed their volunteer commitment with {{project_name}} until {{projected_end_date}}.")
+
+notify_volunteer_renewed_email_with_comments = HtmlEmailTemplate() \
+    .paragraph("{{volunteer_name}} has renewed their volunteer commitment with {{project_name}} until {{projected_end_date}}, "
+               "and would like to convey the following:") \
+    .paragraph('"{{comments}}"')
+
+
+def notify_project_owners_volunteer_renewed_email(volunteer_relation, comments):
+    email_template = notify_volunteer_renewed_email_with_comments if comments else notify_volunteer_renewed_email_no_comment
+    project_name = volunteer_relation.project.project_name
+    projected_end_date = datetime_to_string(datetime_field_to_datetime(volunteer_relation.projected_end_date), DateTimeFormats.DATE_LOCALIZED)
+
+    volunteer_name = volunteer_relation.volunteer.full_name()
+    context = {
+        'volunteer_name': volunteer_name,
+        'project_name': project_name,
+        'projected_end_date': projected_end_date,
+        'comments': comments
+    }
+    email_msg = EmailMessage(
+        subject=volunteer_name + " has renewed their volunteer commitment with " + project_name,
+        from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
+        to=_get_co_owner_emails(volunteer_relation.project)
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
+
+
+notify_volunteer_concluded_email_no_comment = HtmlEmailTemplate() \
+    .paragraph("{{volunteer_name}} has concluded their volunteer commitment with {{project_name}}.")
+
+notify_volunteer_concluded_email_with_comments = HtmlEmailTemplate() \
+    .paragraph("{{volunteer_name}} has concluded their volunteer commitment with {{project_name}}, "
+               "and would like to convey the following:") \
+    .paragraph('"{{comments}}"')
+
+
+def notify_project_owners_volunteer_concluded_email(volunteer_relation, comments):
+    email_template = notify_volunteer_concluded_email_with_comments if comments else notify_volunteer_concluded_email_no_comment
+    project_name = volunteer_relation.project.project_name
+
+    volunteer_name = volunteer_relation.volunteer.full_name()
+    context = {
+        'volunteer_name': volunteer_name,
+        'project_name': project_name,
+        'comments': comments
+    }
+    email_msg = EmailMessage(
+        subject=volunteer_name + " has concluded their volunteer commitment with " + project_name,
+        from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
+        to=_get_co_owner_emails(volunteer_relation.project)
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
+
 
 def send_email(email_msg, email_acct=None):
     if not settings.FAKE_EMAILS:
@@ -193,6 +251,10 @@ def send_email(email_msg, email_acct=None):
             to=[settings.ADMIN_EMAIL]
         )
         test_email_msg.send()
+
+
+def _get_co_owner_emails(project):
+    return list(map(lambda co_owner: co_owner.email, project.all_owners()))
 
 
 def _get_account_from_email(email_acct):

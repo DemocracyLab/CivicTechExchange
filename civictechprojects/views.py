@@ -18,7 +18,7 @@ from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email, \
-    send_volunteer_conclude_email
+    send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
@@ -370,12 +370,11 @@ def renew_volunteering_with_project(request, application_id):
         return HttpResponse(status=403)
 
     body = json.loads(request.body)
-    # message = body['message']
     volunteer_relation.projected_end_date = body['projectedEndDate']
     volunteer_relation.re_enrolled_last_date = timezone.now()
     volunteer_relation.save()
 
-    # TODO: Send email with message
+    notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
 
 
@@ -394,10 +393,9 @@ def conclude_volunteering_with_project(request, application_id):
     send_volunteer_conclude_email(user, volunteer_relation.project.project_name)
 
     body = json.loads(request.body)
-    # message = body['message']
     volunteer_relation.delete()
 
-    # TODO: Send email with message
+    notify_project_owners_volunteer_concluded_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
 
 

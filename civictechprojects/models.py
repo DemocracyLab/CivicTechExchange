@@ -58,6 +58,13 @@ class Project(models.Model):
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
 
+    def all_owners(self):
+        owners = [self.project_creator]
+        project_volunteers = VolunteerRelation.objects.filter(project=self.id)
+        project_co_owners = filter(lambda pv: pv.is_co_owner, project_volunteers)
+
+        return owners + list(map(lambda pv: pv.volunteer, project_co_owners))
+
     def hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_project=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
