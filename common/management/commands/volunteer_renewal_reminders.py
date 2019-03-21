@@ -16,14 +16,17 @@ class Command(BaseCommand):
         now = timezone.now()
 
         from civictechprojects.models import VolunteerRelation
-        approved_volunteer_applications = VolunteerRelation.objects.filter(is_approved=True)
-        for volunteer_relation in approved_volunteer_applications:
+        volunteer_applications = VolunteerRelation.objects.all()
+        for volunteer_relation in volunteer_applications:
             if volunteer_relation.is_up_for_renewal(now):
                 if now > volunteer_relation.projected_end_date:
-                    send_volunteer_conclude_email(volunteer_relation.volunteer, volunteer_relation.project.project_name)
-                    notify_project_owners_volunteer_concluded_email(volunteer_relation)
+                    if volunteer_relation.is_approved:
+                        # Don't send conclusion emails if volunteer wasn't approved
+                        send_volunteer_conclude_email(volunteer_relation.volunteer, volunteer_relation.project.project_name)
+                        notify_project_owners_volunteer_concluded_email(volunteer_relation)
                     volunteer_relation.delete()
-                else:
+                elif volunteer_relation.is_approved:
+                    # Don't send reminders if volunteer isn't approved
                     email_template = get_reminder_template_if_time(now, volunteer_relation)
                     if email_template:
                         send_reminder_email(email_template, volunteer_relation)
