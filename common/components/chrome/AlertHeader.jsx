@@ -3,6 +3,8 @@
 import React from 'react';
 import {Glyph,GlyphStyles, GlyphSizes} from "../utils/glyphs.js";
 import CurrentUser from "../utils/CurrentUser.js";
+import url from "../utils/url.js";
+import Section from "../enums/Section.js";
 import moment from 'moment';
 import _ from 'lodash'
 
@@ -46,6 +48,13 @@ class AlertHeader extends React.PureComponent<Props, State> {
           return CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified()
         },
         getAlertBody: this._renderEmailNotVerifiedAlert.bind(this)
+      }, {
+        name: "renewVolunteeringAlert",
+        waitTimeBeforeShowAgain: "P1D" /* 1 day */,
+        shouldShowAlert: () => {
+          return CurrentUser.isVolunteeringUpForRenewal()
+        },
+        getAlertBody: this._renderVolunteerUpForRenewal.bind(this)
       }, {
         name: "eventAlert",
         waitTimeBeforeShowAgain: "P1D" /* 1 day */,
@@ -116,6 +125,16 @@ class AlertHeader extends React.PureComponent<Props, State> {
         You have not verified your email yet.  Please check your email and click on the link to verify your account.
         Didn't get an email? { }
         <a href="/verify_user">Resend verification email</a>
+      </div>
+    );
+  }
+  
+  _renderVolunteerUpForRenewal(): React$Node {
+    Section
+    return (
+      <div className="AlertHeader-text">
+        You are approaching the end date for one or more projects you are volunteering with. { }
+        <a href={url.section(Section.MyProjects)}>Review Volunteer Commitments</a>
       </div>
     );
   }
