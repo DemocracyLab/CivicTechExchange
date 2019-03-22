@@ -30,12 +30,6 @@ button.clear-button-appearance, a.clear-button-appearance, a[type="button"].clea
   color: $color-orange;
   text-decoration: underline;
 }
-//setting the :hover state for psuedo-links requires targeting parent elements, and it doesn't like class declarations
-//this requires any psuedo-link to be a span in a paragraph with class psuedo-parent and the only span in that paragraph. TODO: Make this more versatile. Or just use <a href="#"> ?
-p.psuedo-parent:hover span {
-  color: $color-orange-darker;
-  cursor: pointer;
-}
 
 //these are "helper classes" with one declaration each
 .background-light {

@@ -33,7 +33,7 @@ class VerifyEmailBlurb extends React.PureComponent<{||},State> {
           onClickButton={this.closeModal.bind(this)}
         />
         <div>
-          <p className="psuedo-parent">You have not verified your email address yet.  Check your email inbox and click on the supplied link.
+          <p>You have not verified your email address yet.  Check your email inbox and click on the supplied link.
           If you can't find the link,
           click <span className="pseudo-link" onClick={this.sendVerificationEmail.bind(this)}>here to resend it</span>.</p>
         </div>
