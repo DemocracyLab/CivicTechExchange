@@ -25,13 +25,13 @@
   grid-template-rows: auto;
 }
 .ProjectCard-description {
-  grid-column: 1 / 5;
+  grid-column: 3 / 5;
   grid-row: 3;
   padding-left: 0.5rem; /* only on mobile */
   padding-right: 0.5rem; /* always */
 }
 .ProjectCard-subinfo {
-  grid-column: 3 / 5;
+  grid-column: 1 / 2;
   grid-row: 2;
 }
 .ProjectCard-subinfo ul {
@@ -56,14 +56,14 @@
   grid-row: 1 / 2;
 }
 .ProjectCard-logo {
-  grid-column: 1;
+  grid-column: 1 / 2;
   grid-row: 1 / 3;
 }
 .ProjectCard-logo img {
   max-width: 100%;
 }
 .ProjectCard-skills {
-  grid-column: 1 / 5;
+  grid-column: 3 / 5;
   grid-row: 4;
   padding: 0 0 0 8px;
 }
