@@ -22,6 +22,8 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   static calculateState(prevState: State): State {
     return {
       projects: ProjectSearchStore.getProjects(),
+      keyword: ProjectSearchStore.getKeyword() || '',
+      tags: ProjectSearchStore.getTags() || [],
     };
   }
 
@@ -31,12 +33,20 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
         <div className="container-fluid">
             <ProjectSearchSort />
           <div className="row">
-            {!_.isEmpty(this.state.projects) && <h2 className="ProjectCardContainer-header">Find and volunteer with the best tech-for-good projects</h2>}
+            {!_.isEmpty(this.state.projects) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}
             {this._renderCards()}
           </div>
         </div>
       </div>
     );
+  }
+
+  _renderCardHeaderText(): React$Node {
+    if (this.state.keyword || this.state.tags.size > 0) {
+      return this.state.projects.size + ' tech-for-good projects found'
+    } else {
+      return 'Find and volunteer with the best tech-for-good projects'
+    }
   }
 
   _renderCards(): React$Node {
