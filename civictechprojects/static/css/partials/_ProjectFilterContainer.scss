@@ -71,7 +71,7 @@
 }
 /* if category is expanded, change background */
 .ProjectFilterContainer-expanded > .ProjectFilterContainer-category-header {
-  background: $color-background-default;
+  background: $color-grey-medium;
 }
 /* if subcategory is collapsed, keep fontweight normal  */
 .ProjectFilterContainer-collapsed > .ProjectFilterContainer-subcategory-header {
