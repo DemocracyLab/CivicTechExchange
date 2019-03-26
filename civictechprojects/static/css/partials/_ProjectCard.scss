@@ -25,14 +25,14 @@
   grid-template-rows: auto;
 }
 .ProjectCard-description {
-  grid-column: 3 / 5;
+  grid-column: 1 / 5;
   grid-row: 3;
   padding-left: 0.5rem; /* only on mobile */
   padding-right: 0.5rem; /* always */
 }
 .ProjectCard-subinfo {
-  grid-column: 1 / 2;
-  grid-row: 3;
+  grid-column: 3 / 5;
+  grid-row: 2;
 }
 .ProjectCard-subinfo ul {
   color: $color-text-grey;
@@ -63,7 +63,7 @@
   max-width: 100%;
 }
 .ProjectCard-skills {
-  grid-column: 3 / 5;
+  grid-column: 1 / 5;
   grid-row: 4;
   padding: 0 0 0 8px;
 }
@@ -111,14 +111,9 @@
 
 @include media-breakpoint-up(lg) {
   // applied when screen width > 960px
-  .ProjectCard-root a {
-    border: navy solid 2px;
-  }  
   .ProjectCard-root {
     height: calc(100% - 1rem) /* height is 100% - margin) */
   }
-
-  
   .ProjectCard-root a {
     grid-template-columns: 30% 2% 34% 34%;
     grid-template-rows: auto;
@@ -148,36 +143,25 @@
   }
 }
 
-
-// @include media-breakpoint-between(lg, xl) {
-//   .ProjectCard-description, .ProjectCard-subinfo, .ProjectCard-skills {
-//     margin-left: 0.5rem;
-//   }
-//   .ProjectCard-logo, .ProjectCard-subinfo {
-//     border-right: none;
-//   }
-//   .ProjectCard-description {
-//     grid-row: 3;
-//     grid-column: 1 / 5;
-//   }
-//   .ProjectCard-skills {
-//     grid-row: 4;
-//     grid-column: 1 / 5;
-//   }
-//   .ProjectCard-subinfo {
-//     grid-row: 5;
-//     grid-column: 1 / 5;
-//     margin-top: 0.5rem;
-//   }
-//   .ProjectCard-subinfo li {
-//     display: inline;
-//     margin-top: 0;
-//     padding-right: 1rem;
-//   }
-//   .ProjectCard-subinfo li:first-of-type {
-//     padding-top: 0;
-//   }
-//   .ProjectCard-subinfo li:last-of-type {
-//     padding-right: 0;
-//   }
-// }
+@include media-breakpoint-between(lg, xl) {
+  .ProjectCard-description, .ProjectCard-subinfo, .ProjectCard-skills {
+    margin-left: 0.5rem;
+  }
+  .ProjectCard-logo, .ProjectCard-subinfo {
+    border-right: none;
+  }
+  .ProjectCard-subinfo {
+    margin-top: 0.5rem;
+  }
+  .ProjectCard-subinfo li {
+    display: inline;
+    margin-top: 0;
+    padding-right: 1rem;
+  }
+  .ProjectCard-subinfo li:first-of-type {
+    padding-top: 0;
+  }
+  .ProjectCard-subinfo li:last-of-type {
+    padding-right: 0;
+  }
+}
