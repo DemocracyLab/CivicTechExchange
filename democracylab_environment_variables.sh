@@ -30,6 +30,9 @@ export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/index/?sect
 # Configure position description example link
 export POSITION_DESCRIPTION_EXAMPLE_URL='https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit'
 
+# Configure exit survey url for volunteers concluding their commitment with a project
+export VOLUNTEER_CONCLUDE_SURVEY_URL='https://docs.google.com/forms/d/e/1FAIpQLSd4e9FQYX3ARPg7qz1ct5qM_bQW_kkEvQaMuM5LV9Ma1NDgbA/viewform'
+
 # Static asset CDN
 export STATIC_CDN_URL='https://d1agxr2dqkgkuy.cloudfront.net'
 
