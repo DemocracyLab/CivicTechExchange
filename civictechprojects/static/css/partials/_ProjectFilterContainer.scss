@@ -30,7 +30,9 @@
 .ProjectFilterContainer-filter-list {
   list-style-type: none;
   padding-inline-start: 0;
+  -webkit-padding-start: 0;
 }
+
 
 
 .ProjectFilterContainer-filter-list li {
@@ -103,4 +105,14 @@
   align-items: center;
   height: 72px;
   border-bottom: 1px solid $color-grey-medium;
+}
+
+.ProjectFilterDataContainer-root {
+  margin: 0 15px;
+}
+
+@include media-breakpoint-up(sm) {
+  .ProjectFilterDataContainer-root {
+    margin: 0;
+  }
 }
