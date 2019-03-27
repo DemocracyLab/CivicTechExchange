@@ -3,6 +3,7 @@
 import type {Project} from '../../stores/ProjectSearchStore.js';
 import type {FluxReduceStore} from 'flux/utils';
 import ProjectSearchSort from './ProjectSearchSort.jsx';
+import ProjectTagContainer from './ProjectTagContainer.jsx';
 import {Container} from 'flux/utils';
 import {List} from 'immutable'
 import ProjectCard from './ProjectCard.jsx';
@@ -32,6 +33,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
       <div className="ProjectCardContainer col-12 col-md-9 col-xxl-10 p-0 m-0">
         <div className="container-fluid">
             <ProjectSearchSort />
+            <ProjectTagContainer />
           <div className="row">
             {!_.isEmpty(this.state.projects) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}
             {this._renderCards()}
@@ -53,7 +55,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     return !this.state.projects
       ? 'Loading projects ...'
       : this.state.projects.size === 0
-        ? 'No projects match the provided criteria.  Sign up for an alert to be notified when matching projects are added or try a different set of filters.'
+        ? 'No projects match the provided criteria. Try a different set of filters or search term.'
         : this.state.projects.map(
           (project, index) =>
             <ProjectCard

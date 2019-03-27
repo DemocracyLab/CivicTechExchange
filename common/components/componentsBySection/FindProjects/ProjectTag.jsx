@@ -1,7 +1,7 @@
 // @flow
 
 import {TagDefinition} from "../../utils/ProjectAPIUtils.js";
-
+import GlyphStyles from "../../utils/glyphs.js";
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
 
@@ -30,7 +30,7 @@ class ProjectTag extends React.PureComponent<Props> {
             tag: this.props.tag,
           })}
         }>
-        ×
+      <i className={GlyphStyles.Close}></i>
       </span>
     );
   }
