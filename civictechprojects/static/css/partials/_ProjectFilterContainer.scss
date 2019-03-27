@@ -2,6 +2,7 @@
   background-color: $color-background-light;
   min-height: 100%;
   vertical-align: top;
+  border-right: 1px solid $color-grey-medium;
 }
 
 .ProjectFilterContainer-root .form-control {
@@ -100,5 +101,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 72px; /* needs to match height of ProjectSearchSort-container */
+  height: 72px;
+  border-bottom: 1px solid $color-grey-medium;
 }

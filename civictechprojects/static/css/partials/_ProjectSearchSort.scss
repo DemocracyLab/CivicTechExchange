@@ -1,5 +1,8 @@
 .ProjectSearchSort-container {
-  margin-bottom: 1rem;
+  margin-left: -15px; /*margin/padding values to extend background/border to cross the gutter from grid */
+  margin-right: -15px;
+  padding: 0 15px 15px 15px;
+  background: $color-background-light;
 }
 
 .ProjectSearchSort-sortform {
@@ -20,9 +23,9 @@
     margin-left: 0.5rem;
   }
   .ProjectSearchSort-container {
-    margin-bottom: 0;
+    padding-bottom: 0;
     display: flex;
-    height: 72px; /*needs to match height of .ProjectFilterContainer-reset */
+    height: 71px; /*needs to match height of .ProjectFilterContainer-reset -border (so -1px) */
     align-items: center;
     justify-content: space-between;
   }

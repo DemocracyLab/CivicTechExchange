@@ -1,6 +1,9 @@
 .ProjectTagContainer-root {
-  border-top: none;
   clear: both;
-  min-height: 95px;
-  overflow: hidden;
+  background: $color-background-light;
+  margin-left: -15px; /*the margin/padding values are to extend border over the gutter from the bootstrap grid */
+  padding-left: 15px;
+  margin-right: -15px;
+  padding-right: 10px; /* this is an experiment to see if tags will fit on one line cleanly; if it fails set it to 15px */
+  border-bottom: 1px solid $color-grey-medium;
 }
