@@ -29,6 +29,11 @@ class Contributor(User):
     def full_name(self):
         return self.first_name + ' ' + self.last_name
 
+    def is_up_for_volunteering_renewal(self):
+        from civictechprojects.models import VolunteerRelation
+        volunteer_relations_up_for_renewal = list(filter(lambda vr: vr.is_up_for_renewal(), VolunteerRelation.get_by_user(self)))
+        return bool(volunteer_relations_up_for_renewal)
+
     def hydrate_to_json(self):
         links = civictechprojects.models.ProjectLink.objects.filter(link_user=self.id)
         files = civictechprojects.models.ProjectFile.objects.filter(file_user=self.id)
