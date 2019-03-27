@@ -410,7 +410,7 @@ def accept_project_volunteer(request, application_id):
         volunteer_relation.is_approved = True
         volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        volunteer_relation.update_project_timestamp(user=request.user)
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -424,7 +424,7 @@ def promote_project_volunteer(request, application_id):
         # Set co_owner flag
         volunteer_relation.is_co_owner = True
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        volunteer_relation.update_project_timestamp(user=request.user)
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -442,7 +442,7 @@ def reject_project_volunteer(request, application_id):
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject='Your application to join ' + volunteer_relation.project.project_name,
                                   body=email_body)
-        volunteer_relation.update_project_timestamp()
+        volunteer_relation.update_project_timestamp(user=request.user)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
@@ -461,7 +461,7 @@ def dismiss_project_volunteer(request, application_id):
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject='You have been dismissed from ' + volunteer_relation.project.project_name,
                                   body=email_body)
-        volunteer_relation.update_project_timestamp()
+        volunteer_relation.update_project_timestamp(user=request.user)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
@@ -475,7 +475,7 @@ def demote_project_volunteer(request, application_id):
     if volunteer_operation_is_authorized(request, volunteer_relation):
         volunteer_relation.is_co_owner = False
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        volunteer_relation.update_project_timestamp(user=request.user)
         body = json.loads(request.body)
         message = body['demotion_message']
         email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
@@ -506,7 +506,7 @@ def leave_project(request, project_id):
                                sender=volunteer_relation.volunteer,
                                subject=email_subject,
                                body=email_body)
-        volunteer_relation.update_project_timestamp()
+        volunteer_relation.update_project_timestamp(user=request.user)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:

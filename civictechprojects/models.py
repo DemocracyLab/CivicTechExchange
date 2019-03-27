@@ -52,11 +52,16 @@ class Project(models.Model):
     project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
     project_date_created = models.DateTimeField(null=True)
-    project_date_modified = models.DateTimeField(auto_now=True, null=True)
+    project_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     is_searchable = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
+
+    def save(self, user=None):
+        if user is None or not user.is_staff:
+            self.project_date_modified = timezone.now()
+        super().save()
 
     def all_owners(self):
         owners = [self.project_creator]
@@ -441,13 +446,13 @@ class VolunteerRelation(models.Model):
         project_json = self.project.hydrate_to_list_json()
         return merge_dicts(volunteer_json, project_json)
 
-    def update_project_timestamp(self):
-        self.project.save()
+    def update_project_timestamp(self, user):
+        self.project.save(user=user)
 
     def is_up_for_renewal(self, now=None):
         now = now or timezone.now()
         return (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
-        
+
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
         relation = VolunteerRelation()
@@ -464,4 +469,3 @@ class VolunteerRelation(models.Model):
     @staticmethod
     def get_by_user(user):
         return VolunteerRelation.objects.filter(volunteer=user.id)
-
