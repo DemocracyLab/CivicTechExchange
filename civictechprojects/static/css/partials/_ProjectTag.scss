@@ -1,14 +1,22 @@
 .ProjectTag-root {
-  background-color: $color-green-dark;
-  border-radius: 5px;
+  background-color: $color-orange;
+  border-radius: 30px; /*can't use 50% because item isn't a square, so just use any number > 50% element height */
   color: $color-text-light;
   display: inline-block;
-  margin-bottom: 10px;
+  margin-bottom: 10px; /*provides spacing in case active tags wrap onto two rows */
   margin-right: 10px;
-  padding: 11px 14px 10px 9px;
+  padding: 6px 10px 5px 15px;
+  font-size: 14px;
 }
 
 .ProjectTag-closeButton {
+  align-items: center;
+  background-color: $color-orange-darker;
+  border-radius: 50%;
   cursor: pointer;
-  margin-left: 18px;
+  display: inline-flex;
+  height: 25px;
+  justify-content: center;
+  margin-left: 10px;
+  width: 25px;
 }

@@ -81,9 +81,10 @@
   .AboutProjects-intro {
       min-height: 262px;
   }
-  
+
   .AboutProjects-owner {
       margin-right: 10px;
+      padding-bottom: 20px;
   }
 
   .AboutProjects-owner button {
@@ -241,6 +242,24 @@
     }
   }
 
+  .AboutProject-button {
+    background-color: $color-green;
+    border: 0;
+    border-radius: 5px;
+    color: $color-text-light;
+    cursor: pointer;
+    float: right;
+    font-size: 14px;
+    padding: 8px 8px 8px 8px;
+    margin-right: 8px;
+    margin-top: 16px;
+  }
+
+  button.AboutProject-button:disabled {
+    background-color: $color-grey-disabled;
+    color: $color-text-light;
+  }
+
   //MUI objects are set to xs=12 sm=3/9 which matches 600 break (md is 960)
   //TODO: standardize and use proper mixins (breakpoint-md-up etc)
   //This media query consists of mostly pre-existing style declarations moved here so we can get this CSS to be mobile-first, mostly
@@ -286,6 +305,9 @@
     .AboutProjects-skills {
       width: 49.5%;
       margin-right: .5%;
+    }
+    .AboutProjects-owner {
+      padding-bottom: 0;
     }
   }
 

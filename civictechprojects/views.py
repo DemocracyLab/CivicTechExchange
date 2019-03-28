@@ -17,7 +17,8 @@ from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email
+from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email, \
+    send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
@@ -33,28 +34,14 @@ def tags(request):
         queryset = get_tags_by_category(category)
         countoption = bool(strtobool(query_terms.get('getCounts')[0]))
         if countoption == True:
-            activetagdict = projects_tag_counts()
-            querydict = {tag.tag_name:tag for tag in queryset}
-            resultdict = {}
-
-            for slug in querydict.keys():
-                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-            tags = list(resultdict.values())
+            tags = tags_with_counts(queryset)
         else:
             tags = list(queryset.values())
     else:
         countoption = bool(strtobool(query_terms.get('getCounts')[0]))
         if countoption == True:
             queryset = Tag.objects.all()
-            activetagdict = projects_tag_counts()
-            querydict = {tag.tag_name:tag for tag in queryset}
-            resultdict = {}
-
-            for slug in querydict.keys():
-                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-            tags = list(resultdict.values())
+            tags = tags_with_counts(queryset)
         else:
             queryset = Tag.objects.all()
             tags = list(queryset.values())
@@ -63,6 +50,16 @@ def tags(request):
             tags
         )
     )
+
+def tags_with_counts(queryset):
+    activetagdict = projects_tag_counts()
+    querydict = {tag.tag_name:tag for tag in queryset}
+    resultdict = {}
+
+    for slug in querydict.keys():
+        resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+        resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+    return list(resultdict.values())
 
 
 def to_rows(items, width):
@@ -149,9 +146,11 @@ def index(request):
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
         context['emailVerified'] = contributor.email_verified
+        context['email'] = contributor.email
         context['firstName'] = contributor.first_name
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
+        context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
 
     return HttpResponse(template.render(context, request))
 
@@ -351,6 +350,50 @@ def volunteer_with_project(request, project_id):
         role=role,
         application_text=message)
     send_volunteer_application_email(volunteer_relation)
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def renew_volunteering_with_project(request, application_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+
+    if not user.id == volunteer_relation.volunteer.id:
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    volunteer_relation.projected_end_date = body['projectedEndDate']
+    volunteer_relation.re_enrolled_last_date = timezone.now()
+    volunteer_relation.re_enroll_reminder_count = 0
+    volunteer_relation.re_enroll_last_reminder_date = None
+    volunteer_relation.save()
+
+    notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def conclude_volunteering_with_project(request, application_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+
+    if not user.id == volunteer_relation.volunteer.id:
+        return HttpResponse(status=403)
+
+    send_volunteer_conclude_email(user, volunteer_relation.project.project_name)
+
+    body = json.loads(request.body)
+    volunteer_relation.delete()
+
+    notify_project_owners_volunteer_concluded_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
 
 
