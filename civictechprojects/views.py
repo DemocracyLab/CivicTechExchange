@@ -34,28 +34,14 @@ def tags(request):
         queryset = get_tags_by_category(category)
         countoption = bool(strtobool(query_terms.get('getCounts')[0]))
         if countoption == True:
-            activetagdict = projects_tag_counts()
-            querydict = {tag.tag_name:tag for tag in queryset}
-            resultdict = {}
-
-            for slug in querydict.keys():
-                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-            tags = list(resultdict.values())
+            tags = tags_with_counts(queryset)
         else:
             tags = list(queryset.values())
     else:
         countoption = bool(strtobool(query_terms.get('getCounts')[0]))
         if countoption == True:
             queryset = Tag.objects.all()
-            activetagdict = projects_tag_counts()
-            querydict = {tag.tag_name:tag for tag in queryset}
-            resultdict = {}
-
-            for slug in querydict.keys():
-                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-            tags = list(resultdict.values())
+            tags = tags_with_counts(queryset)
         else:
             queryset = Tag.objects.all()
             tags = list(queryset.values())
@@ -64,6 +50,16 @@ def tags(request):
             tags
         )
     )
+
+def tags_with_counts(queryset):
+    activetagdict = projects_tag_counts()
+    querydict = {tag.tag_name:tag for tag in queryset}
+    resultdict = {}
+
+    for slug in querydict.keys():
+        resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+        resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+    return list(resultdict.values())
 
 
 def to_rows(items, width):

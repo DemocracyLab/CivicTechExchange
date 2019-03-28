@@ -1,25 +1,9 @@
 .ProjectTagContainer-root {
-  background-color: $color-background-light;
-  border: solid 1px $color-grey-frame-border;
-  border-top: none;
   clear: both;
-  min-height: 95px;
-  overflow: hidden;
-  padding: 25px 50px 15px 25px;
-}
-
-/*if the reset search button is used elsewhere, split this out of ProjectTagContainer.css */
-button.ResetSearch {
-  background-color: $color-green;
-  border: 0;
-  border-radius: 5px;
-  color: $color-text-light;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 14px;
-  float: right;
-  padding: 10px 30px;
-}
-button.ResetSearch:disabled {
-  background-color: $color-grey-disabled;
+  background: $color-background-light;
+  margin-left: -15px; /*the margin/padding values are to extend border over the gutter from the bootstrap grid */
+  padding-left: 15px;
+  margin-right: -15px;
+  padding-right: 10px; /* this is an experiment to see if tags will fit on one line cleanly; if it fails set it to 15px */
+  border-bottom: 1px solid $color-grey-medium;
 }

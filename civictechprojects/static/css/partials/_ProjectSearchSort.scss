@@ -1,0 +1,32 @@
+.ProjectSearchSort-container {
+  margin-left: -15px; /*margin/padding values to extend background/border to cross the gutter from grid */
+  margin-right: -15px;
+  padding: 0 15px 15px 15px;
+  background: $color-background-light;
+}
+
+.ProjectSearchSort-sortform {
+  padding: 0;
+  border: none;
+  background: inherit;
+  background-color: inherit;
+}
+
+/*this should be controlled by react-select v2's style object in the future */
+.ProjectSearchSort__indicator-separator {
+  display: none;
+}
+
+@include media-breakpoint-up(lg) {
+  .ProjectSearchSort-sortform {
+    max-width: 22%;
+    margin-left: 0.5rem;
+  }
+  .ProjectSearchSort-container {
+    padding-bottom: 0;
+    display: flex;
+    height: 71px; /*needs to match height of .ProjectFilterContainer-reset -border (so -1px) */
+    align-items: center;
+    justify-content: space-between;
+  }
+}
