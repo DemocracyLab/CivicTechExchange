@@ -24,7 +24,6 @@
 @import 'vendor/dropdown';
   //import DemocracyLab component partials
 @import 'partials/AlertSignupModal';
-@import 'partials/ContextualCollapsible';
 @import 'partials/EditProjectForm';
 @import 'partials/FlashMessage';
 @import 'partials/FindProjectsController';
@@ -37,10 +36,13 @@
 @import 'partials/MyProjectCard';
 @import 'partials/MyProjectsController';
 @import 'partials/ProjectCard';
+@import 'partials/ProjectCardContainer';
 @import 'partials/ProjectFilterContainer';
 @import 'partials/ProjectSearchBar';
+@import 'partials/ProjectSearchSort';
 @import 'partials/ProjectTag';
 @import 'partials/ProjectTagContainer';
+@import 'partials/ResetSearchButton';
 @import 'partials/SectionLink';
 @import 'partials/SubHeader';
 @import 'partials/TagsDisplay';
@@ -54,5 +56,4 @@
 @import 'partials/IconLinkDisplay';
 @import 'partials/AlertHeader';
 @import 'partials/SignedUpController';
-//Global should be last
 @import 'partials/Global';

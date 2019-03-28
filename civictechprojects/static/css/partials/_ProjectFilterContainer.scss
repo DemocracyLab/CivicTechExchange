@@ -2,6 +2,7 @@
   background-color: $color-background-light;
   min-height: 100%;
   vertical-align: top;
+  border-right: 1px solid $color-grey-medium;
 }
 
 .ProjectFilterContainer-root .form-control {
@@ -25,14 +26,13 @@
   display: flex;
   justify-content: space-between;
 }
-.ProjectFilterContainer-root > div {
-  display: block;
-}
 
 .ProjectFilterContainer-filter-list {
   list-style-type: none;
   padding-inline-start: 0;
+  -webkit-padding-start: 0;
 }
+
 
 
 .ProjectFilterContainer-filter-list li {
@@ -74,7 +74,7 @@
 }
 /* if category is expanded, change background */
 .ProjectFilterContainer-expanded > .ProjectFilterContainer-category-header {
-  background: $color-background-default;
+  background: $color-grey-medium;
 }
 /* if subcategory is collapsed, keep fontweight normal  */
 .ProjectFilterContainer-collapsed > .ProjectFilterContainer-subcategory-header {
@@ -95,4 +95,24 @@
 .ProjectFilterContainer-showtext {
   font-size: 16px;
   font-weight: normal;
+  margin-right: 4px;
+}
+
+.ProjectFilterContainer-reset {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 72px;
+  border-bottom: 1px solid $color-grey-medium;
+}
+
+.ProjectFilterDataContainer-root {
+  margin: 0 15px;
+}
+
+@include media-breakpoint-up(sm) {
+  .ProjectFilterDataContainer-root {
+    margin: 0;
+  }
 }

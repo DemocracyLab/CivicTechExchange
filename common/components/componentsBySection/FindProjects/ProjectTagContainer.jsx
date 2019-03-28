@@ -29,16 +29,12 @@ class ProjectTagContainer extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div
-        className={
-          'ProjectTagContainer-root col-12'
-            + (this.state.tags.size === 0 ? '  ProjectTagContainer-noTags' : '')
-        }>
+        className="ProjectTagContainer-root">
         {
           this.state.tags.map(
             tag => <ProjectTag key={tag.tag_name} tag={tag}/>,
           )
         }
-        <ResetSearchButton />
       </div>
     );
   }
