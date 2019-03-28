@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from enum import Enum
@@ -56,6 +57,13 @@ class Project(models.Model):
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
+
+    def all_owners(self):
+        owners = [self.project_creator]
+        project_volunteers = VolunteerRelation.objects.filter(project=self.id)
+        project_co_owners = filter(lambda pv: pv.is_co_owner, project_volunteers)
+
+        return owners + list(map(lambda pv: pv.volunteer, project_co_owners))
 
     def hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_project=self.id)
@@ -400,11 +408,14 @@ class VolunteerRelation(models.Model):
     application_text = models.CharField(max_length=10000, blank=True)
     is_approved = models.BooleanField(default=False)
     is_co_owner = models.BooleanField(default=False)
-    projected_end_date = models.DateTimeField(auto_now=False, null=True)
+    projected_end_date = models.DateTimeField(auto_now=False, null=True, blank=True)
     application_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
-    approved_date = models.DateTimeField(auto_now=False, null=True)
-    last_reminder_date = models.DateTimeField(auto_now=False, null=True)
+    approved_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    last_reminder_date = models.DateTimeField(auto_now=False, null=True, blank=True)
     reminder_count = models.IntegerField(default=0)
+    re_enrolled_last_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    re_enroll_last_reminder_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    re_enroll_reminder_count = models.IntegerField(default=0)
 
     def __str__(self):
         return 'Project: ' + str(self.project.project_name) + ', User: ' + str(self.volunteer.email)
@@ -412,14 +423,15 @@ class VolunteerRelation(models.Model):
     def to_json(self):
         volunteer = self.volunteer
 
-        # TODO: Add end date and application date
         volunteer_json = {
             'application_id': self.id,
             'user': volunteer.hydrate_to_tile_json(),
             'application_text': self.application_text,
             'roleTag': Tag.hydrate_to_json(volunteer.id, self.role.all().values())[0],
             'isApproved': self.is_approved,
-            'isCoOwner': self.is_co_owner
+            'isCoOwner': self.is_co_owner,
+            'isUpForRenewal': self.is_up_for_renewal(),
+            'projectedEndDate': self.projected_end_date.__str__()
         }
 
         return volunteer_json
@@ -431,6 +443,10 @@ class VolunteerRelation(models.Model):
 
     def update_project_timestamp(self):
         self.project.save()
+
+    def is_up_for_renewal(self, now=None):
+        now = now or timezone.now()
+        return (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
         
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
@@ -445,4 +461,7 @@ class VolunteerRelation(models.Model):
         relation.role.add(role)
         return relation
 
+    @staticmethod
+    def get_by_user(user):
+        return VolunteerRelation.objects.filter(volunteer=user.id)
 

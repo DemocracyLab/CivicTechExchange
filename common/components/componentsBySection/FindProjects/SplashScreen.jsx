@@ -4,6 +4,7 @@ import React from 'react';
 import {Button} from 'react-bootstrap';
 import Section from "../../enums/Section.js";
 import url from "../../utils/url.js";
+import cdn from "../../utils/cdn.js";
 
 type Props = {|
   onClickFindProjects: () => void
@@ -16,7 +17,7 @@ class SplashScreen extends React.PureComponent<Props> {
 
   render(): React$Node {
     return (
-      <div className="SplashScreen-root">
+      <div className="SplashScreen-root" style={{backgroundImage: 'url(' + cdn.image("dl_splash.png")+ ')' }}>
         <div className="SplashScreen-content">
           <h2>Optimizing the connection between skilled volunteers and tech-for-good projects</h2>
           <div className="SplashScreen-section">

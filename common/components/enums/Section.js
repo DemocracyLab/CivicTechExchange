@@ -11,7 +11,9 @@ const Section = {
   LogIn: 'LogIn',
   ResetPassword: 'ResetPassword',
   ChangePassword: 'ChangePassword',
-  EditProfile: 'EditProfile'
+  EditProfile: 'EditProfile',
+  SignedUp: 'SignedUp',
+  EmailVerified: 'EmailVerified'
 };
 
 export type SectionType = $Keys<typeof Section>;
