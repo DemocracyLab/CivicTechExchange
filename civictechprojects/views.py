@@ -34,14 +34,28 @@ def tags(request):
         queryset = get_tags_by_category(category)
         countoption = bool(strtobool(query_terms.get('getCounts')[0]))
         if countoption == True:
-            tags = tags_with_counts(queryset)
+            activetagdict = projects_tag_counts()
+            querydict = {tag.tag_name:tag for tag in queryset}
+            resultdict = {}
+
+            for slug in querydict.keys():
+                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+            tags = list(resultdict.values())
         else:
             tags = list(queryset.values())
     else:
         countoption = bool(strtobool(query_terms.get('getCounts')[0]))
         if countoption == True:
             queryset = Tag.objects.all()
-            tags = tags_with_counts(queryset)
+            activetagdict = projects_tag_counts()
+            querydict = {tag.tag_name:tag for tag in queryset}
+            resultdict = {}
+
+            for slug in querydict.keys():
+                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+            tags = list(resultdict.values())
         else:
             queryset = Tag.objects.all()
             tags = list(queryset.values())
@@ -50,16 +64,6 @@ def tags(request):
             tags
         )
     )
-
-def tags_with_counts(queryset):
-    activetagdict = projects_tag_counts()
-    querydict = {tag.tag_name:tag for tag in queryset}
-    resultdict = {}
-
-    for slug in querydict.keys():
-        resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-        resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-    return list(resultdict.values())
 
 
 def to_rows(items, width):
@@ -406,7 +410,7 @@ def accept_project_volunteer(request, application_id):
         volunteer_relation.is_approved = True
         volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -420,7 +424,7 @@ def promote_project_volunteer(request, application_id):
         # Set co_owner flag
         volunteer_relation.is_co_owner = True
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -438,7 +442,7 @@ def reject_project_volunteer(request, application_id):
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject='Your application to join ' + volunteer_relation.project.project_name,
                                   body=email_body)
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
@@ -457,7 +461,7 @@ def dismiss_project_volunteer(request, application_id):
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject='You have been dismissed from ' + volunteer_relation.project.project_name,
                                   body=email_body)
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
@@ -471,7 +475,7 @@ def demote_project_volunteer(request, application_id):
     if volunteer_operation_is_authorized(request, volunteer_relation):
         volunteer_relation.is_co_owner = False
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         body = json.loads(request.body)
         message = body['demotion_message']
         email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
@@ -502,8 +506,12 @@ def leave_project(request, project_id):
                                sender=volunteer_relation.volunteer,
                                subject=email_subject,
                                body=email_body)
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
+
+def update_project_timestamp(request, project):
+    if not request.user.is_staff:
+        project.update_timestamp()
