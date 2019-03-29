@@ -108,7 +108,10 @@ class ProjectCreationForm(ModelForm):
         Tag.merge_tags_field(project.project_technologies, form.data.get('project_technologies'))
         Tag.merge_tags_field(project.project_organization, form.data.get('project_organization'))
 
-        project.save(user=request.user)
+        if not request.user.is_staff:
+            project.project_date_modified = timezone.now()
+
+        project.save()
 
         positions_json_text = form.data.get('project_positions')
         if len(positions_json_text) > 0:

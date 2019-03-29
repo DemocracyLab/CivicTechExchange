@@ -58,11 +58,6 @@ class Project(models.Model):
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
 
-    def save(self, user=None):
-        if user is None or not user.is_staff:
-            self.project_date_modified = timezone.now()
-        super().save()
-
     def all_owners(self):
         owners = [self.project_creator]
         project_volunteers = VolunteerRelation.objects.filter(project=self.id)
@@ -135,6 +130,10 @@ class Project(models.Model):
         }
 
         return project
+
+    def update_timestamp(self):
+        self.project_date_modified = timezone.now()
+        self.save()
 
 
 class ProjectLink(models.Model):
