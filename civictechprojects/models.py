@@ -445,9 +445,6 @@ class VolunteerRelation(models.Model):
         project_json = self.project.hydrate_to_list_json()
         return merge_dicts(volunteer_json, project_json)
 
-    def update_project_timestamp(self, user):
-        self.project.save(user=user)
-
     def is_up_for_renewal(self, now=None):
         now = now or timezone.now()
         return (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
