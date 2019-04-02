@@ -13,7 +13,8 @@ const Section = {
   ChangePassword: 'ChangePassword',
   EditProfile: 'EditProfile',
   SignedUp: 'SignedUp',
-  EmailVerified: 'EmailVerified'
+  EmailVerified: 'EmailVerified',
+  PartnerWithUs: 'PartnerWithUs'
 };
 
 export type SectionType = $Keys<typeof Section>;
