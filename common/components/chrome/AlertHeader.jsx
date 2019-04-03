@@ -4,7 +4,7 @@ import React from 'react';
 import {Glyph,GlyphStyles, GlyphSizes} from "../utils/glyphs.js";
 
 type Props = {|
-  onClickFindProjects: () => void
+  onClickFindProjects: () => void;
 |};
 
 type State = {|
@@ -21,17 +21,19 @@ function unescapeHtml(html: string): string {
 class AlertHeader extends React.PureComponent<Props, State> {
   constructor(): void {
     super();
+    this.alertHeaderRef = React.createRef();
     this.state = {showHeader: window.HEADER_ALERT && !sessionStorage["hideAlertHeader"]};
   }
-  
+
   hideHeader(): void {
     sessionStorage["hideAlertHeader"] = true;
     this.setState({showHeader: false});
+    this.props.onAlertClose();
   }
-  
+
   render(): ?React$Node {
     return this.state.showHeader && (
-      <div className="AlertHeader-root">
+      <div ref={this.alertHeaderRef} className="AlertHeader-root">
         <div className="AlertHeader-text" dangerouslySetInnerHTML={{__html: unescapeHtml(window.HEADER_ALERT)}}/>
         <div className="AlertHeader-close" onClick={() => this.hideHeader()}>
           <i className={Glyph(GlyphStyles.Close,GlyphSizes.LG)} aria-hidden="true"></i>
@@ -39,6 +41,6 @@ class AlertHeader extends React.PureComponent<Props, State> {
       </div>
     );
   }
-  
+
 }
 export default AlertHeader;
