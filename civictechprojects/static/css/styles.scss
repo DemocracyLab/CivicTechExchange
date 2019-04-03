@@ -30,6 +30,7 @@
 @import 'partials/CollapsibleMenuItem';
 @import 'partials/EmailVerifiedController';
 @import 'partials/LandingController';
+@import 'partials/MainController';
 @import 'partials/MainHeader';
 @import 'partials/MainFooter';
 @import 'partials/project_signup'; // has a modal opacity rule required for bootstrap-modals, maybe pull that out if we dont use the rest of this

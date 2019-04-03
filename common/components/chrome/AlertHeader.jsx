@@ -20,7 +20,8 @@ type AlertConfiguration = {|
 |};
 
 type Props = {|
-  onClickFindProjects: () => void
+  onClickFindProjects: () => void,
+  onAlertClose: () => void
 |};
 
 type State = {|
@@ -31,7 +32,6 @@ type State = {|
 
 // Put string html content into a format that dangerouslySetInnerHTML accepts
 function unescapeHtml(html: string): string {
-  
   let escapeEl = document.createElement('textarea');
   escapeEl.innerHTML = html;
   return escapeEl.textContent;
@@ -71,7 +71,7 @@ class AlertHeader extends React.PureComponent<Props, State> {
       alertConfigurations: alertConfigurations
     };
   }
-  
+
   hideHeader(): void {
     const alertShownStats: AlertShownStats = {
       lastHidden: moment.now().valueOf()
@@ -79,6 +79,7 @@ class AlertHeader extends React.PureComponent<Props, State> {
     
     sessionStorage[this.state.currentAlert.name] = JSON.stringify(alertShownStats);
     this.setState({showHeader: false});
+    this.props.onAlertClose();
   }
   
   getCurrentAlert(alertConfigurations: $ReadOnlyArray<AlertConfiguration>): AlertHeader {
@@ -130,7 +131,6 @@ class AlertHeader extends React.PureComponent<Props, State> {
   }
   
   _renderVolunteerUpForRenewal(): React$Node {
-    Section
     return (
       <div className="AlertHeader-text">
         You are approaching the end date for one or more projects you are volunteering with. { }
@@ -138,6 +138,5 @@ class AlertHeader extends React.PureComponent<Props, State> {
       </div>
     );
   }
-  
 }
 export default AlertHeader;
