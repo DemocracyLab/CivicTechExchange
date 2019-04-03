@@ -2,8 +2,7 @@
 
 import React from 'react';
 import cdn,{Images} from "../utils/cdn.js";
-import url from '../utils/url.js'
-import Section from '../enums/Section.js'
+import Sponsors, {SponsorMetadata} from "../utils/Sponsors.js";
 
 class PartnerWithUsController extends React.Component<{||}> {
   constructor(): void {
@@ -24,9 +23,7 @@ class PartnerWithUsController extends React.Component<{||}> {
           {this._renderEventSponsorshipSection()}
           {this._renderPlatformSponsorshipSection()}
         </div>
-        <div className="PartnerWithUsController-partners">
-          <h2>Our Partnerships</h2>
-        </div>
+        {this._renderSponsors()}
       </div>
     );
   }
@@ -78,6 +75,36 @@ class PartnerWithUsController extends React.Component<{||}> {
         </p>
       </div>
     );
+  }
+  
+  _renderSponsors(): ?React$Node {
+    const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
+    if(sponsors) {
+      return (
+        <div className="PartnerWithUsController-partners">
+          <h2>Our Partnerships</h2>
+          <div className="PartnerWithUsController-sponsorList">
+            {
+              sponsors.map( (sponsor: SponsorMetadata, i:number) => {
+                return (
+                  <div className="PartnerWithUsController-sponsor">
+                    <div>
+                      <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
+                        <img src={sponsor.thumbnailUrl}/>
+                      </a>
+                    </div>
+                    <div>
+                      <h6>{sponsor.displayName}</h6>
+                      <p>{sponsor.description}</p>
+                    </div>
+                  </div>
+                );
+              })
+            }
+          </div>
+        </div>
+      );
+    }
   }
 }
 

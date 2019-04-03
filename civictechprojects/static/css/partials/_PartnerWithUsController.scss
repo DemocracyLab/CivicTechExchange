@@ -12,6 +12,7 @@
 
 .PartnerWithUsController-sponsorTypeSection {
   width: 600px;
+  margin: 20px;
 }
 
 .PartnerWithUsController-sponsorTypeSection img{
@@ -26,4 +27,21 @@
 .PartnerWithUsController-partners {
   background-color: $color-background-default;
   padding: 50px 30px 50px 30px;
+}
+
+.PartnerWithUsController-sponsorList {
+  display: flex;
+}
+
+.PartnerWithUsController-sponsor {
+  display: flex;
+  width: 600px;
+}
+
+.PartnerWithUsController-sponsor img{
+  width: 200px;
+}
+
+.PartnerWithUsController-sponsor h6{
+  font-weight: bold;
 }
