@@ -4,7 +4,7 @@ import React from 'react';
 import {Glyph,GlyphStyles, GlyphSizes} from "../utils/glyphs.js";
 
 type Props = {|
-  onClickFindProjects: () => void;
+  onClickFindProjects: () => void
 |};
 
 type State = {|
