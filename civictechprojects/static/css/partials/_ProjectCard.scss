@@ -85,36 +85,6 @@
   margin: 0.25rem 0.5rem 0.25rem 0;
 }
 
-// @include media-breakpoint-up(sm) {
-//   .Project-Card-title {
-//     grid-row: 1;
-//   }
-//   .ProjectCard-description {
-//     grid-column: 3 / 5;
-//     grid-row: 2;
-//     padding: 0;
-//   }
-//   .ProjectCard-subinfo {
-//     grid-column: 1;
-//     grid-row: 3;
-//     margin-left: 0.5rem;
-//   }
-//   .ProjectCard-subinfo li {
-//     margin-top: 0.875rem;
-//   }
-//   .ProjectCard-subinfo li:first-of-type {
-//     margin-top: 0;
-//   }
-//   .ProjectCard-skills {
-//     grid-column: 3 / 5;
-//     grid-row: 3;
-//     padding: 0;
-//   }
-//   .ProjectCard-logo, .ProjectCard-subinfo {
-//     border-right: 1px solid $color-grey-medium;
-//   }
-// }
-
 @include media-breakpoint-up(lg) {
   // applied when screen width > 960px
   .ProjectCard-root {
