@@ -39,7 +39,7 @@ class SectionController extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="SectionBody">
+      <div className="SectionBody" style={{ paddingTop: this.props.headerHeight }}>
         {this._getController()}
       </div>
     );

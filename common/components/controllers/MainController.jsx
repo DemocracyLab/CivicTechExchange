@@ -12,12 +12,15 @@ class MainController extends React.Component<{||}> {
   constructor() {
     super();
     window.addEventListener("popstate", this.loadPage.bind(this));
+    this.state = {
+      headerHeight: 0
+    };
   }
-  
+
   componentWillMount(): void {
     this.loadPage();
   }
-  
+
   loadPage(): void {
     const args = url.arguments(window.location.href);
     if (args.section) {
@@ -30,12 +33,17 @@ class MainController extends React.Component<{||}> {
     }
   }
 
+  _mainHeaderHeightChange(headerHeight) {
+    this.setState({
+      headerHeight: headerHeight
+    });
+  }
+
   render(): React$Node {
     return [
-      <MainHeader key='main_header'/>,
+      <MainHeader key='main_header' onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}/>,
       <FlashMessage key='flash_message'/>,
-      <SectionController key='section_controller'/>,
-      <MainFooter key='main_footer'/>
+      <SectionController key='section_controller' headerHeight={this.state.headerHeight}/>,
     ];
   }
 }
