@@ -21,7 +21,6 @@ function unescapeHtml(html: string): string {
 class AlertHeader extends React.PureComponent<Props, State> {
   constructor(): void {
     super();
-    this.alertHeaderRef = React.createRef();
     this.state = {showHeader: window.HEADER_ALERT && !sessionStorage["hideAlertHeader"]};
   }
 
@@ -33,7 +32,7 @@ class AlertHeader extends React.PureComponent<Props, State> {
 
   render(): ?React$Node {
     return this.state.showHeader && (
-      <div ref={this.alertHeaderRef} className="AlertHeader-root">
+      <div className="AlertHeader-root">
         <div className="AlertHeader-text" dangerouslySetInnerHTML={{__html: unescapeHtml(window.HEADER_ALERT)}}/>
         <div className="AlertHeader-close" onClick={() => this.hideHeader()}>
           <i className={Glyph(GlyphStyles.Close,GlyphSizes.LG)} aria-hidden="true"></i>
