@@ -16,6 +16,11 @@
   padding-left: 10px;
 }
 
+.AlertHeader-text a {
+  text-decoration: underline;
+  color: $color-text-light; 
+}
+
 .AlertHeader-text p,i {
   text-align: center;
 }

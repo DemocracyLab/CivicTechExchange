@@ -180,7 +180,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
           <Grid item xs={12} sm={9} className="AboutProjects-mainColumn">
             <Paper className='AboutProjects-paper' elevation={1} square={true}>
               <Grid className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
-                  <Grid className='AboutProjects-description' item xs={12} sm={9}>
+                  <Grid className='AboutProjects-description' item xs={12} md={9}>
                     <h1>{project && project.project_name}</h1>
                     <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
                     <p>{project && project.project_short_description}</p>
@@ -194,7 +194,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     handleClose={this.confirmJoinProject.bind(this)}
                   />
 
-                  <Grid className='AboutProjects-owner' item xs={12} sm={3}>
+                  <Grid className='AboutProjects-owner' item xs={12} md={3}>
                     <ContactProjectButton project={project}/>
                     <ProjectVolunteerButton
                       project={project}
@@ -205,7 +205,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <div className="AboutProjects_tabs">
                 <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
                 {project && !_.isEmpty(project.project_positions) && 
-                <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#skills-needed">Skills Needed</a>
+                <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
                 }
               </div>
 

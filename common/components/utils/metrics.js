@@ -141,6 +141,18 @@ class metrics {
     _logEvent("ProjectPromoteVolunteer", {userId: userId, projectId: projectId});
   }
   
+  static logVolunteerRenewed(userId: number, projectId: number): void {
+    _logEvent("VolunteerRenewed", {userId: userId, projectId: projectId});
+  }
+  
+  static logVolunteerConcluded(userId: number, projectId: number): void {
+    _logEvent("VolunteerConcluded", {userId: userId, projectId: projectId});
+  }
+  
+  static logVolunteerClickReviewCommitmentsInEmail(userId: number): void {
+    _logEvent("VolunteerClickedReviewCommitmentsInEmail", {userId: userId});
+  }
+  
   static logSectionNavigation(section: SectionType): void {
     _logEvent("sectionLinkClick", {section: section});
   }

@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
+#TODO: Call out any missing required environment variables during startup
 import os
 import ast
 import dj_database_url
+from datetime import timedelta
 from distutils.util import strtobool
 from django.core.mail.backends.smtp import EmailBackend
 
@@ -66,6 +67,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(PROJECT_ROOT, 'democracylab/templates'),
+            os.path.join(PROJECT_ROOT, 'democracylab/templates/emails'),
             os.path.join(PROJECT_ROOT, 'civictechprojects/templates')
         ],
         'APP_DIRS': True,
@@ -161,6 +163,10 @@ ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
 FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
 
 APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
+VOLUNTEER_RENEW_REMINDER_PERIODS = ast.literal_eval(os.environ.get('VOLUNTEER_RENEW_REMINDER_PERIODS', 'None'))
+VOLUNTEER_REMINDER_OVERALL_PERIOD = VOLUNTEER_RENEW_REMINDER_PERIODS and timedelta(sum(VOLUNTEER_RENEW_REMINDER_PERIODS))
+VOLUNTEER_CONCLUDE_SURVEY_URL = os.environ.get('VOLUNTEER_CONCLUDE_SURVEY_URL', '')
+
 
 FOOTER_LINKS = os.environ.get('FOOTER_LINKS', '')
 
@@ -168,6 +174,7 @@ HEADER_ALERT = os.environ.get('HEADER_ALERT', '')
 
 PROJECT_DESCRIPTION_EXAMPLE_URL = os.environ.get('PROJECT_DESCRIPTION_EXAMPLE_URL', '')
 POSITION_DESCRIPTION_EXAMPLE_URL = os.environ.get('POSITION_DESCRIPTION_EXAMPLE_URL', '')
+
 
 SECURE_SSL_REDIRECT = os.environ.get('DL_SECURE_SSL_REDIRECT', False) == 'True'
 

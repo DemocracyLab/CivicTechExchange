@@ -19,6 +19,8 @@ import ResetPasswordController from "./ResetPasswordController.jsx";
 import ChangePasswordController from "./ChangePasswordController.jsx";
 import EditProfileController from "./EditProfileController.jsx";
 import AboutUserController from "./AboutUserController.jsx";
+import SignedUpController from "./SignedUpController.jsx";
+import EmailVerifiedController from "./EmailVerifiedController.jsx";
 
 type State = {|
   section: SectionType,
@@ -69,6 +71,10 @@ class SectionController extends React.Component<{||}, State> {
         return <EditProfileController />;
       case Section.Profile:
         return <AboutUserController />;
+      case Section.SignedUp:
+        return <SignedUpController />;
+      case Section.EmailVerified:
+        return <EmailVerifiedController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }

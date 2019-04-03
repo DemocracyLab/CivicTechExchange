@@ -14,7 +14,9 @@ export type MyProjectData = {|
   +application_text: ?string,
   +roleTag: ?TagDefinition,
   +isApproved: ?boolean,
-  +isCoOwner: ?boolean
+  +isCoOwner: ?boolean,
+  +isUpForRenewal: ?boolean,
+  +projectedEndDate: ?Date
 |};
 
 export type MyProjectsAPIResponse = {|

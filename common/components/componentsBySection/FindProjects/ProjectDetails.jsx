@@ -1,7 +1,12 @@
 // @flow
 import React from 'react';
 import Divider from '@material-ui/core/Divider';
-import {Earth, MapMarker, Clock, Domain, ChartBar, Key} from 'mdi-material-ui';
+import Earth from 'mdi-material-ui/Earth';
+import MapMarker from 'mdi-material-ui/MapMarker';
+import Clock from 'mdi-material-ui/Clock';
+import Domain from 'mdi-material-ui/Domain';
+import ChartBar from 'mdi-material-ui/ChartBar';
+import Key from 'mdi-material-ui/Key';
 import Moment from 'react-moment';
 import urlHelper from '../../utils/url.js'
 

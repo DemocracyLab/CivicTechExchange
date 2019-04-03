@@ -282,7 +282,7 @@ class MainHeader extends React.Component<{||}, State > {
   _renderHamburgerFooterLinks(): $ReadOnlyArray<React$Node> {
     return FooterLinks.list().map((link) => {
       return (
-        <React.Fragment>
+        <React.Fragment key={link.url}>
           <a key={link.url} href={link.url} onClick={FooterLinks.logClick.bind(this, link)}>
             <div className={'SubHeader-drawerDiv'}>
               {link.name}
