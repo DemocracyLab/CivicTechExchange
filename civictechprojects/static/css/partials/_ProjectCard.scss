@@ -45,6 +45,7 @@
 }
 .ProjectCard-subinfo li {
   margin-top: 0.25rem;
+  display: block;
 }
 .ProjectCard-subinfo li:first-of-type {
   margin-top: 0;
@@ -64,7 +65,8 @@
   display: grid;
 }
 .ProjectCard-logo img {
-  max-width: 100%;
+  max-width: 97%;
+  max-height: 95%;
   display: block;
   margin: auto;
 }
@@ -125,7 +127,7 @@
     padding-top: 0.5rem;
   }
   .ProjectCard-subinfo li {
-    display: inline;
+    display: block;
     padding-right: 1rem;
   }
 }
