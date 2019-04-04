@@ -1,15 +1,14 @@
 .MainFooter-footer {
   background-color: $color-background-default;
   width: 100%;
+  padding: 0 20px;
   display: flex;
   flex-wrap: wrap;
 }
-
 .MainFooter-item {
-  margin: auto;
-  padding: 20px;
+  padding-top: 20px;
 }
 
 .MainFooter-sponsor img{
-  width: 200px;
+  max-width: 200px;
 }
