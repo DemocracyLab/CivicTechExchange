@@ -44,6 +44,7 @@ class MainController extends React.Component<{||}> {
       <MainHeader key='main_header' onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}/>,
       <FlashMessage key='flash_message'/>,
       <SectionController key='section_controller' headerHeight={this.state.headerHeight}/>,
+      <MainFooter/>
     ];
   }
 }

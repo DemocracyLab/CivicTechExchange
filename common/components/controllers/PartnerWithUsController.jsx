@@ -87,7 +87,7 @@ class PartnerWithUsController extends React.Component<{||}> {
             {
               sponsors.map( (sponsor: SponsorMetadata, i:number) => {
                 return (
-                  <div className="PartnerWithUsController-sponsor">
+                  <div key={i} className="PartnerWithUsController-sponsor">
                     <div>
                       <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
                         <img src={sponsor.thumbnailUrl}/>
