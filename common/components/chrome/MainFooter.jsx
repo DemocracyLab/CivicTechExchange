@@ -17,7 +17,7 @@ class MainFooter extends React.PureComponent<{||}> {
         <div className="MainFooter-item col-xs-12 col-md-6">
           <h2>Sponsors Make It Possible</h2>
           <p>Support the acceleration of social change</p>
-          <a className="EmailVerified-find-projects-btn btn btn-default" href={url.section(Section.PartnerWithUs)}>
+          <a className="EmailVerified-find-projects-btn btn btn-theme" href={url.section(Section.PartnerWithUs)}>
             PARTNER WITH US
           </a>
         </div>
