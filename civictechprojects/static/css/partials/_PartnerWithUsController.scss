@@ -1,23 +1,19 @@
 .PartnerWithUsController-topSection {
   background-color: $color-background-default;
-  padding: 50px 30px 50px 30px;
+  padding: 25px 0;
 }
 
 .PartnerWithUsController-sponsorTypes {
   background-color: $color-background-light;
-  padding: 50px 30px 50px 30px;
+  padding: 25px 0 0 0;
   display: flex;
   flex-wrap: wrap;
 }
 
-.PartnerWithUsController-sponsorTypeSection {
-  width: 600px;
-  margin: 20px;
-}
 
-.PartnerWithUsController-sponsorTypeSection img{
-  width: 600px;
-  height: 350px;
+.PartnerWithUsController-sponsorTypeSection img {
+  max-width: 100%;
+  padding-bottom: 16px;
 }
 
 .PartnerWithUsController-sponsorAmount {

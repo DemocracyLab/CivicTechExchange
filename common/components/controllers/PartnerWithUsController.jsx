@@ -8,18 +8,18 @@ class PartnerWithUsController extends React.Component<{||}> {
   constructor(): void {
     super();
   }
-  
+
   render(): React$Node {
     return (
-      <div className="PartnerWithUsController-root">
-        <div className="PartnerWithUsController-topSection">
+      <div className="PartnerWithUsController-root container">
+        <div className="PartnerWithUsController-topSection col-xs-12">
           <h1>Partner With Us</h1>
           <p>Support the acceleration of social change</p>
           <a className="EmailVerified-find-projects-btn btn btn-default" href="mailto:hello@democracylab.org">
             CONTACT US
           </a>
         </div>
-        <div className="PartnerWithUsController-sponsorTypes">
+        <div className="PartnerWithUsController-sponsorTypes row">
           {this._renderEventSponsorshipSection()}
           {this._renderPlatformSponsorshipSection()}
         </div>
@@ -27,10 +27,10 @@ class PartnerWithUsController extends React.Component<{||}> {
       </div>
     );
   }
-  
+
   _renderEventSponsorshipSection(): React$Node {
     return (
-      <div className="PartnerWithUsController-sponsorTypeSection">
+      <div className="PartnerWithUsController-sponsorTypeSection col-xs-12 col-md-6">
         <div className="PartnerWithUsController-headerLogo">
           <img src={cdn.image(Images.EVENT_SPLASH)}/>
         </div>
@@ -49,10 +49,10 @@ class PartnerWithUsController extends React.Component<{||}> {
       </div>
     );
   }
-  
+
   _renderPlatformSponsorshipSection(): React$Node {
     return (
-      <div className="PartnerWithUsController-sponsorTypeSection">
+      <div className="PartnerWithUsController-sponsorTypeSection col-xs-12 col-md-6">
         <div className="PartnerWithUsController-headerLogo">
           <img src={cdn.image(Images.PLATFORM_SPLASH)}/>
         </div>
@@ -76,7 +76,7 @@ class PartnerWithUsController extends React.Component<{||}> {
       </div>
     );
   }
-  
+
   _renderSponsors(): ?React$Node {
     const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
     if(sponsors) {
