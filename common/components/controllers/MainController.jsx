@@ -5,15 +5,28 @@ import MainHeader from '../chrome/MainHeader.jsx';
 import UniversalDispatcher from '../stores/UniversalDispatcher.js';
 import React from 'react';
 import FlashMessage from '../chrome/FlashMessage.jsx';
-import url from '../../components/utils/url.js'
 import MainFooter from "../chrome/MainFooter.jsx";
+import Section from "../enums/Section.js";
+import url from '../../components/utils/url.js'
+import _ from 'lodash';
 
-class MainController extends React.Component<{||}> {
+type State = {|
+  headerHeight: number,
+  currentSection: ?string
+|};
+
+const sectionsToShowFooter: $ReadOnlyArray<string> = [
+  Section.FindProjects,
+  Section.AboutProject
+];
+
+class MainController extends React.Component<{||}, State> {
   constructor() {
     super();
     window.addEventListener("popstate", this.loadPage.bind(this));
     this.state = {
-      headerHeight: 0
+      headerHeight: 0,
+      currentSection: null
     };
   }
 
@@ -30,6 +43,7 @@ class MainController extends React.Component<{||}> {
         url: window.location.href,
         fromUrl: true
       });
+      this.setState({currentSection: args.section});
     }
   }
 
@@ -39,11 +53,12 @@ class MainController extends React.Component<{||}> {
     });
   }
 
-  render(): React$Node {
+  render(): Array<React$Node> {
     return [
       <MainHeader key='main_header' onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}/>,
       <FlashMessage key='flash_message'/>,
       <SectionController key='section_controller' headerHeight={this.state.headerHeight}/>,
+      this.state.currentSection && (_.includes(sectionsToShowFooter, this.state.currentSection)) ? <MainFooter/> : null
     ];
   }
 }

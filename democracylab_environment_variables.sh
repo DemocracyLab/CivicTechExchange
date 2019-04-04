@@ -24,6 +24,9 @@ export FOOTER_LINKS='[{"u":"https://connect.democracylab.org","n":"About"},{"u":
 # Event Header
 export HEADER_ALERT="<p>You are invited to our upcoming event, St. Hat-trick's day!  Come with a team or join a new one on Saturday, March 16.  Be sure to RSVP on <a href='https://www.eventbrite.com/e/st-hack-tricks-day-tickets-54897293282'>Eventbrite</a>!</p>"
 
+# Sponsor information
+export SPONSORS_METADATA='[{"displayName":"HERE Technologies","url":"https://www.here.com/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/here_technologies.png","description":"By building a digital representation of reality entirely built upon location data, we are radically transforming the way the world lives, moves and interacts"}]'
+
 # Configure project description example link
 export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/index/?section=AboutProject&id=1'
 

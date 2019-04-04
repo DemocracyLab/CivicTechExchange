@@ -135,8 +135,8 @@ def index(request):
         'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL,
         'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL,
         'STATIC_CDN_URL': settings.STATIC_CDN_URL,
-        'HEADER_ALERT' : settings.HEADER_ALERT
-
+        'HEADER_ALERT': settings.HEADER_ALERT,
+        'SPONSORS_METADATA': settings.SPONSORS_METADATA
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',

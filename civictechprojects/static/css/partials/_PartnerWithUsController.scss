@@ -1,0 +1,44 @@
+.PartnerWithUsController-topSection {
+  background-color: $color-background-default;
+  padding: 25px 0;
+}
+
+.PartnerWithUsController-sponsorTypes {
+  background-color: $color-background-light;
+  padding: 25px 0 0 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.PartnerWithUsController-sponsorTypeSection img {
+  max-width: 100%;
+  padding-bottom: 16px;
+}
+
+.PartnerWithUsController-sponsorAmount {
+  color: $color-orange-darker;
+}
+
+.PartnerWithUsController-partners {
+  background-color: $color-background-default;
+  padding: 50px 30px 50px 30px;
+}
+
+.PartnerWithUsController-sponsorList {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.PartnerWithUsController-sponsor {
+  display: flex;
+  width: 600px;
+}
+
+.PartnerWithUsController-sponsor img{
+  width: 200px;
+}
+
+.PartnerWithUsController-sponsor h6{
+  font-weight: bold;
+}
