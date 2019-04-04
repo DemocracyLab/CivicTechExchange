@@ -5,14 +5,20 @@ import MainHeader from '../chrome/MainHeader.jsx';
 import UniversalDispatcher from '../stores/UniversalDispatcher.js';
 import React from 'react';
 import FlashMessage from '../chrome/FlashMessage.jsx';
-import url from '../../components/utils/url.js'
 import MainFooter from "../chrome/MainFooter.jsx";
 import Section from "../enums/Section.js";
+import url from '../../components/utils/url.js'
+import _ from 'lodash';
 
 type State = {|
   headerHeight: number,
   currentSection: ?string
 |};
+
+const sectionsToShowFooter: $ReadOnlyArray<string> = [
+  Section.FindProjects,
+  Section.AboutProject
+];
 
 class MainController extends React.Component<{||}, State> {
   constructor() {
@@ -52,7 +58,7 @@ class MainController extends React.Component<{||}, State> {
       <MainHeader key='main_header' onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}/>,
       <FlashMessage key='flash_message'/>,
       <SectionController key='section_controller' headerHeight={this.state.headerHeight}/>,
-      this.state.currentSection && this.state.currentSection !== Section.PartnerWithUs ? <MainFooter/> : null
+      this.state.currentSection && (_.includes(sectionsToShowFooter, this.state.currentSection)) ? <MainFooter/> : null
     ];
   }
 }
