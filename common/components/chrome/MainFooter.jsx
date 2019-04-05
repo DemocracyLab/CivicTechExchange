@@ -1,18 +1,36 @@
 // @flow
 
 import React from 'react';
+import {Container} from 'flux/utils';
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import Sponsors, {SponsorMetadata} from "../utils/Sponsors.js";
+import NavigationStore from "../stores/NavigationStore.js";
+import _ from 'lodash';
 
-class MainFooter extends React.PureComponent<{||}> {
+const sectionsToShowFooter: $ReadOnlyArray<string> = [
+  Section.FindProjects,
+  Section.AboutProject
+];
+
+class MainFooter extends React.Component<{||}> {
 
   constructor(): void {
     super();
   }
+  
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [NavigationStore];
+  }
+  
+  static calculateState(prevState: State): State {
+    return {
+      section: NavigationStore.getSection(),
+    };
+  }
 
-  render(): React$Node {
-    return (
+  render(): ?React$Node {
+    return this.state.section && (_.includes(sectionsToShowFooter, this.state.section)) && (
       <div className="MainFooter-footer container">
         <div className="MainFooter-item col-xs-12 col-md-6">
           <h2>Sponsors Make It Possible</h2>
@@ -43,4 +61,4 @@ class MainFooter extends React.PureComponent<{||}> {
     }
   }
 }
-export default MainFooter;
+export default Container.create(MainFooter);
