@@ -33,7 +33,7 @@
     "react-dom": "^16.4.2",
     "react-helmet": "^5.2.0",
     "react-moment": "^0.7.9",
-    "react-select": "^2.0.0",
+    "react-select": "^2.0.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.289.0",
@@ -48,6 +48,7 @@
     "net": "^1.0.2",
     "sync-exec": "~0.6.2",
     "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^2.11.2"
   }
 }
