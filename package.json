@@ -49,6 +49,6 @@
     "sync-exec": "~0.6.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^2.11.2"
+    "webpack-dev-server": "^3.3.0"
   }
 }
