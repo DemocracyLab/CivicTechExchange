@@ -27,5 +27,8 @@ export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/index/?sect
 # Configure position description example link
 export POSITION_DESCRIPTION_EXAMPLE_URL='https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit'
 
+# Configure number of projects to display per server request
+export PROJECTS_PER_PAGE=20
+
 # ONLY FOR USE IN PRODUCTION
 #export HOTJAR_APPLICATION_ID=1097784
