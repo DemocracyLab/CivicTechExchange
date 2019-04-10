@@ -75,8 +75,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   }
 
   _renderPagination(): React$Node {
-    debugger;
-    if (this.state.current_page + 1 === this.state.project_pages) {
+    if (this.state.current_page === this.state.project_pages) {
       return null; // don't render button if we've loaded the last page
     }
     return (

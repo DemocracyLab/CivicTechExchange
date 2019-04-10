@@ -24626,7 +24626,7 @@ var DEFAULT_STATE = {
   sortField: '',
   location: '',
   numPages: -1,
-  page: 0,
+  page: 1,
   tags: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(),
   projectsData: {},
   findProjectsArgs: {}
@@ -24715,7 +24715,6 @@ var ProjectSearchStore = function (_ReduceStore) {
           keyword: state.keyword,
           sortField: state.sortField,
           location: state.location,
-          // page: state.page,
           issues: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ISSUES),
           tech: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].TECHNOLOGIES_USED),
           role: this._getTagCategoryParams(state, __WEBPACK_IMPORTED_MODULE_4__common_tags_TagCategory_jsx__["a" /* default */].ROLE),
@@ -24724,8 +24723,6 @@ var ProjectSearchStore = function (_ReduceStore) {
           url: state.url,
           positions: state.positions
         }, __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.identity);
-        // } else {
-        //   findProjectsArgs = { page: state.page };
       }
 
       state = state.set('findProjectsArgs', findProjectsArgs);
@@ -24749,7 +24746,6 @@ var ProjectSearchStore = function (_ReduceStore) {
       state = this._addKeywordToState(state, findProjectsArgs.keyword);
       state = this._addSortFieldToState(state, findProjectsArgs.sortField);
       state = this._addLocationToState(state, findProjectsArgs.location && decodeURI(findProjectsArgs.location));
-      state = this._setPageNumberInState(state, 0); // findProjectsArgs.page);
 
       return state;
     }
@@ -24807,11 +24803,10 @@ var ProjectSearchStore = function (_ReduceStore) {
   }, {
     key: '_loadProjects',
     value: function _loadProjects(state) {
-      debugger;
       state = this._updateFindProjectArgs(state);
       this._updateWindowUrl(state);
 
-      var url = __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].constructWithQueryString('/api/projects?page=' + (state.page + 1), Object.assign({}, state.findProjectsArgs));
+      var url = __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].constructWithQueryString('/api/projects?page=' + state.page, Object.assign({}, state.findProjectsArgs));
       fetch(new Request(url)).then(function (response) {
         return response.json();
       }).then(function (getProjectsResponse) {
@@ -94298,8 +94293,7 @@ var ProjectCardsContainer = function (_React$Component) {
   }, {
     key: '_renderPagination',
     value: function _renderPagination() {
-      debugger;
-      if (this.state.current_page + 1 === this.state.project_pages) {
+      if (this.state.current_page === this.state.project_pages) {
         return null; // don't render button if we've loaded the last page
       }
       return this.state.projects && this.state.projects.size !== 0 ? __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(

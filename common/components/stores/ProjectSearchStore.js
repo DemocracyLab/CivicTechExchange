@@ -68,7 +68,7 @@ const DEFAULT_STATE = {
   sortField: '',
   location: '',
   numPages: -1,
-  page: 0,
+  page: 1,
   tags: List(),
   projectsData: {},
   findProjectsArgs: {}
@@ -142,7 +142,6 @@ class ProjectSearchStore extends ReduceStore<State> {
         keyword: state.keyword,
         sortField: state.sortField,
         location: state.location,
-        // page: state.page,
         issues: this._getTagCategoryParams(state, TagCategory.ISSUES),
         tech: this._getTagCategoryParams(state, TagCategory.TECHNOLOGIES_USED),
         role: this._getTagCategoryParams(state, TagCategory.ROLE),
@@ -151,8 +150,6 @@ class ProjectSearchStore extends ReduceStore<State> {
         url: state.url,
         positions: state.positions
       }, _.identity);
-    // } else {
-    //   findProjectsArgs = { page: state.page };
     }
 
     state = state.set('findProjectsArgs',findProjectsArgs);
@@ -174,7 +171,6 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = this._addKeywordToState(state, findProjectsArgs.keyword);
     state = this._addSortFieldToState(state, findProjectsArgs.sortField);
     state = this._addLocationToState(state, findProjectsArgs.location && decodeURI(findProjectsArgs.location));
-    state = this._setPageNumberInState(state, 0); // findProjectsArgs.page);
 
     return state;
   }
@@ -222,11 +218,10 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _loadProjects(state: State): State {
-    debugger;
     state = this._updateFindProjectArgs(state);
     this._updateWindowUrl(state);
 
-    const url: string = urls.constructWithQueryString(`/api/projects?page=${state.page + 1}`, 
+    const url: string = urls.constructWithQueryString(`/api/projects?page=${state.page}`,
       Object.assign({}, state.findProjectsArgs));
     fetch(new Request(url))
       .then(response => response.json())
