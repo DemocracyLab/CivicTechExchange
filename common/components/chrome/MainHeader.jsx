@@ -65,7 +65,7 @@ class MainHeader extends React.Component<{||}, State > {
       url: url.section(section)
     });
   }
-
+ 
   constructor(): void {
     super();
     this._cx = new cx('SubHeader-');
@@ -101,7 +101,7 @@ class MainHeader extends React.Component<{||}, State > {
       <div ref={this.mainHeaderRef} className='MainHeader'>
         <AlertHeader onAlertClose={this._handleAlertClosing.bind(this)}/>
         <div className={this._cx.get('root')}>
-          <a href={url.section(Section.FindProjects, {showSplash: 1})}>
+          <a href={url.section(Section.FindProjects, {showSplash: 1})} target="_blank">
             <div className="SubHeader-logo-container">
               <img
                 className="SubHeader-logo"
@@ -283,7 +283,7 @@ class MainHeader extends React.Component<{||}, State > {
     return FooterLinks.list().map((link) => {
       return (
         <React.Fragment key={link.url}>
-          <a key={link.url} href={link.url} onClick={FooterLinks.logClick.bind(this, link)}>
+          <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer" onClick={FooterLinks.logClick.bind(this, link)}>
             <div className={'SubHeader-drawerDiv'}>
               {link.name}
             </div>
@@ -306,7 +306,7 @@ class MainHeader extends React.Component<{||}, State > {
           headerLinks.map((link) => {
             return (
               <div key={link.url} className="SectionLink-root">
-                <a className="SubHeader-anchor" href={link.url} onClick={FooterLinks.logClick.bind(this, link)}>
+                <a className="SubHeader-anchor" href={link.url} target="_blank" rel="noopener noreferrer" onClick={FooterLinks.logClick.bind(this, link)}>
                   <h3>{link.name}</h3>
                 </a>
               </div>
@@ -326,6 +326,7 @@ class MainHeader extends React.Component<{||}, State > {
              href={link.url}
              className="SubHeader-donate-btn-container"
              onClick={FooterLinks.logClick.bind(this, link)}
+             target="_blank" rel="noopener noreferrer"
           >
             <button className="SubHeader-donate-btn">
               {link.name}
@@ -367,6 +368,7 @@ class MainHeader extends React.Component<{||}, State > {
           key={config.title}
           section={config.section}
           title={config.title}
+          target="_blank" rel="noopener noreferrer"
         />
       );
   }
