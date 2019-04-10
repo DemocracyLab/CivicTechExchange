@@ -98427,12 +98427,12 @@ var ProjectOwnerCard = function (_React$PureComponent) {
         { className: 'VolunteerCard-root' },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'a',
-          { className: 'VolunteerCard-volunteerName', href: ownerUrl, target: '_blank', rel: 'noopener noreferrer' },
+          { className: 'VolunteerCard-volunteerName', href: ownerUrl },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__avatar_jsx__["a" /* default */], { user: owner, size: 50 })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'a',
-          { className: 'VolunteerCard-volunteerName', href: ownerUrl, target: '_blank', rel: 'noopener noreferrer' },
+          { className: 'VolunteerCard-volunteerName', href: ownerUrl },
           owner && owner.first_name + " " + owner.last_name
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
