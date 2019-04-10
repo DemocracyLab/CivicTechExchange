@@ -17,7 +17,7 @@ from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email, \
+from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
@@ -495,17 +495,22 @@ def leave_project(request, project_id):
     if request.user.id == volunteer_relation.volunteer.id:
         body = json.loads(request.body)
         message = body['departure_message']
-        email_body = '{volunteer_name} is leaving {project_name} for the following reason:\n{message}'.format(
+        # email_body = '{volunteer_name} is leaving {project_name} for the following reason:\n{message}'.format(
+        #     volunteer_name=volunteer_relation.volunteer.full_name(),
+        #     project_name=volunteer_relation.project.project_name,
+        #     message=message)
+        email_template = HtmlEmailTemplate()\
+        .paragraph('{volunteer_name} is leaving {project_name} for the following reason:'.format(
             volunteer_name=volunteer_relation.volunteer.full_name(),
-            project_name=volunteer_relation.project.project_name,
-            message=message)
+            project_name=volunteer_relation.project.project_name))\
+        .paragraph('\"{message}\"'.format(message=message))
         email_subject = '{volunteer_name} is leaving {project_name}'.format(
             volunteer_name=volunteer_relation.volunteer.full_name(),
             project_name=volunteer_relation.project.project_name)
         send_to_project_owners(project=volunteer_relation.project,
                                sender=volunteer_relation.volunteer,
                                subject=email_subject,
-                               body=email_body)
+                               template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
