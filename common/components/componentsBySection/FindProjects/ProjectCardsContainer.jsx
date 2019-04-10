@@ -63,9 +63,12 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
 
   _handleFetchNextPage(e: object): void {
     e.preventDefault();
-    this.setState({current_page: this.state.current_page + 1 <= this.state.project_pages 
+
+    const nextPage = this.state.current_page + 1 <= this.state.project_pages 
       ? this.state.current_page + 1 
-      : this.state.current_page }, function () {
+      : this.state.current_page;
+
+    this.setState({current_page: nextPage }, function () {
       ProjectSearchDispatcher.dispatch({
         type: 'SET_PAGE',
         page: this.state.current_page,
@@ -73,7 +76,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     });
   }
 
-  _renderPagination(): React$Node {
+  _renderPagination(): ?React$Node {
     if (this.state.current_page === this.state.project_pages) {
       return null; // don't render button if we've loaded the last page
     }
@@ -81,7 +84,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
       this.state.projects && this.state.projects.size !== 0
       ? <div className="page_selection_footer">
         <button className="page_button" onClick={this._handleFetchNextPage.bind(this)}>
-          More Projects... &rarr;
+          More Projects...
         </button>
       </div>
       : null

@@ -143,7 +143,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   _updateFindProjectArgs(state: State): State {
     let findProjectsArgs: FindProjectsArgs;
     if(state.projectsData && state.projectsData.allTags) {
-      findProjectsArgs = _.pickBy({
+      const findProjectsArgs: FindProjectsArgs = _.pickBy({
         keyword: state.keyword,
         sortField: state.sortField,
         location: state.location,

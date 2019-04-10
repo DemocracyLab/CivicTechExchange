@@ -24715,7 +24715,7 @@ var ProjectSearchStore = function (_ReduceStore) {
     value: function _updateFindProjectArgs(state) {
       var findProjectsArgs = void 0;
       if (state.projectsData && state.projectsData.allTags) {
-        findProjectsArgs = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.pickBy({
+        var _findProjectsArgs = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.pickBy({
           keyword: state.keyword,
           sortField: state.sortField,
           location: state.location,
@@ -47114,7 +47114,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var DEFAULT_STATE = {
   section: __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].FindProjects
-  // page: 1,
 };
 
 var State = function (_Record) {
@@ -94297,7 +94296,10 @@ var ProjectCardsContainer = function (_React$Component) {
     key: '_handleFetchNextPage',
     value: function _handleFetchNextPage(e) {
       e.preventDefault();
-      this.setState({ current_page: this.state.current_page + 1 <= this.state.project_pages ? this.state.current_page + 1 : this.state.current_page }, function () {
+
+      var nextPage = this.state.current_page + 1 <= this.state.project_pages ? this.state.current_page + 1 : this.state.current_page;
+
+      this.setState({ current_page: nextPage }, function () {
         __WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
           type: 'SET_PAGE',
           page: this.state.current_page
@@ -94316,7 +94318,7 @@ var ProjectCardsContainer = function (_React$Component) {
         __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
           'button',
           { className: 'page_button', onClick: this._handleFetchNextPage.bind(this) },
-          'More Projects... \u2192'
+          'More Projects...'
         )
       ) : null;
     }
@@ -97173,7 +97175,6 @@ var MainHeader = function (_React$PureComponent) {
       __WEBPACK_IMPORTED_MODULE_0__stores_NavigationDispatcher_js__["a" /* default */].dispatch({
         type: 'SET_SECTION',
         section: __WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].FindProjects,
-        page: 1,
         url: __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].section(__WEBPACK_IMPORTED_MODULE_3__enums_Section_js__["a" /* default */].FindProjects)
       });
     }
