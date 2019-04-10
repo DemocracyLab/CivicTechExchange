@@ -100375,7 +100375,7 @@ var IconLinkDisplay = function (_React$PureComponent) {
           { className: "IconLink-root" },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "a",
-            { href: this.props.link.linkUrl },
+            { href: this.props.link.linkUrl, target: "_blank", rel: "noopener noreferrer" },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "div",
               { className: "IconLink-left" },
