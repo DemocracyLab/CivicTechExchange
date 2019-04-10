@@ -1,9 +1,8 @@
 .SubHeader-logo-container {
-  float: left;
   display: flex;
-  width: 200px;
   align-items: center;
   justify-content: center;
+  padding-left: 5px;
 }
 
 .SubHeader-logo {
@@ -16,16 +15,17 @@
   flex-direction: row;
   background-color: $color-background-default;
   height: $header-height;
-  padding: 0 5% 0 5%;
+  padding: 0 5px 0 5px;
   margin-bottom: 5px;
+  justify-content: space-between;
 }
 
 .SubHeader-rightContent {
   display: none; 
   flex-direction: row;
-  height: 100%;  
+  height: 100%;
+  padding-right: 15px;  
   justify-content: flex-end;
-  width: 85%;
   a {
     text-decoration: none;
     color: $color-text-grey;
@@ -201,7 +201,7 @@
 // @include media-breakpoint-up(sm) {
 // }
 
-@include media-breakpoint-up(md) {
+@media (min-width: 910px) {
   .SubHeader-hamburger {
     display: none;
   }
