@@ -53,7 +53,6 @@ class MainHeader extends React.PureComponent<{||}> {
     NavigationDispatcher.dispatch({
       type: 'SET_SECTION',
       section: Section.FindProjects,
-      page: 1,
       url: url.section(Section.FindProjects)
     });
   }
