@@ -327,8 +327,14 @@ def contact_project_owner(request, project_id):
                     firstname=user.first_name,
                     lastname=user.last_name,
                     project=project.project_name)
-    email_body = '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email)
-    send_to_project_owners(project=project, sender=user, subject=email_subject, body=email_body)
+    # email_body = '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email)
+    email_template = HtmlEmailTemplate()\
+        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+            message=message,
+            firstname=user.first_name,
+            lastname=user.last_name))\
+        .paragraph('To contact this person, email them at {email}'.format(email=user.email))
+    send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
     return HttpResponse(status=200)
 
 
