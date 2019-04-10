@@ -3,7 +3,6 @@
 
 .AboutProjects-root {
     width: 96vw;
-    min-height: 1750px;
     margin: auto;
     max-width: 1080px;
 
@@ -49,7 +48,7 @@
   .AboutProjects-icon {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit:contain;
   }
 
   .AboutProjects-details {

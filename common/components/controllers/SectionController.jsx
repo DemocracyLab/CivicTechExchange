@@ -21,6 +21,7 @@ import EditProfileController from "./EditProfileController.jsx";
 import AboutUserController from "./AboutUserController.jsx";
 import SignedUpController from "./SignedUpController.jsx";
 import EmailVerifiedController from "./EmailVerifiedController.jsx";
+import PartnerWithUsController from "./PartnerWithUsController.jsx";
 
 type State = {|
   section: SectionType,
@@ -39,7 +40,7 @@ class SectionController extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="SectionBody">
+      <div className="SectionBody" style={{ paddingTop: this.props.headerHeight }}>
         {this._getController()}
       </div>
     );
@@ -75,6 +76,8 @@ class SectionController extends React.Component<{||}, State> {
         return <SignedUpController />;
       case Section.EmailVerified:
         return <EmailVerifiedController />;
+      case Section.PartnerWithUs:
+        return <PartnerWithUsController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }

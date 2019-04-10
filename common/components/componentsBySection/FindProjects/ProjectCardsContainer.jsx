@@ -2,7 +2,8 @@
 
 import type {Project} from '../../stores/ProjectSearchStore.js';
 import type {FluxReduceStore} from 'flux/utils';
-
+import ProjectSearchSort from './ProjectSearchSort.jsx';
+import ProjectTagContainer from './ProjectTagContainer.jsx';
 import {Container} from 'flux/utils';
 import {List} from 'immutable'
 import ProjectCard from './ProjectCard.jsx';
@@ -22,14 +23,20 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   static calculateState(prevState: State): State {
     return {
       projects: ProjectSearchStore.getProjects(),
+      keyword: ProjectSearchStore.getKeyword() || '',
+      tags: ProjectSearchStore.getTags() || [],
+      location: ProjectSearchStore.getLocation() || ''
     };
   }
 
   render(): React$Node {
     return (
       <div className="ProjectCardContainer col-12 col-md-9 col-xxl-10 p-0 m-0">
-        <div className="container-fluid pl-0 pr-0">
+        <div className="container-fluid">
+            <ProjectSearchSort />
+            <ProjectTagContainer />
           <div className="row">
+            {!_.isEmpty(this.state.projects) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}
             {this._renderCards()}
           </div>
         </div>
@@ -37,11 +44,19 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     );
   }
 
+  _renderCardHeaderText(): React$Node {
+    if (this.state.keyword || this.state.tags.size > 0 || this.state.location) {
+      return this.state.projects.size === 1 ? this.state.projects.size + ' tech-for-good project found' : this.state.projects.size + ' tech-for-good projects found'
+    } else {
+      return 'Find and volunteer with the best tech-for-good projects'
+    }
+  }
+
   _renderCards(): React$Node {
     return !this.state.projects
       ? 'Loading projects ...'
       : this.state.projects.size === 0
-        ? 'No projects match the provided criteria.  Sign up for an alert to be notified when matching projects are added or try a different set of filters.'
+        ? 'No projects match the provided criteria. Try a different set of filters or search term.'
         : this.state.projects.map(
           (project, index) =>
             <ProjectCard
