@@ -71,7 +71,8 @@ const DEFAULT_STATE = {
   page: 1,
   tags: List(),
   projectsData: {},
-  findProjectsArgs: {}
+  findProjectsArgs: {},
+  filterApplied: false
 };
 
 class State extends Record(DEFAULT_STATE) {
@@ -83,6 +84,7 @@ class State extends Record(DEFAULT_STATE) {
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
   findProjectsArgs: FindProjectsArgs;
+  filterApplied: boolean;
 }
 
 class ProjectSearchStore extends ReduceStore<State> {
@@ -124,8 +126,9 @@ class ProjectSearchStore extends ReduceStore<State> {
         let allTags = _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name);
         // Remove all tag filters that don't match an existing tag name
         state = state.set('tags', state.tags.filter(tag => allTags[tag]));
+        let currentProjects = state.projectsData.projects || List();
         return state.set('projectsData', {
-          projects: state.projectsData.projects ? state.projectsData.projects.concat(projects) : List(projects),
+          projects: currentProjects.concat(projects),
           numPages: numPages,
           allTags: allTags,
         });
@@ -186,21 +189,25 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   _addTagToState(state: State, tag: string): State {
     const newTags:$ReadOnlyArray<string> = state.tags.concat(tag);
+    state = state.set('filterApplied', true);
     return state.set('tags', newTags);
   }
 
   _addKeywordToState(state: State, keyword: string): State {
     state = state.set('keyword', keyword);
+    state = state.set('filterApplied', true);
     return state;
   }
 
   _addSortFieldToState(state: State, sortField: string): State {
     state = state.set('sortField', sortField);
+    state = state.set('filterApplied', true);
     return state;
   }
 
   _addLocationToState(state: State, location: string): State {
     state = state.set('location', location);
+    state = state.set('filterApplied', true);
     return state;
   }
 
@@ -214,13 +221,20 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = state.set('sortField', '');
     state = state.set('location', '');
     state = state.set('tags', List());
+    state = state.set('page', 1);
+    state = state.set('filterApplied', false);
+    state = state.set('projectsData', {});
     return state;
   }
 
   _loadProjects(state: State): State {
     state = this._updateFindProjectArgs(state);
     this._updateWindowUrl(state);
-
+    if (state.filterApplied) {
+      state = state.set('page', 1);
+      state = state.set('projectsData', {});
+      state = state.set('filterApplied', false);
+    }
     const url: string = urls.constructWithQueryString(`/api/projects?page=${state.page}`,
       Object.assign({}, state.findProjectsArgs));
     fetch(new Request(url))

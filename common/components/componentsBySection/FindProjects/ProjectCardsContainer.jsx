@@ -66,7 +66,6 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     this.setState({current_page: this.state.current_page + 1 <= this.state.project_pages 
       ? this.state.current_page + 1 
       : this.state.current_page }, function () {
-      // this._onChangePage();
       ProjectSearchDispatcher.dispatch({
         type: 'SET_PAGE',
         page: this.state.current_page,

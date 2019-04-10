@@ -112,7 +112,7 @@ class MainHeader extends React.PureComponent<{||}> {
           </div>
 
           <Drawer open={this.state.left} onClose={() => this._toggleDrawer('left', false)}>
-            <div
+            <div 
               tabIndex={0}
               role="button"
               onClick={() => this._toggleDrawer('left', false)}
@@ -172,7 +172,7 @@ class MainHeader extends React.PureComponent<{||}> {
   _renderFooterDrawerLinks(): $ReadOnlyArray<React$Node> {
     return FooterLinks.list().map((link, i) => {
       return (
-        <React.Fragment>
+        <React.Fragment key={i}>
           <a href={link.url}><div className='MainHeader-drawerDiv' key={i}>{link.name}</div></a>
           <Divider />
         </React.Fragment>

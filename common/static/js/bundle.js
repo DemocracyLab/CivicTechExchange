@@ -24629,7 +24629,8 @@ var DEFAULT_STATE = {
   page: 1,
   tags: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(),
   projectsData: {},
-  findProjectsArgs: {}
+  findProjectsArgs: {},
+  filterApplied: false
 };
 
 var State = function (_Record) {
@@ -24696,8 +24697,9 @@ var ProjectSearchStore = function (_ReduceStore) {
           state = state.set('tags', state.tags.filter(function (tag) {
             return allTags[tag];
           }));
+          var currentProjects = state.projectsData.projects || Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])();
           return state.set('projectsData', {
-            projects: state.projectsData.projects ? state.projectsData.projects.concat(_projects) : Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(_projects),
+            projects: currentProjects.concat(_projects),
             numPages: _numPages,
             allTags: allTags
           });
@@ -24765,24 +24767,28 @@ var ProjectSearchStore = function (_ReduceStore) {
     key: '_addTagToState',
     value: function _addTagToState(state, tag) {
       var newTags = state.tags.concat(tag);
+      state = state.set('filterApplied', true);
       return state.set('tags', newTags);
     }
   }, {
     key: '_addKeywordToState',
     value: function _addKeywordToState(state, keyword) {
       state = state.set('keyword', keyword);
+      state = state.set('filterApplied', true);
       return state;
     }
   }, {
     key: '_addSortFieldToState',
     value: function _addSortFieldToState(state, sortField) {
       state = state.set('sortField', sortField);
+      state = state.set('filterApplied', true);
       return state;
     }
   }, {
     key: '_addLocationToState',
     value: function _addLocationToState(state, location) {
       state = state.set('location', location);
+      state = state.set('filterApplied', true);
       return state;
     }
   }, {
@@ -24798,6 +24804,9 @@ var ProjectSearchStore = function (_ReduceStore) {
       state = state.set('sortField', '');
       state = state.set('location', '');
       state = state.set('tags', Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])());
+      state = state.set('page', 1);
+      state = state.set('filterApplied', false);
+      state = state.set('projectsData', {});
       return state;
     }
   }, {
@@ -24805,7 +24814,11 @@ var ProjectSearchStore = function (_ReduceStore) {
     value: function _loadProjects(state) {
       state = this._updateFindProjectArgs(state);
       this._updateWindowUrl(state);
-
+      if (state.filterApplied) {
+        state = state.set('page', 1);
+        state = state.set('projectsData', {});
+        state = state.set('filterApplied', false);
+      }
       var url = __WEBPACK_IMPORTED_MODULE_5__utils_url_js__["a" /* default */].constructWithQueryString('/api/projects?page=' + state.page, Object.assign({}, state.findProjectsArgs));
       fetch(new Request(url)).then(function (response) {
         return response.json();
@@ -80381,7 +80394,7 @@ var MainController = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return [__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__chrome_MainHeader_jsx__["a" /* default */], { key: 'main_header' }), __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__chrome_SubHeader_jsx__["a" /* default */], { key: 'sub_header' }), __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__chrome_FlashMessage_jsx__["a" /* default */], { key: 'flash_message' }), __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_0__SectionController_jsx__["a" /* default */], { key: 'section_controller' }), __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8__chrome_MainFooter_jsx__["a" /* default */], null)];
+      return [__WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__chrome_MainHeader_jsx__["a" /* default */], { key: 'main_header' }), __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__chrome_SubHeader_jsx__["a" /* default */], { key: 'sub_header' }), __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__chrome_FlashMessage_jsx__["a" /* default */], { key: 'flash_message' }), __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_0__SectionController_jsx__["a" /* default */], { key: 'section_controller' }), __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8__chrome_MainFooter_jsx__["a" /* default */], { key: 'main_footer' })];
     }
   }]);
 
@@ -97381,7 +97394,7 @@ var MainHeader = function (_React$PureComponent) {
       return __WEBPACK_IMPORTED_MODULE_6__utils_FooterLinks_js__["a" /* default */].list().map(function (link, i) {
         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.Fragment,
-          null,
+          { key: i },
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
             'a',
             { href: link.url },
