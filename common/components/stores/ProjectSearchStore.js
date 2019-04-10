@@ -106,9 +106,11 @@ class ProjectSearchStore extends ReduceStore<State> {
         initialState = initialState.set('findProjectsArgs', action.findProjectsArgs || {});
         return this._loadProjects(initialState);
       case 'ADD_TAG':
+        state = state.set('filterApplied', true);
         return this._loadProjects(this._addTagToState(state, action.tag));
       case 'REMOVE_TAG':
         state = state.set('tags', state.tags.filter(tag => tag !== action.tag.tag_name));
+        state = state.set('filterApplied', true);
         return this._loadProjects(state);
       case 'SET_KEYWORD':
         return this._loadProjects(this._addKeywordToState(state, action.keyword));

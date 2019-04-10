@@ -24671,11 +24671,13 @@ var ProjectSearchStore = function (_ReduceStore) {
           initialState = initialState.set('findProjectsArgs', action.findProjectsArgs || {});
           return this._loadProjects(initialState);
         case 'ADD_TAG':
+          state = state.set('filterApplied', true);
           return this._loadProjects(this._addTagToState(state, action.tag));
         case 'REMOVE_TAG':
           state = state.set('tags', state.tags.filter(function (tag) {
             return tag !== action.tag.tag_name;
           }));
+          state = state.set('filterApplied', true);
           return this._loadProjects(state);
         case 'SET_KEYWORD':
           return this._loadProjects(this._addKeywordToState(state, action.keyword));
@@ -94296,7 +94298,6 @@ var ProjectCardsContainer = function (_React$Component) {
     value: function _handleFetchNextPage(e) {
       e.preventDefault();
       this.setState({ current_page: this.state.current_page + 1 <= this.state.project_pages ? this.state.current_page + 1 : this.state.current_page }, function () {
-        // this._onChangePage();
         __WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
           type: 'SET_PAGE',
           page: this.state.current_page
