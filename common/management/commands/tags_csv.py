@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 from common.models.tags import Tag
-from string import Template
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
