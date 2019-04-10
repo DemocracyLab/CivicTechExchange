@@ -88783,7 +88783,7 @@ var AboutPositionEntry = function (_React$PureComponent) {
           { className: 'Position-description-link' },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'a',
-            { href: this.props.position.descriptionUrl },
+            { href: this.props.position.descriptionUrl, target: '_blank', rel: 'noopener noreferrer' },
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('i', { className: __WEBPACK_IMPORTED_MODULE_5__utils_glyphs_js__["d" /* default */].Globe }),
             ' Position description'
           )
