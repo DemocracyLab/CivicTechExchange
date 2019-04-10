@@ -87733,7 +87733,7 @@ var ProjectDetails = function (_React$PureComponent) {
                         { className: 'AboutProjects-icon-text' },
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'a',
-                            { href: this.state.projectUrl },
+                            { href: this.state.projectUrl, target: '_blank', rel: 'noopener noreferrer' },
                             __WEBPACK_IMPORTED_MODULE_9__utils_url_js__["a" /* default */].beautify(this.state.projectUrl)
                         )
                     )
