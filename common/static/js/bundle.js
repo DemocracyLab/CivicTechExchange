@@ -24697,7 +24697,7 @@ var ProjectSearchStore = function (_ReduceStore) {
             return allTags[tag];
           }));
           return state.set('projectsData', {
-            projects: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(_projects),
+            projects: state.projectsData.projects ? state.projectsData.projects.concat(_projects) : Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(_projects),
             numPages: _numPages,
             allTags: allTags
           });
@@ -24819,7 +24819,8 @@ var ProjectSearchStore = function (_ReduceStore) {
           projectsResponse: getProjectsResponse
         });
       });
-      return state.set('projectsData', null);
+      // return state.set('projectsData', null);
+      return state;
     }
   }, {
     key: '_getTagCategoryParams',
@@ -94283,85 +94284,30 @@ var ProjectCardsContainer = function (_React$Component) {
       });
     }
   }, {
-    key: '_handleGoToPreviousPage',
-    value: function _handleGoToPreviousPage(e) {
-      e.preventDefault();
-      this.setState({ current_page: this.state.current_page - 1 > 0 ? this.state.current_page - 1 : this.state.current_page }, function () {
-        this._onChangePage();
-      });
-    }
-  }, {
-    key: '_handleGoToNextPage',
-    value: function _handleGoToNextPage(e) {
+    key: '_handleFetchNextPage',
+    value: function _handleFetchNextPage(e) {
       e.preventDefault();
       this.setState({ current_page: this.state.current_page + 1 <= this.state.project_pages ? this.state.current_page + 1 : this.state.current_page }, function () {
-        this._onChangePage();
+        // this._onChangePage();
+        __WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
+          type: 'SET_PAGE',
+          page: this.state.current_page
+        });
       });
-    }
-  }, {
-    key: '_onChangePage',
-    value: function _onChangePage() {
-      __WEBPACK_IMPORTED_MODULE_4__stores_ProjectSearchDispatcher_js__["a" /* default */].dispatch({
-        type: 'SET_PAGE',
-        page: this.state.current_page
-      });
-    }
-  }, {
-    key: '_fillPageSelect',
-    value: function _fillPageSelect(active_page, max_pages) {
-      var pages = [];
-      for (var page = 1; page <= max_pages; page++) {
-        pages.push({ value: page, label: page });
-      }
-      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-        'select',
-        { className: 'page_select', value: active_page },
-        pages.map(function (page) {
-          return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-            'option',
-            { value: page.value },
-            page.label
-          );
-        })
-      );
-    }
-  }, {
-    key: '_handlePageSelect',
-    value: function _handlePageSelect(e) {
-      e.preventDefault();
-      return this.setState({ current_page: e.target.value }, this._onChangePage);
     }
   }, {
     key: '_renderPagination',
     value: function _renderPagination() {
+      if (this.state.current_page === this.state.project_pages) {
+        return null; // don't render button if we've loaded the last page
+      }
       return this.state.projects && this.state.projects.size !== 0 ? __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
         'div',
         { className: 'page_selection_footer' },
         __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
           'button',
-          { className: 'page_button', onClick: this._handleGoToPreviousPage.bind(this) },
-          '\u2190 Previous Page'
-        ),
-        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-          'form',
-          { className: 'page_select_form', onChange: this._handlePageSelect.bind(this) },
-          __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-            'span',
-            null,
-            'Page '
-          ),
-          this._fillPageSelect.bind(this)(this.state.current_page, this.state.project_pages),
-          __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-            'span',
-            null,
-            ' of '
-          ),
-          this.state.project_pages
-        ),
-        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
-          'button',
-          { className: 'page_button', onClick: this._handleGoToNextPage.bind(this) },
-          'Next Page \u2192'
+          { className: 'page_button', onClick: this._handleFetchNextPage.bind(this) },
+          'More Projects... \u2192'
         )
       ) : null;
     }

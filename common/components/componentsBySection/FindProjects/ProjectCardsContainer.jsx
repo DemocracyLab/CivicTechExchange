@@ -61,62 +61,28 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
         );
   }
 
-  _handleGoToPreviousPage(e: object): void {
-    e.preventDefault();
-    this.setState({current_page: this.state.current_page - 1 > 0 
-      ? this.state.current_page - 1 
-      : this.state.current_page }, function () {
-      this._onChangePage();
-    });
-  }
-
-  _handleGoToNextPage(e: object): void {
+  _handleFetchNextPage(e: object): void {
     e.preventDefault();
     this.setState({current_page: this.state.current_page + 1 <= this.state.project_pages 
       ? this.state.current_page + 1 
       : this.state.current_page }, function () {
-      this._onChangePage();
+      // this._onChangePage();
+      ProjectSearchDispatcher.dispatch({
+        type: 'SET_PAGE',
+        page: this.state.current_page,
+      });
     });
-  }
-
-  _onChangePage(): void {
-    ProjectSearchDispatcher.dispatch({
-      type: 'SET_PAGE',
-      page: this.state.current_page,
-    });
-  }
-
-  _fillPageSelect(active_page, max_pages) {
-    const pages = [];
-    for (let page = 1; page <= max_pages; page++) { pages.push({value: page, label: page}) }
-    return (
-      <select className="page_select" value={active_page}>
-        {pages.map(page => {
-          return(<option value={page.value}>{page.label}</option>);
-        })}
-      </select>
-    );
-  }
-
-  _handlePageSelect(e) {
-    e.preventDefault();
-    return this.setState({current_page: e.target.value}, this._onChangePage);
   }
 
   _renderPagination(): React$Node {
+    if (this.state.current_page === this.state.project_pages) {
+      return null; // don't render button if we've loaded the last page
+    }
     return (
       this.state.projects && this.state.projects.size !== 0
       ? <div className="page_selection_footer">
-        <button className="page_button" onClick={this._handleGoToPreviousPage.bind(this)}>
-          &larr; Previous Page
-        </button>
-        <form className="page_select_form" onChange={this._handlePageSelect.bind(this)}>
-        <span>Page </span>
-        {this._fillPageSelect.bind(this)(this.state.current_page, this.state.project_pages)}
-        <span> of </span>{this.state.project_pages}
-        </form>
-        <button className="page_button" onClick={this._handleGoToNextPage.bind(this)}>
-          Next Page &rarr;
+        <button className="page_button" onClick={this._handleFetchNextPage.bind(this)}>
+          More Projects... &rarr;
         </button>
       </div>
       : null

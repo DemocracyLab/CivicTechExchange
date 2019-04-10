@@ -125,7 +125,7 @@ class ProjectSearchStore extends ReduceStore<State> {
         // Remove all tag filters that don't match an existing tag name
         state = state.set('tags', state.tags.filter(tag => allTags[tag]));
         return state.set('projectsData', {
-          projects: List(projects),
+          projects: state.projectsData.projects ? state.projectsData.projects.concat(projects) : List(projects),
           numPages: numPages,
           allTags: allTags,
         });
@@ -235,7 +235,8 @@ class ProjectSearchStore extends ReduceStore<State> {
           projectsResponse: getProjectsResponse
         })
       );
-    return state.set('projectsData', null);
+    // return state.set('projectsData', null);
+    return state;
   }
 
   _getTagCategoryParams(state: State, category: string): ?string {
