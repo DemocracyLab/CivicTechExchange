@@ -14,10 +14,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.views.generic import TemplateView
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import ProjectSitemap
+
 
 from . import views
 
 urlpatterns = [
+
+    url(
+        r'^sitemap\.xml$',
+        sitemap,
+        {'sitemaps': {'projects': ProjectSitemap()}},
+        name='django.contrib.sitemaps.views.sitemap'
+    ),
+    url(r'^googlebb20bcf8545e7046.html$', TemplateView.as_view(template_name="googlebb20bcf8545e7046.html")),
     url(r'^projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
     url(r'^projects/delete/(?P<project_id>[0-9]+)/$', views.project_delete, name='project_delete'),
     url(r'^projects/signup/$', views.project_create, name='project_create'),
@@ -42,6 +54,8 @@ urlpatterns = [
     url(r'^volunteer/dismiss/(?P<application_id>[0-9]+)/$', views.dismiss_project_volunteer, name='dismiss_project_volunteer'),
     url(r'^volunteer/promote/(?P<application_id>[0-9]+)/$', views.promote_project_volunteer, name='promote_project_volunteer'),
     url(r'^volunteer/demote/(?P<application_id>[0-9]+)/$', views.demote_project_volunteer, name='demote_project_volunteer'),
+    url(r'^volunteer/renew/(?P<application_id>[0-9]+)/$', views.renew_volunteering_with_project, name='renew_volunteering_with_project'),
+    url(r'^volunteer/conclude/(?P<application_id>[0-9]+)/$', views.conclude_volunteering_with_project, name='conclude_volunteering_with_project'),
     url(r'^alert/create/$', views.add_alert, name='add_alert')
 
 ]

@@ -7,7 +7,9 @@ import CurrentUser from "../../utils/CurrentUser.js";
 import FeedbackModal from "../FeedbackModal.jsx";
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import Section from "../../enums/Section.js";
 import metrics from "../../utils/metrics.js";
+import url from "../../utils/url.js";
 import _ from 'lodash'
 
 type LeaveProjectParams = {|
@@ -39,7 +41,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
     this.handleShowJoinModal = this.handleShowJoinModal.bind(this);
     this.handleShowLeaveModal = this.handleShowLeaveModal.bind(this);
   }
-  
+
   getButtonDisplaySetup(props: Props): State {
     // TODO: Don't show button for user who is already volunteering
     const project = props.project;
@@ -59,25 +61,25 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
     } else if(!project.project_claimed) {
       newState.buttonDisabled = true;
       newState.buttonTitle = "This project has not yet been claimed by its owner";
-    } 
-    
+    }
+
     return newState;
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState(this.getButtonDisplaySetup(nextProps));
   }
-  
+
   handleShowJoinModal() {
     metrics.logVolunteerClickVolunteerButton(CurrentUser.userID(), this.props.project.project_id);
     this.props.onVolunteerClick();
   }
-  
+
   handleShowLeaveModal() {
     metrics.logVolunteerClickLeaveButton(CurrentUser.userID(), this.props.project.project_id);
     this.setState({ showLeaveProjectModal: true });
   }
-  
+
   confirmLeaveProject(confirmLeaving: boolean, departureMessage: string):void {
     if(confirmLeaving) {
       const params: LeaveProjectParams = {departure_message: departureMessage};
@@ -109,7 +111,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
                 onConfirm={this.confirmLeaveProject.bind(this)}
               />
             </div>
-          );       
+          );
         } else {
           return null;
         }
@@ -124,13 +126,13 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       return null;
     }
   }
-  
+
   _renderVolunteerButton(): React$Node {
     return this.state.isAlreadyVolunteering
       ? (
         // TODO: Make this its own component and hook up to My Projects page
         <Button
-          className="ProjectSearchBar-submit"
+          className="AboutProject-button btn btn-theme"
           type="button"
           bsStyle="danger"
           onClick={this.handleShowLeaveModal}
@@ -140,7 +142,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       )
       : (
         <Button
-          className="ProjectSearchBar-submit"
+          className="AboutProject-button btn btn-theme"
           type="button"
           disabled={this.state.buttonDisabled}
           title={this.state.buttonTitle}
@@ -154,11 +156,11 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   _renderLinkToSignInButton(): React$Node {
     return (
       <Button
-        className="ProjectSearchBar-submit"
+        className="AboutProject-button btn btn-theme clear-button-appearance"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
-        href="../login"
+        href={url.section(Section.LogIn, url.getPreviousPageArg())}
       >
         Sign in to Volunteer
       </Button>

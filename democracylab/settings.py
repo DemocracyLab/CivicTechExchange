@@ -9,11 +9,13 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
+#TODO: Call out any missing required environment variables during startup
 import os
 import ast
 import dj_database_url
+from datetime import timedelta
 from distutils.util import strtobool
+from django.core.mail.backends.smtp import EmailBackend
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     'rest_framework',
     'taggit'
 ]
@@ -64,6 +67,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(PROJECT_ROOT, 'democracylab/templates'),
+            os.path.join(PROJECT_ROOT, 'democracylab/templates/emails'),
             os.path.join(PROJECT_ROOT, 'civictechprojects/templates')
         ],
         'APP_DIRS': True,
@@ -131,20 +135,48 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-DEFAULT_FROM_EMAIL = 'democracylabreset@gmail.com'
-SERVER_EMAIL = 'democracylabreset@gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'democracylabreset@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+
+def read_connection_config(config):
+    return config and {
+        'from_name': '{name} <{email_address}>'.format(name=config['display_name'], email_address=config['username']),
+        'connection': EmailBackend(
+            host=config['host'],
+            port=int(config['port']),
+            username=config['username'],
+            password=config['password'],
+            use_tls=strtobool(config['use_tls']),
+            fail_silently=False,
+            use_ssl=strtobool(config['use_ssl']),
+            timeout=None,
+            ssl_keyfile=None,
+            ssl_certfile=None)
+    }
+
+EMAIL_SUPPORT_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_SUPPORT_ACCT', 'None')))
+EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_VOLUNTEER_ACCT', 'None')))
+
+# Default log to console in the absence of any account configurations
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
+FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
+
+APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
+VOLUNTEER_RENEW_REMINDER_PERIODS = ast.literal_eval(os.environ.get('VOLUNTEER_RENEW_REMINDER_PERIODS', 'None'))
+VOLUNTEER_REMINDER_OVERALL_PERIOD = VOLUNTEER_RENEW_REMINDER_PERIODS and timedelta(sum(VOLUNTEER_RENEW_REMINDER_PERIODS))
+VOLUNTEER_CONCLUDE_SURVEY_URL = os.environ.get('VOLUNTEER_CONCLUDE_SURVEY_URL', '')
+
 
 FOOTER_LINKS = os.environ.get('FOOTER_LINKS', '')
 
+SPONSORS_METADATA = os.environ.get('SPONSORS_METADATA', '')
+
+HEADER_ALERT = os.environ.get('HEADER_ALERT', '')
+
 PROJECT_DESCRIPTION_EXAMPLE_URL = os.environ.get('PROJECT_DESCRIPTION_EXAMPLE_URL', '')
 POSITION_DESCRIPTION_EXAMPLE_URL = os.environ.get('POSITION_DESCRIPTION_EXAMPLE_URL', '')
+
 
 SECURE_SSL_REDIRECT = os.environ.get('DL_SECURE_SSL_REDIRECT', False) == 'True'
 
@@ -152,6 +184,10 @@ SECURE_SSL_REDIRECT = os.environ.get('DL_SECURE_SSL_REDIRECT', False) == 'True'
 HOTJAR_APPLICATION_ID = os.environ.get('HOTJAR_APPLICATION_ID', '')
 
 GOOGLE_PROPERTY_ID = os.environ.get('GOOGLE_PROPERTY_ID', '')
+
+STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
+
+# TODO: Call out missing required environment variables
 
 # TODO: Set to True in productions
 # SESSION_COOKIE_SECURE = True

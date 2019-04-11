@@ -4,26 +4,27 @@ from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.template import loader
+from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q, Count
-from .models import Project, ProjectFile, FileCategory, ProjectLink, ProjectPosition, UserAlert, VolunteerRelation
+from django.db.models import Q
+from .models import Project, ProjectPosition, UserAlert, VolunteerRelation
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from democracylab.emails import send_to_project_owners, send_to_project_volunteer
+from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email, \
+    send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
 
-#TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
-
+# TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
 @cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
 def tags(request):
     url_parts = request.GET.urlencode()
@@ -45,13 +46,26 @@ def tags(request):
         else:
             tags = list(queryset.values())
     else:
-        queryset = Tag.objects.all()
-        tags = list(queryset.values())
+        countoption = bool(strtobool(query_terms.get('getCounts')[0]))
+        if countoption == True:
+            queryset = Tag.objects.all()
+            activetagdict = projects_tag_counts()
+            querydict = {tag.tag_name:tag for tag in queryset}
+            resultdict = {}
+
+            for slug in querydict.keys():
+                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+            tags = list(resultdict.values())
+        else:
+            queryset = Tag.objects.all()
+            tags = list(queryset.values())
     return HttpResponse(
         json.dumps(
             tags
         )
     )
+
 
 def to_rows(items, width):
     rows = [[]]
@@ -65,6 +79,7 @@ def to_rows(items, width):
             rows.append([])
             row_number += 1
     return rows
+
 
 def to_tag_map(tags):
     tag_map = ((tag.tag_name, tag.display_name) for tag in tags)
@@ -94,6 +109,7 @@ def project_edit(request, project_id):
         return HttpResponseForbidden()
     return redirect('/index/?section=AboutProject&id=' + project_id)
 
+
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def project_delete(request, project_id):
@@ -118,7 +134,10 @@ def index(request):
     context = {
         'FOOTER_LINKS': settings.FOOTER_LINKS,
         'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL,
-        'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL
+        'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL,
+        'STATIC_CDN_URL': settings.STATIC_CDN_URL,
+        'HEADER_ALERT': settings.HEADER_ALERT,
+        'SPONSORS_METADATA': settings.SPONSORS_METADATA
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
@@ -132,9 +151,11 @@ def index(request):
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
         context['emailVerified'] = contributor.email_verified
+        context['email'] = contributor.email
         context['firstName'] = contributor.first_name
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
+        context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
 
     return HttpResponse(template.render(context, request))
 
@@ -149,13 +170,15 @@ def add_alert(request):
 
 
 def my_projects(request):
-    owned_projects = Project.objects.filter(project_creator_id=request.user.id)
     contributor = get_request_contributor(request)
-    volunteering_projects = list(map(lambda volunteer_relation: volunteer_relation.project.hydrate_to_tile_json(), contributor.volunteer_relations.all()))
-    response = {
-        'owned_projects': [project.hydrate_to_tile_json() for project in owned_projects],
-        'volunteering_projects': volunteering_projects
-    }
+    response = {}
+    if contributor is not None:
+        owned_projects = Project.objects.filter(project_creator_id=contributor.id)
+        volunteering_projects = contributor.volunteer_relations.all()
+        response = {
+            'owned_projects': [project.hydrate_to_list_json() for project in owned_projects],
+            'volunteering_projects': volunteering_projects.exists() and list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), volunteering_projects))
+        }
     return HttpResponse(json.dumps(response))
 
 
@@ -232,11 +255,14 @@ def projects_by_issue_areas(tags):
 def projects_by_technologies(tags):
     return Project.objects.filter(project_technologies__name__in=tags)
 
+
 def projects_by_orgs(tags):
     return Project.objects.filter(project_organization__name__in=tags)
 
+
 def projects_by_stage(tags):
     return Project.objects.filter(project_stage__name__in=tags)
+
 
 def projects_by_roles(tags):
     # Get roles by tags
@@ -277,9 +303,9 @@ def presign_project_thumbnail_upload(request):
 
 def volunteer_operation_is_authorized(request, volunteer_relation):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project)
-    authorized_usernames = ([volunteer_relation.project.project_creator.username] 
+    authorized_usernames = ([volunteer_relation.project.project_creator.username]
         + list(map(lambda co: co.volunteer.username, list(filter(lambda v: v.is_co_owner, project_volunteers)))))
-    return request.user.username in authorized_usernames 
+    return request.user.username in authorized_usernames
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
@@ -334,16 +360,57 @@ def volunteer_with_project(request, project_id):
     projected_end_date = body['projectedEndDate']
     message = body['message']
     role = body['roleTag']
-    VolunteerRelation.create(project=project, volunteer=user, projected_end_date=projected_end_date, role=role, application_text=message)
+    volunteer_relation = VolunteerRelation.create(
+        project=project,
+        volunteer=user,
+        projected_end_date=projected_end_date,
+        role=role,
+        application_text=message)
+    send_volunteer_application_email(volunteer_relation)
+    return HttpResponse(status=200)
 
-    # TODO: Include what role they are volunteering for
-    user_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=Profile&id=' + str(user.id)
-    email_subject = '{firstname} {lastname} would like to volunteer with {project}'.format(
-        firstname=user.first_name,
-        lastname=user.last_name,
-        project=project.project_name)
-    email_body = '{message} \n -- \n To view volunteer profile, see {url} \n'.format(message=message, user=user.email, url=user_profile_url)
-    send_to_project_owners(project=project, sender=user, subject=email_subject, body=email_body)
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def renew_volunteering_with_project(request, application_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+
+    if not user.id == volunteer_relation.volunteer.id:
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    volunteer_relation.projected_end_date = body['projectedEndDate']
+    volunteer_relation.re_enrolled_last_date = timezone.now()
+    volunteer_relation.re_enroll_reminder_count = 0
+    volunteer_relation.re_enroll_last_reminder_date = None
+    volunteer_relation.save()
+
+    notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def conclude_volunteering_with_project(request, application_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+
+    if not user.id == volunteer_relation.volunteer.id:
+        return HttpResponse(status=403)
+
+    send_volunteer_conclude_email(user, volunteer_relation.project.project_name)
+
+    body = json.loads(request.body)
+    volunteer_relation.delete()
+
+    notify_project_owners_volunteer_concluded_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
 
 
@@ -354,11 +421,13 @@ def accept_project_volunteer(request, application_id):
     if volunteer_operation_is_authorized(request, volunteer_relation):
         # Set approved flag
         volunteer_relation.is_approved = True
+        volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
+
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
@@ -368,10 +437,11 @@ def promote_project_volunteer(request, application_id):
         # Set co_owner flag
         volunteer_relation.is_co_owner = True
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
+
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
@@ -385,7 +455,7 @@ def reject_project_volunteer(request, application_id):
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject='Your application to join ' + volunteer_relation.project.project_name,
                                   body=email_body)
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
@@ -404,11 +474,12 @@ def dismiss_project_volunteer(request, application_id):
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject='You have been dismissed from ' + volunteer_relation.project.project_name,
                                   body=email_body)
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
+
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
@@ -417,7 +488,7 @@ def demote_project_volunteer(request, application_id):
     if volunteer_operation_is_authorized(request, volunteer_relation):
         volunteer_relation.is_co_owner = False
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         body = json.loads(request.body)
         message = body['demotion_message']
         email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
@@ -428,6 +499,7 @@ def demote_project_volunteer(request, application_id):
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
+
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
@@ -447,8 +519,12 @@ def leave_project(request, project_id):
                                sender=volunteer_relation.volunteer,
                                subject=email_subject,
                                body=email_body)
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
+
+def update_project_timestamp(request, project):
+    if not request.user.is_staff:
+        project.update_timestamp()

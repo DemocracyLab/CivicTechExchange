@@ -1,10 +1,13 @@
+from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from enum import Enum
 from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from common.helpers.form_helpers import is_json_field_empty
+from common.helpers.dictionaries import merge_dicts
 
 
 # Without the following two classes, the following error occurs:
@@ -48,11 +51,19 @@ class Project(models.Model):
     project_name = models.CharField(max_length=200)
     project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
-    project_date_modified = models.DateTimeField(auto_now=True, null=True)
+    project_date_created = models.DateTimeField(null=True)
+    project_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     is_searchable = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
+
+    def all_owners(self):
+        owners = [self.project_creator]
+        project_volunteers = VolunteerRelation.objects.filter(project=self.id)
+        project_co_owners = filter(lambda pv: pv.is_co_owner, project_volunteers)
+
+        return owners + list(map(lambda pv: pv.volunteer, project_co_owners))
 
     def hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_project=self.id)
@@ -110,6 +121,19 @@ class Project(models.Model):
             project['project_thumbnail'] = thumbnail_files[0].to_json()
 
         return project
+
+    def hydrate_to_list_json(self):
+        project = {
+            'project_id': self.id,
+            'project_name': self.project_name,
+            'project_creator': self.project_creator.id
+        }
+
+        return project
+
+    def update_timestamp(self):
+        self.project_date_modified = timezone.now()
+        self.save()
 
 
 class ProjectLink(models.Model):
@@ -388,7 +412,14 @@ class VolunteerRelation(models.Model):
     application_text = models.CharField(max_length=10000, blank=True)
     is_approved = models.BooleanField(default=False)
     is_co_owner = models.BooleanField(default=False)
-    projected_end_date = models.DateTimeField(auto_now=False, null=True)
+    projected_end_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    application_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+    approved_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    last_reminder_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    reminder_count = models.IntegerField(default=0)
+    re_enrolled_last_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    re_enroll_last_reminder_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    re_enroll_reminder_count = models.IntegerField(default=0)
 
     def __str__(self):
         return 'Project: ' + str(self.project.project_name) + ', User: ' + str(self.volunteer.email)
@@ -402,14 +433,22 @@ class VolunteerRelation(models.Model):
             'application_text': self.application_text,
             'roleTag': Tag.hydrate_to_json(volunteer.id, self.role.all().values())[0],
             'isApproved': self.is_approved,
-            'isCoOwner': self.is_co_owner
+            'isCoOwner': self.is_co_owner,
+            'isUpForRenewal': self.is_up_for_renewal(),
+            'projectedEndDate': self.projected_end_date.__str__()
         }
 
         return volunteer_json
 
-    def update_project_timestamp(self):
-        self.project.save()
-        
+    def hydrate_project_volunteer_info(self):
+        volunteer_json = self.to_json()
+        project_json = self.project.hydrate_to_list_json()
+        return merge_dicts(volunteer_json, project_json)
+
+    def is_up_for_renewal(self, now=None):
+        now = now or timezone.now()
+        return (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
+
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
         relation = VolunteerRelation()
@@ -421,3 +460,8 @@ class VolunteerRelation(models.Model):
         relation.save()
 
         relation.role.add(role)
+        return relation
+
+    @staticmethod
+    def get_by_user(user):
+        return VolunteerRelation.objects.filter(volunteer=user.id)

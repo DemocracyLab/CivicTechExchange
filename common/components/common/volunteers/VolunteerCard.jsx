@@ -6,6 +6,7 @@ import {UserAPIData} from "../../utils/UserAPIUtils.js";
 import {TagDefinition, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
+import Avatar from "../avatar.jsx"
 
 type Props = {|
   +volunteer: VolunteerDetailsAPIData,
@@ -20,7 +21,7 @@ type Props = {|
 |};
 
 class VolunteerCard extends React.PureComponent<Props> {
-  
+
   render(): React$Node {
     const volunteer: ?UserAPIData = this.props.volunteer.user;
     const roleTag: ?TagDefinition = this.props.volunteer.roleTag;
@@ -28,11 +29,11 @@ class VolunteerCard extends React.PureComponent<Props> {
     return (
       <div className="VolunteerCard-root">
         <a className="VolunteerCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
-          <img className="upload_img upload_img_bdr VolunteerCard-img" src={volunteer && volunteer.user_thumbnail && volunteer.user_thumbnail.publicUrl}/>
+          <Avatar user={volunteer} size={50} />
         </a>
         <a className="VolunteerCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
           {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
-        </a> 
+        </a>
         {(this.props.isProjectAdmin || this.props.isProjectCoOwner) ? this._renderShowApplicationMenu(volunteer) : null}
         <p className="VolunteerCard-volunteerRole">
           {roleTag && roleTag.display_name}
@@ -40,10 +41,10 @@ class VolunteerCard extends React.PureComponent<Props> {
       </div>
     );
   }
-  
+
   _renderShowApplicationMenu(volunteer): ?React$Node {
     return (this.props.volunteer
-      ? 
+      ?
         (<DropdownButton
           bsClass="VolunteerCard-dropdownButton dropdown"
           bsStyle="default"
@@ -53,7 +54,7 @@ class VolunteerCard extends React.PureComponent<Props> {
         >
           {this._renderApplicationMenuLinks()}
         </DropdownButton>)
-      : 
+      :
         null
       );
   }

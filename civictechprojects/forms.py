@@ -1,11 +1,13 @@
 import json
 from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
+from django.utils import timezone
 from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory
 from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff
+
 
 class ProjectCreationForm(ModelForm):
     class Meta:
@@ -23,6 +25,7 @@ class ProjectCreationForm(ModelForm):
             project_location=form.data.get('project_location'),
             project_name=form.data.get('project_name'),
             project_url=form.data.get('project_url'),
+            project_date_created=timezone.now()
         )
         project = Project.objects.get(id=project.id)
 
@@ -104,6 +107,9 @@ class ProjectCreationForm(ModelForm):
         Tag.merge_tags_field(project.project_stage, form.data.get('project_stage'))
         Tag.merge_tags_field(project.project_technologies, form.data.get('project_technologies'))
         Tag.merge_tags_field(project.project_organization, form.data.get('project_organization'))
+
+        if not request.user.is_staff:
+            project.project_date_modified = timezone.now()
 
         project.save()
 

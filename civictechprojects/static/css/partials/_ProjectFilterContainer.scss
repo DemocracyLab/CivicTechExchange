@@ -1,7 +1,8 @@
 .ProjectFilterContainer-root {
-  background-color: $color-background-default;
+  background-color: $color-background-light;
   min-height: 100%;
   vertical-align: top;
+  border-right: 1px solid $color-grey-medium;
 }
 
 .ProjectFilterContainer-root .form-control {
@@ -14,9 +15,104 @@
   margin-right: 50px;
   margin-top: 12px;
   width: 100%;
-
 }
 
-.ProjectFilterContainer-root > div {
-  display: block;
+.ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 0;
+}
+.ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ProjectFilterContainer-filter-list {
+  list-style-type: none;
+  padding-inline-start: 0;
+  -webkit-padding-start: 0;
+}
+
+
+
+.ProjectFilterContainer-filter-list li {
+  color: $color-text-grey;
+}
+
+.ProjectFilterContainer-filter-list label {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 10px;
+}
+
+.ProjectFilterContainer-filter-list input[type=checkbox]:checked + label {
+  background: $color-orange;
+  color: $color-text-light;
+}
+
+.ProjectFilterContainer-filter-list input[type=checkbox] {
+  display: none;
+}
+
+/* text offset from left edge */
+.ProjectFilterContainer-category-header {
+  padding-left: 5px;
+}
+
+/* border color needs to change based on expanded or collapsed state */
+.ProjectFilterContainer-subcategory {
+  padding-left: 10px;
+  border-radius: 5px;
+}
+
+/* handles expanded/collapsed states for content */
+.ProjectFilterContainer-collapsed > .ProjectFilterContainer-content {
+  display: none;
+}
+/* if category is expanded, change background */
+.ProjectFilterContainer-expanded > .ProjectFilterContainer-category-header {
+  background: $color-grey-medium;
+}
+/* if subcategory is collapsed, keep fontweight normal  */
+.ProjectFilterContainer-collapsed > .ProjectFilterContainer-subcategory-header {
+  font-weight: normal;
+}
+
+
+/*if subcategory is expanded */
+.ProjectFilterContainer-subcategory.ProjectFilterContainer-expanded ul {
+  border-left: 2px solid $color-grey-frame-border;
+}
+
+/* if subcategory is collapsed */
+.ProjectFilterContainer-subcategory.ProjectFilterContainer-collapsed ul {
+  border-left: none;
+}
+
+.ProjectFilterContainer-showtext {
+  font-size: 16px;
+  font-weight: normal;
+  margin-right: 4px;
+}
+
+.ProjectFilterContainer-reset {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 72px;
+  border-bottom: 1px solid $color-grey-medium;
+}
+
+.ProjectFilterDataContainer-root {
+  margin: 0 15px;
+}
+
+@include media-breakpoint-up(sm) {
+  .ProjectFilterDataContainer-root {
+    margin: 0;
+  }
 }
