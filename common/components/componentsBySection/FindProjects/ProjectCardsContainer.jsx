@@ -8,10 +8,13 @@ import {Container} from 'flux/utils';
 import {List} from 'immutable'
 import ProjectCard from './ProjectCard.jsx';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
+import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
 
 type State = {|
-  projects: List<Project>
+  projects: List<Project>,
+  project_pages: number,
+  current_page: number
 |};
 
 class ProjectCardsContainer extends React.Component<{||}, State> {
@@ -23,6 +26,9 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   static calculateState(prevState: State): State {
     return {
       projects: ProjectSearchStore.getProjects(),
+      project_pages: ProjectSearchStore.getProjectPages(),
+      current_page: ProjectSearchStore.getCurrentPage(),
+      projects_loading: ProjectSearchStore.getProjectsLoading(),
       keyword: ProjectSearchStore.getKeyword() || '',
       tags: ProjectSearchStore.getTags() || [],
       location: ProjectSearchStore.getLocation() || ''
@@ -38,6 +44,9 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
           <div className="row">
             {!_.isEmpty(this.state.projects) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}
             {this._renderCards()}
+          </div>
+          <div>
+            {this._renderPagination()}
           </div>
         </div>
       </div>
@@ -67,6 +76,38 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
             />
         );
   }
+
+  _handleFetchNextPage(e: object): void {
+    e.preventDefault();
+
+    const nextPage = this.state.current_page + 1 <= this.state.project_pages 
+      ? this.state.current_page + 1 
+      : this.state.current_page;
+
+    this.setState({current_page: nextPage }, function () {
+      ProjectSearchDispatcher.dispatch({
+        type: 'SET_PAGE',
+        page: this.state.current_page,
+      });
+    });
+  }
+
+  _renderPagination(): ?React$Node {
+    if (this.state.current_page === this.state.project_pages) {
+      return null; // don't render button if we've loaded the last page
+    }
+    return (
+      this.state.projects && this.state.projects.size !== 0 && !this.state.projects_loading
+      ? <div className="page_selection_footer">
+        <button className="page_button" onClick={this._handleFetchNextPage.bind(this)}>
+          More Projects...
+        </button>
+      </div>
+      : null
+    );
+  }
 }
+
+
 
 export default Container.create(ProjectCardsContainer);
