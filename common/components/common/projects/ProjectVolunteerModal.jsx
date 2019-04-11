@@ -63,6 +63,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.askForSendConfirmation = this.askForSendConfirmation.bind(this);
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
+    this._fieldsFilled = this._fieldsFilled.bind(this);
   }
   
   componentWillReceiveProps(nextProps: Props): void {
@@ -85,6 +86,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
       state.existingPositionOption = noPositionOption;
     }
     this.setState(state);
+    this.forceUpdate();
   }
   
   handleChange(event: SyntheticInputEvent<HTMLInputElement>): void {
@@ -179,7 +181,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
               <Modal.Footer>
                 <Button onClick={this.closeModal.bind(this, false)}>{"Cancel"}</Button>
                 <Button
-                  disabled={this.state.isSending || !(this._selectedTag()) || !this.state.daysToVolunteerForOption || !this.state.message}
+                  disabled={this.state.isSending || !(this._fieldsFilled())}
                   onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}
                 </Button>
               </Modal.Footer>
@@ -188,11 +190,22 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
     );
   }
   
-  _selectedTag(): TagDefinition{
-    // TODO: Make sure this works on initial selection
+  _fieldsFilled(): boolean {
+    return this._selectedTag() && this.state.daysToVolunteerForOption && this.state.message;
+  }
+  
+  _selectedExistingPositionTag(): ?string {
     return this.state.existingPositionOption && (this.state.existingPositionOption.value !== OtherRoleOption.value)
       ? this.state.existingPositionOption.value
-      : this.state.roleTag && this.state.roleTag.tag_name;
+      : null;
+  }
+  
+  _selectedOtherRoleTag(): ?string {
+    return this.state.roleTag && this.state.roleTag.tag_name;
+  }
+  
+  _selectedTag(): ?string {
+    return this._selectedExistingPositionTag() || this._selectedOtherRoleTag();
   }
   
   _renderExistingPositionDropdown(): React$Node{
@@ -230,6 +243,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
   _renderVolunteerPeriodDropdown(): React$Node{
     return <Select
       options={volunteerPeriodsInDays}
+      value={this.state.daysToVolunteerForOption}
       onChange={this.handleVolunteerPeriodSelection.bind(this)}
       className="form-control"
       simpleValue={true}

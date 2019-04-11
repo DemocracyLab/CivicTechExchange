@@ -1,13 +1,13 @@
+
 // @flow
 import type {FluxReduceStore} from 'flux/utils';
-
 import {Container} from 'flux/utils';
 import React from 'react';
 import Select from 'react-select'
-import TagSelectorCollapsible from "../../common/tags/TagSelectorCollapsible.jsx";
 import TagCategory from "../../common/tags/TagCategory.jsx";
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
+import ProjectSearchBar from './ProjectSearchBar.jsx'
 import {Locations} from "../../constants/ProjectConstants";
 import {SelectOption} from "../../types/SelectOption.jsx";
 import metrics from "../../utils/metrics.js";
@@ -19,17 +19,17 @@ type State = {|
 |};
 
 const sortOptions: $ReadOnlyArray<SelectOption>  = [
-    // {value: "", label: "---"},
+    // {value: '", label: "---"},
     // {value: "project_date_modified", label: "Date Modified - Ascending"},
     {value: "", label: "Date Modified"},
     {value: "project_name", label: "Name - Ascending"},
     {value: "-project_name", label: "Name - Descending"}
   ];
 
-const locationOptions: $ReadOnlyArray<SelectOption>  = [{value:"", label:"---"}].concat(
+const locationOptions: $ReadOnlyArray<SelectOption>  = [{value:"", label:" Select Location"}].concat(
   Locations.PRESET_LOCATIONS.map(location => ({value:location, label:location})));
 
-class ProjectFilterContainer extends React.Component<{||}, State> {
+class ProjectSearchSort extends React.Component<{||}, State> {
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [ProjectSearchStore];
@@ -49,23 +49,10 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="ProjectFilterContainer-root col-12 col-md-3 col-xxl-2">
-        <div className="ProjectFilterContainer-label">
-          Sort By:
-        </div>
-        {this._renderSortFieldDropdown()}
-        <div className="ProjectFilterContainer-label">
-          Location:
-        </div>
-        {this._renderLocationDropdown()}
-        <div className="ProjectFilterContainer-label">
-          Filter By:
-        </div>
-        <TagSelectorCollapsible category={TagCategory.ISSUES} title="Issue Areas" />
-        <TagSelectorCollapsible category={TagCategory.ROLE} title="Roles Needed" />
-        <TagSelectorCollapsible category={TagCategory.PROJECT_STAGE} title="Project Stage" />
-        <TagSelectorCollapsible category={TagCategory.TECHNOLOGIES_USED} title="Technologies Used" />
-        <TagSelectorCollapsible category={TagCategory.ORGANIZATION} title="Communities" />
+      <div className="ProjectSearchSort-container">
+          <ProjectSearchBar />
+          {this._renderSortFieldDropdown()}
+          {this._renderLocationDropdown()}
       </div>
     );
   }
@@ -103,7 +90,8 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
       options={sortOptions}
       value={this.state && this.state.sortField}
       onChange={this._handleSubmitSortField.bind(this)}
-      className="form-control"
+      classNamePrefix="ProjectSearchSort"
+      className="form-control ProjectSearchSort-sortform"
       simpleValue={true}
       isClearable={false}
       isMulti={false}
@@ -115,7 +103,8 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
       options={locationOptions}
       value={this.state && this.state.location}
       onChange={this._handleSubmitLocation.bind(this)}
-      className="form-control"
+      classNamePrefix="ProjectSearchSort"
+      className="form-control ProjectSearchSort-sortform"
       simpleValue={true}
       isClearable={false}
       isMulti={false}
@@ -123,4 +112,4 @@ class ProjectFilterContainer extends React.Component<{||}, State> {
   }
 }
 
-export default Container.create(ProjectFilterContainer);
+export default Container.create(ProjectSearchSort);

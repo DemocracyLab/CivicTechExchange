@@ -25,12 +25,13 @@
 @import 'vendor/dropdown';
   //import DemocracyLab component partials
 @import 'partials/AlertSignupModal';
-@import 'partials/ContextualCollapsible';
 @import 'partials/EditProjectForm';
 @import 'partials/FlashMessage';
 @import 'partials/FindProjectsController';
 @import 'partials/CollapsibleMenuItem';
+@import 'partials/EmailVerifiedController';
 @import 'partials/LandingController';
+@import 'partials/MainController';
 @import 'partials/MainHeader';
 @import 'partials/MainFooter';
 @import 'partials/project_signup'; // has a modal opacity rule required for bootstrap-modals, maybe pull that out if we dont use the rest of this
@@ -38,16 +39,25 @@
 @import 'partials/MyProjectsController';
 @import 'partials/ProjectCard';
 @import 'partials/ProjectCardsContainer';
+@import 'partials/ProjectCardContainer';
 @import 'partials/ProjectFilterContainer';
 @import 'partials/ProjectSearchBar';
+@import 'partials/ProjectSearchSort';
 @import 'partials/ProjectTag';
 @import 'partials/ProjectTagContainer';
+@import 'partials/ResetSearchButton';
 @import 'partials/SectionLink';
 @import 'partials/SubHeader';
 @import 'partials/TagsDisplay';
 @import 'partials/LogInController';
 @import 'partials/ModalPosition';
-@import 'partials/Global';
 @import 'partials/VolunteerCard';
 @import 'partials/CollapsibleText';
 @import 'partials/AboutProject';
+@import 'partials/SplashScreen';
+@import 'partials/PersonIcon';
+@import 'partials/IconLinkDisplay';
+@import 'partials/AlertHeader';
+@import 'partials/SignedUpController';
+@import 'partials/PartnerWithUsController';
+@import 'partials/Global';

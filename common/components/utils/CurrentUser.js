@@ -23,6 +23,10 @@ class CurrentUser {
   static lastName(): string {
     return window.DLAB_GLOBAL_CONTEXT.lastName;
   }
+  
+  static email(): string {
+    return window.DLAB_GLOBAL_CONTEXT.email;
+  }
 
   static isStaff() : boolean {
     return window.DLAB_GLOBAL_CONTEXT.isStaff;
@@ -49,6 +53,10 @@ class CurrentUser {
   
   static _getVolunteerStatus(project: ProjectDetailsAPIData): ?VolunteerDetailsAPIData {
     return project.project_volunteers && project.project_volunteers.find(volunteer => volunteer.user.id === CurrentUser.userID());
+  }
+  
+  static isVolunteeringUpForRenewal() : boolean {
+    return window.DLAB_GLOBAL_CONTEXT.volunteeringUpForRenewal;
   }
 }
 

@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import simplejson as json
-
+from .emails import send_verification_email, send_password_reset_email
 from .forms import DemocracyLabUserCreationForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
 
@@ -14,13 +14,14 @@ def login_view(request):
     if request.method == 'POST':
         email = request.POST['username']
         password = request.POST['password']
+        prev_page = request.POST['prevPage']
         user = authenticate(username=email, password=password)
         if user is not None and user.is_authenticated:
             login(request, user)
-            return redirect('/')
+            return redirect('/index/?section=' + prev_page)
         else:
             messages.error(request, 'Incorrect Email or Password')
-            return redirect('/index/?section=LogIn')
+            return redirect('/index/?section=LogIn&prev=' + prev_page)
     else:
         return redirect('/index/?section=LogIn')
 
@@ -43,8 +44,8 @@ def signup(request):
             contributor.save()
             user = authenticate(username=email, password=raw_password)
             login(request, user)
-            contributor.send_verification_email()
-            return redirect('/')
+            send_verification_email(contributor)
+            return redirect('/index/?section=SignedUp')
         else:
             errors = json.loads(form.errors.as_json())
 
@@ -72,7 +73,7 @@ def verify_user(request, user_id, token):
         contributor = Contributor.objects.get(id=user_id)
         contributor.email_verified = True
         contributor.save()
-        return redirect('/')
+        return redirect('/index/?section=EmailVerified')
     else:
         return HttpResponse(status=401)
 
@@ -90,7 +91,7 @@ def password_reset(request):
     user = get_contributor_by_username(username)
 
     if user is not None:
-        user.send_password_reset_email()
+        send_password_reset_email(user)
     else:
         # Failing silently to not alert
         print('Attempt to reset password for unregistered email: ' + username)
@@ -132,14 +133,17 @@ def user_details(request, user_id):
     
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-def send_verification_email(request):
+def send_verification_email_request(request):
     if not request.user.is_authenticated():
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
     if not user.email_verified:
-        user.send_verification_email()
-        return HttpResponse(status=200)
+        send_verification_email(user)
+        if request.method == 'GET':
+            return redirect('/index/?section=SignedUp&email=' + user.email)
+        else:
+            return HttpResponse(status=200)
     else:
         # If user's email was already confirmed
         return HttpResponse(status=403)

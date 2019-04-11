@@ -38,7 +38,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
-  
+
   getButtonDisplaySetup(props: Props): State {
     const project = props.project;
     const newState = {
@@ -57,20 +57,20 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     } else if(!project.project_claimed) {
       newState.buttonDisabled = true;
       newState.buttonTitle = "This project has not yet been claimed by its owner";
-    } 
-    
+    }
+
     return newState;
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState(this.getButtonDisplaySetup(nextProps));
   }
-  
+
   handleShow() {
     metrics.logUserClickContactProjectOwner(CurrentUser.userID(), this.props.project.project_id);
     this.setState({ showContactModal: true });
   }
-  
+
   handleClose() {
     this.setState({ showContactModal: false });
   }
@@ -79,12 +79,11 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     const id = {'id':this.props.project.project_id};
     return (
         <Button
-          className="ProjectSearchBar-submit"
+          className="AboutProject-button btn btn-theme clear-button-appearance"
           type="button"
           disabled={this.state.buttonDisabled}
           title={this.state.buttonTitle}
           href={url.section(Section.EditProject, id)}
-          bsStyle="info"
         >
           Edit Project
         </Button>
@@ -94,7 +93,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   _renderContactProjectButton(): React$Node {
     return (
       <Button
-        className="ProjectSearchBar-submit"
+        className="AboutProject-button btn btn-theme"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
@@ -108,11 +107,11 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   _renderLinkToSignInButton(): React$Node {
     return (
       <Button
-        className="ProjectSearchBar-submit"
+        className="AboutProject-button btn btn-theme clear-button-appearance"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
-        href="../login"
+        href={`/index/?section=LogIn&prev=${window.location.href.split('?section=')[1]}`}
       >
         Sign in to Contact Project
       </Button>
@@ -120,7 +119,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   }
 
   displayEditProjectButton(): ?React$Node {
-    if (CurrentUser.userID() === this.props.project.project_creator 
+    if (CurrentUser.userID() === this.props.project.project_creator
       || CurrentUser.isCoOwner(this.props.project)
       || CurrentUser.isStaff()) {
       return (

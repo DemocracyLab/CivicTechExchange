@@ -1,9 +1,32 @@
 // @flow
 
-import NavigationDispatcher from '../stores/NavigationDispatcher.js';
 import React from 'react';
+import { Container } from 'flux/utils';
+import NavigationStore from '../stores/NavigationStore';
+import Section from '../enums/Section.js';
 
-class FlashMessage extends React.PureComponent<{||}> {
+type State = {|
+  section: SectionType,
+|};
+
+class FlashMessage extends React.Component<{||}, State> {
+
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [NavigationStore];
+  }
+
+  static calculateState(prevState: State): State {    
+    return {
+      section: NavigationStore.getSection(),
+    };
+  }
+
+  componentWillUpdate(nextProps, nextState: State) {
+    if (nextState.section !== this.state.section) {
+      window.DLAB_MESSAGES = [];
+    }
+  }
+
   render(): React$Node {
     return (
       <div className="FlashMessage-root">
@@ -23,4 +46,4 @@ class FlashMessage extends React.PureComponent<{||}> {
   }
 }
 
-export default FlashMessage;
+export default Container.create(FlashMessage);

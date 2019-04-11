@@ -2,32 +2,55 @@
 
 import SectionController from './SectionController.jsx';
 import MainHeader from '../chrome/MainHeader.jsx';
-import NavigationDispatcher from '../stores/NavigationDispatcher.js';
+import UniversalDispatcher from '../stores/UniversalDispatcher.js';
 import React from 'react';
-import Section from '../enums/Section.js';
-import SubHeader from '../chrome/SubHeader.jsx';
 import FlashMessage from '../chrome/FlashMessage.jsx';
-import url from '../../components/utils/url.js'
 import MainFooter from "../chrome/MainFooter.jsx";
+import url from '../../components/utils/url.js'
 
-class MainController extends React.Component<{||}> {
+type State = {|
+  headerHeight: number,
+  currentSection: ?string
+|};
+
+class MainController extends React.Component<{||}, State> {
+  constructor() {
+    super();
+    window.addEventListener("popstate", this.loadPage.bind(this));
+    this.state = {
+      headerHeight: 0,
+      currentSection: null
+    };
+  }
+
   componentWillMount(): void {
+    this.loadPage();
+  }
+
+  loadPage(): void {
     const args = url.arguments(window.location.href);
     if (args.section) {
-      if (args.section === Section.FindProjects) {
-        NavigationDispatcher.dispatch({type: 'SET_SECTION', section: args.section, page: 1, url:window.location.href});
-      } else {
-        NavigationDispatcher.dispatch({type: 'SET_SECTION', section: args.section, url:window.location.href});
-      }
+      UniversalDispatcher.dispatch({
+        type: 'SET_SECTION',
+        section: args.section,
+        url: window.location.href,
+        fromUrl: true
+      });
+      this.setState({currentSection: args.section});
     }
   }
 
-  render(): React$Node {
+  _mainHeaderHeightChange(headerHeight) {
+    this.setState({
+      headerHeight: headerHeight
+    });
+  }
+
+  render(): Array<React$Node> {
     return [
-      <MainHeader key='main_header'/>,
-      <SubHeader key='sub_header'/>,
+      <MainHeader key='main_header' onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}/>,
       <FlashMessage key='flash_message'/>,
-      <SectionController key='section_controller'/>,
+      <SectionController key='section_controller' headerHeight={this.state.headerHeight}/>,
       <MainFooter key='main_footer'/>
     ];
   }

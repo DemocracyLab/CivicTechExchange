@@ -16,6 +16,9 @@ class Tag(models.Model):
             prefix += '->' + self.subcategory
         return prefix + '->' + self.tag_name
 
+    class Meta:
+        ordering = ["category", "subcategory", "tag_name"]
+
     @staticmethod
     def get_by_name(name):
         # TODO: Get from in-memory cache
@@ -23,6 +26,15 @@ class Tag(models.Model):
         if tag is None:
             print("ERROR: Could not find tag", name)
         return tag
+
+    @staticmethod
+    def from_field(tag_manager_field):
+        field_values = tag_manager_field.all().values()
+        tag_count = len(field_values)
+        if tag_count > 1:
+            return list(map(lambda tag: Tag.get_by_name(tag['slug']), field_values))
+        elif tag_count == 1:
+            return Tag.get_by_name(field_values[0]['slug'])
 
     @staticmethod
     def hydrate_to_json(project_id, tag_entries):
