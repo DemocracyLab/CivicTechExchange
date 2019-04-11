@@ -7,10 +7,10 @@
   "author": "Marlon Keating <marlonakeating@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --config webpack.config.js && npm run build:sass && python manage.py collectstatic --noinput",
+    "build": "webpack --config webpack.config.js && npm run build:sass && python manage.py collectstatic --noinput -i *.scss",
     "build:sass": "node-sass civictechprojects/static/css/styles.scss -o civictechprojects/static/css/compiled --output-style compressed",
     "flow": "flow",
-    "postinstall": "webpack --config webpack.config.js && python manage.py collectstatic --noinput"
+    "postinstall": "webpack --config webpack.config.js && python manage.py collectstatic --noinput -i *.scss"
   },
   "dependencies": {
     "@material-ui/core": "^3.5.1",
