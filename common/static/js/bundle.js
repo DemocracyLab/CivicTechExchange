@@ -94320,7 +94320,18 @@ var ProjectCardsContainer = function (_React$Component) {
       if (this.state.current_page === this.state.project_pages) {
         return null; // don't render button if we've loaded the last page
       }
-      return this.state.projects && this.state.projects.size !== 0 && !this.state.projects_loading ? __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+      if (this.state.projects_loading) {
+        return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+          'div',
+          { className: 'page_selection_footer' },
+          __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+            'button',
+            { className: 'page_button greyed_button' },
+            'Loading...'
+          )
+        );
+      }
+      return this.state.projects && this.state.projects.size !== 0 ? __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
         'div',
         { className: 'page_selection_footer' },
         __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
