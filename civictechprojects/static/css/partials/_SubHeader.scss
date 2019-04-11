@@ -16,16 +16,7 @@
 
   background-color: $color-background-light;
   height: $header-height;
-<<<<<<< HEAD
   padding: 0 5px 0 5px;
-=======
-  width: 100%;
-  //padding: 0 5% 0 5%;
-
-  //background-color: $color-background-default;
-  padding: 5px 5% 5px 5%;
-
->>>>>>> b0f71a2c4dd74551703d72fe09998888a27b402f
   margin-bottom: 5px;
   justify-content: space-between;
 }
@@ -34,10 +25,7 @@
   display: none;
   flex-direction: row;
   height: 100%;
-<<<<<<< HEAD
-  padding-right: 15px;  
-=======
->>>>>>> b0f71a2c4dd74551703d72fe09998888a27b402f
+  padding-right: 115px;  
   justify-content: flex-end;
   a {
     text-decoration: none;
@@ -211,12 +199,6 @@
   margin-left: 25px;
 }
 
-<<<<<<< HEAD
-// @include media-breakpoint-up(sm) {
-// }
-
-=======
->>>>>>> b0f71a2c4dd74551703d72fe09998888a27b402f
 @media (min-width: 910px) {
   .SubHeader-hamburger {
     display: none;
