@@ -94318,7 +94318,15 @@ var ProjectCardsContainer = function (_React$Component) {
     key: '_renderPagination',
     value: function _renderPagination() {
       if (this.state.current_page === this.state.project_pages) {
-        return null; // don't render button if we've loaded the last page
+        return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+          'div',
+          { className: 'page_selection_footer' },
+          __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+            'button',
+            { className: 'page_button disabled_page_button' },
+            'More Projects...'
+          )
+        );
       }
       if (this.state.projects_loading) {
         return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
@@ -94326,7 +94334,7 @@ var ProjectCardsContainer = function (_React$Component) {
           { className: 'page_selection_footer' },
           __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
             'button',
-            { className: 'page_button greyed_button' },
+            { className: 'page_button disabled_page_button' },
             'Loading...'
           )
         );
