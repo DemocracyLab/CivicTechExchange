@@ -102016,15 +102016,7 @@ var ProjectCardsContainer = function (_React$Component) {
     key: '_renderPagination',
     value: function _renderPagination() {
       if (this.state.current_page === this.state.project_pages) {
-        return __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
-          'div',
-          { className: 'page_selection_footer' },
-          __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
-            'button',
-            { className: 'page_button disabled_page_button' },
-            'More Projects...'
-          )
-        );
+        return null;
       }
       if (this.state.projects_loading) {
         return __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
