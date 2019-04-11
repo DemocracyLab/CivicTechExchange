@@ -27,6 +27,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
       projects: ProjectSearchStore.getProjects(),
       project_pages: ProjectSearchStore.getProjectPages(),
       current_page: ProjectSearchStore.getCurrentPage(),
+      projects_loading: ProjectSearchStore.getProjectsLoading(),
     };
   }
 
@@ -81,7 +82,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
       return null; // don't render button if we've loaded the last page
     }
     return (
-      this.state.projects && this.state.projects.size !== 0
+      this.state.projects && this.state.projects.size !== 0 && !this.state.projects_loading
       ? <div className="page_selection_footer">
         <button className="page_button" onClick={this._handleFetchNextPage.bind(this)}>
           More Projects...

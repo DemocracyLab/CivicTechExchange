@@ -24630,7 +24630,8 @@ var DEFAULT_STATE = {
   tags: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(),
   projectsData: {},
   findProjectsArgs: {},
-  filterApplied: false
+  filterApplied: false,
+  projectsLoading: false
 };
 
 var State = function (_Record) {
@@ -24700,11 +24701,12 @@ var ProjectSearchStore = function (_ReduceStore) {
             return allTags[tag];
           }));
           var currentProjects = state.projectsData.projects || Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])();
-          return state.set('projectsData', {
+          state = state.set('projectsData', {
             projects: currentProjects.concat(_projects),
             numPages: _numPages,
             allTags: allTags
           });
+          return state.set('projectsLoading', false);
         default:
           action;
           return state;
@@ -24814,6 +24816,7 @@ var ProjectSearchStore = function (_ReduceStore) {
   }, {
     key: '_loadProjects',
     value: function _loadProjects(state) {
+      state = state.set('projectsLoading', true);
       state = this._updateFindProjectArgs(state);
       this._updateWindowUrl(state);
       if (state.filterApplied) {
@@ -24873,6 +24876,11 @@ var ProjectSearchStore = function (_ReduceStore) {
     key: 'getCurrentPage',
     value: function getCurrentPage() {
       return parseInt(this.getState().page, 10);
+    }
+  }, {
+    key: 'getProjectsLoading',
+    value: function getProjectsLoading() {
+      return this.getState().projectsLoading;
     }
   }, {
     key: 'getTags',
@@ -94312,7 +94320,7 @@ var ProjectCardsContainer = function (_React$Component) {
       if (this.state.current_page === this.state.project_pages) {
         return null; // don't render button if we've loaded the last page
       }
-      return this.state.projects && this.state.projects.size !== 0 ? __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+      return this.state.projects && this.state.projects.size !== 0 && !this.state.projects_loading ? __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
         'div',
         { className: 'page_selection_footer' },
         __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
@@ -94333,7 +94341,8 @@ var ProjectCardsContainer = function (_React$Component) {
       return {
         projects: __WEBPACK_IMPORTED_MODULE_3__stores_ProjectSearchStore_js__["a" /* default */].getProjects(),
         project_pages: __WEBPACK_IMPORTED_MODULE_3__stores_ProjectSearchStore_js__["a" /* default */].getProjectPages(),
-        current_page: __WEBPACK_IMPORTED_MODULE_3__stores_ProjectSearchStore_js__["a" /* default */].getCurrentPage()
+        current_page: __WEBPACK_IMPORTED_MODULE_3__stores_ProjectSearchStore_js__["a" /* default */].getCurrentPage(),
+        projects_loading: __WEBPACK_IMPORTED_MODULE_3__stores_ProjectSearchStore_js__["a" /* default */].getProjectsLoading()
       };
     }
   }]);

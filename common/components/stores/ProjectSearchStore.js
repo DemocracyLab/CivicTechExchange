@@ -72,7 +72,8 @@ const DEFAULT_STATE = {
   tags: List(),
   projectsData: {},
   findProjectsArgs: {},
-  filterApplied: false
+  filterApplied: false,
+  projectsLoading: false
 };
 
 class State extends Record(DEFAULT_STATE) {
@@ -85,6 +86,7 @@ class State extends Record(DEFAULT_STATE) {
   tags: $ReadOnlyArray<string>;
   findProjectsArgs: FindProjectsArgs;
   filterApplied: boolean;
+  projectsLoading: boolean;
 }
 
 class ProjectSearchStore extends ReduceStore<State> {
@@ -129,11 +131,12 @@ class ProjectSearchStore extends ReduceStore<State> {
         // Remove all tag filters that don't match an existing tag name
         state = state.set('tags', state.tags.filter(tag => allTags[tag]));
         let currentProjects = state.projectsData.projects || List();
-        return state.set('projectsData', {
+        state = state.set('projectsData', {
           projects: currentProjects.concat(projects),
           numPages: numPages,
           allTags: allTags,
         });
+        return state.set('projectsLoading', false);
       default:
         (action: empty);
         return state;
@@ -230,6 +233,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _loadProjects(state: State): State {
+    state = state.set('projectsLoading', true);
     state = this._updateFindProjectArgs(state);
     this._updateWindowUrl(state);
     if (state.filterApplied) {
@@ -279,6 +283,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getCurrentPage(): number {
     return parseInt(this.getState().page, 10);
+  }
+
+  getProjectsLoading(): boolean {
+    return this.getState().projectsLoading;
   }
 
   getTags(inProgressState: ?State): List<TagDefinition> {
