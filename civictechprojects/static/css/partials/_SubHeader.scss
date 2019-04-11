@@ -13,18 +13,31 @@
 .SubHeader-root {
   display: flex;
   flex-direction: row;
-  background-color: $color-background-default;
+
+  background-color: $color-background-light;
   height: $header-height;
+<<<<<<< HEAD
   padding: 0 5px 0 5px;
+=======
+  width: 100%;
+  //padding: 0 5% 0 5%;
+
+  //background-color: $color-background-default;
+  padding: 5px 5% 5px 5%;
+
+>>>>>>> b0f71a2c4dd74551703d72fe09998888a27b402f
   margin-bottom: 5px;
   justify-content: space-between;
 }
 
 .SubHeader-rightContent {
-  display: none; 
+  display: none;
   flex-direction: row;
   height: 100%;
+<<<<<<< HEAD
   padding-right: 15px;  
+=======
+>>>>>>> b0f71a2c4dd74551703d72fe09998888a27b402f
   justify-content: flex-end;
   a {
     text-decoration: none;
@@ -38,7 +51,7 @@
   border: 1px solid $color-text-grey;
   border-radius: 5px;
   color: $color-text-grey;
-  cursor: pointer;  
+  cursor: pointer;
   margin: 0px 6px;
   min-width: 80px;
   padding: 6px 12px;
@@ -51,7 +64,7 @@
 }
 
 .SubHeader-donate-btn-container {
-    align-self: center;    
+    align-self: center;
 }
 
 .SubHeader-donate-btn {
@@ -65,7 +78,7 @@
   cursor: pointer;
   min-width: 80px;
   &:hover {
-    background-color: $color-orange;    
+    background-color: $color-orange;
     color: $color-text-light;
     border-color: $color-text-light;
   }
@@ -85,11 +98,11 @@
   svg {
     height: 100%;
     width: 100%;
-    border-radius: 50%; 
+    border-radius: 50%;
     color: $color-text-light;
     background: $color-text-grey;
     opacity: .5;
-    transition: 300ms;    
+    transition: 300ms;
   }
 }
 
@@ -101,10 +114,10 @@
   align-items: center;
   justify-content: center;
   padding: 0px;
-  opacity: .75;
+  opacity: 1;
   transition: 300ms;
   &:hover {
-    opacity: 1;
+    opacity: 0.75;
   }
   &:focus {
     outline: none;
@@ -114,7 +127,7 @@
 .SubHeader-userImg {
   height: 38px;
   width: 38px;
-  border-radius: 50%;  
+  border-radius: 50%;
   transition: 300ms;
 }
 
@@ -182,7 +195,7 @@
   svg {
     width: 75px;
     height: 75px;
-    border-radius: 50%; 
+    border-radius: 50%;
     color: $color-text-light;
     background: $color-text-grey;
   }
@@ -198,14 +211,16 @@
   margin-left: 25px;
 }
 
+<<<<<<< HEAD
 // @include media-breakpoint-up(sm) {
 // }
 
+=======
+>>>>>>> b0f71a2c4dd74551703d72fe09998888a27b402f
 @media (min-width: 910px) {
   .SubHeader-hamburger {
     display: none;
   }
-  
   .SubHeader-rightContent {
     display: flex;
   }

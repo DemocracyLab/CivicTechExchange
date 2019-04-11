@@ -55,7 +55,7 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
     if(this.state.linkTypeDisplayConfig) {
       return (
         <div className="IconLink-root">
-          <a href={this.props.link.linkUrl}>
+          <a href={this.props.link.linkUrl} target="_blank" rel="noopener noreferrer">
             <div className="IconLink-left">
               <i className={Glyph(this.state.glyphStyle, GlyphSizes.X2)} aria-hidden="true"></i>
             </div>

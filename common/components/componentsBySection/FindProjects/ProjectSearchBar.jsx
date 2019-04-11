@@ -26,20 +26,15 @@ class ProjectSearchBar extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="ProjectSearchBar-root col-12">
+      <div className="ProjectSearchBar-root">
         <i className={GlyphStyles.Search}></i>
         <input
           className="ProjectSearchBar-input"
           onChange={e => this.setState({keyword: e.target.value})}
           onKeyPress={this._handleKeyPress.bind(this)}
-          placeholder="Enter keywords"
+          placeholder="Search tech-for-good projects"
           value={this.state.keyword}
         />
-        <button
-          className="ProjectSearchBar-submit"
-          onClick={this._onSubmitKeyword.bind(this)}>
-          Search Projects
-        </button>
       </div>
     );
   }

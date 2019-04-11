@@ -24,11 +24,17 @@ export FOOTER_LINKS='[{"u":"https://connect.democracylab.org","n":"About"},{"u":
 # Event Header
 export HEADER_ALERT="<p>You are invited to our upcoming event, St. Hat-trick's day!  Come with a team or join a new one on Saturday, March 16.  Be sure to RSVP on <a href='https://www.eventbrite.com/e/st-hack-tricks-day-tickets-54897293282'>Eventbrite</a>!</p>"
 
+# Sponsor information
+export SPONSORS_METADATA='[{"displayName":"HERE Technologies","url":"https://www.here.com/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/here_technologies.png","description":"By building a digital representation of reality entirely built upon location data, we are radically transforming the way the world lives, moves and interacts"}]'
+
 # Configure project description example link
 export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/index/?section=AboutProject&id=1'
 
 # Configure position description example link
 export POSITION_DESCRIPTION_EXAMPLE_URL='https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit'
+
+# Configure exit survey url for volunteers concluding their commitment with a project
+export VOLUNTEER_CONCLUDE_SURVEY_URL='https://docs.google.com/forms/d/e/1FAIpQLSd4e9FQYX3ARPg7qz1ct5qM_bQW_kkEvQaMuM5LV9Ma1NDgbA/viewform'
 
 # Static asset CDN
 export STATIC_CDN_URL='https://d1agxr2dqkgkuy.cloudfront.net'
@@ -39,6 +45,10 @@ export FAKE_EMAILS=True
 # This array specifies how many days we should space our reminder emails.  In this case, the first reminder comes after
 # two days, the second after seven days, and none after that
 export APPLICATION_REMINDER_PERIODS='[2,7,-1]'
+
+# This array specifies how many days we should space our volunteer renewal reminder emails.  In this case, the first
+# reminder comes two weeks before the volunteer's end date, and the second comes one week before
+export VOLUNTEER_RENEW_REMINDER_PERIODS='[7,7,-1]'
 
 # Sample email account configuration
 # export EMAIL_SUPPORT_ACCT='{"host":"smtp.gmail.com","port":"587","display_name":"DemocracyLab Support","username":"support@democracylab.org","password":"SECRET","use_tls":"True","use_ssl":"False"}'

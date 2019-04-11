@@ -25,6 +25,11 @@ button.clear-button-appearance, a.clear-button-appearance, a[type="button"].clea
   -moz-appearance: none;
 }
 
+//for on-page actions we want to appear as links
+.pseudo-link {
+  color: $color-orange;
+  text-decoration: underline;
+}
 
 //these are "helper classes" with one declaration each
 .background-light {

@@ -17,7 +17,8 @@ from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email
+from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email, \
+    send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
@@ -134,8 +135,8 @@ def index(request):
         'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL,
         'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL,
         'STATIC_CDN_URL': settings.STATIC_CDN_URL,
-        'HEADER_ALERT' : settings.HEADER_ALERT
-
+        'HEADER_ALERT': settings.HEADER_ALERT,
+        'SPONSORS_METADATA': settings.SPONSORS_METADATA
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
@@ -149,9 +150,11 @@ def index(request):
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
         context['emailVerified'] = contributor.email_verified
+        context['email'] = contributor.email
         context['firstName'] = contributor.first_name
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
+        context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
 
     return HttpResponse(template.render(context, request))
 
@@ -356,6 +359,50 @@ def volunteer_with_project(request, project_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
+def renew_volunteering_with_project(request, application_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+
+    if not user.id == volunteer_relation.volunteer.id:
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    volunteer_relation.projected_end_date = body['projectedEndDate']
+    volunteer_relation.re_enrolled_last_date = timezone.now()
+    volunteer_relation.re_enroll_reminder_count = 0
+    volunteer_relation.re_enroll_last_reminder_date = None
+    volunteer_relation.save()
+
+    notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def conclude_volunteering_with_project(request, application_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+
+    if not user.id == volunteer_relation.volunteer.id:
+        return HttpResponse(status=403)
+
+    send_volunteer_conclude_email(user, volunteer_relation.project.project_name)
+
+    body = json.loads(request.body)
+    volunteer_relation.delete()
+
+    notify_project_owners_volunteer_concluded_email(volunteer_relation, body['message'])
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
 def accept_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     if volunteer_operation_is_authorized(request, volunteer_relation):
@@ -363,7 +410,7 @@ def accept_project_volunteer(request, application_id):
         volunteer_relation.is_approved = True
         volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -377,7 +424,7 @@ def promote_project_volunteer(request, application_id):
         # Set co_owner flag
         volunteer_relation.is_co_owner = True
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -395,7 +442,7 @@ def reject_project_volunteer(request, application_id):
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject='Your application to join ' + volunteer_relation.project.project_name,
                                   body=email_body)
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
@@ -414,7 +461,7 @@ def dismiss_project_volunteer(request, application_id):
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject='You have been dismissed from ' + volunteer_relation.project.project_name,
                                   body=email_body)
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
@@ -428,7 +475,7 @@ def demote_project_volunteer(request, application_id):
     if volunteer_operation_is_authorized(request, volunteer_relation):
         volunteer_relation.is_co_owner = False
         volunteer_relation.save()
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         body = json.loads(request.body)
         message = body['demotion_message']
         email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
@@ -459,8 +506,12 @@ def leave_project(request, project_id):
                                sender=volunteer_relation.volunteer,
                                subject=email_subject,
                                body=email_body)
-        volunteer_relation.update_project_timestamp()
+        update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
+
+def update_project_timestamp(request, project):
+    if not request.user.is_staff:
+        project.update_timestamp()

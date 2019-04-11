@@ -16,6 +16,9 @@ class Tag(models.Model):
             prefix += '->' + self.subcategory
         return prefix + '->' + self.tag_name
 
+    class Meta:
+        ordering = ["category", "subcategory", "tag_name"]
+
     @staticmethod
     def get_by_name(name):
         # TODO: Get from in-memory cache
