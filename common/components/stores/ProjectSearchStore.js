@@ -29,10 +29,13 @@ export type FindProjectsArgs = {|
 type FindProjectsResponse = {|
   +projects: $ReadOnlyArray<ProjectAPIData>,
   +numPages: number,
+  +numProjects: number
 |};
 
 type FindProjectsData = {|
   +projects: $ReadOnlyArray<Project>,
+  +numPages: number,
+  +numProjects: number
 |};
 
 export type ProjectSearchActionType = {
@@ -67,7 +70,6 @@ const DEFAULT_STATE = {
   keyword: '',
   sortField: '',
   location: '',
-  numPages: -1,
   page: 1,
   tags: List(),
   projectsData: {},
@@ -80,7 +82,6 @@ class State extends Record(DEFAULT_STATE) {
   keyword: string;
   sortField: string;
   location: string;
-  numPages: number;
   page: number;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
@@ -127,6 +128,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
         let projects = action.projectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData);
         let numPages = action.projectsResponse.numPages;
+        let numProjects = action.projectsResponse.numProjects;
         let allTags = _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name);
         // Remove all tag filters that don't match an existing tag name
         state = state.set('tags', state.tags.filter(tag => allTags[tag]));
@@ -134,6 +136,7 @@ class ProjectSearchStore extends ReduceStore<State> {
         state = state.set('projectsData', {
           projects: currentProjects.concat(projects),
           numPages: numPages,
+          numProjects: numProjects,
           allTags: allTags,
         });
         return state.set('projectsLoading', false);
@@ -248,7 +251,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       Object.assign({}, state.findProjectsArgs));
     fetch(new Request(url))
       .then(response => response.json())
-      .then(getProjectsResponse =>
+      .then(getProjectsResponse => 
         ProjectSearchDispatcher.dispatch({
           type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
           projectsResponse: getProjectsResponse
@@ -285,9 +288,14 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   getCurrentPage(): number {
-    return parseInt(this.getState().page, 10);
+    return this.getState().page;
   }
 
+  getNumberOfProjects(): number {
+    const state: State = this.getState();
+    return state.projectsData && state.projectsData.numProjects;
+  }
+  
   getProjectsLoading(): boolean {
     return this.getState().projectsLoading;
   }

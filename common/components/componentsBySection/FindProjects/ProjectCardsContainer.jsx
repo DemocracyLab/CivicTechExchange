@@ -14,7 +14,8 @@ import React from 'react';
 type State = {|
   projects: List<Project>,
   project_pages: number,
-  current_page: number
+  current_page: number,
+  project_count: number
 |};
 
 class ProjectCardsContainer extends React.Component<{||}, State> {
@@ -27,6 +28,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     return {
       projects: ProjectSearchStore.getProjects(),
       project_pages: ProjectSearchStore.getProjectPages(),
+      project_count: ProjectSearchStore.getNumberOfProjects(),
       current_page: ProjectSearchStore.getCurrentPage(),
       projects_loading: ProjectSearchStore.getProjectsLoading(),
       keyword: ProjectSearchStore.getKeyword() || '',
@@ -55,7 +57,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
 
   _renderCardHeaderText(): React$Node {
     if (this.state.keyword || this.state.tags.size > 0 || this.state.location) {
-      return this.state.projects.size === 1 ? this.state.projects.size + ' tech-for-good project found' : this.state.projects.size + ' tech-for-good projects found'
+      return this.state.project_count === 1 ? this.state.project_count + ' tech-for-good project found' : this.state.project_count + ' tech-for-good projects found'
     } else {
       return 'Find and volunteer with the best tech-for-good projects'
     }
