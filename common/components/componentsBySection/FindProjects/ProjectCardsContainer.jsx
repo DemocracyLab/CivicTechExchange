@@ -8,10 +8,14 @@ import {Container} from 'flux/utils';
 import {List} from 'immutable'
 import ProjectCard from './ProjectCard.jsx';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
+import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
 
 type State = {|
-  projects: List<Project>
+  projects: List<Project>,
+  project_pages: number,
+  current_page: number,
+  project_count: number
 |};
 
 class ProjectCardsContainer extends React.Component<{||}, State> {
@@ -23,6 +27,10 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   static calculateState(prevState: State): State {
     return {
       projects: ProjectSearchStore.getProjects(),
+      project_pages: ProjectSearchStore.getProjectPages(),
+      project_count: ProjectSearchStore.getNumberOfProjects(),
+      current_page: ProjectSearchStore.getCurrentPage(),
+      projects_loading: ProjectSearchStore.getProjectsLoading(),
       keyword: ProjectSearchStore.getKeyword() || '',
       tags: ProjectSearchStore.getTags() || [],
       location: ProjectSearchStore.getLocation() || ''
@@ -39,6 +47,9 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
             {!_.isEmpty(this.state.projects) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}
             {this._renderCards()}
           </div>
+          <div>
+            {this._renderPagination()}
+          </div>
         </div>
       </div>
     );
@@ -46,7 +57,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
 
   _renderCardHeaderText(): React$Node {
     if (this.state.keyword || this.state.tags.size > 0 || this.state.location) {
-      return this.state.projects.size === 1 ? this.state.projects.size + ' tech-for-good project found' : this.state.projects.size + ' tech-for-good projects found'
+      return this.state.project_count === 1 ? this.state.project_count + ' tech-for-good project found' : this.state.project_count + ' tech-for-good projects found'
     } else {
       return 'Find and volunteer with the best tech-for-good projects'
     }
@@ -67,6 +78,45 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
             />
         );
   }
+
+  _handleFetchNextPage(e: object): void {
+    e.preventDefault();
+
+    const nextPage = this.state.current_page + 1 <= this.state.project_pages 
+      ? this.state.current_page + 1 
+      : this.state.current_page;
+
+    this.setState({current_page: nextPage }, function () {
+      ProjectSearchDispatcher.dispatch({
+        type: 'SET_PAGE',
+        page: this.state.current_page,
+      });
+    });
+  }
+
+  _renderPagination(): ?React$Node {
+    if (this.state.current_page === this.state.project_pages) {
+      return null;
+    }
+    if (this.state.projects_loading) {
+      return (
+        <div className="page_selection_footer">
+          <button className="page_button disabled_page_button">Loading...</button>
+        </div>
+      );
+    }
+    return (
+      this.state.projects && this.state.projects.size !== 0
+      ? <div className="page_selection_footer">
+        <button className="page_button" onClick={this._handleFetchNextPage.bind(this)}>
+          More Projects...
+        </button>
+      </div>
+      : null
+    );
+  }
 }
+
+
 
 export default Container.create(ProjectCardsContainer);
