@@ -68,6 +68,7 @@ const DEFAULT_STATE = {
   sortField: '',
   location: '',
   numPages: -1,
+  numProjects: 0,
   page: 1,
   tags: List(),
   projectsData: {},
@@ -81,6 +82,7 @@ class State extends Record(DEFAULT_STATE) {
   sortField: string;
   location: string;
   numPages: number;
+  numProjects: number;
   page: number;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
@@ -127,6 +129,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
         let projects = action.projectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData);
         let numPages = action.projectsResponse.numPages;
+        let numProjects = action.projectsResponse.numProjects;
         let allTags = _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name);
         // Remove all tag filters that don't match an existing tag name
         state = state.set('tags', state.tags.filter(tag => allTags[tag]));
@@ -134,6 +137,7 @@ class ProjectSearchStore extends ReduceStore<State> {
         state = state.set('projectsData', {
           projects: currentProjects.concat(projects),
           numPages: numPages,
+          numProjects: numProjects,
           allTags: allTags,
         });
         return state.set('projectsLoading', false);
@@ -288,6 +292,10 @@ class ProjectSearchStore extends ReduceStore<State> {
     return parseInt(this.getState().page, 10);
   }
 
+  getNumberOfProjects(): number{
+    return parseInt(this.getState().numProjects, 10);
+  }
+  
   getProjectsLoading(): boolean {
     return this.getState().projectsLoading;
   }
