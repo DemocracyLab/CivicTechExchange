@@ -24962,8 +24962,6 @@ var DEFAULT_STATE = {
   keyword: '',
   sortField: '',
   location: '',
-  numPages: -1,
-  numProjects: 0,
   page: 1,
   tags: Object(__WEBPACK_IMPORTED_MODULE_2_immutable__["List"])(),
   projectsData: {},
@@ -25031,7 +25029,7 @@ var ProjectSearchStore = function (_ReduceStore) {
         case 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
           var _projects = action.projectsResponse.projects.map(__WEBPACK_IMPORTED_MODULE_3__utils_ProjectAPIUtils_js__["a" /* default */].projectFromAPIData);
           var _numPages = action.projectsResponse.numPages;
-          var numProjects = action.projectsResponse.numProjects;
+          var _numProjects = action.projectsResponse.numProjects;
           var allTags = __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.mapKeys(action.projectsResponse.tags, function (tag) {
             return tag.tag_name;
           });
@@ -25043,7 +25041,7 @@ var ProjectSearchStore = function (_ReduceStore) {
           state = state.set('projectsData', {
             projects: currentProjects.concat(_projects),
             numPages: _numPages,
-            numProjects: numProjects,
+            numProjects: _numProjects,
             allTags: allTags
           });
           return state.set('projectsLoading', false);
@@ -25218,12 +25216,13 @@ var ProjectSearchStore = function (_ReduceStore) {
   }, {
     key: 'getCurrentPage',
     value: function getCurrentPage() {
-      return parseInt(this.getState().page, 10);
+      return this.getState().page;
     }
   }, {
     key: 'getNumberOfProjects',
     value: function getNumberOfProjects() {
-      return parseInt(this.getState().numProjects, 10);
+      var state = this.getState();
+      return state.projectsData && state.projectsData.numProjects;
     }
   }, {
     key: 'getProjectsLoading',
@@ -101988,7 +101987,6 @@ var ProjectCardsContainer = function (_React$Component) {
   }, {
     key: '_renderCardHeaderText',
     value: function _renderCardHeaderText() {
-      console.log('project_count', this.state.project_count);
       if (this.state.keyword || this.state.tags.size > 0 || this.state.location) {
         return this.state.project_count === 1 ? this.state.project_count + ' tech-for-good project found' : this.state.project_count + ' tech-for-good projects found';
       } else {

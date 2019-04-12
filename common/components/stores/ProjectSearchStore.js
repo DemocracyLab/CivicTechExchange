@@ -29,10 +29,13 @@ export type FindProjectsArgs = {|
 type FindProjectsResponse = {|
   +projects: $ReadOnlyArray<ProjectAPIData>,
   +numPages: number,
+  +numProjects: number
 |};
 
 type FindProjectsData = {|
   +projects: $ReadOnlyArray<Project>,
+  +numPages: number,
+  +numProjects: number
 |};
 
 export type ProjectSearchActionType = {
@@ -67,8 +70,6 @@ const DEFAULT_STATE = {
   keyword: '',
   sortField: '',
   location: '',
-  numPages: -1,
-  numProjects: 0,
   page: 1,
   tags: List(),
   projectsData: {},
@@ -81,8 +82,6 @@ class State extends Record(DEFAULT_STATE) {
   keyword: string;
   sortField: string;
   location: string;
-  numPages: number;
-  numProjects: number;
   page: number;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
@@ -252,7 +251,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       Object.assign({}, state.findProjectsArgs));
     fetch(new Request(url))
       .then(response => response.json())
-      .then(getProjectsResponse =>
+      .then(getProjectsResponse => 
         ProjectSearchDispatcher.dispatch({
           type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
           projectsResponse: getProjectsResponse
@@ -289,11 +288,12 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   getCurrentPage(): number {
-    return parseInt(this.getState().page, 10);
+    return this.getState().page;
   }
 
-  getNumberOfProjects(): number{
-    return parseInt(this.getState().numProjects, 10);
+  getNumberOfProjects(): number {
+    const state: State = this.getState();
+    return state.projectsData && state.projectsData.numProjects;
   }
   
   getProjectsLoading(): boolean {

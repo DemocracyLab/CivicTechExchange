@@ -14,7 +14,8 @@ import React from 'react';
 type State = {|
   projects: List<Project>,
   project_pages: number,
-  current_page: number
+  current_page: number,
+  project_count: number
 |};
 
 class ProjectCardsContainer extends React.Component<{||}, State> {
@@ -55,7 +56,6 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   }
 
   _renderCardHeaderText(): React$Node {
-    console.log('project_count', this.state.project_count);
     if (this.state.keyword || this.state.tags.size > 0 || this.state.location) {
       return this.state.project_count === 1 ? this.state.project_count + ' tech-for-good project found' : this.state.project_count + ' tech-for-good projects found'
     } else {
