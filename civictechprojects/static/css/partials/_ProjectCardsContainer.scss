@@ -13,6 +13,10 @@
         width: 150px;
     }
 
+    .disabled_page_button {
+        background-color: $color-grey-disabled;
+    }
+
     .page_select_form {
         font-size: 14px;
         padding: 8px 4px 8px 4px;
