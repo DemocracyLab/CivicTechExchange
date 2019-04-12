@@ -37,7 +37,7 @@ export POSITION_DESCRIPTION_EXAMPLE_URL='https://docs.google.com/document/d/142N
 export VOLUNTEER_CONCLUDE_SURVEY_URL='https://docs.google.com/forms/d/e/1FAIpQLSd4e9FQYX3ARPg7qz1ct5qM_bQW_kkEvQaMuM5LV9Ma1NDgbA/viewform'
 
 # Configure number of projects to display per server request
-export PROJECTS_PER_PAGE=2
+export PROJECTS_PER_PAGE=20
 
 # Static asset CDN
 export STATIC_CDN_URL='https://d1agxr2dqkgkuy.cloudfront.net'
