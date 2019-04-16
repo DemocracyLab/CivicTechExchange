@@ -26,7 +26,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
           {this.props.onClickApply ? this._renderApplyButton() : null}
           </div>
           { this.props.position.descriptionUrl &&
-              <div className="Position-description-link"><a href={this.props.position.descriptionUrl}>
+              <div className="Position-description-link"><a href={this.props.position.descriptionUrl} target="_blank" rel="noopener noreferrer">
                 <i className={GlyphStyles.Globe}></i> Position description
               </a></div>
           }

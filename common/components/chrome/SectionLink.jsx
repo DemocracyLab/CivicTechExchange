@@ -6,6 +6,7 @@ import cx from '../utils/cx';
 import UniversalDispatcher from '../stores/UniversalDispatcher.js';
 import React from 'react';
 import url from '../utils/url.js';
+import Section from '../enums/Section.js';
 import metrics from "../utils/metrics.js";
 
 type Props = {|

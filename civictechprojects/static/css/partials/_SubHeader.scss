@@ -1,9 +1,8 @@
 .SubHeader-logo-container {
-  float: left;
   display: flex;
-  width: 200px;
   align-items: center;
   justify-content: center;
+  padding-left: 40px;
 }
 
 .SubHeader-logo {
@@ -17,21 +16,17 @@
 
   background-color: $color-background-light;
   height: $header-height;
-  width: 100%;
-  //padding: 0 5% 0 5%;
-
-  //background-color: $color-background-default;
-  padding: 5px 5% 5px 5%;
-
+  padding: 0 5px 0 5px;
   margin-bottom: 5px;
+  justify-content: space-between;
 }
 
 .SubHeader-rightContent {
   display: none;
   flex-direction: row;
   height: 100%;
+  padding-right: 65px;  
   justify-content: flex-end;
-  width: 85%;
   a {
     text-decoration: none;
     color: $color-text-grey;
