@@ -38,7 +38,6 @@ class ProjectBase(models.Model):
     class Meta:
         abstract = True
 
-    project_creator = models.ForeignKey(Contributor, related_name='creator')
     project_description = models.CharField(max_length=3000, blank=True)
     project_short_description = models.CharField(max_length=140, blank=True)
     project_location = models.CharField(max_length=200)
@@ -52,6 +51,7 @@ class ProjectBase(models.Model):
 
 class Project(ProjectBase):
     # TODO: Change related name to 'created_projects' or something similar
+    project_creator = models.ForeignKey(Contributor, related_name='creator')
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
     project_issue_area.remote_field.related_name = "+"
     project_stage = TaggableManager(blank=True, through=TaggedStage)
@@ -147,7 +147,7 @@ class Project(ProjectBase):
 
 
 class Project_Archive(ProjectBase):
-    project_creator = models.ForeignKey(Contributor, related_name='creator_fk')
+    project_creator_id = models.IntegerField()
 
     @staticmethod
     def create(project):
@@ -438,8 +438,6 @@ class VolunteerRelationBase(models.Model):
     class Meta:
         abstract = True
 
-    project = models.ForeignKey(Project, related_name='volunteer_relations')
-    volunteer = models.ForeignKey(Contributor, related_name='volunteer_relations')
     is_approved = models.BooleanField(default=False)
     is_co_owner = models.BooleanField(default=False)
     application_text = models.CharField(max_length=10000, blank=True)
@@ -454,6 +452,8 @@ class VolunteerRelationBase(models.Model):
 
 
 class VolunteerRelation(VolunteerRelationBase):
+    project = models.ForeignKey(Project, related_name='volunteer_relations')
+    volunteer = models.ForeignKey(Contributor, related_name='volunteer_relations')
     role = TaggableManager(blank=True, through=TaggedVolunteerRole)
     role.remote_field.related_name = "+"
 
@@ -508,8 +508,8 @@ class VolunteerRelation(VolunteerRelationBase):
 
 
 class VolunteerRelation_Archive(VolunteerRelationBase):
-    project = models.ForeignKey(Project, related_name='project_fk')
-    volunteer = models.ForeignKey(Contributor, related_name='volunteer_fk')
+    project_id = models.IntegerField()
+    volunteer_id = models.IntegerField()
 
     @staticmethod
     def create(volunteer_relation):
