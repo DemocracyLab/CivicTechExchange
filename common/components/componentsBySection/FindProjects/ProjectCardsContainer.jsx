@@ -95,7 +95,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   }
 
   _renderPagination(): ?React$Node {
-    if (this.state.current_page === this.state.project_pages) {
+    if ((this.state.current_page === this.state.project_pages) && !this.state.projects_loading ) {
       return null;
     }
     if (!_.isEmpty(this.state.projects) && this.state.projects_loading) {
