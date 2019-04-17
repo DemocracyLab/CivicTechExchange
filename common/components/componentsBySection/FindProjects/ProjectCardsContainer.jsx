@@ -95,8 +95,17 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   }
 
   _renderPagination(): ?React$Node {
-    if ((this.state.current_page === this.state.project_pages) || this.state.projects_loading) {
+    if (this.state.current_page === this.state.project_pages) {
       return null;
+    }
+    if (!_.isEmpty(this.state.projects) && this.state.projects_loading) {
+      return (
+        <div className="page_selection_footer">
+          <button className="btn btn-theme disabled">
+            Loading...
+          </button>
+        </div>
+      )
     }
     return (
       this.state.projects && this.state.projects.size !== 0
