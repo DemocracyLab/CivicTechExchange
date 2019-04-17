@@ -34,11 +34,24 @@ class TaggedOrganization(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
 
-class Project(models.Model):
-    # TODO: Change related name to 'created_projects' or something similar
+class ProjectBase(models.Model):
+    class Meta:
+        abstract = True
+
     project_creator = models.ForeignKey(Contributor, related_name='creator')
     project_description = models.CharField(max_length=3000, blank=True)
     project_short_description = models.CharField(max_length=140, blank=True)
+    project_location = models.CharField(max_length=200)
+    project_name = models.CharField(max_length=200)
+    project_url = models.CharField(max_length=2083, blank=True)
+    project_links = models.CharField(max_length=5000, blank=True)
+    project_date_created = models.DateTimeField(null=True)
+    project_date_modified = models.DateTimeField(auto_now_add=True, null=True)
+    is_searchable = models.BooleanField(default=True)
+
+
+class Project(ProjectBase):
+    # TODO: Change related name to 'created_projects' or something similar
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
     project_issue_area.remote_field.related_name = "+"
     project_stage = TaggableManager(blank=True, through=TaggedStage)
@@ -47,13 +60,6 @@ class Project(models.Model):
     project_technologies.remote_field.related_name = "+"
     project_organization = TaggableManager(blank=True, through=TaggedOrganization)
     project_organization.remote_field.related_name = "+"
-    project_location = models.CharField(max_length=200)
-    project_name = models.CharField(max_length=200)
-    project_url = models.CharField(max_length=2083, blank=True)
-    project_links = models.CharField(max_length=5000, blank=True)
-    project_date_created = models.DateTimeField(null=True)
-    project_date_modified = models.DateTimeField(auto_now_add=True, null=True)
-    is_searchable = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
@@ -134,6 +140,30 @@ class Project(models.Model):
     def update_timestamp(self):
         self.project_date_modified = timezone.now()
         self.save()
+
+    def delete(self):
+        Project_Archive.create(project=self)
+        Project.objects.filter(id=self.id).delete()
+
+
+class Project_Archive(ProjectBase):
+    project_creator = models.ForeignKey(Contributor, related_name='creator_fk')
+
+    @staticmethod
+    def create(project):
+        Project_Archive.objects.create(
+            id = project.id,
+            project_name = project.project_name,
+            project_creator_id = project.project_creator.id,
+            project_short_description = project.project_short_description,
+            project_description = project.project_description,
+            project_location = project.project_location,
+            project_url = project.project_url,
+            project_links = project.project_links,
+            is_searchable = project.is_searchable,
+            project_date_created = project.project_date_created,
+            project_date_modified = project.project_date_modified
+        )
 
 
 class ProjectLink(models.Model):
@@ -404,22 +434,28 @@ class TaggedVolunteerRole(TaggedItemBase):
     content_object = models.ForeignKey('VolunteerRelation')
 
 
-class VolunteerRelation(models.Model):
+class VolunteerRelationBase(models.Model):
+    class Meta:
+        abstract = True
+
     project = models.ForeignKey(Project, related_name='volunteer_relations')
     volunteer = models.ForeignKey(Contributor, related_name='volunteer_relations')
-    role = TaggableManager(blank=True, through=TaggedVolunteerRole)
-    role.remote_field.related_name = "+"
-    application_text = models.CharField(max_length=10000, blank=True)
     is_approved = models.BooleanField(default=False)
     is_co_owner = models.BooleanField(default=False)
-    projected_end_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    application_text = models.CharField(max_length=10000, blank=True)
     application_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
     approved_date = models.DateTimeField(auto_now=False, null=True, blank=True)
-    last_reminder_date = models.DateTimeField(auto_now=False, null=True, blank=True)
-    reminder_count = models.IntegerField(default=0)
+    projected_end_date = models.DateTimeField(auto_now=False, null=True, blank=True)
     re_enrolled_last_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    last_reminder_date = models.DateTimeField(auto_now=False, null=True, blank=True)
     re_enroll_last_reminder_date = models.DateTimeField(auto_now=False, null=True, blank=True)
+    reminder_count = models.IntegerField(default=0)
     re_enroll_reminder_count = models.IntegerField(default=0)
+
+
+class VolunteerRelation(VolunteerRelationBase):
+    role = TaggableManager(blank=True, through=TaggedVolunteerRole)
+    role.remote_field.related_name = "+"
 
     def __str__(self):
         return 'Project: ' + str(self.project.project_name) + ', User: ' + str(self.volunteer.email)
@@ -465,3 +501,31 @@ class VolunteerRelation(models.Model):
     @staticmethod
     def get_by_user(user):
         return VolunteerRelation.objects.filter(volunteer=user.id)
+
+    def delete(self):
+        VolunteerRelation_Archive.create(volunteer_relation=self)
+        VolunteerRelation.objects.filter(id=self.id).delete()
+
+
+class VolunteerRelation_Archive(VolunteerRelationBase):
+    project = models.ForeignKey(Project, related_name='project_fk')
+    volunteer = models.ForeignKey(Contributor, related_name='volunteer_fk')
+
+    @staticmethod
+    def create(volunteer_relation):
+        VolunteerRelation_Archive.objects.create(
+            id = volunteer_relation.id,
+            project_id = volunteer_relation.project_id,
+            volunteer_id = volunteer_relation.volunteer_id,
+            is_approved = volunteer_relation.is_approved,
+            is_co_owner = volunteer_relation.is_co_owner,
+            application_text = volunteer_relation.application_text,
+            application_date = volunteer_relation.application_date,
+            approved_date = volunteer_relation.approved_date,
+            projected_end_date = volunteer_relation.projected_end_date,
+            re_enrolled_last_date = volunteer_relation.re_enrolled_last_date,
+            last_reminder_date = volunteer_relation.last_reminder_date,
+            re_enroll_last_reminder_date = volunteer_relation.re_enroll_last_reminder_date,
+            reminder_count = volunteer_relation.reminder_count,
+            re_enroll_reminder_count = volunteer_relation.re_enroll_reminder_count
+        )
