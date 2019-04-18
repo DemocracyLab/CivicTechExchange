@@ -28,6 +28,7 @@
 .ProjectCard-description {
   grid-column: 1 / 5;
   grid-row: 3;
+  padding-top: 0.5rem; /* only on mobile */
   padding-left: 0.5rem; /* only on mobile */
   padding-right: 0.5rem; /* always */
   border-top: solid lightgray 1.5px;
@@ -100,6 +101,8 @@
     grid-column: 3 / 5;
     grid-row: 2;
     border-top: none;
+    padding-left: 0;
+    padding-top: 0;
   }
   .ProjectCard-subinfo {
     grid-column: 1 / 2;
@@ -128,6 +131,6 @@
   }
   .ProjectCard-subinfo li {
     display: block;
-    padding-right: 1rem;
+    padding-right: 4px;
   }
 }

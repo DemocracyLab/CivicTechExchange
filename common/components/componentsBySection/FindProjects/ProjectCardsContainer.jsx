@@ -82,8 +82,8 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   _handleFetchNextPage(e: object): void {
     e.preventDefault();
 
-    const nextPage = this.state.current_page + 1 <= this.state.project_pages 
-      ? this.state.current_page + 1 
+    const nextPage = this.state.current_page + 1 <= this.state.project_pages
+      ? this.state.current_page + 1
       : this.state.current_page;
 
     this.setState({current_page: nextPage }, function () {
@@ -95,20 +95,22 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   }
 
   _renderPagination(): ?React$Node {
-    if (this.state.current_page === this.state.project_pages) {
+    if ((this.state.current_page === this.state.project_pages) && !this.state.projects_loading ) {
       return null;
     }
-    if (this.state.projects_loading) {
+    if (!_.isEmpty(this.state.projects) && this.state.projects_loading) {
       return (
         <div className="page_selection_footer">
-          <button className="page_button disabled_page_button">Loading...</button>
+          <button className="btn btn-theme disabled">
+            Loading...
+          </button>
         </div>
-      );
+      )
     }
     return (
       this.state.projects && this.state.projects.size !== 0
       ? <div className="page_selection_footer">
-        <button className="page_button" onClick={this._handleFetchNextPage.bind(this)}>
+        <button className="btn btn-theme" onClick={this._handleFetchNextPage.bind(this)}>
           More Projects...
         </button>
       </div>
