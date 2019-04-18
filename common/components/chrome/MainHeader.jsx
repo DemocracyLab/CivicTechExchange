@@ -101,7 +101,7 @@ class MainHeader extends React.Component<{||}, State > {
       <div ref={this.mainHeaderRef} className='MainHeader'>
         <AlertHeader onAlertClose={this._handleAlertClosing.bind(this)}/>
         <div className={this._cx.get('root')}>
-          <a href={url.section(Section.FindProjects, {showSplash: 1})} target="_blank">
+          <a href={url.section(Section.FindProjects, {showSplash: 1})}>
             <div className="SubHeader-logo-container">
               <img
                 className="SubHeader-logo"

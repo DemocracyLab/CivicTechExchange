@@ -147,9 +147,8 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _updateFindProjectArgs(state: State): State {
-    let findProjectsArgs: FindProjectsArgs;
     if(state.projectsData && state.projectsData.allTags) {
-      findProjectsArgs = _.pickBy({
+      const findProjectsArgs: FindProjectsArgs = _.pickBy({
         keyword: state.keyword,
         sortField: state.sortField,
         location: state.location,
@@ -161,16 +160,19 @@ class ProjectSearchStore extends ReduceStore<State> {
         url: state.url,
         positions: state.positions
       }, _.identity);
+      state = state.set('findProjectsArgs', findProjectsArgs);
     }
-
-    state = state.set('findProjectsArgs',findProjectsArgs);
 
     return state;
   }
 
   _updateWindowUrl(state: State) {
-    const windowUrl: string = urls.constructWithQueryString(urls.section(Section.FindProjects), state.findProjectsArgs);
-    history.pushState({}, null, windowUrl);
+    if(state.findProjectsArgs) {
+      // Only show the FindProjects page args that users care about
+      const urlArgs = _.omit(state.findProjectsArgs, ['page']);
+      const windowUrl: string = urls.constructWithQueryString(urls.section(Section.FindProjects), urlArgs);
+      history.pushState({}, null, windowUrl);
+    }
   }
 
   _initializeFilters(state: State, findProjectsArgs: FindProjectsArgs): State {
@@ -232,13 +234,13 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = state.set('page', 1);
     state = state.set('filterApplied', false);
     state = state.set('projectsData', {});
+    state = state.set('findProjectsArgs', {page: 1});
     return state;
   }
 
   _loadProjects(state: State, noUpdateUrl: ?boolean): State {
     state = state.set('projectsLoading', true);
     state = this._updateFindProjectArgs(state);
-    this._updateWindowUrl(state);
     if (state.filterApplied) {
       state = state.set('page', 1);
       state = state.set('projectsData', {});
