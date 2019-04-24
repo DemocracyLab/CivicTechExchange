@@ -18,6 +18,10 @@ body {
 a.btn-theme:hover, a[type="button"].btn-theme:hover {
   text-decoration: none;
 }
+.btn {
+  background-color: $color-orange;
+  color: $color-text-light;
+}
 
 //use to clear specific button appearance settings, e.g. fix webkit-appearance problem on react-bootstrap <Button href=""> components
 button.clear-button-appearance, a.clear-button-appearance, a[type="button"].clear-button-appearance {
