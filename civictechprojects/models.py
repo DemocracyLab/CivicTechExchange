@@ -143,7 +143,7 @@ class Project(ProjectBase):
 
     def delete(self):
         Project_Archive.create(project=self)
-        Project.objects.filter(id=self.id).delete()
+        Project.objects.get(id=self.id).delete()
 
 
 class Project_Archive(ProjectBase):
