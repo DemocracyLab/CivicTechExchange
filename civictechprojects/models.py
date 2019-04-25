@@ -504,7 +504,7 @@ class VolunteerRelation(VolunteerRelationBase):
 
     def delete(self):
         VolunteerRelation_Archive.create(volunteer_relation=self)
-        VolunteerRelation.objects.filter(id=self.id).delete()
+        VolunteerRelation.objects.get(id=self.id).delete()
 
 
 class VolunteerRelation_Archive(VolunteerRelationBase):
