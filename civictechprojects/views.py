@@ -61,9 +61,7 @@ def tags(request):
             queryset = Tag.objects.all()
             tags = list(queryset.values())
     return HttpResponse(
-        json.dumps(
-            tags
-        )
+        json.dumps(tags), content_type='application/json'
     )
 
 
@@ -125,7 +123,7 @@ def project_delete(request, project_id):
 
 def get_project(request, project_id):
     project = Project.objects.get(id=project_id)
-    return HttpResponse(json.dumps(project.hydrate_to_json()))
+    return HttpResponse(json.dumps(project.hydrate_to_json()), content_type='application/json')
 
 
 @ensure_csrf_cookie
@@ -180,7 +178,7 @@ def my_projects(request):
             'owned_projects': [project.hydrate_to_list_json() for project in owned_projects],
             'volunteering_projects': volunteering_projects.exists() and list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), volunteering_projects))
         }
-    return HttpResponse(json.dumps(response))
+    return HttpResponse(json.dumps(response), content_type='application/json')
 
 
 def projects_list(request):
