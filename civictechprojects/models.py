@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import BooleanField
 from django.utils import timezone
 from enum import Enum
 from democracylab.models import Contributor
@@ -252,7 +251,7 @@ class ProjectPosition(models.Model):
             'id': self.id,
             'description': self.position_description,
             'descriptionUrl': self.description_url,
-            'roleTag': Tag.hydrate_to_json(self.id, self.position_role.all().values()).pop(0)
+            'roleTag': Tag.hydrate_to_json(self.id, self.position_role.all().values())[0]
         }
 
     @staticmethod
