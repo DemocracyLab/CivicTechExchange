@@ -55,8 +55,6 @@ class Archived(models.Model):
     def delete(self):
         self.deleted = True
         self.save()
-        #proof that the archives Manager works:
-        print(self.__class__.archives.count())
 
 
 class Project(Archived):
