@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import BooleanField
 from django.utils import timezone
 from enum import Enum
 from democracylab.models import Contributor
@@ -34,7 +35,32 @@ class TaggedOrganization(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
 
-class Project(models.Model):
+class ArchiveManager(models.Manager):
+    def get_queryset(self):
+        return super(ArchiveManager, self).get_queryset().filter(deleted=True)
+
+
+class DefaultManager(models.Manager):
+    def get_queryset(self):
+        return super(DefaultManager, self).get_queryset().filter(deleted=False)
+
+
+class Archived(models.Model):
+    class Meta:
+        abstract = True
+
+    objects = DefaultManager()
+    archives = ArchiveManager()
+    deleted = models.BooleanField(default=False)
+
+    def delete(self):
+        self.deleted = True
+        self.save()
+        #proof that the archives Manager works:
+        print(self.__class__.archives.count())
+
+
+class Project(Archived):
     # TODO: Change related name to 'created_projects' or something similar
     project_creator = models.ForeignKey(Contributor, related_name='creator')
     project_description = models.CharField(max_length=3000, blank=True)
@@ -226,7 +252,7 @@ class ProjectPosition(models.Model):
             'id': self.id,
             'description': self.position_description,
             'descriptionUrl': self.description_url,
-            'roleTag': Tag.hydrate_to_json(self.id, self.position_role.all().values())[0]
+            'roleTag': Tag.hydrate_to_json(self.id, self.position_role.all().values()).pop(0)
         }
 
     @staticmethod
@@ -404,7 +430,7 @@ class TaggedVolunteerRole(TaggedItemBase):
     content_object = models.ForeignKey('VolunteerRelation')
 
 
-class VolunteerRelation(models.Model):
+class VolunteerRelation(Archived):
     project = models.ForeignKey(Project, related_name='volunteer_relations')
     volunteer = models.ForeignKey(Contributor, related_name='volunteer_relations')
     role = TaggableManager(blank=True, through=TaggedVolunteerRole)
