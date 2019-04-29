@@ -16,17 +16,33 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
     this.state = {
-    aboutUs: 'this is a test string',
+    aboutUs: true
     }
   }
 
-
   render(): $React$Node {
-    return this.state.aboutUs ? this._renderAboutUs() : <div>Loading...</div>
+    return (
+      <div className="container">
+        <p>hello!</p>
+        {this._ourMission()}
+        {this._ourVision()}
+        {this._ourValues()}
+        {this._ourTeam()}
+      </div>
+    )
   }
 
-  _renderAboutUs(): React$Node {
-    return ( <section><p>About Us!</p></section> )
+  _ourMission() {
+    return (<div>Our Mission</div>)
+  }
+  _ourVision() {
+    return (<div>Our Vision</div>)
+  }
+  _ourValues() {
+    return (<div>Our Values</div>)
+  }
+  _ourTeam() {
+    return (this.state.aboutUs ? <div>Our Team</div> : <div>Loading our team information...</div>)
   }
 }
 
