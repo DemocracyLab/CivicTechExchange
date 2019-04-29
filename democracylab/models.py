@@ -19,7 +19,7 @@ class Contributor(User):
     country = models.CharField(max_length=2, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)
     phone_primary = models.CharField(max_length=200, blank=True)
-    about_me = models.CharField(max_length=100000, blank=True, null=True)
+    about_me = models.CharField(max_length=100000, blank=True)
     user_technologies = TaggableManager(blank=True, through=UserTaggedTechnologies)
     user_technologies.remote_field.related_name = "+"
 
