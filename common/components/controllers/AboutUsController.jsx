@@ -16,6 +16,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
     this.state = {
+    democracyLabID: parseInt(window.DLAB_PROJECT_ID),
     aboutUs: true
     }
   }
