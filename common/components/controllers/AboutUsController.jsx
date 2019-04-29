@@ -1,24 +1,36 @@
 // @flow
 
-//TODO: validate all the active imports, these are the result of a messy merge
 import React from 'react';
 import _ from 'lodash'
-// import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
-// import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
+import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
+import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
+// TODO: Create metrics event for this page, then import metrics and use it
 // import metrics from "../utils/metrics.js";
 
-// type State = {|
-//   aboutUs: ?ProjectDetailsAPIData,
-// |};
+type State = {|
+  aboutUs: ?ProjectDetailsAPIData,
+|};
 
 class AboutUsController extends React.PureComponent<{||}, State> {
 
   constructor(): void {
     super();
     this.state = {
-    democracyLabID: parseInt(window.DLAB_PROJECT_ID),
-    aboutUs: true
+      aboutUs: null,
     }
+  }
+//componentDidMount and loadProjectDetails copied from AboutProjectController, since we're retrieving a project's information the same way
+//in this case we use the value provided as an env key to get DemocracyLab's project info, to use in the Our Team section
+
+  componentDidMount() {
+    const projectId = parseInt(window.DLAB_PROJECT_ID);
+    ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
+  }
+
+  loadProjectDetails(project: ProjectDetailsAPIData) {
+    this.setState({
+      aboutUs: project,
+    });
   }
 
   render(): $React$Node {
