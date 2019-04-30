@@ -57,7 +57,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   _ourMission() {
     return (
       <div className="about-us-mission"
-      style={this.bgStyle('OurMissionBG.png')}>
+      style={this.bgStyle('OurMissionBGoverlay.jpg')}>
         <div className="about-us-content">
           <h2>Our Mission</h2>
           <p>We connect people who create technology for public good with talent and resources to achieve their vision</p>
@@ -68,7 +68,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   _ourVision() {
     return (
       <div className="about-us-vision"
-      style={this.bgStyle('OurVisionBG.png')}>
+      style={this.bgStyle('OurVisionBGoverlay.jpg')}>
         <div className="about-us-content">
           <h2>Our Vision</h2>
           <p> At DemocracyLab, we envision a world where everyone who wants to make the world a better place has the [power/ability/opportunity/tools...] to do so.</p>
@@ -79,13 +79,33 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   _ourValues() {
     return (
       <div className="row about-us-values">
-        Our Values
+        <div className="col-12 col-sm-6">
+          <h2>Core Values</h2>
+          <ul>
+            <li>Community Built
+                We are building for the community, by the community
+            </li>
+            <li>Encourage Transparency
+            Transparency provides opportunities to learn & build trust
+            </li>
+            <li>Always Innovate
+            We are laying the groundwork for innovation in the social sector, by innovating ourselves
+            </li>
+            <li>Challenge
+            We believe the hard questions are the best questions. We welcome the challenge to better ourselves and our products
+            </li>
+          </ul>
+        </div>
+        <div className="col-12 col-sm-6">
+          <img src={cdn.image("CoreValuesBG.png")}></img>
+        </div>
+
       </div>
     )
   }
   _ourTeam() {
     return (this.state.aboutUs ?
-      <div className="row about-us-team">
+      <div className="about-us-team">
         Our Team
       </div> : <div>Loading our team information...</div>)
   }
