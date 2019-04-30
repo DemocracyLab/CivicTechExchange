@@ -40,6 +40,11 @@
 .about-us-values h2 {
   font-size: 36px;
   line-height: 1.2;
+  margin-bottom: 25px;
+}
+.about-us-values-image {
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
 
 /* on mobile, image should be on top of text, on desktop text should be left and image right */
@@ -54,10 +59,16 @@
 }
 .about-us-values-list {
   display: flex;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 .about-us-values-icon {
   width: 36px;
-  padding: 0 18px;
+  margin: 0 18px;
+  text-align: center;
+}
+.about-us-values-icon img {
+  max-width: 36px; /* matches width of parent */
 }
 .about-us-values-text h3 {
   color: $color-orange;
@@ -89,9 +100,20 @@
     order: 2;
   }
   .about-us-values-icon {
-    width: 64px;
-    padding: 0 32px;
+    width: 50px;
+    margin: 0 25px;
   }
+  .about-us-values-icon img {
+    max-width: 50px;
+  }
+  .about-us-values h2 {
+    margin-bottom: 50px;
+  }
+  .about-us-values-image {
+    margin-top: 50px;
+    margin-bottom: 0px;
+  }
+
 }
 @include media-breakpoint-up(md) {
   .about-us-content {
