@@ -78,25 +78,50 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   }
   _ourValues() {
     return (
-      <div className="row about-us-values">
-        <div className="col-12 col-sm-6">
+      <div className="row ml-0 mr-0 about-us-values">
+        <div className="col-12 col-sm-6 about-us-values-core">
           <h2>Core Values</h2>
-          <ul>
-            <li>Community Built
-                We are building for the community, by the community
-            </li>
-            <li>Encourage Transparency
-            Transparency provides opportunities to learn & build trust
-            </li>
-            <li>Always Innovate
-            We are laying the groundwork for innovation in the social sector, by innovating ourselves
-            </li>
-            <li>Challenge
-            We believe the hard questions are the best questions. We welcome the challenge to better ourselves and our products
-            </li>
-          </ul>
+          <div className="about-us-values-list">
+            <div className="about-us-values-icon">
+              <img src={cdn.image("CommunityIcon.png")}></img>
+            </div>
+            <div className="about-us-values-text">
+              <h3>Community Built</h3>
+              <p>We are building for the community, by the community</p>
+            </div>
+          </div>
+
+          <div className="about-us-values-list">
+            <div className="about-us-values-icon">
+              <img src={cdn.image("EncourageTransparencyIcon.png")}></img>
+            </div>
+            <div className="about-us-values-text">
+              <h3>Encourage Transparency</h3>
+              <p>Transparency provides opportunities to learn & build trust</p>
+            </div>
+          </div>
+
+          <div className="about-us-values-list">
+            <div className="about-us-values-icon">
+              <img src={cdn.image("InnovateIcon.png")}></img>
+            </div>
+            <div className="about-us-values-text">
+              <h3>Always Innovate</h3>
+              <p>We are laying the groundwork for innovation in the social sector, by innovating ourselves</p>
+            </div>
+          </div>
+
+          <div className="about-us-values-list">
+            <div className="about-us-values-icon">
+              <img src={cdn.image("ChallengeIcon.png")}></img>
+            </div>
+            <div className="about-us-values-text">
+              <h3>Challenge</h3>
+              <p>We believe the hard questions are the best questions. We welcome the challenge to better ourselves and our products</p>
+            </div>
+          </div>
         </div>
-        <div className="col-12 col-sm-6">
+        <div className="col-12 col-sm-6 about-us-values-image">
           <img src={cdn.image("CoreValuesBG.png")}></img>
         </div>
 

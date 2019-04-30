@@ -1,3 +1,6 @@
+.about-us-root h2, .about-us-root h3 {
+  font-weight: bold;
+}
 .about-us-mission, .about-us-vision {
   align-items: center;
   background-color: $color-text-grey;
@@ -30,14 +33,73 @@
   font-size: 18px;
 }
 
+.about-us-values {
+  padding-top: 22px;
+  background: $color-background-light;
+}
+.about-us-values h2 {
+  font-size: 36px;
+  line-height: 1.2;
+}
+
+/* on mobile, image should be on top of text, on desktop text should be left and image right */
+.about-us-values-core {
+  order: 2;
+}
+.about-us-values-image {
+  order: 1;
+}
+.about-us-values-image img {
+  max-width: 100%;
+}
+.about-us-values-list {
+  display: flex;
+}
+.about-us-values-icon {
+  width: 36px;
+  padding: 0 18px;
+}
+.about-us-values-text h3 {
+  color: $color-orange;
+  font-size: 24px;
+}
+.about-us-values-text p {
+  font-size: 16px;
+}
+
 /* on desktop, height = height of individual bg images */
 @include media-breakpoint-up(sm) {
+  .about-us-content {
+    margin: 0 32px 0 16px; /*  rules to get linebreaks where the design wants them */
+  }
   .about-us-mission {
     height: 650px;
   }
   .about-us-vision {
     height: 329px;
   }
+  .about-us-values {
+    padding-top: 84px;
+  }
+
+  .about-us-values-core {
+    order: 1;
+  }
+  .about-us-values-image {
+    order: 2;
+  }
+  .about-us-values-icon {
+    width: 64px;
+    padding: 0 32px;
+  }
+}
+@include media-breakpoint-up(md) {
+  .about-us-content {
+    margin:  0 256px 0 64px /* check that this makes text break into two lines but not three */
+  }
+}
+
+@include media-breakpoint-up(lg) {
   .about-us-content {
     margin: 0 320px 0 168px; /*  rules to get linebreaks where the design wants them */
   }
