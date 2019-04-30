@@ -5,6 +5,7 @@ import _ from 'lodash'
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn from '../utils/cdn.js';
+import Headers from "../common/Headers.jsx";
 // TODO: Create metrics event for this page, then import metrics and use it
 // import metrics from "../utils/metrics.js";
 
@@ -37,6 +38,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   render(): $React$Node {
     return (
       <div className="container about-us-root">
+        {this._renderHeader()}
         {this._ourMission()}
         {this._ourVision()}
         {this._ourValues()}
@@ -44,15 +46,6 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       </div>
     )
   }
-
-//cdn.image("filename.png")
-// ChallengeIcon.png
-// CommunityIcon.png
-// CoreValuesBG.png
-// EncourageTransparency.png
-// InnovateIcon.png
-// OurMissionBG.png
-// OurVisionBG.png
 
   _ourMission() {
     return (
@@ -133,6 +126,18 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="about-us-team">
         Our Team
       </div> : <div>Loading our team information...</div>)
+  }
+
+  _renderHeader(): React$Node {
+    const title: string = "democracyLab | About";
+    const description: string = "Learn About democracyLab, the nonprofit connecting skilled individuals to tech-for-good projects."
+
+    return (
+      <Headers
+        title={title}
+        description={description}
+      />
+    );
   }
 
   bgStyle(filename) {
