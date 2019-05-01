@@ -83,7 +83,6 @@ class Project(Archived):
 
     def delete(self):
         self.is_searchable=False
-        self.save()
         super().delete()
 
     def all_owners(self):
