@@ -10,7 +10,7 @@ from common.helpers.form_helpers import is_json_field_empty
 from common.helpers.dictionaries import merge_dicts
 
 
-# Without the following two classes, the following error occurs:
+# Without the following classes, the following error occurs:
 #
 #   ValueError: You can't have two TaggableManagers with the same
 #   through model.
@@ -80,6 +80,11 @@ class Project(Archived):
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
+
+    def delete(self):
+        self.is_searchable=False
+        self.save()
+        super().delete()
 
     def all_owners(self):
         owners = [self.project_creator]
