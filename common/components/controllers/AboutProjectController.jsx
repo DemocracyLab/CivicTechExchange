@@ -96,7 +96,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       <div className='AboutProjects-root'>
         {this._renderHeader(project)}
         <Grid container className='AboutProjects-container' spacing={0}>
-          <Grid item xs={12} sm={3} className="AboutProjects-infoColumn">
+          <Grid item xs={12} sm={6} md={4} className="AboutProjects-infoColumn">
             <Paper className='AboutProjects-paper' elevation={1} square={true}>
 
               <Grid className='AboutProjects-iconContainer'>
@@ -177,10 +177,10 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </Paper>
           </Grid>
 
-          <Grid item xs={12} sm={9} className="AboutProjects-mainColumn">
+          <Grid item xs={12} sm={6} md={8} className="AboutProjects-mainColumn">
             <Paper className='AboutProjects-paper' elevation={1} square={true}>
               <Grid className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
-                  <Grid className='AboutProjects-description' item xs={12} md={9}>
+                  <Grid className='AboutProjects-description' item xs={12} md={6}>
                     <h1>{project && project.project_name}</h1>
                     <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
                     <p>{project && project.project_short_description}</p>
