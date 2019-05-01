@@ -11,6 +11,11 @@ class PartnerWithUsController extends React.Component<{||}> {
 
   render(): React$Node {
     return (
+      <React.Fragment>
+      <Headers
+      title="Partnering With DemocracyLab"
+      description="Partnering With DemocracyLab"
+      />
       <div className="PartnerWithUsController-root container">
         <div className="PartnerWithUsController-topSection col-xs-12">
           <h1>Partner With Us</h1>
@@ -25,6 +30,7 @@ class PartnerWithUsController extends React.Component<{||}> {
         </div>
         {this._renderSponsors()}
       </div>
+      </React.Fragment>
     );
   }
 
