@@ -4,7 +4,7 @@ import React from 'react';
 import _ from 'lodash'
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
-import cdn from '../utils/cdn.js';
+import cdn, {Images} from '../utils/cdn.js';
 import Headers from "../common/Headers.jsx";
 // TODO: Create metrics event for this page, then import metrics and use it
 // import metrics from "../utils/metrics.js";
@@ -33,18 +33,6 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     this.setState({
       aboutUs: project,
     });
-  }
-
-  render(): $React$Node {
-    return (
-      <div className="container about-us-root">
-        {this._renderHeader()}
-        {this._ourMission()}
-        {this._ourVision()}
-        {this._ourValues()}
-        {this._ourTeam()}
-      </div>
-    )
   }
 
   _ourMission() {
@@ -123,9 +111,32 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   }
   _ourTeam() {
     return (this.state.aboutUs ?
-      <div className="about-us-team">
-        Our Team
-      </div> : <div>Loading our team information...</div>)
+      <div className="about-us-team col">
+        <h2>Our Team</h2>
+        <p>We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
+
+      </div> : <div className="about-us-team-col"><p>Loading our team information...</p></div>)
+  }
+
+  _volunteerWithUs() {
+    return (
+      <div className="about-us-volunteer col">
+        <h2>Volunteer</h2>
+        <div className="row">
+          <div className="col-sm-3">
+            <img className="about-us-volunteer-logo" src={cdn.image(Images.DL_GLYPH)}></img>
+          </div>
+          <div className="col-xs-12 col-sm-9">
+            <p>We connect skilled volunteers with the projects that need them. Open to everyone from individuals and established nonprofits to government organizations and for-profit social enterprises — we provide an open avenue for a better connection, more efficient collaboration, and increased impact.</p>
+            <p className="about-us-volunteer-disclaimer">DemocracyLab is a volunteer-based 501(c)3 non-profit organization, headquartered in Seattle, WA.</p>
+            <div className="about-us-volunteer-buttons">
+              <a href="mailto:hello@democracylab.org" class="SubHeader-donate-btn-container"><button className="SubHeader-donate-btn">Join Us</button></a>
+              <a href="https://connect.democracylab.org/donatenow" class="SubHeader-donate-btn-container" rel="noopener noreferrer"><button className="SubHeader-log-btns">Donate</button></a>
+            </div>
+          </div>
+        </div>
+    </div>
+    )
   }
 
   _renderHeader(): React$Node {
@@ -140,6 +151,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     );
   }
 
+
+
   bgStyle(filename) {
     //only set the background image here because it's a CDN link
     let bgImg = cdn.image(filename);
@@ -147,6 +160,20 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       backgroundImage: `url(${bgImg})`,
      }
     return style;
+   }
+
+
+   render(): $React$Node {
+     return (
+       <div className="container about-us-root">
+         {this._renderHeader()}
+         {this._ourMission()}
+         {this._ourVision()}
+         {this._ourValues()}
+         {this._ourTeam()}
+         {this._volunteerWithUs()}
+       </div>
+     )
    }
 }
 

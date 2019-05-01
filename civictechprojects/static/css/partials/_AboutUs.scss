@@ -78,6 +78,10 @@
   font-size: 16px;
 }
 
+.about-us-volunteer-logo {
+  display: none;
+}
+
 /* on desktop, height = height of individual bg images */
 @include media-breakpoint-up(sm) {
   .about-us-content {
@@ -112,6 +116,17 @@
   .about-us-values-image {
     margin-top: 50px;
     margin-bottom: 0px;
+  }
+  .about-us-volunteer {
+    background: $color-background-light;
+  }
+  .about-us-volunteer-disclaimer {
+    color: $color-text-grey;
+  }
+  .about-us-volunteer-logo {
+    display: block;
+    width: 100%;
+    max-width: 266px;
   }
 
 }
