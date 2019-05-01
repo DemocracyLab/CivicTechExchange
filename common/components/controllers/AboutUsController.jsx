@@ -115,19 +115,13 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         <h2>Our Team</h2>
         <p>We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
         {this._renderTeamOwners(this.state.aboutUs.project_owners)}
+        {this._renderTeamVolunteers(this.state.aboutUs.project_volunteers)}
       </div> : <div className="about-us-team-col"><p>Loading our team information...</p></div>)
-  }
-
-  render() {
-      return (<div>
-      {this.state.people.map((person, index) => (
-          <p key={index}>Hello, {person.name} from {person.country}!</p>
-      ))}
-      </div>);
   }
 
   _renderTeamOwners(owners) {
     //TODO: see if we can clean up nested returns, should probably be extracted to a component
+    //TODO: get collapsible/expandable user bio ({owner.about_me}) in place
       return(
         owners.map(owner => {
         let bioId = owner.first_name + '-' + owner.last_name;
@@ -136,13 +130,25 @@ class AboutUsController extends React.PureComponent<{||}, State> {
           <img src={owner.user_thumbnail.publicUrl} alt="User photo"></img>
           <p>{owner.first_name} {owner.last_name}</p>
           <p>Project Owner</p>
-          <div className="about-us-team-bio">
-            {owner.about_me}
-          </div>
         </div>
       )}
       )
     )
+  }
+
+  _renderTeamVolunteers(volunteers) {
+    return(
+      volunteers.map(vo => {
+      let bioId = vo.first_name + '-' + vo.last_name;
+      return vo.isApproved && (
+        <div className="about-us-team-card" key={bioId}>
+        <img src={vo.user_thumbnail.publicUrl} alt="User photo"></img>
+        <p>{vo.first_name} {vo.last_name}</p>
+        <p>{vo.roleTag.display_name}</p>
+      </div>
+    )}
+    )
+  )
   }
 
   _volunteerWithUs() {
