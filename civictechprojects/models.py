@@ -43,7 +43,7 @@ class DefaultManager(models.Manager):
     def get_queryset(self):
         return super(DefaultManager, self).get_queryset().filter(deleted=False)
 
-
+# This base class adds delete functionality to models using a flag,  and filters deleted items out of the default result set 
 class Archived(models.Model):
     class Meta:
         abstract = True
