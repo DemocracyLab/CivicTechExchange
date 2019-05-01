@@ -114,8 +114,35 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="about-us-team col">
         <h2>Our Team</h2>
         <p>We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
-
+        {this._renderTeamOwners(this.state.aboutUs.project_owners)}
       </div> : <div className="about-us-team-col"><p>Loading our team information...</p></div>)
+  }
+
+  render() {
+      return (<div>
+      {this.state.people.map((person, index) => (
+          <p key={index}>Hello, {person.name} from {person.country}!</p>
+      ))}
+      </div>);
+  }
+
+  _renderTeamOwners(owners) {
+    //TODO: see if we can clean up nested returns, should probably be extracted to a component
+      return(
+        owners.map(owner => {
+        let bioId = owner.first_name + '-' + owner.last_name;
+        return (
+          <div className="about-us-team-card" key={bioId}>
+          <img src={owner.user_thumbnail.publicUrl} alt="User photo"></img>
+          <p>{owner.first_name} {owner.last_name}</p>
+          <p>Project Owner</p>
+          <div className="about-us-team-bio">
+            {owner.about_me}
+          </div>
+        </div>
+      )}
+      )
+    )
   }
 
   _volunteerWithUs() {
@@ -130,8 +157,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             <p>We connect skilled volunteers with the projects that need them. Open to everyone from individuals and established nonprofits to government organizations and for-profit social enterprises — we provide an open avenue for a better connection, more efficient collaboration, and increased impact.</p>
             <p className="about-us-volunteer-disclaimer">DemocracyLab is a volunteer-based 501(c)3 non-profit organization, headquartered in Seattle, WA.</p>
             <div className="about-us-volunteer-buttons">
-              <a href="mailto:hello@democracylab.org" class="SubHeader-donate-btn-container"><button className="SubHeader-donate-btn">Join Us</button></a>
-              <a href="https://connect.democracylab.org/donatenow" class="SubHeader-donate-btn-container" rel="noopener noreferrer"><button className="SubHeader-log-btns">Donate</button></a>
+              <a href="mailto:hello@democracylab.org" className="SubHeader-donate-btn-container"><button className="SubHeader-donate-btn">Join Us</button></a>
+              <a href="https://connect.democracylab.org/donatenow" className="SubHeader-donate-btn-container" rel="noopener noreferrer"><button className="SubHeader-log-btns">Donate</button></a>
             </div>
           </div>
         </div>
