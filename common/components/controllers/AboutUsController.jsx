@@ -142,11 +142,11 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   _renderTeamVolunteers(volunteers) {
     return(
       volunteers.map(vo => {
-      let bioId = vo.first_name + '-' + vo.last_name;
+      let bioId = vo.user.first_name + '-' + vo.user.last_name;
       return vo.isApproved && (
         <div className="about-us-team-card" key={bioId}>
         {this._renderAvatar(vo)}
-        <p className="about-us-team-card-name">{vo.first_name} {vo.last_name}</p>
+        <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
         <p>{vo.roleTag.display_name}</p>
       </div>
     )}
@@ -202,7 +202,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
      return (
        user.user_thumbnail
          ? <img className="about-us-team-avatar" src={user.user_thumbnail.publicUrl} alt="Profile image"/>
-         : (<div className="Icon-container about-us-team-avatar">
+         : (<div className="about-us-team-avatar">
              <Person className="PersonIcon"/>
            </div>)
      );
