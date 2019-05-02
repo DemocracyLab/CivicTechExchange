@@ -64,4 +64,4 @@ export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
 #export HOTJAR_APPLICATION_ID=1097784
 
 # DemocracyLab project ID (for use on About Us page)
-export DLAB_PROJECT_ID=38
+export DLAB_PROJECT_ID=3

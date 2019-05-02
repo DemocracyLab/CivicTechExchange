@@ -98,6 +98,7 @@
 .about-us-team-card {
   flex-basis: 45%;
   text-align: center;
+  margin-bottom: 25px;
 }
 .about-us-team-card p {
   font-size: 18px;
@@ -158,6 +159,7 @@
   }
   .about-us-team-card {
     flex-basis: 22%;
+    margin-bottom: 30px;
   }
 
 }
@@ -184,6 +186,9 @@
   .about-us-team-avatar, .about-us-team-avatar svg {
     height: 250px;
     width: 250px;
+  }
+  .about-us-team-card {
+    margin-bottom: 50px;
   }
 }
 @include media-breakpoint-up(xxl) {
