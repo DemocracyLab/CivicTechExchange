@@ -22,6 +22,7 @@ import AboutUserController from "./AboutUserController.jsx";
 import SignedUpController from "./SignedUpController.jsx";
 import EmailVerifiedController from "./EmailVerifiedController.jsx";
 import PartnerWithUsController from "./PartnerWithUsController.jsx";
+import FlashMessage from "../chrome/FlashMessage.jsx";
 
 type State = {|
   section: SectionType,
@@ -41,6 +42,7 @@ class SectionController extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className="SectionBody" style={{ paddingTop: this.props.headerHeight }}>
+        <FlashMessage key='flash_message'/>
         {this._getController()}
       </div>
     );
