@@ -61,7 +61,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   _ourValues() {
     return (
       <div className="row ml-0 mr-0 about-us-values">
-        <div className="col-12 col-sm-6 about-us-values-core">
+        <div className="col-12 col-md-6 about-us-values-core">
           <h2>Core Values</h2>
           <div className="about-us-values-list">
             <div className="about-us-values-icon">
@@ -103,7 +103,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             </div>
           </div>
         </div>
-        <div className="col-12 col-sm-6 about-us-values-image">
+        <div className="col-12 col-md-6 about-us-values-image">
           <img src={cdn.image("CoreValuesBG.png")}></img>
         </div>
 

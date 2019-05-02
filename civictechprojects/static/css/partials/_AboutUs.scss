@@ -92,7 +92,7 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   padding-top: 25px;
 }
 .about-us-team-card {
@@ -131,12 +131,6 @@
     padding-top: 84px;
   }
 
-  .about-us-values-core {
-    order: 1;
-  }
-  .about-us-values-image {
-    order: 2;
-  }
   .about-us-values-icon {
     width: 50px;
     margin: 0 25px;
@@ -174,6 +168,12 @@
   .about-us-team-avatar, .about-us-team-avatar svg {
     height: 200px;
     width: 200px;
+  }
+  .about-us-values-core {
+    order: 1;
+  }
+  .about-us-values-image {
+    order: 2;
   }
 }
 
