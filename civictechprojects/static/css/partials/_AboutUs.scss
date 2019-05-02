@@ -186,3 +186,8 @@
     width: 250px;
   }
 }
+@include media-breakpoint-up(xxl) {
+  .about-us-content {
+    margin: 0 580px 0 168px;
+  }
+}
