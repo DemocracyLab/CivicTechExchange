@@ -93,6 +93,24 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  justify-content: space-between;
+}
+.about-us-team-card {
+  flex-basis: 45%;
+}
+.about-us-team-card p {
+  text-align: center;
+  font-size: 18px;
+}
+.about-us-team-card img {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+}
+.about-us-team-card-name {
+  font-weight: bold;
+  color: $color-orange;
+  margin-bottom: 0.5rem;
 }
 
 /* on desktop, height = height of individual bg images */
@@ -140,6 +158,9 @@
     display: block;
     width: 100%;
     max-width: 266px;
+  }
+  .about-us-team-card {
+    flex-basis: 22%;
   }
 
 }

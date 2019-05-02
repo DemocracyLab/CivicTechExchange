@@ -130,7 +130,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         return (
           <div className="about-us-team-card" key={bioId}>
           <img src={owner.user_thumbnail.publicUrl} alt="User photo"></img>
-          <p>{owner.first_name} {owner.last_name}</p>
+          <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
           <p>Project Owner</p>
         </div>
       )}
@@ -145,7 +145,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       return vo.isApproved && (
         <div className="about-us-team-card" key={bioId}>
         <img src={vo.user_thumbnail.publicUrl} alt="User photo"></img>
-        <p>{vo.first_name} {vo.last_name}</p>
+        <p className="about-us-team-card-name">{vo.first_name} {vo.last_name}</p>
         <p>{vo.roleTag.display_name}</p>
       </div>
     )}
