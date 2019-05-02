@@ -93,6 +93,7 @@
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
+  padding-top: 25px;
 }
 .about-us-team-card {
   flex-basis: 45%;
@@ -110,11 +111,9 @@
   margin-bottom: 0.5rem;
 }
 
-.about-us-team-avatar {
+.about-us-team-avatar, .about-us-team-avatar svg {
   height: 150px;
   width: 150px;
-}
-.about-us-team-avatar img {
 }
 
 /* on desktop, height = height of individual bg images */
@@ -172,7 +171,7 @@
   .about-us-content {
     margin:  0 256px 0 64px /* check that this makes text break into two lines but not three */
   }
-  .about-us-team-avatar {
+  .about-us-team-avatar, .about-us-team-avatar svg {
     height: 200px;
     width: 200px;
   }
@@ -182,7 +181,7 @@
   .about-us-content {
     margin: 0 320px 0 168px; /*  rules to get linebreaks where the design wants them */
   }
-  .about-us-team-avatar {
+  .about-us-team-avatar, .about-us-team-avatar svg {
     height: 250px;
     width: 250px;
   }
