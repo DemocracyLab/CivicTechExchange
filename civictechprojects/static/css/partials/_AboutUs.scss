@@ -50,11 +50,10 @@
 .about-us-values-core h2 {
   padding-left: 20px;
 }
-
 .about-us-team, .about-us-volunteer {
-  padding: 25px 20px;
+  padding-top: 25px;
+  padding-bottom: 25px;
 }
-
 /* on mobile, image should be on top of text, on desktop text should be left and image right */
 .about-us-values-core {
   order: 2;
@@ -97,20 +96,25 @@
 }
 .about-us-team-card {
   flex-basis: 45%;
+  text-align: center;
 }
 .about-us-team-card p {
-  text-align: center;
   font-size: 18px;
 }
 .about-us-team-card img {
-  height: 200px;
-  width: 200px;
   border-radius: 50%;
 }
 .about-us-team-card-name {
   font-weight: bold;
   color: $color-orange;
   margin-bottom: 0.5rem;
+}
+
+.about-us-team-avatar {
+  height: 150px;
+  width: 150px;
+}
+.about-us-team-avatar img {
 }
 
 /* on desktop, height = height of individual bg images */
@@ -168,10 +172,18 @@
   .about-us-content {
     margin:  0 256px 0 64px /* check that this makes text break into two lines but not three */
   }
+  .about-us-team-avatar {
+    height: 200px;
+    width: 200px;
+  }
 }
 
 @include media-breakpoint-up(lg) {
   .about-us-content {
     margin: 0 320px 0 168px; /*  rules to get linebreaks where the design wants them */
+  }
+  .about-us-team-avatar {
+    height: 250px;
+    width: 250px;
   }
 }

@@ -6,6 +6,7 @@ import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn, {Images} from '../utils/cdn.js';
 import Headers from "../common/Headers.jsx";
+import Person from '@material-ui/icons/Person';
 // TODO: Create metrics event for this page, then import metrics and use it
 // import metrics from "../utils/metrics.js";
 
@@ -129,7 +130,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         let bioId = owner.first_name + '-' + owner.last_name;
         return (
           <div className="about-us-team-card" key={bioId}>
-          <img src={owner.user_thumbnail.publicUrl} alt="User photo"></img>
+          {this._renderAvatar(owner)}
           <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
           <p>Project Owner</p>
         </div>
@@ -144,7 +145,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       let bioId = vo.first_name + '-' + vo.last_name;
       return vo.isApproved && (
         <div className="about-us-team-card" key={bioId}>
-        <img src={vo.user_thumbnail.publicUrl} alt="User photo"></img>
+        {this._renderAvatar(vo)}
         <p className="about-us-team-card-name">{vo.first_name} {vo.last_name}</p>
         <p>{vo.roleTag.display_name}</p>
       </div>
@@ -195,6 +196,16 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       backgroundImage: `url(${bgImg})`,
      }
     return style;
+   }
+
+   _renderAvatar(user) {
+     return (
+       user.user_thumbnail
+         ? <img className="about-us-team-avatar" src={user.user_thumbnail.publicUrl} alt="Profile image"/>
+         : (<div className="Icon-container about-us-team-avatar">
+             <Person className="PersonIcon"/>
+           </div>)
+     );
    }
 
 
