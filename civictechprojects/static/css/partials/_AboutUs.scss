@@ -47,6 +47,14 @@
   margin-bottom: 25px;
 }
 
+.about-us-values-core h2 {
+  padding-left: 20px;
+}
+
+.about-us-team, .about-us-volunteer {
+  padding: 25px 20px;
+}
+
 /* on mobile, image should be on top of text, on desktop text should be left and image right */
 .about-us-values-core {
   order: 2;
@@ -80,6 +88,11 @@
 
 .about-us-volunteer-logo {
   display: none;
+}
+.about-us-team-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
 }
 
 /* on desktop, height = height of individual bg images */

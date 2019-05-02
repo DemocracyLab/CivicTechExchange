@@ -114,8 +114,10 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="about-us-team col">
         <h2>Our Team</h2>
         <p>We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
+        <div className="about-us-team-card-container">
         {this._renderTeamOwners(this.state.aboutUs.project_owners)}
         {this._renderTeamVolunteers(this.state.aboutUs.project_volunteers)}
+        </div>
       </div> : <div className="about-us-team-col"><p>Loading our team information...</p></div>)
   }
 
