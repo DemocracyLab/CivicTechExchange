@@ -119,7 +119,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         {this._renderTeamOwners(this.state.aboutUs.project_owners)}
         {this._renderTeamVolunteers(this.state.aboutUs.project_volunteers)}
         </div>
-      </div> : <div className="about-us-team-col"><p>Loading our team information...</p></div>)
+      </div> : <div className="about-us-team col"><p>Loading our team information...</p></div>)
   }
 
   _renderTeamOwners(owners) {
@@ -199,6 +199,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
    }
 
    _renderAvatar(person) {
+     //modified version of common/components/common/avatar.jsx - to allow for variable sizing via CSS mediaquery instead of provided value as prop
      return (
        person.user_thumbnail
          ? <img className="about-us-team-avatar" src={person.user_thumbnail.publicUrl} alt="Profile image"/>
