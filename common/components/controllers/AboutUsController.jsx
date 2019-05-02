@@ -145,7 +145,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       let bioId = vo.user.first_name + '-' + vo.user.last_name;
       return vo.isApproved && (
         <div className="about-us-team-card" key={bioId}>
-        {this._renderAvatar(vo)}
+        {this._renderAvatar(vo.user)}
         <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
         <p>{vo.roleTag.display_name}</p>
       </div>
@@ -198,10 +198,10 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return style;
    }
 
-   _renderAvatar(user) {
+   _renderAvatar(person) {
      return (
-       user.user_thumbnail
-         ? <img className="about-us-team-avatar" src={user.user_thumbnail.publicUrl} alt="Profile image"/>
+       person.user_thumbnail
+         ? <img className="about-us-team-avatar" src={person.user_thumbnail.publicUrl} alt="Profile image"/>
          : (<div className="about-us-team-avatar">
              <Person className="PersonIcon"/>
            </div>)
