@@ -82,6 +82,11 @@ class SignUpController extends React.Component<Props, State> {
 
   render(): React$Node {
     return (
+      <React.Fragment>
+      <Headers
+      title="Sign Up| DemocracyLab"
+      description="Sign up"
+      />
       <div className="LogInController-root">
         <div className="LogInController-greeting">
           SIGN UP, IT'S EASY AND FREE
@@ -170,6 +175,7 @@ class SignUpController extends React.Component<Props, State> {
           </button>
         </form>
       </div>
+      </React.Fragment>
     );
   }
 }

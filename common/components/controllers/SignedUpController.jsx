@@ -13,11 +13,6 @@ class SignedUpController extends React.Component<{||}> {
   render(): React$Node {
     // TODO: Give better indication that email has been sent when user clicks resend link
     return (
-      <React.Fragment>
-      <Headers
-      title="Sign Up| DemocracyLab"
-      description="Sign up"
-      />
       <div className="SignedUpController-root">
         <div className="SignedUpController-logo">
           <img src={cdn.image(Images.DL_GLYPH)}/>
@@ -32,7 +27,6 @@ class SignedUpController extends React.Component<{||}> {
           </p>
         </div>
       </div>
-      </React.Fragment>
     );
   }
 }
