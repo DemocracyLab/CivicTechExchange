@@ -7,6 +7,13 @@ import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn, {Images} from '../utils/cdn.js';
 import Headers from "../common/Headers.jsx";
 import Person from '@material-ui/icons/Person';
+import {
+    Accordion,
+    AccordionItem,
+    AccordionItemHeading,
+    AccordionItemButton,
+    AccordionItemPanel,
+} from 'react-accessible-accordion';
 // TODO: Create metrics event for this page, then import metrics and use it
 // import metrics from "../utils/metrics.js";
 
@@ -115,10 +122,10 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="about-us-team col">
         <h2>Our Team</h2>
         <p>We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
-        <div className="about-us-team-card-container">
-        {this._renderTeamOwners(this.state.aboutUs.project_owners)}
-        {this._renderTeamVolunteers(this.state.aboutUs.project_volunteers)}
-        </div>
+        <Accordion className="about-us-team-card-container" allowZeroExpanded={true}>
+          {this._renderTeamOwners(this.state.aboutUs.project_owners)}
+          {this._renderTeamVolunteers(this.state.aboutUs.project_volunteers)}
+        </Accordion>
       </div> : <div className="about-us-team col"><p>Loading our team information...</p></div>)
   }
 
@@ -126,29 +133,41 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     //TODO: see if we can clean up nested returns, should probably be extracted to a component
     //TODO: get collapsible/expandable user bio ({owner.about_me}) in place
       return(
-        owners.map(owner => {
-        let bioId = owner.first_name + '-' + owner.last_name;
+        owners.map((owner, i) => {
         return (
-          <div className="about-us-team-card" key={bioId}>
-          {this._renderAvatar(owner)}
-          <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
-          <p>Project Owner</p>
-        </div>
-      )}
-      )
-    )
+          <AccordionItem className="about-us-team-card" key={i}>
+              <AccordionItemHeading>
+                <AccordionItemButton>
+                  {this._renderAvatar(owner)}
+                  <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
+                  <p>Project Owner</p>
+                </AccordionItemButton>
+              </AccordionItemHeading>
+              <AccordionItemPanel className="about-us-team-card-bio">
+                  <p>{owner.about_me}</p>
+              </AccordionItemPanel>
+            </AccordionItem>
+          )}
+          )
+        )
   }
 
   _renderTeamVolunteers(volunteers) {
     return(
-      volunteers.map(vo => {
-      let bioId = vo.user.first_name + '-' + vo.user.last_name;
+      volunteers.map((vo, i) => {
       return vo.isApproved && (
-        <div className="about-us-team-card" key={bioId}>
-        {this._renderAvatar(vo.user)}
-        <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
-        <p>{vo.roleTag.display_name}</p>
-      </div>
+        <AccordionItem className="about-us-team-card" key={i}>
+            <AccordionItemHeading>
+              <AccordionItemButton>
+                {this._renderAvatar(vo.user)}
+                <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
+                <p>{vo.roleTag.display_name}</p>
+              </AccordionItemButton>
+            </AccordionItemHeading>
+            <AccordionItemPanel className="about-us-team-card-bio">
+                <p>{vo.user.about_me}</p>
+            </AccordionItemPanel>
+          </AccordionItem>
     )}
     )
   )
