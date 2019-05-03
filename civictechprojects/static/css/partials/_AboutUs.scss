@@ -103,13 +103,19 @@
 .about-us-team-card p {
   font-size: 18px;
 }
-.about-us-team-card img {
+.about-us-team-card img, .about-us-team-card svg {
   border-radius: 50%;
+}
+.about-us-team-card svg {
+  border: 1px solid $color-grey-frame-border;
 }
 .about-us-team-card-name {
   font-weight: bold;
   color: $color-orange;
   margin-bottom: 0.5rem;
+}
+.about-us-team-avatar {
+  margin: auto; //centers inside the flex container to match centered text
 }
 
 .about-us-team-avatar, .about-us-team-avatar svg {
