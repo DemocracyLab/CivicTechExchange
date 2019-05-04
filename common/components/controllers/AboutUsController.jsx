@@ -139,12 +139,16 @@ class AboutUsController extends React.PureComponent<{||}, State> {
               <AccordionItemHeading>
                 <AccordionItemButton>
                   {this._renderAvatar(owner)}
-                  <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
-                  <p>Project Owner</p>
+                  <div className="about-us-team-card-title">
+                    <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
+                    <p>Project Owner</p>
+                  </div>
                 </AccordionItemButton>
               </AccordionItemHeading>
               <AccordionItemPanel className="about-us-team-card-bio">
-                  <p>{owner.about_me}</p>
+                <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
+                <p>Project Owner</p>
+                <p>{owner.about_me}</p>
               </AccordionItemPanel>
             </AccordionItem>
           )}
@@ -160,11 +164,15 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             <AccordionItemHeading>
               <AccordionItemButton>
                 {this._renderAvatar(vo.user)}
-                <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
-                <p>{vo.roleTag.display_name}</p>
+                <div className="about-us-team-card-title">
+                  <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
+                  <p>{vo.roleTag.display_name}</p>
+                </div>
               </AccordionItemButton>
             </AccordionItemHeading>
             <AccordionItemPanel className="about-us-team-card-bio">
+                <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
+                <p>{vo.roleTag.display_name}</p>
                 <p>{vo.user.about_me}</p>
             </AccordionItemPanel>
           </AccordionItem>

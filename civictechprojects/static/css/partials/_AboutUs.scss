@@ -123,10 +123,17 @@
   width: 150px;
 }
 
-.about-us-team-card-bio p {
+.about-us-team-card-bio {
 	background-color: #fff;
-	padding: 1.125em 1.5em;
+	padding: 0 1.5rem 1.125rem 1.5rem; /* 0 top padding so the hide/show toggle for -title works */
 	border-radius: 1rem;
+}
+
+.accordion__button[aria-expanded="true"] > .about-us-team-card-title {
+  display: none;
+}
+.accordion__button[aria-expanded="true"] > .about-us-team-card-avatar {
+  border: 5px solid $color-orange;
 }
 
 /* on desktop, height = height of individual bg images */
