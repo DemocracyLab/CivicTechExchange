@@ -163,12 +163,12 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   _volunteerWithUs() {
     return (
       <div className="about-us-volunteer col">
-        <h2>Volunteer</h2>
         <div className="row">
           <div className="col-sm-3">
             <img className="about-us-volunteer-logo" src={cdn.image(Images.DL_GLYPH)}></img>
           </div>
           <div className="col-xs-12 col-sm-9">
+            <h2>Volunteer</h2>
             <p>We connect skilled volunteers with the projects that need them. Open to everyone from individuals and established nonprofits to government organizations and for-profit social enterprises — we provide an open avenue for a better connection, more efficient collaboration, and increased impact.</p>
             <p className="about-us-volunteer-disclaimer">DemocracyLab is a volunteer-based 501(c)3 non-profit organization, headquartered in Seattle, WA.</p>
             <div className="about-us-volunteer-buttons">
