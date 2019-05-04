@@ -19,7 +19,7 @@ class SplashScreen extends React.PureComponent<Props> {
     return (
       <div className="SplashScreen-root" style={{backgroundImage: 'url(' + cdn.image("dl_splash.png")+ ')' }}>
         <div className="SplashScreen-content">
-          <h2>Optimizing the connection between skilled volunteers and tech-for-good projects</h2>
+          <h1>Optimizing the connection between skilled volunteers and tech-for-good projects</h1>
           <div className="SplashScreen-section">
             DemocracyLab is a 501(c)(3) nonprofit organization
           </div>
@@ -35,6 +35,6 @@ class SplashScreen extends React.PureComponent<Props> {
       </div>
     );
   }
-  
+
 }
 export default SplashScreen;
