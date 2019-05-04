@@ -136,6 +136,19 @@
   border: 5px solid $color-orange;
 }
 
+.about-us-team-card-link {
+  color: $color-text-dark;
+  text-decoration: none;
+}
+.about-us-team-card-link svg:hover, .about-us-team-card-link img:hover {
+  border: 5px solid $color-orange;
+  color: inherit;
+}
+.about-us-team-card-link:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
 /* on desktop, height = height of individual bg images */
 @include media-breakpoint-up(sm) {
   .about-us-content {

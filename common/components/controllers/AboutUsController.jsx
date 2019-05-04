@@ -135,22 +135,15 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       return(
         owners.map((owner, i) => {
         return (
-          <AccordionItem className="about-us-team-card" key={i}>
-              <AccordionItemHeading>
-                <AccordionItemButton>
-                  {this._renderAvatar(owner)}
-                  <div className="about-us-team-card-title">
-                    <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
-                    <p>Project Owner</p>
-                  </div>
-                </AccordionItemButton>
-              </AccordionItemHeading>
-              <AccordionItemPanel className="about-us-team-card-bio">
+          <div className="about-us-team-card" key={i}>
+            <a href={"/index/?section=Profile&id=" + owner.id} className="about-us-team-card-link">
+              {this._renderAvatar(owner)}
+              <div className="about-us-team-card-title">
                 <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
                 <p>Project Owner</p>
-                <p>{owner.about_me}</p>
-              </AccordionItemPanel>
-            </AccordionItem>
+              </div>
+            </a>
+          </div>
           )}
           )
         )
@@ -160,22 +153,15 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return(
       volunteers.map((vo, i) => {
       return vo.isApproved && (
-        <AccordionItem className="about-us-team-card" key={i}>
-            <AccordionItemHeading>
-              <AccordionItemButton>
-                {this._renderAvatar(vo.user)}
-                <div className="about-us-team-card-title">
-                  <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
-                  <p>{vo.roleTag.display_name}</p>
-                </div>
-              </AccordionItemButton>
-            </AccordionItemHeading>
-            <AccordionItemPanel className="about-us-team-card-bio">
-                <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
-                <p>{vo.roleTag.display_name}</p>
-                <p>{vo.user.about_me}</p>
-            </AccordionItemPanel>
-          </AccordionItem>
+        <div className="about-us-team-card" key={i}>
+          <a href={"/index/?section=Profile&id=" + vo.user.id} className="about-us-team-card-link">
+            {this._renderAvatar(vo.user)}
+            <div className="about-us-team-card-title">
+              <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
+              <p>{vo.roleTag.display_name}</p>
+            </div>
+          </a>
+        </div>
     )}
     )
   )
