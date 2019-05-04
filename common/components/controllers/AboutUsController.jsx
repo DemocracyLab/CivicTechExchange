@@ -7,13 +7,6 @@ import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn, {Images} from '../utils/cdn.js';
 import Headers from "../common/Headers.jsx";
 import Person from '@material-ui/icons/Person';
-import {
-    Accordion,
-    AccordionItem,
-    AccordionItemHeading,
-    AccordionItemButton,
-    AccordionItemPanel,
-} from 'react-accessible-accordion';
 // TODO: Create metrics event for this page, then import metrics and use it
 // import metrics from "../utils/metrics.js";
 
@@ -122,10 +115,10 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="about-us-team col">
         <h2>Our Team</h2>
         <p>We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
-        <Accordion className="about-us-team-card-container" allowZeroExpanded={true}>
+        <div className="about-us-team-card-container">
           {this._renderTeamOwners(this.state.aboutUs.project_owners)}
           {this._renderTeamVolunteers(this.state.aboutUs.project_volunteers)}
-        </Accordion>
+        </div>
       </div> : <div className="about-us-team col"><p>Loading our team information...</p></div>)
   }
 
