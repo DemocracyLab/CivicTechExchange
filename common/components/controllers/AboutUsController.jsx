@@ -41,7 +41,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="about-us-mission"
       style={this.bgStyle('OurMissionBGoverlay.jpg')}>
         <div className="about-us-content">
-          <h2>Our Mission</h2>
+          <h1>Our Mission</h1>
           <p>We connect people who create technology for public good with talent and resources to achieve their vision</p>
         </div>
       </div>
