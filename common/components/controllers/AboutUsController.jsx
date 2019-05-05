@@ -41,8 +41,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="about-us-mission"
       style={this.bgStyle('OurMissionBGoverlay.jpg')}>
         <div className="about-us-content">
-          <h1>Our Mission</h1>
-          <p>We connect people who create technology for public good with talent and resources to achieve their vision</p>
+          <h1>Mission</h1>
+          <p>Empower a community of people and projects that use technology to advance the public good.</p>
         </div>
       </div>
     )
@@ -52,8 +52,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="about-us-vision"
       style={this.bgStyle('OurVisionBGoverlay.jpg')}>
         <div className="about-us-content">
-          <h2>Our Vision</h2>
-          <p> At DemocracyLab, we envision a world where everyone who wants to make the world a better place has the [power/ability/opportunity/tools...] to do so.</p>
+          <h2>Vision</h2>
+          <p>Technology enables our collective intelligence to solve the most challenging social, economic, environmental and civic problems while empowering all members of our societies.</p>
         </div>
       </div>
     )
@@ -69,7 +69,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             </div>
             <div className="about-us-values-text">
               <h3>Community Built</h3>
-              <p>We are building for the community, by the community</p>
+              <p>We are building for the community, by the community.</p>
             </div>
           </div>
 
@@ -78,8 +78,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
               <img src={cdn.image("EncourageTransparencyIcon.png")}></img>
             </div>
             <div className="about-us-values-text">
-              <h3>Encourage Transparency</h3>
-              <p>Transparency provides opportunities to learn & build trust</p>
+              <h3>Transparency</h3>
+              <p>Openness promotes learning and builds trust.</p>
             </div>
           </div>
 
@@ -88,8 +88,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
               <img src={cdn.image("InnovateIcon.png")}></img>
             </div>
             <div className="about-us-values-text">
-              <h3>Always Innovate</h3>
-              <p>We are laying the groundwork for innovation in the social sector, by innovating ourselves</p>
+              <h3>Innovation</h3>
+              <p>We encourage experimentation and shared learning to accelerate innovation.</p>
             </div>
           </div>
 
@@ -99,7 +99,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             </div>
             <div className="about-us-values-text">
               <h3>Challenge</h3>
-              <p>We believe the hard questions are the best questions. We welcome the challenge to better ourselves and our products</p>
+              <p>We believe the hard questions are the best questions, and we welcome the challenge to better ourselves and our products.</p>
             </div>
           </div>
         </div>
@@ -107,6 +107,28 @@ class AboutUsController extends React.PureComponent<{||}, State> {
           <img src={cdn.image("CoreValuesBG.png")}></img>
         </div>
 
+      </div>
+    )
+  }
+  _theProblem() {
+    return (
+      <div className="about-us-problem">
+        <div className="about-us-content">
+          <h2>Problem</h2>
+          <p>Everyday people generate powerful ideas that can change the world. Most of these ideas never achieve their potential because of a lack of resources and support.</p>
+        </div>
+      </div>
+    )
+  }
+  _theSolution() {
+    return (
+      <div className="about-us-solution">
+        <div className="about-us-content">
+          <h2>Solution</h2>
+          <p>DemocracyLab is a platform that helps tech for good projects launch by connecting skilled volunteers to projects that need them.
+            We will design future iterations around the needs of donors, institutions, and citizens. Our work will accelerate the evolution of technologies
+            that empower citizens and help institutions become more accessible, accountable and efficient.</p>
+        </div>
       </div>
     )
   }
@@ -223,6 +245,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
          {this._ourMission()}
          {this._ourVision()}
          {this._ourValues()}
+         {this._theProblem()}
+         {this._theSolution()}
          {this._ourTeam()}
          {this._volunteerWithUs()}
        </div>
