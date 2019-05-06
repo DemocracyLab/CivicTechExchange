@@ -1,7 +1,7 @@
 .about-us-root h1, .about-us-root h2, .about-us-root h3 {
   font-weight: bold;
 }
-.about-us-mission, .about-us-vision, .about-us-problem-solution {
+.about-us-mission, .about-us-vision {
   align-items: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -17,11 +17,11 @@
   color: $color-text-light;
 }
 
-.about-us-problem-solution {
+.about-us-ps {
   background-color: $color-background-light;
 }
 
-.about-us-problem-solution hr {
+.about-us-ps hr {
   width: 75%;
 }
 
@@ -57,9 +57,9 @@
   margin-top: 25px;
   margin-bottom: 25px;
 }
-.about-us-team, .about-us-volunteer {
-  padding-top: 25px;
-  padding-bottom: 25px;
+.about-us-team, .about-us-volunteer, .about-us-ps {
+  padding-top: 36px;
+  padding-bottom: 36px;
 }
 /* on mobile, image should be on top of text, on desktop text should be left and image right */
 .about-us-values-core {
@@ -68,7 +68,7 @@
 .about-us-values-image {
   order: 1;
 }
-.about-us-values-image img {
+.about-us-values-image img, .about-us-ps-image img {
   max-width: 100%;
 }
 .about-us-values-list {
@@ -159,11 +159,24 @@
   text-decoration: none;
 }
 
-.problem-solution-core {
-  order: 2;
+/* this is a gross hack to handle content reflow, take it back to design later */
+.about-us-show-md-up {
+  display: none;
 }
-.problem-solution-image {
-  order: 1;
+.about-us-show-sm-down {
+  display: block;
+}
+/* end gross position hack */
+
+.about-us-ps-icon {
+  text-align: center;
+  margin: 20px 0;
+}
+.about-us-ps h2 {
+  color: $color-orange;
+}
+.about-us-ps-problem, .about-us-ps-solution {
+  margin: 20px 0;
 }
 
 /* on desktop, height = height of individual bg images */
@@ -225,6 +238,15 @@
   }
   .about-us-values-image {
     order: 2;
+  }
+  .about-us-show-md-up {
+    display: block;
+  }
+  .about-us-show-sm-down {
+    display: none;
+  }
+  .about-us-ps-icon {
+    text-align: start;
   }
 }
 

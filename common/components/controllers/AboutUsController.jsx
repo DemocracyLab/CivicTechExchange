@@ -112,23 +112,24 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   }
   _problemSolution() {
     return (
-      <div className="row ml-0 mr-0 about-us-problem-solution">
+      <div className="row ml-0 mr-0 about-us-ps">
         <hr/>
-        <div className="col-12 col-md-6 problem-solution-image about-us-values-image">
+        <div className="about-us-show-md-up col-12 col-md-6 about-us-ps-image">
           <img src={cdn.image("PuzzleBG.jpg")}></img>
         </div>
-        <div className="col-12 col-md-6 problem-solution-core">
-          <div className="about-us-values-list">
-            <div className="about-us-values-icon">
-              <img src={cdn.image("QuestionIcon.png")}></img>
-            </div>
+        <div className="col-12 col-md-6">
+          <div className="about-us-ps-icon">
+            <img src={cdn.image("QuestionIcon.png")}></img>
           </div>
+          <div className="about-us-ps-problem">
           <h2>Problem</h2>
-          <div className="about-us-values-list">
             <p>Everyday people generate powerful ideas that can change the world. Most of these ideas never achieve their potential because of a lack of resources and support.</p>
           </div>
+          <div className="about-us-show-sm-down col-12 col-md-6 about-us-ps-image">
+            <img src={cdn.image("PuzzleBG.jpg")}></img>
+          </div>
+          <div className="about-us-ps-solution">
           <h2>Solution</h2>
-          <div className="about-us-values-list">
             <p>
               DemocracyLab is a platform that helps tech for good projects launch by connecting skilled volunteers to projects that need them.
               We will design future iterations around the needs of donors, institutions, and citizens. Our work will accelerate the evolution of technologies
@@ -211,7 +212,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   }
 
   _renderHeader(): React$Node {
-    const title: string = "democracyLab | About";
+    const title: string = "DemocracyLab | About";
     const description: string = "Learn About democracyLab, the nonprofit connecting skilled individuals to tech-for-good projects."
 
     return (
@@ -247,7 +248,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
    render(): $React$Node {
      return (
-       <div className="container about-us-root">
+       <div className="container pl-0 pr-0 about-us-root">
          {this._renderHeader()}
          {this._ourMission()}
          {this._ourVision()}
