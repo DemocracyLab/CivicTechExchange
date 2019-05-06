@@ -110,24 +110,31 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       </div>
     )
   }
-  _theProblem() {
+  _problemSolution() {
     return (
-      <div className="about-us-problem">
-        <div className="about-us-content">
-          <h2>Problem</h2>
-          <p>Everyday people generate powerful ideas that can change the world. Most of these ideas never achieve their potential because of a lack of resources and support.</p>
+      <div className="row ml-0 mr-0 about-us-problem-solution">
+        <hr/>
+        <div className="col-12 col-md-6 problem-solution-image about-us-values-image">
+          <img src={cdn.image("PuzzleBG.jpg")}></img>
         </div>
-      </div>
-    )
-  }
-  _theSolution() {
-    return (
-      <div className="about-us-solution">
-        <div className="about-us-content">
+        <div className="col-12 col-md-6 problem-solution-core">
+          <div className="about-us-values-list">
+            <div className="about-us-values-icon">
+              <img src={cdn.image("QuestionIcon.png")}></img>
+            </div>
+          </div>
+          <h2>Problem</h2>
+          <div className="about-us-values-list">
+            <p>Everyday people generate powerful ideas that can change the world. Most of these ideas never achieve their potential because of a lack of resources and support.</p>
+          </div>
           <h2>Solution</h2>
-          <p>DemocracyLab is a platform that helps tech for good projects launch by connecting skilled volunteers to projects that need them.
-            We will design future iterations around the needs of donors, institutions, and citizens. Our work will accelerate the evolution of technologies
-            that empower citizens and help institutions become more accessible, accountable and efficient.</p>
+          <div className="about-us-values-list">
+            <p>
+              DemocracyLab is a platform that helps tech for good projects launch by connecting skilled volunteers to projects that need them.
+              We will design future iterations around the needs of donors, institutions, and citizens. Our work will accelerate the evolution of technologies
+              that empower citizens and help institutions become more accessible, accountable and efficient.
+            </p>
+          </div>
         </div>
       </div>
     )
@@ -245,8 +252,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
          {this._ourMission()}
          {this._ourVision()}
          {this._ourValues()}
-         {this._theProblem()}
-         {this._theSolution()}
+         {this._problemSolution()}
          {this._ourTeam()}
          {this._volunteerWithUs()}
        </div>
