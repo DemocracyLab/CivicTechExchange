@@ -58,6 +58,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       </div>
     )
   }
+
   _ourValues() {
     return (
       <div className="row ml-0 mr-0 about-us-values">
@@ -70,6 +71,26 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             <div className="about-us-values-text">
               <h3>Community Built</h3>
               <p>We are building for the community, by the community.</p>
+            </div>
+          </div>
+
+          <div className="about-us-values-list">
+            <div className="about-us-values-icon">
+              <img src={cdn.image("InclusivityIcon.png")}></img>
+            </div>
+            <div className="about-us-values-text">
+              <h3>Inclusivity</h3>
+              <p>We believe everyone has something to contribute to the solutions society needs.</p>
+            </div>
+          </div>
+
+          <div className="about-us-values-list">
+            <div className="about-us-values-icon">
+              <img src={cdn.image("CollaborationIcon.png")}></img>
+            </div>
+            <div className="about-us-values-text">
+              <h3>Collaboration</h3>
+              <p>Diverse teams working together with goodwill and respect can accomplish great things.</p>
             </div>
           </div>
 
@@ -131,9 +152,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
           <div className="about-us-ps-solution">
           <h2>Solution</h2>
             <p>
-              DemocracyLab is a platform that helps tech for good projects launch by connecting skilled volunteers to projects that need them.
-              We will design future iterations around the needs of donors, institutions, and citizens. Our work will accelerate the evolution of technologies
-              that empower citizens and help institutions become more accessible, accountable and efficient.
+              DemocracyLab is a platform that helps tech for good projects launch by connecting skilled volunteers to projects that need them. We will design future iterations around the needs of donors, institutions, and citizens. Our work will accelerate the evolution of technologies that empower citizens and help institutions become more accessible, accountable and efficient.
             </p>
           </div>
         </div>
