@@ -10,6 +10,13 @@ class cdn {
   static image(fileName: string): string {
     return window.STATIC_CDN_URL + "/img/" + fileName;
   }
+
+  static bgImage(fileName: string): string {
+    const pathAndFile = cdn.image(fileName);
+    return ({
+      backgroundImage: `url(${pathAndFile})`
+    })
+  }
 }
 
 export default cdn;
