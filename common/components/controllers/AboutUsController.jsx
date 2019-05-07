@@ -152,7 +152,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
           <div className="about-us-ps-solution">
           <h2>Solution</h2>
             <p>
-              DemocracyLab is a platform that helps tech for good projects launch by connecting skilled volunteers to projects that need them. We will design future iterations around the needs of donors, institutions, and citizens. Our work will accelerate the evolution of technologies that empower citizens and help institutions become more accessible, accountable and efficient.
+              DemocracyLab helps tech for good projects launch by connecting skilled volunteers to projects that need them. We are open to projects from individuals, community organizations, non-profits, social purpose companies and government agencies. Our platform helps volunteers give back and develop new skills, while accelerating the evolution of new technologies that empower citizens and help institutions become more accessible, accountable, and efficient.
             </p>
           </div>
         </div>
