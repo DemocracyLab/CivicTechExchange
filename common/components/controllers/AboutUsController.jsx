@@ -39,7 +39,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   _ourMission() {
     return (
       <div className="about-us-mission"
-      style={this.bgStyle('OurMissionBGoverlay.jpg')}>
+      style={cdn.bgImage('OurMissionBGoverlay.jpg')}>
         <div className="about-us-content">
           <h1>Mission</h1>
           <p>Empower a community of people and projects that use technology to advance the public good.</p>
@@ -50,7 +50,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   _ourVision() {
     return (
       <div className="about-us-vision"
-      style={this.bgStyle('OurVisionBGoverlay.jpg')}>
+      style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
         <div className="about-us-content">
           <h2>Vision</h2>
           <p>Technology enables our collective intelligence to solve the most challenging social, economic, environmental and civic problems while empowering all members of our societies.</p>
@@ -241,17 +241,6 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       />
     );
   }
-
-
-
-  bgStyle(filename) {
-    //only set the background image here because it's a CDN link
-    let bgImg = cdn.image(filename);
-    let style= {
-      backgroundImage: `url(${bgImg})`,
-     }
-    return style;
-   }
 
    _renderAvatar(person) {
      //modified version of common/components/common/avatar.jsx - to allow for variable sizing via CSS mediaquery instead of provided value as prop
