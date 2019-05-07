@@ -17,7 +17,7 @@ class SplashScreen extends React.PureComponent<Props> {
 
   render(): React$Node {
     return (
-      <div className="SplashScreen-root" style={{backgroundImage: 'url(' + cdn.image("dl_splash.png")+ ')' }}>
+      <div className="SplashScreen-root" style={{backgroundImage: 'url(' + cdn.image("dl_splash.jpg")+ ')' }}>
         <div className="SplashScreen-content">
           <h1>Optimizing the connection between skilled volunteers and tech-for-good projects</h1>
           <div className="SplashScreen-section">
