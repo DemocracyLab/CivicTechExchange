@@ -10,7 +10,8 @@ import _ from 'lodash';
 
 const sectionsToShowFooter: $ReadOnlyArray<string> = [
   Section.FindProjects,
-  Section.AboutProject
+  Section.AboutProject,
+  Section.AboutUs
 ];
 
 class MainFooter extends React.Component<{||}> {
@@ -18,11 +19,11 @@ class MainFooter extends React.Component<{||}> {
   constructor(): void {
     super();
   }
-  
+
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [NavigationStore];
   }
-  
+
   static calculateState(prevState: State): State {
     return {
       section: NavigationStore.getSection(),
