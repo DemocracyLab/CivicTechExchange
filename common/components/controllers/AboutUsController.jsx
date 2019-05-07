@@ -125,7 +125,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
           </div>
         </div>
         <div className="col-12 col-md-6 about-us-values-image">
-          <img src={cdn.image("CoreValuesBG.png")}></img>
+          <img src={cdn.image("CoreValuesBG520.jpg")}></img>
         </div>
 
       </div>
