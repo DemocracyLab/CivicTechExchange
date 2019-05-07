@@ -20,14 +20,14 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     super();
     this.state = {
       aboutUs: null,
+      projectId: parseInt(window.DLAB_PROJECT_ID)
     }
   }
 //componentDidMount and loadProjectDetails copied from AboutProjectController, since we're retrieving a project's information the same way
 //in this case we use the value provided as an env key to get DemocracyLab's project info, to use in the Our Team section
 
   componentDidMount() {
-    const projectId = parseInt(window.DLAB_PROJECT_ID);
-    ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
+    ProjectAPIUtils.fetchProjectDetails(this.state.projectId, this.loadProjectDetails.bind(this));
   }
 
   loadProjectDetails(project: ProjectDetailsAPIData) {
@@ -221,7 +221,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             <p>We connect skilled volunteers with the projects that need them. Open to everyone from individuals and established nonprofits to government organizations and for-profit social enterprises — we provide an open avenue for a better connection, more efficient collaboration, and increased impact.</p>
             <p className="about-us-volunteer-disclaimer">DemocracyLab is a volunteer-based 501(c)3 non-profit organization, headquartered in Seattle, WA.</p>
             <div className="about-us-volunteer-buttons">
-              <a href="mailto:hello@democracylab.org" className="SubHeader-donate-btn-container"><button className="SubHeader-donate-btn">Join Us</button></a>
+              <a href={"/index/?section=AboutProject&id=" + this.state.projectId} className="SubHeader-donate-btn-container"><button className="SubHeader-donate-btn">Join Us</button></a>
               <a href="https://connect.democracylab.org/donatenow" className="SubHeader-donate-btn-container" rel="noopener noreferrer"><button className="SubHeader-log-btns">Donate</button></a>
             </div>
           </div>
