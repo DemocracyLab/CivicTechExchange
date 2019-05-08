@@ -10,7 +10,7 @@ from common.helpers.form_helpers import is_json_field_empty
 from common.helpers.dictionaries import merge_dicts
 
 
-# Without the following two classes, the following error occurs:
+# Without the following classes, the following error occurs:
 #
 #   ValueError: You can't have two TaggableManagers with the same
 #   through model.
@@ -34,7 +34,30 @@ class TaggedOrganization(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
 
-class Project(models.Model):
+class ArchiveManager(models.Manager):
+    def get_queryset(self):
+        return super(ArchiveManager, self).get_queryset().filter(deleted=True)
+
+
+class DefaultManager(models.Manager):
+    def get_queryset(self):
+        return super(DefaultManager, self).get_queryset().filter(deleted=False)
+
+# This base class adds delete functionality to models using a flag,  and filters deleted items out of the default result set 
+class Archived(models.Model):
+    class Meta:
+        abstract = True
+
+    objects = DefaultManager()
+    archives = ArchiveManager()
+    deleted = models.BooleanField(default=False)
+
+    def delete(self):
+        self.deleted = True
+        self.save()
+
+
+class Project(Archived):
     # TODO: Change related name to 'created_projects' or something similar
     project_creator = models.ForeignKey(Contributor, related_name='creator')
     project_description = models.CharField(max_length=3000, blank=True)
@@ -57,6 +80,10 @@ class Project(models.Model):
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
+
+    def delete(self):
+        self.is_searchable=False
+        super().delete()
 
     def all_owners(self):
         owners = [self.project_creator]
@@ -404,7 +431,7 @@ class TaggedVolunteerRole(TaggedItemBase):
     content_object = models.ForeignKey('VolunteerRelation')
 
 
-class VolunteerRelation(models.Model):
+class VolunteerRelation(Archived):
     project = models.ForeignKey(Project, related_name='volunteer_relations')
     volunteer = models.ForeignKey(Contributor, related_name='volunteer_relations')
     role = TaggableManager(blank=True, through=TaggedVolunteerRole)

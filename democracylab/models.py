@@ -64,6 +64,7 @@ class Contributor(User):
             'id': self.id,
             'first_name': self.first_name,
             'last_name': self.last_name,
+            'about_me': self.about_me
         }
 
         thumbnail_files = list(files.filter(file_category=civictechprojects.models.FileCategory.THUMBNAIL.value))
@@ -80,4 +81,3 @@ def get_contributor_by_username(username):
 
 def get_request_contributor(request):
     return get_contributor_by_username(request.user.username)
-
