@@ -85,7 +85,7 @@ class SignUpController extends React.Component<Props, State> {
     return (
       <React.Fragment>
       <Headers
-      title="Sign Up| DemocracyLab"
+      title="Sign Up | DemocracyLab"
       description="Sign up"
       />
       <div className="LogInController-root">
