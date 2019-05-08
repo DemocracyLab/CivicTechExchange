@@ -7,6 +7,7 @@ import FormValidation from '../forms/FormValidation.jsx'
 import metrics from "../utils/metrics.js";
 import moment from 'moment';
 import _ from 'lodash';
+import Headers from "../common/Headers.jsx";
 
 type Props = {|
   +errors: {+[key: string]: $ReadOnlyArray<string>},
@@ -82,6 +83,11 @@ class SignUpController extends React.Component<Props, State> {
 
   render(): React$Node {
     return (
+      <React.Fragment>
+      <Headers
+      title="Sign Up | DemocracyLab"
+      description="Sign up"
+      />
       <div className="LogInController-root">
         <div className="LogInController-greeting">
           SIGN UP, IT'S EASY AND FREE
@@ -170,6 +176,7 @@ class SignUpController extends React.Component<Props, State> {
           </button>
         </form>
       </div>
+      </React.Fragment>
     );
   }
 }

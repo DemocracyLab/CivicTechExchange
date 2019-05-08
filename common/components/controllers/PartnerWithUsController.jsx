@@ -3,6 +3,7 @@
 import React from 'react';
 import cdn,{Images} from "../utils/cdn.js";
 import Sponsors, {SponsorMetadata} from "../utils/Sponsors.js";
+import Headers from "../common/Headers.jsx";
 
 class PartnerWithUsController extends React.Component<{||}> {
   constructor(): void {
@@ -11,6 +12,11 @@ class PartnerWithUsController extends React.Component<{||}> {
 
   render(): React$Node {
     return (
+      <React.Fragment>
+      <Headers
+      title="Partnering With DemocracyLab"
+      description="Partnering With DemocracyLab"
+      />
       <div className="PartnerWithUsController-root container">
         <div className="PartnerWithUsController-topSection col-xs-12">
           <h1>Partner With Us</h1>
@@ -25,6 +31,7 @@ class PartnerWithUsController extends React.Component<{||}> {
         </div>
         {this._renderSponsors()}
       </div>
+      </React.Fragment>
     );
   }
 
