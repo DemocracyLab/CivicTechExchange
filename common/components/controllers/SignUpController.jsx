@@ -7,6 +7,7 @@ import FormValidation from '../forms/FormValidation.jsx'
 import metrics from "../utils/metrics.js";
 import moment from 'moment';
 import _ from 'lodash';
+import Headers from "../common/Headers.jsx";
 
 type Props = {|
   +errors: {+[key: string]: $ReadOnlyArray<string>},

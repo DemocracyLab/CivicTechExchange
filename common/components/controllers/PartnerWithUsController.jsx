@@ -3,6 +3,7 @@
 import React from 'react';
 import cdn,{Images} from "../utils/cdn.js";
 import Sponsors, {SponsorMetadata} from "../utils/Sponsors.js";
+import Headers from "../common/Headers.jsx";
 
 class PartnerWithUsController extends React.Component<{||}> {
   constructor(): void {
