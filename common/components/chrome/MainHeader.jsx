@@ -113,13 +113,13 @@ class MainHeader extends React.Component<{||}, State > {
           <div className={this._cx.get('rightContent')}>
             {this._renderSectionLinks()}
             {this._renderHeaderLinks()}
+            {this._renderHeaderButtons()}
+            <div class="vertical-divider"></div>
             {
               CurrentUser.isLoggedIn() ?
                 this._renderAccountInfo() :
-                this._renderLogInButton()
+                this._renderLogInLink()
             }
-            {this._renderCreateProjectButton()}
-            {this._renderHeaderButtons()}
           </div>
         </div>
       </div>
@@ -140,6 +140,18 @@ class MainHeader extends React.Component<{||}, State > {
       <button onClick={this._onLogInClick} className='SubHeader-log-btns'>
         Log In
       </button>
+    );
+  }
+
+  _renderLogInLink(): void {
+    return (
+      <SectionLink
+          activeSection={this.state.activeSection}
+          key="LogIn"
+          section={Section.LogIn}
+          title="Log In"
+          target="_blank" rel="noopener noreferrer"
+        />
     );
   }
 

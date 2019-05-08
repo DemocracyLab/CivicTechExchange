@@ -25,7 +25,7 @@
   display: none;
   flex-direction: row;
   height: 100%;
-  padding-right: 65px;  
+  padding-right: 30px;  
   justify-content: flex-end;
   a {
     text-decoration: none;
@@ -206,4 +206,15 @@
   .SubHeader-rightContent {
     display: flex;
   }
+}
+
+.vertical-divider {
+  position: relative;
+  color: rgba(0,0,0,0.4);
+  border-left: 2px solid;
+  height: 2em;
+  width: 1em;
+  top: 8px;
+  left: 25px;
+  margin-right: 20px;
 }
