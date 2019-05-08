@@ -1,0 +1,277 @@
+.about-us-root h1, .about-us-root h2, .about-us-root h3 {
+  font-weight: bold;
+}
+.about-us-mission, .about-us-vision {
+  align-items: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.about-us-mission, .about-us-vision {
+  background-color: $color-text-grey;
+  color: $color-text-light;
+}
+
+.about-us-ps {
+  background-color: $color-background-light;
+}
+
+.about-us-ps hr {
+  width: 75%;
+}
+
+/* min-heights here for mobile so our content doesn't run outside */
+.about-us-mission {
+  min-height: 169px;
+}
+
+.about-us-vision {
+  min-height: 155px;
+}
+
+.about-us-content {
+  margin: 2rem 0 2rem 1rem;
+}
+.about-us-content h1, .about-us-content h2 {
+  font-size: 48px;
+}
+.about-us-content p {
+  font-size: 18px;
+}
+
+.about-us-values {
+  padding-top: 22px;
+  background-color: $color-background-light;
+}
+.about-us-values h2 {
+  font-size: 36px;
+  line-height: 1.2;
+  margin-bottom: 25px;
+}
+.about-us-values-image {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+.about-us-team, .about-us-volunteer, .about-us-ps {
+  padding-top: 36px;
+  padding-bottom: 36px;
+}
+/* on mobile, image should be on top of text, on desktop text should be left and image right */
+.about-us-values-core {
+  order: 2;
+}
+.about-us-values-image {
+  order: 1;
+}
+.about-us-values-image img, .about-us-ps-image img {
+  max-width: 100%;
+}
+.about-us-values-list {
+  display: flex;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.about-us-values-icon {
+  width: 36px;
+  margin: 0 18px;
+  text-align: center;
+}
+.about-us-values-icon img {
+  max-width: 36px; /* matches width of parent */
+}
+.about-us-values-text h3 {
+  color: $color-orange;
+  font-size: 24px;
+}
+.about-us-values-text p {
+  font-size: 16px;
+}
+.about-us-volunteer h2 {
+  margin-bottom: 1rem;
+}
+
+.about-us-volunteer-logo {
+  display: none;
+}
+.about-us-team-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+  padding-top: 25px;
+}
+.about-us-team-card {
+  flex-basis: 45%;
+  text-align: center;
+  margin-bottom: 25px;
+}
+.about-us-team-card p {
+  font-size: 18px;
+}
+.about-us-team-card img, .about-us-team-card svg {
+  border-radius: 50%;
+}
+.about-us-team-card svg {
+  border: 1px solid $color-grey-frame-border;
+}
+.about-us-team-card-name {
+  font-weight: bold;
+  color: $color-orange;
+  margin-bottom: 0.5rem;
+}
+.about-us-team-avatar {
+  margin: auto; //centers inside the flex container to match centered text
+}
+
+.about-us-team-avatar, .about-us-team-avatar svg {
+  height: 150px;
+  width: 150px;
+}
+
+.about-us-team-card-bio {
+	background-color: #fff;
+	padding: 0 1.5rem 1.125rem 1.5rem; /* 0 top padding so the hide/show toggle for -title works */
+	border-radius: 1rem;
+}
+
+.accordion__button[aria-expanded="true"] > .about-us-team-card-title {
+  display: none;
+}
+.accordion__button[aria-expanded="true"] > .about-us-team-card-avatar {
+  border: 5px solid $color-orange;
+}
+
+.about-us-team-card-link {
+  color: $color-text-dark;
+  text-decoration: none;
+}
+.about-us-team-card-link svg:hover, .about-us-team-card-link img:hover {
+  border: 5px solid $color-orange;
+  color: inherit;
+}
+.about-us-team-card-link:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* this is a gross hack to handle content reflow, take it back to design later */
+.about-us-show-md-up {
+  display: none;
+}
+.about-us-show-sm-down {
+  display: block;
+}
+/* end gross position hack */
+
+.about-us-ps-icon {
+  text-align: center;
+  margin: 20px 0;
+}
+.about-us-ps h2 {
+  color: $color-orange;
+}
+.about-us-ps-problem, .about-us-ps-solution {
+  margin: 20px 0;
+}
+
+/* on desktop, height = height of individual bg images */
+@include media-breakpoint-up(sm) {
+  .about-us-content {
+    margin: 0 32px 0 16px; /*  rules to get linebreaks where the design wants them */
+  }
+  .about-us-mission {
+    height: 650px;
+  }
+  .about-us-vision {
+    height: 329px;
+  }
+  .about-us-values {
+    padding-top: 84px;
+  }
+
+  .about-us-values-icon {
+    width: 50px;
+    margin: 0 25px;
+  }
+  .about-us-values-icon img {
+    max-width: 50px;
+  }
+  .about-us-values h2 {
+    margin-bottom: 50px;
+  }
+  .about-us-values-image {
+    margin-top: 50px;
+    margin-bottom: 0px;
+  }
+  .about-us-volunteer {
+    background: $color-background-light;
+  }
+  .about-us-volunteer-disclaimer {
+    color: $color-text-grey;
+  }
+  .about-us-volunteer-logo {
+    display: block;
+    width: 100%;
+    max-width: 266px;
+  }
+  .about-us-team-card {
+    flex-basis: 22%;
+    margin-bottom: 30px;
+  }
+
+}
+@include media-breakpoint-up(md) {
+  .about-us-content {
+    margin:  0 256px 0 64px /* check that this makes text break into two lines but not three */
+  }
+  .about-us-team-avatar, .about-us-team-avatar svg {
+    height: 200px;
+    width: 200px;
+  }
+  .about-us-values-core {
+    order: 1;
+  }
+  .about-us-values-image {
+    order: 2;
+  }
+  .about-us-show-md-up {
+    display: block;
+  }
+  .about-us-show-sm-down {
+    display: none;
+  }
+  .about-us-ps-icon {
+    text-align: start;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .about-us-content {
+    margin: 0 404px 0 84px; /*  rules to get linebreaks where the design wants them */
+  }
+  .about-us-team-avatar, .about-us-team-avatar svg {
+    height: 230px;
+    width: 230px;
+  }
+  .about-us-team-card {
+    margin-bottom: 50px;
+  }
+  .about-us-values, .about-us-team, .about-us-volunteer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+@include media-breakpoint-up(xxl) {
+  .about-us-content {
+    margin: 0 580px 0 168px;
+  }
+  .about-us-values, .about-us-team, .about-us-volunteer {
+    padding-left: 153px; /* match 168px from Vision/Mission, subtract 30 */
+    padding-right: 153px;
+  }
+}

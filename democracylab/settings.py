@@ -170,6 +170,8 @@ VOLUNTEER_CONCLUDE_SURVEY_URL = os.environ.get('VOLUNTEER_CONCLUDE_SURVEY_URL', 
 
 FOOTER_LINKS = os.environ.get('FOOTER_LINKS', '')
 
+DLAB_PROJECT_ID = os.environ.get('DLAB_PROJECT_ID', '')
+
 SPONSORS_METADATA = os.environ.get('SPONSORS_METADATA', '')
 
 HEADER_ALERT = os.environ.get('HEADER_ALERT', '')
