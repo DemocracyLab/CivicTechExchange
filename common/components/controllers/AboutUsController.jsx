@@ -7,11 +7,11 @@ import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn, {Images} from '../utils/cdn.js';
 import Headers from "../common/Headers.jsx";
 import Person from '@material-ui/icons/Person';
-// TODO: Create metrics event for this page, then import metrics and use it
-// import metrics from "../utils/metrics.js";
+import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
 
 type State = {|
   aboutUs: ?ProjectDetailsAPIData,
+  showBiograhpyModal: boolean
 |};
 
 class AboutUsController extends React.PureComponent<{||}, State> {
@@ -20,7 +20,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     super();
     this.state = {
       aboutUs: null,
-      projectId: parseInt(window.DLAB_PROJECT_ID)
+      projectId: parseInt(window.DLAB_PROJECT_ID),
+      showBiographyModal: false
     }
   }
 //componentDidMount and loadProjectDetails copied from AboutProjectController, since we're retrieving a project's information the same way
