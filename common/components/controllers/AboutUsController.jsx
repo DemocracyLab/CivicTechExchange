@@ -163,17 +163,27 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return (this.state.aboutUs ?
       <div className="about-us-team col">
         <h2>Our Team</h2>
-        <p>We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
+        <p className="about-us-team-description">We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
+        <h4>Business & Marketing Research</h4>
         <div className="about-us-team-card-container">
           {this._renderTeamOwners(this.state.aboutUs.project_owners)}
-          {this._renderTeamVolunteers(this.state.aboutUs.project_volunteers)}
+          {this._filterTeamSection(this.state.aboutUs.project_volunteers, 'Business')}
+        </div>
+        <hr />
+        <h4>Design</h4>
+        <div className="about-us-team-card-container">
+          {this._filterTeamSection(this.state.aboutUs.project_volunteers, 'Design')}
+        </div>
+        <hr />
+        <h4>Development</h4>
+        <div className="about-us-team-card-container">
+          {this._filterTeamSection(this.state.aboutUs.project_volunteers, 'Software Development')}
         </div>
       </div> : <div className="about-us-team col"><p>Loading our team information...</p></div>)
   }
 
   _renderTeamOwners(owners) {
     //TODO: see if we can clean up nested returns, should probably be extracted to a component
-    //TODO: get collapsible/expandable user bio ({owner.about_me}) in place
       return(
         owners.map((owner, i) => {
         return (
@@ -190,6 +200,12 @@ class AboutUsController extends React.PureComponent<{||}, State> {
           )
         )
   }
+
+  _filterTeamSection(volunteers, role) {
+    let filtered = volunteers.filter(vo => vo.roleTag.subcategory === role);
+    return this._renderTeamVolunteers(filtered);
+  }
+
 
   _renderTeamVolunteers(volunteers) {
     return(
