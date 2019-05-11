@@ -13,12 +13,12 @@ type State = {|
 |}
 
 class LogInController extends React.Component<{||}, State> {
-  constructor(): void {
-    super();
+  constructor(props): void {
+    super(props);
     this.state = {
       username: '',
       password: '',
-      prevPage: window.location.href.split('&prev=')[1] || '',
+      prevPage: window.location.href.split('&prev=')[1] || this.props.prevPage || '',
       // errorMessage: url.arguments.(document.location.search)
     };
   }

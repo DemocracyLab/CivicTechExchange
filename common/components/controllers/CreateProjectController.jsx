@@ -37,7 +37,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   
   render(): React$Node {
     return !CurrentUser.isLoggedIn() ?
-      <LogInController /> :
+      <LogInController prevPage='CreateProject' /> :
       <div className="wrapper-gray">
         <div className="container">
           {CurrentUser.isEmailVerified() ? this._renderCreateProjectForm() : <VerifyEmailBlurb />}

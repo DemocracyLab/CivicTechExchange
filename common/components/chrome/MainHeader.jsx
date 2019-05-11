@@ -114,7 +114,7 @@ class MainHeader extends React.Component<{||}, State > {
             {this._renderSectionLinks()}
             {this._renderHeaderLinks()}
             {this._renderHeaderButtons()}
-            <div class="vertical-divider"></div>
+            <div className="vertical-divider"></div>
             {
               CurrentUser.isLoggedIn() ?
                 this._renderAccountInfo() :
@@ -150,7 +150,6 @@ class MainHeader extends React.Component<{||}, State > {
           key="LogIn"
           section={Section.LogIn}
           title="Log In"
-          target="_blank" rel="noopener noreferrer"
         />
     );
   }
