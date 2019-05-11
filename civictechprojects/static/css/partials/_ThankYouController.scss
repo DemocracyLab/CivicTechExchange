@@ -16,11 +16,20 @@
     padding: 5% 4%;
 }
 
+@media (max-width: 900px) {
+  .ThankYou-root {
+    flex-direction: column;
+  }
 
+  .ThankYou-leftImage {
+    width: 100%;
+  }
 
+  .ThankYou-message {
+    padding-bottom: 13%;
+  }
 
-
-
-
-
-
+  .ThankYou-share {
+    padding-bottom: 35%;
+  }
+}

@@ -25,7 +25,7 @@ class ThankYouController extends React.Component<{||}> {
           </div>
 
           <div className="ThankYou-share">
-            <h3>Share with your friends</h3>
+            <h4>Share with your friends</h4>
           </div>
 
         </div>
