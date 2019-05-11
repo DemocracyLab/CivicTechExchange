@@ -43,7 +43,7 @@ class RadioButtons extends React.PureComponent<Props, State> {
         {this.props.options.map((option, i) => {
           return (
           <div key={i} className={(this.state.selectedOption && this.state.selectedOption.value === option.value) ? "checked" : "unchecked"} >
-            <Button onClick={this.handleOptionChange.bind(this, option)} >
+            <Button className="radio-button" onClick={this.handleOptionChange.bind(this, option)} >
               {option.label}
             </Button>
           </div>
