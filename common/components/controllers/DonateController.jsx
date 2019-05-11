@@ -56,7 +56,7 @@ class DonateController extends React.Component<{||}, State> {
               Donate and make a difference
             </h1>
             <p>
-              Your donation helps us in our mission to accelerate the evolution of new technologies that empower citizens and help institutions become more accessible, accountable, and efficient.
+              DemocracyLab is building online infrastructure to support the technology-for-good movement. Your donation will help us support the many projects and volunteers who use our platform to make our world a better place. DemocracyLab is a 501(c)(3) nonprofit organization, and your donation may be tax-deductible.
             </p>
           </div>
   
