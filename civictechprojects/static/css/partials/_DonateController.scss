@@ -10,6 +10,21 @@
   width: 50%;
 }
 
-.checked button {
+.radio-button {
+  border: 1px solid;
+  background-color: transparent;
+  border-radius: 5px;
+  padding: 6px 12px;
+  margin: 0px 0px 10px 15px;
+  cursor: pointer;
+  min-width: 80px;
+  &:hover {
+    color: $color-orange;
+    border-color: $color-orange;
+  }
+}
+
+.checked .radio-button {
   color: $color-orange-darker;
+  border-color: $color-orange-darker;
 }
