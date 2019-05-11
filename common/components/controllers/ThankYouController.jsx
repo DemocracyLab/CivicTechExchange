@@ -20,7 +20,7 @@ class ThankYouController extends React.Component<{||}> {
         <div className="ThankYou-rightColumn">
 
           <div className="ThankYou-message">
-            <h2>Thanks for your support!</h2>
+            <h2>Thank you for your support!</h2>
             <p>Your donation supports the valuable work of our organization. Thank you for your donation.</p>
           </div>
 

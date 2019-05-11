@@ -13,6 +13,7 @@
 
 .ThankYou-rightColumn {
     order: 2;
+    width: 50%;
     padding: 5% 4%;
 }
 
@@ -22,6 +23,10 @@
   }
 
   .ThankYou-leftImage {
+    width: 100%;
+  }
+
+  .ThankYou-rightColumn {
     width: 100%;
   }
 
