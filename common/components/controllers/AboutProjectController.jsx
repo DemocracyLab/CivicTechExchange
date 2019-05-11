@@ -3,9 +3,9 @@
 //TODO: validate all the active imports, these are the result of a messy merge
 import React from 'react';
 import _ from 'lodash'
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
+// import Grid from '@material-ui/core/Grid';
+// import Paper from '@material-ui/core/Paper';
+// import Divider from '@material-ui/core/Divider';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.jsx';
@@ -95,32 +95,31 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     return (
       <div className='AboutProjects-root'>
         {this._renderHeader(project)}
-        <Grid container className='AboutProjects-container' spacing={0}>
-          <Grid item xs={12} sm={6} md={4} className="AboutProjects-infoColumn">
-            <Paper className='AboutProjects-paper' elevation={1} square={true}>
+        <div className='AboutProjects-container'>
+          <div className="AboutProjects-infoColumn">
+            <div className='AboutProjects-paper'>
 
-              <Grid className='AboutProjects-iconContainer'>
+              <div className='AboutProjects-iconContainer'>
                 <img className='AboutProjects-icon'src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
-              </Grid>
+              </div>
 
-              <Divider />
 
-              <Grid className='AboutProjects-details'>
+              <div className='AboutProjects-details'>
                 <ProjectDetails projectLocation={project && project.project_location}
                 projectUrl={project && project.project_url}
                 projectStage={project && !_.isEmpty(project.project_stage) ? project.project_stage[0].display_name : null}
                 dateModified={project && project.project_date_modified}/>
-              </Grid>
+              </div>
 
-              <Divider />
+
 
             {project && !_.isEmpty(project.project_links) &&
               <React.Fragment>
-                <Grid className='AboutProjects-links'>
+                <div className='AboutProjects-links'>
                   <h4>Links</h4>
                   {this._renderLinks()}
-                </Grid>
-                <Divider />
+                </div>
+
               </React.Fragment>
             }
 
@@ -128,17 +127,17 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
             { project && !_.isEmpty(project.project_files) &&
               <React.Fragment>
-                <Grid className='AboutProjects-files'>
+                <div className='AboutProjects-files'>
                   <h4>Files</h4>
                    {this._renderFiles()}
-                </Grid>
-                <Divider />
+                </div>
+
               </React.Fragment>
             }
 
           {project && !_.isEmpty(project.project_organization) &&
             <React.Fragment>
-              <Grid className='AboutProjects-communities'>
+              <div className='AboutProjects-communities'>
                 <h4>Communities</h4>
                 <ul>
                   {
@@ -147,12 +146,12 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     })
                   }
                 </ul>
-              </Grid>
-              <Divider />
+              </div>
+
             </React.Fragment>
           }
 
-              <Grid className='AboutProjects-team'>
+              <div className='AboutProjects-team'>
                 <h4>Team</h4>
                   {
                     project && !_.isEmpty(project.project_owners)
@@ -172,19 +171,19 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                       />
                     : null
                   }
-              </Grid>
+              </div>
 
-            </Paper>
-          </Grid>
+            </div>
+          </div>
 
-          <Grid item xs={12} sm={6} md={8} className="AboutProjects-mainColumn">
-            <Paper className='AboutProjects-paper' elevation={1} square={true}>
-              <Grid className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
-                  <Grid className='AboutProjects-description' item xs={12} md={6}>
+          <div className="AboutProjects-mainColumn">
+            <div className='AboutProjects-paper'>
+              <div className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
+                  <div className='AboutProjects-description' item xs={12} md={6}>
                     <h1>{project && project.project_name}</h1>
                     <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
                     <p>{project && project.project_short_description}</p>
-                  </Grid>
+                  </div>
 
                   <ProjectVolunteerModal
                     projectId={this.state.project && this.state.project.project_id}
@@ -194,13 +193,13 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     handleClose={this.confirmJoinProject.bind(this)}
                   />
 
-                  <Grid className='AboutProjects-owner' item xs={12} md={3}>
+                  <div className='AboutProjects-owner' item xs={12} md={3}>
                     <ContactProjectButton project={project}/>
                     <ProjectVolunteerButton
                       project={project}
                       onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
                     />
-                  </Grid>
+                  </div>
 
               <div className="AboutProjects_tabs">
                 <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
@@ -209,12 +208,11 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 }
               </div>
 
-              </Grid>
-              <Divider/>
+              </div>
 
-                <Grid className='AboutProjects-description-details'>
+                <div className='AboutProjects-description-details'>
                   <div id='project-details'>{project.project_description}</div>
-                  <Grid className='AboutProjects-skills-container' container direction='row'>
+                  <div className='AboutProjects-skills-container'>
                     {project && !_.isEmpty(project.project_positions) && 
                     <div className='AboutProjects-skills'>
                       <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
@@ -228,18 +226,17 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     </div>
                     }
 
-                  <Grid item xs={6}></Grid>
-                  </Grid>
-                </Grid>
-              <Divider/>
+                  <div></div>
+                  </div>
+                </div>
 
-              <Grid className='AboutProjects-positions-available' container>
+              <div className='AboutProjects-positions-available' container>
                 <div id="positions-available">{project && !_.isEmpty(project.project_positions) && this._renderPositions()}</div>
-              </Grid>
-            </Paper>
-          </Grid>
+              </div>
+            </div>
+          </div>
 
-        </Grid>
+        </div>
       </div>
     )
   }
