@@ -95,9 +95,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     return (
       <div className='AboutProjects-root'>
         {this._renderHeader(project)}
-        <div className='AboutProjects-container'>
           <div className="AboutProjects-infoColumn">
-            <div className='AboutProjects-paper'>
 
               <div className='AboutProjects-iconContainer'>
                 <img className='AboutProjects-icon'src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
@@ -172,8 +170,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     : null
                   }
               </div>
-
-            </div>
           </div>
 
           <div className="AboutProjects-mainColumn">
@@ -236,7 +232,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </div>
           </div>
 
-        </div>
       </div>
     )
   }
