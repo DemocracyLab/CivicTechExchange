@@ -59,20 +59,22 @@ class DonateController extends React.Component<{||}, State> {
               Your donation helps us in our mission to accelerate the evolution of new technologies that empower citizens and help institutions become more accessible, accountable, and efficient.
             </p>
           </div>
-          
-          <div className="DonateController-amounts">
-            <RadioButtons
-              options={DonationAmountOptions}
-              onSelection={this.handleFieldSelection.bind(this, "donateAmount")}
-            />
-          </div>
-    
-          <div className="DonateController-monthly">
-            <RadioButtons
-              options={DonationMonthlyOptions}
-              defaultSelection={DonationMonthlyOptions[0]}
-              onSelection={this.handleFieldSelection.bind(this, "donateMonthly")}
-            />
+  
+          <div className="DonateController-options">
+            <div className="DonateController-amounts">
+              <RadioButtons
+                options={DonationAmountOptions}
+                onSelection={this.handleFieldSelection.bind(this, "donateAmount")}
+              />
+            </div>
+      
+            <div className="DonateController-monthly">
+              <RadioButtons
+                options={DonationMonthlyOptions}
+                defaultSelection={DonationMonthlyOptions[0]}
+                onSelection={this.handleFieldSelection.bind(this, "donateMonthly")}
+              />
+            </div>
           </div>
         
           <PaypalDonationButton
