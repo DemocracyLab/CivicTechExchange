@@ -1,6 +1,21 @@
-.ThankYou-message {
-    border: red solid 1px;
+.ThankYou-root {
+    display: flex;
 }
+
+.ThankYou-leftImage {
+    order: 1;
+    width: 50%;
+}
+
+.ThankYou-leftImage img {
+    width: 100%;
+}
+
+.ThankYou-rightColumn {
+    order: 2;
+    padding: 5% 4%;
+}
+
 
 
 
