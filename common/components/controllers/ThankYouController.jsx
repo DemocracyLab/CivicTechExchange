@@ -14,6 +14,7 @@ class ThankYouController extends React.Component<{||}> {
       <div className="ThankYou-root">
         <div>
           picture
+          <img src={cdn.image(Images.THANK_YOU)}/>
         </div>
 
         <div>

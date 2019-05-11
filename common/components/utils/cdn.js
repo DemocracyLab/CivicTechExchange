@@ -3,7 +3,8 @@
 export const Images: { [key: string]: string } = {
   DL_GLYPH: "dl_identity_node_mark.png",
   PLATFORM_SPLASH: "platform_splash.png",
-  EVENT_SPLASH: "event_splash.png"
+  EVENT_SPLASH: "event_splash.png",
+  THANK_YOU: "ThankYouBG.jpg",
 };
 
 class cdn {
