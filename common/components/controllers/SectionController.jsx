@@ -24,6 +24,8 @@ import SignedUpController from "./SignedUpController.jsx";
 import EmailVerifiedController from "./EmailVerifiedController.jsx";
 import PartnerWithUsController from "./PartnerWithUsController.jsx";
 import FlashMessage from "../chrome/FlashMessage.jsx";
+import DonateController from "./DonateController.jsx";
+import ThankYouController from "./ThankYouController.jsx";
 
 type State = {|
   section: SectionType,
@@ -83,6 +85,10 @@ class SectionController extends React.Component<{||}, State> {
         return <EmailVerifiedController />;
       case Section.PartnerWithUs:
         return <PartnerWithUsController />;
+      case Section.Donate:
+        return <DonateController />;
+      case Section.ThankYou:
+        return <ThankYouController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }
