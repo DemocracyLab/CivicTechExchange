@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import cdn,{Images} from "../../utils/cdn.js";
 
 type Props = {|
   donateAmount: ?string,
@@ -23,11 +24,11 @@ class PaypalDonationButton extends React.Component<Props> {
   
   render(): React$Node {
     return (
-      <div className="DonateController-root">
+      <div className="PaypalDonationButton">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
           {this.state && this.state.donateAmount && this._renderFormHiddenFields()}
         
-          <input type="image" src="https://files.slack.com/files-pri/T74CHK7EK-FJGK7G34L/image.png" border="0"
+          <input type="image" src={cdn.image("PaypalDonateButton.png")} border="0"
                  name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button"/>
           <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif
 https://www.paypal.com/en_US/i/scr/pixel.gif
