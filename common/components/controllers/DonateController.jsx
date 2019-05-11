@@ -50,6 +50,16 @@ class DonateController extends React.Component<{||}, State> {
           <img src={cdn.image("DonateBG.jpg")}></img>
         </div>
         <div className="panel">
+          
+          <div className="DonateController-text">
+            <h1>
+              Donate and make a difference
+            </h1>
+            <p>
+              Your donation helps us in our mission to accelerate the evolution of new technologies that empower citizens and help institutions become more accessible, accountable, and efficient.
+            </p>
+          </div>
+          
           <div className="DonateController-amounts">
             <RadioButtons
               options={DonationAmountOptions}
