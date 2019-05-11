@@ -95,43 +95,38 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     return (
       <div className='AboutProjects-root'>
         {this._renderHeader(project)}
-          <div className="AboutProjects-infoColumn">
+        <div className="AboutProjects-infoColumn">
 
-              <div className='AboutProjects-iconContainer'>
-                <img className='AboutProjects-icon'src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
+          <div className='AboutProjects-iconContainer'>
+            <img className='AboutProjects-icon'src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
+          </div>
+
+          <div className='AboutProjects-details'>
+            <ProjectDetails projectLocation={project && project.project_location}
+            projectUrl={project && project.project_url}
+            projectStage={project && !_.isEmpty(project.project_stage) ? project.project_stage[0].display_name : null}
+            dateModified={project && project.project_date_modified}/>
+          </div>
+
+          {project && !_.isEmpty(project.project_links) &&
+            <React.Fragment>
+              <div className='AboutProjects-links'>
+                <h4>Links</h4>
+                {this._renderLinks()}
               </div>
 
+            </React.Fragment>
+          }
 
-              <div className='AboutProjects-details'>
-                <ProjectDetails projectLocation={project && project.project_location}
-                projectUrl={project && project.project_url}
-                projectStage={project && !_.isEmpty(project.project_stage) ? project.project_stage[0].display_name : null}
-                dateModified={project && project.project_date_modified}/>
+          { project && !_.isEmpty(project.project_files) &&
+            <React.Fragment>
+              <div className='AboutProjects-files'>
+                <h4>Files</h4>
+                  {this._renderFiles()}
               </div>
 
-
-
-            {project && !_.isEmpty(project.project_links) &&
-              <React.Fragment>
-                <div className='AboutProjects-links'>
-                  <h4>Links</h4>
-                  {this._renderLinks()}
-                </div>
-
-              </React.Fragment>
-            }
-
-
-
-            { project && !_.isEmpty(project.project_files) &&
-              <React.Fragment>
-                <div className='AboutProjects-files'>
-                  <h4>Files</h4>
-                   {this._renderFiles()}
-                </div>
-
-              </React.Fragment>
-            }
+            </React.Fragment>
+          }
 
           {project && !_.isEmpty(project.project_organization) &&
             <React.Fragment>
@@ -149,28 +144,29 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </React.Fragment>
           }
 
-              <div className='AboutProjects-team'>
-                <h4>Team</h4>
-                  {
-                    project && !_.isEmpty(project.project_owners)
-                    ? <ProjectOwnersSection
-                      owners={project.project_owners}
-                      />
-                    : null
-                  }
+          <div className='AboutProjects-team'>
+            <h4>Team</h4>
+              {
+                project && !_.isEmpty(project.project_owners)
+                ? <ProjectOwnersSection
+                  owners={project.project_owners}
+                  />
+                : null
+              }
 
-                  {
-                  project && !_.isEmpty(project.project_volunteers)
-                    ? <VolunteerSection
-                        volunteers={project.project_volunteers}
-                        isProjectAdmin={CurrentUser.userID() === project.project_creator}
-                        isProjectCoOwner={CurrentUser.isCoOwner(project)}
-                        projectId={project.project_id}
-                      />
-                    : null
-                  }
-              </div>
+              {
+              project && !_.isEmpty(project.project_volunteers)
+                ? <VolunteerSection
+                    volunteers={project.project_volunteers}
+                    isProjectAdmin={CurrentUser.userID() === project.project_creator}
+                    isProjectCoOwner={CurrentUser.isCoOwner(project)}
+                    projectId={project.project_id}
+                  />
+                : null
+              }
           </div>
+
+        </div>
 
           <div className="AboutProjects-mainColumn">
             <div className='AboutProjects-paper'>
