@@ -1,0 +1,40 @@
+.ThankYou-root {
+    display: flex;
+}
+
+.ThankYou-leftImage {
+    order: 1;
+    width: 50%;
+}
+
+.ThankYou-leftImage img {
+    width: 100%;
+}
+
+.ThankYou-rightColumn {
+    order: 2;
+    width: 50%;
+    padding: 5% 4%;
+}
+
+@media (max-width: 900px) {
+  .ThankYou-root {
+    flex-direction: column;
+  }
+
+  .ThankYou-leftImage {
+    width: 100%;
+  }
+
+  .ThankYou-rightColumn {
+    width: 100%;
+  }
+
+  .ThankYou-message {
+    padding-bottom: 13%;
+  }
+
+  .ThankYou-share {
+    padding-bottom: 35%;
+  }
+}
