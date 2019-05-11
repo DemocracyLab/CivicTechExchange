@@ -1,0 +1,15 @@
+.DonateController-root {
+  display: flex;
+}
+
+.donate-image img{
+  width: 100%;
+}
+
+.DonateController-root .panel {
+  width: 50%;
+}
+
+.checked button {
+  color: $color-orange-darker;
+}

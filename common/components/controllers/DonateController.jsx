@@ -46,25 +46,31 @@ class DonateController extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className="DonateController-root">
-        <div className="DonateController-amounts">
-          <RadioButtons
-            options={DonationAmountOptions}
-            onSelection={this.handleFieldSelection.bind(this, "donateAmount")}
+        <div className="panel donate-image">
+          <img src={cdn.image("DonateBG.jpg")}></img>
+        </div>
+        <div className="panel">
+          <div className="DonateController-amounts">
+            <RadioButtons
+              options={DonationAmountOptions}
+              onSelection={this.handleFieldSelection.bind(this, "donateAmount")}
+            />
+          </div>
+    
+          <div className="DonateController-monthly">
+            <RadioButtons
+              options={DonationMonthlyOptions}
+              defaultSelection={DonationMonthlyOptions[0]}
+              onSelection={this.handleFieldSelection.bind(this, "donateMonthly")}
+            />
+          </div>
+        
+          <PaypalDonationButton
+            donateAmount={this.state.donateAmount}
+            donateMonthly={this.state.donateMonthly}
           />
         </div>
-  
-        <div className="DonateController-monthly">
-          <RadioButtons
-            options={DonationMonthlyOptions}
-            defaultSelection={DonationMonthlyOptions[0]}
-            onSelection={this.handleFieldSelection.bind(this, "donateMonthly")}
-          />
-        </div>
-      
-        <PaypalDonationButton
-          donateAmount={this.state.donateAmount}
-          donateMonthly={this.state.donateMonthly}
-        />
+
       </div>
     );
   }
