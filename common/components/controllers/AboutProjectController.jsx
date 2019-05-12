@@ -168,39 +168,39 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
         </div>
 
-          <div className="AboutProjects-mainColumn">
-            <div className='AboutProjects-paper'>
-              <div className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
-                  <div className='AboutProjects-description' item xs={12} md={6}>
-                    <h1>{project && project.project_name}</h1>
-                    <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
-                    <p>{project && project.project_short_description}</p>
-                  </div>
+        <div className="AboutProjects-mainColumn">
 
-                  <ProjectVolunteerModal
-                    projectId={this.state.project && this.state.project.project_id}
-                    positions={this.state.project && this.state.project.project_positions}
-                    positionToJoin={this.state.positionToJoin}
-                    showModal={this.state.showJoinModal}
-                    handleClose={this.confirmJoinProject.bind(this)}
-                  />
+          <div className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
+            <div className='AboutProjects-description' item xs={12} md={6}>
+              <h1>{project && project.project_name}</h1>
+              <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
+              <p>{project && project.project_short_description}</p>
+            </div>
 
-                  <div className='AboutProjects-owner' item xs={12} md={3}>
-                    <ContactProjectButton project={project}/>
-                    <ProjectVolunteerButton
-                      project={project}
-                      onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
-                    />
-                  </div>
+            <ProjectVolunteerModal
+              projectId={this.state.project && this.state.project.project_id}
+              positions={this.state.project && this.state.project.project_positions}
+              positionToJoin={this.state.positionToJoin}
+              showModal={this.state.showJoinModal}
+              handleClose={this.confirmJoinProject.bind(this)}
+            />
 
-              <div className="AboutProjects_tabs">
-                <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
-                {project && !_.isEmpty(project.project_positions) && 
-                <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
-                }
-              </div>
+            <div className='AboutProjects-owner' item xs={12} md={3}>
+              <ContactProjectButton project={project}/>
+              <ProjectVolunteerButton
+                project={project}
+                onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
+              />
+            </div>
 
-              </div>
+            <div className="AboutProjects_tabs">
+              <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
+              {project && !_.isEmpty(project.project_positions) && 
+              <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
+              }
+            </div>
+          </div>
+
 
                 <div className='AboutProjects-description-details'>
                   <div id='project-details'>{project.project_description}</div>
@@ -225,8 +225,8 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               <div className='AboutProjects-positions-available' container>
                 <div id="positions-available">{project && !_.isEmpty(project.project_positions) && this._renderPositions()}</div>
               </div>
-            </div>
-          </div>
+
+        </div>
 
       </div>
     )
