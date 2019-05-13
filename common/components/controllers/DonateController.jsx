@@ -72,6 +72,7 @@ class DonateController extends React.Component<{||}, State> {
               ? < div className="DonateController-monthly">
               <RadioButtons
                 options={DonationMonthlyOptions}
+                defaultSelection={DonationMonthlyOptions[0]}
                 onSelection={this.handleFieldSelection.bind(this, "donateMonthly")}
               />
               </div>

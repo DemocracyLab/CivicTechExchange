@@ -21,14 +21,6 @@ class RadioButtons extends React.PureComponent<Props, State> {
       selectedOption: props.defaultSelection
     };
   }
-
-  componentWillReceiveProps(nextProps: Props): void {
-    if (nextProps.defaultSelection) {
-      this.setState({selectedOption: nextProps.defaultSelection}, function () {
-        this.forceUpdate();
-      });
-    }
-  }
   
   handleOptionChange(selection: SelectOption) {
     this.setState({selectedOption: selection}, function() {
