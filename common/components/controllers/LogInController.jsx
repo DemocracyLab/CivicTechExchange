@@ -6,6 +6,10 @@ import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import metrics from "../utils/metrics.js";
 
+type Props = {|
+  prevPage: string,
+|}
+
 type State = {|
   username: string,
   password: string,

@@ -114,7 +114,13 @@ class MainHeader extends React.Component<{||}, State > {
             {this._renderSectionLinks()}
             {this._renderHeaderLinks()}
             {this._renderHeaderButtons()}
-            <div className="vertical-divider"></div>
+            {
+              <React.Fragment>
+                <div className="SubHeader-divider-container">
+                  <div className="vertical-divider"></div>
+                </div>
+              </React.Fragment>
+            }
             {
               CurrentUser.isLoggedIn() ?
                 this._renderAccountInfo() :
@@ -133,14 +139,6 @@ class MainHeader extends React.Component<{||}, State > {
   _handleAlertClosing() {
     let header = this.mainHeaderRef.current;
     this._handleHeightChange(header.clientHeight - header.firstChild.clientHeight);
-  }
-
-  _renderLogInButton(): void {
-    return (
-      <button onClick={this._onLogInClick} className='SubHeader-log-btns'>
-        Log In
-      </button>
-    );
   }
 
   _renderLogInLink(): void {
@@ -346,19 +344,6 @@ class MainHeader extends React.Component<{||}, State > {
         );
       })
     )
-  }
-
-  _renderCreateProjectButton(): React$Node{
-    return (
-      <a key={this.state.createProjectUrl}
-        href={this.state.createProjectUrl}
-        className="SubHeader-donate-btn-container"
-      >
-        <button className="SubHeader-log-btns">
-          Create Project
-        </button>
-      </a>
-    );
   }
 
   _renderIcon(): React$Node {

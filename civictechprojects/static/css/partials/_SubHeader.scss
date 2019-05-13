@@ -79,7 +79,7 @@
   width: 38px;
   border-radius: 50%;
   cursor: pointer;
-  margin: 0px 5px 0px 35px;
+  margin-left: 10px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -208,13 +208,16 @@
   }
 }
 
+.SubHeader-divider-container {
+  display: flex;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+  padding-left: 15px;
+}
+
 .vertical-divider {
-  position: relative;
   color: rgba(0,0,0,0.4);
   border-left: 2px solid;
   height: 2em;
-  width: 1em;
-  top: 8px;
-  left: 25px;
-  margin-right: 20px;
 }
