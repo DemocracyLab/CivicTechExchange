@@ -4,7 +4,7 @@ import React from 'react';
 import cdn,{Images} from "../utils/cdn.js";
 import Headers from "../common/Headers.jsx";
 import RadioButtons from "../common/selection/RadioButtons.jsx";
-import PaypalDonationButton from "../common/integrations/PaypalDonationButton.jsx";
+import PaypalDonationButton, {OtherAmountSelected} from "../common/integrations/PaypalDonationButton.jsx";
 import {SelectOption} from "../types/SelectOption.jsx";
 
 type State = {|
@@ -20,7 +20,7 @@ const DonationAmountOptions: $ReadOnlyArray<SelectOption> = [
   {label: "$100", value: "100"},
   {label: "$250", value: "250"},
   {label: "$500", value: "500"},
-  {label: "Other", value: null}
+  {label: "Other", value: OtherAmountSelected}
 ];
 
 const DonationMonthlyOptions: $ReadOnlyArray<SelectOption> = [

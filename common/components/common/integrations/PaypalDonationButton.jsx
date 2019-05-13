@@ -4,6 +4,8 @@ import React from 'react';
 import cdn,{Images} from "../../utils/cdn.js";
 import _ from 'lodash';
 
+export const OtherAmountSelected: string = "OTHER";
+
 type Props = {|
   donateAmount: ?string,
   donateMonthly: ?boolean
@@ -50,7 +52,7 @@ https://www.paypal.com/en_US/i/scr/pixel.gif
       <input type="hidden" name="business" value="mark@democracylab.org" />
     ];
     
-    if (this.props.donateMonthly) {
+    if (this.state.donateAmount !== OtherAmountSelected && this.props.donateMonthly) {
       fields = fields.concat([
         <input type="hidden" name="cmd" value="_xclick-subscriptions"/>,
         <input type="hidden" name="a3" value={this.state.donateAmount}/>,
@@ -62,8 +64,12 @@ https://www.paypal.com/en_US/i/scr/pixel.gif
     } else {
       fields = fields.concat([
         <input type="hidden" name="cmd" value="_donations" />,
-        <input type="hidden" name="amount" value={this.state.donateAmount} />
       ]);
+      if(this.state.donateAmount !== OtherAmountSelected) {
+        fields = fields.concat([
+          <input type="hidden" name="amount" value={this.state.donateAmount} />
+        ]);
+      }
     }
     
     return fields;

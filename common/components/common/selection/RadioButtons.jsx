@@ -48,7 +48,7 @@ class RadioButtons extends React.PureComponent<Props, State> {
             </Button>
           </div>
         );
-        })};
+        })}
       </React.Fragment>
     );
   }
