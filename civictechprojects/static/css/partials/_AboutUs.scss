@@ -113,7 +113,7 @@
 .about-us-team-card p {
   font-size: 18px;
 }
-.about-us-team-card img, .about-us-team-card svg {
+.about-us-team-avatar, .about-us-team-avatar-default svg {
   border-radius: 50%;
 }
 .about-us-team-card svg {
@@ -124,11 +124,18 @@
   color: $color-orange;
   margin-bottom: 0.5rem;
 }
-.about-us-team-avatar {
-  margin: auto; //centers inside the flex container to match centered text
+.about-us-team-avatar, .about-us-team-avatar-default {
+  margin: auto; //centers avatar inside card
+  background-repeat: no-repeat; //centers image inside avatar
+  background-size: cover;
+  background-position: center;
+}
+.about-us-team-avatar img {
+  min-height: 100%;
+  min-width: 100%;
 }
 
-.about-us-team-avatar, .about-us-team-avatar svg {
+.about-us-team-avatar, .about-us-team-avatar-default svg {
   height: 150px;
   width: 150px;
 }
@@ -149,7 +156,11 @@
   color: $color-text-dark;
   text-decoration: none;
 }
-.about-us-team-card-link svg:hover, .about-us-team-card-link img:hover {
+.about-us-team-avatar:hover {
+  border: 5px solid $color-orange;
+  color: inherit;
+}
+.about-us-team-avatar-default svg:hover {
   border: 5px solid $color-orange;
   color: inherit;
 }
@@ -228,7 +239,7 @@
   .about-us-content {
     margin:  0 256px 0 64px /* check that this makes text break into two lines but not three */
   }
-  .about-us-team-avatar, .about-us-team-avatar svg {
+  .about-us-team-avatar, .about-us-team-avatar-default svg {
     height: 200px;
     width: 200px;
   }
@@ -253,7 +264,7 @@
   .about-us-content {
     margin: 0 404px 0 84px; /*  rules to get linebreaks where the design wants them */
   }
-  .about-us-team-avatar, .about-us-team-avatar svg {
+  .about-us-team-avatar, .about-us-team-avatar-default svg {
     height: 230px;
     width: 230px;
   }

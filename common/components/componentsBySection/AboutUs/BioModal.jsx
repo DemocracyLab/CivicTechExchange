@@ -36,8 +36,9 @@ class BioModal extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div>
-          <Modal show={this.state.showModal} className="wide-dialog">
+          <Modal show={this.state.showModal}>
               <Modal.Header>
+                <button className='customClose' onClick={closeModal}>CLOSE</button>
                 {this.props.first_name} {this.props.last_name}
                 {this.props.title}
               </Modal.Header>

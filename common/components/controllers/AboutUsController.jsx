@@ -263,8 +263,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
      //modified version of common/components/common/avatar.jsx - to allow for variable sizing via CSS mediaquery instead of provided value as prop
      return (
        person.user_thumbnail
-         ? <img className="about-us-team-avatar" src={person.user_thumbnail.publicUrl} alt="Profile image"/>
-         : (<div className="about-us-team-avatar">
+         ? <div className="about-us-team-avatar" style={{backgroundImage: `url(${person.user_thumbnail.publicUrl})`}}></div>
+         : (<div className="about-us-team-avatar-default">
              <Person className="PersonIcon"/>
            </div>)
      );
