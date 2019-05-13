@@ -11,7 +11,8 @@ import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
 
 type State = {|
   aboutUs: ?ProjectDetailsAPIData,
-  showBiograhpyModal: boolean
+  showBiographyModal: boolean,
+  person: object
 |};
 
 class AboutUsController extends React.PureComponent<{||}, State> {
@@ -21,8 +22,11 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     this.state = {
       aboutUs: null,
       projectId: parseInt(window.DLAB_PROJECT_ID),
-      showBiographyModal: false
+      showBiographyModal: false,
+      person: null
     }
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 //componentDidMount and loadProjectDetails copied from AboutProjectController, since we're retrieving a project's information the same way
 //in this case we use the value provided as an env key to get DemocracyLab's project info, to use in the Our Team section
@@ -36,6 +40,21 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       aboutUs: project,
     });
   }
+
+
+//handlers for biography modal
+  handleShow() {
+    this.setState({
+      showBiographyModal: true
+    });
+  }
+  handleClose() {
+    this.setState({
+      showBiographyModal: false
+     });
+  }
+
+
 
   _ourMission() {
     return (
@@ -189,13 +208,12 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         owners.map((owner, i) => {
         return (
           <div className="about-us-team-card" key={i}>
-            <a href={"/index/?section=Profile&id=" + owner.id} className="about-us-team-card-link">
               {this._renderAvatar(owner)}
               <div className="about-us-team-card-title">
                 <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
                 <p>Project Owner</p>
               </div>
-            </a>
+              <button onClick={this.handleShow} className="btn btn-theme">Show Bio Test</button>
           </div>
           )}
           )
@@ -270,6 +288,13 @@ class AboutUsController extends React.PureComponent<{||}, State> {
      );
    }
 
+   _renderBioModal() {
+     return <BioModal
+      showModal={this.state.showBiographyModal}
+      handleClose={this.handleClose}
+      person={this.state.person}
+     />
+   }
 
    render(): $React$Node {
      return (
@@ -281,6 +306,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
          {this._problemSolution()}
          {this._ourTeam()}
          {this._volunteerWithUs()}
+         {this._renderBioModal()}
        </div>
      )
    }

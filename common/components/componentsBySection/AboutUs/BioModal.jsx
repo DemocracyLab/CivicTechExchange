@@ -7,7 +7,7 @@ type Props = {|
   showModal: boolean,
   biography: string,
   headerText: ?string,
-  onClickButton: () => void
+  handleClose: () => void
 |};
 type State = {|
   showModal: boolean,
@@ -22,6 +22,7 @@ class BioModal extends React.PureComponent<Props, State> {
     this.state = {
       showModal: false
     }
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -30,23 +31,23 @@ class BioModal extends React.PureComponent<Props, State> {
 
   closeModal(): void {
     this.setState({showModal:false});
-    this.props.onClickButton();
+    this.props.handleClose();
   }
 
   render(): React$Node {
     return (
       <div>
-          <Modal show={this.state.showModal}>
+          <Modal show={this.state.showModal} onHide={this.closeModal}>
               <Modal.Header>
-                <button className='customClose' onClick={closeModal}>CLOSE</button>
-                {this.props.first_name} {this.props.last_name}
-                {this.props.title}
+                <button className='about-us-modal-closebutton' onClick={this.closeModal}>CLOSE</button>
+                firstname lastname <br />
+                title
               </Modal.Header>
               <Modal.Body style={{whiteSpace: "pre-wrap"}}>
-                {this.props.biography}
+                words words words words words words words words words words words words words words words words words words words words words words
               </Modal.Body>
               <Modal.Footer>
-                  <Button onClick={this.closeModal.bind(this)}>Close</Button>
+                  <Button onClick={this.closeModal}>Close</Button>
               </Modal.Footer>
           </Modal>
       </div>
