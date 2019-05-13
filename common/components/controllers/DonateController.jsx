@@ -67,13 +67,16 @@ class DonateController extends React.Component<{||}, State> {
                 onSelection={this.handleFieldSelection.bind(this, "donateAmount")}
               />
             </div>
-      
-            <div className="DonateController-monthly">
+  
+            {this.state.donateAmount !== OtherAmountSelected
+              ? < div className="DonateController-monthly">
               <RadioButtons
                 options={DonationMonthlyOptions}
                 onSelection={this.handleFieldSelection.bind(this, "donateMonthly")}
               />
-            </div>
+              </div>
+              : null
+            }
           </div>
         
           <PaypalDonationButton
