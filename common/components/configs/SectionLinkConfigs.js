@@ -7,6 +7,11 @@ const SectionLinkConfigs = [
     showOnlyWhenLoggedIn: false
   },
   {
+    section: Section.CreateProject,
+    title: 'Create Project',
+    showOnlyWhenLoggedIn: false
+  },
+  {
     section: Section.MyProjects,
     title: 'My Projects',
     showOnlyWhenLoggedIn: true

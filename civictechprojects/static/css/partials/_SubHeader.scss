@@ -25,7 +25,7 @@
   display: none;
   flex-direction: row;
   height: 100%;
-  padding-right: 65px;  
+  padding-right: 30px;  
   justify-content: flex-end;
   a {
     text-decoration: none;
@@ -79,7 +79,7 @@
   width: 38px;
   border-radius: 50%;
   cursor: pointer;
-  margin: 0px 5px 0px 35px;
+  margin-left: 10px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -206,4 +206,18 @@
   .SubHeader-rightContent {
     display: flex;
   }
+}
+
+.SubHeader-divider-container {
+  display: flex;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+  padding-left: 15px;
+}
+
+.vertical-divider {
+  color: rgba(0,0,0,0.4);
+  border-left: 2px solid;
+  height: 2em;
 }
