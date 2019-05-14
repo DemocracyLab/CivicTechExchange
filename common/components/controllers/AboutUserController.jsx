@@ -10,6 +10,7 @@ import {FileInfo} from "../common/FileInfo.jsx";
 import {LinkInfo} from "../forms/LinkInfo.jsx";
 import Avatar from "../common/avatar.jsx"
 import _ from 'lodash'
+import Headers from "../common/Headers.jsx";
 
 type State = {|
   user: ?UserAPIData,
@@ -42,6 +43,10 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderDetails(): React$Node {
     const user: UserAPIData = this.state.user;
     return (
+      <React.Fragment>
+        <Headers
+        title={user && user.first_name + " " + user.last_name + " | DemocracyLab"}
+        />
       <div className="AboutProjectController-root">
         <div className="container-fluid">
           <div className="background-light">
@@ -116,6 +121,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           }
         </div>
       </div>
+      </React.Fragment>
     );
   }
 

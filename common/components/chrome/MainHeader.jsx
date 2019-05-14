@@ -65,7 +65,7 @@ class MainHeader extends React.Component<{||}, State > {
       url: url.section(section)
     });
   }
- 
+
   constructor(): void {
     super();
     this._cx = new cx('SubHeader-');
@@ -289,10 +289,11 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderHamburgerFooterLinks(): $ReadOnlyArray<React$Node> {
+    //TODO: refactor FooterLinks to define link behavior on a per-link basis
     return FooterLinks.list().map((link) => {
       return (
         <React.Fragment key={link.url}>
-          <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer" onClick={FooterLinks.logClick.bind(this, link)}>
+          <a key={link.url} href={link.url} rel="noopener noreferrer" onClick={FooterLinks.logClick.bind(this, link)}>
             <div className={'SubHeader-drawerDiv'}>
               {link.name}
             </div>
@@ -308,6 +309,7 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderHeaderLinks(): React$Node {
+    //TODO: Same issue as FooterLinks, refactor to pass link behavior as part of env variable
     const headerLinks: $ReadOnlyArray<FooterLink> = FooterLinks.list().filter((link) => !link.isButton);
     return (
       <React.Fragment>
@@ -315,7 +317,7 @@ class MainHeader extends React.Component<{||}, State > {
           headerLinks.map((link) => {
             return (
               <div key={link.url} className="SectionLink-root">
-                <a className="SubHeader-anchor" href={link.url} target="_blank" rel="noopener noreferrer" onClick={FooterLinks.logClick.bind(this, link)}>
+                <a className="SubHeader-anchor" href={link.url} rel="noopener noreferrer" onClick={FooterLinks.logClick.bind(this, link)}>
                   <h3>{link.name}</h3>
                 </a>
               </div>
