@@ -47,7 +47,7 @@ class DonateController extends React.Component<{||}, State> {
     return (
       <div className="DonateController-root">
         <div className="panel donate-image">
-          <img src={cdn.image("DonateBG.jpg")}></img>
+          <img src={cdn.image(Images.DONATE_SPLASH)}></img>
         </div>
         <div className="panel">
           

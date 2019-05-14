@@ -21,7 +21,7 @@ class PaypalDonationButton extends React.Component<Props> {
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
           {this._renderFormHiddenFields()}
         
-          <input type="image" src={cdn.image("PaypalDonateButton.png")} border="0"
+          <input type="image" src={cdn.image(Images.PAYPAL_BUTTON)} border="0"
                  name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button"/>
           <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1"/>
         </form>
