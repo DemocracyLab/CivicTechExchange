@@ -16,7 +16,7 @@ type State = {|
   errorMessage: string
 |}
 
-class LogInController extends React.Component<{||}, State> {
+class LogInController extends React.Component<Props, State> {
   constructor(props): void {
     super(props);
     this.state = {
