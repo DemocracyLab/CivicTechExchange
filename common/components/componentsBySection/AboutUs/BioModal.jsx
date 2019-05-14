@@ -7,6 +7,7 @@ import GlyphStyles from '../../utils/glyphs.js';
 type Props = {|
   showModal: boolean,
   title: string,
+  size: string,
   handleClose: () => void
 |};
 type State = {|
@@ -37,11 +38,11 @@ class BioModal extends React.PureComponent<Props, State> {
   render(): React$Node {
     return this.props.person && (
       <div>
-          <Modal show={this.state.showModal} onHide={this.closeModal}>
+          <Modal show={this.state.showModal} onHide={this.closeModal} bsSize={this.props.size}>
               <Modal.Header>
-                <div className="bio-nametitle">
-                  <p>{this.props.person.first_name} {this.props.person.last_name}</p>
-                  <p>{this.props.title}</p>
+                <div className="bio-nametitle-container">
+                  <h4 className="bio-name">{this.props.person.first_name} {this.props.person.last_name}</h4>
+                  <h5 className="bio-title">{this.props.title}</h5>
                 </div>
                 <i className={GlyphStyles.Close} onClick={this.closeModal}></i>
               </Modal.Header>

@@ -298,6 +298,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
    _renderBioModal() {
      return <BioModal
+      size="lg"
       showModal={this.state.showBiographyModal}
       handleClose={this.handleClose}
       person={this.state.modalPerson}
@@ -307,16 +308,20 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
    render(): $React$Node {
      return (
-       <div className="container pl-0 pr-0 about-us-root">
-         {this._renderHeader()}
-         {this._ourMission()}
-         {this._ourVision()}
-         {this._ourValues()}
-         {this._problemSolution()}
-         {this._ourTeam()}
-         {this._volunteerWithUs()}
-         {this._renderBioModal()}
-       </div>
+       <React.Fragment>
+         <div className="container-fluid pl-0 pr-0 about-us-root">
+           {this._renderHeader()}
+           {this._ourMission()}
+           {this._ourVision()}
+         </div>
+         <div className="container pl-0 pr-0 about-us-root">
+           {this._ourValues()}
+           {this._problemSolution()}
+           {this._ourTeam()}
+           {this._volunteerWithUs()}
+           {this._renderBioModal()}
+         </div>
+     </React.Fragment>
      )
    }
 }
