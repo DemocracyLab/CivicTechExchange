@@ -2,7 +2,6 @@
 
 import React from 'react';
 import cdn,{Images} from "../../utils/cdn.js";
-import _ from 'lodash';
 
 export const OtherAmountSelected: string = "OTHER";
 
@@ -16,27 +15,15 @@ class PaypalDonationButton extends React.Component<Props> {
     super();
   }
   
-  componentWillReceiveProps(nextProps: Props): void {
-    if(nextProps) {
-      this.setState({
-        donateAmount: nextProps.donateAmount,
-        donateMonthly: nextProps.donateMonthly
-      });
-    }
-  }
-  
   render(): React$Node {
-    const isReady: boolean = this.state && this.state.donateAmount && !_.isUndefined(this.state.donateMonthly);
     return (
       <div className="PaypalDonationButton">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-          {isReady && this._renderFormHiddenFields()}
+          {this._renderFormHiddenFields()}
         
-          <input type="image" disabled={!isReady} src={cdn.image("PaypalDonateButton.png")} border="0"
+          <input type="image" src={cdn.image("PaypalDonateButton.png")} border="0"
                  name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button"/>
-          <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif
-https://www.paypal.com/en_US/i/scr/pixel.gif
-" width="1" height="1"/>
+          <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1"/>
         </form>
       </div>
     );
@@ -52,10 +39,10 @@ https://www.paypal.com/en_US/i/scr/pixel.gif
       <input type="hidden" name="business" value="mark@democracylab.org" />
     ];
     
-    if (this.state.donateAmount !== OtherAmountSelected && this.props.donateMonthly) {
+    if (this.props.donateAmount !== OtherAmountSelected && this.props.donateMonthly) {
       fields = fields.concat([
         <input type="hidden" name="cmd" value="_xclick-subscriptions"/>,
-        <input type="hidden" name="a3" value={this.state.donateAmount}/>,
+        <input type="hidden" name="a3" value={this.props.donateAmount}/>,
         <input type="hidden" name="p3" value="1"/>,
         <input type="hidden" name="t3" value="M"/>,
         <input type="hidden" name="srt" value="0"/>,
@@ -65,9 +52,9 @@ https://www.paypal.com/en_US/i/scr/pixel.gif
       fields = fields.concat([
         <input type="hidden" name="cmd" value="_donations" />,
       ]);
-      if(this.state.donateAmount !== OtherAmountSelected) {
+      if(this.props.donateAmount !== OtherAmountSelected) {
         fields = fields.concat([
-          <input type="hidden" name="amount" value={this.state.donateAmount} />
+          <input type="hidden" name="amount" value={this.props.donateAmount} />
         ]);
       }
     }
