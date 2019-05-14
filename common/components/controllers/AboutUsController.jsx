@@ -12,7 +12,8 @@ import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
 type State = {|
   aboutUs: ?ProjectDetailsAPIData,
   showBiographyModal: boolean,
-  person: object
+  modalPerson: object,
+  personTitle: string
 |};
 
 class AboutUsController extends React.PureComponent<{||}, State> {
@@ -23,7 +24,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       aboutUs: null,
       projectId: parseInt(window.DLAB_PROJECT_ID),
       showBiographyModal: false,
-      person: null
+      modalPerson: null,
+      personTitle: null,
     }
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -43,13 +45,19 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
 
 //handlers for biography modal
-  handleShow() {
+//show passes information to the modal on whose information to display, close clears that out of state (just in case)
+//title is passed separately from the rest because of our data structure for owner and volunteer not matching up
+  handleShow(p, t) {
     this.setState({
+      modalPerson: p,
+      personTitle: t,
       showBiographyModal: true
     });
   }
   handleClose() {
     this.setState({
+      modalPerson: null,
+      personTitle: null,
       showBiographyModal: false
      });
   }
@@ -213,7 +221,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
                 <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
                 <p>Project Owner</p>
               </div>
-              <button onClick={this.handleShow} className="btn btn-theme">Show Bio Test</button>
+              <button onClick={()=>this.handleShow(owner, 'Project Owner')} className="btn btn-theme">Show Bio Test</button>
           </div>
           )}
           )
@@ -231,13 +239,12 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       volunteers.map((vo, i) => {
       return vo.isApproved && (
         <div className="about-us-team-card" key={i}>
-          <a href={"/index/?section=Profile&id=" + vo.user.id} className="about-us-team-card-link">
             {this._renderAvatar(vo.user)}
             <div className="about-us-team-card-title">
               <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
               <p>{vo.roleTag.display_name}</p>
             </div>
-          </a>
+            <button onClick={()=>this.handleShow(vo.user, vo.roleTag.display_name)} className="btn btn-theme">Show Bio Test</button>
         </div>
     )}
     )
@@ -279,6 +286,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
    _renderAvatar(person) {
      //modified version of common/components/common/avatar.jsx - to allow for variable sizing via CSS mediaquery instead of provided value as prop
+     //TODO: Remove <Person> component from Material UI and have our own default avatar image or SVG
      return (
        person.user_thumbnail
          ? <div className="about-us-team-avatar" style={{backgroundImage: `url(${person.user_thumbnail.publicUrl})`}}></div>
@@ -292,7 +300,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
      return <BioModal
       showModal={this.state.showBiographyModal}
       handleClose={this.handleClose}
-      person={this.state.person}
+      person={this.state.modalPerson}
+      title={this.state.personTitle}
      />
    }
 

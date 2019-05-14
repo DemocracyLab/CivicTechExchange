@@ -2,11 +2,11 @@
 
 import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
+import GlyphStyles from '../../utils/glyphs.js';
 
 type Props = {|
   showModal: boolean,
-  biography: string,
-  headerText: ?string,
+  title: string,
   handleClose: () => void
 |};
 type State = {|
@@ -14,13 +14,13 @@ type State = {|
 |};
 
 /**
- * Modal for surfacing notifications
+ * Modal for showing user biography details
  */
 class BioModal extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
-      showModal: false
+      showModal: false,
     }
     this.closeModal = this.closeModal.bind(this);
   }
@@ -35,16 +35,18 @@ class BioModal extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
-    return (
+    return this.props.person && (
       <div>
           <Modal show={this.state.showModal} onHide={this.closeModal}>
               <Modal.Header>
-                <button className='about-us-modal-closebutton' onClick={this.closeModal}>CLOSE</button>
-                firstname lastname <br />
-                title
+                <div className="bio-nametitle">
+                  <p>{this.props.person.first_name} {this.props.person.last_name}</p>
+                  <p>{this.props.title}</p>
+                </div>
+                <i className={GlyphStyles.Close} onClick={this.closeModal}></i>
               </Modal.Header>
               <Modal.Body style={{whiteSpace: "pre-wrap"}}>
-                words words words words words words words words words words words words words words words words words words words words words words
+                <p>{this.props.person.about_me}</p>
               </Modal.Body>
               <Modal.Footer>
                   <Button onClick={this.closeModal}>Close</Button>
