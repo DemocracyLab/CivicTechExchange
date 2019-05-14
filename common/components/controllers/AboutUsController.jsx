@@ -215,13 +215,12 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       return(
         owners.map((owner, i) => {
         return (
-          <div className="about-us-team-card" key={i}>
+          <div className="about-us-team-card" key={i} onClick={()=>this.handleShow(owner, 'Project Owner')}>
               {this._renderAvatar(owner)}
               <div className="about-us-team-card-title">
                 <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
                 <p>Project Owner</p>
               </div>
-              <button onClick={()=>this.handleShow(owner, 'Project Owner')} className="btn btn-theme">Show Bio Test</button>
           </div>
           )}
           )
@@ -238,13 +237,12 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return(
       volunteers.map((vo, i) => {
       return vo.isApproved && (
-        <div className="about-us-team-card" key={i}>
+        <div className="about-us-team-card" key={i} onClick={()=>this.handleShow(vo.user, vo.roleTag.display_name)}>
             {this._renderAvatar(vo.user)}
             <div className="about-us-team-card-title">
               <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
               <p>{vo.roleTag.display_name}</p>
             </div>
-            <button onClick={()=>this.handleShow(vo.user, vo.roleTag.display_name)} className="btn btn-theme">Show Bio Test</button>
         </div>
     )}
     )

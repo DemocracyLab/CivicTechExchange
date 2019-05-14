@@ -106,9 +106,10 @@
   padding-top: 25px;
 }
 .about-us-team-card {
+  cursor: pointer; /* because these trigger a modal now */
   flex-basis: 45%;
-  text-align: center;
   margin-bottom: 25px;
+  text-align: center;
 }
 .about-us-team-card p {
   font-size: 18px;
