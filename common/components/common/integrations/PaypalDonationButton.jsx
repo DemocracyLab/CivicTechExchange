@@ -2,6 +2,7 @@
 
 import React from 'react';
 import cdn,{Images} from "../../utils/cdn.js";
+import url from "../../utils/url.js";
 
 export const OtherAmountSelected: string = "OTHER";
 
@@ -18,7 +19,7 @@ class PaypalDonationButton extends React.Component<Props> {
   render(): React$Node {
     return (
       <div className="PaypalDonationButton">
-        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+        <form action={window.PAYPAL_ENDPOINT} method="post" target="_top">
           {this._renderFormHiddenFields()}
         
           <input type="image" src={cdn.image(Images.PAYPAL_BUTTON)} border="0"
@@ -32,7 +33,7 @@ class PaypalDonationButton extends React.Component<Props> {
   _renderFormHiddenFields(): $ReadOnlyArray<React$Node> {
     let fields:Array<React$Node> = [
       <input type="hidden" name="cancel_return" value="/index/" />,
-      <input type="hidden" name="shopping_url" value="/index/?section=ThankYou" />,
+      <input type="hidden" name="return" value={url.hostname() + "/index/?section=ThankYou"} />,
       <input type="hidden" name="no_note" value="1" />,
       <input type="hidden" name="no_shipping" value="1" />,
       <input type="hidden" name="currency_code" value="USD"/>,

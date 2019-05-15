@@ -172,6 +172,8 @@ FOOTER_LINKS = os.environ.get('FOOTER_LINKS', '')
 
 DLAB_PROJECT_ID = os.environ.get('DLAB_PROJECT_ID', '')
 
+PAYPAL_ENDPOINT = os.environ.get('PAYPAL_ENDPOINT', '')
+
 SPONSORS_METADATA = os.environ.get('SPONSORS_METADATA', '')
 
 HEADER_ALERT = os.environ.get('HEADER_ALERT', '')

@@ -80,6 +80,10 @@ class urlHelper {
     // Remove http(s)
     return url.replace(regex.protocol, "");
   }
+  
+  static hostname(): string {
+    return window.location.hostname;
+  }
 }
 
 export default urlHelper
