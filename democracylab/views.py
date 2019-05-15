@@ -15,7 +15,7 @@ def login_view(request):
         email = request.POST['username']
         password = request.POST['password']
         prev_page = request.POST['prevPage']
-        user = authenticate(username=email, password=password)
+        user = authenticate(username=email.lower(), password=password)
         if user is not None and user.is_authenticated:
             login(request, user)
             return redirect('/index/?section=' + prev_page)
@@ -34,7 +34,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             # TODO: Form validation
             contributor = Contributor(
-                username=email,
+                username=email.lower(),
                 email=email,
                 first_name=form.cleaned_data.get('first_name'),
                 last_name=form.cleaned_data.get('last_name'),
@@ -42,7 +42,7 @@ def signup(request):
             )
             contributor.set_password(raw_password)
             contributor.save()
-            user = authenticate(username=email, password=raw_password)
+            user = authenticate(username=contributor.username, password=raw_password)
             login(request, user)
             send_verification_email(contributor)
             return redirect('/index/?section=SignedUp')
