@@ -201,30 +201,33 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </div>
           </div>
 
+          <div id='project-details'>
+            {project.project_description}
+          </div>
+          
+          <div className='AboutProjects-skills-container'>
 
-                <div className='AboutProjects-description-details'>
-                  <div id='project-details'>{project.project_description}</div>
-                  <div className='AboutProjects-skills-container'>
-                    {project && !_.isEmpty(project.project_positions) && 
-                    <div className='AboutProjects-skills'>
-                      <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
-                      {project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.display_name}</p>)}
-                    </div>
-                    }
-                    {project && !_.isEmpty(project.project_technologies) && 
-                    <div className='AboutProjects-technologies'>
-                      <p className='AboutProjects-tech-title'>Technologies Used</p>
-                      {project && project.project_technologies && project.project_technologies.map(tech => <p>{tech.display_name}</p>)}
-                    </div>
-                    }
-
-                  <div></div>
-                  </div>
-                </div>
-
-              <div className='AboutProjects-positions-available' container>
-                <div id="positions-available">{project && !_.isEmpty(project.project_positions) && this._renderPositions()}</div>
+            {project && !_.isEmpty(project.project_positions) && 
+              <div className='AboutProjects-skills'>
+                <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
+                {project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.display_name}</p>)}
               </div>
+            }
+
+            {project && !_.isEmpty(project.project_technologies) && 
+              <div className='AboutProjects-technologies'>
+                <p className='AboutProjects-tech-title'>Technologies Used</p>
+                {project && project.project_technologies && project.project_technologies.map(tech => <p>{tech.display_name}</p>)}
+              </div>
+            }
+
+          </div>
+
+          <div className='AboutProjects-positions-available' container>
+            <div id="positions-available">
+              {project && !_.isEmpty(project.project_positions) && this._renderPositions()}
+            </div>
+          </div>
 
         </div>
 
