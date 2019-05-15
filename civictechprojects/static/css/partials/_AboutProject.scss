@@ -30,6 +30,7 @@
 
   .AboutProjects-infoColumn {
     order: 1;
+    width: 30%;
     h4 {
       font-size: 1rem;
       font-weight: bold;
@@ -90,7 +91,7 @@
 
   .AboutProjects-mainColumn {
     order: 2;
-    border: yellow solid 2px;
+    width: 70%;
   }
 
   .AboutProjects-description {
@@ -259,6 +260,26 @@
     background-color: $color-grey-disabled;
     color: $color-text-light;
   }
+
+  @media (max-width: 975px) {
+
+    .AboutProjects-root {
+      flex-direction: column;
+      width: 90%;
+      margin: 0 7%;
+    }
+
+    .AboutProjects-infoColumn {
+      width: 100%;
+    }
+
+    .AboutProjects-mainColumn {
+      width: 100%;
+    }
+
+
+  }
+
 
   //MUI objects are set to xs=12 sm=3/9 which matches 600 break (md is 960)
   //TODO: standardize and use proper mixins (breakpoint-md-up etc)
