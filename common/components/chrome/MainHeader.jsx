@@ -113,13 +113,19 @@ class MainHeader extends React.Component<{||}, State > {
           <div className={this._cx.get('rightContent')}>
             {this._renderSectionLinks()}
             {this._renderHeaderLinks()}
+            {this._renderHeaderButtons()}
+            {
+              <React.Fragment>
+                <div className="SubHeader-divider-container">
+                  <div className="vertical-divider"></div>
+                </div>
+              </React.Fragment>
+            }
             {
               CurrentUser.isLoggedIn() ?
                 this._renderAccountInfo() :
-                this._renderLogInButton()
+                this._renderLogInLink()
             }
-            {this._renderCreateProjectButton()}
-            {this._renderHeaderButtons()}
           </div>
         </div>
       </div>
@@ -135,11 +141,14 @@ class MainHeader extends React.Component<{||}, State > {
     this._handleHeightChange(header.clientHeight - header.firstChild.clientHeight);
   }
 
-  _renderLogInButton(): void {
+  _renderLogInLink(): void {
     return (
-      <button onClick={this._onLogInClick} className='SubHeader-log-btns'>
-        Log In
-      </button>
+      <SectionLink
+          activeSection={this.state.activeSection}
+          key="LogIn"
+          section={Section.LogIn}
+          title="Log In"
+        />
     );
   }
 
@@ -337,19 +346,6 @@ class MainHeader extends React.Component<{||}, State > {
         );
       })
     )
-  }
-
-  _renderCreateProjectButton(): React$Node{
-    return (
-      <a key={this.state.createProjectUrl}
-        href={this.state.createProjectUrl}
-        className="SubHeader-donate-btn-container"
-      >
-        <button className="SubHeader-log-btns">
-          Create Project
-        </button>
-      </a>
-    );
   }
 
   _renderIcon(): React$Node {
