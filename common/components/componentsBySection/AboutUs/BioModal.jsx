@@ -41,7 +41,7 @@ class BioModal extends React.PureComponent<Props, State> {
           <Modal show={this.state.showModal} onHide={this.closeModal} bsSize={this.props.size} className="bio-modal-root">
               <Modal.Header>
                 <div className="bio-modal-nametitle-container">
-                  <h4 className="bio-modal-name">{this.props.person.first_name} {this.props.person.last_name}</h4>
+                  <h4 className="bio-modal-name"><a href={"/index/?section=Profile&id=" + this.props.person.id}>{this.props.person.first_name} {this.props.person.last_name}</a></h4>
                   <h5 className="bio-modal-title">{this.props.title}</h5>
                 </div>
                 <i className={Glyph(GlyphStyles.Close, GlyphSizes.X2)} onClick={this.closeModal}></i>
