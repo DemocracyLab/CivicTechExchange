@@ -68,3 +68,5 @@ export DLAB_PROJECT_ID=4
 
 # Paypal endpoint (sandbox by default)
 export PAYPAL_ENDPOINT='https://www.sandbox.paypal.com/cgi-bin/webscr'
+# Paypal payee
+export PAYPAL_PAYEE='mark@democracylab.org'

@@ -37,7 +37,7 @@ class PaypalDonationButton extends React.Component<Props> {
       <input type="hidden" name="no_note" value="1" />,
       <input type="hidden" name="no_shipping" value="1" />,
       <input type="hidden" name="currency_code" value="USD"/>,
-      <input type="hidden" name="business" value="mark@democracylab.org" />
+      <input type="hidden" name="business" value={window.PAYPAL_PAYEE} />
     ];
     
     if (this.props.donateAmount !== OtherAmountSelected && this.props.donateMonthly) {
