@@ -68,7 +68,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return (
       <div className="about-us-mission"
       style={cdn.bgImage('OurMissionBGoverlay.jpg')}>
-        <div className="about-us-content">
+        <div className="about-us-content container">
           <h1>Mission</h1>
           <p>Empower a community of people and projects that use technology to advance the public good.</p>
         </div>
@@ -79,7 +79,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return (
       <div className="about-us-vision"
       style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
-        <div className="about-us-content">
+        <div className="about-us-content container">
           <h2>Vision</h2>
           <p>Technology enables our collective intelligence to solve the most challenging social, economic, environmental and civic problems while empowering all members of our societies.</p>
         </div>
