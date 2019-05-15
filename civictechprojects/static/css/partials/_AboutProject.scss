@@ -2,6 +2,7 @@
 //TODO: standardize on _one_ set of breakpoints...
 
 .AboutProjects-root {
+    display: flex;
     width: 96vw;
     margin: auto;
     max-width: 1080px;
@@ -23,15 +24,12 @@
     }
   }
 
-  .AboutProjects-container {
-    display: grid;
-  }
-
   .AboutProjects-paper {
     height: 100%;
   }
 
   .AboutProjects-infoColumn {
+    order: 1;
     h4 {
       font-size: 1rem;
       font-weight: bold;
@@ -88,6 +86,11 @@
 
   .AboutProjects-owner button {
     margin-right: 5px;
+  }
+
+  .AboutProjects-mainColumn {
+    order: 2;
+    border: yellow solid 2px;
   }
 
   .AboutProjects-description {
