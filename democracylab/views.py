@@ -2,7 +2,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import simplejson as json
 from .emails import send_verification_email, send_password_reset_email
@@ -128,9 +128,9 @@ def user_edit(request, user_id):
 
 def user_details(request, user_id):
     user = Contributor.objects.get(id=user_id)
-    return HttpResponse(json.dumps(user.hydrate_to_json()))
+    return JsonResponse(user.hydrate_to_json())
 
-    
+
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def send_verification_email_request(request):
