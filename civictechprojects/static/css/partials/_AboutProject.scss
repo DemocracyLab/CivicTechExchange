@@ -81,8 +81,7 @@
   }
 
   .AboutProjects-owner {
-      margin-right: 10px;
-      padding-bottom: 20px;
+      min-height: 70px;
   }
 
   .AboutProjects-owner button {
@@ -267,6 +266,7 @@
       flex-direction: column;
       width: 90%;
       margin: 0 7%;
+      min-width: 450px;
     }
 
     .AboutProjects-infoColumn {

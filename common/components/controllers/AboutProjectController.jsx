@@ -194,10 +194,13 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </div>
 
             <div className="AboutProjects_tabs">
+
               <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
+
               {project && !_.isEmpty(project.project_positions) && 
               <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
               }
+
             </div>
           </div>
 
