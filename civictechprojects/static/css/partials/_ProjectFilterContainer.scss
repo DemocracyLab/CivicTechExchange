@@ -21,6 +21,9 @@
   font-size: 16px;
   font-weight: bold;
   padding: 12px 0;
+  &:hover {
+    background: $color-orange;
+  }
 }
 .ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
   display: flex;
@@ -37,6 +40,9 @@
 
 .ProjectFilterContainer-filter-list li {
   color: $color-text-grey;
+  &:hover {
+    background: $color-orange;
+  }
 }
 
 .ProjectFilterContainer-filter-list label {
