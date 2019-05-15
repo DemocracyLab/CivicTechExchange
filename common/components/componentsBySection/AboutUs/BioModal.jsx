@@ -3,6 +3,7 @@
 import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import {Glyph, GlyphStyles, GlyphSizes} from '../../utils/glyphs.js';
+import _ from 'lodash';
 
 type Props = {|
   showModal: boolean,
@@ -13,6 +14,9 @@ type Props = {|
 type State = {|
   showModal: boolean,
 |};
+
+
+const defaultBiography = "This user hasn't provided us with a biography yet. But trust me, when they do it'll be awesome.";
 
 /**
  * Modal for showing user biography details
@@ -48,7 +52,7 @@ class BioModal extends React.PureComponent<Props, State> {
               </Modal.Header>
               <Modal.Body style={{whiteSpace: "pre-wrap"}}>
                 <h5 className="bio-modal-about">About</h5>
-                <p>{this.props.person.about_me}</p>
+                <p>{!_.isEmpty(this.props.person.about_me) ? this.props.person.about_me : defaultBiography}</p>
               </Modal.Body>
           </Modal>
       </div>
