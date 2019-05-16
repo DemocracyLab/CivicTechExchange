@@ -10,10 +10,6 @@
   width: 50%;
 }
 
-.DonateController-text {
-  padding: 50px;
-}
-
 
 .DonateController-amounts {
   display: flex;
@@ -44,6 +40,10 @@
 }
 
 @media (min-width: 900px) {
+  .DonateController-text {
+    padding: 50px;
+  }
+
   .PaypalDonationButton {
     float: right;
   }
@@ -62,6 +62,10 @@
 @media (max-width: 900px) {
   .DonateController-root {
     flex-direction: column;
+  }
+
+  .DonateController-text {
+    padding: 20px;
   }
 
   .DonateController-root .panel {

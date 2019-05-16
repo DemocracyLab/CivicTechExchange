@@ -13,8 +13,13 @@
 
 .ThankYou-rightColumn {
     order: 2;
+}
+
+@media (min-width: 900px) {
+  .ThankYou-rightColumn {
     width: 50%;
-    padding: 5% 4%;
+    padding: 50px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -28,9 +33,10 @@
 
   .ThankYou-rightColumn {
     width: 100%;
+    padding: 20px;
   }
 
-  .ThankYou-message {
-    padding-bottom: 13%;
-  }
+  //.ThankYou-message {
+  //  padding-bottom: 13%;
+  //}
 }
