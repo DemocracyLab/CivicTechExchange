@@ -36,7 +36,7 @@ class BioModal extends React.PureComponent<Props, State> {
   }
 
   defaultBiography(): void {
-    return `${this.props.person.first_name} ${this.props.person.last_name} is contributing their talents to DemocracyLab as a ${this.props.title}.`;
+    return `${this.props.person.first_name} ${this.props.person.last_name} is contributing their talents to DemocracyLab, helping to empower a community of people and projects that use technology to advance the public good.`;
   }
 
   render(): React$Node {
