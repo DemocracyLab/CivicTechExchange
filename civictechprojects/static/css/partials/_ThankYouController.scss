@@ -1,5 +1,7 @@
 .ThankYou-root {
     display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .ThankYou-leftImage {
@@ -35,8 +37,4 @@
     width: 100%;
     padding: 20px;
   }
-
-  //.ThankYou-message {
-  //  padding-bottom: 13%;
-  //}
 }
