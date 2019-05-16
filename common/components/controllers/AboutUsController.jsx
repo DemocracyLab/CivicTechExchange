@@ -7,11 +7,13 @@ import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn, {Images} from '../utils/cdn.js';
 import Headers from "../common/Headers.jsx";
 import Person from '@material-ui/icons/Person';
-// TODO: Create metrics event for this page, then import metrics and use it
-// import metrics from "../utils/metrics.js";
+import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
 
 type State = {|
   aboutUs: ?ProjectDetailsAPIData,
+  showBiographyModal: boolean,
+  modalPerson: number | string,
+  personTitle: string
 |};
 
 class AboutUsController extends React.PureComponent<{||}, State> {
@@ -20,8 +22,13 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     super();
     this.state = {
       aboutUs: null,
-      projectId: parseInt(window.DLAB_PROJECT_ID)
+      projectId: parseInt(window.DLAB_PROJECT_ID),
+      showBiographyModal: false,
+      modalPerson: null,
+      personTitle: null,
     }
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 //componentDidMount and loadProjectDetails copied from AboutProjectController, since we're retrieving a project's information the same way
 //in this case we use the value provided as an env key to get DemocracyLab's project info, to use in the Our Team section
@@ -36,11 +43,32 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     });
   }
 
+
+//handlers for biography modal
+//show passes information to the modal on whose information to display, close clears that out of state (just in case)
+//title is passed separately from the rest because of our data structure for owner and volunteer not matching up
+  handleShow(p, t) {
+    this.setState({
+      modalPerson: p,
+      personTitle: t,
+      showBiographyModal: true
+    });
+  }
+  handleClose() {
+    this.setState({
+      modalPerson: null,
+      personTitle: null,
+      showBiographyModal: false
+     });
+  }
+
+
+
   _ourMission() {
     return (
       <div className="about-us-mission"
       style={cdn.bgImage('OurMissionBGoverlay.jpg')}>
-        <div className="about-us-content">
+        <div className="about-us-content container">
           <h1>Mission</h1>
           <p>Empower a community of people and projects that use technology to advance the public good.</p>
         </div>
@@ -51,7 +79,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return (
       <div className="about-us-vision"
       style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
-        <div className="about-us-content">
+        <div className="about-us-content container">
           <h2>Vision</h2>
           <p>Technology enables our collective intelligence to solve the most challenging social, economic, environmental and civic problems while empowering all members of our societies.</p>
         </div>
@@ -163,46 +191,58 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return (this.state.aboutUs ?
       <div className="about-us-team col">
         <h2>Our Team</h2>
-        <p>We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
+        <p className="about-us-team-description">We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
+        <h4>Business & Marketing Research</h4>
         <div className="about-us-team-card-container">
           {this._renderTeamOwners(this.state.aboutUs.project_owners)}
-          {this._renderTeamVolunteers(this.state.aboutUs.project_volunteers)}
+          {this._filterTeamSection(this.state.aboutUs.project_volunteers, 'Business')}
+        </div>
+        <hr />
+        <h4>Design</h4>
+        <div className="about-us-team-card-container">
+          {this._filterTeamSection(this.state.aboutUs.project_volunteers, 'Design')}
+        </div>
+        <hr />
+        <h4>Development</h4>
+        <div className="about-us-team-card-container">
+          {this._filterTeamSection(this.state.aboutUs.project_volunteers, 'Software Development')}
         </div>
       </div> : <div className="about-us-team col"><p>Loading our team information...</p></div>)
   }
 
   _renderTeamOwners(owners) {
     //TODO: see if we can clean up nested returns, should probably be extracted to a component
-    //TODO: get collapsible/expandable user bio ({owner.about_me}) in place
       return(
         owners.map((owner, i) => {
         return (
-          <div className="about-us-team-card" key={i}>
-            <a href={"/index/?section=Profile&id=" + owner.id} className="about-us-team-card-link">
+          <div className="about-us-team-card" key={i} onClick={()=>this.handleShow(owner, 'Project Owner')}>
               {this._renderAvatar(owner)}
               <div className="about-us-team-card-title">
                 <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
                 <p>Project Owner</p>
               </div>
-            </a>
           </div>
           )}
           )
         )
   }
 
+  _filterTeamSection(volunteers, role) {
+    let filtered = volunteers.filter(vo => vo.roleTag.subcategory === role);
+    return this._renderTeamVolunteers(filtered);
+  }
+
+
   _renderTeamVolunteers(volunteers) {
     return(
       volunteers.map((vo, i) => {
       return vo.isApproved && (
-        <div className="about-us-team-card" key={i}>
-          <a href={"/index/?section=Profile&id=" + vo.user.id} className="about-us-team-card-link">
+        <div className="about-us-team-card" key={i} onClick={()=>this.handleShow(vo.user, vo.roleTag.display_name)}>
             {this._renderAvatar(vo.user)}
             <div className="about-us-team-card-title">
               <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
               <p>{vo.roleTag.display_name}</p>
             </div>
-          </a>
         </div>
     )}
     )
@@ -244,27 +284,42 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
    _renderAvatar(person) {
      //modified version of common/components/common/avatar.jsx - to allow for variable sizing via CSS mediaquery instead of provided value as prop
+     //TODO: Remove <Person> component from Material UI and have our own default avatar image or SVG
      return (
        person.user_thumbnail
-         ? <img className="about-us-team-avatar" src={person.user_thumbnail.publicUrl} alt="Profile image"/>
-         : (<div className="about-us-team-avatar">
+         ? <div className="about-us-team-avatar" style={{backgroundImage: `url(${person.user_thumbnail.publicUrl})`}}></div>
+         : (<div className="about-us-team-avatar-default">
              <Person className="PersonIcon"/>
            </div>)
      );
    }
 
+   _renderBioModal() {
+     return <BioModal
+      size="lg"
+      showModal={this.state.showBiographyModal}
+      handleClose={this.handleClose}
+      person={this.state.modalPerson}
+      title={this.state.personTitle}
+     />
+   }
 
    render(): $React$Node {
      return (
-       <div className="container pl-0 pr-0 about-us-root">
-         {this._renderHeader()}
-         {this._ourMission()}
-         {this._ourVision()}
-         {this._ourValues()}
-         {this._problemSolution()}
-         {this._ourTeam()}
-         {this._volunteerWithUs()}
-       </div>
+       <React.Fragment>
+         <div className="container-fluid pl-0 pr-0 about-us-root">
+           {this._renderHeader()}
+           {this._ourMission()}
+           {this._ourVision()}
+         </div>
+         <div className="container pl-0 pr-0 about-us-root">
+           {this._ourValues()}
+           {this._problemSolution()}
+           {this._ourTeam()}
+           {this._volunteerWithUs()}
+           {this._renderBioModal()}
+         </div>
+     </React.Fragment>
      )
    }
 }
