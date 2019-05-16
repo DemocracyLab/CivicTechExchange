@@ -16,11 +16,7 @@ type State = {|
 |};
 
 
-const defaultBiography = "n/a"; //TODO: get approved text for default bio
-
-/**
- * Modal for showing user biography details
- */
+ /* Modal for showing user biography details */
 class BioModal extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
@@ -39,6 +35,10 @@ class BioModal extends React.PureComponent<Props, State> {
     this.props.handleClose();
   }
 
+  defaultBiography(): void {
+    return `${this.props.person.first_name} ${this.props.person.last_name} is contributing their talents to DemocracyLab as a ${this.props.title}.`;
+  }
+
   render(): React$Node {
     return this.props.person && (
       <div>
@@ -52,7 +52,7 @@ class BioModal extends React.PureComponent<Props, State> {
               </Modal.Header>
               <Modal.Body style={{whiteSpace: "pre-wrap"}}>
                 <h5 className="bio-modal-about">About</h5>
-                <p>{!_.isEmpty(this.props.person.about_me) ? this.props.person.about_me : defaultBiography}</p>
+                <p>{!_.isEmpty(this.props.person.about_me) ? this.props.person.about_me : this.defaultBiography()}</p>
               </Modal.Body>
               <Modal.Footer>
                 <button onClick={this.closeModal} className="btn btn-secondary">Close</button>
