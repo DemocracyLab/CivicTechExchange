@@ -54,6 +54,9 @@ class BioModal extends React.PureComponent<Props, State> {
                 <h5 className="bio-modal-about">About</h5>
                 <p>{!_.isEmpty(this.props.person.about_me) ? this.props.person.about_me : defaultBiography}</p>
               </Modal.Body>
+              <Modal.Footer>
+                <button onClick={this.closeModal} className="btn btn-secondary">Close</button>
+              </Modal.Footer>
           </Modal>
       </div>
     );
