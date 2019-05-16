@@ -82,7 +82,7 @@ class urlHelper {
   }
   
   static hostname(): string {
-    return window.location.hostname;
+    return window.location.origin;
   }
 }
 
