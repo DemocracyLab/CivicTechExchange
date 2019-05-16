@@ -2,10 +2,13 @@
 
 import React from 'react';
 import CurrentUser from '../../components/utils/CurrentUser.js';
-import EditProjectForm from '../common/projects/EditProjectForm.jsx'
+import EditProjectForm from "../common/projects/EditProjectForm.jsx";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 import metrics from "../utils/metrics.js";
+import LogInController from "./LogInController.jsx";
+import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
+
 
 type State = {|
   showEmailConfirmationModal: boolean,
@@ -39,14 +42,17 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     return (
       <React.Fragment>
         <Headers
-        title="Create a Project | DemocracyLab"
-        description="Create project page"
+          title="Create a Project | DemocracyLab"
+          description="Create project page"
         />
-      <div className="wrapper-gray">
-        <div className="container">
-          {CurrentUser.isEmailVerified() ? this._renderCreateProjectForm() : <VerifyEmailBlurb />}
-        </div>
-      </div>
+        {!CurrentUser.isLoggedIn()
+          ? <LogInController prevPage={Section.CreateProject}/>
+          : <div className="wrapper-gray">
+            <div className="container">
+              {CurrentUser.isEmailVerified() ? this._renderCreateProjectForm() : <VerifyEmailBlurb/>}
+            </div>
+          </div>
+        }
       </React.Fragment>
     );
   }

@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.conf import settings
@@ -60,11 +60,7 @@ def tags(request):
         else:
             queryset = Tag.objects.all()
             tags = list(queryset.values())
-    return HttpResponse(
-        json.dumps(
-            tags
-        )
-    )
+    return JsonResponse(tags, safe=False)
 
 
 def to_rows(items, width):
@@ -125,7 +121,7 @@ def project_delete(request, project_id):
 
 def get_project(request, project_id):
     project = Project.objects.get(id=project_id)
-    return HttpResponse(json.dumps(project.hydrate_to_json()))
+    return JsonResponse(project.hydrate_to_json())
 
 
 @ensure_csrf_cookie
@@ -183,7 +179,7 @@ def my_projects(request):
             'owned_projects': [project.hydrate_to_list_json() for project in owned_projects],
             'volunteering_projects': volunteering_projects.exists() and list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), volunteering_projects))
         }
-    return HttpResponse(json.dumps(response))
+    return JsonResponse(response)
 
 
 def projects_list(request):
@@ -222,9 +218,9 @@ def projects_list(request):
             project_pages = 1
 
 
-    response = json.dumps(projects_with_meta_data(project_list_page, project_pages, project_count))
+    response = projects_with_meta_data(project_list_page, project_pages, project_count)
 
-    return HttpResponse(response)
+    return JsonResponse(response)
 
 
 def apply_tag_filters(project_list, query_params, param_name, tag_filter):
