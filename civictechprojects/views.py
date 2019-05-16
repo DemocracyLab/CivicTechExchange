@@ -135,6 +135,8 @@ def index(request):
         'STATIC_CDN_URL': settings.STATIC_CDN_URL,
         'HEADER_ALERT': settings.HEADER_ALERT,
         'SPONSORS_METADATA': settings.SPONSORS_METADATA,
+        'PAYPAL_ENDPOINT': settings.PAYPAL_ENDPOINT,
+        'PAYPAL_PAYEE': settings.PAYPAL_PAYEE,
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt')
     }
     if settings.HOTJAR_APPLICATION_ID:

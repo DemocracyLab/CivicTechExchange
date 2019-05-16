@@ -15,7 +15,9 @@ const Section = {
   EditProfile: 'EditProfile',
   SignedUp: 'SignedUp',
   EmailVerified: 'EmailVerified',
-  PartnerWithUs: 'PartnerWithUs'
+  PartnerWithUs: 'PartnerWithUs',
+  Donate: 'Donate',
+  ThankYou: 'ThankYou'
 };
 
 export type SectionType = $Keys<typeof Section>;
