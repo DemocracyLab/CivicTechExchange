@@ -12,7 +12,7 @@ import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
 type State = {|
   aboutUs: ?ProjectDetailsAPIData,
   showBiographyModal: boolean,
-  modalPerson: object,
+  modalPerson: number | string,
   personTitle: string
 |};
 
