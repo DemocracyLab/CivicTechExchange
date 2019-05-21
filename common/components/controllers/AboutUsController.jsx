@@ -1,13 +1,14 @@
 // @flow
 
 import React from 'react';
-import _ from 'lodash'
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn, {Images} from '../utils/cdn.js';
 import Headers from "../common/Headers.jsx";
 import Person from '@material-ui/icons/Person';
 import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
+import url from "../utils/url.js";
+import Section from "../enums/Section.js";
 
 type State = {|
   aboutUs: ?ProjectDetailsAPIData,
@@ -262,7 +263,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             <p className="about-us-volunteer-disclaimer">DemocracyLab is a volunteer-based 501(c)3 non-profit organization, headquartered in Seattle, WA.</p>
             <div className="about-us-volunteer-buttons">
               <a href={"/index/?section=AboutProject&id=" + this.state.projectId} className="SubHeader-donate-btn-container"><button className="SubHeader-donate-btn">Join Us</button></a>
-              <a href="https://connect.democracylab.org/donatenow" className="SubHeader-donate-btn-container" rel="noopener noreferrer"><button className="SubHeader-log-btns">Donate</button></a>
+              <a href={url.section(Section.Donate)} className="SubHeader-donate-btn-container"><button className="SubHeader-log-btns">Donate</button></a>
             </div>
           </div>
         </div>
