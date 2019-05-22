@@ -171,26 +171,28 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         <div className="AboutProjects-mainColumn">
 
           <div className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
-            <div className='AboutProjects-description'>
-              <h1>{project && project.project_name}</h1>
-              <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
-              <p>{project && project.project_short_description}</p>
-            </div>
+            <div className='AboutProjects-introTop'>
+              <div className='AboutProjects-description'>
+                <h1>{project && project.project_name}</h1>
+                <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
+                <p>{project && project.project_short_description}</p>
+              </div>
 
-            <ProjectVolunteerModal
-              projectId={this.state.project && this.state.project.project_id}
-              positions={this.state.project && this.state.project.project_positions}
-              positionToJoin={this.state.positionToJoin}
-              showModal={this.state.showJoinModal}
-              handleClose={this.confirmJoinProject.bind(this)}
-            />
-
-            <div className='AboutProjects-owner'>
-              <ContactProjectButton project={project}/>
-              <ProjectVolunteerButton
-                project={project}
-                onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
+              <ProjectVolunteerModal
+                projectId={this.state.project && this.state.project.project_id}
+                positions={this.state.project && this.state.project.project_positions}
+                positionToJoin={this.state.positionToJoin}
+                showModal={this.state.showJoinModal}
+                handleClose={this.confirmJoinProject.bind(this)}
               />
+
+              <div className='AboutProjects-owner'>
+                <ContactProjectButton project={project}/>
+                <ProjectVolunteerButton
+                  project={project}
+                  onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
+                />
+              </div>
             </div>
 
             <div className="AboutProjects_tabs">

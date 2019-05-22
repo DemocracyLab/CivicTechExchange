@@ -82,6 +82,11 @@
       min-height: 262px;
   }
 
+  .AboutProjects-introTop {
+    display: flex;
+    min-height: 225px;
+}
+
   .AboutProjects-owner {
       min-height: 70px;
   }
@@ -97,6 +102,7 @@
 
   .AboutProjects-description {
     padding: 10px 5px;
+    width: 70%;
 
     h1 {
       font-size: 1.75rem;
@@ -261,6 +267,13 @@
     background-color: $color-grey-disabled;
     color: $color-text-light;
   }
+
+@media (max-width: 1000px) {
+  // buttons will align below "-description"
+  .AboutProjects-introTop {
+    display: inherit;
+  }
+}
 
   @media (max-width: 800px) {
 
