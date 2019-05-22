@@ -15,6 +15,7 @@ from .models import Project, ProjectPosition, UserAlert, VolunteerRelation
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
+from common.helpers.form_helpers import is_co_owner_or_staff
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
@@ -121,7 +122,14 @@ def project_delete(request, project_id):
 
 def get_project(request, project_id):
     project = Project.objects.get(id=project_id)
-    return JsonResponse(project.hydrate_to_json())
+
+    if project is not None:
+        if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
+            return JsonResponse(project.hydrate_to_json())
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
 
 
 @ensure_csrf_cookie
