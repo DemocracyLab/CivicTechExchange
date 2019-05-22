@@ -327,7 +327,6 @@ class MainHeader extends React.Component<{||}, State > {
              href={link.url}
              className="SubHeader-donate-btn-container"
              onClick={FooterLinks.logClick.bind(this, link)}
-             target="_blank" rel="noopener noreferrer"
           >
             <button className="SubHeader-donate-btn">
               {link.name}
@@ -356,7 +355,6 @@ class MainHeader extends React.Component<{||}, State > {
           key={config.title}
           section={config.section}
           title={config.title}
-          target="_blank" rel="noopener noreferrer"
         />
       );
   }

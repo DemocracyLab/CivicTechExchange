@@ -19,7 +19,7 @@ export DJANGO_SECRET_KEY="d!01@gn+%1ql1n(*)8xo+nx$$&n@mg$0_)9g+!(t-2vncaq!j8"
 export DJANGO_DEBUG=True
 
 # Configure footer links
-export FOOTER_LINKS='[{"u":"/index/?section=AboutUs","n":"About"},{"u":"https://connect.democracylab.org/donatenow","n":"Donate", "isButton":"true"},{"u":"mailto:hello@democracylab.org","n":"Contact Us"}]'
+export FOOTER_LINKS='[{"u":"/index/?section=AboutUs","n":"About"},{"u":"/index/?section=Donate","n":"Donate", "isButton":"true"},{"u":"mailto:hello@democracylab.org","n":"Contact Us"}]'
 
 # Event Header
 export HEADER_ALERT="<p>You are invited to our upcoming event, St. Hat-trick's day!  Come with a team or join a new one on Saturday, March 16.  Be sure to RSVP on <a href='https://www.eventbrite.com/e/st-hack-tricks-day-tickets-54897293282'>Eventbrite</a>!</p>"
@@ -65,3 +65,8 @@ export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
 
 # DemocracyLab project ID (for use on About Us page)
 export DLAB_PROJECT_ID=4
+
+# Paypal endpoint (sandbox by default)
+export PAYPAL_ENDPOINT='https://www.sandbox.paypal.com/cgi-bin/webscr'
+# Paypal payee
+export PAYPAL_PAYEE='mark@democracylab.org'

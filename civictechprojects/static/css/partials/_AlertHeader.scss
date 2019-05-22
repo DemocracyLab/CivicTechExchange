@@ -5,15 +5,15 @@
   background-color: $color-orange;
   color: $color-text-light;
   width: 100%;
-  line-height: 30px;
-}
-
-.AlertHeader-root div:last-child {
-  margin-left: auto;
+  line-height: 1.2em;
+  min-height: 34px;
+  padding-top: 4px;
 }
 
 .AlertHeader-text {
   padding-left: 10px;
+  width: auto;
+  margin: 0 auto -10px auto;
 }
 
 .AlertHeader-text a {
@@ -30,4 +30,3 @@
   padding-right: 10px;
   cursor: pointer;
 }
-
