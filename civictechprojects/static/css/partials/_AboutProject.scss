@@ -53,7 +53,7 @@
   }
 
   .AboutProjects-details {
-    margin-top: 10px;
+    margin: 20px;
   }
 
   .AboutProjects-icon-row {
@@ -65,7 +65,7 @@
     margin-left: 10px;
   }
 
-  .AboutProjects-details, .AboutProjects-links, .AboutProjects-files, .AboutProjects-communities, .AboutProjects-team {
+  .AboutProjects-links, .AboutProjects-files, .AboutProjects-communities, .AboutProjects-team {
     margin: 10px 5px 10px 15px;
   }
 
@@ -166,6 +166,11 @@
         padding-bottom: 50px;
         width: 100%;
       }
+  }
+
+  .AboutProjects-skills-container {
+    display: flex;
+    margin-top: 15%;
   }
 
   .AboutProjects-skills {
@@ -292,6 +297,10 @@
       width: 100%;
     }
 
+    .AboutProjects-skills-container {
+      display: inherit;
+      margin-top: 8%;
+    }
 
   }
 
