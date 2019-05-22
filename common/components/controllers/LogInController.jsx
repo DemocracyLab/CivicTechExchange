@@ -13,7 +13,7 @@ type Props = {|
 type State = {|
   username: string,
   password: string,
-  errorMessage: string
+  prevPage: string
 |}
 
 class LogInController extends React.Component<Props, State> {
@@ -22,8 +22,7 @@ class LogInController extends React.Component<Props, State> {
     this.state = {
       username: '',
       password: '',
-      prevPage: window.location.href.split('&prev=')[1] || this.props.prevPage || '',
-      // errorMessage: url.arguments.(document.location.search)
+      prevPage: window.location.href.split('&prev=')[1] || this.props.prevPage || ''
     };
   }
 

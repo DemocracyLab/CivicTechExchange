@@ -11,7 +11,7 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import Project, ProjectPosition, UserAlert, VolunteerRelation
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
@@ -135,6 +135,9 @@ def index(request):
         'STATIC_CDN_URL': settings.STATIC_CDN_URL,
         'HEADER_ALERT': settings.HEADER_ALERT,
         'SPONSORS_METADATA': settings.SPONSORS_METADATA,
+        'userImgUrl' : '',
+        'PAYPAL_ENDPOINT': settings.PAYPAL_ENDPOINT,
+        'PAYPAL_PAYEE': settings.PAYPAL_PAYEE,
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt')
     }
     if settings.HOTJAR_APPLICATION_ID:
@@ -154,6 +157,10 @@ def index(request):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
+        thumbnails = ProjectFile.objects.filter(file_user=request.user.id, 
+                                                file_category=FileCategory.THUMBNAIL.value)
+        if thumbnails:
+            context['userImgUrl'] = thumbnails[0].file_url
 
     return HttpResponse(template.render(context, request))
 

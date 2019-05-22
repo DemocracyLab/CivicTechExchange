@@ -1,0 +1,81 @@
+.DonateController-root {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.donate-image img{
+  width: 100%;
+}
+
+.DonateController-root .panel {
+  width: 50%;
+}
+
+
+.DonateController-amounts {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.DonateController-monthly {
+  display: flex;
+}
+
+.radio-button {
+  border: 1px solid;
+  background-color: transparent;
+  border-radius: 5px;
+  padding: 6px 12px;
+  margin: 0px 0px 10px 15px;
+  cursor: pointer;
+  min-width: 70px;
+  &:hover {
+    color: $color-orange;
+    border-color: $color-orange;
+  }
+}
+
+.checked .radio-button {
+  color: $color-orange-darker;
+  border-color: $color-orange-darker;
+}
+
+@media (min-width: 900px) {
+  .DonateController-text {
+    padding: 50px;
+  }
+
+  .PaypalDonationButton {
+    float: right;
+  }
+
+  .DonateController-options {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .DonateController-monthly .radio-button {
+    width: 200px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 900px) {
+  .DonateController-root {
+    flex-direction: column;
+  }
+
+  .DonateController-text {
+    padding: 20px;
+  }
+
+  .DonateController-root .panel {
+    width: 100%;
+  }
+
+  .DonateController-monthly .radio-button {
+    width: 150px;
+    height: 40px;
+  }
+}
