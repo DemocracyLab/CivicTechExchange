@@ -13,7 +13,8 @@ type Props = {|
 type State = {|
   username: string,
   password: string,
-  errorMessage: string
+  prevPage: string,
+  //errorMessage: string
 |}
 
 class LogInController extends React.Component<Props, State> {
