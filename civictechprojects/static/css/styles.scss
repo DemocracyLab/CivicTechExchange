@@ -25,6 +25,7 @@
 @import 'vendor/dropdown';
   //import DemocracyLab component partials
 @import 'partials/AboutUs';
+@import 'partials/BioModal';
 @import 'partials/AlertSignupModal';
 @import 'partials/EditProjectForm';
 @import 'partials/FlashMessage';
@@ -61,4 +62,6 @@
 @import 'partials/AlertHeader';
 @import 'partials/SignedUpController';
 @import 'partials/PartnerWithUsController';
+@import 'partials/DonateController';
 @import 'partials/Global';
+@import 'partials/ThankYouController';

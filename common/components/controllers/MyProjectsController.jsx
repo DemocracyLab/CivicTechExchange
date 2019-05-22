@@ -10,6 +10,7 @@ import metrics from "../utils/metrics.js";
 import {Container} from 'flux/utils';
 import ProjectVolunteerRenewModal from "../common/projects/ProjectVolunteerRenewModal.jsx";
 import ProjectVolunteerConcludeModal from "../common/projects/ProjectVolunteerConcludeModal.jsx";
+import LogInController from "./LogInController.jsx";
 import url from "../utils/url.js";
 import Section from "../enums/Section";
 import React from 'react';
@@ -161,7 +162,7 @@ class MyProjectsController extends React.Component<{||}, State> {
         </div>
         </React.Fragment>
       )
-      : <p><a href={url.section(Section.LogIn, {"prev": Section.MyProjects})}>Login</a> to see a list of your projects.</p>;
+      : <LogInController prevPage={Section.MyProjects}/>;
   }
   
   renderProjectCollection(title:string, projects: $ReadOnlyArray<MyProjectData>): React$Node{
