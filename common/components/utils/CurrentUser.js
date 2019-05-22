@@ -28,6 +28,10 @@ class CurrentUser {
     return window.DLAB_GLOBAL_CONTEXT.email;
   }
 
+  static userImgUrl(): string {
+    return window.DLAB_GLOBAL_CONTEXT.userImgUrl;
+  }
+
   static isStaff() : boolean {
     return window.DLAB_GLOBAL_CONTEXT.isStaff;
   }

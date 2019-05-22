@@ -6,7 +6,7 @@ import type { SectionType } from '../enums/Section.js';
 import { Container } from 'flux/utils';
 import cdn from "../utils/cdn.js";
 import cx from '../utils/cx';
-import CurrentUser from '../../components/utils/CurrentUser.js';
+import CurrentUser from '../utils/CurrentUser.js';
 import FooterLinks from "../utils/FooterLinks.js";
 import NavigationStore from '../stores/NavigationStore.js'
 import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
@@ -14,7 +14,6 @@ import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
 import url from '../utils/url.js'
-import UserAPIUtils from "../utils/UserAPIUtils";
 import Person from '@material-ui/icons/Person';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -34,7 +33,6 @@ import _ from 'lodash'
 
 type State = {|
   +activeSection: SectionType,
-  user: ?UserAPIData,
   dropdown: boolean,
   slider: boolean,
   createProjectUrl: string,
@@ -70,7 +68,6 @@ class MainHeader extends React.Component<{||}, State > {
     super();
     this._cx = new cx('SubHeader-');
     this.state = {
-      user: null,
       dropdown: false,
       slider: false,
       showMyProjects: false,
@@ -87,13 +84,6 @@ class MainHeader extends React.Component<{||}, State > {
   componentDidMount() {
     UniversalDispatcher.dispatch({type: 'INIT'});
     this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
-    CurrentUser.isLoggedIn() && UserAPIUtils.fetchUserDetails(CurrentUser.userID(), this.loadUserDetails.bind(this));
-  }
-
-  loadUserDetails(user: UserAPIData) {
-    this.setState({
-      user: user
-    });
   }
 
   render(): React$Node {
@@ -172,7 +162,7 @@ class MainHeader extends React.Component<{||}, State > {
               <Paper className="SubHeader-dropdown-menu">
                 <ClickAwayListener onClickAway={this._closeDropdown}>
                   <MenuList>
-                    <p className="SubHeader-dropdown-name">{`${this.state.user.first_name} ${this.state.user.last_name}`}</p>
+                    <p className="SubHeader-dropdown-name">{`${CurrentUser.firstName()} ${CurrentUser.lastName()}`}</p>
                     <MenuItem onClick={(e) => this.navigateToSection(e, 'EditProfile')}>My Profile</MenuItem>
                     {this.state.showMyProjects && <MenuItem onClick={(e) => this.navigateToSection(e, 'MyProjects')}>My Projects</MenuItem>}
                   </MenuList>
@@ -350,8 +340,8 @@ class MainHeader extends React.Component<{||}, State > {
 
   _renderIcon(): React$Node {
     return (
-      this.state.user && !_.isEmpty(this.state.user.user_thumbnail) ?
-        <img className="SubHeader-userImg" src={this.state.user.user_thumbnail.publicUrl} /> :
+      !_.isEmpty(CurrentUser.userImgUrl()) ?
+        <img className="SubHeader-userImg" src={CurrentUser.userImgUrl()} /> :
         <Person className="SubHeader-userIcon" />
     );
   }
