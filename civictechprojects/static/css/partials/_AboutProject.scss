@@ -32,6 +32,7 @@
   .AboutProjects-infoColumn {
     order: 1;
     width: 30%;
+    min-width: 300px;
     h4 {
       font-size: 1rem;
       font-weight: bold;
@@ -261,7 +262,7 @@
     color: $color-text-light;
   }
 
-  @media (max-width: 975px) {
+  @media (max-width: 800px) {
 
     .AboutProjects-root {
       flex-direction: column;

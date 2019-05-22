@@ -171,7 +171,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         <div className="AboutProjects-mainColumn">
 
           <div className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
-            <div className='AboutProjects-description' item xs={12} md={6}>
+            <div className='AboutProjects-description'>
               <h1>{project && project.project_name}</h1>
               <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
               <p>{project && project.project_short_description}</p>
@@ -185,7 +185,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               handleClose={this.confirmJoinProject.bind(this)}
             />
 
-            <div className='AboutProjects-owner' item xs={12} md={3}>
+            <div className='AboutProjects-owner'>
               <ContactProjectButton project={project}/>
               <ProjectVolunteerButton
                 project={project}
