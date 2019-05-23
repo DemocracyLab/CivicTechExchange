@@ -153,7 +153,8 @@ class Project(Archived):
         project = {
             'project_id': self.id,
             'project_name': self.project_name,
-            'project_creator': self.project_creator.id
+            'project_creator': self.project_creator.id,
+            'isApproved': self.is_searchable
         }
 
         return project
