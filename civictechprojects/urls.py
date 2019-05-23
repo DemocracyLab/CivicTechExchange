@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
     url(r'^projects/delete/(?P<project_id>[0-9]+)/$', views.project_delete, name='project_delete'),
     url(r'^projects/signup/$', views.project_create, name='project_create'),
+    url(r'^projects/approve/(?P<project_id>[0-9]+)/$', views.approve_project, name='approve_project'),
     url(
         r'^presign_s3/upload/project/thumbnail/$',
         views.presign_project_thumbnail_upload,

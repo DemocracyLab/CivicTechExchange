@@ -93,18 +93,23 @@ def send_password_reset_email(contributor):
 
 def send_project_creation_notification(project):
     project_url = settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
-    email_msg = EmailMessage(
-        subject='New DemocracyLab Project: ' + project.project_name,
-        body='{first_name} {last_name}({email}) has created the project "{project_name}": \n {project_url}'.format(
+
+    verification_url = settings.PROTOCOL_DOMAIN + '/projects/approve/' + str(project.id)
+    email_template = HtmlEmailTemplate() \
+        .paragraph('{first_name} {last_name}({email}) has created the project "{project_name}": \n {project_url}'.format(
             first_name=project.project_creator.first_name,
             last_name=project.project_creator.last_name,
             email=project.project_creator.email,
             project_name=project.project_name,
             project_url=project_url
-        ),
+        )) \
+        .button(url=verification_url, text='APPROVE')
+    email_msg = EmailMessage(
+        subject='New DemocracyLab Project: ' + project.project_name,
         from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
         to=[settings.ADMIN_EMAIL]
     )
+    email_msg = email_template.render(email_msg)
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 

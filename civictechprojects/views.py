@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.conf import settings
+from django.contrib import messages
 from django.template import loader
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -126,6 +127,21 @@ def get_project(request, project_id):
     if project is not None:
         if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
             return JsonResponse(project.hydrate_to_json())
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
+def approve_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    user = get_request_contributor(request)
+
+    if project is not None:
+        if user.is_staff:
+            project.is_searchable = True
+            project.save()
+            messages.success(request, 'Project Approved')
+            return redirect('/index/?section=AboutProject&id=' + str(project.id))
         else:
             return HttpResponseForbidden()
     else:
