@@ -141,6 +141,7 @@ def approve_project(request, project_id):
             project.is_searchable = True
             project.save()
             messages.success(request, 'Project Approved')
+            # TODO: Send notification email to project owners
             return redirect('/index/?section=AboutProject&id=' + str(project.id))
         else:
             return HttpResponseForbidden()
