@@ -1,0 +1,9 @@
+.press-title, .press-stats {
+  min-height: 450px;
+  color: $color-text-light;
+}
+/* for a full-width background element, this brings the content in-line with .container */
+.press-bounded-content {
+  margin: 0 auto;
+  padding: 0 15px;
+}

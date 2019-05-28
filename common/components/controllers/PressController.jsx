@@ -32,9 +32,11 @@ class PressController extends React.PureComponent<{||}, State> {
 
     _renderTitle(): React$Node {
       return (
-        <div className="press-title">
-          <h1>Press</h1>
-          <p>For press opportunities, please contact hello@democracylab.org</p>
+        <div className="press-title" style={cdn.bgImage('PressBG.jpg')}>
+          <div class="press-bounded-content">
+            <h1>Press</h1>
+            <p>For press opportunities, please contact hello@democracylab.org</p>
+          </div>
         </div>
       )
     }
@@ -42,7 +44,9 @@ class PressController extends React.PureComponent<{||}, State> {
     _renderStats(): React$Node {
       return (
         <div className="press-stats" style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
-         <p>Statistics go here</p>
+          <div class="press-bounded-content">
+            <p>Statistics go here</p>
+          </div>
        </div>
       )
     }
