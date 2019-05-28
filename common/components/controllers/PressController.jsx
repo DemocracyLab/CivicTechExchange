@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Headers from "../common/Headers.jsx";
+import cdn, {Images} from "../utils/cdn.js";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 
@@ -40,7 +41,9 @@ class PressController extends React.PureComponent<{||}, State> {
 
     _renderStats(): React$Node {
       return (
-        <p>Stats</p>
+        <div className="press-stats" style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
+         <p>Statistics go here</p>
+       </div>
       )
     }
     _renderNews(): React$Node {
