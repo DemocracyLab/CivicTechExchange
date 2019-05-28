@@ -5,47 +5,9 @@ import Headers from "../common/Headers.jsx";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 
-//TEMPORARY DATA FOR TESTING//
-//date field may need to be changed, represented as a literal string right now but should be something Moment/etc could handle
-//Month Day, Year
-const pressLinks = [
-  {
-    date: "March 11, 2019",
-    href: "https://www.washingtontechnology.org/the-pulse-of-tech-for-good-in-seattle/",
-    title: "The Pulse of Tech for Good in Seattle",
-    source: "Washington Technology Industry Association"
-  },
-  {
-    date: "February 10, 2019",
-    href: "https://www.esal.us/blog/democracylab-empowering-the-civic-tech-movement/",
-    title: "DemocracyLab: Empowering the Civic Tech Movement",
-    source: "Engineers and Scientists Acting Locally"
-  },
-  {
-    date: "January 22, 2019",
-    href: "https://givingcompass.org/article/untapped-potential-of-civic-technology/",
-    title: "The Untapped Potential of Civic Technology",
-    source: "Giving Compass"
-  },
-  {
-    date: "January 18, 2019",
-    href: "http://techtalk.seattle.gov/2019/01/18/civic-tech-community-tackles-pressing-issues-with-seattles-open-data/",
-    title: "Civic Tech Community Tackles Pressing Issues with Seattle’s Open Data",
-    source: "Seattle IT Tech Talk Blog"
-  },
-  {
-    date: "January 9, 2019",
-    href: "https://socrata.com/blog/seattle-hackathon-real-world-impact/",
-    title: "Seattle Hackathon Innovates for ‘Real World Impact’",
-    source: "Socrata Blog"
-  },
-  {
-    date: "August 8, 2018",
-    href: "https://www.geekwire.com/2018/can-tech-government-innovate-together-social-good-inside-new-effort-change-tide/",
-    title: "Can tech and government innovate together for social good? Inside a new effort to change the tide",
-    source: "GeekWire"
-  }
-]
+
+//get press links
+const pressLinks = JSON.parse(_.unescape(window.PRESS_LINKS))
 
 class PressController extends React.PureComponent<{||}, State> {
   constructor(): void {

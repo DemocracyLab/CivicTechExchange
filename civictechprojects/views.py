@@ -138,6 +138,7 @@ def index(request):
         'userImgUrl' : '',
         'PAYPAL_ENDPOINT': settings.PAYPAL_ENDPOINT,
         'PAYPAL_PAYEE': settings.PAYPAL_PAYEE,
+        'PRESS_LINKS': settings.PRESS_LINKS,
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt')
     }
     if settings.HOTJAR_APPLICATION_ID:
@@ -157,7 +158,7 @@ def index(request):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
-        thumbnails = ProjectFile.objects.filter(file_user=request.user.id, 
+        thumbnails = ProjectFile.objects.filter(file_user=request.user.id,
                                                 file_category=FileCategory.THUMBNAIL.value)
         if thumbnails:
             context['userImgUrl'] = thumbnails[0].file_url
