@@ -63,13 +63,13 @@ class PressController extends React.PureComponent<{||}, State> {
     }
 
     _renderStats(): React$Node {
-      return (
+      return (this.state.stats ?
         <div className="press-stats" style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
-          <div className="press-bounded-content">
-            <p>Statistics go here</p>
+          <div className="press-bounded-content press-stats-content">
+            {this._renderStatItems(this.state.stats)}
           </div>
-       </div>
-      )
+       </div> : <div className="press-stats" style={cdn.bgImage('OurVisionBGoverlay.jpg')}>Loading statistics...</div>
+     )
     }
     _renderNews(): React$Node {
       return (
@@ -85,6 +85,20 @@ class PressController extends React.PureComponent<{||}, State> {
         </div>
       )
     }
+
+    _renderStatItems(statData) {
+      console.log('raw: ', statData);
+      console.log('keys: ', Object.keys(statData));
+      console.log('entries: ', Object.entries(statData));
+      return Object.keys(statData).map(function(key) {
+          return (
+            <div className="press-stats-item" key={key}>
+              <p>{statData[key]}</p>
+              <p>{key}</p>
+            </div>
+            )
+        })
+      }
 
    render(): $React$Node {
      return (

@@ -1,5 +1,5 @@
 .press-title, .press-stats {
-  min-height: 450px;
+  background-size: cover;
   color: $color-text-light;
 }
 /* for a full-width background element, this brings the content in-line with .container */
@@ -31,4 +31,13 @@
 }
 .press-presslink:first-of-type {
   border-top: 1px solid $color-grey-frame-border;
+}
+
+.press-stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.press-stats-item {
+  flex: 0 0 33.333333%;
 }
