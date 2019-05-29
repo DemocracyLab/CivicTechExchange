@@ -166,6 +166,19 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 
+def get_site_stats(request):
+    active_volunteers = VolunteerRelation.objects.filter(deleted=False)
+
+    stats = {
+        'projectCount': Project.objects.filter(is_searchable=True, deleted=False).count(),
+        'userCount': Contributor.objects.filter(is_active=True).count(),
+        'activeVolunteerCount': active_volunteers.distinct('volunteer__id').count(),
+        'dlVolunteerCount': active_volunteers.filter(is_approved=True, project__id=settings.DLAB_PROJECT_ID).count()
+    }
+
+    return JsonResponse(stats)
+
+
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def add_alert(request):
