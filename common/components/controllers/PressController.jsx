@@ -2,19 +2,40 @@
 
 import React from 'react';
 import Headers from "../common/Headers.jsx";
-import cdn, {Images} from "../utils/cdn.js";
+import cdn from "../utils/cdn.js";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
+import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 
 
 //get press links
 const pressLinks = JSON.parse(_.unescape(window.PRESS_LINKS))
+//set 'static' stats to merge with API results later
+const staticData = {
+  platformLaunch: '2018',
+  orgFounded: '2006'
+}
 
 class PressController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
-    this.state = {}
+    this.state = {
+      stats: null,
+    }
   }
+
+  componentDidMount() {
+    //get stats from API, callback function will merge with static data defined above, then set state
+    ProjectAPIUtils.fetchStatistics(this.setStats.bind(this));
+  }
+
+  setStats(dbStats) {
+    let combined = Object.assign({}, dbStats, staticData);
+    this.setState({
+      stats: combined,
+    });
+  }
+
 
 
 
@@ -33,7 +54,7 @@ class PressController extends React.PureComponent<{||}, State> {
     _renderTitle(): React$Node {
       return (
         <div className="press-title" style={cdn.bgImage('PressBG.jpg')}>
-          <div class="press-bounded-content">
+          <div className="press-bounded-content">
             <h1>Press</h1>
             <p>For press opportunities, please contact hello@democracylab.org</p>
           </div>
@@ -44,7 +65,7 @@ class PressController extends React.PureComponent<{||}, State> {
     _renderStats(): React$Node {
       return (
         <div className="press-stats" style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
-          <div class="press-bounded-content">
+          <div className="press-bounded-content">
             <p>Statistics go here</p>
           </div>
        </div>

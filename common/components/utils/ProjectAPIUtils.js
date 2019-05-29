@@ -157,7 +157,19 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
-
+  //fetch DemocracyLab statistics
+  static fetchStatistics(callback) {
+    fetch('/api/stats')
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      callback(data);
+    })
+    .catch(err => {
+      console.log('Error fetching stats API. Error: ' + err)
+    })
+  }
 
   static post(url: string, body: {||},successCallback: (APIResponse) => void, errCallback: (APIError) => void) {
     const doError = (response) => errCallback && errCallback({
