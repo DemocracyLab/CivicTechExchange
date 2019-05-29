@@ -238,6 +238,22 @@ def notify_project_owners_volunteer_concluded_email(volunteer_relation, comments
     send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
 
 
+def notify_project_owners_project_approved(project):
+    email_template = HtmlEmailTemplate() \
+        .paragraph('Your project "{{project_name}}" has been approved. You can see it at {{project_url}}')
+    context = {
+        'project_name': project.project_name,
+        'project_url': settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
+    }
+    email_msg = EmailMessage(
+        subject=project.project_name + " has been approved",
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=_get_co_owner_emails(project)
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+
+
 def send_email(email_msg, email_acct=None):
     if not settings.FAKE_EMAILS:
         email_msg.connection = email_acct['connection'] if email_acct is not None else settings.EMAIL_SUPPORT_ACCT['connection']

@@ -21,7 +21,8 @@ from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email, \
-    send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email
+    send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
+    notify_project_owners_project_approved
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
@@ -140,8 +141,8 @@ def approve_project(request, project_id):
         if user.is_staff:
             project.is_searchable = True
             project.save()
+            notify_project_owners_project_approved(project)
             messages.success(request, 'Project Approved')
-            # TODO: Send notification email to project owners
             return redirect('/index/?section=AboutProject&id=' + str(project.id))
         else:
             return HttpResponseForbidden()
