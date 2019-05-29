@@ -7,3 +7,28 @@
   margin: 0 auto;
   padding: 0 15px;
 }
+.press-root h1, .press-root h2 {
+  font-size: 48px;
+  margin-bottom: 18px;
+}
+
+.press-in-news p {
+  margin-bottom: 0.5rem;
+}
+
+.press-in-news h4 {
+  font-size: 24px;
+}
+.press-in-news a {
+  color: $color-orange;
+  &:hover {
+    color: $color-orange-darker;
+  }
+}
+.press-presslink {
+  padding: 2rem 0;
+  border-bottom: 1px solid $color-grey-frame-border
+}
+.press-presslink:first-of-type {
+  border-top: 1px solid $color-grey-frame-border;
+}
