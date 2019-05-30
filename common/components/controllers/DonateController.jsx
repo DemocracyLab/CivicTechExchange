@@ -46,6 +46,10 @@ class DonateController extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className="DonateController-root">
+        <Headers
+          title="democracyLab | Donate"
+          description="We too are a nonprofit, and your tax-deductible gift helps us connect good people with good causes."
+        />
         <div className="panel donate-image">
           <img src={cdn.image(Images.DONATE_SPLASH)}></img>
         </div>
