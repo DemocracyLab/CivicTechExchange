@@ -39,11 +39,11 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
     this.askForSendConfirmation = this.askForSendConfirmation.bind(this);
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
   }
-    
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({ showModal: nextProps.showModal });
   }
-  
+
 
   handleChange(event: SyntheticInputEvent<HTMLInputElement>): void {
       this.setState({message: event.target.value});
@@ -78,14 +78,13 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div>
-        <ConfirmationModal 
+        <ConfirmationModal
           showModal={this.state.showConfirmationModal}
           message="Do you want to send this?"
           onSelection={this.receiveSendConfirmation}
         />
           <Modal show={this.state.showModal}
                  onHide={this.closeModal}
-                 style={{paddingTop:'20%'}}
           >
               <Modal.Header >
                   <Modal.Title>Send message to Project Owner</Modal.Title>
