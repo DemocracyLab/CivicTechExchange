@@ -15,6 +15,16 @@ const staticData = {
   platformLaunch: '2018',
   orgFounded: '2006'
 }
+//set display names based on key names for stats. TODO: move to global?
+const categoryDisplayNames = {
+  //TODO: move to global constants file
+  "platformLaunch": "Platform Launched",
+  "orgFounded": "Founded",
+  "dlVolunteerCount": "Team Members",
+  "activeVolunteerCount": "Active Volunteers",
+  "userCount": "Number of Users",
+  "projectCount": "Number of Projects"
+}
 
 class PressController extends React.PureComponent<{||}, State> {
   constructor(): void {
@@ -35,8 +45,6 @@ class PressController extends React.PureComponent<{||}, State> {
       stats: combined,
     });
   }
-
-
 
 
   _renderHeader(): React$Node {
@@ -87,14 +95,12 @@ class PressController extends React.PureComponent<{||}, State> {
     }
 
     _renderStatItems(statData) {
-      console.log('raw: ', statData);
-      console.log('keys: ', Object.keys(statData));
-      console.log('entries: ', Object.entries(statData));
       return Object.keys(statData).map(function(key) {
+          let name = categoryDisplayNames[key] || key; //have to do this here to avoid API errors that shouldn't happen but do, ok sure whatever react
           return (
             <div className="press-stats-item" key={key}>
               <p>{statData[key]}</p>
-              <p>{key}</p>
+              <p>{name}</p>
             </div>
             )
         })

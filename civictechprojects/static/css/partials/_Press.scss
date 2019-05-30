@@ -33,11 +33,13 @@
   border-top: 1px solid $color-grey-frame-border;
 }
 
-.press-stats-container {
+.press-stats-content {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-content: space-between;
 }
 .press-stats-item {
   flex: 0 0 33.333333%;
+  text-align: center;
 }
