@@ -81,7 +81,7 @@ class ProjectCreationForm(ModelForm):
         # Notify the admins that a new project has been created
         send_project_creation_notification(project)
 
-        messages.add_message(request, messages.INFO, 'Your project is awaiting approval.  Expect a decision in the next 24 hours.')
+        messages.add_message(request, messages.INFO, 'Your project "' + project.project_name + '" is awaiting approval.  Expect a decision in the next business day.')
 
     @staticmethod
     def delete_project(request, project_id):
