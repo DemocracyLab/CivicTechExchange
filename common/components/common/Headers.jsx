@@ -18,6 +18,7 @@ class Headers extends React.PureComponent<Props> {
         <meta name="description" content={this.props.description} />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={this.props.title} />
+        <meta property="og:description" content={this.props.description} />
         <meta property="og:image" content={this.props.thumbnailUrl || cdn.image("dl_logo.png")} />
       </Helmet>
     );
