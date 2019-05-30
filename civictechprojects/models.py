@@ -70,13 +70,13 @@ class Project(Archived):
     project_technologies.remote_field.related_name = "+"
     project_organization = TaggableManager(blank=True, through=TaggedOrganization)
     project_organization.remote_field.related_name = "+"
-    project_location = models.CharField(max_length=200)
+    project_location = models.CharField(max_length=200, blank=True)
     project_name = models.CharField(max_length=200)
     project_url = models.CharField(max_length=2083, blank=True)
     project_links = models.CharField(max_length=5000, blank=True)
     project_date_created = models.DateTimeField(null=True)
     project_date_modified = models.DateTimeField(auto_now_add=True, null=True)
-    is_searchable = models.BooleanField(default=True)
+    is_searchable = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
@@ -153,7 +153,8 @@ class Project(Archived):
         project = {
             'project_id': self.id,
             'project_name': self.project_name,
-            'project_creator': self.project_creator.id
+            'project_creator': self.project_creator.id,
+            'isApproved': self.is_searchable
         }
 
         return project
