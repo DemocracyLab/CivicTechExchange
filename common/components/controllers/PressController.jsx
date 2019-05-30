@@ -99,8 +99,8 @@ class PressController extends React.PureComponent<{||}, State> {
           let name = categoryDisplayNames[key] || key; //have to do this here to avoid API errors that shouldn't happen but do, ok sure whatever react
           return (
             <div className="press-stats-item" key={key}>
-              <p>{statData[key]}</p>
-              <p>{name}</p>
+              <p className="press-stats-data">{statData[key]}</p>
+              <p className="press-stats-label">{name}</p>
             </div>
             )
         })
@@ -114,7 +114,7 @@ class PressController extends React.PureComponent<{||}, State> {
            {this._renderTitle()}
            {this._renderStats()}
          </div>
-         <div className="container pl-0 pr-0 press-root">
+         <div className="container press-root">
            {this._renderNews()}
          </div>
      </React.Fragment>
