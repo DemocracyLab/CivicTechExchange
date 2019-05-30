@@ -1,17 +1,19 @@
 .press-title, .press-stats {
   background-size: cover;
   color: $color-text-light;
+  display: flex;
+  align-items: center;
 }
 /* for a full-width background element, this brings the content in-line with .container */
 .press-bounded-content {
   margin: 0 auto;
   padding: 0 15px;
 }
-.press-root h1, .press-root h2 {
+.press-root h1, .press-in-news h2 {
   font-size: 28px;
   font-weight: bold;
-  margin: 0 0 0.5rem 0;
   line-height: 1.2;
+  margin: 0 0 1rem 0;
 }
 
 .press-in-news p {
@@ -62,4 +64,54 @@
 }
 .press-in-news {
   padding-top: 2rem;
+}
+
+@include media-breakpoint-up(sm) {
+  .press-bounded-content {
+    width: 540px;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .press-bounded-content {
+    width: 720px;
+  }
+  .press-stats-item {
+    flex: 0 0 30%;
+  }
+  .press-title {
+    min-height: 480px;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .press-bounded-content {
+    width: 960px;
+  }
+  .press-root h1, .press-in-news h2, .press-stats-data {
+    font-size: 48px;
+  }
+  .press-title {
+    min-height: 568px;
+  }
+  .press-in-news a {
+    font-size: 24px;
+  }
+}
+@include media-breakpoint-up(xl) {
+  .press-bounded-content {
+    width: 1140px;
+  }
+  .press-title {
+    min-height: 640px;
+  }
+}
+
+@include media-breakpoint-up(xxl) {
+  .press-bounded-content {
+    width: 1400px;
+  }
+  .press-title {
+    min-height: 853px; /* actual height of background image */
+  }
 }
