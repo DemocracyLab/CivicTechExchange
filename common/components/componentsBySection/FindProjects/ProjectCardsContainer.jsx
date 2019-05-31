@@ -59,7 +59,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     if (this.state.keyword || this.state.tags.size > 0 || this.state.location) {
       return this.state.project_count === 1 ? this.state.project_count + ' tech-for-good project found' : this.state.project_count + ' tech-for-good projects found'
     } else {
-      return 'Find and volunteer with the best tech-for-good projects'
+      return 'Find and volunteer with innovative tech-for-good projects'
     }
   }
 
