@@ -48,7 +48,7 @@ class PressController extends React.PureComponent<{||}, State> {
 
 
   _renderHeader(): React$Node {
-    const title: string = "DemocracyLab | Press";
+    const title: string = "DemocracyLab | News Feed";
     const description: string = "Read external articles and blog posts describing DemocracyLab's work."
 
     return (
@@ -63,7 +63,7 @@ class PressController extends React.PureComponent<{||}, State> {
       return (
         <div className="press-title" style={cdn.bgImage('PressBG.jpg')}>
           <div className="press-bounded-content">
-            <h1>Press</h1>
+            <h1>News Feed</h1>
             <p>For press opportunities, please contact hello@democracylab.org</p>
           </div>
         </div>
