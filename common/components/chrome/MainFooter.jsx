@@ -11,7 +11,8 @@ import _ from 'lodash';
 const sectionsToShowFooter: $ReadOnlyArray<string> = [
   Section.FindProjects,
   Section.AboutProject,
-  Section.AboutUs
+  Section.AboutUs,
+  Section.Press
 ];
 
 class MainFooter extends React.Component<{||}> {

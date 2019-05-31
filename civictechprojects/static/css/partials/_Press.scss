@@ -34,6 +34,10 @@
 .press-presslink:first-of-type {
   border-top: 1px solid $color-grey-frame-border;
 }
+.press-presslink:last-of-type {
+  border-bottom: none;
+  margin-bottom: 2rem;
+}
 .press-presslink p {
   color: $color-text-grey;
 }
