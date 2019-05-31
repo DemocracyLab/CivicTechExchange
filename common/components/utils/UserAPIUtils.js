@@ -1,19 +1,9 @@
 // @flow
 
-import type {Project} from '../stores/ProjectSearchStore.js';
-import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
-import type {FileInfo} from '../common/FileInfo.jsx'
-import {PositionInfo} from "../forms/PositionInfo.jsx";
-
-// TODO: Refactor these common types into separate file
-export type APIResponse = {|
-  +status: number
-|};
-
-export type APIError = {|
-  +errorCode: number,
-  +errorMessage: string
-|};
+import type {Project} from "../stores/ProjectSearchStore.js";
+import type {LinkInfo} from "../../components/forms/LinkInfo.jsx";
+import type {FileInfo} from "../common/FileInfo.jsx";
+import {APIError, APIResponse} from "./api.js";
 
 export type UserAPIData = {|
   +id: number,

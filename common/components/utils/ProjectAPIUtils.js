@@ -132,6 +132,7 @@ class ProjectAPIUtils {
         return response.json();
       })
       .then(projectDetails => callback(projectDetails))
+      // TODO: Get catch to return http status code
       .catch(response => errCallback && errCallback({
         errorCode: response.status,
         errorMessage: JSON.stringify(response)
