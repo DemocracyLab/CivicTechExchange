@@ -80,4 +80,4 @@ def get_contributor_by_username(username):
 
 
 def get_request_contributor(request):
-    return get_contributor_by_username(request.user.username)
+    return get_contributor_by_username(request.user.username) if request.user.username else None
