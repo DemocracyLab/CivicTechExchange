@@ -471,7 +471,11 @@ def accept_project_volunteer(request, application_id):
         volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
         update_project_timestamp(request, volunteer_relation.project)
-        return HttpResponse(status=200)
+        if request.method == 'GET':
+            messages.add_message(request, messages.SUCCESS, volunteer_relation.volunteer.full_name() + '" has been approved as a volunteer.')
+            return redirect('/index/?section=AboutProject&id=' + str(volunteer_relation.project.id))
+        else:
+            return HttpResponse(status=200)
     else:
         raise PermissionDenied()
 
