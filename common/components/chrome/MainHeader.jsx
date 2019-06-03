@@ -1,4 +1,4 @@
-NavigationLinks// @flow
+// @flow
 
 import type { FluxReduceStore } from 'flux/utils';
 import type { SectionType } from '../enums/Section.js';
