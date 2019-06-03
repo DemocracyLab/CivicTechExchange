@@ -82,7 +82,7 @@ class PressController extends React.PureComponent<{||}, State> {
     _renderNews(): React$Node {
       return (
         <div className="press-in-news">
-        <h2>In the news</h2>
+        <h2>In the media</h2>
         {pressLinks.map((item, i) => {
           return (
             <div className="press-presslink" key={i}>

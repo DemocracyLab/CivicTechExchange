@@ -1,4 +1,4 @@
-// @flow
+NavigationLinks// @flow
 
 import type { FluxReduceStore } from 'flux/utils';
 import type { SectionType } from '../enums/Section.js';
@@ -7,7 +7,8 @@ import { Container } from 'flux/utils';
 import cdn from "../utils/cdn.js";
 import cx from '../utils/cx';
 import CurrentUser from '../utils/CurrentUser.js';
-import FooterLinks from "../utils/FooterLinks.js";
+import NavigationLinks from "../utils/NavigationLinks.js";
+import {NavigationLink} from "../utils/NavigationLinks.js";
 import NavigationStore from '../stores/NavigationStore.js'
 import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import SectionLink from './SectionLink.jsx';
@@ -25,7 +26,6 @@ import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
-import {FooterLink} from "../utils/FooterLinks.js";
 import AlertHeader from "./AlertHeader.jsx";
 import MyProjectsStore, {MyProjectsAPIResponse} from "../stores/MyProjectsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
@@ -250,7 +250,7 @@ class MainHeader extends React.Component<{||}, State > {
               </a>
               <Divider />
 
-              {this._renderHamburgerFooterLinks()}
+              {this._renderHamburgerNavigationLinks()}
 
               <Divider />
               {
@@ -278,12 +278,12 @@ class MainHeader extends React.Component<{||}, State > {
     )
   }
 
-  _renderHamburgerFooterLinks(): $ReadOnlyArray<React$Node> {
-    //TODO: refactor FooterLinks to define link behavior on a per-link basis
-    return FooterLinks.list().map((link) => {
+  _renderHamburgerNavigationLinks(): $ReadOnlyArray<React$Node> {
+    //TODO: refactor NavigationLinks to define link behavior on a per-link basis
+    return NavigationLinks.list().map((link) => {
       return (
         <React.Fragment key={link.url}>
-          <a key={link.url} href={link.url} rel="noopener noreferrer" onClick={FooterLinks.logClick.bind(this, link)}>
+          <a key={link.url} href={link.url} rel="noopener noreferrer" onClick={NavigationLinks.logClick.bind(this, link)}>
             <div className={'SubHeader-drawerDiv'}>
               {link.name}
             </div>
@@ -299,15 +299,15 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderHeaderLinks(): React$Node {
-    //TODO: Same issue as FooterLinks, refactor to pass link behavior as part of env variable
-    const headerLinks: $ReadOnlyArray<FooterLink> = FooterLinks.list().filter((link) => !link.isButton);
+    //TODO: Same issue as NavigationLinks, refactor to pass link behavior as part of env variable
+    const headerLinks: $ReadOnlyArray<NavigationLink> = NavigationLinks.list().filter((link) => !link.isButton);
     return (
       <React.Fragment>
         {
           headerLinks.map((link) => {
             return (
               <div key={link.url} className="SectionLink-root">
-                <a className="SubHeader-anchor" href={link.url} rel="noopener noreferrer" onClick={FooterLinks.logClick.bind(this, link)}>
+                <a className="SubHeader-anchor" href={link.url} rel="noopener noreferrer" onClick={NavigationLinks.logClick.bind(this, link)}>
                   <h3>{link.name}</h3>
                 </a>
               </div>
@@ -319,14 +319,14 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderHeaderButtons(): React$Node {
-    const headerButtonLinks: $ReadOnlyArray<React$Node> = FooterLinks.list().filter((link) => link.isButton);
+    const headerButtonLinks: $ReadOnlyArray<React$Node> = NavigationLinks.list().filter((link) => link.isButton);
     return (
       headerButtonLinks.map((link) => {
         return (
           <a key={link.url}
              href={link.url}
              className="SubHeader-donate-btn-container"
-             onClick={FooterLinks.logClick.bind(this, link)}
+             onClick={NavigationLinks.logClick.bind(this, link)}
           >
             <button className="SubHeader-donate-btn">
               {link.name}

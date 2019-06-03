@@ -128,7 +128,6 @@ def get_project(request, project_id):
 def index(request):
     template = loader.get_template('new_index.html')
     context = {
-        'FOOTER_LINKS': settings.FOOTER_LINKS,
         'DLAB_PROJECT_ID': settings.DLAB_PROJECT_ID,
         'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL,
         'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL,
