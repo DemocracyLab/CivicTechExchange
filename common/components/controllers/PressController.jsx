@@ -25,6 +25,16 @@ const categoryDisplayNames = {
   "userCount": "Number of Users",
   "projectCount": "Number of Projects"
 }
+type statsType = {
+  projectCount: number,
+  userCount: number,
+  activeVolunteerCount: number,
+  dlVolunteerCount: number
+}
+
+type State = {|
+  stats: statsType
+|};
 
 class PressController extends React.PureComponent<{||}, State> {
   constructor(): void {

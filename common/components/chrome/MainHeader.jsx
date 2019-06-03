@@ -7,8 +7,7 @@ import { Container } from 'flux/utils';
 import cdn from "../utils/cdn.js";
 import cx from '../utils/cx';
 import CurrentUser from '../utils/CurrentUser.js';
-import NavigationLinks from "../utils/NavigationLinks.js";
-import {NavigationLink} from "../utils/NavigationLinks.js";
+import NavigationLinks, {NavigationLink} from "../utils/NavigationLinks.js";
 import NavigationStore from '../stores/NavigationStore.js'
 import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import SectionLink from './SectionLink.jsx';

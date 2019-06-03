@@ -3,12 +3,6 @@
 import metrics from "./metrics.js";
 import CurrentUser from "./CurrentUser.js";
 
-type DLAB_NAV_LINK = {|
-  u: string,
-  n: string,
-  isButton: ?boolean
-|};
-
 export type NavigationLink = {|
   url: string,
   name: string,
@@ -27,8 +21,7 @@ const siteNavLinks =
 class NavigationLinks {
   static list(): $ReadOnlyArray<NavigationLink> {
     try {
-      const envLinks: $ReadOnlyArray<DLAB_NAV_LINK> = siteNavLinks;
-      return envLinks.map( (link:DLAB_FOOTER_LINK) => ({url:link.u, name:link.n, isButton:link.isButton}));
+      return siteNavLinks.map( (link:NavigationLink) => ({url:link.u, name:link.n, isButton:link.isButton}));
     } catch(ex) {
       console.error("Failed to parse navigation links. ", ex);
       return [];
