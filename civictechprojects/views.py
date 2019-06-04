@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.conf import settings
+from django.contrib import messages
 from django.template import loader
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -15,11 +16,13 @@ from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAle
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
+from common.helpers.form_helpers import is_co_owner_or_staff
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email, \
-    send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email
+    send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
+    notify_project_owners_project_approved
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
@@ -121,7 +124,30 @@ def project_delete(request, project_id):
 
 def get_project(request, project_id):
     project = Project.objects.get(id=project_id)
-    return JsonResponse(project.hydrate_to_json())
+
+    if project is not None:
+        if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
+            return JsonResponse(project.hydrate_to_json())
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
+def approve_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    user = get_request_contributor(request)
+
+    if project is not None:
+        if user.is_staff:
+            project.is_searchable = True
+            project.save()
+            notify_project_owners_project_approved(project)
+            messages.success(request, 'Project Approved')
+            return redirect('/index/?section=AboutProject&id=' + str(project.id))
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
 
 
 @ensure_csrf_cookie

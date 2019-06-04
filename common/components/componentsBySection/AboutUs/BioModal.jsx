@@ -42,7 +42,7 @@ class BioModal extends React.PureComponent<Props, State> {
   render(): React$Node {
     return this.props.person && (
       <div>
-          <Modal show={this.state.showModal} onHide={this.closeModal} bsSize={this.props.size} className="bio-modal-root show">
+          <Modal show={this.state.showModal} onHide={this.closeModal} bsSize={this.props.size} className="bio-modal-root">
               <Modal.Header>
                 <div className="bio-modal-nametitle-container">
                   <h4 className="bio-modal-name"><a href={"/index/?section=Profile&id=" + this.props.person.id}>{this.props.person.first_name} {this.props.person.last_name}</a></h4>
