@@ -9,23 +9,16 @@ export type NavigationLink = {|
   isButton: boolean
 |};
 
-const siteNavLinks =
-[
-  {"u":"/index/?section=AboutUs","n":"About"},
-  {"u":"/index/?section=Donate","n":"Donate", "isButton":"true"},
-  {"u":"mailto:hello@democracylab.org","n":"Contact Us"},
-  {"u":"/index/?section=Press","n":"News"}
+const navLinks = [
+  { url: "/index/?section=AboutUs", name: "About", isButton: false },
+  { url: "/index/?section=Donate", name: "Donate", isButton: true },
+  { url: "mailto:hello@democracylab.org", name :"Contact Us", isButton: false },
+  { url: "/index/?section=Press", name: "News", isButton: false }
 ]
 
-
 class NavigationLinks {
-  static list(): $ReadOnlyArray<NavigationLink> {
-    try {
-      return siteNavLinks.map( (link:NavigationLink) => ({url:link.u, name:link.n, isButton:link.isButton}));
-    } catch(ex) {
-      console.error("Failed to parse navigation links. ", ex);
-      return [];
-    }
+  static list() {
+    return navLinks;
   }
 
   static logClick(link: NavigationLink): void {
