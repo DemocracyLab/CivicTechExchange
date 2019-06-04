@@ -249,6 +249,20 @@ class MainHeader extends React.Component<{||}, State > {
               </a>
               <Divider />
 
+              <a href={url.section(Section.AboutUs)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  About Us
+                </div>
+              </a>
+              <Divider />
+
+              <a href={url.section(Section.Press)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  News
+                </div>
+              </a>
+              <Divider />
+
               {this._renderHamburgerNavigationLinks()}
 
               <Divider />

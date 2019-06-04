@@ -20,6 +20,16 @@ const SectionLinkConfigs = [
     section: Section.EditProfile,
     title: 'My Profile',
     showOnlyWhenLoggedIn: true
+  },
+  {
+    section: Section.AboutUs,
+    title: 'About Us',
+    showOnlyWhenLoggedIn: false
+  },
+  {
+    section: Section.Press,
+    title: 'News',
+    showOnlyWhenLoggedIn: false
   }
 ];
 
