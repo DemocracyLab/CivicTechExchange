@@ -97,6 +97,7 @@ class PressController extends React.PureComponent<{||}, State> {
           return (
             <div className="press-presslink" key={i}>
               <p>{item.date}</p>
+              <p className="press-presslink-source">{item.source}</p>
               <h4><a href={item.href} alt={item.source + ' - ' + item.title}>{item.title}</a></h4>
             </div>
           )})}
