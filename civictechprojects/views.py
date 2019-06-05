@@ -20,7 +20,7 @@ from common.helpers.form_helpers import is_co_owner_or_staff
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from democracylab.emails import send_to_project_owners, send_to_project_volunteer, send_volunteer_application_email, \
+from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved
 from distutils.util import strtobool
@@ -154,7 +154,6 @@ def approve_project(request, project_id):
 def index(request):
     template = loader.get_template('new_index.html')
     context = {
-        'FOOTER_LINKS': settings.FOOTER_LINKS,
         'DLAB_PROJECT_ID': settings.DLAB_PROJECT_ID,
         'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL,
         'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL,
@@ -164,6 +163,7 @@ def index(request):
         'userImgUrl' : '',
         'PAYPAL_ENDPOINT': settings.PAYPAL_ENDPOINT,
         'PAYPAL_PAYEE': settings.PAYPAL_PAYEE,
+        'PRESS_LINKS': settings.PRESS_LINKS,
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt')
     }
     if settings.HOTJAR_APPLICATION_ID:
@@ -183,7 +183,7 @@ def index(request):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
-        thumbnails = ProjectFile.objects.filter(file_user=request.user.id, 
+        thumbnails = ProjectFile.objects.filter(file_user=request.user.id,
                                                 file_category=FileCategory.THUMBNAIL.value)
         if thumbnails:
             context['userImgUrl'] = thumbnails[0].file_url
@@ -387,8 +387,13 @@ def contact_project_owner(request, project_id):
                     firstname=user.first_name,
                     lastname=user.last_name,
                     project=project.project_name)
-    email_body = '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email)
-    send_to_project_owners(project=project, sender=user, subject=email_subject, body=email_body)
+    email_template = HtmlEmailTemplate()\
+        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+            message=message,
+            firstname=user.first_name,
+            lastname=user.last_name))\
+        .paragraph('To contact this person, email them at {email}'.format(email=user.email))
+    send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
     return HttpResponse(status=200)
 
 
@@ -559,17 +564,24 @@ def leave_project(request, project_id):
     if request.user.id == volunteer_relation.volunteer.id:
         body = json.loads(request.body)
         message = body['departure_message']
-        email_body = '{volunteer_name} is leaving {project_name} for the following reason:\n{message}'.format(
-            volunteer_name=volunteer_relation.volunteer.full_name(),
-            project_name=volunteer_relation.project.project_name,
-            message=message)
+        if len(message) > 0:
+            email_template = HtmlEmailTemplate()\
+            .paragraph('{volunteer_name} is leaving {project_name} for the following reason:'.format(
+                volunteer_name=volunteer_relation.volunteer.full_name(),
+                project_name=volunteer_relation.project.project_name))\
+            .paragraph('\"{message}\"'.format(message=message))
+        else:
+            email_template = HtmlEmailTemplate() \
+                .paragraph('{volunteer_name} is leaving {project_name} for unspecified reasons.'.format(
+                volunteer_name=volunteer_relation.volunteer.full_name(),
+                project_name=volunteer_relation.project.project_name))
         email_subject = '{volunteer_name} is leaving {project_name}'.format(
             volunteer_name=volunteer_relation.volunteer.full_name(),
             project_name=volunteer_relation.project.project_name)
         send_to_project_owners(project=volunteer_relation.project,
                                sender=volunteer_relation.volunteer,
                                subject=email_subject,
-                               body=email_body)
+                               template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
