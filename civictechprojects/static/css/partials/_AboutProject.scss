@@ -305,15 +305,21 @@
 
     .AboutProjects-infoColumn {
       width: 100%;
+      order: 2;
     }
 
     .AboutProjects-mainColumn {
       width: 100%;
+      order: 1;
     }
 
     .AboutProjects-skills-container {
       display: inherit;
       margin-top: 8%;
+    }
+
+    .AboutProjects-iconContainer {
+      display: none;
     }
 
   }
