@@ -47,7 +47,11 @@
     height: 262px;
     margin: auto;
     width: 100%;
-    border-bottom: $color-grey-disabled solid 0.5px;
+    border-bottom: $color-grey-disabled solid 1px;
+    img {
+      padding-top: 2%;
+      padding-bottom: 3%; 
+    }
   }
 
   .AboutProjects-icon {
