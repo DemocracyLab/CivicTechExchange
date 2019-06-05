@@ -150,10 +150,6 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
         lastname=user.last_name,
         project=project.project_name,
         role=role_text)
-    # email_body = '{message} \n -- \n To review this volunteer, see {url}'.format(
-    #     message=volunteer_relation.application_text,
-    #     user=user.email,
-    #     url=project_profile_url)
     email_template = HtmlEmailTemplate()\
         .header("You Have a New Volunteer!")\
         .paragraph('\"{message}\" -{firstname} {lastname}'.format(

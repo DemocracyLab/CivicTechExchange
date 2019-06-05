@@ -327,7 +327,6 @@ def contact_project_owner(request, project_id):
                     firstname=user.first_name,
                     lastname=user.last_name,
                     project=project.project_name)
-    # email_body = '{message} \n -- \n To contact this person, email {user}'.format(message=message, user=user.email)
     email_template = HtmlEmailTemplate()\
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
             message=message,
@@ -501,15 +500,17 @@ def leave_project(request, project_id):
     if request.user.id == volunteer_relation.volunteer.id:
         body = json.loads(request.body)
         message = body['departure_message']
-        # email_body = '{volunteer_name} is leaving {project_name} for the following reason:\n{message}'.format(
-        #     volunteer_name=volunteer_relation.volunteer.full_name(),
-        #     project_name=volunteer_relation.project.project_name,
-        #     message=message)
-        email_template = HtmlEmailTemplate()\
-        .paragraph('{volunteer_name} is leaving {project_name} for the following reason:'.format(
-            volunteer_name=volunteer_relation.volunteer.full_name(),
-            project_name=volunteer_relation.project.project_name))\
-        .paragraph('\"{message}\"'.format(message=message))
+        if len(message) > 0:
+            email_template = HtmlEmailTemplate()\
+            .paragraph('{volunteer_name} is leaving {project_name} for the following reason:'.format(
+                volunteer_name=volunteer_relation.volunteer.full_name(),
+                project_name=volunteer_relation.project.project_name))\
+            .paragraph('\"{message}\"'.format(message=message))
+        else:
+            email_template = HtmlEmailTemplate() \
+                .paragraph('{volunteer_name} is leaving {project_name} for unspecified reasons.'.format(
+                volunteer_name=volunteer_relation.volunteer.full_name(),
+                project_name=volunteer_relation.project.project_name))
         email_subject = '{volunteer_name} is leaving {project_name}'.format(
             volunteer_name=volunteer_relation.volunteer.full_name(),
             project_name=volunteer_relation.project.project_name)
