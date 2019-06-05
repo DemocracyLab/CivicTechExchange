@@ -18,7 +18,8 @@ def login_view(request):
         user = authenticate(username=email.lower(), password=password)
         if user is not None and user.is_authenticated:
             login(request, user)
-            return redirect('/index/?section=' + prev_page)
+            redirect_url = prev_page if prev_page.startswith('/') else '/index/?section=' + prev_page
+            return redirect(redirect_url)
         else:
             messages.error(request, 'Incorrect Email or Password')
             return redirect('/index/?section=LogIn&prev=' + prev_page)
