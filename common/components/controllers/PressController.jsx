@@ -12,14 +12,14 @@ import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 const pressLinks = JSON.parse(_.unescape(window.PRESS_LINKS))
 //set 'static' stats to merge with API results later
 const staticData = {
-  platformLaunch: '2018',
-  orgFounded: '2006'
+  platformLaunch: 'August 2018',
+  orgFounded: 'July 2006'
 }
 //set display names based on key names for stats. TODO: move to global?
 const categoryDisplayNames = {
   //TODO: move to global constants file
-  "platformLaunch": "Platform Launched",
-  "orgFounded": "Founded",
+  "platformLaunch": "Matchmaking Platform Launched",
+  "orgFounded": "Organization Founded",
   "dlVolunteerCount": "Team Members",
   "activeVolunteerCount": "Active Volunteers",
   "userCount": "Number of Users",
