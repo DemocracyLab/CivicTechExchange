@@ -12,3 +12,11 @@
 .MainFooter-sponsor img{
   max-width: 200px;
 }
+.MainFooter-sponsor-link, .MainFooter-sponsor img {
+  background: $color-background-light;
+}
+.MainFooter-border {
+  width: 100%;
+  height: 1px;
+  border-top: 1px solid $color-grey-medium;
+}
