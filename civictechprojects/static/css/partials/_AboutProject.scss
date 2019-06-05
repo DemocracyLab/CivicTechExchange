@@ -75,7 +75,11 @@
   }
 
   .AboutProjects-links, .AboutProjects-files, .AboutProjects-communities, .AboutProjects-team {
-    margin: 10px 5px 10px 15px;
+    padding: 10px 5px 10px 15px;
+  }
+
+  .AboutProjects-links {
+    border-bottom: $color-grey-disabled solid 1px;
   }
 
   .AboutProjects-links-icon-container {
