@@ -31,7 +31,8 @@ class NavigationStore extends ReduceStore<State> {
   }
 
   getInitialState(): State {
-    return new State();
+    const state = new State();
+    return state;
   }
 
   reduce(state: State, action: NavigationActionType): State {

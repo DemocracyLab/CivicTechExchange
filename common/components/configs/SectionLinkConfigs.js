@@ -7,6 +7,11 @@ const SectionLinkConfigs = [
     showOnlyWhenLoggedIn: false
   },
   {
+    section: Section.CreateProject,
+    title: 'Create Project',
+    showOnlyWhenLoggedIn: false
+  },
+  {
     section: Section.MyProjects,
     title: 'My Projects',
     showOnlyWhenLoggedIn: true
@@ -15,6 +20,16 @@ const SectionLinkConfigs = [
     section: Section.EditProfile,
     title: 'My Profile',
     showOnlyWhenLoggedIn: true
+  },
+  {
+    section: Section.AboutUs,
+    title: 'About Us',
+    showOnlyWhenLoggedIn: false
+  },
+  {
+    section: Section.Press,
+    title: 'News',
+    showOnlyWhenLoggedIn: false
   }
 ];
 

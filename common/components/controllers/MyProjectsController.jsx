@@ -10,10 +10,12 @@ import metrics from "../utils/metrics.js";
 import {Container} from 'flux/utils';
 import ProjectVolunteerRenewModal from "../common/projects/ProjectVolunteerRenewModal.jsx";
 import ProjectVolunteerConcludeModal from "../common/projects/ProjectVolunteerConcludeModal.jsx";
+import LogInController from "./LogInController.jsx";
 import url from "../utils/url.js";
 import Section from "../enums/Section";
 import React from 'react';
 import _ from 'lodash';
+import Headers from "../common/Headers.jsx";
 
 
 type State = {|
@@ -130,6 +132,11 @@ class MyProjectsController extends React.Component<{||}, State> {
   render(): React$Node {
     return CurrentUser.isLoggedIn()
       ? (
+        <React.Fragment>
+        <Headers
+        title="My Projects | DemocracyLab"
+        description="My Projects page"
+        />
         <div className="MyProjectsController-root">
           
           <ConfirmationModal
@@ -153,8 +160,9 @@ class MyProjectsController extends React.Component<{||}, State> {
           {!_.isEmpty(this.state.ownedProjects) && this.renderProjectCollection("Owned Projects", this.state.ownedProjects)}
           {!_.isEmpty(this.state.volunteeringProjects) && this.renderProjectCollection("Volunteering With", this.state.volunteeringProjects)}
         </div>
+        </React.Fragment>
       )
-      : <p><a href={url.section(Section.LogIn, {"prev": Section.MyProjects})}>Login</a> to see a list of your projects.</p>;
+      : <LogInController prevPage={Section.MyProjects}/>;
   }
   
   renderProjectCollection(title:string, projects: $ReadOnlyArray<MyProjectData>): React$Node{

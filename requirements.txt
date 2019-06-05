@@ -1,7 +1,7 @@
 boto3==1.4.7
 botocore==1.7.28
 dj-database-url==0.4.1
-Django==1.10.7
+Django==1.11.20
 django-appconf==1.0.2
 django-compressor==2.1.1
 django-core==1.4.1
@@ -17,7 +17,7 @@ psycopg2==2.7.3.2
 python-dateutil==2.6.1
 pytz==2017.3
 rcssmin==1.0.6
-requests==2.19.1
+requests==2.20.0
 rjsmin==1.0.12
 s3transfer==0.1.11
 simplejson==3.12.0

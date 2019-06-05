@@ -19,10 +19,10 @@ class ProjectOwnerCard extends React.PureComponent<Props> {
     const ownerUrl:string = url.section(Section.Profile, {id: owner.id});
     return (
       <div className="VolunteerCard-root">
-        <a className="VolunteerCard-volunteerName" href={ownerUrl} target="_blank" rel="noopener noreferrer">
+        <a className="VolunteerCard-volunteerName" href={ownerUrl}>
           <Avatar user={owner} size={50} />
         </a>
-        <a className="VolunteerCard-volunteerName" href={ownerUrl} target="_blank" rel="noopener noreferrer">
+        <a className="VolunteerCard-volunteerName" href={ownerUrl}>
           {owner && (owner.first_name + " " + owner.last_name)}
         </a>
         <p className="VolunteerCard-volunteerRole">

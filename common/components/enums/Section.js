@@ -1,5 +1,6 @@
 const Section = {
   AboutProject: 'AboutProject',
+  AboutUs: 'AboutUs',
   CreateProject: 'CreateProject',
   EditProject: 'EditProject',
   Landing: 'Landing',
@@ -14,7 +15,10 @@ const Section = {
   EditProfile: 'EditProfile',
   SignedUp: 'SignedUp',
   EmailVerified: 'EmailVerified',
-  PartnerWithUs: 'PartnerWithUs'
+  PartnerWithUs: 'PartnerWithUs',
+  Donate: 'Donate',
+  ThankYou: 'ThankYou',
+  Press: 'Press'
 };
 
 export type SectionType = $Keys<typeof Section>;

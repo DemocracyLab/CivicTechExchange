@@ -7,10 +7,11 @@
   "author": "Marlon Keating <marlonakeating@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --config webpack.config.js && npm run build:sass && python manage.py collectstatic --noinput",
-    "build:sass": "node-sass civictechprojects/static/css/styles.scss -o civictechprojects/static/css/compiled --output-style compressed",
-    "flow": "flow",
-    "postinstall": "webpack --config webpack.config.js && python manage.py collectstatic --noinput"
+    "build": "webpack --mode development && npm run buildtask:sass && npm run buildtask:collectstatic",
+    "buildprod": "webpack --mode production && npm run buildtask:sass && npm run buildtask:collectstatic",
+    "postinstall": "webpack --mode development && npm run buildtask:sass && npm run buildtask:collectstatic",
+    "buildtask:collectstatic": "python manage.py collectstatic --noinput -i *.scss",
+    "buildtask:sass": "node-sass civictechprojects/static/css/styles.scss -o civictechprojects/static/css/compiled --output-style compressed"
   },
   "dependencies": {
     "@material-ui/core": "^3.5.1",
@@ -22,19 +23,18 @@
     "flow-bin": "^0.59.0",
     "flux": "^3.1.3",
     "immutable": "^3.8.2",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "mdi-material-ui": "^5.7.0",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
-    "node-sass": "^4.9.3",
+    "node-sass": "^4.11.0",
     "path": "^0.12.7",
     "react": "^16.4.2",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.4.2",
     "react-helmet": "^5.2.0",
     "react-moment": "^0.7.9",
-    "react-select": "^2.0.0",
-    "webpack-dev-server": "^2.11.2"
+    "react-select": "^2.0.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.289.0",
@@ -48,6 +48,8 @@
     "fs": "0.0.1-security",
     "net": "^1.0.2",
     "sync-exec": "~0.6.2",
-    "webpack": "^3.12.0"
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.3.0"
   }
 }

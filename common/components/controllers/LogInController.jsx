@@ -6,20 +6,23 @@ import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import metrics from "../utils/metrics.js";
 
+type Props = {|
+  prevPage: string,
+|}
+
 type State = {|
   username: string,
   password: string,
-  errorMessage: string
+  prevPage: string
 |}
 
-class LogInController extends React.Component<{||}, State> {
-  constructor(): void {
-    super();
+class LogInController extends React.Component<Props, State> {
+  constructor(props): void {
+    super(props);
     this.state = {
       username: '',
       password: '',
-      prevPage: window.location.href.split('&prev=')[1] || '',
-      // errorMessage: url.arguments.(document.location.search)
+      prevPage: window.location.href.split('&prev=')[1] || this.props.prevPage || ''
     };
   }
 

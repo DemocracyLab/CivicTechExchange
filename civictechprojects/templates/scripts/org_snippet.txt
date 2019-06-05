@@ -1,0 +1,23 @@
+<script type="application/ld+json">
+{
+	"@context": "http://schema.org",
+	"@type": "Organization",
+	"name": "democracyLab",
+	"description": "DemocracyLab is a matchmaking platform that helps socially-conscious individuals who want to help their communities find tech-for-good projects that match interests and skills",
+	"image": "https://d1agxr2dqkgkuy.cloudfront.net/img/dl_logo.png",
+	"logo": "https://d1agxr2dqkgkuy.cloudfront.net/img/dl_logo.png",
+    "foundingDate": "2009",
+ "founders":
+ {
+ "@type": "Person",
+ "name": "Mark Frischmuth"
+ },
+	"url": "http://democracylab.org",
+	"sameAs": ["https://twitter.com/DemocracyLab","https://www.linkedin.com/company/7973689","https://www.facebook.com/democracylaborg"],
+	"address": {
+		"@type": "PostalAddress",
+		"addressLocality": "Seattle",
+		"addressCountry": "USA"
+	}
+}
+</script>

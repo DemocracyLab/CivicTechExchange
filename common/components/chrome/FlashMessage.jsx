@@ -3,7 +3,7 @@
 import React from 'react';
 import { Container } from 'flux/utils';
 import NavigationStore from '../stores/NavigationStore';
-import Section from '../enums/Section.js';
+import _ from 'lodash';
 
 type State = {|
   section: SectionType,
@@ -39,7 +39,7 @@ class FlashMessage extends React.Component<{||}, State> {
     return window.DLAB_MESSAGES.map((msg, i) => {
       return (
           <div key={i} className={msg.level}>
-            {msg.message}
+            {_.unescape(msg.message)}
           </div>
       )
     })

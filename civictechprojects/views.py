@@ -1,7 +1,9 @@
 from django.shortcuts import redirect
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator
 from django.conf import settings
+from django.contrib import messages
 from django.template import loader
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -10,15 +12,17 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import Project, ProjectPosition, UserAlert, VolunteerRelation
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
+from common.helpers.form_helpers import is_co_owner_or_staff
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
-    send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email
+    send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
+    notify_project_owners_project_approved
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
@@ -59,11 +63,7 @@ def tags(request):
         else:
             queryset = Tag.objects.all()
             tags = list(queryset.values())
-    return HttpResponse(
-        json.dumps(
-            tags
-        )
-    )
+    return JsonResponse(tags, safe=False)
 
 
 def to_rows(items, width):
@@ -124,19 +124,47 @@ def project_delete(request, project_id):
 
 def get_project(request, project_id):
     project = Project.objects.get(id=project_id)
-    return HttpResponse(json.dumps(project.hydrate_to_json()))
+
+    if project is not None:
+        if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
+            return JsonResponse(project.hydrate_to_json())
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
+def approve_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    user = get_request_contributor(request)
+
+    if project is not None:
+        if user.is_staff:
+            project.is_searchable = True
+            project.save()
+            notify_project_owners_project_approved(project)
+            messages.success(request, 'Project Approved')
+            return redirect('/index/?section=AboutProject&id=' + str(project.id))
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
 
 
 @ensure_csrf_cookie
 def index(request):
     template = loader.get_template('new_index.html')
     context = {
-        'FOOTER_LINKS': settings.FOOTER_LINKS,
+        'DLAB_PROJECT_ID': settings.DLAB_PROJECT_ID,
         'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL,
         'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL,
         'STATIC_CDN_URL': settings.STATIC_CDN_URL,
         'HEADER_ALERT': settings.HEADER_ALERT,
-        'SPONSORS_METADATA': settings.SPONSORS_METADATA
+        'SPONSORS_METADATA': settings.SPONSORS_METADATA,
+        'userImgUrl' : '',
+        'PAYPAL_ENDPOINT': settings.PAYPAL_ENDPOINT,
+        'PAYPAL_PAYEE': settings.PAYPAL_PAYEE,
+        'PRESS_LINKS': settings.PRESS_LINKS,
+        'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt')
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
@@ -155,8 +183,25 @@ def index(request):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
+        thumbnails = ProjectFile.objects.filter(file_user=request.user.id,
+                                                file_category=FileCategory.THUMBNAIL.value)
+        if thumbnails:
+            context['userImgUrl'] = thumbnails[0].file_url
 
     return HttpResponse(template.render(context, request))
+
+
+def get_site_stats(request):
+    active_volunteers = VolunteerRelation.objects.filter(deleted=False)
+
+    stats = {
+        'projectCount': Project.objects.filter(is_searchable=True, deleted=False).count(),
+        'userCount': Contributor.objects.filter(is_active=True).count(),
+        'activeVolunteerCount': active_volunteers.distinct('volunteer__id').count(),
+        'dlVolunteerCount': active_volunteers.filter(is_approved=True, project__id=settings.DLAB_PROJECT_ID).count()
+    }
+
+    return JsonResponse(stats)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
@@ -178,7 +223,7 @@ def my_projects(request):
             'owned_projects': [project.hydrate_to_list_json() for project in owned_projects],
             'volunteering_projects': volunteering_projects.exists() and list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), volunteering_projects))
         }
-    return HttpResponse(json.dumps(response))
+    return JsonResponse(response)
 
 
 def projects_list(request):
@@ -205,8 +250,21 @@ def projects_list(request):
         else:
             project_list = projects_by_sortField(project_list, '-project_date_modified')
 
-    response = json.dumps(projects_with_filter_counts(project_list))
-    return HttpResponse(response)
+        project_count = len(project_list)
+
+        project_paginator = Paginator(project_list, settings.PROJECTS_PER_PAGE)
+
+        if 'page' in query_params:
+            project_list_page = project_paginator.page(query_params['page'][0])
+            project_pages = project_paginator.num_pages
+        else:
+            project_list_page = project_list
+            project_pages = 1
+
+
+    response = projects_with_meta_data(project_list_page, project_pages, project_count)
+
+    return JsonResponse(response)
 
 
 def apply_tag_filters(project_list, query_params, param_name, tag_filter):
@@ -260,10 +318,12 @@ def projects_by_roles(tags):
     return Project.objects.filter(positions__in=positions)
 
 
-def projects_with_filter_counts(projects):
+def projects_with_meta_data(projects, project_pages, project_count):
     return {
         'projects': [project.hydrate_to_tile_json() for project in projects],
-        'tags': list(Tag.objects.values())
+        'tags': list(Tag.objects.values()),
+        'numPages': project_pages,
+        'numProjects': project_count
     }
 
 

@@ -18,11 +18,14 @@
 @import 'vendor/bootstrap/forms';
 @import 'vendor/bootstrap/utilities';
 @import 'vendor/bootstrap/print';
+@import 'vendor/bootstrap/pagination';
   //import other third party CSS
 @import 'vendor/_react-select.min';
   //import Bootstrap3 dropdown (TODO: refactor to use Bootstrap 4)
 @import 'vendor/dropdown';
   //import DemocracyLab component partials
+@import 'partials/AboutUs';
+@import 'partials/BioModal';
 @import 'partials/AlertSignupModal';
 @import 'partials/EditProjectForm';
 @import 'partials/FlashMessage';
@@ -37,6 +40,7 @@
 @import 'partials/MyProjectCard';
 @import 'partials/MyProjectsController';
 @import 'partials/ProjectCard';
+@import 'partials/ProjectCardsContainer';
 @import 'partials/ProjectCardContainer';
 @import 'partials/ProjectFilterContainer';
 @import 'partials/ProjectSearchBar';
@@ -58,4 +62,7 @@
 @import 'partials/AlertHeader';
 @import 'partials/SignedUpController';
 @import 'partials/PartnerWithUsController';
+@import 'partials/DonateController';
 @import 'partials/Global';
+@import 'partials/ThankYouController';
+@import 'partials/Press';

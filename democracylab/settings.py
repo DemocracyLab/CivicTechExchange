@@ -168,7 +168,10 @@ VOLUNTEER_REMINDER_OVERALL_PERIOD = VOLUNTEER_RENEW_REMINDER_PERIODS and timedel
 VOLUNTEER_CONCLUDE_SURVEY_URL = os.environ.get('VOLUNTEER_CONCLUDE_SURVEY_URL', '')
 
 
-FOOTER_LINKS = os.environ.get('FOOTER_LINKS', '')
+DLAB_PROJECT_ID = os.environ.get('DLAB_PROJECT_ID', '')
+
+PAYPAL_ENDPOINT = os.environ.get('PAYPAL_ENDPOINT', '')
+PAYPAL_PAYEE = os.environ.get('PAYPAL_PAYEE', '')
 
 SPONSORS_METADATA = os.environ.get('SPONSORS_METADATA', '')
 
@@ -177,6 +180,7 @@ HEADER_ALERT = os.environ.get('HEADER_ALERT', '')
 PROJECT_DESCRIPTION_EXAMPLE_URL = os.environ.get('PROJECT_DESCRIPTION_EXAMPLE_URL', '')
 POSITION_DESCRIPTION_EXAMPLE_URL = os.environ.get('POSITION_DESCRIPTION_EXAMPLE_URL', '')
 
+PRESS_LINKS = os.environ.get('PRESS_LINKS', '')
 
 SECURE_SSL_REDIRECT = os.environ.get('DL_SECURE_SSL_REDIRECT', False) == 'True'
 
@@ -205,6 +209,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+PROJECTS_PER_PAGE = os.environ.get('PROJECTS_PER_PAGE', 20)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

@@ -1,9 +1,8 @@
 .SubHeader-logo-container {
-  float: left;
   display: flex;
-  width: 200px;
   align-items: center;
   justify-content: center;
+  padding-left: 40px;
 }
 
 .SubHeader-logo {
@@ -17,21 +16,17 @@
 
   background-color: $color-background-light;
   height: $header-height;
-  width: 100%;
-  //padding: 0 5% 0 5%;
-
-  //background-color: $color-background-default;
-  padding: 5px 5% 5px 5%;
-
+  padding: 0 5px 0 5px;
   margin-bottom: 5px;
+  justify-content: space-between;
 }
 
 .SubHeader-rightContent {
   display: none;
   flex-direction: row;
   height: 100%;
+  padding-right: 30px;
   justify-content: flex-end;
-  width: 85%;
   a {
     text-decoration: none;
     color: $color-text-grey;
@@ -84,7 +79,7 @@
   width: 38px;
   border-radius: 50%;
   cursor: pointer;
-  margin: 0px 5px 0px 35px;
+  margin-left: 10px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -204,11 +199,25 @@
   margin-left: 25px;
 }
 
-@media (min-width: 910px) {
+@media (min-width: 925px) {
   .SubHeader-hamburger {
     display: none;
   }
   .SubHeader-rightContent {
     display: flex;
   }
+}
+
+.SubHeader-divider-container {
+  display: flex;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+  padding-left: 15px;
+}
+
+.vertical-divider {
+  color: rgba(0,0,0,0.4);
+  border-left: 2px solid;
+  height: 2em;
 }

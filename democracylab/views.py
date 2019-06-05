@@ -2,7 +2,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import simplejson as json
 from .emails import send_verification_email, send_password_reset_email
@@ -15,7 +15,7 @@ def login_view(request):
         email = request.POST['username']
         password = request.POST['password']
         prev_page = request.POST['prevPage']
-        user = authenticate(username=email, password=password)
+        user = authenticate(username=email.lower(), password=password)
         if user is not None and user.is_authenticated:
             login(request, user)
             return redirect('/index/?section=' + prev_page)
@@ -34,7 +34,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             # TODO: Form validation
             contributor = Contributor(
-                username=email,
+                username=email.lower(),
                 email=email,
                 first_name=form.cleaned_data.get('first_name'),
                 last_name=form.cleaned_data.get('last_name'),
@@ -42,7 +42,7 @@ def signup(request):
             )
             contributor.set_password(raw_password)
             contributor.save()
-            user = authenticate(username=email, password=raw_password)
+            user = authenticate(username=contributor.username, password=raw_password)
             login(request, user)
             send_verification_email(contributor)
             return redirect('/index/?section=SignedUp')
@@ -128,9 +128,9 @@ def user_edit(request, user_id):
 
 def user_details(request, user_id):
     user = Contributor.objects.get(id=user_id)
-    return HttpResponse(json.dumps(user.hydrate_to_json()))
+    return JsonResponse(user.hydrate_to_json())
 
-    
+
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def send_verification_email_request(request):

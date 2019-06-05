@@ -3,6 +3,7 @@
 import React from 'react';
 import CurrentUser from "../utils/CurrentUser.js";
 import cdn,{Images} from "../utils/cdn.js";
+import Headers from "../common/Headers.jsx";
 
 class SignedUpController extends React.Component<{||}> {
   constructor(): void {

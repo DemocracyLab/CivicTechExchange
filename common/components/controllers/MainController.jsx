@@ -4,7 +4,6 @@ import SectionController from './SectionController.jsx';
 import MainHeader from '../chrome/MainHeader.jsx';
 import UniversalDispatcher from '../stores/UniversalDispatcher.js';
 import React from 'react';
-import FlashMessage from '../chrome/FlashMessage.jsx';
 import MainFooter from "../chrome/MainFooter.jsx";
 import url from '../../components/utils/url.js'
 
@@ -49,9 +48,8 @@ class MainController extends React.Component<{||}, State> {
   render(): Array<React$Node> {
     return [
       <MainHeader key='main_header' onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}/>,
-      <FlashMessage key='flash_message'/>,
       <SectionController key='section_controller' headerHeight={this.state.headerHeight}/>,
-      <MainFooter/>
+      <MainFooter key='main_footer'/>
     ];
   }
 }

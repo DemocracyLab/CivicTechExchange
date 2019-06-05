@@ -1,5 +1,6 @@
 import json
 from django.forms import ModelForm
+from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory
@@ -79,6 +80,8 @@ class ProjectCreationForm(ModelForm):
 
         # Notify the admins that a new project has been created
         send_project_creation_notification(project)
+
+        messages.add_message(request, messages.INFO, 'Your project "' + project.project_name + '" is awaiting approval.  Expect a decision in the next business day.')
 
     @staticmethod
     def delete_project(request, project_id):
