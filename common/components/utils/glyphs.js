@@ -22,7 +22,11 @@ export const GlyphStyles: {[key: string]: string} = {
   Meetup: "fab fa-meetup",
   Check: "fas fa-check",
   ChevronUp: "fas fa-chevron-up",
-  ChevronDown: "fas fa-chevron-down"
+  ChevronDown: "fas fa-chevron-down",
+  EllipsisV: "fas fa-ellipsis-v",
+  Pushpin: "fas fa-thumbtack",
+  Eye: "fas fa-eye",
+  Trashcan: "fas fa-trash-alt"
 };
 
 export const GlyphSizes: {[key: string]: string} = {
