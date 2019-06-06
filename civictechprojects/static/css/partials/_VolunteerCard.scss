@@ -25,3 +25,15 @@ div.VolunteerCard-dropdownButton {
   display: inline;
   font-size: 24px;
 }
+.VolunteerCard-dropdownButton li > a {
+  font-size: 16px;
+  line-height: 1.75;
+}
+/* rotate thumbtack 45 degrees */
+.VolunteerCard-dropdownButton .fa-thumbtack {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
