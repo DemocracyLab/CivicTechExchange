@@ -476,6 +476,11 @@ def accept_project_volunteer(request, application_id):
         return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
 
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    about_project_url = section_url(FrontEndSection.AboutProject, {'id': str(volunteer_relation.project.id)})
+    if volunteer_relation.is_approved:
+        messages.add_message(request, messages.ERROR, 'This volunteer has already been approved.')
+        return redirect(about_project_url)
+
     if volunteer_operation_is_authorized(request, volunteer_relation):
         # Set approved flag
         volunteer_relation.is_approved = True
@@ -484,11 +489,12 @@ def accept_project_volunteer(request, application_id):
         update_project_timestamp(request, volunteer_relation.project)
         if request.method == 'GET':
             messages.add_message(request, messages.SUCCESS, volunteer_relation.volunteer.full_name() + ' has been approved as a volunteer.')
-            return redirect(section_url(FrontEndSection.AboutProject, {'id': str(volunteer_relation.project.id)}))
+            return redirect(about_project_url)
         else:
             return HttpResponse(status=200)
     else:
-        raise PermissionDenied()
+        messages.add_message(request, messages.ERROR, 'You do not have permission to approve this volunteer.')
+        return redirect(about_project_url)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
