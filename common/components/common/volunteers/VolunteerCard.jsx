@@ -62,21 +62,21 @@ class VolunteerCard extends React.PureComponent<Props> {
   _renderApplicationMenuLinks(): ?Array<React$Node>  {
     if (this.props.volunteer && this.props.volunteer.isCoOwner) {
       return [
-          (<MenuItem className="VolunteerCard-caution" onSelect={() => this.props.onDemotionButton(this.props.volunteer)} key="0">Demote</MenuItem>),
-          (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
+          (<MenuItem onSelect={() => this.props.onDemotionButton(this.props.volunteer)} key="0">Demote</MenuItem>),
+          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
         ]
     }
     if (this.props.volunteer && this.props.volunteer.isApproved) {
         return [
-          (<MenuItem className="VolunteerCard-caution" onSelect={() => this.props.onPromotionButton(this.props.volunteer)} key="0">Promote</MenuItem>),
-          (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
+          (<MenuItem onSelect={() => this.props.onPromotionButton(this.props.volunteer)} key="0">Promote</MenuItem>),
+          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1">Remove</MenuItem>)
         ]
     }
     if (this.props.volunteer) {
       return [
           (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key="2">Application</MenuItem>),
-          (<MenuItem className="VolunteerCard-success" onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3">Accept</MenuItem>),
-          (<MenuItem className="VolunteerCard-danger" onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4">Reject</MenuItem>)
+          (<MenuItem onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3">Accept</MenuItem>),
+          (<MenuItem onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4">Reject</MenuItem>)
       ];
     }
     return null;
