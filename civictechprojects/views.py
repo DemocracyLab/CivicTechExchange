@@ -20,9 +20,11 @@ from common.helpers.form_helpers import is_co_owner_or_staff
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
+from common.helpers.constants import FrontEndSection
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved
+from common.helpers.front_end import section_url
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
@@ -469,16 +471,30 @@ def conclude_volunteering_with_project(request, application_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def accept_project_volunteer(request, application_id):
+    # Redirect to login if not logged in
+    if not request.user.is_authenticated():
+        return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
+
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    about_project_url = section_url(FrontEndSection.AboutProject, {'id': str(volunteer_relation.project.id)})
+    if volunteer_relation.is_approved:
+        messages.add_message(request, messages.ERROR, 'This volunteer has already been approved.')
+        return redirect(about_project_url)
+
     if volunteer_operation_is_authorized(request, volunteer_relation):
         # Set approved flag
         volunteer_relation.is_approved = True
         volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
         update_project_timestamp(request, volunteer_relation.project)
-        return HttpResponse(status=200)
+        if request.method == 'GET':
+            messages.add_message(request, messages.SUCCESS, volunteer_relation.volunteer.full_name() + ' has been approved as a volunteer.')
+            return redirect(about_project_url)
+        else:
+            return HttpResponse(status=200)
     else:
-        raise PermissionDenied()
+        messages.add_message(request, messages.ERROR, 'You do not have permission to approve this volunteer.')
+        return redirect(about_project_url)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it

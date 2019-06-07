@@ -149,6 +149,7 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
     role_details = Tag.from_field(volunteer_relation.role)
     role_text = "{subcategory}: {name}".format(subcategory=role_details.subcategory, name=role_details.display_name)
     project_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
+    approve_url = settings.PROTOCOL_DOMAIN + '/volunteer/approve/' + str(volunteer_relation.id) + '/'
     email_subject = '{is_reminder}{firstname} {lastname} would like to volunteer with {project} as {role}'.format(
         is_reminder='REMINDER: ' if is_reminder else '',
         firstname=user.first_name,
@@ -162,7 +163,8 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
             firstname=user.first_name,
             lastname=user.last_name))\
         .paragraph('Please click below to review this volunteer')\
-        .button(url=project_profile_url, text='REVIEW VOLUNTEER')
+        .button(url=project_profile_url, text='REVIEW VOLUNTEER')\
+        .button(url=approve_url, text='APPROVE VOLUNTEER')
     send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
 
 
