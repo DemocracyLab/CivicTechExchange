@@ -7,7 +7,7 @@
     margin: auto;
     max-width: 1080px;
     background: $color-background-light;
-    border-radius: 1%;
+    border-radius: 12px;
     border: $color-grey-disabled solid 1px;
 
     /* this whole section is potentially placeholder */
@@ -287,12 +287,12 @@
     color: $color-text-light;
   }
 
-@media (max-width: 1000px) {
-  // buttons will align below "-description"
-  .AboutProjects-introTop {
-    display: inherit;
+  @media (max-width: 1000px) {
+    // buttons will align below "-description"
+    .AboutProjects-introTop {
+      display: inherit;
+    }
   }
-}
 
   @media (max-width: 800px) {
 
@@ -301,6 +301,7 @@
       width: 90%;
       margin: 0 7%;
       min-width: 450px;
+      border-radius: 8px;
     }
 
     .AboutProjects-infoColumn {
