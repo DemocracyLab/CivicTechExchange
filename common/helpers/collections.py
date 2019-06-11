@@ -4,4 +4,3 @@ def find_first(collection, condition):
         if condition(item):
             return item
     return None
-
