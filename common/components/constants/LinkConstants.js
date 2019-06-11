@@ -1,6 +1,7 @@
 // @flow
 
 import GlyphStyles from "../utils/glyphs.js";
+import _ from 'lodash';
 
 export type LinkSourceDisplayConfig = {|
   +sourceUrlPattern: ?RegExp,
@@ -45,30 +46,29 @@ export const LinkTypes: { [key: string]: string} = {
   LINKED_IN: "link_linkedin"
 };
 
-//TODO: Use constant link names here
-export const DefaultLinkDisplayConfigurations: { [key: string]: LinkSourceDisplayConfig }  = {
-  'link_messaging': {
+export const DefaultLinkDisplayConfigurations: { [key: string]: LinkSourceDisplayConfig }  = _.fromPairs([
+  [LinkTypes.MESSAGING,{
     sourceTypeDisplayName: "Messaging",
     iconClass:  GlyphStyles.Messaging
-  },
-  'link_filerepo': {
+  }],
+  [LinkTypes.FILE_REPOSITORY,{
     sourceTypeDisplayName: "File Repository",
     iconClass:  GlyphStyles.Folder
-  },
-  'link_projmanage': {
+  }],
+  [LinkTypes.PROJECT_MANAGEMENT,{
     sourceTypeDisplayName: "Project Management",
     iconClass:  GlyphStyles.Tasks
-  },
-  'link_linkedin': {
+  }],
+  [LinkTypes.LINKED_IN,{
     sourceTypeDisplayName: "LinkedIn",
     iconClass:  GlyphStyles.LinkedIn
-  },
-  'link_coderepo': {
+  }],
+  [LinkTypes.CODE_REPOSITORY,{
     sourceTypeDisplayName: "Code Repository",
     iconClass:  GlyphStyles.GeneralCode
-  },
-  other: {
+  }],
+  ["other",{
     sourceTypeDisplayName: "Website",
     iconClass:  GlyphStyles.Globe
-  }
-};
+  }]
+]);
