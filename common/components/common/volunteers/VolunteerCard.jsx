@@ -53,6 +53,7 @@ class VolunteerCard extends React.PureComponent<Props> {
           title={<span><i className={GlyphStyles.EllipsisV}></i></span>}
           id="VolunteerCard-dropdown"
           noCaret
+          pullRight
         >
           {this._renderApplicationMenuLinks()}
         </DropdownButton>)

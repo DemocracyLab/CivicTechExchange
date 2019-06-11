@@ -62,14 +62,14 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       project: project,
     });
   }
-  
+
   handleLoadProjectFailure(error: APIError) {
     this.setState({
       loadStatusMsg: "Could not load project"
     });
   }
-  
-  
+
+
   handleShowVolunteerModal(position: ?PositionInfo) {
     this.setState({
       showJoinModal: true,
@@ -163,6 +163,17 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
           }
 
               <Grid className='AboutProjects-team'>
+                {
+                project && !_.isEmpty(project.project_volunteers)
+                  ? <VolunteerSection
+                      volunteers={project.project_volunteers}
+                      isProjectAdmin={CurrentUser.userID() === project.project_creator}
+                      isProjectCoOwner={CurrentUser.isCoOwner(project)}
+                      projectId={project.project_id}
+                      renderOnlyPending={true}
+                    />
+                  : null
+                }
                 <h4>Team</h4>
                   {
                     project && !_.isEmpty(project.project_owners)
@@ -179,6 +190,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                         isProjectAdmin={CurrentUser.userID() === project.project_creator}
                         isProjectCoOwner={CurrentUser.isCoOwner(project)}
                         projectId={project.project_id}
+                        renderOnlyPending={false}
                       />
                     : null
                   }
@@ -214,7 +226,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
               <div className="AboutProjects_tabs">
                 <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
-                {project && !_.isEmpty(project.project_positions) && 
+                {project && !_.isEmpty(project.project_positions) &&
                 <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
                 }
               </div>
@@ -225,13 +237,13 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                 <Grid className='AboutProjects-description-details'>
                   <div id='project-details'>{project.project_description}</div>
                   <Grid className='AboutProjects-skills-container' container direction='row'>
-                    {project && !_.isEmpty(project.project_positions) && 
+                    {project && !_.isEmpty(project.project_positions) &&
                     <div className='AboutProjects-skills'>
                       <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
                       {project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.display_name}</p>)}
                     </div>
                     }
-                    {project && !_.isEmpty(project.project_technologies) && 
+                    {project && !_.isEmpty(project.project_technologies) &&
                     <div className='AboutProjects-technologies'>
                       <p className='AboutProjects-tech-title'>Technologies Used</p>
                       {project && project.project_technologies && project.project_technologies.map(tech => <p>{tech.display_name}</p>)}
@@ -253,11 +265,11 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </div>
     )
   }
-  
+
   _renderHeader(project: ProjectDetailsAPIData): React$Node {
     const title: string = project.project_name + " | DemocracyLab";
     const description: string = project.project_short_description || Truncate.stringT(project.project_description, 300);
-    
+
     return (
       <Headers
         title={title}
