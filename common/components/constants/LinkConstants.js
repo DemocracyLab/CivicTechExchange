@@ -37,7 +37,16 @@ export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConf
   },
 ];
 
-export const DefaultLinkDisplayConfigurations:  { [key: string]: LinkSourceDisplayConfig }  = {
+export const LinkTypes: { [key: string]: string} = {
+  CODE_REPOSITORY: "link_coderepo",
+  FILE_REPOSITORY: "link_filerepo",
+  MESSAGING: "link_messaging",
+  PROJECT_MANAGEMENT: "link_projmanage",
+  LINKED_IN: "link_linkedin"
+};
+
+//TODO: Use constant link names here
+export const DefaultLinkDisplayConfigurations: { [key: string]: LinkSourceDisplayConfig }  = {
   'link_messaging': {
     sourceTypeDisplayName: "Messaging",
     iconClass:  GlyphStyles.Messaging
