@@ -324,3 +324,11 @@ button.AboutProject-button:disabled {
 
 }
 
+
+@media (min-width: 1160px) {
+  
+  .AboutProjects-root {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
