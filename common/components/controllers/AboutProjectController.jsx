@@ -22,6 +22,8 @@ import Headers from "../common/Headers.jsx";
 import Truncate from "../utils/truncate.js";
 import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 import {APIError} from "../utils/api.js";
+import Sort from "../utils/sort.js";
+import {LinkTypes} from "../constants/LinkConstants.js";
 
 
 type State = {|
@@ -278,7 +280,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
-    return project && project.project_links && project.project_links.map((link, i) =>
+    const linkOrder = [LinkTypes.CODE_REPOSITORY, LinkTypes.FILE_REPOSITORY, LinkTypes.MESSAGING, LinkTypes.PROJECT_MANAGEMENT];
+    const sortedLinks = project && project.project_links && Sort.byNamedEntries(project.project_links, linkOrder, (link) => link.linkName);
+    return sortedLinks.map((link, i) =>
       <IconLinkDisplay key={i} link={link}/>
     );
   }
