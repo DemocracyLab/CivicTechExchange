@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
     url(r'^projects/delete/(?P<project_id>[0-9]+)/$', views.project_delete, name='project_delete'),
     url(r'^projects/signup/$', views.project_create, name='project_create'),
+    url(r'^projects/approve/(?P<project_id>[0-9]+)/$', views.approve_project, name='approve_project'),
     url(
         r'^presign_s3/upload/project/thumbnail/$',
         views.presign_project_thumbnail_upload,
@@ -45,6 +46,7 @@ urlpatterns = [
     url(r'^api/my_projects', views.my_projects),
     url(r'^api/tags', views.tags),
     url(r'^index/$', views.index),
+    url(r'^api/stats$', views.get_site_stats, name='get_site_stats'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
     url(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner'),
     url(r'^volunteer/(?P<project_id>[0-9]+)/$', views.volunteer_with_project, name='volunteer_with_project'),

@@ -39,18 +39,21 @@
           email: '{{email}}',
           firstName: '{{firstName}}',
           lastName: '{{lastName}}',
+          userImgUrl: '{{userImgUrl}}',
           isStaff: '{{isStaff}}' === "True" ? true : false,
           volunteeringUpForRenewal: '{{volunteeringUpForRenewal}}' === "True" ? true : false
         })
         : {};
 
-      window.DLAB_FOOTER_LINKS = '{{FOOTER_LINKS}}';
-
+      window.DLAB_PROJECT_ID = '{{DLAB_PROJECT_ID}}';
       window.PROJECT_DESCRIPTION_EXAMPLE_URL = '{{PROJECT_DESCRIPTION_EXAMPLE_URL}}';
       window.POSITION_DESCRIPTION_EXAMPLE_URL = '{{POSITION_DESCRIPTION_EXAMPLE_URL}}';
       window.STATIC_CDN_URL = '{{STATIC_CDN_URL}}';
       window.HEADER_ALERT = '{{HEADER_ALERT}}';
       window.SPONSORS_METADATA = '{{SPONSORS_METADATA}}';
+      window.PAYPAL_ENDPOINT = '{{PAYPAL_ENDPOINT}}';
+      window.PAYPAL_PAYEE = '{{PAYPAL_PAYEE}}';
+      window.PRESS_LINKS = '{{PRESS_LINKS}}';
 
       window.DLAB_MESSAGES = [];
       {% for message in messages %}

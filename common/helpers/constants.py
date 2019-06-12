@@ -14,5 +14,7 @@ class TagCategory(Enum):
 
 # TODO: Keep in sync with /common/components/enums/Section.js
 class FrontEndSection(Enum):
+    LogIn = 'LogIn'
     ResetPassword = 'ResetPassword'
     ChangePassword = 'ChangePassword'
+    AboutProject = 'AboutProject'

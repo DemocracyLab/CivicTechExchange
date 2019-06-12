@@ -18,9 +18,6 @@ export DJANGO_SECRET_KEY="d!01@gn+%1ql1n(*)8xo+nx$$&n@mg$0_)9g+!(t-2vncaq!j8"
 # Whether to show django debug info page on errors
 export DJANGO_DEBUG=True
 
-# Configure footer links
-export FOOTER_LINKS='[{"u":"https://connect.democracylab.org","n":"About"},{"u":"https://connect.democracylab.org/donatenow","n":"Donate", "isButton":"true"},{"u":"mailto:hello@democracylab.org","n":"Contact Us"}]'
-
 # Event Header
 export HEADER_ALERT="<p>You are invited to our upcoming event, St. Hat-trick's day!  Come with a team or join a new one on Saturday, March 16.  Be sure to RSVP on <a href='https://www.eventbrite.com/e/st-hack-tricks-day-tickets-54897293282'>Eventbrite</a>!</p>"
 
@@ -62,3 +59,14 @@ export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
 
 # ONLY FOR USE IN PRODUCTION
 #export HOTJAR_APPLICATION_ID=1097784
+
+# DemocracyLab project ID (for use on About Us page)
+export DLAB_PROJECT_ID=4
+
+# Paypal endpoint (sandbox by default)
+export PAYPAL_ENDPOINT='https://www.sandbox.paypal.com/cgi-bin/webscr'
+# Paypal payee
+export PAYPAL_PAYEE='mark@democracylab.org'
+
+# Press page links (TODO: convert to db entries)
+export PRESS_LINKS='[{"date":"March 11, 2019","href":"https://www.washingtontechnology.org/the-pulse-of-tech-for-good-in-seattle/","title":"The Pulse of Tech for Good in Seattle","source":"Washington Technology Industry Association"},{"date":"February 10, 2019","href":"https://www.esal.us/blog/democracylab-empowering-the-civic-tech-movement/","title":"DemocracyLab: Empowering the Civic Tech Movement","source":"Engineers and Scientists Acting Locally"},{"date":"January 22, 2019","href":"https://givingcompass.org/article/untapped-potential-of-civic-technology/","title":"The Untapped Potential of Civic Technology","source":"Giving Compass"},{"date":"January 18, 2019","href":"http://techtalk.seattle.gov/2019/01/18/civic-tech-community-tackles-pressing-issues-with-seattles-open-data/","title":"Civic Tech Community Tackles Pressing Issues with Seattle’s Open Data","source":"Seattle IT Tech Talk Blog"},{"date":"January 9, 2019","href":"https://socrata.com/blog/seattle-hackathon-real-world-impact/","title":"Seattle Hackathon Innovates for ‘Real World Impact’","source":"Socrata Blog"},{"date":"August 8, 2018","href":"https://www.geekwire.com/2018/can-tech-government-innovate-together-social-good-inside-new-effort-change-tide/","title":"Can tech and government innovate together for social good? Inside a new effort to change the tide","source":"GeekWire"}]'

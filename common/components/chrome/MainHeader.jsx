@@ -6,15 +6,14 @@ import type { SectionType } from '../enums/Section.js';
 import { Container } from 'flux/utils';
 import cdn from "../utils/cdn.js";
 import cx from '../utils/cx';
-import CurrentUser from '../../components/utils/CurrentUser.js';
-import FooterLinks from "../utils/FooterLinks.js";
+import CurrentUser from '../utils/CurrentUser.js';
+import NavigationLinks, {NavigationLink} from "../utils/NavigationLinks.js";
 import NavigationStore from '../stores/NavigationStore.js'
 import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
 import url from '../utils/url.js'
-import UserAPIUtils from "../utils/UserAPIUtils";
 import Person from '@material-ui/icons/Person';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -26,7 +25,6 @@ import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
-import {FooterLink} from "../utils/FooterLinks.js";
 import AlertHeader from "./AlertHeader.jsx";
 import MyProjectsStore, {MyProjectsAPIResponse} from "../stores/MyProjectsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
@@ -34,7 +32,6 @@ import _ from 'lodash'
 
 type State = {|
   +activeSection: SectionType,
-  user: ?UserAPIData,
   dropdown: boolean,
   slider: boolean,
   createProjectUrl: string,
@@ -65,12 +62,11 @@ class MainHeader extends React.Component<{||}, State > {
       url: url.section(section)
     });
   }
- 
+
   constructor(): void {
     super();
     this._cx = new cx('SubHeader-');
     this.state = {
-      user: null,
       dropdown: false,
       slider: false,
       showMyProjects: false,
@@ -87,13 +83,6 @@ class MainHeader extends React.Component<{||}, State > {
   componentDidMount() {
     UniversalDispatcher.dispatch({type: 'INIT'});
     this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
-    CurrentUser.isLoggedIn() && UserAPIUtils.fetchUserDetails(CurrentUser.userID(), this.loadUserDetails.bind(this));
-  }
-
-  loadUserDetails(user: UserAPIData) {
-    this.setState({
-      user: user
-    });
   }
 
   render(): React$Node {
@@ -113,13 +102,19 @@ class MainHeader extends React.Component<{||}, State > {
           <div className={this._cx.get('rightContent')}>
             {this._renderSectionLinks()}
             {this._renderHeaderLinks()}
+            {this._renderHeaderButtons()}
+            {
+              <React.Fragment>
+                <div className="SubHeader-divider-container">
+                  <div className="vertical-divider"></div>
+                </div>
+              </React.Fragment>
+            }
             {
               CurrentUser.isLoggedIn() ?
                 this._renderAccountInfo() :
-                this._renderLogInButton()
+                this._renderLogInLink()
             }
-            {this._renderCreateProjectButton()}
-            {this._renderHeaderButtons()}
           </div>
         </div>
       </div>
@@ -135,11 +130,14 @@ class MainHeader extends React.Component<{||}, State > {
     this._handleHeightChange(header.clientHeight - header.firstChild.clientHeight);
   }
 
-  _renderLogInButton(): void {
+  _renderLogInLink(): void {
     return (
-      <button onClick={this._onLogInClick} className='SubHeader-log-btns'>
-        Log In
-      </button>
+      <SectionLink
+          activeSection={this.state.activeSection}
+          key="LogIn"
+          section={Section.LogIn}
+          title="Log In"
+        />
     );
   }
 
@@ -163,7 +161,7 @@ class MainHeader extends React.Component<{||}, State > {
               <Paper className="SubHeader-dropdown-menu">
                 <ClickAwayListener onClickAway={this._closeDropdown}>
                   <MenuList>
-                    <p className="SubHeader-dropdown-name">{`${this.state.user.first_name} ${this.state.user.last_name}`}</p>
+                    <p className="SubHeader-dropdown-name">{`${CurrentUser.firstName()} ${CurrentUser.lastName()}`}</p>
                     <MenuItem onClick={(e) => this.navigateToSection(e, 'EditProfile')}>My Profile</MenuItem>
                     {this.state.showMyProjects && <MenuItem onClick={(e) => this.navigateToSection(e, 'MyProjects')}>My Projects</MenuItem>}
                   </MenuList>
@@ -251,7 +249,21 @@ class MainHeader extends React.Component<{||}, State > {
               </a>
               <Divider />
 
-              {this._renderHamburgerFooterLinks()}
+              <a href={url.section(Section.AboutUs)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  About Us
+                </div>
+              </a>
+              <Divider />
+
+              <a href={url.section(Section.Press)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  News
+                </div>
+              </a>
+              <Divider />
+
+              {this._renderHamburgerNavigationLinks()}
 
               <Divider />
               {
@@ -279,11 +291,12 @@ class MainHeader extends React.Component<{||}, State > {
     )
   }
 
-  _renderHamburgerFooterLinks(): $ReadOnlyArray<React$Node> {
-    return FooterLinks.list().map((link) => {
+  _renderHamburgerNavigationLinks(): $ReadOnlyArray<React$Node> {
+    //TODO: refactor NavigationLinks to define link behavior on a per-link basis
+    return NavigationLinks.list().map((link) => {
       return (
         <React.Fragment key={link.url}>
-          <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer" onClick={FooterLinks.logClick.bind(this, link)}>
+          <a key={link.url} href={link.url} rel="noopener noreferrer" onClick={NavigationLinks.logClick.bind(this, link)}>
             <div className={'SubHeader-drawerDiv'}>
               {link.name}
             </div>
@@ -299,14 +312,15 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderHeaderLinks(): React$Node {
-    const headerLinks: $ReadOnlyArray<FooterLink> = FooterLinks.list().filter((link) => !link.isButton);
+    //TODO: Same issue as NavigationLinks, refactor to pass link behavior as part of env variable
+    const headerLinks: $ReadOnlyArray<NavigationLink> = NavigationLinks.list().filter((link) => !link.isButton);
     return (
       <React.Fragment>
         {
           headerLinks.map((link) => {
             return (
               <div key={link.url} className="SectionLink-root">
-                <a className="SubHeader-anchor" href={link.url} target="_blank" rel="noopener noreferrer" onClick={FooterLinks.logClick.bind(this, link)}>
+                <a className="SubHeader-anchor" href={link.url} rel="noopener noreferrer" onClick={NavigationLinks.logClick.bind(this, link)}>
                   <h3>{link.name}</h3>
                 </a>
               </div>
@@ -318,15 +332,14 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderHeaderButtons(): React$Node {
-    const headerButtonLinks: $ReadOnlyArray<React$Node> = FooterLinks.list().filter((link) => link.isButton);
+    const headerButtonLinks: $ReadOnlyArray<React$Node> = NavigationLinks.list().filter((link) => link.isButton);
     return (
       headerButtonLinks.map((link) => {
         return (
           <a key={link.url}
              href={link.url}
              className="SubHeader-donate-btn-container"
-             onClick={FooterLinks.logClick.bind(this, link)}
-             target="_blank" rel="noopener noreferrer"
+             onClick={NavigationLinks.logClick.bind(this, link)}
           >
             <button className="SubHeader-donate-btn">
               {link.name}
@@ -337,23 +350,10 @@ class MainHeader extends React.Component<{||}, State > {
     )
   }
 
-  _renderCreateProjectButton(): React$Node{
-    return (
-      <a key={this.state.createProjectUrl}
-        href={this.state.createProjectUrl}
-        className="SubHeader-donate-btn-container"
-      >
-        <button className="SubHeader-log-btns">
-          Create Project
-        </button>
-      </a>
-    );
-  }
-
   _renderIcon(): React$Node {
     return (
-      this.state.user && !_.isEmpty(this.state.user.user_thumbnail) ?
-        <img className="SubHeader-userImg" src={this.state.user.user_thumbnail.publicUrl} /> :
+      !_.isEmpty(CurrentUser.userImgUrl()) ?
+        <img className="SubHeader-userImg" src={CurrentUser.userImgUrl()} /> :
         <Person className="SubHeader-userIcon" />
     );
   }
@@ -368,7 +368,6 @@ class MainHeader extends React.Component<{||}, State > {
           key={config.title}
           section={config.section}
           title={config.title}
-          target="_blank" rel="noopener noreferrer"
         />
       );
   }

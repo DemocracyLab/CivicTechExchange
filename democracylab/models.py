@@ -64,6 +64,7 @@ class Contributor(User):
             'id': self.id,
             'first_name': self.first_name,
             'last_name': self.last_name,
+            'about_me': self.about_me
         }
 
         thumbnail_files = list(files.filter(file_category=civictechprojects.models.FileCategory.THUMBNAIL.value))
@@ -75,9 +76,8 @@ class Contributor(User):
 
 def get_contributor_by_username(username):
     # using .first instead of .get_by_natural_key returns None instead of raising if object does not exist
-    return Contributor.objects.filter(email=username).first()
+    return Contributor.objects.filter(username=username.lower()).first()
 
 
 def get_request_contributor(request):
-    return get_contributor_by_username(request.user.username)
-
+    return get_contributor_by_username(request.user.username) if request.user.username else None

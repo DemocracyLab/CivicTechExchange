@@ -10,7 +10,9 @@ import _ from 'lodash';
 
 const sectionsToShowFooter: $ReadOnlyArray<string> = [
   Section.FindProjects,
-  Section.AboutProject
+  Section.AboutProject,
+  Section.AboutUs,
+  Section.Press
 ];
 
 class MainFooter extends React.Component<{||}> {
@@ -18,11 +20,11 @@ class MainFooter extends React.Component<{||}> {
   constructor(): void {
     super();
   }
-  
+
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [NavigationStore];
   }
-  
+
   static calculateState(prevState: State): State {
     return {
       section: NavigationStore.getSection(),
@@ -31,6 +33,8 @@ class MainFooter extends React.Component<{||}> {
 
   render(): ?React$Node {
     return this.state.section && (_.includes(sectionsToShowFooter, this.state.section)) && (
+      <React.Fragment>
+      <div className="MainFooter-border"></div>
       <div className="MainFooter-footer container">
         <div className="MainFooter-item col-xs-12 col-md-6">
           <h2>Sponsors Make It Possible</h2>
@@ -41,6 +45,7 @@ class MainFooter extends React.Component<{||}> {
         </div>
         {this._renderSponsors()}
       </div>
+    </React.Fragment>
     );
   }
 
@@ -51,7 +56,7 @@ class MainFooter extends React.Component<{||}> {
         return (
           <div key={i} className="MainFooter-sponsor MainFooter-item col-xs-12 col-md-6">
             <div>
-              <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
+              <a href={sponsor.url} target="_blank" rel="noopener noreferrer" className="MainFooter-sponsor-link">
                 <img src={sponsor.thumbnailUrl}/>
               </a>
             </div>

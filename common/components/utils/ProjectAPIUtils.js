@@ -124,7 +124,7 @@ class ProjectAPIUtils {
   }
 
   static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
-    fetch(new Request('/api/project/' + id + '/'))
+    fetch(new Request('/api/project/' + id + '/', {credentials: 'include'}))
       .then(response => {
         if(!response.ok) {
           throw Error();
@@ -132,6 +132,7 @@ class ProjectAPIUtils {
         return response.json();
       })
       .then(projectDetails => callback(projectDetails))
+      // TODO: Get catch to return http status code
       .catch(response => errCallback && errCallback({
         errorCode: response.status,
         errorMessage: JSON.stringify(response)
@@ -157,7 +158,19 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
-
+  //fetch DemocracyLab statistics
+  static fetchStatistics(callback) {
+    fetch('/api/stats')
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      callback(data);
+    })
+    .catch(err => {
+      console.log('Error fetching stats API. Error: ' + err)
+    })
+  }
 
   static post(url: string, body: {||},successCallback: (APIResponse) => void, errCallback: (APIError) => void) {
     const doError = (response) => errCallback && errCallback({

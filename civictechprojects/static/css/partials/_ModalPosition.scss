@@ -1,8 +1,6 @@
-//helps position all react-bootstrap modals
+//delete this when we upgrade to react-bootstrap >=1.0.0
 .modal-dialog {
-  top: 22%;
-}
-
-.wide-dialog .modal-dialog {
-  max-width: 60%;
+  .modal.fade & {
+    transform: translate(0, 0);
+  }
 }

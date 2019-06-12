@@ -21,10 +21,14 @@ import type {PositionInfo} from "../forms/PositionInfo.jsx";
 import Headers from "../common/Headers.jsx";
 import Truncate from "../utils/truncate.js";
 import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
+import {APIError} from "../utils/api.js";
+import Sort from "../utils/sort.js";
+import {LinkTypes} from "../constants/LinkConstants.js";
 
 
 type State = {|
   project: ?ProjectDetailsAPIData,
+  loadStatusMsg: string,
   showJoinModal: boolean,
   positionToJoin: ?PositionInfo,
   showPositionModal: boolean,
@@ -38,6 +42,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     super();
     this.state = {
     project: null,
+    loadStatusMsg: "Loading...",
     showContactModal: false,
     showPositionModal: false,
     shownPosition: null,
@@ -50,7 +55,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   componentDidMount() {
     const projectId: string = (new RegExp("id=([^&]+)")).exec(document.location.search)[1];
-    ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this));
+    ProjectAPIUtils.fetchProjectDetails(projectId, this.loadProjectDetails.bind(this), this.handleLoadProjectFailure.bind(this));
     metrics.logNavigateToProjectProfile(projectId);
   }
 
@@ -59,7 +64,14 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       project: project,
     });
   }
-
+  
+  handleLoadProjectFailure(error: APIError) {
+    this.setState({
+      loadStatusMsg: "Could not load project"
+    });
+  }
+  
+  
   handleShowVolunteerModal(position: ?PositionInfo) {
     this.setState({
       showJoinModal: true,
@@ -87,7 +99,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   render(): $React$Node {
-    return this.state.project ? this._renderDetails() : <div>Loading...</div>
+    return this.state.project ? this._renderDetails() : <div>{this.state.loadStatusMsg}</div>
   }
 
   _renderDetails(): React$Node {
@@ -266,7 +278,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
-    return project && project.project_links && project.project_links.map((link, i) =>
+    const linkOrder = [LinkTypes.CODE_REPOSITORY, LinkTypes.FILE_REPOSITORY, LinkTypes.MESSAGING, LinkTypes.PROJECT_MANAGEMENT];
+    const sortedLinks = project && project.project_links && Sort.byNamedEntries(project.project_links, linkOrder, (link) => link.linkName);
+    return sortedLinks.map((link, i) =>
       <IconLinkDisplay key={i} link={link}/>
     );
   }

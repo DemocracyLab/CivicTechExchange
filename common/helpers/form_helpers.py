@@ -20,7 +20,8 @@ def is_co_owner(user, project):
 
 
 def is_co_owner_or_staff(user, project):
-    return is_creator(user, project) or is_co_owner(user, project) or user.is_staff
+    if user is not None:
+        return is_creator(user, project) or is_co_owner(user, project) or user.is_staff
 
 
 def is_creator_or_staff(user, project):
