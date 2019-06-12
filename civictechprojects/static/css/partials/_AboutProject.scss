@@ -3,8 +3,7 @@
 
 .AboutProjects-root {
     display: flex;
-    width: 96vw;
-    margin: auto;
+    margin: 0 40px;
     max-width: 1080px;
     background: $color-background-light;
     border-radius: 12px;
@@ -174,12 +173,8 @@
 }
 
 .AboutProjects-details {
-  // padding: 25px 10px; /*consider max-width instead of padding here */
-
     #project-details {
       white-space: pre-wrap;
-      // padding-bottom: 50px;
-      // width: 100%;
     }
 }
 
@@ -299,8 +294,7 @@ button.AboutProject-button:disabled {
 
   .AboutProjects-root {
     flex-direction: column;
-    width: 90%;
-    margin: 0 7%;
+    margin: 0 5px;
     min-width: 450px;
     border-radius: 8px;
   }
@@ -330,74 +324,3 @@ button.AboutProject-button:disabled {
 
 }
 
-
-  //MUI objects are set to xs=12 sm=3/9 which matches 600 break (md is 960)
-  //TODO: standardize and use proper mixins (breakpoint-md-up etc)
-  //This media query consists of mostly pre-existing style declarations moved here so we can get this CSS to be mobile-first, mostly
-
-  // @media all and (min-width: 600px) {
-  //   .AboutProjects-root {
-  //     width: 90vw;
-  //   }
-  //   .AboutProjects-container {
-  //     display: flex;
-  //   }
-  //   .AboutProjects-infoColumn {
-  //     border-radius: 5px 0 0 5px;
-  //   }
-  //   .AboutProjects-mainColumn {
-  //     border-radius: 0 5px 5px 0;
-  //   }
-  //   .AboutProjects-paper {
-  //     border-radius: inherit; /* inherits from parent declarations above */
-  //   }
-  //   .AboutProjects-intro {
-  //     height: 262px;
-  //   }
-  //   .AboutProjects-description {
-  //     padding: 10px 0 0 15px;
-  //   }
-  //   .AboutProjects_tabs {
-  //         a {
-  //           line-height: inherit;
-  //           margin-bottom: 0;
-  //         }
-  //       }
-
-  //   .AboutProjects-description-details, .AboutProjects-positions-available {
-  //     padding: 25px 75px 25px 25px;
-  //   }
-
-  //   .AboutProjects-technologies {
-  //     width: 49.5%;
-  //     margin-left: .5%;
-  //   }
-
-  //   .AboutProjects-skills {
-  //     width: 49.5%;
-  //     margin-right: .5%;
-  //   }
-  //   .AboutProjects-owner {
-  //     padding-bottom: 0;
-  //   }
-  // }
-
-//TODO: Integrate the below query into the root of the stylesheet if it works. This is for layout.
-
-// @media all and (max-width: 600px) {
-//   .AboutProjects-container {
-//     display: grid !important;
-//   }
-//   .AboutProjects-infoColumn {
-//     grid-row: 2;
-//   }
-//   .AboutProjects-mainColumn {
-//     grid-row: 1;
-//   }
-//   .AboutProjects-iconContainer {
-//     display: none;
-//   }
-//   .AboutProjects_tabs a {
-//     display: block;
-//   }
-// }
