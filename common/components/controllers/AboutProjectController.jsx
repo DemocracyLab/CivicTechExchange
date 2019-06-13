@@ -3,9 +3,6 @@
 //TODO: validate all the active imports, these are the result of a messy merge
 import React from 'react';
 import _ from 'lodash'
-// import Grid from '@material-ui/core/Grid';
-// import Paper from '@material-ui/core/Paper';
-// import Divider from '@material-ui/core/Divider';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.jsx';
@@ -105,9 +102,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderDetails(): React$Node {
     const project = this.state.project;
     return (
-      <div className='AboutProjects-root'>
+      <div className='AboutProjects-root container pl-0 pr-0'>
         {this._renderHeader(project)}
-        <div className="AboutProjects-infoColumn">
+        <div className="AboutProjects-infoColumn col-12 col-md-3 pl-0 pr-0">
 
           <div className='AboutProjects-iconContainer'>
             <img className='AboutProjects-icon'src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
@@ -180,7 +177,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
         </div>
 
-        <div className="AboutProjects-mainColumn">
+        <div className="AboutProjects-mainColumn col-12 col-md-9 pl-0 pr-0">
 
           <div className='AboutProjects-intro'>
             <div className='AboutProjects-introTop'>
