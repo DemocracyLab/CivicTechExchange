@@ -2,9 +2,12 @@
 //TODO: standardize on _one_ set of breakpoints...
 
 .AboutProjects-root {
-    width: 96vw;
-    margin: auto;
+    display: flex;
+    margin: 0 40px;
     max-width: 1080px;
+    background: $color-background-light;
+    border-radius: 12px;
+    border: $color-grey-disabled solid 1px;
 
     /* this whole section is potentially placeholder */
     a {
@@ -23,309 +26,309 @@
     }
   }
 
-  .AboutProjects-container {
-    display: grid;
+.AboutProjects-paper {
+  height: 100%;
+}
+
+.AboutProjects-infoColumn {
+  order: 1;
+  width: 30%;
+  min-width: 300px;
+  border-right: $color-grey-disabled solid 1px;
+  h4 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0.25rem 0 0.75rem 0;
+  }
+}
+
+.AboutProjects-iconContainer {
+  height: 262px;
+  margin: auto;
+  width: 100%;
+  border-bottom: $color-grey-disabled solid 1px;
+  img {
+    padding-top: 2%;
+    padding-bottom: 3%; 
+  }
+}
+
+.AboutProjects-icon {
+  width: 100%;
+  height: 100%;
+  object-fit:contain;
+}
+
+.AboutProjects-details {
+  padding: 20px;
+  border-bottom: $color-grey-disabled solid 1px;
+}
+
+.AboutProjects-icon-row {
+  display: flex;
+  flex-direction: row;
+  word-break: break-all;
+}
+.AboutProjects-icon-text {
+  margin-left: 10px;
+}
+
+.AboutProjects-links, .AboutProjects-files, .AboutProjects-communities, .AboutProjects-team {
+  padding: 10px 5px 10px 15px;
+}
+
+.AboutProjects-links, .AboutProjects-files, .AboutProjects-communities {
+  border-bottom: $color-grey-disabled solid 1px;
+}
+
+.AboutProjects-links-icon-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  margin: auto;
+}
+
+.AboutProjects-intro {
+    min-height: 262px;
+    border-bottom: $color-grey-disabled solid 1px;
+}
+
+.AboutProjects-introTop {
+  display: flex;
+  min-height: 225px;
+  justify-content: space-between;
+}
+
+.AboutProjects-owner {
+    min-height: 70px;
+}
+
+.AboutProjects-owner button {
+  margin-right: 13px;
+}
+
+.AboutProjects-mainColumn {
+  order: 2;
+  width: 70%;
+}
+
+.AboutProjects-description {
+  padding: 10px 5px;
+  width: 70%;
+
+  h1 {
+    font-size: 1.75rem;
   }
 
-  .AboutProjects-paper {
-    height: 100%;
-  }
-
-  .AboutProjects-infoColumn {
-    h4 {
-      font-size: 1rem;
+  h3 {
+      margin-bottom: 0;
+      font-size: 20px;
       font-weight: bold;
-      margin: 0.25rem 0 0.75rem 0;
-    }
   }
 
-  .AboutProjects-iconContainer {
-    height: 262px;
-    margin: auto;
-    width: 90%;
+  .AboutProjects-description-issue {
+      color: #888;
+  }
+  .Position-description-link {
+    margin-top: 4px;
+    margin-bottom: 4px;
   }
 
-  .AboutProjects-icon {
-    width: 100%;
-    height: 100%;
-    object-fit:contain;
-  }
+}
 
-  .AboutProjects-details {
-    margin-top: 10px;
-  }
-
-  .AboutProjects-icon-row {
-    display: flex;
-    flex-direction: row;
-    word-break: break-all;
-  }
-  .AboutProjects-icon-text {
-    margin-left: 10px;
-  }
-
-  .AboutProjects-details, .AboutProjects-links, .AboutProjects-files, .AboutProjects-communities, .AboutProjects-team {
-    margin: 10px 5px 10px 15px;
-  }
-
-  .AboutProjects-links-icon-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 90%;
-    margin: auto;
-  }
-
-  .AboutProjects-intro {
-      min-height: 262px;
-  }
-
-  .AboutProjects-owner {
-      margin-right: 10px;
-      padding-bottom: 20px;
-  }
-
-  .AboutProjects-owner button {
-    margin-right: 5px;
-  }
-
-  .AboutProjects-description {
-    padding: 10px 5px;
-
-    h1 {
-      font-size: 1.75rem;
-    }
-
-    h3 {
-        margin-bottom: 0;
-        font-size: 20px;
-        font-weight: bold;
-    }
-
-    .AboutProjects-description-issue {
+.AboutProjects_tabs {
+  justify-self: flex-start;
+  align-self: flex-end;
+  width: 100%;
+  padding: 0px 0px 0px 15px;
+      a {
+        line-height: 1;
+        margin-bottom: 16px;
+        padding-bottom: 2px;
+        font-size: 24px;
+        margin-right: 40px;
         color: #888;
-    }
-    .Position-description-link {
-      margin-top: 4px;
-      margin-bottom: 4px;
-    }
-
-  }
-
-  .AboutProjects_tabs {
-    justify-self: flex-start;
-    align-self: flex-end;
-    width: 100%;
-    padding: 0px 0px 0px 15px;
-        a {
-          line-height: 1;
-          margin-bottom: 16px;
-          padding-bottom: 2px;
-          font-size: 24px;
-          margin-right: 40px;
-          color: #888;
-          transition: 300ms;
-          cursor: pointer;
-          &:hover {
-            color: black;
-            text-decoration: none;
-          }
+        transition: 300ms;
+        cursor: pointer;
+        &:hover {
+          color: black;
+          text-decoration: none;
         }
-        .AboutProjects_aHighlighted {
-          border-bottom: 3px solid $color-orange;
-          padding-bottom: 2px;
-          font-size: 24px;
-          margin-right: 40px;
-          color: #000;
-          transition: 300ms;
-          cursor: pointer;
-          &:hover {
-            color: black;
-            text-decoration: none;
-          }
-        }
-  }
-
-  .AboutProjects-description-details {
-    padding: 25px 10px; /*consider max-width instead of padding here */
-
-      #project-details {
-        white-space: pre-wrap;
-        padding-bottom: 50px;
-        width: 100%;
       }
-  }
-
-
-
-  .AboutProjects-skills {
-    p {
-      display: inline-block;
-      background: $color-grey-medium;
-      border-radius: 20px;
-      padding: 4px 10px 4px 10px;
-      margin: 4px;
-    }
-
-    .AboutProjects-skills-title {
-      padding-left: 0px;
-      float: left;
-      background: $color-background-light;
-      font-weight: bold;
-      width: 100%;
-    }
-
-  }
-
-  .AboutProjects-technologies {
-    p {
-      display: inline-block;
-      background: #DDD;
-      border-radius: 20px;
-      padding: 4px 10px 4px 10px;
-      margin: 4px;
-    }
-
-    .AboutProjects-tech-title {
-      padding-left: 0px;
-      float: left;
-      background: $color-background-light;
-      font-weight: bold;
-      width: 100%;
-    }
-  }
-
-  .AboutProjects-positions-available {
-    padding: 25px 10px; /*as with description-details consider maxwidth */
-
-    #positions-available {
-      width: 100%; /* fixes element repositioning error with read more expand/collapse */
-    }
-
-    .form-group {
-      margin-bottom: 0; /* margin is handled outside form-group on project page */
-    }
-
-    .Position-entry {
-      padding: 12px 0;
-    }
-    .Position-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-    .Text-section {
-      margin-top: 1rem;
-    }
-  }
-
-  .AboutProjects-team {
-
-    .upload_img_bdr {
-      height: 60px;
-      width: 60px;
-    }
-  }
-
-  .AboutProjects-communities {
-    li {
-      list-style-type: none;
-    }
-  }
-
-  .AboutProjects-links  {
-    /* revisit this padding when icons are in */
-    .Link-listitem {
-      padding: 0.125rem 0;
-    }
-  }
-
-  .AboutProject-button {
-    background-color: $color-green;
-    border: 0;
-    border-radius: 5px;
-    color: $color-text-light;
-    cursor: pointer;
-    float: right;
-    font-size: 14px;
-    padding: 8px 8px 8px 8px;
-    margin-right: 8px;
-    margin-top: 16px;
-  }
-
-  button.AboutProject-button:disabled {
-    background-color: $color-grey-disabled;
-    color: $color-text-light;
-  }
-
-  //MUI objects are set to xs=12 sm=3/9 which matches 600 break (md is 960)
-  //TODO: standardize and use proper mixins (breakpoint-md-up etc)
-  //This media query consists of mostly pre-existing style declarations moved here so we can get this CSS to be mobile-first, mostly
-
-  @media all and (min-width: 600px) {
-    .AboutProjects-root {
-      width: 90vw;
-    }
-    .AboutProjects-container {
-      display: flex;
-    }
-    .AboutProjects-infoColumn {
-      border-radius: 5px 0 0 5px;
-    }
-    .AboutProjects-mainColumn {
-      border-radius: 0 5px 5px 0;
-    }
-    .AboutProjects-paper {
-      border-radius: inherit; /* inherits from parent declarations above */
-    }
-    .AboutProjects-intro {
-      height: 262px;
-    }
-    .AboutProjects-description {
-      padding: 10px 0 0 15px;
-    }
-    .AboutProjects_tabs {
-          a {
-            line-height: inherit;
-            margin-bottom: 0;
-          }
+      .AboutProjects_aHighlighted {
+        border-bottom: 3px solid $color-orange;
+        padding-bottom: 2px;
+        font-size: 24px;
+        margin-right: 40px;
+        color: #000;
+        transition: 300ms;
+        cursor: pointer;
+        &:hover {
+          color: black;
+          text-decoration: none;
         }
+      }
+}
 
-    .AboutProjects-description-details, .AboutProjects-positions-available {
-      padding: 25px 75px 25px 25px;
+.AboutProjects-details {
+    #project-details {
+      white-space: pre-wrap;
     }
+}
 
-    .AboutProjects-technologies {
-      width: 49.5%;
-      margin-left: .5%;
-    }
+.AboutProjects-skills-container {
+  display: flex;
+  margin-top: 15%;
+}
 
-    .AboutProjects-skills {
-      width: 49.5%;
-      margin-right: .5%;
-    }
-    .AboutProjects-owner {
-      padding-bottom: 0;
-    }
+.AboutProjects-skills {
+  p {
+    display: inline-block;
+    background: $color-grey-medium;
+    border-radius: 20px;
+    padding: 4px 10px 4px 10px;
+    margin: 4px;
   }
 
-//TODO: Integrate the below query into the root of the stylesheet if it works. This is for layout.
-
-@media all and (max-width: 600px) {
-  .AboutProjects-container {
-    display: grid !important;
+  .AboutProjects-skills-title {
+    padding-left: 0px;
+    float: left;
+    background: $color-background-light;
+    font-weight: bold;
+    width: 100%;
   }
+
+}
+
+.AboutProjects-technologies {
+  p {
+    display: inline-block;
+    background: #DDD;
+    border-radius: 20px;
+    padding: 4px 10px 4px 10px;
+    margin: 4px;
+  }
+
+  .AboutProjects-tech-title {
+    padding-left: 0px;
+    float: left;
+    background: $color-background-light;
+    font-weight: bold;
+    width: 100%;
+  }
+}
+
+.AboutProjects-positions-available {
+  padding: 25px 10px; /*as with description-details consider maxwidth */
+
+  #positions-available {
+    width: 100%; /* fixes element repositioning error with read more expand/collapse */
+  }
+
+  .form-group {
+    margin-bottom: 0; /* margin is handled outside form-group on project page */
+  }
+
+  .Position-entry {
+    padding: 12px 0;
+  }
+  .Position-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .Text-section {
+    margin-top: 1rem;
+  }
+}
+
+.AboutProjects-team {
+
+  .upload_img_bdr {
+    height: 60px;
+    width: 60px;
+  }
+}
+
+.AboutProjects-communities {
+  li {
+    list-style-type: none;
+  }
+}
+
+.AboutProjects-links  {
+  /* revisit this padding when icons are in */
+  .Link-listitem {
+    padding: 0.125rem 0;
+  }
+}
+
+.AboutProject-button {
+  background-color: $color-green;
+  border: 0;
+  border-radius: 5px;
+  color: $color-text-light;
+  cursor: pointer;
+  float: right;
+  font-size: 14px;
+  padding: 8px 8px 8px 8px;
+  margin-right: 8px;
+  margin-top: 16px;
+}
+
+button.AboutProject-button:disabled {
+  background-color: $color-grey-disabled;
+  color: $color-text-light;
+}
+
+@media (max-width: 1000px) {
+  // buttons will align below "-description"
+  .AboutProjects-introTop {
+    display: inherit;
+  }
+}
+
+@media (max-width: 800px) {
+
+  .AboutProjects-root {
+    flex-direction: column;
+    margin: 0 5px;
+    min-width: 450px;
+    border-radius: 8px;
+  }
+
   .AboutProjects-infoColumn {
-    grid-row: 2;
+    width: 100%;
+    order: 2;
   }
+
   .AboutProjects-mainColumn {
-    grid-row: 1;
+    width: 100%;
+    order: 1;
   }
+
+  .AboutProjects-skills-container {
+    display: inherit;
+    margin-top: 8%;
+  }
+
   .AboutProjects-iconContainer {
     display: none;
   }
-  .AboutProjects_tabs a {
-    display: block;
+
+  .AboutProjects-positions-available {
+    border-bottom: $color-grey-disabled solid 1px;
+  }
+
+}
+
+
+@media (min-width: 1160px) {
+  
+  .AboutProjects-root {
+    margin-left: auto;
+    margin-right: auto;
   }
 }
