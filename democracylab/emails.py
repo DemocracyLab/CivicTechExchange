@@ -82,12 +82,16 @@ def send_password_reset_email(contributor):
     }
     reset_url = section_url(FrontEndSection.ChangePassword, reset_parameters)
     # Send email with token
+    email_template = HtmlEmailTemplate()\
+        .header("Hi {{first_name}}.")\
+        .paragraph('Please click below to reset your password.')\
+        .button(url=reset_url, text='RESET PASSWORD')
     email_msg = EmailMessage(
         subject='DemocracyLab Password Reset',
-        body='Click here to change your password: ' + reset_url,
         from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
         to=[contributor.email]
     )
+    email_msg = email_template.render(email_msg, {'first_name': user.first_name})
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
@@ -113,16 +117,16 @@ def send_project_creation_notification(project):
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
-def send_to_project_owners(project, sender, subject, body):
+def send_to_project_owners(project, sender, subject, template):
     project_volunteers = VolunteerRelation.objects.filter(project=project.id)
     co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
     email_msg = EmailMessage(
         subject=subject,
-        body=body,
         from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
         to=[project.project_creator.email] + co_owner_emails,
         reply_to=[sender.email]
     )
+    email_msg = template.render(email_msg)
     send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
 
 
@@ -145,17 +149,23 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
     role_details = Tag.from_field(volunteer_relation.role)
     role_text = "{subcategory}: {name}".format(subcategory=role_details.subcategory, name=role_details.display_name)
     project_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
+    approve_url = settings.PROTOCOL_DOMAIN + '/volunteer/approve/' + str(volunteer_relation.id) + '/'
     email_subject = '{is_reminder}{firstname} {lastname} would like to volunteer with {project} as {role}'.format(
         is_reminder='REMINDER: ' if is_reminder else '',
         firstname=user.first_name,
         lastname=user.last_name,
         project=project.project_name,
         role=role_text)
-    email_body = '{message} \n -- \n To review this volunteer, see {url}'.format(
-        message=volunteer_relation.application_text,
-        user=user.email,
-        url=project_profile_url)
-    send_to_project_owners(project=project, sender=user, subject=email_subject, body=email_body)
+    email_template = HtmlEmailTemplate()\
+        .header("You Have a New Volunteer!")\
+        .paragraph('\"{message}\" -{firstname} {lastname}'.format(
+            message=volunteer_relation.application_text,
+            firstname=user.first_name,
+            lastname=user.last_name))\
+        .paragraph('Please click below to review this volunteer')\
+        .button(url=project_profile_url, text='REVIEW VOLUNTEER')\
+        .button(url=approve_url, text='APPROVE VOLUNTEER')
+    send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
 
 
 volunteer_conclude_email_template = HtmlEmailTemplate() \

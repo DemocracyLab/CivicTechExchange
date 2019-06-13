@@ -2,6 +2,7 @@
   background-color: $color-background-default;
   width: 100%;
   padding: 0 20px;
+  margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -11,4 +12,12 @@
 
 .MainFooter-sponsor img{
   max-width: 200px;
+}
+.MainFooter-sponsor-link, .MainFooter-sponsor img {
+  background: $color-background-light;
+}
+.MainFooter-border {
+  width: 100%;
+  height: 1px;
+  border-top: 1px solid $color-grey-medium;
 }

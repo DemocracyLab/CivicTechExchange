@@ -3,9 +3,9 @@
 //TODO: validate all the active imports, these are the result of a messy merge
 import React from 'react';
 import _ from 'lodash'
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
+// import Grid from '@material-ui/core/Grid';
+// import Paper from '@material-ui/core/Paper';
+// import Divider from '@material-ui/core/Divider';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import ProjectDetails from '../componentsBySection/FindProjects/ProjectDetails.jsx';
@@ -22,6 +22,8 @@ import Headers from "../common/Headers.jsx";
 import Truncate from "../utils/truncate.js";
 import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 import {APIError} from "../utils/api.js";
+import Sort from "../utils/sort.js";
+import {LinkTypes} from "../constants/LinkConstants.js";
 
 
 type State = {|
@@ -105,50 +107,42 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     return (
       <div className='AboutProjects-root'>
         {this._renderHeader(project)}
-        <Grid container className='AboutProjects-container' spacing={0}>
-          <Grid item xs={12} sm={3} className="AboutProjects-infoColumn">
-            <Paper className='AboutProjects-paper' elevation={1} square={true}>
+        <div className="AboutProjects-infoColumn">
 
-              <Grid className='AboutProjects-iconContainer'>
-                <img className='AboutProjects-icon'src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
-              </Grid>
+          <div className='AboutProjects-iconContainer'>
+            <img className='AboutProjects-icon'src={project && project.project_thumbnail && project.project_thumbnail.publicUrl} />
+          </div>
 
-              <Divider />
+          <div className='AboutProjects-details'>
+            <ProjectDetails projectLocation={project && project.project_location}
+            projectUrl={project && project.project_url}
+            projectStage={project && !_.isEmpty(project.project_stage) ? project.project_stage[0].display_name : null}
+            dateModified={project && project.project_date_modified}/>
+          </div>
 
-              <Grid className='AboutProjects-details'>
-                <ProjectDetails projectLocation={project && project.project_location}
-                projectUrl={project && project.project_url}
-                projectStage={project && !_.isEmpty(project.project_stage) ? project.project_stage[0].display_name : null}
-                dateModified={project && project.project_date_modified}/>
-              </Grid>
+          {project && !_.isEmpty(project.project_links) &&
+            <React.Fragment>
+              <div className='AboutProjects-links'>
+                <h4>Links</h4>
+                {this._renderLinks()}
+              </div>
 
-              <Divider />
+            </React.Fragment>
+          }
 
-            {project && !_.isEmpty(project.project_links) &&
-              <React.Fragment>
-                <Grid className='AboutProjects-links'>
-                  <h4>Links</h4>
-                  {this._renderLinks()}
-                </Grid>
-                <Divider />
-              </React.Fragment>
-            }
+          { project && !_.isEmpty(project.project_files) &&
+            <React.Fragment>
+              <div className='AboutProjects-files'>
+                <h4>Files</h4>
+                  {this._renderFiles()}
+              </div>
 
-
-
-            { project && !_.isEmpty(project.project_files) &&
-              <React.Fragment>
-                <Grid className='AboutProjects-files'>
-                  <h4>Files</h4>
-                   {this._renderFiles()}
-                </Grid>
-                <Divider />
-              </React.Fragment>
-            }
+            </React.Fragment>
+          }
 
           {project && !_.isEmpty(project.project_organization) &&
             <React.Fragment>
-              <Grid className='AboutProjects-communities'>
+              <div className='AboutProjects-communities'>
                 <h4>Communities</h4>
                 <ul>
                   {
@@ -157,111 +151,117 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     })
                   }
                 </ul>
-              </Grid>
-              <Divider />
+              </div>
+
             </React.Fragment>
           }
 
-              <Grid className='AboutProjects-team'>
-                {
-                project && !_.isEmpty(project.project_volunteers)
-                  ? <VolunteerSection
-                      volunteers={project.project_volunteers}
-                      isProjectAdmin={CurrentUser.userID() === project.project_creator}
-                      isProjectCoOwner={CurrentUser.isCoOwner(project)}
-                      projectId={project.project_id}
-                      renderOnlyPending={true}
-                    />
-                  : null
-                }
-                <h4>Team</h4>
-                  {
-                    project && !_.isEmpty(project.project_owners)
-                    ? <ProjectOwnersSection
-                      owners={project.project_owners}
-                      />
-                    : null
-                  }
-
-                  {
-                  project && !_.isEmpty(project.project_volunteers)
-                    ? <VolunteerSection
-                        volunteers={project.project_volunteers}
-                        isProjectAdmin={CurrentUser.userID() === project.project_creator}
-                        isProjectCoOwner={CurrentUser.isCoOwner(project)}
-                        projectId={project.project_id}
-                        renderOnlyPending={false}
-                      />
-                    : null
-                  }
-              </Grid>
-
-            </Paper>
-          </Grid>
-
-          <Grid item xs={12} sm={9} className="AboutProjects-mainColumn">
-            <Paper className='AboutProjects-paper' elevation={1} square={true}>
-              <Grid className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
-                  <Grid className='AboutProjects-description' item xs={12} md={9}>
-                    <h1>{project && project.project_name}</h1>
-                    <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
-                    <p>{project && project.project_short_description}</p>
-                  </Grid>
-
-                  <ProjectVolunteerModal
-                    projectId={this.state.project && this.state.project.project_id}
-                    positions={this.state.project && this.state.project.project_positions}
-                    positionToJoin={this.state.positionToJoin}
-                    showModal={this.state.showJoinModal}
-                    handleClose={this.confirmJoinProject.bind(this)}
+          <div className='AboutProjects-team'>
+            {
+            project && !_.isEmpty(project.project_volunteers)
+              ? <VolunteerSection
+                  volunteers={project.project_volunteers}
+                  isProjectAdmin={CurrentUser.userID() === project.project_creator}
+                  isProjectCoOwner={CurrentUser.isCoOwner(project)}
+                  projectId={project.project_id}
+                  renderOnlyPending={true}
+                />
+              : null
+            }
+            <h4>Team</h4>
+              {
+                project && !_.isEmpty(project.project_owners)
+                ? <ProjectOwnersSection
+                  owners={project.project_owners}
                   />
+                : null
+              }
 
-                  <Grid className='AboutProjects-owner' item xs={12} md={3}>
-                    <ContactProjectButton project={project}/>
-                    <ProjectVolunteerButton
-                      project={project}
-                      onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
-                    />
-                  </Grid>
+              {
+              project && !_.isEmpty(project.project_volunteers)
+                ? <VolunteerSection
+                    volunteers={project.project_volunteers}
+                    isProjectAdmin={CurrentUser.userID() === project.project_creator}
+                    isProjectCoOwner={CurrentUser.isCoOwner(project)}
+                    projectId={project.project_id}
+                    renderOnlyPending={false}
+                  />
+                : null
+              }
+          </div>
 
-              <div className="AboutProjects_tabs">
-                <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
-                {project && !_.isEmpty(project.project_positions) &&
-                <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
-                }
+        </div>
+
+        <div className="AboutProjects-mainColumn">
+
+          <div className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
+            <div className='AboutProjects-introTop'>
+              <div className='AboutProjects-description'>
+                <h1>{project && project.project_name}</h1>
+                <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
+                <p>{project && project.project_short_description}</p>
               </div>
 
-              </Grid>
-              <Divider/>
+              <ProjectVolunteerModal
+                projectId={this.state.project && this.state.project.project_id}
+                positions={this.state.project && this.state.project.project_positions}
+                positionToJoin={this.state.positionToJoin}
+                showModal={this.state.showJoinModal}
+                handleClose={this.confirmJoinProject.bind(this)}
+              />
 
-                <Grid className='AboutProjects-description-details'>
-                  <div id='project-details'>{project.project_description}</div>
-                  <Grid className='AboutProjects-skills-container' container direction='row'>
-                    {project && !_.isEmpty(project.project_positions) &&
-                    <div className='AboutProjects-skills'>
-                      <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
-                      {project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.display_name}</p>)}
-                    </div>
-                    }
-                    {project && !_.isEmpty(project.project_technologies) &&
-                    <div className='AboutProjects-technologies'>
-                      <p className='AboutProjects-tech-title'>Technologies Used</p>
-                      {project && project.project_technologies && project.project_technologies.map(tech => <p>{tech.display_name}</p>)}
-                    </div>
-                    }
+              <div className='AboutProjects-owner'>
+                <ContactProjectButton project={project}/>
+                <ProjectVolunteerButton
+                  project={project}
+                  onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
+                />
+              </div>
+            </div>
 
-                  <Grid item xs={6}></Grid>
-                  </Grid>
-                </Grid>
-              <Divider/>
+            <div className="AboutProjects_tabs">
 
-              <Grid className='AboutProjects-positions-available' container>
-                <div id="positions-available">{project && !_.isEmpty(project.project_positions) && this._renderPositions()}</div>
-              </Grid>
-            </Paper>
-          </Grid>
+              <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
 
-        </Grid>
+              {project && !_.isEmpty(project.project_positions) &&
+              <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
+              }
+
+            </div>
+          </div>
+
+          <div className='AboutProjects-details'>
+            <div id='project-details'>
+              {project.project_description}
+            </div>
+
+            <div className='AboutProjects-skills-container'>
+
+              {project && !_.isEmpty(project.project_positions) &&
+                <div className='AboutProjects-skills'>
+                  <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
+                  {project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.display_name}</p>)}
+                </div>
+              }
+
+              {project && !_.isEmpty(project.project_technologies) &&
+                <div className='AboutProjects-technologies'>
+                  <p className='AboutProjects-tech-title'>Technologies Used</p>
+                  {project && project.project_technologies && project.project_technologies.map(tech => <p>{tech.display_name}</p>)}
+                </div>
+              }
+
+            </div>
+          </div>
+
+          <div className='AboutProjects-positions-available' container>
+            <div id="positions-available">
+              {project && !_.isEmpty(project.project_positions) && this._renderPositions()}
+            </div>
+          </div>
+
+        </div>
+
       </div>
     )
   }
@@ -290,7 +290,9 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
   _renderLinks(): ?Array<React$Node> {
     const project = this.state.project;
-    return project && project.project_links && project.project_links.map((link, i) =>
+    const linkOrder = [LinkTypes.CODE_REPOSITORY, LinkTypes.FILE_REPOSITORY, LinkTypes.MESSAGING, LinkTypes.PROJECT_MANAGEMENT];
+    const sortedLinks = project && project.project_links && Sort.byNamedEntries(project.project_links, linkOrder, (link) => link.linkName);
+    return sortedLinks.map((link, i) =>
       <IconLinkDisplay key={i} link={link}/>
     );
   }
