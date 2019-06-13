@@ -7,7 +7,7 @@ import {TagDefinition, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtil
 import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import Avatar from "../avatar.jsx"
-import {Glyph, GlyphStyles, GlyphSizes, GlyphOption} from "../../utils/glyphs.js";
+import {Glyph, GlyphStyles, GlyphSizes, GlyphWidth} from "../../utils/glyphs.js";
 
 
 type Props = {|
@@ -66,21 +66,21 @@ class VolunteerCard extends React.PureComponent<Props> {
   _renderApplicationMenuLinks(): ?Array<React$Node>  {
     if (this.props.volunteer && this.props.volunteer.isCoOwner) {
       return [
-          (<MenuItem onSelect={() => this.props.onDemotionButton(this.props.volunteer)} key="0"><i className={GlyphOption(GlyphStyles.Pushpin, { fixedWidth: true })}></i> Demote</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1"><i className={GlyphOption(GlyphStyles.Delete, { fixedWidth: true })}></i> Remove</MenuItem>)
+          (<MenuItem onSelect={() => this.props.onDemotionButton(this.props.volunteer)} key="0"><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Demote</MenuItem>),
+          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</MenuItem>)
         ]
     }
     if (this.props.volunteer && this.props.volunteer.isApproved) {
         return [
-          (<MenuItem onSelect={() => this.props.onPromotionButton(this.props.volunteer)} key="0"><i className={GlyphOption(GlyphStyles.Pushpin, { fixedWidth: true })}></i> Promote</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1"><i className={GlyphOption(GlyphStyles.Delete, { fixedWidth: true })}></i> Remove</MenuItem>)
+          (<MenuItem onSelect={() => this.props.onPromotionButton(this.props.volunteer)} key="0"><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Promote</MenuItem>),
+          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</MenuItem>)
         ]
     }
     if (this.props.volunteer) {
       return [
-          (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key="2"><i className={GlyphOption(GlyphStyles.Eye, { fixedWidth: true })}></i> Review</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3"><i className={GlyphOption(GlyphStyles.Pushpin, { fixedWidth: true })}></i> Approve</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4"><i className={GlyphOption(GlyphStyles.Delete, { fixedWidth: true })}></i> Reject</MenuItem>)
+          (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key="2"><i className={Glyph(GlyphStyles.Eye, GlyphWidth.Fixed)}></i> Review</MenuItem>),
+          (<MenuItem onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3"><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Approve</MenuItem>),
+          (<MenuItem onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Reject</MenuItem>)
       ];
     }
     return null;

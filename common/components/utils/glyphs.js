@@ -29,41 +29,22 @@ export const GlyphStyles: {[key: string]: string} = {
 };
 
 export const GlyphSizes: {[key: string]: string} = {
-  XS: "fa-xs",
-  SM: "fa-sm",
-  LG: "fa-lg",
-  X2: "fa-2x",
-  X3: "fa-3x",
-  X5: "fa-5x",
-  X7: "fa-7x",
-  X10: "fa-10x"
+  XS: " fa-xs",
+  SM: " fa-sm",
+  LG: " fa-lg",
+  X2: " fa-2x",
+  X3: " fa-3x",
+  X5: " fa-5x",
+  X7: " fa-7x",
+  X10: " fa-10x"
 };
 
-export function Glyph(style: string, size: ?string): string {
-  return style + (size ? " " + size : "");
+export const GlyphWidth: {[key: string]: string} = {
+  Fixed: " fa-fw",
 }
 
-//to use GlyphOption you must also import GlyphStyles, GlyphSizes, from glyphs.js if you declare a size/style
-//TODO: Add rotate, flip, and other FontAwesome options, see e.g. https://fontawesome.com/how-to-use/on-the-web/styling/rotating-icons
-export function GlyphOption(style: string, options: object) {
-  //create default options object, so we don't have to declare every one every time
-  function setDefaults(options, defaults){
-    return _.defaults({}, _.clone(options), defaults);
-  }
-  let defaults = {
-    size: "",
-    fixedWidth: false
-  };
-  options = setDefaults(options, defaults);
-
-  //now modify style based on passed or default options
-  if (options.size) {
-      style = style += (' ' + options.size)
-    }
-    if (options.fixedWidth) {
-      style = style += ' fa-fw'
-    }
-    return style;
+export function Glyph(style: string, ...args): string {
+  return style += args.join();
 }
 
 export default GlyphStyles;
