@@ -43,7 +43,8 @@ export function Glyph(style: string, size: ?string): string {
   return style + (size ? " " + size : "");
 }
 
-//to use GlyphOption you must also import GlyphStyles, GlyphSizes, from glyphs.js
+//to use GlyphOption you must also import GlyphStyles, GlyphSizes, from glyphs.js if you declare a size/style
+//TODO: Add rotate, flip, and other FontAwesome options, see e.g. https://fontawesome.com/how-to-use/on-the-web/styling/rotating-icons
 export function GlyphOption(style: string, options: object) {
   //create default options object, so we don't have to declare every one every time
   function setDefaults(options, defaults){
