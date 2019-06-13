@@ -64,14 +64,14 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       project: project,
     });
   }
-  
+
   handleLoadProjectFailure(error: APIError) {
     this.setState({
       loadStatusMsg: "Could not load project"
     });
   }
-  
-  
+
+
   handleShowVolunteerModal(position: ?PositionInfo) {
     this.setState({
       showJoinModal: true,
@@ -182,7 +182,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
         <div className="AboutProjects-mainColumn">
 
-          <div className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
+          <div className='AboutProjects-intro'>
             <div className='AboutProjects-introTop'>
               <div className='AboutProjects-description'>
                 <h1>{project && project.project_name}</h1>
@@ -211,7 +211,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
               <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
 
-              {project && !_.isEmpty(project.project_positions) && 
+              {project && !_.isEmpty(project.project_positions) &&
               <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
               }
 
@@ -222,17 +222,17 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             <div id='project-details'>
               {project.project_description}
             </div>
-            
+
             <div className='AboutProjects-skills-container'>
 
-              {project && !_.isEmpty(project.project_positions) && 
+              {project && !_.isEmpty(project.project_positions) &&
                 <div className='AboutProjects-skills'>
                   <p id='skills-needed' className='AboutProjects-skills-title'>Skills Needed</p>
                   {project && project.project_positions && project.project_positions.map(position => <p>{position.roleTag.display_name}</p>)}
                 </div>
               }
 
-              {project && !_.isEmpty(project.project_technologies) && 
+              {project && !_.isEmpty(project.project_technologies) &&
                 <div className='AboutProjects-technologies'>
                   <p className='AboutProjects-tech-title'>Technologies Used</p>
                   {project && project.project_technologies && project.project_technologies.map(tech => <p>{tech.display_name}</p>)}
@@ -242,7 +242,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </div>
           </div>
 
-          <div className='AboutProjects-positions-available' container>
+          <div className='AboutProjects-positions-available'>
             <div id="positions-available">
               {project && !_.isEmpty(project.project_positions) && this._renderPositions()}
             </div>
@@ -253,11 +253,11 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </div>
     )
   }
-  
+
   _renderHeader(project: ProjectDetailsAPIData): React$Node {
     const title: string = project.project_name + " | DemocracyLab";
     const description: string = project.project_short_description || Truncate.stringT(project.project_description, 300);
-    
+
     return (
       <Headers
         title={title}
