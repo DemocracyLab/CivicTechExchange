@@ -9,7 +9,7 @@ $grid-breakpoints: (
   lg: 992px,
   // Extra large screen / wide desktop
   xl: 1200px,
-  // DemocracyLab extra wide 
+  // DemocracyLab extra wide
   xxl: 1440px
 );
 
@@ -20,3 +20,5 @@ $container-max-widths: (
   xl: 1140px,
   xxl: 1400px
 );
+
+$font-family-sans-serif: 'Montserrat',-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
