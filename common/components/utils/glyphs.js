@@ -43,4 +43,26 @@ export function Glyph(style: string, size: ?string): string {
   return style + (size ? " " + size : "");
 }
 
+//to use GlyphOption you must also import GlyphStyles, GlyphSizes, from glyphs.js
+export function GlyphOption(style: string, options: object) {
+  //create default options object, so we don't have to declare every one every time
+  function setDefaults(options, defaults){
+    return _.defaults({}, _.clone(options), defaults);
+  }
+  let defaults = {
+    size: "",
+    fixedWidth: false
+  };
+  options = setDefaults(options, defaults);
+
+  //now modify style based on passed or default options
+  if (options.size) {
+      style = style += (' ' + options.size)
+    }
+    if (options.fixedWidth) {
+      style = style += ' fa-fw'
+    }
+    return style;
+}
+
 export default GlyphStyles;
