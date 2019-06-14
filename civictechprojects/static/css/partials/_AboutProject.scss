@@ -285,6 +285,10 @@ button.AboutProject-button:disabled {
   .AboutProjects-introTop {
     display: inherit;
   }
+  //description is then full width
+  .AboutProjects-description {
+    width: 100%;
+  }
 }
 
 @media (max-width: 800px) {
@@ -326,5 +330,11 @@ button.AboutProject-button:disabled {
   .AboutProjects-root {
     margin-left: auto;
     margin-right: auto;
+  }
+}
+//push tabs and buttons a bit farther apart on narrow devices
+@media (max-width: 400px) {
+  .AboutProjects_tabs {
+    padding-top: 24px;
   }
 }
