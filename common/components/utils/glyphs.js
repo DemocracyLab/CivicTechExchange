@@ -22,22 +22,29 @@ export const GlyphStyles: {[key: string]: string} = {
   Meetup: "fab fa-meetup",
   Check: "fas fa-check",
   ChevronUp: "fas fa-chevron-up",
-  ChevronDown: "fas fa-chevron-down"
+  ChevronDown: "fas fa-chevron-down",
+  EllipsisV: "fas fa-ellipsis-v",
+  Pushpin: "fas fa-thumbtack",
+  Eye: "fas fa-eye",
 };
 
 export const GlyphSizes: {[key: string]: string} = {
-  XS: "fa-xs",
-  SM: "fa-sm",
-  LG: "fa-lg",
-  X2: "fa-2x",
-  X3: "fa-3x",
-  X5: "fa-5x",
-  X7: "fa-7x",
-  X10: "fa-10x"
+  XS: " fa-xs",
+  SM: " fa-sm",
+  LG: " fa-lg",
+  X2: " fa-2x",
+  X3: " fa-3x",
+  X5: " fa-5x",
+  X7: " fa-7x",
+  X10: " fa-10x"
 };
 
-export function Glyph(style: string, size: ?string): string {
-  return style + (size ? " " + size : "");
+export const GlyphWidth: {[key: string]: string} = {
+  Fixed: " fa-fw",
+}
+
+export function Glyph(style: string, ...args): string {
+  return style += args.join();
 }
 
 export default GlyphStyles;

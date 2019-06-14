@@ -157,6 +157,17 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
           }
 
           <div className='AboutProjects-team'>
+            {
+            project && !_.isEmpty(project.project_volunteers)
+              ? <VolunteerSection
+                  volunteers={project.project_volunteers}
+                  isProjectAdmin={CurrentUser.userID() === project.project_creator}
+                  isProjectCoOwner={CurrentUser.isCoOwner(project)}
+                  projectId={project.project_id}
+                  renderOnlyPending={true}
+                />
+              : null
+            }
             <h4>Team</h4>
               {
                 project && !_.isEmpty(project.project_owners)
@@ -173,6 +184,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
                     isProjectAdmin={CurrentUser.userID() === project.project_creator}
                     isProjectCoOwner={CurrentUser.isCoOwner(project)}
                     projectId={project.project_id}
+                    renderOnlyPending={false}
                   />
                 : null
               }
