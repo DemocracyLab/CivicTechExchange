@@ -26,10 +26,6 @@
     }
   }
 
-.AboutProjects-paper {
-  height: 100%;
-}
-
 .AboutProjects-infoColumn {
   order: 1;
   width: 30%;
@@ -139,6 +135,7 @@
 }
 
 .AboutProjects_tabs {
+  clear: both;
   justify-self: flex-start;
   align-self: flex-end;
   width: 100%;
@@ -295,7 +292,6 @@ button.AboutProject-button:disabled {
   .AboutProjects-root {
     flex-direction: column;
     margin: 0 5px;
-    min-width: 450px;
     border-radius: 8px;
   }
 
@@ -311,7 +307,7 @@ button.AboutProject-button:disabled {
 
   .AboutProjects-skills-container {
     display: inherit;
-    margin-top: 8%;
+    margin-top: 40px;
   }
 
   .AboutProjects-iconContainer {
