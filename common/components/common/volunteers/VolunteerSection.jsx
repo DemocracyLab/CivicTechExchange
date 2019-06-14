@@ -17,7 +17,8 @@ type Props = {|
   +volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +isProjectAdmin: boolean,
   +isProjectCoOwner: boolean,
-  +projectId: string
+  +projectId: string,
+  +renderOnlyPending: boolean
 |};
 
 type RejectVolunteerParams = {|
@@ -258,34 +259,39 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           onConfirm={this.closeDemotionModal.bind(this)}
         />
 
-        {this._renderCoOwnerVolunteers(coOwnerVolunteers)}
-        {this._renderPendingVolunteers(approvedAndPendingVolunteers[1])}
-        {this._renderApprovedVolunteers(approvedAndPendingVolunteers[0])}
+        {this.props.renderOnlyPending && this._renderPendingVolunteers(approvedAndPendingVolunteers[1])}
+        {!this.props.renderOnlyPending && this._renderCoOwnerVolunteers(coOwnerVolunteers)}
+        {!this.props.renderOnlyPending && this._renderApprovedVolunteers(approvedAndPendingVolunteers[0])}
+
       </div>
     );
   }
 
+
+
+
   _renderCoOwnerVolunteers(coOwnerVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
     return !_.isEmpty(coOwnerVolunteers)
-      ? this._renderVolunteerSection(coOwnerVolunteers, CoOwnerHeading)
+      ? this._renderVolunteerSection(coOwnerVolunteers, "")
       : null;
   }
 
   _renderApprovedVolunteers(approvedVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
     return !_.isEmpty(approvedVolunteers)
-      ? this._renderVolunteerSection(approvedVolunteers, "TEAM")
+      ? this._renderVolunteerSection(approvedVolunteers, "")
       : null;
   }
 
   _renderPendingVolunteers(pendingVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
     return (this.props.isProjectAdmin || this.props.isProjectCoOwner) &&  !_.isEmpty(pendingVolunteers)
-      ? this._renderVolunteerSection(pendingVolunteers, "AWAITING REVIEW")
+      ? this._renderVolunteerSection(pendingVolunteers, "Waiting for confirmation...")
       : null;
   }
 
   _renderVolunteerSection(volunteers: ?Array<VolunteerDetailsAPIData>, header: string): React$Node {
       return !_.isEmpty(volunteers)
       ?  <div className="Text-section VolunteerSection-volunteerList">
+            {header && <h4>{header}</h4>}
               {
                 volunteers.map((volunteer,i) =>
                   <VolunteerCard

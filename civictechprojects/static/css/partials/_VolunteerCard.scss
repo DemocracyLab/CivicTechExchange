@@ -24,16 +24,20 @@
 div.VolunteerCard-dropdownButton {
   display: inline;
   font-size: 24px;
+  float: right;
 }
-
-.VolunteerCard-danger {
-  background-color: red;
+.VolunteerCard-dropdownButton .btn-link {
+  color: $color-text-grey;
 }
-
-.VolunteerCard-success {
-  background-color: lightgreen;
+.VolunteerCard-dropdownButton li > a {
+  font-size: 18px;
+  line-height: 1.75;
 }
-
-.VolunteerCard-caution {
-  background-color: yellow;
+/* rotate thumbtack 45 degrees */
+.VolunteerCard-dropdownButton .fa-thumbtack {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
