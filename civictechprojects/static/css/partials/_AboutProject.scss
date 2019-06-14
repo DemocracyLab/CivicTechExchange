@@ -3,7 +3,8 @@
 
 .AboutProjects-root {
     display: flex;
-    flex-direction: column;
+    margin: 0 40px;
+    max-width: 1080px;
     background: $color-background-light;
     border-radius: 12px;
     border: $color-grey-disabled solid 1px;
@@ -24,8 +25,15 @@
       color: $color-text-light;
     }
   }
+
+.AboutProjects-paper {
+  height: 100%;
+}
+
 .AboutProjects-infoColumn {
-  order: 2;
+  order: 1;
+  width: 30%;
+  min-width: 300px;
   border-right: $color-grey-disabled solid 1px;
   h4 {
     font-size: 1rem;
@@ -35,7 +43,6 @@
 }
 
 .AboutProjects-iconContainer {
-  display: none;
   height: 262px;
   margin: auto;
   width: 100%;
@@ -89,7 +96,7 @@
 }
 
 .AboutProjects-introTop {
-  display: inherit;
+  display: flex;
   min-height: 225px;
   justify-content: space-between;
 }
@@ -103,7 +110,8 @@
 }
 
 .AboutProjects-mainColumn {
-  order: 1;
+  order: 2;
+  width: 70%;
 }
 
 .AboutProjects-description {
@@ -275,36 +283,52 @@ button.AboutProject-button:disabled {
   color: $color-text-light;
 }
 
-@include media-breakpoint-up(md) {
-  .AboutProjects-root {
-    flex-direction: row;
-  }
-  .AboutProjects-mainColumn {
-    order: 2;
-  }
-  .AboutProjects-infoColumn {
-  order: 1;
-  }
+@media (max-width: 1000px) {
+  // buttons will align below "-description"
   .AboutProjects-introTop {
-    display: flex;
-  }
-  .AboutProjects-iconContainer {
-    display: block;
+    display: inherit;
   }
 }
 
-
 @media (max-width: 800px) {
+
+  .AboutProjects-root {
+    flex-direction: column;
+    margin: 0 5px;
+    min-width: 450px;
+    border-radius: 8px;
+  }
+
+  .AboutProjects-infoColumn {
+    width: 100%;
+    order: 2;
+  }
+
+  .AboutProjects-mainColumn {
+    width: 100%;
+    order: 1;
+  }
 
   .AboutProjects-skills-container {
     display: inherit;
     margin-top: 8%;
   }
 
-
+  .AboutProjects-iconContainer {
+    display: none;
+  }
 
   .AboutProjects-positions-available {
     border-bottom: $color-grey-disabled solid 1px;
   }
 
+}
+
+
+@media (min-width: 1160px) {
+
+  .AboutProjects-root {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
