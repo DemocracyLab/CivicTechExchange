@@ -26,10 +26,6 @@
     }
   }
 
-.AboutProjects-paper {
-  height: 100%;
-}
-
 .AboutProjects-infoColumn {
   order: 1;
   width: 30%;
@@ -48,8 +44,8 @@
   width: 100%;
   border-bottom: $color-grey-disabled solid 1px;
   img {
-    padding-top: 2%;
-    padding-bottom: 3%; 
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 }
 
@@ -139,6 +135,7 @@
 }
 
 .AboutProjects_tabs {
+  clear: both;
   justify-self: flex-start;
   align-self: flex-end;
   width: 100%;
@@ -288,6 +285,10 @@ button.AboutProject-button:disabled {
   .AboutProjects-introTop {
     display: inherit;
   }
+  //description is then full width
+  .AboutProjects-description {
+    width: 100%;
+  }
 }
 
 @media (max-width: 800px) {
@@ -295,7 +296,6 @@ button.AboutProject-button:disabled {
   .AboutProjects-root {
     flex-direction: column;
     margin: 0 5px;
-    min-width: 450px;
     border-radius: 8px;
   }
 
@@ -311,7 +311,7 @@ button.AboutProject-button:disabled {
 
   .AboutProjects-skills-container {
     display: inherit;
-    margin-top: 8%;
+    margin-top: 40px;
   }
 
   .AboutProjects-iconContainer {
@@ -326,9 +326,15 @@ button.AboutProject-button:disabled {
 
 
 @media (min-width: 1160px) {
-  
+
   .AboutProjects-root {
     margin-left: auto;
     margin-right: auto;
+  }
+}
+//push tabs and buttons a bit farther apart on narrow devices
+@media (max-width: 400px) {
+  .AboutProjects_tabs {
+    padding-top: 24px;
   }
 }

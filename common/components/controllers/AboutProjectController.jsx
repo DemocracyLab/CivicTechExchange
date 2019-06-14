@@ -194,7 +194,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
         <div className="AboutProjects-mainColumn">
 
-          <div className='AboutProjects-intro' container direction='row' alignItems='flex-start' justify='center'>
+          <div className='AboutProjects-intro'>
             <div className='AboutProjects-introTop'>
               <div className='AboutProjects-description'>
                 <h1>{project && project.project_name}</h1>
@@ -254,7 +254,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
             </div>
           </div>
 
-          <div className='AboutProjects-positions-available' container>
+          <div className='AboutProjects-positions-available'>
             <div id="positions-available">
               {project && !_.isEmpty(project.project_positions) && this._renderPositions()}
             </div>
