@@ -28,6 +28,7 @@ import {LinkTypes} from "../constants/LinkConstants.js";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
+  volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   loadStatusMsg: string,
   showJoinModal: boolean,
   positionToJoin: ?PositionInfo,
@@ -41,16 +42,17 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   constructor(): void{
     super();
     this.state = {
-    project: null,
-    loadStatusMsg: "Loading...",
-    showContactModal: false,
-    showPositionModal: false,
-    shownPosition: null,
-    tabs: {
-      details: true,
-      skills: false,
-    }
-  }
+      project: null,
+      loadStatusMsg: "Loading...",
+      showContactModal: false,
+      showPositionModal: false,
+      shownPosition: null,
+      tabs: {
+        details: true,
+        skills: false,
+      }
+    };
+    this.handleUpdateVolunteers = this.handleUpdateVolunteers.bind(this);
  }
 
   componentDidMount() {
@@ -62,6 +64,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   loadProjectDetails(project: ProjectDetailsAPIData) {
     this.setState({
       project: project,
+      volunteers: project.project_volunteers
     });
   }
 
@@ -76,6 +79,12 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
     this.setState({
       showJoinModal: true,
       positionToJoin: position
+    });
+  }
+  
+  handleUpdateVolunteers(volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>) {
+    this.setState({
+      volunteers: volunteers
     });
   }
 
@@ -158,13 +167,14 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
 
           <div className='AboutProjects-team'>
             {
-            project && !_.isEmpty(project.project_volunteers)
+            !_.isEmpty(this.state.volunteers)
               ? <VolunteerSection
-                  volunteers={project.project_volunteers}
+                  volunteers={this.state.volunteers}
                   isProjectAdmin={CurrentUser.userID() === project.project_creator}
                   isProjectCoOwner={CurrentUser.isCoOwner(project)}
                   projectId={project.project_id}
                   renderOnlyPending={true}
+                  onUpdateVolunteers={this.handleUpdateVolunteers}
                 />
               : null
             }
@@ -178,13 +188,14 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
               }
 
               {
-              project && !_.isEmpty(project.project_volunteers)
+              !_.isEmpty(this.state.volunteers)
                 ? <VolunteerSection
-                    volunteers={project.project_volunteers}
+                    volunteers={this.state.volunteers}
                     isProjectAdmin={CurrentUser.userID() === project.project_creator}
                     isProjectCoOwner={CurrentUser.isCoOwner(project)}
                     projectId={project.project_id}
                     renderOnlyPending={false}
+                    onUpdateVolunteers={this.handleUpdateVolunteers}
                   />
                 : null
               }
