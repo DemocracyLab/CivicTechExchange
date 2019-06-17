@@ -18,7 +18,8 @@ type Props = {|
   +isProjectAdmin: boolean,
   +isProjectCoOwner: boolean,
   +projectId: string,
-  +renderOnlyPending: boolean
+  +renderOnlyPending: boolean,
+  +onUpdateVolunteers: ($ReadOnlyArray<VolunteerDetailsAPIData>) => void
 |};
 
 type RejectVolunteerParams = {|
@@ -65,6 +66,12 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     this.openPromotionModal = this.openPromotionModal.bind(this);
     this.openDemotionModal = this.openDemotionModal.bind(this);
   }
+  
+  componentWillReceiveProps(nextProps: Props): void {
+    if(nextProps.volunteers) {
+      this.setState({volunteers: _.cloneDeep(nextProps.volunteers)});
+    }
+  }
 
   openApplicationModal(volunteer: VolunteerDetailsAPIData): void {
     this.setState({
@@ -94,6 +101,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
         this.setState({
           showApproveModal: false
         });
+        this.props.onUpdateVolunteers && this.props.onUpdateVolunteers(this.state.volunteers);
         this.forceUpdate();
       });
     } else {
