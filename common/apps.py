@@ -18,6 +18,6 @@ class CommonConfig(AppConfig):
             if not hasattr(settings, key):
                 if value['error']:
                     missing_required_variables.append(key)
-                print(value['message'])
+                print(key + ' not set: ' + value['message'])
         if len(missing_required_variables) > 0:
             raise EnvironmentError('Required environment variables missing: ' + ','.join(missing_required_variables))

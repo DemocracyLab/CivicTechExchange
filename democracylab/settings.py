@@ -194,35 +194,35 @@ STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
 ENVIRONMENT_VARIABLE_WARNINGS = {
     'PRESS_LINKS': {
         'error': True,
-        'message': 'PRESS_LINKS not set: Press page articles will not be shown.'
+        'message': 'Press page articles will not be shown.'
     },
     'PROTOCOL_DOMAIN': {
         'error': True,
-        'message': 'PROTOCOL_DOMAIN not set: backend link generation will not work.'
+        'message': 'Backend link generation will not work.'
     },
     'DLAB_PROJECT_ID': {
         'error': True,
-        'message': 'DLAB_PROJECT_ID not set: About Us page will not display correctly.'
+        'message': 'About Us page will not display correctly.'
     },
-    'STATIC_CDN_URL': {
+    'STATIC_CDN_URLX': {
         'error': False,
-        'message': 'STATIC_CDN_URL not set: static images will not be shown.'
+        'message': 'Static images will not be shown.'
     },
     'PROJECT_DESCRIPTION_EXAMPLE_URL': {
         'error': False,
-        'message': 'PROJECT_DESCRIPTION_EXAMPLE_URL not set: url example for project description will not be shown.'
+        'message': 'Example url for project description will not be shown.'
     },
     'POSITION_DESCRIPTION_EXAMPLE_URL': {
         'error': False,
-        'message': 'POSITION_DESCRIPTION_EXAMPLE_URL not set: url example for position description will not be shown.'
+        'message': 'Example url for position description will not be shown.'
     },
     'S3_BUCKET': {
         'error': False,
-        'message': 'S3_BUCKET not set; saving images and files will not work.'
+        'message': 'Saving images and files will not work.'
     },
     'PAYPAL_ENDPOINT': {
         'error': False,
-        'message': 'PAYPAL_ENDPOINT not set; donation will not work.'
+        'message': 'Donations will not work.'
     }
 }
 
