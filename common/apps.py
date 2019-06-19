@@ -13,9 +13,11 @@ class CommonConfig(AppConfig):
             import_tags_from_csv()
 
     def display_missing_environment_variables(self):
+        missing_required_variables = []
         for key, value in settings.ENVIRONMENT_VARIABLE_WARNINGS.items():
             if not hasattr(settings, key):
                 if value['error']:
-                    raise EnvironmentError(value['message'])
-                else:
-                    print(value['message'])
+                    missing_required_variables.append(key)
+                print(value['message'])
+        if len(missing_required_variables) > 0:
+            raise EnvironmentError('Required environment variables missing: ' + ','.join(missing_required_variables))
