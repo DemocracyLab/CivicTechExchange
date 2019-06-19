@@ -15,4 +15,7 @@ class CommonConfig(AppConfig):
     def display_missing_environment_variables(self):
         for key, value in settings.ENVIRONMENT_VARIABLE_WARNINGS.items():
             if not hasattr(settings, key):
-                print(value['message'])
+                if value['error']:
+                    raise EnvironmentError(value['message'])
+                else:
+                    print(value['message'])
