@@ -204,7 +204,7 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
         'error': True,
         'message': 'About Us page will not display correctly.'
     },
-    'STATIC_CDN_URLX': {
+    'STATIC_CDN_URL': {
         'error': False,
         'message': 'Static images will not be shown.'
     },

@@ -15,7 +15,7 @@ class CommonConfig(AppConfig):
     def display_missing_environment_variables(self):
         missing_required_variables = []
         for key, value in settings.ENVIRONMENT_VARIABLE_WARNINGS.items():
-            if not hasattr(settings, key):
+            if not (hasattr(settings, key) and len(getattr(settings, key)) > 0):
                 if value['error']:
                     missing_required_variables.append(key)
                 print(key + ' not set: ' + value['message'])
