@@ -191,7 +191,12 @@ GOOGLE_PROPERTY_ID = os.environ.get('GOOGLE_PROPERTY_ID', '')
 
 STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
 
-# TODO: Call out missing required environment variables
+ENVIRONMENT_VARIABLE_WARNINGS = {
+    'STATIC_CDN_URL': {
+        'error': True,
+        'message': 'STATIC_CDN_URL not set; static images will not be shown.'
+    },
+}
 
 # TODO: Set to True in productions
 # SESSION_COOKIE_SECURE = True
