@@ -1,3 +1,42 @@
 .SocialFooter-root {
-  
+  background: #555; /* placeholder */
+  color: $color-text-light;
+  padding: 20px 0 10px 0;
+}
+.SocialFooter-iconblock a {
+  color: $color-text-light;
+  text-decoration: none;
+  padding-right: 1rem;
+  &:hover {
+    color: $color-text-grey;
+  }
+}
+.SocialFooter-btn-about, .SocialFooter-btn-donate {
+  background: $color-background-light;
+}
+.SocialFooter-btn-about {
+  color: $color-orange;
+  border: $color-orange;
+  &:hover {
+    color: $color-orange-darker;
+    border: $color-orange-darker;
+  }
+}
+.SocialFooter-btn-donate {
+  color: $color-text-grey;
+  border: $color-text-grey;
+  &:hover {
+    color: $color-text-dark;
+    border: $color-text-dark;
+  }
+}
+.SocialFooter-copyright {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+@include media-breakpoint-up(sm) {
+  .SocialFooter-btn-about {
+    margin-right: 1rem;
+  }
 }

@@ -52,8 +52,8 @@ button.clear-button-appearance, a.clear-button-appearance, a[type="button"].clea
 @include media-breakpoint-up(md) {
   .bounded-content {
     width: 720px;
+  }
 }
-
 @include media-breakpoint-up(lg) {
   .bounded-content {
     width: 960px;

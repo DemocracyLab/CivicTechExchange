@@ -1,20 +1,36 @@
 import React from 'react';
+import {Button} from 'react-bootstrap';
+import {Glyph, GlyphStyles, GlyphSizes} from '../utils/glyphs.js'
+
 
 class SocialFooter extends React.Component {
 
   _dlCallToActions() {
     return (
-      <p>Welcome to DemocracyLab</p>
+      <React.Fragment>
+        <p>Welcome to DemocracyLab</p>
+        <Button bsClass="btn SocialFooter-btn-about" href={`/index/?section=AboutProject&id=${window.DLAB_PROJECT_ID}`}>Join Us</Button>
+        <Button bsClass="btn SocialFooter-btn-donate" href="/index/?section=Donate">Donate</Button>
+      </React.Fragment>
     )
   }
   _socialLinks() {
     return (
-      <p>Join us on social media somewhere....</p>
+      <React.Fragment>
+        <p>Follow us on</p>
+        <div className="SocialFooter-iconblock">
+          <a href=""><i className={Glyph(GlyphStyles.FacebookSquare, GlyphSizes.X2)}></i></a>
+          <a href=""><i className={Glyph(GlyphStyles.TwitterSquare, GlyphSizes.X2)}></i></a>
+          <a href=""><i className={Glyph(GlyphStyles.LinkedIn, GlyphSizes.X2)}></i></a>
+          <a href=""><i className={Glyph(GlyphStyles.Medium, GlyphSizes.X2)}></i></a>
+        </div>
+      </React.Fragment>
+
     )
   }
   _copyrightInfo() {
     return (
-      <p>Copyright &copy; 2019 DemocracyLab. All Rights Reserved.</p>
+      <p className="SocialFooter-copyright">Copyright &copy; 2019 DemocracyLab. All Rights Reserved.</p>
     )
   }
   _footerNavigation() {
@@ -31,13 +47,13 @@ class SocialFooter extends React.Component {
 
   render() {
     return (
-      <div className="SocialFooter-root container-fluid">
-        <div className="bounded-content">
-          {this._dlCallToActions}
-          {this._socialLinks}
-          {this._copyrightInfo}
-          {this._footerNavigation}
-          {this._newsletterSignup}
+      <div className="SocialFooter-root">
+        <div className="container">
+          {this._dlCallToActions()}
+          {this._socialLinks()}
+          {/* {this._footerNavigation()} */}
+          {this._newsletterSignup()}
+          {this._copyrightInfo()}
         </div>
       </div>
     )
