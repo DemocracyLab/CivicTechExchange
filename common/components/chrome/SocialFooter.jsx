@@ -33,11 +33,6 @@ class SocialFooter extends React.Component {
       <p className="SocialFooter-copyright">Copyright &copy; 2019 DemocracyLab. All Rights Reserved.</p>
     )
   }
-  _footerNavigation() {
-    return (
-      <p>Footer navigation links go here</p>
-    )
-  }
 
   _newsletterSignup() {
     return (
@@ -48,12 +43,17 @@ class SocialFooter extends React.Component {
   render() {
     return (
       <div className="SocialFooter-root">
-        <div className="container">
-          {this._dlCallToActions()}
-          {this._socialLinks()}
-          {/* {this._footerNavigation()} */}
-          {this._newsletterSignup()}
-          {this._copyrightInfo()}
+        <div className="container SocialFooter-container">
+          <div className="SocialFooter-left">
+            {this._dlCallToActions()}
+          </div>
+          <div className="SocialFooter-right">
+            {this._socialLinks()}
+            {this._newsletterSignup()}
+          </div>
+          <div className="SocialFooter-bottom">
+            {this._copyrightInfo()}
+          </div>
         </div>
       </div>
     )
