@@ -19,10 +19,10 @@ class SocialFooter extends React.Component {
       <div className="SocialFooter-followus">
         <p>Follow us on</p>
         <div className="SocialFooter-iconblock">
-          <a href=""><i className={Glyph(GlyphStyles.FacebookSquare, GlyphSizes.X2)}></i></a>
-          <a href=""><i className={Glyph(GlyphStyles.TwitterSquare, GlyphSizes.X2)}></i></a>
-          <a href=""><i className={Glyph(GlyphStyles.LinkedIn, GlyphSizes.X2)}></i></a>
-          <a href=""><i className={Glyph(GlyphStyles.Medium, GlyphSizes.X2)}></i></a>
+          <a href="https://www.facebook.com/democracylaborg"><i className={Glyph(GlyphStyles.FacebookSquare, GlyphSizes.X2)}></i></a>
+          <a href="https://twitter.com/democracylab"><i className={Glyph(GlyphStyles.TwitterSquare, GlyphSizes.X2)}></i></a>
+          <a href="https://www.linkedin.com/company/democracylab"><i className={Glyph(GlyphStyles.LinkedIn, GlyphSizes.X2)}></i></a>
+          <a href="https://medium.com/democracylab-org"><i className={Glyph(GlyphStyles.Medium, GlyphSizes.X2)}></i></a>
         </div>
       </div>
 
