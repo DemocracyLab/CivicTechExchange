@@ -11,6 +11,9 @@
     color: $color-text-grey;
   }
 }
+.SocialFooter-iconblock a:last-of-type {
+  padding-right: 0;
+}
 .SocialFooter-btn-about, .SocialFooter-btn-donate {
   background: $color-background-light;
 }

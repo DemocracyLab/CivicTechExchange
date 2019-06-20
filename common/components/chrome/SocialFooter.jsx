@@ -7,16 +7,16 @@ class SocialFooter extends React.Component {
 
   _dlCallToActions() {
     return (
-      <React.Fragment>
+      <div className="SocialFooter-cta">
         <p>Welcome to DemocracyLab</p>
         <Button bsClass="btn SocialFooter-btn-about" href={`/index/?section=AboutProject&id=${window.DLAB_PROJECT_ID}`}>Join Us</Button>
         <Button bsClass="btn SocialFooter-btn-donate" href="/index/?section=Donate">Donate</Button>
-      </React.Fragment>
+      </div>
     )
   }
   _socialLinks() {
     return (
-      <React.Fragment>
+      <div className="SocialFooter-followus">
         <p>Follow us on</p>
         <div className="SocialFooter-iconblock">
           <a href=""><i className={Glyph(GlyphStyles.FacebookSquare, GlyphSizes.X2)}></i></a>
@@ -24,7 +24,7 @@ class SocialFooter extends React.Component {
           <a href=""><i className={Glyph(GlyphStyles.LinkedIn, GlyphSizes.X2)}></i></a>
           <a href=""><i className={Glyph(GlyphStyles.Medium, GlyphSizes.X2)}></i></a>
         </div>
-      </React.Fragment>
+      </div>
 
     )
   }
