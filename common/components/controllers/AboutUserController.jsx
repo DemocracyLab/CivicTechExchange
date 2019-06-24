@@ -11,6 +11,7 @@ import {LinkInfo} from "../forms/LinkInfo.jsx";
 import Avatar from "../common/avatar.jsx"
 import _ from 'lodash'
 import Headers from "../common/Headers.jsx";
+import LoadingMessage from "../chrome/LoadingMessage.jsx";
 
 type State = {|
   user: ?UserAPIData,
@@ -37,7 +38,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   }
 
   render(): React$Node {
-    return this.state.user ? this._renderDetails() : <div>Loading...</div>
+    return this.state.user ? this._renderDetails() : <LoadingMessage message="Loading profile..." />
   }
 
   _renderDetails(): React$Node {

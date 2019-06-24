@@ -6,6 +6,7 @@ import cdn from "../utils/cdn.js";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
+import LoadingMessage from '../chrome/LoadingMessage.jsx';
 
 
 //get press links
@@ -86,7 +87,7 @@ class PressController extends React.PureComponent<{||}, State> {
           <div className="press-bounded-content press-stats-content">
             {this._renderStatItems(this.state.stats)}
           </div>
-       </div> : <div className="press-stats" style={cdn.bgImage('OurVisionBGoverlay.jpg')}>Loading statistics...</div>
+       </div> : <div className="press-stats" style={cdn.bgImage('OurVisionBGoverlay.jpg')}><LoadingMessage message="Loading statistics..." /></div>
      )
     }
     _renderNews(): React$Node {
