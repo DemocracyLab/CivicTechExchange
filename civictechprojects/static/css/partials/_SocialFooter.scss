@@ -2,14 +2,11 @@
   background: #555; /* placeholder */
   color: $color-text-light;
   padding: 20px 0 10px 0;
+  text-align: center;
 }
 .SocialFooter-iconblock a {
-  color: $color-text-light;
   text-decoration: none;
-  padding-right: 1rem;
-  &:hover {
-    color: $color-text-grey;
-  }
+  padding-right: 1.5rem;
 }
 .SocialFooter-iconblock a:last-of-type {
   padding-right: 0;
@@ -21,7 +18,8 @@
   color: $color-orange;
   border: $color-orange;
   &:hover {
-    color: $color-orange-darker;
+    color: $color-text-light;
+    background: $color-orange;
     border: $color-orange-darker;
   }
 }
@@ -29,7 +27,8 @@
   color: $color-text-grey;
   border: $color-text-grey;
   &:hover {
-    color: $color-text-dark;
+    color: $color-text-light;
+    background: $color-text-grey;
     border: $color-text-dark;
   }
 }
@@ -38,8 +37,27 @@
   margin: 0 auto;
   text-align: center;
 }
+.SocialFooter-nav a, .SocialFooter-iconblock a {
+  color: $color-text-light;
+  &:hover {
+    color: $color-text-grey;
+  }
+}
+.SocialFooter-box {
+  margin-bottom: 1.5rem;
+}
 @include media-breakpoint-up(sm) {
   .SocialFooter-btn-about {
     margin-right: 1rem;
+  }
+}
+@include media-breakpoint-up(lg) {
+  .SocialFooter-root {
+    text-align: left;
+  }
+  .SocialFooter-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 }
