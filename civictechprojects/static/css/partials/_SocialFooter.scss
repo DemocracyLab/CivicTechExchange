@@ -4,12 +4,14 @@
   padding: 20px 0 10px 0;
   text-align: center;
 }
+.SocialFooter-cta a {
+  display: block;
+  margin: 0 auto 24px auto;
+  max-width: 130px;
+}
 .SocialFooter-iconblock a {
   text-decoration: none;
-  display: block;
-  margin: 0 auto;
-  max-width: 90px;
-  padding-bottom: 2rem;
+  padding-right: 1.5rem;
 }
 .SocialFooter-iconblock a:last-of-type {
   padding-right: 0;
@@ -53,14 +55,32 @@
   .SocialFooter-btn-about {
     margin-right: 1rem;
   }
-}
-@include media-breakpoint-up(lg) {
   .SocialFooter-root {
     text-align: left;
+  }
+  .SocialFooter-cta a {
+    display: inline-block;
+    margin: 0 12px;
   }
   .SocialFooter-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .SocialFooter-box {
+    flex-basis: 50%;
+  }
+  .SocialFooter-newsletter {
+    margin-left: auto;
+  }
+}
+@include media-breakpoint-up(lg) {
+  .SocialFooter-box {
+    flex-basis: 33%;
+    min-width: 300px;
+  }
+  .SocialFooter-newsletter {
+    margin-left: 0;
   }
 }
