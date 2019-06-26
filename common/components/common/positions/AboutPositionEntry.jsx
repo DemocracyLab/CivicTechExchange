@@ -1,11 +1,13 @@
- // @flow
-
+// @flow
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import CollapsibleTextSection from "../CollapsibleTextSection.jsx";
 import {tagOptionDisplay} from "../tags/TagSelector.jsx";
 import GlyphStyles from "../../utils/glyphs.js";
+import Section from "../../enums/Section.js";
+import url from "../../utils/url.js";
+import CurrentUser from '../../utils/CurrentUser';
 
 type Props = {|
   +position: PositionInfo,
@@ -23,7 +25,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
         <div className="Position-entry">
           <div className="Position-header">
           {this._renderHeader()}
-          {this.props.onClickApply ? this._renderApplyButton() : null}
+          {this._renderApplyButton()}
           </div>
           { this.props.position.descriptionUrl &&
               <div className="Position-description-link"><a href={this.props.position.descriptionUrl} target="_blank" rel="noopener noreferrer">
@@ -44,15 +46,34 @@ class AboutPositionEntry extends React.PureComponent<Props> {
   }
 
   _renderApplyButton(): ?React$Node {
+
+    let applyButton;
+    if (CurrentUser.isLoggedIn() === true) {
+      applyButton = (
+        <Button className="btn btn-theme"
+        type="button"
+        title="Apply to this position"
+        onClick={this.handleClickApply.bind(this)}
+      >
+        Apply Now
+      </Button>
+      );
+    } else {
+      applyButton = (
+        <Button className="btn btn-theme"
+        type="button"
+        title="Apply to this position"
+        href={url.section(Section.LogIn, url.getPreviousPageArg())}
+      >
+        Apply Now
+      </Button>
+      );
+    }
+
+
     return (
       <div className="apply-position-button">
-        <Button className="btn btn-theme"
-          type="button"
-          title="Apply to this position"
-          onClick={this.handleClickApply.bind(this)}
-        >
-          Apply Now
-        </Button>
+        {applyButton}
       </div>
     );
   }

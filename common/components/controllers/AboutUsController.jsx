@@ -9,6 +9,7 @@ import Person from '@material-ui/icons/Person';
 import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
+import LoadingMessage from "../chrome/LoadingMessage.jsx";
 
 type State = {|
   aboutUs: ?ProjectDetailsAPIData,
@@ -205,7 +206,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         <div className="about-us-team-card-container">
           {this._filterTeamSection(this.state.aboutUs.project_volunteers, 'Software Development')}
         </div>
-      </div> : <div className="about-us-team col"><p>Loading our team information...</p></div>)
+      </div> : <div className="about-us-team col"><LoadingMessage message="Loading our team information..." /></div>)
   }
 
   _renderTeamOwners(owners) {

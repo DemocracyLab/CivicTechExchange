@@ -10,6 +10,7 @@ import ProjectCard from './ProjectCard.jsx';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
+import LoadingMessage from '../../chrome/LoadingMessage.jsx';
 
 type State = {|
   projects: List<Project>,
@@ -65,7 +66,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
 
   _renderCards(): React$Node {
     return !this.state.projects
-      ? 'Loading projects ...'
+      ? <LoadingMessage message="Loading projects..." />
       : this.state.projects.size === 0
         ? 'No projects match the provided criteria. Try a different set of filters or search term.'
         : this.state.projects.map(
