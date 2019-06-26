@@ -10,7 +10,7 @@ class SocialFooter extends React.Component {
     return (
       <div className="SocialFooter-cta SocialFooter-box">
         <p>Welcome to DemocracyLab</p>
-        <Button bsClass="btn SocialFooter-btn-about" href={`/index/?section=AboutProject&id=${window.DLAB_PROJECT_ID}`}>Join Us</Button>
+        <Button bsClass="btn SocialFooter-btn-contact" href="mailto:hello@democracylab.org">Contact Us</Button>
         <Button bsClass="btn SocialFooter-btn-donate" href="/index/?section=Donate">Donate</Button>
       </div>
     )
@@ -38,6 +38,7 @@ class SocialFooter extends React.Component {
   _newsletterSignup() {
     return (
       <div className="SocialFooter-newsletter SocialFooter-box">
+        <p>Subscribe to our newsletter</p>
         <NewsletterSignup />
       </div>
     )

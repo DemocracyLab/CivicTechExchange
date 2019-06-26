@@ -1,0 +1,17 @@
+// custom styling for our newsletter signup box
+#mc_embed_signup {
+  clear: left;
+}
+
+.mc_embed_hidden {
+  position: absolute;
+  left: -5000px;
+}
+
+#mc_embed_signup.button {
+  display: inline;
+}
+
+.mc_display_none {
+  display: none;
+}

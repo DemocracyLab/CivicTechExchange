@@ -6,15 +6,18 @@
 }
 .SocialFooter-iconblock a {
   text-decoration: none;
-  padding-right: 1.5rem;
+  display: block;
+  margin: 0 auto;
+  max-width: 90px;
+  padding-bottom: 2rem;
 }
 .SocialFooter-iconblock a:last-of-type {
   padding-right: 0;
 }
-.SocialFooter-btn-about, .SocialFooter-btn-donate {
+.SocialFooter-btn-contact, .SocialFooter-btn-donate {
   background: $color-background-light;
 }
-.SocialFooter-btn-about {
+.SocialFooter-btn-contact {
   color: $color-orange;
   border: $color-orange;
   &:hover {
