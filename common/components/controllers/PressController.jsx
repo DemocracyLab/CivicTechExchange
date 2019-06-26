@@ -16,14 +16,13 @@ const staticData = {
   platformLaunch: 'August 2018',
   orgFounded: 'July 2006'
 }
-//set display names based on key names for stats. TODO: move to global?
+//set display names based on key names for stats.
 const categoryDisplayNames = {
-  //TODO: move to global constants file
   "platformLaunch": "Matchmaking Platform Launched",
   "orgFounded": "Organization Founded",
   "dlVolunteerCount": "Team Members",
   "activeVolunteerCount": "Active Volunteers",
-  "userCount": "Number of Users",
+  "userCount": "Registered Users",
   "projectCount": "Number of Projects"
 }
 type statsType = {
