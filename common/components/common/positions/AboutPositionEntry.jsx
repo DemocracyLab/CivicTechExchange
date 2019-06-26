@@ -25,7 +25,6 @@ class AboutPositionEntry extends React.PureComponent<Props> {
           <div className="Position-header">
           {this._renderHeader()}
           {this._renderApplyButton()}
-          {/* {this.props.onClickApply ? this._renderApplyButton() : null} */}
           </div>
           { this.props.position.descriptionUrl &&
               <div className="Position-description-link"><a href={this.props.position.descriptionUrl} target="_blank" rel="noopener noreferrer">
@@ -47,9 +46,9 @@ class AboutPositionEntry extends React.PureComponent<Props> {
 
   _renderApplyButton(): ?React$Node {
 
-    let ApplyButton;
+    let applyButton;
     if (CurrentUser.isLoggedIn() === true) {
-      ApplyButton = (
+      applyButton = (
         <Button className="btn btn-theme"
         type="button"
         title="Apply to this position"
@@ -59,7 +58,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
       </Button>
       );
     } else {
-      ApplyButton = (
+      applyButton = (
         <Button className="btn btn-theme"
         type="button"
         title="Apply to this position"
@@ -73,7 +72,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
 
     return (
       <div className="apply-position-button">
-        {ApplyButton}
+        {applyButton}
       </div>
     );
   }
