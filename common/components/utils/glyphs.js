@@ -26,6 +26,7 @@ export const GlyphStyles: {[key: string]: string} = {
   EllipsisV: "fas fa-ellipsis-v",
   Pushpin: "fas fa-thumbtack",
   Eye: "fas fa-eye",
+  LoadingSpinner: "fas fa-spinner fa-spin"
 };
 
 export const GlyphSizes: {[key: string]: string} = {
