@@ -13,6 +13,7 @@
     a {
       color: $color-orange;
       text-decoration: none;
+      -webkit-appearance: none;
     }
     a:hover {
       color: $color-orange-darker;
