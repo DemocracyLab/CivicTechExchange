@@ -169,9 +169,6 @@ class AboutUsController extends React.PureComponent<{||}, State> {
           <img src={cdn.image("PuzzleBG.jpg")}></img>
         </div>
         <div className="col-12 col-md-6">
-          <div className="about-us-ps-icon">
-            <img src={cdn.image("QuestionIcon.png")}></img>
-          </div>
           <div className="about-us-ps-problem">
           <h2>Problem</h2>
             <p>Everyday people generate powerful ideas that can change the world. Most of these ideas never achieve their potential because of a lack of resources and support.</p>
