@@ -1,4 +1,31 @@
+import json
 from common.helpers.collections import find_first
+from common.models.tags import Tag
+
+
+def read_form_field_string(model, form, field_name):
+    if field_name in form.data:
+        setattr(model, field_name, form.data.get(field_name))
+
+
+def merge_tag_changes(model, form, field_name):
+    if field_name in form.data:
+        Tag.merge_tags_field(getattr(model, field_name), form.data.get(field_name))
+
+
+def merge_json_changes(model_class, model, form, field_name):
+    if field_name in form.data:
+        json_text = form.data.get(field_name)
+        if len(json_text) > 0:
+            json_object = json.loads(json_text)
+            model_class.merge_changes(model, json_object)
+
+
+def merge_single_file(model, form, file_category, field_name):
+    from civictechprojects.models import ProjectFile
+    if field_name in form.data:
+        file_json = json.loads(form.data.get(field_name))
+        ProjectFile.replace_single_file(model, file_category, file_json)
 
 
 def is_json_field_empty(field_json):

@@ -101,6 +101,7 @@ def project_create(request):
 
 
 def project_edit(request, project_id):
+    # TODO: Use this for both create/edit
     if not request.user.is_authenticated():
         return redirect('/signup')
 
