@@ -6,4 +6,6 @@
   gtag('js', new Date());
 
   gtag('config', '{{GOOGLE_PROPERTY_ID}}');
+  gtag('config', '{{GOOGLE_ADS_ID}}');
+
 </script>

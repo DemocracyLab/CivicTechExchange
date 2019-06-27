@@ -174,7 +174,10 @@ def index(request):
 
     if settings.GOOGLE_PROPERTY_ID:
         context['googleScript'] = loader.render_to_string('scripts/google_snippet.txt',
-                                                          {'GOOGLE_PROPERTY_ID': settings.GOOGLE_PROPERTY_ID})
+                                                          {
+                                                              'GOOGLE_PROPERTY_ID': settings.GOOGLE_PROPERTY_ID,
+                                                              'GOOGLE_ADS_ID': settings.GOOGLE_ADS_ID
+                                                          })
 
     if request.user.is_authenticated():
         contributor = Contributor.objects.get(id=request.user.id)
