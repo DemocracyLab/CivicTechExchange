@@ -6,6 +6,10 @@
   gtag('js', new Date());
 
   gtag('config', '{{GOOGLE_PROPERTY_ID}}');
+  {% if GOOGLE_ADS_ID %}
   gtag('config', '{{GOOGLE_ADS_ID}}');
-
+  {% endif %}
 </script>
+{% if GOOGLE_ADS_ID and GOOGLE_CONVERSION_ID %}
+<script> gtag('event', 'conversion', {'send_to': '{{GOOGLE_ADS_ID}}/{{GOOGLE_CONVERSION_ID}}'}); </script>
+{% endif %}

@@ -24,7 +24,7 @@ from common.helpers.constants import FrontEndSection
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved
-from common.helpers.front_end import section_url
+from common.helpers.front_end import section_url, get_page_section
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 
@@ -172,11 +172,16 @@ def index(request):
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
                                                           {'HOTJAR_APPLICATION_ID': settings.HOTJAR_APPLICATION_ID})
 
+    GOOGLE_CONVERSION_ID = None
+    page = get_page_section(request.get_full_path())
+    if page and settings.GOOGLE_CONVERSION_IDS and page in settings.GOOGLE_CONVERSION_IDS:
+        GOOGLE_CONVERSION_ID = settings.GOOGLE_CONVERSION_IDS[page]
     if settings.GOOGLE_PROPERTY_ID:
         context['googleScript'] = loader.render_to_string('scripts/google_snippet.txt',
                                                           {
                                                               'GOOGLE_PROPERTY_ID': settings.GOOGLE_PROPERTY_ID,
-                                                              'GOOGLE_ADS_ID': settings.GOOGLE_ADS_ID
+                                                              'GOOGLE_ADS_ID': settings.GOOGLE_ADS_ID,
+                                                              'GOOGLE_CONVERSION_ID': GOOGLE_CONVERSION_ID
                                                           })
 
     if request.user.is_authenticated():
