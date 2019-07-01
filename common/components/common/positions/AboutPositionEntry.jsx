@@ -8,8 +8,10 @@ import GlyphStyles from "../../utils/glyphs.js";
 import Section from "../../enums/Section.js";
 import url from "../../utils/url.js";
 import CurrentUser from '../../utils/CurrentUser';
+import {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 
 type Props = {|
+  +project: ProjectDetailsAPIData,
   +position: PositionInfo,
   +onClickApply: (PositionInfo) => void
 |}
@@ -48,7 +50,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
   _renderApplyButton(): ?React$Node {
 
     let applyButton;
-    if (CurrentUser.isLoggedIn() === true) {
+    if (CurrentUser.canVolunteerForProject(this.props.project)) {
       applyButton = (
         <Button className="btn btn-theme"
         type="button"
@@ -58,7 +60,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
         Apply Now
       </Button>
       );
-    } else {
+    } else if (!CurrentUser.isLoggedIn()) {
       applyButton = (
         <Button className="btn btn-theme"
         type="button"
