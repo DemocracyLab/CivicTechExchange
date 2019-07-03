@@ -567,10 +567,12 @@ def demote_project_volunteer(request, application_id):
         #                           body=email_body)
         # return HttpResponse(status=200)
         email_template = HtmlEmailTemplate()\
-        .paragraph('{volunteer_name} is leaving {project_name} for the following reason:'.format(
-            volunteer_name=volunteer_relation.volunteer.full_name(),
+        .paragraph('The owner of {project_name} has removed you as a co-owner of the project for the following reason:'.format(
             project_name=volunteer_relation.project.project_name))\
         .paragraph('\"{message}\"'.format(message=message))
+
+
+
     
     
     
