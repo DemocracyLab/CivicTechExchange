@@ -547,10 +547,11 @@ def dismiss_project_volunteer(request, application_id):
         .paragraph('The owner of {project_name} has removed you from the project for the following reason:'.format(
             project_name=volunteer_relation.project.project_name))\
         .paragraph('\"{message}\"'.format(message=message))
-
-        
-        
-        
+        email_subject = 'You have been removed as a volunteer from {project_name}'.format(
+            project_name=volunteer_relation.project.project_name)
+        send_to_project_volunteer(volunteer_relation=volunteer_relation,
+                               subject=email_subject,
+                               body=email_template)
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
