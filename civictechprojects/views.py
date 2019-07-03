@@ -518,11 +518,18 @@ def reject_project_volunteer(request, application_id):
     if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['rejection_message']
-        email_body_template = 'The project owner for {project_name} has declined your application for the following reason:\n{message}'
-        email_body = email_body_template.format(project_name=volunteer_relation.project.project_name,message=message)
+        # OLD PLAIN-TEXT FORMAT; WILL BE REMOVED AFTER REVIEW:
+        # email_body_template = 'The project owner for {project_name} has declined your application for the following reason:\n{message}'
+        # email_body = email_body_template.format(project_name=volunteer_relation.project.project_name,message=message)
+        email_template = HtmlEmailTemplate()\
+        .paragraph('The project owner of {project_name} has declined your application for the following reason:'.format(
+            project_name=volunteer_relation.project.project_name))\
+        .paragraph('\"{message}\"'.format(message=message))
+        email_subject = 'Your application to join {project_name}'.format(
+            project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
-                                  subject='Your application to join ' + volunteer_relation.project.project_name,
-                                  body=email_body)
+                                  subject=email_subject,
+                                  body=email_template)
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
@@ -547,7 +554,7 @@ def dismiss_project_volunteer(request, application_id):
         .paragraph('The owner of {project_name} has removed you from the project for the following reason:'.format(
             project_name=volunteer_relation.project.project_name))\
         .paragraph('\"{message}\"'.format(message=message))
-        email_subject = 'You have been removed as a volunteer from {project_name}'.format(
+        email_subject = 'You have been dismissed from {project_name}'.format(
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                subject=email_subject,
