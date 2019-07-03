@@ -13,6 +13,13 @@ class ContactForm extends React.Component {
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(event) {
+    let msg = JSON.stringify(this.state);
+    alert(msg);
+    event.preventDefault();
   }
 
   handleInputChange(event) {
@@ -26,7 +33,7 @@ class ContactForm extends React.Component {
 
   render() {
     return (
-      <form>
+      <form onSubmit={this.handleSubmit}>
         <label>
           First name:
           <input
@@ -60,7 +67,7 @@ class ContactForm extends React.Component {
             onChange={this.handleInputChange} />
         </label>
 
-
+        <input type="submit" value="Submit" />
       </form>
     );
   }
