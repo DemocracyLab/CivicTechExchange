@@ -571,9 +571,10 @@ def demote_project_volunteer(request, application_id):
             project_name=volunteer_relation.project.project_name))\
         .paragraph('\"{message}\"'.format(message=message))
 
+        email_subject = 'You have been removed as a co-owner from {project_name}'.format(
+            project_name=volunteer_relation.project.project_name)
 
 
-    
     
     
     
