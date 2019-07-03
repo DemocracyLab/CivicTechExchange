@@ -537,11 +537,20 @@ def dismiss_project_volunteer(request, application_id):
     if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['dismissal_message']
-        email_body = 'The owner for {project_name} has removed you from the project for the following reason:\n{message}'.format(
-            project_name=volunteer_relation.project.project_name, message=message)
-        send_to_project_volunteer(volunteer_relation=volunteer_relation,
-                                  subject='You have been dismissed from ' + volunteer_relation.project.project_name,
-                                  body=email_body)
+        # OLD PLAIN-TEXT FORMAT; WILL BE REMOVED AFTER REVIEW:
+        # email_body = 'The owner for {project_name} has removed you from the project for the following reason:\n{message}'.format(
+        #     project_name=volunteer_relation.project.project_name, message=message)
+        # send_to_project_volunteer(volunteer_relation=volunteer_relation,
+        #                           subject='You have been dismissed from ' + volunteer_relation.project.project_name,
+                                #   body=email_body)
+        email_template = HtmlEmailTemplate()\
+        .paragraph('The owner of {project_name} has removed you from the project for the following reason:'.format(
+            project_name=volunteer_relation.project.project_name))\
+        .paragraph('\"{message}\"'.format(message=message))
+
+        
+        
+        
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
@@ -559,7 +568,7 @@ def demote_project_volunteer(request, application_id):
         update_project_timestamp(request, volunteer_relation.project)
         body = json.loads(request.body)
         message = body['demotion_message']
-        # OLD PLAIN-TEXT FORMAT; WILL BE REMOVED AFTER REVIEW: 
+        # OLD PLAIN-TEXT FORMAT; WILL BE REMOVED AFTER REVIEW:
         # email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
         #     project_name=volunteer_relation.project.project_name, message=message)
         # send_to_project_volunteer(volunteer_relation=volunteer_relation,
