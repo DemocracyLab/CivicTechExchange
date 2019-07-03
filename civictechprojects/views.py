@@ -559,7 +559,7 @@ def demote_project_volunteer(request, application_id):
         update_project_timestamp(request, volunteer_relation.project)
         body = json.loads(request.body)
         message = body['demotion_message']
-        # Old Plain-text Format:
+        # OLD PLAIN-TEXT FORMAT; WILL BE REMOVED AFTER REVIEW: 
         # email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
         #     project_name=volunteer_relation.project.project_name, message=message)
         # send_to_project_volunteer(volunteer_relation=volunteer_relation,
@@ -570,19 +570,14 @@ def demote_project_volunteer(request, application_id):
         .paragraph('The owner of {project_name} has removed you as a co-owner of the project for the following reason:'.format(
             project_name=volunteer_relation.project.project_name))\
         .paragraph('\"{message}\"'.format(message=message))
-
         email_subject = 'You have been removed as a co-owner from {project_name}'.format(
             project_name=volunteer_relation.project.project_name)
-
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                subject=email_subject,
                                body=email_template)
-    
-    
-    
+        return HttpResponse(status=200)
     else:
         raise PermissionDenied()
-
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
