@@ -610,7 +610,6 @@ def contact_democracylab(request):
     if len(message) > 0:
         email_template = HtmlEmailTemplate()\
         .paragraph('\"{message}\"'.format(message=message))
-        .paragraph(request['fname'] request['lname'])\
     email_subject = 'Contact DemocracyLab message'
     contact_democracylab(emailaddr=body['emailaddr'], template=email_template)
     return HttpResponse(status=200)

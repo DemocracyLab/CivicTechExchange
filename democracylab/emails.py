@@ -294,8 +294,8 @@ def contact_democracylab(emailaddr, template):
     email_msg = EmailMessage(
         subject='Contact Us Message',
         from_email=_get_account_from_email(settings.EMAIL_ADMIN_ACCT),
-        to=settings.
-        reply_to=emailaddr
+        to=_get_account_from_email(settings.EMAIL_ADMIN_ACCT),
+        reply_to={emailaddr}
     )
     email_msg = template.render(email_msg)
-    send_email(email_msg, settings.EMAIL_ADMIN_ACCT)
+    send_email(email_msg, settings.EMAIL_)

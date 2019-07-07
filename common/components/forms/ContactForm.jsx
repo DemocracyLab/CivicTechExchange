@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import ProjectAPIUtils from '../utils/ProjectAPIUtils.jsx';
+import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 
 class ContactForm extends React.Component {
   constructor(props) {
@@ -26,17 +26,14 @@ class ContactForm extends React.Component {
           emailaddr: this.state.emailaddr,
           message: this.state.message
         },
-        response => this.showSuccess()
-        response => this.showFailure()
+        response => this.showResponse(response),
+        response => null
         );
     }
-  }
 
-  showSuccess() {
-    console.log('Successful send.')
-  }
-  showFailure() {
-    console.log('Failed to send, please try again.')
+
+  showResponse(response) {
+    console.log('Send status: ' + response)
   }
 
   handleInputChange(event) {
