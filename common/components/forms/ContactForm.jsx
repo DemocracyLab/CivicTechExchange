@@ -19,7 +19,7 @@ class ContactForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    ProjectAPIUtils.post("/contact/democracylab/",
+    ProjectAPIUtils.post("/contact/democracylab",
         {
           fname: this.state.fname,
           lname: this.state.lname,

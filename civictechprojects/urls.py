@@ -59,6 +59,6 @@ urlpatterns = [
     url(r'^volunteer/renew/(?P<application_id>[0-9]+)/$', views.renew_volunteering_with_project, name='renew_volunteering_with_project'),
     url(r'^volunteer/conclude/(?P<application_id>[0-9]+)/$', views.conclude_volunteering_with_project, name='conclude_volunteering_with_project'),
     url(r'^alert/create/$', views.add_alert, name='add_alert'),
-    url(r'^contact/democracylab', views.contact_democracylab, name='contact_democracylab')
+    url(r'^contact/democracylab$', views.contact_democracylab, name='contact_democracylab')
 
 ]
