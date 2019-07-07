@@ -23,7 +23,7 @@ from common.models.tags import Tag
 from common.helpers.constants import FrontEndSection
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
-    notify_project_owners_project_approved
+    notify_project_owners_project_approved, contact_democracylab
 from common.helpers.front_end import section_url
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
@@ -603,3 +603,14 @@ def leave_project(request, project_id):
 def update_project_timestamp(request, project):
     if not request.user.is_staff:
         project.update_timestamp()
+
+def contact_democracylab(request):
+    body = json.loads(request.body)
+    message = body['departure_message']
+    if len(message) > 0:
+        email_template = HtmlEmailTemplate()\
+        .paragraph('\"{message}\"'.format(message=message))
+        .paragraph(request['fname'] request['lname'])\
+    email_subject = 'Contact DemocracyLab message'
+    contact_democracylab(emailaddr=body['emailaddr'], template=email_template)
+    return HttpResponse(status=200)

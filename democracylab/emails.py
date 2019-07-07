@@ -171,7 +171,7 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
 volunteer_conclude_email_template = HtmlEmailTemplate() \
     .header("How has your experience been at {{project_name}}?") \
     .paragraph("Hi {{first_name}},") \
-    .paragraph("We're always looking for ways to improve the connection between volunteers and tech-for-good projects.  " 
+    .paragraph("We're always looking for ways to improve the connection between volunteers and tech-for-good projects.  "
                "We've developed this super-short survey and we'd love to hear from you.  It will take less than a minute "
                "and will help us make DemocracyLab even better.") \
     .button(url=settings.VOLUNTEER_CONCLUDE_SURVEY_URL, text='TAKE OUR SURVEY')
@@ -289,3 +289,13 @@ def _get_co_owner_emails(project):
 
 def _get_account_from_email(email_acct):
     return email_acct['from_name'] if email_acct is not None else 'DemocracyLab'
+
+def contact_democracylab(emailaddr, template):
+    email_msg = EmailMessage(
+        subject='Contact Us Message',
+        from_email=_get_account_from_email(settings.EMAIL_ADMIN_ACCT),
+        to=settings.
+        reply_to=emailaddr
+    )
+    email_msg = template.render(email_msg)
+    send_email(email_msg, settings.EMAIL_ADMIN_ACCT)
