@@ -290,12 +290,12 @@ def _get_co_owner_emails(project):
 def _get_account_from_email(email_acct):
     return email_acct['from_name'] if email_acct is not None else 'DemocracyLab'
 
-def contact_democracylab(emailaddr, template):
+def contact_democracylab_email(emailaddr, template):
     email_msg = EmailMessage(
         subject='Contact Us Message',
-        from_email=_get_account_from_email(settings.EMAIL_ADMIN_ACCT),
-        to=_get_account_from_email(settings.EMAIL_ADMIN_ACCT),
-        reply_to={emailaddr}
+        from_email=[emailaddr],
+        to=['hello@democracylab.org'],
+        reply_to=[emailaddr],
     )
     email_msg = template.render(email_msg)
-    send_email(email_msg, settings.EMAIL_)
+    send_email(email_msg)
