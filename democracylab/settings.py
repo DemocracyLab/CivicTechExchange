@@ -188,10 +188,45 @@ SECURE_SSL_REDIRECT = os.environ.get('DL_SECURE_SSL_REDIRECT', False) == 'True'
 HOTJAR_APPLICATION_ID = os.environ.get('HOTJAR_APPLICATION_ID', '')
 
 GOOGLE_PROPERTY_ID = os.environ.get('GOOGLE_PROPERTY_ID', '')
+GOOGLE_ADS_ID = os.environ.get('GOOGLE_ADS_ID', '')
+GOOGLE_CONVERSION_IDS = ast.literal_eval(os.environ.get('GOOGLE_CONVERSION_IDS', 'None'))
 
 STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
 
-# TODO: Call out missing required environment variables
+ENVIRONMENT_VARIABLE_WARNINGS = {
+    'PRESS_LINKS': {
+        'error': True,
+        'message': 'Press page articles will not be shown.'
+    },
+    'PROTOCOL_DOMAIN': {
+        'error': True,
+        'message': 'Backend link generation will not work.'
+    },
+    'DLAB_PROJECT_ID': {
+        'error': True,
+        'message': 'About Us page will not display correctly.'
+    },
+    'STATIC_CDN_URL': {
+        'error': False,
+        'message': 'Static images will not be shown.'
+    },
+    'PROJECT_DESCRIPTION_EXAMPLE_URL': {
+        'error': False,
+        'message': 'Example url for project description will not be shown.'
+    },
+    'POSITION_DESCRIPTION_EXAMPLE_URL': {
+        'error': False,
+        'message': 'Example url for position description will not be shown.'
+    },
+    'S3_BUCKET': {
+        'error': False,
+        'message': 'Saving images and files will not work.'
+    },
+    'PAYPAL_ENDPOINT': {
+        'error': False,
+        'message': 'Donations will not work.'
+    }
+}
 
 # TODO: Set to True in productions
 # SESSION_COOKIE_SECURE = True

@@ -9,6 +9,7 @@ import Person from '@material-ui/icons/Person';
 import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
+import LoadingMessage from "../chrome/LoadingMessage.jsx";
 
 type State = {|
   aboutUs: ?ProjectDetailsAPIData,
@@ -154,7 +155,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
           </div>
         </div>
         <div className="col-12 col-md-6 about-us-values-image">
-          <img src={cdn.image("CoreValuesBG520.jpg")}></img>
+          <img src={cdn.image(Images.CORE_VALUES_BG)}></img>
         </div>
 
       </div>
@@ -165,18 +166,15 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="row ml-0 mr-0 about-us-ps">
         <hr/>
         <div className="about-us-show-md-up col-12 col-md-6 about-us-ps-image">
-          <img src={cdn.image("PuzzleBG.jpg")}></img>
+          <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)}></img>
         </div>
         <div className="col-12 col-md-6">
-          <div className="about-us-ps-icon">
-            <img src={cdn.image("QuestionIcon.png")}></img>
-          </div>
           <div className="about-us-ps-problem">
           <h2>Problem</h2>
             <p>Everyday people generate powerful ideas that can change the world. Most of these ideas never achieve their potential because of a lack of resources and support.</p>
           </div>
           <div className="about-us-show-sm-down col-12 col-md-6 about-us-ps-image">
-            <img src={cdn.image("PuzzleBG.jpg")}></img>
+            <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)}></img>
           </div>
           <div className="about-us-ps-solution">
           <h2>Solution</h2>
@@ -208,7 +206,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         <div className="about-us-team-card-container">
           {this._filterTeamSection(this.state.aboutUs.project_volunteers, 'Software Development')}
         </div>
-      </div> : <div className="about-us-team col"><p>Loading our team information...</p></div>)
+      </div> : <div className="about-us-team col"><LoadingMessage message="Loading our team information..." /></div>)
   }
 
   _renderTeamOwners(owners) {

@@ -6,6 +6,7 @@ import cdn from "../utils/cdn.js";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
+import LoadingMessage from '../chrome/LoadingMessage.jsx';
 
 
 //get press links
@@ -15,14 +16,13 @@ const staticData = {
   platformLaunch: 'August 2018',
   orgFounded: 'July 2006'
 }
-//set display names based on key names for stats. TODO: move to global?
+//set display names based on key names for stats.
 const categoryDisplayNames = {
-  //TODO: move to global constants file
   "platformLaunch": "Matchmaking Platform Launched",
   "orgFounded": "Organization Founded",
   "dlVolunteerCount": "Team Members",
   "activeVolunteerCount": "Active Volunteers",
-  "userCount": "Number of Users",
+  "userCount": "Registered Users",
   "projectCount": "Number of Projects"
 }
 type statsType = {
@@ -86,7 +86,7 @@ class PressController extends React.PureComponent<{||}, State> {
           <div className="press-bounded-content press-stats-content">
             {this._renderStatItems(this.state.stats)}
           </div>
-       </div> : <div className="press-stats" style={cdn.bgImage('OurVisionBGoverlay.jpg')}>Loading statistics...</div>
+       </div> : <div className="press-stats" style={cdn.bgImage('OurVisionBGoverlay.jpg')}><LoadingMessage message="Loading statistics..." /></div>
      )
     }
     _renderNews(): React$Node {
