@@ -30,8 +30,8 @@
   color: $color-orange;
   border: $color-orange;
   &:hover {
-    color: $color-orange-darker;
-    border: $color-orange-darker;
+    color: $color-text-light;
+    background: $color-orange-darker;
   }
 }
 .SocialFooter-copyright {
@@ -79,5 +79,8 @@
   }
   .SocialFooter-newsletter {
     margin-left: 0;
+  }
+  .SocialFooter-signupcontainer {
+    display: flex;
   }
 }
