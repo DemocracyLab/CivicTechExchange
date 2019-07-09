@@ -3,9 +3,11 @@
   color: $color-text-light;
   padding: 20px 0 10px 0;
   text-align: center;
+}
+.SocialFooter-root p {
   font-weight: 500;
 }
-.SocialFooter-root button {
+.SocialFooter-root a {
   font-weight: 600;
 }
 .SocialFooter-cta a {
@@ -24,22 +26,12 @@
 .SocialFooter-btn-contact, .SocialFooter-btn-donate {
   background: $color-background-light;
 }
-.SocialFooter-btn-contact {
+.SocialFooter-btn-contact, .SocialFooter-btn-donate {
   color: $color-orange;
   border: $color-orange;
   &:hover {
-    color: $color-text-light;
-    background: $color-orange;
+    color: $color-orange-darker;
     border: $color-orange-darker;
-  }
-}
-.SocialFooter-btn-donate {
-  color: $color-text-grey;
-  border: $color-text-grey;
-  &:hover {
-    color: $color-text-light;
-    background: $color-text-grey;
-    border: $color-text-dark;
   }
 }
 .SocialFooter-copyright {
@@ -50,7 +42,7 @@
 .SocialFooter-nav a, .SocialFooter-iconblock a {
   color: $color-text-light;
   &:hover {
-    color: $color-text-grey;
+    color: $color-orange-darker;
   }
 }
 .SocialFooter-box {
