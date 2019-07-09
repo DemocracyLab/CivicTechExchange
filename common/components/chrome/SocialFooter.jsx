@@ -10,7 +10,7 @@ class SocialFooter extends React.Component {
     return (
       <div className="SocialFooter-cta SocialFooter-box">
         <p>Welcome to DemocracyLab</p>
-        <Button bsClass="btn SocialFooter-btn-contact" href="mailto:hello@democracylab.org">Contact Us</Button>
+        <Button bsClass="btn SocialFooter-btn-contact" href="/index/?section=ContactUs">Contact Us</Button>
         <Button bsClass="btn SocialFooter-btn-donate" href="/index/?section=Donate">Donate</Button>
       </div>
     )
