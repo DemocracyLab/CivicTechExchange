@@ -1,8 +1,12 @@
 .SocialFooter-root {
-  background: #555; /* placeholder */
+  background: $color-orange; /* placeholder */
   color: $color-text-light;
   padding: 20px 0 10px 0;
   text-align: center;
+  font-weight: 500;
+}
+.SocialFooter-root button {
+  font-weight: 600;
 }
 .SocialFooter-cta a {
   display: block;
@@ -12,6 +16,7 @@
 .SocialFooter-iconblock a {
   text-decoration: none;
   padding-right: 1.5rem;
+  font-weight: 400;
 }
 .SocialFooter-iconblock a:last-of-type {
   padding-right: 0;
