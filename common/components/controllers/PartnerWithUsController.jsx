@@ -21,7 +21,7 @@ class PartnerWithUsController extends React.Component<{||}> {
         <div className="PartnerWithUsController-topSection col-xs-12">
           <h1>Partner With Us</h1>
           <p>Support the acceleration of social change</p>
-          <a className="EmailVerified-find-projects-btn btn btn-theme" href="mailto:hello@democracylab.org">
+          <a className="EmailVerified-find-projects-btn btn btn-theme" href="/index/?section=ContactUs">
             CONTACT US
           </a>
         </div>

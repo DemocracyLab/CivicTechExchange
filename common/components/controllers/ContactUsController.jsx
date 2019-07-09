@@ -23,7 +23,7 @@ class ContactUsController extends React.PureComponent<{||}> {
         {this._renderHeader()}
          <div className="container contact-us-root">
            <h1>Contact Us</h1>
-           <p>Words about contacting us with some links go here</p>
+           <p>To contact DemocracyLab, please email us at <a href="mailto:hello@democracylab.org">hello@democracylab.org</a>.</p>
          </div>
        </React.Fragment>
      )
