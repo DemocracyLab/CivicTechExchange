@@ -46,8 +46,9 @@ class urlHelper {
     return result;
   }
   
-  static arguments(url: string): { [key: string]: string } {
+  static arguments(fromUrl: ?string): { [key: string]: string } {
     // Take argument section of url and split args into substrings
+    const url = fromUrl || document.location.search;
     const argStart = url.indexOf("?");
     if(argStart > -1) {
       let args = url.slice(argStart + 1).split("&");
@@ -59,6 +60,11 @@ class urlHelper {
     } else {
       return {};
     }
+  }
+  
+  static argument(key: string): ?string {
+    const args: { [key: string]: string } = urlHelper.arguments();
+    return args && args[key];
   }
   
   static getPreviousPageArg(): { [key: string]: string } {

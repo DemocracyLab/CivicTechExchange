@@ -9,6 +9,8 @@ from democracylab.models import get_request_contributor
 from common.models.tags import Tag
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, merge_json_changes, merge_single_file
 
+from pprint import pprint
+
 
 class ProjectCreationForm(ModelForm):
     class Meta:
@@ -85,13 +87,18 @@ class ProjectCreationForm(ModelForm):
 
     @staticmethod
     def create_project_new(request):
+        pprint(request.body)
+
         form = ProjectCreationForm(request.POST)
         # TODO: Form validation
         project = Project.objects.create(
             project_creator=get_request_contributor(request),
             project_name=form.data.get('project_name'),
             project_short_description=form.data.get('project_short_description'),
-            project_date_created=timezone.now()
+            project_date_created=timezone.now(),
+            project_url='',
+            project_description='',
+            project_location=''
         )
         project = Project.objects.get(id=project.id)
 
@@ -101,6 +108,7 @@ class ProjectCreationForm(ModelForm):
         merge_single_file(project, form, FileCategory.THUMBNAIL, 'project_thumbnail_location')
 
         project.save()
+        return project
 
     @staticmethod
     def delete_project(request, project_id):

@@ -86,18 +86,19 @@ def to_tag_map(tags):
     tag_map = ((tag.tag_name, tag.display_name) for tag in tags)
     return list(tag_map)
 
-
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
 def project_create(request):
     if not request.user.is_authenticated():
-        return redirect('/signup')
+        return redirect(section_url(FrontEndSection.LogIn))
 
     user = get_request_contributor(request)
     if not user.email_verified:
         # TODO: Log this
         return HttpResponse(status=403)
 
-    ProjectCreationForm.create_project(request)
-    return redirect('/index/?section=MyProjects')
+    project = ProjectCreationForm.create_project_new(request)
+    return JsonResponse(project.hydrate_to_json())
 
 
 def project_edit(request, project_id):

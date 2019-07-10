@@ -24,8 +24,10 @@ def merge_json_changes(model_class, model, form, field_name):
 def merge_single_file(model, form, file_category, field_name):
     from civictechprojects.models import ProjectFile
     if field_name in form.data:
-        file_json = json.loads(form.data.get(field_name))
-        ProjectFile.replace_single_file(model, file_category, file_json)
+        file_content = form.data.get(field_name)
+        if file_content and len(file_content) > 0:
+            file_json = json.loads(file_content)
+            ProjectFile.replace_single_file(model, file_category, file_json)
 
 
 def is_json_field_empty(field_json):

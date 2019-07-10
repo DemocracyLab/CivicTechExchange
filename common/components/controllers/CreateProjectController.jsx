@@ -1,18 +1,48 @@
 // @flow
 
-import React from 'react';
-import CurrentUser from '../../components/utils/CurrentUser.js';
-import EditProjectForm from "../common/projects/EditProjectForm.jsx";
+import React from "react";
+import CurrentUser from "../../components/utils/CurrentUser.js";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
+import ProjectOverviewForm from "../componentsBySection/CreateProject/ProjectOverviewForm.jsx";
+import {ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
+import api from "../utils/api.js";
+import url from "../utils/url.js";
+import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
+
+type CreateProjectStepConfig = {|
+  stepName: string,
+  header: string,
+  subHeader: string,
+  formComponent: React$Node,
+  prerequisites: (ProjectDetailsAPIData) => boolean
+|};
+
+const steps: $ReadOnlyArray<CreateProjectStepConfig> = [
+  {
+    stepName: "start",
+    header: "Let's get started!",
+    subHeader: "Tell us how you want to create a better world.",
+    formComponent: ProjectOverviewForm,
+    prerequisites: (project: ProjectDetailsAPIData) => true
+  }, {
+    stepName: "preview",
+    header: "Ready to publish your project?",
+    subHeader: "Congratulations!  You have successfully created a tech-for-good project.",
+    formComponent: ProjectOverviewForm,
+    prerequisites: (project: ProjectDetailsAPIData) => !!project
+  }
+];
 
 
 type State = {|
-  showEmailConfirmationModal: boolean,
-  emailConfirmationError: boolean
+  projectId: number,
+  project: ProjectDetailsAPIData,
+  currentStep: number,
+  formIsValid: boolean
 |};
 
 /**
@@ -22,20 +52,70 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   constructor(props: {||}): void {
     super(props);
     
+    // TODO: Support navigating to page via &step=stepName
+    // TODO: Support auto-navigating to page via prerequisites
+    const projectId: number = url.argument("id");
+    this.formRef = React.createRef();
     this.state = {
-      showEmailConfirmationModal: false,
-      emailConfirmationError: false
+      projectId: projectId,
+      currentStep: 0,
+      formIsValid: false
     };
   }
   
+  loadCurrentStep(projectId: ?number): CreateProjectStepConfig {
+    // Load step by name if present
+    // Load project if projectId
+      // Advance to correct step if step name not specified
+  }
+  
   componentDidMount(): void {
+    if(this.state.projectId) {
+      ProjectAPIUtils.fetchProjectDetails(this.state.projectId, this.loadProjectDetails.bind(this), this.handleLoadProjectError.bind(this));
+    }
     if(CurrentUser.isLoggedIn() && CurrentUser.isEmailVerified()) {
-      metrics.logProjectClickCreate(CurrentUser.userID());
+      // TODO: Only fire event on initial page when the project is not yet created
+      // metrics.logProjectClickCreate(CurrentUser.userID());
     }
   }
   
-  logProjectCreated(): void {
-    metrics.logProjectCreated(CurrentUser.userID());
+  loadProjectDetails(project: ProjectDetailsAPIData): void {
+    if(!CurrentUser.isOwner(project)) {
+      // TODO: Handle someone other than owner
+    } else {
+      this.setState({project: project});
+    }
+  }
+  
+  handleLoadProjectError(error: APIError): void {
+    this.setState({
+      error: "Failed to load project information"
+    });
+  }
+  
+  onValidationCheck(formIsValid: boolean): void {
+    if (formIsValid !== this.state.formIsValid) {
+      this.setState({formIsValid});
+    }
+  }
+  
+  onSubmit(event: SyntheticEvent<HTMLFormElement>): void {
+    const formSubmitUrl: string = this.state.projectId ? "/projects/edit/" + this.state.projectId : "/projects/signup/";
+    api.postForm(formSubmitUrl, this.formRef, this.onSubmitSuccess.bind(this), response => null /* TODO: Report error to user */);
+    event.preventDefault();
+  }
+  
+  onSubmitSuccess(project: ProjectDetailsAPIData) {
+    
+    if(this.onLastStep()) {
+      metrics.logProjectCreated(CurrentUser.userID());
+      url.navigateToSection(Section.MyProjects);
+    } else {
+      this.setState({
+        project: project,
+        currentStep: this.state.currentStep + 1
+      });
+    }
   }
   
   render(): React$Node {
@@ -58,11 +138,41 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   }
   
   _renderCreateProjectForm() : React$Node {
+    const currentStep: CreateProjectStepConfig = steps[this.state.currentStep];
+    const FormComponent: React$Node = currentStep.formComponent;
     return (
-      <form action="/projects/signup/" onSubmit={this.logProjectCreated} method="post">
-        <EditProjectForm/>
-      </form>
+      <React.Fragment>
+        <h1>{currentStep.header}</h1>
+        <h2>{currentStep.subHeader}</h2>
+        {/*TODO: Show spinner when loading project*/}
+        {/*TODO: Render step bars*/}
+        <form
+            // action={formSubmitUrl}
+              onSubmit={this.onSubmit.bind(this)}
+              method="post"
+              ref={this.formRef}>
+          <FormComponent
+            project={this.state.project}
+            readyForSubmit={this.onValidationCheck.bind(this)}
+          />
+    
+          {/*TODO: Back button*/}
+          
+          <div className="form-group pull-right">
+            <div className='text-right'>
+              <input type="submit" className="btn_outline save_btn"
+                     disabled={!this.state.formIsValid}
+                     value={this.onLastStep() ? "Publish" : "Next"}
+              />
+            </div>
+          </div>
+        </form>
+      </React.Fragment>
     );
+  }
+  
+  onLastStep(): boolean {
+    return this.state.currentStep >= steps.length;
   }
 }
 
