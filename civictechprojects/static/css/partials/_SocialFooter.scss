@@ -7,7 +7,7 @@
 .SocialFooter-root p {
   font-weight: 500;
 }
-.SocialFooter-root a {
+.SocialFooter-root a, .SocialFooter-newsletter input[type=submit] {
   font-weight: 600;
 }
 .SocialFooter-cta a {
@@ -23,10 +23,8 @@
 .SocialFooter-iconblock a:last-of-type {
   padding-right: 0;
 }
-.SocialFooter-btn-contact, .SocialFooter-btn-donate {
+.SocialFooter-btn-contact, .SocialFooter-btn-donate, .SocialFooter-newsletter input[type=submit] {
   background: $color-background-light;
-}
-.SocialFooter-btn-contact, .SocialFooter-btn-donate {
   color: $color-orange;
   border: $color-orange;
   &:hover {
@@ -39,15 +37,16 @@
   margin: 0 auto;
   text-align: center;
 }
-.SocialFooter-nav a, .SocialFooter-iconblock a {
+.SocialFooter-iconblock a {
   color: $color-text-light;
   &:hover {
-    color: $color-orange-darker;
+    color: $color-text-grey;
   }
 }
 .SocialFooter-box {
   margin-bottom: 1.5rem;
 }
+
 @include media-breakpoint-up(sm) {
   .SocialFooter-btn-about {
     margin-right: 1rem;
@@ -55,9 +54,13 @@
   .SocialFooter-root {
     text-align: left;
   }
-  .SocialFooter-cta a {
+  .SocialFooter-cta a:first-of-type {
     display: inline-block;
-    margin: 0 12px;
+    margin: 0 1.5rem 0 0;
+  }
+  .SocialFooter-cta a:last-of-type {
+    display: inline-block;
+    margin: 0;
   }
   .SocialFooter-row {
     display: flex;
@@ -82,5 +85,11 @@
   }
   .SocialFooter-signupcontainer {
     display: flex;
+  }
+  .SocialFooter-signupcontainer input {
+    height: 2.25rem;
+  }
+  .SocialFooter-signupcontainer input[type=submit] {
+    margin-left: 1rem;
   }
 }

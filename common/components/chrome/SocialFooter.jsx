@@ -44,16 +44,6 @@ class SocialFooter extends React.Component {
     )
   }
 
-  _footerNav() {
-    return (
-      <div className="SocialFooter-nav SocialFooter-box">
-        <ul>
-          <li><a href="mailto:hello@democracylab.org">Contact Us</a></li>
-        </ul>
-      </div>
-    )
-  }
-
   render() {
     return (
       <div className="SocialFooter-root">
