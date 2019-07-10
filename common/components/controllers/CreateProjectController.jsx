@@ -8,13 +8,13 @@ import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
 import ProjectOverviewForm from "../componentsBySection/CreateProject/ProjectOverviewForm.jsx";
+import ProjectPreviewForm from "../componentsBySection/CreateProject/ProjectPreviewForm.jsx";
 import {ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
 import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 
 type CreateProjectStepConfig = {|
-  stepName: string,
   header: string,
   subHeader: string,
   formComponent: React$Node,
@@ -23,16 +23,34 @@ type CreateProjectStepConfig = {|
 
 const steps: $ReadOnlyArray<CreateProjectStepConfig> = [
   {
-    stepName: "start",
     header: "Let's get started!",
     subHeader: "Tell us how you want to create a better world.",
     formComponent: ProjectOverviewForm,
     prerequisites: (project: ProjectDetailsAPIData) => true
   }, {
-    stepName: "preview",
+    header: "Let others know what your project is about...",
+    subHeader: "You can always change details about your project later.",
+    formComponent: ProjectPreviewForm,
+    prerequisites: (project: ProjectDetailsAPIData) => project.project_name
+  }, {
+    header: "Let others know what your project is about...",
+    subHeader: "You can always change details about your project later.",
+    formComponent: ProjectPreviewForm,
+    prerequisites: (project: ProjectDetailsAPIData) => project.project_name
+  }, {
+    header: "What resources would you like to share?",
+    subHeader: "Let volunteers know how they can engage with your project",
+    formComponent: ProjectPreviewForm,
+    prerequisites: (project: ProjectDetailsAPIData) => project.project_name
+  }, {
+    header: "What type of volunteers does your project need?",
+    subHeader: "You can always change the type of help your project needs later.",
+    formComponent: ProjectPreviewForm,
+    prerequisites: (project: ProjectDetailsAPIData) => project.project_name
+  }, {
     header: "Ready to publish your project?",
     subHeader: "Congratulations!  You have successfully created a tech-for-good project.",
-    formComponent: ProjectOverviewForm,
+    formComponent: ProjectPreviewForm,
     prerequisites: (project: ProjectDetailsAPIData) => !!project
   }
 ];
@@ -51,8 +69,7 @@ type State = {|
 class CreateProjectController extends React.PureComponent<{||},State> {
   constructor(props: {||}): void {
     super(props);
-    
-    // TODO: Support navigating to page via &step=stepName
+    // TODO: Support navigating to page via &step=#
     // TODO: Support auto-navigating to page via prerequisites
     const projectId: number = url.argument("id");
     this.formRef = React.createRef();
@@ -147,7 +164,6 @@ class CreateProjectController extends React.PureComponent<{||},State> {
         {/*TODO: Show spinner when loading project*/}
         {/*TODO: Render step bars*/}
         <form
-            // action={formSubmitUrl}
               onSubmit={this.onSubmit.bind(this)}
               method="post"
               ref={this.formRef}>
@@ -157,6 +173,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
           />
     
           {/*TODO: Back button*/}
+          {/*TODO: Project Saved icon*/}
           
           <div className="form-group pull-right">
             <div className='text-right'>
