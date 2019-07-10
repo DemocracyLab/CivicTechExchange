@@ -49,7 +49,7 @@ render() {
           </div>
         </div>
       </form>
-    </div>;
+    </div>
     )
   }
 

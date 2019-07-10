@@ -46,7 +46,9 @@
 .SocialFooter-box {
   margin-bottom: 1.5rem;
 }
-
+.SocialFooter-signupcontainer input[type=submit] {
+  margin: 0.5rem 0 0 0;
+}
 @include media-breakpoint-up(sm) {
   .SocialFooter-btn-about {
     margin-right: 1rem;
@@ -90,6 +92,6 @@
     height: 2.25rem;
   }
   .SocialFooter-signupcontainer input[type=submit] {
-    margin-left: 1rem;
+    margin: 0 0 0 1rem;
   }
 }
