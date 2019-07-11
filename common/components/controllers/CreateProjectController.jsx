@@ -1,6 +1,7 @@
 // @flow
 
 import React from "react";
+import {Button} from 'react-bootstrap';
 import CurrentUser from "../../components/utils/CurrentUser.js";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 import metrics from "../utils/metrics.js";
@@ -85,6 +86,11 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     // Load step by name if present
     // Load project if projectId
       // Advance to correct step if step name not specified
+  }
+  
+  navigateToStep(step: number): void {
+    this.setState({currentStep: step});
+    // TODO: Confirm if user wants to discard changes before moving sections
   }
   
   componentDidMount(): void {
@@ -175,7 +181,16 @@ class CreateProjectController extends React.PureComponent<{||},State> {
             readyForSubmit={this.onValidationCheck.bind(this)}
           />
     
-          {/*TODO: Back button*/}
+          {/*TODO: Bring button visuals in line with design*/}
+          <Button className="btn btn-theme"
+                  type="button"
+                  title="Back"
+                  disabled={this.state.currentStep === 0}
+                  onClick={this.navigateToStep.bind(this, this.state.currentStep - 1)}
+          >
+            Back
+          </Button>
+  
           {/*TODO: Project Saved icon*/}
           
           <div className="form-group pull-right">
