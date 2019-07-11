@@ -27,7 +27,8 @@ class apiHelper {
   
     const headers = {
       'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'X-Requested-With': 'XMLHttpRequest'
     };
     apiHelper._request(url, "POST", serializedForm, headers, successCallback, errCallback);
   }

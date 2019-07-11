@@ -102,15 +102,19 @@ def project_create(request):
 
 
 def project_edit(request, project_id):
-    # TODO: Use this for both create/edit
     if not request.user.is_authenticated():
         return redirect('/signup')
 
+    project = None
     try:
-        ProjectCreationForm.edit_project(request, project_id)
+        project = ProjectCreationForm.edit_project(request, project_id)
     except PermissionDenied:
         return HttpResponseForbidden()
-    return redirect('/index/?section=AboutProject&id=' + project_id)
+
+    if request.is_ajax():
+        return JsonResponse(project.hydrate_to_json())
+    else:
+        return redirect('/index/?section=AboutProject&id=' + project_id)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it

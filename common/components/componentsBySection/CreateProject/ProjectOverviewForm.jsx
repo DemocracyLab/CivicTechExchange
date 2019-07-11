@@ -24,7 +24,6 @@ type Props = {|
   readyForSubmit: () => () => boolean
 |};
 type State = {|
-  error: string,
   formIsValid: boolean,
   formFields: FormFields,
   validations: $ReadOnlyArray<Validator>
@@ -39,7 +38,6 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
 
     const project: ProjectDetailsAPIData = props.project;
     this.state = {
-      error: "",
       formIsValid: false,
       formFields: {
         project_name: project ? project.project_name : "",
@@ -79,18 +77,6 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
   }
 
   render(): React$Node {
-    return this.state.error ? this._renderError() : this._renderForm();
-  }
-
-  _renderError(): React$Node {
-    return (
-      <div className="EditProjectForm-error">
-        {this.state.error}
-      </div>
-    );
-  }
-
-  _renderForm(): React$Node {
     return (
       <div className="EditProjectForm-root">
 
@@ -136,7 +122,6 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
           onValidationCheck={this.onValidationCheck.bind(this)}
           formState={this.state.formFields}
         />
-
 
       </div>
     );

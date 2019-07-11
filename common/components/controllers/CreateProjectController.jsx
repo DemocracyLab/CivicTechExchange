@@ -8,6 +8,7 @@ import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
 import ProjectOverviewForm from "../componentsBySection/CreateProject/ProjectOverviewForm.jsx";
+import ProjectInfoForm from "../componentsBySection/CreateProject/ProjectInfoForm.jsx";
 import ProjectPreviewForm from "../componentsBySection/CreateProject/ProjectPreviewForm.jsx";
 import {ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
 import api from "../utils/api.js";
@@ -30,7 +31,7 @@ const steps: $ReadOnlyArray<CreateProjectStepConfig> = [
   }, {
     header: "Let others know what your project is about...",
     subHeader: "You can always change details about your project later.",
-    formComponent: ProjectPreviewForm,
+    formComponent: ProjectInfoForm,
     prerequisites: (project: ProjectDetailsAPIData) => project.project_name
   }, {
     header: "Let others know what your project is about...",
@@ -58,7 +59,7 @@ const steps: $ReadOnlyArray<CreateProjectStepConfig> = [
 
 type State = {|
   projectId: number,
-  project: ProjectDetailsAPIData,
+  project: ?ProjectDetailsAPIData,
   currentStep: number,
   formIsValid: boolean
 |};
@@ -117,7 +118,9 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   }
   
   onSubmit(event: SyntheticEvent<HTMLFormElement>): void {
-    const formSubmitUrl: string = this.state.projectId ? "/projects/edit/" + this.state.projectId : "/projects/signup/";
+    const formSubmitUrl: string = this.state.project && this.state.project.project_id
+      ? "/projects/edit/" + this.state.project.project_id + "/"
+      : "/projects/signup/";
     api.postForm(formSubmitUrl, this.formRef, this.onSubmitSuccess.bind(this), response => null /* TODO: Report error to user */);
     event.preventDefault();
   }

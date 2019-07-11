@@ -126,6 +126,7 @@ class ProjectCreationForm(ModelForm):
         if not is_co_owner_or_staff(request.user, project):
             raise PermissionDenied()
 
+        pprint(request.body)
         form = ProjectCreationForm(request.POST)
         read_form_field_string(project, form, 'project_description')
         read_form_field_string(project, form, 'project_short_description')
@@ -152,3 +153,5 @@ class ProjectCreationForm(ModelForm):
         # TODO: Notify the admins that a new project has been created after final creation step
         # send_project_creation_notification(project)
         # messages.add_message(request, messages.INFO, 'Your project "' + project.project_name + '" is awaiting approval.  Expect a decision in the next business day.')
+
+        return project
