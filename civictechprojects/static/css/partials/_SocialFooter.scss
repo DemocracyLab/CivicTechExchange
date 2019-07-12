@@ -48,7 +48,10 @@
 }
 .SocialFooter-signupcontainer input[type=submit] {
   display: block;
-  margin: 0.5rem auto;
+  margin: 0 auto;
+}
+.SocialFooter-signupcontainer input[type=email] {
+  margin: 0 0 0.5rem 0;
 }
 
 @include media-breakpoint-up(sm) {
@@ -79,7 +82,7 @@
     margin-left: auto;
   }
   .SocialFooter-signupcontainer input[type=submit] {
-    margin: 0.5rem 0;
+    margin: 0;
   }
 }
 @include media-breakpoint-up(lg) {
@@ -92,12 +95,15 @@
   }
   .SocialFooter-signupcontainer {
     display: flex;
+    flex-wrap: wrap;
   }
   .SocialFooter-signupcontainer input {
     height: 2.25rem;
   }
   .SocialFooter-signupcontainer input[type=submit] {
     display: inline-block;
-    margin: 0 0 0 1rem;
+  }
+  .SocialFooter-signupcontainer input[type=email] {
+    margin: 0 1rem 0.5rem 0;
   }
 }
