@@ -4,6 +4,10 @@ import React from 'react';
 import cdn,{Images} from "../utils/cdn.js";
 import Sponsors, {SponsorMetadata} from "../utils/Sponsors.js";
 import Headers from "../common/Headers.jsx";
+import Section from "../enums/Section.js";
+import url from '../../components/utils/url.js';
+
+
 
 class PartnerWithUsController extends React.Component<{||}> {
   constructor(): void {
@@ -21,7 +25,7 @@ class PartnerWithUsController extends React.Component<{||}> {
         <div className="PartnerWithUsController-topSection col-xs-12">
           <h1>Partner With Us</h1>
           <p>Support the acceleration of social change</p>
-          <a className="EmailVerified-find-projects-btn btn btn-theme" href="mailto:hello@democracylab.org">
+          <a className="EmailVerified-find-projects-btn btn btn-theme" href={url.section(Section.ContactUs)}>
             CONTACT US
           </a>
         </div>
