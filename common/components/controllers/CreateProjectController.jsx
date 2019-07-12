@@ -11,6 +11,7 @@ import Headers from "../common/Headers.jsx";
 import ProjectOverviewForm from "../componentsBySection/CreateProject/ProjectOverviewForm.jsx";
 import ProjectInfoForm from "../componentsBySection/CreateProject/ProjectInfoForm.jsx";
 import ProjectPreviewForm from "../componentsBySection/CreateProject/ProjectPreviewForm.jsx";
+import ProjectDescriptionForm from "../componentsBySection/CreateProject/ProjectDescriptionForm.jsx";
 import {ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
@@ -37,7 +38,7 @@ const steps: $ReadOnlyArray<CreateProjectStepConfig> = [
   }, {
     header: "Let others know what your project is about...",
     subHeader: "You can always change details about your project later.",
-    formComponent: ProjectPreviewForm,
+    formComponent: ProjectDescriptionForm,
     prerequisites: (project: ProjectDetailsAPIData) => project.project_name
   }, {
     header: "What resources would you like to share?",
