@@ -27,6 +27,7 @@ import FlashMessage from "../chrome/FlashMessage.jsx";
 import DonateController from "./DonateController.jsx";
 import ThankYouController from "./ThankYouController.jsx";
 import PressController from './PressController.jsx';
+import ContactUsController from './ContactUsController.jsx';
 
 type State = {|
   section: SectionType,
@@ -92,6 +93,8 @@ class SectionController extends React.Component<{||}, State> {
         return <ThankYouController />;
       case Section.Press:
         return <PressController />;
+      case Section.ContactUs:
+        return <ContactUsController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }
