@@ -12,6 +12,7 @@ import ProjectOverviewForm from "../componentsBySection/CreateProject/ProjectOve
 import ProjectInfoForm from "../componentsBySection/CreateProject/ProjectInfoForm.jsx";
 import ProjectPreviewForm from "../componentsBySection/CreateProject/ProjectPreviewForm.jsx";
 import ProjectDescriptionForm from "../componentsBySection/CreateProject/ProjectDescriptionForm.jsx";
+import ProjectResourcesForm from "../componentsBySection/CreateProject/ProjectResourcesForm.jsx";
 import {ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
@@ -43,7 +44,7 @@ const steps: $ReadOnlyArray<CreateProjectStepConfig> = [
   }, {
     header: "What resources would you like to share?",
     subHeader: "Let volunteers know how they can engage with your project",
-    formComponent: ProjectPreviewForm,
+    formComponent: ProjectResourcesForm,
     prerequisites: (project: ProjectDetailsAPIData) => project.project_name
   }, {
     header: "What type of volunteers does your project need?",
@@ -64,7 +65,8 @@ type State = {|
   project: ?ProjectDetailsAPIData,
   currentStep: number,
   formIsValid: boolean,
-  fieldsUpdated: boolean
+  fieldsUpdated: boolean,
+  beforeSubmit: Function
 |};
 
 /**
@@ -120,9 +122,13 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     });
   }
   
-  onValidationCheck(formIsValid: boolean): void {
+  onValidationCheck(formIsValid: boolean, beforeSubmit: ?Function): void {
     if (formIsValid !== this.state.formIsValid) {
       this.setState({formIsValid});
+    }
+  
+    if (beforeSubmit !== this.state.beforeSubmit) {
+      this.setState({beforeSubmit});
     }
   }
   
@@ -130,7 +136,10 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     const formSubmitUrl: string = this.state.project && this.state.project.project_id
       ? "/projects/edit/" + this.state.project.project_id + "/"
       : "/projects/signup/";
-    api.postForm(formSubmitUrl, this.formRef, this.onSubmitSuccess.bind(this), response => null /* TODO: Report error to user */);
+    const submitFunc: Function = () => {
+      api.postForm(formSubmitUrl, this.formRef, this.onSubmitSuccess.bind(this), response => null /* TODO: Report error to user */);
+    };
+    this.state.beforeSubmit ? this.state.beforeSubmit(submitFunc) : submitFunc();
     event.preventDefault();
   }
   
