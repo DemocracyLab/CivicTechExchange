@@ -62,7 +62,8 @@ type State = {|
   projectId: number,
   project: ?ProjectDetailsAPIData,
   currentStep: number,
-  formIsValid: boolean
+  formIsValid: boolean,
+  fieldsUpdated: boolean
 |};
 
 /**
@@ -78,7 +79,8 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     this.state = {
       projectId: projectId,
       currentStep: 0,
-      formIsValid: false
+      formIsValid: false,
+      fieldsUpdated: false
     };
   }
   
@@ -131,6 +133,10 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     event.preventDefault();
   }
   
+  onFormUpdate(formFields: {||}) {
+    this.setState({fieldsUpdated: true});
+  }
+  
   onSubmitSuccess(project: ProjectDetailsAPIData) {
     
     if(this.onLastStep()) {
@@ -179,6 +185,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
           <FormComponent
             project={this.state.project}
             readyForSubmit={this.onValidationCheck.bind(this)}
+            onFormUpdate={this.onFormUpdate.bind(this)}
           />
     
           {/*TODO: Bring button visuals in line with design*/}

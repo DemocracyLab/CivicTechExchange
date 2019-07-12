@@ -8,6 +8,7 @@ import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {TagDefinition, ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
 import {Locations} from "../../constants/ProjectConstants.js";
+import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
 
 
@@ -22,12 +23,11 @@ type FormFields = {|
 type Props = {|
   project: ?ProjectDetailsAPIData,
   readyForSubmit: () => () => boolean
-|};
+|} & FormPropsBase<FormFields>;
 type State = {|
   formIsValid: boolean,
-  formFields: FormFields,
   validations: $ReadOnlyArray<Validator>
-|};
+|} & FormStateBase<FormFields>;
 
 /**
  * Encapsulates form for Project Info section
@@ -48,17 +48,8 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
       },
       validations: []
     };
-  }
   
-  // TODO: Put this is a helper library
-  onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
-    this.state.formFields[formFieldName] = event.target.value;
-    this.forceUpdate();
-  }
-  
-  // TODO: Put this is a helper library
-  onTagChange(formFieldName: string, value: $ReadOnlyArray<TagDefinition>): void {
-    this.state.formFields[formFieldName] = value;
+    this.form = form.setup();
   }
 
   render(): React$Node {
@@ -69,7 +60,7 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
   
         <div className="form-group">
           <label htmlFor="project_location">Project Location</label>
-          <select name="project_location" id="project_location" className="form-control" value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}>
+          <select name="project_location" id="project_location" className="form-control" value={this.state.formFields.project_location} onChange={this.form.onInput.bind(this, "project_location")}>
             {!_.includes(Locations.PRESET_LOCATIONS, this.state.formFields.project_location) ? <option value={this.state.formFields.project_location}>{this.state.formFields.project_location}</option> : null}
             {Locations.PRESET_LOCATIONS.map(location => <option key={location} value={location}>{location}</option>)}
           </select>
@@ -78,7 +69,7 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
         <div className="form-group">
           <label htmlFor="project_url">Website URL</label>
           <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
-                 value={this.state.formFields.project_url} onChange={this.onFormFieldChange.bind(this, "project_url")}/>
+                 value={this.state.formFields.project_url} onChange={this.form.onInput.bind(this, "project_url")}/>
         </div>
   
         <div className="form-group">
@@ -88,7 +79,7 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
             value={this.state.formFields.project_stage}
             category={TagCategory.PROJECT_STAGE}
             allowMultiSelect={false}
-            onSelection={this.onTagChange.bind(this, "project_stage")}
+            onSelection={this.form.onSelection.bind(this, "project_stage")}
           />
         </div>
   
@@ -99,7 +90,7 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
             value={this.state.formFields.project_organization}
             category={TagCategory.ORGANIZATION}
             allowMultiSelect={true}
-            onSelection={this.onTagChange.bind(this, "project_organization")}
+            onSelection={this.form.onSelection.bind(this, "project_organization")}
           />
         </div>
   
@@ -110,7 +101,7 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
             value={this.state.formFields.project_technologies}
             category={TagCategory.TECHNOLOGIES_USED}
             allowMultiSelect={true}
-            onSelection={this.onTagChange.bind(this, "project_technologies")}
+            onSelection={this.form.onSelection.bind(this, "project_technologies")}
           />
         </div>
 

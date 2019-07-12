@@ -9,6 +9,7 @@ import DjangoCSRFToken from "django-react-csrftoken";
 import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {TagDefinition, ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
+import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
 
 
@@ -22,12 +23,12 @@ type FormFields = {|
 type Props = {|
   project: ?ProjectDetailsAPIData,
   readyForSubmit: () => () => boolean
-|};
+|} & FormPropsBase<FormFields>;
+
 type State = {|
   formIsValid: boolean,
-  formFields: FormFields,
   validations: $ReadOnlyArray<Validator>
-|};
+|} & FormStateBase<FormFields>;
 
 /**
  * Encapsulates form for Project Overview section
@@ -35,7 +36,6 @@ type State = {|
 class ProjectOverviewForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
-
     const project: ProjectDetailsAPIData = props.project;
     this.state = {
       formIsValid: false,
@@ -56,6 +56,8 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
         }
       ]
     };
+    
+    this.form = form.setup();
   }
 
   onValidationCheck(formIsValid: boolean): void {
@@ -63,17 +65,6 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
       this.setState({formIsValid});
       this.props.readyForSubmit(formIsValid);
     }
-  }
-
-  // TODO: Put this is a helper library
-  onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
-    this.state.formFields[formFieldName] = event.target.value;
-    this.forceUpdate();
-  }
-  
-  // TODO: Put this is a helper library
-  onTagChange(formFieldName: string, value: $ReadOnlyArray<TagDefinition>): void {
-    this.state.formFields[formFieldName] = value;
   }
 
   render(): React$Node {
@@ -85,13 +76,15 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
         <div className="form-group">
           <ImageUploadFormElement form_id="project_thumbnail_location"
                                   buttonText="Upload Project Image"
-                                  currentImage={this.state.formFields.project_thumbnail}/>
+                                  currentImage={this.state.formFields.project_thumbnail}
+                                  onSelection={this.form.onSelection.bind(this, "project_thumbnail")}
+          />
         </div>
 
         <div className="form-group">
           <label>Project Name</label>
           <input type="text" className="form-control" id="project_name" name="project_name" maxLength="60"
-                 value={this.state.formFields.project_name} onChange={this.onFormFieldChange.bind(this, "project_name")}/>
+                 value={this.state.formFields.project_name} onChange={this.form.onInput.bind(this, "project_name")}/>
         </div>
 
         <div className="form-group">
@@ -101,7 +94,7 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
             value={this.state.formFields.project_issue_area}
             category={TagCategory.ISSUES}
             allowMultiSelect={false}
-            onSelection={this.onTagChange.bind(this, "project_issue_area")}
+            onSelection={this.form.onSelection.bind(this, "project_issue_area")}
           />
         </div>
   
@@ -114,7 +107,7 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
           </div>
           <textarea className="form-control" id="project_short_description" name="project_short_description"
                     placeholder="Give a one-sentence description of this project" rows="2" maxLength="140"
-                    value={this.state.formFields.project_short_description} onChange={this.onFormFieldChange.bind(this, "project_short_description")}></textarea>
+                    value={this.state.formFields.project_short_description} onChange={this.form.onInput.bind(this, "project_short_description")}></textarea>
         </div>
 
         <FormValidation
