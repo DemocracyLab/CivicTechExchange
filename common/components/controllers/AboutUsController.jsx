@@ -155,7 +155,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
           </div>
         </div>
         <div className="col-12 col-md-6 about-us-values-image">
-          <img src={cdn.image("CoreValuesBG520.jpg")}></img>
+          <img src={cdn.image(Images.CORE_VALUES_BG)}></img>
         </div>
 
       </div>
@@ -166,7 +166,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="row ml-0 mr-0 about-us-ps">
         <hr/>
         <div className="about-us-show-md-up col-12 col-md-6 about-us-ps-image">
-          <img src={cdn.image("PuzzleBG.jpg")}></img>
+          <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)}></img>
         </div>
         <div className="col-12 col-md-6">
           <div className="about-us-ps-problem">
@@ -174,7 +174,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             <p>Everyday people generate powerful ideas that can change the world. Most of these ideas never achieve their potential because of a lack of resources and support.</p>
           </div>
           <div className="about-us-show-sm-down col-12 col-md-6 about-us-ps-image">
-            <img src={cdn.image("PuzzleBG.jpg")}></img>
+            <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)}></img>
           </div>
           <div className="about-us-ps-solution">
           <h2>Solution</h2>

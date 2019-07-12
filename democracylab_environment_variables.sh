@@ -60,6 +60,10 @@ export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
 # ONLY FOR USE IN PRODUCTION
 #export HOTJAR_APPLICATION_ID=1097784
 
+#export GOOGLE_PROPERTY_ID='UA-2879129-5'
+#export GOOGLE_ADS_ID='AW-736663510'
+#export GOOGLE_CONVERSION_IDS='[{'SignedUp':'bYM2CLDDlqMBENavot8C'}]'
+
 # DemocracyLab project ID (for use on About Us page)
 export DLAB_PROJECT_ID=4
 
