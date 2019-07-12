@@ -2,16 +2,17 @@ import React from 'react';
 import {Button} from 'react-bootstrap';
 import {Glyph, GlyphStyles, GlyphSizes} from '../utils/glyphs.js';
 import NewsletterSignup from '../common/integrations/NewsletterSignup.jsx';
+import url from "../utils/url.js";
+import Section from "../enums/Section.js";
 
 
 class SocialFooter extends React.Component {
-
   _dlCallToActions() {
     return (
       <div className="SocialFooter-cta SocialFooter-box">
         <p>Welcome to DemocracyLab</p>
-        <Button bsClass="btn SocialFooter-btn-contact" href="/index/?section=ContactUs">Contact Us</Button>
-        <Button bsClass="btn SocialFooter-btn-donate" href="/index/?section=Donate">Donate</Button>
+        <Button bsClass="btn SocialFooter-btn-contact" href={url.section(Section.ContactUs)}>Contact Us</Button>
+        <Button bsClass="btn SocialFooter-btn-donate" href={url.section(Section.Donate)}>Donate</Button>
       </div>
     )
   }
