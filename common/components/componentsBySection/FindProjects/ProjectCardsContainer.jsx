@@ -1,5 +1,8 @@
 // @flow
 
+
+import _ from 'lodash';
+import React from 'react';
 import type {Project} from '../../stores/ProjectSearchStore.js';
 import type {FluxReduceStore} from 'flux/utils';
 import ProjectSearchSort from './ProjectSearchSort.jsx';
@@ -9,7 +12,6 @@ import {List} from 'immutable'
 import ProjectCard from './ProjectCard.jsx';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
-import React from 'react';
 import LoadingMessage from '../../chrome/LoadingMessage.jsx';
 
 type State = {|
