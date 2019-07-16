@@ -11,6 +11,8 @@ class ContactForm extends React.Component {
       lname: '',
       emailaddr: '',
       message: '',
+      sendStatus: null,
+      statusMessageClass: null,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -19,6 +21,8 @@ class ContactForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    //validate our form here; only continue to post if it succsesfully validates
+
     ProjectAPIUtils.post("/contact/democracylab",
         {
           fname: this.state.fname,
@@ -26,22 +30,34 @@ class ContactForm extends React.Component {
           emailaddr: this.state.emailaddr,
           message: this.state.message
         },
-        response => this.showResponse(response),
-        response => null
+        response => this.showSuccess(),
+        response => this.showFailure()
         );
     }
 
 
-  showResponse(response) {
-    console.log('Send status: ' + response)
+  showSuccess() {
+    this.setState({
+      sendStatus: 'Message sent successfully! We will get back to you as soon as possible.',
+      statusMessageClass: 'ContactForm-status-success'
+    })
+  }
+  showFailure() {
+    this.setState({
+      sendStatus: 'We encountered an error sending your message. Please refresh and try again.',
+      statusMessageClass: 'ContactForm-status-error'
+    })
   }
 
   handleInputChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
+    //if any input is made, clear the display of the send status message
     this.setState({
-      [name]: value
+      [name]: value,
+      sendStatus: null,
+      statusMessageClass: null
     });
   }
 
@@ -49,6 +65,7 @@ class ContactForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
+        {this.state.sendStatus ? <div className={"ContactForm-status-message" + " " + this.state.statusMessageClass}>{this.state.sendStatus}</div> : null}
         <div className="form-group">
           <label htmlFor="fname">
             First name:
