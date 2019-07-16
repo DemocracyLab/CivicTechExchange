@@ -41,3 +41,31 @@ button.clear-button-appearance, a.clear-button-appearance, a[type="button"].clea
 .background-light {
   background-color: $color-background-light;
 }
+
+// .bounded-content should be used inside a .container-fluid; letting us have full width background with .container width content */
+@include media-breakpoint-up(sm) {
+  .bounded-content {
+    width: 540px;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .bounded-content {
+    width: 720px;
+  }
+}
+@include media-breakpoint-up(lg) {
+  .bounded-content {
+    width: 960px;
+  }
+}
+@include media-breakpoint-up(xl) {
+  .bounded-content {
+    width: 1140px;
+  }
+}
+@include media-breakpoint-up(xxl) {
+  .bounded-content {
+    width: 1400px;
+  }
+}
