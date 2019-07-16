@@ -4,6 +4,7 @@ import React from "react";
 import {Button} from 'react-bootstrap';
 import CurrentUser from "../../components/utils/CurrentUser.js";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
+import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
@@ -66,6 +67,8 @@ type State = {|
   currentStep: number,
   formIsValid: boolean,
   fieldsUpdated: boolean,
+  showConfirmDiscardChanges: boolean,
+  navigateToStepUponDiscardConfirmation: number,
   beforeSubmit: Function
 |};
 
@@ -83,7 +86,8 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       projectId: projectId,
       currentStep: 0,
       formIsValid: false,
-      fieldsUpdated: false
+      fieldsUpdated: false,
+      showConfirmDiscardChanges: false
     };
   }
   
@@ -94,8 +98,16 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   }
   
   navigateToStep(step: number): void {
-    this.setState({currentStep: step});
-    // TODO: Confirm if user wants to discard changes before moving sections
+    if(this.state.fieldsUpdated) {
+      this.setState({
+        navigateToStepUponDiscardConfirmation: step,
+        showConfirmDiscardChanges: true
+      });
+    } else {
+      this.setState({
+        currentStep: step
+      });
+    }
   }
   
   componentDidMount(): void {
@@ -147,6 +159,18 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     this.setState({fieldsUpdated: true});
   }
   
+  confirmDiscardChanges(confirmDiscard: boolean): void {
+    let confirmState: State = this.state;
+    confirmState.showConfirmDiscardChanges = false;
+    if(confirmDiscard) {
+      confirmState.currentStep = this.state.navigateToStepUponDiscardConfirmation;
+      confirmState.fieldsUpdated = false;
+    }
+    
+    this.setState(confirmState);
+    this.forceUpdate();
+  }
+  
   onSubmitSuccess(project: ProjectDetailsAPIData) {
     
     if(this.onLastStep()) {
@@ -155,7 +179,8 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     } else {
       this.setState({
         project: project,
-        currentStep: this.state.currentStep + 1
+        currentStep: this.state.currentStep + 1,
+        fieldsUpdated: false
       });
     }
   }
@@ -184,6 +209,12 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     const FormComponent: React$Node = currentStep.formComponent;
     return (
       <React.Fragment>
+        <ConfirmationModal
+          showModal={this.state.showConfirmDiscardChanges}
+          message="You have unsaved changes on this form.  Do you want to discard these changes?"
+          onSelection={this.confirmDiscardChanges.bind(this)}
+        />
+        
         <h1>{currentStep.header}</h1>
         <h2>{currentStep.subHeader}</h2>
         {/*TODO: Show spinner when loading project*/}
