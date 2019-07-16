@@ -26,7 +26,6 @@ class formHelper {
     const onInput = function(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>) {
       const formValues: T = _getFormValues(this);
       formValues[formFieldName] = event.target.value;
-      console.log("Updating " + formFieldName + ": " + JSON.stringify(formValues));
       this.forceUpdate();
       _onFormUpdate(this, formValues);
     };
@@ -34,7 +33,6 @@ class formHelper {
     const onSelection = function<V>(formFieldName: string, value: V): void {
       const formValues: T = _getFormValues(this);
       formValues[formFieldName] = value;
-      console.log("Updating " + formFieldName + ": " + JSON.stringify(formValues));
       this.forceUpdate();
       _onFormUpdate(this, formValues);
     };

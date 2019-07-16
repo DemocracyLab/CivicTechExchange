@@ -13,6 +13,7 @@ import ProjectOverviewForm from "../componentsBySection/CreateProject/ProjectOve
 import ProjectInfoForm from "../componentsBySection/CreateProject/ProjectInfoForm.jsx";
 import ProjectPreviewForm from "../componentsBySection/CreateProject/ProjectPreviewForm.jsx";
 import ProjectDescriptionForm from "../componentsBySection/CreateProject/ProjectDescriptionForm.jsx";
+import ProjectPositionsForm from "../componentsBySection/CreateProject/ProjectPositionsForm.jsx";
 import ProjectResourcesForm from "../componentsBySection/CreateProject/ProjectResourcesForm.jsx";
 import {ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
 import api from "../utils/api.js";
@@ -26,6 +27,7 @@ type CreateProjectStepConfig = {|
   prerequisites: (ProjectDetailsAPIData) => boolean
 |};
 
+// TODO: Use prerequisites or get rid of them
 const steps: $ReadOnlyArray<CreateProjectStepConfig> = [
   {
     header: "Let's get started!",
@@ -50,7 +52,7 @@ const steps: $ReadOnlyArray<CreateProjectStepConfig> = [
   }, {
     header: "What type of volunteers does your project need?",
     subHeader: "You can always change the type of help your project needs later.",
-    formComponent: ProjectPreviewForm,
+    formComponent: ProjectPositionsForm,
     prerequisites: (project: ProjectDetailsAPIData) => project.project_name
   }, {
     header: "Ready to publish your project?",
@@ -77,6 +79,7 @@ type State = {|
  */
 class CreateProjectController extends React.PureComponent<{||},State> {
   constructor(props: {||}): void {
+    
     super(props);
     // TODO: Support navigating to page via &step=#
     // TODO: Support auto-navigating to page via prerequisites
@@ -104,9 +107,9 @@ class CreateProjectController extends React.PureComponent<{||},State> {
         showConfirmDiscardChanges: true
       });
     } else {
-      this.setState({
+      this.setState(Object.assign(this.resetPageState(), {
         currentStep: step
-      });
+      }));
     }
   }
   
@@ -118,6 +121,14 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       // TODO: Only fire event on initial page when the project is not yet created
       // metrics.logProjectClickCreate(CurrentUser.userID());
     }
+  }
+  
+  resetPageState(state: ?State): State {
+    let _state: State = state || this.state;
+    return Object.assign(_state, {
+      beforeSubmit: null,
+      fieldsUpdated: false
+    });
   }
   
   loadProjectDetails(project: ProjectDetailsAPIData): void {
@@ -164,7 +175,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     confirmState.showConfirmDiscardChanges = false;
     if(confirmDiscard) {
       confirmState.currentStep = this.state.navigateToStepUponDiscardConfirmation;
-      confirmState.fieldsUpdated = false;
+      confirmState = this.resetPageState(confirmState);
     }
     
     this.setState(confirmState);
@@ -177,11 +188,11 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       metrics.logProjectCreated(CurrentUser.userID());
       url.navigateToSection(Section.MyProjects);
     } else {
-      this.setState({
+      this.setState(Object.assign(this.resetPageState(), {
         project: project,
-        currentStep: this.state.currentStep + 1,
-        fieldsUpdated: false
-      });
+        currentStep: this.state.currentStep + 1
+      }));
+      this.forceUpdate();
     }
   }
   
