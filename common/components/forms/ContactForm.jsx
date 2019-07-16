@@ -45,43 +45,64 @@ class ContactForm extends React.Component {
     });
   }
 
+
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>
-          First name:
+        <div className="form-group">
+          <label htmlFor="fname">
+            First name:
+          </label>
           <input
+            className="form-control"
             name="fname"
+            id="fname"
             type="text"
+            placeholder="Your first name"
             value={this.state.fname}
             onChange={this.handleInputChange} />
-        </label>
-        <label>
-          Last name:
+        </div>
+        <div className="form-group">
+          <label htmlFor="lname">
+            Last name:
+          </label>
           <input
+            className="form-control"
             name="lname"
+            id="lname"
             type="text"
+            placeholder="Your last name"
             value={this.state.lname}
             onChange={this.handleInputChange} />
-        </label>
-        <label>
-          Your email address:
+        </div>
+        <div className="form-group">
+          <label htmlFor="emailaddr">
+            Your email address:
+          </label>
           <input
+            className="form-control"
             name="emailaddr"
             type="email"
+            id="emailaddr"
+            placeholder="name@example.com"
             value={this.state.emailaddr}
             onChange={this.handleInputChange} />
-        </label>
-        <label>
-          Message:
-          <input
-            name="message"
-            type="textarea"
-            value={this.state.message}
-            onChange={this.handleInputChange} />
-        </label>
+        </div>
+        <div className="form-group">
+          <label htmlFor="message">
+            Message:
+          </label>
+            <textarea
+              className="form-control"
+              name="message"
+              id="message"
+              placeholder="Type your message here"
+              rows="8"
+              value={this.state.message}
+              onChange={this.handleInputChange} />
+        </div>
 
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" className="btn btn-theme" />
       </form>
     );
   }
