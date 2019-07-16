@@ -188,6 +188,8 @@ SECURE_SSL_REDIRECT = os.environ.get('DL_SECURE_SSL_REDIRECT', False) == 'True'
 HOTJAR_APPLICATION_ID = os.environ.get('HOTJAR_APPLICATION_ID', '')
 
 GOOGLE_PROPERTY_ID = os.environ.get('GOOGLE_PROPERTY_ID', '')
+GOOGLE_ADS_ID = os.environ.get('GOOGLE_ADS_ID', '')
+GOOGLE_CONVERSION_IDS = ast.literal_eval(os.environ.get('GOOGLE_CONVERSION_IDS', 'None'))
 
 STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
 

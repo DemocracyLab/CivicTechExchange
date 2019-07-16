@@ -6,7 +6,9 @@ export const Images: { [key: string]: string } = {
   EVENT_SPLASH: "event_splash.png",
   THANK_YOU: "ThankYouBG_slim.jpg",
   DONATE_SPLASH: "DonateBG.jpg",
-  PAYPAL_BUTTON: "PaypalDonateButton.png"
+  PAYPAL_BUTTON: "PaypalDonateButton.png",
+  CORE_VALUES_BG: "CoreValuesBG520.png",
+  PROBLEM_SOLUTION_BG: "PuzzleBG.png"
 };
 
 class cdn {

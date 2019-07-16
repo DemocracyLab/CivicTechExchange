@@ -315,6 +315,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       .map((position, i) => {
         return <AboutPositionEntry
           key={i}
+          project={this.state.project}
           position={position}
           onClickApply={canApply ? this.handleShowVolunteerModal.bind(this, position) : null}
         />;
