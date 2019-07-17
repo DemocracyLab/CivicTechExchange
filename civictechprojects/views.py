@@ -524,11 +524,9 @@ def reject_project_volunteer(request, application_id):
         email_template = HtmlEmailTemplate()\
         .paragraph('The project owner of {project_name} has declined your application for the following reason:'.format(project_name=volunteer_relation.project.project_name))\
         .paragraph('\"{message}\"'.format(message=message))
-        
 
 
-
-        # here is the sample from leave:
+        # here is the sample:
         # email_template = HtmlEmailTemplate()\
         # .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         #     message=message,
@@ -540,7 +538,7 @@ def reject_project_volunteer(request, application_id):
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject=email_subject,
-                                  body=email_template)
+                                  template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
@@ -569,7 +567,7 @@ def dismiss_project_volunteer(request, application_id):
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                subject=email_subject,
-                               body=email_template)
+                               template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
         return HttpResponse(status=200)
@@ -602,7 +600,7 @@ def demote_project_volunteer(request, application_id):
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                subject=email_subject,
-                               body=email_template)
+                               template=email_template)
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
