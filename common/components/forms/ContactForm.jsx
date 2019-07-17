@@ -11,8 +11,8 @@ class ContactForm extends React.Component {
       lname: '',
       emailaddr: '',
       message: '',
-      sendStatus: null,
-      statusMessageClass: null,
+      sendStatusMessage: null,
+      sendStatusClass: null,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -38,14 +38,14 @@ class ContactForm extends React.Component {
 
   showSuccess() {
     this.setState({
-      sendStatus: 'Message sent successfully! We will get back to you as soon as possible.',
-      statusMessageClass: 'ContactForm-status-success'
+      sendStatusMessage: 'Message sent successfully! We will get back to you as soon as possible.',
+      sendStatusClass: 'ContactForm-status-success'
     })
   }
   showFailure() {
     this.setState({
-      sendStatus: 'We encountered an error sending your message. Please refresh and try again.',
-      statusMessageClass: 'ContactForm-status-error'
+      sendStatusMessage: 'We encountered an error sending your message. Please refresh and try again.',
+      sendStatusClass: 'ContactForm-status-error'
     })
   }
 
@@ -56,8 +56,8 @@ class ContactForm extends React.Component {
     //if any input is made, clear the display of the send status message
     this.setState({
       [name]: value,
-      sendStatus: null,
-      statusMessageClass: null
+      sendStatusMessage: null,
+      sendStatusClass: null
     });
   }
 
@@ -65,7 +65,7 @@ class ContactForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        {this.state.sendStatus ? <div className={"ContactForm-status-message" + " " + this.state.statusMessageClass}>{this.state.sendStatus}</div> : null}
+        {this.state.sendStatusMessage ? <div className={"ContactForm-status-message" + " " + this.state.sendStatusClass}>{this.state.sendStatusMessage}</div> : null}
         <div className="form-group">
           <label htmlFor="fname">
             First name:
