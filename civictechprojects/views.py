@@ -615,9 +615,9 @@ def update_project_timestamp(request, project):
 @csrf_exempt
 def contact_democracylab(request):
     body = json.loads(request.body)
-    message = body['message']
-    email_template = HtmlEmailTemplate()\
-    .paragraph('\"{message}\"'.format(message=message))
-    email_subject = 'Contact DemocracyLab message'
-    contact_democracylab_email(emailaddr=body['emailaddr'], template=email_template)
+    fn = body['fname']
+    ln = body['lname']
+    em = body['emailaddr']
+    ms = body['message']
+    contact_democracylab_email(fn, ln, em ,ms)
     return HttpResponse(status=200)
