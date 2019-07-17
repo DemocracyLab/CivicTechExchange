@@ -1,11 +1,19 @@
 import json
 from common.helpers.collections import find_first
 from common.models.tags import Tag
+from distutils.util import strtobool
 
 
-def read_form_field_string(model, form, field_name):
+def read_form_field_string(model, form, field_name, transformation=None):
     if field_name in form.data:
-        setattr(model, field_name, form.data.get(field_name))
+        form_field_content = form.data.get(field_name)
+        if transformation is not None:
+            form_field_content = transformation(form_field_content)
+        setattr(model, field_name, form_field_content)
+
+
+def read_form_field_boolean(model, form, field_name):
+    read_form_field_string(model, form, field_name, lambda str: strtobool(str))
 
 
 def merge_tag_changes(model, form, field_name):

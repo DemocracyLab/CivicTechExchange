@@ -7,7 +7,8 @@ from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCate
 from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
-from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, merge_json_changes, merge_single_file
+from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
+    merge_json_changes, merge_single_file
 
 from pprint import pprint
 
@@ -20,7 +21,7 @@ class ProjectCreationForm(ModelForm):
     @staticmethod
     def create_project(request):
         form = ProjectCreationForm(request.POST)
-        # TODO: Form validation
+        # TODO: Remove this
         project = Project.objects.create(
             project_creator=get_request_contributor(request),
             project_description=form.data.get('project_description'),
@@ -98,7 +99,8 @@ class ProjectCreationForm(ModelForm):
             project_date_created=timezone.now(),
             project_url='',
             project_description='',
-            project_location=''
+            project_location='',
+            is_created=False
         )
         project = Project.objects.get(id=project.id)
 
@@ -128,6 +130,9 @@ class ProjectCreationForm(ModelForm):
 
         pprint(request.body)
         form = ProjectCreationForm(request.POST)
+        is_created_original = project.is_created
+        read_form_field_boolean(project, form, 'is_created')
+
         read_form_field_string(project, form, 'project_description')
         read_form_field_string(project, form, 'project_short_description')
         read_form_field_string(project, form, 'project_location')
@@ -150,8 +155,10 @@ class ProjectCreationForm(ModelForm):
 
         merge_single_file(project, form, FileCategory.THUMBNAIL, 'project_thumbnail_location')
 
-        # TODO: Notify the admins that a new project has been created after final creation step
-        # send_project_creation_notification(project)
-        # messages.add_message(request, messages.INFO, 'Your project "' + project.project_name + '" is awaiting approval.  Expect a decision in the next business day.')
+        if is_created_original != project.is_created:
+            print('notifying project creation')
+            send_project_creation_notification(project)
+            # TODO: Move this message to front-end
+            # messages.add_message(request, messages.INFO, 'Your project "' + project.project_name + '" is awaiting approval.  Expect a decision in the next business day.')
 
         return project

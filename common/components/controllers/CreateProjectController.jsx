@@ -186,7 +186,9 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     
     if(this.onLastStep()) {
       metrics.logProjectCreated(CurrentUser.userID());
-      url.navigateToSection(Section.MyProjects);
+      // TODO: Your project "' + project.project_name + '" is awaiting approval.  Expect a decision in the next business day.
+      // TODO: Fix bug with switching to this section without page reload
+      window.location.href = url.section(Section.MyProjects);
     } else {
       this.setState(Object.assign(this.resetPageState(), {
         project: project,
@@ -256,7 +258,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
             <div className='text-right'>
               <input type="submit" className="btn_outline save_btn"
                      disabled={!this.state.formIsValid}
-                     value={this.onLastStep() ? "Publish" : "Next"}
+                     value={this.onLastStep() ? "PUBLISH" : "Next"}
               />
             </div>
           </div>
@@ -266,7 +268,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   }
   
   onLastStep(): boolean {
-    return this.state.currentStep >= steps.length;
+    return this.state.currentStep >= steps.length - 1;
   }
 }
 
