@@ -370,7 +370,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <div className="form-group pull-right">
           <div className='text-right'>
             <input disabled={!this.state.formIsValid} type="submit" className="btn_outline save_btn"
-                   value="Save Project" onClick={this.onSubmit.bind(this)}/>
+                   value="Save Project" onClick={_.throttle(this.onSubmit.bind(this), 1000,{'trailing': false})}/>
           </div>
         </div>
       </div>
