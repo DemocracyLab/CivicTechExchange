@@ -291,7 +291,7 @@ def _get_account_from_email(email_acct):
     return email_acct['from_name'] if email_acct is not None else 'DemocracyLab'
 
 def contact_democracylab_email(fname, lname, emailaddr, body):
-    subject = '{fname} {lname} would like to contact DemocracyLab'
+    subject = '{} {} would like to contact DemocracyLab'.format(fname, lname)
     email_msg = EmailMessage(
         subject=subject,
         body=body,
