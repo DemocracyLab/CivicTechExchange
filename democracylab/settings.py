@@ -223,7 +223,12 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'PAYPAL_ENDPOINT': {
         'error': False,
         'message': 'Donations will not work.'
+    },
+    'VOLUNTEER_RENEW_REMINDER_PERIODS': {
+        'error': False,
+        'message': 'Needed to calculate volunteer renewal periods.'
     }
+
 }
 
 # TODO: Set to True in productions
