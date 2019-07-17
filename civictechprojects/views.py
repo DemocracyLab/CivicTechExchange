@@ -518,22 +518,9 @@ def reject_project_volunteer(request, application_id):
     if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['rejection_message']
-        # OLD PLAIN-TEXT FORMAT; WILL BE REMOVED AFTER REVIEW:
-        # email_body_template = 'The project owner for {project_name} has declined your application for the following reason:\n{message}'
-        # email_body = email_body_template.format(project_name=volunteer_relation.project.project_name,message=message)
         email_template = HtmlEmailTemplate()\
         .paragraph('The project owner of {project_name} has declined your application for the following reason:'.format(project_name=volunteer_relation.project.project_name))\
         .paragraph('\"{message}\"'.format(message=message))
-
-
-        # here is the sample:
-        # email_template = HtmlEmailTemplate()\
-        # .paragraph('\"{message}\" - {firstname} {lastname}'.format(
-        #     message=message,
-        #     firstname=user.first_name,
-        #     lastname=user.last_name))\
-        # .paragraph('To contact this person, email them at {email}'.format(email=user.email))
-
         email_subject = 'Your application to join {project_name}'.format(
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
@@ -553,12 +540,6 @@ def dismiss_project_volunteer(request, application_id):
     if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['dismissal_message']
-        # OLD PLAIN-TEXT FORMAT; WILL BE REMOVED AFTER REVIEW:
-        # email_body = 'The owner for {project_name} has removed you from the project for the following reason:\n{message}'.format(
-        #     project_name=volunteer_relation.project.project_name, message=message)
-        # send_to_project_volunteer(volunteer_relation=volunteer_relation,
-        #                           subject='You have been dismissed from ' + volunteer_relation.project.project_name,
-                                #   body=email_body)
         email_template = HtmlEmailTemplate()\
         .paragraph('The owner of {project_name} has removed you from the project for the following reason:'.format(
             project_name=volunteer_relation.project.project_name))\
@@ -585,13 +566,6 @@ def demote_project_volunteer(request, application_id):
         update_project_timestamp(request, volunteer_relation.project)
         body = json.loads(request.body)
         message = body['demotion_message']
-        # OLD PLAIN-TEXT FORMAT; WILL BE REMOVED AFTER REVIEW:
-        # email_body = 'The owner of {project_name} has removed you as a co-owner of the project for the following reason:\n{message}'.format(
-        #     project_name=volunteer_relation.project.project_name, message=message)
-        # send_to_project_volunteer(volunteer_relation=volunteer_relation,
-        #                           subject='You have been removed as a co-owner from ' + volunteer_relation.project.project_name,
-        #                           body=email_body)
-        # return HttpResponse(status=200)
         email_template = HtmlEmailTemplate()\
         .paragraph('The owner of {project_name} has removed you as a co-owner of the project for the following reason:'.format(
             project_name=volunteer_relation.project.project_name))\
