@@ -522,9 +522,20 @@ def reject_project_volunteer(request, application_id):
         # email_body_template = 'The project owner for {project_name} has declined your application for the following reason:\n{message}'
         # email_body = email_body_template.format(project_name=volunteer_relation.project.project_name,message=message)
         email_template = HtmlEmailTemplate()\
-        .paragraph('The project owner of {project_name} has declined your application for the following reason:'.format(
-            project_name=volunteer_relation.project.project_name))\
+        .paragraph('The project owner of {project_name} has declined your application for the following reason:'.format(project_name=volunteer_relation.project.project_name))\
         .paragraph('\"{message}\"'.format(message=message))
+        
+
+
+
+        # here is the sample from leave:
+        # email_template = HtmlEmailTemplate()\
+        # .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+        #     message=message,
+        #     firstname=user.first_name,
+        #     lastname=user.last_name))\
+        # .paragraph('To contact this person, email them at {email}'.format(email=user.email))
+
         email_subject = 'Your application to join {project_name}'.format(
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
