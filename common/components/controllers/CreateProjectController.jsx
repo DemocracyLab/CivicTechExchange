@@ -15,10 +15,10 @@ import ProjectPreviewForm from "../componentsBySection/CreateProject/ProjectPrev
 import ProjectDescriptionForm from "../componentsBySection/CreateProject/ProjectDescriptionForm.jsx";
 import ProjectPositionsForm from "../componentsBySection/CreateProject/ProjectPositionsForm.jsx";
 import ProjectResourcesForm from "../componentsBySection/CreateProject/ProjectResourcesForm.jsx";
-import {ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils, {ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
+import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
-import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 
 type CreateProjectStepConfig = {|
   header: string,
@@ -66,6 +66,7 @@ const steps: $ReadOnlyArray<CreateProjectStepConfig> = [
 type State = {|
   projectId: number,
   project: ?ProjectDetailsAPIData,
+  projectIsLoading: boolean,
   currentStep: number,
   formIsValid: boolean,
   fieldsUpdated: boolean,
@@ -87,6 +88,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     this.formRef = React.createRef();
     this.state = {
       projectId: projectId,
+      projectIsLoading: !!projectId,
       currentStep: 0,
       formIsValid: false,
       fieldsUpdated: false,
@@ -135,7 +137,10 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     if(!CurrentUser.isOwner(project)) {
       // TODO: Handle someone other than owner
     } else {
-      this.setState({project: project});
+      this.setState({
+        project: project,
+        projectIsLoading: false
+      });
     }
   }
   
@@ -217,7 +222,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   
   _renderCreateProjectForm() : React$Node {
     const currentStep: CreateProjectStepConfig = steps[this.state.currentStep];
-    const FormComponent: React$Node = currentStep.formComponent;
+    
     return (
       <React.Fragment>
         <ConfirmationModal
@@ -226,52 +231,60 @@ class CreateProjectController extends React.PureComponent<{||},State> {
           onSelection={this.confirmDiscardChanges.bind(this)}
         />
         
+        
         <div class="create-form white-bg">
           <h1>{currentStep.header}</h1>
           <h2>{currentStep.subHeader}</h2>
           {/*TODO: Render step bars*/}
         </div>
   
-        {/*TODO: Show spinner when loading project*/}
-        <form
-              onSubmit={this.onSubmit.bind(this)}
-              method="post"
-              ref={this.formRef}>
+        {this.state.projectIsLoading ? <LoadingMessage /> : this._renderForm()}
 
-          <div class="create-form grey-bg">
-            <FormComponent
-              project={this.state.project}
-              readyForSubmit={this.onValidationCheck.bind(this)}
-              onFormUpdate={this.onFormUpdate.bind(this)}
-            />
-          </div>
+      </React.Fragment>
+    );
+  }
   
-          <div class="create-form white-bg">
-            {/*TODO: Bring button visuals in line with design*/}
-            
-            <Button className="btn btn-theme"
-                    type="button"
-                    title="Back"
-                    disabled={this.state.currentStep === 0}
-                    onClick={this.navigateToStep.bind(this, this.state.currentStep - 1)}
-            >
-              Back
-            </Button>
+  _renderForm(): React$Node {
+    const FormComponent: React$Node = steps[this.state.currentStep].formComponent;
+  
+    return (
+      <form
+        onSubmit={this.onSubmit.bind(this)}
+        method="post"
+        ref={this.formRef}>
     
-            {/*TODO: Project Saved icon*/}
-            
-            <div className="form-group pull-right">
-              <div className='text-right'>
-                <input type="submit" className="btn_outline save_btn"
-                       disabled={!this.state.formIsValid}
-                       value={this.onLastStep() ? "PUBLISH" : "Next"}
-                />
-              </div>
+        <div class="create-form grey-bg">
+          <FormComponent
+            project={this.state.project}
+            readyForSubmit={this.onValidationCheck.bind(this)}
+            onFormUpdate={this.onFormUpdate.bind(this)}
+          />
+        </div>
+    
+        <div class="create-form white-bg">
+          {/*TODO: Bring button visuals in line with design*/}
+      
+          <Button className="btn btn-theme"
+                  type="button"
+                  title="Back"
+                  disabled={this.state.currentStep === 0}
+                  onClick={this.navigateToStep.bind(this, this.state.currentStep - 1)}
+          >
+            Back
+          </Button>
+      
+          {/*TODO: Project Saved icon*/}
+      
+          <div className="form-group pull-right">
+            <div className='text-right'>
+              <input type="submit" className="btn_outline save_btn"
+                     disabled={!this.state.formIsValid}
+                     value={this.onLastStep() ? "PUBLISH" : "Next"}
+              />
             </div>
           </div>
-          
-        </form>
-      </React.Fragment>
+        </div>
+      </form>
     );
   }
   

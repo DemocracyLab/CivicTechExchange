@@ -37,26 +37,30 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
     const project: ProjectDetailsAPIData = props.project;
-    this.state = {
-      formIsValid: false,
-      formFields: {
-        project_name: project ? project.project_name : "",
-        project_short_description: project ? project.project_short_description : "",
-        project_issue_area: project ? project.project_issue_area : [],
-        project_thumbnail: project ? project.project_thumbnail : ""
-      },
-      validations: [
-        {
-          checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_name"]),
-          errorMessage: "Please enter Project Name"
-        },
-        {
-          checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_short_description"]),
-          errorMessage: "Please enter Project Description"
-        }
-      ]
+    const formFields: FormFields = {
+      project_name: project ? project.project_name : "",
+      project_short_description: project ? project.project_short_description : "",
+      project_issue_area: project ? project.project_issue_area : [],
+      project_thumbnail: project ? project.project_thumbnail : ""
     };
-    
+    const validations: $ReadOnlyArray<Validator<FormFields>> = [
+      {
+        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_name"]),
+        errorMessage: "Please enter Project Name"
+      },
+      {
+        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_short_description"]),
+        errorMessage: "Please enter Project Description"
+      }
+    ];
+  
+    const formIsValid: boolean = FormValidation.isValid(formFields, validations);
+    this.state = {
+      formIsValid: formIsValid,
+      formFields: formFields,
+      validations: validations
+    };
+    props.readyForSubmit(formIsValid);
     this.form = form.setup();
   }
 
