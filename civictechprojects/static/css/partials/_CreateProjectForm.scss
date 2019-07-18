@@ -1,0 +1,12 @@
+//overrides a very particular user agent stylesheet declaration
+.create-form.white-bg {
+    background-color: $color-background-light;
+    padding: 20px;
+    border-bottom: medium solid $color-grey-medium;
+    border-top: medium solid $color-grey-medium;
+}
+
+.create-form.grey-bg {
+    background-color: $color-background-default;
+    padding: 20px;
+}
