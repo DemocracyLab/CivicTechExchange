@@ -6,7 +6,6 @@ import Truncate from '../utils/truncate';
 import urlHelper from '../utils/url';
 import window from './__mocks__/window';
 import NavigationStore from '../stores/NavigationStore.js';
-import type {SectionType} from '../enums/Section.js';
 
 describe('utils', () => {
 
