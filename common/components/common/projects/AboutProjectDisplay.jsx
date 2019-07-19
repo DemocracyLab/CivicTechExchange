@@ -205,14 +205,8 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 handleClose={this.confirmJoinProject.bind(this)}
               />
 
-              
-              <div className='AboutProjects-owner'>
-                <ContactProjectButton project={project}/>
-                <ProjectVolunteerButton
-                  project={project}
-                  onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
-                />
-              </div>
+              {!this.props.viewOnly && this._renderContactAndVolunteerButtons()}
+
             </div>
 
             <div className="AboutProjects_tabs">
@@ -276,7 +270,15 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   }
   
   _renderContactAndVolunteerButtons(): React$Node {
-    
+    return (
+      <div className='AboutProjects-owner'>
+        <ContactProjectButton project={this.props.project}/>
+        <ProjectVolunteerButton
+          project={this.props.project}
+          onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
+        />
+      </div>
+    );
   }
 
   _renderFiles(): ?Array<React$Node> {
