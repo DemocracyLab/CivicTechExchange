@@ -1,4 +1,4 @@
-window.PRESS_LINKS = '[{"date":"June 13, 2019","source":"WTIA","title":"DLAB Delivers"}]'
+window.PRESS_LINKS = '[{"date":"June 13, 2019","source":"WTIA","title":"DLab Is Tested"}]';
 window.DLAB_GLOBAL_CONTEXT = {
 	'userID': 1,
 	'emailVerified': true,
@@ -8,5 +8,5 @@ window.DLAB_GLOBAL_CONTEXT = {
 	'userImgUrl': 'pic.png',
 	'isStaff': false,
 	'volunteeringUpForRenewal': false,
-}
-window.DLAB_MESSAGES = []
+};
+window.DLAB_MESSAGES = [];
