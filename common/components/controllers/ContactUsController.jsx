@@ -25,7 +25,7 @@ class ContactUsController extends React.PureComponent<{||}> {
         {this._renderHeader()}
          <div className="container contact-us-root">
            <h1>Contact Us</h1>
-           <p>To contact DemocracyLab, please fill out this form to send us a message and we'll get back to you.</p>
+           <p>To contact DemocracyLab, please fill out this form to send us a message and we'll get back to you. All fields are required.</p>
            <ContactForm />
          </div>
        </React.Fragment>

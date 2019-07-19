@@ -15,7 +15,6 @@ class ContactForm extends React.Component {
       sendStatusMessage: null,
       sendStatusClass: null,
       reCaptchaKey: null,
-      enableSend: false
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -34,7 +33,7 @@ class ContactForm extends React.Component {
           lname: this.state.lname,
           emailaddr: this.state.emailaddr,
           message: this.state.message,
-          reCaptchaKey: reCaptchaKey
+          reCaptchaKey: this.state.reCaptchaKey
         },
         response => this.showSuccess(),
         response => this.showFailure()
@@ -68,11 +67,9 @@ class ContactForm extends React.Component {
   }
 
   reCaptchaOnChange(value) {
-    console.log('reCaptcha key: ' + value)
-    //when the reCaptcha is completed, set the value in state and enable the submit button
+    //when the reCaptcha is completed, set the value in state
     this.setState({
       reCaptchaKey: value,
-      enableSend: true,
     })
   }
 
@@ -86,6 +83,7 @@ class ContactForm extends React.Component {
               First name:
             </label>
             <input
+              required
               className="form-control"
               name="fname"
               id="fname"
@@ -99,6 +97,7 @@ class ContactForm extends React.Component {
               Last name:
             </label>
             <input
+              required
               className="form-control"
               name="lname"
               id="lname"
@@ -112,6 +111,7 @@ class ContactForm extends React.Component {
               Your email address:
             </label>
             <input
+              required
               className="form-control"
               name="emailaddr"
               type="email"
@@ -125,6 +125,7 @@ class ContactForm extends React.Component {
               Message:
             </label>
               <textarea
+                required
                 className="form-control"
                 name="message"
                 id="message"
@@ -133,12 +134,12 @@ class ContactForm extends React.Component {
                 value={this.state.message}
                 onChange={this.handleInputChange} />
           </div>
-          <p>Please complete this reCAPTCHA to submit your message. I know, they're terrible. Sorry. :(</p>
+          <p>Please complete this captcha after writing your message above.</p>
           <ReCAPTCHA
             sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
             onChange={this.reCaptchaOnChange}
           />
-          {this.state.enableSend && <input type="submit" value="Send message" className="btn btn-theme ContactForm-submit-btn" />}
+          {this.state.reCaptchaKey && <input type="submit" value="Send message" className="btn btn-theme ContactForm-submit-btn" />}
         </form>
     </React.Fragment>
     );
