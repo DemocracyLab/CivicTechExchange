@@ -34,7 +34,7 @@ class TagSelector extends React.PureComponent<Props, State> {
     };
   }
   
-  handleFetchTags(tags: Array<TagDefinition>): void {
+  handleFetchTags(tags: Array<TagDefinition>): void {                                                                                 
     this.setState({
       tags: tags
     });

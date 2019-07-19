@@ -2,6 +2,7 @@
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import CurrentUser from "./CurrentUser.js";
 import Section from "../enums/Section.js";
+import {Dictionary} from "../types/Generics.jsx";
 import _ from 'lodash'
 
 const regex = {
@@ -36,7 +37,7 @@ class urlHelper {
   }
   
   // Construct a url with properly-formatted query string for the given arguments
-  static constructWithQueryString(url: string, args: { [key: string]: string }): string {
+  static constructWithQueryString(url: string, args: Dictionary<string>): string {
     let result: string = url;
     if(!_.isEmpty(args)) {
       const existingArgs: {[key: string]: number} = urlHelper.arguments(url);
@@ -46,7 +47,7 @@ class urlHelper {
     return result;
   }
   
-  static arguments(fromUrl: ?string): { [key: string]: string } {
+  static arguments(fromUrl: ?string): Dictionary<string> {
     // Take argument section of url and split args into substrings
     const url = fromUrl || document.location.search;
     const argStart = url.indexOf("?");
@@ -63,11 +64,26 @@ class urlHelper {
   }
   
   static argument(key: string): ?string {
-    const args: { [key: string]: string } = urlHelper.arguments();
+    const args: Dictionary<string> = urlHelper.arguments();
     return args && args[key];
   }
   
-  static getPreviousPageArg(): { [key: string]: string } {
+  static update(newUrl: string): void {
+    history.pushState({}, null, newUrl);
+  }
+  
+  static updateArgs(args: Dictionary<string>, url: ?string): string {
+    let _url: string = url || window.location.href;
+    let oldArgs: Dictionary<string> = urlHelper.arguments(_url);
+    let newArgs: Dictionary<string> = Object.assign(oldArgs, args);
+    let section: ?string = newArgs.section;
+    newArgs = _.omit(newArgs,['section']);
+    let newUrl: string = urlHelper.section(section, newArgs);
+    urlHelper.update(newUrl);
+    return newUrl;
+  }
+  
+  static getPreviousPageArg(): Dictionary<string> {
     const url: string = window.location.href;
     // If prev arg already exists, use that
     const existingPrevSection: string = url.split('&prev=');

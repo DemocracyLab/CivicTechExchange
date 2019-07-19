@@ -128,6 +128,12 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     });
   }
   
+  updatePageUrl() {
+    if(this.state.projectId && !url.argument('id')) {
+      url.updateArgs({id: this.state.projectId});
+    }
+  }
+  
   loadProjectDetails(project: ProjectDetailsAPIData): void {
     if(!CurrentUser.isOwner(project)) {
       // TODO: Handle someone other than owner
@@ -135,7 +141,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       this.setState({
         project: project,
         projectIsLoading: false
-      });
+      }, this.updatePageUrl);
     }
   }
   
@@ -192,8 +198,9 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     } else {
       this.setState(Object.assign(this.resetPageState(), {
         project: project,
+        projectId: project.project_id,
         currentStep: this.state.currentStep + 1
-      }));
+      }), this.updatePageUrl);
       this.forceUpdate();
     }
   }
