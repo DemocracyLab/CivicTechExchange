@@ -205,6 +205,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 handleClose={this.confirmJoinProject.bind(this)}
               />
 
+              
               <div className='AboutProjects-owner'>
                 <ContactProjectButton project={project}/>
                 <ProjectVolunteerButton
@@ -273,6 +274,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       />
     );
   }
+  
+  _renderContactAndVolunteerButtons(): React$Node {
+    
+  }
 
   _renderFiles(): ?Array<React$Node> {
     const project = this.state.project;
@@ -299,6 +304,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       .map((position, i) => {
         return <AboutPositionEntry
           key={i}
+          project={project}
           position={position}
           onClickApply={canApply ? this.handleShowVolunteerModal.bind(this, position) : null}
         />;

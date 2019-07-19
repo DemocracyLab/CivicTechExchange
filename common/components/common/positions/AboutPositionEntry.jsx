@@ -2,6 +2,7 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
+import {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CollapsibleTextSection from "../CollapsibleTextSection.jsx";
 import {tagOptionDisplay} from "../tags/TagSelector.jsx";
 import GlyphStyles from "../../utils/glyphs.js";
@@ -10,6 +11,7 @@ import url from "../../utils/url.js";
 import CurrentUser from '../../utils/CurrentUser';
 
 type Props = {|
+  +project: ProjectDetailsAPIData,
   +position: PositionInfo,
   +onClickApply: (PositionInfo) => void
 |}
@@ -25,7 +27,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
         <div className="Position-entry">
           <div className="Position-header">
           {this._renderHeader()}
-          {this._renderApplyButton()}
+          {!CurrentUser.isOwnerOrVolunteering(this.props.project) && this._renderApplyButton()}
           </div>
           { this.props.position.descriptionUrl &&
               <div className="Position-description-link"><a href={this.props.position.descriptionUrl} target="_blank" rel="noopener noreferrer">
