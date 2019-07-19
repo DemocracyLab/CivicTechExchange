@@ -96,12 +96,6 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     };
   }
   
-  loadCurrentStep(projectId: ?number): CreateProjectStepConfig {
-    // Load step by name if present
-    // Load project if projectId
-      // Advance to correct step if step name not specified
-  }
-  
   navigateToStep(step: number): void {
     if(this.state.fieldsUpdated) {
       this.setState({
@@ -112,6 +106,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       this.setState(Object.assign(this.resetPageState(), {
         currentStep: step
       }));
+      this.forceUpdate();
     }
   }
   
@@ -232,7 +227,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
         />
         
         
-        <div class="create-form white-bg">
+        <div className="create-form white-bg">
           <h1>{currentStep.header}</h1>
           <h2>{currentStep.subHeader}</h2>
           {/*TODO: Render step bars*/}
@@ -253,7 +248,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
         method="post"
         ref={this.formRef}>
     
-        <div class="create-form grey-bg">
+        <div className="create-form grey-bg">
           <FormComponent
             project={this.state.project}
             readyForSubmit={this.onValidationCheck.bind(this)}
@@ -261,7 +256,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
           />
         </div>
     
-        <div class="create-form white-bg">
+        <div className="create-form white-bg">
           {/*TODO: Bring button visuals in line with design*/}
       
           <Button className="btn btn-theme"

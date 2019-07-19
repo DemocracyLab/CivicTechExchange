@@ -23,7 +23,7 @@ class apiHelper {
   }
   
   static postForm(url: string, formNode: React.Ref, successCallback: (APIResponse) => void, errCallback: (APIError) => void) {
-    const serializedForm = serialize(formNode.current);
+    const serializedForm = serialize(formNode.current, {empty: true, hash: false});
   
     const headers = {
       'Accept': 'application/json, text/plain, */*',

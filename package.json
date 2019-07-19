@@ -35,7 +35,7 @@
     "react-dom": "^16.4.2",
     "react-helmet": "^5.2.0",
     "react-moment": "^0.7.9",
-    "react-select": "^2.0.0"
+    "react-select": "^2.4.2"
   },
   "devDependencies": {
     "aws-sdk": "^2.289.0",

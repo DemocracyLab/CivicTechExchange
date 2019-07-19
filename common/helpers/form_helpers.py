@@ -16,7 +16,7 @@ def read_form_field_boolean(model, form, field_name):
     read_form_field_string(model, form, field_name, lambda str: strtobool(str))
 
 
-def merge_tag_changes(model, form, field_name):
+def read_form_field_tags(model, form, field_name):
     if field_name in form.data:
         Tag.merge_tags_field(getattr(model, field_name), form.data.get(field_name))
 

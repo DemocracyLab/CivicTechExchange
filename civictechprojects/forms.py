@@ -8,7 +8,7 @@ from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
-    merge_json_changes, merge_single_file
+    merge_json_changes, merge_single_file, read_form_field_tags
 
 from pprint import pprint
 
@@ -139,10 +139,10 @@ class ProjectCreationForm(ModelForm):
         read_form_field_string(project, form, 'project_name')
         read_form_field_string(project, form, 'project_url')
 
-        Tag.merge_tags_field(project.project_issue_area, form.data.get('project_issue_area'))
-        Tag.merge_tags_field(project.project_stage, form.data.get('project_stage'))
-        Tag.merge_tags_field(project.project_technologies, form.data.get('project_technologies'))
-        Tag.merge_tags_field(project.project_organization, form.data.get('project_organization'))
+        read_form_field_tags(project, form, 'project_issue_area')
+        read_form_field_tags(project, form, 'project_stage')
+        read_form_field_tags(project, form, 'project_technologies')
+        read_form_field_tags(project, form, 'project_organization')
 
         if not request.user.is_staff:
             project.project_date_modified = timezone.now()
