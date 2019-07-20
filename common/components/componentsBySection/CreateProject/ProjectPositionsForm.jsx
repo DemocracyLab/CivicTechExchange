@@ -40,6 +40,8 @@ class ProjectPositionsForm extends React.PureComponent<Props,State> {
     };
     
     this.form = form.setup();
+    // All fields optional
+    props.readyForSubmit(true);
   }
 
   render(): React$Node {

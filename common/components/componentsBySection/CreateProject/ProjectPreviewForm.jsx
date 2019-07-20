@@ -17,7 +17,8 @@ type Props = {|
 class ProjectPreviewForm extends React.PureComponent<Props> {
   constructor(props: Props): void {
     super(props);
-    props.readyForSubmit && props.readyForSubmit(true);
+    // All fields optional
+    props.readyForSubmit(true);
   }
 
   render(): React$Node {

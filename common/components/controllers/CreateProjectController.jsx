@@ -124,7 +124,8 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     let _state: State = state || this.state;
     return Object.assign(_state, {
       beforeSubmit: null,
-      fieldsUpdated: false
+      fieldsUpdated: false,
+      formIsValid: false
     });
   }
   

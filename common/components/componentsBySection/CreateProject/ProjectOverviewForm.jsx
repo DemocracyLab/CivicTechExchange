@@ -63,6 +63,11 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
     props.readyForSubmit(formIsValid);
     this.form = form.setup();
   }
+  
+  componentDidMount() {
+    // Initial validation check
+    this.form.doValidation.bind(this)();
+  }
 
   onValidationCheck(formIsValid: boolean): void {
     if(formIsValid !== this.state.formIsValid) {

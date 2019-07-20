@@ -4,7 +4,7 @@ import React from "react";
 import TagCategory from "../../common/tags/TagCategory.jsx";
 import TagSelector from "../../common/tags/TagSelector.jsx";
 import DjangoCSRFToken from "django-react-csrftoken";
-import FormValidation from "../../../components/forms/FormValidation.jsx";
+import {OnReadySubmitFunc} from "./ProjectFormCommon.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {TagDefinition, ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
 import {Locations} from "../../constants/ProjectConstants.js";
@@ -22,7 +22,7 @@ type FormFields = {|
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
-  readyForSubmit: () => () => boolean
+  readyForSubmit: OnReadySubmitFunc
 |} & FormPropsBase<FormFields>;
 type State = {|
   formIsValid: boolean,
@@ -50,6 +50,8 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
     };
   
     this.form = form.setup();
+    // All fields optional
+    props.readyForSubmit(true);
   }
 
   render(): React$Node {

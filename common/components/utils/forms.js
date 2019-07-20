@@ -37,9 +37,14 @@ class formHelper {
       _onFormUpdate(this, formValues);
     };
     
+    const doValidation = function(): void {
+      _onFormUpdate(this, _getFormValues(this));
+    };
+    
     return {
       onInput: onInput,
-      onSelection: onSelection
+      onSelection: onSelection,
+      doValidation: doValidation
     };
   }
 }
