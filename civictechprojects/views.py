@@ -97,7 +97,7 @@ def project_create(request):
         # TODO: Log this
         return HttpResponse(status=403)
 
-    project = ProjectCreationForm.create_project_new(request)
+    project = ProjectCreationForm.create_project(request)
     return JsonResponse(project.hydrate_to_json())
 
 
