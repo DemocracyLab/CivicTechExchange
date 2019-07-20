@@ -115,8 +115,10 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       ProjectAPIUtils.fetchProjectDetails(this.state.projectId, this.loadProjectDetails.bind(this), this.handleLoadProjectError.bind(this));
     }
     if(CurrentUser.isLoggedIn() && CurrentUser.isEmailVerified()) {
-      // TODO: Only fire event on initial page when the project is not yet created
-      // metrics.logProjectClickCreate(CurrentUser.userID());
+      // Only fire event on initial page when the project is not yet created
+      if(!url.argument("id")) {
+        metrics.logProjectClickCreate(CurrentUser.userID());
+      }
     }
   }
   
