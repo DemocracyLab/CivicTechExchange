@@ -10,6 +10,11 @@ const regex = {
   argumentSplit: new RegExp("([^=]+)=(.*)")
 };
 
+type SectionUrlArguments = {|
+  section: string,
+  args: Dictionary<string>
+|}
+
 class urlHelper {
   static navigateToSection(section: string): void {
     UniversalDispatcher.dispatch({
@@ -28,6 +33,20 @@ class urlHelper {
       );
     }
     return sectionUrl;
+  }
+  
+  static getSectionArgs(url: ?string): SectionUrlArguments {
+    let _url: string = url || window.location.href;
+    let oldArgs: Dictionary<string> = urlHelper.arguments(_url);
+    const args = {
+      section: oldArgs.section,
+      args: _.omit(oldArgs,['section'])
+    };
+    return args;
+  };
+  
+  static fromSectionArgs(args: SectionUrlArguments): string {
+    return urlHelper.section(args.section, args.args);
   }
   
   static sectionOrLogIn(section: string): string {
@@ -72,13 +91,20 @@ class urlHelper {
     history.pushState({}, null, newUrl);
   }
   
-  static updateArgs(args: Dictionary<string>, url: ?string): string {
+  static updateArgs(args: Dictionary<string>, removeArgs: ?$ReadOnlyArray<string>, url: ?string): string {
     let _url: string = url || window.location.href;
-    let oldArgs: Dictionary<string> = urlHelper.arguments(_url);
-    let newArgs: Dictionary<string> = Object.assign(oldArgs, args);
-    let section: ?string = newArgs.section;
-    newArgs = _.omit(newArgs,['section']);
-    let newUrl: string = urlHelper.section(section, newArgs);
+    let sectionArgs: SectionUrlArguments = urlHelper.getSectionArgs(_url);
+    sectionArgs.args = Object.assign(sectionArgs.args, args);
+    let newUrl: string = urlHelper.fromSectionArgs(sectionArgs);
+    urlHelper.update(newUrl);
+    return newUrl;
+  }
+  
+  static removeArgs(args: $ReadOnlyArray<string>, url: ?string): string {
+    let _url: string = url || window.location.href;
+    let sectionArgs: SectionUrlArguments = urlHelper.getSectionArgs(_url);
+    sectionArgs.args = _.omit(sectionArgs.args, args);
+    let newUrl: string = urlHelper.fromSectionArgs(sectionArgs);
     urlHelper.update(newUrl);
     return newUrl;
   }

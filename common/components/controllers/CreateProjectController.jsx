@@ -192,9 +192,8 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     
     if(this.onLastStep()) {
       metrics.logProjectCreated(CurrentUser.userID());
-      // TODO: Your project "' + project.project_name + '" is awaiting approval.  Expect a decision in the next business day.
       // TODO: Fix bug with switching to this section without page reload
-      window.location.href = url.section(Section.MyProjects);
+      window.location.href = url.section(Section.MyProjects, {projectAwaitingApproval: project.project_name});
     } else {
       this.setState(Object.assign(this.resetPageState(), {
         project: project,
