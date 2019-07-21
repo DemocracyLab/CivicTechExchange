@@ -9,6 +9,7 @@ import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
+import StepIndicatorBars from "../common/StepIndicatorBars.jsx";
 import ProjectOverviewForm from "../componentsBySection/CreateProject/ProjectOverviewForm.jsx";
 import ProjectInfoForm from "../componentsBySection/CreateProject/ProjectInfoForm.jsx";
 import ProjectPreviewForm from "../componentsBySection/CreateProject/ProjectPreviewForm.jsx";
@@ -239,7 +240,10 @@ class CreateProjectController extends React.PureComponent<{||},State> {
         <div className="create-form white-bg">
           <h1>{currentStep.header}</h1>
           <h2>{currentStep.subHeader}</h2>
-          {/*TODO: Render step bars*/}
+          <StepIndicatorBars
+            stepCount={steps.length}
+            currentlySelected={this.state.currentStep}
+          />
         </div>
   
         {this.state.projectIsLoading ? <LoadingMessage /> : this._renderForm()}
