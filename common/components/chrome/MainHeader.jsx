@@ -88,7 +88,10 @@ class MainHeader extends React.Component<{||}, State > {
   render(): React$Node {
     return (
       <div ref={this.mainHeaderRef} className='MainHeader'>
-        <AlertHeader onAlertClose={this._handleAlertClosing.bind(this)}/>
+        <AlertHeader
+          onAlertClose={this._handleAlertClosing.bind(this)}
+          onUpdate={this._onAlertHeaderUpdate.bind(this)}
+        />
         <div className={this._cx.get('root')}>
           <a href={url.section(Section.FindProjects, {showSplash: 1})}>
             <div className="SubHeader-logo-container">
@@ -119,6 +122,10 @@ class MainHeader extends React.Component<{||}, State > {
         </div>
       </div>
     );
+  }
+  
+  _onAlertHeaderUpdate() {
+    this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
   }
 
   _handleHeightChange(height) {

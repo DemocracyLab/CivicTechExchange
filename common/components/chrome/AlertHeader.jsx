@@ -24,7 +24,8 @@ type AlertConfiguration = {|
 
 type Props = {|
   onClickFindProjects: () => void,
-  onAlertClose: () => void
+  onAlertClose: () => void,
+  onUpdate: () => void
 |};
 
 type State = {|
@@ -103,7 +104,13 @@ class AlertHeader extends React.Component<Props, State> {
       });
     }
   }
-
+  
+  componentDidUpdate(prevProps: Props, prevState:State) {
+    if(this.state.currentAlert !== prevState.currentAlert) {
+      this.props.onUpdate();
+    }
+  }
+  
   hideHeader(): void {
     url.removeArgs(_.keys(AlertMessages));
     if(this.state.currentAlert.waitTimeBeforeShowAgain) {
