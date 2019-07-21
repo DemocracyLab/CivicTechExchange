@@ -12,7 +12,6 @@ export type NavigationLink = {|
 
 const navLinks = [
   { url: "/index/?section=Donate", name: "Donate", isButton: true },
-  { url: "mailto:hello@democracylab.org", name :"Contact Us", isButton: false },
 ]
 
 class NavigationLinks {

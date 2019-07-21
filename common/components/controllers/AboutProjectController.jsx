@@ -13,7 +13,7 @@ import url from "../utils/url.js";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
-  loadStatusMsg: string
+  loadStatusMsg: stringA
 |};
 
 class AboutProjectController extends React.PureComponent<{||}, State> {
@@ -69,7 +69,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       />
     );
   }
-
 }
 
 export default AboutProjectController;

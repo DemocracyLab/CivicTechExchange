@@ -50,7 +50,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
   _renderApplyButton(): ?React$Node {
 
     let applyButton;
-    if (CurrentUser.isLoggedIn() === true) {
+    if (CurrentUser.canVolunteerForProject(this.props.project)) {
       applyButton = (
         <Button className="btn btn-theme"
         type="button"
@@ -60,7 +60,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
         Apply Now
       </Button>
       );
-    } else {
+    } else if (!CurrentUser.isLoggedIn()) {
       applyButton = (
         <Button className="btn btn-theme"
         type="button"
