@@ -215,12 +215,14 @@ class CreateProjectController extends React.PureComponent<{||},State> {
           title="Create a Project | DemocracyLab"
           description="Create project page"
         />
-        {!CurrentUser.isLoggedIn()
-          ? <LogInController prevPage={Section.CreateProject}/>
-          : <React.Fragment>
-              {CurrentUser.isEmailVerified() ? this._renderCreateProjectForm() : <VerifyEmailBlurb/>}
-            </React.Fragment>
-        }
+        <div className="form-body">
+          {!CurrentUser.isLoggedIn()
+            ? <LogInController prevPage={Section.CreateProject}/>
+            : <React.Fragment>
+                {CurrentUser.isEmailVerified() ? this._renderCreateProjectForm() : <VerifyEmailBlurb/>}
+              </React.Fragment>
+          }
+        </div>
       </React.Fragment>
     );
   }
@@ -237,13 +239,15 @@ class CreateProjectController extends React.PureComponent<{||},State> {
         />
         
         
-        <div className="create-form white-bg">
-          <h1>{currentStep.header}</h1>
-          <h2>{currentStep.subHeader}</h2>
-          <StepIndicatorBars
-            stepCount={steps.length}
-            currentlySelected={this.state.currentStep}
-          />
+        <div className="create-form white-bg container-fluid">
+          <div className="bounded-content">
+            <h1>{currentStep.header}</h1>
+            <h2>{currentStep.subHeader}</h2>
+            <StepIndicatorBars
+              stepCount={steps.length}
+              currentlySelected={this.state.currentStep}
+            />
+          </div>
         </div>
   
         {this.state.projectIsLoading ? <LoadingMessage /> : this._renderForm()}
@@ -261,7 +265,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
         method="post"
         ref={this.formRef}>
     
-        <div className="create-form grey-bg">
+        <div className="create-form grey-bg container">
           <FormComponent
             project={this.state.project}
             readyForSubmit={this.onValidationCheck.bind(this)}
@@ -269,7 +273,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
           />
         </div>
     
-        <div className="create-form white-bg">
+        <div className="create-form white-bg container-fluid">
           {/*TODO: Bring button visuals in line with design*/}
       
           <Button className="btn btn-theme"
