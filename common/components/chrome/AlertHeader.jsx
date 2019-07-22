@@ -1,10 +1,13 @@
 // @flow
 
 import React from 'react';
+import { Container } from 'flux/utils';
 import {Glyph,GlyphStyles, GlyphSizes} from "../utils/glyphs.js";
+import {Dictionary} from "../types/Generics.jsx";
 import CurrentUser from "../utils/CurrentUser.js";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
+import NavigationStore from "../stores/NavigationStore.js";
 import moment from 'moment';
 import _ from 'lodash'
 
@@ -14,14 +17,15 @@ type AlertShownStats = {|
 
 type AlertConfiguration = {|
   name: string, /* Identifier for tracking AlertShownStats in session storage */
-  waitTimeBeforeShowAgain: string, /* ISO 8601 duration string */
+  waitTimeBeforeShowAgain: ?string, /* ISO 8601 duration string */
   shouldShowAlert: () => boolean, /* Whether to show alert */
   getAlertBody: () => React$Node /* Alert HTML body */
 |};
 
 type Props = {|
   onClickFindProjects: () => void,
-  onAlertClose: () => void
+  onAlertClose: () => void,
+  onUpdate: () => void
 |};
 
 type State = {|
@@ -30,6 +34,10 @@ type State = {|
   currentAlert: AlertConfiguration
 |};
 
+const AlertMessages: Dictionary<string> = {
+  projectAwaitingApproval: 'Your project "{value}" is awaiting approval.  Expect a decision in the next business day.'
+};
+
 // Put string html content into a format that dangerouslySetInnerHTML accepts
 function unescapeHtml(html: string): string {
   let escapeEl = document.createElement('textarea');
@@ -37,11 +45,17 @@ function unescapeHtml(html: string): string {
   return escapeEl.textContent;
 }
 
-class AlertHeader extends React.PureComponent<Props, State> {
+class AlertHeader extends React.Component<Props, State> {
   constructor(): void {
     super();
     const alertConfigurations: $ReadOnlyArray<AlertConfiguration> = [
       {
+        name: "triggeredAlertMessages",
+        shouldShowAlert: () => {
+          return _.some(_.keys(AlertMessages), (key) => url.argument(key));
+        },
+        getAlertBody: this._renderTriggeredAlert.bind(this)
+      }, {
         name: "emailVerificationAlert",
         waitTimeBeforeShowAgain: "PT1M" /* 1 Minute */,
         shouldShowAlert: () => {
@@ -71,13 +85,41 @@ class AlertHeader extends React.PureComponent<Props, State> {
       alertConfigurations: alertConfigurations
     };
   }
-
-  hideHeader(): void {
-    const alertShownStats: AlertShownStats = {
-      lastHidden: moment.now().valueOf()
+  
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [NavigationStore];
+  }
+  
+  static calculateState(prevState: State): State {
+    // Re-calculate the current alert if we navigate to a different section
+    return {
+      currentAlert: null
     };
-    
-    sessionStorage[this.state.currentAlert.name] = JSON.stringify(alertShownStats);
+  }
+  
+  componentWillUpdate(nextProps: Props, nextState: State) {
+    if(!nextState.currentAlert) {
+      this.setState({
+        currentAlert: this.getCurrentAlert(this.state.alertConfigurations)
+      });
+    }
+  }
+  
+  componentDidUpdate(prevProps: Props, prevState:State) {
+    if(this.state.currentAlert !== prevState.currentAlert) {
+      this.props.onUpdate();
+    }
+  }
+  
+  hideHeader(): void {
+    url.removeArgs(_.keys(AlertMessages));
+    if(this.state.currentAlert.waitTimeBeforeShowAgain) {
+      const alertShownStats: AlertShownStats = {
+        lastHidden: moment.now().valueOf()
+      };
+  
+      sessionStorage[this.state.currentAlert.name] = JSON.stringify(alertShownStats);
+    }
     this.setState({showHeader: false});
     this.props.onAlertClose();
   }
@@ -102,7 +144,7 @@ class AlertHeader extends React.PureComponent<Props, State> {
   }
   
   render(): ?React$Node {
-    return this.state.showHeader && (
+    return this.state.showHeader && this.state.currentAlert && (
       <div className="AlertHeader-root">
         {this._renderCurrentAlert()}
         <div className="AlertHeader-close" onClick={() => this.hideHeader()}>
@@ -114,6 +156,16 @@ class AlertHeader extends React.PureComponent<Props, State> {
   
   _renderCurrentAlert(): React$Node {
     return this.state.currentAlert.getAlertBody();
+  }
+  
+  _renderTriggeredAlert(): React$Node {
+    const key: string =_.keys(AlertMessages).find((key) => url.argument(key));
+    const message: string = AlertMessages[key].replace("{value}",decodeURI(url.argument(key)));
+    return (
+      <div className="AlertHeader-text">
+        {message}
+      </div>
+    );
   }
   
   _renderBackendAlert(): React$Node {
@@ -139,4 +191,4 @@ class AlertHeader extends React.PureComponent<Props, State> {
     );
   }
 }
-export default AlertHeader;
+export default Container.create(AlertHeader);

@@ -34,6 +34,10 @@ class TaggedOrganization(TaggedItemBase):
     content_object = models.ForeignKey('Project')
 
 
+class TaggedOrganizationType(TaggedItemBase):
+    content_object = models.ForeignKey('Project')
+
+
 class ArchiveManager(models.Manager):
     def get_queryset(self):
         return super(ArchiveManager, self).get_queryset().filter(deleted=True)
@@ -60,7 +64,9 @@ class Archived(models.Model):
 class Project(Archived):
     # TODO: Change related name to 'created_projects' or something similar
     project_creator = models.ForeignKey(Contributor, related_name='creator')
-    project_description = models.CharField(max_length=3000, blank=True)
+    project_description = models.CharField(max_length=4000, blank=True)
+    project_description_solution = models.CharField(max_length=4000, blank=True)
+    project_description_actions = models.CharField(max_length=4000, blank=True)
     project_short_description = models.CharField(max_length=140, blank=True)
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
     project_issue_area.remote_field.related_name = "+"
@@ -70,13 +76,15 @@ class Project(Archived):
     project_technologies.remote_field.related_name = "+"
     project_organization = TaggableManager(blank=True, through=TaggedOrganization)
     project_organization.remote_field.related_name = "+"
+    project_organization_type = TaggableManager(blank=True, through=TaggedOrganizationType)
+    project_organization_type.remote_field.related_name = "+"
     project_location = models.CharField(max_length=200, blank=True)
     project_name = models.CharField(max_length=200)
     project_url = models.CharField(max_length=2083, blank=True)
-    project_links = models.CharField(max_length=5000, blank=True)
     project_date_created = models.DateTimeField(null=True)
     project_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     is_searchable = models.BooleanField(default=False)
+    is_created = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
@@ -154,7 +162,8 @@ class Project(Archived):
             'project_id': self.id,
             'project_name': self.project_name,
             'project_creator': self.project_creator.id,
-            'isApproved': self.is_searchable
+            'isApproved': self.is_searchable,
+            'isCreated': self.is_created
         }
 
         return project

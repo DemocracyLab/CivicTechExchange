@@ -1,0 +1,20 @@
+.form-body {
+    h1 {
+        font-size: 36px;
+    }
+    h2 {
+        font-size: 18px;
+    }
+}
+
+.create-form.white-bg {
+    background-color: $color-background-light;
+    padding: 20px;
+    border-bottom: 2px solid $color-grey-medium;
+    border-top: 2px solid $color-grey-medium;
+}
+
+.create-form.grey-bg {
+    background-color: $color-background-default;
+    padding: 20px;
+}

@@ -88,9 +88,10 @@ class MyProjectCard extends React.PureComponent<Props, State> {
     ];
   
     if(this.state.isOwner){
+      const editUrl: string = this.props.project.isCreated ? url.section(Section.EditProject, id) : url.section(Section.CreateProject, id);
       buttons = buttons.concat(
         [
-            <Button className="MyProjectCard-button" href={url.section(Section.EditProject, id)} bsStyle="info">Edit</Button>,
+            <Button className="MyProjectCard-button" href={editUrl} bsStyle="info">Edit</Button>,
             <Button className="MyProjectCard-button" bsStyle="danger" onClick={() => this.props.onProjectClickDelete(this.props.project)}>Delete</Button>
         ]);
     } else if(this.props.project.isUpForRenewal && this.props.project.isApproved) {

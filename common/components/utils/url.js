@@ -2,12 +2,18 @@
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import CurrentUser from "./CurrentUser.js";
 import Section from "../enums/Section.js";
+import {Dictionary} from "../types/Generics.jsx";
 import _ from 'lodash'
 
 const regex = {
   protocol: new RegExp("^(f|ht)tps?://", "i"),
   argumentSplit: new RegExp("([^=]+)=(.*)")
 };
+
+type SectionUrlArguments = {|
+  section: string,
+  args: Dictionary<string>
+|}
 
 class urlHelper {
   static navigateToSection(section: string): void {
@@ -29,6 +35,20 @@ class urlHelper {
     return sectionUrl;
   }
   
+  static getSectionArgs(url: ?string): SectionUrlArguments {
+    let _url: string = url || window.location.href;
+    let oldArgs: Dictionary<string> = urlHelper.arguments(_url);
+    const args = {
+      section: oldArgs.section,
+      args: _.omit(oldArgs,['section'])
+    };
+    return args;
+  };
+  
+  static fromSectionArgs(args: SectionUrlArguments): string {
+    return urlHelper.section(args.section, args.args);
+  }
+  
   static sectionOrLogIn(section: string): string {
     return CurrentUser.isLoggedIn()
       ? urlHelper.section(section)
@@ -36,7 +56,7 @@ class urlHelper {
   }
   
   // Construct a url with properly-formatted query string for the given arguments
-  static constructWithQueryString(url: string, args: { [key: string]: string }): string {
+  static constructWithQueryString(url: string, args: Dictionary<string>): string {
     let result: string = url;
     if(!_.isEmpty(args)) {
       const existingArgs: {[key: string]: number} = urlHelper.arguments(url);
@@ -46,8 +66,9 @@ class urlHelper {
     return result;
   }
   
-  static arguments(url: string): { [key: string]: string } {
+  static arguments(fromUrl: ?string): Dictionary<string> {
     // Take argument section of url and split args into substrings
+    const url = fromUrl || document.location.search;
     const argStart = url.indexOf("?");
     if(argStart > -1) {
       let args = url.slice(argStart + 1).split("&");
@@ -61,7 +82,34 @@ class urlHelper {
     }
   }
   
-  static getPreviousPageArg(): { [key: string]: string } {
+  static argument(key: string): ?string {
+    const args: Dictionary<string> = urlHelper.arguments();
+    return args && args[key];
+  }
+  
+  static update(newUrl: string): void {
+    history.pushState({}, null, newUrl);
+  }
+  
+  static updateArgs(args: Dictionary<string>, removeArgs: ?$ReadOnlyArray<string>, url: ?string): string {
+    let _url: string = url || window.location.href;
+    let sectionArgs: SectionUrlArguments = urlHelper.getSectionArgs(_url);
+    sectionArgs.args = Object.assign(sectionArgs.args, args);
+    let newUrl: string = urlHelper.fromSectionArgs(sectionArgs);
+    urlHelper.update(newUrl);
+    return newUrl;
+  }
+  
+  static removeArgs(args: $ReadOnlyArray<string>, url: ?string): string {
+    let _url: string = url || window.location.href;
+    let sectionArgs: SectionUrlArguments = urlHelper.getSectionArgs(_url);
+    sectionArgs.args = _.omit(sectionArgs.args, args);
+    let newUrl: string = urlHelper.fromSectionArgs(sectionArgs);
+    urlHelper.update(newUrl);
+    return newUrl;
+  }
+  
+  static getPreviousPageArg(): Dictionary<string> {
     const url: string = window.location.href;
     // If prev arg already exists, use that
     const existingPrevSection: string = url.split('&prev=');
