@@ -351,10 +351,9 @@ def available_tag_filters(projects, selected_tag_filters):
             project_tags.pop(tag)
     return project_tags
 
-
 def presign_project_thumbnail_upload(request):
     uploader = request.user.username
-    file_name = request.GET['file_name']
+    file_name = request.GET['file_name'][:150]
     file_type = request.GET['file_type']
     file_extension = file_type.split('/')[-1]
     unique_file_name = file_name + '_' + str(time())
