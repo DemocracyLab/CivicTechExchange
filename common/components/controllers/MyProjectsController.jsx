@@ -52,7 +52,9 @@ class MyProjectsController extends React.Component<{||}, State> {
   }
   
   componentWillMount(): void {
-    UniversalDispatcher.dispatch({type: 'INIT'});
+    setTimeout(function() { // Run after dispatcher has finished
+      UniversalDispatcher.dispatch({type: 'INIT'});
+    }, 0);
     const args = url.arguments(window.location.href);
     if ("from" in args && args.from === "renewal_notification_email" && CurrentUser.isLoggedIn()) {
       metrics.logVolunteerClickReviewCommitmentsInEmail(CurrentUser.userID());
