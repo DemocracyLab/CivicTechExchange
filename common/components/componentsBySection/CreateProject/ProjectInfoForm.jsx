@@ -44,6 +44,7 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
         project_url: project ? project.project_url : "",
         project_stage: project ? project.project_stage : [],
         project_organization: project ? project.project_organization : [],
+        project_organization_type: project ? project.project_organization_type : [],
         project_technologies: project ? project.project_technologies : []
       },
       validations: []
@@ -93,6 +94,17 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
             category={TagCategory.ORGANIZATION}
             allowMultiSelect={true}
             onSelection={this.form.onSelection.bind(this, "project_organization")}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Organization Type</label>
+          <TagSelector
+            elementId="project_organization_type"
+            value={this.state.formFields.project_organization_type}
+            category={TagCategory.ORGANIZATION_TYPE}
+            allowMultiSelect={false}
+            onSelection={this.form.onSelection.bind(this, "project_organization_type")}
           />
         </div>
   
