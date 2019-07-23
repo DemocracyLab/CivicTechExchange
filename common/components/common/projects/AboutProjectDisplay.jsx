@@ -222,11 +222,13 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
           <div className='AboutProjects-details'>
             <div id='project-details'>
-              {
-                project.project_description + "\n" +
-                project.project_description_solution + "\n" +
-                project.project_description_actions
-              }
+              {project.project_description}
+              <br></br>
+              <br></br>
+              {project.project_description_solution}
+              <br></br>
+              <br></br>
+              {project.project_description_actions}
             </div>
 
             <div className='AboutProjects-skills-container'>

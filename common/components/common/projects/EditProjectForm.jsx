@@ -307,12 +307,13 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           </div>
           <textarea className="form-control" id="project_short_description" name="project_short_description"
                     placeholder="Give a one-sentence description of this project" rows="2" maxLength="140"
-                    value={this.state.formFields.project_short_description} onChange={this.onFormFieldChange.bind(this, "project_short_description")}></textarea>
+                    value={this.state.formFields.project_short_description} onChange={this.onFormFieldChange.bind(this, "project_short_description")}>
+          </textarea>
         </div>
 
         <div className="form-group">
           <label>
-            Problem* { }
+            Problem*
             {
               window.PROJECT_DESCRIPTION_EXAMPLE_URL
                 ? (
@@ -324,11 +325,13 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             }
           </label>
           <div className="character-count">
-            { (this.state.formFields.project_description || "").length} / 1000
+            { (this.state.formFields.project_description || "").length} / 3000
           </div>
           <textarea className="form-control" id="project_description" name="project_description"
-                    placeholder="Describe the problem your project is solving..." rows="6" maxLength="1000"
-                    value={this.state.formFields.project_description} onChange={this.onFormFieldChange.bind(this, "project_description")}></textarea>
+                    placeholder="Describe the problem your project is solving..." rows="6" maxLength="3000"
+                    value={this.state.formFields.project_description} onChange={this.onFormFieldChange.bind(this, "project_description")}>
+          </textarea>
+          *Required
         </div>
 
         <div className="form-group">
@@ -340,19 +343,21 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           </div>
           <textarea className="form-control" id="project_description_solution" name="project_description_solution"
                     placeholder="Describe the solution you plan to build..." rows="6" maxLength="1000"
-                    value={this.state.formFields.project_description_solution} onChange={this.onFormFieldChange.bind(this, "project_description_solution")}></textarea>
+                    value={this.state.formFields.project_description_solution} onChange={this.onFormFieldChange.bind(this, "project_description_solution")}>
+          </textarea>
         </div>
 
         <div className="form-group">
           <label>
-            Actions
+            Action(s)
           </label>
           <div className="character-count">
             { (this.state.formFields.project_description_actions || "").length} / 1000
           </div>
           <textarea className="form-control" id="project_description_actions" name="project_description_actions"
                     placeholder="Describe the actions that needed to be token..." rows="6" maxLength="1000"
-                    value={this.state.formFields.project_description_actions} onChange={this.onFormFieldChange.bind(this, "project_description_actions")}></textarea>
+                    value={this.state.formFields.project_description_actions} onChange={this.onFormFieldChange.bind(this, "project_description_actions")}>
+          </textarea>
         </div>
 
         <div className="form-group">

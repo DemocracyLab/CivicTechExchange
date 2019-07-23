@@ -70,7 +70,7 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
   
         <div className="form-group">
           <label>
-            Problem* { }
+            <strong>Problem*</strong>
             {
               window.PROJECT_DESCRIPTION_EXAMPLE_URL
                 ? (
@@ -86,12 +86,14 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
           </div>
           <textarea className="form-control" id="project_description" name="project_description"
                     placeholder="Describe the problem your project is solving..." rows="6" maxLength="1000"
-                    value={this.state.formFields.project_description} onChange={this.form.onInput.bind(this, "project_description")}></textarea>
+                    value={this.state.formFields.project_description} onChange={this.form.onInput.bind(this, "project_description")}>
+          </textarea>
+          *Required
         </div>
 
         <div className="form-group">
           <label>
-            Solution
+            <strong>Solution</strong>
           </label>
           <div className="character-count">
             { (this.state.formFields.project_description_solution || "").length} / 1000
@@ -103,7 +105,7 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
 
         <div className="form-group">
           <label>
-            Actions
+            <strong>Action(s)</strong>
           </label>
           <div className="character-count">
             { (this.state.formFields.project_description_actions || "").length} / 1000
