@@ -60,6 +60,8 @@ class ProjectCreationForm(ModelForm):
         read_form_field_boolean(project, form, 'is_created')
 
         read_form_field_string(project, form, 'project_description')
+        read_form_field_string(project, form, 'project_description_solution')
+        read_form_field_string(project, form, 'project_description_actions')
         read_form_field_string(project, form, 'project_short_description')
         read_form_field_string(project, form, 'project_location')
         read_form_field_string(project, form, 'project_name')
