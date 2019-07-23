@@ -223,12 +223,18 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           <div className='AboutProjects-details'>
             <div id='project-details'>
               {project.project_description}
-              <br></br>
-              <br></br>
-              {project.project_description_solution}
-              <br></br>
-              <br></br>
-              {project.project_description_actions}
+              {!_.isEmpty(project.project_description_solution) && 
+                <div className='prject-details-project-description-solution'>
+                  <br></br>
+                  {project.project_description_solution}
+                </div>
+              }
+              {!_.isEmpty(project.project_description_actions) && 
+                <div className='prject-details-project-description-actions'>
+                  <br></br>
+                  {project.project_description_actions}
+                </div>
+              }
             </div>
 
             <div className='AboutProjects-skills-container'>
