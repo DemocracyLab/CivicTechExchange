@@ -116,7 +116,6 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         error: "You are not authorized to edit this Project"
       });
     } else {
-      console.log(project);
       metrics.logProjectClickEdit(CurrentUser.userID(), this.props.projectId);
       this.setState({
         formFields: {
