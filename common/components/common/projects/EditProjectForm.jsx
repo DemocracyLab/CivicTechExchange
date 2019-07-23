@@ -29,6 +29,8 @@ type FormFields = {|
   project_location: ?string,
   project_url: ?string,
   project_description: ?string,
+  project_description_solution: ?string,
+  project_description_actions: ?string,
   project_short_description: ?string,
   project_organization?: Array<TagDefinition>,
   project_issue_area?: Array<TagDefinition>,
@@ -69,6 +71,8 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         project_location: "",
         project_url: "",
         project_description: "",
+        project_description_solution: "",
+        project_description_actions: "",
         project_short_description: "",
         project_organization: [],
         project_issue_area: [],
@@ -90,7 +94,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         },
         {
           checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_description"]),
-          errorMessage: "Please enter Project Description"
+          errorMessage: "Please enter Project Problem"
         }
       ]
     };
@@ -121,6 +125,8 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_location: project.project_location,
           project_url: project.project_url,
           project_description: project.project_description,
+          project_description_solution: project.project_description_solution,
+          project_description_actions: project.project_description_actions,
           project_short_description: project.project_short_description,
           project_organization: project.project_organization,
           project_issue_area: project.project_issue_area,
@@ -306,7 +312,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
 
         <div className="form-group">
           <label>
-            Describe This Project { }
+            Problem* { }
             {
               window.PROJECT_DESCRIPTION_EXAMPLE_URL
                 ? (
@@ -318,11 +324,35 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             }
           </label>
           <div className="character-count">
-            { (this.state.formFields.project_description || "").length} / 3000
+            { (this.state.formFields.project_description || "").length} / 1000
           </div>
           <textarea className="form-control" id="project_description" name="project_description"
-                    placeholder="Tell us what you're doing and why it's important" rows="6" maxLength="3000"
+                    placeholder="Describe the problem your project is solving..." rows="6" maxLength="1000"
                     value={this.state.formFields.project_description} onChange={this.onFormFieldChange.bind(this, "project_description")}></textarea>
+        </div>
+
+        <div className="form-group">
+          <label>
+            Solution
+          </label>
+          <div className="character-count">
+            { (this.state.formFields.project_description_solution || "").length} / 1000
+          </div>
+          <textarea className="form-control" id="project_description_solution" name="project_description_solution"
+                    placeholder="Describe the solution you plan to build..." rows="6" maxLength="1000"
+                    value={this.state.formFields.project_description_solution} onChange={this.onFormFieldChange.bind(this, "project_description_solution")}></textarea>
+        </div>
+
+        <div className="form-group">
+          <label>
+            Actions
+          </label>
+          <div className="character-count">
+            { (this.state.formFields.project_description_actions || "").length} / 1000
+          </div>
+          <textarea className="form-control" id="project_description_actions" name="project_description_actions"
+                    placeholder="Describe the actions that needed to be token..." rows="6" maxLength="1000"
+                    value={this.state.formFields.project_description_actions} onChange={this.onFormFieldChange.bind(this, "project_description_actions")}></textarea>
         </div>
 
         <div className="form-group">
