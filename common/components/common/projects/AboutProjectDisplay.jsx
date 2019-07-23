@@ -110,6 +110,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             <ProjectDetails projectLocation={project && project.project_location}
             projectUrl={project && project.project_url}
             projectStage={project && !_.isEmpty(project.project_stage) ? project.project_stage[0].display_name : null}
+            projectOrganizationType={project && !_.isEmpty(project.project_organization_type) ? project.project_organization_type[0].display_name : null}
             dateModified={project && project.project_date_modified}/>
           </div>
 

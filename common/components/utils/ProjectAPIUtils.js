@@ -105,6 +105,10 @@ class ProjectAPIUtils {
         apiData.project_stage && apiData.project_stage.length !=0
           ? apiData.project_stage[0].display_name
           : 'None',
+      project_organization_type:
+        apiData.project_organization_type && apiData.project_organization_type.length != 0
+          ? apiData.project_organization_type[0].display_name
+          : 'None',
       location: apiData.project_location,
       name: apiData.project_name,
       thumbnail: apiData.project_thumbnail,
