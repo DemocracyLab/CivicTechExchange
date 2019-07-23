@@ -118,6 +118,7 @@ class Project(Archived):
             'project_url': self.project_url,
             'project_location': self.project_location,
             'project_organization': Tag.hydrate_to_json(self.id, list(self.project_organization.all().values())),
+            'project_organization_type': Tag.hydrate_to_json(self.id, list(self.project_organization_type.all().values())),
             'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
             'project_stage': Tag.hydrate_to_json(self.id, list(self.project_stage.all().values())),
             'project_technologies': Tag.hydrate_to_json(self.id, list(self.project_technologies.all().values())),
