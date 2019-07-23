@@ -173,7 +173,7 @@ class MyProjectsController extends React.Component<{||}, State> {
         <h3>{title}</h3>
         {projects.map(project => {
           return <MyProjectCard
-            key={project.name}
+            key={project.project_name}
             project={project}
             onProjectClickDelete={this.clickDeleteProject.bind(this)}
             onProjectClickRenew={this.clickRenewVolunteerWithProject.bind(this)}
