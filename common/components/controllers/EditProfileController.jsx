@@ -160,7 +160,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
       <div className="wrapper-gray">
         <div className="container">
           <form action={`/api/user/edit/${window.DLAB_GLOBAL_CONTEXT.userID}/`} method="post">
-            <div className="EditProjectForm-root">
+            <div className="EditProjectForm-root create-form white-bg container-fluid">
               <DjangoCSRFToken/>
   
               <div className="form-group">
