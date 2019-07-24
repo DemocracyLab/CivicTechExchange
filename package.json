@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode production && npm run buildtask:sass && npm run buildtask:collectstatic",
-    "buildprod": "webpack --mode production && npm run buildtask:sass && npm run buildtask:collectstatic",
+    "buildfast": "webpack --mode development && npm run buildtask:sass && npm run buildtask:collectstatic",
     "postinstall": "webpack --mode development && npm run buildtask:sass && npm run buildtask:collectstatic",
     "buildtask:collectstatic": "python manage.py collectstatic --noinput -i *.scss",
     "buildtask:sass": "node-sass civictechprojects/static/css/styles.scss -o civictechprojects/static/css/compiled --output-style compressed"
