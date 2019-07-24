@@ -114,6 +114,8 @@ class Project(Archived):
             'project_creator': self.project_creator.id,
             'project_claimed': not self.project_creator.is_admin_contributor(),
             'project_description': self.project_description,
+            'project_description_solution': self.project_description_solution,
+            'project_description_actions': self.project_description_actions,
             'project_short_description': self.project_short_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
