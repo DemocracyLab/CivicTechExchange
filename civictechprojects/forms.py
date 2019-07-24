@@ -71,6 +71,7 @@ class ProjectCreationForm(ModelForm):
         read_form_field_tags(project, form, 'project_stage')
         read_form_field_tags(project, form, 'project_technologies')
         read_form_field_tags(project, form, 'project_organization')
+        read_form_field_tags(project, form, 'project_organization_type')
 
         if not request.user.is_staff:
             project.project_date_modified = timezone.now()

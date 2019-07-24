@@ -7,7 +7,7 @@ import csv
 
 
 def get_tags_by_category(categoryName):
-    return Tag.objects.filter(category__contains=categoryName)
+    return Tag.objects.filter(category=categoryName)
 
 
 def get_tag_dictionary():

@@ -33,6 +33,7 @@ type FormFields = {|
   project_description_actions: ?string,
   project_short_description: ?string,
   project_organization?: Array<TagDefinition>,
+  project_organization_type?: Array<TagDefinition>,
   project_issue_area?: Array<TagDefinition>,
   project_stage?: Array<TagDefinition>,
   project_technologies?: Array<TagDefinition>,
@@ -75,6 +76,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         project_description_actions: "",
         project_short_description: "",
         project_organization: [],
+        project_organization_type: [],
         project_issue_area: [],
         project_stage: [],
         project_technologies: [],
@@ -129,6 +131,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           project_description_actions: project.project_description_actions,
           project_short_description: project.project_short_description,
           project_organization: project.project_organization,
+          project_organization_type: project.project_organization_type,
           project_issue_area: project.project_issue_area,
           project_stage: project.project_stage,
           project_technologies: project.project_technologies,
@@ -262,6 +265,17 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             category={TagCategory.ORGANIZATION}
             allowMultiSelect={true}
             onSelection={this.onTagChange.bind(this, "project_organization")}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Organization Type</label>
+          <TagSelector
+            elementId="project_organization_type"
+            value={this.state.formFields.project_organization_type}
+            category={TagCategory.ORGANIZATION_TYPE}
+            allowMultiSelect={false}
+            onSelection={this.onTagChange.bind(this, "project_organization_type")}
           />
         </div>
 
