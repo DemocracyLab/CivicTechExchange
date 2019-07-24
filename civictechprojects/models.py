@@ -320,7 +320,7 @@ class ProjectFile(models.Model):
     file_project = models.ForeignKey(Project, related_name='files', blank=True, null=True)
     file_user = models.ForeignKey(Contributor, related_name='files', blank=True, null=True)
     file_visibility = models.CharField(max_length=50)
-    file_name = models.CharField(max_length=200)
+    file_name = models.CharField(max_length=150)
     file_key = models.CharField(max_length=200)
     file_url = models.CharField(max_length=2083)
     file_type = models.CharField(max_length=50)
