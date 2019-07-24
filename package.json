@@ -7,7 +7,7 @@
   "author": "Marlon Keating <marlonakeating@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --mode development && npm run buildtask:sass && npm run buildtask:collectstatic",
+    "build": "webpack --mode production && npm run buildtask:sass && npm run buildtask:collectstatic",
     "buildprod": "webpack --mode production && npm run buildtask:sass && npm run buildtask:collectstatic",
     "postinstall": "webpack --mode development && npm run buildtask:sass && npm run buildtask:collectstatic",
     "buildtask:collectstatic": "python manage.py collectstatic --noinput -i *.scss",
