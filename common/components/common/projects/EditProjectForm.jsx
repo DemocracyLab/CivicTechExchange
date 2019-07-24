@@ -221,7 +221,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
 
   _renderForm(): React$Node {
     return (
-      <div className="EditProjectForm-root">
+      <div className="EditProjectForm-root create-form white-bg container-fluid">
 
         <DjangoCSRFToken/>
 
@@ -366,7 +366,6 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           onValidationCheck={this.onValidationCheck.bind(this)}
           formState={this.state.formFields}
         />
-
         <div className="form-group pull-right">
           <div className='text-right'>
             <input disabled={!this.state.formIsValid} type="submit" className="btn_outline save_btn"

@@ -2,3 +2,8 @@
 .btn-background-project, .btn-background-project input[type="button" i] {
     background-color: $color-grey-medium;
 }
+
+.EditProjectForm-root .save_btn {
+    position: relative;
+    top: -20px;
+}
