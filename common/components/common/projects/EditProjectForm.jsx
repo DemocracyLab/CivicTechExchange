@@ -221,7 +221,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
 
   _renderForm(): React$Node {
     return (
-      <div className="EditProjectForm-root create-form white-bg container-fluid">
+      <div className="EditProjectForm-root create-form white-bg">
 
         <DjangoCSRFToken/>
 
