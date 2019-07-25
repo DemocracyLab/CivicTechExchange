@@ -366,7 +366,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
           onValidationCheck={this.onValidationCheck.bind(this)}
           formState={this.state.formFields}
         />
-        <div className="form-group pull-right">
+        <div className="form-group">
           <div className='text-right'>
             <input disabled={!this.state.formIsValid} type="submit" className="btn_outline save_btn"
                    value="Save Project" onClick={this.onSubmit.bind(this)}/>
