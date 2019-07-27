@@ -291,10 +291,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   _renderContactAndVolunteerButtons(): React$Node {
     return (
       <div className='AboutProjects-owner'>
-        <ContactProjectButton project={this.props.project}/>
-        <ContactVolunteersButton project={this.props.project}/>
+        <ContactProjectButton project={this.state.project}/>
+        <ContactVolunteersButton project={this.state.project}/>
         <ProjectVolunteerButton
-          project={this.props.project}
+          project={this.state.project}
           onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
         />
       </div>

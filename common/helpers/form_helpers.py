@@ -55,6 +55,8 @@ def is_co_owner(user, project):
     co_owner_relationship = find_first(volunteer_relations, lambda volunteer_relation: volunteer_relation.is_co_owner)
     return co_owner_relationship is not None
 
+def is_co_owner_or_owner(user, project):
+    return is_creator(user, project) or is_co_owner(user, project)
 
 def is_co_owner_or_staff(user, project):
     if user is not None:

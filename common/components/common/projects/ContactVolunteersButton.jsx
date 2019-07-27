@@ -39,6 +39,7 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.subjectLine = "Contact Volunteer";
+        this._handleSubmission = this._handleSubmission.bind(this);
     }
 
     getButtonDisplaySetup(props: Props): State {
@@ -122,7 +123,7 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
 
     _handleSubmission(body, subject, closeModal): ?React$Node {
         ProjectAPIUtils.post("/contact/volunteers/" + this.props.project.project_id + "/",
-            {message: body}, //TODO: Create sendURL
+            {message: body, subject: subject}, //TODO: Create sendURL
             response => closeModal, //Send function to close modal
             response => null /* TODO: Report error to user */
         );
