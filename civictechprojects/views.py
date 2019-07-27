@@ -442,7 +442,38 @@ def contact_project_volunteers(request, project_id):
     for volunteer in volunteers:
         # TODO: See if we can send emails in a batch
         # https://docs.djangoproject.com/en/2.2/topics/email/#topics-sending-multiple-emails
-        send_to_project_volunteer(volunteer, subject, email_template)
+        send_to_project_volunteer(volunteer, email_subject, email_template)
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def contact_project_volunteer(request, application_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    project = volunteer_relation.project
+
+    body = json.loads(request.body)
+    subject = body['subject']
+    message = body['message']
+
+    # TODO: Condense common code between this and contact_project_volunteers
+    if not user.email_verified or not is_co_owner(user, project):
+        return HttpResponse(status=403)
+
+    email_subject = '{project}: {subject}'.format(
+        project=project.project_name,
+        subject=subject)
+    email_template = HtmlEmailTemplate() \
+        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+        message=message,
+        firstname=user.first_name,
+        lastname=user.last_name)) \
+        .paragraph('To reply, email at {email}'.format(email=user.email))
+    send_to_project_volunteer(volunteer_relation.volunteer, email_subject, email_template)
     return HttpResponse(status=200)
 
 
