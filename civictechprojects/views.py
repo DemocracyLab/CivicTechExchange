@@ -16,7 +16,7 @@ from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAle
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
-from common.helpers.form_helpers import is_co_owner_or_staff
+from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
@@ -407,6 +407,35 @@ def contact_project_owner(request, project_id):
             message=message,
             firstname=user.first_name,
             lastname=user.last_name))\
+        .paragraph('To contact this person, email them at {email}'.format(email=user.email))
+    send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def contact_project_volunteers(request, project_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+
+    body = json.loads(request.body)
+    message = body['message']
+
+    project = Project.objects.get(id=project_id)
+    if not user.email_verified or not is_co_owner(user, project):
+        return HttpResponse(status=403)
+
+    email_subject = '{firstname} {lastname} would like to connect with {project}'.format(
+        firstname=user.first_name,
+        lastname=user.last_name,
+        project=project.project_name)
+    email_template = HtmlEmailTemplate() \
+        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+        message=message,
+        firstname=user.first_name,
+        lastname=user.last_name)) \
         .paragraph('To contact this person, email them at {email}'.format(email=user.email))
     send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
     return HttpResponse(status=200)
