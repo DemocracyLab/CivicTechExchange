@@ -50,6 +50,10 @@ class CurrentUser {
   static isOwnerOrVolunteering(project: ProjectDetailsAPIData): boolean {
     return CurrentUser.isOwner(project) || CurrentUser._getVolunteerStatus(project);
   }
+
+  static isCoOwnerOrOwner(project: ProjectDetailsAPIData): boolean {
+    return CurrentUser.isOwner(project) || CurrentUser.isCoOwner(project);
+  }
   
   static canVolunteerForProject(project: ProjectDetailsAPIData): boolean {
     return project.project_claimed

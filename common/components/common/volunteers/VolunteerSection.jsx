@@ -5,6 +5,7 @@ import VolunteerCard from "./VolunteerCard.jsx";
 import {VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import NotificationModal from "../notification/NotificationModal.jsx";
 import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
+import ContactProjectModal from "../projects/ContactProjectModal.jsx";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import FeedbackModal from "../FeedbackModal.jsx";
 import metrics from "../../utils/metrics.js";
@@ -43,7 +44,8 @@ type State = {|
   +showApplicationModal: boolean,
   +applicationModalText: string,
   +showPromotionModal: boolean,
-  +showDemotionModal: boolean
+  +showDemotionModal: boolean,
+  +showContactProjectModal: boolean
 |};
 
 class VolunteerSection extends React.PureComponent<Props, State> {
@@ -57,7 +59,8 @@ class VolunteerSection extends React.PureComponent<Props, State> {
       showApplicationModal: false,
       showPromotionModal: false,
       showDemotionModal: false,
-      applicationModalText: ""
+      applicationModalText: "",
+      showContactProjectModal: false
     };
     this.openApplicationModal = this.openApplicationModal.bind(this);
     this.openApproveModal = this.openApproveModal.bind(this);
@@ -167,6 +170,41 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     });
   }
 
+  openVolunteerContactModal(volunteer: VolunteerDetailsAPIData ){
+    this.setState({
+      showContactProjectModal: true,
+      volunteerToActUpon: volunteer
+    })
+  }
+
+  closeVolunteerContactModal(){
+    this.setState({
+      showContactProjectModal: false,
+    })
+  }
+
+  handleAllVolunteersContactModal(body, subject, closeModal): void{
+    ProjectAPIUtils.post("/contact/volunteers/" + this.props.projectId + "/",
+        {message: body},
+        response => closeModal,
+        response => null /* TODO: Report error to user */
+    );
+  }
+
+  handleVolunteerContactModal(body, subject ,closeModal): void {
+    ProjectAPIUtils.post("/contact/volunteer/" + this.state.volunteerToActUpon.application_id + "/",
+        {message: body},
+        response => closeModal, //Send function to close modal
+        response => null /* TODO: Report error to user */
+    );
+  }
+
+  openTeamContactModal(): void {
+
+  }
+
+
+
   closeDismissModal(confirmDismissed: boolean, dismissalMessage: string):void {
     if(confirmDismissed) {
       const params: DismissVolunteerParams = {dismissal_message: dismissalMessage};
@@ -266,6 +304,12 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           requireMessage={true}
           onConfirm={this.closeDemotionModal.bind(this)}
         />
+        <ContactProjectModal
+          showModal={this.state.showContactProjectModal}
+          handleSubmission={this.handleVolunteerContactModal}
+          projectId={this.props.projectId}
+          handleClose={this.closeVolunteerContactModal}
+        />
 
         {this.props.renderOnlyPending && this._renderPendingVolunteers(approvedAndPendingVolunteers[1])}
         {!this.props.renderOnlyPending && this._renderCoOwnerVolunteers(coOwnerVolunteers)}
@@ -274,8 +318,6 @@ class VolunteerSection extends React.PureComponent<Props, State> {
       </div>
     );
   }
-
-
 
 
   _renderCoOwnerVolunteers(coOwnerVolunteers: ?Array<VolunteerDetailsAPIData>): ?React$Node {
@@ -313,6 +355,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
                     onDismissButton={this.openDismissModal}
                     onPromotionButton={this.openPromotionModal}
                     onDemotionButton={this.openDemotionModal}
+                    onVolunteerContactButton={this.openVolunteerContactModal}
                   />)
               }
             </div>

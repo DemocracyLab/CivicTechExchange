@@ -5,6 +5,7 @@ import _ from 'lodash'
 import type {ProjectDetailsAPIData} from '../../utils/ProjectAPIUtils.js';
 import ProjectDetails from '../../componentsBySection/FindProjects/ProjectDetails.jsx';
 import ContactProjectButton from "./ContactProjectButton.jsx";
+import ContactVolunteersButton from "./ContactVolunteersButton.jsx";
 import ProjectVolunteerButton from "./ProjectVolunteerButton.jsx";
 import ProjectVolunteerModal from "./ProjectVolunteerModal.jsx";
 import AboutPositionEntry from "../positions/AboutPositionEntry.jsx";
@@ -17,6 +18,7 @@ import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
+import DropdownMenu from "react-bootstrap/es/DropdownMenu";
 
 
 type Props = {|
@@ -290,6 +292,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     return (
       <div className='AboutProjects-owner'>
         <ContactProjectButton project={this.props.project}/>
+        <ContactVolunteersButton project={this.props.project}/>
         <ProjectVolunteerButton
           project={this.props.project}
           onVolunteerClick={this.handleShowVolunteerModal.bind(this)}

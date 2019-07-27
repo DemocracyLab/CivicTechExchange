@@ -67,20 +67,24 @@ class VolunteerCard extends React.PureComponent<Props> {
     if (this.props.volunteer && this.props.volunteer.isCoOwner) {
       return [
           (<MenuItem onSelect={() => this.props.onDemotionButton(this.props.volunteer)} key="0"><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Demote</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</MenuItem>)
+          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</MenuItem>),
         ]
     }
     if (this.props.volunteer && this.props.volunteer.isApproved) {
         return [
           (<MenuItem onSelect={() => this.props.onPromotionButton(this.props.volunteer)} key="0"><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Promote</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</MenuItem>)
+          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</MenuItem>),
+            (<MenuItem onSelect={() => this.props.openVolunteerContactModal(this.props.volunteer)} key="2" ><i className={Glyph(GlyphStyles.Envelope, GlyphWidth.Fixed)}></i>Contact</MenuItem>)
         ]
     }
     if (this.props.volunteer) {
       return [
           (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key="2"><i className={Glyph(GlyphStyles.Eye, GlyphWidth.Fixed)}></i> Review</MenuItem>),
           (<MenuItem onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3"><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Approve</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Reject</MenuItem>)
+          (<MenuItem onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Reject</MenuItem>),
+          (<MenuItem onSelect={() => this.props.openVolunteerContactModal(this.props.volunteer)} key="5" ><i className={Glyph(GlyphStyles.Envelope, GlyphWidth.Fixed)}></i>Contact</MenuItem>)
+
+
       ];
     }
     return null;
