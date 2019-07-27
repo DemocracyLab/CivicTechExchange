@@ -505,3 +505,7 @@ class VolunteerRelation(Archived):
     @staticmethod
     def get_by_user(user):
         return VolunteerRelation.objects.filter(volunteer=user.id)
+
+    @staticmethod
+    def get_by_project(project, active=True):
+        return VolunteerRelation.objects.filter(project_id=project.project_id, deleted=not active)

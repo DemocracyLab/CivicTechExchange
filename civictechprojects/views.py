@@ -421,23 +421,28 @@ def contact_project_volunteers(request, project_id):
     user = get_request_contributor(request)
 
     body = json.loads(request.body)
+    subject = body['subject']
     message = body['message']
 
     project = Project.objects.get(id=project_id)
     if not user.email_verified or not is_co_owner(user, project):
         return HttpResponse(status=403)
 
-    email_subject = '{firstname} {lastname} would like to connect with {project}'.format(
-        firstname=user.first_name,
-        lastname=user.last_name,
-        project=project.project_name)
+    volunteers = VolunteerRelation.get_by_project(project)
+
+    email_subject = '{project}: {subject}'.format(
+        project=project.project_name,
+        subject=subject)
     email_template = HtmlEmailTemplate() \
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,
         lastname=user.last_name)) \
-        .paragraph('To contact this person, email them at {email}'.format(email=user.email))
-    send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
+        .paragraph('To reply, email at {email}'.format(email=user.email))
+    for volunteer in volunteers:
+        # TODO: See if we can send emails in a batch
+        # https://docs.djangoproject.com/en/2.2/topics/email/#topics-sending-multiple-emails
+        send_to_project_volunteer(volunteer, subject, email_template)
     return HttpResponse(status=200)
 
 
