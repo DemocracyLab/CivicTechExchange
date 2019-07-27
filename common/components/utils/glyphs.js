@@ -26,6 +26,7 @@ export const GlyphStyles: {[key: string]: string} = {
   Meetup: "fab fa-meetup",
   ChartBar: "fas fa-chart-bar",
   Check: "fas fa-check",
+  CircleCheck: "fas fa-check-circle",
   ChevronUp: "fas fa-chevron-up",
   ChevronDown: "fas fa-chevron-down",
   EllipsisV: "fas fa-ellipsis-v",
