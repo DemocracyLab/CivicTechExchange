@@ -114,10 +114,13 @@ class Project(Archived):
             'project_creator': self.project_creator.id,
             'project_claimed': not self.project_creator.is_admin_contributor(),
             'project_description': self.project_description,
+            'project_description_solution': self.project_description_solution,
+            'project_description_actions': self.project_description_actions,
             'project_short_description': self.project_short_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
             'project_organization': Tag.hydrate_to_json(self.id, list(self.project_organization.all().values())),
+            'project_organization_type': Tag.hydrate_to_json(self.id, list(self.project_organization_type.all().values())),
             'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
             'project_stage': Tag.hydrate_to_json(self.id, list(self.project_stage.all().values())),
             'project_technologies': Tag.hydrate_to_json(self.id, list(self.project_technologies.all().values())),
@@ -317,7 +320,7 @@ class ProjectFile(models.Model):
     file_project = models.ForeignKey(Project, related_name='files', blank=True, null=True)
     file_user = models.ForeignKey(Contributor, related_name='files', blank=True, null=True)
     file_visibility = models.CharField(max_length=50)
-    file_name = models.CharField(max_length=200)
+    file_name = models.CharField(max_length=150)
     file_key = models.CharField(max_length=200)
     file_url = models.CharField(max_length=2083)
     file_type = models.CharField(max_length=50)

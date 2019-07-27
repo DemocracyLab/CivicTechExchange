@@ -77,6 +77,7 @@ export type ProjectDetailsAPIData = {|
   +project_claimed: boolean,
   +project_url: string,
   +project_organization: $ReadOnlyArray<TagDefinition>,
+  +project_organization_type: $ReadOnlyArray<TagDefinition>,
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
   +project_stage: $ReadOnlyArray<TagDefinition>,
   +project_technologies: $ReadOnlyArray<TagDefinition>,
@@ -103,6 +104,10 @@ class ProjectAPIUtils {
       stage:
         apiData.project_stage && apiData.project_stage.length !=0
           ? apiData.project_stage[0].display_name
+          : 'None',
+      project_organization_type:
+        apiData.project_organization_type && apiData.project_organization_type.length != 0
+          ? apiData.project_organization_type[0].display_name
           : 'None',
       location: apiData.project_location,
       name: apiData.project_name,
