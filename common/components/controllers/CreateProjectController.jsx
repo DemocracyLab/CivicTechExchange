@@ -175,7 +175,6 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   
   onSubmit(event: SyntheticEvent<HTMLFormElement>): void {
     this.setState({projectSaved: true, clickedNext: false});
-    //this.render();
     const formSubmitUrl: string = this.state.project && this.state.project.project_id
       ? "/projects/edit/" + this.state.project.project_id + "/"
       : "/projects/signup/";
@@ -187,16 +186,10 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   }
   
   onFormUpdate(formFields: {||}) {
-    if (!this.state.clickedNext && !this.compareFormFields(this.state.currentFormFields, formFields)) {
+    if (!this.state.clickedNext && !_.isEqual(this.state.currentFormFields, formFields)) {
       this.setState({projectSaved: false});
     }
     this.setState({fieldsUpdated: true, currentFormFields: formFields});
-  }
-
-  compareFormFields(currentFormFields, formFields): boolean {
-    var currentFormFieldsStr = JSON.stringify(currentFormFields);
-    var formFieldsStr = JSON.stringify(formFields);
-    return currentFormFieldsStr !== formFieldsStr;
   }
   
   confirmDiscardChanges(confirmDiscard: boolean): void {
