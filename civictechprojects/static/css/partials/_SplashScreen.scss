@@ -6,6 +6,7 @@
   color: $color-text-light;
   width: 100%;
   height: calc(100vh - #{$header-height} - #{$footer-height});
+  position: relative;
 }
 
 .SplashScreen-content {
@@ -49,5 +50,22 @@
     background-color: $color-orange;
     color: $color-text-light;
     border-color: $color-text-light;
+  }
+}
+.SplashScreen-mission {
+  background: $color-orange;
+  color: $color-text-light;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  padding: 0.5rem;
+}
+.SplashScreen-mission p {
+  margin: 0 auto;
+}
+@include media-breakpoint-up(md) {
+  .SplashScreen-mission p {
+    max-width: 700px;
   }
 }
