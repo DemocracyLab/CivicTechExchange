@@ -21,16 +21,16 @@ class SplashScreen extends React.PureComponent<Props> {
         <div className="SplashScreen-content">
           <h1>Optimizing the connection between skilled volunteers and tech-for-good projects</h1>
           <div className="SplashScreen-section">
-            DemocracyLab is a 501(c)(3) nonprofit organization
-          </div>
-          <div className="SplashScreen-section">
             <Button className="SplashScreen-find-projects-btn" onClick={this._onClickFindProjects.bind(this)}>
-              Find Civic-Tech Projects
+              Find Projects
             </Button>
             <Button className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.CreateProject)}>
               Create A Project
             </Button>
           </div>
+        </div>
+        <div className="SplashScreen-mission">
+          <p>DemocracyLab is a 501(c)(3) nonprofit organization.  Our mission is to empower a community of people and projects that use technology to advance the public good.</p>
         </div>
       </div>
     );
