@@ -101,6 +101,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       clickedNext: false,
       showConfirmDiscardChanges: false
     };
+    this.onSubmit = _.debounce(this.onSubmit.bind(this),1000, { 'leading': true });
   }
   
   navigateToStep(step: number): void {
