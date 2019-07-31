@@ -34,21 +34,12 @@ class CivictechprojectsViewsTestCase(TestCase):
         create_project_form = {
             'project_name': __name__,
             'project_short_description': 'short',
-            'project_description': 'description',
-            'project_url': '',
-            'project_location': 'Kirkland, WA',
-            'project_organization': '',
             'project_issue_area': '',
-            'project_technologies': '',
-            'project_stage': '',
-            'project_positions': '',
-            'project_links': '',
-            'project_files': '',
-            'project_thumbnail_location': '',
+            'project_thumbnail_location': ''
         }
 
         response = self.client.post(url, create_project_form, follow = True)
         new_project = Project.objects.get(project_name=__name__)
 
-        self.assertRedirects(response, '/index/?section=MyProjects')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(new_project.project_creator, self.user)
