@@ -14,6 +14,7 @@ export type MyProjectData = {|
   +application_text: ?string,
   +roleTag: ?TagDefinition,
   +isApproved: ?boolean,
+  +isCreated: ?boolean,
   +isCoOwner: ?boolean,
   +isUpForRenewal: ?boolean,
   +projectedEndDate: ?Date

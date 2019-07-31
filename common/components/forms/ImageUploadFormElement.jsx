@@ -10,7 +10,8 @@ import _ from 'lodash'
 type Props = {|
   form_id: string,
   buttonText: ?string,
-  currentImage: FileInfo
+  currentImage: FileInfo,
+  onSelection: ?(FileInfo) => void
 |};
 
 type State = {|
@@ -39,7 +40,8 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
   
   updateFormFields(fileInfo: FileInfo): void {
     this.refs.hiddenFormField.value = JSON.stringify(fileInfo);
-    this.setState({"currentImage": fileInfo});
+    this.setState({"currentImage": fileInfo}, () => this.props.onUpdate && this.props.onUpdate(fileInfo));
+    this.props.onSelection && this.props.onSelection(fileInfo);
   }
 
   render(): React$Node {

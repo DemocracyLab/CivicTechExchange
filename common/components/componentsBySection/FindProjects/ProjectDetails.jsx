@@ -1,12 +1,6 @@
 // @flow
 import React from 'react';
-import Divider from '@material-ui/core/Divider';
-import Earth from 'mdi-material-ui/Earth';
-import MapMarker from 'mdi-material-ui/MapMarker';
-import Clock from 'mdi-material-ui/Clock';
-import Domain from 'mdi-material-ui/Domain';
-import ChartBar from 'mdi-material-ui/ChartBar';
-import Key from 'mdi-material-ui/Key';
+import GlyphStyles, { GlyphSizes, Glyph } from '../../utils/glyphs.js'
 import Moment from 'react-moment';
 import urlHelper from '../../utils/url.js'
 
@@ -24,6 +18,7 @@ class ProjectDetails extends React.PureComponent<Props, State> {
             projectLocation: props.projectLocation,
             projectUrl: props.projectUrl,
             projectStage: props.projectStage,
+            projectOrganizationType: props.projectOrganizationType,
             dateModified: props.dateModified,
         }
     }
@@ -33,26 +28,32 @@ class ProjectDetails extends React.PureComponent<Props, State> {
           <React.Fragment>
           {this.state.projectLocation &&
               <div className="AboutProjects-icon-row">
-                <MapMarker/>
+                <i className={Glyph(GlyphStyles.MapMarker, GlyphSizes.LG)} />
                 <p className="AboutProjects-icon-text">{this.state.projectLocation}</p>
               </div>
           }
           {this.state.projectUrl &&
               <div className="AboutProjects-icon-row">
-                <Earth/>
+                <i className={Glyph(GlyphStyles.Globe, GlyphSizes.LG)} />
                 <p className="AboutProjects-icon-text"><a href={this.state.projectUrl} target="_blank" rel="noopener noreferrer">{urlHelper.beautify(this.state.projectUrl)}</a></p>
               </div>
           }
           {this.state.dateModified &&
               <div className="AboutProjects-icon-row">
-                <Clock/>
+                <i className={Glyph(GlyphStyles.Clock, GlyphSizes.LG)} />
                 <p className="AboutProjects-icon-text"><Moment fromNow>{this.state.dateModified}</Moment></p>
               </div>
           }
           {this.state.projectStage &&
               <div className="AboutProjects-icon-row">
-                <ChartBar/>
+                <i className={Glyph(GlyphStyles.ChartBar, GlyphSizes.LG)} />
                 <p className="AboutProjects-icon-text">{this.state.projectStage}</p>
+              </div>
+          }
+          {this.state.projectOrganizationType &&
+              <div className="AboutProjects-icon-row">
+                <i className={Glyph(GlyphStyles.University, GlyphSizes.LG)} />
+                <p className="AboutProjects-icon-text">{this.state.projectOrganizationType}</p>
               </div>
           }
           </React.Fragment>

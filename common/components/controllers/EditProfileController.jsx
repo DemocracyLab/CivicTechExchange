@@ -160,7 +160,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
       <div className="wrapper-gray">
         <div className="container">
           <form action={`/api/user/edit/${window.DLAB_GLOBAL_CONTEXT.userID}/`} method="post">
-            <div className="EditProjectForm-root">
+            <div className="EditProjectForm-root create-form white-bg">
               <DjangoCSRFToken/>
   
               <div className="form-group">
@@ -242,7 +242,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
                 <FileUploadList elementid="user_files" title="Files" files={this.state.formFields.user_files}/>
               </div>
   
-              <div className="form-group pull-right">
+              <div className="form-group">
                 <div className='text-right'>
                   <input type="submit" className="btn_outline save_btn"
                          value="Save Changes" onClick={this.onSubmit.bind(this)}/>
