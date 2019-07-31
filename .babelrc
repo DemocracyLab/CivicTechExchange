@@ -3,8 +3,8 @@
 */
 {
   "presets":[
-    ["es2015", {"modules":false}],
-    "react",
-    "flow",
+    "@babel/preset-env",
+    "@babel/preset-react",
+    "@babel/preset-flow",
   ]
 }

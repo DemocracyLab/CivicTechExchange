@@ -51,7 +51,7 @@ export const GlyphWidth: {[key: string]: string} = {
 }
 
 export function Glyph(style: string, ...args): string {
-  return style += args.join();
+  return style += args.join('');
 }
 
 export default GlyphStyles;
