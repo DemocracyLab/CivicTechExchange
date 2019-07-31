@@ -4,17 +4,16 @@
   background-size: cover;
   background-position: center;
   color: $color-text-light;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: calc(100vh - #{$header-height} - #{$footer-height});
-  position: relative;
 }
 
 .SplashScreen-content {
-  position: relative;
   text-align: center;
-  transform: translateY(-50%);
-  top: 50%;
   padding: 0 10px;
+  margin: auto 0 0 0;
 }
 
 .SplashScreen-content h1 {
@@ -22,7 +21,7 @@
 }
 
 .SplashScreen-section {
-  padding-bottom: 15px;
+  padding: 15px 0;
 }
 
 .SplashScreen-find-projects-btn {
@@ -57,9 +56,8 @@
   color: $color-text-light;
   width: 100%;
   text-align: center;
-  position: absolute;
-  bottom: 0;
   padding: 0.5rem;
+  margin: auto 0 0 0;
 }
 .SplashScreen-mission p {
   margin: 0 auto;
