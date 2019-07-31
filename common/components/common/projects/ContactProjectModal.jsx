@@ -11,7 +11,8 @@ import ConfirmationModal from '../../common/confirmation/ConfirmationModal.jsx';
 type Props = {|
   projectId: number,
   showModal: boolean,
-  handleClose: () => void
+  handleClose: () => void,
+  handleSubmission: (string, string, () => void) => void
 |};
 type State = {|
   showModal: boolean,
@@ -49,10 +50,12 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
       this.setState({message: event.target.value});
   }
 
+  //SHARED
   askForSendConfirmation(): void {
     this.setState({showConfirmationModal:true});
   }
 
+  //SHARED
   receiveSendConfirmation(confirmation: boolean): void {
         if (confirmation) {
           this.handleSubmit()
@@ -61,13 +64,8 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
   }
 
   handleSubmit() {
-    this.setState({isSending:true});
-    metrics.logUserContactedProjectOwner(CurrentUser.userID(), this.props.projectId);
-    ProjectAPIUtils.post("/contact/project/" + this.props.projectId + "/",
-      {message: this.state.message},
-      response => this.closeModal(),
-      response => null /* TODO: Report error to user */
-      );
+    this.setState({isSending: true});
+    this.props.handleSubmission(this.state.message, this.props.subjectLine, this.closeModal);
   }
 
   closeModal(){
