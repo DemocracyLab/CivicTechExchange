@@ -39,6 +39,15 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
     this.setState({showContactModal: true});
   }
   
+  _handleSubmission(fields, closeModal): ?React$Node {
+    // TODO: Get close modal working
+    ProjectAPIUtils.post("/contact/volunteers/" + this.props.project.project_id + "/",
+      fields,
+      closeModal, //Send function to close modal
+      response => null /* TODO: Report error to user */
+    );
+  }
+  
   handleClose() {
     this.setState({showContactModal: false});
   }
@@ -63,23 +72,15 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
         <ContactModal
           headerText={"Send message to Project Volunteers"}
           explanationText={"Volunteers can reply to your message via your registered email."}
+          showSubject={true}
           showModal={this.state.showContactModal}
           handleClose={this.handleClose}
           handleSubmission={this._handleSubmission}
-          subjectLine="Contact Volunteer"
         />
       </React.Fragment>
     );
   }
   
-  _handleSubmission(body, subject, closeModal): ?React$Node {
-    // TODO: Get close modal working
-    ProjectAPIUtils.post("/contact/volunteers/" + this.props.project.project_id + "/",
-      {message: body, subject: subject}, //TODO: Create sendURL
-      response => closeModal, //Send function to close modal
-      response => null /* TODO: Report error to user */
-    );
-  }
   
   render(): ?React$Node {
     if (CurrentUser.isCoOwnerOrOwner(this.props.project)) {

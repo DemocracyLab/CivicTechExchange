@@ -74,7 +74,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   
   handleVolunteerContactModal(fields: ContactModalFields, closeModal: Function): void {
     ProjectAPIUtils.post("/contact/project/" + this.props.project.project_id + "/",
-      {message: fields.message},
+      fields,
       response => closeModal(),
       response => null /* TODO: Report error to user */
     );
