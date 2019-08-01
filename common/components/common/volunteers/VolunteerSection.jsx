@@ -295,7 +295,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
         />
         
         <ContactModal
-          headerText={"Send message to {volunteer}"}
+          headerText={"Send message to " + (this.state.volunteerToActUpon ? this.state.volunteerToActUpon.user.first_name + " " + this.state.volunteerToActUpon.user.last_name : "")}
           explanationText={"Volunteer can reply to your message via your registered email."}
           showSubject={true}
           showModal={this.state.showContactProjectModal}
