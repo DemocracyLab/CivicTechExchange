@@ -402,7 +402,7 @@ def contact_project_owner(request, project_id):
                     firstname=user.first_name,
                     lastname=user.last_name,
                     project=project.project_name)
-    email_template = HtmlEmailTemplate()\
+    email_template = HtmlEmailTemplate(use_signature=False)\
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
             message=message,
             firstname=user.first_name,
@@ -433,7 +433,7 @@ def contact_project_volunteers(request, project_id):
     email_subject = '{project}: {subject}'.format(
         project=project.project_name,
         subject=subject)
-    email_template = HtmlEmailTemplate() \
+    email_template = HtmlEmailTemplate(use_signature=False) \
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,
@@ -467,7 +467,7 @@ def contact_project_volunteer(request, application_id):
     email_subject = '{project}: {subject}'.format(
         project=project.project_name,
         subject=subject)
-    email_template = HtmlEmailTemplate() \
+    email_template = HtmlEmailTemplate(use_signature=False) \
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,

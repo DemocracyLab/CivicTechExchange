@@ -51,6 +51,7 @@ class ContactModal extends React.PureComponent<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Props): void {
+    // TODO: Erase fields
     this.setState({ showModal: nextProps.showModal });
   }
 
