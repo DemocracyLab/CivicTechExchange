@@ -5,7 +5,7 @@ import VolunteerCard from "./VolunteerCard.jsx";
 import {VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import NotificationModal from "../notification/NotificationModal.jsx";
 import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
-import ContactProjectModal from "../projects/ContactProjectModal.jsx";
+import ContactModal from "../projects/ContactModal.jsx";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import FeedbackModal from "../FeedbackModal.jsx";
 import metrics from "../../utils/metrics.js";
@@ -304,7 +304,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           requireMessage={true}
           onConfirm={this.closeDemotionModal.bind(this)}
         />
-        <ContactProjectModal
+        <ContactModal
           showModal={this.state.showContactProjectModal}
           handleSubmission={this.handleVolunteerContactModal}
           projectId={this.props.projectId}

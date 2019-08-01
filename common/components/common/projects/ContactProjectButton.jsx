@@ -2,11 +2,11 @@
 
 import React from 'react';
 import {Button} from 'react-bootstrap';
-import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils, {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import Section from '../../enums/Section.js';
 import url from '../../utils/url.js';
-import ContactProjectModal from "./ContactProjectModal.jsx";
+import ContactModal from "./ContactModal.jsx";
 import metrics from "../../utils/metrics";
 
 type Props = {|
@@ -36,7 +36,8 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
       };
     }
     this.handleShow = this.handleShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.handleVolunteerContactModal = this.handleVolunteerContactModal.bind(this);
   }
 
   getButtonDisplaySetup(props: Props): State {
@@ -70,8 +71,17 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     metrics.logUserClickContactProjectOwner(CurrentUser.userID(), this.props.project.project_id);
     this.setState({ showContactModal: true });
   }
-
-  handleClose() {
+  
+  handleVolunteerContactModal(fields: ContactModalFields, closeModal: Function): void {
+    ProjectAPIUtils.post("/contact/project/" + this.props.project.project_id + "/",
+      {message: fields.message},
+      response => closeModal(),
+      response => null /* TODO: Report error to user */
+    );
+    metrics.logUserContactedProjectOwner(CurrentUser.userID(), this.props.projectId);
+  }
+  
+  closeModal() {
     this.setState({ showContactModal: false });
   }
 
@@ -135,10 +145,13 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     return (
       <div>
         {this._renderContactProjectButton()}
-        <ContactProjectModal
-          projectId={this.state.project && this.state.project.project_id}
+        <ContactModal
+          headerText={"Send message to Project Owner"}
+          explanationText={"The project owner will reply to your message via your registered email."}
+          messagePlaceholderText={"I'm interested in helping with this project because..."}
           showModal={this.state.showContactModal}
-          handleClose={this.handleClose}
+          handleSubmission={this.handleVolunteerContactModal}
+          handleClose={this.closeModal}
         />
       </div>
       );
