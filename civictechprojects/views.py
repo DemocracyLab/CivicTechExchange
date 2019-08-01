@@ -461,7 +461,7 @@ def contact_project_volunteer(request, application_id):
     message = body['message']
 
     # TODO: Condense common code between this and contact_project_volunteers
-    if not user.email_verified or not is_co_owner(user, project):
+    if not user.email_verified or not is_co_owner_or_owner(user, project):
         return HttpResponse(status=403)
 
     email_subject = '{project}: {subject}'.format(
@@ -473,7 +473,7 @@ def contact_project_volunteer(request, application_id):
         firstname=user.first_name,
         lastname=user.last_name)) \
         .paragraph('To reply, email at {email}'.format(email=user.email))
-    send_to_project_volunteer(volunteer_relation.volunteer, email_subject, email_template)
+    send_to_project_volunteer(volunteer_relation, email_subject, email_template)
     return HttpResponse(status=200)
 
 

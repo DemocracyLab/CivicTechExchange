@@ -68,6 +68,9 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     this.openDismissModal = this.openDismissModal.bind(this);
     this.openPromotionModal = this.openPromotionModal.bind(this);
     this.openDemotionModal = this.openDemotionModal.bind(this);
+    this.openVolunteerContactModal = this.openVolunteerContactModal.bind(this);
+    this.handleVolunteerContactModal = this.handleVolunteerContactModal.bind(this);
+    this.closeVolunteerContactModal = this.closeVolunteerContactModal.bind(this);
   }
   
   componentWillReceiveProps(nextProps: Props): void {
@@ -174,36 +177,22 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     this.setState({
       showContactProjectModal: true,
       volunteerToActUpon: volunteer
-    })
+    });
   }
 
   closeVolunteerContactModal(){
     this.setState({
-      showContactProjectModal: false,
-    })
+      showContactProjectModal: false
+    });
   }
 
-  handleAllVolunteersContactModal(body, subject, closeModal): void{
-    ProjectAPIUtils.post("/contact/volunteers/" + this.props.projectId + "/",
-        {message: body},
-        response => closeModal,
-        response => null /* TODO: Report error to user */
-    );
-  }
-
-  handleVolunteerContactModal(body, subject ,closeModal): void {
+  handleVolunteerContactModal(formFields, closeModal): void {
     ProjectAPIUtils.post("/contact/volunteer/" + this.state.volunteerToActUpon.application_id + "/",
-        {message: body},
-        response => closeModal, //Send function to close modal
+        formFields,
+        closeModal, //Send function to close modal
         response => null /* TODO: Report error to user */
     );
   }
-
-  openTeamContactModal(): void {
-
-  }
-
-
 
   closeDismissModal(confirmDismissed: boolean, dismissalMessage: string):void {
     if(confirmDismissed) {
@@ -304,10 +293,13 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           requireMessage={true}
           onConfirm={this.closeDemotionModal.bind(this)}
         />
+        
         <ContactModal
+          headerText={"Send message to {volunteer}"}
+          explanationText={"Volunteer can reply to your message via your registered email."}
+          showSubject={true}
           showModal={this.state.showContactProjectModal}
           handleSubmission={this.handleVolunteerContactModal}
-          projectId={this.props.projectId}
           handleClose={this.closeVolunteerContactModal}
         />
 
@@ -355,7 +347,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
                     onDismissButton={this.openDismissModal}
                     onPromotionButton={this.openPromotionModal}
                     onDemotionButton={this.openDemotionModal}
-                    onVolunteerContactButton={this.openVolunteerContactModal}
+                    onContactButton={this.openVolunteerContactModal}
                   />)
               }
             </div>
