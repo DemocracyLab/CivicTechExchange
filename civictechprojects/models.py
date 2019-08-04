@@ -508,4 +508,4 @@ class VolunteerRelation(Archived):
 
     @staticmethod
     def get_by_project(project, active=True):
-        return VolunteerRelation.objects.filter(project_id=project.id, deleted=not active)
+        return VolunteerRelation.objects.filter(project_id=project.id, is_approved=active, deleted=not active)
