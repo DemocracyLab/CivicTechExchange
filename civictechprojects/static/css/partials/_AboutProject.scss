@@ -102,11 +102,11 @@
 }
 
 .AboutProjects-owner {
-    min-height: 70px;
-}
+  min-height: 70px;
 
-.AboutProjects-owner button {
-  margin-right: 13px;
+  button, a.btn {
+    margin-right: 13px;
+  }
 }
 
 .AboutProjects-mainColumn {

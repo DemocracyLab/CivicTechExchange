@@ -16,7 +16,7 @@ from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAle
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
-from common.helpers.form_helpers import is_co_owner_or_staff
+from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
@@ -402,13 +402,78 @@ def contact_project_owner(request, project_id):
                     firstname=user.first_name,
                     lastname=user.last_name,
                     project=project.project_name)
-    email_template = HtmlEmailTemplate()\
+    email_template = HtmlEmailTemplate(use_signature=False)\
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
             message=message,
             firstname=user.first_name,
             lastname=user.last_name))\
         .paragraph('To contact this person, email them at {email}'.format(email=user.email))
     send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def contact_project_volunteers(request, project_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+
+    body = json.loads(request.body)
+    subject = body['subject']
+    message = body['message']
+
+    project = Project.objects.get(id=project_id)
+    if not user.email_verified or not is_co_owner_or_owner(user, project):
+        return HttpResponse(status=403)
+
+    volunteers = VolunteerRelation.get_by_project(project)
+
+    email_subject = '{project}: {subject}'.format(
+        project=project.project_name,
+        subject=subject)
+    email_template = HtmlEmailTemplate(use_signature=False) \
+        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+        message=message,
+        firstname=user.first_name,
+        lastname=user.last_name)) \
+        .paragraph('To reply, email at {email}'.format(email=user.email))
+    for volunteer in volunteers:
+        # TODO: See if we can send emails in a batch
+        # https://docs.djangoproject.com/en/2.2/topics/email/#topics-sending-multiple-emails
+        send_to_project_volunteer(volunteer, email_subject, email_template)
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def contact_project_volunteer(request, application_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    volunteer_relation = VolunteerRelation.objects.get(id=application_id)
+    project = volunteer_relation.project
+
+    body = json.loads(request.body)
+    subject = body['subject']
+    message = body['message']
+
+    # TODO: Condense common code between this and contact_project_volunteers
+    if not user.email_verified or not is_co_owner_or_owner(user, project):
+        return HttpResponse(status=403)
+
+    email_subject = '{project}: {subject}'.format(
+        project=project.project_name,
+        subject=subject)
+    email_template = HtmlEmailTemplate(use_signature=False) \
+        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+        message=message,
+        firstname=user.first_name,
+        lastname=user.last_name)) \
+        .paragraph('To reply, email at {email}'.format(email=user.email))
+    send_to_project_volunteer(volunteer_relation, email_subject, email_template)
     return HttpResponse(status=200)
 
 

@@ -1,52 +1,59 @@
 // @flow
 
 import React from 'react';
-import metrics from "../../utils/metrics.js";
 import {Modal, Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
-import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
-import CurrentUser from "../../utils/CurrentUser";
 import ConfirmationModal from '../../common/confirmation/ConfirmationModal.jsx';
+import form from "../../utils/forms.js";
+import _ from "lodash";
 
+export type ContactModalFields = {|
+  subject: ?string,
+  message: string
+|}
 
 type Props = {|
-  projectId: number,
+  headerText: string,
+  explanationText: string,
+  messagePlaceholderText: string,
+  showSubject: ?boolean,
   showModal: boolean,
-  handleClose: () => void
+  handleClose: () => void,
+  handleSubmission: (ContactModalFields, () => void) => void
 |};
 type State = {|
   showModal: boolean,
   isSending: boolean,
-  message: string,
+  formFields: ContactModalFields,
   showConfirmationModal: boolean
 |};
 
 /**
- * Modal for sending messages to project owners
+ * Modal for sending messages to individuals
  */
 
-class ContactProjectModal extends React.PureComponent<Props, State> {
+class ContactModal extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
       showModal: false,
       isSending: false,
-      message: "",
+      formFields: {
+        subject: "",
+        message: ""
+      },
       showConfirmationModal: false
-    }
+    };
     this.closeModal = this.closeModal.bind(this, this.props.handleClose);
-    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.askForSendConfirmation = this.askForSendConfirmation.bind(this);
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
+  
+    this.form = form.setup();
   }
 
   componentWillReceiveProps(nextProps: Props): void {
+    // TODO: Erase fields
     this.setState({ showModal: nextProps.showModal });
-  }
-
-
-  handleChange(event: SyntheticInputEvent<HTMLInputElement>): void {
-      this.setState({message: event.target.value});
   }
 
   askForSendConfirmation(): void {
@@ -54,20 +61,15 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
   }
 
   receiveSendConfirmation(confirmation: boolean): void {
-        if (confirmation) {
-          this.handleSubmit()
-        }
-        this.setState({showConfirmationModal: false});
+    if (confirmation) {
+      this.handleSubmit();
+    }
+    this.setState({showConfirmationModal: false});
   }
 
   handleSubmit() {
-    this.setState({isSending:true});
-    metrics.logUserContactedProjectOwner(CurrentUser.userID(), this.props.projectId);
-    ProjectAPIUtils.post("/contact/project/" + this.props.projectId + "/",
-      {message: this.state.message},
-      response => this.closeModal(),
-      response => null /* TODO: Report error to user */
-      );
+    this.setState({isSending: true});
+    this.props.handleSubmission(this.state.formFields, this.closeModal);
   }
 
   closeModal(){
@@ -87,29 +89,40 @@ class ContactProjectModal extends React.PureComponent<Props, State> {
                  onHide={this.closeModal}
           >
               <Modal.Header >
-                  <Modal.Title>Send message to Project Owner</Modal.Title>
+                  <Modal.Title>{this.props.headerText}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <p>The project owner will reply to your message via your registered email.</p>
+                <p>{this.props.explanationText}</p>
+                {this.props.showSubject ? this._renderSubjectLineBox() : null}
                 <FormGroup>
                   <ControlLabel>Message:</ControlLabel>
                   <FormControl componentClass="textarea"
-                    placeholder="I'm interested in helping with this project because..."
+                    placeholder={this.props.messagePlaceholderText}
                     rows="4"
                     cols="50"
                     name="message"
-                    value={this.state.message}
-                    onChange={this.handleChange}/>
+                    value={this.state.formFields.message}
+                    onChange={this.form.onInput.bind(this, "message")}/>
                 </FormGroup>
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button disabled={this.state.isSending} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
+                <Button disabled={this.state.isSending || _.isEmpty(this.state.formFields.message)} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
               </Modal.Footer>
           </Modal>
       </div>
     );
   }
+  
+  _renderSubjectLineBox(): React$Node {
+    return (
+      <FormGroup>
+        <ControlLabel>Subject</ControlLabel>
+        <FormControl componentClass="input" name="subject" maxLength="60"
+               value={this.state.formFields.subject} onChange={this.form.onInput.bind(this, "subject")}/>
+      </FormGroup>
+    );
+  }
 }
 
-export default ContactProjectModal;
+export default ContactModal;

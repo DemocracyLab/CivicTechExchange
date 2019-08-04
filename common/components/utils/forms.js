@@ -20,7 +20,7 @@ class formHelper {
     
     const _onFormUpdate: UpdateValuesFunc = onFormUpdate || function(that, formFields) {
       that.setState({formFields});
-      that.props.onFormUpdate(formFields);
+      that.props.onFormUpdate && that.props.onFormUpdate(formFields);
     };
     
     const onInput = function(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>) {
