@@ -7,6 +7,7 @@ import CurrentUser from "../../utils/CurrentUser.js";
 import ContactModal from "./ContactModal.jsx";
 import metrics from "../../utils/metrics";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils";
+import _ from "lodash";
 
 type Props = {|
   project: ?ProjectDetailsAPIData
@@ -83,7 +84,7 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
   
   
   render(): ?React$Node {
-    if (CurrentUser.isCoOwnerOrOwner(this.props.project)) {
+    if (CurrentUser.isCoOwnerOrOwner(this.props.project) && !_.isEmpty(this.props.project.project_volunteers)) {
       return (
         <div>
           {this.displayContactVolunteerButton()}
