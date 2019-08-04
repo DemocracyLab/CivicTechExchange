@@ -4,6 +4,7 @@ import React from 'react';
 import {Modal, Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
 import ConfirmationModal from '../../common/confirmation/ConfirmationModal.jsx';
 import form from "../../utils/forms.js";
+import _ from "lodash";
 
 export type ContactModalFields = {|
   subject: ?string,
@@ -106,7 +107,7 @@ class ContactModal extends React.PureComponent<Props, State> {
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button disabled={this.state.isSending} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
+                <Button disabled={this.state.isSending || _.isEmpty(this.state.formFields.message)} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
               </Modal.Footer>
           </Modal>
       </div>
