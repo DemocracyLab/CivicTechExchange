@@ -78,7 +78,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
       response => closeModal(),
       response => null /* TODO: Report error to user */
     );
-    metrics.logUserContactedProjectOwner(CurrentUser.userID(), this.props.projectId);
+    metrics.logUserContactedProjectOwner(CurrentUser.userID(), this.props.project.project_id);
   }
   
   closeModal() {
