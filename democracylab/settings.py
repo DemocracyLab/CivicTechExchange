@@ -191,6 +191,10 @@ GOOGLE_PROPERTY_ID = os.environ.get('GOOGLE_PROPERTY_ID', '')
 GOOGLE_ADS_ID = os.environ.get('GOOGLE_ADS_ID', '')
 GOOGLE_CONVERSION_IDS = ast.literal_eval(os.environ.get('GOOGLE_CONVERSION_IDS', 'None'))
 
+#Google ReCaptcha keys - site key is exposed to the front end, secret is not
+GR_SITEKEY = os.environ.get('GOOGLE_RECAPTCHA_SITE_KEY', '')
+GR_SECRETKEY = os.environ.get('GOOGLE_RECAPTCHA_SECRET_KEY', '')
+
 STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
 
 ENVIRONMENT_VARIABLE_WARNINGS = {
@@ -225,6 +229,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'PAYPAL_ENDPOINT': {
         'error': False,
         'message': 'Donations will not work.'
+    },
+    'GR_SITEKEY': {
+        'error': False,
+        'message': 'Contact Us ReCaptcha form will not validate.'
     }
 }
 

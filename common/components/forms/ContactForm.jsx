@@ -14,7 +14,7 @@ class ContactForm extends React.Component {
       message: '',
       sendStatusMessage: null,
       sendStatusClass: null,
-      reCaptchaKey: null,
+      reCaptchaValue: null,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -33,7 +33,7 @@ class ContactForm extends React.Component {
           lname: this.state.lname,
           emailaddr: this.state.emailaddr,
           message: this.state.message,
-          reCaptchaKey: this.state.reCaptchaKey
+          reCaptchaValue: this.state.reCaptchaValue
         },
         response => this.showSuccess(),
         response => this.showFailure()
@@ -69,7 +69,7 @@ class ContactForm extends React.Component {
   reCaptchaOnChange(value) {
     //when the reCaptcha is completed, set the value in state
     this.setState({
-      reCaptchaKey: value,
+      reCaptchaValue: value,
     })
   }
 
@@ -136,10 +136,10 @@ class ContactForm extends React.Component {
           </div>
           <p>Please complete this captcha after writing your message above.</p>
           <ReCAPTCHA
-            sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+            sitekey={window.GR_SITEKEY}
             onChange={this.reCaptchaOnChange}
           />
-          {this.state.reCaptchaKey && <input type="submit" value="Send message" className="btn btn-theme ContactForm-submit-btn" />}
+          {this.state.reCaptchaValue && <input type="submit" value="Send message" className="btn btn-theme ContactForm-submit-btn" />}
         </form>
     </React.Fragment>
     );

@@ -612,6 +612,7 @@ def update_project_timestamp(request, project):
     if not request.user.is_staff:
         project.update_timestamp()
 
+#This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.
 @csrf_exempt
 def contact_democracylab(request):
     body = json.loads(request.body)
