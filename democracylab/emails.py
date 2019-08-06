@@ -296,7 +296,7 @@ def contact_democracylab_email(fname, lname, emailaddr, body):
         subject=subject,
         body=body,
         from_email=[emailaddr],
-        to=['hello@democracylab.org'],
+        to=[settings.CONTACT_EMAIL],
         reply_to=[emailaddr]
     )
     send_email(email_msg)

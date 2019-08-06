@@ -12,6 +12,9 @@ export PROTOCOL_DOMAIN=http://127.0.0.1:8000
 # Email of the admin account, used to
 export ADMIN_EMAIL=marlonakeating+1111@gmail.com
 
+#Contact Us email address, used for Contact Form
+export CONTACT_EMAIL=hello@democracylab.org
+
 # Secret key used to encrypt session tokens
 export DJANGO_SECRET_KEY="d!01@gn+%1ql1n(*)8xo+nx$$&n@mg$0_)9g+!(t-2vncaq!j8"
 
@@ -77,4 +80,4 @@ export PRESS_LINKS='[{"date":"March 11, 2019","href":"https://www.washingtontech
 
 # Google ReCaptcha keys
 # export GOOGLE_RECAPTCHA_SECRET_KEY='SECRET'
-export GOOGLE_RECAPTCHA_SITE_KEY='6LdkB64UAAAAADTd8KLMrShqRXoU251dUThRpjSb'
+export GOOGLE_RECAPTCHA_SITE_KEY=6LdkB64UAAAAADTd8KLMrShqRXoU251dUThRpjSb
