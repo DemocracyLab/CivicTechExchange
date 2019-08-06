@@ -62,6 +62,14 @@
   border: 0px;
   color: $color-text-light;
 }
+.save_btn_create_project {
+  width: 130px;
+  height: 35px;
+  border-radius: 5px;
+  background-color: $color-orange;
+  border: 0px;
+  color: $color-text-light;
+}
 
 input[type="submit"]:disabled {
   background: $color-grey-disabled;

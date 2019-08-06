@@ -29,6 +29,11 @@ var/
 *.egg
 *.js.map
 
+# Files that are now built automatically during heroku deployment
+bundle.js
+styles.css
+
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -87,4 +92,12 @@ mydatabase
 # [vim] swap files
 *.swp
 
-/package-lock.json
+# bin folder
+bin/
+.sh
+share/
+pyvenv.cfg
+
+
+# Don't check in package-lock, as it will conflict with yarn.lock and break the heroku build
+package-lock.json

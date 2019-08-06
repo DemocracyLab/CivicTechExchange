@@ -1,0 +1,18 @@
+.step-bars {
+  display: flex;
+  flex-direction: row;
+  max-width: 800px;
+  padding:10px;
+}
+
+.step-bar {
+  background: $color-grey-medium;
+  border-radius: 25px;
+  width: 75px;
+  height: 7px;
+  margin:10px;
+}
+
+.step-bar.selected {
+  background: $color-orange;
+}

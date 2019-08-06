@@ -8,7 +8,8 @@ const TagCategory = {
   STATUS: "Status",
   TECHNOLOGIES_USED: "Technologies Used",
   ROLE: "Role",
-  ORGANIZATION: "Organization"
+  ORGANIZATION: "Organization",
+  ORGANIZATION_TYPE: "Organization Type"
 };
 
 export default TagCategory;

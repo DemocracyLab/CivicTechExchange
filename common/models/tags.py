@@ -63,8 +63,10 @@ class Tag(models.Model):
 
         tags_to_add = list(tag_entry_slugs - existing_tag_slugs)
         for tag in tags_to_add:
-            tags_field.add(tag)
+            if len(tag) > 0:
+                tags_field.add(tag)
 
         tags_to_remove = list(existing_tag_slugs - tag_entry_slugs)
         for tag in tags_to_remove:
-            tags_field.remove(tag)
+            if len(tag) > 0:
+                tags_field.remove(tag)

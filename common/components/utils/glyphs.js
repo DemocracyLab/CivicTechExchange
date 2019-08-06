@@ -8,6 +8,7 @@ export const GlyphStyles: {[key: string]: string} = {
   Alert: "fa fa-bell",
   MapMarker: "fas fa-map-marker-alt",
   Globe:"fas fa-globe-americas",
+  University:"fas fa-university",
   Clock: "fas fa-clock",
   Search: "fa fa-search",
   Github: "fab fa-github",
@@ -23,13 +24,16 @@ export const GlyphStyles: {[key: string]: string} = {
   Folder: "far fa-folder",
   Tasks: "fas fa-tasks",
   Meetup: "fab fa-meetup",
+  ChartBar: "fas fa-chart-bar",
   Check: "fas fa-check",
+  CircleCheck: "fas fa-check-circle",
   ChevronUp: "fas fa-chevron-up",
   ChevronDown: "fas fa-chevron-down",
   EllipsisV: "fas fa-ellipsis-v",
   Pushpin: "fas fa-thumbtack",
   Eye: "fas fa-eye",
-  LoadingSpinner: "fas fa-spinner fa-spin"
+  LoadingSpinner: "fas fa-spinner fa-spin",
+  Envelope: "far fa-envelope"
 };
 
 export const GlyphSizes: {[key: string]: string} = {
@@ -48,7 +52,7 @@ export const GlyphWidth: {[key: string]: string} = {
 }
 
 export function Glyph(style: string, ...args): string {
-  return style += args.join();
+  return style += args.join('');
 }
 
 export default GlyphStyles;

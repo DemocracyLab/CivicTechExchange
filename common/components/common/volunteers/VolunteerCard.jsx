@@ -8,6 +8,7 @@ import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import Avatar from "../avatar.jsx"
 import {Glyph, GlyphStyles, GlyphSizes, GlyphWidth} from "../../utils/glyphs.js";
+import CurrentUser from "../../utils/CurrentUser.js";
 
 
 type Props = {|
@@ -19,7 +20,8 @@ type Props = {|
   +onRejectButton: (VolunteerDetailsAPIData) => void,
   +onDismissButton: (VolunteerDetailsAPIData) => void,
   +onPromotionButton: (VolunteerDetailsAPIData) => void,
-  +onDemotionButton: (VolunteerDetailsAPIData) => void
+  +onDemotionButton: (VolunteerDetailsAPIData) => void,
+  +onContactButton: (VolunteerDetailsAPIData) => void
 |};
 
 class VolunteerCard extends React.PureComponent<Props> {
@@ -36,7 +38,7 @@ class VolunteerCard extends React.PureComponent<Props> {
         <a className="VolunteerCard-volunteerName" href={volunteerUrl} target="_blank" rel="noopener noreferrer">
           {volunteer && (volunteer.first_name + " " + volunteer.last_name)}
         </a>
-        {(this.props.isProjectAdmin || this.props.isProjectCoOwner) ? this._renderShowApplicationMenu(volunteer) : null}
+        {(this.props.isProjectAdmin || this.props.isProjectCoOwner) ? this._renderShowApplicationMenu() : null}
         <p className="VolunteerCard-volunteerRole">
           {roleTag && roleTag.display_name}
         </p>
@@ -44,7 +46,7 @@ class VolunteerCard extends React.PureComponent<Props> {
     );
   }
 
-  _renderShowApplicationMenu(volunteer): ?React$Node {
+  _renderShowApplicationMenu(): ?React$Node {
     return (this.props.volunteer
       ?
         (<DropdownButton
@@ -63,27 +65,40 @@ class VolunteerCard extends React.PureComponent<Props> {
       );
   }
 
-  _renderApplicationMenuLinks(): ?Array<React$Node>  {
-    if (this.props.volunteer && this.props.volunteer.isCoOwner) {
-      return [
-          (<MenuItem onSelect={() => this.props.onDemotionButton(this.props.volunteer)} key="0"><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Demote</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</MenuItem>)
-        ]
+  _renderApplicationMenuLinks(): ?Array<React$Node> {
+    const volunteer: VolunteerDetailsAPIData = this.props.volunteer;
+    let links: ?Array<React$Node> = [];
+    let key: number = 0;
+    
+    if (volunteer.isApproved) {
+      if (volunteer.isCoOwner) {
+        links = links.concat([
+          (<MenuItem onSelect={() => this.props.onDemotionButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Demote</MenuItem>)
+        ]);
+      } else {
+        links = links.concat([
+          (<MenuItem onSelect={() => this.props.onPromotionButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Promote</MenuItem>)
+        ]);
+      }
+  
+      links = links.concat([
+        (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</MenuItem>)
+      ]);
+    } else {
+      links = links.concat([
+          (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Eye, GlyphWidth.Fixed)}></i> Review</MenuItem>),
+          (<MenuItem onSelect={() => this.props.onApproveButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Approve</MenuItem>),
+          (<MenuItem onSelect={() => this.props.onRejectButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Reject</MenuItem>),
+      ]);
     }
-    if (this.props.volunteer && this.props.volunteer.isApproved) {
-        return [
-          (<MenuItem onSelect={() => this.props.onPromotionButton(this.props.volunteer)} key="0"><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Promote</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key="1"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</MenuItem>)
-        ]
+
+    if(volunteer.user.id !== CurrentUser.userID()) {
+      links = links.concat([
+        (<MenuItem onSelect={() => this.props.onContactButton(this.props.volunteer)} key={key++} ><i className={Glyph(GlyphStyles.Envelope, GlyphWidth.Fixed)}></i> Contact</MenuItem>)
+      ]);
     }
-    if (this.props.volunteer) {
-      return [
-          (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key="2"><i className={Glyph(GlyphStyles.Eye, GlyphWidth.Fixed)}></i> Review</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onApproveButton(this.props.volunteer)} key="3"><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Approve</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onRejectButton(this.props.volunteer)} key="4"><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Reject</MenuItem>)
-      ];
-    }
-    return null;
+    
+    return links;
   }
 }
 

@@ -26,7 +26,8 @@ class HtmlEmailTemplate:
         EmailSection.Paragraph: loader.get_template('html_email_paragraph.html')
     }
 
-    def __init__(self):
+    def __init__(self, use_signature=True):
+        self.use_signature = use_signature
         self.sections = []
         self.hydrated_template = None
 
@@ -50,7 +51,9 @@ class HtmlEmailTemplate:
         email_msg.content_subtype = "html"
         # For some reason xml markup characters in the template (<,>) get converted to entity codes (&lt; and &rt;)
         # We unescape to convert the markup characters back
-        email_msg.body = unescape(self.hydrated_template.render(Context(context or {})))
+        _context = context or {}
+        _context['use_signature'] = self.use_signature
+        email_msg.body = unescape(self.hydrated_template.render(Context(_context)))
         return email_msg
 
 
@@ -130,16 +133,16 @@ def send_to_project_owners(project, sender, subject, template):
     send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
 
 
-def send_to_project_volunteer(volunteer_relation, subject, body):
+def send_to_project_volunteer(volunteer_relation, subject, template):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project.id)
     co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
     email_msg = EmailMessage(
         subject=subject,
-        body=body,
         from_email=settings.EMAIL_VOLUNTEER_ACCT['from_name'],
         to=[volunteer_relation.volunteer.email],
         reply_to=[volunteer_relation.project.project_creator.email] + co_owner_emails,
     )
+    email_msg = template.render(email_msg)
     send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
 
 

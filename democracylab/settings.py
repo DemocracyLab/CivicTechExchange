@@ -231,10 +231,15 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
         'error': False,
         'message': 'Donations will not work.'
     },
-    'GR_SITEKEY': {
+    'VOLUNTEER_RENEW_REMINDER_PERIODS': {
         'error': False,
-        'message': 'Contact Us ReCaptcha form will not validate.'
+        'message': 'Needed to calculate volunteer renewal periods.'
+    },
+    'GR_SITEKEY': {
+        'error': True,
+        'message': 'Contact Us page will not render correctly.'
     }
+
 }
 
 # TODO: Set to True in productions
