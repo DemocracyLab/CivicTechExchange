@@ -72,7 +72,7 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
         {this._renderContactVolunteerButton()}
         <ContactModal
           headerText={"Send message to Project Volunteers"}
-          explanationText={"Volunteers can reply to your message via your registered email."}
+          explanationText={"This email will be sent to all project volunteers. They can reply to your message via your registered email."}
           showSubject={true}
           showModal={this.state.showContactModal}
           handleClose={this.handleClose}
