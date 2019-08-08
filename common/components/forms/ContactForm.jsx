@@ -78,7 +78,6 @@ class ContactForm extends React.Component {
     return (
       <React.Fragment>
         <form onSubmit={this.handleSubmit}>
-          {this.state.sendStatusMessage ? <div className={"ContactForm-status-message" + " " + this.state.sendStatusClass}>{this.state.sendStatusMessage}</div> : null}
           <div className="form-group">
             <label htmlFor="fname">
               First name:
@@ -141,6 +140,7 @@ class ContactForm extends React.Component {
             onChange={this.reCaptchaOnChange}
           />
           {this.state.reCaptchaValue && <input type="submit" value="Send message" className="btn btn-theme ContactForm-submit-btn" />}
+          {this.state.sendStatusMessage ? <div className={"ContactForm-status-message" + " " + this.state.sendStatusClass}>{this.state.sendStatusMessage}</div> : null}
         </form>
     </React.Fragment>
     );
