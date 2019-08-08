@@ -298,7 +298,7 @@ def contact_democracylab_email(fname, lname, emailaddr, body):
     email_msg = EmailMessage(
         subject=subject,
         body=body,
-        from_email=[emailaddr],
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
         to=[settings.CONTACT_EMAIL],
         reply_to=[emailaddr]
     )
