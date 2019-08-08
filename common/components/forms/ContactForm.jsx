@@ -3,6 +3,7 @@
 import React from 'react';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import ReCAPTCHA from "react-google-recaptcha";
+import _ from 'lodash';
 
 class ContactForm extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class ContactForm extends React.Component {
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = _.debounce(this.handleSubmit.bind(this),1000, {'leading': true});
     this.reCaptchaOnChange = this.reCaptchaOnChange.bind(this);
   }
 
