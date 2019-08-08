@@ -238,6 +238,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'GR_SITEKEY': {
         'error': True,
         'message': 'Contact Us page will not render correctly.'
+    },
+    'CONTACT_EMAIL': {
+        'error': False,
+        'message': 'Contact Us form will not send messages.'
     }
 
 }
