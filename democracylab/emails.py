@@ -294,12 +294,12 @@ def _get_account_from_email(email_acct):
     return email_acct['from_name'] if email_acct is not None else 'DemocracyLab'
 
 def contact_democracylab_email(first_name, last_name, email_address, body):
-    subject = '{} {} would like to contact DemocracyLab'.format(fname, lname)
+    subject = '{} {} would like to contact DemocracyLab'.format(first_name, last_name)
     email_msg = EmailMessage(
         subject=subject,
         body=body,
         from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
         to=[settings.CONTACT_EMAIL],
-        reply_to=[emailaddr]
+        reply_to=[email_address]
     )
     send_email(email_msg)
