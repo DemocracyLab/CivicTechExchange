@@ -21,6 +21,7 @@ import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
 import GlyphStyles from "../utils/glyphs.js";
+import Guard from "../utils/guard.js";
 
 type CreateProjectStepConfig = {|
   header: string,
@@ -85,7 +86,7 @@ type State = {|
  */
 class CreateProjectController extends React.PureComponent<{||},State> {
   constructor(props: {||}): void {
-    
+
     super(props);
     // TODO: Support navigating to page via &step=#
     // TODO: Support auto-navigating to page via prerequisites
@@ -101,9 +102,9 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       clickedNext: false,
       showConfirmDiscardChanges: false
     };
-    this.onSubmit = _.debounce(this.onSubmit.bind(this),1000, { 'leading': true });
+    this.onSubmit = Guard.click(this.onSubmit.bind(this),1000, { 'leading': true });
   }
-  
+
   navigateToStep(step: number): void {
     if(this.state.fieldsUpdated) {
       this.setState({
@@ -119,7 +120,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       this.forceUpdate();
     }
   }
-  
+
   componentDidMount(): void {
     if(this.state.projectId) {
       ProjectAPIUtils.fetchProjectDetails(this.state.projectId, this.loadProjectDetails.bind(this), this.handleLoadProjectError.bind(this));
@@ -131,7 +132,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       }
     }
   }
-  
+
   resetPageState(state: ?State): State {
     let _state: State = state || this.state;
     return Object.assign(_state, {
@@ -140,13 +141,13 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       formIsValid: false
     });
   }
-  
+
   updatePageUrl() {
     if(this.state.projectId && !url.argument('id')) {
       url.updateArgs({id: this.state.projectId});
     }
   }
-  
+
   loadProjectDetails(project: ProjectDetailsAPIData): void {
     if(!CurrentUser.isOwner(project)) {
       // TODO: Handle someone other than owner
@@ -157,23 +158,23 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       }, this.updatePageUrl);
     }
   }
-  
+
   handleLoadProjectError(error: APIError): void {
     this.setState({
       error: "Failed to load project information"
     });
   }
-  
+
   onValidationCheck(formIsValid: boolean, beforeSubmit: ?Function): void {
     if (formIsValid !== this.state.formIsValid) {
       this.setState({formIsValid});
     }
-  
+
     if (beforeSubmit !== this.state.beforeSubmit) {
       this.setState({beforeSubmit});
     }
   }
-  
+
   onSubmit(event: SyntheticEvent<HTMLFormElement>): void {
     this.setState({projectSaved: true, clickedNext: false});
     const formSubmitUrl: string = this.state.project && this.state.project.project_id
@@ -185,14 +186,14 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     this.state.beforeSubmit ? this.state.beforeSubmit(submitFunc) : submitFunc();
     event.preventDefault();
   }
-  
+
   onFormUpdate(formFields: {||}) {
     if (!this.state.clickedNext && !_.isEqual(this.state.currentFormFields, formFields)) {
       this.setState({projectSaved: false});
     }
     this.setState({fieldsUpdated: true, currentFormFields: formFields});
   }
-  
+
   confirmDiscardChanges(confirmDiscard: boolean): void {
     let confirmState: State = this.state;
     confirmState.showConfirmDiscardChanges = false;
@@ -200,13 +201,13 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       confirmState.currentStep = this.state.navigateToStepUponDiscardConfirmation;
       confirmState = this.resetPageState(confirmState);
     }
-    
+
     this.setState(confirmState);
     this.forceUpdate();
   }
-  
+
   onSubmitSuccess(project: ProjectDetailsAPIData) {
-    
+
     if(this.onLastStep()) {
       metrics.logProjectCreated(CurrentUser.userID());
       // TODO: Fix bug with switching to this section without page reload
@@ -221,7 +222,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     }
     this.setState({clickedNext: false});
   }
-  
+
   render(): React$Node {
     return (
       <React.Fragment>
@@ -240,10 +241,10 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       </React.Fragment>
     );
   }
-  
+
   _renderCreateProjectForm() : React$Node {
     const currentStep: CreateProjectStepConfig = steps[this.state.currentStep];
-    
+
     return (
       <React.Fragment>
         <ConfirmationModal
@@ -251,8 +252,8 @@ class CreateProjectController extends React.PureComponent<{||},State> {
           message="You have unsaved changes on this form.  Do you want to discard these changes?"
           onSelection={this.confirmDiscardChanges.bind(this)}
         />
-        
-        
+
+
         <div className="create-form white-bg container-fluid">
           <div className="bounded-content">
             <h1>{currentStep.header}</h1>
@@ -263,22 +264,22 @@ class CreateProjectController extends React.PureComponent<{||},State> {
             />
           </div>
         </div>
-  
+
         {this.state.projectIsLoading ? <LoadingMessage /> : this._renderForm()}
 
       </React.Fragment>
     );
   }
-  
+
   _renderForm(): React$Node {
     const FormComponent: React$Node = steps[this.state.currentStep].formComponent;
-  
+
     return (
       <form
         onSubmit={this.onSubmit.bind(this)}
         method="post"
         ref={this.formRef}>
-    
+
         <div className="create-form grey-bg container">
           <FormComponent
             project={this.state.project}
@@ -286,10 +287,10 @@ class CreateProjectController extends React.PureComponent<{||},State> {
             onFormUpdate={this.onFormUpdate.bind(this)}
           />
         </div>
-    
+
         <div className="create-form white-bg container-fluid">
           {/*TODO: Bring button visuals in line with design*/}
-      
+
           <Button className="btn btn-theme"
                   type="button"
                   title="Back"
@@ -298,12 +299,12 @@ class CreateProjectController extends React.PureComponent<{||},State> {
           >
             Back
           </Button>
-      
+
           <div className="form-group pull-right">
             <div className='text-right'>
-              {!this.state.projectSaved ? "" : 
+              {!this.state.projectSaved ? "" :
                 <span className='create-project-saved-emblem'><i className={GlyphStyles.CircleCheck} aria-hidden="true"></i> Project Saved</span>}
-               
+
               <input type="submit" className="btn_outline save_btn_create_project"
                     disabled={!this.state.formIsValid}
                     value={this.onLastStep() ? "PUBLISH" : "Next"}
@@ -314,7 +315,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       </form>
     );
   }
-  
+
   onLastStep(): boolean {
     return this.state.currentStep >= steps.length - 1;
   }
