@@ -20,7 +20,9 @@ import ProjectAPIUtils, {ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.j
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
+import utils from "../utils/utils.js";
 import GlyphStyles from "../utils/glyphs.js";
+
 
 type CreateProjectStepConfig = {|
   header: string,
@@ -115,7 +117,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       this.setState(Object.assign(this.resetPageState(), {
         currentStep: step,
         projectSaved: false
-      }));
+      }), utils.navigateToTopOfPage);
       this.forceUpdate();
     }
   }
@@ -145,6 +147,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     if(this.state.projectId && !url.argument('id')) {
       url.updateArgs({id: this.state.projectId});
     }
+    utils.navigateToTopOfPage();
   }
   
   loadProjectDetails(project: ProjectDetailsAPIData): void {
@@ -202,7 +205,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     }
     
     this.setState(confirmState);
-    this.forceUpdate();
+    this.forceUpdate(utils.navigateToTopOfPage);
   }
   
   onSubmitSuccess(project: ProjectDetailsAPIData) {
