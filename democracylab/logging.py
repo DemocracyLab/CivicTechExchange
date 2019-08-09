@@ -13,7 +13,9 @@ def dump_request_summary(request):
     url = request.path
     method = request.method
     body = censor_sensitive_fields(dict(getattr(request, method)))
+
     return '({user}) {method} {url} {body}'.format(user=user, url=url, method=method, body=body)
+
 
 sensitive_fields = ['password', 'password1', 'password2']
 
@@ -30,6 +32,7 @@ def censor_sensitive_fields(fields_dict):
 
 class CustomErrorHandler(logging.Handler):
     def emit(self, record):
-        exception_info = traceback.format_exc()
-        request_info = dump_request_summary(record.request)
-        print('ERROR: {exception_info} REQUEST: {request_info}'.format(exception_info=exception_info, request_info=request_info))
+        error_msg = 'ERROR: {}'.format(traceback.format_exc())
+        if hasattr(record, 'request'):
+            error_msg += ' REQUEST: {}'.format(dump_request_summary(record.request))
+        print(error_msg)
