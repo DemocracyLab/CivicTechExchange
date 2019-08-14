@@ -9,7 +9,7 @@ import cx from '../utils/cx';
 import CurrentUser from '../utils/CurrentUser.js';
 import NavigationLinks, {NavigationLink} from "../utils/NavigationLinks.js";
 import NavigationStore from '../stores/NavigationStore.js'
-import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
+import SectionLinkConfigs, {SectionLinkConfig} from '../configs/SectionLinkConfigs.js';
 import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
@@ -364,10 +364,14 @@ class MainHeader extends React.Component<{||}, State > {
         <Person className="SubHeader-userIcon" />
     );
   }
+  
+  _shouldShowSectionLink(config: SectionLinkConfig): boolean {
+    return !config.showOnlyWhenLoggedIn && (!config.showOnPages || _.includes(config.showOnPages, this.state.activeSection));
+  }
 
   _renderSectionLinks(): React$Node {
     const SectionsToShow = SectionLinkConfigs
-      .filter(config => !config.showOnlyWhenLoggedIn);
+      .filter(config => this._shouldShowSectionLink(config));
     return SectionsToShow
       .map(config =>
         <SectionLink

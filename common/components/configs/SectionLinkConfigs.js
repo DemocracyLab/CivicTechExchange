@@ -1,15 +1,46 @@
 import Section from '../enums/Section.js'
 
-const SectionLinkConfigs = [
+export type SectionLinkConfig = {|
+  section: string,
+  title: string,
+  showOnlyWhenLoggedIn: boolean,
+  showOnPages: ?$ReadOnlyArray<string>
+|}
+
+const SectionLinkConfigs: $ReadOnlyArray<SectionLinkConfig> = [
   {
     section: Section.FindProjects,
-    title: 'Find Projects',
+    title: 'Projects',
+    showOnlyWhenLoggedIn: false
+  },
+  {
+    section: Section.FindEvents,
+    title: 'Events',
+    showOnlyWhenLoggedIn: false
+  },
+
+  {
+    section: Section.FindGroups,
+    title: 'Groups',
     showOnlyWhenLoggedIn: false
   },
   {
     section: Section.CreateProject,
     title: 'Create Project',
-    showOnlyWhenLoggedIn: false
+    showOnlyWhenLoggedIn: false,
+    showOnPages: [Section.FindProjects, Section.CreateProject]
+  },
+  {
+    section: Section.CreateEvent,
+    title: 'Create Event',
+    showOnlyWhenLoggedIn: false,
+    showOnPages: [Section.FindEvents, Section.CreateEvent]
+  },
+  {
+    section: Section.CreateGroup,
+    title: 'Create Group',
+    showOnlyWhenLoggedIn: false,
+    showOnPages: [Section.FindGroups, Section.CreateGroup]
   },
   {
     section: Section.MyProjects,
