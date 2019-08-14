@@ -11,6 +11,11 @@ const SectionLinkConfigs = [
     title: 'Create Project',
     showOnlyWhenLoggedIn: false
   },
+   {
+    section: Section.CreateOrganization,
+    title: 'Create Organization',
+    showOnlyWhenLoggedIn: false
+  },
   {
     section: Section.MyProjects,
     title: 'My Projects',
