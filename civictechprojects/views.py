@@ -141,6 +141,61 @@ def get_group(request, group_id):
     else:
         return HttpResponse(status=404)
 
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def event_create(request):
+    if not request.user.is_authenticated():
+        return redirect(section_url(FrontEndSection.LogIn))
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        # TODO: Log this
+        return HttpResponse(status=403)
+
+    event = EventCreationForm.create_event(request)
+    return JsonResponse(event.hydfrate_to_json())
+
+
+def event_edit(request, event_id):
+    if not request.user.is_authenticated():
+        return redirect('/signup')
+
+    event = None
+    try:
+        event = EventCreationForm.edit_event(request, event_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+
+    if request.is_ajax():
+        return JsonResponse(event.hydrate_to_json())
+    else:
+        return redirect('/index/?section=AboutEvent&id=' + event_id)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def event_delete(request, event_id):
+    # if not logged in, send user to login page
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+    try:
+        EventCreationForm.delete_event(request, event_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return HttpResponse(status=204)
+
+
+def get_event(request, event_id):
+    event = Event.objects.get(id=event_id)
+
+    if event is not None:
+        if event.is_searchable or is_creator_or_staff(get_request_contributor(request), event):
+            return JsonResponse(event.hydrate_to_json())
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
