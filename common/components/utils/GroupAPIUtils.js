@@ -18,10 +18,10 @@ export type GroupDetailsAPIData = {|
 
 
 export default class GroupAPIUtils {
-    static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
-        fetch(new Request('/api/group/' + id + '/', {credentials: 'include'}))
+    static fetchGroupDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
+        fetch(new Request('/api/groups/' + id + '/', {credentials: 'include'}))
             .then(response => {
-                console.log('GroupAPIUtiles.fetchProjectDetails:then', response.json());
+                console.log('GroupAPIUtiles.fetchGroupDetails:then', response.json());
                 if(!response.ok) {
                     throw Error();
                 }
