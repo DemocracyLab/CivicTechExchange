@@ -111,6 +111,7 @@ class CreateGroupController extends React.PureComponent<{||},State> {
   }
   
   onNextPageSuccess(group: GroupDetailsAPIData): void {
+    console.log('onNextPageSuccess', group)
     this.setState({
       group: group,
       groupId: group.group_id
