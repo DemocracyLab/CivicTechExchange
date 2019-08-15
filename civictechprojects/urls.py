@@ -30,6 +30,9 @@ urlpatterns = [
         name='django.contrib.sitemaps.views.sitemap'
     ),
     url(r'^googlebb20bcf8545e7046.html$', TemplateView.as_view(template_name="googlebb20bcf8545e7046.html")),
+    url(r'^groups/create/$', views.group_create, name='group_create'),
+    url(r'^groups/edit/(?P<group_id>[0-9]+)/$', views.group_edit, name='group_edit'),
+    url(r'^groups/delete/(?P<group_id>[0-9]+)/$', views.group_delete, name='group_delete'),
     url(r'^projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
     url(r'^projects/delete/(?P<project_id>[0-9]+)/$', views.project_delete, name='project_delete'),
     url(r'^projects/signup/$', views.project_create, name='project_create'),

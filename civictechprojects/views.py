@@ -86,6 +86,19 @@ def to_tag_map(tags):
     tag_map = ((tag.tag_name, tag.display_name) for tag in tags)
     return list(tag_map)
 
+# TODO: @csrf_exempt
+def group_create(request):
+    if not request.user.is_authenticated():
+        return redirect(section_url(FrontEndSection.LogIn))
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        # TODO: Log this
+        return HttpResponse(status=403)
+
+    group = GroupCreationForm.create_group(request)
+    return JsonResponse(group.hydfrate_to_json())
+
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def project_create(request):
