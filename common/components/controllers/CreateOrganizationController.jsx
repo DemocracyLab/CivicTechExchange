@@ -6,133 +6,134 @@ import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
-import ProjectOverviewForm from "../componentsBySection/CreateProject/ProjectOverviewForm.jsx";
-import ProjectInfoForm from "../componentsBySection/CreateProject/ProjectInfoForm.jsx";
-import ProjectPreviewForm from "../componentsBySection/CreateProject/ProjectPreviewForm.jsx";
-import ProjectDescriptionForm from "../componentsBySection/CreateProject/ProjectDescriptionForm.jsx";
-import ProjectPositionsForm from "../componentsBySection/CreateProject/ProjectPositionsForm.jsx";
-import ProjectResourcesForm from "../componentsBySection/CreateProject/ProjectResourcesForm.jsx";
-import ProjectAPIUtils, {ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
+import OrganizationOverviewForm from "../componentsBySection/CreateOrganization/OrganizationOverviewForm.jsx";
+import OrganizationInfoForm from "../componentsBySection/CreateOrganization/OrganizationInfoForm.jsx";
+import OrganizationPreviewForm from "../componentsBySection/CreateOrganization/OrganizationPreviewForm.jsx";
+import OrganizationDescriptionForm from "../componentsBySection/CreateOrganization/OrganizationDescriptionForm.jsx";
+import OrganizationPositionsForm from "../componentsBySection/CreateOrganization/OrganizationPositionsForm.jsx";
+import OrganizationResourcesForm from "../componentsBySection/CreateOrganization/OrganizationResourcesForm.jsx";
+import OrganizationAPIUtils, {OrganizationDetailsAPIData} from "../utils/OrganizationAPIUtils.js";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
 
 type State = {|
-  projectId: ?number,
-  project: ?ProjectDetailsAPIData,
+  id: ?number,
+  organization: ?OrganizationDetailsAPIData,
   steps: $ReadOnlyArray<FormWorkflowStepConfig>
 |};
 
 /**
- * Encapsulates form for creating projects
+ * Encapsulates form for creating Organizations
  */
 class CreateOrganizationController extends React.PureComponent<{||},State> {
   constructor(props: {||}): void {
     super(props);
-    const projectId: number = url.argument("id");
+    const organizationId: number = url.argument("id");
     this.onNextPageSuccess = this.onNextPageSuccess.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onFinalSubmitSuccess = this.onFinalSubmitSuccess.bind(this);
     this.state = {
-      projectId: projectId,
+      organizationId: organizationId,
       steps: [
         {
           header: "Let's get started!",
           subHeader: "Tell us how you want to create a better world.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: ProjectOverviewForm
+          // formComponent: () => <h1>Hello w2orld!</h1>,
+          formComponent: OrganizationOverviewForm
         }, {
-          header: "Let others know what your project is about...",
-          subHeader: "You can always change details about your project later.",
+          header: "Let others know what your Organization is about...",
+          subHeader: "You can always change details about your Organization later.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: ProjectInfoForm
+          formComponent: OrganizationInfoForm
         }, {
-          header: "Let others know what your project is about...",
-          subHeader: "You can always change details about your project later.",
+          header: "Let others know what your Organization is about...",
+          subHeader: "You can always change details about your Organization later.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: ProjectDescriptionForm
+          formComponent: OrganizationDescriptionForm
         }, {
           header: "What resources would you like to share?",
-          subHeader: "Let volunteers know how they can engage with your project",
+          subHeader: "Let volunteers know how they can engage with your Organization",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: ProjectResourcesForm
+          formComponent: OrganizationResourcesForm
         }, {
-          header: "What type of volunteers does your project need?",
-          subHeader: "You can always change the type of help your project needs later.",
+          header: "What type of volunteers does your Organization need?",
+          subHeader: "You can always change the type of help your Organization needs later.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: ProjectPositionsForm
+          formComponent: OrganizationPositionsForm
         }, {
-          header: "Ready to publish your project?",
-          subHeader: "Congratulations!  You have successfully created a tech-for-good project.",
+          header: "Ready to publish your Organization?",
+          subHeader: "Congratulations!  You have successfully created a tech-for-good Organization.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onFinalSubmitSuccess,
-          formComponent: ProjectPreviewForm
+          formComponent: OrganizationPreviewForm
         }
       ]
     };
   }
   
-//   componentDidMount(): void {
-//     if(this.state.projectId) {
-//       ProjectAPIUtils.fetchProjectDetails(this.state.projectId, this.loadProjectDetails.bind(this), this.handleLoadProjectError.bind(this));
-//     }
-//     if(CurrentUser.isLoggedIn() && CurrentUser.isEmailVerified()) {
-//       // Only fire event on initial page when the project is not yet created
-//       if(!url.argument("id")) {
-//         metrics.logProjectClickCreate(CurrentUser.userID());
-//       }
-//     }
-//   }
+  componentDidMount(): void {
+    if(this.state.organizationId) {
+      OrganizationAPIUtils.fetchOrganizationDetails(this.state.organizationId, this.loadOrganizationDetails.bind(this), this.handleLoadOrganizationError.bind(this));
+    }
+    // if(CurrentUser.isLoggedIn() && CurrentUser.isEmailVerified()) {
+    //   // Only fire event on initial page when the Organization is not yet created
+    //   if(!url.argument("id")) {
+    //     metrics.logOrganizationClickCreate(CurrentUser.userID());
+    //   }
+    // }
+  }
 
-//   updatePageUrl() {
-//     if(this.state.projectId && !url.argument('id')) {
-//       url.updateArgs({id: this.state.projectId});
-//     }
-//     utils.navigateToTopOfPage();
-//   }
+  updatePageUrl() {
+    if(this.state.organizationId && !url.argument('id')) {
+      url.updateArgs({id: this.state.organizationId});
+    }
+    utils.navigateToTopOfPage();
+  }
   
-//   loadProjectDetails(project: ProjectDetailsAPIData): void {
-//     if(!CurrentUser.isOwner(project)) {
-//       // TODO: Handle someone other than owner
-//     } else {
-//       this.setState({
-//         project: project,
-//         projectIsLoading: false
-//       });
-//     }
-//   }
+  loadOrganizationDetails(organization: OrganizationDetailsAPIData): void {
+    if(!CurrentUser.isOwner(organization)) {
+      // TODO: Handle someone other than owner
+    } else {
+      this.setState({
+        organization: organization,
+        organizationIsLoading: false
+      });
+    }
+  }
   
-//   handleLoadProjectError(error: APIError): void {
-//     this.setState({
-//       error: "Failed to load project information"
-//     });
-//   }
-  
-//   onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (ProjectDetailsAPIData, () => void) => void): void {
-//     const formSubmitUrl: string = this.state.project && this.state.project.project_id
-//       ? "/projects/edit/" + this.state.project.project_id + "/"
-//       : "/projects/signup/";
-//     api.postForm(formSubmitUrl, formRef, onSubmitSuccess, response => null /* TODO: Report error to user */);
-//   }
-  
-  onNextPageSuccess(project: ProjectDetailsAPIData): void {
+  handleLoadOrganizationError(error: APIError): void {
     this.setState({
-      project: project,
-      projectId: project.project_id
+      error: "Failed to load Organization information"
+    });
+  }
+  
+  onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (OrganizationDetailsAPIData, () => void) => void): void {
+    const formSubmitUrl: string = this.state.organization && this.state.Organization.Organization_id
+      ? "/organizations/edit/" + this.state.organization.Organization_id + "/"
+      : "/organizations/signup/";
+    api.postForm(formSubmitUrl, formRef, onSubmitSuccess, response => null /* TODO: Report error to user */);
+  }
+  
+  onNextPageSuccess(organization: OrganizationDetailsAPIData): void {
+    this.setState({
+      organization: organization,
+      organizationId: organization.organization_id
     });
     this.updatePageUrl();
   }
   
-  onFinalSubmitSuccess(project: ProjectDetailsAPIData): void {
-    metrics.logProjectCreated(CurrentUser.userID());
+  onFinalSubmitSuccess(organization: OrganizationDetailsAPIData): void {
+    metrics.logOrganizationCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
-    window.location.href = url.section(Section.MyProjects, {projectAwaitingApproval: project.project_name});
+    window.location.href = url.section(Section.MyOrganizations, {OrganizationAwaitingApproval: organization.organization_name});
   }
   
   render(): React$Node {
@@ -143,22 +144,27 @@ class CreateOrganizationController extends React.PureComponent<{||},State> {
           title="Create an Organization | DemocracyLab"
           description="Create organization page"
         />
-        <h1>Hello world!</h1>
+        
         <div className="form-body">
-          {!CurrentUser.isLoggedIn()
+          <FormWorkflow
+                      steps={this.state.steps}
+                      isLoading={this.state.organizationId && !this.state.organization}
+                      formFields={this.state.organization}
+                    />
+          {/* {!CurrentUser.isLoggedIn()
             ? <LogInController prevPage={Section.CreateOrganization}/>
             : <React.Fragment>
                 {CurrentUser.isEmailVerified()
                   ? (
                     <FormWorkflow
                       steps={this.state.steps}
-                      isLoading={this.state.projectId && !this.state.project}
-                      formFields={this.state.project}
+                      isLoading={this.state.organizationId && !this.state.organization}
+                      formFields={this.state.organization}
                     />
                   )
                   : <VerifyEmailBlurb/>}
               </React.Fragment>
-          }
+          } */}
         </div>
       </React.Fragment>
     );
