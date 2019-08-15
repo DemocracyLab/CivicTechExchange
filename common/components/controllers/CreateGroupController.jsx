@@ -44,20 +44,20 @@ class CreateGroupController extends React.PureComponent<{||},State> {
           formComponent: GroupOverviewForm,
         }, {
           header: "What resources would you like to share?",
-          subHeader: "Let volunteers know how they can engage with your Group",
+          subHeader: "Let volunteers know how they can engage with your group",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: GroupResourcesForm,
         }, {
-          // TODO: figure out where to get the project select widget from
+          // TODO: bring in widget from common/components/controllers/FindProjectsController.jsx
           header: "Which projects are in your group?",
           subHeader: "You can always change details about your Group later.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: GroupDescriptionForm,
         }, {
-          header: "Ready to publish your Group?",
-          subHeader: "Congratulations!  You have successfully created a tech-for-good Group.",
+          header: "Ready to publish your group?",
+          subHeader: "Congratulations!  You have successfully created a tech-for-good group.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onFinalSubmitSuccess,
           formComponent: GroupPreviewForm,
