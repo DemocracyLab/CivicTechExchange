@@ -55,6 +55,7 @@ urlpatterns = [
     url(r'^api/stats$', views.get_site_stats, name='get_site_stats'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
     url(r'^api/group/(?P<group_id>[0-9]+)/$', views.get_group, name='get_group'),
+    url(r'^api/event/(?P<event_id>[0-9]+)/$', views.get_event, name='get_event'),
     url(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner'),
     url(r'^contact/volunteers/(?P<project_id>[0-9]+)/$', views.contact_project_volunteers, name='contact_project_volunteers'),
     url(r'^contact/volunteer/(?P<application_id>[0-9]+)/$', views.contact_project_volunteer, name='contact_project_volunteer'),
