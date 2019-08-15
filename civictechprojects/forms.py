@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
-from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory
+from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Group
 from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
@@ -89,3 +89,72 @@ class ProjectCreationForm(ModelForm):
             send_project_creation_notification(project)
 
         return project
+
+class GroupCreationForm(ModelForm):
+    class Meta:
+        model = Group
+        fields = '__all__'
+
+    @staticmethod
+    def create_group(request):
+
+        form = GroupCreationForm(request.POST)
+        # TODO: Form validation
+        group = Group.objects.create(
+            group_creator=get_request_contributor(request),
+            group_date_created=timezone.now(),
+            group_name=form.data.get('group_name'),
+            group_short_description=form.data.get('group_short_description'),
+            group_description=form.data.get('group_description'),
+            group_location=form.data.get('group_location'),
+            is_created=False
+        )
+        group = Group.objects.get(id=group.id)
+
+        # TODO: confirm    
+        merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
+
+        group.save()
+        return group
+
+    @staticmethod
+    def delete_group(request, group_id):
+        group = Group.objects.get(id=group_id)
+
+        if not is_creator_or_staff(request.user, group):
+            raise PermissionDenied()
+
+        group.delete()
+
+    @staticmethod
+    def edit_group(request, group_id):
+        group = Group.objects.get(id=group_id)
+
+        if not is_co_owner_or_staff(request.user, group):
+            raise PermissionDenied()
+
+        form = GroupCreationForm(request.POST)
+        is_created_original = group.is_created
+        read_form_field_boolean(group, form, 'is_created')
+
+        read_form_field_string(group, form, 'group_description')
+        read_form_field_string(group, form, 'group_short_description')
+        read_form_field_string(group, form, 'group_location')
+        read_form_field_string(group, form, 'group_name')
+
+        if not request.user.is_staff:
+            group.group_date_modified = timezone.now()
+
+        group.save()
+
+        merge_json_changes(ProjectLink, group, form, 'group_links')
+        merge_json_changes(ProjectFile, group, form, 'group_files')
+
+        merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
+
+        # TODO
+        #if is_created_original != group.is_created:
+            #print('notifying group creation')
+            #send_project_creation_notification(group)
+
+        return group

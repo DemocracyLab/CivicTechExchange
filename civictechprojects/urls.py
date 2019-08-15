@@ -30,6 +30,9 @@ urlpatterns = [
         name='django.contrib.sitemaps.views.sitemap'
     ),
     url(r'^googlebb20bcf8545e7046.html$', TemplateView.as_view(template_name="googlebb20bcf8545e7046.html")),
+    url(r'^groups/create/$', views.group_create, name='group_create'),
+    url(r'^groups/edit/(?P<group_id>[0-9]+)/$', views.group_edit, name='group_edit'),
+    url(r'^groups/delete/(?P<group_id>[0-9]+)/$', views.group_delete, name='group_delete'),
     url(r'^projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
     url(r'^projects/delete/(?P<project_id>[0-9]+)/$', views.project_delete, name='project_delete'),
     url(r'^projects/signup/$', views.project_create, name='project_create'),
@@ -48,6 +51,7 @@ urlpatterns = [
     url(r'^index/$', views.index),
     url(r'^api/stats$', views.get_site_stats, name='get_site_stats'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
+    url(r'^api/group/(?P<group_id>[0-9]+/$', views.get_group, name='get_group'),
     url(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner'),
     url(r'^contact/volunteers/(?P<project_id>[0-9]+)/$', views.contact_project_volunteers, name='contact_project_volunteers'),
     url(r'^contact/volunteer/(?P<application_id>[0-9]+)/$', views.contact_project_volunteer, name='contact_project_volunteer'),

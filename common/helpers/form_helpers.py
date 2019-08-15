@@ -3,7 +3,6 @@ from common.helpers.collections import find_first
 from common.models.tags import Tag
 from distutils.util import strtobool
 
-
 def read_form_field_string(model, form, field_name, transformation=None):
     if field_name in form.data:
         form_field_content = form.data.get(field_name)
@@ -45,9 +44,14 @@ def is_json_field_empty(field_json):
         return len(field_json) == 0
 
 
-def is_creator(user, project):
-    return user.username == project.project_creator.username
-
+def is_creator(user, entity):
+    from civictechprojects.models import Project, Group
+    if type(entity) is Project:
+        return user.username == entity.project_creator.username
+    elif type(entity) is Group:
+        return user.username == entity.group_creator.username
+    else:
+        return user.username == entity.event_creator.username
 
 def is_co_owner(user, project):
     from civictechprojects.models import VolunteerRelation
@@ -63,5 +67,5 @@ def is_co_owner_or_staff(user, project):
         return is_creator(user, project) or is_co_owner(user, project) or user.is_staff
 
 
-def is_creator_or_staff(user, project):
-    return is_creator(user, project) or user.is_staff
+def is_creator_or_staff(user, entity):
+    return is_creator(user, entity) or user.is_staff
