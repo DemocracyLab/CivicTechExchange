@@ -4,7 +4,7 @@ import React from "react";
 import DjangoCSRFToken from "django-react-csrftoken";
 import type {ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
 import AboutProjectDisplay from "../../common/projects/AboutProjectDisplay.jsx";
-import {OnReadySubmitFunc} from "./OrganizationFormCommon.jsx";
+import {OnReadySubmitFunc} from "./GroupFormCommon.jsx";
 
 type Props = {|
   project: ?ProjectDetailsAPIData,

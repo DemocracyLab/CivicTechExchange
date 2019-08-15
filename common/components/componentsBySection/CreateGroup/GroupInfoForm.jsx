@@ -4,7 +4,7 @@ import React from "react";
 import TagCategory from "../../common/tags/TagCategory.jsx";
 import TagSelector from "../../common/tags/TagSelector.jsx";
 import DjangoCSRFToken from "django-react-csrftoken";
-import {OnReadySubmitFunc} from "./OrganizationFormCommon.jsx";
+import {OnReadySubmitFunc} from "./GroupFormCommon.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {TagDefinition, ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
 import {Locations} from "../../constants/ProjectConstants.js";

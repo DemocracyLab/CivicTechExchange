@@ -12,8 +12,8 @@ const SectionLinkConfigs = [
     showOnlyWhenLoggedIn: false
   },
    {
-    section: Section.CreateOrganization,
-    title: 'Create Organization',
+    section: Section.CreateGroup,
+    title: 'Create Group',
     showOnlyWhenLoggedIn: false
   },
   {
