@@ -12,7 +12,7 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
@@ -141,6 +141,35 @@ def get_group(request, group_id):
     else:
         return HttpResponse(status=404)
 
+def group_add_project(request, group_id):
+    body = json.loads(request.body)
+    group = Group.objects.get(id=group_id)
+    project = Project.objects.get(id=body["project_id"])
+
+    if group is not None and project is not None:
+        if is_creator_or_staff(get_request_contributor(request), group):
+            ProjectRelationship.create(group, project)
+
+            return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
+def group_delete_project(request, group_id):
+    body = json.loads(request.body)
+    group = Group.objects.get(id=group_id)
+    project = Project.objects.get(id=body["project_id"])
+
+    if group is not None and project is not None:
+        if is_creator_or_staff(get_request_contributor(request), group):
+            relationship = ProjectRelationship.objects.get(relationship_project=project.id, relationship_group=group.id)
+
+            if relationship is not None:
+                relationship.delete()
+                return HttpResponse(status=204)
+
+    return HttpResponse(status=404)
+
+
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def event_create(request):
@@ -196,6 +225,33 @@ def get_event(request, event_id):
     else:
         return HttpResponse(status=404)
 
+def event_add_project(request, event_id):
+    body = json.loads(request.body)
+    event = Event.objects.get(id=event_id)
+    project = Project.objects.get(id=body["project_id"])
+
+    if event is not None and project is not None:
+        if is_creator_or_staff(get_request_contributor(request), event):
+            ProjectRelationship.create(event, project)
+
+            return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
+def event_delete_project(request, event_id):
+    body = json.loads(request.body)
+    event = Event.objects.get(id=event_id)
+    project = Project.objects.get(id=body["project_id"])
+
+    if event is not None and project is not None:
+        if is_creator_or_staff(get_request_contributor(request), event):
+            relationship = ProjectRelationship.objects.get(relationship_project=project.id, relationship_event=event.id)
+
+            if relationship is not None:
+                relationship.delete()
+                return HttpResponse(status=204)
+
+    return HttpResponse(status=404)
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
