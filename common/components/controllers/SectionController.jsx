@@ -29,6 +29,7 @@ import ThankYouController from "./ThankYouController.jsx";
 import PressController from './PressController.jsx';
 import ContactUsController from './ContactUsController.jsx';
 import CreateGroupController from './CreateGroupController.jsx';
+import CreateEventController from './CreateEventController.jsx';
 
 type State = {|
   section: SectionType,
@@ -98,6 +99,8 @@ class SectionController extends React.Component<{||}, State> {
         return <ContactUsController />;
       case Section.CreateGroup:
         return <CreateGroupController />;
+      case Section.CreateEvent:
+        return <CreateEventController />
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }
