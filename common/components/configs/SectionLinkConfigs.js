@@ -11,9 +11,14 @@ const SectionLinkConfigs = [
     title: 'Create Project',
     showOnlyWhenLoggedIn: false
   },
-   {
+  {
     section: Section.CreateGroup,
     title: 'Create Group',
+    showOnlyWhenLoggedIn: false
+  },
+  {
+    section: Section.CreateEvent,
+    title: 'Create Event',
     showOnlyWhenLoggedIn: false
   },
   {

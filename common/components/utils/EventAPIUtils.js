@@ -13,3 +13,7 @@ export type EventData = {|
     // event_projects: any,
     // event_files: any,
 |};
+
+export class EventAPIUtils {
+    
+}
