@@ -6,6 +6,7 @@ const Section = {
   Landing: 'Landing',
   FindProjects: 'FindProjects',
   MyProjects: 'MyProjects',
+  MyGroups: 'MyGroups',
   Profile: 'Profile',
   Inbox: 'Inbox',
   SignUp: 'SignUp',
