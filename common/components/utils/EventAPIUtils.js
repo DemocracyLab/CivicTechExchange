@@ -14,6 +14,6 @@ export type EventData = {|
     // event_files: any,
 |};
 
-export class EventAPIUtils {
+export default class EventAPIUtils {
     
 }

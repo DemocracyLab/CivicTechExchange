@@ -8,6 +8,7 @@ from django.template import loader
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
+from .forms import GroupCreationForm
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
@@ -27,6 +28,7 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
 from common.helpers.front_end import section_url, get_page_section
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
+
 
 
 # TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
@@ -98,7 +100,7 @@ def group_create(request):
         return HttpResponse(status=403)
 
     group = GroupCreationForm.create_group(request)
-    return JsonResponse(group.hydfrate_to_json())
+    return JsonResponse(group.hydrate_to_json())
 
 
 def group_edit(request, group_id):

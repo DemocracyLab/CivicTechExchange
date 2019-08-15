@@ -5,7 +5,7 @@ import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 // import {PositionInfo} from "../forms/PositionInfo.jsx";
 
-export type GroupAPIData = {|
+export type GroupDetailsAPIData = {|
     id: string,
     group_name: string,
     group_location: string,
@@ -17,8 +17,25 @@ export type GroupAPIData = {|
 |};
 
 
-export class GroupAPIUtils {
-    
+export default class GroupAPIUtils {
+    static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
+        fetch(new Request('/api/group/' + id + '/', {credentials: 'include'}))
+            .then(response => {
+                console.log('GroupAPIUtiles.fetchProjectDetails:then', response.json());
+                if(!response.ok) {
+                    throw Error();
+                }
+                return response.json();
+            })
+            .then(projectDetails => callback(projectDetails))
+            // TODO: Get catch to return http status code
+            .catch(response => errCallback && errCallback({
+                errorCode: response.status,
+                errorMessage: JSON.stringify(response)
+            }));
+  }
+
+
 }
 
 // class ProjectAPIUtils {
