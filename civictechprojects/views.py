@@ -412,11 +412,21 @@ def my_projects(request):
 
 
 def projects_list(request):
-    project_list = Project.objects.filter(is_searchable=True)
+    url_parts = request.GET.urlencode()
+    query_params = urlparse.parse_qs(
+        url_parts, keep_blank_values=0, strict_parsing=0)
+    if 'group_id' in query_params:
+        project_relationships = ProjectRelationship.objects.filter(relationship_group=query_params['group_id'][0])
+        project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
+        project_list = Project.objects.filter(id__in=project_ids, is_searchable=True)
+    elif 'event_id' in query_params:
+        project_relationships = ProjectRelationship.objects.filter(relationship_event=query_params['event_id'][0])
+        project_ids = list(map(lambda relationship: relationship.relationship_event.id, project_relationships))
+        project_list = Project.objects.filter(id__in=project_ids, is_searchable=True)
+    else:
+        project_list = Project.objects.filter(is_searchable=True)
+    
     if request.method == 'GET':
-        url_parts = request.GET.urlencode()
-        query_params = urlparse.parse_qs(
-            url_parts, keep_blank_values=0, strict_parsing=0)
         project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
         project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
         project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
