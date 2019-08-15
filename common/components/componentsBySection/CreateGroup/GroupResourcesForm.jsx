@@ -2,7 +2,7 @@
 
 import React from "react";
 import DjangoCSRFToken from "django-react-csrftoken";
-import type {ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
+import type {GroupDetailsAPIData} from "../../../components/utils/GroupAPIUtils.js";
 import type {LinkInfo} from "../../forms/LinkInfo.jsx";
 import type {FileInfo} from "../../common/FileInfo.jsx";
 import LinkList from "../../forms/LinkList.jsx";
@@ -15,8 +15,8 @@ import _ from "lodash";
 
 
 type FormFields = {|
-  project_links: Array<LinkInfo>,
-  project_files: Array<FileInfo>,
+  group_links: Array<LinkInfo>,
+  group_files: Array<FileInfo>,
   link_coderepo: ?string,
   link_messaging: ?string,
   link_projmanage: ?string,
@@ -24,48 +24,48 @@ type FormFields = {|
 |};
 
 type Props = {|
-  project: ?ProjectDetailsAPIData,
+  group: ?GroupDetailsAPIData,
   readyForSubmit: OnReadySubmitFunc
 |} & FormPropsBase<FormFields>;
 
 type State = FormStateBase<FormFields>;
 
 /**
- * Encapsulates form for Project Resources section
+ * Encapsulates form for Group Resources section
  */
-class ProjectResourcesForm extends React.PureComponent<Props,State> {
+class GroupResourcesForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
-    const project: ProjectDetailsAPIData = props.project;
+    const group: GroupDetailsAPIData = props.group;
     this.state = {
       formIsValid: false,
       formFields: {
-        project_links: project ? project.project_links : [],
-        project_files: project ? project.project_files : [],
-        link_coderepo: project ? project.link_coderepo : "",
-        link_messaging: project ? project.link_messaging : "",
-        link_projmanage: project ? project.link_projmanage : "",
-        link_filerepo: project ? project.link_filerepo : ""
+        group_links: group ? group.group_links : [],
+        group_files: group ? group.group_files : [],
+        link_coderepo: group ? group.link_coderepo : "",
+        link_messaging: group ? group.link_messaging : "",
+        link_projmanage: group ? group.link_projmanage : "",
+        link_filerepo: group ? group.link_filerepo : ""
       }
     };
     
-    //this will set formFields.project_links and formFields.links_*
-    this.filterSpecificLinks(_.cloneDeep(project.project_links));
+    //this will set formFields.group_links and formFields.links_*
+    this.filterSpecificLinks(_.cloneDeep(group.group_links));
     this.form = form.setup();
     props.readyForSubmit(true, this.onSubmit.bind(this));
   }
   
-  // TODO: Put common code used between EditProjectsForm in a common place
+  // TODO: Put common code used between EditGroupsForm in a common place
   onSubmit(submitFunc: Function): void {
-    //Sanitize project url if necessary
-    if(this.state.formFields.project_url) {
-      this.state.formFields.project_url = url.appendHttpIfMissingProtocol(this.state.formFields.project_url);
+    //Sanitize group url if necessary
+    if(this.state.formFields.group_url) {
+      this.state.formFields.group_url = url.appendHttpIfMissingProtocol(this.state.formFields.group_url);
     }
     // create input array
     let eLinks = ['link_coderepo','link_messaging','link_filerepo','link_projmanage'].map(name => ({linkName: name, linkUrl: this.state.formFields[name]}));
     //create output array
     let eLinksArray = [];
-    //create objects for project_links array, skipping empty fields
+    //create objects for group_links array, skipping empty fields
     eLinks.forEach(function(item) {
       if(!_.isEmpty(item.linkUrl)) {
         item.linkUrl = url.appendHttpIfMissingProtocol(item.linkUrl);
@@ -78,7 +78,7 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
     });
     //combine arrays prior to sending to backend
     let formFields = this.state.formFields;
-    formFields.project_links = formFields.project_links.concat(eLinksArray);
+    formFields.group_links = formFields.group_links.concat(eLinksArray);
     this.setState({ formFields: formFields}, submitFunc);
     this.forceUpdate();
   }
@@ -95,7 +95,7 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
       linkState[item.linkName] = item.linkUrl;
     });
     //add the other links to state copy
-    linkState['project_links'] = array;
+    linkState['group_links'] = array;
     
     //TODO: see if there's a way to do this without the forceUpdate - passing by reference problem?
     this.setState({ formFields: linkState });
@@ -104,7 +104,7 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
 
   render(): React$Node {
     return (
-      <div className="EditProjectForm-root">
+      <div className="EditGroupForm-root">
 
         <DjangoCSRFToken/>
   
@@ -121,7 +121,7 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
         </div>
   
         <div className="form-group">
-          <label htmlFor="link_projmanage">Project Management <span className="label-hint">(e.g. Trello)</span></label>
+          <label htmlFor="link_projmanage">Group Management <span className="label-hint">(e.g. Trello)</span></label>
           <input type="text" className="form-control" id="link_projmanage" name="link_projmanage" maxLength="2075"
                  value={this.state.formFields.link_projmanage} onChange={this.form.onInput.bind(this, "link_projmanage")}/>
         </div>
@@ -133,11 +133,11 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
         </div>
   
         <div className="form-group">
-          <LinkList elementid="project_links" title="Project Links" links={this.state.formFields.project_links}/>
+          <LinkList elementid="group_links" title="Group Links" links={this.state.formFields.group_links}/>
         </div>
   
         <div className="form-group">
-          <FileUploadList elementid="project_files" title="Project Files" files={this.state.formFields.project_files}/>
+          <FileUploadList elementid="group_files" title="Group Files" files={this.state.formFields.group_files}/>
         </div>
 
       </div>
@@ -145,4 +145,4 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
   }
 }
 
-export default ProjectResourcesForm;
+export default GroupResourcesForm;

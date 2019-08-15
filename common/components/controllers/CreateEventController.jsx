@@ -7,7 +7,6 @@ import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
 import EventOverviewForm from "../componentsBySection/CreateEvent/EventOverviewForm.jsx";
-import EventInfoForm from "../componentsBySection/CreateEvent/EventInfoForm.jsx";
 import EventPreviewForm from "../componentsBySection/CreateEvent/EventPreviewForm.jsx";
 import EventDescriptionForm from "../componentsBySection/CreateEvent/EventDescriptionForm.jsx";
 import EventPositionsForm from "../componentsBySection/CreateEvent/EventPositionsForm.jsx";
@@ -44,12 +43,6 @@ class CreateEventController extends React.PureComponent<{||},State> {
           onSubmitSuccess: this.onNextPageSuccess,
           // formComponent: () => <h1>Hello w2orld!</h1>,
           formComponent: EventOverviewForm
-        }, {
-          header: "Let others know what your Event is about...",
-          subHeader: "You can always change details about your Event later.",
-          onSubmit: this.onSubmit,
-          onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: EventInfoForm
         }, {
           header: "Let others know what your Event is about...",
           subHeader: "You can always change details about your Event later.",
