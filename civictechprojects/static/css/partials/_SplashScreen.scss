@@ -52,7 +52,6 @@
   }
 }
 .SplashScreen-mission {
-  background: $color-orange;
   color: $color-text-light;
   width: 100%;
   text-align: center;
@@ -61,6 +60,7 @@
 }
 .SplashScreen-mission p {
   margin: 0 auto;
+  font-weight: 500;
 }
 @include media-breakpoint-up(md) {
   .SplashScreen-mission p {
