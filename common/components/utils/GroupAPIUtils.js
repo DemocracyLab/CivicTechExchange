@@ -17,7 +17,7 @@ export type GroupDetailsAPIData = {|
 |};
 
 
-export class GroupAPIUtils {
+export default class GroupAPIUtils {
     static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
         fetch(new Request('/api/group/' + id + '/', {credentials: 'include'}))
             .then(response => {
