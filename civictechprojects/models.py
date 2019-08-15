@@ -177,7 +177,7 @@ class Project(Archived):
 
 
 class Group(Archived):
-    group_creator = models.ForeignKey(Contributor, related_name='creator')
+    group_creator = models.ForeignKey(Contributor, related_name='group_creator')
     group_date_created = models.DateTimeField(null=True)
     group_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     group_description = models.CharField(max_length=4000, blank=True)
@@ -225,7 +225,7 @@ class Group(Archived):
 
 class Event(Archived):
     event_agenda = models.CharField(max_length=4000, blank=True)
-    event_creator = models.ForeignKey(Contributor, related_name='creator')
+    event_creator = models.ForeignKey(Contributor, related_name='event_creator')
     event_date_created = models.DateTimeField(null=True)
     event_date_end = models.DateTimeField()
     event_date_modified = models.DateTimeField(auto_now_add=True, null=True)
