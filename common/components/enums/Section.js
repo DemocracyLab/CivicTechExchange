@@ -20,7 +20,7 @@ const Section = {
   ThankYou: 'ThankYou',
   Press: 'Press',
   ContactUs: 'ContactUs',
-  CreateOrganization: 'CreateOrganization',
+  CreateGroup: 'CreateGroup',
 };
 
 export type SectionType = $Keys<typeof Section>;

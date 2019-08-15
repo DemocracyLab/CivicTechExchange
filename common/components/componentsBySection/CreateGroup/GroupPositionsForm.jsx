@@ -5,7 +5,7 @@ import DjangoCSRFToken from "django-react-csrftoken";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
 import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
-import {OnReadySubmitFunc} from "./OrganizationFormCommon.jsx";
+import {OnReadySubmitFunc} from "./GroupFormCommon.jsx";
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import PositionList from "../../forms/PositionList.jsx";
 import _ from "lodash";

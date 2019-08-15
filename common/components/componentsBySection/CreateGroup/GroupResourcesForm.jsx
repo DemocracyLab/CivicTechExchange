@@ -8,7 +8,7 @@ import type {FileInfo} from "../../common/FileInfo.jsx";
 import LinkList from "../../forms/LinkList.jsx";
 import FileUploadList from "../../forms/FileUploadList.jsx";
 import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
-import {OnReadySubmitFunc} from "./OrganizationFormCommon.jsx";
+import {OnReadySubmitFunc} from "./GroupFormCommon.jsx";
 import {DefaultLinkDisplayConfigurations} from "../../constants/LinkConstants.js";
 import url from "../../utils/url.js";
 import _ from "lodash";

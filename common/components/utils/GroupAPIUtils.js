@@ -5,7 +5,7 @@ import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 // import {PositionInfo} from "../forms/PositionInfo.jsx";
 
-export type OrganizationAPIData = {|
+export type GroupAPIData = {|
     id: string,
     group_name: string,
     group_location: string,
@@ -17,7 +17,7 @@ export type OrganizationAPIData = {|
 |};
 
 
-export class OrganizationAPIUtils {
+export class GroupAPIUtils {
     
 }
 
