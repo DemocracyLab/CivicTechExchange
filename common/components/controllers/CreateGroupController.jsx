@@ -7,10 +7,8 @@ import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
 import GroupOverviewForm from "../componentsBySection/CreateGroup/GroupOverviewForm.jsx";
-import GroupInfoForm from "../componentsBySection/CreateGroup/GroupInfoForm.jsx";
 import GroupPreviewForm from "../componentsBySection/CreateGroup/GroupPreviewForm.jsx";
 import GroupDescriptionForm from "../componentsBySection/CreateGroup/GroupDescriptionForm.jsx";
-import GroupPositionsForm from "../componentsBySection/CreateGroup/GroupPositionsForm.jsx";
 import GroupResourcesForm from "../componentsBySection/CreateGroup/GroupResourcesForm.jsx";
 import GroupAPIUtils, {GroupDetailsAPIData} from "../utils/GroupAPIUtils.js";
 import api from "../utils/api.js";
@@ -45,29 +43,18 @@ class CreateGroupController extends React.PureComponent<{||},State> {
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: GroupOverviewForm,
         }, {
-          header: "Let others know what your Group is about...",
-          subHeader: "You can always change details about your Group later.",
-          onSubmit: this.onSubmit,
-          onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: GroupInfoForm,
-        }, {
-          header: "Let others know what your Group is about...",
-          subHeader: "You can always change details about your Group later.",
-          onSubmit: this.onSubmit,
-          onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: GroupDescriptionForm,
-        }, {
           header: "What resources would you like to share?",
           subHeader: "Let volunteers know how they can engage with your Group",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: GroupResourcesForm,
         }, {
-          header: "What type of volunteers does your Group need?",
-          subHeader: "You can always change the type of help your Group needs later.",
+          // TODO: figure out where to get the project select widget from
+          header: "Which projects are in your group?",
+          subHeader: "You can always change details about your Group later.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: GroupPositionsForm,
+          formComponent: GroupDescriptionForm,
         }, {
           header: "Ready to publish your Group?",
           subHeader: "Congratulations!  You have successfully created a tech-for-good Group.",
