@@ -205,7 +205,6 @@ class Group(Archived):
         links = ProjectLink.objects.filter(link_group=self.id)
 
         group = {
-            'group_claimed': not self.group_creator.is_admin_contributor(),
             'group_creator': self.group_creator.id,
             'group_date_modified': self.group_date_modified.__str__(),
             'group_description': self.group_description,
@@ -257,7 +256,6 @@ class Event(Archived):
         links = ProjectLink.objects.filter(link_event=self.id)
 
         event = {
-            'event_claimed': not self.event_creator.is_admin_contributor(),
             'event_creator': self.event_creator.id,
             'event_date_modified': self.event_date_modified.__str__(),
             'event_description': self.event_description,
