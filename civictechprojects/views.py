@@ -8,15 +8,16 @@ from django.template import loader
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
+from .forms import GroupCreationForm
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
-from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner
+from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
@@ -27,6 +28,7 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
 from common.helpers.front_end import section_url, get_page_section
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
+
 
 
 # TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
@@ -98,7 +100,7 @@ def group_create(request):
         return HttpResponse(status=403)
 
     group = GroupCreationForm.create_group(request)
-    return JsonResponse(group.hydfrate_to_json())
+    return JsonResponse(group.hydrate_to_json())
 
 
 def group_edit(request, group_id):
@@ -141,6 +143,117 @@ def get_group(request, group_id):
     else:
         return HttpResponse(status=404)
 
+def group_add_project(request, group_id):
+    body = json.loads(request.body)
+    group = Group.objects.get(id=group_id)
+    project = Project.objects.get(id=body["project_id"])
+
+    if group is not None and project is not None:
+        if is_creator_or_staff(get_request_contributor(request), group):
+            ProjectRelationship.create(group, project)
+
+            return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
+def group_delete_project(request, group_id):
+    body = json.loads(request.body)
+    group = Group.objects.get(id=group_id)
+    project = Project.objects.get(id=body["project_id"])
+
+    if group is not None and project is not None:
+        if is_creator_or_staff(get_request_contributor(request), group):
+            relationship = ProjectRelationship.objects.get(relationship_project=project.id, relationship_group=group.id)
+
+            if relationship is not None:
+                relationship.delete()
+                return HttpResponse(status=204)
+
+    return HttpResponse(status=404)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def event_create(request):
+    if not request.user.is_authenticated():
+        return redirect(section_url(FrontEndSection.LogIn))
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        # TODO: Log this
+        return HttpResponse(status=403)
+
+    event = EventCreationForm.create_event(request)
+    return JsonResponse(event.hydfrate_to_json())
+
+
+def event_edit(request, event_id):
+    if not request.user.is_authenticated():
+        return redirect('/signup')
+
+    event = None
+    try:
+        event = EventCreationForm.edit_event(request, event_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+
+    if request.is_ajax():
+        return JsonResponse(event.hydrate_to_json())
+    else:
+        return redirect('/index/?section=AboutEvent&id=' + event_id)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def event_delete(request, event_id):
+    # if not logged in, send user to login page
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+    try:
+        EventCreationForm.delete_event(request, event_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return HttpResponse(status=204)
+
+
+def get_event(request, event_id):
+    event = Event.objects.get(id=event_id)
+
+    if event is not None:
+        if event.is_searchable or is_creator_or_staff(get_request_contributor(request), event):
+            return JsonResponse(event.hydrate_to_json())
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
+def event_add_project(request, event_id):
+    body = json.loads(request.body)
+    event = Event.objects.get(id=event_id)
+    project = Project.objects.get(id=body["project_id"])
+
+    if event is not None and project is not None:
+        if is_creator_or_staff(get_request_contributor(request), event):
+            ProjectRelationship.create(event, project)
+
+            return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
+def event_delete_project(request, event_id):
+    body = json.loads(request.body)
+    event = Event.objects.get(id=event_id)
+    project = Project.objects.get(id=body["project_id"])
+
+    if event is not None and project is not None:
+        if is_creator_or_staff(get_request_contributor(request), event):
+            relationship = ProjectRelationship.objects.get(relationship_project=project.id, relationship_event=event.id)
+
+            if relationship is not None:
+                relationship.delete()
+                return HttpResponse(status=204)
+
+    return HttpResponse(status=404)
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
