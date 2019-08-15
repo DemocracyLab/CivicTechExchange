@@ -2,8 +2,6 @@ import json
 from common.helpers.collections import find_first
 from common.models.tags import Tag
 from distutils.util import strtobool
-from common.models import Project, Group 
-
 
 def read_form_field_string(model, form, field_name, transformation=None):
     if field_name in form.data:
@@ -47,6 +45,7 @@ def is_json_field_empty(field_json):
 
 
 def is_creator(user, entity):
+    from civictechprojects.models import Project, Group
     if type(entity) is Project:
         return user.username == entity.project_creator.username
     elif type(entity) is Group:

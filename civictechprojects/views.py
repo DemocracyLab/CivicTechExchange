@@ -86,7 +86,8 @@ def to_tag_map(tags):
     tag_map = ((tag.tag_name, tag.display_name) for tag in tags)
     return list(tag_map)
 
-# TODO: @csrf_exempt
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
 def group_create(request):
     if not request.user.is_authenticated():
         return redirect(section_url(FrontEndSection.LogIn))
@@ -98,6 +99,36 @@ def group_create(request):
 
     group = GroupCreationForm.create_group(request)
     return JsonResponse(group.hydfrate_to_json())
+
+
+def group_edit(request, group_id):
+    if not request.user.is_authenticated():
+        return redirect('/signup')
+
+    group = None
+    try:
+        group = GroupCreationForm.edit_group(request, group_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+
+    if request.is_ajax():
+        return JsonResponse(group.hydrate_to_json())
+    else:
+        return redirect('/index/?section=AboutGroup&id=' + group_id)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def group_delete(request, group_id):
+    # if not logged in, send user to login page
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+    try:
+        GroupCreationForm.delete_group(request, group_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return HttpResponse(status=204)
+
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
