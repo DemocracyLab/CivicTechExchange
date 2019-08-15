@@ -176,8 +176,28 @@ class Project(Archived):
         self.save()
 
 
+class ProjectRelationship(model.Model):
+    relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True)
+    relationship_group = models.ForeignKey(Group, related_name='relationships', blank=True, null=True)
+    relationship_event = models.ForeignKey(Event, related_name='relationships', blank=True, null=True)
+
+    @staticmethod
+    def create(owner, project):
+        relationship = ProjectRelationship()
+        relationship.relationship_project = project
+        
+        if type(owner) is Group:
+            relationship.relationship_group = owner
+        else:
+            relationship.relationship_event = owner
+        
+        return relationship
+
+
+
 class ProjectLink(models.Model):
     link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True)
+    link_group = models.ForeignKey(Group, related_name='links', blank=True, null=True)
     link_user = models.ForeignKey(Contributor, related_name='links', blank=True, null=True)
     link_name = models.CharField(max_length=200, blank=True)
     link_url = models.CharField(max_length=2083)
@@ -193,6 +213,8 @@ class ProjectLink(models.Model):
 
         if type(owner) is Project:
             link.link_project = owner
+        elif type(owner) is Group:
+            link.link_group = owner
         else:
             link.link_user = owner
 
@@ -221,8 +243,11 @@ class ProjectLink(models.Model):
     def remove_links_not_in_list(owner, links):
         if type(owner) is Project:
             existing_links = ProjectLink.objects.filter(link_project=owner.id)
+        elif type(owner) is Group:
+            existing_links = ProjectLink.objects.filter(link_group=owner.id)
         else:
             existing_links = ProjectLink.objects.filter(link_user=owner.id)
+
         existing_link_ids = set(map(lambda link: link.id, existing_links))
         updated_link_ids = set(map(lambda link: link['id'], links))
         deleted_link_ids = list(existing_link_ids - updated_link_ids)
@@ -319,6 +344,8 @@ class ProjectFile(models.Model):
     # TODO: Add ForeignKey pointing to Contributor, see https://stackoverflow.com/a/20935513/6326903
     file_project = models.ForeignKey(Project, related_name='files', blank=True, null=True)
     file_user = models.ForeignKey(Contributor, related_name='files', blank=True, null=True)
+    file_group = models.ForeignKey(Group, related_name='files', blank=True, null=True)
+    file_event = models.ForeignKey(Event, related_name='files', blank=True, null=True)
     file_visibility = models.CharField(max_length=50)
     file_name = models.CharField(max_length=150)
     file_key = models.CharField(max_length=200)
@@ -339,6 +366,10 @@ class ProjectFile(models.Model):
 
         if type(owner) is Project:
             file.file_project = owner
+        elif type(owner) is Group:
+            file.file_group = owner
+        elif type(owner) is Event:
+            file.file_event = owner
         else:
             file.file_user = owner
 
@@ -351,6 +382,12 @@ class ProjectFile(models.Model):
 
         if type(owner) is Project:
             old_files = list(ProjectFile.objects.filter(file_project=owner.id, file_category=FileCategory.ETC.value)
+                             .values())
+        elif type(owner) is Group:
+            old_files = list(ProjectFile.objects.filter(file_group=owner.id, file_category=FileCategory.ETC.value)
+                             .values())
+        elif type(owner) is Event:
+            old_files = list(ProjectFile.objects.filter(file_event=owner.id, file_category=FileCategory.ETC.value)
                              .values())
         else:
             old_files = list(ProjectFile.objects.filter(file_user=owner.id, file_category=FileCategory.ETC.value)
@@ -371,6 +408,10 @@ class ProjectFile(models.Model):
     def replace_single_file(owner, file_category, file_json):
         if type(owner) is Project:
             existing_file = ProjectFile.objects.filter(file_project=owner.id, file_category=file_category.value).first()
+        elif type(owner) is Group:
+            existing_file = ProjectFile.objects.filter(file_group=owner.id, file_category=file_category.value).first()
+        elif type(owner) is Event:
+            existing_file = ProjectFile.objects.filter(file_event=owner.id, file_category=file_category.value).first()
         else:
             existing_file = ProjectFile.objects.filter(file_user=owner.id, file_category=file_category.value).first()
 
@@ -509,3 +550,103 @@ class VolunteerRelation(Archived):
     @staticmethod
     def get_by_project(project, active=True):
         return VolunteerRelation.objects.filter(project_id=project.id, is_approved=active, deleted=not active)
+
+
+class Group(Archived):
+    group_creator = models.ForeignKey(Contributor, related_name='creator')
+    group_date_created = models.DateTimeField(null=True)
+    group_date_modified = models.DateTimeField(auto_now_add=True, null=True)
+    group_description = models.CharField(max_length=4000, blank=True)
+    group_location = models.CharField(max_length=200, blank=True)
+    group_name = models.CharField(max_length=200)
+    group_short_description = models.CharField(max_length=140, blank=True)
+    is_searchable = models.BooleanField(default=False)
+    is_created = models.BooleanField(default=True)
+
+    def __str__(self):
+        return str(self.id) + ':' + str(self.group_name)
+
+    def delete(self):
+        self.is_searchable=False
+        super().delete()
+
+    def update_timestamp(self):
+        self.group_date_modified = timezone.now()
+        self.save()
+
+    def hydrate_to_json(self):
+        files = ProjectFile.objects.filter(file_group=self.id)
+        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+        other_files = list(files.filter(file_category=FileCategory.ETC.value))
+        links = ProjectLink.objects.filter(link_group=self.id)
+
+        group = {
+            'group_claimed': not self.group_creator.is_admin_contributor(),
+            'group_creator': self.group_creator.id,
+            'group_date_modified': self.group_date_modified.__str__(),
+            'group_description': self.group_description,
+            'group_files': list(map(lambda file: file.to_json(), other_files)),
+            'group_id': self.id,
+            'group_links': list(map(lambda link: link.to_json(), links)),
+            'group_location': self.group_location,
+            'group_name': self.group_name,
+            'group_owners': [self.group_creator.hydrate_to_tile_json()],
+            'group_short_description': self.group_short_description,
+        }
+
+        if len(thumbnail_files) > 0:
+            group['group_thumbnail'] = thumbnail_files[0].to_json()
+
+        return group
+
+
+class Event(Archived):
+    event_agenda = models.CharField(max_length=4000, blank=True)
+    event_creator = models.ForeignKey(Contributor, related_name='creator')
+    event_date_created = models.DateTimeField(null=True)
+    event_date_end = models.DateTimeField()
+    event_date_modified = models.DateTimeField(auto_now_add=True, null=True)
+    event_date_start = models.DateTimeField()
+    event_description = models.CharField(max_length=4000, blank=True)
+    event_location = models.CharField(max_length=200, blank=True)
+    event_name = models.CharField(max_length=200)
+    event_rsvp_url = models.CharField(max_length=2083, blank=True)
+    event_short_description = models.CharField(max_length=140, blank=True)
+    is_searchable = models.BooleanField(default=False)
+    is_created = models.BooleanField(default=True)
+
+    def __str__(self):
+        return str(self.id) + ':' + str(self.event_name)
+
+    def delete(self):
+        self.is_searchable=False
+        super().delete()
+
+    def update_timestamp(self):
+        self.event_date_modified = timezone.now()
+        self.save()
+
+    def hydrate_to_json(self):
+        files = ProjectFile.objects.filter(file_event=self.id)
+        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+        other_files = list(files.filter(file_category=FileCategory.ETC.value))
+        links = ProjectLink.objects.filter(link_event=self.id)
+
+        event = {
+            'event_claimed': not self.event_creator.is_admin_contributor(),
+            'event_creator': self.event_creator.id,
+            'event_date_modified': self.event_date_modified.__str__(),
+            'event_description': self.event_description,
+            'event_files': list(map(lambda file: file.to_json(), other_files)),
+            'event_id': self.id,
+            'event_links': list(map(lambda link: link.to_json(), links)),
+            'event_location': self.event_location,
+            'event_name': self.event_name,
+            'event_owners': [self.event_creator.hydrate_to_tile_json()],
+            'event_short_description': self.event_short_description,
+        }
+
+        if len(thumbnail_files) > 0:
+            event['event_thumbnail'] = thumbnail_files[0].to_json()
+
+        return event
