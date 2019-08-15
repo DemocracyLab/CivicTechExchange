@@ -16,7 +16,7 @@ from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAle
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
-from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner
+from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
