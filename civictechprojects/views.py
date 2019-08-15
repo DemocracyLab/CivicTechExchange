@@ -12,7 +12,7 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group
 from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
@@ -128,6 +128,18 @@ def group_delete(request, group_id):
     except PermissionDenied:
         return HttpResponseForbidden()
     return HttpResponse(status=204)
+
+
+def get_group(request, group_id):
+    group = Group.objects.get(id=group_id)
+
+    if group is not None:
+        if group.is_searchable or is_creator_or_staff(get_request_contributor(request), group):
+            return JsonResponse(group.hydrate_to_json())
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
