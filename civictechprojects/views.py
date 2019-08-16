@@ -8,7 +8,6 @@ from django.template import loader
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
-from .forms import GroupCreationForm
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
@@ -18,7 +17,7 @@ from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff
-from .forms import ProjectCreationForm
+from .forms import ProjectCreationForm, GroupCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 from common.helpers.constants import FrontEndSection
@@ -146,13 +145,17 @@ def get_group(request, group_id):
 def group_add_project(request, group_id):
     body = json.loads(request.body)
     group = Group.objects.get(id=group_id)
-    project = Project.objects.get(id=body["project_id"])
 
-    if group is not None and project is not None:
-        if is_creator_or_staff(get_request_contributor(request), group):
+    if group is not None and body["project_ids"] is not None:
+        if not is_creator_or_staff(get_request_contributor(request), group):
+            return HttpResponseForbidden()
+
+        projects = Project.objects.filter(id__in=body["project_ids"])
+
+        for project in projects:
             ProjectRelationship.create(group, project)
 
-            return HttpResponse(status=204)
+        return HttpResponse(status=204)
     else:
         return HttpResponse(status=404)
 
@@ -230,13 +233,17 @@ def get_event(request, event_id):
 def event_add_project(request, event_id):
     body = json.loads(request.body)
     event = Event.objects.get(id=event_id)
-    project = Project.objects.get(id=body["project_id"])
 
-    if event is not None and project is not None:
-        if is_creator_or_staff(get_request_contributor(request), event):
+    if event is not None and body["project_ids"] is not None:
+        if not is_creator_or_staff(get_request_contributor(request), event):
+            return HttpResponseForbidden()
+
+        projects = Project.objects.filter(id__in=body["project_ids"])
+
+        for project in projects:
             ProjectRelationship.create(event, project)
 
-            return HttpResponse(status=204)
+        return HttpResponse(status=204)
     else:
         return HttpResponse(status=404)
 
