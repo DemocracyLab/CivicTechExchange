@@ -124,23 +124,17 @@ class CreateGroupController extends React.PureComponent<{||},State> {
   }
 
   onProjectSelectionSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (GroupDetailsAPIData, () => void) => void): void {
-    // console.log('on project submit', event);
     console.warn('on submit!!2', event, formRef);
-    const formSubmitUrl: string = this.state.group && this.state.group.group_id
-      ? "/groups/edit/" + this.state.group.group_id + "/"
-      : "/groups/create/";
-      console.log('URL!!!!!!', formSubmitUrl)
     
-    if (projectSelectionStoreSingleton.length) {
-      api.post(
-        "/groups/" + this.state.group.group_id + "/add_project/", 
-        { project_ids: projectSelectionStoreSingleton.map(project => project.id) },
-        onSubmitSuccess, 
-        response => null /* TODO: Report error to user */
-      )
-    } else {
-      api.postForm(formSubmitUrl, formRef, onSubmitSuccess, response => null /* TODO: Report error to user */);
-    }
+    api.post(
+      "/groups/" + this.state.group.group_id + "/add_project/", 
+      { project_ids: projectSelectionStoreSingleton.map(project => project.id) },
+      () => {
+        console.log('hello?')
+        this.onNextPageSuccess()
+      }, 
+      response => null /* TODO: Report error to user */
+    )
   }
   
   onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (GroupDetailsAPIData, () => void) => void): void {
