@@ -66,7 +66,7 @@ class CreateGroupController extends React.PureComponent<{||},State> {
           // TODO: bring in widget from common/components/controllers/FindProjectsController.jsx
           header: "Which projects are in your group?",
           subHeader: "You can always change details about your group later.",
-          onSubmit: this.onProjectSelectionSubmit,
+          onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: GroupProjectSelectionForm,
         }, {
