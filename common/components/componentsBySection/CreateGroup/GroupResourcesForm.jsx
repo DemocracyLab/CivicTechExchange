@@ -36,7 +36,6 @@ type State = FormStateBase<FormFields>;
 class GroupResourcesForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
-    console.log('GroupResourcesForm:ctor:props', props)
     const group: GroupDetailsAPIData = props.project; // TODO(jj): forms are hardcoded to provide the value as 'project' (i.e. not configurable, FormWorkflow.jsx:169)
     this.state = {
       formIsValid: false,

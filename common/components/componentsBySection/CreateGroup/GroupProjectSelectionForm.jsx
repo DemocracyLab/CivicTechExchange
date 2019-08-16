@@ -62,12 +62,10 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
   }
 
   addProjectToSelectedProjects(project: Project): void {
-    console.log('addProjectToSelectedProjects:project', project);
     if (this.state.selectedProjects.includes(project)) {
       return;
     }
     const updatedSelectProjects = [...this.state.selectedProjects, project];
-        console.log('addProjectToSelectedProjects:updatedSelectProjects', updatedSelectProjects);
 
     this.setState({
       selectedProjects: updatedSelectProjects,
