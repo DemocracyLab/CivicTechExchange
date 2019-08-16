@@ -51,7 +51,6 @@ class MainHeader extends React.Component<{||}, State > {
   static calculateState(prevState: State): State {
     const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
     const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
-    debugger
     return {
       activeSection: NavigationStore.getSection(),
       showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects)),
