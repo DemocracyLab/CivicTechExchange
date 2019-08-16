@@ -45,19 +45,11 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
         {this.state.src && this.state.isCropping && (
           <div>
           <ReactCrop
-            // renderComponent={this.renderVideo()}
             src={this.state.src}
             crop={this.state.crop}
-            // ruleOfThirds
-            // circularCrop
-            onImageLoaded={this.onImageLoaded.bind(this)}
-            onComplete={this.onCropComplete.bind(this)}
-            onChange={this.onCropChange.bind(this)}
-         //   onDragStart={this.onDragStart}
-           // onDragEnd={this.onDragEnd}
-            // renderSelectionAddon={this.renderSelectionAddon}
-            // minWidth={160}
-            // minHeight={90}
+            onImageLoaded={this._onImageLoaded.bind(this)}
+            onComplete={this._onCropComplete.bind(this)}
+            onChange={this._onCropChange.bind(this)}
           />
             <input type="button" value="Done Cropping" onClick={this._handleDoneCropping.bind(this)} className="crop-img-btn"/>
 </div>
@@ -76,18 +68,18 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
      this.setState( { isCropping: false } );
   }
 
-  onCropChange(crop, percentCrop) : void {
+  _onCropChange(crop, percentCrop) : void {
     // You could also use percentCrop:
     // this.setState({ crop: percentCrop });
     this.setState({ crop });
   };
 
   // If you setState the crop in here you should return false.
-  onImageLoaded(image) : void {
+  _onImageLoaded(image) : void {
     this.imageRef = image;
   };
 
-  onCropComplete(crop) : void {
+  _onCropComplete(crop) : void {
     this.makeClientCrop(crop);
   };
 
