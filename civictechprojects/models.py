@@ -221,6 +221,18 @@ class Group(Archived):
             group['group_thumbnail'] = thumbnail_files[0].to_json()
 
         return group
+    
+    def hydrate_to_list_json(self):
+        group = {
+            'group_id': self.id,
+            'group_name': self.group_name,
+            'group_creator': self.group_creator.id,
+            'group_short_description': self.group_short_description,
+            'isApproved': self.is_searchable,
+            'isCreated': self.is_created
+        }
+
+        return group
 
 
 class Event(Archived):
@@ -256,13 +268,16 @@ class Event(Archived):
         links = ProjectLink.objects.filter(link_event=self.id)
 
         event = {
+            'event_agenda': self.event_agenda,
             'event_creator': self.event_creator.id,
+            'event_date_end': self.event_date_end.__str__(),
             'event_date_modified': self.event_date_modified.__str__(),
+            'event_date_start': self.event_date_start.__str__(),
             'event_description': self.event_description,
             'event_files': list(map(lambda file: file.to_json(), other_files)),
             'event_id': self.id,
-            'event_links': list(map(lambda link: link.to_json(), links)),
             'event_location': self.event_location,
+            'event_rsvp_url': self.event_rsvp_url,
             'event_name': self.event_name,
             'event_owners': [self.event_creator.hydrate_to_tile_json()],
             'event_short_description': self.event_short_description,
@@ -270,6 +285,21 @@ class Event(Archived):
 
         if len(thumbnail_files) > 0:
             event['event_thumbnail'] = thumbnail_files[0].to_json()
+
+        return event
+    
+    def hydrate_to_list_json(self):
+        event = {
+            'event_creator': self.event_creator.id,
+            'event_date_end': self.event_date_end.__str__(),
+            'event_date_start': self.event_date_start.__str__(),
+            'event_id': self.id,
+            'event_location': self.event_location,
+            'event_name': self.event_name,
+            'event_short_description': self.event_short_description,
+            'isApproved': self.is_searchable,
+            'isCreated': self.is_created,
+        }
 
         return event
 
