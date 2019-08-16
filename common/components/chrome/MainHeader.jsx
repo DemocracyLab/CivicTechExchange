@@ -175,6 +175,7 @@ class MainHeader extends React.Component<{||}, State > {
                     <p className="SubHeader-dropdown-name">{`${CurrentUser.firstName()} ${CurrentUser.lastName()}`}</p>
                     <MenuItem onClick={(e) => this.navigateToSection(e, 'EditProfile')}>My Profile</MenuItem>
                     {this.state.showMyProjects && <MenuItem onClick={(e) => this.navigateToSection(e, 'MyProjects')}>My Projects</MenuItem>}
+                    {this.state.showMyGroups && <MenuItem onClick={(e) => this.navigateToSection(e, 'MyGroups')}>My Groups</MenuItem>}
                   </MenuList>
                   <Divider />
                   <a href="/logout" onClick={this._closeDropdown}>
