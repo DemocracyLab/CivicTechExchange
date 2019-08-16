@@ -8,7 +8,7 @@ import type {ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUt
 import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
 import ProjectCardsContainer from '../FindProjects/ProjectCardsContainer.jsx';
-
+import { projectSelectionStoreSingleton } from '../../controllers/CreateGroupController.jsx';
 
 type FormFields = {|
   project_description: ?string,
@@ -68,18 +68,25 @@ class GroupProjectSelectionForm extends React.PureComponent<Props,State> {
 
   addProjectToSelectedProjects(project: Project): void {
     console.log('addProjectToSelectedProjects:project', project);
-    if (this.state.selectedProjects.includes(project)) {
+    if (projectSelectionStoreSingleton.includes(project)) {
       return;
     }
-    const updatedSelectProjects = [...this.state.selectedProjects, project];
-    console.log('addProjectToSelectedProjects:updatedSelectProjects', updatedSelectProjects);
 
-    // Todo: wrap in proper state management
-    projectSelectorSingleton = updatedSelectProjects;
-
+    projectSelectionStoreSingleton.push(project);
     this.setState({
-      selectedProjects: updatedSelectProjects,
+      selectedProjects: [...projectSelectionStoreSingleton],
     })
+    console.log(`addProjectToSelectedProjects`, [...projectSelectionStoreSingleton]);
+    // if (this.state.selectedProjects.includes(project)) {
+    //   return;
+    // }
+    // const updatedSelectProjects = [...this.state.selectedProjects, project];
+    // console.log('addProjectToSelectedProjects:updatedSelectProjects', updatedSelectProjects);
+    // // Todo: wrap in proper state management
+    // projectSelectorSingleton = updatedSelectProjects;
+    // this.setState({
+    //   selectedProjects: updatedSelectProjects,
+    // })
   }
 
   render(): React$Node {

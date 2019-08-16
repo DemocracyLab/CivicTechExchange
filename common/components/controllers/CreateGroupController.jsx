@@ -66,7 +66,7 @@ class CreateGroupController extends React.PureComponent<{||},State> {
           // TODO: bring in widget from common/components/controllers/FindProjectsController.jsx
           header: "Which projects are in your group?",
           subHeader: "You can always change details about your group later.",
-          onSubmit: this.onSubmit,
+          onSubmit: this.onProjectSelectionSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: GroupProjectSelectionForm,
         }, {
@@ -124,8 +124,8 @@ class CreateGroupController extends React.PureComponent<{||},State> {
   }
 
   onProjectSelectionSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (GroupDetailsAPIData, () => void) => void): void {
-    console.log('on project submit', event);
-    console.log('on submit!!2', event, formRef);
+    // console.log('on project submit', event);
+    console.warn('on submit!!2', event, formRef);
     const formSubmitUrl: string = this.state.group && this.state.group.group_id
       ? "/groups/edit/" + this.state.group.group_id + "/"
       : "/groups/create/";
@@ -169,10 +169,10 @@ class CreateGroupController extends React.PureComponent<{||},State> {
         
         <div className="form-body">
           <FormWorkflow
-                      steps={this.state.steps}
-                      isLoading={this.state.groupId && !this.state.group}
-                      formFields={this.state.group}
-                    />
+            steps={this.state.steps}
+            isLoading={this.state.groupId && !this.state.group}
+            formFields={this.state.group}
+          />
           {/* {!CurrentUser.isLoggedIn()
             ? <LogInController prevPage={Section.CreateGroup}/>
             : <React.Fragment>
