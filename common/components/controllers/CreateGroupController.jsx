@@ -6,15 +6,23 @@ import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
+
 import GroupOverviewForm from "../componentsBySection/CreateGroup/GroupOverviewForm.jsx";
 import GroupPreviewForm from "../componentsBySection/CreateGroup/GroupPreviewForm.jsx";
-import GroupDescriptionForm from "../componentsBySection/CreateGroup/GroupDescriptionForm.jsx";
+import GroupProjectSelectionForm from "../componentsBySection/CreateGroup/GroupProjectSelectionForm.jsx";
 import GroupResourcesForm from "../componentsBySection/CreateGroup/GroupResourcesForm.jsx";
 import GroupAPIUtils, {GroupDetailsAPIData} from "../utils/GroupAPIUtils.js";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
+import ProjectSearchDispatcher from '../stores/ProjectSearchDispatcher.js';
+import TagDispatcher from '../stores/TagDispatcher.js';
+import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
+import ProjectFilterContainer from '../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx';
+import {FindProjectsArgs} from "../stores/ProjectSearchStore.js";
+import urls from "../utils/url.js";
+
 
 type State = {|
   id: ?number,
@@ -51,10 +59,10 @@ class CreateGroupController extends React.PureComponent<{||},State> {
         }, {
           // TODO: bring in widget from common/components/controllers/FindProjectsController.jsx
           header: "Which projects are in your group?",
-          subHeader: "You can always change details about your Group later.",
+          subHeader: "You can always change details about your group later.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: GroupDescriptionForm,
+          formComponent: GroupProjectSelectionForm,//GroupDescriptionForm,
         }, {
           header: "Ready to publish your group?",
           subHeader: "Congratulations!  You have successfully created a tech-for-good group.",
@@ -64,6 +72,13 @@ class CreateGroupController extends React.PureComponent<{||},State> {
         }
       ]
     };
+  }
+
+  componentWillMount(): void {
+    let args: FindProjectsArgs = urls.arguments(document.location.search);
+    args = _.pick(args, ['showSplash','keyword','sortField','location','page','issues','tech', 'role', 'org', 'stage']);
+    ProjectSearchDispatcher.dispatch({type: 'INIT', findProjectsArgs: !_.isEmpty(args) ? args : null});
+    TagDispatcher.dispatch({type: 'INIT'});
   }
   
   componentDidMount(): void {
@@ -111,6 +126,7 @@ class CreateGroupController extends React.PureComponent<{||},State> {
   }
   
   onNextPageSuccess(group: GroupDetailsAPIData): void {
+    console.log('onNextPageSuccess', group)
     this.setState({
       group: group,
       groupId: group.group_id

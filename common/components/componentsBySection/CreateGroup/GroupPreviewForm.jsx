@@ -26,10 +26,10 @@ class ProjectPreviewForm extends React.PureComponent<Props> {
       <React.Fragment>
         <DjangoCSRFToken/>
         <input type="hidden" name="is_created" value="True"/>
-        <AboutProjectDisplay
+        {/* <AboutProjectDisplay
           project={this.props.project}
           viewOnly={true}
-        />
+        /> */}
       </React.Fragment>
     );
   }
