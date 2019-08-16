@@ -1,0 +1,35 @@
+.FileSelectButton-wrapper {
+    position:relative;
+    border: 1px solid black;
+    border-radius:10px;
+    .FileSelectButton-innerWrapper {
+        position:relative;
+        height:100%;
+        width:100%;
+        padding:10px;
+        background-size:cover;
+        border-radius:10px;
+    }
+    &.FileSelectButton-imagePreview {
+        width:500px;
+        height:250px;    
+        .FileSelectButton-innerContent {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .FileSelectButton-previewImage {
+            height:100%;
+            text-align:center;
+        }
+    } 
+    .file-drop-target {
+        height:100%;
+    }
+    .FileSelectButton-dragFiles {
+        text-align:center;
+    }
+    .FileSelectButton-button {
+        text-align: center;
+    }
+}

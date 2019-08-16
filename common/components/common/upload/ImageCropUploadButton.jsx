@@ -15,6 +15,7 @@ export type FileUploadData = {|
 type Props = {|
   onFileUpload: (FileUploadData) => void,
   buttonText: string,
+  cropButtonText: string,
   acceptedFileTypes: string,
   iconClass: string
 |};
@@ -41,9 +42,9 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
 
   render(): React$Node {
       return (
-        <div>
+        <div className="ImageCropUploadButton-root">
         {this.state.src && this.state.isCropping && (
-          <div>
+          <div className="ImageCropUploadButton-cropper">
           <ReactCrop
             src={this.state.src}
             crop={this.state.crop}
@@ -51,14 +52,16 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
             onComplete={this._onCropComplete.bind(this)}
             onChange={this._onCropChange.bind(this)}
           />
-            <input type="button" value="Done Cropping" onClick={this._handleDoneCropping.bind(this)} className="crop-img-btn"/>
+            <input type="button" value={this.props.cropButtonText || "Done Cropping"} onClick={this._handleDoneCropping.bind(this)} className="ImageCropUploadButton-doneButton"/>
 </div>
         )}
-        {this.state.croppedImageUrl && !this.state.isCropping && (
-          <img alt="Crop" style={{ maxWidth: "100%" }} src={this.state.croppedImageUrl} />
-        )}
         {!this.state.isCropping && (
-          <FileSelectButton acceptedFileTypes="image/*" buttonText={this.props.buttonText || "Upload Image"} onFileSelect={this._handleFileSelection.bind(this)}/>
+          <FileSelectButton imagePreview="true" 
+             previewImage={this.state.croppedImageUrl}
+             acceptedFileTypes="image/*"
+             dragText={this.props.dragText || "Drag Your Images Here or"}
+             buttonText={this.props.buttonText || "Browse Photos On Computer"} 
+              onFileSelect={this._handleFileSelection.bind(this)}/>
         )}
         </div>
       );

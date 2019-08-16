@@ -7,8 +7,11 @@ import FileDrop from 'react-file-drop';
 type Props = {|
   onFileSelect: (image) => void,
   buttonText: string,
+  dragText: string,
   acceptedFileTypes: string,
-  iconClass: string
+  iconClass: string,
+  imagePreview : boolean,
+  previewImage : string
 |};
 
 
@@ -21,10 +24,15 @@ class FileSelectButton extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
+      const previewImageStyle = {
+        backgroundImage: 'url(' + this.props.previewImage + ')',
+    };
+
     if(this.props.iconClass && this.props.buttonText){
       return (
-                <FileDrop onDrop={this._handleDrop.bind(this)}>
-          Drop some files here!
+                <FileDrop onDrop={this._handleDrop.bind(this)} className="FileSelectButton-wrapper">
+                <div class="FileSelectButton-innerContent">
+          <div className="FileSelectButton-dragFiles">{this.props.dragText || "Drag Your Files Here or"}</div>
         <div>
           <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
 
@@ -37,15 +45,21 @@ class FileSelectButton extends React.PureComponent<Props, State> {
             <i className={this.props.iconClass} aria-hidden="true"></i>
           </Button>
         </div>
+        </div>
         </FileDrop>
       );
     } else if (this.props.buttonText){
       return (
-                <FileDrop onDrop={this._handleDrop.bind(this)}>
-          Drop some files here!
-        <div>
-          <input type="button" value={this.props.buttonText} onClick={this._handleClick.bind(this)} className="upload-img-btn"/>
+                <FileDrop onDrop={this._handleDrop.bind(this)} className={this.props.imagePreview ? "FileSelectButton-wrapper FileSelectButton-imagePreview" : "FileSelectButton-wrapper"}>
+                  <div class="FileSelectButton-innerWrapper" style={previewImageStyle} >
+                                <div class="FileSelectButton-innerContent">
+                    
+          <div className="FileSelectButton-dragFiles">{this.props.dragText || "Drag Your Files Here or"} </div>
+        <div className="FileSelectButton-button">
+          <input type="button" value={this.props.buttonText} onClick={this._handleClick.bind(this)} className="btn btn-theme"/>
           <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
+        </div>
+        </div>
         </div>
         </FileDrop>
       );
