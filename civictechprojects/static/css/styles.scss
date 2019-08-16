@@ -27,6 +27,8 @@
 @import 'vendor/_react-select.min';
   //import Bootstrap3 dropdown (TODO: refactor to use Bootstrap 4)
 @import 'vendor/dropdown';
+@import 'vendor/react-image-crop/ReactCrop';
+
   //import DemocracyLab component partials
 @import 'partials/AboutUs';
 @import 'partials/BioModal';
