@@ -129,12 +129,14 @@ class CreateGroupController extends React.PureComponent<{||},State> {
     api.post(
       "/groups/" + this.state.group.group_id + "/add_project/", 
       { project_ids: projectSelectionStoreSingleton.map(project => project.id) },
-      () => {
+      (group) => {
         console.log('hello?')
-        this.onNextPageSuccess()
+        this.onNextPageSuccess(group)
       }, 
       response => null /* TODO: Report error to user */
     )
+    // this.onSubmitSuccess()
+    this.onNextPageSuccess(this.state.group)
   }
   
   onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (GroupDetailsAPIData, () => void) => void): void {
