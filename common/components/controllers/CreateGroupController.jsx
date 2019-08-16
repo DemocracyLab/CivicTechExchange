@@ -23,6 +23,11 @@ import ProjectFilterContainer from '../componentsBySection/FindProjects/Filters/
 import {FindProjectsArgs} from "../stores/ProjectSearchStore.js";
 import urls from "../utils/url.js";
 
+let projectSelectionStoreSingleton = [
+
+];
+
+export { projectSelectionStoreSingleton };
 
 type State = {|
   id: ?number,
@@ -40,6 +45,7 @@ class CreateGroupController extends React.PureComponent<{||},State> {
     const groupId: number = url.argument("id");
     this.onNextPageSuccess = this.onNextPageSuccess.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onProjectSelectionSubmit = this.onProjectSelectionSubmit.bind(this);
     this.onFinalSubmitSuccess = this.onFinalSubmitSuccess.bind(this);
     this.state = {
       groupId: groupId,
@@ -60,9 +66,9 @@ class CreateGroupController extends React.PureComponent<{||},State> {
           // TODO: bring in widget from common/components/controllers/FindProjectsController.jsx
           header: "Which projects are in your group?",
           subHeader: "You can always change details about your group later.",
-          onSubmit: this.onSubmit,
+          onSubmit: this.onProjectSelectionSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: GroupProjectSelectionForm,//GroupDescriptionForm,
+          formComponent: GroupProjectSelectionForm,
         }, {
           header: "Ready to publish your group?",
           subHeader: "Congratulations!  You have successfully created a tech-for-good group.",
@@ -116,8 +122,19 @@ class CreateGroupController extends React.PureComponent<{||},State> {
       error: "Failed to load Group information"
     });
   }
+
+  onProjectSelectionSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (GroupDetailsAPIData, () => void) => void): void {
+    // console.log('on project submit', event);
+    console.warn('on submit!!2', event, formRef);
+    const formSubmitUrl: string = this.state.group && this.state.group.group_id
+      ? "/groups/edit/" + this.state.group.group_id + "/"
+      : "/groups/create/";
+      console.log('URL!!!!!!', formSubmitUrl)
+    api.postForm(formSubmitUrl, formRef, onSubmitSuccess, response => null /* TODO: Report error to user */);
+  }
   
   onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (GroupDetailsAPIData, () => void) => void): void {
+    console.log('on submit!!', event, formRef)
     const formSubmitUrl: string = this.state.group && this.state.group.group_id
       ? "/groups/edit/" + this.state.group.group_id + "/"
       : "/groups/create/";
@@ -149,10 +166,10 @@ class CreateGroupController extends React.PureComponent<{||},State> {
         
         <div className="form-body">
           <FormWorkflow
-                      steps={this.state.steps}
-                      isLoading={this.state.groupId && !this.state.group}
-                      formFields={this.state.group}
-                    />
+            steps={this.state.steps}
+            isLoading={this.state.groupId && !this.state.group}
+            formFields={this.state.group}
+          />
           {/* {!CurrentUser.isLoggedIn()
             ? <LogInController prevPage={Section.CreateGroup}/>
             : <React.Fragment>

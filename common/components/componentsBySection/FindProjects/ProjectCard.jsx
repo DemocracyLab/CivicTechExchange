@@ -42,13 +42,19 @@ class ProjectCard extends React.Component<Props, State> {
       >
         <div className="ProjectCardRelative ProjectCard-root">
           {this.props.isSelectable && this.state.isHovered && <div 
+          // { <div 
+
             className="ProjectCardOverlay"
           >
             <div 
-              onClick={() => this.props.onProjectSelect && this.props.onProjectSelect(this.state.project)}
               className="ProjectCardOverlayContainer"
             >
-              button go here...
+            </div>
+            <div
+              onClick={() => this.props.onProjectSelect && this.props.onProjectSelect(this.state.project)}
+              className="ProjectCardSelectButton"
+            >
+              Select
             </div>
           </div>
           }
