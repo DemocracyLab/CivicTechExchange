@@ -142,6 +142,7 @@ def get_group(request, group_id):
     else:
         return HttpResponse(status=404)
 
+@csrf_exempt
 def group_add_project(request, group_id):
     body = json.loads(request.body)
     group = Group.objects.get(id=group_id)
