@@ -88,6 +88,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
         <ProjectCard
           project={project}
           isSelectable={this.props.selectableCards}
+          // isSelectable={true}
           onProjectSelect={() => this.props.onSelectProject && this.props.onSelectProject(project)}
           key={index}
           textlen={140}

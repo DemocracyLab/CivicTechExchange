@@ -12,6 +12,8 @@ import type {TagDefinition, GroupDetailsAPIData} from "../../../components/utils
 import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import {Locations} from "../../constants/ProjectConstants.js";
 import _ from "lodash";
+// Todo: Wrap this in proper state management
+import { projectSelectionStoreSingleton } from '../../controllers/CreateGroupController.jsx'
 
 
 type FormFields = {|

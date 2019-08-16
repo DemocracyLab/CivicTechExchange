@@ -9,8 +9,10 @@ import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
 import ProjectCardsContainer from '../FindProjects/ProjectCardsContainer.jsx';
 
+
 type FormFields = {|
   project_description: ?string,
+  selected_projects: ?Array<string>,
 |};
 
 type Props = {|
@@ -27,25 +29,21 @@ type State = {|
 /**
  * Encapsulates form for Project Description section
  */
-class ProjectDescriptionForm extends React.PureComponent<Props,State> {
+class GroupProjectSelectionForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
+    console.log('GroupProjectSelectionForm:ctor:props', props)
     const project: ProjectDetailsAPIData = props.project;
     this.state = {
       selectedProjects: [],
       formIsValid: false,
       formFields: {
-        project_description: project ? project.project_description : "",
+        selectedProjects: [],
       },
-      validations: [
-        // {
-        //   checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_description"]),
-        //   errorMessage: "Please enter Project Problem"
-        // }
-      ]
     };
     
     this.form = form.setup();
+    props.readyForSubmit(true, this.onSubmit.bind(this));
     this.addProjectToSelectedProjects = this.addProjectToSelectedProjects.bind(this);
   }
   
@@ -54,10 +52,17 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
     this.form.doValidation.bind(this)();
   }
 
+  onSubmit(submitFunc: Function): void {
+    console.log('ON SUBMIT IN SELECTION');
+    this.setState({}, submitFunc);
+  }
+
   onValidationCheck(formIsValid: boolean): void {
+    this.props.readyForSubmit(true);
+
     if(formIsValid !== this.state.formIsValid) {
       this.setState({formIsValid});
-      this.props.readyForSubmit(formIsValid);
+      this.props.readyForSubmit(true);
     }
   }
 
@@ -67,7 +72,10 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
       return;
     }
     const updatedSelectProjects = [...this.state.selectedProjects, project];
-        console.log('addProjectToSelectedProjects:updatedSelectProjects', updatedSelectProjects);
+    console.log('addProjectToSelectedProjects:updatedSelectProjects', updatedSelectProjects);
+
+    // Todo: wrap in proper state management
+    projectSelectorSingleton = updatedSelectProjects;
 
     this.setState({
       selectedProjects: updatedSelectProjects,
@@ -102,14 +110,9 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
               selectableCards={true}
             />
           </div>
-        <FormValidation
-          validations={this.state.validations}
-          onValidationCheck={this.onValidationCheck.bind(this)}
-          formState={this.state.formFields}
-        />
       </div>
     );
   }
 }
 
-export default ProjectDescriptionForm;
+export default GroupProjectSelectionForm;
