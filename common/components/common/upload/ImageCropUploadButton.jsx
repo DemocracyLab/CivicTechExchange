@@ -69,6 +69,9 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
 
   _handleDoneCropping() : void {
      this.setState( { isCropping: false } );
+     if (this.fileBlob) {
+        this.launchPresignedUploadToS3(this.fileBlob);
+     }
   }
 
   _onCropChange(crop, percentCrop) : void {
@@ -92,8 +95,6 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
 
   _handleFileSelection(file): void {
     this.setState( { src: file, isCropping: true } );
-    console.log(file);
-    //this.launchPresignedUploadToS3(this.refs.fileInput.files[0]);
   }
 
   makeClientCrop(crop) {
@@ -136,6 +137,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
         blob.name = fileName;
         window.URL.revokeObjectURL(this.fileUrl);
         this.fileUrl = window.URL.createObjectURL(blob);
+        this.fileBlob = blob;
         resolve(this.fileUrl);
       }, "image/jpeg");
     });

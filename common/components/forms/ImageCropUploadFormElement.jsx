@@ -47,19 +47,12 @@ class ImageCropUploadFormElement extends React.PureComponent<Props,State> {
   render(): React$Node {
     return (
       <div>
-        {this.state.currentImage && this._renderThumbnail()}
         <ImageCropUploadButton buttonText={this.props.buttonText || "Upload Image"} onFileUpload={this._handleFileSelection.bind(this)}/>
         <input type="hidden" ref="hiddenFormField" name={this.props.form_id} id={this.props.form_id} />
       </div>
     );
   }
-  
-  _renderThumbnail() : React$Node {
-    return (
-      <img className="upload_img upload_img_bdr" src={this.state.currentImage.publicUrl}/>
-    );
-  }
-  
+    
   _handleFileSelection(fileUploadData: FileUploadData) : void {
     var fileInfo = _.assign({ visibility: Visibility.PUBLIC }, fileUploadData);
     this.updateFormFields(fileInfo);

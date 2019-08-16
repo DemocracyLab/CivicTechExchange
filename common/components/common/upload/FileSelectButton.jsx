@@ -31,7 +31,7 @@ class FileSelectButton extends React.PureComponent<Props, State> {
     if(this.props.iconClass && this.props.buttonText){
       return (
                 <FileDrop onDrop={this._handleDrop.bind(this)} className="FileSelectButton-wrapper">
-                <div class="FileSelectButton-innerContent">
+                <div className="FileSelectButton-innerContent">
           <div className="FileSelectButton-dragFiles">{this.props.dragText || "Drag Your Files Here or"}</div>
         <div>
           <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
@@ -51,8 +51,8 @@ class FileSelectButton extends React.PureComponent<Props, State> {
     } else if (this.props.buttonText){
       return (
                 <FileDrop onDrop={this._handleDrop.bind(this)} className={this.props.imagePreview ? "FileSelectButton-wrapper FileSelectButton-imagePreview" : "FileSelectButton-wrapper"}>
-                  <div class="FileSelectButton-innerWrapper" style={previewImageStyle} >
-                                <div class="FileSelectButton-innerContent">
+                  <div className="FileSelectButton-innerWrapper" style={previewImageStyle} >
+                                <div className="FileSelectButton-innerContent">
                     
           <div className="FileSelectButton-dragFiles">{this.props.dragText || "Drag Your Files Here or"} </div>
         <div className="FileSelectButton-button">
