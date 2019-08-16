@@ -14,6 +14,12 @@ import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import LoadingMessage from '../../chrome/LoadingMessage.jsx';
 
+type Props = {|
+  fullWidth: ?boolean,
+  onSelectProject: Function,
+  alreadySelectedProjects: ?List<string>, // todo: proper state management
+|}
+
 type State = {|
   projects: List<Project>,
   project_pages: number,
@@ -21,7 +27,7 @@ type State = {|
   project_count: number
 |};
 
-class ProjectCardsContainer extends React.Component<{||}, State> {
+class ProjectCardsContainer extends React.Component<Props, State> {
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [ProjectSearchStore];
@@ -42,7 +48,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="ProjectCardContainer col-12 col-md-9 col-xxl-10 p-0 m-0">
+      <div className={`ProjectCardContainer col-12 ${this.props.fullWidth ? '' : 'col-md-9 col-xxl-10 p-0 m-0'}`}>        
         <div className="container-fluid">
             <ProjectSearchSort />
             <ProjectTagContainer />
@@ -75,6 +81,8 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
           (project, index) =>
             <ProjectCard
               project={project}
+              isSelectable={true}
+              onProjectSelect={() => this.props.onSelectProject && this.props.onSelectProject(project)}
               key={index}
               textlen={140}
               skillslen={4}

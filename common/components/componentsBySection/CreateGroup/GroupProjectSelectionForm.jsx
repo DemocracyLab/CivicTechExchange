@@ -8,6 +8,7 @@ import type {ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUt
 import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
 
+import ProjectCardsContainer from '../FindProjects/ProjectCardsContainer.jsx';
 
 type FormFields = {|
   project_description: ?string,
@@ -36,8 +37,6 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
       formIsValid: false,
       formFields: {
         project_description: project ? project.project_description : "",
-        project_description_solution: project ? project.project_description_solution : "",
-        project_description_actions: project ? project.project_description_actions : ""
       },
       validations: [
         {
@@ -91,6 +90,18 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
           *Required
         </div>
 
+        <div style={{ marginBottom: '200px' }}>
+          Which projects are associated with your group?
+        </div>
+
+          <div className="row">
+            <ProjectCardsContainer 
+          
+              onSelectProject={(project) => console.log('GroupDescriptionForm:onSelectProject:project', project)} 
+              fullWidth={true} 
+            />
+          </div>
+
         <div className="form-group">
           <label>
             <strong>Solution</strong>
@@ -102,19 +113,6 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
                     placeholder="Describe the solution you plan to build..." rows="6" maxLength="1000"
                     value={this.state.formFields.project_description_solution} onChange={this.form.onInput.bind(this, "project_description_solution")}></textarea>
         </div>
-
-        <div className="form-group">
-          <label>
-            <strong>Action(s)</strong>
-          </label>
-          <div className="character-count">
-            { (this.state.formFields.project_description_actions || "").length} / 1000
-          </div>
-          <textarea className="form-control" id="project_description_actions" name="project_description_actions"
-                    placeholder="Describe the actions that needed to be token..." rows="6" maxLength="1000"
-                    value={this.state.formFields.project_description_actions} onChange={this.form.onInput.bind(this, "project_description_actions")}></textarea>
-        </div>
-
         <FormValidation
           validations={this.state.validations}
           onValidationCheck={this.onValidationCheck.bind(this)}
