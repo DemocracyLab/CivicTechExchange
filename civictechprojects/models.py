@@ -215,6 +215,7 @@ class Group(Archived):
             'group_name': self.group_name,
             'group_owners': [self.group_creator.hydrate_to_tile_json()],
             'group_short_description': self.group_short_description,
+            'group_issue_areas': self.get_issue_areas(),
         }
 
         if len(thumbnail_files) > 0:
@@ -233,6 +234,13 @@ class Group(Archived):
         }
 
         return group
+
+    def get_issue_areas(self):
+        project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
+        project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
+        project_list = Project.objects.filter(id__in=project_ids)
+
+        return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
 
 
 class Event(Archived):
@@ -281,6 +289,7 @@ class Event(Archived):
             'event_name': self.event_name,
             'event_owners': [self.event_creator.hydrate_to_tile_json()],
             'event_short_description': self.event_short_description,
+            'event_issue_areas': self.get_issue_areas(),
         }
 
         if len(thumbnail_files) > 0:
@@ -302,6 +311,13 @@ class Event(Archived):
         }
 
         return event
+    
+    def get_issue_areas(self):
+        project_relationships = ProjectRelationship.objects.filter(relationship_event=self.id)
+        project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
+        project_list = Project.objects.filter(id__in=project_ids)
+
+        return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
 
 
 class ProjectRelationship(models.Model):
