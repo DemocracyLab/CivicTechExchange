@@ -113,7 +113,7 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
         </div>
 
         <div className="form-group">
-          <label>Group Description</label>
+          <label>Short Description</label>
           <div className="character-count">
             { (this.state.formFields.group_short_description || "").length} / 50
           </div>
@@ -130,7 +130,7 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
         </div>
 
         <div className="form-group">
-          <label htmlFor="group_location">Group Location</label>
+          <label htmlFor="group_location">Location</label>
           <select
             name="group_location"
             id="group_location"
@@ -144,13 +144,13 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
 
         <div className="form-group">
           <label>
-            Short Description
+            Description
           </label>
           <textarea
             id="group_description"
             name="group_description"
             placeholder="Briefly describe your group..."
-            rows="3"
+            rows="4"
             maxLength="300"
             className="form-control"
             value={this.state.formFields.group_description} onChange={this.form.onInput.bind(this, "group_description")}
