@@ -21,7 +21,6 @@ export default class GroupAPIUtils {
     static fetchGroupDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
         fetch(new Request('/api/groups/' + id + '/', {credentials: 'include'}))
             .then(response => {
-                console.log('GroupAPIUtiles.fetchGroupDetails:then', response.json());
                 if(!response.ok) {
                     throw Error();
                 }

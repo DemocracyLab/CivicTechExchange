@@ -121,12 +121,10 @@ class CreateGroupController extends React.PureComponent<{||},State> {
     const formSubmitUrl: string = this.state.group && this.state.group.group_id
       ? "/groups/edit/" + this.state.group.group_id + "/"
       : "/groups/create/";
-      console.log('URL!!!!!!', formSubmitUrl)
     api.postForm(formSubmitUrl, formRef, onSubmitSuccess, response => null /* TODO: Report error to user */);
   }
   
   onNextPageSuccess(group: GroupDetailsAPIData): void {
-    console.log('onNextPageSuccess', group)
     this.setState({
       group: group,
       groupId: group.group_id
