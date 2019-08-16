@@ -17,6 +17,7 @@ import LoadingMessage from '../../chrome/LoadingMessage.jsx';
 type Props = {|
   fullWidth: ?boolean,
   onSelectProject: Function,
+  selectableCards: ?boolean,
   alreadySelectedProjects: ?List<string>, // todo: proper state management
 |}
 
@@ -73,21 +74,26 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   }
 
   _renderCards(): React$Node {
-    return !this.state.projects
-      ? <LoadingMessage message="Loading projects..." />
-      : this.state.projects.size === 0
-        ? 'No projects match the provided criteria. Try a different set of filters or search term.'
-        : this.state.projects.map(
-          (project, index) =>
-            <ProjectCard
-              project={project}
-              isSelectable={true}
-              onProjectSelect={() => this.props.onSelectProject && this.props.onSelectProject(project)}
-              key={index}
-              textlen={140}
-              skillslen={4}
-            />
-        );
+    if (!this.state.projects) {
+      return <LoadingMessage message="Loading projects..." />;
+    }
+  
+    const filteredAlreadySelectedProjects = this.state.projects
+      .filter(project => !(this.props.alreadySelectedProjects || []).includes(project))
+    if (filteredAlreadySelectedProjects.length) {
+      return 'No projects match the provided criteria. Try a different set of filters or search term.'
+    }
+    return filteredAlreadySelectedProjects.map(
+      (project, index) =>
+        <ProjectCard
+          project={project}
+          isSelectable={this.props.selectableCards}
+          onProjectSelect={() => this.props.onSelectProject && this.props.onSelectProject(project)}
+          key={index}
+          textlen={140}
+          skillslen={4}
+        />
+    );
   }
 
   _handleFetchNextPage(e: object): void {
