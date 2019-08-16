@@ -100,14 +100,44 @@ class GroupProjectSelectionForm extends React.PureComponent<Props,State> {
         <div style={{ marginBottom: '20px' }}>
           Which projects are associated with your group?
         </div>
+        <div
+          className="SelectProjectsPillsContainer"
+          style={{
+            marginBottom: '20px'
+          }}
+        >
           {
             this.state.selectedProjects.map(project => {
               // need pill buttons or tags
               return (
-                <div>{project.name}</div>
+                <span
+                  style={{
+
+                    borderRadius: '20px',
+                    backgroundColor: '#F3A73C',
+                    height: '40px',
+                    padding: '10px 30px',
+                    display: 'flex',
+                    display: 'inline-block',
+                    margin: '0 10px 10px 0',
+
+                  }}
+                
+                >
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+
+                  }}>
+                    {project.name}
+                  </div>
+                </span>
               )
             })
           }
+        </div>
 
           <div className="row">
             <ProjectCardsContainer 
