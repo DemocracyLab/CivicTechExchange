@@ -410,18 +410,38 @@ def my_projects(request):
         }
     return JsonResponse(response)
 
+def my_groups(request):
+    contributor = get_request_contributor(request)
+    response = {}
+    if contributor is not None:
+        owned_groups = Group.objects.filter(group_creator_id=contributor.id)
+        response = {
+            'owned_groups': [group.hydrate_to_list_json() for group in owned_groups],
+        }
+    return JsonResponse(response)
+
+def my_events(request):
+    contributor = get_request_contributor(request)
+    response = {}
+    if contributor is not None:
+        owned_events = Event.objects.filter(event_creator_id=contributor.id)
+        response = {
+            'owned_events': [event.hydrate_to_list_json() for event in owned_events],
+        }
+    return JsonResponse(response)
+
 
 def projects_list(request):
     url_parts = request.GET.urlencode()
-    query_params = urlparse.parse_qs(
-        url_parts, keep_blank_values=0, strict_parsing=0)
+    query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+
     if 'group_id' in query_params:
         project_relationships = ProjectRelationship.objects.filter(relationship_group=query_params['group_id'][0])
-        project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
-        project_list = Project.objects.filter(id__in=project_ids, is_searchable=True)
     elif 'event_id' in query_params:
         project_relationships = ProjectRelationship.objects.filter(relationship_event=query_params['event_id'][0])
-        project_ids = list(map(lambda relationship: relationship.relationship_event.id, project_relationships))
+    
+    if project_relationships is not None:
+        project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
         project_list = Project.objects.filter(id__in=project_ids, is_searchable=True)
     else:
         project_list = Project.objects.filter(is_searchable=True)
