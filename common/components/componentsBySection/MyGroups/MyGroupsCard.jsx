@@ -89,7 +89,6 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
   _renderButtons(): ?Array<React$Node>  {
     const id = {'id':this.props.group.group_id};
     // TODO: Reorder buttons according to re-engagement spec
-    debugger
     let buttons: ?Array<React$Node> = [
       <Button className="MyProjectCard-button" href={url.section(Section.AboutGroup, id)} bsStyle="info">View</Button>
     ];
