@@ -8,7 +8,6 @@ from django.template import loader
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
-from .forms import GroupCreationForm
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
@@ -18,7 +17,7 @@ from .helpers.projects import projects_tag_counts
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff
-from .forms import ProjectCreationForm
+from .forms import ProjectCreationForm, GroupCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 from common.helpers.constants import FrontEndSection
@@ -146,13 +145,17 @@ def get_group(request, group_id):
 def group_add_project(request, group_id):
     body = json.loads(request.body)
     group = Group.objects.get(id=group_id)
-    project = Project.objects.get(id=body["project_id"])
 
-    if group is not None and project is not None:
-        if is_creator_or_staff(get_request_contributor(request), group):
+    if group is not None and body["project_ids"] is not None:
+        if not is_creator_or_staff(get_request_contributor(request), group):
+            return HttpResponseForbidden()
+
+        projects = Project.objects.filter(id__in=body["project_ids"])
+
+        for project in projects:
             ProjectRelationship.create(group, project)
 
-            return HttpResponse(status=204)
+        return HttpResponse(status=204)
     else:
         return HttpResponse(status=404)
 
@@ -230,13 +233,17 @@ def get_event(request, event_id):
 def event_add_project(request, event_id):
     body = json.loads(request.body)
     event = Event.objects.get(id=event_id)
-    project = Project.objects.get(id=body["project_id"])
 
-    if event is not None and project is not None:
-        if is_creator_or_staff(get_request_contributor(request), event):
+    if event is not None and body["project_ids"] is not None:
+        if not is_creator_or_staff(get_request_contributor(request), event):
+            return HttpResponseForbidden()
+
+        projects = Project.objects.filter(id__in=body["project_ids"])
+
+        for project in projects:
             ProjectRelationship.create(event, project)
 
-            return HttpResponse(status=204)
+        return HttpResponse(status=204)
     else:
         return HttpResponse(status=404)
 
@@ -410,13 +417,44 @@ def my_projects(request):
         }
     return JsonResponse(response)
 
+def my_groups(request):
+    contributor = get_request_contributor(request)
+    response = {}
+    if contributor is not None:
+        owned_groups = Group.objects.filter(group_creator_id=contributor.id)
+        response = {
+            'owned_groups': [group.hydrate_to_list_json() for group in owned_groups],
+        }
+    return JsonResponse(response)
+
+def my_events(request):
+    contributor = get_request_contributor(request)
+    response = {}
+    if contributor is not None:
+        owned_events = Event.objects.filter(event_creator_id=contributor.id)
+        response = {
+            'owned_events': [event.hydrate_to_list_json() for event in owned_events],
+        }
+    return JsonResponse(response)
+
 
 def projects_list(request):
-    project_list = Project.objects.filter(is_searchable=True)
+    url_parts = request.GET.urlencode()
+    query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+    project_relationships = None
+
+    if 'group_id' in query_params:
+        project_relationships = ProjectRelationship.objects.filter(relationship_group=query_params['group_id'][0])
+    elif 'event_id' in query_params:
+        project_relationships = ProjectRelationship.objects.filter(relationship_event=query_params['event_id'][0])
+    
+    if project_relationships is not None:
+        project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
+        project_list = Project.objects.filter(id__in=project_ids, is_searchable=True)
+    else:
+        project_list = Project.objects.filter(is_searchable=True)
+    
     if request.method == 'GET':
-        url_parts = request.GET.urlencode()
-        query_params = urlparse.parse_qs(
-            url_parts, keep_blank_values=0, strict_parsing=0)
         project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
         project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
         project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
