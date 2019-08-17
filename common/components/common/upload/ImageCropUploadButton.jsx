@@ -56,7 +56,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
 </div>
         )}
         {!this.state.isCropping && (
-          <FileSelectButton imagePreview="true" 
+          <FileSelectButton hasImagePreview="true" 
              previewImage={this.state.croppedImageUrl}
              acceptedFileTypes="image/*"
              dragText={this.props.dragText || "Drag Your Images Here or"}

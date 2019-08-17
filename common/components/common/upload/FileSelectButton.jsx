@@ -10,7 +10,7 @@ type Props = {|
   dragText: string,
   acceptedFileTypes: string,
   iconClass: string,
-  imagePreview : boolean,
+  hasImagePreview : boolean,
   previewImage : string
 |};
 
@@ -29,7 +29,7 @@ class FileSelectButton extends React.PureComponent<Props, State> {
     };
 
       return (
-                <FileDrop onDrop={this._handleDrop.bind(this)} className={this.props.imagePreview ? "FileSelectButton-wrapper FileSelectButton-imagePreview" : "FileSelectButton-wrapper"}>
+                <FileDrop onDrop={this._handleDrop.bind(this)} className={this.props.hasImagePreview ? "FileSelectButton-wrapper FileSelectButton-imagePreview" : "FileSelectButton-wrapper"}>
                   <div className="FileSelectButton-innerWrapper" style={previewImageStyle} >
                                 <div className="FileSelectButton-innerContent">
                     
