@@ -4,6 +4,7 @@ import React from 'react';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import ReCAPTCHA from "react-google-recaptcha";
 import Guard from '../utils/guard.js'
+import apiHelper from '../utils/api.js'
 
 type State = FormFields & ControlVariables
 
@@ -40,10 +41,9 @@ class ContactForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    //get reCaptcha validation and message information and send it to Django
-    //backend will make the validation request and send the email if validated or return a failure message if not
-
-    ProjectAPIUtils.post("/contact/democracylab",
+    //get reCaptcha hash and submitted message and send it to backend
+    //backend will validate the captcha and send the message if validated or return a failure message if there's a problem
+    apiHelper.post("/contact/democracylab",
         {
           fname: this.state.fname,
           lname: this.state.lname,
