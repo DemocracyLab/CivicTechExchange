@@ -102,7 +102,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       clickedNext: false,
       showConfirmDiscardChanges: false
     };
-    this.onSubmit = Guard.click(this.onSubmit.bind(this),1000, { 'leading': true });
+    this.onSubmit = Guard.duplicateInput(this.onSubmit.bind(this),1000, { 'leading': true });
   }
 
   navigateToStep(step: number): void {
