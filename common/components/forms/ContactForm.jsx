@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import ReCAPTCHA from "react-google-recaptcha";
 import Guard from '../utils/guard.js'
 import apiHelper from '../utils/api.js'
@@ -149,7 +148,7 @@ class ContactForm extends React.Component {
                 value={this.state.message}
                 onChange={this.handleInputChange} />
           </div>
-          <p>Please complete this captcha after writing your message above.</p>
+          <p>Before sending your message, please complete this captcha once you've filled out the form above.</p>
           <ReCAPTCHA
             sitekey={window.GR_SITEKEY}
             onChange={this.reCaptchaOnChange}
