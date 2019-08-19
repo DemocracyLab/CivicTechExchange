@@ -51,25 +51,23 @@ class ContactForm extends React.Component {
           message: this.state.message,
           reCaptchaValue: this.state.reCaptchaValue
         },
-        this.showSuccess(response),
-        this.showFailure(response)
+        this.showSuccess(),
+        this.showFailure()
         );
     }
 
 
-  showSuccess(r) {
+  showSuccess() {
     this.setState({
       sendStatusMessage: 'Message sent successfully! We will get back to you as soon as possible.',
       sendStatusClass: 'ContactForm-status-success'
     })
-    console.log(r)
   }
-  showFailure(r) {
+  showFailure() {
     this.setState({
       sendStatusMessage: 'We encountered an error sending your message. Please try again.',
       sendStatusClass: 'ContactForm-status-error'
     })
-    console.log(r)
   }
 
   handleInputChange(event) {
