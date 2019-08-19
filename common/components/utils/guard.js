@@ -3,7 +3,7 @@
 import _ from 'lodash';
 
 class Guard {
-  static click(func: string, duration = 1000: number, options = {'leading': true}: object): string {
+  static duplicateInput(func: string, duration = 1000: number, options = {'leading': true}: object): string {
     return _.debounce(func, duration, options)
   }
 }

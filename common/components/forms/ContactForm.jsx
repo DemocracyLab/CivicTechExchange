@@ -18,7 +18,7 @@ class ContactForm extends React.Component {
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = Guard.click(this.handleSubmit.bind(this), 1000, {'leading': true});
+    this.handleSubmit = Guard.duplicateInput(this.handleSubmit.bind(this), 1000, {'leading': true});
     this.reCaptchaOnChange = this.reCaptchaOnChange.bind(this);
   }
 
