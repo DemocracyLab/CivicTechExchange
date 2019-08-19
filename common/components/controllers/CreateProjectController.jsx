@@ -17,7 +17,6 @@ import api from "../utils/api.js";
 import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
-import Guard from "../utils/guard.js"
 
 
 type State = {|
@@ -34,7 +33,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     super(props);
     const projectId: number = url.argument("id");
     this.onNextPageSuccess = this.onNextPageSuccess.bind(this);
-    this.onSubmit = Guard.duplicateInput(this.onSubmit.bind(this));
+    this.onSubmit = this.onSubmit.bind(this);
     this.onFinalSubmitSuccess = this.onFinalSubmitSuccess.bind(this);
     this.state = {
       projectId: projectId,
