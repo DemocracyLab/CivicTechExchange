@@ -4,6 +4,22 @@ import React from 'react';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import ReCAPTCHA from "react-google-recaptcha";
 import Guard from '../utils/guard.js'
+
+type State = FormFields & ControlVariables
+
+type FormFields = {|
+  fname: string,
+  lname: string,
+  emailaddr: string,
+  message: string
+|};
+
+type ControlVariables = {|
+  sendStatusMessage: string,
+  sendStatusClass: string,
+  reCaptchaValue: string,
+|};
+
 class ContactForm extends React.Component {
   constructor(props) {
     super(props);
