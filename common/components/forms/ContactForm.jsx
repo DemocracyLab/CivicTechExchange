@@ -35,7 +35,7 @@ class ContactForm extends React.Component {
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = Guard.duplicateInput(this.handleSubmit.bind(this), 1000, {'leading': true});
+    this.handleSubmit = Guard.duplicateInput(this.handleSubmit.bind(this));
     this.reCaptchaOnChange = this.reCaptchaOnChange.bind(this);
   }
 
@@ -51,23 +51,25 @@ class ContactForm extends React.Component {
           message: this.state.message,
           reCaptchaValue: this.state.reCaptchaValue
         },
-        response => this.showSuccess(),
-        response => this.showFailure()
+        this.showSuccess(response),
+        this.showFailure(response)
         );
     }
 
 
-  showSuccess() {
+  showSuccess(r) {
     this.setState({
       sendStatusMessage: 'Message sent successfully! We will get back to you as soon as possible.',
       sendStatusClass: 'ContactForm-status-success'
     })
+    console.log(r)
   }
-  showFailure() {
+  showFailure(r) {
     this.setState({
       sendStatusMessage: 'We encountered an error sending your message. Please try again.',
       sendStatusClass: 'ContactForm-status-error'
     })
+    console.log(r)
   }
 
   handleInputChange(event) {

@@ -34,7 +34,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     super(props);
     const projectId: number = url.argument("id");
     this.onNextPageSuccess = this.onNextPageSuccess.bind(this);
-    this.onSubmit = Guard.duplicateInput(this.onSubmit.bind(this),1000, { 'leading': true });
+    this.onSubmit = Guard.duplicateInput(this.onSubmit.bind(this));
     this.onFinalSubmitSuccess = this.onFinalSubmitSuccess.bind(this);
     this.state = {
       projectId: projectId,
