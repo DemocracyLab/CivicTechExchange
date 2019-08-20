@@ -30,6 +30,7 @@ type ControlVariables = {|
 class ContactForm extends React.Component {
   constructor(props) {
     super(props);
+    this.formRef = React.createRef();
     this.state = {
       fname: '',
       lname: '',
@@ -50,29 +51,27 @@ class ContactForm extends React.Component {
     event.preventDefault();
     //get reCaptcha hash and submitted message and send it to backend
     //backend will validate the captcha and send the message if validated or return a failure message if there's a problem
-    apiHelper.post("/contact/democracylab",
-        {
-          fname: this.state.fname,
-          lname: this.state.lname,
-          emailaddr: this.state.emailaddr,
-          message: this.state.message,
-          reCaptchaValue: this.state.reCaptchaValue
-        },
-        this.showSuccess(),
-        this.showFailure()
-        );
-    }
+    apiHelper.postForm(
+      "/contact/democracylab",
+      this.formRef,
+      response => this.showSuccess(),
+      response => this.showFailure()
+    );
+  }
 
-//clear the form on a successful send. Possibly send them to a confirm page in the future?
+//clear the form on a successful send. #TODO: send them to a confirm page instead
   showSuccess() {
     this.setState({
       sendStatusMessage: 'Message sent successfully! We will get back to you as soon as possible.',
-      sendStatusClass: 'ContactForm-status-success'
-      sendStatusMessage: null,
-      sendStatusClass: null
+      sendStatusClass: 'ContactForm-status-success',
+      fname: null,
+      lname: null,
+      emailaddr: null,
+      message: null,
+      reCaptchaValue: null
     })
   }
-//leave the fields intact to avoid retyping on error
+//leave the fields intact on error so they don't lose their message
   showFailure() {
     this.setState({
       sendStatusMessage: 'We encountered an error sending your message. Please try again.',
@@ -90,7 +89,7 @@ class ContactForm extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} ref={this.formRef}>
           <div className="form-group">
             <label htmlFor="fname">
               First name:
