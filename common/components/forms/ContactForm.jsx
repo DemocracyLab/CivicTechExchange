@@ -18,13 +18,13 @@ type FormFields = {|
   fname: string,
   lname: string,
   emailaddr: string,
-  message: string
+  message: string,
+  reCaptchaValue: string,
 |};
 
 type ControlVariables = {|
   sendStatusMessage: string,
-  sendStatusClass: string,
-  reCaptchaValue: string,
+  sendStatusClass: string
 |};
 
 class ContactForm extends React.Component {
