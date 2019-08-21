@@ -11,7 +11,7 @@ class Command(BaseCommand):
         #clear old cache values first - note that this will wipe the ENTIRE cache, if we start caching multiple views or other files this will need to be specifically wiping just the API endpoint cache
         cache.clear()
         #define endpoints
-        endpoints = ['Issue(s) Addressed', 'Technologies Used', 'Role', 'Organization', 'Project Stage']
+        endpoints = ['Issue(s) Addressed', 'Technologies Used', 'Role', 'Organization', 'Organization Type', 'Project Stage']
         #define URL parts for loop.
         #TODO: Get domain dynamically, not hardcoded.
         domain = settings.PROTOCOL_DOMAIN
