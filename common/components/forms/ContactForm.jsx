@@ -40,6 +40,7 @@ class ContactForm extends React.Component {
       reCaptchaValue: null,
     };
 
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = Guard.duplicateInput(this.handleSubmit.bind(this));
     this.reCaptchaOnChange = this.reCaptchaOnChange.bind(this);
     this.form = form.setup((that) => that.state, this.onFormUpdate)
@@ -63,21 +64,30 @@ class ContactForm extends React.Component {
         );
     }
 
-//clear the form on a successful send. Possibly send them to a confirm page in the future?
+
   showSuccess() {
     this.setState({
       sendStatusMessage: 'Message sent successfully! We will get back to you as soon as possible.',
       sendStatusClass: 'ContactForm-status-success'
-      sendStatusMessage: null,
-      sendStatusClass: null
     })
   }
-//leave the fields intact to avoid retyping on error
   showFailure() {
     this.setState({
       sendStatusMessage: 'We encountered an error sending your message. Please try again.',
       sendStatusClass: 'ContactForm-status-error'
     })
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value,
+      //if any input is made, clear the display of the send status message
+      sendStatusMessage: null,
+      sendStatusClass: null
+    });
   }
 
   reCaptchaOnChange(value) {
