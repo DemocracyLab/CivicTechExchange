@@ -2,8 +2,8 @@
 
 import React from 'react';
 import ReCAPTCHA from "react-google-recaptcha";
-import Guard from '../utils/guard.js'
-import apiHelper from '../utils/api.js'
+import Guard from '../utils/guard.js';
+import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 
 type State = FormFields & ControlVariables
 
@@ -42,7 +42,7 @@ class ContactForm extends React.Component {
     event.preventDefault();
     //get reCaptcha hash and submitted message and send it to backend
     //backend will validate the captcha and send the message if validated or return a failure message if there's a problem
-    apiHelper.post("/contact/democracylab",
+    ProjectAPIUtils.post("/contact/democracylab",
         {
           fname: this.state.fname,
           lname: this.state.lname,
@@ -50,19 +50,25 @@ class ContactForm extends React.Component {
           message: this.state.message,
           reCaptchaValue: this.state.reCaptchaValue
         },
-        this.showSuccess(),
-        this.showFailure()
+        response => this.showSuccess(),
+        response => this.showFailure()
         );
     }
 
 
   showSuccess() {
+    //show success message and clear form. TODO: send user to a confirm page
     this.setState({
       sendStatusMessage: 'Message sent successfully! We will get back to you as soon as possible.',
-      sendStatusClass: 'ContactForm-status-success'
+      sendStatusClass: 'ContactForm-status-success',
+      fname: '',
+      lname: '',
+      emailaddr: '',
+      message: '',
     })
   }
   showFailure() {
+    //do not clear form when message fails, so the user does not have to retype
     this.setState({
       sendStatusMessage: 'We encountered an error sending your message. Please try again.',
       sendStatusClass: 'ContactForm-status-error'
