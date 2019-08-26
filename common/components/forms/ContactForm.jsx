@@ -1,16 +1,9 @@
 // @flow
-//
-// The important parts are
-// 1)  Call form.setup((that) => that.state, this.onFormUpdate)
-// 2) Implement onFormUpdate
-// 3)  For the input onChange events, use form's methods, which will hook those changes up to onFormUpdate
-
 
 import React from 'react';
 import ReCAPTCHA from "react-google-recaptcha";
-import Guard from '../utils/guard.js';
-import apiHelper from '../utils/api.js';
-import form from '../utils/forms.js';
+import Guard from '../utils/guard.js'
+import apiHelper from '../utils/api.js'
 
 type State = FormFields & ControlVariables
 
@@ -43,9 +36,7 @@ class ContactForm extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = Guard.duplicateInput(this.handleSubmit.bind(this));
     this.reCaptchaOnChange = this.reCaptchaOnChange.bind(this);
-    this.form = form.setup((that) => that.state, this.onFormUpdate)
   }
-
 
   handleSubmit(event) {
     event.preventDefault();
@@ -82,9 +73,9 @@ class ContactForm extends React.Component {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
+    //if any input is made, clear the display of the send status message
     this.setState({
       [name]: value,
-      //if any input is made, clear the display of the send status message
       sendStatusMessage: null,
       sendStatusClass: null
     });
@@ -113,7 +104,7 @@ class ContactForm extends React.Component {
               type="text"
               placeholder="Your first name"
               value={this.state.fname}
-              onChange={this.form.onInput.bind(this, "fname")} />
+              onChange={this.handleInputChange} />
           </div>
           <div className="form-group">
             <label htmlFor="lname">
@@ -127,7 +118,7 @@ class ContactForm extends React.Component {
               type="text"
               placeholder="Your last name"
               value={this.state.lname}
-              onChange={this.form.onInput.bind(this, "lname")} />
+              onChange={this.handleInputChange} />
           </div>
           <div className="form-group">
             <label htmlFor="emailaddr">
@@ -141,7 +132,7 @@ class ContactForm extends React.Component {
               id="emailaddr"
               placeholder="name@example.com"
               value={this.state.emailaddr}
-              onChange={this.form.onInput.bind(this, "emailaddr")} />
+              onChange={this.handleInputChange} />
           </div>
           <div className="form-group">
             <label htmlFor="message">
@@ -155,7 +146,7 @@ class ContactForm extends React.Component {
                 placeholder="Type your message here"
                 rows="8"
                 value={this.state.message}
-                onChange={this.form.onInput.bind(this, "message")} />
+                onChange={this.handleInputChange} />
           </div>
           <p>Before sending your message, please complete this captcha once you've filled out the form above.</p>
           <ReCAPTCHA
