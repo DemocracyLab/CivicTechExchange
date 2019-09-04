@@ -254,6 +254,7 @@ def projects_list(request):
         project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
         project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
         project_list = apply_tag_filters(project_list, query_params, 'org', projects_by_orgs)
+        project_list = apply_tag_filters(project_list, query_params, 'orgType', projects_by_org_types)
         project_list = apply_tag_filters(project_list, query_params, 'stage', projects_by_stage)
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
@@ -322,6 +323,10 @@ def projects_by_technologies(tags):
 
 def projects_by_orgs(tags):
     return Project.objects.filter(project_organization__name__in=tags)
+
+
+def projects_by_org_types(tags):
+    return Project.objects.filter(project_organization_type__name__in=tags)
 
 
 def projects_by_stage(tags):

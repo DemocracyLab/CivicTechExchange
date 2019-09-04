@@ -17,6 +17,7 @@ import api from "../utils/api.js";
 import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
+import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 
 
 type State = {|
@@ -136,7 +137,6 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   }
 
   render(): React$Node {
-
     return (
       <React.Fragment>
         <Headers
