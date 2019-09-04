@@ -23,10 +23,11 @@ from common.models.tags import Tag
 from common.helpers.constants import FrontEndSection
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
-    notify_project_owners_project_approved
+    notify_project_owners_project_approved, contact_democracylab_email
 from common.helpers.front_end import section_url, get_page_section
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
+import requests
 
 
 # TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
@@ -172,7 +173,8 @@ def index(request):
         'PAYPAL_ENDPOINT': settings.PAYPAL_ENDPOINT,
         'PAYPAL_PAYEE': settings.PAYPAL_PAYEE,
         'PRESS_LINKS': settings.PRESS_LINKS,
-        'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt')
+        'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt'),
+        'GR_SITEKEY': settings.GR_SITEKEY
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
@@ -696,3 +698,30 @@ def leave_project(request, project_id):
 def update_project_timestamp(request, project):
     if not request.user.is_staff:
         project.update_timestamp()
+
+#This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.
+#TODO: Return text strings to be displayed on the front end so we know specifically what happened
+@csrf_exempt
+def contact_democracylab(request):
+    #first prepare all the data from the request body
+    body = json.loads(request.body)
+    # submit validation request to recaptcha
+    r = requests.post(
+      'https://www.google.com/recaptcha/api/siteverify',
+      data={
+        'secret': settings.GR_SECRETKEY,
+        'response': body['reCaptchaValue']
+      }
+    )
+
+    if r.json()['success']:
+        # Successfuly validated, send email
+        fn = body['fname']
+        ln = body['lname']
+        em = body['emailaddr']
+        ms = body['message']
+        contact_democracylab_email(fn, ln, em ,ms)
+        return HttpResponse(status=200)
+
+    # Error while verifying the captcha, do not send the email
+    return HttpResponse(status=401)

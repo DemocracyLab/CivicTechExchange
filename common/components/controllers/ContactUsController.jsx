@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Headers from "../common/Headers.jsx";
+import {Glyph, GlyphStyles} from "../utils/glyphs.js";
+import ContactForm from "../forms/ContactForm.jsx";
 
 class ContactUsController extends React.PureComponent<{||}> {
 
@@ -23,7 +25,8 @@ class ContactUsController extends React.PureComponent<{||}> {
         {this._renderHeader()}
          <div className="container contact-us-root">
            <h1>Contact Us</h1>
-           <p>To contact DemocracyLab, please email us at <a href="mailto:hello@democracylab.org">hello@democracylab.org</a>.</p>
+           <p>To contact DemocracyLab, please fill out this form to send us a message and we'll get back to you. All fields are required.</p>
+           <ContactForm />
          </div>
        </React.Fragment>
      )
