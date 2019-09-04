@@ -76,7 +76,7 @@ class PartnerWithUsController extends React.Component<{||}> {
           seeking opportunities to contribute their talents to projects that advance the public good.
         </p>
         <p>
-          Your sponsorship allows us to cover overhead costs associated with running out platform and expenses related
+          Your sponsorship allows us to cover overhead costs associated with running our platform and expenses related
           to marketing our work and growing our audience.
         </p>
         <p>
