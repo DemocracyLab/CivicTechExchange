@@ -108,7 +108,7 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
               category={key}
               data={_.sortBy(this.state.sortedTags[key], (tag) => tag.display_name.toUpperCase())}
               hasSubcategories={_.every(this.state.sortedTags[key], 'subcategory')}
-              selectedTags={this.state.selectedTags}
+              selectedTags={Object.keys(this.state.selectedTags)}
               selectOption={this._selectOption}
             />
           );

@@ -16,7 +16,7 @@ const classCategoryCollapsed = 'ProjectFilterContainer-category ProjectFilterCon
 const classSubcategoryExpanded = 'ProjectFilterContainer-subcategory ProjectFilterContainer-expanded';
 const classSubcategoryCollapsed = 'ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed';
 
-class RenderFilterCategory<T> extends React.Component<Props<T>, State> {
+class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
     super(props)
     // This constructor creates state keys based on category or subcategory - each state key/value will indicate whether or not a given (sub)category is expanded (true) or collapsed (false)
@@ -106,9 +106,9 @@ class RenderFilterCategory<T> extends React.Component<Props<T>, State> {
     let sortedTags = Object.values(data).map(tag => {
       const key:string = tag.category + '-' + tag.tag_name;
       return  (<li key={key} className="ProjectFilterContainer-list-item">
-                <input type="checkbox" id={key} checked={this.props.selectedTags[tag.tag_name] || false} onChange={() => this.props.selectOption(tag)}></input>
+                <input type="checkbox" id={key} checked={this.props.selectedTags.includes(tag.tag_name)} onChange={() => this.props.selectOption(tag)}></input>
                 <label htmlFor={key}>
-                  <span className="ProjectFilterContainer-list-item-name">{tag.display_name}</span> <span className="ProjectFilterContainer-list-item-count">{this.props.selectedTags[tag.tag_name] ? <i className={GlyphStyles.Check}></i> : tag.num_times}</span>
+                  <span className="ProjectFilterContainer-list-item-name">{tag.display_name}</span> <span className="ProjectFilterContainer-list-item-count">{this.props.selectedTags.includes(tag.tag_name) ? <i className={GlyphStyles.Check}></i> : tag.num_times}</span>
                 </label>
               </li>)
       });
