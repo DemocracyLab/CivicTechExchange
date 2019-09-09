@@ -57,7 +57,6 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
         sortedTags: sorted
       });
     });
-    this._checkEnabled = this._checkEnabled.bind(this);
     this._selectOption = this._selectOption.bind(this);
   }
 
@@ -70,7 +69,6 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
       selectedTags:_.mapKeys(ProjectSearchStore.getTags().toArray(), (tag: TagDefinition) => tag.tag_name)
     };
   }
-
 
   render(): React$Node {
     //should render a number of <RenderFilterCategory> child components
@@ -110,7 +108,7 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
               category={key}
               data={_.sortBy(this.state.sortedTags[key], (tag) => tag.display_name.toUpperCase())}
               hasSubcategories={_.every(this.state.sortedTags[key], 'subcategory')}
-              checkEnabled={this._checkEnabled}
+              selectedTags={this.state.selectedTags}
               selectOption={this._selectOption}
             />
           );
@@ -119,14 +117,6 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
                 {displayFilters}
             </div>
         )
-    }
-
-    _checkEnabled(tag: TagDefinition): boolean {
-      if (this.state.selectedTags[tag.tag_name]) {
-         return true
-       } else {
-         return false
-       }
     }
 
     _selectOption(tag: TagDefinition): void {
