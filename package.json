@@ -34,6 +34,7 @@
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.4.2",
     "react-file-drop": "^0.2.8",
+    "react-google-recaptcha": "^1.1.0",
     "react-helmet": "^5.2.0",
     "react-image-crop": "^8.3.0",
     "react-moment": "^0.7.9",

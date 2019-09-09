@@ -37,6 +37,10 @@
   margin: 0 auto;
   text-align: center;
 }
+.SocialFooter-copyright a{
+  color: $color-text-light;
+  text-decoration: underline;
+}
 .SocialFooter-iconblock a {
   color: $color-text-light;
   &:hover {
