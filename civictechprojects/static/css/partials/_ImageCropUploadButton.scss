@@ -2,10 +2,17 @@
     position:relative;
     border: 1px solid black;
     border-radius:10px;
-    width:500px;
-    height:250px;    
+    /* width:500px;
+    height:250px;*/    
     .ImageCropUploadButton-doneButton {
         display:block;
     }
 
+    .FileSelectButton-dragFiles {
+        color:#FFF;
+        font-weight:bold;
+    }
+    .ReactCrop__image {
+        height:100%;
+    }
 }

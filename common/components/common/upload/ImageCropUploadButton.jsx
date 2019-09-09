@@ -17,7 +17,8 @@ type Props = {|
   buttonText: string,
   cropButtonText: string,
   acceptedFileTypes: string,
-  iconClass: string
+  iconClass: string,
+  aspect: number
 |};
 
 type State = {|
@@ -26,16 +27,17 @@ type State = {|
 
 class ImageCropUploadButton extends React.PureComponent<Props, State> {
 
-  constructor(): void {
+  constructor(props): void {
     super();
+    const aspect = props.aspect || 16 / 9;
     this.state = {
       s3Key: "",
       src: null,
       isCropping: false,
       crop: {
-        unit: "%",
-        width: 30,
-        aspect: 16 / 9
+        unit:"%",
+        width:30,
+        aspect: aspect
       }
     };
   }

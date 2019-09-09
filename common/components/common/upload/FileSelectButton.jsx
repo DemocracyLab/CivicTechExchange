@@ -72,7 +72,6 @@ class FileSelectButton extends React.PureComponent<Props, State> {
 
   _handleFileSelection(): void {
     this._processFile(this.refs.fileInput.files[0]);
-    //this.launchPresignedUploadToS3(this.refs.fileInput.files[0]);
   }
 
 }
