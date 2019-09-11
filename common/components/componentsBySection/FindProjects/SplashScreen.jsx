@@ -30,7 +30,8 @@ class SplashScreen extends React.PureComponent<Props> {
           </div>
         </div>
         <div className="SplashScreen-mission">
-          <p>DemocracyLab is a 501(c)(3) nonprofit organization.  Our mission is to empower a community of people and projects that use technology to advance the public good.</p>
+          <p>DemocracyLab is a nonprofit organization.</p>
+          <p>Our mission is to empower people who use technology to advance the public good.</p>
         </div>
       </div>
     );
