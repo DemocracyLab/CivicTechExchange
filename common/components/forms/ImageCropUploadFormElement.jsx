@@ -11,7 +11,8 @@ type Props = {|
   form_id: string,
   buttonText: ?string,
   currentImage: FileInfo,
-  onSelection: ?(FileInfo) => void
+  onSelection: ?(FileInfo) => void,
+  aspect: number
 |};
 
 type State = {|
@@ -45,7 +46,7 @@ class ImageCropUploadFormElement extends React.PureComponent<Props,State> {
   }
 
   render(): React$Node {
-    const aspect = 16 / 9;
+    const aspect = this.props.aspect || 16 / 9;
     return (
       <div>
         <ImageCropUploadButton aspect={aspect} buttonText={this.props.buttonText || "Upload Image"} onFileUpload={this._handleFileSelection.bind(this)}/>

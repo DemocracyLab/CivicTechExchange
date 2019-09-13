@@ -29,7 +29,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
 
   constructor(props): void {
     super();
-    const aspect = props.aspect || 16 / 9;
+    const aspect = props.aspect || 1 / 1;
     this.state = {
       s3Key: "",
       src: null,
