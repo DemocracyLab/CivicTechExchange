@@ -28,6 +28,13 @@
     }
     .FileSelectButton-dragFiles {
         text-align:center;
+        background: rgba($color: #000000, $alpha: .4);
+        padding:10px;
+        color:#FFFFFF;
+        font-weight: bold;
+        width:264px;
+        margin:auto;
+        border-radius:5px;
     }
     .FileSelectButton-button {
         text-align: center;
