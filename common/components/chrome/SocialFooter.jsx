@@ -32,7 +32,16 @@ class SocialFooter extends React.Component {
   }
   _copyrightInfo() {
     return (
-      <p className="SocialFooter-copyright">Copyright &copy; 2019 DemocracyLab. All Rights Reserved.</p>
+      <p className="SocialFooter-copyright">
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+          <i className={Glyph(GlyphStyles.CreativeCommons, GlyphSizes.X2)}></i>
+          <i className={Glyph(GlyphStyles.CreativeCommonsBy, GlyphSizes.X2)}></i>
+        </a>
+        <br />
+        This work by
+        {' '}<a href="https://www.democracylab.org/" property="cc:attributionName" rel="cc:attributionURL">DemocracyLab</a>{' '}
+        is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+      </p>
     )
   }
 

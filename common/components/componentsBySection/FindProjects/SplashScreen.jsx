@@ -19,7 +19,7 @@ class SplashScreen extends React.PureComponent<Props> {
     return (
       <div className="SplashScreen-root" style={{backgroundImage: 'url(' + cdn.image("dl_splash.jpg")+ ')' }}>
         <div className="SplashScreen-content">
-          <h1>Optimizing the connection between skilled volunteers and tech-for-good projects</h1>
+          <h1>We connect skilled volunteers and tech-for-good projects</h1>
           <div className="SplashScreen-section">
             <Button className="SplashScreen-find-projects-btn" onClick={this._onClickFindProjects.bind(this)}>
               Find Projects

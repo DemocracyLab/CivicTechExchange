@@ -23,10 +23,11 @@ from common.models.tags import Tag
 from common.helpers.constants import FrontEndSection
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
-    notify_project_owners_project_approved
+    notify_project_owners_project_approved, contact_democracylab_email
 from common.helpers.front_end import section_url, get_page_section
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
+import requests
 
 
 # TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
@@ -172,7 +173,8 @@ def index(request):
         'PAYPAL_ENDPOINT': settings.PAYPAL_ENDPOINT,
         'PAYPAL_PAYEE': settings.PAYPAL_PAYEE,
         'PRESS_LINKS': settings.PRESS_LINKS,
-        'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt')
+        'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt'),
+        'GR_SITEKEY': settings.GR_SITEKEY
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
@@ -252,6 +254,7 @@ def projects_list(request):
         project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
         project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
         project_list = apply_tag_filters(project_list, query_params, 'org', projects_by_orgs)
+        project_list = apply_tag_filters(project_list, query_params, 'orgType', projects_by_org_types)
         project_list = apply_tag_filters(project_list, query_params, 'stage', projects_by_stage)
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
@@ -320,6 +323,10 @@ def projects_by_technologies(tags):
 
 def projects_by_orgs(tags):
     return Project.objects.filter(project_organization__name__in=tags)
+
+
+def projects_by_org_types(tags):
+    return Project.objects.filter(project_organization_type__name__in=tags)
 
 
 def projects_by_stage(tags):
@@ -691,3 +698,30 @@ def leave_project(request, project_id):
 def update_project_timestamp(request, project):
     if not request.user.is_staff:
         project.update_timestamp()
+
+#This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.
+#TODO: Return text strings to be displayed on the front end so we know specifically what happened
+@csrf_exempt
+def contact_democracylab(request):
+    #first prepare all the data from the request body
+    body = json.loads(request.body)
+    # submit validation request to recaptcha
+    r = requests.post(
+      'https://www.google.com/recaptcha/api/siteverify',
+      data={
+        'secret': settings.GR_SECRETKEY,
+        'response': body['reCaptchaValue']
+      }
+    )
+
+    if r.json()['success']:
+        # Successfuly validated, send email
+        fn = body['fname']
+        ln = body['lname']
+        em = body['emailaddr']
+        ms = body['message']
+        contact_democracylab_email(fn, ln, em ,ms)
+        return HttpResponse(status=200)
+
+    # Error while verifying the captcha, do not send the email
+    return HttpResponse(status=401)
