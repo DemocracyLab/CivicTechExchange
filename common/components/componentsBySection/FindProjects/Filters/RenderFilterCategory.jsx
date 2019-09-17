@@ -27,16 +27,25 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     let c = Object.keys(_.groupBy(this.props.data, 'category')) || [] ;
     let s = Object.keys(_.groupBy(this.props.data, 'subcategory')) || [];
     let cs = _.concat(c, s);
-    //cs is now an array of each key we want to use for expand/collapse tracking
-
+    //cs is now an array of each key we want to use for expand/collapse category state
     //make an object and push in each key from cs, set all values to false
     const collector = {}
     for (var key in cs) {
       let val = cs[key]
       collector[val] = false;
     }
-    //set initial state once collector is populated
-    this.state = collector || {}
+    //now create an object for individual filter selected/unselected state
+    const tagNames = {}
+    const tdata = this.props.data
+    for (var i = 0; i < tdata.length; i++) {
+      var kname = tdata[i].tag_name;
+      tagNames[kname] = false
+    }
+    //merge these two objects before creating state
+    let combined = _.merge(collector, tagNames)
+
+    //set initial state
+    this.state = combined || {}
 
     this._handleChange = this._handleChange.bind(this);
   }
