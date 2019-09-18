@@ -42,7 +42,8 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     const tdata = this.props.data
     for (var i = 0; i < tdata.length; i++) {
       var kname = tdata[i].tag_name;
-      tagNames[kname] = false
+      //set true or false initially using selectedTags prop (this handles querystring saved filter sets)
+      tagNames[kname] = this.props.selectedTags.includes(kname)
     }
     //merge these two objects before creating state
     let combined = _.merge(collector, tagNames)
