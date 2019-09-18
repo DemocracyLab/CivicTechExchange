@@ -57,7 +57,6 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
         sortedTags: sorted
       });
     });
-    this._selectOption = this._selectOption.bind(this);
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -109,7 +108,6 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
               data={_.sortBy(this.state.sortedTags[key], (tag) => tag.display_name.toUpperCase())}
               hasSubcategories={_.every(this.state.sortedTags[key], 'subcategory')}
               selectedTags={Object.keys(this.state.selectedTags)}
-              selectOption={this._selectOption}
             />
           );
         return (
@@ -118,25 +116,6 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
             </div>
         )
     }
-
-    _selectOption(tag: TagDefinition): void {
-      var tagInState = _.has(this.state.selectedTags, tag.tag_name);
-      //if tag is NOT currently in state, add it, otherwise remove
-      if(!tagInState) {
-        ProjectSearchDispatcher.dispatch({
-          type: 'ADD_TAG',
-          tag: tag.tag_name,
-        });
-        metrics.logSearchFilterByTagEvent(tag);
-      } else {
-        ProjectSearchDispatcher.dispatch({
-          type: 'REMOVE_TAG',
-          tag: tag,
-        });
-      }
-
-
-  }
 }
 
 

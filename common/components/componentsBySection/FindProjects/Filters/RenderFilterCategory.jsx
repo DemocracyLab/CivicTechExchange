@@ -3,6 +3,9 @@
 import React from 'react';
 import _ from 'lodash';
 import GlyphStyles from '../../../utils/glyphs.js'
+import metrics from "../../../utils/metrics";
+import ProjectSearchDispatcher from "../../../stores/ProjectSearchDispatcher.js";
+
 
 const categoryDisplayNames = {
   //TODO: move to global constants file
@@ -114,15 +117,36 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     //this function renders individual clickable filter items regardless of category or subcategory status
     let sortedTags = Object.values(data).map(tag => {
       const key:string = tag.category + '-' + tag.tag_name;
-      return  (<li key={key} className="ProjectFilterContainer-list-item">
-                <input type="checkbox" id={key} checked={this.props.selectedTags.includes(tag.tag_name)} onChange={() => this.props.selectOption(tag)}></input>
-                <label htmlFor={key}>
-                  <span className="ProjectFilterContainer-list-item-name">{tag.display_name}</span> <span className="ProjectFilterContainer-list-item-count">{this.props.selectedTags.includes(tag.tag_name) ? <i className={GlyphStyles.Check}></i> : tag.num_times}</span>
-                </label>
-              </li>)
+      return  (
+                <li key={key} className="ProjectFilterContainer-list-item">
+                  <input type="checkbox" id={key} checked={this.state[tag.tag_name]} onChange={() => this.selectOption(tag)}></input>
+                  <label htmlFor={key}>
+                    <span className="ProjectFilterContainer-list-item-name">{tag.display_name}</span> <span className="ProjectFilterContainer-list-item-count">{this.state[tag.tag_name] ? <i className={GlyphStyles.Check}></i> : tag.num_times}</span>
+                  </label>
+                </li>
+            )
       });
 
     return <ul className="ProjectFilterContainer-filter-list">{sortedTags}</ul>
+  }
+
+  selectOption(tag): void {
+    var tagInState = this.state[tag.tag_name]
+    //if tag is NOT currently in state, add it, otherwise remove
+    if(!tagInState) {
+      ProjectSearchDispatcher.dispatch({
+        type: 'ADD_TAG',
+        tag: tag.tag_name,
+      });
+      this.setState({[tag.tag_name]: true})
+      metrics.logSearchFilterByTagEvent(tag);
+    } else {
+      ProjectSearchDispatcher.dispatch({
+        type: 'REMOVE_TAG',
+        tag: tag,
+      });
+      this.setState({[tag.tag_name]: false})
+    }
   }
 
   render(): React$Node {
