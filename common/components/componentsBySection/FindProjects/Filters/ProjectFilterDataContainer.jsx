@@ -123,10 +123,6 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
 
     _checkEnabled(tag: TagDefinition): boolean {
       return !!this.state.selectedTags[tag.tag_name];
-         return true
-       } else {
-         return false
-       }
     }
 
     _selectOption(tag: TagDefinition): void {
