@@ -87,13 +87,14 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
 
   _renderEditProjectButton(): React$Node {
     const id = {'id':this.props.project.project_id};
+    const section: string = this.props.project.project_approved ? Section.EditProject : Section.CreateProject;
     return (
         <Button
           className="AboutProject-button btn btn-theme clear-button-appearance"
           type="button"
           disabled={this.state.buttonDisabled}
           title={this.state.buttonTitle}
-          href={url.section(Section.EditProject, id)}
+          href={url.section(section, id)}
         >
           Edit Project
         </Button>
