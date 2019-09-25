@@ -47,9 +47,10 @@ class ImageCropUploadFormElement extends React.PureComponent<Props,State> {
 
   render(): React$Node {
     const aspect = this.props.aspect || 1 / 1;
+    const previewImage = this.props.currentImage ? this.props.currentImage.publicUrl : '';
     return (
       <div>
-        <ImageCropUploadButton currentImage={this.props.currentImage.publicUrl} aspect={aspect} buttonText={this.props.buttonText || "Upload Image"} onFileUpload={this._handleFileSelection.bind(this)}/>
+        <ImageCropUploadButton currentImage={previewImage} aspect={aspect} buttonText={this.props.buttonText || "Upload Image"} onFileUpload={this._handleFileSelection.bind(this)}/>
         <input type="hidden" ref="hiddenFormField" name={this.props.form_id} id={this.props.form_id} />
       </div>
     );

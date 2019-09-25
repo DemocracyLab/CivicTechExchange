@@ -10,7 +10,7 @@ import TagSelector from "../common/tags/TagSelector.jsx";
 import LinkList from "../forms/LinkList.jsx";
 import {LinkInfo} from "../forms/LinkInfo.jsx";
 import {FileInfo} from "../common/FileInfo.jsx";
-import ImageUploadFormElement from "../forms/ImageUploadFormElement.jsx";
+import ImageCropUploadFormElement from "../forms/ImageCropUploadFormElement.jsx";
 import FileUploadList from "../forms/FileUploadList.jsx";
 import url from "../utils/url.js";
 import metrics from "../utils/metrics.js";
@@ -164,7 +164,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
               <DjangoCSRFToken/>
   
               <div className="form-group">
-                <ImageUploadFormElement form_id="user_thumbnail_location"
+                <ImageCropUploadFormElement form_id="user_thumbnail_location"
                                         buttonText="Upload Your Picture"
                                         currentImage={this.state.formFields.user_thumbnail}/>
               </div>
