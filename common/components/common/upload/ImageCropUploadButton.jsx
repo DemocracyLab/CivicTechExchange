@@ -28,12 +28,13 @@ type State = {|
 class ImageCropUploadButton extends React.PureComponent<Props, State> {
 
   constructor(props): void {
-    super();
+    super(props);
     const aspect = props.aspect || 1 / 1;
     this.state = {
       s3Key: "",
       src: null,
       isCropping: false,
+      croppedImageUrl: '',
       crop: {
         unit:"%",
         width:30,
@@ -43,6 +44,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
+      const previewImage = this.state.croppedImageUrl || this.props.currentImage;
       return (
         <div className="ImageCropUploadButton-root">
         {this.state.src && this.state.isCropping && (
@@ -59,7 +61,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
         )}
         {!this.state.isCropping && (
           <FileSelectButton hasImagePreview="true" 
-             previewImage={this.state.croppedImageUrl}
+             previewImage={previewImage}
              acceptedFileTypes="image/*"
              dragText={this.props.dragText || "Drag Your Images Here or"}
              buttonText={this.props.buttonText || "Browse Photos On Computer"} 
