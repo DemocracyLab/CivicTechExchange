@@ -71,7 +71,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
           formComponent: ProjectPositionsForm
         }, {
           header: "Ready to publish your project?",
-          subHeader: "Congratulations!  You have successfully created a tech-for-good project.",
+          subHeader: "Please review your project's details and click \"PUBLISH\" below when you're ready.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onFinalSubmitSuccess,
           formComponent: ProjectPreviewForm
