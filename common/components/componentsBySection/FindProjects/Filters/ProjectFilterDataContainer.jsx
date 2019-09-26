@@ -122,8 +122,7 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     }
 
     _checkEnabled(tag: TagDefinition): boolean {
-      //return true if tag is in this.state.selectedTags, else implicitly false
-      return _.has(this.state.selectedTags, tag.tag_name)
+      return !!this.state.selectedTags[tag.tag_name];
     }
 
     _selectOption(tag: TagDefinition): void {
