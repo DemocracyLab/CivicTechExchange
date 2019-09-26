@@ -142,7 +142,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
             <h1>{currentStep.header}</h1>
             <h2>{currentStep.subHeader}</h2>
             <StepIndicatorBars
-              stepCount={this.props.steps.length}
+              stepCount={this.props.steps.length + 1}
               currentlySelected={this.state.currentStep}
             />
           </div>
