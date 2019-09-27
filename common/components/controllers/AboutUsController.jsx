@@ -72,7 +72,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       style={cdn.bgImage('OurMissionBGoverlay.jpg')}>
         <div className="about-us-content container">
           <h1>Mission</h1>
-          <p>DemocracyLab is a nonprofit organization.  Our mission is to empower people who use technology to advance the public good.</p>
+          <p>Empower people who use technology to advance the public good.</p>
         </div>
       </div>
     )
