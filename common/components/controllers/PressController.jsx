@@ -12,20 +12,13 @@ import LoadingMessage from '../chrome/LoadingMessage.jsx';
 
 //get press links
 const pressLinks = JSON.parse(_.unescape(window.PRESS_LINKS))
-//set 'static' stats to merge with API results later
-const staticData = {
-  platformLaunch: 'August 2018',
-  orgFounded: 'July 2006'
-}
 //set display names based on key names for stats.
 const categoryDisplayNames = {
-  "platformLaunch": "Matchmaking Platform Launched",
-  "orgFounded": "Organization Founded",
   "dlVolunteerCount": "Team Members",
   "activeVolunteerCount": "Active Volunteers",
   "userCount": "Registered Users",
   "projectCount": "Number of Projects"
-}
+};
 type statsType = {
   projectCount: number,
   userCount: number,
@@ -51,9 +44,8 @@ class PressController extends React.PureComponent<{||}, State> {
   }
 
   setStats(dbStats) {
-    let combined = Object.assign({}, dbStats, staticData);
     this.setState({
-      stats: combined,
+      stats: dbStats,
     });
   }
 
