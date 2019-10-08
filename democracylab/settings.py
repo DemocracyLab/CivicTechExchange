@@ -190,6 +190,7 @@ HOTJAR_APPLICATION_ID = os.environ.get('HOTJAR_APPLICATION_ID', '')
 
 GOOGLE_PROPERTY_ID = os.environ.get('GOOGLE_PROPERTY_ID', '')
 GOOGLE_ADS_ID = os.environ.get('GOOGLE_ADS_ID', '')
+GOOGLE_TAGS_ID = os.environ.get('GOOGLE_TAGS_ID', '')
 GOOGLE_CONVERSION_IDS = ast.literal_eval(os.environ.get('GOOGLE_CONVERSION_IDS', 'None'))
 
 #Google ReCaptcha keys - site key is exposed to the front end, secret is not
