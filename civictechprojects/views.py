@@ -192,6 +192,11 @@ def index(request):
                                                               'GOOGLE_CONVERSION_ID': GOOGLE_CONVERSION_ID
                                                           })
 
+    if settings.GOOGLE_TAGS_ID:
+        google_tag_context = {'GOOGLE_TAGS_ID': settings.GOOGLE_TAGS_ID}
+        context['googleTagsHeadScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_head.txt', google_tag_context)
+        context['googleTagsBodyScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_body.txt', google_tag_context)
+
     if request.user.is_authenticated():
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
