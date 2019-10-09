@@ -66,10 +66,10 @@
   background-blend-mode: multiply;
 }
 .SplashScreen-opacity50 {
-  background: rgba($color-opacity-layer, 0.5)
+  background-color: rgba($color-opacity-layer, 0.5)
 }
 .SplashScreen-opacity20 {
-  background: rgba($color-opacity-layer, 0.2)
+  background-color: rgba($color-opacity-layer, 0.2)
 }
 @include media-breakpoint-up(md) {
   .SplashScreen-mission p {
