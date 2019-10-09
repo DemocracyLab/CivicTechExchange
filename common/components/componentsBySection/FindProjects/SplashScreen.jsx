@@ -41,7 +41,7 @@ class SplashScreen extends React.PureComponent<Props> {
             </Button>
           </div>
         </div>
-        <div className="SplashScreen-mission SplashScreen-opacity-layer SplashScreen-opacity70">
+        <div className="SplashScreen-mission SplashScreen-opacity-layer SplashScreen-opacity20">
           <p>DemocracyLab is a nonprofit organization.</p>
           <p>Our mission is to empower people who use technology to advance the public good.</p>
         </div>

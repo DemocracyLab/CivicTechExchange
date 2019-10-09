@@ -1,5 +1,5 @@
 .SplashScreen-root {
-  background-color: $color-text-grey;
+  background-color: $color-opacity-layer;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -61,6 +61,15 @@
 .SplashScreen-mission p {
   margin: 0 auto;
   font-weight: 500;
+}
+.SplashScreen-opacity-layer {
+  background-blend-mode: multiply;
+}
+.SplashScreen-opacity50 {
+  background: rgba($color-opacity-layer, 0.5)
+}
+.SplashScreen-opacity20 {
+  background: rgba($color-opacity-layer, 0.2)
 }
 @include media-breakpoint-up(md) {
   .SplashScreen-mission p {
