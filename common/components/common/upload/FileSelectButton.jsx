@@ -28,21 +28,19 @@ class FileSelectButton extends React.PureComponent<Props, State> {
         backgroundImage: 'url(' + this.props.previewImage + ')',
     };
 
-      return (
-                <FileDrop onDrop={this._handleDrop.bind(this)} className={this.props.hasImagePreview ? "FileSelectButton-wrapper FileSelectButton-imagePreview" : "FileSelectButton-wrapper"}>
-                  <div className="FileSelectButton-innerWrapper" style={previewImageStyle} >
-                                <div className="FileSelectButton-innerContent">
-                    
-          <div className="FileSelectButton-dragFiles">{this.props.dragText || "Drag Your Files Here or"} </div>
-        <div className="FileSelectButton-button">
-           <input type="button" value={this.props.buttonText || "Browse Photos On Computer"} onClick={this._handleClick.bind(this)} className="btn btn-theme"/>
-          <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
+    return (
+      <FileDrop onDrop={this._handleDrop.bind(this)} className={this.props.hasImagePreview ? "FileSelectButton-wrapper FileSelectButton-imagePreview" : "FileSelectButton-wrapper"}>
+        <div className="FileSelectButton-innerWrapper" style={previewImageStyle} >
+          <div className="FileSelectButton-innerContent">
+            <div className="FileSelectButton-dragFiles">{this.props.dragText || "Drag Your Files Here or"}</div>
+            <div className="FileSelectButton-button">
+              <input type="button" value={this.props.buttonText || "Browse Photos On Computer"} onClick={this._handleClick.bind(this)} className="btn btn-theme"/>
+              <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
+            </div>
+          </div>
         </div>
-        </div>
-        </div>
-        </FileDrop>
-      );
-    
+      </FileDrop>
+    );
   }
 
    _processFile(file) : void {
