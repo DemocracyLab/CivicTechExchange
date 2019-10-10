@@ -1,16 +1,10 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
 import type { S3Data } from './S3Data.jsx'
+import type {FileUploadData} from "./FileUploadButton";
 import FileSelectButton from './FileSelectButton.jsx';
 import ReactCrop from "react-image-crop";
-
-export type FileUploadData = {|
-  key: string,
-  fileName: string,
-  publicUrl: string
-|};
 
 type Props = {|
   onFileUpload: (FileUploadData) => void,
@@ -78,9 +72,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
      }
   }
 
-  _onCropChange(crop, percentCrop) : void {
-    // You could also use percentCrop:
-    // this.setState({ crop: percentCrop });
+  _onCropChange(crop) : void {
     this.setState({ crop });
   };
 
@@ -92,10 +84,6 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
   _onCropComplete(crop) : void {
     this.makeClientCrop(crop);
   };
-
-  _handleClick(): void {
-    this.refs.fileInput.click();
-  }
 
   _handleFileSelection(file): void {
     this.setState( { src: file, isCropping: true } );
@@ -131,10 +119,9 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
       crop.height
     );
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       canvas.toBlob(blob => {
         if (!blob) {
-          //reject(new Error('Canvas is empty'));
           console.error("Canvas is empty");
           return;
         }
