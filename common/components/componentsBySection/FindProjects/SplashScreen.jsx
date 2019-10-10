@@ -10,14 +10,26 @@ type Props = {|
   onClickFindProjects: () => void
 |};
 
+const heroImages: $ReadOnlyArray<string> = [
+  "CodeForGood_072719_MSReactor-003.jpg",
+  "CodeForGood_072719_MSReactor-074.jpg",
+  "CodeForGood_072719_MSReactor-020.jpg",
+  "CodeForGood_072719_MSReactor-064.jpg"
+]
+
 class SplashScreen extends React.PureComponent<Props> {
   _onClickFindProjects(): void {
     this.props.onClickFindProjects();
   }
 
+  _heroRandomizer(): void {
+    let imgIndex = Math.floor(Math.random() * Math.floor(heroImages.length));
+    return cdn.image(heroImages[imgIndex])
+  }
+
   render(): React$Node {
     return (
-      <div className="SplashScreen-root" style={{backgroundImage: 'url(' + cdn.image("dl_splash.jpg")+ ')' }}>
+      <div className="SplashScreen-root SplashScreen-opacity-layer SplashScreen-opacity50" style={{backgroundImage: 'url(' + this._heroRandomizer() + ')' }}>
         <div className="SplashScreen-content">
           <h1>We connect skilled volunteers and tech-for-good projects</h1>
           <div className="SplashScreen-section">
@@ -29,7 +41,7 @@ class SplashScreen extends React.PureComponent<Props> {
             </Button>
           </div>
         </div>
-        <div className="SplashScreen-mission">
+        <div className="SplashScreen-mission SplashScreen-opacity-layer SplashScreen-opacity20">
           <p>DemocracyLab is a nonprofit organization.</p>
           <p>Our mission is to empower people who use technology to advance the public good.</p>
         </div>
