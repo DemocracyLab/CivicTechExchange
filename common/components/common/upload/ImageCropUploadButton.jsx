@@ -57,7 +57,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
           <FileSelectButton hasImagePreview="true" 
              previewImage={previewImage}
              acceptedFileTypes="image/*"
-             dragText={this.props.dragText || "Drag Your Images Here or"}
+             dragText={this.props.dragText || "Drag Your Image Here or"}
              buttonText={this.props.buttonText || "Browse Photos On Computer"} 
               onFileSelect={this._handleFileSelection.bind(this)}/>
         )}
