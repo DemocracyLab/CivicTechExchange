@@ -3,7 +3,7 @@
 import React from 'react';
 import type {LinkInfo} from '../../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../../common/FileInfo.jsx'
-import ImageUploadFormElement from '../../../components/forms/ImageUploadFormElement.jsx'
+import ImageCropUploadFormElement from '../../../components/forms/ImageCropUploadFormElement.jsx'
 import LinkList from '../../../components/forms/LinkList.jsx'
 import FileUploadList from '../../../components/forms/FileUploadList.jsx'
 import TagCategory from '../../common/tags/TagCategory.jsx'
@@ -235,7 +235,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <DjangoCSRFToken/>
 
         <div className="form-group">
-          <ImageUploadFormElement form_id="project_thumbnail_location"
+          <ImageCropUploadFormElement form_id="project_thumbnail_location"
                                   buttonText="Upload Project Image"
                                   currentImage={this.state.formFields.project_thumbnail}/>
         </div>

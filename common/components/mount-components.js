@@ -7,7 +7,6 @@ import LinkList from './forms/LinkList.jsx'
 import FileUploadList from './forms/FileUploadList.jsx'
 import MainController from './controllers/MainController.jsx'
 import CreateProjectController from './controllers/CreateProjectController.jsx'
-import ImageUploadFormElement from './forms/ImageUploadFormElement.jsx'
 import LogInController from './controllers/LogInController.jsx'
 import SignUpErrorAdapter from './componentsBySection/signUp/SignUpErrorAdapter.jsx'
 
