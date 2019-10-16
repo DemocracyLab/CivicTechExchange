@@ -7,7 +7,8 @@ import GlyphStyles from '../../../utils/glyphs.js'
 const categoryDisplayNames = {
   //TODO: move to global constants file
   'Issue(s) Addressed': "Issue Areas",
-  'Role': "Skills Needed",
+  'Role': "Skills Needed", 
+  'Organization': "Events & Groups"
 };
 
 //define CSS classes, keep it readable
