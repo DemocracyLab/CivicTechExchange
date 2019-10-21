@@ -47,17 +47,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'rest_framework',
-    'taggit'
+    'taggit',
+    'django_seo_js'
 ]
 
 MIDDLEWARE = [
+    'django_seo_js.middleware.UserAgentMiddleware',
+    'request_logging.middleware.LoggingMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'democracylab.urls'
@@ -293,3 +296,9 @@ LOGGING = {
         },
     },
 }
+
+# If you're using prerender.io (the default backend):
+SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '') # Really, put this in your env, not your codebase.
+SEO_JS_BACKEND = "django_seo_js.backends.PrerenderHosted"
+SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
+SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"

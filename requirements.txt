@@ -24,3 +24,4 @@ s3transfer==0.1.11
 simplejson==3.12.0
 six==1.11.0
 whitenoise==3.3.0
+django-seo-js==0.3.2

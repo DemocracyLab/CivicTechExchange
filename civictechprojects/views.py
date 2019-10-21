@@ -25,6 +25,7 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved, contact_democracylab_email
 from common.helpers.front_end import section_url, get_page_section
+from common.helpers.caching import update_cached_project_url
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 import requests
@@ -109,6 +110,7 @@ def project_edit(request, project_id):
     project = None
     try:
         project = ProjectCreationForm.edit_project(request, project_id)
+        update_cached_project_url(project_id)
     except PermissionDenied:
         return HttpResponseForbidden()
 
