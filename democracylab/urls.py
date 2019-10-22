@@ -21,8 +21,9 @@ from django.views.generic.base import RedirectView
 from . import views
 
 urlpatterns = [
+    url(r'^accounts/', include('allauth.urls')),
     url(r'^signup/$', views.signup, name='signup'),
-    url(r'^login/$', views.login_view, name='login_view'),
+    url(r'^login/(?P<provider>\w*)', views.login_view, name='login_view'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(
         r'^password_reset/$',

@@ -42,13 +42,50 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.sitemaps',
+    'django.contrib.staticfiles',
     'rest_framework',
-    'taggit'
+    'taggit',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.linkedin_oauth2',
 ]
+
+SITE_ID = 1
+
+# Customize allauth.socialaccount
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Bypass the signup form
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'SCOPE': [ 'read:user' ]
+    },
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'}
+    },
+    'linkedin_oauth2': {
+        'SCOPE': ['r_liteprofile', 'r_emailaddress']
+    },
+    'facebook': {
+        'SCOPE': ['email', 'public_profile'],
+         'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+         'METHOD': 'oauth2'
+    },
+}
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
