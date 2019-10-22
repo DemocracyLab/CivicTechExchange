@@ -206,10 +206,10 @@ def index(request):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
-        thumbnails = ProjectFile.objects.filter(file_user=request.user.id,
-                                                file_category=FileCategory.THUMBNAIL.value)
-        if thumbnails:
-            context['userImgUrl'] = thumbnails[0].file_url
+        thumbnail = ProjectFile.objects.filter(file_user=request.user.id,
+                                               file_category=FileCategory.THUMBNAIL.value).first()
+        if thumbnail:
+            context['userImgUrl'] = thumbnail.file_url
 
     return HttpResponse(template.render(context, request))
 

@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 # Customize allauth.socialaccount
+SOCIALACCOUNT_ADAPTER = 'democracylab.oauth2.SocialAccountAdapter'
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_AUTO_SIGNUP = True  # Bypass the signup form
