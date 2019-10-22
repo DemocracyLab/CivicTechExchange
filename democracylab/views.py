@@ -2,15 +2,19 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 import simplejson as json
 from .emails import send_verification_email, send_password_reset_email
 from .forms import DemocracyLabUserCreationForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
+from allauth.socialaccount import providers
 
 
-def login_view(request):
+def login_view(request, provider=None):
+    provider_ids = [p.id for p in providers.registry.get_list()]
+
     if request.method == 'POST':
         email = request.POST['username']
         password = request.POST['password']
@@ -23,6 +27,10 @@ def login_view(request):
         else:
             messages.error(request, 'Incorrect Email or Password')
             return redirect('/index/?section=LogIn&prev=' + prev_page)
+
+    if provider in provider_ids:
+        return redirect(reverse(f'{provider}_login'))
+
     else:
         return redirect('/index/?section=LogIn')
 
@@ -36,7 +44,7 @@ def signup(request):
             # TODO: Form validation
             contributor = Contributor(
                 username=email.lower(),
-                email=email,
+                email=email.lower(),
                 first_name=form.cleaned_data.get('first_name'),
                 last_name=form.cleaned_data.get('last_name'),
                 email_verified=False
