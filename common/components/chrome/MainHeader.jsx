@@ -360,7 +360,7 @@ class MainHeader extends React.Component<{||}, State > {
   _renderIcon(): React$Node {
     return (
       !_.isEmpty(CurrentUser.userImgUrl()) ?
-        <img className="SubHeader-userImg" src={CurrentUser.userImgUrl()} /> :
+        <img className="SubHeader-userImg" src={CurrentUser.userImgUrl().replace(/&amp;/g, '&')} /> :
         <Person className="SubHeader-userIcon" />
     );
   }
