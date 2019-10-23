@@ -52,34 +52,60 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.linkedin_oauth2',
+    'allauth.socialaccount.providers.oauth2',
+    'oauth2.providers.github',
+    'oauth2.providers.google',
+    'oauth2.providers.linkedin',
+    'oauth2.providers.facebook',
 ]
 
 SITE_ID = 1
 
 # Customize allauth.socialaccount
-SOCIALACCOUNT_ADAPTER = 'democracylab.oauth2.SocialAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'oauth2.adapter.SocialAccountAdapter'
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_AUTO_SIGNUP = True  # Bypass the signup form
+SOCIAL_APPS = {
+    'github': {
+        'name': 'DLab Social Login',
+        'client_id': 'b99879d1dcfc3164243f',
+        'secret': '27cb3e51c495d2149a97635f69a7949f2065b16b'
+    },
+    'google': {
+        'name': 'DLab Social Login',
+        'client_id': '985536764238-kg1u060tmmn6pko9ut418me8e8pbog8p.apps.googleusercontent.com',
+        'secret': 'nP6qe48iEjD-aoP_TUADmWNF'
+    },
+    'linkedin': {
+        'name': 'DLab Social Login',
+        'client_id': '86lmdtaz3zgnsb',
+        'secret': 'WeRqozfuW680cRhG'
+    },
+    'facebook': {
+        'name': 'DLab Social Login',
+        'client_id': '401313064132303',
+        'secret': '1d66651935ef2780dc34d5d6636f856e'
+    },
+}
+
+# Be sure to use a custom id property on your provider class such that its default URLs
+# do not clash with the provider you are subclassing
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
-        'SCOPE': [ 'read:user' ]
+        'SCOPE': ['read:user']
     },
     'google': {
         'SCOPE': ['profile', 'email'],
         'AUTH_PARAMS': {'access_type': 'online'}
     },
-    'linkedin_oauth2': {
+    'linkedin': {
         'SCOPE': ['r_liteprofile', 'r_emailaddress']
     },
     'facebook': {
         'SCOPE': ['email', 'public_profile'],
          'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-         'METHOD': 'oauth2'
+         'METHOD': 'oauth2'  # instead of 'js_sdk'
     },
 }
 
