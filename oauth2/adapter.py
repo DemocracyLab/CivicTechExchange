@@ -9,15 +9,15 @@ from civictechprojects.models import ProjectFile, FileCategory
 from democracylab.models import Contributor
 from django.contrib.auth.models import User
 from django.utils import timezone
-import requests
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
     def new_user(self, request, sociallogin):
-        email = sociallogin.account.get_provider().extract_common_fields(
+        email: str = sociallogin.account.get_provider().extract_common_fields(
                                                    sociallogin.account.extra_data).get('email').lower()
+        assert email
         try:
-            # This may NOT necessarily be a new user
+            # This account may actually belong to an existing user
             user = User.objects.get(username=email)
             # Preserve current password (sociallogin assigns an unusable password)
             if user.has_usable_password():
