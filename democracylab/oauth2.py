@@ -46,15 +46,15 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
     def new_user(self, request, sociallogin):
         email = sociallogin.account.get_provider().extract_common_fields(
                                                    sociallogin.account.extra_data).get('email').lower()
-        try:
-            # This may NOT necessarily be a new user
-            user = User.objects.get(username=email)
+
+        # This account may belong to an existing user
+        user = User.objects.filter(username=email).first()
+        if user:
             # Preserve current password (sociallogin assigns an unusable password)
             if user.has_usable_password():
                 sociallogin.account.extra_data.update(password=user.password)
             return Contributor.objects.get_by_natural_key(user.username)
-
-        except User.DoesNotExist:
+        else:
             return Contributor(email_verified=True, last_login=timezone.now())
 
     def pre_social_login(self, request, sociallogin):
@@ -75,12 +75,12 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
 
         sociallogin.user.first_name = first_name or full_name.split()[0]
         sociallogin.user.last_name = last_name or ' '.join(full_name.split()[1:])
-        # Set username to lowercase email
+
         sociallogin.user.username = sociallogin.user.email.lower()
 
-        password = sociallogin.account.extra_data.get('password')
-        if password:
-            sociallogin.user.password = password
+        existing_password = sociallogin.account.extra_data.get('password')
+        if existing_password:
+            sociallogin.user.password = existing_password
 
         if sociallogin.is_existing:
             sociallogin.user.save()  # Update only the user

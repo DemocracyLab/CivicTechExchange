@@ -29,7 +29,7 @@ def login_view(request, provider=None):
             return redirect('/index/?section=LogIn&prev=' + prev_page)
 
     if provider in provider_ids:
-        return redirect(reverse(f'{provider}_login'))
+        return redirect(f'{provider}_login')
 
     else:
         return redirect('/index/?section=LogIn')
