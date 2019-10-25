@@ -38,18 +38,6 @@ class PressController extends React.PureComponent<{||}, State> {
     }
   }
 
-  componentDidMount() {
-    //get stats from API, callback function will merge with static data defined above, then set state
-    ProjectAPIUtils.fetchStatistics(this.setStats.bind(this));
-  }
-
-  setStats(dbStats) {
-    this.setState({
-      stats: dbStats,
-    });
-  }
-
-
   _renderHeader(): React$Node {
     const title: string = "DemocracyLab | News Feed";
     const description: string = "Read external articles and blog posts describing DemocracyLab's work."
@@ -116,7 +104,6 @@ class PressController extends React.PureComponent<{||}, State> {
          {this._renderHeader()}
          <div className="container-fluid pl-0 pr-0 press-root">
            {this._renderTitle()}
-           {this._renderStats()}
          </div>
          <div className="container press-root">
            {this._renderNews()}
