@@ -25,8 +25,6 @@
 @import 'vendor/bootstrap/pagination';
   //import other third party CSS
 @import 'vendor/_react-select.min';
-  //import Bootstrap3 dropdown (TODO: refactor to use Bootstrap 4)
-@import 'vendor/dropdown';
 @import 'vendor/react-image-crop/ReactCrop';
 
   //import DemocracyLab component partials
@@ -42,7 +40,7 @@
 @import 'partials/MainController';
 @import 'partials/MainHeader';
 @import 'partials/MainFooter';
-@import 'partials/project_signup'; // has a modal opacity rule required for bootstrap-modals, maybe pull that out if we dont use the rest of this
+@import 'partials/project_signup'; // TODO: verify if we use any of these rules (Oct 2019)
 @import 'partials/MyProjectCard';
 @import 'partials/MyProjectsController';
 @import 'partials/ProjectCard';
@@ -58,7 +56,6 @@
 @import 'partials/SubHeader';
 @import 'partials/TagsDisplay';
 @import 'partials/LogInController';
-@import 'partials/ModalPosition';
 @import 'partials/VolunteerCard';
 @import 'partials/CollapsibleText';
 @import 'partials/AboutProject';
