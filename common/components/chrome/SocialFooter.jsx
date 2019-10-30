@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import {Glyph, GlyphStyles, GlyphSizes} from '../utils/glyphs.js';
 import NewsletterSignup from '../common/integrations/NewsletterSignup.jsx';
 import url from "../utils/url.js";

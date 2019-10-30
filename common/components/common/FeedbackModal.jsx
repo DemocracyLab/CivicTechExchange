@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 type Props = {|
   showModal: boolean,
@@ -28,23 +29,23 @@ class FeedbackModal extends React.PureComponent<Props, State> {
       feedbackText: ""
     }
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({ showModal: nextProps.showModal });
   }
-  
+
   onTextChange(event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.feedbackText = event.target.value;
     this.forceUpdate();
   }
-  
+
   confirm(confirmation: boolean): void {
     this.props.onConfirm(confirmation, this.state.feedbackText);
     if(confirmation) {
       this.setState({feedbackText: ""});
     }
   }
-  
+
   render(): React$Node {
     return (
       <div>

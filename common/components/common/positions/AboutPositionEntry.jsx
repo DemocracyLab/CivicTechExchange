@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CollapsibleTextSection from "../CollapsibleTextSection.jsx";

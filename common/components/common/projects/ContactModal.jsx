@@ -1,9 +1,11 @@
 // @flow
 
 import React from 'react';
-import {Modal, Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form'
 import ConfirmationModal from '../../common/confirmation/ConfirmationModal.jsx';
-import form from "../../utils/forms.js";
+import formHelper from "../../utils/forms.js";
 import _ from "lodash";
 
 export type ContactModalFields = {|
@@ -47,8 +49,8 @@ class ContactModal extends React.PureComponent<Props, State> {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.askForSendConfirmation = this.askForSendConfirmation.bind(this);
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
-  
-    this.form = form.setup();
+
+    this.form = formHelper.setup();
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -113,7 +115,7 @@ class ContactModal extends React.PureComponent<Props, State> {
       </div>
     );
   }
-  
+
   _renderSubjectLineBox(): React$Node {
     return (
       <FormGroup>

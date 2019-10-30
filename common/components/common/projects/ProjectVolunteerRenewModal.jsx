@@ -2,7 +2,9 @@
 
 import React from 'react';
 import metrics from "../../utils/metrics.js";
-import {Modal, Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
 import {SelectOption} from "../../types/SelectOption.jsx";
 import Select from 'react-select'
@@ -44,7 +46,7 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
     this._fieldsFilled = this._fieldsFilled.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     let state: State = {
       showModal: nextProps.showModal
@@ -53,7 +55,7 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
     this.setState(state);
     this.forceUpdate();
   }
-  
+
   handleMessageChange(event: SyntheticInputEvent<HTMLInputElement>): void {
       this.setState({message: event.target.value});
   }
@@ -61,7 +63,7 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
   handleVolunteerPeriodSelection(daysToVolunteerForOption: SelectOption): void {
     this.setState({daysToVolunteerForOption: daysToVolunteerForOption});
   }
-  
+
   handleSubmit() {
     this.setState({isSending:true});
     // TODO: Add metrics
@@ -120,7 +122,7 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
       </div>
     );
   }
-  
+
   _fieldsFilled(): boolean {
     return this.state.daysToVolunteerForOption !== null;
   }

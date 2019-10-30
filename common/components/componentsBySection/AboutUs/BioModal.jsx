@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 import {Glyph, GlyphStyles, GlyphSizes} from '../../utils/glyphs.js';
 import _ from 'lodash';
 

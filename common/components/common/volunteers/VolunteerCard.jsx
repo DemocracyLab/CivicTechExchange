@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import {DropdownButton, MenuItem} from 'react-bootstrap';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import {UserAPIData} from "../../utils/UserAPIUtils.js";
 import {TagDefinition, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import url from "../../utils/url.js";
@@ -69,7 +69,7 @@ class VolunteerCard extends React.PureComponent<Props> {
     const volunteer: VolunteerDetailsAPIData = this.props.volunteer;
     let links: ?Array<React$Node> = [];
     let key: number = 0;
-    
+
     if (volunteer.isApproved) {
       if (volunteer.isCoOwner) {
         links = links.concat([
@@ -80,7 +80,7 @@ class VolunteerCard extends React.PureComponent<Props> {
           (<MenuItem onSelect={() => this.props.onPromotionButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Promote</MenuItem>)
         ]);
       }
-  
+
       links = links.concat([
         (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</MenuItem>)
       ]);
@@ -97,7 +97,7 @@ class VolunteerCard extends React.PureComponent<Props> {
         (<MenuItem onSelect={() => this.props.onContactButton(this.props.volunteer)} key={key++} ><i className={Glyph(GlyphStyles.Envelope, GlyphWidth.Fixed)}></i> Contact</MenuItem>)
       ]);
     }
-    
+
     return links;
   }
 }

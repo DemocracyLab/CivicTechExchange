@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import ProjectAPIUtils, {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import Section from '../../enums/Section.js';
@@ -71,7 +71,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     metrics.logUserClickContactProjectOwner(CurrentUser.userID(), this.props.project.project_id);
     this.setState({ showContactModal: true });
   }
-  
+
   handleVolunteerContactModal(fields: ContactModalFields, closeModal: Function): void {
     ProjectAPIUtils.post("/contact/project/" + this.props.project.project_id + "/",
       fields,
@@ -80,7 +80,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     );
     metrics.logUserContactedProjectOwner(CurrentUser.userID(), this.props.project.project_id);
   }
-  
+
   closeModal() {
     this.setState({ showContactModal: false });
   }

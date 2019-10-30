@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import FeedbackModal from "../FeedbackModal.jsx";

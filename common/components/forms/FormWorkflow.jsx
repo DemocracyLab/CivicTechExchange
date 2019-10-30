@@ -1,7 +1,8 @@
 // @flow
 
 import React from "react";
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import StepIndicatorBars from "../common/StepIndicatorBars.jsx";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";

@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import {DropdownButton, MenuItem} from 'react-bootstrap';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import {UserAPIData} from "../../utils/UserAPIUtils.js";
 import {TagDefinition, VolunteerUserData} from "../../utils/ProjectAPIUtils.js";
 import url from "../../utils/url.js";

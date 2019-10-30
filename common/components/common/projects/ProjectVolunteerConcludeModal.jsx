@@ -2,7 +2,9 @@
 
 import React from 'react';
 import metrics from "../../utils/metrics.js";
-import {Modal, Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
 
 type Props = {|
@@ -32,7 +34,7 @@ class ProjectVolunteerConcludeModal extends React.PureComponent<Props, State> {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     let state: State = {
       showModal: nextProps.showModal
@@ -41,11 +43,11 @@ class ProjectVolunteerConcludeModal extends React.PureComponent<Props, State> {
     this.setState(state);
     this.forceUpdate();
   }
-  
+
   handleMessageChange(event: SyntheticInputEvent<HTMLInputElement>): void {
       this.setState({message: event.target.value});
   }
-  
+
   handleSubmit() {
     this.setState({isSending:true});
     // TODO: Add metrics
@@ -100,7 +102,7 @@ class ProjectVolunteerConcludeModal extends React.PureComponent<Props, State> {
       </div>
     );
   }
-  
+
 }
 
 export default ProjectVolunteerConcludeModal;

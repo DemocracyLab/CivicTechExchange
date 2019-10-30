@@ -18,7 +18,6 @@ import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
-import DropdownMenu from "react-bootstrap/es/DropdownMenu";
 
 
 type Props = {|
@@ -53,7 +52,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     };
     this.handleUpdateVolunteers = this.handleUpdateVolunteers.bind(this);
  }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({
       project: nextProps.project,
@@ -67,7 +66,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       positionToJoin: position
     });
   }
-  
+
   handleUpdateVolunteers(volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>) {
     this.setState({
       volunteers: volunteers
@@ -226,7 +225,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           <div className='AboutProjects-details'>
             <div id='project-details'>
               {project.project_description}
-              {!_.isEmpty(project.project_description_solution) && 
+              {!_.isEmpty(project.project_description_solution) &&
                 <React.Fragment>
                   <div>
                     <br></br>
@@ -234,7 +233,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                   </div>
                 </React.Fragment>
               }
-              {!_.isEmpty(project.project_description_actions) && 
+              {!_.isEmpty(project.project_description_actions) &&
                 <React.Fragment>
                   <div>
                     <br></br>
@@ -287,7 +286,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       />
     );
   }
-  
+
   _renderContactAndVolunteerButtons(): React$Node {
     return (
       <div className='AboutProjects-owner'>

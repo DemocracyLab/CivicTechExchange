@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+
 import LinkEntryModal from './LinkEntryModal.jsx'
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
 import type { LinkInfo } from './LinkInfo.jsx'

@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+
 import FileDrop from 'react-file-drop';
 
 type Props = {|
@@ -50,7 +51,7 @@ class FileSelectButton extends React.PureComponent<Props, State> {
         this.props.onFileSelect(reader.result);
       });
       reader.readAsDataURL(file);
-    
+
   };
 
   _isValidFileType(file) : boolean {

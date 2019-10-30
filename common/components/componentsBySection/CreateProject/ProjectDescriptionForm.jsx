@@ -5,7 +5,7 @@ import DjangoCSRFToken from "django-react-csrftoken";
 import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
-import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
+import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
 
 
@@ -46,10 +46,10 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
         }
       ]
     };
-    
-    this.form = form.setup();
+
+    this.form = formHelper.setup();
   }
-  
+
   componentDidMount() {
     // Initial validation check
     this.form.doValidation.bind(this)();
@@ -67,7 +67,7 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
       <div className="EditProjectForm-root">
 
         <DjangoCSRFToken/>
-  
+
         <div className="form-group">
           <label>
             <strong>Problem*</strong>

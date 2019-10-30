@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import ContactModal from "./ContactModal.jsx";
@@ -28,18 +28,18 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
       project: props.project,
       showContactModal: false,
     };
-    
+
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this._handleSubmission = this._handleSubmission.bind(this);
   }
-  
+
   handleShow() {
     // TODO: Add metrics
     // metrics.logUserClickContactProjectOwner(CurrentUser.userID(), this.props.project.project_id);
     this.setState({showContactModal: true});
   }
-  
+
   _handleSubmission(fields, closeModal): ?React$Node {
     // TODO: Get close modal working
     ProjectAPIUtils.post("/contact/volunteers/" + this.props.project.project_id + "/",
@@ -48,11 +48,11 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
       response => null /* TODO: Report error to user */
     );
   }
-  
+
   handleClose() {
     this.setState({showContactModal: false});
   }
-  
+
   _renderContactVolunteerButton(): React$Node {
     return (
       <Button
@@ -65,7 +65,7 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
       </Button>
     );
   }
-  
+
   displayContactVolunteerButton(): ?React$Node {
     return (
       <React.Fragment>
@@ -81,8 +81,8 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
       </React.Fragment>
     );
   }
-  
-  
+
+
   render(): ?React$Node {
     if (CurrentUser.isCoOwnerOrOwner(this.props.project) && !_.isEmpty(this.props.project.project_volunteers)) {
       return (

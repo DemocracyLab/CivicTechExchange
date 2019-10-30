@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 type Props = {|
   showModal: boolean,
@@ -22,15 +23,15 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
       showModal: false
     }
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({ showModal: nextProps.showModal });
   }
-  
+
   confirm(confirmation: boolean): void {
     this.props.onSelection(confirmation);
   }
-  
+
   render(): React$Node {
     return (
       <div>

@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+
 import type { S3Data } from './S3Data.jsx'
 
 export type FileUploadData = {|

@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+
 import Section from "../../enums/Section.js";
 import url from "../../utils/url.js";
 import cdn from "../../utils/cdn.js";

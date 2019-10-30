@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 import {TagDefinition} from "../utils/ProjectAPIUtils.js";
 import TagSelector from "../common/tags/TagSelector.jsx";
 import TagCategory from "../common/tags/TagCategory.jsx";
@@ -84,7 +85,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
     this.state.positionInfo.descriptionUrl = event.target.value;
     this.forceUpdate();
   }
-  
+
   onDescriptionTextChange(event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.positionInfo.description = event.target.value;
     this.forceUpdate();
@@ -109,7 +110,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
                       onSelection={this.onRoleChange.bind(this)}
                     />
                   </div>
-  
+
                 <div className="form-group">
                   <label htmlFor="position-description">
                     Position Description
@@ -130,7 +131,7 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
                             placeholder="Describe the position's qualifications and responsibilities" rows="4" maxLength="3000"
                             value={this.state.positionInfo.description} onChange={this.onDescriptionTextChange.bind(this)}></textarea>
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="link-position-description-url">Link to Description (Optional)</label>
                   <input type="text" className="form-control" id="link-position-description-url" maxLength="2075" value={this.state.positionInfo.descriptionUrl} onChange={this.onDescriptionUrlChange.bind(this)} placeholder="http://"/>
