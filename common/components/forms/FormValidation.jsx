@@ -57,7 +57,7 @@ class FormValidation<T> extends React.PureComponent<Props<T>,State>  {
   static getValidationErrors<T> (formFields:T, validators: $ReadOnlyArray<Validator<T>>) {
     return validators.filter(validator => !validator.checkFunc(formFields));
   }
-  
+
 }
 
 export default FormValidation;

@@ -14,7 +14,8 @@ import type {Validator} from '../../../components/forms/FormValidation.jsx'
 import CurrentUser from "../../utils/CurrentUser.js"
 import ProjectAPIUtils from '../../../components/utils/ProjectAPIUtils.js';
 import type {APIError, TagDefinition, ProjectDetailsAPIData} from '../../../components/utils/ProjectAPIUtils.js';
-import url from '../../utils/url.js'
+import url from '../../utils/url.js';
+import isValidUrl from '../../utils/url-validator';
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import PositionList from "../../forms/PositionList.jsx";
 import _ from 'lodash'
@@ -97,6 +98,10 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         {
           checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_description"]),
           errorMessage: "Please enter Project Problem"
+        },
+        {
+          checkFunc: (formFields: FormFields) => isValidUrl(formFields["project_url"]),
+          errorMessage: "Please enter a valid Url"
         }
       ]
     };
@@ -162,9 +167,9 @@ class EditProjectForm extends React.PureComponent<Props,State> {
 
   onSubmit(): void {
     //Sanitize project url if necessary
-    if(this.state.formFields.project_url) {
+      if(this.state.formFields.project_url) {
       this.state.formFields.project_url = url.appendHttpIfMissingProtocol(this.state.formFields.project_url);
-    }
+      }
    // create input array
    let eLinks = ['link_coderepo','link_messaging','link_filerepo','link_projmanage'].map(name => ({linkName: name, linkUrl: this.state.formFields[name]}));
    //create output array
