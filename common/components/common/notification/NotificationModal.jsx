@@ -38,7 +38,7 @@ class NotificationModal extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div>
-          <Modal show={this.state.showModal} bsSize="lg">
+          <Modal show={this.state.showModal} size="lg">
               <Modal.Header style={{whiteSpace: "pre-wrap"}}>
                   <Modal.Title>{this.props.headerText}</Modal.Title>
               </Modal.Header>

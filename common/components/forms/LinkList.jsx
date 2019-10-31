@@ -106,7 +106,7 @@ class LinkList extends React.PureComponent<Props,State>  {
         <label>{this.props.title || "Links"} &nbsp;</label>
         <Button
           className="btn-background-project"
-          bsSize="small"
+          size="sm"
           onClick={this.createNewLink.bind(this)}
         >
           <i className={GlyphStyles.Add} aria-hidden="true"></i>

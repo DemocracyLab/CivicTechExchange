@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import {SelectOption} from "../../types/SelectOption.jsx";
 
 type Props = {|
@@ -21,14 +21,14 @@ class RadioButtons extends React.PureComponent<Props, State> {
       selectedOption: props.defaultSelection
     };
   }
-  
+
   handleOptionChange(selection: SelectOption) {
     this.setState({selectedOption: selection}, function() {
       this.forceUpdate();
     });
     this.props.onSelection(selection);
   }
-  
+
   render(): ?React$Node {
     return this.props.options && (
       <React.Fragment>

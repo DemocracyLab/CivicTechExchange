@@ -50,9 +50,8 @@ class VolunteerCard extends React.PureComponent<Props> {
     return (this.props.volunteer
       ?
         (<DropdownButton
-          bsClass="VolunteerCard-dropdownButton dropdown"
-          bsStyle="link"
-          bsSize="large"
+          className="VolunteerCard-dropdownButton dropdown"
+          size="lg"
           title={<span><i className={GlyphStyles.EllipsisV}></i></span>}
           id="VolunteerCard-dropdown"
           noCaret

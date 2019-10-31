@@ -103,7 +103,7 @@ class PositionList extends React.PureComponent<Props,State>  {
         <label>Roles Needed &nbsp;</label>
         <Button
           className="btn-background-project"
-          bsSize="small"
+          size="sm"
           onClick={this.createNewPosition.bind(this)}
         >
           <i className={GlyphStyles.Add} aria-hidden="true"></i>
