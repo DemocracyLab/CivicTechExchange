@@ -85,7 +85,7 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
           <Modal show={this.state.showModal}
                  onHide={this.close}
           >
-              <Modal.Header>
+              <Modal.Header closeButton>
                   <Modal.Title>Add Link</Modal.Title>
               </Modal.Header>
               <Modal.Body>

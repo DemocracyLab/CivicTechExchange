@@ -111,7 +111,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
                  onHide={this.closeModal}
           >
             <form onSubmit={this.handleSubmit}>
-              <Modal.Header >
+              <Modal.Header closeButton>
                   <Modal.Title>Sign Up For Alerts</Modal.Title>
               </Modal.Header>
               <Modal.Body>

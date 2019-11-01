@@ -52,7 +52,7 @@ class FeedbackModal extends React.PureComponent<Props, State> {
           <Modal show={this.state.showModal}
                  onHide={this.confirm.bind(this, false)}
           >
-              <Modal.Header >
+              <Modal.Header closeButton>
                   <Modal.Title>{this.props.headerText}</Modal.Title>
               </Modal.Header>
               <Modal.Body>

@@ -90,7 +90,7 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
           <Modal show={this.state.showModal}
              onHide={this.closeModal.bind(this, false)}
           >
-              <Modal.Header >
+              <Modal.Header closeButton>
                   <Modal.Title>Volunteer Renewal Application</Modal.Title>
               </Modal.Header>
               <Modal.Body>

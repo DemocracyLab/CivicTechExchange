@@ -38,7 +38,7 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
           <Modal show={this.state.showModal}
                  onHide={this.confirm.bind(this, false)}
           >
-              <Modal.Header >
+              <Modal.Header closeButton>
                   <Modal.Title>Confirm</Modal.Title>
               </Modal.Header>
               <Modal.Body>

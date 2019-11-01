@@ -90,7 +90,7 @@ class ContactModal extends React.PureComponent<Props, State> {
           <Modal show={this.state.showModal}
                  onHide={this.closeModal}
           >
-              <Modal.Header >
+              <Modal.Header closeButton>
                   <Modal.Title>{this.props.headerText}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
