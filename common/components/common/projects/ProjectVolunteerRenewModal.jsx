@@ -94,22 +94,23 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
                   <Modal.Title>Volunteer Renewal Application</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <FormGroup>
-                  <ControlLabel>How long do you expect to be able to contribute to this project?</ControlLabel>
-                  {this._renderVolunteerPeriodDropdown()}
-                  <ControlLabel>Message:</ControlLabel>
-                  <div className="character-count">
-                    { (this.state.message || "").length} / 3000
-                  </div>
-                  <FormControl componentClass="textarea"
-                    placeholder="Message for Project Owner (Optional)"
-                    rows="4"
-                    cols="50"
-                    name="message"
-                    maxLength="3000"
-                    value={this.state.message}
-                    onChange={this.handleMessageChange}/>
-                </FormGroup>
+                <Form>
+                  <Form.Group>
+                    <Form.Label>How long do you expect to be able to contribute to this project?</Form.Label>
+                    {this._renderVolunteerPeriodDropdown()}
+                    <Form.Label>Message:</Form.Label>
+                    <div className="character-count">
+                      { (this.state.message || "").length} / 3000
+                    </div>
+                    <Form.Control as="textarea"
+                      placeholder="Message for Project Owner (Optional)"
+                      rows="4"
+                      name="message"
+                      maxLength="3000"
+                      value={this.state.message}
+                      onChange={this.handleMessageChange}/>
+                  </Form.Group>
+              </Form>
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.closeModal.bind(this, false)}>{"Cancel"}</Button>

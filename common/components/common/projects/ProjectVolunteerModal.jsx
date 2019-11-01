@@ -159,26 +159,27 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
                   <Modal.Title>Volunteer Application</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <FormGroup>
-                  {!_.isEmpty(this.props.positions) ? this._renderExistingPositionDropdown() : null}
-                  {_.isEmpty(this.props.positions) || (this.state.existingPositionOption && (this.state.existingPositionOption.value === OtherRoleOption.value))
-                    ? this._renderOtherRoleDropdown()
-                    : null}
-                  <ControlLabel>How long do you expect to be able to contribute to this project?</ControlLabel>
-                  {this._renderVolunteerPeriodDropdown()}
-                  <ControlLabel>Message:</ControlLabel>
-                  <div className="character-count">
-                    { (this.state.message || "").length} / 3000
-                  </div>
-                  <FormControl componentClass="textarea"
-                    placeholder="I'm interested in helping with this project because..."
-                    rows="4"
-                    cols="50"
-                    name="message"
-                    maxLength="3000"
-                    value={this.state.message}
-                    onChange={this.handleChange}/>
-                </FormGroup>
+                <Form>
+                  <Form.Group>
+                    {!_.isEmpty(this.props.positions) ? this._renderExistingPositionDropdown() : null}
+                    {_.isEmpty(this.props.positions) || (this.state.existingPositionOption && (this.state.existingPositionOption.value === OtherRoleOption.value))
+                      ? this._renderOtherRoleDropdown()
+                      : null}
+                    <Form.Label>How long do you expect to be able to contribute to this project?</Form.Label>
+                    {this._renderVolunteerPeriodDropdown()}
+                    <Form.Label>Message:</Form.Label>
+                    <div className="character-count">
+                      { (this.state.message || "").length} / 3000
+                    </div>
+                    <Form.Control as="textarea"
+                      placeholder="I'm interested in helping with this project because..."
+                      rows="4"
+                      name="message"
+                      maxLength="3000"
+                      value={this.state.message}
+                      onChange={this.handleChange}/>
+                  </Form.Group>
+                </Form>
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.closeModal.bind(this, false)}>{"Cancel"}</Button>

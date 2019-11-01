@@ -96,16 +96,17 @@ class ContactModal extends React.PureComponent<Props, State> {
               <Modal.Body>
                 <p>{this.props.explanationText}</p>
                 {this.props.showSubject ? this._renderSubjectLineBox() : null}
-                <FormGroup>
-                  <ControlLabel>Message:</ControlLabel>
-                  <FormControl componentClass="textarea"
-                    placeholder={this.props.messagePlaceholderText}
-                    rows="4"
-                    cols="50"
-                    name="message"
-                    value={this.state.formFields.message}
-                    onChange={this.form.onInput.bind(this, "message")}/>
-                </FormGroup>
+                <Form>
+                  <Form.Group>
+                    <Form.Label>Message:</Form.Label>
+                    <Form.Control as="textarea"
+                      placeholder={this.props.messagePlaceholderText}
+                      rows="4"
+                      name="message"
+                      value={this.state.formFields.message}
+                      onChange={this.form.onInput.bind(this, "message")}/>
+                  </Form.Group>
+                </Form>
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.closeModal}>{"Cancel"}</Button>
