@@ -11,4 +11,3 @@ def update_cached_project_url(project_id):
 def update_cached_url(url):
     print('caching ' + url)
     update_cache_for_url(url)
-

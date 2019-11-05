@@ -298,6 +298,6 @@ LOGGING = {
 
 # If you're using prerender.io (the default backend):
 SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '') # Really, put this in your env, not your codebase.
-SEO_JS_BACKEND = "django_seo_js.backends.PrerenderHosted"
+SEO_JS_BACKEND = "django_seo_js.backends.PrerenderIO"
 SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
 SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
