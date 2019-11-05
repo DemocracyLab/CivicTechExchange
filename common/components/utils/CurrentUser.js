@@ -29,7 +29,7 @@ class CurrentUser {
   }
 
   static userImgUrl(): string {
-    return window.DLAB_GLOBAL_CONTEXT.userImgUrl;
+    return window.DLAB_GLOBAL_CONTEXT.userImgUrl.replace(/&amp;/g, '&');
   }
 
   static isStaff() : boolean {
