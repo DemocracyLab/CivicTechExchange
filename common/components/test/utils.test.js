@@ -2,10 +2,12 @@ import async from '../utils/async';
 import CurrentUser from '../utils/CurrentUser';
 import {Glyph} from '../utils/glyphs';
 import Sort from '../utils/sort';
+import svg, {SVGPath} from "../utils/svg.js";
 import Truncate from '../utils/truncate';
 import urlHelper from '../utils/url';
 import window from './__mocks__/window';
 import NavigationStore from '../stores/NavigationStore.js';
+import renderer from 'react-test-renderer';
 
 describe('utils', () => {
 
@@ -69,6 +71,13 @@ describe('utils', () => {
   	const args = urlHelper.arguments('/api/test?query=test&page=1');
   	expect(args['query']).toEqual('test');
   	expect(args['page']).toEqual('1');
+  });
+
+  test('svg', () => {
+    const img = svg.path(SVGPath['GITHUB'], 'LogInController-socialIcon');
+    const el = renderer.create(img);
+    const str = JSON.stringify(el);
+    expect(str).toMatch('LogInController-socialIcon');
   });
 
 });
