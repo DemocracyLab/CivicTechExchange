@@ -267,21 +267,10 @@
 }
 
 .AboutProject-button {
-  background-color: $color-green;
-  border: 0;
-  border-radius: 5px;
-  color: $color-text-light;
-  cursor: pointer;
+  /* note these are in addition to the DL theme button rules */
   float: right;
   font-size: 14px;
-  padding: 8px 8px 8px 8px;
-  margin-right: 8px;
   margin-top: 16px;
-}
-
-button.AboutProject-button:disabled {
-  background-color: $color-grey-disabled;
-  color: $color-text-light;
 }
 
 @media (max-width: 1000px) {

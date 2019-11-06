@@ -34,10 +34,10 @@ class SplashScreen extends React.PureComponent<Props> {
         <div className="SplashScreen-content">
           <h1>We connect skilled volunteers and tech-for-good projects</h1>
           <div className="SplashScreen-section">
-            <Button className="SplashScreen-find-projects-btn" onClick={this._onClickFindProjects.bind(this)}>
+            <Button variant="dl-orange" className="SplashScreen-find-projects-btn" onClick={this._onClickFindProjects.bind(this)}>
               Find Projects
             </Button>
-            <Button className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.CreateProject)}>
+            <Button variant="dl-orange" className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.CreateProject)}>
               Create A Project
             </Button>
           </div>
