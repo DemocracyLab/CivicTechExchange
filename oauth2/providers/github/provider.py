@@ -8,6 +8,7 @@ class GitHubAccount(ProviderAccount):
     def get_profile_url(self):
         return self.account.extra_data.get('html_url')
 
+    @staticmethod
     def get_avatar_url(self):
         return self.account.extra_data.get('avatar_url')
 
@@ -42,6 +43,9 @@ class GitHubProvider(SocialAppMixin, OAuth2Provider):
         return dict(email=data.get('email'),
                     username=data.get('login'),
                     name=data.get('name'))
+
+    def avatar_url(self, sociallogin):
+        return sociallogin.account.extra_data.get('avatar_url')
 
 
 provider_classes = [GitHubProvider]

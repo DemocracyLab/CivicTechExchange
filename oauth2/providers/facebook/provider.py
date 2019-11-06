@@ -32,7 +32,7 @@ class FacebookAccount(ProviderAccount):
     def get_profile_url(self):
         return self.account.extra_data.get('link')
 
-    def get_avatar_url(self):
+    def get_avatar_url(self, sociallogin):
         uid = self.account.uid
         # ask for a 600x600 pixel image. We might get smaller but
         # image will always be highest res possible and square
@@ -194,6 +194,10 @@ class FacebookProvider(SocialAppMixin, OAuth2Provider):
                                     verified=False,
                                     primary=True))
         return ret
+
+    def avatar_url(self, sociallogin):
+        uid = sociallogin.account.uid
+        return GRAPH_API_URL + f'/{uid}/picture?type=square&height=600&width=600&return_ssl_resources=1'
 
 
 provider_classes = [FacebookProvider]

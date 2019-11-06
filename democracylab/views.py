@@ -31,8 +31,8 @@ def login_view(request, provider=None):
     if provider in provider_ids:
         return redirect(f'{provider}_login')
 
-    '''else:
-        return redirect('/index/?section=LogIn')'''
+    else:
+        return redirect('/index/?section=LogIn')
 
 
 def signup(request):

@@ -62,7 +62,7 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
     @receiver(user_logged_in)
     def set_avatar_at_login(sender, sociallogin, **kwargs):
         owner = sociallogin.user.contributor
-        user_avatar_url = sociallogin.account.get_avatar_url()
+        user_avatar_url = sociallogin.account.get_provider().avatar_url(sociallogin)
         if user_avatar_url:
             file_json = {
                 'publicUrl': user_avatar_url,

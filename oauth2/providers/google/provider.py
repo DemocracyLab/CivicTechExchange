@@ -14,7 +14,7 @@ class GoogleAccount(ProviderAccount):
     def get_profile_url(self):
         return self.account.extra_data.get('link')
 
-    def get_avatar_url(self):
+    def get_avatar_url(self, sociallogin):
         return self.account.extra_data.get('picture')
 
     def to_str(self):
@@ -56,6 +56,9 @@ class GoogleProvider(SocialAppMixin, OAuth2Provider):
                        verified=True,
                        primary=True))
         return ret
+
+    def avatar_url(self, sociallogin):
+        return sociallogin.account.extra_data.get('picture')
 
 
 provider_classes = [GoogleProvider]

@@ -69,11 +69,6 @@ class LinkedInOAuth2Provider(SocialAppMixin, OAuth2Provider):
             'id',
             'firstName',
             'lastName',
-            # This would be needed to in case you need access to the image
-            # URL. Not enabling this by default due to the amount of data
-            # returned.
-            #
-            # 'profilePicture(displayImage~:playableStreams)'
         ]
         fields = self.get_settings().get('PROFILE_FIELDS',
                                          default_fields)
@@ -91,7 +86,7 @@ class LinkedInOAuth2Provider(SocialAppMixin, OAuth2Provider):
             last_name=_extract_name_field(data, 'lastName'),
             email=_extract_email(data))
 
-    def get_avatar_url(self, sociallogin):
+    def avatar_url(self, sociallogin):
         response = requests.get(
             'https://api.linkedin.com/v2/me?projection=(profilePicture(displayImage~:playableStreams))',
             headers={'Authorization': f'Bearer {sociallogin.token}'}
