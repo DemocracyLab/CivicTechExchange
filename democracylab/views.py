@@ -9,11 +9,11 @@ import simplejson as json
 from .emails import send_verification_email, send_password_reset_email
 from .forms import DemocracyLabUserCreationForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
-from allauth.socialaccount import providers
+from oauth2 import registry
 
 
 def login_view(request, provider=None):
-    provider_ids = [p.id for p in providers.registry.get_list()]
+    provider_ids = [p.id for p in registry.get_list()]
 
     if request.method == 'POST':
         email = request.POST['username']
