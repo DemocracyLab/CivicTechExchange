@@ -46,7 +46,7 @@ class NotificationModal extends React.PureComponent<Props, State> {
                 {this.props.message}
               </Modal.Body>
               <Modal.Footer>
-                  <Button onClick={this.closeModal.bind(this)}>{this.props.buttonText}</Button>
+                  <Button variant="dl-theme" onClick={this.closeModal.bind(this)}>{this.props.buttonText}</Button>
               </Modal.Footer>
           </Modal>
       </div>

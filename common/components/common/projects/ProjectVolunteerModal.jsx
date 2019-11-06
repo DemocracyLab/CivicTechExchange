@@ -182,8 +182,12 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
                 </Form>
               </Modal.Body>
               <Modal.Footer>
-                <Button onClick={this.closeModal.bind(this, false)}>{"Cancel"}</Button>
                 <Button
+                  variant="outline-secondary"
+                  onClick={this.closeModal.bind(this, false)}>{"Cancel"}
+                </Button>
+                <Button
+                  variant="dl-theme"
                   disabled={this.state.isSending || !(this._fieldsFilled())}
                   onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}
                 </Button>

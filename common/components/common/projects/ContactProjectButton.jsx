@@ -90,7 +90,8 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     const section: string = this.props.project.project_approved ? Section.EditProject : Section.CreateProject;
     return (
         <Button
-          className="AboutProject-button btn btn-theme clear-button-appearance"
+          variant="dl-theme"
+          className="AboutProject-button"
           type="button"
           disabled={this.state.buttonDisabled}
           title={this.state.buttonTitle}
@@ -104,7 +105,8 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   _renderContactProjectButton(): React$Node {
     return (
       <Button
-        className="AboutProject-button btn btn-theme"
+        variant="dl-theme"
+        className="AboutProject-button"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
@@ -118,7 +120,8 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   _renderLinkToSignInButton(): React$Node {
     return (
       <Button
-        className="AboutProject-button btn btn-theme clear-button-appearance"
+        variant="dl-theme"
+        className="AboutProject-button"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}

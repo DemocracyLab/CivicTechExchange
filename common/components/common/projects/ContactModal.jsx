@@ -109,8 +109,8 @@ class ContactModal extends React.PureComponent<Props, State> {
                 </Form>
               </Modal.Body>
               <Modal.Footer>
-                <Button onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button disabled={this.state.isSending || _.isEmpty(this.state.formFields.message)} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
+                <Button variant="outline-secondary" onClick={this.closeModal}>{"Cancel"}</Button>
+                <Button variant="dl-theme" disabled={this.state.isSending || _.isEmpty(this.state.formFields.message)} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
               </Modal.Footer>
           </Modal>
       </div>

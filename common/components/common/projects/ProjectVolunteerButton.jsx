@@ -132,7 +132,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       ? (
         // TODO: Make this its own component and hook up to My Projects page
         <Button
-          className="AboutProject-button btn btn-theme"
+          className="AboutProject-button"
           type="button"
           variant="danger"
           onClick={this.handleShowLeaveModal}
@@ -142,7 +142,8 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       )
       : (
         <Button
-          className="AboutProject-button btn btn-theme"
+          variant="dl-theme"
+          className="AboutProject-button"
           type="button"
           disabled={this.state.buttonDisabled}
           title={this.state.buttonTitle}
@@ -156,7 +157,8 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   _renderLinkToSignInButton(): React$Node {
     return (
       <Button
-        className="AboutProject-button btn btn-theme clear-button-appearance"
+        variant="dl-theme"
+        className="AboutProject-button"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}

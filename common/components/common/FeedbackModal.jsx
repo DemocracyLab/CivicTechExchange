@@ -65,8 +65,8 @@ class FeedbackModal extends React.PureComponent<Props, State> {
                 </textarea>
               </Modal.Body>
               <Modal.Footer>
-                  <Button onClick={this.confirm.bind(this, false)}>Cancel</Button>
-                  <Button disabled={this.props.requireMessage && !this.state.feedbackText} onClick={this.confirm.bind(this, true)}>
+                  <Button variant="outline-secondary" onClick={this.confirm.bind(this, false)}>Cancel</Button>
+                  <Button variant="dl-orange" disabled={this.props.requireMessage && !this.state.feedbackText} onClick={this.confirm.bind(this, true)}>
                     {this.props.confirmButtonText}
                   </Button>
               </Modal.Footer>

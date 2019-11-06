@@ -138,8 +138,8 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
                 </div>
               </Modal.Body>
               <Modal.Footer>
-                  <Button onClick={this.close}>Close</Button>
-                  <Button disabled={!this.state.positionInfo.roleTag || !(this.state.positionInfo.descriptionUrl || this.state.positionInfo.description)}
+                  <Button variant="outline-secondary" onClick={this.close}>Close</Button>
+                  <Button variant="dl-theme" disabled={!this.state.positionInfo.roleTag || !(this.state.positionInfo.descriptionUrl || this.state.positionInfo.description)}
                           onClick={this.save}>
                     Save
                   </Button>

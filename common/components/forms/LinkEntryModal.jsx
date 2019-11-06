@@ -95,8 +95,8 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
                   <input type="text" className="form-control" id="link-name" maxLength="200" value={this.state.linkInfo.linkName} onChange={(e) => this.handleChange(e, "linkName")}/>
               </Modal.Body>
               <Modal.Footer>
-                  <Button onClick={this.close}>Close</Button>
-                  <Button disabled={!this.state.linkInfo.linkUrl} onClick={this.save}>Save</Button>
+                  <Button variant="outline-secondary" onClick={this.close}>Close</Button>
+                  <Button variant="dl-theme" disabled={!this.state.linkInfo.linkUrl} onClick={this.save}>Save</Button>
               </Modal.Footer>
           </Modal>
       </div>
