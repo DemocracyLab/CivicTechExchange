@@ -119,11 +119,11 @@ class ContactModal extends React.PureComponent<Props, State> {
 
   _renderSubjectLineBox(): React$Node {
     return (
-      <FormGroup>
-        <ControlLabel>Subject</ControlLabel>
-        <FormControl componentClass="input" name="subject" maxLength="60"
+      <Form>
+        <Form.Label>Subject</Form.Label>
+        <Form.Control componentClass="input" name="subject" maxLength="60"
                value={this.state.formFields.subject} onChange={this.form.onInput.bind(this, "subject")}/>
-      </FormGroup>
+      </Form>
     );
   }
 }
