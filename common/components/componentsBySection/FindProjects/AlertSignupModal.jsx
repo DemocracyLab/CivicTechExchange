@@ -147,7 +147,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="outline-secondary" onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button variant="dl-theme" disabled={this.isDisabled()} type="submit" onClick={this.handleSubmit}>Submit</Button>
+                <Button variant="dl-orange" disabled={this.isDisabled()} type="submit" onClick={this.handleSubmit}>Submit</Button>
               </Modal.Footer>
             </form>
           </Modal>

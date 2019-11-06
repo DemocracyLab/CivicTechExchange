@@ -96,7 +96,7 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
               </Modal.Body>
               <Modal.Footer>
                   <Button variant="outline-secondary" onClick={this.close}>Close</Button>
-                  <Button variant="dl-theme" disabled={!this.state.linkInfo.linkUrl} onClick={this.save}>Save</Button>
+                  <Button variant="dl-orange" disabled={!this.state.linkInfo.linkUrl} onClick={this.save}>Save</Button>
               </Modal.Footer>
           </Modal>
       </div>

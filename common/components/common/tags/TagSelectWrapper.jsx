@@ -28,14 +28,14 @@ type State = {|
 class TagSelectWrapper extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
-  
+
     this.state = {
       displayList: null,
       tagMap: null,
       selected: props.value
     };
   }
-  
+
   populateOptionsList(props: Props): void {
     let displayList: Array<SelectOption> = mapSelectValueLabel(props.tagOptions, (tag) => tag.tag_name, (tag) => tagOptionDisplay(tag));
     displayList = _.sortBy(displayList, ['label']);
@@ -45,10 +45,10 @@ class TagSelectWrapper extends React.PureComponent<Props, State> {
       isLoading: false,
       selected: this.initializeSelectedTags(props, displayList)
     });
-  
+
     this.forceUpdate();
   }
-  
+
   initializeSelectedTags(props: Props, displayList: $ReadOnlyArray<SelectOption>): ?(TagDefinition | Array<SelectOption>) {
     if(props.value) {
       const displayTags: $ReadOnlyArray<SelectOption> = props.value[0]
@@ -57,7 +57,7 @@ class TagSelectWrapper extends React.PureComponent<Props, State> {
       return props.allowMultiSelect ? displayTags : displayTags[0];
     }
   }
-  
+
   getDisplayTag(tag: TagDefinition, displayList: Array<SelectOption>): SelectOption {
     return displayList.find(displayTag => displayTag.value === tag.tag_name);
   }
@@ -78,7 +78,7 @@ class TagSelectWrapper extends React.PureComponent<Props, State> {
       this.props.onSelection(null);
     }
   }
-  
+
   render(): React$Node {
     return (
       <React.Fragment>
@@ -89,7 +89,6 @@ class TagSelectWrapper extends React.PureComponent<Props, State> {
           options={this.state && this.state.displayList}
           value={this.state && this.state.selected}
           onChange={this.handleSelection.bind(this)}
-          className="form-control"
           simpleValue={false}
           isClearable={!this.props.allowMultiSelect}
           isMulti={this.props.allowMultiSelect}

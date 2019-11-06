@@ -52,7 +52,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
     let applyButton;
     if (CurrentUser.canVolunteerForProject(this.props.project)) {
       applyButton = (
-        <Button variant="dl-theme"
+        <Button variant="dl-orange"
         type="button"
         title="Apply to this position"
         onClick={this.handleClickApply.bind(this)}
@@ -62,7 +62,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
       );
     } else if (!CurrentUser.isLoggedIn()) {
       applyButton = (
-        <Button variant="dl-theme"
+        <Button variant="dl-orange"
         type="button"
         title="Apply to this position"
         href={url.section(Section.LogIn, url.getPreviousPageArg())}

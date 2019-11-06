@@ -99,7 +99,7 @@ class ProjectVolunteerConcludeModal extends React.PureComponent<Props, State> {
                   onClick={this.closeModal.bind(this, false)}>{"Cancel"}
                 </Button>
                 <Button
-                  variant="dl-theme"
+                  variant="dl-orange"
                   onClick={this.handleSubmit}>{this.state.isSending ? "Sending" : "Send"}
                 </Button>
               </Modal.Footer>

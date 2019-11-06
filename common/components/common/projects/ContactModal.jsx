@@ -110,7 +110,7 @@ class ContactModal extends React.PureComponent<Props, State> {
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="outline-secondary" onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button variant="dl-theme" disabled={this.state.isSending || _.isEmpty(this.state.formFields.message)} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
+                <Button variant="dl-orange" disabled={this.state.isSending || _.isEmpty(this.state.formFields.message)} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
               </Modal.Footer>
           </Modal>
       </div>

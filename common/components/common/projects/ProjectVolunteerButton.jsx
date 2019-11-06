@@ -142,7 +142,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       )
       : (
         <Button
-          variant="dl-theme"
+          variant="dl-orange"
           className="AboutProject-button"
           type="button"
           disabled={this.state.buttonDisabled}
@@ -157,7 +157,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   _renderLinkToSignInButton(): React$Node {
     return (
       <Button
-        variant="dl-theme"
+        variant="dl-orange"
         className="AboutProject-button"
         type="button"
         disabled={this.state.buttonDisabled}
