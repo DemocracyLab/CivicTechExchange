@@ -105,6 +105,7 @@ class LinkList extends React.PureComponent<Props,State>  {
 
         <label>{this.props.title || "Links"} &nbsp;</label>
         <Button
+          variant="dl-theme"
           className="btn-background-project"
           size="sm"
           onClick={this.createNewLink.bind(this)}

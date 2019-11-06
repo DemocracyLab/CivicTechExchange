@@ -102,6 +102,7 @@ class PositionList extends React.PureComponent<Props,State>  {
         <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
         <label>Roles Needed &nbsp;</label>
         <Button
+          variant="dl-theme"
           className="btn-background-project"
           size="sm"
           onClick={this.createNewPosition.bind(this)}
