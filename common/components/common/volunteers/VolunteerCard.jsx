@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import {UserAPIData} from "../../utils/UserAPIUtils.js";
 import {TagDefinition, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
@@ -50,7 +51,8 @@ class VolunteerCard extends React.PureComponent<Props> {
     return (this.props.volunteer
       ?
         (<DropdownButton
-          className="VolunteerCard-dropdownButton dropdown"
+          variant="light"
+          className="VolunteerCard-dropdownButton"
           size="lg"
           title={<span><i className={GlyphStyles.EllipsisV}></i></span>}
           id="VolunteerCard-dropdown"

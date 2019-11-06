@@ -8,24 +8,20 @@
     background: $color-background-light;
     border-radius: 12px;
     border: $color-grey-disabled solid 1px;
-
-    /* this whole section is potentially placeholder */
-    a {
-      color: $color-orange;
-      text-decoration: none;
-      -webkit-appearance: none;
-    }
-    a:hover {
-      color: $color-orange-darker;
-      text-decoration: underline;
-    }
-    a[type="button"] {
-      color: $color-text-light;
-    }
-    a[type="button"]:hover {
-      color: $color-text-light;
-    }
   }
+  
+.AboutProjects-details, .AboutProjects-team, .AboutProjects-positions-available {
+  /* to avoid issues with an overly broad a selector, only put it in sections where required */
+  a {
+    color: $color-orange;
+    text-decoration: none;
+    -webkit-appearance: none;
+  }
+  a:hover {
+    color: $color-orange-darker;
+    text-decoration: underline;
+  }
+}
 
 .AboutProjects-infoColumn {
   order: 1;

@@ -23,7 +23,7 @@ $container-max-widths: (
   xxl: 1400px
 );
 
-//font stack
+//define our font stack
 $font-family-sans-serif: 'Montserrat',-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
 
 //add DL colors to themes for button variants, etc
@@ -31,3 +31,6 @@ $theme-colors: (
   "dl-orange": #f79e02,
   "dl-orange-darker": #de8e01
 );
+
+//disables dropdown caret by default
+$enable-caret: false;
