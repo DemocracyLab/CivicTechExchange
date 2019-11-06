@@ -86,7 +86,7 @@ class LinkedInOAuth2Provider(SocialAppMixin, OAuth2Provider):
             last_name=_extract_name_field(data, 'lastName'),
             email=_extract_email(data))
 
-    def avatar_url(self, sociallogin):
+    def get_avatar_url(self, sociallogin):
         response = requests.get(
             'https://api.linkedin.com/v2/me?projection=(profilePicture(displayImage~:playableStreams))',
             headers={'Authorization': f'Bearer {sociallogin.token}'}

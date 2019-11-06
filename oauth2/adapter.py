@@ -13,7 +13,7 @@ from django.utils import timezone
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
     def new_user(self, request, sociallogin):
-        email: str = sociallogin.account.get_provider().extract_common_fields(
+        email = sociallogin.account.get_provider().extract_common_fields(
                                                    sociallogin.account.extra_data).get('email').lower()
         assert email
         try:
@@ -62,7 +62,7 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
     @receiver(user_logged_in)
     def set_avatar_at_login(sender, sociallogin, **kwargs):
         owner = sociallogin.user.contributor
-        user_avatar_url = sociallogin.account.get_provider().avatar_url(sociallogin)
+        user_avatar_url = sociallogin.account.get_provider().get_avatar_url(sociallogin)
         if user_avatar_url:
             file_json = {
                 'publicUrl': user_avatar_url,

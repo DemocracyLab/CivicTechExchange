@@ -57,8 +57,8 @@ class GoogleProvider(SocialAppMixin, OAuth2Provider):
                        primary=True))
         return ret
 
-    def avatar_url(self, sociallogin):
-        return sociallogin.account.extra_data.get('picture')
+    def get_avatar_url(self, sociallogin):
+        return sociallogin.account.get_avatar_url()
 
 
 provider_classes = [GoogleProvider]
