@@ -67,32 +67,7 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_AUTO_SIGNUP = True  # Bypass the signup form
 SOCIALACCOUNT_STORE_TOKENS = False  # Token table has foreign key on SocialApp table, which we're not using
-SOCIAL_APPS = {
-    'github': {
-        'id': 1,
-        'name': 'DLab Social Login',
-        'client_id': 'b99879d1dcfc3164243f',
-        'secret': '27cb3e51c495d2149a97635f69a7949f2065b16b'
-    },
-    'google': {
-        'id': 2,
-        'name': 'DLab Social Login',
-        'client_id': '985536764238-kg1u060tmmn6pko9ut418me8e8pbog8p.apps.googleusercontent.com',
-        'secret': 'nP6qe48iEjD-aoP_TUADmWNF'
-    },
-    'linkedin': {
-        'id': 3,
-        'name': 'DLab Social Login',
-        'client_id': '86lmdtaz3zgnsb',
-        'secret': 'WeRqozfuW680cRhG'
-    },
-    'facebook': {
-        'id': 4,
-        'name': 'DLab Social Login',
-        'client_id': '401313064132303',
-        'secret': '1d66651935ef2780dc34d5d6636f856e'
-    },
-}
+SOCIAL_APPS = ast.literal_eval(os.environ['SOCIAL_APPS'])
 
 # Be sure to use a custom id property on your provider class such that its default URLs
 # do not clash with the provider you are subclassing

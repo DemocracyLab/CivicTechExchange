@@ -1,5 +1,5 @@
 // @flow
-
+import _ from 'lodash'
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 
 class CurrentUser {
@@ -11,7 +11,7 @@ class CurrentUser {
   static isLoggedIn(): boolean {
     return Boolean(this.userID());
   }
-  
+
   static isEmailVerified(): boolean {
     return Boolean(window.DLAB_GLOBAL_CONTEXT.emailVerified);
   }
@@ -23,13 +23,13 @@ class CurrentUser {
   static lastName(): string {
     return window.DLAB_GLOBAL_CONTEXT.lastName;
   }
-  
+
   static email(): string {
     return window.DLAB_GLOBAL_CONTEXT.email;
   }
 
   static userImgUrl(): string {
-    return window.DLAB_GLOBAL_CONTEXT.userImgUrl.replace(/&amp;/g, '&');
+    return _.unescape(window.DLAB_GLOBAL_CONTEXT.userImgUrl);
   }
 
   static isStaff() : boolean {
