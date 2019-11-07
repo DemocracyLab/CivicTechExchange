@@ -9,13 +9,12 @@
     border-radius: 12px;
     border: $color-grey-disabled solid 1px;
   }
-  
-.AboutProjects-details, .AboutProjects-team, .AboutProjects-positions-available {
-  /* to avoid issues with an overly broad a selector, only put it in sections where required */
+
+  /* to avoid conflict with a href styled as buttons, only put this rule in sections where required */
+.AboutProjects-details, .AboutProjects-team, .AboutProjects-files, .Position-description-link {
   a {
     color: $color-orange;
     text-decoration: none;
-    -webkit-appearance: none;
   }
   a:hover {
     color: $color-orange-darker;
