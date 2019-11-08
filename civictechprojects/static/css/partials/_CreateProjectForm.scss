@@ -24,3 +24,7 @@
     font-weight: bold;
     color: $color-orange;
 }
+.create-form-buttonrow {
+  display: flex;
+  justify-content: space-between;
+}

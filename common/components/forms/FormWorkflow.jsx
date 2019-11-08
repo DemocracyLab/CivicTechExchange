@@ -174,26 +174,26 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
         </div>
 
         <div className="create-form white-bg container-fluid">
+          <div className="create-form-buttonrow">
 
-          <Button variant="outline-secondary"
-                  type="button"
-                  title="Back"
-                  disabled={this.onFirstStep()}
-                  onClick={this.navigateToStep.bind(this, this.state.currentStep - 1)}
-          >
-            Back
-          </Button>
+            <Button variant="outline-secondary"
+                    type="button"
+                    title="Back"
+                    disabled={this.onFirstStep()}
+                    onClick={this.navigateToStep.bind(this, this.state.currentStep - 1)}
+            >
+              Back
+            </Button>
 
-            <div className='text-right'>
-              {!this.state.savedEmblemVisible ? "" :
-                <span className='create-project-saved-emblem'><i className={GlyphStyles.CircleCheck} aria-hidden="true"></i> Saved</span>}
+                {!this.state.savedEmblemVisible ? "" :
+                  <span className='create-project-saved-emblem'><i className={GlyphStyles.CircleCheck} aria-hidden="true"></i> Saved</span>}
 
-              <input type="submit" className="btn_outline save_btn_create_project"
-                    disabled={!this.state.formIsValid}
-                    value={this.onLastStep() ? "PUBLISH" : "Next"}
-              />
+                <input type="submit" className="btn_outline save_btn_create_project"
+                      disabled={!this.state.formIsValid}
+                      value={this.onLastStep() ? "PUBLISH" : "Next"}
+                />
+              </div>
             </div>
-          </div>
       </form>
     );
   }
