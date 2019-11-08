@@ -23,16 +23,15 @@
 }
 
 .radio-button {
-  border: 1px solid;
-  background-color: transparent;
-  border-radius: 5px;
-  padding: 6px 12px;
   margin: 0px 0px 10px 15px;
-  cursor: pointer;
   min-width: 70px;
   &:hover {
     color: $color-orange;
     border-color: $color-orange;
+    background: none;
+  }
+  &:focus {
+    box-shadow: 0 0 0 .2rem rgba($color-orange-darker, 0.5)
   }
 }
 

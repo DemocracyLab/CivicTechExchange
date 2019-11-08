@@ -7,6 +7,7 @@ import {SelectOption} from "../../types/SelectOption.jsx";
 type Props = {|
   options: $ReadOnlyArray<SelectOption>,
   defaultSelection: ?SelectOption,
+  variant: string,
   onSelection: (SelectOption) => void
 |};
 
@@ -35,7 +36,7 @@ class RadioButtons extends React.PureComponent<Props, State> {
         {this.props.options.map((option, i) => {
           return (
           <div key={i} className={(this.state.selectedOption && this.state.selectedOption.value === option.value) ? "checked" : "unchecked"} >
-            <Button className="radio-button" onClick={this.handleOptionChange.bind(this, option)} >
+            <Button variant={this.props.variant} className="radio-button" onClick={this.handleOptionChange.bind(this, option)} >
               {option.label}
             </Button>
           </div>
