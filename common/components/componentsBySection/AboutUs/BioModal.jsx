@@ -3,7 +3,6 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import {Glyph, GlyphStyles, GlyphSizes} from '../../utils/glyphs.js';
 import _ from 'lodash';
 
 type Props = {|
@@ -49,7 +48,6 @@ class BioModal extends React.PureComponent<Props, State> {
                   <h4 className="bio-modal-name"><a href={"/index/?section=Profile&id=" + this.props.person.id}>{this.props.person.first_name} {this.props.person.last_name}</a></h4>
                   <h5 className="bio-modal-title">{this.props.title}</h5>
                 </div>
-                <i className={Glyph(GlyphStyles.Close, GlyphSizes.X2)} onClick={this.closeModal}></i>
               </Modal.Header>
               <Modal.Body style={{whiteSpace: "pre-wrap"}}>
                 <h5 className="bio-modal-about">About</h5>
