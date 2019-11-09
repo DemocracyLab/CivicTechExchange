@@ -245,6 +245,30 @@
   }
 }
 
+.AboutProjects-commit-history {
+  padding: 25px 10px; /*as with description-details consider maxwidth */
+
+  #commit-history{
+    width: 100%; /* fixes element repositioning error with read more expand/collapse */
+  }
+
+  .form-group {
+    margin-bottom: 0; /* margin is handled outside form-group on project page */
+  }
+
+  .Position-entry {
+    padding: 12px 0;
+  }
+  .Position-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .Text-section {
+    margin-top: 1rem;
+  }
+}
+
 .AboutProjects-team {
 
   .upload_img_bdr {
@@ -326,6 +350,9 @@ button.AboutProject-button:disabled {
     border-bottom: $color-grey-disabled solid 1px;
   }
 
+  .AboutProjects-commit-history {
+    border-bottom: $color-grey-disabled solid 1px;
+  }
 }
 
 

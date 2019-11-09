@@ -2,6 +2,7 @@
 
 import React from 'react';
 import _ from 'lodash'
+import apiHelper from "../../utils/api.js";
 import type {ProjectDetailsAPIData} from '../../utils/ProjectAPIUtils.js';
 import ProjectDetails from '../../componentsBySection/FindProjects/ProjectDetails.jsx';
 import ContactProjectButton from "./ContactProjectButton.jsx";
@@ -51,6 +52,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
         skills: false,
       }
     };
+
     this.handleUpdateVolunteers = this.handleUpdateVolunteers.bind(this);
  }
   
@@ -269,6 +271,16 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             </div>
           </div>
 
+
+            <div className='AboutProjects-commit-history'>
+              <h5>Commit Activity</h5>
+              <div id="commit-history">
+              {project && !_.isEmpty(project.project_links) &&
+                this._renderCommitHistory()
+              }
+              </div>
+            </div>
+
         </div>
 
       </div>
@@ -317,6 +329,244 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     return sortedLinks.map((link, i) =>
       <IconLinkDisplay key={i} link={link}/>
     );
+  }
+
+  _renderCommitHistory(): ?Array<React$Node>{
+    const project: ProjectDetailsAPIData = this.state.project;
+    const links = project.project_links;
+    const githubUrl = "https://github.com/";
+    const githubAPIUrl = "https://api.github.com/repos/";
+
+        let sampleCommits = 
+      [
+        {
+    "url": "https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "node_id": "MDY6Q29tbWl0NmRjYjA5YjViNTc4NzVmMzM0ZjYxYWViZWQ2OTVlMmU0MTkzZGI1ZQ==",
+    "html_url": "https://github.com/octocat/Hello-World/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "comments_url": "https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e/comments",
+    "commit": {
+      "url": "https://api.github.com/repos/octocat/Hello-World/git/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+      "author": {
+        "name": "Monalisa Octocat",
+        "email": "support@github.com",
+        "date": "2011-04-14T16:00:49Z"
+      },
+      "committer": {
+        "name": "Monalisa Octocat",
+        "email": "support@github.com",
+        "date": "2011-04-15T12:00:49Z"
+      },
+      "message": "Added new API call",
+      "tree": {
+        "url": "https://api.github.com/repos/octocat/Hello-World/tree/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+        "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e"
+      },
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "author": {
+      "login": "octocat",
+      "id": 1,
+      "node_id": "MDQ6VXNlcjE=",
+      "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/octocat",
+      "html_url": "https://github.com/octocat",
+      "followers_url": "https://api.github.com/users/octocat/followers",
+      "following_url": "https://api.github.com/users/octocat/following{/other_user}",
+      "gists_url": "https://api.github.com/users/octocat/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/octocat/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/octocat/subscriptions",
+      "organizations_url": "https://api.github.com/users/octocat/orgs",
+      "repos_url": "https://api.github.com/users/octocat/repos",
+      "events_url": "https://api.github.com/users/octocat/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/octocat/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "octocat",
+      "id": 1,
+      "node_id": "MDQ6VXNlcjE=",
+      "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/octocat",
+      "html_url": "https://github.com/octocat",
+      "followers_url": "https://api.github.com/users/octocat/followers",
+      "following_url": "https://api.github.com/users/octocat/following{/other_user}",
+      "gists_url": "https://api.github.com/users/octocat/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/octocat/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/octocat/subscriptions",
+      "organizations_url": "https://api.github.com/users/octocat/orgs",
+      "repos_url": "https://api.github.com/users/octocat/repos",
+      "events_url": "https://api.github.com/users/octocat/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/octocat/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "url": "https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+        "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e"
+      }
+    ]
+  },
+  {
+    "url": "https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "node_id": "MDY6Q29tbWl0NmRjYjA5YjViNTc4NzVmMzM0ZjYxYWViZWQ2OTVlMmU0MTkzZGI1ZQ==",
+    "html_url": "https://github.com/octocat/Hello-World/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "comments_url": "https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e/comments",
+    "commit": {
+      "url": "https://api.github.com/repos/octocat/Hello-World/git/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+      "author": {
+        "name": "Monalisa Octocat",
+        "email": "support@github.com",
+        "date": "2011-04-14T16:00:49Z"
+      },
+      "committer": {
+        "name": "Monalisa Octocat",
+        "email": "support@github.com",
+        "date": "2011-04-14T16:00:49Z"
+      },
+      "message": "Fix all the bugs",
+      "tree": {
+        "url": "https://api.github.com/repos/octocat/Hello-World/tree/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+        "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e"
+      },
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "author": {
+      "login": "octocat",
+      "id": 1,
+      "node_id": "MDQ6VXNlcjE=",
+      "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/octocat",
+      "html_url": "https://github.com/octocat",
+      "followers_url": "https://api.github.com/users/octocat/followers",
+      "following_url": "https://api.github.com/users/octocat/following{/other_user}",
+      "gists_url": "https://api.github.com/users/octocat/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/octocat/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/octocat/subscriptions",
+      "organizations_url": "https://api.github.com/users/octocat/orgs",
+      "repos_url": "https://api.github.com/users/octocat/repos",
+      "events_url": "https://api.github.com/users/octocat/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/octocat/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "octocat",
+      "id": 1,
+      "node_id": "MDQ6VXNlcjE=",
+      "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/octocat",
+      "html_url": "https://github.com/octocat",
+      "followers_url": "https://api.github.com/users/octocat/followers",
+      "following_url": "https://api.github.com/users/octocat/following{/other_user}",
+      "gists_url": "https://api.github.com/users/octocat/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/octocat/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/octocat/subscriptions",
+      "organizations_url": "https://api.github.com/users/octocat/orgs",
+      "repos_url": "https://api.github.com/users/octocat/repos",
+      "events_url": "https://api.github.com/users/octocat/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/octocat/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "url": "https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+        "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e"
+      }
+    ]
+  }
+      ];
+
+    let githubLink = "";
+
+    links.forEach(function(link){
+      if(link.linkUrl.includes(githubUrl)){
+        githubLink = link.linkUrl;
+      }
+    });
+      
+        let stringAfterGithub = githubLink.slice(githubUrl.length, githubLink.length);
+        let indexOfFirstBackslash = stringAfterGithub.indexOf("/");
+        let username = stringAfterGithub.slice(0, indexOfFirstBackslash);
+        let repoName = stringAfterGithub.slice(indexOfFirstBackslash,
+         stringAfterGithub.length);
+
+        let apiSetUp = githubAPIUrl + username + repoName + "/commits";
+
+        let returnedElement;
+
+        function successCallback(successResponse){
+          console.log("Success");
+          console.log(successResponse);
+          return (successResponse.map((file, i) =>
+            <div key={i}>
+              <a href={file.html_url}>Commit {i+1}</a>
+              <p>{file.commit.committer.date}</p>
+              <p>{file.commit.message}</p>
+            </div>));
+        }
+
+        function errorCallback(errorResponse){
+          let succinctErrorResponse = {
+            errorCode: errorResponse.status,
+            errorMessage: JSON.stringify(errorResponse)
+          }
+
+          console.log("error");
+          returnedElement = <p>This is not working</p>;
+        }
+
+        const headers = {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Access-Control-Allow-Origin': false
+        };
+
+        fetch(new Request(apiSetUp, { method: "GET", headers: headers }))
+          .then(response => {
+            if(!response.ok) {
+              throw Error();
+            }
+            return response.json();
+          })
+          .then(responsePayload => successCallback && successCallback(responsePayload))
+          .catch(response => errorCallback(response));
+
+        //apiHelper.get(apiSetUp, "{}",
+        //(successResponse) => ,
+        //(errorResponse) => {
+        //    console.log("Error");
+        //    console.log(errorResponse);
+        //    return (<div><p>This is working</p></div>);
+        //})
+
+        return sampleCommits.map((file, i) =>
+            <div key={i}>
+              <a href={file.html_url}>Commit {i+1}</a>
+              <p>{file.commit.committer.date}</p>
+              <p>{file.commit.message}</p>
+            </div>);
   }
 
   _renderPositions(): ?Array<React$Node> {
