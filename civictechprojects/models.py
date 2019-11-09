@@ -172,8 +172,8 @@ class Project(Archived):
 
         return project
 
-    def update_timestamp(self):
-        self.project_date_modified = timezone.now()
+    def update_timestamp(self, time=None):
+        self.project_date_modified = time or timezone.now()
         self.save()
 
 

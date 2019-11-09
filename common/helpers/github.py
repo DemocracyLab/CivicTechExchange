@@ -1,6 +1,5 @@
 from urllib import parse as urlparse
 import requests
-from pprint import pprint
 
 
 def fetch_github_repository_info(repo_url):
@@ -16,7 +15,6 @@ def fetch_github_repository_info(repo_url):
 def get_repo_endpoint_from_public_url(public_repo_url):
     # https://github.com/DemocracyLab/CivicTechExchange
     path_parts = urlparse.urlparse(public_repo_url)
-    pprint(path_parts)
     if hasattr(path_parts, 'path'):
         url_parts = path_parts.path.split('/')
         if len(url_parts) > 1:
