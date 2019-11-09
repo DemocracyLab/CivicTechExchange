@@ -562,12 +562,38 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
         //    return (<div><p>This is working</p></div>);
         //})
 
+        let commitDetails = [];
+
+        function addZero(dateValue){
+          if(dateValue < 10){
+            return "0"+dateValue;
+          }
+
+          return dateValue;
+        }
+
+        sampleCommits.forEach(function(commit) {
+          let commitDetailsOneCommit = {};
+
+          commitDetailsOneCommit.htmlLink = commit.html_url;
+
+          let formDate = new Date(commit.commit.committer.date);
+
+          // Format info: codehandbook.org/javascript-date-format/
+          commitDetailsOneCommit.date = commit.commit.committer.date;
+          // commitDetailsOneCommit.readableDate = formDate.toString();
+          commitDetailsOneCommit.readableDate = formDate.getFullYear() + "-" + addZero(formDate.getMonth()) + "-" + addZero(formDate.getDate()) + " " + addZero(formDate.getHours()) + ":" + addZero(formDate.getMinutes());
+          commitDetailsOneCommit.message = commit.commit.message;
+
+          commitDetails.push(commitDetailsOneCommit);
+        });
+
         // TODO: Replace direct return with the values from the fetch method above
-        return sampleCommits.map((file, i) =>
+        return commitDetails.map((file, i) =>
             <div key={i}>
-              <a href={file.html_url}>Commit {i+1}</a>
-              <p>{file.commit.committer.date}</p>
-              <p>{file.commit.message}</p>
+              <a href={file.htmlLink}>Commit {i+1}</a>
+              <p>{file.readableDate}</p>
+              <p>{file.message}</p>
             </div>);
   }
 
