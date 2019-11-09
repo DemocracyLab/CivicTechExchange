@@ -14,7 +14,7 @@ class GoogleAccount(ProviderAccount):
     def get_profile_url(self):
         return self.account.extra_data.get('link')
 
-    def get_avatar_url(self, sociallogin):
+    def get_avatar_url(self):
         return self.account.extra_data.get('picture')
 
     def to_str(self):
