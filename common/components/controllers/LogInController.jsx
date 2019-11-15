@@ -2,10 +2,10 @@
 
 import DjangoCSRFToken from 'django-react-csrftoken'
 import React from 'react';
-import svg, {SVGPath} from "../utils/svg.js";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import metrics from "../utils/metrics.js";
+import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
 
 type Props = {|
   prevPage: string,
@@ -73,26 +73,14 @@ class LogInController extends React.Component<Props, State> {
               </button>
             </div>
             <div className="LogInController-socialSection">
-              <div className="text-center">
-                <p>or sign in with</p>
-                {this._render_social_logins()}
-              </div>
+              <SocialMediaSignupSection/>
             </div>
         </form>
       </div>
     );
   }
 
-  _render_social_logins(): React$Node {
-    return (
-        <div>
-            <a href="/login/linkedin" className="LogInController-socialLink">{svg.path(SVGPath['LINKEDIN'], "LogInController-socialIcon")}</a>
-            <a href="/login/google" className="LogInController-socialLink">{svg.path(SVGPath['GOOGLE'], "LogInController-socialIcon")}</a>
-            <a href="/login/github" className="LogInController-socialLink">{svg.path(SVGPath['GITHUB'], "LogInController-socialIcon")}</a>
-            <a href="/login/facebook" className="LogInController-socialLink">{svg.path(SVGPath['FACEBOOK'], "LogInController-socialIcon")}</a>
-        </div>
-    )
-  }
+
 
 }
 

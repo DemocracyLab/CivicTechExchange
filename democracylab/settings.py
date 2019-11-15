@@ -67,7 +67,9 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_AUTO_SIGNUP = True  # Bypass the signup form
 SOCIALACCOUNT_STORE_TOKENS = False  # Token table has foreign key on SocialApp table, which we're not using
-SOCIAL_APPS = ast.literal_eval(os.environ['SOCIAL_APPS'])
+SOCIAL_APPS = ast.literal_eval(os.environ.get('SOCIAL_APPS', None))
+if SOCIAL_APPS is not None:
+    SOCIAL_APPS_VISIBILITY = {app: SOCIAL_APPS[app]["public"] for app in SOCIAL_APPS.keys()}
 
 # Be sure to use a custom id property on your provider class such that its default URLs
 # do not clash with the provider you are subclassing
