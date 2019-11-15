@@ -73,7 +73,7 @@ class LogInController extends React.Component<Props, State> {
               </button>
             </div>
             <div className="LogInController-socialSection">
-              <div className="centered">
+              <div className="text-center">
                 <p>or sign in with</p>
                 {this._render_social_logins()}
               </div>
