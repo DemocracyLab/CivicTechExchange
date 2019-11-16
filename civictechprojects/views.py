@@ -197,7 +197,7 @@ def index(request):
         context['googleTagsHeadScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_head.txt', google_tag_context)
         context['googleTagsBodyScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_body.txt', google_tag_context)
 
-    if settings.SOCIAL_APPS_VISIBILITY:
+    if hasattr(settings, 'SOCIAL_APPS_VISIBILITY'):
         context['SOCIAL_APPS_VISIBILITY'] = json.dumps(settings.SOCIAL_APPS_VISIBILITY)
 
     if request.user.is_authenticated():

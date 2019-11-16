@@ -5,7 +5,7 @@ import svg, {SVGPath} from "../../utils/svg";
 import CurrentUser from "../../utils/CurrentUser.js";
 import _ from "lodash";
 
-const socialAppVisibility: { [key: string]: boolean } = JSON.parse(_.unescape(window.SOCIAL_APPS_VISIBILITY));
+const socialAppVisibility: { [key: string]: boolean } = !_.isEmpty(window.SOCIAL_APPS_VISIBILITY) ? JSON.parse(_.unescape(window.SOCIAL_APPS_VISIBILITY)) : {};
 
 const svgMap: { [key: string]: string } = {
   "linkedin": "LINKEDIN",
