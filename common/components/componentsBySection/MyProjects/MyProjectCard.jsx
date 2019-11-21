@@ -95,7 +95,9 @@ class MyProjectCard extends React.PureComponent<Props, State> {
             <Button className="MyProjectCard-button" href={editUrl} variant="info">Edit</Button>,
             <Button className="MyProjectCard-button" variant="danger" onClick={() => this.props.onProjectClickDelete(this.props.project)}>Delete</Button>
         ]);
-    } else if(this.props.project.isUpForRenewal && this.props.project.isApproved) {
+    }
+    
+    if(this.props.project.isUpForRenewal && this.props.project.isApproved) {
       buttons = buttons.concat(
         [
           <Button className="MyProjectCard-button" variant="warning" onClick={() => this.props.onProjectClickRenew(this.props.project)}>Renew</Button>,
