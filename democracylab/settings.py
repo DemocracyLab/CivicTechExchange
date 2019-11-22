@@ -297,7 +297,29 @@ LOGGING = {
 }
 
 # If you're using prerender.io (the default backend):
-SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '') # Really, put this in your env, not your codebase.
-SEO_JS_BACKEND = "django_seo_js.backends.PrerenderIO"
+SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '')
+SEO_JS_BACKEND = "common.helpers.caching.DebugPrerenderIO"
 SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
 SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
+
+# TODO: Put in environment variable
+SEO_JS_USER_AGENTS = (
+    # These first three should be disabled, since they support escaped fragments, and
+    # and leaving them enabled will penalize a website as "cloaked".
+    "Googlebot",
+    "Yahoo",
+    "bingbot",
+
+    "Ask Jeeves",
+    "baiduspider",
+    "facebookexternalhit",
+    "twitterbot",
+    "rogerbot",
+    "linkedinbot",
+    "embedly",
+    "quoralink preview'",
+    "showyoubot",
+    "outbrain",
+    "pinterest",
+    "developersgoogle.com/+/web/snippet",
+)
