@@ -72,8 +72,6 @@ if SOCIAL_APPS_environ is not None:
     SOCIAL_APPS = ast.literal_eval(SOCIAL_APPS_environ)
     SOCIAL_APPS_VISIBILITY = {app: SOCIAL_APPS[app]["public"] for app in SOCIAL_APPS.keys()}
 
-# Be sure to use a custom id property on your provider class such that its default URLs
-# do not clash with the provider you are subclassing
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
         'SCOPE': ['read:user']
