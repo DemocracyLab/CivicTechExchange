@@ -16,15 +16,14 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         email = sociallogin.account.get_provider().extract_common_fields(
                                                    sociallogin.account.extra_data).get('email').lower()
         assert email
-        try:
-            # This account may actually belong to an existing user
-            user = User.objects.get(username=email)
+        # This account may actually belong to an existing user
+        user = User.objects.filter(username=email).first()
+        if user:
             # Preserve current password (sociallogin assigns an unusable password)
             if user.has_usable_password():
                 sociallogin.account.extra_data.update(password=user.password)
             return Contributor.objects.get_by_natural_key(user.username)
-
-        except User.DoesNotExist:
+        else:
             return Contributor(email_verified=True, last_login=timezone.now())
 
     def pre_social_login(self, request, sociallogin):
