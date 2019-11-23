@@ -40,3 +40,7 @@ def update_if_commit_after_project_updated_time(project_github_link, latest_comm
             id=project.id,
             commit_time=latest_commit_date_string,
             project_update=project_updated_time))
+
+
+def get_project_last_commit_time(project):
+    

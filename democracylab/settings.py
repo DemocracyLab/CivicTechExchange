@@ -90,6 +90,8 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+GITHUB_API_TOKEN = os.environ.get('GITHUB_API_TOKEN', None)
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
