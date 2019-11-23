@@ -107,6 +107,7 @@ class Project(Archived):
         links = ProjectLink.objects.filter(link_project=self.id)
         positions = ProjectPosition.objects.filter(position_project=self.id)
         volunteers = VolunteerRelation.objects.filter(project=self.id)
+        commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:10]
 
         project = {
             'project_id': self.id,
@@ -128,6 +129,7 @@ class Project(Archived):
             'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links)),
+            'project_commits': list(map(lambda commit: commit.to_json(), commits)),
             'project_owners': [self.project_creator.hydrate_to_tile_json()],
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__()
@@ -175,6 +177,33 @@ class Project(Archived):
     def update_timestamp(self, time=None):
         self.project_date_modified = time or timezone.now()
         self.save()
+
+
+class ProjectCommit(models.Model):
+    commit_project = models.ForeignKey(Project, related_name='commits', blank=True, null=True)
+    user_name = models.CharField(max_length=200)
+    user_link = models.CharField(max_length=2083)
+    commit_date = models.DateTimeField()
+    commit_sha = models.CharField(max_length=40)
+    commit_title = models.CharField(max_length=2000)
+    branch_name = models.CharField(max_length=200)
+    branch_link = models.CharField(max_length=2083)
+    repo_name = models.CharField(max_length=200)
+    repo_link = models.CharField(max_length=2083)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'user_name': self.user_name,
+            'user_link': self.user_link,
+            'commit_date': self.commit_date,
+            'commit_sha': self.commit_sha,
+            'commit_title': self.commit_title,
+            'branch_name': self.branch_name,
+            'branch_link': self.branch_link,
+            'repo_name': self.repo_name,
+            'repo_link': self.repo_link
+        }
 
 
 class ProjectLink(models.Model):
