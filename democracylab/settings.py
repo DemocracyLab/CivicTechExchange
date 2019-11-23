@@ -39,16 +39,61 @@ INSTALLED_APPS = [
     'civictechprojects.apps.CivictechprojectsConfig',
     'common.apps.CommonConfig',
     'democracylab.apps.DemocracylabConfig',
+    'oauth2.apps.OAuth2Config',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.sitemaps',
+    'django.contrib.staticfiles',
     'rest_framework',
-    'taggit'
+    'taggit',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'oauth2.providers.github',
+    'oauth2.providers.google',
+    'oauth2.providers.linkedin',
+    'oauth2.providers.facebook',
 ]
+
+SITE_ID = 1
+
+# Customize allauth.socialaccount
+SOCIALACCOUNT_ADAPTER = 'oauth2.adapter.SocialAccountAdapter'
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Bypass the signup form
+SOCIALACCOUNT_STORE_TOKENS = False  # Token table has foreign key on SocialApp table, which we're not using
+SOCIAL_APPS_environ = os.environ.get('SOCIAL_APPS', None)
+if SOCIAL_APPS_environ is not None:
+    SOCIAL_APPS = ast.literal_eval(SOCIAL_APPS_environ)
+    SOCIAL_APPS_VISIBILITY = {app: SOCIAL_APPS[app]["public"] for app in SOCIAL_APPS.keys()}
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'SCOPE': ['read:user']
+    },
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'}
+    },
+    'linkedin': {
+        'SCOPE': ['r_liteprofile', 'r_emailaddress']
+    },
+    'facebook': {
+        'SCOPE': ['email', 'public_profile'],
+         'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+         'METHOD': 'oauth2'  # instead of 'js_sdk'
+    },
+}
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -293,3 +338,6 @@ LOGGING = {
         },
     },
 }
+
+# https://docs.djangoproject.com/en/1.7/ref/settings/#silenced-system-checks
+SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]

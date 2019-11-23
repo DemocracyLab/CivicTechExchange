@@ -384,7 +384,7 @@ class ProjectFile(models.Model):
                 # Add new file
                 thumbnail = ProjectFile.from_json(owner, file_category, file_json)
                 thumbnail.save()
-            elif not file_json['key'] == existing_file.file_key:
+            elif file_json['key'] != existing_file.file_key:
                 # Replace existing file
                 thumbnail = ProjectFile.from_json(owner, file_category, file_json)
                 thumbnail.save()
