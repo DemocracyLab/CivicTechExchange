@@ -1,7 +1,7 @@
 boto3==1.4.7
 botocore==1.7.28
 dj-database-url==0.4.1
-Django==1.11.20
+Django==1.11.23
 django-allauth==0.39.1
 django-appconf==1.0.2
 django-autofixture==0.12.1
@@ -11,11 +11,12 @@ django-registration==2.1.2
 django-s3direct==0.4.2
 django-storages==1.5.1
 django-taggit==0.22.1
-djangorestframework==3.6.4
+djangorestframework==3.9.4
 docutils==0.14
 gunicorn==19.6.0
 jmespath==0.9.3
 psycopg2==2.7.7
+psycopg2-binary==2.8.4
 python-dateutil==2.6.1
 pytz==2017.3
 rcssmin==1.0.6

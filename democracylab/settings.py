@@ -338,3 +338,6 @@ LOGGING = {
         },
     },
 }
+
+# https://docs.djangoproject.com/en/1.7/ref/settings/#silenced-system-checks
+SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
