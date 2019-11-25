@@ -104,7 +104,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     if (!_.isEmpty(this.state.projects) && this.state.projects_loading) {
       return (
         <div className="page_selection_footer">
-          <button className="btn btn-theme disabled">
+          <button className="btn btn-primary disabled">
             Loading...
           </button>
         </div>
@@ -113,7 +113,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
     return (
       this.state.projects && this.state.projects.size !== 0
       ? <div className="page_selection_footer">
-        <button className="btn btn-theme" onClick={this._handleFetchNextPage.bind(this)}>
+        <button className="btn btn-primary" onClick={this._handleFetchNextPage.bind(this)}>
           More Projects...
         </button>
       </div>

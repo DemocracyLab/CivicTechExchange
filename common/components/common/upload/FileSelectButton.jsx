@@ -34,7 +34,7 @@ class FileSelectButton extends React.PureComponent<Props, State> {
           <div className="FileSelectButton-innerContent">
             <div className="FileSelectButton-dragFiles">{this.props.dragText || "Drag Your Files Here or"}</div>
             <div className="FileSelectButton-button">
-              <input type="button" value={this.props.buttonText || "Browse Photos On Computer"} onClick={this._handleClick.bind(this)} className="btn btn-theme"/>
+              <input type="button" value={this.props.buttonText || "Browse Photos On Computer"} onClick={this._handleClick.bind(this)} className="btn btn-primary"/>
               <input ref="fileInput" type="file" style={{display:"none"}} accept={this.props.acceptedFileTypes} onChange={this._handleFileSelection.bind(this)} />
             </div>
           </div>
