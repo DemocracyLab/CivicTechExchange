@@ -66,7 +66,7 @@ class FeedbackModal extends React.PureComponent<Props, State> {
               </Modal.Body>
               <Modal.Footer>
                   <Button variant="outline-secondary" onClick={this.confirm.bind(this, false)}>Cancel</Button>
-                  <Button variant="dl-orange" disabled={this.props.requireMessage && !this.state.feedbackText} onClick={this.confirm.bind(this, true)}>
+                  <Button variant="primary" disabled={this.props.requireMessage && !this.state.feedbackText} onClick={this.confirm.bind(this, true)}>
                     {this.props.confirmButtonText}
                   </Button>
               </Modal.Footer>

@@ -56,7 +56,7 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
   _renderContactVolunteerButton(): React$Node {
     return (
       <Button
-        variant="dl-orange"
+        variant="primary"
         className="AboutProject-button"
         type="button"
         title={"Contact Volunteers"}

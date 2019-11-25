@@ -46,7 +46,7 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
               </Modal.Body>
               <Modal.Footer>
                   <Button variant="outline-secondary" onClick={this.confirm.bind(this, false)}>No</Button>
-                  <Button variant="dl-orange" onClick={this.confirm.bind(this, true)}>Yes</Button>
+                  <Button variant="primary" onClick={this.confirm.bind(this, true)}>Yes</Button>
               </Modal.Footer>
           </Modal>
       </div>

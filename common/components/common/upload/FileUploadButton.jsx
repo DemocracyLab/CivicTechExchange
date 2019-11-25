@@ -39,7 +39,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
 
           <label>{this.props.buttonText} &nbsp;</label>
           <Button
-            variant="dl-theme"
+            variant="primary"
             className="btn-background-project"
             size="sm"
             onClick={this._handleClick.bind(this)}
