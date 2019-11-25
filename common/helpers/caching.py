@@ -2,10 +2,14 @@ from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 from django_seo_js import settings
 from django_seo_js.helpers import update_cache_for_url
-from django_seo_js.backends import SEOBackendBase
+from django_seo_js.backends import SEOBackendBase, SelectedBackend
 from django_seo_js.backends.base import RequestsBasedBackend
 
+import re
+from django_seo_js.helpers import request_should_be_ignored
 from pprint import pprint
+import logging
+logger = logging.getLogger(__name__)
 
 
 def update_cached_project_url(project_id):
@@ -18,12 +22,45 @@ def update_cached_url(url):
     update_cache_for_url(url)
 
 
+class DebugUserAgentMiddleware(SelectedBackend):
+    def __init__(self, *args, **kwargs):
+        super(DebugUserAgentMiddleware, self).__init__(*args, **kwargs)
+        regex_str = "|".join(settings.USER_AGENTS)
+        regex_str = ".*?(%s)" % regex_str
+        self.USER_AGENT_REGEX = re.compile(regex_str, re.IGNORECASE)
+
+    def process_request(self, request):
+        if not settings.ENABLED:
+            print('DebugUserAgentMiddleware: settings.ENABLED False')
+            return
+
+        if request_should_be_ignored(request):
+            print('DebugUserAgentMiddleware: request_should_be_ignored')
+            return
+
+        if "HTTP_USER_AGENT" not in request.META:
+            print('DebugUserAgentMiddleware: HTTP_USER_AGENT not in request.META')
+            return
+
+        if not self.USER_AGENT_REGEX.match(request.META["HTTP_USER_AGENT"]):
+            print('DebugUserAgentMiddleware: User agent "{agent}" not in list'.format(agent=request.META["HTTP_USER_AGENT"]))
+            return
+
+        url = self.backend.build_absolute_uri(request)
+        print('DebugUserAgentMiddleware: Getting response for ' + url)
+        try:
+            return self.backend.get_response_for_url(url)
+        except Exception as e:
+            logger.exception(e)
+
+
 class DebugPrerenderIO(SEOBackendBase, RequestsBasedBackend):
     """Implements the backend for prerender.io"""
     BASE_URL = "https://service.prerender.io/"
     RECACHE_URL = "https://api.prerender.io/recache"
 
     def __init__(self, *args, **kwargs):
+        print('DebugPrerenderIO __init__')
         super(SEOBackendBase, self).__init__(*args, **kwargs)
         self.token = self._get_token()
 
@@ -37,7 +74,6 @@ class DebugPrerenderIO(SEOBackendBase, RequestsBasedBackend):
         Accepts a fully-qualified url.
         Returns an HttpResponse, passing through all headers and the status code.
         """
-
         if not url or "//" not in url:
             raise ValueError("Missing or invalid url: %s" % url)
 
@@ -46,6 +82,7 @@ class DebugPrerenderIO(SEOBackendBase, RequestsBasedBackend):
             'X-Prerender-Token': self.token,
         }
 
+        print('DebugPrerenderIO get_response_for_url from ' + render_url)
         r = self.session.get(render_url, headers=headers, allow_redirects=False)
         assert r.status_code < 500
 
@@ -56,7 +93,7 @@ class DebugPrerenderIO(SEOBackendBase, RequestsBasedBackend):
         Accepts a fully-qualified url, or regex.
         Returns True if successful, False if not successful.
         """
-        print('DebugPrerenderIO Backend')
+        print('DebugPrerenderIO update_url')
         print(settings.PRERENDER_TOKEN)
         if not url and not regex:
             raise ValueError("Neither a url or regex was provided to update_url.")
