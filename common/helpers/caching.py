@@ -45,7 +45,7 @@ class DebugPrerenderIO(SEOBackendBase, RequestsBasedBackend):
         headers = {
             'X-Prerender-Token': self.token,
         }
-        p
+
         r = self.session.get(render_url, headers=headers, allow_redirects=False)
         assert r.status_code < 500
 
