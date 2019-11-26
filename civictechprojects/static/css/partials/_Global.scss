@@ -20,6 +20,25 @@ a.btn-theme:hover, a[type="button"].btn-theme:hover {
   text-decoration: none;
 }
 
+// footer buttons are difficult to theme in Bootstrap, so define manually
+//TODO: Sass variables
+.btn-footer {
+  background-color: #fff;
+  color: $color-text-dark;
+}
+.btn-footer a, .btn-footer a[type="button"] {
+  color: $color-text-dark;
+  text-decoration: none;
+}
+.btn-footer:hover, .btn-footer:active {
+  background-color: #f7cf88;
+  color: $color-text-dark;
+  border-color: $color-orange-darker;
+}
+a.btn-footer:hover, a.btn-footer:active, a[type="button"].btn-footer:hover, a[type="button"].btn-footer:active  {
+  text-decoration: none;
+}
+
 
 //for on-page actions we want to appear as links
 .pseudo-link {

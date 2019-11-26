@@ -1,6 +1,6 @@
 .SocialFooter-root {
   background: $color-orange; /* placeholder */
-  color: $color-text-light;
+  color: $color-text-dark;
   padding: 20px 0 10px 0;
   text-align: center;
 }
@@ -23,27 +23,19 @@
 .SocialFooter-iconblock a:last-of-type {
   padding-right: 0;
 }
-.SocialFooter-btn-contact, .SocialFooter-btn-donate, .SocialFooter-newsletter input[type=submit] {
-  background: $color-background-light;
-  color: $color-orange;
-  border: $color-orange;
-  &:hover {
-    color: $color-text-light;
-    background: $color-orange-darker;
-  }
-}
 .SocialFooter-copyright {
   width: 100%;
   margin: 0 auto;
   text-align: center;
 }
 .SocialFooter-copyright a {
-  color: $color-text-light;
-  text-decoration: underline;
+  color: $color-text-dark;
 }
 .SocialFooter-copyright i {
   font-weight: 400;
+  padding: 0px 5px;
 }
+
 .SocialFooter-iconblock a {
   color: $color-text-light;
   &:hover {
@@ -102,7 +94,7 @@
   }
   .SocialFooter-signupcontainer {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
   .SocialFooter-signupcontainer input {
     height: 2.25rem;
