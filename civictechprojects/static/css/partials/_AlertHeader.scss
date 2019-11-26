@@ -13,7 +13,7 @@
 .AlertHeader-text {
   padding-left: 10px;
   width: auto;
-  margin: 0 auto 0px auto;
+  margin: 0.25rem 0;
 }
 
 .AlertHeader-text a {
@@ -23,6 +23,9 @@
 
 .AlertHeader-text p,i {
   text-align: center;
+}
+.AlertHeader-text p {
+  margin: 0;
 }
 
 .AlertHeader-close {
