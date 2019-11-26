@@ -19,7 +19,7 @@ class EmailVerifiedController extends React.Component<{||}> {
         <div className="EmailVerifiedController-greeting">
           <h3>Your email has been verified</h3>
           <p>Get started by finding tech-for-good projects that match your skill and interests.</p>
-          <a className="EmailVerified-find-projects-btn btn-secondary" href={url.section(Section.FindProjects, {showSplash: 1})}>
+          <a className="btn btn-primary" href={url.section(Section.FindProjects, {showSplash: 1})}>
             FIND PROJECTS
           </a>
         </div>
