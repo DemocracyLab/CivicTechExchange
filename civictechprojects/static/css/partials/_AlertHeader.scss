@@ -3,7 +3,7 @@
   flex-direction: row;
   justify-content: flex-end;
   background-color: $color-orange;
-  color: $color-text-light;
+  color: $color-text-dark;
   width: 100%;
   line-height: 1.2em;
   min-height: 34px;
@@ -18,7 +18,7 @@
 
 .AlertHeader-text a {
   text-decoration: underline;
-  color: $color-text-light; 
+  color: $color-text-dark;
 }
 
 .AlertHeader-text p,i {
