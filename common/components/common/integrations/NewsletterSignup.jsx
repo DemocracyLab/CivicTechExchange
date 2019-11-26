@@ -32,7 +32,7 @@ render() {
               value="Subscribe"
               name="subscribe"
               id="mc-embedded-subscribe"
-              className="button btn"
+              className={this.props.btnClass}
             />
           </div>
           <div id="mce-responses" className="clear">
