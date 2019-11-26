@@ -98,24 +98,40 @@ class DebugPrerenderIO(SEOBackendBase, RequestsBasedBackend):
         if not url and not regex:
             raise ValueError("Neither a url or regex was provided to update_url.")
 
+        # headers = {
+        #     'Content-Type': 'application/json',
+        #     'Accept': '*/*',
+        #     'Host': 'api-prerender.io'
+        # }
         headers = {
-            'X-Prerender-Token': self.token,
-            'Content-Type': 'application/json',
+            'X-Prerender-Token': "PcAiN4VgTchZa6TdcYHY",
+            'Content-Type': "application/json",
+            'User-Agent': "PostmanRuntime/7.20.1",
+            'Accept': "*/*",
+            'Cache-Control': "no-cache",
+            'Postman-Token': "3e8d8bd6-8ce6-4ac6-a6b9-5bc5fc92a247,e7a339d2-df66-4c3f-8d92-34166bc9c527",
+            'Host': "api.prerender.io",
+            'Accept-Encoding': "gzip, deflate",
+            'Cookie': "__cfduid=d681dd0f9e165503e50a06705e7a8a4691573059256",
+            'Connection': "keep-alive",
+            'cache-control': "no-cache"
         }
         data = {
-            'prerenderToken': settings.PRERENDER_TOKEN,
+            'prerenderToken': settings.PRERENDER_TOKEN
         }
         if url:
             data["url"] = url
         if regex:
             data["regex"] = regex
 
+        headers['Content-Length'] = str(len(str(data)))
         print(self.RECACHE_URL)
         pprint(headers)
         pprint(data)
 
         r = self.session.post(self.RECACHE_URL, headers=headers, data=data)
         print(r.status_code)
+        print(r.headers)
         # print(r.reason_phrase)
         pprint(r.content)
         return r.status_code < 500
