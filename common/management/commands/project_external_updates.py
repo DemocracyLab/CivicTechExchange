@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
-from common.helpers.github import fetch_github_repository_info, get_latest_commit_date, get_repo_endpoint_from_public_url
+from common.helpers.github import fetch_github_repository_info, get_latest_commit_date, get_owner_repo_name_from_public_url, \
+    get_repo_endpoint_from_owner_repo_name
 from common.helpers.date_helpers import datetime_field_to_datetime
 import pytz
 
@@ -18,10 +19,17 @@ def get_project_github_links():
 
 
 def handle_project_github_updates(project_github_link):
-    repo_url = get_repo_endpoint_from_public_url(project_github_link.link_url)
+    # TODO: Get last updated
+    # last_updated_time = datetime_field_to_datetime(project_github_link.link_project.project_date_modified)
+    owner_repo_name = get_owner_repo_name_from_public_url(project_github_link.link_url)
+    repo_url = get_repo_endpoint_from_owner_repo_name(owner_repo_name)
     if repo_url is not None:
+        print('Ingesting: ' + repo_url)
         repo_info = fetch_github_repository_info(repo_url)
+        repo_name = owner_repo_name[0] + '/' + owner_repo_name[1]
         if repo_info is not None:
+            project = project_github_link.link_project
+            add_commits_to_database(project, repo_name, 'master', repo_info)
             latest_commit_date = get_latest_commit_date(repo_info)
             update_if_commit_after_project_updated_time(project_github_link, latest_commit_date)
 
@@ -42,5 +50,7 @@ def update_if_commit_after_project_updated_time(project_github_link, latest_comm
             project_update=project_updated_time))
 
 
-def get_project_last_commit_time(project):
-    
+def add_commits_to_database(project, repo_name, branch_name, repo_info):
+    from civictechprojects.models import ProjectCommit
+    for commit_info in repo_info:
+        ProjectCommit.create(project, repo_name, branch_name, commit_info)

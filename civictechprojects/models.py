@@ -183,13 +183,33 @@ class ProjectCommit(models.Model):
     commit_project = models.ForeignKey(Project, related_name='commits', blank=True, null=True)
     user_name = models.CharField(max_length=200)
     user_link = models.CharField(max_length=2083)
+    user_avatar_link = models.CharField(max_length=2083)
     commit_date = models.DateTimeField()
     commit_sha = models.CharField(max_length=40)
     commit_title = models.CharField(max_length=2000)
     branch_name = models.CharField(max_length=200)
-    branch_link = models.CharField(max_length=2083)
     repo_name = models.CharField(max_length=200)
-    repo_link = models.CharField(max_length=2083)
+
+    def __str__(self):
+        return "({repo}) {sha}: {title}".format(repo=self.repo_name, sha=self.commit_sha[:6], title=self.commit_title)
+
+    @staticmethod
+    def create(project, repo_name, branch_name, github_json):
+        project_commit = ProjectCommit()
+        project_commit.commit_project = project
+        project_commit.repo_name = repo_name
+        project_commit.branch_name = branch_name
+        project_commit.commit_sha = github_json['sha']
+
+        commit_section = github_json['commit']
+        project_commit.commit_title = commit_section['message']
+        project_commit.commit_date = commit_section['author']['date']
+
+        author_section = github_json['author']
+        project_commit.user_name = author_section['login']
+        project_commit.user_link = author_section['html_url']
+        project_commit.user_avatar_link = author_section['avatar_url']
+        project_commit.save()
 
     def to_json(self):
         return {
