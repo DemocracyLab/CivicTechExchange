@@ -213,16 +213,14 @@ class ProjectCommit(models.Model):
 
     def to_json(self):
         return {
-            'id': self.id,
             'user_name': self.user_name,
             'user_link': self.user_link,
+            'user_avatar_link': self.user_avatar_link,
             'commit_date': self.commit_date,
             'commit_sha': self.commit_sha,
             'commit_title': self.commit_title,
             'branch_name': self.branch_name,
-            'branch_link': self.branch_link,
-            'repo_name': self.repo_name,
-            'repo_link': self.repo_link
+            'repo_name': self.repo_name
         }
 
 
