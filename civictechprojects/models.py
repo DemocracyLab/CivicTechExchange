@@ -195,21 +195,24 @@ class ProjectCommit(models.Model):
 
     @staticmethod
     def create(project, repo_name, branch_name, github_json):
-        project_commit = ProjectCommit()
-        project_commit.commit_project = project
-        project_commit.repo_name = repo_name
-        project_commit.branch_name = branch_name
-        project_commit.commit_sha = github_json['sha']
+        commit_sha = github_json['sha']
+        existing_commit = ProjectCommit.objects.filter(commit_sha=commit_sha)
+        if existing_commit.count() == 0:
+            project_commit = ProjectCommit()
+            project_commit.commit_project = project
+            project_commit.repo_name = repo_name
+            project_commit.branch_name = branch_name
+            project_commit.commit_sha = commit_sha
 
-        commit_section = github_json['commit']
-        project_commit.commit_title = commit_section['message']
-        project_commit.commit_date = commit_section['author']['date']
+            commit_section = github_json['commit']
+            project_commit.commit_title = commit_section['message']
+            project_commit.commit_date = commit_section['author']['date']
 
-        author_section = github_json['author']
-        project_commit.user_name = author_section['login']
-        project_commit.user_link = author_section['html_url']
-        project_commit.user_avatar_link = author_section['avatar_url']
-        project_commit.save()
+            author_section = github_json['author']
+            project_commit.user_name = author_section['login']
+            project_commit.user_link = author_section['html_url']
+            project_commit.user_avatar_link = author_section['avatar_url']
+            project_commit.save()
 
     def to_json(self):
         return {

@@ -18,9 +18,8 @@ def get_repo_endpoint_from_owner_repo_name(owner_repo_name, start_date=None):
     # TODO: Add support for getting all repos under Org/User, like https://github.com/DemocracyLab
     if len(owner_repo_name) > 1:
         url_base = 'https://api.github.com/repos/{owner}/{repo}/commits'.format(owner=owner_repo_name[0], repo=owner_repo_name[1])
-        print('url_base: ' + url_base)
         if start_date is not None:
-            return url_base + '?since=' + datetime_to_string(start_date, DateTimeFormats.DATE_LOCALIZED)
+            return url_base + '?since=' + datetime_to_string(start_date, DateTimeFormats.UTC_DATETIME)
         else:
             return url_base
 
@@ -32,4 +31,7 @@ def get_owner_repo_name_from_public_url(public_repo_url):
 
 
 def get_latest_commit_date(repo_info):
-    return repo_info[0]["commit"]['author']['date']
+    if len(repo_info) > 0:
+        first_commit = repo_info[0]
+        if 'commit' in first_commit:
+            return first_commit['commit']['author']['date']

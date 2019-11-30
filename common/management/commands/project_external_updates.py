@@ -19,10 +19,11 @@ def get_project_github_links():
 
 
 def handle_project_github_updates(project_github_link):
-    # TODO: Get last updated
-    # last_updated_time = datetime_field_to_datetime(project_github_link.link_project.project_date_modified)
+    # TODO: Support multiple github repos
+    last_updated_time = datetime_field_to_datetime(get_project_latest_commit_date(project_github_link.link_project))
     owner_repo_name = get_owner_repo_name_from_public_url(project_github_link.link_url)
-    repo_url = get_repo_endpoint_from_owner_repo_name(owner_repo_name)
+
+    repo_url = get_repo_endpoint_from_owner_repo_name(owner_repo_name, last_updated_time)
     if repo_url is not None:
         print('Ingesting: ' + repo_url)
         repo_info = fetch_github_repository_info(repo_url)
@@ -54,3 +55,9 @@ def add_commits_to_database(project, repo_name, branch_name, repo_info):
     from civictechprojects.models import ProjectCommit
     for commit_info in repo_info:
         ProjectCommit.create(project, repo_name, branch_name, commit_info)
+
+
+def get_project_latest_commit_date(project):
+    from civictechprojects.models import ProjectCommit
+    latest_commit = ProjectCommit.objects.filter(commit_project=project.id).order_by('-commit_date').first()
+    return latest_commit and latest_commit.commit_date
