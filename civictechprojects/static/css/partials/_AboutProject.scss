@@ -215,7 +215,10 @@
     width: 100%;
   }
 }
-
+.AboutProjects-jumplink {
+  /* anchor tag is moved "higher up" than its content to account for Bootstrap fixed nav bar */
+  top: -$header-height;
+}
 .AboutProjects-positions-available {
   padding: 25px 10px; /*as with description-details consider maxwidth */
 
