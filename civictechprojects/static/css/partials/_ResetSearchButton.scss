@@ -1,5 +1,6 @@
 button.reset-search-button:disabled {
   background-color: $color-grey-disabled;
+  border: $color-grey-disabled;
 }
 button.reset-search-button {
   max-width: 80%;
