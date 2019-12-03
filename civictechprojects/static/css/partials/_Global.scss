@@ -38,6 +38,16 @@ a.btn-theme:hover, a[type="button"].btn-theme:hover {
 a.btn-footer:hover, a.btn-footer:active, a[type="button"].btn-footer:hover, a[type="button"].btn-footer:active  {
   text-decoration: none;
 }
+//Sets button states to be our specific values instead of default computed by Bootstrap
+.btn-success:active, .btn-success:hover {
+  background-color: #395e00;
+}
+.btn-danger:active, .btn-danger:hover {
+  background-color: #b20000;
+}
+.btn-info:active, .btn-info:hover {
+  background-color: #025d87;
+}
 
 
 //for on-page actions we want to appear as links
