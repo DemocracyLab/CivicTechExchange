@@ -331,7 +331,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             {
               window.PROJECT_DESCRIPTION_EXAMPLE_URL
                 ? (
-                  <a className="label-hint project-example" target="_blank" rel="noopener noreferrer" href={_.unescape(window.PROJECT_DESCRIPTION_EXAMPLE_URL)}>
+                  <a className="label-hint create-form-project-example" target="_blank" rel="noopener noreferrer" href={_.unescape(window.PROJECT_DESCRIPTION_EXAMPLE_URL)}>
                     (Example)
                   </a>
                 )
