@@ -311,7 +311,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
             onSelection={this.onTagChange.bind(this, "project_stage")}
           />
         </div>
-  
+
         <div className="form-group">
           <label>
             Short Description
@@ -417,7 +417,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         />
         <div className="form-group">
           <div className='text-right'>
-            <input disabled={!this.state.formIsValid} type="submit" className="btn_outline save_btn"
+            <input disabled={!this.state.formIsValid} type="submit" className="btn btn-success"
                    value="Save Project" onClick={this.onSubmit.bind(this)}/>
           </div>
         </div>

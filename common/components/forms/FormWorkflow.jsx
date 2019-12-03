@@ -188,7 +188,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
                 {!this.state.savedEmblemVisible ? "" :
                   <span className='create-project-saved-emblem'><i className={GlyphStyles.CircleCheck} aria-hidden="true"></i> Saved</span>}
 
-                <input type="submit" className="btn_outline save_btn_create_project"
+                <input type="submit" className="btn btn-primary create-btn"
                       disabled={!this.state.formIsValid}
                       value={this.onLastStep() ? "PUBLISH" : "Next"}
                 />
