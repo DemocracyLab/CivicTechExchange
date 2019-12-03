@@ -33,31 +33,6 @@
   border: solid 1px $color-grey-frame-border;
 }
 
-.upload_btn {
-  width: 174px;
-  height: 35px;
-  background: none;
-  border: solid 1px $color-green-dark;
-  border-radius: 5px;
-  text-align: center;
-  color: $color-green-dark;
-}
-
-.upload_btn_sm {
-  width: 81px;
-  height: 27px;
-  background: none;
-  border: solid 1px $color-green-dark;
-  border-radius: 5px;
-  text-align: center;
-  color: $color-green-dark;
-}
 .create-btn {
   min-width: 130px;
 }
-
-input[type="submit"]:disabled {
-  background: $color-grey-disabled;
-}
-
-/// new
