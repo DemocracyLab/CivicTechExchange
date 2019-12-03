@@ -103,7 +103,6 @@ class PositionList extends React.PureComponent<Props,State>  {
         <label>Roles Needed &nbsp;</label>
         <Button
           variant="primary"
-          className="btn-background-project"
           size="sm"
           onClick={this.createNewPosition.bind(this)}
         >
