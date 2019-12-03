@@ -50,6 +50,14 @@ a.btn-footer:hover, a.btn-footer:active, a[type="button"].btn-footer:hover, a[ty
 }
 
 
+//Global override of disabled state input elements
+input[type="submit"]:disabled {
+  background: $color-grey-disabled;
+  border: $color-disabled-border;
+}
+
+
+
 //for on-page actions we want to appear as links
 .pseudo-link {
   color: $color-orange;
