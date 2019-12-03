@@ -223,7 +223,6 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
           options={this.state.positionOptions}
           value={this.state.existingPositionOption || this.state.initialPositionSelection}
           onChange={this.handleExistingPositionSelection.bind(this)}
-          className="form-control"
           simpleValue={true}
           isClearable={false}
           isMulti={false}
