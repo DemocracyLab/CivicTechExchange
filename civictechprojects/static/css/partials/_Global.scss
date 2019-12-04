@@ -2,24 +2,6 @@ body {
   background-color: $color-background-default;
 }
 
-// uses democracyLab orange for a "themed button", use class="btn btn-theme"
-// TODO: Use this for footer button concept, but remove this before merging reactstrap4 branch
-.btn-theme {
-  background-color: $color-orange;
-  color: $color-text-light;
-}
-.btn-theme a, .btn-theme a[type="button"] {
-  color: $color-text-light;
-  text-decoration: none;
-}
-.btn-theme:hover {
-  background-color: $color-orange-darker;
-  color: $color-text-light;
-}
-a.btn-theme:hover, a[type="button"].btn-theme:hover {
-  text-decoration: none;
-}
-
 // footer buttons are difficult to theme in Bootstrap, so define manually
 //TODO: Sass variables
 .btn-footer {
