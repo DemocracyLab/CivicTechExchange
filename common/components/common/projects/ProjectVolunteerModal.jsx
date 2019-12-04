@@ -97,11 +97,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
 
   onRoleChange(role: $ReadOnlyArray<TagDefinition>): void {
     //this fixes an Uncaught TypeError: Cannot read property '0' of null if the user clicks the X to clear the field in the role selector
-    if(role && role.length) {
-      this.state.roleTag = role[0];
-    } else {
-      this.state.roleTag = null
-    }
+    this.state.roleTag = !_.isEmpty(role) ? role[0] : null;
     this.forceUpdate();
   }
 
