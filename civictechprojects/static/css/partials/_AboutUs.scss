@@ -107,7 +107,7 @@
 }
 .about-us-team-card {
   cursor: pointer; /* because these trigger a modal now */
-  flex-basis: 45%;
+  flex-basis: 50%; /* default 2 wide, will raise at wider breakpoints */
   margin-bottom: 25px;
   text-align: center;
 }
@@ -227,7 +227,6 @@
     max-width: 266px;
   }
   .about-us-team-card {
-    flex-basis: 22%;
     margin-bottom: 30px;
   }
 
@@ -252,6 +251,9 @@
   .about-us-show-sm-down {
     display: none;
   }
+  .about-us-team-card {
+    flex-basis: 33%;
+  }
 }
 
 @include media-breakpoint-up(lg) {
@@ -268,6 +270,11 @@
   .about-us-values, .about-us-team, .about-us-volunteer {
     padding-left: 20px;
     padding-right: 20px;
+  }
+}
+@include media-breakpoint-up(xl) {
+  .about-us-team-card {
+    flex-basis: 25%;
   }
 }
 @include media-breakpoint-up(xxl) {
