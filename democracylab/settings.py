@@ -14,6 +14,7 @@ import os
 import ast
 import dj_database_url
 from datetime import timedelta
+from dateutil.parser import parse
 from distutils.util import strtobool
 from django.core.mail.backends.smtp import EmailBackend
 
@@ -369,5 +370,9 @@ SEO_JS_USER_AGENTS = (
     "pinterest",
     "developersgoogle.com/+/web/snippet",
 )
+
+DL_PAGES_LAST_UPDATED_DATE = os.environ.get('DL_PAGES_LAST_UPDATED', '2019-12-05')
+SITE_LAST_UPDATED = parse(DL_PAGES_LAST_UPDATED_DATE)
+
 # https://docs.djangoproject.com/en/1.7/ref/settings/#silenced-system-checks
 SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]

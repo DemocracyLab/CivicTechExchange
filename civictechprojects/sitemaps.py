@@ -1,4 +1,5 @@
 from common.helpers.constants import FrontEndSection
+from django.conf import settings
 from django.contrib.sitemaps import Sitemap
 from .models import Project
 from datetime import date
@@ -9,7 +10,7 @@ class SectionSitemap(Sitemap):
     changefreq = "monthly"
     priority = 0.5
     # TODO: Update this date for each release
-    lastmod = date(year=2019, month=12, day=5)
+    lastmod = settings.SITE_LAST_UPDATED
     sections = [FrontEndSection.AboutUs, FrontEndSection.FindProjects, FrontEndSection.PartnerWithUs, FrontEndSection.Donate,
                 FrontEndSection.Press, FrontEndSection.ContactUs]
 
