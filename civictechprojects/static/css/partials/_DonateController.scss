@@ -31,13 +31,13 @@
     background: none;
   }
   &:focus {
-    box-shadow: 0 0 0 .2rem rgba($color-orange-darker, 0.5)
+    box-shadow: 0 0 0 .2rem rgba($color-orange-dark, 0.5)
   }
 }
 
 .checked .radio-button {
-  color: $color-orange-darker;
-  border-color: $color-orange-darker;
+  color: $color-orange-dark;
+  border-color: $color-orange-dark;
 }
 
 @media (min-width: 900px) {
