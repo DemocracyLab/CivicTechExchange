@@ -7,7 +7,6 @@ from django_seo_js.backends.base import RequestsBasedBackend
 
 import re
 from django_seo_js.helpers import request_should_be_ignored
-from pprint import pprint
 import logging
 logger = logging.getLogger(__name__)
 
@@ -18,7 +17,6 @@ def update_cached_project_url(project_id):
 
 # Update url cached with our 3rd party prerender service
 def update_cached_url(url):
-    print('caching ' + url)
     update_cache_for_url(url)
 
 
@@ -31,23 +29,22 @@ class DebugUserAgentMiddleware(SelectedBackend):
 
     def process_request(self, request):
         if not settings.ENABLED:
-            print('DebugUserAgentMiddleware: settings.ENABLED False')
+            print('Prerender: settings.ENABLED False')
             return
 
         if request_should_be_ignored(request):
-            print('DebugUserAgentMiddleware: request_should_be_ignored')
+            print('Prerender: request_should_be_ignored')
             return
 
         if "HTTP_USER_AGENT" not in request.META:
-            print('DebugUserAgentMiddleware: HTTP_USER_AGENT not in request.META')
+            print('Prerender: HTTP_USER_AGENT not in request.META')
             return
 
         if not self.USER_AGENT_REGEX.match(request.META["HTTP_USER_AGENT"]):
-            print('DebugUserAgentMiddleware: User agent "{agent}" not in list'.format(agent=request.META["HTTP_USER_AGENT"]))
+            print('Prerender: User agent "{agent}" not in list'.format(agent=request.META["HTTP_USER_AGENT"]))
             return
 
         url = self.backend.build_absolute_uri(request)
-        print('DebugUserAgentMiddleware: Getting response for ' + url)
         try:
             return self.backend.get_response_for_url(url)
         except Exception as e:
@@ -60,7 +57,6 @@ class DebugPrerenderIO(SEOBackendBase, RequestsBasedBackend):
     RECACHE_URL = "https://api.prerender.io/recache"
 
     def __init__(self, *args, **kwargs):
-        print('DebugPrerenderIO __init__')
         super(SEOBackendBase, self).__init__(*args, **kwargs)
         self.token = self._get_token()
 
@@ -82,7 +78,6 @@ class DebugPrerenderIO(SEOBackendBase, RequestsBasedBackend):
             'X-Prerender-Token': self.token,
         }
 
-        print('DebugPrerenderIO get_response_for_url from ' + render_url)
         r = self.session.get(render_url, headers=headers, allow_redirects=False)
         assert r.status_code < 500
 
@@ -93,28 +88,13 @@ class DebugPrerenderIO(SEOBackendBase, RequestsBasedBackend):
         Accepts a fully-qualified url, or regex.
         Returns True if successful, False if not successful.
         """
-        print('DebugPrerenderIO update_url')
-        print(settings.PRERENDER_TOKEN)
         if not url and not regex:
             raise ValueError("Neither a url or regex was provided to update_url.")
 
-        # headers = {
-        #     'Content-Type': 'application/json',
-        #     'Accept': '*/*',
-        #     'Host': 'api-prerender.io'
-        # }
         headers = {
-            'X-Prerender-Token': "PcAiN4VgTchZa6TdcYHY",
-            'Content-Type': "application/json",
-            'User-Agent': "PostmanRuntime/7.20.1",
-            'Accept': "*/*",
-            'Cache-Control': "no-cache",
-            'Postman-Token': "3e8d8bd6-8ce6-4ac6-a6b9-5bc5fc92a247,e7a339d2-df66-4c3f-8d92-34166bc9c527",
-            'Host': "api.prerender.io",
-            'Accept-Encoding': "gzip, deflate",
-            'Cookie': "__cfduid=d681dd0f9e165503e50a06705e7a8a4691573059256",
-            'Connection': "keep-alive",
-            'cache-control': "no-cache"
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Host': 'api-prerender.io'
         }
         data = {
             'prerenderToken': settings.PRERENDER_TOKEN
@@ -125,13 +105,6 @@ class DebugPrerenderIO(SEOBackendBase, RequestsBasedBackend):
             data["regex"] = regex
 
         headers['Content-Length'] = str(len(str(data)))
-        print(self.RECACHE_URL)
-        pprint(headers)
-        pprint(data)
 
         r = self.session.post(self.RECACHE_URL, headers=headers, data=data)
-        print(r.status_code)
-        print(r.headers)
-        # print(r.reason_phrase)
-        pprint(r.content)
         return r.status_code < 500

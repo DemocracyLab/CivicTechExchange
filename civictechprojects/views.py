@@ -110,7 +110,8 @@ def project_edit(request, project_id):
     project = None
     try:
         project = ProjectCreationForm.edit_project(request, project_id)
-        update_cached_project_url(project_id)
+        # TODO:
+        # update_cached_project_url(project_id)
     except PermissionDenied:
         return HttpResponseForbidden()
 
