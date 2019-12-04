@@ -86,3 +86,6 @@ export GOOGLE_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 
 # Sample OAuth configuration
 # export SOCIAL_APPS='{"github": {"id": 1, "name": "DLab Social Login", "client_id": "CONFIGURE", "secret": "CONFIGURE", "public": True}, "google": {"id": 2,"name": "DLab Social Login","client_id": "CONFIGURE","secret": "CONFIGURE", "public": True}, "linkedin": {"id": 3,"name": "DLab Social Login","client_id": "CONFIGURE","secret": "CONFIGURE", "public": True}, "facebook": {"id": 4,"name": "DLab Social Login","client_id": "CONFIGURE","secret": "CONFIGURE", "public": True}}'
+
+# The date the DemocracyLab site was last updated.  Used in our sitemap
+export DL_PAGES_LAST_UPDATED='2019-12-05'
