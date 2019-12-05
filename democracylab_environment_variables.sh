@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # S3 bucket and credentials for uploading files
 #export AWS_ACCESS_KEY_ID=ASK
 #export AWS_SECRET_ACCESS_KEY=ASK
@@ -17,6 +19,9 @@ export CONTACT_EMAIL=hello@democracylab.org
 
 # Secret key used to encrypt session tokens
 export DJANGO_SECRET_KEY="d!01@gn+%1ql1n(*)8xo+nx$$&n@mg$0_)9g+!(t-2vncaq!j8"
+
+# Hostname for db connection - value is different for docker
+export HOSTNAME="127.0.0.1"
 
 # Whether to show django debug info page on errors
 export DJANGO_DEBUG=True
