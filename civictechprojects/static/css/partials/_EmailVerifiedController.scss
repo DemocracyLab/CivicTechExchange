@@ -25,18 +25,6 @@
     display: inline-block;
 }
 
-.EmailVerified-find-projects-btn {
-    border: 1px solid $color-orange;
-    color: $color-text-light;
-    background-color: $color-orange;
-    border-radius: 5px;
-    padding: 6px 12px;
-    margin-bottom: 10px;
-    transition: 300ms;
-    cursor: pointer;
-    min-width: 80px;
-}
-
 @include media-breakpoint-up(md) {
     // This is where width of the screen > 768 px
     .EmailVerifiedController-logo {

@@ -160,7 +160,7 @@ class ContactForm extends React.Component {
             sitekey={window.GR_SITEKEY}
             onChange={this.reCaptchaOnChange}
           />
-          <input type="submit" value="Send message" disabled={!this.state.reCaptchaValue} className="btn btn-theme ContactForm-submit-btn" />
+          <input type="submit" value="Send message" disabled={!this.state.reCaptchaValue} className="btn btn-primary ContactForm-submit-btn" />
         </form>
     </React.Fragment>
     );

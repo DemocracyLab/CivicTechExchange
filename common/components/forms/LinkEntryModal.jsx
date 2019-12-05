@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 import type { LinkInfo } from './LinkInfo.jsx'
 import Visibility from '../common/Visibility.jsx'
 import url from '../utils/url.js'
@@ -84,7 +85,7 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
           <Modal show={this.state.showModal}
                  onHide={this.close}
           >
-              <Modal.Header>
+              <Modal.Header closeButton>
                   <Modal.Title>Add Link</Modal.Title>
               </Modal.Header>
               <Modal.Body>
@@ -94,8 +95,8 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
                   <input type="text" className="form-control" id="link-name" maxLength="200" value={this.state.linkInfo.linkName} onChange={(e) => this.handleChange(e, "linkName")}/>
               </Modal.Body>
               <Modal.Footer>
-                  <Button onClick={this.close}>Close</Button>
-                  <Button disabled={!this.state.linkInfo.linkUrl} onClick={this.save}>Save</Button>
+                  <Button variant="outline-secondary" onClick={this.close}>Close</Button>
+                  <Button variant="primary" disabled={!this.state.linkInfo.linkUrl} onClick={this.save}>Save</Button>
               </Modal.Footer>
           </Modal>
       </div>

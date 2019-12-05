@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import ProjectAPIUtils, {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import Section from '../../enums/Section.js';
@@ -71,7 +71,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     metrics.logUserClickContactProjectOwner(CurrentUser.userID(), this.props.project.project_id);
     this.setState({ showContactModal: true });
   }
-  
+
   handleVolunteerContactModal(fields: ContactModalFields, closeModal: Function): void {
     ProjectAPIUtils.post("/contact/project/" + this.props.project.project_id + "/",
       fields,
@@ -80,7 +80,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     );
     metrics.logUserContactedProjectOwner(CurrentUser.userID(), this.props.project.project_id);
   }
-  
+
   closeModal() {
     this.setState({ showContactModal: false });
   }
@@ -90,7 +90,8 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     const section: string = this.props.project.project_approved ? Section.EditProject : Section.CreateProject;
     return (
         <Button
-          className="AboutProject-button btn btn-theme clear-button-appearance"
+          variant="primary"
+          className="AboutProject-button"
           type="button"
           disabled={this.state.buttonDisabled}
           title={this.state.buttonTitle}
@@ -104,7 +105,8 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   _renderContactProjectButton(): React$Node {
     return (
       <Button
-        className="AboutProject-button btn btn-theme"
+        variant="primary"
+        className="AboutProject-button"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
@@ -118,7 +120,8 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   _renderLinkToSignInButton(): React$Node {
     return (
       <Button
-        className="AboutProject-button btn btn-theme clear-button-appearance"
+        variant="primary"
+        className="AboutProject-button"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}

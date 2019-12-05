@@ -4,7 +4,7 @@ import React from "react";
 import DjangoCSRFToken from "django-react-csrftoken";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
-import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
+import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import {OnReadySubmitFunc} from "./ProjectFormCommon.jsx";
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import PositionList from "../../forms/PositionList.jsx";
@@ -38,8 +38,8 @@ class ProjectPositionsForm extends React.PureComponent<Props,State> {
         project_positions: project ? project.project_positions : []
       }
     };
-    
-    this.form = form.setup();
+
+    this.form = formHelper.setup();
     // All fields optional
     props.readyForSubmit(true);
   }
@@ -49,7 +49,7 @@ class ProjectPositionsForm extends React.PureComponent<Props,State> {
     return (
       <div className="EditProjectForm-root">
         <DjangoCSRFToken/>
-        
+
         <div className="form-group">
           <PositionList elementid="project_positions" positions={this.state.formFields.project_positions}/>
         </div>
