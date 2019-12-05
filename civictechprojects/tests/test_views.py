@@ -43,3 +43,11 @@ class CivictechprojectsViewsTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(new_project.project_creator, self.user)
+
+    def test_allauth_provider_url_resolves(self):
+        from allauth.socialaccount import providers
+        provider_list = [p.id for p in providers.registry.get_list()]
+
+        for provider in provider_list:
+            url = reverse(f'{provider}_login')
+            self.assertIsNotNone(url)

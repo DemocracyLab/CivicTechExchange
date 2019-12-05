@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" style="height: 100%">
+{% load django_seo_js %}
   <head>
+    {% seo_js_head %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/static/js/bundle.js" defer></script>
@@ -56,7 +58,8 @@
       window.PAYPAL_ENDPOINT = '{{PAYPAL_ENDPOINT}}';
       window.PAYPAL_PAYEE = '{{PAYPAL_PAYEE}}';
       window.PRESS_LINKS = '{{PRESS_LINKS}}';
-      window.GR_SITEKEY = '{{GR_SITEKEY}}'
+      window.GR_SITEKEY = '{{GR_SITEKEY}}';
+      window.SOCIAL_APPS_VISIBILITY = '{{SOCIAL_APPS_VISIBILITY}}';
 
       window.DLAB_MESSAGES = [];
       {% for message in messages %}

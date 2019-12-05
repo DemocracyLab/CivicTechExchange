@@ -25,6 +25,7 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved, contact_democracylab_email
 from common.helpers.front_end import section_url, get_page_section
+from common.helpers.caching import update_cached_project_url
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 import requests
@@ -109,6 +110,8 @@ def project_edit(request, project_id):
     project = None
     try:
         project = ProjectCreationForm.edit_project(request, project_id)
+        # TODO:
+        # update_cached_project_url(project_id)
     except PermissionDenied:
         return HttpResponseForbidden()
 
@@ -197,6 +200,9 @@ def index(request):
         context['googleTagsHeadScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_head.txt', google_tag_context)
         context['googleTagsBodyScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_body.txt', google_tag_context)
 
+    if hasattr(settings, 'SOCIAL_APPS_VISIBILITY'):
+        context['SOCIAL_APPS_VISIBILITY'] = json.dumps(settings.SOCIAL_APPS_VISIBILITY)
+
     if request.user.is_authenticated():
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
@@ -206,10 +212,10 @@ def index(request):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
-        thumbnails = ProjectFile.objects.filter(file_user=request.user.id,
-                                                file_category=FileCategory.THUMBNAIL.value)
-        if thumbnails:
-            context['userImgUrl'] = thumbnails[0].file_url
+        thumbnail = ProjectFile.objects.filter(file_user=request.user.id,
+                                               file_category=FileCategory.THUMBNAIL.value).first()
+        if thumbnail:
+            context['userImgUrl'] = thumbnail.file_url
 
     return HttpResponse(template.render(context, request))
 

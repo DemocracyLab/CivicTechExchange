@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
-from .sitemaps import ProjectSitemap
+from .sitemaps import ProjectSitemap, SectionSitemap
 
 
 from . import views
@@ -26,7 +26,7 @@ urlpatterns = [
     url(
         r'^sitemap\.xml$',
         sitemap,
-        {'sitemaps': {'projects': ProjectSitemap()}},
+        {'sitemaps': {'projects': ProjectSitemap(), 'sections': SectionSitemap()}},
         name='django.contrib.sitemaps.views.sitemap'
     ),
     url(r'^googlebb20bcf8545e7046.html$', TemplateView.as_view(template_name="googlebb20bcf8545e7046.html")),
