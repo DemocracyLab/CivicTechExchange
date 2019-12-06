@@ -35,7 +35,7 @@ class ProjectDetails extends React.PureComponent<Props, State> {
           {this.state.projectUrl &&
               <div className="AboutProjects-icon-row">
                 <i className={Glyph(GlyphStyles.Globe, GlyphSizes.LG)} />
-                <p className="AboutProjects-icon-text"><a href={this.state.projectUrl} target="_blank" rel="noopener noreferrer">{urlHelper.beautify(this.state.projectUrl)}</a></p>
+                <p className="AboutProjects-url-text"><a href={this.state.projectUrl} target="_blank" rel="noopener noreferrer">{urlHelper.beautify(this.state.projectUrl)}</a></p>
               </div>
           }
           {this.state.dateModified &&
