@@ -11,14 +11,21 @@ class SectionSitemap(Sitemap):
     priority = 0.5
     # TODO: Update this date for each release
     lastmod = settings.SITE_LAST_UPDATED
-    sections = [FrontEndSection.AboutUs, FrontEndSection.FindProjects, FrontEndSection.PartnerWithUs, FrontEndSection.Donate,
-                FrontEndSection.Press, FrontEndSection.ContactUs]
+    pages = [
+        str(FrontEndSection.AboutUs.value),
+        str(FrontEndSection.FindProjects.value),
+        str(FrontEndSection.FindProjects.value) + '&showSplash=1',
+        str(FrontEndSection.PartnerWithUs.value),
+        str(FrontEndSection.Donate.value),
+        str(FrontEndSection.Press.value),
+        str(FrontEndSection.ContactUs.value)
+    ]
 
     def items(self):
-        return self.sections
+        return self.pages
 
-    def location(self, section):
-        return '/index/?section=' + str(section.value)
+    def location(self, page):
+        return '/index/?section=' + page
 
 
 class ProjectSitemap(Sitemap):
