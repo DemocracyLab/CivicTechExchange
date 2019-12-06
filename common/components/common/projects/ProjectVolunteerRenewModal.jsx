@@ -137,7 +137,6 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
       options={volunteerPeriodsInDays}
       value={this.state.daysToVolunteerForOption}
       onChange={this.handleVolunteerPeriodSelection.bind(this)}
-      className="form-control"
       simpleValue={true}
       isClearable={false}
       isMulti={false}
