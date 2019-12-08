@@ -313,7 +313,11 @@ def clean_nonexistent_tags(tags, tag_dict):
 
 
 def projects_by_keyword(keyword):
-    return Project.objects.filter(Q(project_description__icontains=keyword) | Q(project_name__icontains=keyword))
+    return Project.objects.filter(Q(project_name__icontains=keyword)
+                                  | Q(project_short_description__icontains=keyword)
+                                  | Q(project_description__icontains=keyword)
+                                  | Q(project_description_solution__icontains=keyword)
+                                  | Q(project_description_actions__icontains=keyword))
 
 
 def projects_by_sortField(project_list, sortField):
