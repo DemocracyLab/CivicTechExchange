@@ -228,7 +228,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               {project.project_description}
               {!_.isEmpty(project.project_description_solution) &&
                 <React.Fragment>
-                  <div>
+                  <div className="AboutProjects-details-description">
                     <br></br>
                     {project.project_description_solution}
                   </div>
