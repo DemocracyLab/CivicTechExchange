@@ -215,7 +215,8 @@
 }
 .AboutProjects-jumplink {
   /* anchor tag is moved "higher up" than its content to account for Bootstrap fixed nav bar */
-  top: -$header-height;
+  /* TODO: Make the component use the React prop from MainHeader and then remove this rule, so it can account for the alert message */
+  top: -60px;
 }
 .AboutProjects-positions-available {
   padding: 25px 10px; /*as with description-details consider maxwidth */
