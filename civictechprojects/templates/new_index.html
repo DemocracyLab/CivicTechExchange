@@ -17,6 +17,11 @@
   <body>
     {{ googleTagsBodyScript }}
     <script>
+      // Stop prerender.io from caching page until it loads
+      window.prerenderReady = false;
+      console.log('TODO: Remove!  Set prerenderReady to false')
+    </script>
+    <script>
       window.fbAsyncInit = function() {
         FB.init({
           appId      : '137258853647008',
