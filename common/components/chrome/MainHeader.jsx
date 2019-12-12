@@ -1,4 +1,6 @@
 // @flow
+// https://stackoverflow.com/questions/42635126/bootstrap-4-navbar-with-2-rows/42635243#42635243
+// https://www.codeply.com/go/26lFpoCSWx
 
 import type { FluxReduceStore } from 'flux/utils';
 import type { SectionType } from '../enums/Section.js';
