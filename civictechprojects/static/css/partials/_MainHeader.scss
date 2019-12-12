@@ -3,74 +3,8 @@
   height: 54px;
 }
 
-.MainHeader-logo {
-  cursor: pointer;
-  width: 200px;
-  height: 100%;
-}
-
-.MainHeader-profilePicture {
-  border-radius: 5px;
-  margin-right: 40px;
-  vertical-align: middle;
-  width: 40px;
-}
-
-.MainHeader-rightContent {
-  float: right;
-}
-
-.MainHeader-links {
-  display: none;
-  float: right;
-}
-
-.MainHeader-hamburger { 
-  display: block; 
-}
-
-.MainHeader-navDrawer {
-  margin-top: 25px;
-  width: 43.72vw;
-  min-width: 200px;
-}
-
-.MainHeader-drawerDiv {
-  margin-top: 30px;
-  margin-bottom: 30px;
-  margin-left: 25px;
-}
-
-
-.MainHeader-dropdownButton {
-  display: none;
-  cursor: pointer;
-  text-decoration: none;
-  color: $color-text-dark;
-}
-
-.MainHeader-name {
-  text-align: center;
-  margin-left: 25px;
-  margin-bottom: 25px;
-}
-
-.MainHeader {
+.MainHeader-container {
   position: fixed;
   z-index: 99;
   width: 100%;
-}
-
-@include media-breakpoint-up(sm) {
-  .MainHeader-dropdownButton {
-    display: block;
-  }
-
-  .MainHeader-hamburger {
-    display: none;
-  }
-
-  .MainHeader-links {
-    display: block;
-  }
 }
