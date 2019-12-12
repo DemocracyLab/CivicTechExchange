@@ -52,12 +52,12 @@ class MainHeader extends React.Component<{||}, State > {
 
   render(): React$Node {
     return (
-      <div ref={this.mainHeaderRef} className='MainHeader'>
+      <div ref={this.mainHeaderRef} className="MainHeader">
         <AlertHeader
           onAlertClose={this._handleAlertClosing.bind(this)}
           onUpdate={this._onAlertHeaderUpdate.bind(this)}
         />
-        <div className="MainHeader-container">
+        <div className="MainHeader-nav-container">
           {this._renderNavBar()}
         </div>
       </div>
