@@ -54,7 +54,7 @@ class MainHeader extends React.Component<{||}, State > {
 
   render(): React$Node {
     return (
-      <div ref={this.mainHeaderRef} className="MainHeader">
+      <div ref={this.mainHeaderRef} className="MainHeader-root">
         <AlertHeader
           onAlertClose={this._handleAlertClosing.bind(this)}
           onUpdate={this._onAlertHeaderUpdate.bind(this)}
@@ -69,25 +69,35 @@ class MainHeader extends React.Component<{||}, State > {
   _renderNavBar() {
     return (
       <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-            <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
+        <Navbar.Brand href="/index/?section=FindProjects"><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></Navbar.Brand>
+        <Navbar.Toggle aria-controls="nav-usernav-container" />
+        <Navbar.Collapse id="nav-usernav-container">
+          <Nav className="MainHeader-usernav">
+            <Nav className="MainHeader-usernav">
+              <Nav.Link href="#login">Log In</Nav.Link>
+              <Nav.Link href="#donate">Donate</Nav.Link>
+            </Nav>
+          </Nav>
+        </Navbar.Collapse>
+        <Navbar.Toggle aria-controls="nav-pagenav-container" />
+        <Navbar.Collapse id="nav-pagenav-container">
+          <Nav className="MainHeader-pagenav">
+            <NavDropdown title="Projects" id="nav-projects">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
             </NavDropdown>
-          </Nav>
-          <Nav>
-            <Nav.Link href="#deets">More deets</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-              Dank memes
-            </Nav.Link>
+            <NavDropdown title="Groups" id="nav-groups">
+              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title="Events" id="nav-events">
+              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title="About" id="nav-about">
+              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+            </NavDropdown>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
