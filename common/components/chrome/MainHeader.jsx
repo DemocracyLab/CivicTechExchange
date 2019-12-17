@@ -60,6 +60,7 @@ class MainHeader extends React.Component<{||}, State > {
           onUpdate={this._onAlertHeaderUpdate.bind(this)}
         />
         <div className="MainHeader-nav-container">
+          <div className="MainHeader-logo"><a href="/index/?section=FindProjects"><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></div>
           {this._renderNavBar()}
         </div>
       </div>
@@ -69,16 +70,6 @@ class MainHeader extends React.Component<{||}, State > {
   _renderNavBar() {
     return (
       <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
-        <Navbar.Brand href="/index/?section=FindProjects"><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></Navbar.Brand>
-        <Navbar.Toggle aria-controls="nav-usernav-container" />
-        <Navbar.Collapse id="nav-usernav-container">
-          <Nav className="MainHeader-usernav">
-            <Nav className="MainHeader-usernav">
-              <Nav.Link href="#login">Log In</Nav.Link>
-              <Nav.Link href="#donate">Donate</Nav.Link>
-            </Nav>
-          </Nav>
-        </Navbar.Collapse>
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
         <Navbar.Collapse id="nav-pagenav-container">
           <Nav className="MainHeader-pagenav">
@@ -98,6 +89,8 @@ class MainHeader extends React.Component<{||}, State > {
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
             </NavDropdown>
+            <Nav.Link href="#login">Log In</Nav.Link>
+            <Nav.Link href="#donate">Donate</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
