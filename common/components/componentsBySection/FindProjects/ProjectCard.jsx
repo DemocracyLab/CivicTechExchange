@@ -93,7 +93,7 @@ class ProjectCard extends React.PureComponent<Props> {
           </li>
         }
         {this.props.project.url &&
-          <li>
+         <li className="ProjectCard-url-text">
             <i className={GlyphStyles.Globe + glyphFixedWidth}></i>
             {urlHelper.beautify(this.props.project.url)}
           </li>
