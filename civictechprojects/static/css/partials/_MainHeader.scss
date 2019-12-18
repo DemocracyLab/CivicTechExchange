@@ -1,9 +1,10 @@
 .MainHeader-root {
-  height: 79px;
+  // height: 79px;
   z-index: 99;
   width: 100%;
   position: fixed; /* fix the entire component, including AlertHeader and Nav */
 }
-.MainHeader-logo {
-  padding: 0.5rem 0 0.5rem 0.5rem;
+.MainHeader-root .navbar-brand {
+  padding-top: 0;
+  padding-bottom: 0;
 }

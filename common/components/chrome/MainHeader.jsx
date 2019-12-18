@@ -21,6 +21,7 @@ import _ from 'lodash';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Button from 'react-bootstrap/Button';
 
 class MainHeader extends React.Component<{||}, State > {
 
@@ -60,7 +61,6 @@ class MainHeader extends React.Component<{||}, State > {
           onUpdate={this._onAlertHeaderUpdate.bind(this)}
         />
         <div className="MainHeader-nav-container">
-          <div className="MainHeader-logo"><a href="/index/?section=FindProjects"><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></div>
           {this._renderNavBar()}
         </div>
       </div>
@@ -70,9 +70,10 @@ class MainHeader extends React.Component<{||}, State > {
   _renderNavBar() {
     return (
       <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+        <Navbar.Brand><a href="/index/?section=FindProjects"><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></Navbar.Brand>
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
         <Navbar.Collapse id="nav-pagenav-container">
-          <Nav className="MainHeader-pagenav">
+          <Nav className="MainHeader-pagenav mr-auto">
             <NavDropdown title="Projects" id="nav-projects">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
@@ -89,13 +90,21 @@ class MainHeader extends React.Component<{||}, State > {
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="#login">Log In</Nav.Link>
-            <Nav.Link href="#donate">Donate</Nav.Link>
           </Nav>
+          {this._renderUserSection()}
         </Navbar.Collapse>
       </Navbar>
     )
+  }
 
+  _renderUserSection() {
+    //renders a login/donate button if user is logged out, renders user profile/action links if logged in
+    return (
+      <Nav>
+        <Button variant="outline-primary" href="#donate">Donate</Button>
+        <Nav.Link href="#login">Log In</Nav.Link>
+      </Nav>
+    )
   }
 
   _onAlertHeaderUpdate() {
