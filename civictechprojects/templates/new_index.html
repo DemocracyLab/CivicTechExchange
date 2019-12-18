@@ -29,6 +29,8 @@
           version    : 'v2.10',
         });
         FB.AppEvents.logPageView();
+        window.democracyLabEvents = {'fbLoaded': true};
+        window.dispatchEvent(new Event('fbLoaded'));
       };
       (function(d, s, id){
          var js, fjs = d.getElementsByTagName(s)[0];
