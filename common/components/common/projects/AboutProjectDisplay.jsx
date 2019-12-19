@@ -8,6 +8,7 @@ import ContactProjectButton from "./ContactProjectButton.jsx";
 import ContactVolunteersButton from "./ContactVolunteersButton.jsx";
 import ProjectVolunteerButton from "./ProjectVolunteerButton.jsx";
 import ProjectVolunteerModal from "./ProjectVolunteerModal.jsx";
+import ProjectCommitCard from "./ProjectCommitCard.jsx";
 import AboutPositionEntry from "../positions/AboutPositionEntry.jsx";
 import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../volunteers/VolunteerSection.jsx";
@@ -33,7 +34,8 @@ type State = {|
   positionToJoin: ?PositionInfo,
   showPositionModal: boolean,
   shownPosition: ?PositionInfo,
-  tabs: object
+  tabs: object,
+  maxActivity: number
 |};
 
 class AboutProjectDisplay extends React.PureComponent<Props, State> {
@@ -49,9 +51,12 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       tabs: {
         details: true,
         skills: false,
-      }
+        activity: false,
+      },
+      maxActivity: 5
     };
     this.handleUpdateVolunteers = this.handleUpdateVolunteers.bind(this);
+    this.handleShowMoreActivity = this.handleShowMoreActivity.bind(this);
  }
   
   componentWillReceiveProps(nextProps: Props): void {
@@ -74,6 +79,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     });
   }
 
+  handleShowMoreActivity() {
+    this.setState({ maxActivity: this.state.maxActivity + 5 });
+  }
+
   confirmJoinProject(confirmJoin: boolean) {
     if(confirmJoin) {
       window.location.reload(true);
@@ -87,6 +96,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       details: false,
       skills: false,
       positions: false,
+      activity: false,
     };
 
     tabs[tab] = true;
@@ -220,6 +230,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
               }
 
+              {project && !_.isEmpty(project.project_commits) &&
+              <a onClick={() => this.changeHighlighted('activity')} className={this.state.tabs.activity ? 'AboutProjects_aHighlighted' : 'none'} href="#recent-activity">Recent Activity</a>
+              }
+
             </div>
           </div>
 
@@ -268,6 +282,26 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               {project && !_.isEmpty(project.project_positions) && this._renderPositions()}
             </div>
           </div>
+
+          {project && !_.isEmpty(project.project_commits) &&
+            <div className='AboutProjects-recent-activity'>
+              <div id="recent-activity">
+                <h4>Recent Activity</h4>
+                { project.project_commits
+                    .slice(0, this.state.maxActivity)
+                    .map(commit => <ProjectCommitCard commit={commit} />)
+                }
+                { project.project_commits.length > this.state.maxActivity && (
+                  <div
+                    className="AboutProjects-show-more-activity"
+                    onClick={this.handleShowMoreActivity}
+                  >
+                    Show more activity
+                  </div>
+                )}
+              </div>
+            </div>
+          }
 
         </div>
 

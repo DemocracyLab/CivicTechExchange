@@ -1,0 +1,59 @@
+.ProjectCommitCard-container {
+  border: $color-grey-disabled solid 1px;
+  border-radius: 3px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.ProjectCommitCard-line {
+  display: flex;
+  margin-top: 1rem;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  > div {
+    margin-left: 0.5rem;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.ProjectCommitCard-author-line {
+  align-items: flex-end;
+}
+
+.ProjectCommitCard-user {
+  color: #888;
+  font-weight: bold;
+}
+
+.ProjectCommitCard-date {
+  color: #888;
+  font-size: 0.8rem;
+  line-height: 22px;
+}
+
+.ProjectCommitCard-commit-icon {
+  line-height: 0;
+
+  > svg {
+    fill: currentColor;
+    color: #ccc;
+  }
+}
+
+.ProjectCommitCard-sha {
+  font-weight: bold;
+}
+
+.ProjectCommitCard-branch-line {
+  font-size: 0.8rem;
+
+  strong, a {
+    margin: 0 0.25rem;
+  }
+}

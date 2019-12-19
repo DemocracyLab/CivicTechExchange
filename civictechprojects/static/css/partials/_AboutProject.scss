@@ -221,6 +221,19 @@
   }
 }
 
+.AboutProjects-recent-activity {
+  padding: 20px; /*as with description-details consider maxwidth */
+
+  border-top: $color-grey-disabled solid 1px;
+}
+
+.AboutProjects-show-more-activity {
+  cursor: pointer;
+  font-weight: bold;
+  color: #888;
+  text-align: center;
+}
+
 .AboutProjects-positions-available {
   padding: 25px 10px; /*as with description-details consider maxwidth */
 

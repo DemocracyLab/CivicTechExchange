@@ -107,7 +107,7 @@ class Project(Archived):
         links = ProjectLink.objects.filter(link_project=self.id)
         positions = ProjectPosition.objects.filter(position_project=self.id)
         volunteers = VolunteerRelation.objects.filter(project=self.id)
-        commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:10]
+        commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
 
         project = {
             'project_id': self.id,
@@ -209,9 +209,11 @@ class ProjectCommit(models.Model):
             project_commit.commit_date = commit_section['author']['date']
 
             author_section = github_json['author']
-            project_commit.user_name = author_section['login']
-            project_commit.user_link = author_section['html_url']
-            project_commit.user_avatar_link = author_section['avatar_url']
+            if author_section:
+                project_commit.user_name = author_section['login']
+                project_commit.user_link = author_section['html_url']
+                project_commit.user_avatar_link = author_section['avatar_url']
+
             project_commit.save()
 
     def to_json(self):
