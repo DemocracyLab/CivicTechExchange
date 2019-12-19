@@ -13,6 +13,7 @@ import ProjectCard from './ProjectCard.jsx';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import LoadingMessage from '../../chrome/LoadingMessage.jsx';
+import prerender from "../../utils/prerender.js";
 
 type State = {|
   projects: List<Project>,
@@ -28,6 +29,8 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
   }
 
   static calculateState(prevState: State): State {
+    prerender.ready(!ProjectSearchStore.getProjectsLoading());
+    
     return {
       projects: ProjectSearchStore.getProjects(),
       project_pages: ProjectSearchStore.getProjectPages(),
