@@ -6,6 +6,7 @@ import Headers from "../common/Headers.jsx";
 import RadioButtons from "../common/selection/RadioButtons.jsx";
 import PaypalDonationButton, {OtherAmountSelected} from "../common/integrations/PaypalDonationButton.jsx";
 import {SelectOption} from "../types/SelectOption.jsx";
+import prerender from "../utils/prerender.js";
 
 type State = {|
   donateAmount: ?string,
@@ -35,6 +36,10 @@ class DonateController extends React.Component<{||}, State> {
       donateAmount: null,
       donateMonthly: null
     };
+  }
+  
+  componentDidMount() {
+    prerender.ready();
   }
 
   handleFieldSelection(field: string, option: SelectOption): void {

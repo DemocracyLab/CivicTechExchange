@@ -10,12 +10,21 @@ import NavigationStore from '../stores/NavigationStore.js';
 import renderer from 'react-test-renderer';
 
 describe('utils', () => {
-
-  test('async', () => {
+	
+  test('async.doWhenReady', () => {
     const readyFunc = () => true;
     const doVoidFunc = jest.fn();
-
+    
     async.doWhenReady(readyFunc, doVoidFunc, 1);
+    expect(doVoidFunc).toBeCalled();
+  });
+  
+  test('async.onEvent', () => {
+    const eventName = 'testEvent';
+    const doVoidFunc = jest.fn();
+    
+    async.onEvent(eventName, doVoidFunc);
+    global.dispatchEvent(new Event(eventName));
     expect(doVoidFunc).toBeCalled();
   });
 
