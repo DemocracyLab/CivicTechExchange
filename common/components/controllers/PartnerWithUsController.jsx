@@ -6,12 +6,16 @@ import Sponsors, {SponsorMetadata} from "../utils/Sponsors.js";
 import Headers from "../common/Headers.jsx";
 import Section from "../enums/Section.js";
 import url from '../../components/utils/url.js';
-
+import prerender from "../utils/prerender.js";
 
 
 class PartnerWithUsController extends React.Component<{||}> {
   constructor(): void {
     super();
+  }
+  
+  componentDidMount() {
+    prerender.ready();
   }
 
   render(): React$Node {
