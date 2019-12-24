@@ -68,6 +68,17 @@
   margin-bottom: 0;
 }
 
+.AboutProjects-url-text {
+  overflow: hidden;
+  text-Overflow: ellipsis;
+  white-Space: nowrap;
+  @extend .AboutProjects-icon-text;
+  color: $color-orange;
+  &:hover {
+    color: $color-orange-dark;
+  }
+}
+
 .AboutProjects-links, .AboutProjects-files, .AboutProjects-communities, .AboutProjects-team {
   padding: 10px 5px 10px 15px;
 }

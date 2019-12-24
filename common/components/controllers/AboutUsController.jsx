@@ -10,6 +10,7 @@ import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
+import prerender from "../utils/prerender.js";
 
 type State = {|
   aboutUs: ?ProjectDetailsAPIData,
@@ -42,7 +43,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   loadProjectDetails(project: ProjectDetailsAPIData) {
     this.setState({
       aboutUs: project,
-    });
+    }, prerender.ready);
   }
 
 

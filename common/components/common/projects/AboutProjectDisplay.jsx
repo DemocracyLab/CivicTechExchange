@@ -222,13 +222,13 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             </div>
           </div>
 
-          <div className='AboutProjects-details'>
+          <div className='AboutProjects-details AboutProjects-details-description'>
             <div className="position-relative"><a className="position-absolute AboutProjects-jumplink" id="project-details" name="project-details"></a></div>
             <div>
               {project.project_description}
               {!_.isEmpty(project.project_description_solution) &&
                 <React.Fragment>
-                  <div className="AboutProjects-details-description">
+                  <div>
                     <br></br>
                     {project.project_description_solution}
                   </div>
