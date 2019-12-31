@@ -8,7 +8,12 @@ def fetch_github_repository_info(repo_url):
     headers = {"Authorization":"token " + settings.GITHUB_API_TOKEN} if settings.GITHUB_API_TOKEN is not None else {}
     response = requests.get(repo_url, headers=headers)
     try:
-        return response.json()
+        repo_info = response.json()
+        if 'message' in repo_info:
+            print('Error reading ' + repo_url + ': ' + repo_info['message'])
+            return None
+        else:
+            return repo_info
     except:
         print('Invalid json: ' + repo_url)
         return None
@@ -35,3 +40,4 @@ def get_latest_commit_date(repo_info):
         first_commit = repo_info[0]
         if 'commit' in first_commit:
             return first_commit['commit']['author']['date']
+
