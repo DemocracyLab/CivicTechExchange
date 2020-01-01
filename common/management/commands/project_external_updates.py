@@ -14,8 +14,7 @@ class Command(BaseCommand):
 
 def get_project_github_links():
     from civictechprojects.models import ProjectLink
-    # TODO: Filter out non-github links
-    return ProjectLink.objects.filter(link_name='link_coderepo')
+    return ProjectLink.objects.filter(link_name='link_coderepo', link_url__icontains='github.com/')
 
 
 def handle_project_github_updates(project_github_link):
