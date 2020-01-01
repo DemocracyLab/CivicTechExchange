@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
-from common.helpers.github import fetch_github_repository_info, get_latest_commit_date, get_owner_repo_name_from_public_url, \
-    get_repo_endpoint_from_owner_repo_name
+from common.helpers.github import fetch_github_info, get_latest_commit_date, get_owner_repo_name_from_public_url, \
+    get_repo_endpoint_from_owner_repo_name, get_repo_names_from_owner_repo_name
 from common.helpers.date_helpers import datetime_field_to_datetime
 import pytz
 
@@ -19,16 +19,16 @@ def get_project_github_links():
 
 
 def handle_project_github_updates(project_github_link):
-    # TODO: Support multiple github repos
     last_updated_time = datetime_field_to_datetime(get_project_latest_commit_date(project_github_link.link_project))
     owner_repo_name = get_owner_repo_name_from_public_url(project_github_link.link_url)
 
-    repo_url = get_repo_endpoint_from_owner_repo_name(owner_repo_name, last_updated_time)
-    if repo_url is not None:
+    repo_names = get_repo_names_from_owner_repo_name(owner_repo_name)
+    for repo_name in repo_names:
+        repo_url = get_repo_endpoint_from_owner_repo_name(repo_name, last_updated_time)
         print('Ingesting: ' + repo_url)
-        repo_info = fetch_github_repository_info(repo_url)
-        repo_name = owner_repo_name[0] + '/' + owner_repo_name[1]
-        if repo_info is not None:
+        repo_info = fetch_github_info(repo_url)
+        repo_name = repo_name[0] + '/' + repo_name[1]
+        if repo_info is not None and len(repo_info) > 0:
             project = project_github_link.link_project
             add_commits_to_database(project, repo_name, 'master', repo_info)
             latest_commit_date = get_latest_commit_date(repo_info)
