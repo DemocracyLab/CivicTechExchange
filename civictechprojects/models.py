@@ -205,7 +205,7 @@ class ProjectCommit(models.Model):
             project_commit.commit_sha = commit_sha
 
             commit_section = github_json['commit']
-            project_commit.commit_title = commit_section['message']
+            project_commit.commit_title = commit_section['message'][:2000]
             project_commit.commit_date = commit_section['author']['date']
 
             author_section = github_json['author']
