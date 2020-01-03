@@ -343,3 +343,6 @@ LOGGING = {
 
 # https://docs.djangoproject.com/en/1.7/ref/settings/#silenced-system-checks
 SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
+
+# How many of the most recent github commits to store per project.
+MAX_COMMITS_PER_PROJECT = int(os.environ.get('MAX_COMMITS_PER_PROJECT', 30))
