@@ -11,7 +11,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         project_github_links = get_project_github_links()
         for github_link in project_github_links:
-            handle_project_github_updates(github_link)
+            if github_link.link_project.is_searchable:
+                handle_project_github_updates(github_link)
 
 
 def get_project_github_links():
