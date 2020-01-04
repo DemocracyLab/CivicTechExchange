@@ -39,13 +39,6 @@ def get_owner_repo_name_from_public_url(public_repo_url):
         return path_parts.path.split('/')[1:3]
 
 
-def get_latest_commit_date(repo_info):
-    if len(repo_info) > 0:
-        first_commit = repo_info[0]
-        if 'commit' in first_commit:
-            return first_commit['commit']['author']['date']
-
-
 # If the provided repo name is a user or organization, query github to get all of their repos
 def get_repo_names_from_owner_repo_name(owner_repo_name):
     if len(owner_repo_name) > 1:
