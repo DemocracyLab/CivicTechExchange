@@ -10,6 +10,6 @@ def db_is_initialized():
     return db_table_exists('common_tag')
 
 
-def bulk_delete_all_but(Table, keep_results):
-    ids = keep_results.values_list("id", flat=True)
-    Table.objects.exclude(pk__in=list(ids)).delete()
+def bulk_delete(Table, delete_results):
+    ids = delete_results.values_list("id", flat=True)
+    Table.objects.filter(pk__in=list(ids)).delete()

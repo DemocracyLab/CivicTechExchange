@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from common.helpers.db import bulk_delete_all_but
+from common.helpers.db import bulk_delete
 from common.helpers.github import fetch_github_info, get_latest_commit_date, get_owner_repo_name_from_public_url, \
     get_repo_endpoint_from_owner_repo_name, get_repo_names_from_owner_repo_name
 from common.helpers.date_helpers import datetime_field_to_datetime
@@ -77,6 +77,6 @@ def remove_old_commits(project):
     # Delete them
     if commit_count > settings.MAX_COMMITS_PER_PROJECT:
         print('Deleting {ct} commits from project {id}'.format(ct=commit_count - settings.MAX_COMMITS_PER_PROJECT, id=project.id))
-        commits_to_keep = ProjectCommit.objects.filter(commit_project=project.id)\
-            .order_by('-commit_date')[:settings.MAX_COMMITS_PER_PROJECT]
-        bulk_delete_all_but(ProjectCommit, commits_to_keep)
+        commits_to_remove = ProjectCommit.objects.filter(commit_project=project.id)\
+            .order_by('-commit_date')[settings.MAX_COMMITS_PER_PROJECT:]
+        bulk_delete(ProjectCommit, commits_to_remove)
