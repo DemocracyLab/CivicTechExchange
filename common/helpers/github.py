@@ -34,7 +34,8 @@ def get_repo_endpoint_from_owner_repo_name(owner_repo_name, start_date=None):
 
 
 def get_owner_repo_name_from_public_url(public_repo_url):
-    cleaned_url = public_repo_url.strip()
+    # Strip whitespace and trailing slashes
+    cleaned_url = public_repo_url.strip().rstrip('/')
     path_parts = urlparse.urlparse(cleaned_url)
     if hasattr(path_parts, 'path'):
         return path_parts.path.split('/')[1:3]
