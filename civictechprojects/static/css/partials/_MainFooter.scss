@@ -31,22 +31,3 @@
   align-content: space-between;
   align-items: center;
 }
-
-.MainFooter-sponsor-header:before,
-.MainFooter-sponsor-header:after {
-  background-color: $color-text-dark;
-  content: "";
-  display: inline-block;
-  height: 1px;
-  position: relative;
-  vertical-align: middle;
-  width: 20%;
-}
-.MainFooter-sponsor-header:before {
-  right: 0.5em;
-  margin-left: -21%;
-}
-.MainFooter-sponsor-header:after {
-  left: 0.5em;
-  margin-right: -21%;
-}

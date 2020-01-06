@@ -80,3 +80,23 @@ input[type="submit"]:disabled {
     width: 1400px;
   }
 }
+
+// header text decorator
+.side-lines:before,
+.side-lines:after {
+  background-color: $color-text-dark;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+  vertical-align: middle;
+  width: 20%;
+}
+.side-lines:before {
+  right: 0.5em;
+  margin-left: -21%;
+}
+.side-lines:after {
+  left: 0.5em;
+  margin-right: -21%;
+}

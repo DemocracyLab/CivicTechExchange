@@ -44,13 +44,13 @@ class MainFooter extends React.Component<{||}> {
           </a>
         </div>
         <div className="MainFooter-sponsor-container MainFooter-sponsors-sustain col-12">
-          <h3 className="MainFooter-sponsor-header text-center">Sustaining</h3>
+          <h3 className="MainFooter-sponsor-header text-center side-lines">Sustaining</h3>
           <div className="MainFooter-sponsor-wrapper">
             {this._renderSponsors("first")}
           </div>
         </div>
         <div className="MainFooter-sponsor-container MainFooter-sponsors-advancing col-12">
-          <h3 className="MainFooter-sponsor-header text-center">Advancing</h3>
+          <h3 className="MainFooter-sponsor-header text-center side-lines">Advancing</h3>
           <div className="MainFooter-sponsor-wrapper">
             {this._renderSponsors("second")}
           </div>
