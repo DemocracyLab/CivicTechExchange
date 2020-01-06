@@ -22,7 +22,7 @@ def get_project_github_links():
 
 def handle_project_github_updates(project_github_link):
     project = project_github_link.link_project
-    print('Handling updates for project {id}'.format(id=project.id))
+    print('Handling updates for project {id} github link: {url}'.format(id=project.id, url=project_github_link.link_url))
     last_updated_time = datetime_field_to_datetime(get_project_latest_commit_date(project_github_link.link_project))
     owner_repo_name = get_owner_repo_name_from_public_url(project_github_link.link_url)
 
