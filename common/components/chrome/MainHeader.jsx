@@ -69,7 +69,7 @@ class MainHeader extends React.Component<{||}, State > {
 
   _renderNavBar() {
     return (
-      <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+      <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
         <Navbar.Brand><a href="/index/?section=FindProjects"><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></Navbar.Brand>
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
         <Navbar.Collapse id="nav-pagenav-container">
@@ -91,7 +91,9 @@ class MainHeader extends React.Component<{||}, State > {
               <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
             </NavDropdown>
           </Nav>
-          {this._renderUserSection()}
+          <Nav className="MainHeader-usernav">
+            {this._renderUserSection()}
+          </Nav>
         </Navbar.Collapse>
       </Navbar>
     )
@@ -100,11 +102,12 @@ class MainHeader extends React.Component<{||}, State > {
   _renderUserSection() {
     //renders a login/donate button if user is logged out, renders user profile/action links if logged in
     return (
-      <Nav>
+      <React.Fragment>
         <Button variant="outline-primary" href="#donate">Donate</Button>
         <Nav.Link href="#login">Log In</Nav.Link>
-      </Nav>
+      </React.Fragment>
     )
+
   }
 
   _onAlertHeaderUpdate() {

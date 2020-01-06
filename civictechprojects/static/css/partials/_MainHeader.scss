@@ -4,7 +4,12 @@
   width: 100%;
   position: fixed; /* fix the entire component, including AlertHeader and Nav */
 }
+.MainHeader-root .navbar {
+  padding: 0.25rem; //override entire navbar padding values, set our own later
+}
 .MainHeader-root .navbar-brand {
-  padding-top: 0;
-  padding-bottom: 0;
+  padding-right: 0.875rem;
+}
+.bg-navlight {
+  background: $color-background-light;
 }
