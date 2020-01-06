@@ -10,8 +10,10 @@
   padding-top: 20px;
 }
 
-.MainFooter-sponsor img {
+.MainFooter-sponsors-advancing img {
   max-width: 200px;
+  max-height: 100px;
+  /* TODO: remove these rules once we get properly sized native images on our CDN */
 }
 
 .MainFooter-border {
@@ -28,4 +30,23 @@
   justify-content: space-evenly;
   align-content: space-between;
   align-items: center;
+}
+
+.MainFooter-sponsor-header:before,
+.MainFooter-sponsor-header:after {
+  background-color: $color-text-dark;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+  vertical-align: middle;
+  width: 20%;
+}
+.MainFooter-sponsor-header:before {
+  right: 0.5em;
+  margin-left: -21%;
+}
+.MainFooter-sponsor-header:after {
+  left: 0.5em;
+  margin-right: -21%;
 }
