@@ -13,7 +13,7 @@ class PartnerWithUsController extends React.Component<{||}> {
   constructor(): void {
     super();
   }
-  
+
   componentDidMount() {
     prerender.ready();
   }
@@ -37,7 +37,14 @@ class PartnerWithUsController extends React.Component<{||}> {
           {this._renderEventSponsorshipSection()}
           {this._renderPlatformSponsorshipSection()}
         </div>
-        {this._renderSponsors()}
+        <div className="PartnerWithUsController-partners">
+          <h2>Our Partnerships</h2>
+          <h3>Sustaining</h3>
+          {this._renderSponsors("first")}
+          <h3>Advancing</h3>
+          {this._renderSponsors("second")}
+        </div>
+
       </div>
       </React.Fragment>
     );
@@ -92,15 +99,13 @@ class PartnerWithUsController extends React.Component<{||}> {
     );
   }
 
-  _renderSponsors(): ?React$Node {
+  _renderSponsors(category): ?React$Node {
     const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
     if(sponsors) {
       return (
-        <div className="PartnerWithUsController-partners">
-          <h2>Our Partnerships</h2>
           <div className="PartnerWithUsController-sponsorList">
             {
-              sponsors.map( (sponsor: SponsorMetadata, i:number) => {
+              sponsors.filter(obj => obj.category === category).map( (sponsor: SponsorMetadata, i:number) => {
                 return (
                   <div key={i} className="PartnerWithUsController-sponsor">
                     <div>
@@ -117,7 +122,6 @@ class PartnerWithUsController extends React.Component<{||}> {
               })
             }
           </div>
-        </div>
       );
     }
   }

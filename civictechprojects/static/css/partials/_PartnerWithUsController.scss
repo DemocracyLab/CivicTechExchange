@@ -24,6 +24,9 @@
   background-color: $color-background-default;
   padding: 50px 30px 50px 30px;
 }
+.PartnerWithUsController-partners h3 {
+  margin-top: 25px;
+}
 
 .PartnerWithUsController-sponsorList {
   display: flex;
@@ -32,10 +35,10 @@
 
 .PartnerWithUsController-sponsor {
   display: flex;
-  width: 600px;
+  margin: 1rem 0;
 }
 
-.PartnerWithUsController-sponsor img{
+.PartnerWithUsController-sponsor img {
   width: 200px;
 }
 
