@@ -36,30 +36,40 @@ class MainFooter extends React.Component<{||}> {
       <React.Fragment>
       <div className="MainFooter-border"></div>
       <div className="MainFooter-footer container">
-        <div className="MainFooter-item col-xs-12 col-md-6">
+        <div className="MainFooter-item col-12 text-center">
           <h2>Sponsors Make It Possible</h2>
           <p>Support the acceleration of social change</p>
           <a className="btn btn-primary" href={url.section(Section.PartnerWithUs)}>
             PARTNER WITH US
           </a>
         </div>
-        {this._renderSponsors()}
+        <div className="MainFooter-sponsor-container MainFooter-sponsors-sustain col-12">
+          <h3 className="MainFooter-sponsor-header text-center">Sustaining</h3>
+          <div className="MainFooter-sponsor-wrapper">
+            {this._renderSponsors("first")}
+          </div>
+        </div>
+        <div className="MainFooter-sponsor-container MainFooter-sponsors-advancing col-12">
+          <h3 className="MainFooter-sponsor-header text-center">Advancing</h3>
+          <div className="MainFooter-sponsor-wrapper">
+            {this._renderSponsors("second")}
+          </div>
+        </div>
       </div>
     </React.Fragment>
     );
   }
 
-  _renderSponsors(): ?Array<React$Node>  {
+  _renderSponsors(category): ?Array<React$Node>  {
     const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
     if(sponsors) {
-      return sponsors.map( (sponsor: SponsorMetadata, i:number) => {
+      return sponsors.filter(obj => obj.category === category)
+      .map( (sponsor: SponsorMetadata, i:number) => {
         return (
-          <div key={i} className="MainFooter-sponsor MainFooter-item col-xs-12 col-md-6">
-            <div>
+          <div key={i} className="MainFooter-sponsor">
               <a href={sponsor.url} target="_blank" rel="noopener noreferrer" className="MainFooter-sponsor-link">
                 <img src={sponsor.thumbnailUrl}/>
               </a>
-            </div>
           </div>
         );
       });

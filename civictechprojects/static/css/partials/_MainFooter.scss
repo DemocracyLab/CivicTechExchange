@@ -10,14 +10,22 @@
   padding-top: 20px;
 }
 
-.MainFooter-sponsor img{
+.MainFooter-sponsor img {
   max-width: 200px;
 }
-.MainFooter-sponsor-link, .MainFooter-sponsor img {
-  background: $color-background-light;
-}
+
 .MainFooter-border {
   width: 100%;
   height: 1px;
   border-top: 1px solid $color-grey-medium;
+}
+.MainFooter-sponsor-container {
+  padding-top: 40px;
+}
+.MainFooter-sponsor-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  align-content: space-between;
+  align-items: center;
 }
