@@ -46,3 +46,9 @@
 .PartnerWithUsController-sponsor h6{
   font-weight: bold;
 }
+
+@include media-breakpoint-up(md) {
+  .PartnerWithUsController-sponsor {
+    flex-wrap: nowrap;
+  }
+}
