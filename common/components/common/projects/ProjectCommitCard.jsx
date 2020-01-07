@@ -3,20 +3,29 @@
 import React from 'react';
 import moment from 'moment';
 
+type ProjectCommit = {|
+  user_name: string,
+  user_link: string,
+  user_avatar_link: string,
+  commit_date: string,
+  commit_sha: string,
+  commit_title: string,
+  branch_name: string,
+  repo_name: string
+|};
+
 type Props = {|
-  commit: object
+  commit: ProjectCommit
 |};
 
 class ProjectCommitCard extends React.PureComponent<Props> {
-
+  
   render(): React$Node {
-    console.log('commit', this.props.commit);
-
     const {
       user_name, user_link, user_avatar_link, commit_date, commit_sha, commit_title, branch_name,
       repo_name
     } = this.props.commit;
-
+    
     return (
       <div className="ProjectCommitCard-container">
         <div className="ProjectCommitCard-line ProjectCommitCard-author-line">
@@ -48,7 +57,7 @@ class ProjectCommitCard extends React.PureComponent<Props> {
       </div>
     );
   }
-
+  
 }
 
 export default ProjectCommitCard;
