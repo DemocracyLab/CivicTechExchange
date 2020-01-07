@@ -196,7 +196,7 @@ class ProjectCommit(models.Model):
     @staticmethod
     def create(project, repo_name, branch_name, github_json):
         commit_sha = github_json['sha']
-        existing_commit = ProjectCommit.objects.filter(commit_sha=commit_sha, id=project.id)
+        existing_commit = ProjectCommit.objects.filter(commit_sha=commit_sha, commit_project=project.id)
         if existing_commit.count() == 0:
             project_commit = ProjectCommit()
             project_commit.commit_project = project
