@@ -7,6 +7,7 @@ import Headers from "../common/Headers.jsx";
 import Section from "../enums/Section.js";
 import url from '../../components/utils/url.js';
 import prerender from "../utils/prerender.js";
+import _ from "lodash";
 
 
 class PartnerWithUsController extends React.Component<{||}> {
@@ -39,10 +40,10 @@ class PartnerWithUsController extends React.Component<{||}> {
         </div>
         <div className="PartnerWithUsController-partners">
           <h2>Our Partnerships</h2>
-          <h3>Sustaining</h3>
-          {this._renderSponsors("first")}
-          <h3>Advancing</h3>
-          {this._renderSponsors("second")}
+          {this._renderSponsors("Visionary")}
+          {this._renderSponsors("Sustaining")}
+          {this._renderSponsors("Advancing")}
+          {this._renderSponsors("Supporting")}
         </div>
 
       </div>
@@ -101,19 +102,22 @@ class PartnerWithUsController extends React.Component<{||}> {
 
   _renderSponsors(category): ?React$Node {
     const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
-    if(sponsors) {
+    let sdata = sponsors.filter(obj => obj.category === category);
+    if (!_.isEmpty(sdata)) {
       return (
+        <React.Fragment>
+          <h3>{category}</h3>
           <div className="PartnerWithUsController-sponsorList">
             {
-              sponsors.filter(obj => obj.category === category).map( (sponsor: SponsorMetadata, i:number) => {
+              sdata.map( (sponsor: SponsorMetadata, i:number) => {
                 return (
                   <div key={i} className="PartnerWithUsController-sponsor">
-                    <div>
+                    <div className="PartnerWithUsController-sponsor-logo">
                       <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
                         <img src={sponsor.thumbnailUrl}/>
                       </a>
                     </div>
-                    <div>
+                    <div className="PartnerWithUsController-sponsor-text">
                       <h6>{sponsor.displayName}</h6>
                       <p>{sponsor.description}</p>
                     </div>
@@ -122,6 +126,7 @@ class PartnerWithUsController extends React.Component<{||}> {
               })
             }
           </div>
+        </React.Fragment>
       );
     }
   }

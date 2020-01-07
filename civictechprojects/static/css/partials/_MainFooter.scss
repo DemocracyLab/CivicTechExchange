@@ -16,6 +16,10 @@
   /* TODO: remove these rules once we get properly sized native images on our CDN */
 }
 
+.MainFooter-sponsors-sustaining img {
+  max-width: 300px;
+}
+
 .MainFooter-border {
   width: 100%;
   height: 1px;

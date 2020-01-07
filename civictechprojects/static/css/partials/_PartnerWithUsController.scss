@@ -39,16 +39,20 @@
   margin: 1rem 0;
 }
 
-.PartnerWithUsController-sponsor img {
-  width: 200px;
+.PartnerWithUsController-sponsor h6 {
+  font-weight: bold;
 }
 
-.PartnerWithUsController-sponsor h6{
-  font-weight: bold;
+.PartnerWithUsController-sponsor-logo {
+  min-width: 200px;
+  text-align: center;
 }
 
 @include media-breakpoint-up(md) {
   .PartnerWithUsController-sponsor {
     flex-wrap: nowrap;
+  }
+  .PartnerWithUsController-sponsor-text {
+    padding-left: 20px;
   }
 }
