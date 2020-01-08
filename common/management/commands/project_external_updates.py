@@ -12,7 +12,12 @@ class Command(BaseCommand):
         project_github_links = get_project_github_links()
         for github_link in project_github_links:
             if github_link.link_project.is_searchable:
-                handle_project_github_updates(github_link)
+                try:
+                    handle_project_github_updates(github_link)
+                except:
+                    # Keep processing if we run into errors with a particular update
+                    print('Error processing ' + github_link.link_url)
+                    pass
 
 
 def get_project_github_links():
