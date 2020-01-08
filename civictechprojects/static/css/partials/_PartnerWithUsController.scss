@@ -22,7 +22,7 @@
 
 .PartnerWithUsController-partners {
   background-color: $color-background-default;
-  padding: 50px 30px 50px 30px;
+  padding-top: 50px;
 }
 .PartnerWithUsController-partners h3 {
   margin-top: 25px;
@@ -46,6 +46,7 @@
 .PartnerWithUsController-sponsor-logo {
   min-width: 200px;
   text-align: center;
+  margin: 0 auto; /* centers child image */
 }
 
 @include media-breakpoint-up(md) {

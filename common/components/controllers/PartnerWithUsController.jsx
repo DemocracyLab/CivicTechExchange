@@ -38,7 +38,7 @@ class PartnerWithUsController extends React.Component<{||}> {
           {this._renderEventSponsorshipSection()}
           {this._renderPlatformSponsorshipSection()}
         </div>
-        <div className="PartnerWithUsController-partners">
+        <div className="PartnerWithUsController-partners col-12">
           <h2>Our Partnerships</h2>
           {/* {this._renderSponsors("Visionary")} */}
           {this._renderSponsors("Sustaining")}
