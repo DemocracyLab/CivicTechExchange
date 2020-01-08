@@ -106,7 +106,7 @@ class PartnerWithUsController extends React.Component<{||}> {
     if (!_.isEmpty(sdata)) {
       return (
         <React.Fragment>
-          <h3>{category}</h3>
+          <h3 className="text-center side-lines">{category}</h3>
           <div className="PartnerWithUsController-sponsorList">
             {
               sdata.map( (sponsor: SponsorMetadata, i:number) => {
