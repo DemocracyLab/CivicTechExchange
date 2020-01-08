@@ -292,11 +292,13 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                     .map(commit => <ProjectCommitCard commit={commit} />)
                 }
                 { project.project_commits.length > this.state.maxActivity && (
-                  <div
-                    className="AboutProjects-show-more-activity"
-                    onClick={this.handleShowMoreActivity}
-                  >
-                    Show more activity
+                  
+                  <div className="AboutProjects-show-more-activity-container">
+                    <div className="btn btn-theme AboutProjects-show-more-activity"
+                      onClick={this.handleShowMoreActivity}
+                    >
+                      Show more activity
+                    </div>
                   </div>
                 )}
               </div>

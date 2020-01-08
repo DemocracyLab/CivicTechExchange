@@ -228,6 +228,11 @@
   border-top: $color-grey-disabled solid 1px;
 }
 
+.AboutProjects-show-more-activity-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 .AboutProjects-show-more-activity {
   cursor: pointer;
   font-weight: bold;
