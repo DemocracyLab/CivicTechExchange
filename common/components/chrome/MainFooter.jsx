@@ -44,10 +44,10 @@ class MainFooter extends React.Component<{||}> {
           </a>
         </div>
         <div className="MainFooter-sponsor-container col-12">
-            {/* {this._renderSponsors("Visionary")} */}
+            {this._renderSponsors("Visionary")}
             {this._renderSponsors("Sustaining")}
             {this._renderSponsors("Advancing")}
-            {/* {this._renderSponsors("Supporting")} */}
+            {this._renderSponsors("Supporting")}
         </div>
       </div>
       </React.Fragment>
