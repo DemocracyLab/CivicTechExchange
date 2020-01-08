@@ -3,7 +3,6 @@ from django.conf import settings
 from urllib import parse as urlparse
 import requests
 
-
 github_api_endpoint='https://api.github.com'
 
 
@@ -46,12 +45,32 @@ def get_repo_names_from_owner_repo_name(owner_repo_name):
     if len(owner_repo_name) > 1:
         return [owner_repo_name]
     else:
-        return get_repos_for_owner(owner_repo_name[0])
+        response = get_repos_for_org(owner_repo_name[0])
+        if response is not None:
+            return response
+        else:
+            return get_repos_for_user(owner_repo_name[0])
 
 
-def get_repos_for_owner(owner_name):
-    print('Retrieving repo endpoints for user/organization: ' + owner_name)
+def get_repos_for_org(owner_name):
+    print('Retrieving repo endpoints for organization: ' + owner_name)
     repos_url = '{github}/orgs/{owner}/repos'.format(github=github_api_endpoint, owner=owner_name)
     repos_json = fetch_github_info(repos_url)
-    repo_names = list(map(lambda repo_json: [owner_name, repo_json['name']], repos_json))
-    return repo_names
+    if repos_json is None:
+        print('No results found, querying users')
+        return None
+    else:
+        repo_names = list(map(lambda repo_json: [owner_name, repo_json['name']], repos_json))
+        return repo_names
+
+
+def get_repos_for_user(owner_name):
+    print('Retrieving repo endpoints for user: ' + owner_name)
+    repos_url = '{github}/users/{owner}/repos'.format(github=github_api_endpoint, owner=owner_name)
+    repos_json = fetch_github_info(repos_url)
+    if repos_json is None:
+        print('No user results found, giving up on github link')
+        return None
+    else:
+        repo_names = list(map(lambda repo_json: [owner_name, repo_json['name']], repos_json))
+        return repo_names
