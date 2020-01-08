@@ -5,6 +5,7 @@ from common.helpers.github import fetch_github_info, get_owner_repo_name_from_pu
 from common.helpers.date_helpers import datetime_field_to_datetime
 from django.conf import settings
 import pytz
+import traceback
 
 
 class Command(BaseCommand):
@@ -17,6 +18,7 @@ class Command(BaseCommand):
                 except:
                     # Keep processing if we run into errors with a particular update
                     print('Error processing ' + github_link.link_url)
+                    print(traceback.format_exc())
                     pass
 
 
