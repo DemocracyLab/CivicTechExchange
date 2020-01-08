@@ -40,10 +40,10 @@ class PartnerWithUsController extends React.Component<{||}> {
         </div>
         <div className="PartnerWithUsController-partners">
           <h2>Our Partnerships</h2>
-          {this._renderSponsors("Visionary")}
+          {/* {this._renderSponsors("Visionary")} */}
           {this._renderSponsors("Sustaining")}
           {this._renderSponsors("Advancing")}
-          {this._renderSponsors("Supporting")}
+          {/* {this._renderSponsors("Supporting")} */}
         </div>
 
       </div>

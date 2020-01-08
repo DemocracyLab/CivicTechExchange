@@ -43,36 +43,37 @@ class MainFooter extends React.Component<{||}> {
             PARTNER WITH US
           </a>
         </div>
-        <div className="MainFooter-sponsor-container MainFooter-sponsors-sustain col-12">
-          <h3 className="MainFooter-sponsor-header text-center side-lines">Sustaining</h3>
-          <div className="MainFooter-sponsor-wrapper">
-            {this._renderSponsors("first")}
-          </div>
-        </div>
-        <div className="MainFooter-sponsor-container MainFooter-sponsors-advancing col-12">
-          <h3 className="MainFooter-sponsor-header text-center side-lines">Advancing</h3>
-          <div className="MainFooter-sponsor-wrapper">
-            {this._renderSponsors("second")}
-          </div>
+        <div className="MainFooter-sponsor-container col-12">
+            {/* {this._renderSponsors("Visionary")} */}
+            {this._renderSponsors("Sustaining")}
+            {this._renderSponsors("Advancing")}
+            {/* {this._renderSponsors("Supporting")} */}
         </div>
       </div>
-    </React.Fragment>
+      </React.Fragment>
     );
   }
 
   _renderSponsors(category): ?Array<React$Node>  {
     const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
-    if(sponsors) {
-      return sponsors.filter(obj => obj.category === category)
-      .map( (sponsor: SponsorMetadata, i:number) => {
-        return (
-          <div key={i} className="MainFooter-sponsor">
-              <a href={sponsor.url} target="_blank" rel="noopener noreferrer" className="MainFooter-sponsor-link">
-                <img src={sponsor.thumbnailUrl}/>
-              </a>
-          </div>
-        );
-      });
+    let sdata = sponsors.filter(obj => obj.category === category)
+    if(!_.isEmpty(sdata)) {
+      return (
+        <React.Fragment>
+          <h3 className="MainFooter-sponsor-header text-center side-lines">{category}</h3>
+          <div className="MainFooter-sponsor-wrapper">
+          {sdata.map( (sponsor: SponsorMetadata, i:number) => {
+            return (
+              <div key={i} className="MainFooter-sponsor">
+                <a href={sponsor.url} target="_blank" rel="noopener noreferrer" className="MainFooter-sponsor-link">
+                  <img src={sponsor.thumbnailUrl}/>
+                </a>
+              </div>
+            );
+          })};
+        </div>
+        </React.Fragment>
+      )
     }
   }
 }
