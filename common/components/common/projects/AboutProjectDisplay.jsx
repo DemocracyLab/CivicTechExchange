@@ -19,7 +19,6 @@ import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
-import DropdownMenu from "react-bootstrap/es/DropdownMenu";
 
 
 type Props = {|
@@ -58,7 +57,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     this.handleUpdateVolunteers = this.handleUpdateVolunteers.bind(this);
     this.handleShowMoreActivity = this.handleShowMoreActivity.bind(this);
  }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({
       project: nextProps.project,
@@ -72,7 +71,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       positionToJoin: position
     });
   }
-  
+
   handleUpdateVolunteers(volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>) {
     this.setState({
       volunteers: volunteers
@@ -237,10 +236,11 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             </div>
           </div>
 
-          <div className='AboutProjects-details'>
-            <div id='project-details'>
+          <div className='AboutProjects-details AboutProjects-details-description'>
+            <div className="position-relative"><a className="position-absolute AboutProjects-jumplink" id="project-details" name="project-details"></a></div>
+            <div>
               {project.project_description}
-              {!_.isEmpty(project.project_description_solution) && 
+              {!_.isEmpty(project.project_description_solution) &&
                 <React.Fragment>
                   <div>
                     <br></br>
@@ -248,7 +248,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                   </div>
                 </React.Fragment>
               }
-              {!_.isEmpty(project.project_description_actions) && 
+              {!_.isEmpty(project.project_description_actions) &&
                 <React.Fragment>
                   <div>
                     <br></br>
@@ -278,7 +278,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           </div>
 
           <div className='AboutProjects-positions-available'>
-            <div id="positions-available">
+            <div className="position-relative">
+              <a name="positions-available" id="positions-available" className="position-absolute AboutProjects-jumplink"></a>
+            </div>
+            <div>
               {project && !_.isEmpty(project.project_positions) && this._renderPositions()}
             </div>
           </div>
@@ -294,7 +297,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 { project.project_commits.length > this.state.maxActivity && (
                   
                   <div className="AboutProjects-show-more-activity-container">
-                    <div className="btn btn-theme AboutProjects-show-more-activity"
+                    <div className="btn btn-primary AboutProjects-show-more-activity"
                       onClick={this.handleShowMoreActivity}
                     >
                       Show more activity
@@ -323,7 +326,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       />
     );
   }
-  
+
   _renderContactAndVolunteerButtons(): React$Node {
     return (
       <div className='AboutProjects-owner'>

@@ -2,11 +2,14 @@
 
 import React from 'react';
 import Headers from "../common/Headers.jsx";
-import {Glyph, GlyphStyles} from "../utils/glyphs.js";
 import ContactForm from "../forms/ContactForm.jsx";
+import prerender from "../utils/prerender.js";
 
 class ContactUsController extends React.PureComponent<{||}> {
-
+  componentDidMount() {
+    prerender.ready();
+  }
+  
   _renderHeader(): React$Node {
     const title: string = "DemocracyLab | Contact Us";
     const description: string = "Contact information for DemocracyLab."

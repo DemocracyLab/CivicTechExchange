@@ -7,7 +7,7 @@ import type {LinkInfo} from "../../forms/LinkInfo.jsx";
 import type {FileInfo} from "../../common/FileInfo.jsx";
 import LinkList from "../../forms/LinkList.jsx";
 import FileUploadList from "../../forms/FileUploadList.jsx";
-import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
+import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import {OnReadySubmitFunc} from "./ProjectFormCommon.jsx";
 import {DefaultLinkDisplayConfigurations} from "../../constants/LinkConstants.js";
 import url from "../../utils/url.js";
@@ -48,13 +48,13 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
         link_filerepo: project ? project.link_filerepo : ""
       }
     };
-    
+
     //this will set formFields.project_links and formFields.links_*
     this.filterSpecificLinks(_.cloneDeep(project.project_links));
-    this.form = form.setup();
+    this.form = formHelper.setup();
     props.readyForSubmit(true, this.onSubmit.bind(this));
   }
-  
+
   // TODO: Put common code used between EditProjectsForm in a common place
   onSubmit(submitFunc: Function): void {
     //Sanitize project url if necessary
@@ -82,7 +82,7 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
     this.setState({ formFields: formFields}, submitFunc);
     this.forceUpdate();
   }
-  
+
   filterSpecificLinks(array) {
     //this function updates the entire state.formFields object at once
     let specificLinks = _.remove(array, function(n) {
@@ -96,7 +96,7 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
     });
     //add the other links to state copy
     linkState['project_links'] = array;
-    
+
     //TODO: see if there's a way to do this without the forceUpdate - passing by reference problem?
     this.setState({ formFields: linkState });
     this.forceUpdate();
@@ -107,35 +107,35 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
       <div className="EditProjectForm-root">
 
         <DjangoCSRFToken/>
-  
+
         <div className="form-group">
           <label htmlFor="link_coderepo">Code Repository <span className="label-hint">(e.g. Github)</span></label>
           <input type="text" className="form-control" id="link_coderepo" name="link_coderepo" maxLength="2075"
                  value={this.state.formFields.link_coderepo} onChange={this.form.onInput.bind(this, "link_coderepo")}/>
         </div>
-  
+
         <div className="form-group">
           <label htmlFor="link_messaging">Messaging <span className="label-hint">(e.g. Slack)</span></label>
           <input type="text" className="form-control" id="link_messaging" name="link_messaging" maxLength="2075"
                  value={this.state.formFields.link_messaging} onChange={this.form.onInput.bind(this, "link_messaging")}/>
         </div>
-  
+
         <div className="form-group">
           <label htmlFor="link_projmanage">Project Management <span className="label-hint">(e.g. Trello)</span></label>
           <input type="text" className="form-control" id="link_projmanage" name="link_projmanage" maxLength="2075"
                  value={this.state.formFields.link_projmanage} onChange={this.form.onInput.bind(this, "link_projmanage")}/>
         </div>
-  
+
         <div className="form-group">
           <label htmlFor="link_filerepo">File Repository <span className="label-hint">(e.g. Google Drive)</span></label>
           <input type="text" className="form-control" id="link_filerepo" name="link_filerepo" maxLength="2075"
                  value={this.state.formFields.link_filerepo} onChange={this.form.onInput.bind(this, "link_filerepo")}/>
         </div>
-  
+
         <div className="form-group">
           <LinkList elementid="project_links" title="Project Links" links={this.state.formFields.project_links}/>
         </div>
-  
+
         <div className="form-group">
           <FileUploadList elementid="project_files" title="Project Files" files={this.state.formFields.project_files}/>
         </div>

@@ -14,6 +14,7 @@ import os
 import ast
 import dj_database_url
 from datetime import timedelta
+from dateutil.parser import parse
 from distutils.util import strtobool
 from django.core.mail.backends.smtp import EmailBackend
 
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
     'oauth2.providers.google',
     'oauth2.providers.linkedin',
     'oauth2.providers.facebook',
+    'django_seo_js'
 ]
 
 SITE_ID = 1
@@ -97,14 +99,16 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+# TODO: Use     'django_seo_js.middleware.UserAgentMiddleware',
 MIDDLEWARE = [
+    'common.helpers.caching.DebugUserAgentMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'democracylab.urls'
@@ -343,6 +347,37 @@ LOGGING = {
         },
     },
 }
+
+# If you're using prerender.io (the default backend):
+SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '')
+SEO_JS_BACKEND = "common.helpers.caching.DebugPrerenderIO"
+SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
+SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
+
+# TODO: Put in environment variable
+SEO_JS_USER_AGENTS = (
+    # These first three should be disabled, since they support escaped fragments, and
+    # and leaving them enabled will penalize a website as "cloaked".
+    "Googlebot",
+    "Yahoo",
+    "bingbot",
+
+    "Ask Jeeves",
+    "baiduspider",
+    "facebookexternalhit",
+    "twitterbot",
+    "rogerbot",
+    "linkedinbot",
+    "embedly",
+    "quoralink preview'",
+    "showyoubot",
+    "outbrain",
+    "pinterest",
+    "developersgoogle.com/+/web/snippet",
+)
+
+DL_PAGES_LAST_UPDATED_DATE = os.environ.get('DL_PAGES_LAST_UPDATED', '2019-12-05')
+SITE_LAST_UPDATED = parse(DL_PAGES_LAST_UPDATED_DATE)
 
 # https://docs.djangoproject.com/en/1.7/ref/settings/#silenced-system-checks
 SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]

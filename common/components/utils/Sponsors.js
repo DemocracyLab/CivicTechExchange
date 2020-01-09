@@ -6,7 +6,8 @@ export type SponsorMetadata = {|
   displayName: string,
   url: string,
   thumbnailUrl: string,
-  description: string
+  description: string,
+  category: string
 |};
 
 class Sponsors {

@@ -63,12 +63,12 @@ class EditProfileController extends React.PureComponent<{||},State> {
       }
     }
   }
-  
+
   componentDidMount(): void {
     // TODO: Show error message on failure to load
     UserAPIUtils.fetchUserDetails(window.DLAB_GLOBAL_CONTEXT.userID, this.loadUserDetails.bind(this));
   }
-  
+
   loadUserDetails(user: UserAPIData): void {
     this.setState({
       formFields: {
@@ -84,21 +84,21 @@ class EditProfileController extends React.PureComponent<{||},State> {
         user_thumbnail: user.user_thumbnail
       }
     });
-  
+
     //this will set formFields.user_links and formFields.links_*
     this.filterSpecificLinks(user.user_links);
     metrics.logUserProfileEditEntry(CurrentUser.userID());
   }
-  
+
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.formFields[formFieldName] = event.target.value;
     this.forceUpdate();
   }
-  
+
   onTagChange(formFieldName: string, value: string): void {
     this.state.formFields[formFieldName] = value;
   }
-  
+
   handleCountrySelection(selectedValue: string): void {
     let formFields: FormFields = this.state.formFields;
     formFields.country = selectedValue;
@@ -106,7 +106,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
       this.forceUpdate();
     });
   }
-  
+
   onSubmit(): void {
     // create input array
     var eLinks = UserLinkNames.map(name => ({linkName: name, linkUrl: this.state.formFields[name]}))
@@ -130,7 +130,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
     this.forceUpdate();
     metrics.logUserProfileEditSave(CurrentUser.userID());
   }
-  
+
   filterSpecificLinks(array) {
     //this function updates the entire state.formFields object at once
     var specificLinks = _.remove(array, function(n) {
@@ -144,12 +144,12 @@ class EditProfileController extends React.PureComponent<{||},State> {
     });
     //add the other links to state copy
     linkState['user_links'] = array;
-    
+
     //TODO: see if there's a way to do this without the forceUpdate - passing by reference problem?
     this.setState({ formFields: linkState });
     this.forceUpdate();
   }
-  
+
   render(): React$Node {
     return (
       <React.Fragment>
@@ -162,13 +162,13 @@ class EditProfileController extends React.PureComponent<{||},State> {
           <form action={`/api/user/edit/${window.DLAB_GLOBAL_CONTEXT.userID}/`} method="post">
             <div className="EditProjectForm-root create-form white-bg">
               <DjangoCSRFToken/>
-  
+
               <div className="form-group">
                 <ImageCropUploadFormElement form_id="user_thumbnail_location"
                                         buttonText="Upload Your Picture"
                                         currentImage={this.state.formFields.user_thumbnail}/>
               </div>
-              
+
               <div className="form-group">
                 <label>
                   ABOUT ME
@@ -179,25 +179,25 @@ class EditProfileController extends React.PureComponent<{||},State> {
                 <textarea className="form-control" id="about_me" name="about_me" rows="6" maxLength="2000"
                           value={this.state.formFields.about_me} onChange={this.onFormFieldChange.bind(this, "about_me")}/>
               </div>
-              
+
               <div className="form-group">
                 <label>First Name</label>
                 <input type="text" className="form-control" id="first_name" name="first_name" maxLength="30"
                        value={this.state.formFields.first_name} onChange={this.onFormFieldChange.bind(this, "first_name")}/>
               </div>
-  
+
               <div className="form-group">
                 <label>Last Name</label>
                 <input type="text" className="form-control" id="last_name" name="last_name" maxLength="30"
                        value={this.state.formFields.last_name} onChange={this.onFormFieldChange.bind(this, "last_name")}/>
               </div>
-  
+
               <div className="form-group">
                 <label htmlFor="link_linkedin">LinkedIn</label>
                 <input type="text" className="form-control" id="link_linkedin" name="link_linkedin" maxLength="2075"
                        value={this.state.formFields.link_linkedin} onChange={this.onFormFieldChange.bind(this, "link_linkedin")}/>
               </div>
-  
+
               <div className="form-group">
                 <FileUploadList
                   elementid="user_resume_file"
@@ -205,7 +205,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
                   singleFileOnly={true}
                   files={this.state.formFields.user_resume_file}/>
               </div>
-  
+
               <div className="form-group">
                 <label>Technologies Used</label>
                 <TagSelector
@@ -216,7 +216,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
                   onSelection={this.onTagChange.bind(this, "user_technologies")}
                 />
               </div>
-  
+
               <div className="form-group">
                 <label>Country</label>
                 <CountrySelector
@@ -224,31 +224,33 @@ class EditProfileController extends React.PureComponent<{||},State> {
                   onSelection={this.handleCountrySelection.bind(this)}
                 />
               </div>
-  
+
               <div className="form-group">
                 <label htmlFor="postal_code">Zip/Postal Code</label>
                 <input type="text" className="form-control" id="postal_code" name="postal_code" maxLength="10"
                        value={this.state.formFields.postal_code} onChange={this.onFormFieldChange.bind(this, "postal_code")}/>
               </div>
-  
+
               <div className="form-group">
                 <LinkList elementid="user_links"
                           title="Links"
                           hiddenLinkNames={["link_linkedin"]}
                           links={this.state.formFields.user_links}/>
               </div>
-  
+
               <div className="form-group">
                 <FileUploadList elementid="user_files" title="Files" files={this.state.formFields.user_files}/>
               </div>
-  
-              <div className="form-group">
-                <div className='text-right'>
-                  <input type="submit" className="btn_outline save_btn"
-                         value="Save Changes" onClick={this.onSubmit.bind(this)}/>
-                </div>
+
+              <div className="form-group text-right">
+                <input
+                  type="submit"
+                  className="btn btn-success"
+                  value="Save Changes"
+                  onClick={this.onSubmit.bind(this)}
+                />
               </div>
-              
+
             </div>
           </form>
         </div>
@@ -256,8 +258,8 @@ class EditProfileController extends React.PureComponent<{||},State> {
       </React.Fragment>
     );
   }
-  
-  
+
+
 }
 
 export default EditProfileController;

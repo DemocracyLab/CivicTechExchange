@@ -6,12 +6,17 @@ import Sponsors, {SponsorMetadata} from "../utils/Sponsors.js";
 import Headers from "../common/Headers.jsx";
 import Section from "../enums/Section.js";
 import url from '../../components/utils/url.js';
-
+import prerender from "../utils/prerender.js";
+import _ from "lodash";
 
 
 class PartnerWithUsController extends React.Component<{||}> {
   constructor(): void {
     super();
+  }
+
+  componentDidMount() {
+    prerender.ready();
   }
 
   render(): React$Node {
@@ -25,7 +30,7 @@ class PartnerWithUsController extends React.Component<{||}> {
         <div className="PartnerWithUsController-topSection col-xs-12">
           <h1>Partner With Us</h1>
           <p>Support the acceleration of social change</p>
-          <a className="EmailVerified-find-projects-btn btn btn-theme" href={url.section(Section.ContactUs)}>
+          <a className="btn btn-primary" href={url.section(Section.ContactUs)}>
             CONTACT US
           </a>
         </div>
@@ -33,7 +38,14 @@ class PartnerWithUsController extends React.Component<{||}> {
           {this._renderEventSponsorshipSection()}
           {this._renderPlatformSponsorshipSection()}
         </div>
-        {this._renderSponsors()}
+        <div className="PartnerWithUsController-partners col-12">
+          <h2>Our Partnerships</h2>
+          {this._renderSponsors("Visionary")}
+          {this._renderSponsors("Sustaining")}
+          {this._renderSponsors("Advancing")}
+          {this._renderSponsors("Supporting")}
+        </div>
+
       </div>
       </React.Fragment>
     );
@@ -88,23 +100,24 @@ class PartnerWithUsController extends React.Component<{||}> {
     );
   }
 
-  _renderSponsors(): ?React$Node {
+  _renderSponsors(category): ?React$Node {
     const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
-    if(sponsors) {
+    let sdata = sponsors.filter(obj => obj.category === category);
+    if (!_.isEmpty(sdata)) {
       return (
-        <div className="PartnerWithUsController-partners">
-          <h2>Our Partnerships</h2>
+        <React.Fragment>
+          <h3 className="text-center side-lines">{category}</h3>
           <div className="PartnerWithUsController-sponsorList">
             {
-              sponsors.map( (sponsor: SponsorMetadata, i:number) => {
+              sdata.map( (sponsor: SponsorMetadata, i:number) => {
                 return (
                   <div key={i} className="PartnerWithUsController-sponsor">
-                    <div>
+                    <div className="PartnerWithUsController-sponsor-logo">
                       <a href={sponsor.url} target="_blank" rel="noopener noreferrer">
                         <img src={sponsor.thumbnailUrl}/>
                       </a>
                     </div>
-                    <div>
+                    <div className="PartnerWithUsController-sponsor-text">
                       <h6>{sponsor.displayName}</h6>
                       <p>{sponsor.description}</p>
                     </div>
@@ -113,7 +126,7 @@ class PartnerWithUsController extends React.Component<{||}> {
               })
             }
           </div>
-        </div>
+        </React.Fragment>
       );
     }
   }

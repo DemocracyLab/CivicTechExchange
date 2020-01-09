@@ -13,23 +13,10 @@ const tagCategoryEventMapping: { [key: string]: string } = _.fromPairs([
   [TagCategory.PROJECT_STAGE, "addProjectStageTag"]
 ]);
 
-let facebookMetrics = null;
-
 function _logEvent(eventName: string, parameters: ?{ [key: string]: string }): void {
-  if(facebookMetrics) {
-    facebookMetrics.logEvent(eventName, null, parameters);
-  } else {
-    // If Facebook metrics hasn't initialized yet, log the event once it's ready
-    Async.doWhenReady(
-      () => window.FB && window.FB.AppEvents,
-      (appEvents) => {
-        facebookMetrics = appEvents;
-        facebookMetrics.logEvent(eventName, null, parameters);
-      },
-      1000,
-      5
-    );
-  }
+  Async.onEvent('fbLoaded', () => {
+    FB.AppEvents.logEvent(eventName, null, parameters);
+  });
 }
 
 class metrics {

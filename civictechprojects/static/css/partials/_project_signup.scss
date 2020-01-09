@@ -1,12 +1,10 @@
 /* Project_Sign-up Elements  */
-
-.subheader{
+.subheader {
   font-size: 20px
 }
 
 .create-project {
   height: 76px;
-
 }
 
 .create-project h1 {
@@ -35,48 +33,6 @@
   border: solid 1px $color-grey-frame-border;
 }
 
-.upload_btn {
-  width: 174px;
-  height: 35px;
-  background: none;
-  border: solid 1px $color-green-dark;
-  border-radius: 5px;
-  text-align: center;
-  color: $color-green-dark;
+.create-btn {
+  min-width: 130px;
 }
-
-.upload_btn_sm {
-  width: 81px;
-  height: 27px;
-  background: none;
-  border: solid 1px $color-green-dark;
-  border-radius: 5px;
-  text-align: center;
-  color: $color-green-dark;
-}
-.save_btn {
-  width: 130px;
-  height: 35px;
-  border-radius: 5px;
-  background-color: $color-green;
-  border: 0px;
-  color: $color-text-light;
-}
-.save_btn_create_project {
-  width: 130px;
-  height: 35px;
-  border-radius: 5px;
-  background-color: $color-orange;
-  border: 0px;
-  color: $color-text-light;
-}
-
-input[type="submit"]:disabled {
-  background: $color-grey-disabled;
-}
-
-div.modal {
-  opacity: 1
-}
-
-/// new

@@ -24,15 +24,14 @@
   padding: 15px 0;
 }
 
+// both of these SplashScreen buttons must also have Bootstrap "btn btn-primary" classes applied
 .SplashScreen-find-projects-btn {
   border: 1px solid $color-orange;
-  color: $color-text-light;
+  color: $color-text-dark;
   background-color: $color-orange;
   border-radius: 5px;
   padding: 6px 12px;
   margin-bottom: 10px;
-  transition: 300ms;
-  cursor: pointer;
   min-width: 80px;
 }
 
@@ -45,12 +44,8 @@
   margin: 0px 0px 10px 15px;
   cursor: pointer;
   min-width: 80px;
-  &:hover {
-    background-color: $color-orange;
-    color: $color-text-light;
-    border-color: $color-text-light;
-  }
 }
+
 .SplashScreen-mission {
   color: $color-text-light;
   width: 100%;

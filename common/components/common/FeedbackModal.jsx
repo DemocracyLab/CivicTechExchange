@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 type Props = {|
   showModal: boolean,
@@ -28,30 +29,30 @@ class FeedbackModal extends React.PureComponent<Props, State> {
       feedbackText: ""
     }
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({ showModal: nextProps.showModal });
   }
-  
+
   onTextChange(event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.feedbackText = event.target.value;
     this.forceUpdate();
   }
-  
+
   confirm(confirmation: boolean): void {
     this.props.onConfirm(confirmation, this.state.feedbackText);
     if(confirmation) {
       this.setState({feedbackText: ""});
     }
   }
-  
+
   render(): React$Node {
     return (
       <div>
           <Modal show={this.state.showModal}
                  onHide={this.confirm.bind(this, false)}
           >
-              <Modal.Header >
+              <Modal.Header closeButton>
                   <Modal.Title>{this.props.headerText}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
@@ -64,8 +65,8 @@ class FeedbackModal extends React.PureComponent<Props, State> {
                 </textarea>
               </Modal.Body>
               <Modal.Footer>
-                  <Button onClick={this.confirm.bind(this, false)}>Cancel</Button>
-                  <Button disabled={this.props.requireMessage && !this.state.feedbackText} onClick={this.confirm.bind(this, true)}>
+                  <Button variant="outline-secondary" onClick={this.confirm.bind(this, false)}>Cancel</Button>
+                  <Button variant="primary" disabled={this.props.requireMessage && !this.state.feedbackText} onClick={this.confirm.bind(this, true)}>
                     {this.props.confirmButtonText}
                   </Button>
               </Modal.Footer>

@@ -4,10 +4,8 @@ import _ from 'lodash';
 import React from 'react';
 import Headers from "../common/Headers.jsx";
 import cdn from "../utils/cdn.js";
-import url from "../utils/url.js";
-import Section from "../enums/Section.js";
-import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import LoadingMessage from '../chrome/LoadingMessage.jsx';
+import prerender from "../utils/prerender.js";
 
 
 //get press links
@@ -36,6 +34,10 @@ class PressController extends React.PureComponent<{||}, State> {
     this.state = {
       stats: null,
     }
+  }
+  
+  componentDidMount() {
+    prerender.ready();
   }
 
   _renderHeader(): React$Node {

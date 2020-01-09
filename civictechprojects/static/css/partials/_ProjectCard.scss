@@ -65,6 +65,12 @@
   border-right: solid lightgray 1.5px;
   display: grid;
 }
+.ProjectCard-url-text {
+    overflow: hidden;
+    text-Overflow: ellipsis;
+    white-Space: nowrap;
+    margin: auto;
+}
 .ProjectCard-logo img {
   max-width: 97%;
   max-height: 95%;

@@ -8,7 +8,7 @@ import {OnReadySubmitFunc} from "./ProjectFormCommon.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {TagDefinition, ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
 import {Locations} from "../../constants/ProjectConstants.js";
-import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
+import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
 
 
@@ -49,8 +49,8 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
       },
       validations: []
     };
-  
-    this.form = form.setup();
+
+    this.form = formHelper.setup();
     // All fields optional
     props.readyForSubmit(true);
   }
@@ -60,7 +60,7 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
       <div className="EditProjectForm-root">
 
         <DjangoCSRFToken/>
-  
+
         <div className="form-group">
           <label htmlFor="project_location">Project Location</label>
           <select name="project_location" id="project_location" className="form-control" value={this.state.formFields.project_location} onChange={this.form.onInput.bind(this, "project_location")}>
@@ -68,13 +68,13 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
             {Locations.PRESET_LOCATIONS.map(location => <option key={location} value={location}>{location}</option>)}
           </select>
         </div>
-  
+
         <div className="form-group">
           <label htmlFor="project_url">Website URL</label>
           <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
                  value={this.state.formFields.project_url} onChange={this.form.onInput.bind(this, "project_url")}/>
         </div>
-  
+
         <div className="form-group">
           <label>Project Stage</label>
           <TagSelector
@@ -85,7 +85,7 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
             onSelection={this.form.onSelection.bind(this, "project_stage")}
           />
         </div>
-  
+
         <div className="form-group">
           <label>Organization</label>
           <TagSelector
@@ -107,7 +107,7 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
             onSelection={this.form.onSelection.bind(this, "project_organization_type")}
           />
         </div>
-  
+
         <div className="form-group">
           <label>Technology Used</label>
           <TagSelector

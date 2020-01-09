@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
 import {PositionInfo} from "./PositionInfo.jsx";
 import PositionEntryModal from "./PositionEntryModal.jsx";
@@ -101,8 +102,8 @@ class PositionList extends React.PureComponent<Props,State>  {
         <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
         <label>Roles Needed &nbsp;</label>
         <Button
-          className="btn-background-project"
-          bsSize="small"
+          variant="primary"
+          size="sm"
           onClick={this.createNewPosition.bind(this)}
         >
           <i className={GlyphStyles.Add} aria-hidden="true"></i>

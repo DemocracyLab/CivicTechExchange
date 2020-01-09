@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import {Glyph, GlyphStyles, GlyphSizes} from '../utils/glyphs.js';
 import NewsletterSignup from '../common/integrations/NewsletterSignup.jsx';
 import url from "../utils/url.js";
@@ -11,8 +11,8 @@ class SocialFooter extends React.Component {
     return (
       <div className="SocialFooter-cta SocialFooter-box">
         <p>Welcome to DemocracyLab</p>
-        <Button bsClass="btn SocialFooter-btn-contact" href={url.section(Section.ContactUs)}>Contact Us</Button>
-        <Button bsClass="btn SocialFooter-btn-donate" href={url.section(Section.Donate)}>Donate</Button>
+        <Button className="btn btn-footer" href={url.section(Section.ContactUs)}>Contact Us</Button>
+        <Button className="btn btn-footer" href={url.section(Section.Donate)}>Donate</Button>
       </div>
     )
   }
@@ -33,7 +33,7 @@ class SocialFooter extends React.Component {
   _copyrightInfo() {
     return (
       <p className="SocialFooter-copyright">
-        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <a className="SocialFooter-copyright-icons" rel="license" href="http://creativecommons.org/licenses/by/4.0/">
           <i className={Glyph(GlyphStyles.CreativeCommons, GlyphSizes.X2)}></i>
           <i className={Glyph(GlyphStyles.CreativeCommonsBy, GlyphSizes.X2)}></i>
         </a>
@@ -49,7 +49,7 @@ class SocialFooter extends React.Component {
     return (
       <div className="SocialFooter-newsletter SocialFooter-box">
         <p>Subscribe to our newsletter</p>
-        <NewsletterSignup />
+        <NewsletterSignup btnClass="btn btn-footer"/>
       </div>
     )
   }

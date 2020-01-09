@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+
 import LinkEntryModal from './LinkEntryModal.jsx'
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
 import type { LinkInfo } from './LinkInfo.jsx'
@@ -104,8 +105,8 @@ class LinkList extends React.PureComponent<Props,State>  {
 
         <label>{this.props.title || "Links"} &nbsp;</label>
         <Button
-          className="btn-background-project"
-          bsSize="small"
+          variant="primary"
+          size="sm"
           onClick={this.createNewLink.bind(this)}
         >
           <i className={GlyphStyles.Add} aria-hidden="true"></i>

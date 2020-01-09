@@ -9,7 +9,7 @@ def dump(obj):
 
 
 def dump_request_summary(request):
-    user = request.user.username if request.user.is_authenticated() else ''
+    user = (hasattr(request, 'user') and request.user.is_authenticated() and request.user.username) or ''
     url = request.path
     method = request.method
     body = censor_sensitive_fields(dict(getattr(request, method)))
