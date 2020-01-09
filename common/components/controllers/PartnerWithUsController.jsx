@@ -38,14 +38,8 @@ class PartnerWithUsController extends React.Component<{||}> {
           {this._renderEventSponsorshipSection()}
           {this._renderPlatformSponsorshipSection()}
         </div>
-        <div className="PartnerWithUsController-partners col-12">
-          <h2>Our Partnerships</h2>
-          {this._renderSponsors("Visionary")}
-          {this._renderSponsors("Sustaining")}
-          {this._renderSponsors("Advancing")}
-          {this._renderSponsors("Supporting")}
-        </div>
-
+        {this._renderPartnersSection()}
+      }
       </div>
       </React.Fragment>
     );
@@ -71,6 +65,22 @@ class PartnerWithUsController extends React.Component<{||}> {
         </p>
       </div>
     );
+  }
+
+  _renderPartnersSection(): React$Node {
+    const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
+    // check if we have any sponsors at all before rendering anthing
+    if (sponsors.length > 0) {
+      return (
+        <div className="PartnerWithUsController-partners col-12">
+          <h2>Our Partnerships</h2>
+          {this._renderSponsors("Visionary")}
+          {this._renderSponsors("Sustaining")}
+          {this._renderSponsors("Advancing")}
+          {this._renderSponsors("Supporting")}
+        </div>
+      )
+    }
   }
 
   _renderPlatformSponsorshipSection(): React$Node {
