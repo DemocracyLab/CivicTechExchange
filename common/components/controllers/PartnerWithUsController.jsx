@@ -39,7 +39,6 @@ class PartnerWithUsController extends React.Component<{||}> {
           {this._renderPlatformSponsorshipSection()}
         </div>
         {this._renderPartnersSection()}
-      }
       </div>
       </React.Fragment>
     );

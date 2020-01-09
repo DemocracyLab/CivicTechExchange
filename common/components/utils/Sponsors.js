@@ -16,6 +16,8 @@ class Sponsors {
       const sponsorMetadata:string = window.SPONSORS_METADATA;
       if(!_.isEmpty(sponsorMetadata)) {
         return JSON.parse(_.unescape(sponsorMetadata));
+      } else {
+        return [];
       }
     } catch(ex) {
       console.error("Failed to parse sponsor metadata. ", ex);
