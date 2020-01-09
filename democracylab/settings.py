@@ -92,6 +92,8 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+GITHUB_API_TOKEN = os.environ.get('GITHUB_API_TOKEN', None)
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
@@ -292,8 +294,11 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'CONTACT_EMAIL': {
         'error': False,
         'message': 'Contact Us form will not send messages.'
+    },
+    'GITHUB_API_TOKEN': {
+        'error': False,
+        'message': 'Github API key needed to raise rate limit for ingesting commit data'
     }
-
 }
 
 # TODO: Set to True in productions
@@ -376,3 +381,6 @@ SITE_LAST_UPDATED = parse(DL_PAGES_LAST_UPDATED_DATE)
 
 # https://docs.djangoproject.com/en/1.7/ref/settings/#silenced-system-checks
 SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
+
+# How many of the most recent github commits to store per project.
+MAX_COMMITS_PER_PROJECT = int(os.environ.get('MAX_COMMITS_PER_PROJECT', 30))

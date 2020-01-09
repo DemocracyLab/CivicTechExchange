@@ -107,6 +107,7 @@ class Project(Archived):
         links = ProjectLink.objects.filter(link_project=self.id)
         positions = ProjectPosition.objects.filter(position_project=self.id)
         volunteers = VolunteerRelation.objects.filter(project=self.id)
+        commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
 
         project = {
             'project_id': self.id,
@@ -128,6 +129,7 @@ class Project(Archived):
             'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links)),
+            'project_commits': list(map(lambda commit: commit.to_json(), commits)),
             'project_owners': [self.project_creator.hydrate_to_tile_json()],
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__()
@@ -172,9 +174,59 @@ class Project(Archived):
 
         return project
 
-    def update_timestamp(self):
-        self.project_date_modified = timezone.now()
+    def update_timestamp(self, time=None):
+        self.project_date_modified = time or timezone.now()
         self.save()
+
+
+class ProjectCommit(models.Model):
+    commit_project = models.ForeignKey(Project, related_name='commits', blank=True, null=True)
+    user_name = models.CharField(max_length=200)
+    user_link = models.CharField(max_length=2083)
+    user_avatar_link = models.CharField(max_length=2083)
+    commit_date = models.DateTimeField()
+    commit_sha = models.CharField(max_length=40)
+    commit_title = models.CharField(max_length=2000)
+    branch_name = models.CharField(max_length=200)
+    repo_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return "({repo}) {sha}: {title}".format(repo=self.repo_name, sha=self.commit_sha[:6], title=self.commit_title)
+
+    @staticmethod
+    def create(project, repo_name, branch_name, github_json):
+        commit_sha = github_json['sha']
+        existing_commit = ProjectCommit.objects.filter(commit_sha=commit_sha, commit_project=project.id)
+        if existing_commit.count() == 0:
+            project_commit = ProjectCommit()
+            project_commit.commit_project = project
+            project_commit.repo_name = repo_name
+            project_commit.branch_name = branch_name
+            project_commit.commit_sha = commit_sha
+
+            commit_section = github_json['commit']
+            project_commit.commit_title = commit_section['message'][:2000]
+            project_commit.commit_date = commit_section['author']['date']
+
+            author_section = github_json['author']
+            if author_section:
+                project_commit.user_name = author_section['login']
+                project_commit.user_link = author_section['html_url']
+                project_commit.user_avatar_link = author_section['avatar_url']
+
+            project_commit.save()
+
+    def to_json(self):
+        return {
+            'user_name': self.user_name,
+            'user_link': self.user_link,
+            'user_avatar_link': self.user_avatar_link,
+            'commit_date': self.commit_date,
+            'commit_sha': self.commit_sha,
+            'commit_title': self.commit_title,
+            'branch_name': self.branch_name,
+            'repo_name': self.repo_name
+        }
 
 
 class ProjectLink(models.Model):
