@@ -8,7 +8,7 @@ Make sure you've followed our [Contributor Guide](https://docs.google.com/docume
 
 ## Where's the best place to ask a question?
 
-Our [Slack](https://join.slack.com/t/democracylab-org/shared_invite/enQtMjQyNDMxOTY2NjA4LTU3MTYyM2EwYTRmMDYwNzUyNjg4YTk1NjEyZTg0ZjgxNzYwY2E5ODIyMTNjZGZkOTI5NTAyZTMwNTNiMWRiZTA). While you can submit an issue through Github, response time will be slower than asking in Slack. Depending on what your question is, try one of these channels:
+Our [Slack](https://join.slack.com/t/democracylab-org/shared_invite/enQtMjY3OTQ1NDI2NzU1LTQzNDBkYTVjNmY1MTU3ZDNjMjI5YzRkNjY0MTRjZDc1ZTZlYTlhODlmMjhjM2QyOGE4ZTRmNjljMTIwMzc3NTA). While you can submit an issue through Github, response time will be slower than asking in Slack. Depending on what your question is, try one of these channels:
   - `#design` for anything related to the overall site design, UI, or user experience
   - `#developers` for anything related to the function of the site or a given component, as well as technical assistance on contributing
   - `#general` for anything else
