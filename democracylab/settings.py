@@ -290,8 +290,11 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'CONTACT_EMAIL': {
         'error': False,
         'message': 'Contact Us form will not send messages.'
+    },
+    'GITHUB_API_TOKEN': {
+        'error': False,
+        'message': 'Github API key needed to raise rate limit for ingesting commit data'
     }
-
 }
 
 # TODO: Set to True in productions
