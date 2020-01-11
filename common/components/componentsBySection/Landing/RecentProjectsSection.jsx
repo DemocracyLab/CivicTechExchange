@@ -18,7 +18,7 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
   }
   
   componentDidMount() {
-    const url: string = "/api/projects/recent/?count=3";
+    const url: string = "/api/projects/recent/?count=2";
     fetch(new Request(url))
       .then(response => response.json())
       .then(getProjectsResponse => this.setState({
@@ -29,7 +29,10 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return (
       <div className="RecentProjects">
-        {this._renderCards()}
+        <h2>Recent Projects</h2>
+        <div className="RecentProjects-cards">
+          {this._renderCards()}
+        </div>
       </div>
     );
   }
