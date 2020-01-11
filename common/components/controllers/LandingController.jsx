@@ -1,8 +1,7 @@
 // @flow
 
 import React from 'react';
-import MainFooter from "../chrome/MainFooter.jsx";
-import SplashScreen,{HeroImage} from "../componentsBySection/FindProjects/SplashScreen.jsx";
+import SplashScreen, {HeroImage} from "../componentsBySection/FindProjects/SplashScreen.jsx";
 
 class LandingController extends React.PureComponent<{||}> {
 
@@ -15,10 +14,10 @@ class LandingController extends React.PureComponent<{||}> {
       <div>
         {this._renderTopSplash()}
         {this._renderBottomSplash()}
-        <MainFooter/>
       </div>
     );
   }
+  
   
   _renderTopSplash(): React$Node {
     const header: string = "Make Tech.  Do Good.";
@@ -36,7 +35,6 @@ class LandingController extends React.PureComponent<{||}> {
       <SplashScreen header={header} img={HeroImage.BottomLanding}/>
     );
   }
-
   
 }
 export default LandingController;
