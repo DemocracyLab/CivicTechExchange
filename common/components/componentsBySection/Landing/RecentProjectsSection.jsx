@@ -26,9 +26,6 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
       }));
   }
 
-// <div className="RecentProjects col-12 col-md-9 col-xxl-10 p-0 m-0">
-// <div className="container-fluid">
-  
   render(): React$Node {
     return (
       <div className="RecentProjects">
