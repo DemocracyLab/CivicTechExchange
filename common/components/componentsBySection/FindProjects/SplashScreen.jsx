@@ -2,21 +2,31 @@
 
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-
+import _ from 'lodash';
 import Section from "../../enums/Section.js";
 import url from "../../utils/url.js";
 import cdn from "../../utils/cdn.js";
 
+// TODO: Make buttons configurable
 type Props = {|
+  header: string,
+  text: ?$ReadOnlyArray<string>,
+  bottomOverlayText: ?$ReadOnlyArray<string>,
+  img: ?string,
   onClickFindProjects: () => void
 |};
 
+export const HeroImage: { [key: string]: string } = {
+  TopLanding: "CodeForGood_072719_MSReactor-064.jpg",
+  BottomLanding: "CodeForGood_072719_MSReactor-003.jpg",
+};
+
 const heroImages: $ReadOnlyArray<string> = [
-  "CodeForGood_072719_MSReactor-003.jpg",
+  HeroImage.TopLanding,
+  HeroImage.BottomLanding,
   "CodeForGood_072719_MSReactor-074.jpg",
-  "CodeForGood_072719_MSReactor-020.jpg",
-  "CodeForGood_072719_MSReactor-064.jpg"
-]
+  "CodeForGood_072719_MSReactor-020.jpg"
+];
 
 class SplashScreen extends React.PureComponent<Props> {
   _onClickFindProjects(): void {
@@ -29,8 +39,9 @@ class SplashScreen extends React.PureComponent<Props> {
   }
 
   render(): React$Node {
+    const backgroundUrl: string = this.props.img ? cdn.image(this.props.img) : this._heroRandomizer();
     return (
-      <div className="SplashScreen-root SplashScreen-opacity-layer SplashScreen-opacity50" style={{backgroundImage: 'url(' + this._heroRandomizer() + ')' }}>
+      <div className="SplashScreen-root SplashScreen-opacity-layer SplashScreen-opacity50" style={{backgroundImage: 'url(' + backgroundUrl + ')' }}>
         <div className="SplashScreen-content">
           <h1>We connect skilled volunteers and tech-for-good projects</h1>
           <div className="SplashScreen-section">
@@ -42,10 +53,15 @@ class SplashScreen extends React.PureComponent<Props> {
             </Button>
           </div>
         </div>
-        <div className="SplashScreen-mission SplashScreen-opacity-layer SplashScreen-opacity20">
-          <p>DemocracyLab is a nonprofit organization.</p>
-          <p>Our mission is to empower people who use technology to advance the public good.</p>
-        </div>
+        {!_.isEmpty(this.props.bottomOverlayText) && this._renderBottomOverlay()}
+      </div>
+    );
+  }
+  
+  _renderBottomOverlay(): React$Node {
+    return (
+      <div className="SplashScreen-mission SplashScreen-opacity-layer SplashScreen-opacity20">
+        {this.props.bottomOverlayText.map((text) => (<p>{text}</p>))}
       </div>
     );
   }

@@ -40,7 +40,7 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
           title="DemocracyLab"
           description="Optimizing the connection between skilled volunteers and tech-for-good projects"
         />
-        {this.state.showSplash ? <SplashScreen onClickFindProjects={this._onClickFindProjects.bind(this)}/> : null}
+        {this.state.showSplash ? this._renderSplash() : null}
         <div className="FindProjectsController-root container">
           <div className="row">
             <ProjectFilterContainer />
@@ -48,6 +48,21 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
           </div>
         </div>
       </React.Fragment>
+    );
+  }
+  
+  _renderSplash(): React$Node {
+    const header: string = "We connect skilled volunteers and tech-for-good projects";
+    const bottomOverlayLines: $ReadOnlyArray<string> = [
+      "DemocracyLab is a nonprofit organization.",
+      "Our mission is to empower people who use technology to advance the public good."
+    ];
+    
+    return (
+      <SplashScreen onClickFindProjects={this._onClickFindProjects.bind(this)}
+                    header={header}
+                    bottomOverlayText={bottomOverlayLines}
+      />
     );
   }
 }
