@@ -297,6 +297,17 @@ def projects_list(request):
     return JsonResponse(response)
 
 
+def recent_projects_list(request):
+    if request.method == 'GET':
+        url_parts = request.GET.urlencode()
+        query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+        project_count = int(query_params['count'][0]) if 'count' in query_params else 3
+        project_list = Project.objects.filter(is_searchable=True)
+        project_list = projects_by_sortField(project_list, '-project_date_modified')[:project_count]
+        hydrated_project_list = list(project.hydrate_to_tile_json() for project in project_list)
+        return JsonResponse({'projects': hydrated_project_list})
+
+
 def apply_tag_filters(project_list, query_params, param_name, tag_filter):
     if param_name in query_params:
         tag_dict = get_tag_dictionary()

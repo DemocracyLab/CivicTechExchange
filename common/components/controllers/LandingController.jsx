@@ -2,6 +2,7 @@
 
 import React from 'react';
 import SplashScreen, {HeroImage} from "../componentsBySection/FindProjects/SplashScreen.jsx";
+import RecentProjectsSection from "../componentsBySection/Landing/RecentProjectsSection.jsx";
 
 class LandingController extends React.PureComponent<{||}> {
 
@@ -13,11 +14,11 @@ class LandingController extends React.PureComponent<{||}> {
     return (
       <div>
         {this._renderTopSplash()}
+        <RecentProjectsSection/>
         {this._renderBottomSplash()}
       </div>
     );
   }
-  
   
   _renderTopSplash(): React$Node {
     const header: string = "Make Tech.  Do Good.";
