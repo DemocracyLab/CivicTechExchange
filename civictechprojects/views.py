@@ -740,3 +740,10 @@ def contact_democracylab(request):
 
     # Error while verifying the captcha, do not send the email
     return HttpResponse(status=401)
+
+
+def robots(request):
+    template = loader.get_template('robots.txt')
+    context = {'domain': settings.PROTOCOL_DOMAIN}
+
+    return HttpResponse(template.render(context, request))
