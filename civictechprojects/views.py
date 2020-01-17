@@ -744,6 +744,9 @@ def contact_democracylab(request):
 
 def robots(request):
     template = loader.get_template('robots.txt')
-    context = {'domain': settings.PROTOCOL_DOMAIN}
+    context = {
+        'PROTOCOL_DOMAIN': settings.PROTOCOL_DOMAIN,
+        'DISALLOW_CRAWLING': settings.DISALLOW_CRAWLING
+    }
 
     return HttpResponse(template.render(context, request))

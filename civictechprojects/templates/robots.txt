@@ -1,4 +1,9 @@
-User-agent: *
-Allow: /
+{% if DISALLOW_CRAWLING %}
+  User-agent: *
+  Disallow: /
+{% else %}
+  User-agent: *
+  Allow: /
+{% endif %}
 
-Sitemap: {{domain}}/sitemap.xml
+Sitemap: {{PROTOCOL_DOMAIN}}/sitemap.xml
