@@ -376,6 +376,8 @@ SEO_JS_USER_AGENTS = (
     "developersgoogle.com/+/web/snippet",
 )
 
+DISALLOW_CRAWLING = os.environ.get('DISALLOW_CRAWLING', False) == 'True'
+
 DL_PAGES_LAST_UPDATED_DATE = os.environ.get('DL_PAGES_LAST_UPDATED', '2019-12-05')
 SITE_LAST_UPDATED = parse(DL_PAGES_LAST_UPDATED_DATE)
 
