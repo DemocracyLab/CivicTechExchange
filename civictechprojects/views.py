@@ -303,6 +303,9 @@ def recent_projects_list(request):
         query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
         project_count = int(query_params['count'][0]) if 'count' in query_params else 3
         project_list = Project.objects.filter(is_searchable=True)
+        # Filter out the DemocracyLab project
+        if settings.DLAB_PROJECT_ID.isdigit():
+            project_list = Project.objects.exclude(id=int(settings.DLAB_PROJECT_ID))
         project_list = projects_by_sortField(project_list, '-project_date_modified')[:project_count]
         hydrated_project_list = list(project.hydrate_to_tile_json() for project in project_list)
         return JsonResponse({'projects': hydrated_project_list})
