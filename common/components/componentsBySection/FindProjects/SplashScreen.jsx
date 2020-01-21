@@ -18,11 +18,13 @@ type Props = {|
 
 export const HeroImage: { [key: string]: string } = {
   TopLanding: "CodeForGood_072719_MSReactor-064.jpg",
+  MidLanding: "CodeForGood_072719_MSReactor-034.jpg",
   BottomLanding: "CodeForGood_072719_MSReactor-003.jpg",
 };
 
 const heroImages: $ReadOnlyArray<string> = [
   HeroImage.TopLanding,
+  HeroImage.MidLanding,
   HeroImage.BottomLanding,
   "CodeForGood_072719_MSReactor-074.jpg",
   "CodeForGood_072719_MSReactor-020.jpg"
@@ -74,6 +76,12 @@ class SplashScreen extends React.PureComponent<Props> {
           <Button variant="primary" className="LandingController-topsplash-btn" href="#">Get Started</Button>
         </React.Fragment>
       )
+    } else if (sec === "landingmid") {
+        return (
+          <React.Fragment>
+            <Button variant="primary" className="LandingController-midsplash-btn" href="#">Learn More</Button>
+          </React.Fragment>
+        )
     } else if (sec === "landingbottom") {
         return (
           <React.Fragment>

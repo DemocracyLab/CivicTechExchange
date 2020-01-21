@@ -23,6 +23,7 @@ class LandingController extends React.PureComponent<{||}> {
         <div className="container">
           <RecentProjectsSection/>
           {this._renderPathFlows()}
+          {this._renderMiddleSplash()}
           {this._renderPartnerSection()}
           {this._renderBottomSplash()}
         </div>
@@ -50,7 +51,7 @@ class LandingController extends React.PureComponent<{||}> {
             1. Create a Profile
             2. Search Projects
             3. Connect with Project Leaders</p>
-            <Button variant="outline-primary">Start Volunteering!</Button>
+            <Button variant="outline-light">Start Volunteering!</Button>
 
           </div>
           <div className="col-xs-12 col-lg-6 LandingController-recruit-flow">
@@ -65,6 +66,15 @@ class LandingController extends React.PureComponent<{||}> {
             </div>
           </div>
         )
+      }
+      _renderMiddleSplash() {
+        const header: string = "Accelerating Civic Innovation";
+        const text: string = "DemocracyLab is a non-profit organization. We are seeking to advance tech innovation in social, non-profit and civic sectors through the power of tech-for-good volunteerism."
+        const buttonSection: string = "landingmid";
+
+        return (
+          <SplashScreen header={header} text={text} img={HeroImage.MidLanding} buttonSection={buttonSection}/>
+        );
       }
 
       _renderPartnerSection() {
