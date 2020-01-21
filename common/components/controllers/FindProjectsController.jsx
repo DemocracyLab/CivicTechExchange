@@ -50,18 +50,20 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
       </React.Fragment>
     );
   }
-  
+
   _renderSplash(): React$Node {
     const header: string = "We connect skilled volunteers and tech-for-good projects";
     const bottomOverlayLines: $ReadOnlyArray<string> = [
       "DemocracyLab is a nonprofit organization.",
       "Our mission is to empower people who use technology to advance the public good."
     ];
-    
+    const buttonSection = "findprojects"
+
     return (
       <SplashScreen onClickFindProjects={this._onClickFindProjects.bind(this)}
                     header={header}
                     bottomOverlayText={bottomOverlayLines}
+                    buttonSection={buttonSection}
       />
     );
   }
