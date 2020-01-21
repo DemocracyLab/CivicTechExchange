@@ -16,9 +16,9 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
     super();
     this.state = {projects: null};
   }
-  
+
   componentDidMount() {
-    const url: string = "/api/projects/recent/?count=2";
+    const url: string = "/api/projects/recent/?count=3";
     fetch(new Request(url))
       .then(response => response.json())
       .then(getProjectsResponse => this.setState({

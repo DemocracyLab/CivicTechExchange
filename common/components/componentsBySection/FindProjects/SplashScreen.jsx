@@ -7,12 +7,12 @@ import Section from "../../enums/Section.js";
 import url from "../../utils/url.js";
 import cdn from "../../utils/cdn.js";
 
-// TODO: Make buttons configurable
 type Props = {|
   header: string,
   text: ?$ReadOnlyArray<string>,
   bottomOverlayText: ?$ReadOnlyArray<string>,
   img: ?string,
+  buttonSection: ?string,
   onClickFindProjects: () => void
 |};
 
@@ -43,21 +43,48 @@ class SplashScreen extends React.PureComponent<Props> {
     return (
       <div className="SplashScreen-root SplashScreen-opacity-layer SplashScreen-opacity50" style={{backgroundImage: 'url(' + backgroundUrl + ')' }}>
         <div className="SplashScreen-content">
-          <h1>We connect skilled volunteers and tech-for-good projects</h1>
+          {this.props.header ? <h1>{this.props.header}</h1> : null}
           <div className="SplashScreen-section">
-            <Button variant="primary" className="SplashScreen-find-projects-btn" onClick={this._onClickFindProjects.bind(this)}>
-              Find Projects
-            </Button>
-            <Button variant="primary" className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.CreateProject)}>
-              Create A Project
-            </Button>
+            {this.props.text ? <p>{this.props.text}</p> : null}
+            {this.props.buttonSection ? this._renderButtons(this.props.buttonSection) : null}
           </div>
         </div>
         {!_.isEmpty(this.props.bottomOverlayText) && this._renderBottomOverlay()}
       </div>
     );
   }
-  
+
+  _renderButtons(sec) {
+    // to render action items in our splash (usually buttons)
+    //TODO: make this less gross than a big if/else/else/else/else mess
+    if (sec === "findprojects") {
+    return (
+      <React.Fragment>
+        <Button variant="primary" className="SplashScreen-find-projects-btn" onClick={this._onClickFindProjects.bind(this)}>
+          Find Projects
+        </Button>
+        <Button variant="primary" className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.CreateProject)}>
+          Create A Project
+        </Button>
+      </React.Fragment>
+    )
+  } else if (sec === "landingtop") {
+      return (
+        <React.Fragment>
+          <Button variant="primary" className="LandingController-topsplash-btn" href="#">Get Started</Button>
+        </React.Fragment>
+      )
+    } else if (sec === "landingbottom") {
+        return (
+          <React.Fragment>
+            <Button variant="primary" className="LandingController-bottomsplash-btn" href="#">Learn More</Button>
+          </React.Fragment>
+        )
+    } else {
+        return null;
+      }
+  }
+
   _renderBottomOverlay(): React$Node {
     return (
       <div className="SplashScreen-mission SplashScreen-opacity-layer SplashScreen-opacity20">
