@@ -7,6 +7,14 @@ import cdn from "../utils/cdn";
 import Button from "react-bootstrap/Button";
 import url from "../utils/url";
 import Section from "../enums/Section";
+import Vo1 from "../svg/volunteer1.svg";
+import Vo2 from "../svg/volunteer2.svg";
+import Vo3 from "../svg/volunteer3.svg";
+import ArrowBlack from "../svg/arrowright-black.svg";
+import Rec1 from "../svg/recruit1.svg";
+import Rec2 from "../svg/recruit2.svg";
+import Rec3 from "../svg/recruit3.svg";
+import ArrowOrange from "../svg/arrowright-orange.svg";
 
 class LandingController extends React.PureComponent<{||}> {
 
@@ -37,7 +45,7 @@ class LandingController extends React.PureComponent<{||}> {
     const buttonSection: string = "landingtop";
 
     return (
-      <SplashScreen header={header} text={text} img={HeroImage.TopLanding} buttonSection={buttonSection}/>
+      <SplashScreen className="LandingController-topsplash" header={header} text={text} img={HeroImage.TopLanding} buttonSection={buttonSection}/>
     );
   }
 
@@ -46,8 +54,9 @@ class LandingController extends React.PureComponent<{||}> {
       <div className="LandingController-pathflows row">
         <div className="col-xs-12 col-lg-6 LandingController-volunteer-flow">
           <h3>Want to Volunteer?</h3>
-          <p>Apply your tech skills to projects that need them
-
+          <p>Apply your tech skills to projects that need them</p>
+              <Vo1 /> <ArrowBlack /> <Vo2 /> <ArrowBlack /> <Vo3 />
+              <p>
             1. Create a Profile
             2. Search Projects
             3. Connect with Project Leaders</p>
@@ -56,8 +65,9 @@ class LandingController extends React.PureComponent<{||}> {
           </div>
           <div className="col-xs-12 col-lg-6 LandingController-recruit-flow">
             <h3>Need Volunteers?</h3>
-            <p>Find people with the tech skills you need
-
+            <p>Find people with the tech skills you need</p>
+            <Rec1 /> <ArrowOrange /> <Rec2 /> <ArrowOrange /> <Rec3 />
+            <p>
               1. Add your organization
               2. List your project needs
               3. Find skilled volunteers</p>
