@@ -95,3 +95,6 @@ export DL_PAGES_LAST_UPDATED='2019-12-05'
 
 # Disallow crawling for non-production environments
 export DISALLOW_CRAWLING=True
+
+# Turn on Prerender (hosted environments only)
+# export SEO_JS_ENABLED=True
