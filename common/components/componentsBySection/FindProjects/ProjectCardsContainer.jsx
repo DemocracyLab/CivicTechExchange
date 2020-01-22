@@ -30,7 +30,7 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
 
   static calculateState(prevState: State): State {
     prerender.ready(!ProjectSearchStore.getProjectsLoading());
-    
+
     return {
       projects: ProjectSearchStore.getProjects(),
       project_pages: ProjectSearchStore.getProjectPages(),
@@ -76,12 +76,14 @@ class ProjectCardsContainer extends React.Component<{||}, State> {
         ? 'No projects match the provided criteria. Try a different set of filters or search term.'
         : this.state.projects.map(
           (project, index) =>
-            <ProjectCard
+            <div className="col-sm-12 col-lg-6">
+              <ProjectCard
               project={project}
               key={index}
               textlen={140}
               skillslen={4}
-            />
+              />
+            </div>
         );
   }
 
