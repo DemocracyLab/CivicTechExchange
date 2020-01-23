@@ -26,7 +26,6 @@ def is_prerenderable_request(request):
         # Only prerender urls that are listed in the sitemap
         for url in all_sitemap_paths:
             if url in full_path:
-                print('Can prerender ' + full_path)
                 return True
     else:
         return False
@@ -45,7 +44,7 @@ class DebugUserAgentMiddleware(SelectedBackend):
             return
 
         if not is_prerenderable_request(request):
-            print('Prerender: do not prerender ' + request.path)
+            print('Prerender: do not prerender ' + request.get_full_path())
             return
 
         if "HTTP_USER_AGENT" not in request.META:
@@ -56,6 +55,7 @@ class DebugUserAgentMiddleware(SelectedBackend):
             print('Prerender: User agent "{agent}" not in list'.format(agent=request.META["HTTP_USER_AGENT"]))
             return
 
+        print('Prerender: Retrieving prerendered ' + request.get_full_path())
         url = self.backend.build_absolute_uri(request)
         try:
             return self.backend.get_response_for_url(url)
