@@ -2,7 +2,6 @@ from common.helpers.constants import FrontEndSection
 from django.conf import settings
 from django.contrib.sitemaps import Sitemap
 from .models import Project
-from datetime import date
 
 
 class SectionSitemap(Sitemap):
@@ -41,3 +40,15 @@ class ProjectSitemap(Sitemap):
 
     def lastmod(self, project):
         return project.project_date_modified
+
+
+def get_all_sitemap_paths():
+    sitemap_paths = []
+    for sitemap_class in [SectionSitemap, ProjectSitemap]:
+        sitemap_instance = sitemap_class()
+        sitemap_paths = sitemap_paths + list(map(lambda item: sitemap_instance.location(item), sitemap_instance.items()))
+
+    return sitemap_paths
+
+
+all_sitemap_paths = get_all_sitemap_paths()

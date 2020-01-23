@@ -1,12 +1,12 @@
+from civictechprojects.sitemaps import all_sitemap_paths
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 from django_seo_js import settings
-from django_seo_js.helpers import update_cache_for_url
+from django_seo_js.helpers import update_cache_for_url, request_should_be_ignored
 from django_seo_js.backends import SEOBackendBase, SelectedBackend
 from django_seo_js.backends.base import RequestsBasedBackend
 
 import re
-from django_seo_js.helpers import request_should_be_ignored
 import logging
 logger = logging.getLogger(__name__)
 
@@ -18,6 +18,18 @@ def update_cached_project_url(project_id):
 # Update url cached with our 3rd party prerender service
 def update_cached_url(url):
     update_cache_for_url(url)
+
+
+def is_prerenderable_request(request):
+    full_path = request.get_full_path()
+    if not request_should_be_ignored(request):
+        # Only prerender urls that are listed in the sitemap
+        for url in all_sitemap_paths:
+            if url in full_path:
+                print('Can prerender ' + full_path)
+                return True
+    else:
+        return False
 
 
 class DebugUserAgentMiddleware(SelectedBackend):
@@ -32,8 +44,8 @@ class DebugUserAgentMiddleware(SelectedBackend):
             print('Prerender: settings.ENABLED False')
             return
 
-        if request_should_be_ignored(request):
-            print('Prerender: request_should_be_ignored')
+        if not is_prerenderable_request(request):
+            print('Prerender: do not prerender ' + request.path)
             return
 
         if "HTTP_USER_AGENT" not in request.META:
