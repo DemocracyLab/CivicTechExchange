@@ -10,7 +10,7 @@
   text-align: center;
 }
 
-.LandingController-pathflows {
+.LandingController-pathflows, .LandingController-testimonial-container {
   margin: 20px 0;
 }
 
@@ -19,4 +19,12 @@
 }
 .LandingController-recruit-flow {
   background: $color-background-light;
+}
+.LandingController-testimonial-container .carousel-avatar {
+  height: 80px;
+  width: 80px;
+  margin: 0 auto;
+}
+.LandingController-testimonial-container .carousel-item p {
+  padding-bottom: 20px;
 }

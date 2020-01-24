@@ -79,7 +79,7 @@ class LandingController extends React.PureComponent<{||}> {
           </div>
         )
       }
-      
+
     _renderMiddleSplash() {
       const header: string = "Accelerating Civic Innovation";
       const text: string = "DemocracyLab is a non-profit organization. We are seeking to advance tech innovation in social, non-profit and civic sectors through the power of tech-for-good volunteerism."
@@ -93,7 +93,7 @@ class LandingController extends React.PureComponent<{||}> {
     _renderTestimonials() {
       return (
         <div className="LandingController-testimonial-container">
-          <h2>Testimonials</h2>
+          <h2 className="text-center">Testimonials</h2>
           <TestimonialCarousel className="LandingController-testimonial" />
         </div>
       )
