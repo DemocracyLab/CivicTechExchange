@@ -78,3 +78,5 @@ source: for quotes about DL cited elsewhere, for attribution if required
 
 note that name and text are the only required fields; there are default values (avatar) or conditionals for the rest
 */
+
+export default Testimonials;

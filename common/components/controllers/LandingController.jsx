@@ -3,6 +3,7 @@
 import React from 'react';
 import SplashScreen, {HeroImage} from "../componentsBySection/FindProjects/SplashScreen.jsx";
 import RecentProjectsSection from "../componentsBySection/Landing/RecentProjectsSection.jsx";
+import TestimonialCarousel from "../componentsBySection/Landing/TestimonialCarousel.jsx";
 import cdn from "../utils/cdn";
 import Button from "react-bootstrap/Button";
 import url from "../utils/url";
@@ -32,6 +33,7 @@ class LandingController extends React.PureComponent<{||}> {
           <RecentProjectsSection/>
           {this._renderPathFlows()}
           {this._renderMiddleSplash()}
+          {this._renderTestimonials()}
           {this._renderPartnerSection()}
           {this._renderBottomSplash()}
         </div>
@@ -77,30 +79,40 @@ class LandingController extends React.PureComponent<{||}> {
           </div>
         )
       }
-      _renderMiddleSplash() {
-        const header: string = "Accelerating Civic Innovation";
-        const text: string = "DemocracyLab is a non-profit organization. We are seeking to advance tech innovation in social, non-profit and civic sectors through the power of tech-for-good volunteerism."
-        const buttonSection: string = "landingmid";
+      
+    _renderMiddleSplash() {
+      const header: string = "Accelerating Civic Innovation";
+      const text: string = "DemocracyLab is a non-profit organization. We are seeking to advance tech innovation in social, non-profit and civic sectors through the power of tech-for-good volunteerism."
+      const buttonSection: string = "landingmid";
 
-        return (
-          <SplashScreen header={header} text={text} img={HeroImage.MidLanding} buttonSection={buttonSection}/>
-        );
-      }
+      return (
+        <SplashScreen header={header} text={text} img={HeroImage.MidLanding} buttonSection={buttonSection}/>
+      );
+    }
 
-      _renderPartnerSection() {
-        return (
-          <div className="about-us-vision" style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
-            <div className="PartnerSection">
-              <h2>Partner With Us to Organize your Next Hackathon</h2>
-              <p>DemocracyLab is the leading organizer for Tech-for-Good Hackathons.</p>
-              <p>Let us help your company, non-profit or group organize your next Hackathon.</p>
-              <Button variant="primary" className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.PartnerWithUs)}>
-                Learn More
-              </Button>
-            </div>
+    _renderTestimonials() {
+      return (
+        <div className="LandingController-testimonial-container">
+          <h2>Testimonials</h2>
+          <TestimonialCarousel className="LandingController-testimonial" />
+        </div>
+      )
+    }
+
+    _renderPartnerSection() {
+      return (
+        <div className="about-us-vision" style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
+          <div className="PartnerSection">
+            <h2>Partner With Us to Organize your Next Hackathon</h2>
+            <p>DemocracyLab is the leading organizer for Tech-for-Good Hackathons.</p>
+            <p>Let us help your company, non-profit or group organize your next Hackathon.</p>
+            <Button variant="primary" className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.PartnerWithUs)}>
+              Learn More
+            </Button>
           </div>
-        )
-      }
+        </div>
+      )
+    }
 
   _renderBottomSplash(): React$Node {
     const header: string = "What are you waiting for?";
