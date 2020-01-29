@@ -25,7 +25,7 @@ def is_prerenderable_request(request):
     if not request_should_be_ignored(request):
         # Only prerender urls that are listed in the sitemap
         for url in all_sitemap_paths:
-            if url in full_path:
+            if url == full_path:
                 return True
     else:
         return False
