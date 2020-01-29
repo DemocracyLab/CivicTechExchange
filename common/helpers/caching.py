@@ -21,14 +21,17 @@ def update_cached_url(url):
 
 
 def is_prerenderable_request(request):
-    full_path = request.get_full_path()
     if not request_should_be_ignored(request):
         # Only prerender urls that are listed in the sitemap
-        for url in all_sitemap_paths:
-            if url == full_path:
-                return True
+        return is_sitemap_url(request.get_full_path())
     else:
         return False
+
+
+def is_sitemap_url(url):
+    for sitemap_url in all_sitemap_paths:
+        if sitemap_url == url:
+            return True
 
 
 class DebugUserAgentMiddleware(SelectedBackend):
