@@ -1,6 +1,6 @@
 const Testimonials = [
   {
-    name: "Maxx Silver",
+    name: "Maxx Kaplan",
     avatar: "",
     role: "Project Owner",
     project: "FareStart",
@@ -17,7 +17,7 @@ const Testimonials = [
   },
   {
     name: "Will Saunders",
-    avatar: "",
+    avatar: "https://democracylab-marlok.s3.amazonaws.com/thumbnails%2Fwill.saunders%40ocio.wa.gov%2FWill-on-boat.jpg_1569084469.8664274.jpeg",
     role: "Project Owner",
     project: "Access and Connectivity Toolkit",
     text: "DemocracyLab has become an essential networking tool and resource for state programs looking to engage the civic tech community.  The ability to credibly mobilize interested talent over longer periods has made a real difference to government stakeholders.",
@@ -25,8 +25,8 @@ const Testimonials = [
   },
   {
     name: "Karen Perry",
-    avatar: "",
-    role: "Project Owner",
+    avatar: "https://democracylab-marlok.s3.amazonaws.com/thumbnails%2Fkarenaperry%40outlook.com%2FnewFile.jpeg_1578858469.6961696.jpeg",
+    role: "Volunteer",
     project: "Access and Connectivity Toolkit",
     text: "DemocracyLab has found the secret sauce to attract volunteer talent, inspirational projects, and put them together so that progress happens.  It may sound easy, but we know it’s not. DemocracyLab makes it work and it gets better with every hack.",
     source: ""
