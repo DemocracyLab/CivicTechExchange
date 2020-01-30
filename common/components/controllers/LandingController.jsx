@@ -4,6 +4,7 @@ import React from 'react';
 import SplashScreen, {HeroImage} from "../componentsBySection/FindProjects/SplashScreen.jsx";
 import RecentProjectsSection from "../componentsBySection/Landing/RecentProjectsSection.jsx";
 import TestimonialCarousel from "../componentsBySection/Landing/TestimonialCarousel.jsx";
+import Partners from "../componentsBySection/Landing/Partners.jsx";
 import cdn from "../utils/cdn";
 import Button from "react-bootstrap/Button";
 import url from "../utils/url";
@@ -35,6 +36,7 @@ class LandingController extends React.PureComponent<{||}> {
           {this._renderMiddleSplash()}
           {this._renderTestimonials()}
           {this._renderPartnerSection()}
+          {this._renderPartnersInAction()}
           {this._renderBottomSplash()}
         </div>
       </div>
@@ -110,6 +112,21 @@ class LandingController extends React.PureComponent<{||}> {
               Learn More
             </Button>
           </div>
+        </div>
+      )
+    }
+
+    _renderPartnersInAction() {
+      const partnerLogos = Partners.map((i) =>
+        <div className="LandingController-partnersinaction-logo">
+          <a href={i.link}><img src={i.logo} alt={i.name} /></a>
+        </div>
+      );
+
+      return (
+        <div className="LandingController-partnersinaction">
+          <h2 className="text-center">Our Partners In Action</h2>
+          <div className="LandingController-partnersinaction-container">{partnerLogos}</div>
         </div>
       )
     }

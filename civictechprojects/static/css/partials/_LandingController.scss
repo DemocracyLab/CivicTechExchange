@@ -28,3 +28,40 @@
 .LandingController-testimonial-container .carousel-item p {
   padding-bottom: 20px;
 }
+.LandingController-testimonial-container .carousel-inner {
+  margin-bottom: 20px; /* because the indicators are absolutely positioned in the div, this effectively pushes them down a bit */
+}
+.LandingController-testimonial-container .carousel-indicators li {
+  background-color: $color-text-grey;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+}
+
+.LandingController-testimonial-container .carousel-indicators .active {
+  background-color: $color-text-dark;
+}
+.LandingController-partnersinaction {
+  padding: 20px 0;
+  background-color: $color-background-light;
+}
+.LandingController-partnersinaction h2 {
+  margin-bottom: 20px;
+}
+.LandingController-partnersinaction-logo img {
+  width: 150px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.LandingController-partnersinaction-logo a {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+.LandingController-partnersinaction-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 8px;
+}
