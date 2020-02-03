@@ -6,6 +6,7 @@ import {List} from 'immutable'
 import ProjectCard from "../FindProjects/ProjectCard.jsx";
 import {Glyph, GlyphSizes, GlyphStyles} from "../../utils/glyphs.js";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import Button from "react-bootstrap/Button";
 
 type State = {|
   projects: List<Project>
@@ -33,6 +34,7 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
         <div className="RecentProjects-cards">
           {this._renderCards()}
         </div>
+        <Button className="RecentProjects-all" href="/index/?section=FindProjects&showSplash=0">See All Projects</Button>
       </div>
     );
   }
