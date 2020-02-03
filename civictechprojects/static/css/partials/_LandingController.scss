@@ -11,7 +11,7 @@
 }
 
 .LandingController-pathflows, .LandingController-testimonial-container {
-  margin: 20px 0;
+  margin: 20px 0 0 0;
 }
 
 .LandingController-volunteer-flow {
@@ -19,6 +19,9 @@
 }
 .LandingController-recruit-flow {
   background: $color-background-light;
+}
+.LandingController-volunteer-flow, .LandingController-recruit-flow {
+  padding: 20px;
 }
 .LandingController-testimonial-container .carousel-avatar {
   height: 80px;
@@ -52,6 +55,7 @@
   width: 150px;
   margin-bottom: 20px;
   cursor: pointer;
+  margin: 10px;
 }
 .LandingController-partnersinaction-logo a {
   width: 100%;
