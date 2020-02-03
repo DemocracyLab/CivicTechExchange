@@ -4,7 +4,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import Person from '@material-ui/icons/Person';
 
 const carouselItems = Testimonials.map((i) =>
-  <Carousel.Item className="carousel-item">
+  <Carousel.Item className="carousel-item" key={i.name}>
     {i.avatar ? <img src={i.avatar} alt={i.name} className="carousel-avatar"></img> : null}
     <h3>{i.name}</h3>
     <h4>{i.role}, {i.project}</h4>
