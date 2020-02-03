@@ -17,7 +17,8 @@
 }
 
 .LandingController-testimonial-container {
-  margin: 20px 0 0 0;
+  padding: 20px 0;
+  background: $color-background-light; /* on mobile the whole div is used as a "card" so background appropriately) */
 }
 .LandingController-pathflows-item {
   flex-basis: 26%;
@@ -88,4 +89,14 @@
 }
 .LandingController-pathflows-stepcontainer p {
   margin-top: 8px;
+}
+
+@include media-breakpoint-up(lg) {
+  /* these rules call out Testimonial cards on screens big enough to not just use the whole div */
+  .LandingController-testimonial-container {
+    background: $color-background-default;
+  }
+  .LandingController-testimonial {
+    background: $color-background-light;
+  }
 }
