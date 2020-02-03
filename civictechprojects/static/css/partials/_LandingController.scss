@@ -1,5 +1,7 @@
 .RecentProjects {
   text-align: center;
+  background: $color-background-light;
+  padding: 20px 0 40px 0; /* extra padding to keep background color correct between this and pathflows section */
 }
 
 .RecentProjects-cards {
@@ -14,7 +16,7 @@
   margin: auto;
 }
 
-.LandingController-pathflows, .LandingController-testimonial-container {
+.LandingController-testimonial-container {
   margin: 20px 0 0 0;
 }
 .LandingController-pathflows-item {

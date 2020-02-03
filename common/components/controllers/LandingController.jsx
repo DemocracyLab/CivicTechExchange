@@ -31,7 +31,7 @@ class LandingController extends React.PureComponent<{||}> {
           {this._renderTopSplash()}
         </div>
         <div className="container">
-          <RecentProjectsSection/>
+          <RecentProjectsSection className="row"/>
           {this._renderPathFlows()}
           {this._renderMiddleSplash()}
           {this._renderTestimonials()}
@@ -55,7 +55,7 @@ class LandingController extends React.PureComponent<{||}> {
 
   _renderPathFlows() {
     return (
-      <div className="LandingController-pathflows row">
+      <div className="LandingController-pathflows row ml-0 mr-0">
         <div className="col-xs-12 col-lg-6 LandingController-volunteer-flow">
           <h3>Want to Volunteer?</h3>
           <p>Apply your tech skills to projects that need them</p>
