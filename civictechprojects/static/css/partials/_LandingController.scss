@@ -17,7 +17,12 @@
 .LandingController-pathflows, .LandingController-testimonial-container {
   margin: 20px 0 0 0;
 }
-
+.LandingController-pathflows-item {
+  flex-basis: 26%;
+}
+.LandingController-pathflows-arrow {
+  flex-basis: 10%;
+}
 .LandingController-volunteer-flow {
   background: $color-orange;
 }
@@ -26,6 +31,7 @@
 }
 .LandingController-volunteer-flow, .LandingController-recruit-flow {
   padding: 20px;
+  text-align: center;
 }
 .LandingController-testimonial-container .carousel-avatar {
   height: 80px;
@@ -76,5 +82,8 @@
 .LandingController-pathflows-stepcontainer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+}
+.LandingController-pathflows-stepcontainer p {
+  margin-top: 8px;
 }

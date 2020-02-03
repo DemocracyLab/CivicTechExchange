@@ -26,7 +26,7 @@ class LandingController extends React.PureComponent<{||}> {
 
   render(): React$Node {
     return (
-      <div className="FindProjectsController-root">
+      <div className="LandingController-root">
         <div className="container-fluid">
           {this._renderTopSplash()}
         </div>
@@ -59,23 +59,48 @@ class LandingController extends React.PureComponent<{||}> {
         <div className="col-xs-12 col-lg-6 LandingController-volunteer-flow">
           <h3>Want to Volunteer?</h3>
           <p>Apply your tech skills to projects that need them</p>
-              <Vo1 /> <ArrowBlack /> <Vo2 /> <ArrowBlack /> <Vo3 />
-              <p>
-            1. Create a Profile
-            2. Search Projects
-            3. Connect with Project Leaders</p>
-            <Button variant="outline-light">Start Volunteering!</Button>
+          <div className="LandingController-pathflows-stepcontainer">
+            <div className="LandingController-pathflows-item">
+              <Vo1 />
+              <p>1. Create a Profile</p>
+            </div>
+            <div className="LandingController-pathflows-arrow"><ArrowBlack /></div>
+            <div className="LandingController-pathflows-item">
+              <Vo2 />
+              <p>2. Search Projects</p>
+            </div>
+            <div className="LandingController-pathflows-arrow"><ArrowBlack /></div>
+            <div className="LandingController-pathflows-item">
+              <Vo3 />
+              <p>3. Connect with Project Leaders</p>
+            </div>
+          </div>
+            <Button href={url.sectionOrLogIn(Section.FindProjects)} variant="outline-light">Start Volunteering!</Button>
 
           </div>
           <div className="col-xs-12 col-lg-6 LandingController-recruit-flow">
             <h3>Need Volunteers?</h3>
             <p>Find people with the tech skills you need</p>
-            <Rec1 /> <ArrowOrange /> <Rec2 /> <ArrowOrange /> <Rec3 />
-            <p>
-              1. Add your organization
-              2. List your project needs
-              3. Find skilled volunteers</p>
-              <Button variant="primary">Start Recruiting!</Button>
+              <div className="LandingController-pathflows-stepcontainer">
+                <div className="LandingController-pathflows-item">
+                  <Rec1 />
+                  <p>1. Add your organization</p>
+                </div>
+                <div className="LandingController-pathflows-arrow"><ArrowOrange /></div>
+                <div className="LandingController-pathflows-item">
+                  <Rec2 />
+                  <p>2. List your project needs</p>
+                </div>
+                <div className="LandingController-pathflows-arrow"><ArrowOrange /></div>
+                <div className="LandingController-pathflows-item">
+                  <Rec3 />
+                  <p>3. Find skilled volunteers</p>
+                </div>
+              </div>
+
+
+
+              <Button href={url.sectionOrLogIn(Section.CreateProject)} variant="primary">Start Recruiting!</Button>
 
             </div>
           </div>
