@@ -10,6 +10,10 @@
   text-align: center;
 }
 
+.LandingController-root .SplashScreen-content {
+  margin: auto;
+}
+
 .LandingController-pathflows, .LandingController-testimonial-container {
   margin: 20px 0 0 0;
 }
@@ -68,4 +72,9 @@
   justify-content: space-around;
   align-items: center;
   padding: 0 8px;
+}
+.LandingController-pathflows-stepcontainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
