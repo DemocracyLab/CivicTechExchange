@@ -30,7 +30,7 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return (
       <div className="RecentProjects">
-        <h2>Recent Projects</h2>
+        <h2>Featured Projects</h2>
         <div className="RecentProjects-cards">
           {this._renderCards()}
         </div>
@@ -45,6 +45,7 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
       : this.state.projects.map(
           (project, index) =>
             <ProjectCard
+              className="RecentProjects-card"
               project={project}
               key={index}
               textlen={140}
