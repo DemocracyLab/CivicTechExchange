@@ -6,6 +6,17 @@
 
 .RecentProjects-cards {
   display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-bottom: 20px;
+
+  .ProjectCard-root {
+    flex-basis: 100%;
+  }
+
+  .ProjectCard-root:nth-of-type(4) {
+    display: none; /* for mobile and desktop we show three at a time, so the fourth gets banished to the display none zone */
+  }
 }
 
 .PartnerSection {
@@ -124,6 +135,21 @@
   margin-top: 8px;
 }
 
+@include media-breakpoint-up(md) {
+
+  .RecentProjects-cards {
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .ProjectCard-root {
+      flex-basis: 45%;
+    }
+    .ProjectCard-root:nth-of-type(4) {
+      display: block;
+    }
+  }
+}
+
 @include media-breakpoint-up(lg) {
   /* these rules call out Testimonial cards on screens big enough to not just use the whole div */
   .LandingController-testimonial-container {
@@ -143,5 +169,15 @@
     border: 1px solid $color-grey-frame-border;
     border-radius: 5px;
     margin: auto;
+  }
+  .RecentProjects-cards {
+    flex-wrap: nowrap;
+
+    .ProjectCard-root {
+      flex-basis: 31%;
+    }
+    .ProjectCard-root:nth-of-type(4) {
+      display: none;
+    }
   }
 }
