@@ -121,7 +121,7 @@ class LandingController extends React.PureComponent<{||}> {
       return (
         <div className="LandingController-testimonial-container">
           <h2 className="text-center">Testimonials</h2>
-          <TestimonialCarousel className="LandingController-testimonial" />
+          <TestimonialCarousel className="LandingController-testimonial" interval={12000} />
         </div>
       )
     }
