@@ -1,0 +1,9 @@
+{% if DISALLOW_CRAWLING %}
+  User-agent: *
+  Disallow: /
+{% else %}
+  User-agent: *
+  Allow: /
+{% endif %}
+
+Sitemap: {{PROTOCOL_DOMAIN}}/sitemap.xml

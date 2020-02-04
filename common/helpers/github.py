@@ -12,7 +12,7 @@ def fetch_github_info(github_url):
     try:
         repo_info = response.json()
         if 'message' in repo_info:
-            print('Error reading ' + github_url + ': ' + repo_info['message'])
+            print('Unable to read ' + github_url + ': ' + repo_info['message'])
             return None
         else:
             return repo_info

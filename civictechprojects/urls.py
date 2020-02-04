@@ -28,6 +28,7 @@ urlpatterns = [
         {'sitemaps': {'projects': ProjectSitemap(), 'sections': SectionSitemap()}},
         name='django.contrib.sitemaps.views.sitemap'
     ),
+    url(r'^robots\.txt$', views.robots, name='robots'),
     url(r'^googlebb20bcf8545e7046.html$', TemplateView.as_view(template_name="googlebb20bcf8545e7046.html")),
     url(r'^projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
     url(r'^projects/delete/(?P<project_id>[0-9]+)/$', views.project_delete, name='project_delete'),

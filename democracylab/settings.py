@@ -353,6 +353,7 @@ SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '')
 SEO_JS_BACKEND = "common.helpers.caching.DebugPrerenderIO"
 SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
 SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
+SEO_JS_ENABLED = os.environ.get('SEO_JS_ENABLED', False) == 'True'
 
 # TODO: Put in environment variable
 SEO_JS_USER_AGENTS = (
@@ -375,6 +376,8 @@ SEO_JS_USER_AGENTS = (
     "pinterest",
     "developersgoogle.com/+/web/snippet",
 )
+
+DISALLOW_CRAWLING = os.environ.get('DISALLOW_CRAWLING', False) == 'True'
 
 DL_PAGES_LAST_UPDATED_DATE = os.environ.get('DL_PAGES_LAST_UPDATED', '2019-12-05')
 SITE_LAST_UPDATED = parse(DL_PAGES_LAST_UPDATED_DATE)
