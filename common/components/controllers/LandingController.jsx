@@ -75,7 +75,7 @@ class LandingController extends React.PureComponent<{||}> {
               <p>3. Connect with Project Leaders</p>
             </div>
           </div>
-            <Button href={url.sectionOrLogIn(Section.FindProjects)} variant="outline-light">Start Volunteering!</Button>
+            <Button href={url.sectionOrLogIn(Section.FindProjects)} variant="light">Start Volunteering!</Button>
 
           </div>
           <div className="col-xs-12 col-lg-6 LandingController-recruit-flow">
