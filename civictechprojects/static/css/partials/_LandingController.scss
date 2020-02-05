@@ -1,8 +1,11 @@
 .RecentProjects {
-  text-align: center;
   background: $color-background-light;
   padding: 20px 0 40px 0; /* extra padding to keep background color correct between this and pathflows section */
 }
+.RecentProjects-title, .RecentProjects-button {
+  text-align: center;
+}
+
 
 .RecentProjects-cards {
   display: flex;
@@ -10,12 +13,36 @@
   justify-content: space-around;
   margin-bottom: 20px;
 
+/* overriding the find projects page CSS to fit this page's design */
   .ProjectCard-root {
     flex-basis: 100%;
+    height: auto;
   }
 
   .ProjectCard-root:nth-of-type(4) {
     display: none; /* for mobile and desktop we show three at a time, so the fourth gets banished to the display none zone */
+  }
+  .ProjectCard-logo {
+    border: none;
+  }
+  .ProjectCard-title {
+    grid-column: 1/5;
+    grid-row: 3;
+    margin-left: 0.5rem;
+  }
+  .ProjectCard-subinfo {
+    grid-column: 3/5;
+    grid-row: 2;
+    border: none;
+  }
+  .ProjectCard-description {
+    grid-column: 1/5;
+    grid-row: 4;
+  }
+  .ProjectCard-skills {
+    grid-column: 1/5;
+    grid-row: 5;
+    padding: 0;
   }
 }
 
@@ -25,9 +52,12 @@
 
 .LandingController-root .SplashScreen-content {
   margin: auto;
-  p {
-    max-width: 500px;
-  }
+}
+.LandingController-topsplash .SplashScreen-content h1 {
+  font-size: 4rem;
+}
+.LandingController-midsplash p {
+  max-width: 500px;
 }
 
 

@@ -113,7 +113,7 @@ class LandingController extends React.PureComponent<{||}> {
       const buttonSection: string = "landingmid";
 
       return (
-        <SplashScreen header={header} text={text} img={HeroImage.MidLanding} buttonSection={buttonSection}/>
+        <SplashScreen className="LandingController-midsplash" header={header} text={text} img={HeroImage.MidLanding} buttonSection={buttonSection}/>
       );
     }
 

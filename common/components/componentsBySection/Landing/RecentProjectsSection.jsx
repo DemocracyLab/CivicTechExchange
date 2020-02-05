@@ -19,6 +19,8 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
   }
 
   componentDidMount() {
+    //TODO: Filter out DemocracyLab here (window.DLAB_PROJECT_ID?)
+    // bonus points: only map 4 items so the css doesn't have to deal with getting 4 or 5 depending on the filter
     const url: string = "/api/projects/recent/?count=4";
     fetch(new Request(url))
       .then(response => response.json())
@@ -30,11 +32,13 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return (
       <div className="RecentProjects">
-        <h2>Featured Projects</h2>
+        <h2 className="RecentProjects-title">Featured Projects</h2>
         <div className="RecentProjects-cards">
           {this._renderCards()}
         </div>
-        <Button className="RecentProjects-all" href="/index/?section=FindProjects&showSplash=0">See All Projects</Button>
+        <div className="RecentProjects-button">
+          <Button className="RecentProjects-all" href="/index/?section=FindProjects&showSplash=0">See All Projects</Button>
+        </div>
       </div>
     );
   }

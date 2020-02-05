@@ -13,6 +13,7 @@ type Props = {|
   bottomOverlayText: ?$ReadOnlyArray<string>,
   img: ?string,
   buttonSection: ?string,
+  className: ?string,
   onClickFindProjects: () => void
 |};
 
@@ -42,8 +43,9 @@ class SplashScreen extends React.PureComponent<Props> {
 
   render(): React$Node {
     const backgroundUrl: string = this.props.img ? cdn.image(this.props.img) : this._heroRandomizer();
+    const cssClass = "SplashScreen-root SplashScreen-opacity-layer SplashScreen-opacity50 " + this.props.className
     return (
-      <div className="SplashScreen-root SplashScreen-opacity-layer SplashScreen-opacity50" style={{backgroundImage: 'url(' + backgroundUrl + ')' }}>
+      <div className={cssClass} style={{backgroundImage: 'url(' + backgroundUrl + ')' }}>
         <div className="SplashScreen-content">
           {this.props.header ? <h1>{this.props.header}</h1> : null}
           <div className="SplashScreen-section">
