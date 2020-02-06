@@ -56,7 +56,8 @@ export type VolunteerUserData = {|
   +id: number,
   +first_name: string,
   +last_name: string,
-  +user_thumbnail: FileInfo
+  +user_thumbnail: FileInfo,
+  +about_me: string
 |}
 
 export type VolunteerDetailsAPIData = {|
@@ -88,7 +89,7 @@ export type ProjectDetailsAPIData = {|
   +project_thumbnail: FileInfo,
   +project_links: $ReadOnlyArray<LinkInfo>,
   +project_files: $ReadOnlyArray<FileInfo>,
-  +project_owners: $ReadONlyArray<VolunteerUserData>,
+  +project_owners: $ReadOnlyArray<VolunteerUserData>,
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date
 |};
@@ -137,9 +138,10 @@ class ProjectAPIUtils {
         }
         return response.json();
       })
-      .then(projectDetails => callback(projectDetails))
-      // TODO: Get catch to return http status code
-      .catch(response => errCallback && errCallback({
+      .then(projectDetails => {
+        callback(projectDetails);
+        // TODO: Get catch to return http status code
+      }).catch(response => errCallback && errCallback({
         errorCode: response.status,
         errorMessage: JSON.stringify(response)
       }));

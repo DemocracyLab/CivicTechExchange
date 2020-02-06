@@ -5,17 +5,22 @@ import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn, {Images} from '../utils/cdn.js';
 import Headers from "../common/Headers.jsx";
-import Person from '@material-ui/icons/Person';
 import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
+import BioThumbnail from "../componentsBySection/AboutUs/BioThumbnail.jsx";
+import type {BioPersonData} from "../componentsBySection/AboutUs/BioPersonData.jsx";
+import {VolunteerUserDataToBioPersonData} from "../componentsBySection/AboutUs/BioPersonData.jsx";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import prerender from "../utils/prerender.js";
+import GroupBy from "../utils/groupBy.js";
 
 type State = {|
-  aboutUs: ?ProjectDetailsAPIData,
+  project: ?ProjectDetailsAPIData,
+  project_volunteers: { [key: string]: BioPersonData },
+  project_owners: $ReadOnlyArray<BioPersonData>,
   showBiographyModal: boolean,
-  modalPerson: number | string,
+  modalPerson: ?BioPersonData,
   personTitle: string
 |};
 
@@ -24,13 +29,12 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
     this.state = {
-      aboutUs: null,
+      project: null,
       projectId: parseInt(window.DLAB_PROJECT_ID),
       showBiographyModal: false,
       modalPerson: null,
-      personTitle: null,
-    }
-    this.handleShow = this.handleShow.bind(this);
+    };
+    this.handleShowBio = this.handleShowBio.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
 //componentDidMount and loadProjectDetails copied from AboutProjectController, since we're retrieving a project's information the same way
@@ -41,8 +45,17 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   }
 
   loadProjectDetails(project: ProjectDetailsAPIData) {
+    let volunteers: { [key: string]: BioPersonData } = GroupBy.andTransform(
+      project.project_volunteers,
+      (pv) => pv.roleTag.subcategory,
+      (pv) => {
+        return VolunteerUserDataToBioPersonData(pv.user, pv.roleTag.display_name);
+      });
+    let owners: $ReadOnlyArray<BioPersonData> = project.project_owners.map((po) => VolunteerUserDataToBioPersonData(po, "Owner"));
     this.setState({
-      aboutUs: project,
+      project: project,
+      project_volunteers: volunteers,
+      project_owners: owners
     }, prerender.ready);
   }
 
@@ -50,17 +63,15 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 //handlers for biography modal
 //show passes information to the modal on whose information to display, close clears that out of state (just in case)
 //title is passed separately from the rest because of our data structure for owner and volunteer not matching up
-  handleShow(p, t) {
+  handleShowBio(person: BioPersonData) {
     this.setState({
-      modalPerson: p,
-      personTitle: t,
+      modalPerson: person,
       showBiographyModal: true
     });
   }
   handleClose() {
     this.setState({
       modalPerson: null,
-      personTitle: null,
       showBiographyModal: false
      });
   }
@@ -188,65 +199,50 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     )
   }
   _ourTeam() {
-    return (this.state.aboutUs ?
+    return (this.state.project ?
       <div className="about-us-team col">
         <h2>Our Team</h2>
         <p className="about-us-team-description">We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
         <h4>Business & Marketing Research</h4>
         <div className="about-us-team-card-container">
-          {this._renderTeamOwners(this.state.aboutUs.project_owners)}
-          {this._filterTeamSection(this.state.aboutUs.project_volunteers, 'Business')}
+          {this._renderTeamOwners(this.state.project_owners)}
+          {this._filterTeamSection(this.state.project_volunteers, 'Business')}
         </div>
         <hr />
         <h4>Design</h4>
         <div className="about-us-team-card-container">
-          {this._filterTeamSection(this.state.aboutUs.project_volunteers, 'Design')}
+          {this._filterTeamSection(this.state.project_volunteers, 'Design')}
         </div>
         <hr />
         <h4>Development</h4>
         <div className="about-us-team-card-container">
-          {this._filterTeamSection(this.state.aboutUs.project_volunteers, 'Software Development')}
+          {this._filterTeamSection(this.state.project_volunteers, 'Software Development')}
         </div>
       </div> : <div className="about-us-team col"><LoadingMessage message="Loading our team information..." /></div>)
   }
-
+  
   _renderTeamOwners(owners) {
-    //TODO: see if we can clean up nested returns, should probably be extracted to a component
-      return(
-        owners.map((owner, i) => {
+    return (
+      owners.map((owner, i) => {
         return (
-          <div className="about-us-team-card" key={i} onClick={()=>this.handleShow(owner, 'Project Owner')}>
-              {this._renderAvatar(owner)}
-              <div className="about-us-team-card-title">
-                <p className="about-us-team-card-name">{owner.first_name} {owner.last_name}</p>
-                <p>Project Owner</p>
-              </div>
-          </div>
-          )}
-          )
-        )
+          <BioThumbnail key={i} person={owner} handleClick={this.handleShowBio}/>
+        )}
+      )
+    );
   }
 
   _filterTeamSection(volunteers, role) {
-    let filtered = volunteers.filter(vo => vo.roleTag.subcategory === role);
-    return this._renderTeamVolunteers(filtered);
+    return volunteers[role] && this._renderTeamVolunteers(volunteers[role]);
   }
-
-
-  _renderTeamVolunteers(volunteers) {
-    return(
-      volunteers.map((vo, i) => {
-      return vo.isApproved && (
-        <div className="about-us-team-card" key={i} onClick={()=>this.handleShow(vo.user, vo.roleTag.display_name)}>
-            {this._renderAvatar(vo.user)}
-            <div className="about-us-team-card-title">
-              <p className="about-us-team-card-name">{vo.user.first_name} {vo.user.last_name}</p>
-              <p>{vo.roleTag.display_name}</p>
-            </div>
-        </div>
-    )}
-    )
-  )
+  
+  _renderTeamVolunteers(volunteers: $ReadOnlyArray<BioPersonData>) {
+    return (
+      volunteers.map((volunteer, i) => {
+        return (
+          <BioThumbnail key={i} person={volunteer} handleClick={this.handleShowBio}/>
+        )}
+      )
+    );
   }
 
   _volunteerWithUs() {
@@ -282,25 +278,12 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     );
   }
 
-   _renderAvatar(person) {
-     //modified version of common/components/common/avatar.jsx - to allow for variable sizing via CSS mediaquery instead of provided value as prop
-     //TODO: Remove <Person> component from Material UI and have our own default avatar image or SVG
-     return (
-       person.user_thumbnail
-         ? <div className="about-us-team-avatar" style={{backgroundImage: `url(${person.user_thumbnail.publicUrl})`}}></div>
-         : (<div className="about-us-team-avatar-default">
-             <Person className="PersonIcon"/>
-           </div>)
-     );
-   }
-
    _renderBioModal() {
      return <BioModal
       size="lg"
       showModal={this.state.showBiographyModal}
       handleClose={this.handleClose}
       person={this.state.modalPerson}
-      title={this.state.personTitle}
      />
    }
 
