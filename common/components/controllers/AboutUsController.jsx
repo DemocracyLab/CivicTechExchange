@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
-import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
+import type {ProjectDetailsAPIData, TeamAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn, {Images} from '../utils/cdn.js';
 import Headers from "../common/Headers.jsx";
 import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
@@ -17,8 +17,9 @@ import GroupBy from "../utils/groupBy.js";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
-  project_volunteers: { [key: string]: BioPersonData },
-  project_owners: $ReadOnlyArray<BioPersonData>,
+  board_of_directors: ?$ReadOnlyArray<BioPersonData>,
+  project_volunteers: ?{ [key: string]: BioPersonData },
+  project_owners: ?$ReadOnlyArray<BioPersonData>,
   showBiographyModal: boolean,
   modalPerson: ?BioPersonData,
   personTitle: string
@@ -41,24 +42,27 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 //in this case we use the value provided as an env key to get DemocracyLab's project info, to use in the Our Team section
 
   componentDidMount() {
-    ProjectAPIUtils.fetchProjectDetails(this.state.projectId, this.loadProjectDetails.bind(this));
+    ProjectAPIUtils.fetchTeamDetails(this.loadTeamDetails.bind(this));
   }
 
-  loadProjectDetails(project: ProjectDetailsAPIData) {
-    let volunteers: { [key: string]: BioPersonData } = GroupBy.andTransform(
-      project.project_volunteers,
-      (pv) => pv.roleTag.subcategory,
-      (pv) => {
-        return VolunteerUserDataToBioPersonData(pv.user, pv.roleTag.display_name);
-      });
-    let owners: $ReadOnlyArray<BioPersonData> = project.project_owners.map((po) => VolunteerUserDataToBioPersonData(po, "Owner"));
-    this.setState({
-      project: project,
-      project_volunteers: volunteers,
-      project_owners: owners
-    }, prerender.ready);
+  loadTeamDetails(response: TeamAPIData) {
+    const state: State = {
+      board_of_directors: JSON.parse(response.board_of_directors)
+    };
+    
+    if(response.project) {
+      state.project = response.project;
+      state.project_volunteers = GroupBy.andTransform(
+        response.project.project_volunteers,
+        (pv) => pv.roleTag.subcategory,
+        (pv) => {
+          return VolunteerUserDataToBioPersonData(pv.user, pv.roleTag.display_name);
+        });
+      state.project_owners = response.project.project_owners.map((po) => VolunteerUserDataToBioPersonData(po, "Owner"));
+    }
+    
+    this.setState(state, prerender.ready);
   }
-
 
 //handlers for biography modal
 //show passes information to the modal on whose information to display, close clears that out of state (just in case)
@@ -75,8 +79,6 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       showBiographyModal: false
      });
   }
-
-
 
   _ourMission() {
     return (
@@ -198,6 +200,18 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       </div>
     )
   }
+  
+  _boardOfDirectors() {
+    return (this.state.project ?
+      <div className="about-us-team col">
+        <h2>Board of Directors</h2>
+        <div className="about-us-team-card-container">
+          {this._renderBios(this.state.board_of_directors)}
+        </div>
+        <hr />
+      </div> : null);
+  }
+  
   _ourTeam() {
     return (this.state.project ?
       <div className="about-us-team col">
@@ -205,7 +219,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         <p className="about-us-team-description">We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
         <h4>Business & Marketing Research</h4>
         <div className="about-us-team-card-container">
-          {this._renderTeamOwners(this.state.project_owners)}
+          {this._renderBios(this.state.project_owners)}
           {this._filterTeamSection(this.state.project_volunteers, 'Business')}
         </div>
         <hr />
@@ -220,22 +234,12 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         </div>
       </div> : <div className="about-us-team col"><LoadingMessage message="Loading our team information..." /></div>)
   }
-  
-  _renderTeamOwners(owners) {
-    return (
-      owners.map((owner, i) => {
-        return (
-          <BioThumbnail key={i} person={owner} handleClick={this.handleShowBio}/>
-        )}
-      )
-    );
-  }
 
   _filterTeamSection(volunteers, role) {
-    return volunteers[role] && this._renderTeamVolunteers(volunteers[role]);
+    return volunteers[role] && this._renderBios(volunteers[role]);
   }
   
-  _renderTeamVolunteers(volunteers: $ReadOnlyArray<BioPersonData>) {
+  _renderBios(volunteers: $ReadOnlyArray<BioPersonData>) {
     return (
       volunteers.map((volunteer, i) => {
         return (
@@ -298,6 +302,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
          <div className="container pl-0 pr-0 about-us-root">
            {this._ourValues()}
            {this._problemSolution()}
+           {this._boardOfDirectors()}
            {this._ourTeam()}
            {this._volunteerWithUs()}
            {this._renderBioModal()}

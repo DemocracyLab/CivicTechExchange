@@ -94,6 +94,11 @@ export type ProjectDetailsAPIData = {|
   +project_date_modified: Date
 |};
 
+export type TeamAPIData = {|
+  +board_of_directors: string,
+  +project: ProjectDetailsAPIData
+|}
+
 class ProjectAPIUtils {
   static projectFromAPIData(apiData: ProjectAPIData): ProjectData {
     return {
@@ -166,9 +171,9 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
-  //fetch DemocracyLab statistics
-  static fetchStatistics(callback) {
-    fetch('/api/stats')
+  //fetch DemocracyLab board information
+  static fetchTeamDetails(callback) {
+    fetch('/api/team')
     .then(response => {
       return response.json()
     })
@@ -176,7 +181,7 @@ class ProjectAPIUtils {
       callback(data);
     })
     .catch(err => {
-      console.log('Error fetching stats API. Error: ' + err)
+      console.log('Error fetching team details. Error: ' + err)
     })
   }
 

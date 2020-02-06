@@ -166,7 +166,7 @@ def approve_project(request, project_id):
 def index(request):
     template = loader.get_template('new_index.html')
     context = {
-        'DLAB_PROJECT_ID': settings.DLAB_PROJECT_ID,
+        'DLAB_PROJECT_ID': settings.DLAB_PROJECT_ID or '',
         'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL,
         'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL,
         'STATIC_CDN_URL': settings.STATIC_CDN_URL,
@@ -750,3 +750,15 @@ def robots(request):
     }
 
     return HttpResponse(template.render(context, request))
+
+
+def team(request):
+    response = {
+        'board_of_directors': settings.BOARD_OF_DIRECTORS
+    }
+
+    if settings.DLAB_PROJECT_ID is not None:
+        project = Project.objects.get(id=settings.DLAB_PROJECT_ID)
+        response['project'] = project.hydrate_to_json()
+
+    return JsonResponse(response)
