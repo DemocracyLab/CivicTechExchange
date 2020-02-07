@@ -1,6 +1,6 @@
 // @flow
 
-import type {VolunteerUserData} from "../../utils/ProjectAPIUtils.js";
+import type {VolunteerUserData, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 
 export type BioPersonData = {|
   first_name: string,
@@ -18,4 +18,12 @@ export function VolunteerUserDataToBioPersonData(v: VolunteerUserData, title: st
       user_thumbnail: v.user_thumbnail && v.user_thumbnail.publicUrl,
       bio_text: v.about_me
     };
+}
+
+export function VolunteerDetailsAPIDataEqualsBioPersonData(v: VolunteerDetailsAPIData, b: BioPersonData): boolean {
+  return VolunteerUserDataEqualsBioPersonData(v.user, b);
+}
+
+export function VolunteerUserDataEqualsBioPersonData(v: VolunteerUserData, b: BioPersonData): boolean {
+  return (v.first_name === b.first_name) && (v.last_name === b.last_name);
 }

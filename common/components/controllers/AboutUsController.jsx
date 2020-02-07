@@ -8,12 +8,14 @@ import Headers from "../common/Headers.jsx";
 import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
 import BioThumbnail from "../componentsBySection/AboutUs/BioThumbnail.jsx";
 import type {BioPersonData} from "../componentsBySection/AboutUs/BioPersonData.jsx";
-import {VolunteerUserDataToBioPersonData} from "../componentsBySection/AboutUs/BioPersonData.jsx";
+import {VolunteerUserDataToBioPersonData, VolunteerDetailsAPIDataEqualsBioPersonData, VolunteerUserDataEqualsBioPersonData} from "../componentsBySection/AboutUs/BioPersonData.jsx";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import prerender from "../utils/prerender.js";
 import GroupBy from "../utils/groupBy.js";
+import _ from "lodash";
+import type {VolunteerDetailsAPIData} from "../utils/ProjectAPIUtils";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -52,13 +54,23 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     
     if(response.project) {
       state.project = response.project;
-      state.project_volunteers = GroupBy.andTransform(
+      // Remove board members from volunteer list
+      const uniqueVolunteers: $ReadOnlyArray<BioPersonData> = _.differenceWith(
         response.project.project_volunteers,
+        state.board_of_directors,
+        VolunteerDetailsAPIDataEqualsBioPersonData);
+      state.project_volunteers = GroupBy.andTransform(
+        uniqueVolunteers,
         (pv) => pv.roleTag.subcategory,
         (pv) => {
           return VolunteerUserDataToBioPersonData(pv.user, pv.roleTag.display_name);
         });
-      state.project_owners = response.project.project_owners.map((po) => VolunteerUserDataToBioPersonData(po, "Owner"));
+      // Remove board members from owner list
+      const uniqueOwners: $ReadOnlyArray<BioPersonData> = _.differenceWith(
+        response.project.project_owners,
+        state.board_of_directors,
+        VolunteerUserDataEqualsBioPersonData);
+      state.project_owners = uniqueOwners.map((po) => VolunteerUserDataToBioPersonData(po, "Owner"));
     }
     
     this.setState(state, prerender.ready);
