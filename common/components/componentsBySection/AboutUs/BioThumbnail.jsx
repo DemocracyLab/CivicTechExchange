@@ -25,7 +25,7 @@ class BioThumbnail extends React.PureComponent<Props> {
         {this._renderAvatar()}
         <div className="about-us-team-card-title">
           <p className="about-us-team-card-name">{this.props.person.first_name} {this.props.person.last_name}</p>
-          <p>{this.props.person.title}</p>
+          {this.props.person.title.map((title,i)=> <div key={i}>{title}</div> )}
         </div>
       </div>
     );
