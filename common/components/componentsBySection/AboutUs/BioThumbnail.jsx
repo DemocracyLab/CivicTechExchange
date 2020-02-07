@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import Person from "@material-ui/core/SvgIcon/SvgIcon";
+import Person from '@material-ui/icons/Person';
 import type {BioPersonData} from "./BioPersonData.jsx";
 
 type Props = {|
