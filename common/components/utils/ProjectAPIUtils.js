@@ -64,6 +64,7 @@ export type VolunteerDetailsAPIData = {|
   +application_id: number,
   +user: VolunteerUserData,
   +application_text: string,
+  +application_date: string,
   +roleTag: TagDefinition,
   +isApproved: boolean,
   +isCoOwner: boolean,
