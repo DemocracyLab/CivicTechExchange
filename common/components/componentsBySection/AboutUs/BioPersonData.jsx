@@ -15,7 +15,7 @@ export function VolunteerUserDataToBioPersonData(v: VolunteerUserData, title: st
       first_name: v.first_name,
       last_name: v.last_name,
       title: title,
-      user_thumbnail: v.user_thumbnail.publicUrl,
+      user_thumbnail: v.user_thumbnail && v.user_thumbnail.publicUrl,
       bio_text: v.about_me
     };
 }
