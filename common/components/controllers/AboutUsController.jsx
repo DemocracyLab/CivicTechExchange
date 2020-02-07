@@ -228,7 +228,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return (this.state.project ?
       <div className="about-us-team col">
         <h2>Our Team</h2>
-        <p className="about-us-team-description">We are engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
+        <p className="about-us-team-description">We are volunteer engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
         <h4>Business & Marketing Research</h4>
         <div className="about-us-team-card-container">
           {this._renderBios(this.state.project_owners)}
