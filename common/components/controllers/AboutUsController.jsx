@@ -49,7 +49,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
   loadTeamDetails(response: TeamAPIData) {
     const state: State = {
-      board_of_directors: JSON.parse(response.board_of_directors)
+      board_of_directors: response.board_of_directors && JSON.parse(response.board_of_directors)
     };
     
     if(response.project) {
@@ -215,7 +215,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   }
   
   _boardOfDirectors() {
-    return (this.state.project ?
+    return (this.state.board_of_directors ?
       <div className="about-us-team col">
         <h2>Board of Directors</h2>
         <div className="about-us-team-card-container">

@@ -260,7 +260,7 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
         'message': 'Backend link generation will not work.'
     },
     'BOARD_OF_DIRECTORS': {
-        'error': True,
+        'error': False,
         'message': 'About Us page will not display correctly.'
     },
     'DLAB_PROJECT_ID': {
