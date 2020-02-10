@@ -220,7 +220,7 @@ VOLUNTEER_REMINDER_OVERALL_PERIOD = VOLUNTEER_RENEW_REMINDER_PERIODS and timedel
 VOLUNTEER_CONCLUDE_SURVEY_URL = os.environ.get('VOLUNTEER_CONCLUDE_SURVEY_URL', '')
 
 
-DLAB_PROJECT_ID = os.environ.get('DLAB_PROJECT_ID', '')
+DLAB_PROJECT_ID = os.environ.get('DLAB_PROJECT_ID', None)
 
 PAYPAL_ENDPOINT = os.environ.get('PAYPAL_ENDPOINT', '')
 PAYPAL_PAYEE = os.environ.get('PAYPAL_PAYEE', '')
@@ -259,8 +259,12 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
         'error': True,
         'message': 'Backend link generation will not work.'
     },
+    'BOARD_OF_DIRECTORS': {
+        'error': False,
+        'message': 'About Us page will not display correctly.'
+    },
     'DLAB_PROJECT_ID': {
-        'error': True,
+        'error': False,
         'message': 'About Us page will not display correctly.'
     },
     'STATIC_CDN_URL': {
@@ -387,3 +391,5 @@ SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
 
 # How many of the most recent github commits to store per project.
 MAX_COMMITS_PER_PROJECT = int(os.environ.get('MAX_COMMITS_PER_PROJECT', 30))
+
+BOARD_OF_DIRECTORS = os.environ.get('BOARD_OF_DIRECTORS', '')

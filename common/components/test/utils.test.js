@@ -1,13 +1,13 @@
-import async from '../utils/async';
-import CurrentUser from '../utils/CurrentUser';
-import {Glyph} from '../utils/glyphs';
-import Sort from '../utils/sort';
+import async from '../utils/async.js';
+import {Glyph} from '../utils/glyphs.js';
+import Sort from '../utils/sort.js';
 import svg, {SVGPath} from "../utils/svg.js";
-import Truncate from '../utils/truncate';
-import urlHelper from '../utils/url';
+import Truncate from '../utils/truncate.js';
+import urlHelper from '../utils/url.js';
 import window from './__mocks__/window';
 import NavigationStore from '../stores/NavigationStore.js';
 import renderer from 'react-test-renderer';
+import GroupBy from "../utils/groupBy.js";
 
 describe('utils', () => {
 	
@@ -87,6 +87,12 @@ describe('utils', () => {
     const el = renderer.create(img);
     const str = JSON.stringify(el);
     expect(str).toMatch('LogInController-socialIcon');
+  });
+  
+  test('groupBy.andTransform', () => {
+    const testData = [{a:1,b:2,type:"a"}, {a:2, b:2, type:"b"}];
+    const result = GroupBy.andTransform(testData, i => i.type, i => ({result: i.a + i.b}));
+    expect(result).toMatchObject({"a":[{"result":3}],"b":[{"result":4}]});
   });
 
 });

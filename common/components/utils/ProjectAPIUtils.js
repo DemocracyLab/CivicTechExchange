@@ -56,13 +56,15 @@ export type VolunteerUserData = {|
   +id: number,
   +first_name: string,
   +last_name: string,
-  +user_thumbnail: FileInfo
+  +user_thumbnail: FileInfo,
+  +about_me: string
 |}
 
 export type VolunteerDetailsAPIData = {|
   +application_id: number,
   +user: VolunteerUserData,
   +application_text: string,
+  +application_date: string,
   +roleTag: TagDefinition,
   +isApproved: boolean,
   +isCoOwner: boolean,
@@ -88,10 +90,15 @@ export type ProjectDetailsAPIData = {|
   +project_thumbnail: FileInfo,
   +project_links: $ReadOnlyArray<LinkInfo>,
   +project_files: $ReadOnlyArray<FileInfo>,
-  +project_owners: $ReadONlyArray<VolunteerUserData>,
+  +project_owners: $ReadOnlyArray<VolunteerUserData>,
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date
 |};
+
+export type TeamAPIData = {|
+  +board_of_directors: string,
+  +project: ProjectDetailsAPIData
+|}
 
 class ProjectAPIUtils {
   static projectFromAPIData(apiData: ProjectAPIData): ProjectData {
@@ -137,9 +144,10 @@ class ProjectAPIUtils {
         }
         return response.json();
       })
-      .then(projectDetails => callback(projectDetails))
-      // TODO: Get catch to return http status code
-      .catch(response => errCallback && errCallback({
+      .then(projectDetails => {
+        callback(projectDetails);
+        // TODO: Get catch to return http status code
+      }).catch(response => errCallback && errCallback({
         errorCode: response.status,
         errorMessage: JSON.stringify(response)
       }));
@@ -164,9 +172,9 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response)
       }));
   }
-  //fetch DemocracyLab statistics
-  static fetchStatistics(callback) {
-    fetch('/api/stats')
+  //fetch DemocracyLab board information
+  static fetchTeamDetails(callback) {
+    fetch('/api/team')
     .then(response => {
       return response.json()
     })
@@ -174,7 +182,7 @@ class ProjectAPIUtils {
       callback(data);
     })
     .catch(err => {
-      console.log('Error fetching stats API. Error: ' + err)
+      console.log('Error fetching team details. Error: ' + err)
     })
   }
 

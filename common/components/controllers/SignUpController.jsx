@@ -8,6 +8,7 @@ import metrics from "../utils/metrics.js";
 import moment from 'moment';
 import _ from 'lodash';
 import Headers from "../common/Headers.jsx";
+import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
 
 type Props = {|
   +errors: {+[key: string]: $ReadOnlyArray<string>},
@@ -28,7 +29,7 @@ class SignUpController extends React.Component<Props, State> {
   
   constructor(): void {
     super();
-  
+
     // Make sure to keep validators in sync with the backend validators specified in settings.py
     this.minimumPasswordLength = 8;
     this.hasNumberPattern = new RegExp("[0-9]");
@@ -175,6 +176,9 @@ class SignUpController extends React.Component<Props, State> {
             Create Account
           </button>
         </form>
+        <div className="SignUpController-socialSection">
+          <SocialMediaSignupSection/>
+        </div>
       </div>
       </React.Fragment>
     );
