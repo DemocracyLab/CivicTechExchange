@@ -61,6 +61,9 @@
 .LandingController-midsplash p {
   max-width: 500px;
 }
+.LandingController-midsplash-btn:hover {
+  background-color: $color-orange;
+}
 
 
 .LandingController-testimonial-container {
