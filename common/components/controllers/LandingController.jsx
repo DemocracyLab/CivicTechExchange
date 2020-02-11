@@ -27,9 +27,7 @@ class LandingController extends React.PureComponent<{||}> {
   render(): React$Node {
     return (
       <div className="LandingController-root">
-        <div className="container-fluid">
-          {this._renderTopSplash()}
-        </div>
+        {this._renderTopSplash()}
         <div className="container">
           <RecentProjectsSection className="row"/>
           {this._renderPathFlows()}
