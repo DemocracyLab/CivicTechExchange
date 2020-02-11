@@ -19,8 +19,6 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
   }
 
   componentDidMount() {
-    //TODO: Filter out DemocracyLab here (window.DLAB_PROJECT_ID?)
-    // bonus points: only map 4 items so the css doesn't have to deal with getting 4 or 5 depending on the filter
     const url: string = "/api/projects/recent/?count=4";
     fetch(new Request(url))
       .then(response => response.json())

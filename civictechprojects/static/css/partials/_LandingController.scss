@@ -16,6 +16,7 @@
 /* overriding the find projects page CSS to fit this page's design */
   .ProjectCard-root {
     flex-basis: 100%;
+    min-width: 100%;
     height: auto;
   }
 
@@ -42,6 +43,7 @@
   .ProjectCard-skills {
     grid-column: 1/5;
     grid-row: 5;
+    margin-left: 0.5rem;
     padding: 0;
   }
 }
@@ -173,9 +175,13 @@
 
     .ProjectCard-root {
       flex-basis: 45%;
+      min-width: 45%;
     }
     .ProjectCard-root:nth-of-type(4) {
       display: block;
+    }
+    .ProjectCard-description {
+      border-top: 0;
     }
   }
 }
@@ -205,6 +211,7 @@
 
     .ProjectCard-root {
       flex-basis: 31%;
+      min-width: 31%;
     }
     .ProjectCard-root:nth-of-type(4) {
       display: none;
