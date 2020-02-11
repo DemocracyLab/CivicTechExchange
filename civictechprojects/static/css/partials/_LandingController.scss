@@ -61,10 +61,6 @@
 .LandingController-midsplash p {
   max-width: 500px;
 }
-.LandingController-midsplash-btn:hover {
-  background-color: $color-orange;
-}
-
 
 .LandingController-testimonial-container {
   padding: 20px 0;
@@ -108,6 +104,8 @@
   }
   .carousel-item-content {
     padding: 1rem;
+    width: 80%; /* give space for the arrows on left and right */
+    margin: auto;
   }
 
   .carousel-item p {
@@ -127,6 +125,7 @@
     background-color: $color-text-dark;
   }
 }
+
 .LandingController-testimonial-container .carousel-avatar {
   height: 200px;
   width: 200px;
@@ -135,8 +134,8 @@
   img {
     object-fit: cover;
   }
-
 }
+
 .LandingController-partnersinaction {
   padding: 20px 0;
   background-color: $color-background-light;
@@ -204,11 +203,9 @@
     }
   }
   .LandingController-testimonial-container .carousel-item-content {
-    width: 80%; /* set these widths better, this is testing */
     background: $color-background-light;
     border: 1px solid $color-grey-frame-border;
     border-radius: 5px;
-    margin: auto;
   }
   .RecentProjects-cards {
     flex-wrap: nowrap;
