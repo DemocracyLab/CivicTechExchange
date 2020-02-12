@@ -106,7 +106,6 @@
     padding: 1rem;
     width: 80%; /* give space for the arrows on left and right */
     margin: auto;
-    min-height: 300px; /* this value MUST be at least the height of the tallest content item we have for desktop view of Testimonial cards. Round up 5-10px for browser differences just in case. */
   }
 
   .carousel-item p {
@@ -116,6 +115,7 @@
   .carousel-inner {
     margin-bottom: 20px; /* because the indicators are absolutely positioned in the div, this effectively pushes them down a bit */
   }
+
   .carousel-indicators li {
     background-color: $color-text-grey;
     height: 10px;
@@ -130,10 +130,13 @@
 .LandingController-testimonial-container .carousel-avatar {
   height: 200px;
   width: 200px;
-  margin: 0 auto;
   border-radius: 50%;
+  background-repeat: no-repeat; //centers image inside avatar
+  background-size: cover;
+  background-position: center;
   img {
-    object-fit: cover;
+    min-height: 100%;
+    min-width: 100%;
   }
 }
 
@@ -198,9 +201,13 @@
     .carousel-item-content {
       display: flex;
       flex-flow: row nowrap;
+      min-height: 300px; /* this value MUST be at least the height of the tallest content item we have for desktop view of Testimonial cards. Round up 5-10px for browser differences just in case. */
     }
-    .carousel-item-left img {
-      margin: 0 20px 0 10px; /* if an image is in this section, give it some margin, otherwise no need to take up the space */
+    .carousel-item-left {
+      margin: auto; /* if an image is in this section, give it some space, otherwise don't */
+      .carousel-avatar {
+        margin: 0 1rem;
+      }
     }
   }
   .LandingController-testimonial-container .carousel-item-content {

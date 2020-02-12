@@ -6,7 +6,7 @@ const carouselItems = Testimonials.map((i) =>
   <Carousel.Item className="carousel-item" key={i.name}>
     <div className="carousel-item-content">
       <div className="carousel-item-left">
-        {i.avatar ? <img src={i.avatar} alt={i.name} className="carousel-avatar"></img> : null}
+        {i.avatar ? <div className="carousel-avatar" style={{backgroundImage: `url(${i.avatar})`}}></div> : null}
       </div>
       <div className="carousel-item-right">
         <h3>{i.name}</h3>
