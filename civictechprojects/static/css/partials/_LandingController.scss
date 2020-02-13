@@ -5,6 +5,9 @@
 .RecentProjects-title, .RecentProjects-button {
   text-align: center;
 }
+.RecentProjects-button {
+  padding: 10px 0 0 0; /* push button away from cards a bit */
+}
 
 
 .RecentProjects-cards {
@@ -47,9 +50,18 @@
     padding: 0;
   }
 }
-
-.PartnerSection {
-  text-align: center;
+.LandingController-partner-section {
+  align-items: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  .PartnerSection {
+    padding: 60px 0; /* makes sure div isn't too short regardless of min-height */
+  }
 }
 
 .LandingController-root .SplashScreen-content {
@@ -58,6 +70,12 @@
 .LandingController-topsplash .SplashScreen-content h1 {
   font-size: 4rem;
 }
+.LandingController-topsplash p {
+  font-size: 24px;
+}
+.LandingController-midsplash p, .PartnerSection p {
+  font-weight: 18px;
+}
 .LandingController-midsplash p {
   max-width: 500px;
 }
@@ -65,6 +83,10 @@
 .LandingController-testimonial-container {
   padding: 20px 0;
   background: $color-background-light; /* on mobile the whole div is used as a "card" so background appropriately) */
+}
+
+.LandingController-pathflows {
+  padding-top: 20px;
 }
 .LandingController-pathflows-item {
   flex-basis: 26%;
@@ -206,7 +228,7 @@
     }
     .carousel-avatar {
       margin: 0 1rem;
-    }  
+    }
   }
   .LandingController-testimonial-container .carousel-item-content {
     background: $color-background-light;
