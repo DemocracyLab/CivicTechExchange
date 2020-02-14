@@ -230,7 +230,7 @@
       display: flex;
       flex-flow: row nowrap;
       align-items: center;
-      min-height: 300px; /* this value MUST be at least the height of the tallest content item we have for desktop view of Testimonial cards. Round up 5-10px for browser differences just in case. */
+      min-height: 375px; /* this value MUST be at least the height of the tallest content item we have for desktop view of Testimonial cards. Round up 5-10px for browser differences just in case. */
     }
     .carousel-avatar {
       margin: 0 1rem;

@@ -1,82 +1,67 @@
 const Testimonials = [
   {
-    name: "Maxx Kaplan",
-    avatar: "",
-    role: "Project Owner",
-    project: "FareStart",
+    name: "Maxx Silver",
+    avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/Maxx%20Silver.png",
+    title: "Operations Systems Analyst, FareStart",
     text: "DemocracyLab has been a great resource for FareStart as we’ve sought opportunities to connect with the local tech sector. Thanks to DemocracyLab, we’ve been able to recruit a diverse group of skilled volunteers. As a project leader, I’ve appreciated the structure DemocracyLab has provided, along with the best practices and reminders they’ve shared.  We are grateful for the platform and community that DemocracyLab has built.",
     source: ""
   },
   {
     name: "Joseph Peha",
-    avatar: "",
-    role: "Project Owner",
-    project: "Ready Set Vote",
+    avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/Joseph%20Peha.png",
+    title: "Co-Founder, Ready Set Vote",
     text: "DemocracyLab has been instrumental in adding momentum to Ready Set Vote. I can think of no better way to connect with volunteers, not only for hackathon-style events, but to cultivate ongoing, meaningful relationships with people who want to contribute to a project like ours.",
     source: ""
   },
   {
     name: "Will Saunders",
-    avatar: "https://democracylab-marlok.s3.amazonaws.com/thumbnails%2Fwill.saunders%40ocio.wa.gov%2FWill-on-boat.jpg_1569084469.8664274.jpeg",
-    role: "Project Owner",
-    project: "Access and Connectivity Toolkit",
+    avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/Will%20Saunders.png",
+    title: "Senior Program Manager for Open Data, State of Washington",
     text: "DemocracyLab has become an essential networking tool and resource for state programs looking to engage the civic tech community.  The ability to credibly mobilize interested talent over longer periods has made a real difference to government stakeholders.",
     source: ""
   },
   {
     name: "Karen Perry",
-    avatar: "https://democracylab-marlok.s3.amazonaws.com/thumbnails%2Fkarenaperry%40outlook.com%2FnewFile.jpeg_1578858469.6961696.jpeg",
-    role: "Volunteer",
-    project: "Access and Connectivity Toolkit",
+    avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/Karen%20Perry.png",
+    title: "National Telecommunications and Information Administration",
     text: "DemocracyLab has found the secret sauce to attract volunteer talent, inspirational projects, and put them together so that progress happens.  It may sound easy, but we know it’s not. DemocracyLab makes it work and it gets better with every hack.",
     source: ""
   },
   {
     name: "Scott Veirs",
     avatar: "",
-    role: "Project Owner",
-    project: "Orcasound",
+    title: "Project Owner, Orcasound",
     text: "DemocracyLab has helped Orcasound build our open source community while making incremental progress on design and coding challenges during one day events. Many hackathon volunteers come and go, but some have dedicated hundreds of hours to our project outside of the hackathons themselves.",
     source: ""
   },
   {
     name: "Jackson Brown",
     avatar: "",
-    role: "Project Owner",
-    project: "Council Data Project",
+    title: "Project Owner, Council Data Project",
     text: "Our project has received incredible benefit from the DemocracyLab community. Whether it's development and design assistance or simply feedback and awareness for our project, DemocracyLab has been a valuable resource in furthering the goals of our work.",
     source: ""
   },
   {
     name: "Jenny Durkan",
-    avatar: "",
-    role: "Mayor",
-    project: "City of Seattle",
+    avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/Jenny%20Durkan.png",
+    title: "Mayor, City of Seattle",
     text: "Seattle is home to some of the most innovative thinkers and technologists anywhere in the world who want to use their talent to address social challenges. It’s why we formed an Innovation Advisory Council, and it’s why groups like DemocracyLab exist.",
     source: ""
   },
+  {
+    name: "Minjoo Kweon",
+    avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/Minjoo%20Kweon.png",
+    title: "UX Designer, Locix",
+    text: "I’ve been looking for a way to use my skills to do good in the world, and I’m so glad to see there’s a group organized specifically around doing just that!",
+    source: ""
+  },
+  {
+    name: "Akshat Vasavada",
+    avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/Akshat%20Vasavada.png",
+    title: "Product Manager, Stitch Inc.",
+    text: "DemocracyLab gave me a chance to learn and grow my skillsets in a new career. The experiences I gained through my work with DemocracyLab set me up for long-term success as a Product Manager.",
+    source: ""
+  }
 ]
-
-/*
-{
-  name: "",
-  avatar: "",
-  role: "",
-  project: "",
-  text: "",
-  source: ""
-},
-*/
-
-/* Object Keys
-name: display name for person
-avatar: image URL for their photo, if we have it
-role: their role (Project Leader, volunteer...)
-project: project they most identify with / are identified with by us
-text:  testimonial text here
-source: for quotes about DL cited elsewhere, for attribution if required
-
-note that name and text are the only required fields; there are default values (avatar) or conditionals for the rest
-*/
 
 export default Testimonials;

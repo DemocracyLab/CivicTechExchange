@@ -10,7 +10,7 @@ const carouselItems = Testimonials.map((i) =>
       </div>
       <div className="carousel-item-right">
         <h3>{i.name}</h3>
-        <h4>{i.role}, {i.project}</h4>
+        <h4>{i.title}</h4>
         <span className="carousel-spacer"></span>
         <p>"{i.text}"</p>
       </div>
