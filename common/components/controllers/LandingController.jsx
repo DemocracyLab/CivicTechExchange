@@ -107,7 +107,7 @@ class LandingController extends React.PureComponent<{||}> {
 
     _renderMiddleSplash() {
       const header: string = "Accelerating Civic Innovation";
-      const text: string = "DemocracyLab is a non-profit organization. We are seeking to advance tech innovation in social, non-profit and civic sectors through the power of tech-for-good volunteerism."
+      const text: string = "DemocracyLab is a nonprofit organization. \n\n Our mission is to empower people who use technology to advance the public good. \n\n We are accelerating innovation in the social, non-profit and civic sectors through the power of tech-for-good volunteerism."
       const buttonSection: string = "landingmid";
 
       return (

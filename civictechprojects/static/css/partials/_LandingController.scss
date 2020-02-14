@@ -74,10 +74,11 @@
   font-size: 24px;
 }
 .LandingController-midsplash p, .PartnerSection p {
-  font-weight: 18px;
+  font-size: 18px;
 }
 .LandingController-midsplash p {
   max-width: 500px;
+  white-space: pre-wrap;
 }
 
 .LandingController-testimonial-container {
