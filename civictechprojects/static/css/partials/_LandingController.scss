@@ -124,6 +124,11 @@
     border-bottom: 1px solid $color-text-dark;
     margin: 20px 0 10px 0;
   }
+  .carousel-item-left {
+    /* centers the avatar on mobile */
+    display: flex;
+    justify-content: center;
+  }
   .carousel-item-content {
     padding: 1rem;
     width: 80%; /* give space for the arrows on left and right */
