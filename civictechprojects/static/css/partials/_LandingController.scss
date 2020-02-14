@@ -1,6 +1,6 @@
 .RecentProjects {
   background: $color-background-light;
-  padding: 20px 0 40px 0; /* extra padding to keep background color correct between this and pathflows section */
+  padding: 20px 0 60px 0; /* extra padding to keep background color correct between this and pathflows section */
 }
 .RecentProjects-title, .RecentProjects-button {
   text-align: center;
@@ -60,7 +60,7 @@
   justify-content: center;
   width: 100%;
   .PartnerSection {
-    padding: 60px 0; /* makes sure div isn't too short regardless of min-height */
+    padding: 60px 10px; /* makes sure div isn't too short regardless of min-height, makes sure content doesn't hit edges */
   }
 }
 .LandingController-partnersinaction-logo {
@@ -88,9 +88,6 @@
   background: $color-background-light; /* on mobile the whole div is used as a "card" so background appropriately) */
 }
 
-.LandingController-pathflows {
-  padding-top: 20px;
-}
 .LandingController-pathflows-item {
   flex-basis: 26%;
 }
