@@ -81,7 +81,7 @@ class SplashScreen extends React.PureComponent<Props> {
     } else if (sec === "landingmid") {
         return (
           <React.Fragment>
-            <Button variant="primary" className="LandingController-midsplash-btn SplashScreen-create-project-btn" href="/index/section?=AboutUs">Learn More</Button>
+            <Button variant="primary" className="LandingController-midsplash-btn SplashScreen-create-project-btn" href={url.section(Section.AboutUs)}>Learn More</Button>
           </React.Fragment>
         )
     } else if (sec === "landingbottom") {
