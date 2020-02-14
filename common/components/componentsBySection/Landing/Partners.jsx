@@ -5,9 +5,29 @@ const Partners = [
     link: "https://openseattle.org/"
   },
   {
-    name: "Code For America",
-    logo: "https://d1agxr2dqkgkuy.cloudfront.net/img/codeforamerica.png",
-    link: "https://www.codeforamerica.org/"
+    name: "Seattle Tech4Good",
+    logo: "https://d1agxr2dqkgkuy.cloudfront.net/img/SeattleTech4Good.png",
+    link: "https://www.meetup.com/SeaTech4Good/"
+  },
+  {
+    name: "AIGA Seattle",
+    logo: "https://d1agxr2dqkgkuy.cloudfront.net/img/AIGASeattle.png",
+    link: "https://seattle.aiga.org/"
+  },
+  {
+    name: "501 Commons",
+    logo: "https://d1agxr2dqkgkuy.cloudfront.net/img/501commonslogo.png",
+    link: "https://www.501commons.org/"
+  },
+  {
+    name: "Seattle Community Technology Advisory Board",
+    logo: "https://d1agxr2dqkgkuy.cloudfront.net/img/communitytech.png",
+    link: "http://www.seattle.gov/community-technology-advisory-board"
+  },
+  {
+    name: "Sea.Citi",
+    logo: "https://d1agxr2dqkgkuy.cloudfront.net/img/SeaCiti.jpg",
+    link: "https://seaciti.org/"
   },
   {
     name: "Washington Technology Industry Association",
@@ -15,29 +35,9 @@ const Partners = [
     link: "https://www.washingtontechnology.org/"
   },
   {
-    name: "NetSquared",
-    logo: "https://d1agxr2dqkgkuy.cloudfront.net/img/net2.jpeg",
-    link: "https://www.netsquared.org/"
-  },
-  {
-    name: "Seattle Community Technology Advisory Board",
-    logo: "https://d1agxr2dqkgkuy.cloudfront.net/img/communitytech.jpeg",
-    link: "http://www.seattle.gov/community-technology-advisory-board"
+    name: "Code For America Brigade",
+    logo: "https://d1agxr2dqkgkuy.cloudfront.net/img/codeforamerica.png",
+    link: "https://brigade.codeforamerica.org/"
   }
 ]
-
-/*
-{
-  name: "",
-  logo: "",
-  link: ""
-}
-*/
-
-/* Object Keys
-name: name of partner (for img alt="")
-logo: url to their logo image  (for img src="")
-link: click target for logo (for href="")
-*/
-
 export default Partners;

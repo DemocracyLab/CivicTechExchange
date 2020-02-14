@@ -128,9 +128,9 @@ class LandingController extends React.PureComponent<{||}> {
       return (
         <div className="LandingController-partner-section" style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
           <div className="PartnerSection text-center">
-            <h2>Partner With Us to Organize your Next Hackathon</h2>
-            <p>DemocracyLab is the leading organizer for Tech-for-Good Hackathons.</p>
-            <p>Let us help your company, non-profit or group organize your next Hackathon.</p>
+            <h2>Partner With Us To Organize Your Next Hackathon</h2>
+            <p>DemocracyLab is a leading organizer of tech-for-good hackathons.</p>
+            <p>Let us help your company, non-profit or group strengthen your culture and make an impact!</p>
             <Button variant="outline-dark" href={url.sectionOrLogIn(Section.PartnerWithUs)}>
               Learn More
             </Button>
