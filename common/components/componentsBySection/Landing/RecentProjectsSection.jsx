@@ -7,6 +7,9 @@ import ProjectCard from "../FindProjects/ProjectCard.jsx";
 import {Glyph, GlyphSizes, GlyphStyles} from "../../utils/glyphs.js";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import Button from "react-bootstrap/Button";
+import url from "../../utils/url.js";
+import Section from '../../enums/Section.js'
+
 
 type State = {|
   projects: List<Project>
@@ -35,7 +38,7 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
           {this._renderCards()}
         </div>
         <div className="RecentProjects-button">
-          <Button className="RecentProjects-all" href={url.section(Sections.FindProjects)}>See All Projects</Button>
+          <Button className="RecentProjects-all" href={url.section(Section.FindProjects)}>See All Projects</Button>
         </div>
       </div>
     );
