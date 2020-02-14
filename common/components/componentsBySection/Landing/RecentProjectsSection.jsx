@@ -35,7 +35,7 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
           {this._renderCards()}
         </div>
         <div className="RecentProjects-button">
-          <Button className="RecentProjects-all" href="/index/?section=FindProjects&showSplash=0">See All Projects</Button>
+          <Button className="RecentProjects-all" href={url.section(Sections.FindProjects)}>See All Projects</Button>
         </div>
       </div>
     );
