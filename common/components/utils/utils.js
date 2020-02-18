@@ -7,6 +7,13 @@ class utils {
     window.scrollTo(0, 0);
   }
   
+  // Put string html content into a format that dangerouslySetInnerHTML accepts
+  static unescapeHtml(html: string): string {
+    let escapeEl = document.createElement('textarea');
+    escapeEl.innerHTML = html;
+    return escapeEl.textContent;
+  }
+  
 }
 
 export default utils;
