@@ -46,7 +46,7 @@ class LandingController extends React.PureComponent<{||}> {
     const text: string = "We connect skilled volunteers and tech-for-good projects";
 
     return (
-      <SplashScreen className="LandingController-topsplash" header={header} text={text} img={HeroImage.TopLanding}>
+      <SplashScreen className="LandingController-topsplash" header={header} text={text}>
         <Button variant="primary" className="LandingController-topsplash-btn" href={url.sectionOrLogIn(Section.FindProjects)}>Get Started</Button>
       </SplashScreen>
     );

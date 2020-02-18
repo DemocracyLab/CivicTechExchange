@@ -24,8 +24,6 @@ export const HeroImage: { [key: string]: string } = {
 
 const heroImages: $ReadOnlyArray<string> = [
   HeroImage.TopLanding,
-  HeroImage.MidLanding,
-  HeroImage.BottomLanding,
   "CodeForGood_072719_MSReactor-074.jpg",
   "CodeForGood_072719_MSReactor-020.jpg"
 ];
