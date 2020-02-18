@@ -44,10 +44,11 @@ class LandingController extends React.PureComponent<{||}> {
   _renderTopSplash(): React$Node {
     const header: string = "Make Tech.  Do Good.";
     const text: string = "We connect skilled volunteers and tech-for-good projects";
-    const buttonSection: string = "landingtop";
 
     return (
-      <SplashScreen className="LandingController-topsplash" header={header} text={text} img={HeroImage.TopLanding} buttonSection={buttonSection}/>
+      <SplashScreen className="LandingController-topsplash" header={header} text={text} img={HeroImage.TopLanding}>
+        <Button variant="primary" className="LandingController-topsplash-btn" href={url.sectionOrLogIn(Section.FindProjects)}>Get Started</Button>
+      </SplashScreen>
     );
   }
 
@@ -108,10 +109,11 @@ class LandingController extends React.PureComponent<{||}> {
     _renderMiddleSplash() {
       const header: string = "Accelerating Civic Innovation";
       const text: string = "DemocracyLab is a nonprofit organization. \n\n Our mission is to empower people who use technology to advance the public good. \n\n We are accelerating innovation in the social, non-profit and civic sectors through the power of tech-for-good volunteerism."
-      const buttonSection: string = "landingmid";
 
       return (
-        <SplashScreen className="LandingController-midsplash" header={header} text={text} img={HeroImage.MidLanding} buttonSection={buttonSection}/>
+        <SplashScreen className="LandingController-midsplash" header={header} text={text} img={HeroImage.MidLanding}>
+          <Button variant="primary" className="LandingController-midsplash-btn SplashScreen-create-project-btn" href={url.section(Section.AboutUs)}>Learn More</Button>
+        </SplashScreen>
       );
     }
 
@@ -156,10 +158,11 @@ class LandingController extends React.PureComponent<{||}> {
 
   _renderBottomSplash(): React$Node {
     const header: string = "What are you waiting for?";
-    const buttonSection: string = "landingbottom";
 
     return (
-      <SplashScreen header={header} img={HeroImage.BottomLanding} buttonSection={buttonSection}/>
+      <SplashScreen header={header} img={HeroImage.BottomLanding}>
+        <Button variant="primary" className="LandingController-bottomsplash-btn" href={url.sectionOrLogIn(Section.FindProjects)}>Get Started</Button>
+      </SplashScreen>
     );
   }
 

@@ -1,11 +1,13 @@
 // @flow
 
+import Button from 'react-bootstrap/Button';
 import ProjectSearchDispatcher from '../stores/ProjectSearchDispatcher.js';
 import TagDispatcher from '../stores/TagDispatcher.js';
 import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
 import ProjectFilterContainer from '../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx';
 import {FindProjectsArgs} from "../stores/ProjectSearchStore.js";
 import SplashScreen from "../componentsBySection/FindProjects/SplashScreen.jsx";
+import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
 import urls from "../utils/url.js";
 import React from 'react';
@@ -57,14 +59,16 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
       "DemocracyLab is a nonprofit organization.",
       "Our mission is to empower people who use technology to advance the public good."
     ];
-    const buttonSection = "findprojects"
 
     return (
-      <SplashScreen onClickFindProjects={this._onClickFindProjects.bind(this)}
-                    header={header}
-                    bottomOverlayText={bottomOverlayLines}
-                    buttonSection={buttonSection}
-      />
+      <SplashScreen header={header} bottomOverlayText={bottomOverlayLines}>
+        <Button variant="primary" className="SplashScreen-find-projects-btn" onClick={this._onClickFindProjects.bind(this)}>
+          Find Projects
+        </Button>
+        <Button variant="primary" className="SplashScreen-create-project-btn" href={urls.sectionOrLogIn(Section.CreateProject)}>
+          Create A Project
+        </Button>
+      </SplashScreen>
     );
   }
 }
