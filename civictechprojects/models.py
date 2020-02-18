@@ -525,6 +525,7 @@ class VolunteerRelation(Archived):
             'user': volunteer.hydrate_to_tile_json(),
             'application_text': self.application_text,
             'application_date': self.application_date.__str__(),
+            'platform_date_joined': volunteer.date_joined.__str__(),
             'roleTag': Tag.hydrate_to_json(volunteer.id, self.role.all().values())[0],
             'isApproved': self.is_approved,
             'isCoOwner': self.is_co_owner,
