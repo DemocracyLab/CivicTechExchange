@@ -28,6 +28,8 @@
   }
   .ProjectCard-logo {
     border: none;
+    grid-row: 1/2;
+    min-height: 99px;
   }
   .ProjectCard-title {
     grid-column: 1/5;
@@ -36,12 +38,17 @@
   }
   .ProjectCard-subinfo {
     grid-column: 3/5;
-    grid-row: 2;
+    grid-row: 1/2;
     border: none;
+    /* make sure it's similar height whether a project has one or all three subinfo lines */
+  }
+  .ProjectCard-subinfo li {
+    padding-right: 0.5rem;
   }
   .ProjectCard-description {
     grid-column: 1/5;
     grid-row: 4;
+    border-top: none;
   }
   .ProjectCard-skills {
     grid-column: 1/5;
@@ -64,7 +71,7 @@
   }
 }
 .LandingController-partnersinaction-logo {
-  margin: 0 20px;
+  margin: 5px; /* override this on desktop */
 }
 .LandingController-root .SplashScreen-content {
   margin: auto;
@@ -235,6 +242,10 @@
       margin: 0 1rem;
     }
   }
+  .LandingController-partnersinaction-logo {
+    margin: 5px 20px; /* to get the correct number per row we add margin at lg and above */
+  }
+
   .LandingController-testimonial-container .carousel-item-content {
     background: $color-background-light;
     border: 1px solid $color-grey-frame-border;
