@@ -9,6 +9,7 @@ import utils from "../../utils/utils.js";
 type Props = {|
   showModal: boolean,
   person: BioPersonData,
+  allowUnsafeHtml: boolean,
   size: string,
   handleClose: () => void
 |};
@@ -38,7 +39,6 @@ class BioModal extends React.PureComponent<Props, State> {
 
   render(): ?React$Node {
     if(this.props.person) {
-      const bio: string = !_.isEmpty(this.props.person.bio_text) ? this.props.person.bio_text : this.defaultBiography();
       return (
         <div>
           <Modal show={this.state.showModal} onHide={this.closeModal} size={this.props.size} className="bio-modal-root">
@@ -50,7 +50,7 @@ class BioModal extends React.PureComponent<Props, State> {
             </Modal.Header>
             <Modal.Body style={{whiteSpace: "pre-wrap"}}>
               <h5 className="bio-modal-about">About</h5>
-              <div dangerouslySetInnerHTML={{__html: "<p>" + utils.unescapeHtml(bio) + "</p>"}}/>
+              {this._renderBody()}
             </Modal.Body>
             <Modal.Footer>
               <button onClick={this.closeModal} className="btn btn-secondary">Close</button>
@@ -59,6 +59,19 @@ class BioModal extends React.PureComponent<Props, State> {
         </div>
       );
     } else return null;
+  }
+  
+  _renderBody(): React$Node {
+    const bio: string = !_.isEmpty(this.props.person.bio_text) ? this.props.person.bio_text : this.defaultBiography();
+    return (
+      <React.Fragment>
+        {
+          this.props.allowUnsafeHtml
+          ? <div dangerouslySetInnerHTML={{__html: "<p>" + utils.unescapeHtml(bio) + "</p>"}}/>
+          : <p>{bio}</p>
+        }
+      </React.Fragment>
+    );
   }
   
   _renderBioName(): React$Node {
