@@ -3,7 +3,8 @@ import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import CurrentUser from "./CurrentUser.js";
 import Section from "../enums/Section.js";
 import {Dictionary} from "../types/Generics.jsx";
-import _ from 'lodash'
+import _ from 'lodash';
+import isURL from 'validator/lib/isURL';
 
 const regex = {
   protocol: new RegExp("^(f|ht)tps?://", "i"),
@@ -131,6 +132,10 @@ class urlHelper {
   
   static hostname(): string {
     return window.location.origin;
+  }
+
+  static isEmptyStringOrValidUrl(url: string): boolean {
+    return (_.isEmpty(url) || isURL(url));
   }
 }
 

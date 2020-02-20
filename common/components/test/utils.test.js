@@ -79,7 +79,11 @@ describe('utils', () => {
 
   	const args = urlHelper.arguments('/api/test?query=test&page=1');
   	expect(args['query']).toEqual('test');
-  	expect(args['page']).toEqual('1');
+    expect(args['page']).toEqual('1');
+    
+    expect(urlHelper.isEmptyStringOrValidUrl('')).toEqual(true);
+    expect(urlHelper.isEmptyStringOrValidUrl('google.com')).toEqual(true);
+    expect(urlHelper.isEmptyStringOrValidUrl('localhost:3000')).toEqual(false);
   });
 
   test('svg', () => {
