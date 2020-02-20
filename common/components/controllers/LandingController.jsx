@@ -133,7 +133,7 @@ class LandingController extends React.PureComponent<{||}> {
             <h2>Partner With Us To Organize Your Next Hackathon</h2>
             <p>DemocracyLab is a leading organizer of tech-for-good hackathons.</p>
             <p>Let us help your company, non-profit or group strengthen your culture and make an impact!</p>
-            <Button variant="outline-dark" href={url.sectionOrLogIn(Section.PartnerWithUs)}>
+            <Button variant="outline-dark" href={url.section(Section.PartnerWithUs)}>
               Learn More
             </Button>
           </div>
