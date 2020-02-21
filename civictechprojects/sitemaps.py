@@ -11,9 +11,9 @@ class SectionSitemap(Sitemap):
     # TODO: Update this date for each release
     lastmod = settings.SITE_LAST_UPDATED
     pages = [
+        str(FrontEndSection.Home.value),
         str(FrontEndSection.AboutUs.value),
         str(FrontEndSection.FindProjects.value),
-        str(FrontEndSection.FindProjects.value) + '&showSplash=1',
         str(FrontEndSection.PartnerWithUs.value),
         str(FrontEndSection.Donate.value),
         str(FrontEndSection.Press.value),

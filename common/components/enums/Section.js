@@ -7,7 +7,6 @@ const Section = {
   FindProjects: 'FindProjects',
   MyProjects: 'MyProjects',
   Profile: 'Profile',
-  Inbox: 'Inbox',
   SignUp: 'SignUp',
   LogIn: 'LogIn',
   ResetPassword: 'ResetPassword',
