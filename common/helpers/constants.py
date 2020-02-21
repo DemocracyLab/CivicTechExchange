@@ -27,3 +27,11 @@ class FrontEndSection(Enum):
     Press = 'Press'
     ContactUs = 'ContactUs'
     Home = "Home"
+    CreateProject = 'CreateProject'
+    EditProject = 'EditProject'
+    MyProjects = 'MyProjects'
+    Profile = 'Profile'
+    SignUp = 'SignUp'
+    EditProfile = 'EditProfile'
+    ThankYou = 'ThankYou'
+    EmailVerified = 'EmailVerified'
