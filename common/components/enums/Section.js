@@ -3,7 +3,7 @@ const Section = {
   AboutUs: 'AboutUs',
   CreateProject: 'CreateProject',
   EditProject: 'EditProject',
-  Landing: 'Landing',
+  Home: 'Home',
   FindProjects: 'FindProjects',
   MyProjects: 'MyProjects',
   Profile: 'Profile',

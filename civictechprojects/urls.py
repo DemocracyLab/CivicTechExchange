@@ -20,7 +20,6 @@ from .sitemaps import ProjectSitemap, SectionSitemap
 
 
 from . import views
-
 urlpatterns = [
 
     url(
@@ -43,6 +42,7 @@ urlpatterns = [
         r'^delete_s3/(?P<s3_key>.*)$',
         views.delete_uploaded_file,
     ),
+    url(r'^api/projects/recent', views.recent_projects_list),
     url(r'^api/projects', views.projects_list),
     url(r'^api/my_projects', views.my_projects),
     url(r'^api/tags', views.tags),
@@ -65,3 +65,4 @@ urlpatterns = [
     url(r'^contact/democracylab$', views.contact_democracylab, name='contact_democracylab')
 
 ]
+

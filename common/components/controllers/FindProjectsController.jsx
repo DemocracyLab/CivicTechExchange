@@ -5,17 +5,12 @@ import TagDispatcher from '../stores/TagDispatcher.js';
 import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
 import ProjectFilterContainer from '../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx';
 import {FindProjectsArgs} from "../stores/ProjectSearchStore.js";
-import SplashScreen from "../componentsBySection/FindProjects/SplashScreen.jsx";
 import Headers from "../common/Headers.jsx";
 import urls from "../utils/url.js";
 import React from 'react';
 import _ from 'lodash'
 
-type State = {|
-  showSplash: boolean
-|};
-
-class FindProjectsController extends React.PureComponent<{||}, State> {
+class FindProjectsController extends React.PureComponent {
   constructor(): void {
     super();
     this.state = {showSplash: true};
@@ -26,11 +21,6 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
     args = _.pick(args, ['showSplash','keyword','sortField','location','page','issues','tech', 'role', 'org', 'stage']);
     ProjectSearchDispatcher.dispatch({type: 'INIT', findProjectsArgs: !_.isEmpty(args) ? args : null});
     TagDispatcher.dispatch({type: 'INIT'});
-    this.setState({showSplash: args.showSplash});
-  }
-
-  _onClickFindProjects(): void {
-    this.setState({showSplash: false});
   }
 
   render(): React$Node {
@@ -40,7 +30,6 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
           title="DemocracyLab"
           description="Optimizing the connection between skilled volunteers and tech-for-good projects"
         />
-        {this.state.showSplash ? <SplashScreen onClickFindProjects={this._onClickFindProjects.bind(this)}/> : null}
         <div className="FindProjectsController-root container">
           <div className="row">
             <ProjectFilterContainer />
@@ -50,6 +39,7 @@ class FindProjectsController extends React.PureComponent<{||}, State> {
       </React.Fragment>
     );
   }
+  
 }
 
 export default FindProjectsController;

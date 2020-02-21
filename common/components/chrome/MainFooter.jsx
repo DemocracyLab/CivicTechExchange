@@ -12,7 +12,8 @@ const sectionsToShowFooter: $ReadOnlyArray<string> = [
   Section.FindProjects,
   Section.AboutProject,
   Section.AboutUs,
-  Section.Press
+  Section.Press,
+  Section.Home
 ];
 
 class MainFooter extends React.Component<{||}> {
@@ -62,16 +63,16 @@ class MainFooter extends React.Component<{||}> {
         <React.Fragment>
           <h3 className="MainFooter-sponsor-header text-center side-lines">{category}</h3>
           <div className="MainFooter-sponsor-wrapper">
-          {sdata.map( (sponsor: SponsorMetadata, i:number) => {
-            return (
-              <div key={i} className="MainFooter-sponsor">
-                <a href={sponsor.url} target="_blank" rel="noopener noreferrer" className="MainFooter-sponsor-link">
-                  <img src={sponsor.thumbnailUrl}/>
-                </a>
-              </div>
-            );
-          })};
-        </div>
+            {sdata.map( (sponsor: SponsorMetadata, i:number) => {
+              return (
+                <div key={i} className="MainFooter-sponsor">
+                  <a href={sponsor.url} target="_blank" rel="noopener noreferrer" className="MainFooter-sponsor-link">
+                    <img src={sponsor.thumbnailUrl}/>
+                  </a>
+                </div>
+              );
+            })}
+          </div>
         </React.Fragment>
       )
     }

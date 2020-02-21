@@ -1,50 +1,265 @@
-.LandingController-centerer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.RecentProjects {
+  background: $color-background-light;
+  padding: 20px 0 60px 0; /* extra padding to keep background color correct between this and pathflows section */
 }
-
-.LandingController-landingText {
-  color: $color-text-light;
-  font-weight: bold;
+.RecentProjects-title, .RecentProjects-button {
   text-align: center;
-  width: 51%;
+}
+.RecentProjects-button {
+  padding: 10px 0 0 0; /* push button away from cards a bit */
 }
 
-.LandingController-landingTextContainer {
-  margin-top: 71px;
-  margin-bottom: 400px;
-}
 
-.LandingController-letsGetStarted {
-  font-size: 48px;
-  margin-top: 0;
-}
+.RecentProjects-cards {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-bottom: 20px;
 
-.LandingController-signUp {
-  background-color: $color-green;
-  border-radius: 5px;
-  display: inline-table;
-  font-size: 19px;
-  padding: 10px 36px 10px 36px;
-  width: auto;
-}
+/* overriding the find projects page CSS to fit this page's design */
+  .ProjectCard-root {
+    flex-basis: 100%;
+    min-width: 100%;
+    height: auto;
+  }
 
-.LandingController-signUpContainer {
-  width: 100%;
+  .ProjectCard-root:nth-of-type(4) {
+    display: none; /* for mobile and desktop we show three at a time, so the fourth gets banished to the display none zone */
+  }
+  .ProjectCard-logo {
+    border: none;
+    grid-row: 1/2;
+    min-height: 99px;
+  }
+  .ProjectCard-title {
+    grid-column: 1/5;
+    grid-row: 3;
+    margin-left: 0.5rem;
+  }
+  .ProjectCard-subinfo {
+    grid-column: 3/5;
+    grid-row: 1/2;
+    border: none;
+    /* make sure it's similar height whether a project has one or all three subinfo lines */
+  }
+  .ProjectCard-subinfo li {
+    padding-right: 0.5rem;
+  }
+  .ProjectCard-description {
+    grid-column: 1/5;
+    grid-row: 4;
+    border-top: none;
+  }
+  .ProjectCard-skills {
+    grid-column: 1/5;
+    grid-row: 5;
+    margin-left: 0.5rem;
+    padding: 0;
+  }
 }
-
-.LandingController-supremeCourtBanner {
-  background-image: url(https://dprhz3gr7kco1.cloudfront.net/img/dl_landing_banner.png);
+.LandingController-partner-section {
+  align-items: center;
+  background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   display: flex;
-  height: 100%;
+  flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  .PartnerSection {
+    padding: 60px 10px; /* makes sure div isn't too short regardless of min-height, makes sure content doesn't hit edges */
+  }
+}
+.LandingController-partnersinaction-logo {
+  margin: 5px; /* override this on desktop */
+}
+.LandingController-root .SplashScreen-content {
+  margin: auto;
+}
+.LandingController-topsplash .SplashScreen-content h1 {
+  font-size: 4rem;
+}
+.LandingController-topsplash p {
+  font-size: 24px;
+}
+.LandingController-midsplash p, .PartnerSection p {
+  font-size: 18px;
+}
+.LandingController-midsplash p {
+  max-width: 500px;
+  white-space: pre-wrap;
 }
 
-.LandingController-useYourSkills {
-  font-size: 36px;
-  line-height: 1.5;
-  margin-bottom: 0;
+.LandingController-testimonial-container {
+  padding: 20px 0;
+  background: $color-background-light; /* on mobile the whole div is used as a "card" so background appropriately) */
+}
+
+.LandingController-pathflows-item {
+  flex-basis: 26%;
+}
+.LandingController-pathflows-arrow {
+  flex-basis: 10%;
+  margin: 0 auto; /* ensure the arrow is horizontally centered in its assigned space */
+}
+.LandingController-volunteer-flow {
+  background: $color-orange;
+}
+.LandingController-recruit-flow {
+  background: $color-background-light;
+}
+.LandingController-volunteer-flow, .LandingController-recruit-flow {
+  padding: 20px;
+  text-align: center;
+}
+
+.LandingController-testimonial-container {
+  text-align: center;
+  h2 {
+    margin-bottom: 1rem;
+  }
+  h3 {
+    font-size: 18px;
+  }
+  h4 {
+    font-size: 18px;
+  }
+  .carousel-spacer {
+    display: inline-block;
+    width: 50px;
+    height: 1px;
+    border-bottom: 1px solid $color-text-dark;
+    margin: 20px 0 10px 0;
+  }
+  .carousel-item-left {
+    /* centers the avatar on mobile */
+    display: flex;
+    justify-content: center;
+  }
+  .carousel-item-content {
+    padding: 1rem;
+    width: 80%; /* give space for the arrows on left and right */
+    margin: auto;
+  }
+
+  .carousel-item p {
+    padding: 10px 0 20px 0;
+    text-align: left;
+  }
+  .carousel-inner {
+    margin-bottom: 20px; /* because the indicators are absolutely positioned in the div, this effectively pushes them down a bit */
+  }
+
+  .carousel-indicators li {
+    background-color: $color-text-grey;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+  }
+  .carousel-indicators .active {
+    background-color: $color-text-dark;
+  }
+}
+
+.LandingController-testimonial-container .carousel-avatar {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  background-repeat: no-repeat; //centers image inside avatar
+  background-size: cover;
+  background-position: center;
+  img {
+    min-height: 100%;
+    min-width: 100%;
+  }
+}
+
+.LandingController-partnersinaction {
+  padding: 20px 0;
+  background-color: $color-background-light;
+}
+.LandingController-partnersinaction h2 {
+  margin-bottom: 20px;
+}
+.LandingController-partnersinaction-logo img {
+  width: 150px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  margin: 10px;
+}
+.LandingController-partnersinaction-logo a {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+.LandingController-partnersinaction-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 8px;
+}
+.LandingController-pathflows-stepcontainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.LandingController-pathflows-stepcontainer p {
+  margin-top: 8px;
+}
+
+@include media-breakpoint-up(md) {
+
+  .RecentProjects-cards {
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .ProjectCard-root {
+      flex-basis: 45%;
+      min-width: 45%;
+    }
+    .ProjectCard-root:nth-of-type(4) {
+      display: block;
+    }
+    .ProjectCard-description {
+      border-top: 0;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  /* these rules call out Testimonial cards on screens big enough to not just use the whole div */
+  .LandingController-testimonial-container {
+    background: $color-background-default;
+    text-align: left;
+    .carousel-item-content {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      min-height: 375px; /* this value MUST be at least the height of the tallest content item we have for desktop view of Testimonial cards. Round up 5-10px for browser differences just in case. */
+    }
+    .carousel-avatar {
+      margin: 0 1rem;
+    }
+  }
+  .LandingController-partnersinaction-logo {
+    margin: 5px 20px; /* to get the correct number per row we add margin at lg and above */
+  }
+
+  .LandingController-testimonial-container .carousel-item-content {
+    background: $color-background-light;
+    border: 1px solid $color-grey-frame-border;
+    border-radius: 5px;
+  }
+  .RecentProjects-cards {
+    flex-wrap: nowrap;
+
+    .ProjectCard-root {
+      flex-basis: 31%;
+      min-width: 31%;
+    }
+    .ProjectCard-root:nth-of-type(4) {
+      display: none;
+    }
+  }
 }
