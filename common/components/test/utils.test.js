@@ -84,16 +84,16 @@ describe('utils', () => {
 
   test('URL validator validates URL correctly', () => {
     const urlLists = {
-      valid : [
+      valid: [
         '',
         'http://www.unsecure.com',
         'https://www.secure.com',
         'https://multiple.parts.com/subdir',
         'https://hyphenated-domain.next.com/',
         'https://www.gnarly.com/url/viewer.html?&something=d38d408127d64407a7' +
-        '627f8e990908fe&view=388155.63,109.56,-69891.37,388028.5,247.89,-7006' +
-        '6.36,0.95&lyr=1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1&wkid=2' +
-        '926&v=2'
+          '627f8e990908fe&view=388155.63,109.56,-69891.37,388028.5,247.89,-70' +
+          '066.36,0.95&lyr=1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1&wk' +
+          'id=2926&v=2'
         ],
       invalid: [
         'localhost:3000',
