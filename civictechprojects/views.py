@@ -177,7 +177,8 @@ def index(request):
         'PAYPAL_PAYEE': settings.PAYPAL_PAYEE,
         'PRESS_LINKS': settings.PRESS_LINKS,
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt'),
-        'GR_SITEKEY': settings.GR_SITEKEY
+        'GR_SITEKEY': settings.GR_SITEKEY,
+        'FAVICON_PATH': settings.FAVICON_PATH
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
