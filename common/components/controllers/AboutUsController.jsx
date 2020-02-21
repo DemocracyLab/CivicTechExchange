@@ -23,6 +23,7 @@ type State = {|
   project_volunteers: ?{ [key: string]: BioPersonData },
   project_owners: ?$ReadOnlyArray<BioPersonData>,
   showBiographyModal: boolean,
+  allowModalUnsafeHtml: boolean,
   modalPerson: ?BioPersonData,
   personTitle: string
 |};
@@ -54,7 +55,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     
     if(response.project) {
       state.project = response.project;
-      const sortedVolunteers: $ReadOnlyArray<VolunteerDetailsAPIData> = _.sortBy(response.project.project_volunteers, ["application_date"]);
+      const sortedVolunteers: $ReadOnlyArray<VolunteerDetailsAPIData> = _.sortBy(response.project.project_volunteers, ["platform_date_joined"]);
       // Remove board members from volunteer list
       const uniqueVolunteers: $ReadOnlyArray<BioPersonData> = _.differenceWith(
         sortedVolunteers,
@@ -80,16 +81,18 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 //handlers for biography modal
 //show passes information to the modal on whose information to display, close clears that out of state (just in case)
 //title is passed separately from the rest because of our data structure for owner and volunteer not matching up
-  handleShowBio(person: BioPersonData) {
+  handleShowBio(allowModalUnsafeHtml: boolean, person: BioPersonData) {
     this.setState({
       modalPerson: person,
-      showBiographyModal: true
+      showBiographyModal: true,
+      allowModalUnsafeHtml: allowModalUnsafeHtml
     });
   }
   handleClose() {
     this.setState({
       modalPerson: null,
-      showBiographyModal: false
+      showBiographyModal: false,
+      allowModalUnsafeHtml: false
      });
   }
 
@@ -219,7 +222,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="about-us-team col">
         <h2>Board of Directors</h2>
         <div className="about-us-team-card-container">
-          {this._renderBios(this.state.board_of_directors)}
+          {this._renderBios(this.state.board_of_directors, true)}
         </div>
         <hr />
       </div> : null);
@@ -230,7 +233,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="about-us-team col">
         <h2>Our Team</h2>
         <p className="about-us-team-description">We are volunteer engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
-        <h4>Business & Marketing Research</h4>
+        <h4>Business & Operations</h4>
         <div className="about-us-team-card-container">
           {this._renderBios(this.state.project_owners)}
           {this._filterTeamSection(this.state.project_volunteers, 'Business')}
@@ -249,14 +252,14 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   }
 
   _filterTeamSection(volunteers, role) {
-    return volunteers[role] && this._renderBios(volunteers[role]);
+    return volunteers[role] && this._renderBios(volunteers[role], false);
   }
   
-  _renderBios(volunteers: $ReadOnlyArray<BioPersonData>) {
+  _renderBios(volunteers: $ReadOnlyArray<BioPersonData>, allowUnsafeHtml: boolean) {
     return (
       volunteers.map((volunteer, i) => {
         return (
-          <BioThumbnail key={i} person={volunteer} handleClick={this.handleShowBio}/>
+          <BioThumbnail key={i} person={volunteer} handleClick={this.handleShowBio.bind(this, allowUnsafeHtml)}/>
         )}
       )
     );
@@ -299,6 +302,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
      return <BioModal
       size="lg"
       showModal={this.state.showBiographyModal}
+      allowUnsafeHtml={this.state.allowModalUnsafeHtml}
       handleClose={this.handleClose}
       person={this.state.modalPerson}
      />

@@ -4,10 +4,12 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import _ from 'lodash';
 import type {BioPersonData} from "./BioPersonData.jsx";
+import utils from "../../utils/utils.js";
 
 type Props = {|
   showModal: boolean,
   person: BioPersonData,
+  allowUnsafeHtml: boolean,
   size: string,
   handleClose: () => void
 |};
@@ -35,25 +37,40 @@ class BioModal extends React.PureComponent<Props, State> {
     this.props.handleClose();
   }
 
-  render(): React$Node {
-    return this.props.person && (
-      <div>
+  render(): ?React$Node {
+    if(this.props.person) {
+      return (
+        <div>
           <Modal show={this.state.showModal} onHide={this.closeModal} size={this.props.size} className="bio-modal-root">
-              <Modal.Header closeButton>
-                <div className="bio-modal-nametitle-container">
-                  {this._renderBioName()}
-                  {this.props.person.title.map((title,i)=> <h5 className="bio-modal-title" key={i}>{title}</h5> )}
-                </div>
-              </Modal.Header>
-              <Modal.Body style={{whiteSpace: "pre-wrap"}}>
-                <h5 className="bio-modal-about">About</h5>
-                <p>{!_.isEmpty(this.props.person.bio_text) ? this.props.person.bio_text : this.defaultBiography()}</p>
-              </Modal.Body>
-              <Modal.Footer>
-                <button onClick={this.closeModal} className="btn btn-secondary">Close</button>
-              </Modal.Footer>
+            <Modal.Header closeButton>
+              <div className="bio-modal-nametitle-container">
+                {this._renderBioName()}
+                {this.props.person.title.map((title, i) => <h5 className="bio-modal-title" key={i}>{title}</h5>)}
+              </div>
+            </Modal.Header>
+            <Modal.Body style={{whiteSpace: "pre-wrap"}}>
+              <h5 className="bio-modal-about">About</h5>
+              {this._renderBody()}
+            </Modal.Body>
+            <Modal.Footer>
+              <button onClick={this.closeModal} className="btn btn-secondary">Close</button>
+            </Modal.Footer>
           </Modal>
-      </div>
+        </div>
+      );
+    } else return null;
+  }
+  
+  _renderBody(): React$Node {
+    const bio: string = !_.isEmpty(this.props.person.bio_text) ? this.props.person.bio_text : this.defaultBiography();
+    return (
+      <React.Fragment>
+        {
+          this.props.allowUnsafeHtml
+          ? <div dangerouslySetInnerHTML={{__html: "<p>" + utils.unescapeHtml(bio) + "</p>"}}/>
+          : <p>{bio}</p>
+        }
+      </React.Fragment>
     );
   }
   
