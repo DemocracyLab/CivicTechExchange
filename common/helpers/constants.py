@@ -26,3 +26,4 @@ class FrontEndSection(Enum):
     Donate = 'Donate'
     Press = 'Press'
     ContactUs = 'ContactUs'
+    Home = "Home"
