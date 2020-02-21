@@ -13,7 +13,7 @@ const sectionsToShowFooter: $ReadOnlyArray<string> = [
   Section.AboutProject,
   Section.AboutUs,
   Section.Press,
-  Section.Landing
+  Section.Home
 ];
 
 class MainFooter extends React.Component<{||}> {

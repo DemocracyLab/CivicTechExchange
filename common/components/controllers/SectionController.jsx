@@ -65,7 +65,7 @@ class SectionController extends React.Component<{||}, State> {
         return <EditProjectController />;
       case Section.FindProjects:
         return <FindProjectsController />;
-      case Section.Landing:
+      case Section.Home:
         return <LandingController />;
       case Section.MyProjects:
         return <MyProjectsController />;
