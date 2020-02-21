@@ -11,7 +11,7 @@ import type {TagDefinition, ProjectDetailsAPIData} from "../../../components/uti
 import {Locations} from "../../constants/ProjectConstants.js";
 import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
-import url from "../../utils/url";
+import url from "../../utils/url.js";
 
 
 type FormFields = {|

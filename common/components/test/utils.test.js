@@ -80,11 +80,35 @@ describe('utils', () => {
   	const args = urlHelper.arguments('/api/test?query=test&page=1');
   	expect(args['query']).toEqual('test');
     expect(args['page']).toEqual('1');
-    
-    expect(urlHelper.isEmptyStringOrValidUrl('')).toEqual(true);
-    expect(urlHelper.isEmptyStringOrValidUrl('google.com')).toEqual(true);
-    expect(urlHelper.isEmptyStringOrValidUrl('localhost:3000')).toEqual(false);
   });
+
+  test('URL validator validates URL correctly', () => {
+    const urlLists = {
+      valid : [
+        '',
+        'http://www.unsecure.com',
+        'https://www.secure.com',
+        'https://multiple.parts.com/subdir',
+        'https://hyphenated-domain.next.com/',
+        'https://www.gnarly.com/url/viewer.html?&something=d38d408127d64407a7' +
+        '627f8e990908fe&view=388155.63,109.56,-69891.37,388028.5,247.89,-7006' +
+        '6.36,0.95&lyr=1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1&wkid=2' +
+        '926&v=2'
+        ],
+      invalid: [
+        'localhost:3000',
+        'N/A',
+        'TBD',
+        'Not built yet'
+      ]
+    };
+    urlLists.valid.forEach(validUrl => {
+      expect(urlHelper.isEmptyStringOrValidUrl(validUrl)).toEqual(true);
+    })
+    urlLists.invalid.forEach(invalidUrl => {
+      expect(urlHelper.isEmptyStringOrValidUrl(invalidUrl)).toEqual(false);
+    })
+  })
 
   test('svg', () => {
     const img = svg.path(SVGPath['GITHUB'], 'LogInController-socialIcon');
