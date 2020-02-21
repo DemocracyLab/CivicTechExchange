@@ -82,7 +82,7 @@ class SignUpController extends React.Component<Props, State> {
         },
         {
           checkFunc: (state: State) => state.didCheckTerms,
-          errorMessage: "Check terms of service"
+          errorMessage: "Agree to terms of service"
         }
       ]
     };
@@ -169,9 +169,10 @@ class SignUpController extends React.Component<Props, State> {
               name="read"
               type="checkbox"
               disabled={!this.state.didReadTerms}
+              title={!this.state.didReadTerms && "Please read terms before clicking"}
               onChange={e => this.setState({didCheckTerms: !this.state.didCheckTerms})}
             />
-            I have read and accepted the <PseudoLink text="terms of Volunteering" onClick={e => this.setState({termsOpen: true})}/>
+            <span> I have read and accepted the <PseudoLink text="Terms of Volunteering" onClick={e => this.setState({termsOpen: true})}/> </span>
             
           </div>
           
