@@ -79,7 +79,7 @@ describe('utils', () => {
 
   	const args = urlHelper.arguments('/api/test?query=test&page=1');
   	expect(args['query']).toEqual('test');
-    expect(args['page']).toEqual('1');
+  	expect(args['page']).toEqual('1');
   });
 
   test('URL validator validates URL correctly', () => {
