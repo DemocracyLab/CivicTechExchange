@@ -24,7 +24,6 @@ type State = {|
   password2: string,
   validations: $ReadOnlyArray<Validator>,
   termsOpen: boolean,
-  didReadTerms: boolean,
   didCheckTerms: boolean,
   isValid: boolean
 |}
@@ -48,7 +47,6 @@ class SignUpController extends React.Component<Props, State> {
       password1: '',
       password2: '',
       termsOpen: false,
-      didReadTerms: false,
       didCheckTerms: false,
       isValid: false,
       validations: [
@@ -168,15 +166,13 @@ class SignUpController extends React.Component<Props, State> {
             <input
               name="read"
               type="checkbox"
-              disabled={!this.state.didReadTerms}
-              title={!this.state.didReadTerms && "Please read terms before clicking"}
               onChange={e => this.setState({didCheckTerms: !this.state.didCheckTerms})}
             />
             <span> I have read and accepted the <PseudoLink text="Terms of Volunteering" onClick={e => this.setState({termsOpen: true})}/> </span>
             
           </div>
           
-          <TermsModal showModal={this.state.termsOpen} onSelection={() => this.setState({termsOpen: false, didReadTerms: true})}/>
+          <TermsModal showModal={this.state.termsOpen} onSelection={() => this.setState({termsOpen: false})}/>
 
           {/* TODO: Replace with visible forms, or modify backend. */}
           <input name="postal_code" value="123456" type="hidden" />
