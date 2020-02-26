@@ -114,6 +114,7 @@ class LandingController extends React.PureComponent<{||}> {
         <SplashScreen className="LandingController-midsplash" header={header} text={text} img={HeroImage.MidLanding}>
           <Button variant="primary" className="LandingController-midsplash-btn SplashScreen-create-project-btn" href={url.section(Section.AboutUs)}>Learn More</Button>
         </SplashScreen>
+
       );
     }
 
