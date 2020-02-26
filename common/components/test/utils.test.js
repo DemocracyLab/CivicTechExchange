@@ -82,10 +82,9 @@ describe('utils', () => {
   	expect(args['page']).toEqual('1');
   });
 
-  test('URL validator validates URL correctly', () => {
+  test('isValidUrl validates URL correctly', () => {
     const urlLists = {
       valid: [
-        '',
         'http://www.unsecure.com',
         'https://www.secure.com',
         'https://multiple.parts.com/subdir',
@@ -103,11 +102,15 @@ describe('utils', () => {
       ]
     };
     urlLists.valid.forEach(validUrl => {
-      expect(urlHelper.isEmptyStringOrValidUrl(validUrl)).toEqual(true);
+      expect(urlHelper.isValidUrl(validUrl)).toEqual(true);
     })
     urlLists.invalid.forEach(invalidUrl => {
-      expect(urlHelper.isEmptyStringOrValidUrl(invalidUrl)).toEqual(false);
+      expect(urlHelper.isValidUrl(invalidUrl)).toEqual(false);
     })
+  })
+
+  test('isEmptyStringOrValidUrl also accepts empty string', () => {
+    expect(urlHelper.isEmptyStringOrValidUrl('')).toEqual(true);
   })
 
   test('svg', () => {

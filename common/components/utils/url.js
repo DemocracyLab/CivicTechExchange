@@ -134,8 +134,12 @@ class urlHelper {
     return window.location.origin;
   }
 
+  static isValidUrl(url:string): boolean {
+    return isURL(url);
+  }
+
   static isEmptyStringOrValidUrl(url: string): boolean {
-    return (_.isEmpty(url) || isURL(url));
+    return (_.isEmpty(url) || isValidUrl(url));
   }
 }
 
