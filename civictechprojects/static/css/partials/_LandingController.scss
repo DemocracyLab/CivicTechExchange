@@ -35,6 +35,7 @@
     grid-column: 1/5;
     grid-row: 3;
     margin-left: 0.5rem;
+    word-break: break-word; // prevent long project titles from breaking flow
   }
   .ProjectCard-subinfo {
     grid-column: 3/5;
