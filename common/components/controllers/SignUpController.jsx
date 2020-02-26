@@ -179,7 +179,6 @@ class SignUpController extends React.Component<Props, State> {
           <TermsModal showModal={this.state.termsOpen} onSelection={() => this.setState({termsOpen: false, didReadTerms: true})}/>
 
           {/* TODO: Replace with visible forms, or modify backend. */}
-          <input name="postal_code" value="123456" type="hidden" />
           <input name="username" value={this.state.email} type="hidden" />
           <input
             name="date_joined"
