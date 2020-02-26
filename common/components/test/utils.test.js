@@ -95,6 +95,7 @@ describe('utils', () => {
           'id=2926&v=2'
         ],
       invalid: [
+        '',
         'localhost:3000',
         'N/A',
         'TBD',
