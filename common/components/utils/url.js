@@ -139,7 +139,7 @@ class urlHelper {
   }
 
   static isEmptyStringOrValidUrl(url: string): boolean {
-    return (_.isEmpty(url) || isValidUrl(url));
+    return (_.isEmpty(url) || this.isValidUrl(url));
   }
 }
 
