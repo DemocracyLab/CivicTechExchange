@@ -23,8 +23,8 @@
     height: auto;
   }
 
-  .ProjectCard-root:nth-of-type(4) {
-    display: none; /* for mobile and desktop we show three at a time, so the fourth gets banished to the display none zone */
+  .ProjectCard-root:nth-of-type(n+4) {
+    display: none; /* mobile only shows three projects, despite us calling six from the API, so 4-6 are hidden */
   }
   .ProjectCard-logo {
     border: none;
@@ -219,7 +219,7 @@
       min-width: 45%;
     }
     .ProjectCard-root:nth-of-type(4) {
-      display: block;
+      display: block; /* show the 4th here */
     }
     .ProjectCard-description {
       border-top: 0;
@@ -259,7 +259,7 @@
       min-width: 31%;
     }
     .ProjectCard-root:nth-of-type(4) {
-      display: none;
+      display: none; /* re-hide the 4th here, #5-6 still hidden from previous rules */
     }
   }
 }
