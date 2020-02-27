@@ -66,20 +66,17 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
 
   resetModal(url:?string, name:?string, visibility:?string): void {
     this.setState({
-      "formFields": {
-        project_link: url || ""
+      linkInfo: {
+        linkUrl: url || "",
+        linkName: name || "",
+        visibility: visibility || Visibility.PUBLIC
       }
     });
-    this.setState({ "linkInfo": {
-      linkUrl: url || "",
-      linkName: name || "",
-      visibility: visibility || Visibility.PUBLIC
-    }});
+    this.form.doValidation.bind(this)();
   }
 
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({ showModal: nextProps.showModal });
-
     if(nextProps.existingLink) {
       this.resetModal(
         nextProps.existingLink.linkUrl,nextProps.existingLink.linkName);
