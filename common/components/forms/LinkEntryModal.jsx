@@ -70,9 +70,16 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
         linkUrl: url || "",
         linkName: name || "",
         visibility: visibility || Visibility.PUBLIC
+      },
+      formFields: {
+        project_link: url || ""
       }
+    }, () => {
+      this.setState({
+        formIsValid: FormValidation.isValid(
+          this.state.formFields, this.state.validations)
+      });
     });
-    this.form.doValidation.bind(this)();
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -105,9 +112,14 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
     //Sanitize link
     this.state.formFields.project_link = url.appendHttpIfMissingProtocol(
       this.state.formFields.project_link);
-    this.state.linkInfo.linkUrl = this.state.formFields.project_link;
-    this.props.onSaveLink(this.state.linkInfo);
-    this.close();
+    this.setState({
+      linkInfo : {
+        linkUrl: this.state.formFields.project_link
+      }
+    }, () => {
+      this.props.onSaveLink(this.state.linkInfo);
+      this.close();
+    })
   }
 
   handleChange(
