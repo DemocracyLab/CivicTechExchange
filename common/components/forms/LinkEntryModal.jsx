@@ -7,11 +7,12 @@ import type { LinkInfo } from './LinkInfo.jsx';
 import Visibility from '../common/Visibility.jsx';
 import FormValidation, {Validator} from "../forms/FormValidation.jsx";
 import formHelper from "../utils/forms.js"
-import url from '../utils/url.js';
+import urlHelper from '../utils/url.js';
 
 
 type FormFields = {|
   project_link: ?string,
+  project_link_name: ?string
 |};
 
 type Props = {|
@@ -31,16 +32,16 @@ type State = {|
 class LinkEntryModal extends React.PureComponent<Props,State> {
   close: Function;
   save: Function;
-  handleChange: Function;
 
   constructor(props: Props): void {
     super(props);
     const formFields: FormFields = {
       project_link: "",
+      project_link_name: ""
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
-        checkFunc: (formFields: FormFields) => url.isValidUrl(
+        checkFunc: (formFields: FormFields) => urlHelper.isValidUrl(
           formFields["project_link"]),
         errorMessage: "Please enter valid URL for project link."
       }
@@ -60,7 +61,6 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
     }
     this.close = this.close.bind(this);
     this.save = this.save.bind(this);
-    this.handleChange = this.handleChange.bind(this);
     this.form = formHelper.setup();
   }
 
@@ -72,13 +72,10 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
         visibility: visibility || Visibility.PUBLIC
       },
       formFields: {
-        project_link: url || ""
-      }
-    }, () => {
-      this.setState({
-        formIsValid: FormValidation.isValid(
-          this.state.formFields, this.state.validations)
-      });
+        project_link: url || "",
+        project_link_name: name || ""
+      },
+      formIsValid: url ? urlHelper.isValidUrl(url) : false
     });
   }
 
@@ -110,22 +107,17 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
   save(): void {
     //TODO: Validate that link is not duplicate of existing link in the list before saving
     //Sanitize link
-    this.state.formFields.project_link = url.appendHttpIfMissingProtocol(
+    this.state.formFields.project_link = urlHelper.appendHttpIfMissingProtocol(
       this.state.formFields.project_link);
     this.setState({
       linkInfo : {
-        linkUrl: this.state.formFields.project_link
+        linkUrl: this.state.formFields.project_link,
+        linkName: this.state.formFields.project_link_name
       }
     }, () => {
       this.props.onSaveLink(this.state.linkInfo);
       this.close();
     })
-  }
-
-  handleChange(
-    event: SyntheticInputEvent<HTMLInputElement>, propertyName: string): void {
-    this.state.linkInfo[propertyName] = event.target.value;
-    this.forceUpdate();
   }
 
   render(): React$Node {
@@ -140,13 +132,23 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
                   <label htmlFor="link-url">Link URL</label>
                   <input type="text"
                          className="form-control"
-                         id="link-url" maxLength="2075"
+                         id="link-url"
+                         maxLength="2075"
                          value={this.state.formFields.project_link}
                          onChange={
                            this.form.onInput.bind(this, "project_link")
-                         }/>
+                         }
+                  />
                   <label htmlFor="link-name">Link Name</label>
-                  <input type="text" className="form-control" id="link-name" maxLength="200" value={this.state.linkInfo.linkName} onChange={(e) => this.handleChange(e, "linkName")}/>
+                  <input type="text"
+                         className="form-control" 
+                         id="link-name" 
+                         maxLength="200" 
+                         value={this.state.formFields.project_link_name} 
+                         onChange={
+                           this.form.onInput.bind(this, "project_link_name")
+                         }
+                  />
               </Modal.Body>
               <FormValidation
                 validations={this.state.validations}
