@@ -110,7 +110,7 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
     this.state.formFields.project_link = urlHelper.appendHttpIfMissingProtocol(
       this.state.formFields.project_link);
     this.setState({
-      linkInfo : {
+      linkInfo: {
         linkUrl: this.state.formFields.project_link,
         linkName: this.state.formFields.project_link_name
       }
