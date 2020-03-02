@@ -10,7 +10,7 @@ import {PositionInfo} from "./PositionInfo.jsx";
 import FormValidation, {Validator} from "../forms/FormValidation.jsx";
 import formHelper from "../utils/forms.js"
 import urlHelper from "../utils/url.js";
-import isEmpty from 'lodash/isEmpty';
+import _ from 'lodash';
 
 type FormFields = {|
   role_tag: Array<TagDefinition>,
@@ -49,12 +49,12 @@ class PositionEntryModal extends React.PureComponent<Props,State> {
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
-        checkFunc: (formFields: FormFields) => !isEmpty(formFields["role_tag"]),
+        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["role_tag"]),
         errorMessage: "Please select a role."
       },
       {
         checkFunc: (formFields: FormFields) => 
-          !isEmpty(formFields["description"]),
+          !_.isEmpty(formFields["description"]),
         errorMessage: "Please enter a brief description for the role."
       },
       {
