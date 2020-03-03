@@ -8,18 +8,33 @@ import {Glyph, GlyphSizes, GlyphStyles} from "../../utils/glyphs.js";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import Button from "react-bootstrap/Button";
 import url from "../../utils/url.js";
-import Section from '../../enums/Section.js'
+import Section from '../../enums/Section.js';
+import _ from 'lodash';
 
 
 type State = {|
-  projects: List<Project>
+  projects: List<Project>,
+  showFirstSection: boolean,
+  windowHeight: number,
+  windowWidth: number,
+  cardStart: number,
+  cardEnd: number
 |};
 
-class RecentProjectsSection extends React.PureComponent<{||}, State> {
+class RecentProjectsSection extends React.Component<{||}, State> {
   constructor(): void {
     super();
-    this.state = {projects: null};
+    this.state = {
+      projects: null,
+      showFirstSection: true, // if false, implicitly derive that second section should show
+      windowHeight: 0,
+      windowWidth: 0,
+      cardStart: 0,
+      cardEnd: 3
+    };
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
+
 
   componentDidMount() {
     const url: string = "/api/projects/recent/?count=6";
@@ -27,7 +42,19 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
       .then(response => response.json())
       .then(getProjectsResponse => this.setState({
         projects: getProjectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData)
-      }));
+      })
+    );
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
+  }
+
+  componentWillUnmount(): React$Node {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions(): React$Node {
+    this.setState({ windowWidth: window.innerWidth, windowHeight: window.innerHeight });
+    this._selectCards(window.innerWidth)
   }
 
   render(): React$Node {
@@ -44,10 +71,20 @@ class RecentProjectsSection extends React.PureComponent<{||}, State> {
     );
   }
 
+  _selectCards(width): $React$Node {
+    if (width < 992 && width >= 768) {
+      this.setState({cardStart: 0, cardEnd: 4})
+    } else if (width >= 992 && !this.state.showFirstSection) {
+      this.setState({cardStart: 4, cardEnd: 6})
+    } else {
+      this.setState({cardStart: 0, cardEnd: 3})
+    }
+  }
+
   _renderCards(): $ReadOnlyArray<React$Node> {
     return !this.state.projects
       ? <i className={Glyph(GlyphStyles.LoadingSpinner, GlyphSizes.X2)}></i>
-      : this.state.projects.map(
+      : this.state.projects.slice(this.state.cardStart, this.state.cardEnd).map(
           (project, index) =>
             <ProjectCard
               className="RecentProjects-card"

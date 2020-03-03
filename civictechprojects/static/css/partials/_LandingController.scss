@@ -8,6 +8,9 @@
 .RecentProjects-button {
   padding: 10px 0 0 0; /* push button away from cards a bit */
 }
+.RecentProjects-toggle {
+  display: none; /* these only show at desktop */
+}
 
 
 .RecentProjects-cards {
@@ -21,10 +24,6 @@
     flex-basis: 100%;
     min-width: 100%;
     height: auto;
-  }
-
-  .ProjectCard-root:nth-of-type(n+4) {
-    display: none; /* mobile only shows three projects, despite us calling six from the API, so 4-6 are hidden */
   }
   .ProjectCard-logo {
     border: none;
@@ -218,9 +217,6 @@
       flex-basis: 45%;
       min-width: 45%;
     }
-    .ProjectCard-root:nth-of-type(4) {
-      display: block; /* show the 4th here */
-    }
     .ProjectCard-description {
       border-top: 0;
     }
@@ -258,8 +254,10 @@
       flex-basis: 31%;
       min-width: 31%;
     }
-    .ProjectCard-root:nth-of-type(4) {
-      display: none; /* re-hide the 4th here, #5-6 still hidden from previous rules */
-    }
+  }
+  .RecentProjects-toggle {
+    display: inline-block;
+    width: 10px;
+    border: 5px solid $color-text-grey;
   }
 }
