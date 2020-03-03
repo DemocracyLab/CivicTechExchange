@@ -8,7 +8,7 @@ import TagSelector from "../common/tags/TagSelector.jsx";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import {PositionInfo} from "./PositionInfo.jsx";
 import FormValidation, {Validator} from "../forms/FormValidation.jsx";
-import formHelper from "../utils/forms.js"
+import formHelper from "../utils/forms.js";
 import urlHelper from "../utils/url.js";
 import _ from 'lodash';
 
