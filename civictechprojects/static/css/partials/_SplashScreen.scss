@@ -73,9 +73,11 @@
   }
 }
 
-.photo-credit{
+.photo-credit a{
   position: absolute;
-  bottom: 8px;
-  right: 16px;
-  font-size: 18px;
+  bottom: 4px;
+  right: 4px;
+  font-size: small;
+  opacity: .6;
+  color: white;
 }
