@@ -12,7 +12,9 @@ import {LinkInfo} from "../forms/LinkInfo.jsx";
 import {FileInfo} from "../common/FileInfo.jsx";
 import ImageCropUploadFormElement from "../forms/ImageCropUploadFormElement.jsx";
 import FileUploadList from "../forms/FileUploadList.jsx";
-import url from "../utils/url.js";
+import FormValidation, {Validator} from "../forms/FormValidation.jsx";
+import formHelper from "../utils/forms.js";
+import urlHelper from "../utils/url.js";
 import metrics from "../utils/metrics.js";
 import CurrentUser from "../utils/CurrentUser.js";
 import _ from 'lodash';
@@ -25,21 +27,23 @@ const UserFileTypes = {
 };
 
 type FormFields = {|
-  +user_thumbnail?: FileInfo,
-  +first_name: string,
-  +last_name: string,
-  +about_me: string,
-  +link_linkedin: string,
-  +user_resume_file: Array<FileInfo>,
-  +technologies_used: Array<TagDefinition>,
-  +postal_code: string,
-  +country: string,
-  +user_links: Array<LinkInfo>,
-  +user_files: Array<FileInfo>
+  user_thumbnail?: FileInfo,
+  first_name: string,
+  last_name: string,
+  about_me: string,
+  link_linkedin: string,
+  user_resume_file: Array<FileInfo>,
+  user_technologies: Array<TagDefinition>,
+  postal_code: string,
+  country: string,
+  user_links: Array<LinkInfo>,
+  user_files: Array<FileInfo>,
 |};
 
 type State = {|
-  formFields: number
+  formFields: FormFields,
+  formIsValid: boolean,
+  validations: $ReadOnlyArray<Validator>
 |};
 
 /**
@@ -48,25 +52,47 @@ type State = {|
 class EditProfileController extends React.PureComponent<{||},State> {
   constructor(props: {||}): void {
     super(props);
-    this.state = {
-      formFields: {
-        user_thumbnail: "",
-        first_name: "",
-        last_name: "",
-        about_me: "",
-        link_linkedin: "",
-        user_technologies: [],
-        postal_code: "",
-        country: defaultCountryCode,
-        user_links: [],
-        user_files: []
+    const formFields: FormFields = {
+      user_thumbnail: "",
+      first_name: "",
+      last_name: "",
+      about_me: "",
+      link_linkedin: "",
+      user_resume_file: [],
+      user_technologies: [],
+      postal_code: "",
+      country: defaultCountryCode,
+      user_links: [],
+      user_files: []
+    };
+    const validations: $ReadOnlyArray<Validator<FormFields>> = [
+      {
+        checkFunc: (formFields: FormFields) => 
+          urlHelper.isEmptyStringOrValidUrl(formFields["link_linkedin"]),
+        errorMessage: "Please enter a valid LinkedIn URL."
       }
+    ];
+    const formIsValid: boolean = FormValidation.isValid(
+      formFields, validations);
+    this.state = {
+      formFields: formFields,
+      formIsValid: formIsValid,
+      validations: validations
     }
+    this.form = formHelper.setup();
   }
 
   componentDidMount(): void {
     // TODO: Show error message on failure to load
-    UserAPIUtils.fetchUserDetails(window.DLAB_GLOBAL_CONTEXT.userID, this.loadUserDetails.bind(this));
+    UserAPIUtils.fetchUserDetails(
+      window.DLAB_GLOBAL_CONTEXT.userID, this.loadUserDetails.bind(this));
+    this.form.doValidation.bind(this)();
+  }
+
+  onValidationCheck(formIsValid: boolean): void {
+    if(formIsValid !== this.state.formIsValid) {
+      this.setState({formIsValid});
+    }
   }
 
   loadUserDetails(user: UserAPIData): void {
@@ -115,7 +141,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
     //create objects for project_links array, skipping empty fields
     eLinks.forEach(function(item) {
       if(!_.isEmpty(item.linkUrl)) {
-        item.linkUrl = url.appendHttpIfMissingProtocol(item.linkUrl);
+        item.linkUrl = urlHelper.appendHttpIfMissingProtocol(item.linkUrl);
         eLinksArray.push({
           linkName: item.linkName,
           linkUrl: item.linkUrl,
@@ -242,10 +268,17 @@ class EditProfileController extends React.PureComponent<{||},State> {
                 <FileUploadList elementid="user_files" title="Files" files={this.state.formFields.user_files}/>
               </div>
 
+              <FormValidation
+                validations={this.state.validations}
+                onValidationCheck={this.onValidationCheck.bind(this)}
+                formState={this.state.formFields}
+              />
+
               <div className="form-group text-right">
                 <input
                   type="submit"
                   className="btn btn-success"
+                  disabled={!this.state.formIsValid}
                   value="Save Changes"
                   onClick={this.onSubmit.bind(this)}
                 />

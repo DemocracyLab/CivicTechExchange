@@ -8,6 +8,8 @@ import type {FileInfo} from "../../common/FileInfo.jsx";
 import LinkList from "../../forms/LinkList.jsx";
 import FileUploadList from "../../forms/FileUploadList.jsx";
 import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
+import FormValidation from "../../forms/FormValidation.jsx";
+import type {Validator} from "../../forms/FormValidation.jsx";
 import {OnReadySubmitFunc} from "./ProjectFormCommon.jsx";
 import {DefaultLinkDisplayConfigurations} from "../../constants/LinkConstants.js";
 import url from "../../utils/url.js";
@@ -37,22 +39,58 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
     const project: ProjectDetailsAPIData = props.project;
-    this.state = {
-      formIsValid: false,
-      formFields: {
-        project_links: project ? project.project_links : [],
-        project_files: project ? project.project_files : [],
-        link_coderepo: project ? project.link_coderepo : "",
-        link_messaging: project ? project.link_messaging : "",
-        link_projmanage: project ? project.link_projmanage : "",
-        link_filerepo: project ? project.link_filerepo : ""
-      }
+    const formFields: FormFields = {
+      project_links: project ? project.project_links : [],
+      project_files: project ? project.project_files : [],
+      link_coderepo: "",
+      link_messaging: "",
+      link_projmanage: "",
+      link_filerepo: ""
     };
-
+    const validations: $ReadOnlyArray<Validator<FormFields>> = [
+      {
+        checkFunc: (formFields: FormFields) => url.isEmptyStringOrValidUrl(
+          formFields["link_coderepo"]),
+        errorMessage: "Please enter valid URL for code repository website."
+      },
+      {
+        checkFunc: (formFields: FormFields) => url.isEmptyStringOrValidUrl(
+          formFields["link_messaging"]),
+        errorMessage: "Please enter valid URL for messaging website."
+      },
+      {
+        checkFunc: (formFields: FormFields) => url.isEmptyStringOrValidUrl(
+          formFields["link_projmanage"]),
+        errorMessage: "Please enter valid URL for project management website."
+      },
+      {
+        checkFunc: (formFields: FormFields) => url.isEmptyStringOrValidUrl(
+          formFields["link_filerepo"]),
+        errorMessage: "Please enter valid URL for file repository website."
+      }
+    ];
+    const formIsValid: boolean = FormValidation.isValid(
+      formFields, validations);
+    this.state = {
+      formFields: formFields,
+      formIsValid: formIsValid,
+      validations: validations
+    };
     //this will set formFields.project_links and formFields.links_*
     this.filterSpecificLinks(_.cloneDeep(project.project_links));
     this.form = formHelper.setup();
-    props.readyForSubmit(true, this.onSubmit.bind(this));
+    props.readyForSubmit(formIsValid, this.onSubmit.bind(this));
+  }
+
+  componentDidMount() {
+    this.form.doValidation.bind(this)();
+  }
+
+  onValidationCheck(formIsValid: boolean): void {
+    if(formIsValid !== this.state.formIsValid) {
+      this.setState({formIsValid});
+      this.props.readyForSubmit(formIsValid, this.onSubmit.bind(this));
+    }
   }
 
   // TODO: Put common code used between EditProjectsForm in a common place
@@ -139,6 +177,12 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
         <div className="form-group">
           <FileUploadList elementid="project_files" title="Project Files" files={this.state.formFields.project_files}/>
         </div>
+
+        <FormValidation 
+          validations={this.state.validations}
+          onValidationCheck={this.onValidationCheck.bind(this)}
+          formState={this.state.formFields}
+        />
 
       </div>
     );

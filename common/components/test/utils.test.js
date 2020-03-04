@@ -82,6 +82,38 @@ describe('utils', () => {
   	expect(args['page']).toEqual('1');
   });
 
+  test('isValidUrl validates URL correctly', () => {
+    const urlLists = {
+      valid: [
+        'http://www.unsecure.com',
+        'https://www.secure.com',
+        'https://multiple.parts.com/subdir',
+        'https://hyphenated-domain.next.com/',
+        'https://www.gnarly.com/url/viewer.html?&something=d38d408127d64407a7' +
+          '627f8e990908fe&view=388155.63,109.56,-69891.37,388028.5,247.89,-70' +
+          '066.36,0.95&lyr=1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1&wk' +
+          'id=2926&v=2'
+        ],
+      invalid: [
+        '',
+        'localhost:3000',
+        'N/A',
+        'TBD',
+        'Not built yet'
+      ]
+    };
+    urlLists.valid.forEach(validUrl => {
+      expect(urlHelper.isValidUrl(validUrl)).toEqual(true);
+    })
+    urlLists.invalid.forEach(invalidUrl => {
+      expect(urlHelper.isValidUrl(invalidUrl)).toEqual(false);
+    })
+  })
+
+  test('isEmptyStringOrValidUrl also accepts empty string', () => {
+    expect(urlHelper.isEmptyStringOrValidUrl('')).toEqual(true);
+  })
+
   test('svg', () => {
     const img = svg.path(SVGPath['GITHUB'], 'LogInController-socialIcon');
     const el = renderer.create(img);
