@@ -161,6 +161,14 @@ class SignUpController extends React.Component<Props, State> {
             />
           </div>
           <input name="password" value={this.state.password1} type="hidden" />
+  
+          <div>
+            <input
+              name="newsletter_signup"
+              type="checkbox"
+            />
+            <span> I would like to receive occasional emails from DemocracyLab about events and projects</span>
+          </div>
           
           <div>
             <input

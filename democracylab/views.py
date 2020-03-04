@@ -1,3 +1,4 @@
+from common.helpers.mailing_list import SubscribeToMailingList
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
@@ -54,6 +55,13 @@ def signup(request):
             user = authenticate(username=contributor.username, password=raw_password)
             login(request, user)
             send_verification_email(contributor)
+
+            subscribe_checked = form.data.get('newsletter_signup')
+            print(subscribe_checked)
+            if subscribe_checked:
+                SubscribeToMailingList(email=contributor.email, first_name=contributor.first_name,
+                                       last_name=contributor.last_name)
+            # TODO: Use section_url for urls here
             return redirect('/index/?section=SignedUp')
         else:
             errors = json.loads(form.errors.as_json())

@@ -57,6 +57,10 @@ export VOLUNTEER_RENEW_REMINDER_PERIODS='[7,7,-1]'
 # export EMAIL_SUPPORT_ACCT='{"host":"smtp.gmail.com","port":"587","display_name":"DemocracyLab Support","username":"support@democracylab.org","password":"SECRET","use_tls":"True","use_ssl":"False"}'
 # export EMAIL_VOLUNTEER_ACCT='{"host":"smtp.gmail.com","port":"587","display_name":"DemocracyLab Volunteering","username":"volunteer@democracylab.org","password":"SECRET","use_tls":"True","use_ssl":"False"}'
 
+# Mailchimp
+# export MAILCHIMP_API_KEY=SECRET
+# export MAILCHIMP_SUBSCRIBE_LIST_ID=SECRET
+
 export S3_BUCKET=democracylab-marlok
 export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
 
