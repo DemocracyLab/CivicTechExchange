@@ -9,7 +9,6 @@ import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import Button from "react-bootstrap/Button";
 import url from "../../utils/url.js";
 import Section from '../../enums/Section.js';
-import _ from 'lodash';
 
 
 type State = {|
@@ -32,7 +31,8 @@ class RecentProjectsSection extends React.Component<{||}, State> {
       cardStart: 0,
       cardEnd: 3
     };
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this._updateWindowDimensions = this._updateWindowDimensions.bind(this);
+    this._toggleProjects = this._toggleProjects.bind(this);
   }
 
 
@@ -44,17 +44,17 @@ class RecentProjectsSection extends React.Component<{||}, State> {
         projects: getProjectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData)
       })
     );
-    this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
+    this._updateWindowDimensions();
+    window.addEventListener('resize', this._updateWindowDimensions);
   }
 
   componentWillUnmount(): React$Node {
-    window.removeEventListener('resize', this.updateWindowDimensions);
+    window.removeEventListener('resize', this._updateWindowDimensions);
   }
 
-  updateWindowDimensions(): React$Node {
+  _updateWindowDimensions(): React$Node {
     this.setState({ windowWidth: window.innerWidth, windowHeight: window.innerHeight });
-    this._selectCards(window.innerWidth)
+    this._selectCards()
   }
 
   render(): React$Node {
@@ -65,17 +65,36 @@ class RecentProjectsSection extends React.Component<{||}, State> {
           {this._renderCards()}
         </div>
         <div className="RecentProjects-button">
+          <Button variant="primary" onClick={this._toggleProjects}>TEST BUTTON</Button>
           <Button className="RecentProjects-all" href={url.section(Section.FindProjects)}>See All Projects</Button>
         </div>
       </div>
     );
   }
 
-  _selectCards(width): $React$Node {
+  _toggleProjects(): $React$Node {
+    if (this.state.showFirstSection) {
+      this.setState({
+        cardStart: 3,
+        cardEnd: 6,
+        showFirstSection: false
+      })
+    }
+      else {
+        this.setState({
+          cardStart: 0,
+          cardEnd: 3,
+          showFirstSection: true
+        })
+      }
+    }
+
+  _selectCards(): $React$Node {
+    const width = this.state.windowWidth
     if (width < 992 && width >= 768) {
       this.setState({cardStart: 0, cardEnd: 4})
     } else if (width >= 992 && !this.state.showFirstSection) {
-      this.setState({cardStart: 4, cardEnd: 6})
+      this.setState({cardStart: 3, cardEnd: 6})
     } else {
       this.setState({cardStart: 0, cardEnd: 3})
     }
