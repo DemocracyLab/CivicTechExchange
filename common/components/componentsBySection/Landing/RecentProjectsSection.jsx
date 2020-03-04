@@ -13,11 +13,9 @@ import Section from '../../enums/Section.js';
 
 type State = {|
   projects: List<Project>,
-  showFirstSection: boolean,
-  windowHeight: number,
   windowWidth: number,
   cardStart: number,
-  cardEnd: number
+  cardCapacity: number
 |};
 
 class RecentProjectsSection extends React.Component<{||}, State> {
@@ -25,14 +23,13 @@ class RecentProjectsSection extends React.Component<{||}, State> {
     super();
     this.state = {
       projects: null,
-      showFirstSection: true, // if false, implicitly derive that second section should show
-      windowHeight: 0,
       windowWidth: 0,
       cardStart: 0,
-      cardEnd: 3
+      cardCapacity: 3
     };
     this._updateWindowDimensions = this._updateWindowDimensions.bind(this);
-    this._toggleProjects = this._toggleProjects.bind(this);
+    this._prevProjects = this._prevProjects.bind(this);
+    this._nextProjects = this._nextProjects.bind(this);
   }
 
 
@@ -53,8 +50,8 @@ class RecentProjectsSection extends React.Component<{||}, State> {
   }
 
   _updateWindowDimensions(): React$Node {
-    this.setState({ windowWidth: window.innerWidth, windowHeight: window.innerHeight });
-    this._selectCards()
+    this.setState({ windowWidth: window.innerWidth });
+    this._setCardCapacity() /* Test to see if this is a race condition or if it works as-is */
   }
 
   render(): React$Node {
@@ -62,48 +59,47 @@ class RecentProjectsSection extends React.Component<{||}, State> {
       <div className="RecentProjects">
         <h2 className="RecentProjects-title">Active Projects</h2>
         <div className="RecentProjects-cards">
+          <div className="RecentProjects-toggle RecentProjects-decrease" onClick={this._prevProjects}>
+            <i className={GlyphStyles.ChevronLeft}></i>
+          </div>
           {this._renderCards()}
+          <div className="RecentProjects-toggle RecentProjects-increase" onClick={this._nextProjects}>
+            <i className={GlyphStyles.ChevronRight}></i>
+          </div>
         </div>
         <div className="RecentProjects-button">
-          <Button variant="primary" onClick={this._toggleProjects}>TEST BUTTON</Button>
           <Button className="RecentProjects-all" href={url.section(Section.FindProjects)}>See All Projects</Button>
         </div>
       </div>
     );
   }
 
-  _toggleProjects(): $React$Node {
-    if (this.state.showFirstSection) {
-      this.setState({
-        cardStart: 3,
-        cardEnd: 6,
-        showFirstSection: false
-      })
-    }
-      else {
-        this.setState({
-          cardStart: 0,
-          cardEnd: 3,
-          showFirstSection: true
-        })
-      }
-    }
+  _nextProjects(): $React$Node {
+    this.setState(prevState => ({
+      cardStart: prevState.cardStart + this.state.cardCapacity
+    }));
+  }
 
-  _selectCards(): $React$Node {
+  _prevProjects(): $React$Node {
+    this.setState(prevState => ({
+      cardStart: prevState.cardStart - this.state.cardCapacity
+    }));
+  }
+
+  _setCardCapacity(): $React$Node {
+    //sets how many cards are shown at one time
     const width = this.state.windowWidth
     if (width < 992 && width >= 768) {
-      this.setState({cardStart: 0, cardEnd: 4})
-    } else if (width >= 992 && !this.state.showFirstSection) {
-      this.setState({cardStart: 3, cardEnd: 6})
+      this.setState({cardCapacity: 4})
     } else {
-      this.setState({cardStart: 0, cardEnd: 3})
+      this.setState({cardCapacity: 3})
     }
   }
 
   _renderCards(): $ReadOnlyArray<React$Node> {
     return !this.state.projects
       ? <i className={Glyph(GlyphStyles.LoadingSpinner, GlyphSizes.X2)}></i>
-      : this.state.projects.slice(this.state.cardStart, this.state.cardEnd).map(
+      : this.state.projects.slice(this.state.cardStart, this.state.cardStart + this.state.cardCapacity).map(
           (project, index) =>
             <ProjectCard
               className="RecentProjects-card"
