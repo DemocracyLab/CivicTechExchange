@@ -259,7 +259,12 @@
     margin: auto 0;
     display: inline-block;
     width: 20px;
-    color: $color-text-grey;
+    color: $color-grey-medium;
     padding: 20px 5px;
+    cursor: pointer;
   }
+  .RecentProjects-toggle:hover {
+    color: $color-text-dark;
+  }
+
 }

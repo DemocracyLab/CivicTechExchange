@@ -59,19 +59,39 @@ class RecentProjectsSection extends React.Component<{||}, State> {
       <div className="RecentProjects">
         <h2 className="RecentProjects-title">Active Projects</h2>
         <div className="RecentProjects-cards">
-          <div className="RecentProjects-toggle RecentProjects-decrease" onClick={this._prevProjects}>
-            <i className={GlyphStyles.ChevronLeft}></i>
-          </div>
+          {this._renderPrevControl()}
           {this._renderCards()}
-          <div className="RecentProjects-toggle RecentProjects-increase" onClick={this._nextProjects}>
-            <i className={GlyphStyles.ChevronRight}></i>
-          </div>
+          {this._renderNextControl()}
         </div>
         <div className="RecentProjects-button">
           <Button className="RecentProjects-all" href={url.section(Section.FindProjects)}>See All Projects</Button>
         </div>
       </div>
     );
+  }
+
+  _renderPrevControl(): $React$Node {
+    if (this.state.cardStart != 0) {
+      return (
+        <div className="RecentProjects-toggle RecentProjects-decrease" onClick={this._prevProjects}>
+          <i className={GlyphStyles.ChevronLeft}></i>
+        </div>
+      )
+    } else {
+      return null;
+    }
+  }
+
+  _renderNextControl(): $React$Node {
+    if (this.state.cardStart === 0) {
+      return (
+        <div className="RecentProjects-toggle RecentProjects-increase" onClick={this._nextProjects}>
+          <i className={GlyphStyles.ChevronRight}></i>
+        </div>
+      )
+    } else {
+      return null;
+    }
   }
 
   _nextProjects(): $React$Node {
