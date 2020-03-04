@@ -256,8 +256,10 @@
     }
   }
   .RecentProjects-toggle {
+    margin: auto 0;
     display: inline-block;
-    width: 10px;
-    border: 5px solid $color-text-grey;
+    width: 20px;
+    color: $color-text-grey;
+    padding: 20px 5px;
   }
 }
