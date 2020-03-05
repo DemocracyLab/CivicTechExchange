@@ -93,14 +93,6 @@ def verify_user(request, user_id, token):
     else:
         return HttpResponse(status=401)
 
-# def check_email(request):
-#     user = authenticate(username = email, password = raw_password)
-#     if not request.user.is_authenticated():
-#         print('Incorrect Login Details')
-#         return redirect('/?=errorpage')
-    # else:
-    #     return ... login/ show discover page
-
 
 def password_reset(request):
     username = request.POST['email']
