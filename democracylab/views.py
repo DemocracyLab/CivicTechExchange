@@ -1,10 +1,11 @@
+from common.helpers.constants import FrontEndSection
+from common.helpers.front_end import section_url
 from common.helpers.mailing_list import SubscribeToMailingList
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from django.urls import reverse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import simplejson as json
 from .emails import send_verification_email, send_password_reset_email
@@ -23,17 +24,17 @@ def login_view(request, provider=None):
         user = authenticate(username=email.lower(), password=password)
         if user is not None and user.is_authenticated:
             login(request, user)
-            redirect_url = prev_page if prev_page.startswith('/') else '/index/?section=' + prev_page
+            redirect_url = prev_page if prev_page.startswith('/') else section_url(prev_page)
             return redirect(redirect_url)
         else:
             messages.error(request, 'Incorrect Email or Password')
-            return redirect('/index/?section=LogIn&prev=' + prev_page)
+            return redirect(section_url(FrontEndSection.LogIn, {'prev': prev_page}))
 
     if provider in provider_ids:
         return redirect(f'{provider}_login')
 
     else:
-        return redirect('/index/?section=LogIn')
+        return redirect(section_url(FrontEndSection.LogIn))
 
 
 def signup(request):
@@ -57,12 +58,10 @@ def signup(request):
             send_verification_email(contributor)
 
             subscribe_checked = form.data.get('newsletter_signup')
-            print(subscribe_checked)
             if subscribe_checked:
                 SubscribeToMailingList(email=contributor.email, first_name=contributor.first_name,
                                        last_name=contributor.last_name)
-            # TODO: Use section_url for urls here
-            return redirect('/index/?section=SignedUp')
+            return redirect(section_url(FrontEndSection.SignedUp))
         else:
             errors = json.loads(form.errors.as_json())
 
@@ -75,9 +74,9 @@ def signup(request):
                 for fieldError in fieldErrors:
                     messages.error(request, fieldError['message'])
 
-            return redirect('/index/?section=SignUp')
+            return redirect(section_url(FrontEndSection.SignUp))
     else:
-        return redirect('/index/?section=SignUp')
+        return redirect(section_url(FrontEndSection.SignUp))
 
 
 def verify_user(request, user_id, token):
@@ -90,7 +89,7 @@ def verify_user(request, user_id, token):
         contributor = Contributor.objects.get(id=user_id)
         contributor.email_verified = True
         contributor.save()
-        return redirect('/index/?section=EmailVerified')
+        return redirect(section_url(FrontEndSection.EmailVerified))
     else:
         return HttpResponse(status=401)
 
@@ -136,11 +135,11 @@ def change_password(request):
 
 def user_edit(request, user_id):
     if not request.user.is_authenticated():
-        return redirect('/index/?section=LogIn')
+        return redirect(section_url(FrontEndSection.LogIn))
 
     DemocracyLabUserCreationForm.edit_user(request, user_id)
 
-    return redirect('/index/?section=Profile&id=' + user_id)
+    return redirect(section_url(FrontEndSection.Profile, {'id': user_id}))
 
 
 def user_details(request, user_id):
@@ -158,7 +157,7 @@ def send_verification_email_request(request):
     if not user.email_verified:
         send_verification_email(user)
         if request.method == 'GET':
-            return redirect('/index/?section=SignedUp&email=' + user.email)
+            return redirect(section_url(FrontEndSection.SignedUp, {'email': user.email}))
         else:
             return HttpResponse(status=200)
     else:
