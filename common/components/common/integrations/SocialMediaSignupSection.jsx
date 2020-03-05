@@ -33,7 +33,7 @@ class SocialMediaSignupSection extends React.Component<{||}, State> {
   _renderSocialLoginsSection(): React$Node {
     return (
       <div className="text-center">
-        <p>or sign in with</p>
+        <h5>OR</h5>
         {this._renderSocialLogins()}
       </div>
     );
@@ -43,9 +43,17 @@ class SocialMediaSignupSection extends React.Component<{||}, State> {
     return (
       <div>
         {this.state.visibleApps.map(app => {return (
-          <a href={"/login/" + app} key={app} className="LogInController-socialLink">
-            {svg.path(SVGPath[svgMap[app]], "LogInController-socialIcon")}
-          </a>);
+          <div className="LogInController-socialLink">
+            <a href={"/login/" + app} key={app}>
+              <span>
+                {svg.path(SVGPath[svgMap[app]], "LogInController-socialIcon")}
+              </span>
+              <span>
+                Continue with {app}
+              </span>
+            </a>
+          </div>
+        );
         })}
       </div>
     );
