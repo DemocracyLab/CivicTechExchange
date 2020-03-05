@@ -8,6 +8,9 @@
 .RecentProjects-button {
   padding: 10px 0 0 0; /* push button away from cards a bit */
 }
+.RecentProjects-toggle {
+  display: none; /* these only show at desktop */
+}
 
 
 .RecentProjects-cards {
@@ -21,10 +24,6 @@
     flex-basis: 100%;
     min-width: 100%;
     height: auto;
-  }
-
-  .ProjectCard-root:nth-of-type(4) {
-    display: none; /* for mobile and desktop we show three at a time, so the fourth gets banished to the display none zone */
   }
   .ProjectCard-logo {
     border: none;
@@ -218,9 +217,6 @@
       flex-basis: 45%;
       min-width: 45%;
     }
-    .ProjectCard-root:nth-of-type(4) {
-      display: block;
-    }
     .ProjectCard-description {
       border-top: 0;
     }
@@ -258,8 +254,17 @@
       flex-basis: 31%;
       min-width: 31%;
     }
-    .ProjectCard-root:nth-of-type(4) {
-      display: none;
-    }
   }
+  .RecentProjects-toggle {
+    margin: auto 0;
+    display: inline-block;
+    width: 20px;
+    color: $color-grey-medium;
+    padding: 20px 5px;
+    cursor: pointer;
+  }
+  .RecentProjects-toggle:hover {
+    color: $color-text-dark;
+  }
+
 }
