@@ -56,10 +56,5 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/index/?section=Home', permanent=False)),
     url(r'^admin/', admin.site.urls),
     url(r'^platform$', RedirectView.as_view(url='http://connect.democracylab.org/platform/', permanent=False)),
-    # url(r'^.*$', RedirectView.as_view(url='/index/', permanent=False)),
-    # url(
-    #     r'check_email/(?P<user_email>.*)$',
-    #     views.check_email,
-    #     name="check_email"
-    # )
+    # url(r'^.*$', RedirectView.as_view(url='/index/', permanent=False))
 ]

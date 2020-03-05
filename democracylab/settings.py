@@ -214,6 +214,9 @@ ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
 CONTACT_EMAIL = os.environ['CONTACT_EMAIL']
 FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
 
+MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY', None)
+MAILCHIMP_SUBSCRIBE_LIST_ID = os.environ.get('MAILCHIMP_SUBSCRIBE_LIST_ID', None)
+
 APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
 VOLUNTEER_RENEW_REMINDER_PERIODS = ast.literal_eval(os.environ.get('VOLUNTEER_RENEW_REMINDER_PERIODS', 'None'))
 VOLUNTEER_REMINDER_OVERALL_PERIOD = VOLUNTEER_RENEW_REMINDER_PERIODS and timedelta(sum(VOLUNTEER_RENEW_REMINDER_PERIODS))
@@ -302,6 +305,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'GITHUB_API_TOKEN': {
         'error': False,
         'message': 'Github API key needed to raise rate limit for ingesting commit data'
+    },
+    'MAILCHIMP_API_KEY': {
+        'error': False,
+        'message': 'Mailchimp API key needed to subscribe users to mailing list'
     }
 }
 
