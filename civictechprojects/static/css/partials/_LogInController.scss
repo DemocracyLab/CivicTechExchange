@@ -82,10 +82,9 @@
   }
 }
 
-.LogInController-socialIcon {
-	overflow: hidden;
-  opacity: .5;
-	width: 55px;
+.LogInController-socialIcon svg{
+  overflow: hidden;
+  width: 55px;
   height: 55px;
   cursor: pointer;
 }
