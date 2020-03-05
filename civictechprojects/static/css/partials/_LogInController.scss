@@ -67,7 +67,7 @@
 .LogInController-socialLink {
   background-color: transparent;
   text-decoration: none;
-  border: thin solid;
+  border: 1px solid $color-background-dark;
   margin-bottom: 10px;
   width: 325px;
   margin-left: auto;
@@ -75,6 +75,7 @@
 
   a {
     color: $color-text-dark;
+    padding-left: 15px;
   }
 
   span {
@@ -90,18 +91,5 @@
 }
 
 .LogInController-google svg{
-  width: 40px;
-  height: 50px;
-}
-
-.LogInController-facebook svg{
-
-}
-
-.LogInController-github svg{
-
-}
-
-.LogInController-linkedin svg{
-
+  padding: 5px 0 4px 0;
 }

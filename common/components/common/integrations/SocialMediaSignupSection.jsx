@@ -19,7 +19,6 @@ type SocialSignInLinkDisplayConfig = {|
 const socialSignInLinkDisplayConfigMap: { [key: string]: SocialSignInLinkDisplayConfig } = {
   linkedin: {
     displayName: "LinkedIn",
-    iconClass: "LogInController-linkedin",
     iconElement: <LinkedInSVG />
   }, google: {
     displayName: "Google",
@@ -27,11 +26,9 @@ const socialSignInLinkDisplayConfigMap: { [key: string]: SocialSignInLinkDisplay
     iconElement: <GoogleSVG />
   }, github: {
     displayName: "GitHub",
-    iconClass: "LogInController-github",
     iconElement: <GithubSVG />
   }, facebook: {
     displayName: "Facebook",
-    iconClass: "LogInController-facebook",
     iconElement: <FacebookSVG />
   }
 };
@@ -54,10 +51,10 @@ class SocialMediaSignupSection extends React.Component<{||}, State> {
   
   _renderSocialLoginsSection(): React$Node {
     return (
-      <div className="text-center">
-        <h5>OR</h5>
+      <React.Fragment>
+        <h5 className="text-center">OR</h5>
         {this._renderSocialLogins()}
-      </div>
+      </React.Fragment>
     );
   }
   
@@ -66,7 +63,7 @@ class SocialMediaSignupSection extends React.Component<{||}, State> {
       <div>
         {this.state.visibleApps.map(app => {
           const config: SocialSignInLinkDisplayConfig = socialSignInLinkDisplayConfigMap[app];
-          const iconClass: string = "LogInController-socialIcon " + config.iconClass;
+          const iconClass: string = "LogInController-socialIcon" + (config.iconClass ? " " + config.iconClass : "");
           return (
           <div className="LogInController-socialLink">
             <a href={"/login/" + app} key={app}>
