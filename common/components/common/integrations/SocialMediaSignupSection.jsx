@@ -12,21 +12,26 @@ const socialAppVisibility: { [key: string]: boolean } = !_.isEmpty(window.SOCIAL
 
 type SocialSignInLinkDisplayConfig = {|
   displayName: string,
+  iconClass: ?string,
   iconElement: React$Node
 |};
 
 const socialSignInLinkDisplayConfigMap: { [key: string]: SocialSignInLinkDisplayConfig } = {
   linkedin: {
     displayName: "LinkedIn",
+    iconClass: "LogInController-linkedin",
     iconElement: <LinkedInSVG />
   }, google: {
     displayName: "Google",
+    iconClass: "LogInController-google",
     iconElement: <GoogleSVG />
   }, github: {
     displayName: "GitHub",
+    iconClass: "LogInController-github",
     iconElement: <GithubSVG />
   }, facebook: {
     displayName: "Facebook",
+    iconClass: "LogInController-facebook",
     iconElement: <FacebookSVG />
   }
 };
@@ -61,10 +66,11 @@ class SocialMediaSignupSection extends React.Component<{||}, State> {
       <div>
         {this.state.visibleApps.map(app => {
           const config: SocialSignInLinkDisplayConfig = socialSignInLinkDisplayConfigMap[app];
+          const iconClass: string = "LogInController-socialIcon " + config.iconClass;
           return (
           <div className="LogInController-socialLink">
             <a href={"/login/" + app} key={app}>
-              <span style={{color: config.iconColor}} className="LogInController-socialIcon">
+              <span style={{color: config.iconColor}} className={iconClass}>
                 {config.iconElement}
               </span>
               <span>
