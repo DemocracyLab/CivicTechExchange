@@ -1,7 +1,7 @@
 boto3==1.4.7
 botocore==1.7.28
 dj-database-url==0.4.1
-Django==1.11.23
+Django==1.11.28
 django-allauth==0.39.1
 django-appconf==1.0.2
 django-autofixture==0.12.1
