@@ -167,7 +167,7 @@ class SignUpController extends React.Component<Props, State> {
               name="newsletter_signup"
               type="checkbox"
             />
-            <span> I would like to receive occasional emails from DemocracyLab about events and projects</span>
+            <span> I would like to receive occasional emails from DemocracyLab about events and projects (Optional)</span>
           </div>
           
           <div>
