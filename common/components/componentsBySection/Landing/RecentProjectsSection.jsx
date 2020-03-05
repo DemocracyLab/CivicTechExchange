@@ -45,11 +45,11 @@ class RecentProjectsSection extends React.Component<{||}, State> {
     window.addEventListener('resize', this._updateWindowDimensions);
   }
 
-  componentWillUnmount(): React$Node {
+  componentWillUnmount(): void {
     window.removeEventListener('resize', this._updateWindowDimensions);
   }
 
-  _updateWindowDimensions(): React$Node {
+  _updateWindowDimensions(): void {
     this.setState({ windowWidth: window.innerWidth });
     this._setCardCapacity() /* Test to see if this is a race condition or if it works as-is */
   }
@@ -94,19 +94,19 @@ class RecentProjectsSection extends React.Component<{||}, State> {
     }
   }
 
-  _nextProjects(): $React$Node {
+  _nextProjects(): void {
     this.setState(prevState => ({
       cardStart: prevState.cardStart + this.state.cardCapacity
     }));
   }
 
-  _prevProjects(): $React$Node {
+  _prevProjects(): void {
     this.setState(prevState => ({
       cardStart: prevState.cardStart - this.state.cardCapacity
     }));
   }
 
-  _setCardCapacity(): $React$Node {
+  _setCardCapacity(): void {
     //sets how many cards are shown at one time
     const width = this.state.windowWidth
     if (width < 992 && width >= 768) {
