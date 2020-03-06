@@ -112,7 +112,8 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
     this.setState({
       linkInfo: {
         linkUrl: this.state.formFields.project_link,
-        linkName: this.state.formFields.project_link_name
+        linkName: this.state.formFields.project_link_name,
+        visibility: Visibility.PUBLIC
       }
     }, () => {
       this.props.onSaveLink(this.state.linkInfo);
