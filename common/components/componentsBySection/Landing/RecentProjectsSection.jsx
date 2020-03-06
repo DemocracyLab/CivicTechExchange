@@ -50,8 +50,7 @@ class RecentProjectsSection extends React.Component<{||}, State> {
   }
 
   _updateWindowDimensions(): void {
-    this.setState({ windowWidth: window.innerWidth });
-    this._setCardCapacity() /* Test to see if this is a race condition or if it works as-is */
+    this.setState({ windowWidth: window.innerWidth }, () => this._setCardCapacity());
   }
 
   render(): React$Node {
