@@ -17,6 +17,7 @@ type FormFields = {|
 
 type Props = {|
   showModal: boolean,
+  
   existingLink: LinkInfo,
   onSaveLink: (LinkInfo) => void,
   onCancelLink: (void) => void
@@ -43,7 +44,7 @@ class LinkEntryModal extends React.PureComponent<Props,State> {
       {
         checkFunc: (formFields: FormFields) => urlHelper.isValidUrl(
           formFields["project_link"]),
-        errorMessage: "Please enter valid URL for project link."
+        errorMessage: "Please enter valid URL for link."
       }
     ];
     const formIsValid: boolean = FormValidation.isValid(
