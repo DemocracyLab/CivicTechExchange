@@ -7,9 +7,9 @@
   "author": "Marlon Keating <marlonakeating@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --mode production && npm run buildtask:sass && npm run buildtask:collectstatic",
-    "buildfast": "webpack --mode development && npm run buildtask:sass && npm run buildtask:collectstatic",
-    "postinstall": "webpack --mode development && npm run buildtask:sass && npm run buildtask:collectstatic",
+    "build": "webpack --config webpack.prod.js && npm run buildtask:sass && npm run buildtask:collectstatic",
+    "dev": "webpack --config webpack.dev.js && npm run buildtask:sass && npm run buildtask:collectstatic",
+    "postinstall": "webpack --config webpack.dev.js && npm run buildtask:sass && npm run buildtask:collectstatic",
     "buildtask:collectstatic": "python manage.py collectstatic --noinput -i *.scss",
     "buildtask:sass": "node-sass civictechprojects/static/css/styles.scss -o civictechprojects/static/css/compiled --output-style compressed",
     "test": "jest"
@@ -62,9 +62,11 @@
     "react-test-renderer": "^16.8.6",
     "regenerator-runtime": "^0.13.2",
     "sync-exec": "~0.6.2",
+    "terser-webpack-plugin": "^2.3.5",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.3.0"
+    "webpack-dev-server": "^3.3.0",
+    "webpack-merge": "^4.2.2"
   },
   "resolutions": {
     "fstream": "^1.0.12",
