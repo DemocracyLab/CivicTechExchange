@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+  web:
+    build: .
+    command: bash -c 'rm -rf node_modules && 
+                      npm install && 
+                      npm run build && 
+                      find . -path "*/migrations/*.py" -not -name "__init__.py" -delete &&
+                      find . -path "*/migrations/*.pyc"  -delete &&
+                      python manage.py migrate &&
+                      python manage.py collectstatic --noinput --clear &&
+                      python manage.py runserver 0.0.0.0:8000'
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    
+  
