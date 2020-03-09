@@ -3,21 +3,30 @@ version: '3'
 services:
   db:
     image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=p0stgres!
+      - POSTGRES_DB=postgres
+  create_table:
+    image: app
+    command: python manage.py createcachetable
+    depends_on:
+      - db
+  make_migrations:
+    image: app
+    command: python manage.py makemigrations
+    depends_on:
+      - create_table
+  migrate:
+    image: app
+    command: python manage.py migrate
+    depends_on:
+      - make_migrations
   web:
     build: .
-    command: bash -c 'rm -rf node_modules && 
-                      npm install && 
-                      npm run build && 
-                      find . -path "*/migrations/*.py" -not -name "__init__.py" -delete &&
-                      find . -path "*/migrations/*.pyc"  -delete &&
-                      python manage.py migrate &&
-                      python manage.py collectstatic --noinput --clear &&
+    command: bash -c 'npm run buildfast &&
                       python manage.py runserver 0.0.0.0:8000'
-    volumes:
-      - .:/code
     ports:
       - "8000:8000"
     depends_on:
       - db
-    
-  

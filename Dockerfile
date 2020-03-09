@@ -5,6 +5,16 @@ ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /code
 WORKDIR /code
+
+# Install pip and yarn depedencies before copying directory to Docker image.
+COPY requirements.txt /code/requirements.txt
+RUN pip install -r requirements.txt
+
+# Copy files needed for yarn install.
+COPY package.json yarn.lock /code/
+RUN yarn --frozen-lockfile --link-duplicates --ignore-scripts
+
+# Copy folders and files whitelisted by .dockerignore.
 COPY . /code/
 
 # S3 bucket and credentials for uploading files
@@ -96,7 +106,4 @@ ENV PRESS_LINKS '[{"date":"March 11, 2019","href":"https://www.washingtontechnol
 ENV GOOGLE_RECAPTCHA_SECRET_KEY "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
 ENV GOOGLE_RECAPTCHA_SITE_KEY "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
 
-RUN pip install -r requirements.txt
-CMD python manage.py createcachetable
-CMD python manage.py migrate
 EXPOSE 8000
