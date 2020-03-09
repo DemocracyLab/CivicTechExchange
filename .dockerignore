@@ -11,6 +11,7 @@
 !manage.py
 !setupJest.js
 !webpack.config.js
+!.babelrc
 
 # Third-party dependency files.
 !package.json
