@@ -1,4 +1,4 @@
-from civictechprojects.sitemaps import all_sitemap_paths
+# from civictechprojects.sitemaps import all_sitemap_paths
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 from django_seo_js import settings
@@ -46,9 +46,9 @@ class DebugUserAgentMiddleware(SelectedBackend):
             print('Prerender: settings.ENABLED False')
             return
 
-        if not is_prerenderable_request(request):
-            print('Prerender: do not prerender ' + request.get_full_path())
-            return
+        # if not is_prerenderable_request(request):
+        #     print('Prerender: do not prerender ' + request.get_full_path())
+        #     return
 
         if "HTTP_USER_AGENT" not in request.META:
             print('Prerender: HTTP_USER_AGENT not in request.META')

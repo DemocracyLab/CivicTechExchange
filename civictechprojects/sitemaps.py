@@ -42,13 +42,13 @@ class ProjectSitemap(Sitemap):
         return project.project_date_modified
 
 
-def get_all_sitemap_paths():
-    sitemap_paths = []
-    for sitemap_class in [SectionSitemap, ProjectSitemap]:
-        sitemap_instance = sitemap_class()
-        sitemap_paths = sitemap_paths + list(map(lambda item: sitemap_instance.location(item), sitemap_instance.items()))
+# def get_all_sitemap_paths():
+#     sitemap_paths = []
+#     for sitemap_class in [SectionSitemap, ProjectSitemap]:
+#         sitemap_instance = sitemap_class()
+#         sitemap_paths = sitemap_paths + list(map(lambda item: sitemap_instance.location(item), sitemap_instance.items()))
 
-    return sitemap_paths
+#     return sitemap_paths
 
 
-all_sitemap_paths = get_all_sitemap_paths()
+# all_sitemap_paths = get_all_sitemap_paths()
