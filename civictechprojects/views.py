@@ -306,7 +306,7 @@ def recent_projects_list(request):
         project_list = Project.objects.filter(is_searchable=True)
         # Filter out the DemocracyLab project
         if settings.DLAB_PROJECT_ID.isdigit():
-            project_list = Project.objects.exclude(id=int(settings.DLAB_PROJECT_ID))
+            project_list = project_list.exclude(id=int(settings.DLAB_PROJECT_ID))
         project_list = projects_by_sortField(project_list, '-project_date_modified')[:project_count]
         hydrated_project_list = list(project.hydrate_to_tile_json() for project in project_list)
         return JsonResponse({'projects': hydrated_project_list})
