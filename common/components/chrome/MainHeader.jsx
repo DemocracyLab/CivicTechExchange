@@ -70,7 +70,7 @@ class MainHeader extends React.Component<{||}, State > {
   _renderNavBar() {
     return (
       <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
-        <Navbar.Brand><a href="/index/?section=FindProjects"><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></Navbar.Brand>
+        <Navbar.Brand><a href="/index/?section=Home"><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></Navbar.Brand>
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
         <Navbar.Collapse id="nav-pagenav-container">
           <Nav className="MainHeader-pagenav mr-auto">
@@ -100,7 +100,7 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderUserSection() {
-    //renders a login/donate button if user is logged out, renders user profile/action links if logged in
+    //renders a login button if user is logged out, renders user profile/action links if logged in
     return (
       <React.Fragment>
         <Button variant="outline-primary" href="#donate">Donate</Button>

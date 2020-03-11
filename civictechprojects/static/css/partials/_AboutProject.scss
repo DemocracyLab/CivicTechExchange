@@ -146,6 +146,7 @@
 
 .AboutProjects_tabs {
   clear: both;
+  display:flex;
   justify-self: flex-start;
   align-self: flex-end;
   width: 100%;
@@ -224,11 +225,29 @@
     width: 100%;
   }
 }
+
+.AboutProjects-recent-activity {
+  padding: 20px; /*as with description-details consider maxwidth */
+
+  border-top: $color-grey-disabled solid 1px;
+}
+
+.AboutProjects-show-more-activity-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.AboutProjects-show-more-activity {
+  cursor: pointer;
+  text-align: center;
+}
+
 .AboutProjects-jumplink {
   /* anchor tag is moved "higher up" than its content to account for Bootstrap fixed nav bar */
   /* TODO: Make the component use the React prop from MainHeader and then remove this rule, so it can account for the alert message */
   top: -60px;
 }
+
 .AboutProjects-positions-available {
   padding: 25px 10px; /*as with description-details consider maxwidth */
 

@@ -6,6 +6,7 @@ import {Glyph,GlyphStyles, GlyphSizes} from "../utils/glyphs.js";
 import {Dictionary} from "../types/Generics.jsx";
 import CurrentUser from "../utils/CurrentUser.js";
 import url from "../utils/url.js";
+import utils from "../utils/utils.js";
 import Section from "../enums/Section.js";
 import NavigationStore from "../stores/NavigationStore.js";
 import moment from 'moment';
@@ -37,13 +38,6 @@ type State = {|
 const AlertMessages: Dictionary<string> = {
   projectAwaitingApproval: 'Your project "{value}" is awaiting approval.  Expect a decision in the next business day.'
 };
-
-// Put string html content into a format that dangerouslySetInnerHTML accepts
-function unescapeHtml(html: string): string {
-  let escapeEl = document.createElement('textarea');
-  escapeEl.innerHTML = html;
-  return escapeEl.textContent;
-}
 
 class AlertHeader extends React.Component<Props, State> {
   constructor(): void {
@@ -169,7 +163,7 @@ class AlertHeader extends React.Component<Props, State> {
   }
   
   _renderBackendAlert(): React$Node {
-    return <div className="AlertHeader-text" dangerouslySetInnerHTML={{__html: unescapeHtml(window.HEADER_ALERT)}}/>
+    return <div className="AlertHeader-text" dangerouslySetInnerHTML={{__html: utils.unescapeHtml(window.HEADER_ALERT)}}/>
   }
   
   _renderEmailNotVerifiedAlert(): React$Node {

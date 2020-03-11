@@ -20,7 +20,6 @@ from .sitemaps import ProjectSitemap, SectionSitemap
 
 
 from . import views
-
 urlpatterns = [
 
     url(
@@ -29,6 +28,7 @@ urlpatterns = [
         {'sitemaps': {'projects': ProjectSitemap(), 'sections': SectionSitemap()}},
         name='django.contrib.sitemaps.views.sitemap'
     ),
+    url(r'^robots\.txt$', views.robots, name='robots'),
     url(r'^googlebb20bcf8545e7046.html$', TemplateView.as_view(template_name="googlebb20bcf8545e7046.html")),
     url(r'^projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
     url(r'^projects/delete/(?P<project_id>[0-9]+)/$', views.project_delete, name='project_delete'),
@@ -42,11 +42,12 @@ urlpatterns = [
         r'^delete_s3/(?P<s3_key>.*)$',
         views.delete_uploaded_file,
     ),
+    url(r'^api/projects/recent', views.recent_projects_list),
     url(r'^api/projects', views.projects_list),
     url(r'^api/my_projects', views.my_projects),
     url(r'^api/tags', views.tags),
     url(r'^index/$', views.index),
-    url(r'^api/stats$', views.get_site_stats, name='get_site_stats'),
+    url(r'^api/team$', views.team, name='team'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
     url(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner'),
     url(r'^contact/volunteers/(?P<project_id>[0-9]+)/$', views.contact_project_volunteers, name='contact_project_volunteers'),
@@ -64,3 +65,4 @@ urlpatterns = [
     url(r'^contact/democracylab$', views.contact_democracylab, name='contact_democracylab')
 
 ]
+

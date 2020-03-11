@@ -92,6 +92,8 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+GITHUB_API_TOKEN = os.environ.get('GITHUB_API_TOKEN', None)
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
@@ -212,13 +214,16 @@ ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
 CONTACT_EMAIL = os.environ['CONTACT_EMAIL']
 FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
 
+MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY', None)
+MAILCHIMP_SUBSCRIBE_LIST_ID = os.environ.get('MAILCHIMP_SUBSCRIBE_LIST_ID', None)
+
 APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
 VOLUNTEER_RENEW_REMINDER_PERIODS = ast.literal_eval(os.environ.get('VOLUNTEER_RENEW_REMINDER_PERIODS', 'None'))
 VOLUNTEER_REMINDER_OVERALL_PERIOD = VOLUNTEER_RENEW_REMINDER_PERIODS and timedelta(sum(VOLUNTEER_RENEW_REMINDER_PERIODS))
 VOLUNTEER_CONCLUDE_SURVEY_URL = os.environ.get('VOLUNTEER_CONCLUDE_SURVEY_URL', '')
 
 
-DLAB_PROJECT_ID = os.environ.get('DLAB_PROJECT_ID', '')
+DLAB_PROJECT_ID = os.environ.get('DLAB_PROJECT_ID', None)
 
 PAYPAL_ENDPOINT = os.environ.get('PAYPAL_ENDPOINT', '')
 PAYPAL_PAYEE = os.environ.get('PAYPAL_PAYEE', '')
@@ -257,8 +262,12 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
         'error': True,
         'message': 'Backend link generation will not work.'
     },
+    'BOARD_OF_DIRECTORS': {
+        'error': False,
+        'message': 'About Us page will not display correctly.'
+    },
     'DLAB_PROJECT_ID': {
-        'error': True,
+        'error': False,
         'message': 'About Us page will not display correctly.'
     },
     'STATIC_CDN_URL': {
@@ -292,8 +301,15 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'CONTACT_EMAIL': {
         'error': False,
         'message': 'Contact Us form will not send messages.'
+    },
+    'GITHUB_API_TOKEN': {
+        'error': False,
+        'message': 'Github API key needed to raise rate limit for ingesting commit data'
+    },
+    'MAILCHIMP_API_KEY': {
+        'error': False,
+        'message': 'Mailchimp API key needed to subscribe users to mailing list'
     }
-
 }
 
 # TODO: Set to True in productions
@@ -348,6 +364,7 @@ SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '')
 SEO_JS_BACKEND = "common.helpers.caching.DebugPrerenderIO"
 SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
 SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
+SEO_JS_ENABLED = os.environ.get('SEO_JS_ENABLED', False) == 'True'
 
 # TODO: Put in environment variable
 SEO_JS_USER_AGENTS = (
@@ -371,8 +388,17 @@ SEO_JS_USER_AGENTS = (
     "developersgoogle.com/+/web/snippet",
 )
 
+DISALLOW_CRAWLING = os.environ.get('DISALLOW_CRAWLING', False) == 'True'
+
 DL_PAGES_LAST_UPDATED_DATE = os.environ.get('DL_PAGES_LAST_UPDATED', '2019-12-05')
 SITE_LAST_UPDATED = parse(DL_PAGES_LAST_UPDATED_DATE)
 
 # https://docs.djangoproject.com/en/1.7/ref/settings/#silenced-system-checks
 SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
+
+# How many of the most recent github commits to store per project.
+MAX_COMMITS_PER_PROJECT = int(os.environ.get('MAX_COMMITS_PER_PROJECT', 30))
+
+BOARD_OF_DIRECTORS = os.environ.get('BOARD_OF_DIRECTORS', '')
+
+FAVICON_PATH = os.environ.get('FAVICON_PATH', 'https://d1agxr2dqkgkuy.cloudfront.net/img/favicon.png')

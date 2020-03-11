@@ -166,7 +166,7 @@ def approve_project(request, project_id):
 def index(request):
     template = loader.get_template('new_index.html')
     context = {
-        'DLAB_PROJECT_ID': settings.DLAB_PROJECT_ID,
+        'DLAB_PROJECT_ID': settings.DLAB_PROJECT_ID or '',
         'PROJECT_DESCRIPTION_EXAMPLE_URL': settings.PROJECT_DESCRIPTION_EXAMPLE_URL,
         'POSITION_DESCRIPTION_EXAMPLE_URL': settings.POSITION_DESCRIPTION_EXAMPLE_URL,
         'STATIC_CDN_URL': settings.STATIC_CDN_URL,
@@ -177,7 +177,8 @@ def index(request):
         'PAYPAL_PAYEE': settings.PAYPAL_PAYEE,
         'PRESS_LINKS': settings.PRESS_LINKS,
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt'),
-        'GR_SITEKEY': settings.GR_SITEKEY
+        'GR_SITEKEY': settings.GR_SITEKEY,
+        'FAVICON_PATH': settings.FAVICON_PATH
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
@@ -295,6 +296,20 @@ def projects_list(request):
     response = projects_with_meta_data(project_list_page, project_pages, project_count)
 
     return JsonResponse(response)
+
+
+def recent_projects_list(request):
+    if request.method == 'GET':
+        url_parts = request.GET.urlencode()
+        query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+        project_count = int(query_params['count'][0]) if 'count' in query_params else 3
+        project_list = Project.objects.filter(is_searchable=True)
+        # Filter out the DemocracyLab project
+        if settings.DLAB_PROJECT_ID.isdigit():
+            project_list = Project.objects.exclude(id=int(settings.DLAB_PROJECT_ID))
+        project_list = projects_by_sortField(project_list, '-project_date_modified')[:project_count]
+        hydrated_project_list = list(project.hydrate_to_tile_json() for project in project_list)
+        return JsonResponse({'projects': hydrated_project_list})
 
 
 def apply_tag_filters(project_list, query_params, param_name, tag_filter):
@@ -740,3 +755,25 @@ def contact_democracylab(request):
 
     # Error while verifying the captcha, do not send the email
     return HttpResponse(status=401)
+
+
+def robots(request):
+    template = loader.get_template('robots.txt')
+    context = {
+        'PROTOCOL_DOMAIN': settings.PROTOCOL_DOMAIN,
+        'DISALLOW_CRAWLING': settings.DISALLOW_CRAWLING
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
+def team(request):
+    response = {
+        'board_of_directors': settings.BOARD_OF_DIRECTORS
+    }
+
+    if settings.DLAB_PROJECT_ID is not None:
+        project = Project.objects.get(id=settings.DLAB_PROJECT_ID)
+        response['project'] = project.hydrate_to_json()
+
+    return JsonResponse(response)

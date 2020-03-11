@@ -53,13 +53,8 @@ urlpatterns = [
     url(r'^api/user/(?P<user_id>[0-9]+)/$', views.user_details, name='user_details'),
     url(r'^api/user/edit/(?P<user_id>[0-9]+)/$', views.user_edit, name='user_edit'),
     url(r'^', include('civictechprojects.urls')),
-    url(r'^$', RedirectView.as_view(url='/index/?section=FindProjects&showSplash=1', permanent=False)),
+    url(r'^$', RedirectView.as_view(url='/index/?section=Home', permanent=False)),
     url(r'^admin/', admin.site.urls),
     url(r'^platform$', RedirectView.as_view(url='http://connect.democracylab.org/platform/', permanent=False)),
-    # url(r'^.*$', RedirectView.as_view(url='/index/', permanent=False)),
-    # url(
-    #     r'check_email/(?P<user_email>.*)$',
-    #     views.check_email,
-    #     name="check_email"
-    # )
+    # url(r'^.*$', RedirectView.as_view(url='/index/', permanent=False))
 ]
