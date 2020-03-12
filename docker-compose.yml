@@ -1,4 +1,4 @@
-version: '3'
+version: '2.4'
 
 services:
   db:
@@ -7,11 +7,17 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=p0stgres!
       - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   create_table:
     build: .
     command: python manage.py createcachetable
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   make_migrations:
     build: .
     command: python manage.py makemigrations
@@ -29,4 +35,5 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
