@@ -19,41 +19,11 @@
   justify-content: space-around;
   margin-bottom: 20px;
 
-/* overriding the find projects page CSS to fit this page's design */
+/* layout for project cards */
   .ProjectCard-root {
     flex-basis: 100%;
     min-width: 100%;
     height: auto;
-  }
-  .ProjectCard-logo {
-    border: none;
-    grid-row: 1/2;
-    min-height: 99px;
-  }
-  .ProjectCard-title {
-    grid-column: 1/5;
-    grid-row: 3;
-    margin-left: 0.5rem;
-  }
-  .ProjectCard-subinfo {
-    grid-column: 3/5;
-    grid-row: 1/2;
-    border: none;
-    /* make sure it's similar height whether a project has one or all three subinfo lines */
-  }
-  .ProjectCard-subinfo li {
-    padding-right: 0.5rem;
-  }
-  .ProjectCard-description {
-    grid-column: 1/5;
-    grid-row: 4;
-    border-top: none;
-  }
-  .ProjectCard-skills {
-    grid-column: 1/5;
-    grid-row: 5;
-    margin-left: 0.5rem;
-    padding: 0;
   }
 }
 .LandingController-partner-section {
@@ -216,9 +186,6 @@
     .ProjectCard-root {
       flex-basis: 45%;
       min-width: 45%;
-    }
-    .ProjectCard-description {
-      border-top: 0;
     }
   }
 }
