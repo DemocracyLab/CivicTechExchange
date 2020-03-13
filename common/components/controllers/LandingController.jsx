@@ -47,7 +47,12 @@ class LandingController extends React.PureComponent<{||}> {
 
     return (
       <SplashScreen className="LandingController-topsplash" header={header} text={text}>
-        <Button variant="primary" className="LandingController-topsplash-btn" href={url.sectionOrLogIn(Section.FindProjects)}>Get Started</Button>
+        <Button variant="primary" className="SplashScreen-find-projects-btn" onClick={url.section(Section.FindProjects))}>
+          Find Projects
+        </Button>
+        <Button variant="primary" className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.CreateProject)}>
+          Create A Project
+        </Button>
       </SplashScreen>
     );
   }
