@@ -25,7 +25,8 @@ services:
       - create_table
   web:
     build: .
-    command: bash -c 'npm run buildfast &&
+    command: bash -c 'source ./docker_environment_init.sh || true &&
+                      npm run buildfast &&
                       python manage.py runserver 0.0.0.0:8000'
     ports:
       - "8000:8000"
