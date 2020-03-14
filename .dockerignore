@@ -1,0 +1,23 @@
+# Ignore all files and only allow files and directories below.
+*
+
+# Working folders.
+!civictechprojects/
+!common/
+!democracylab/
+!oauth2/
+
+# Important run-time files.
+!manage.py
+!setupJest.js
+!webpack.config.js
+!.babelrc
+
+# Third-party dependency files.
+!package.json
+!yarn.lock
+!.yarnrc
+!requirements.txt
+
+# Config
+!docker_environment_init.sh

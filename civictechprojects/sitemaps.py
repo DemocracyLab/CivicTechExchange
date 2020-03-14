@@ -51,4 +51,14 @@ def get_all_sitemap_paths():
     return sitemap_paths
 
 
-all_sitemap_paths = get_all_sitemap_paths()
+class SitemapPages(object):
+    __instance = None
+
+    def __new__(cls):
+        if SitemapPages.__instance is None:
+            SitemapPages.update()
+        return SitemapPages.__instance
+
+    @staticmethod
+    def update():
+        SitemapPages.__instance = get_all_sitemap_paths()
