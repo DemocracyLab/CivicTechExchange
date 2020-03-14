@@ -140,7 +140,7 @@ WSGI_APPLICATION = 'democracylab.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DL_DATABASE = os.environ.get('DL_DATABASE', '')
-HOSTNAME = os.environ.get('HOSTNAME')
+HOSTNAME = os.environ.get('HOSTNAME', '127.0.0.1')
 
 DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
     'default': {
