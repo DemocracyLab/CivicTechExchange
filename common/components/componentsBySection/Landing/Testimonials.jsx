@@ -29,14 +29,14 @@ const Testimonials = [
   },
   {
     name: "Scott Veirs",
-    avatar: "",
+    avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/scottveirs.jpg",
     title: "Project Owner, Orcasound",
     text: "DemocracyLab has helped Orcasound build our open source community while making incremental progress on design and coding challenges during one day events. Many hackathon volunteers come and go, but some have dedicated hundreds of hours to our project outside of the hackathons themselves.",
     source: ""
   },
   {
     name: "Jackson Brown",
-    avatar: "",
+    avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/jacksonbrown.jpg",
     title: "Project Owner, Council Data Project",
     text: "Our project has received incredible benefit from the DemocracyLab community. Whether it's development and design assistance or simply feedback and awareness for our project, DemocracyLab has been a valuable resource in furthering the goals of our work.",
     source: ""
@@ -46,7 +46,7 @@ const Testimonials = [
     avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/Jenny%20Durkan.png",
     title: "Mayor, City of Seattle",
     text: "Seattle is home to some of the most innovative thinkers and technologists anywhere in the world who want to use their talent to address social challenges. It’s why we formed an Innovation Advisory Council, and it’s why groups like DemocracyLab exist.",
-    source: ""
+    source: "https://twitter.com/MayorJenny/status/1027951623690022913?s=20"
   },
   {
     name: "Minjoo Kweon",
@@ -60,6 +60,13 @@ const Testimonials = [
     avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/Akshat%20Vasavada.png",
     title: "Product Manager, Stitch Inc.",
     text: "DemocracyLab gave me a chance to learn and grow my skillsets in a new career. The experiences I gained through my work with DemocracyLab set me up for long-term success as a Product Manager.",
+    source: ""
+  },
+  {
+    name: "Glen Braun",
+    avatar: "https://d1agxr2dqkgkuy.cloudfront.net/img/glenbraun.jpg",
+    title: "Project Owner, RHours",
+    text: "Thank you, DemocracyLab! Through the hackathons and the web presence we’re growing a committed, talented team of contributors. Taking the first, simple step of creating a project on DemocracyLab provided a concrete way to move past an idea and into a real effort which others could join. That first step has made all the difference for us at RHours.",
     source: ""
   }
 ]

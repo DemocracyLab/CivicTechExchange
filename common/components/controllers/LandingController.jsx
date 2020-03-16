@@ -47,7 +47,12 @@ class LandingController extends React.PureComponent<{||}> {
 
     return (
       <SplashScreen className="LandingController-topsplash" header={header} text={text}>
-        <Button variant="primary" className="LandingController-topsplash-btn" href={url.sectionOrLogIn(Section.FindProjects)}>Get Started</Button>
+        <Button variant="primary" className="SplashScreen-find-projects-btn" href={url.section(Section.FindProjects)}>
+          Find Projects
+        </Button>
+        <Button variant="primary" className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.CreateProject)}>
+          Create A Project
+        </Button>
       </SplashScreen>
     );
   }
@@ -74,7 +79,7 @@ class LandingController extends React.PureComponent<{||}> {
               <p>3. Connect with Project Leaders</p>
             </div>
           </div>
-            <Button href={url.sectionOrLogIn(Section.FindProjects)} variant="light">Start Volunteering!</Button>
+            <Button href={url.section(Section.FindProjects)} variant="light">Start Volunteering!</Button>
 
           </div>
           <div className="col-xs-12 col-lg-6 LandingController-recruit-flow">

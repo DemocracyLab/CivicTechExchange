@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory
+from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
@@ -47,6 +48,7 @@ class ProjectCreationForm(ModelForm):
             raise PermissionDenied()
 
         project.delete()
+        SitemapPages.update()
 
     @staticmethod
     def edit_project(request, project_id):
