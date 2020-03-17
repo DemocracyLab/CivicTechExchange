@@ -10,7 +10,7 @@
     "build": "webpack --mode production && npm run buildtask:collectstatic",
     "buildfast": "webpack --mode development && npm run buildtask:collectstatic",
     "watch": "webpack --mode development --watch",
-    "postinstall": "webpack --mode development && npm run buildtask:sass && npm run buildtask:collectstatic",
+    "postinstall": "webpack --mode development && npm run buildtask:collectstatic",
     "buildtask:collectstatic": "python manage.py collectstatic --noinput -i *.scss",
     "test": "jest"
   },
