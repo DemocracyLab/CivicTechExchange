@@ -29,6 +29,7 @@ var/
 *.egg
 *.js.map
 *.css.map
+main.styles.css
 
 # Files that are now built automatically during heroku deployment
 bundle.js

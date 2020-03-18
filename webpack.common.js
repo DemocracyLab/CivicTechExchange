@@ -5,11 +5,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  entry: "./common/components/mount-components.js",
+  entry: ["./common/components/mount-components.js", "./civictechprojects/static/css/styles.scss"],
   target: 'web',
   output: {
-    path: path.resolve(__dirname, "./common/static/js"),
-    filename: "[name].bundle.js"
+    path: path.resolve(__dirname, "./common/static"),
+    filename: "js/bundle.js"
   },
   module: {
     rules: [
@@ -57,6 +57,7 @@ module.exports = {
     })
   ],
   optimization: {
+    minimizer: [new OptimizeCSSAssetsPlugin({})],
     runtimeChunk: 'single',
     splitChunks: {
       cacheGroups: {
