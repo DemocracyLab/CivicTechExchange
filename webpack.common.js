@@ -2,14 +2,13 @@ const path = require('path');
 const webpack = require('webpack');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   entry: ["./common/components/mount-components.js", "./civictechprojects/static/css/styles.scss"],
   target: 'web',
   output: {
     path: path.resolve(__dirname, "./common/static"),
-    filename: "js/bundle.js"
+    filename: "js/[name].bundle.js"
   },
   module: {
     rules: [
@@ -52,12 +51,11 @@ module.exports = {
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
-      filename: 'css/styles.css',
+      filename: 'css/[name].styles.css',
       allChunks: true,
     })
   ],
   optimization: {
-    minimizer: [new OptimizeCSSAssetsPlugin({})],
     runtimeChunk: 'single',
     splitChunks: {
       cacheGroups: {
