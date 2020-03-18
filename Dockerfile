@@ -75,7 +75,7 @@ ENV S3_BUCKET "democracylab-marlok"
 ENV EMAIL_HOST_PASSWORD "betterDemocracyViaTechnology"
 
 # DemocracyLab project ID (for use on About Us page)
-ENV DLAB_PROJECT_ID 4
+ENV DLAB_PROJECT_ID 1
 
 # Paypal endpoint (sandbox by default)
 ENV PAYPAL_ENDPOINT 'https://www.sandbox.paypal.com/cgi-bin/webscr'

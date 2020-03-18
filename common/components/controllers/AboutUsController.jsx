@@ -55,7 +55,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     
     if(response.project) {
       state.project = response.project;
-      const sortedVolunteers: $ReadOnlyArray<VolunteerDetailsAPIData> = _.sortBy(response.project.project_volunteers, ["platform_date_joined"]);
+      const activeVolunteers: $ReadOnlyArray<VolunteerDetailsAPIData> = response.project.project_volunteers.filter( (pv) => pv.isApproved);
+      const sortedVolunteers: $ReadOnlyArray<VolunteerDetailsAPIData> = _.sortBy(activeVolunteers, ["platform_date_joined"]);
       // Remove board members from volunteer list
       const uniqueVolunteers: $ReadOnlyArray<BioPersonData> = _.differenceWith(
         sortedVolunteers,
@@ -232,7 +233,10 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return (this.state.project ?
       <div className="about-us-team col">
         <h2>Our Team</h2>
-        <p className="about-us-team-description">We are volunteer engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.</p>
+        <p className="about-us-team-description">
+          We are volunteer engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.
+          Please visit our <a href={url.section(Section.AboutProject, {id: this.state.project.project_id})}>project profile</a> to learn how you can get involved!
+        </p>
         <h4>Business & Operations</h4>
         <div className="about-us-team-card-container">
           {this._renderBios(this.state.project_owners)}
