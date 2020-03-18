@@ -1,4 +1,4 @@
-from civictechprojects.sitemaps import all_sitemap_paths
+from civictechprojects.sitemaps import SitemapPages
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 from django_seo_js import settings
@@ -29,7 +29,7 @@ def is_prerenderable_request(request):
 
 
 def is_sitemap_url(url):
-    for sitemap_url in all_sitemap_paths:
+    for sitemap_url in SitemapPages():
         if sitemap_url == url:
             return True
 

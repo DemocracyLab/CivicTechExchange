@@ -1,7 +1,6 @@
 import async from '../utils/async.js';
 import {Glyph} from '../utils/glyphs.js';
 import Sort from '../utils/sort.js';
-import svg, {SVGPath} from "../utils/svg.js";
 import Truncate from '../utils/truncate.js';
 import urlHelper from '../utils/url.js';
 import window from './__mocks__/window';
@@ -113,13 +112,6 @@ describe('utils', () => {
   test('isEmptyStringOrValidUrl also accepts empty string', () => {
     expect(urlHelper.isEmptyStringOrValidUrl('')).toEqual(true);
   })
-
-  test('svg', () => {
-    const img = svg.path(SVGPath['GITHUB'], 'LogInController-socialIcon');
-    const el = renderer.create(img);
-    const str = JSON.stringify(el);
-    expect(str).toMatch('LogInController-socialIcon');
-  });
   
   test('groupBy.andTransform', () => {
     const testData = [{a:1,b:2,type:"a"}, {a:2, b:2, type:"b"}];
