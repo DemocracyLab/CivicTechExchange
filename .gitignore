@@ -28,6 +28,7 @@ var/
 .installed.cfg
 *.egg
 *.js.map
+*.css.map
 
 # Files that are now built automatically during heroku deployment
 bundle.js
