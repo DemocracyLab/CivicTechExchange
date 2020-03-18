@@ -55,7 +55,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     
     if(response.project) {
       state.project = response.project;
-      const sortedVolunteers: $ReadOnlyArray<VolunteerDetailsAPIData> = _.sortBy(response.project.project_volunteers, ["platform_date_joined"]);
+      const activeVolunteers: $ReadOnlyArray<VolunteerDetailsAPIData> = response.project.project_volunteers.filter( (pv) => pv.isApproved);
+      const sortedVolunteers: $ReadOnlyArray<VolunteerDetailsAPIData> = _.sortBy(activeVolunteers, ["platform_date_joined"]);
       // Remove board members from volunteer list
       const uniqueVolunteers: $ReadOnlyArray<BioPersonData> = _.differenceWith(
         sortedVolunteers,
