@@ -78,7 +78,7 @@ export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
 #export GOOGLE_CONVERSION_IDS='[{'SignedUp':'bYM2CLDDlqMBENavot8C'}]'
 
 # DemocracyLab project ID (for use on About Us page)
-export DLAB_PROJECT_ID=4
+export DLAB_PROJECT_ID=1
 
 # Paypal endpoint (sandbox by default)
 export PAYPAL_ENDPOINT='https://www.sandbox.paypal.com/cgi-bin/webscr'

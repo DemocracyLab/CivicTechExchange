@@ -147,6 +147,7 @@
 .AboutProjects_tabs {
   clear: both;
   display:flex;
+  flex-wrap: wrap;
   justify-self: flex-start;
   align-self: flex-end;
   width: 100%;
