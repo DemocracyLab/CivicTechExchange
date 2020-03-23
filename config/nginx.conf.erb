@@ -44,7 +44,7 @@ http {
 			proxy_set_header Host $http_host;
 			proxy_redirect off;
 			# 3001 needs to be hardcoded on the node server/webpack or whatsoever
-			proxy_pass http://127.0.0.1:3001;
+			proxy_pass http://0.0.0.0:3000;
 			client_max_body_size 15m;
 		}
 
