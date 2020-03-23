@@ -72,7 +72,10 @@ class MainHeader extends React.Component<{||}, State > {
       <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
         <Navbar.Brand><a href="/index/?section=Home"><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></Navbar.Brand>
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
-        <Navbar.Collapse id="nav-pagenav-container">
+        <Navbar.Collapse id="nav-pagenav-container" className="flex-column">
+          <Nav className="MainHeader-usernav ml-auto">
+            {this._renderUserSection()}
+          </Nav>
           <Nav className="MainHeader-pagenav mr-auto">
             <NavDropdown title="Projects" id="nav-projects">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
@@ -90,9 +93,6 @@ class MainHeader extends React.Component<{||}, State > {
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
             </NavDropdown>
-          </Nav>
-          <Nav className="MainHeader-usernav">
-            {this._renderUserSection()}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
