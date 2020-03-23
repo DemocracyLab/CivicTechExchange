@@ -36,6 +36,8 @@ http {
 		server_name _;
 		keepalive_timeout 5;
 
+		large_client_header_buffers 4 32k;
+
     	# root   ./;
 	#index  index.html index.htm;
 
