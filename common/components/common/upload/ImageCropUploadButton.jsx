@@ -24,16 +24,14 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
   constructor(props): void {
     super(props);
   
-    const crosshairsSettingsWithNoAspectRatio = {
+    let cropSettings = {
       unit:"%",
       x:5,
       y:5,
       width:90,
       height:90
     }
-    const crosshairsSettingsWithSquareApectRatio = {...crosshairsSettingsWithNoAspectRatio, aspect: 1 / 1};
-    const crosshairsSettingsWithPropsApectRatio = {...crosshairsSettingsWithNoAspectRatio, aspect: props.aspect};
-    const cropSettings = props.aspect ? crosshairsSettingsWithPropsApectRatio : crosshairsSettingsWithSquareApectRatio;
+    cropSettings = props.aspect ? {...cropSettings, aspect: props.aspect} : cropSettings;
     
     this.state = {
       s3Key: "",

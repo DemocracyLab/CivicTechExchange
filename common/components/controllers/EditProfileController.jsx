@@ -192,7 +192,8 @@ class EditProfileController extends React.PureComponent<{||},State> {
               <div className="form-group">
                 <ImageCropUploadFormElement form_id="user_thumbnail_location"
                                         buttonText="Upload Your Picture"
-                                        currentImage={this.state.formFields.user_thumbnail}/>
+                                        currentImage={this.state.formFields.user_thumbnail}
+                                        aspect={1/1}/>
               </div>
 
               <div className="form-group">
