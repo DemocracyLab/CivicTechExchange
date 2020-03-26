@@ -67,10 +67,11 @@ class MainHeader extends React.Component<{||}, State > {
     );
   }
 
+
   _renderNavBar() {
     return (
       <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
-        <Navbar.Brand><a href="/index/?section=Home"><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></Navbar.Brand>
+        <Navbar.Brand><a href={url.section(Section.Home)}><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></Navbar.Brand>
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
         <Navbar.Collapse id="nav-pagenav-container" className="flex-column">
           <Nav className="MainHeader-usernav ml-auto">
@@ -78,8 +79,8 @@ class MainHeader extends React.Component<{||}, State > {
           </Nav>
           <Nav className="MainHeader-pagenav mr-auto">
             <NavDropdown title="Projects" id="nav-projects">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+              <NavDropdown.Item href={url.section(Section.FindProjects)}>Find Projects</NavDropdown.Item>
+              <NavDropdown.Item href={url.section(Section.CreateProject)}>Create Project</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Groups" id="nav-groups">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
@@ -90,8 +91,9 @@ class MainHeader extends React.Component<{||}, State > {
               <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="About" id="nav-about">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+              <NavDropdown.Item href={url.section(Section.AboutUs)}>About Us</NavDropdown.Item>
+              <NavDropdown.Item href={url.section(Section.ContactUs)}>Contact Us</NavDropdown.Item>
+              <NavDropdown.Item href={url.section(Section.Press)}>News</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
@@ -103,8 +105,8 @@ class MainHeader extends React.Component<{||}, State > {
     //renders a login button if user is logged out, renders user profile/action links if logged in
     return (
       <React.Fragment>
-        <Button variant="outline-primary" href="#donate">Donate</Button>
-        <Nav.Link href="#login">Log In</Nav.Link>
+        <Button variant="outline-primary" href={url.section(Section.Donate)}>Donate</Button>
+        <Nav.Link href={url.section(Section.LogIn)}>Log In</Nav.Link>
       </React.Fragment>
     )
 
