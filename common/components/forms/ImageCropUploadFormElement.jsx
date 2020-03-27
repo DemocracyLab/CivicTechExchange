@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react';
-import FileUploadButton from '../common/upload/FileUploadButton.jsx'
+import ImageCropUploadButton from '../common/upload/ImageCropUploadButton.jsx'
 import Visibility from '../common/Visibility.jsx'
-import type FileUploadData from '../common/upload/FileUploadButton.jsx'
+import type FileUploadData from '../common/upload/ImageCropUploadButton.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 import _ from 'lodash'
 
@@ -11,7 +11,8 @@ type Props = {|
   form_id: string,
   buttonText: ?string,
   currentImage: FileInfo,
-  onSelection: ?(FileInfo) => void
+  onSelection: ?(FileInfo) => void,
+  aspect: number
 |};
 
 type State = {|
@@ -20,12 +21,12 @@ type State = {|
 |};
 
 
-class ImageUploadFormElement extends React.PureComponent<Props,State> {
+class ImageCropUploadFormElement extends React.PureComponent<Props,State> {
 
   constructor(): void {
     super();
     this.state = {
-      currentImage: "",
+      currentImage: '',
       buttonText: "",
       initialized: false
     };
@@ -45,21 +46,18 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
   }
 
   render(): React$Node {
+    const previewImage = this.props.currentImage ? this.props.currentImage.publicUrl : '';
     return (
       <div>
-        {this.state.currentImage && this._renderThumbnail()}
-        <FileUploadButton acceptedFileTypes="image/*" buttonText={this.props.buttonText || "Upload Image"} onFileUpload={this._handleFileSelection.bind(this)}/>
+        <ImageCropUploadButton currentImage={previewImage}
+                               aspect={this.props.aspect}
+                               buttonText={this.props.buttonText || "Upload Image"}
+                               onFileUpload={this._handleFileSelection.bind(this)}/>
         <input type="hidden" ref="hiddenFormField" name={this.props.form_id} id={this.props.form_id} />
       </div>
     );
   }
-  
-  _renderThumbnail() : React$Node {
-    return (
-      <img className="upload_img upload_img_bdr" src={this.state.currentImage.publicUrl}/>
-    );
-  }
-  
+    
   _handleFileSelection(fileUploadData: FileUploadData) : void {
     var fileInfo = _.assign({ visibility: Visibility.PUBLIC }, fileUploadData);
     this.updateFormFields(fileInfo);
@@ -67,4 +65,4 @@ class ImageUploadFormElement extends React.PureComponent<Props,State> {
 
 }
 
-export default ImageUploadFormElement;
+export default ImageCropUploadFormElement;

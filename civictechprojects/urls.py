@@ -16,19 +16,19 @@ Including another URLconf
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
-from .sitemaps import ProjectSitemap
+from .sitemaps import ProjectSitemap, SectionSitemap
 
 
 from . import views
-
 urlpatterns = [
 
     url(
         r'^sitemap\.xml$',
         sitemap,
-        {'sitemaps': {'projects': ProjectSitemap()}},
+        {'sitemaps': {'projects': ProjectSitemap(), 'sections': SectionSitemap()}},
         name='django.contrib.sitemaps.views.sitemap'
     ),
+    url(r'^robots\.txt$', views.robots, name='robots'),
     url(r'^googlebb20bcf8545e7046.html$', TemplateView.as_view(template_name="googlebb20bcf8545e7046.html")),
     url(r'^groups/create/$', views.group_create, name='group_create'),
     url(r'^groups/edit/(?P<group_id>[0-9]+)/$', views.group_edit, name='group_edit'),
@@ -52,13 +52,14 @@ urlpatterns = [
         r'^delete_s3/(?P<s3_key>.*)$',
         views.delete_uploaded_file,
     ),
+    url(r'^api/projects/recent', views.recent_projects_list),
     url(r'^api/projects', views.projects_list),
     url(r'^api/my_projects', views.my_projects),
     url(r'^api/my_events', views.my_events),
     url(r'^api/my_groups', views.my_groups),
     url(r'^api/tags', views.tags),
     url(r'^index/$', views.index),
-    url(r'^api/stats$', views.get_site_stats, name='get_site_stats'),
+    url(r'^api/team$', views.team, name='team'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
     url(r'^api/group/(?P<group_id>[0-9]+)/$', views.get_group, name='get_group'),
     url(r'^api/event/(?P<event_id>[0-9]+)/$', views.get_event, name='get_event'),
@@ -74,6 +75,8 @@ urlpatterns = [
     url(r'^volunteer/demote/(?P<application_id>[0-9]+)/$', views.demote_project_volunteer, name='demote_project_volunteer'),
     url(r'^volunteer/renew/(?P<application_id>[0-9]+)/$', views.renew_volunteering_with_project, name='renew_volunteering_with_project'),
     url(r'^volunteer/conclude/(?P<application_id>[0-9]+)/$', views.conclude_volunteering_with_project, name='conclude_volunteering_with_project'),
-    url(r'^alert/create/$', views.add_alert, name='add_alert')
+    url(r'^alert/create/$', views.add_alert, name='add_alert'),
+    url(r'^contact/democracylab$', views.contact_democracylab, name='contact_democracylab')
 
 ]
+

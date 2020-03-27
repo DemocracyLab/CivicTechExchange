@@ -1,11 +1,12 @@
 // @flow
 
 import React from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 type Props = {|
   showModal: boolean,
-  message: string,
+  message: ?string, // If message not included, use props.children instead
   buttonText: string,
   headerText: ?string,
   onClickButton: () => void
@@ -37,15 +38,15 @@ class NotificationModal extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div>
-          <Modal show={this.state.showModal} bsSize="lg">
-              <Modal.Header style={{whiteSpace: "pre-wrap"}}>
+          <Modal show={this.state.showModal} size="lg" onHide={this.closeModal.bind(this)}>
+              <Modal.Header style={{whiteSpace: "pre-wrap"}} closeButton>
                   <Modal.Title>{this.props.headerText}</Modal.Title>
               </Modal.Header>
               <Modal.Body style={{whiteSpace: "pre-wrap"}}>
-                {this.props.message}
+                {this.props.message ? this.props.message : this.props.children}
               </Modal.Body>
               <Modal.Footer>
-                  <Button onClick={this.closeModal.bind(this)}>{this.props.buttonText}</Button>
+                  <Button variant="primary" onClick={this.closeModal.bind(this)}>{this.props.buttonText}</Button>
               </Modal.Footer>
           </Modal>
       </div>

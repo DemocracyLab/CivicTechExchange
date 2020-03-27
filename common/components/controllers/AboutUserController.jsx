@@ -49,35 +49,19 @@ class AboutUserController extends React.PureComponent<{||}, State> {
         title={user && user.first_name + " " + user.last_name + " | DemocracyLab"}
         />
       <div className="AboutProjectController-root">
-        <div className="container-fluid">
-          <div className="background-light">
-            <div className="row" style={{margin: "30px 0 0 0", padding: "10px 0"}}>
-              <div className="col-sm-5">
-                <div className="row">
-                  <div className="col-sm-auto">
-                    <Avatar user={user} size={50} />
-                  </div>
-                  <div className="col">
-                    <div className="row">
-                      <div className="col">
-                        {user && user.first_name + " " + user.last_name}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col">
-              </div>
-              <div className="col col-sm-3">
-              </div>
+        <div className="container">
+          <div className="row background-light about-user-section">
+            <div className="col">
+              <Avatar user={user} size={50} />
+              <h1 className="about-user-name">{user && user.first_name + " " + user.last_name}</h1>
             </div>
           </div>
 
           {
             user && !_.isEmpty(user.user_technologies)
-              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
-                  <div className='col'>
-                    <h2 className="form-group subheader">TECHNOLOGIES</h2>
+              ? <div className="row about-user-section">
+                  <div className="col">
+                    <h2 className="subheader">TECHNOLOGIES</h2>
                     <div className="Text-section">
                       {this._renderTechnologies()}
                     </div>
@@ -86,9 +70,9 @@ class AboutUserController extends React.PureComponent<{||}, State> {
               : null
           }
 
-          <div className="row" style={{margin: "30px 40px 0 40px"}}>
+          <div className="row about-user-section">
             <div className="col">
-              <h2 className="form-group subheader">ABOUT ME</h2>
+              <h2 className="subheader">ABOUT ME</h2>
               <div className="Text-section" style={{whiteSpace: "pre-wrap"}}>
                 {user && user.about_me}
               </div>
@@ -97,9 +81,9 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
           {
             user && !_.isEmpty(user.user_links)
-              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
-                  <div className='col'>
-                    <h2 className="form-group subheader">LINKS</h2>
+              ? <div className="row about-user-section">
+                  <div className="col">
+                    <h2 className="subheader">LINKS</h2>
                     <div className="Text-section">
                       {this._renderLinks()}
                     </div>
@@ -110,9 +94,9 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
           {
             user && !_.isEmpty(user.user_files)
-              ? <div className="row" style={{margin: "30px 40px 0 40px"}}>
-                  <div className='col'>
-                    <h2 className="form-group subheader">FILES</h2>
+              ? <div className="row about-user-section">
+                  <div className="col">
+                    <h2 className="subheader">FILES</h2>
                     <div className="Text-section">
                       {this._renderFiles()}
                     </div>

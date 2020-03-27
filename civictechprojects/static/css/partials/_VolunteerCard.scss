@@ -33,6 +33,10 @@ div.VolunteerCard-dropdownButton {
   font-size: 18px;
   line-height: 1.75;
 }
+.VolunteerCard-root a.dropdown-item {
+  /* overrides orange link text for the project owner's manage team member dropdown menu */
+  color: inherit;
+}
 /* rotate thumbtack 45 degrees */
 .VolunteerCard-dropdownButton .fa-thumbtack {
   -webkit-transform: rotate(45deg);

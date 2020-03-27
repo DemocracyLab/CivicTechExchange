@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {DropdownButton, MenuItem} from 'react-bootstrap';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import {UserAPIData} from "../../utils/UserAPIUtils.js";
 import {TagDefinition, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import url from "../../utils/url.js";
@@ -50,13 +51,12 @@ class VolunteerCard extends React.PureComponent<Props> {
     return (this.props.volunteer
       ?
         (<DropdownButton
-          bsClass="VolunteerCard-dropdownButton dropdown"
-          bsStyle="link"
-          bsSize="large"
+          variant="light"
+          className="VolunteerCard-dropdownButton"
+          size="lg"
           title={<span><i className={GlyphStyles.EllipsisV}></i></span>}
           id="VolunteerCard-dropdown"
-          noCaret
-          pullRight
+          alignRight
         >
           {this._renderApplicationMenuLinks()}
         </DropdownButton>)
@@ -69,35 +69,35 @@ class VolunteerCard extends React.PureComponent<Props> {
     const volunteer: VolunteerDetailsAPIData = this.props.volunteer;
     let links: ?Array<React$Node> = [];
     let key: number = 0;
-    
+
     if (volunteer.isApproved) {
       if (volunteer.isCoOwner) {
         links = links.concat([
-          (<MenuItem onSelect={() => this.props.onDemotionButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Demote</MenuItem>)
+          (<Dropdown.Item onSelect={() => this.props.onDemotionButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Demote</Dropdown.Item>)
         ]);
       } else {
         links = links.concat([
-          (<MenuItem onSelect={() => this.props.onPromotionButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Promote</MenuItem>)
+          (<Dropdown.Item onSelect={() => this.props.onPromotionButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Promote</Dropdown.Item>)
         ]);
       }
-  
+
       links = links.concat([
-        (<MenuItem onSelect={() => this.props.onDismissButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</MenuItem>)
+        (<Dropdown.Item onSelect={() => this.props.onDismissButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Remove</Dropdown.Item>)
       ]);
     } else {
       links = links.concat([
-          (<MenuItem onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Eye, GlyphWidth.Fixed)}></i> Review</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onApproveButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Approve</MenuItem>),
-          (<MenuItem onSelect={() => this.props.onRejectButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Reject</MenuItem>),
+          (<Dropdown.Item onSelect={() => this.props.onOpenApplication(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Eye, GlyphWidth.Fixed)}></i> Review</Dropdown.Item>),
+          (<Dropdown.Item onSelect={() => this.props.onApproveButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Pushpin, GlyphWidth.Fixed)}></i> Approve</Dropdown.Item>),
+          (<Dropdown.Item onSelect={() => this.props.onRejectButton(this.props.volunteer)} key={key++}><i className={Glyph(GlyphStyles.Delete, GlyphWidth.Fixed)}></i> Reject</Dropdown.Item>),
       ]);
     }
 
     if(volunteer.user.id !== CurrentUser.userID()) {
       links = links.concat([
-        (<MenuItem onSelect={() => this.props.onContactButton(this.props.volunteer)} key={key++} ><i className={Glyph(GlyphStyles.Envelope, GlyphWidth.Fixed)}></i> Contact</MenuItem>)
+        (<Dropdown.Item onSelect={() => this.props.onContactButton(this.props.volunteer)} key={key++} ><i className={Glyph(GlyphStyles.Envelope, GlyphWidth.Fixed)}></i> Contact</Dropdown.Item>)
       ]);
     }
-    
+
     return links;
   }
 }

@@ -3,7 +3,8 @@
 
 //colors
 $color-orange: #f79e02; // brand
-$color-orange-darker: #de8e01; // for button hover, border, whatever
+$color-orange-dark: #de8e01; // accent/button borders
+$color-orange-light: #f7cf88; // footer button hover
 $color-green: #86c232; //confirm-role buttons
 $color-green-dark: #61892f; //tag selectors and selected tags
 $color-text-light: #ffffff;
@@ -11,6 +12,7 @@ $color-text-dark: #222629;
 $color-text-grey: #535A5F; //lightest we can go without brekaing accessibility
 $color-grey-medium: #dddddd;
 $color-grey-disabled: #cecece; // any item in a disabled state
+$color-disabled-border: #a8a8a8; // for e.g. a disabled state button border
 $color-grey-frame-border: #6b6e70; // from design guide
 
 //background colors
@@ -20,6 +22,7 @@ $color-background-dark: #222629; //nav bar, footer
 $color-background-info: #add8e6; // info messages
 $color-background-success: #a3ffa6; // success messages
 $color-background-error: #ffcfcf; //error messages
+$color-opacity-layer: #231f20; //  overlay opacity
 
 //Dimensions
 $header-height: 50px; //Height of site header

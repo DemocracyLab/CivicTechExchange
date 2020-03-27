@@ -1,7 +1,8 @@
 // @flow
 
 import React from "react";
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import StepIndicatorBars from "../common/StepIndicatorBars.jsx";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
@@ -54,7 +55,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
     // TODO: Replace with Guard helper function
     this.onSubmit = _.debounce(this.onSubmit.bind(this), 1000, { 'leading': true });
   }
-  
+
   navigateToStep(step: number): void {
     if(this.state.fieldsUpdated) {
       this.setState({
@@ -70,7 +71,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
       this.forceUpdate();
     }
   }
-  
+
   resetPageState(state: ?State): State {
     let _state: State = state || this.state;
     return Object.assign(_state, {
@@ -78,24 +79,24 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
       formIsValid: false
     });
   }
-  
+
   onValidationCheck(formIsValid: boolean, preSubmitProcessing: Function): void {
     if (formIsValid !== this.state.formIsValid) {
       this.setState({formIsValid});
     }
-    
+
     if (preSubmitProcessing !== this.state.preSubmitProcessing) {
       this.setState({preSubmitProcessing});
     }
   }
-  
+
   onFormUpdate(formFields: {||}) {
     if (!this.state.clickedNext && !_.isEqual(this.state.currentFormFields, formFields)) {
       this.setState({savedEmblemVisible: false});
     }
     this.setState({fieldsUpdated: true, currentFormFields: formFields});
   }
-  
+
   confirmDiscardChanges(confirmDiscard: boolean): void {
     let confirmState: State = this.state;
     confirmState.showConfirmDiscardChanges = false;
@@ -103,11 +104,11 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
       confirmState.currentStep = this.state.navigateToStepUponDiscardConfirmation;
       confirmState = this.resetPageState(confirmState);
     }
-    
+
     this.setState(confirmState);
     this.forceUpdate(utils.navigateToTopOfPage);
   }
-  
+
   onSubmit(event: SyntheticEvent<HTMLFormElement>): void {
     event.preventDefault();
     const currentStep: FormWorkflowStepConfig = this.props.steps[this.state.currentStep];
@@ -116,7 +117,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
     };
     this.state.preSubmitProcessing ? this.state.preSubmitProcessing(submitFunc) : submitFunc();
   }
-  
+
   onSubmitSuccess(onStepSubmitSuccess: (T) => void, formFields: T) {
     onStepSubmitSuccess(formFields);
     this.setState(this.resetPageState({
@@ -125,10 +126,10 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
       savedEmblemVisible: true
     }));
   }
-  
+
   render(): React$Node {
     const currentStep: FormWorkflowStepConfig = this.props.steps[this.state.currentStep];
-    
+
     return (
       <React.Fragment>
         <ConfirmationModal
@@ -136,33 +137,33 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
           message="You have unsaved changes on this form.  Do you want to discard these changes?"
           onSelection={this.confirmDiscardChanges.bind(this)}
         />
-        
+
         <div className="create-form white-bg container-fluid">
           <div className="bounded-content">
             <h1>{currentStep.header}</h1>
             <h2>{currentStep.subHeader}</h2>
             <StepIndicatorBars
-              stepCount={this.props.steps.length}
+              stepCount={this.props.steps.length + 1}
               currentlySelected={this.state.currentStep}
             />
           </div>
         </div>
-  
+
         {this.props.isLoading ? <LoadingMessage /> : this._renderForm()}
 
       </React.Fragment>
     );
   }
-  
+
   _renderForm(): React$Node {
     const FormComponent: React$Node = this.props.steps[this.state.currentStep].formComponent;
-  
+
     return (
       <form
         onSubmit={this.onSubmit.bind(this)}
         method="post"
         ref={this.formRef}>
-    
+
         <div className="create-form grey-bg container">
           {/*TODO: Rename projects prop to something generic*/}
           <FormComponent
@@ -171,34 +172,32 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
             onFormUpdate={this.onFormUpdate.bind(this)}
           />
         </div>
-    
+
         <div className="create-form white-bg container-fluid">
-      
-          <Button className="btn btn-theme"
-                  type="button"
-                  title="Back"
-                  disabled={this.onFirstStep()}
-                  onClick={this.navigateToStep.bind(this, this.state.currentStep - 1)}
-          >
-            Back
-          </Button>
-      
-          <div className="form-group pull-right">
-            <div className='text-right'>
-              {!this.state.savedEmblemVisible ? "" :
-                <span className='create-project-saved-emblem'><i className={GlyphStyles.CircleCheck} aria-hidden="true"></i> Saved</span>}
-               
-              <input type="submit" className="btn_outline save_btn_create_project"
-                    disabled={!this.state.formIsValid}
-                    value={this.onLastStep() ? "PUBLISH" : "Next"}
-              />
+          <div className="create-form-buttonrow">
+
+            <Button variant="outline-secondary"
+                    type="button"
+                    title="Back"
+                    disabled={this.onFirstStep()}
+                    onClick={this.navigateToStep.bind(this, this.state.currentStep - 1)}
+            >
+              Back
+            </Button>
+
+                {!this.state.savedEmblemVisible ? "" :
+                  <span className='create-project-saved-emblem'><i className={GlyphStyles.CircleCheck} aria-hidden="true"></i> Saved</span>}
+
+                <input type="submit" className="btn btn-primary create-btn"
+                      disabled={!this.state.formIsValid}
+                      value={this.onLastStep() ? "PUBLISH" : "Next"}
+                />
+              </div>
             </div>
-          </div>
-        </div>
       </form>
     );
   }
-  
+
   onLastStep(): boolean {
     return this.state.currentStep >= this.props.steps.length - 1;
   }

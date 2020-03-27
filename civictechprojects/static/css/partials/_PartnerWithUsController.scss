@@ -17,12 +17,15 @@
 }
 
 .PartnerWithUsController-sponsorAmount {
-  color: $color-orange-darker;
+  color: $color-orange-dark;
 }
 
 .PartnerWithUsController-partners {
   background-color: $color-background-default;
-  padding: 50px 30px 50px 30px;
+  padding-top: 50px;
+}
+.PartnerWithUsController-partners h3 {
+  margin-top: 25px;
 }
 
 .PartnerWithUsController-sponsorList {
@@ -32,13 +35,32 @@
 
 .PartnerWithUsController-sponsor {
   display: flex;
-  width: 600px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 1rem 0;
 }
 
-.PartnerWithUsController-sponsor img{
-  width: 200px;
-}
-
-.PartnerWithUsController-sponsor h6{
+.PartnerWithUsController-sponsor h6 {
   font-weight: bold;
+  margin-top: 1.25rem;
+}
+
+.PartnerWithUsController-sponsor-logo {
+  flex-basis: 300px; /* set "ideal size" of logo width */
+  min-width: 300px; /* now all of these are forced up to 300, lining up content nicely */
+  text-align: center;
+  margin: 0 auto; /* centers sponsor image inside assigned width if required */
+}
+
+
+@include media-breakpoint-up(md) {
+  .PartnerWithUsController-sponsor {
+    flex-wrap: nowrap;
+  }
+  .PartnerWithUsController-sponsor-text {
+    padding-left: 20px;
+  }
+  .PartnerWithUsController-sponsor h6 {
+    margin-top: 0;
+  }
 }

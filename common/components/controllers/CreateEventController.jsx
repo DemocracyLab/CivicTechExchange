@@ -139,7 +139,6 @@ class CreateEventController extends React.PureComponent<{||},State> {
         />
         
         <div className="form-body">
-        <h1>sup fam</h1>
           <FormWorkflow
                       steps={this.state.steps}
                       isLoading={this.state.eventId && !this.state.event}

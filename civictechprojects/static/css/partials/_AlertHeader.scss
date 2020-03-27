@@ -3,7 +3,7 @@
   flex-direction: row;
   justify-content: flex-end;
   background-color: $color-orange;
-  color: $color-text-light;
+  color: $color-text-dark;
   width: 100%;
   line-height: 1.2em;
   min-height: 34px;
@@ -13,20 +13,23 @@
 .AlertHeader-text {
   padding-left: 10px;
   width: auto;
-  margin: 0 auto 0px auto;
+  margin: 0.25rem auto;
 }
 
 .AlertHeader-text a {
   text-decoration: underline;
-  color: $color-text-light; 
+  color: $color-text-dark;
 }
 
 .AlertHeader-text p,i {
   text-align: center;
 }
+.AlertHeader-text p {
+  margin: 0;
+}
 
 .AlertHeader-close {
-  width: 30px;
-  padding-right: 10px;
+  min-width: 30px;
+  padding: 0 10px;
   cursor: pointer;
 }

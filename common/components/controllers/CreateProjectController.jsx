@@ -17,6 +17,8 @@ import api from "../utils/api.js";
 import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
+import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
+
 
 type State = {|
   projectId: ?number,
@@ -69,7 +71,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
           formComponent: ProjectPositionsForm
         }, {
           header: "Ready to publish your project?",
-          subHeader: "Congratulations!  You have successfully created a tech-for-good project.",
+          subHeader: "Please review your project's details and click \"PUBLISH\" below when you're ready.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onFinalSubmitSuccess,
           formComponent: ProjectPreviewForm
@@ -77,7 +79,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       ]
     };
   }
-  
+
   componentDidMount(): void {
     if(this.state.projectId) {
       ProjectAPIUtils.fetchProjectDetails(this.state.projectId, this.loadProjectDetails.bind(this), this.handleLoadProjectError.bind(this));
@@ -95,7 +97,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     }
     utils.navigateToTopOfPage();
   }
-  
+
   loadProjectDetails(project: ProjectDetailsAPIData): void {
     if(!CurrentUser.isOwner(project)) {
       // TODO: Handle someone other than owner
@@ -106,20 +108,20 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       });
     }
   }
-  
+
   handleLoadProjectError(error: APIError): void {
     this.setState({
       error: "Failed to load project information"
     });
   }
-  
+
   onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (ProjectDetailsAPIData, () => void) => void): void {
     const formSubmitUrl: string = this.state.project && this.state.project.project_id
       ? "/projects/edit/" + this.state.project.project_id + "/"
       : "/projects/signup/";
     api.postForm(formSubmitUrl, formRef, onSubmitSuccess, response => null /* TODO: Report error to user */);
   }
-  
+
   onNextPageSuccess(project: ProjectDetailsAPIData): void {
     this.setState({
       project: project,
@@ -127,15 +129,14 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     });
     this.updatePageUrl();
   }
-  
+
   onFinalSubmitSuccess(project: ProjectDetailsAPIData): void {
     metrics.logProjectCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
     window.location.href = url.section(Section.MyProjects, {projectAwaitingApproval: project.project_name});
   }
-  
+
   render(): React$Node {
-    
     return (
       <React.Fragment>
         <Headers
@@ -161,7 +162,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
       </React.Fragment>
     );
   }
-  
+
 }
 
 export default CreateProjectController;

@@ -18,7 +18,7 @@ import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
-import DropdownMenu from "react-bootstrap/es/DropdownMenu";
+import DropdownMenu from "react-bootstrap/DropdownMenu";
 
 
 type Props = {|

@@ -1,0 +1,35 @@
+version: '2.4'
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=p0stgres!
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  create_table:
+    build: .
+    command: python manage.py createcachetable
+    depends_on:
+      db:
+        condition: service_healthy
+  migrate:
+    build: .
+    command: python manage.py migrate
+    depends_on:
+      - create_table
+  web:
+    build: .
+    command: bash -c 'source ./docker_environment_init.sh || true &&
+                      npm run buildfast &&
+                      python manage.py runserver 0.0.0.0:8000'
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy

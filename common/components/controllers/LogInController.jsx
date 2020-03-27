@@ -5,6 +5,7 @@ import React from 'react';
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import metrics from "../utils/metrics.js";
+import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
 
 type Props = {|
   prevPage: string,
@@ -71,10 +72,16 @@ class LogInController extends React.Component<Props, State> {
                 Sign In
               </button>
             </div>
+            <div className="LogInController-socialSection">
+              <SocialMediaSignupSection/>
+            </div>
         </form>
       </div>
     );
   }
+
+
+
 }
 
 export default LogInController;

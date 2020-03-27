@@ -2,14 +2,14 @@
 
 import React from "react";
 import type {FileInfo} from "../../common/FileInfo.jsx";
-import ImageUploadFormElement from "../../../components/forms/ImageUploadFormElement.jsx";
+import ImageCropUploadFormElement from "../../../components/forms/ImageCropUploadFormElement.jsx";
 import TagCategory from "../../common/tags/TagCategory.jsx";
 import TagSelector from "../../common/tags/TagSelector.jsx";
 import DjangoCSRFToken from "django-react-csrftoken";
 import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {TagDefinition, ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
-import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
+import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
 
 
@@ -53,7 +53,7 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
         errorMessage: "Please enter Project Description"
       }
     ];
-  
+
     const formIsValid: boolean = FormValidation.isValid(formFields, validations);
     this.state = {
       formIsValid: formIsValid,
@@ -61,9 +61,9 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
       validations: validations
     };
     props.readyForSubmit(formIsValid);
-    this.form = form.setup();
+    this.form = formHelper.setup();
   }
-  
+
   componentDidMount() {
     // Initial validation check
     this.form.doValidation.bind(this)();
@@ -83,8 +83,8 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
         <DjangoCSRFToken/>
 
         <div className="form-group">
-          <ImageUploadFormElement form_id="project_thumbnail_location"
-                                  buttonText="Upload Project Image"
+          <ImageCropUploadFormElement form_id="project_thumbnail_location"
+                                  buttonText="Browse Photos On Computer"
                                   currentImage={this.state.formFields.project_thumbnail}
                                   onSelection={this.form.onSelection.bind(this, "project_thumbnail")}
           />
@@ -106,7 +106,7 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
             onSelection={this.form.onSelection.bind(this, "project_issue_area")}
           />
         </div>
-  
+
         <div className="form-group">
           <label>
             Short Description

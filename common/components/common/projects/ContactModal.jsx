@@ -1,9 +1,11 @@
 // @flow
 
 import React from 'react';
-import {Modal, Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form'
 import ConfirmationModal from '../../common/confirmation/ConfirmationModal.jsx';
-import form from "../../utils/forms.js";
+import formHelper from "../../utils/forms.js";
 import _ from "lodash";
 
 export type ContactModalFields = {|
@@ -47,8 +49,8 @@ class ContactModal extends React.PureComponent<Props, State> {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.askForSendConfirmation = this.askForSendConfirmation.bind(this);
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
-  
-    this.form = form.setup();
+
+    this.form = formHelper.setup();
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -88,39 +90,40 @@ class ContactModal extends React.PureComponent<Props, State> {
           <Modal show={this.state.showModal}
                  onHide={this.closeModal}
           >
-              <Modal.Header >
+              <Modal.Header closeButton>
                   <Modal.Title>{this.props.headerText}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <p>{this.props.explanationText}</p>
                 {this.props.showSubject ? this._renderSubjectLineBox() : null}
-                <FormGroup>
-                  <ControlLabel>Message:</ControlLabel>
-                  <FormControl componentClass="textarea"
-                    placeholder={this.props.messagePlaceholderText}
-                    rows="4"
-                    cols="50"
-                    name="message"
-                    value={this.state.formFields.message}
-                    onChange={this.form.onInput.bind(this, "message")}/>
-                </FormGroup>
+                <Form>
+                  <Form.Group>
+                    <Form.Label>Message:</Form.Label>
+                    <Form.Control as="textarea"
+                      placeholder={this.props.messagePlaceholderText}
+                      rows="4"
+                      name="message"
+                      value={this.state.formFields.message}
+                      onChange={this.form.onInput.bind(this, "message")}/>
+                  </Form.Group>
+                </Form>
               </Modal.Body>
               <Modal.Footer>
-                <Button onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button disabled={this.state.isSending || _.isEmpty(this.state.formFields.message)} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
+                <Button variant="outline-secondary" onClick={this.closeModal}>{"Cancel"}</Button>
+                <Button variant="primary" disabled={this.state.isSending || _.isEmpty(this.state.formFields.message)} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
               </Modal.Footer>
           </Modal>
       </div>
     );
   }
-  
+
   _renderSubjectLineBox(): React$Node {
     return (
-      <FormGroup>
-        <ControlLabel>Subject</ControlLabel>
-        <FormControl componentClass="input" name="subject" maxLength="60"
+      <Form>
+        <Form.Label>Subject</Form.Label>
+        <Form.Control componentClass="input" name="subject" maxLength="60"
                value={this.state.formFields.subject} onChange={this.form.onInput.bind(this, "subject")}/>
-      </FormGroup>
+      </Form>
     );
   }
 }

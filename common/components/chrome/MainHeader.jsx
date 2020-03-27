@@ -97,7 +97,7 @@ class MainHeader extends React.Component<{||}, State > {
           onUpdate={this._onAlertHeaderUpdate.bind(this)}
         />
         <div className={this._cx.get('root')}>
-          <a href={url.section(Section.FindProjects, {showSplash: 1})}>
+          <a href={url.section(Section.Home)}>
             <div className="SubHeader-logo-container">
               <img
                 className="SubHeader-logo"

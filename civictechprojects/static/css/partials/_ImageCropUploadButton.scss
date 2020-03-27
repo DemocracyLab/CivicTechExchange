@@ -1,0 +1,16 @@
+.ImageCropUploadButton-cropper {
+    position:relative;
+    border: 1px solid black;
+    border-radius:10px; 
+    .ImageCropUploadButton-doneButton {
+        display:block;
+    }
+
+    .FileSelectButton-dragFiles {
+        color:#FFF;
+        font-weight:bold;
+    }
+    .ReactCrop__image {
+        height:100%;
+    }
+}

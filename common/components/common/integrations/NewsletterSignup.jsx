@@ -20,19 +20,11 @@ render() {
           <div className="mc-field-group SocialFooter-signupcontainer">
             <label htmlFor="mce-EMAIL" />
             <input
-              type="email"
-              defaultValue=""
-              placeholder="Enter your email address"
-              name="EMAIL"
-              className="required email"
-              id="mce-EMAIL"
-            />
-            <input
               type="submit"
               value="Subscribe"
               name="subscribe"
               id="mc-embedded-subscribe"
-              className="button btn"
+              className={this.props.btnClass}
             />
           </div>
           <div id="mce-responses" className="clear">

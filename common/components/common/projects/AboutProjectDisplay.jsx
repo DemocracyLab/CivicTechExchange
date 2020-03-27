@@ -8,6 +8,7 @@ import ContactProjectButton from "./ContactProjectButton.jsx";
 import ContactVolunteersButton from "./ContactVolunteersButton.jsx";
 import ProjectVolunteerButton from "./ProjectVolunteerButton.jsx";
 import ProjectVolunteerModal from "./ProjectVolunteerModal.jsx";
+import ProjectCommitCard from "./ProjectCommitCard.jsx";
 import AboutPositionEntry from "../positions/AboutPositionEntry.jsx";
 import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../volunteers/VolunteerSection.jsx";
@@ -18,7 +19,6 @@ import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
-import DropdownMenu from "react-bootstrap/es/DropdownMenu";
 
 
 type Props = {|
@@ -33,7 +33,8 @@ type State = {|
   positionToJoin: ?PositionInfo,
   showPositionModal: boolean,
   shownPosition: ?PositionInfo,
-  tabs: object
+  tabs: object,
+  maxActivity: number
 |};
 
 class AboutProjectDisplay extends React.PureComponent<Props, State> {
@@ -49,11 +50,14 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       tabs: {
         details: true,
         skills: false,
-      }
+        activity: false,
+      },
+      maxActivity: 5
     };
     this.handleUpdateVolunteers = this.handleUpdateVolunteers.bind(this);
+    this.handleShowMoreActivity = this.handleShowMoreActivity.bind(this);
  }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({
       project: nextProps.project,
@@ -67,11 +71,15 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       positionToJoin: position
     });
   }
-  
+
   handleUpdateVolunteers(volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>) {
     this.setState({
       volunteers: volunteers
     });
+  }
+
+  handleShowMoreActivity() {
+    this.setState({ maxActivity: this.state.maxActivity + 5 });
   }
 
   confirmJoinProject(confirmJoin: boolean) {
@@ -87,6 +95,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       details: false,
       skills: false,
       positions: false,
+      activity: false,
     };
 
     tabs[tab] = true;
@@ -220,13 +229,18 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
               }
 
+              {project && !_.isEmpty(project.project_commits) &&
+              <a onClick={() => this.changeHighlighted('activity')} className={this.state.tabs.activity ? 'AboutProjects_aHighlighted' : 'none'} href="#recent-activity">Recent Activity</a>
+              }
+
             </div>
           </div>
 
-          <div className='AboutProjects-details'>
-            <div id='project-details'>
+          <div className='AboutProjects-details AboutProjects-details-description'>
+            <div className="position-relative"><a className="position-absolute AboutProjects-jumplink" id="project-details" name="project-details"></a></div>
+            <div>
               {project.project_description}
-              {!_.isEmpty(project.project_description_solution) && 
+              {!_.isEmpty(project.project_description_solution) &&
                 <React.Fragment>
                   <div>
                     <br></br>
@@ -234,7 +248,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                   </div>
                 </React.Fragment>
               }
-              {!_.isEmpty(project.project_description_actions) && 
+              {!_.isEmpty(project.project_description_actions) &&
                 <React.Fragment>
                   <div>
                     <br></br>
@@ -264,10 +278,35 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           </div>
 
           <div className='AboutProjects-positions-available'>
-            <div id="positions-available">
+            <div className="position-relative">
+              <a name="positions-available" id="positions-available" className="position-absolute AboutProjects-jumplink"></a>
+            </div>
+            <div>
               {project && !_.isEmpty(project.project_positions) && this._renderPositions()}
             </div>
           </div>
+
+          {project && !_.isEmpty(project.project_commits) &&
+            <div className='AboutProjects-recent-activity'>
+              <div id="recent-activity">
+                <h4>Recent Activity</h4>
+                { project.project_commits
+                    .slice(0, this.state.maxActivity)
+                    .map(commit => <ProjectCommitCard commit={commit} />)
+                }
+                { project.project_commits.length > this.state.maxActivity && (
+                  
+                  <div className="AboutProjects-show-more-activity-container">
+                    <div className="btn btn-primary AboutProjects-show-more-activity"
+                      onClick={this.handleShowMoreActivity}
+                    >
+                      Show more activity
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          }
 
         </div>
 
@@ -287,7 +326,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       />
     );
   }
-  
+
   _renderContactAndVolunteerButtons(): React$Node {
     return (
       <div className='AboutProjects-owner'>

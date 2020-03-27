@@ -2,7 +2,7 @@
 
 import React from "react";
 import type {FileInfo} from "../../common/FileInfo.jsx";
-import ImageUploadFormElement from "../../../components/forms/ImageUploadFormElement.jsx";
+import ImageCropUploadFormElement from "../../../components/forms/ImageCropUploadFormElement.jsx";
 import TagCategory from "../../common/tags/TagCategory.jsx";
 import TagSelector from "../../common/tags/TagSelector.jsx";
 import DjangoCSRFToken from "django-react-csrftoken";
@@ -83,7 +83,7 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
         <DjangoCSRFToken/>
 
         <div className="form-group">
-          <ImageUploadFormElement form_id="event_thumbnail_location"
+          <ImageCropUploadFormElement form_id="event_thumbnail_location"
                                   buttonText="Upload Event Image"
                                   currentImage={this.state.formFields.event_thumbnail}
                                   onSelection={this.form.onSelection.bind(this, "event_thumbnail")}

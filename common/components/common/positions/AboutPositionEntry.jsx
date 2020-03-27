@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CollapsibleTextSection from "../CollapsibleTextSection.jsx";
@@ -52,7 +52,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
     let applyButton;
     if (CurrentUser.canVolunteerForProject(this.props.project)) {
       applyButton = (
-        <Button className="btn btn-theme"
+        <Button variant="primary"
         type="button"
         title="Apply to this position"
         onClick={this.handleClickApply.bind(this)}
@@ -62,7 +62,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
       );
     } else if (!CurrentUser.isLoggedIn()) {
       applyButton = (
-        <Button className="btn btn-theme"
+        <Button variant="primary"
         type="button"
         title="Apply to this position"
         href={url.section(Section.LogIn, url.getPreviousPageArg())}

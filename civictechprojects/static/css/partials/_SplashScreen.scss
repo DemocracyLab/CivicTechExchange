@@ -1,5 +1,5 @@
 .SplashScreen-root {
-  background-color: $color-text-grey;
+  background-color: $color-opacity-layer;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100vh - #{$header-height} - #{$footer-height});
+  min-height: calc(100vh - #{$header-height} - #{$footer-height}); /* use min-height to fix wide but short viewports */
 }
 
 .SplashScreen-content {
@@ -24,15 +24,14 @@
   padding: 15px 0;
 }
 
+// both of these SplashScreen buttons must also have Bootstrap "btn btn-primary" classes applied
 .SplashScreen-find-projects-btn {
   border: 1px solid $color-orange;
-  color: $color-text-light;
+  color: $color-text-dark;
   background-color: $color-orange;
   border-radius: 5px;
   padding: 6px 12px;
   margin-bottom: 10px;
-  transition: 300ms;
-  cursor: pointer;
   min-width: 80px;
 }
 
@@ -45,14 +44,9 @@
   margin: 0px 0px 10px 15px;
   cursor: pointer;
   min-width: 80px;
-  &:hover {
-    background-color: $color-orange;
-    color: $color-text-light;
-    border-color: $color-text-light;
-  }
 }
+
 .SplashScreen-mission {
-  background: $color-orange;
   color: $color-text-light;
   width: 100%;
   text-align: center;
@@ -61,6 +55,16 @@
 }
 .SplashScreen-mission p {
   margin: 0 auto;
+  font-weight: 500;
+}
+.SplashScreen-opacity-layer {
+  background-blend-mode: multiply;
+}
+.SplashScreen-opacity50 {
+  background-color: rgba($color-opacity-layer, 0.5)
+}
+.SplashScreen-opacity20 {
+  background-color: rgba($color-opacity-layer, 0.2)
 }
 @include media-breakpoint-up(md) {
   .SplashScreen-mission p {

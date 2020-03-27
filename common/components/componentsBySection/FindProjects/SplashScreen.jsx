@@ -1,37 +1,60 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import _ from 'lodash';
 import Section from "../../enums/Section.js";
 import url from "../../utils/url.js";
 import cdn from "../../utils/cdn.js";
 
 type Props = {|
+  header: string,
+  text: ?$ReadOnlyArray<string>,
+  bottomOverlayText: ?$ReadOnlyArray<string>,
+  img: ?string,
+  className: ?string,
   onClickFindProjects: () => void
 |};
 
+export const HeroImage: { [key: string]: string } = {
+  TopLanding: "CodeForGood_072719_MSReactor-064.jpg",
+  MidLanding: "CodeForGood_072719_MSReactor-034.jpg",
+  BottomLanding: "CodeForGood_072719_MSReactor-003.jpg",
+};
+
+const heroImages: $ReadOnlyArray<string> = [
+  HeroImage.TopLanding,
+  "CodeForGood_072719_MSReactor-074.jpg",
+  "CodeForGood_072719_MSReactor-020.jpg"
+];
+
 class SplashScreen extends React.PureComponent<Props> {
-  _onClickFindProjects(): void {
-    this.props.onClickFindProjects();
+  _heroRandomizer(): void {
+    let imgIndex = Math.floor(Math.random() * Math.floor(heroImages.length));
+    return cdn.image(heroImages[imgIndex])
   }
 
   render(): React$Node {
+    const backgroundUrl: string = this.props.img ? cdn.image(this.props.img) : this._heroRandomizer();
+    const cssClass = "SplashScreen-root SplashScreen-opacity-layer SplashScreen-opacity50 " + this.props.className
     return (
-      <div className="SplashScreen-root" style={{backgroundImage: 'url(' + cdn.image("dl_splash.jpg")+ ')' }}>
+      <div className={cssClass} style={{backgroundImage: 'url(' + backgroundUrl + ')' }}>
         <div className="SplashScreen-content">
-          <h1>Optimizing the connection between skilled volunteers and tech-for-good projects</h1>
+          {this.props.header ? <h1>{this.props.header}</h1> : null}
           <div className="SplashScreen-section">
-            <Button className="SplashScreen-find-projects-btn" onClick={this._onClickFindProjects.bind(this)}>
-              Find Projects
-            </Button>
-            <Button className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.CreateProject)}>
-              Create A Project
-            </Button>
+            {this.props.text ? <p>{this.props.text}</p> : null}
+            {this.props.children}
           </div>
         </div>
-        <div className="SplashScreen-mission">
-          <p>DemocracyLab is a 501(c)(3) nonprofit organization.  Our mission is to empower a community of people and projects that use technology to advance the public good.</p>
-        </div>
+        {!_.isEmpty(this.props.bottomOverlayText) && this._renderBottomOverlay()}
+      </div>
+    );
+  }
+
+  _renderBottomOverlay(): React$Node {
+    return (
+      <div className="SplashScreen-mission SplashScreen-opacity-layer SplashScreen-opacity20">
+        {this.props.bottomOverlayText.map((text) => (<p>{text}</p>))}
       </div>
     );
   }

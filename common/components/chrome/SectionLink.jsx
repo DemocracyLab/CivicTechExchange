@@ -48,6 +48,7 @@ class SectionLink extends React.PureComponent<Props> {
       section: this.props.section,
       url: url.section(this.props.section)
     });
+    window.scrollTo(0,0);
     metrics.logSectionNavigation(this.props.section);
   }
 }

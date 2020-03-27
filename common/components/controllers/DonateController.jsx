@@ -6,6 +6,7 @@ import Headers from "../common/Headers.jsx";
 import RadioButtons from "../common/selection/RadioButtons.jsx";
 import PaypalDonationButton, {OtherAmountSelected} from "../common/integrations/PaypalDonationButton.jsx";
 import {SelectOption} from "../types/SelectOption.jsx";
+import prerender from "../utils/prerender.js";
 
 type State = {|
   donateAmount: ?string,
@@ -37,12 +38,16 @@ class DonateController extends React.Component<{||}, State> {
     };
   }
   
+  componentDidMount() {
+    prerender.ready();
+  }
+
   handleFieldSelection(field: string, option: SelectOption): void {
     let state: State = this.state;
     state[field] = option.value;
     this.setState(state);
   }
-  
+
   render(): React$Node {
     return (
       <div className="DonateController-root">
@@ -54,7 +59,7 @@ class DonateController extends React.Component<{||}, State> {
           <img src={cdn.image(Images.DONATE_SPLASH)}></img>
         </div>
         <div className="panel">
-          
+
           <div className="DonateController-text">
             <h1>
               Donate and make a difference
@@ -63,18 +68,20 @@ class DonateController extends React.Component<{||}, State> {
               DemocracyLab is building online infrastructure to support the technology-for-good movement. Your donation will help us support the many projects and volunteers who use our platform to make our world a better place. DemocracyLab is a 501(c)(3) nonprofit organization, and your donation may be tax-deductible.
             </p>
           </div>
-  
+
           <div className="DonateController-options">
             <div className="DonateController-amounts">
               <RadioButtons
+                variant="outline-dark"
                 options={DonationAmountOptions}
                 onSelection={this.handleFieldSelection.bind(this, "donateAmount")}
               />
             </div>
-  
+
             {this.state.donateAmount !== OtherAmountSelected
               ? < div className="DonateController-monthly">
               <RadioButtons
+                variant="outline-dark"
                 options={DonationMonthlyOptions}
                 defaultSelection={DonationMonthlyOptions[0]}
                 onSelection={this.handleFieldSelection.bind(this, "donateMonthly")}
@@ -83,7 +90,7 @@ class DonateController extends React.Component<{||}, State> {
               : null
             }
           </div>
-        
+
           <PaypalDonationButton
             donateAmount={this.state.donateAmount}
             donateMonthly={this.state.donateMonthly}

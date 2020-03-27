@@ -8,6 +8,9 @@ import metrics from "../utils/metrics.js";
 import moment from 'moment';
 import _ from 'lodash';
 import Headers from "../common/Headers.jsx";
+import PseudoLink from "../chrome/PseudoLink.jsx";
+import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
+import TermsModal from "../common/confirmation/TermsModal.jsx";
 
 type Props = {|
   +errors: {+[key: string]: $ReadOnlyArray<string>},
@@ -20,6 +23,8 @@ type State = {|
   password1: string,
   password2: string,
   validations: $ReadOnlyArray<Validator>,
+  termsOpen: boolean,
+  didCheckTerms: boolean,
   isValid: boolean
 |}
 
@@ -28,7 +33,7 @@ class SignUpController extends React.Component<Props, State> {
   
   constructor(): void {
     super();
-  
+
     // Make sure to keep validators in sync with the backend validators specified in settings.py
     this.minimumPasswordLength = 8;
     this.hasNumberPattern = new RegExp("[0-9]");
@@ -41,6 +46,8 @@ class SignUpController extends React.Component<Props, State> {
       email: '',
       password1: '',
       password2: '',
+      termsOpen: false,
+      didCheckTerms: false,
       isValid: false,
       validations: [
         {
@@ -71,6 +78,10 @@ class SignUpController extends React.Component<Props, State> {
           checkFunc: (state: State) => state.password1 === state.password2,
           errorMessage: "Passwords don't match"
         },
+        {
+          checkFunc: (state: State) => state.didCheckTerms,
+          errorMessage: "Agree to terms of service"
+        }
       ]
     };
   }
@@ -150,9 +161,28 @@ class SignUpController extends React.Component<Props, State> {
             />
           </div>
           <input name="password" value={this.state.password1} type="hidden" />
+  
+          <div>
+            <input
+              name="newsletter_signup"
+              type="checkbox"
+            />
+            <span> I would like to receive occasional emails from DemocracyLab about events and projects (Optional)</span>
+          </div>
+          
+          <div>
+            <input
+              name="read"
+              type="checkbox"
+              onChange={e => this.setState({didCheckTerms: !this.state.didCheckTerms})}
+            />
+            <span> I have read and accepted the <PseudoLink text="Terms of Volunteering" onClick={e => this.setState({termsOpen: true})}/> </span>
+            
+          </div>
+          
+          <TermsModal showModal={this.state.termsOpen} onSelection={() => this.setState({termsOpen: false})}/>
 
           {/* TODO: Replace with visible forms, or modify backend. */}
-          <input name="postal_code" value="123456" type="hidden" />
           <input name="username" value={this.state.email} type="hidden" />
           <input
             name="date_joined"
@@ -175,6 +205,9 @@ class SignUpController extends React.Component<Props, State> {
             Create Account
           </button>
         </form>
+        <div className="SignUpController-socialSection">
+          <SocialMediaSignupSection/>
+        </div>
       </div>
       </React.Fragment>
     );

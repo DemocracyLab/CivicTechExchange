@@ -38,15 +38,15 @@ export class CountrySelector extends React.PureComponent<Props, State> {
       this.forceUpdate();
     });
   }
-  
+
   handleSelection(selection: CountryOption) {
     this.props.onSelection(selection.value);
   }
-  
+
   getSelectedCountryOption(countries: $ReadOnlyArray<CountryOption>, countryCode: string) {
     return countries.find(country => country.value === countryCode);
   }
-  
+
   render(): React$Node {
     return (
       <Select
@@ -55,7 +55,6 @@ export class CountrySelector extends React.PureComponent<Props, State> {
         options={this.state.countries}
         value={this.state.selectedCountry}
         onChange={this.handleSelection.bind(this)}
-        className="form-control"
         simpleValue={false}
         clearable={false}
         multi={false}

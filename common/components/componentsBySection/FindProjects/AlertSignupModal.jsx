@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
 import Select from 'react-select'
 import {Countries} from "../../constants/Countries.js";
@@ -110,7 +111,7 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
                  onHide={this.closeModal}
           >
             <form onSubmit={this.handleSubmit}>
-              <Modal.Header >
+              <Modal.Header closeButton>
                   <Modal.Title>Sign Up For Alerts</Modal.Title>
               </Modal.Header>
               <Modal.Body>
@@ -145,8 +146,8 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
                 </div>
               </Modal.Body>
               <Modal.Footer>
-                <Button onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button disabled={this.isDisabled()} type="submit" onClick={this.handleSubmit}>Submit</Button>
+                <Button variant="outline-secondary" onClick={this.closeModal}>{"Cancel"}</Button>
+                <Button variant="primary" disabled={this.isDisabled()} type="submit" onClick={this.handleSubmit}>Submit</Button>
               </Modal.Footer>
             </form>
           </Modal>

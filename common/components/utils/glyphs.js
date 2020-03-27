@@ -29,11 +29,15 @@ export const GlyphStyles: {[key: string]: string} = {
   CircleCheck: "fas fa-check-circle",
   ChevronUp: "fas fa-chevron-up",
   ChevronDown: "fas fa-chevron-down",
+  ChevronLeft: "fas fa-chevron-left",
+  ChevronRight: "fas fa-chevron-right",
   EllipsisV: "fas fa-ellipsis-v",
   Pushpin: "fas fa-thumbtack",
   Eye: "fas fa-eye",
   LoadingSpinner: "fas fa-spinner fa-spin",
-  Envelope: "far fa-envelope"
+  Envelope: "far fa-envelope",
+  CreativeCommons: "fab fa-creative-commons",
+  CreativeCommonsBy: "fab fa-creative-commons-by"
 };
 
 export const GlyphSizes: {[key: string]: string} = {

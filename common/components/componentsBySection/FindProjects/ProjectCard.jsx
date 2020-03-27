@@ -70,6 +70,7 @@ class ProjectCard extends React.Component<Props, State> {
       </div>
     );
   }
+  
   _renderLogo(): React$Node {
     return (
       <div className="ProjectCard-logo">
@@ -123,7 +124,7 @@ class ProjectCard extends React.Component<Props, State> {
           </li>
         }
         {this.props.project.url &&
-          <li>
+         <li className="ProjectCard-url-text">
             <i className={GlyphStyles.Globe + glyphFixedWidth}></i>
             {urlHelper.beautify(this.props.project.url)}
           </li>

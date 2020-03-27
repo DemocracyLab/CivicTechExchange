@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import FeedbackModal from "../FeedbackModal.jsx";
@@ -132,9 +132,9 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       ? (
         // TODO: Make this its own component and hook up to My Projects page
         <Button
-          className="AboutProject-button btn btn-theme"
+          className="AboutProject-button"
           type="button"
-          bsStyle="danger"
+          variant="danger"
           onClick={this.handleShowLeaveModal}
         >
           Leave Project
@@ -142,7 +142,8 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       )
       : (
         <Button
-          className="AboutProject-button btn btn-theme"
+          variant="primary"
+          className="AboutProject-button"
           type="button"
           disabled={this.state.buttonDisabled}
           title={this.state.buttonTitle}
@@ -156,7 +157,8 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   _renderLinkToSignInButton(): React$Node {
     return (
       <Button
-        className="AboutProject-button btn btn-theme clear-button-appearance"
+        variant="primary"
+        className="AboutProject-button"
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}

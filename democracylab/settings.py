@@ -14,6 +14,7 @@ import os
 import ast
 import dj_database_url
 from datetime import timedelta
+from dateutil.parser import parse
 from distutils.util import strtobool
 from django.core.mail.backends.smtp import EmailBackend
 
@@ -39,25 +40,75 @@ INSTALLED_APPS = [
     'civictechprojects.apps.CivictechprojectsConfig',
     'common.apps.CommonConfig',
     'democracylab.apps.DemocracylabConfig',
+    'oauth2.apps.OAuth2Config',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.sitemaps',
+    'django.contrib.staticfiles',
     'rest_framework',
-    'taggit'
+    'taggit',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'oauth2.providers.github',
+    'oauth2.providers.google',
+    'oauth2.providers.linkedin',
+    'oauth2.providers.facebook',
+    'django_seo_js'
 ]
 
+SITE_ID = 1
+
+# Customize allauth.socialaccount
+SOCIALACCOUNT_ADAPTER = 'oauth2.adapter.SocialAccountAdapter'
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Bypass the signup form
+SOCIALACCOUNT_STORE_TOKENS = False  # Token table has foreign key on SocialApp table, which we're not using
+SOCIAL_APPS_environ = os.environ.get('SOCIAL_APPS', None)
+if SOCIAL_APPS_environ is not None:
+    SOCIAL_APPS = ast.literal_eval(SOCIAL_APPS_environ)
+    SOCIAL_APPS_VISIBILITY = {app: SOCIAL_APPS[app]["public"] for app in SOCIAL_APPS.keys()}
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'SCOPE': ['read:user']
+    },
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'}
+    },
+    'linkedin': {
+        'SCOPE': ['r_liteprofile', 'r_emailaddress']
+    },
+    'facebook': {
+        'SCOPE': ['email', 'public_profile'],
+         'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+         'METHOD': 'oauth2'  # instead of 'js_sdk'
+    },
+}
+
+GITHUB_API_TOKEN = os.environ.get('GITHUB_API_TOKEN', None)
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+# TODO: Use     'django_seo_js.middleware.UserAgentMiddleware',
 MIDDLEWARE = [
+    'common.helpers.caching.DebugUserAgentMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'democracylab.urls'
@@ -89,6 +140,7 @@ WSGI_APPLICATION = 'democracylab.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DL_DATABASE = os.environ.get('DL_DATABASE', '')
+HOSTNAME = os.environ.get('HOSTNAME', '127.0.0.1')
 
 DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
     'default': {
@@ -96,7 +148,7 @@ DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'p0stgres!',
-        'HOST': '127.0.0.1',
+        'HOST': HOSTNAME,
         'PORT': '5432',
     }
 }
@@ -160,7 +212,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
+CONTACT_EMAIL = os.environ['CONTACT_EMAIL']
 FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
+
+MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY', None)
+MAILCHIMP_SUBSCRIBE_LIST_ID = os.environ.get('MAILCHIMP_SUBSCRIBE_LIST_ID', None)
 
 APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
 VOLUNTEER_RENEW_REMINDER_PERIODS = ast.literal_eval(os.environ.get('VOLUNTEER_RENEW_REMINDER_PERIODS', 'None'))
@@ -168,7 +224,7 @@ VOLUNTEER_REMINDER_OVERALL_PERIOD = VOLUNTEER_RENEW_REMINDER_PERIODS and timedel
 VOLUNTEER_CONCLUDE_SURVEY_URL = os.environ.get('VOLUNTEER_CONCLUDE_SURVEY_URL', '')
 
 
-DLAB_PROJECT_ID = os.environ.get('DLAB_PROJECT_ID', '')
+DLAB_PROJECT_ID = os.environ.get('DLAB_PROJECT_ID', None)
 
 PAYPAL_ENDPOINT = os.environ.get('PAYPAL_ENDPOINT', '')
 PAYPAL_PAYEE = os.environ.get('PAYPAL_PAYEE', '')
@@ -189,7 +245,12 @@ HOTJAR_APPLICATION_ID = os.environ.get('HOTJAR_APPLICATION_ID', '')
 
 GOOGLE_PROPERTY_ID = os.environ.get('GOOGLE_PROPERTY_ID', '')
 GOOGLE_ADS_ID = os.environ.get('GOOGLE_ADS_ID', '')
+GOOGLE_TAGS_ID = os.environ.get('GOOGLE_TAGS_ID', '')
 GOOGLE_CONVERSION_IDS = ast.literal_eval(os.environ.get('GOOGLE_CONVERSION_IDS', 'None'))
+
+#Google ReCaptcha keys - site key is exposed to the front end, secret is not
+GR_SITEKEY = os.environ.get('GOOGLE_RECAPTCHA_SITE_KEY', '')
+GR_SECRETKEY = os.environ.get('GOOGLE_RECAPTCHA_SECRET_KEY', '')
 
 STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
 
@@ -202,8 +263,12 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
         'error': True,
         'message': 'Backend link generation will not work.'
     },
+    'BOARD_OF_DIRECTORS': {
+        'error': False,
+        'message': 'About Us page will not display correctly.'
+    },
     'DLAB_PROJECT_ID': {
-        'error': True,
+        'error': False,
         'message': 'About Us page will not display correctly.'
     },
     'STATIC_CDN_URL': {
@@ -229,8 +294,23 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'VOLUNTEER_RENEW_REMINDER_PERIODS': {
         'error': False,
         'message': 'Needed to calculate volunteer renewal periods.'
+    },
+    'GR_SITEKEY': {
+        'error': True,
+        'message': 'Contact Us page will not render correctly.'
+    },
+    'CONTACT_EMAIL': {
+        'error': False,
+        'message': 'Contact Us form will not send messages.'
+    },
+    'GITHUB_API_TOKEN': {
+        'error': False,
+        'message': 'Github API key needed to raise rate limit for ingesting commit data'
+    },
+    'MAILCHIMP_API_KEY': {
+        'error': False,
+        'message': 'Mailchimp API key needed to subscribe users to mailing list'
     }
-
 }
 
 # TODO: Set to True in productions
@@ -279,3 +359,47 @@ LOGGING = {
         },
     },
 }
+
+# If you're using prerender.io (the default backend):
+SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '')
+SEO_JS_BACKEND = "common.helpers.caching.DebugPrerenderIO"
+SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
+SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
+SEO_JS_ENABLED = os.environ.get('SEO_JS_ENABLED', False) == 'True'
+
+# TODO: Put in environment variable
+SEO_JS_USER_AGENTS = (
+    # These first three should be disabled, since they support escaped fragments, and
+    # and leaving them enabled will penalize a website as "cloaked".
+    "Googlebot",
+    "Yahoo",
+    "bingbot",
+
+    "Ask Jeeves",
+    "baiduspider",
+    "facebookexternalhit",
+    "twitterbot",
+    "rogerbot",
+    "linkedinbot",
+    "embedly",
+    "quoralink preview'",
+    "showyoubot",
+    "outbrain",
+    "pinterest",
+    "developersgoogle.com/+/web/snippet",
+)
+
+DISALLOW_CRAWLING = os.environ.get('DISALLOW_CRAWLING', False) == 'True'
+
+DL_PAGES_LAST_UPDATED_DATE = os.environ.get('DL_PAGES_LAST_UPDATED', '2019-12-05')
+SITE_LAST_UPDATED = parse(DL_PAGES_LAST_UPDATED_DATE)
+
+# https://docs.djangoproject.com/en/1.7/ref/settings/#silenced-system-checks
+SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
+
+# How many of the most recent github commits to store per project.
+MAX_COMMITS_PER_PROJECT = int(os.environ.get('MAX_COMMITS_PER_PROJECT', 30))
+
+BOARD_OF_DIRECTORS = os.environ.get('BOARD_OF_DIRECTORS', '')
+
+FAVICON_PATH = os.environ.get('FAVICON_PATH', 'https://d1agxr2dqkgkuy.cloudfront.net/img/favicon.png')

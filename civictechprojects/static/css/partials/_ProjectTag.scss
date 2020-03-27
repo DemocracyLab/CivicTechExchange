@@ -1,7 +1,7 @@
 .ProjectTag-root {
   background-color: $color-orange;
   border-radius: 30px; /*can't use 50% because item isn't a square, so just use any number > 50% element height */
-  color: $color-text-light;
+  color: $color-text-dark;
   display: inline-block;
   margin-bottom: 10px; /*provides spacing in case active tags wrap onto two rows */
   margin-right: 10px;
@@ -11,7 +11,7 @@
 
 .ProjectTag-closeButton {
   align-items: center;
-  background-color: $color-orange-darker;
+  background-color: $color-orange-dark;
   border-radius: 50%;
   cursor: pointer;
   display: inline-flex;

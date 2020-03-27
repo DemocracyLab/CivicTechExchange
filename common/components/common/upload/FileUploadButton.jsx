@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+
 import type { S3Data } from './S3Data.jsx'
 
 export type FileUploadData = {|
@@ -38,8 +39,8 @@ class FileUploadButton extends React.PureComponent<Props, State> {
 
           <label>{this.props.buttonText} &nbsp;</label>
           <Button
-            className="btn-background-project"
-            bsSize="small"
+            variant="primary"
+            size="sm"
             onClick={this._handleClick.bind(this)}
           >
             <i className={this.props.iconClass} aria-hidden="true"></i>

@@ -8,24 +8,19 @@
     background: $color-background-light;
     border-radius: 12px;
     border: $color-grey-disabled solid 1px;
-
-    /* this whole section is potentially placeholder */
-    a {
-      color: $color-orange;
-      text-decoration: none;
-      -webkit-appearance: none;
-    }
-    a:hover {
-      color: $color-orange-darker;
-      text-decoration: underline;
-    }
-    a[type="button"] {
-      color: $color-text-light;
-    }
-    a[type="button"]:hover {
-      color: $color-text-light;
-    }
   }
+
+  /* to avoid conflict with a href styled as buttons, only put this rule in sections where required */
+.AboutProjects-details, .AboutProjects-team, .AboutProjects-files, .Position-description-link {
+  a {
+    color: $color-orange;
+    text-decoration: none;
+  }
+  a:hover {
+    color: $color-orange-dark;
+    text-decoration: underline;
+  }
+}
 
 .AboutProjects-infoColumn {
   order: 1;
@@ -71,6 +66,17 @@
 .AboutProjects-icon-text {
   margin-left: 10px;
   margin-bottom: 0;
+}
+
+.AboutProjects-url-text {
+  overflow: hidden;
+  text-Overflow: ellipsis;
+  white-Space: nowrap;
+  @extend .AboutProjects-icon-text;
+  color: $color-orange;
+  &:hover {
+    color: $color-orange-dark;
+  }
 }
 
 .AboutProjects-links, .AboutProjects-files, .AboutProjects-communities, .AboutProjects-team {
@@ -140,6 +146,8 @@
 
 .AboutProjects_tabs {
   clear: both;
+  display:flex;
+  flex-wrap: wrap;
   justify-self: flex-start;
   align-self: flex-end;
   width: 100%;
@@ -173,10 +181,8 @@
       }
 }
 
-.AboutProjects-details {
-    #project-details {
-      white-space: pre-wrap;
-    }
+.AboutProjects-details-description {
+    white-space: pre-wrap;
 }
 
 .AboutProjects-skills-container {
@@ -219,6 +225,28 @@
     font-weight: bold;
     width: 100%;
   }
+}
+
+.AboutProjects-recent-activity {
+  padding: 20px; /*as with description-details consider maxwidth */
+
+  border-top: $color-grey-disabled solid 1px;
+}
+
+.AboutProjects-show-more-activity-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.AboutProjects-show-more-activity {
+  cursor: pointer;
+  text-align: center;
+}
+
+.AboutProjects-jumplink {
+  /* anchor tag is moved "higher up" than its content to account for Bootstrap fixed nav bar */
+  /* TODO: Make the component use the React prop from MainHeader and then remove this rule, so it can account for the alert message */
+  top: -60px;
 }
 
 .AboutProjects-positions-available {
@@ -267,21 +295,10 @@
 }
 
 .AboutProject-button {
-  background-color: $color-green;
-  border: 0;
-  border-radius: 5px;
-  color: $color-text-light;
-  cursor: pointer;
+  /* note these are in addition to the DL theme button rules */
   float: right;
   font-size: 14px;
-  padding: 8px 8px 8px 8px;
-  margin-right: 8px;
   margin-top: 16px;
-}
-
-button.AboutProject-button:disabled {
-  background-color: $color-grey-disabled;
-  color: $color-text-light;
 }
 
 @media (max-width: 1000px) {

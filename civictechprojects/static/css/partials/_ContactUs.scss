@@ -1,4 +1,21 @@
-/* temporary margin while page content is small; compare to LogInController's similar margin */
+//this file contains both ContactUsController and ContactForm component styles
 .contact-us-root {
-  margin-bottom: 11rem;
+  margin-bottom: 4rem;
+}
+
+.ContactForm-status-message {
+  padding: 1rem 0.5rem;
+  margin: 1rem 0;
+}
+
+.ContactForm-status-success {
+  background: $color-background-success;
+}
+
+.ContactForm-status-error {
+  background: $color-background-error;
+}
+
+.ContactForm-submit-btn {
+  margin-top: 0.5rem;
 }
