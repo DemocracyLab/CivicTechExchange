@@ -100,7 +100,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   _ourMission() {
     return (
       <div className="about-us-mission"
-      style={cdn.bgImage('OurMissionBGoverlay.jpg')}>
+      style={cdn.bgImage('AboutUs_Header.jpg')}>
         <div className="about-us-content container">
           <h1>Mission</h1>
           <p>Empower people who use technology to advance the public good.</p>
@@ -222,6 +222,9 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return (this.state.board_of_directors ?
       <div className="about-us-team col">
         <h2>Board of Directors</h2>
+        <p className="about-us-team-description">
+          Please review our <a href="https://d1agxr2dqkgkuy.cloudfront.net/documents/2019%20DemocracyLab%20Annual%20Report.pdf" >2019 Annual Report</a> to learn about the impact of our programs and platform last year. 
+        </p>
         <div className="about-us-team-card-container">
           {this._renderBios(this.state.board_of_directors, true)}
         </div>
