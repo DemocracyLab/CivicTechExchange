@@ -76,7 +76,7 @@ class MainHeader extends React.Component<{||}, State > {
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
         <Navbar.Collapse id="nav-pagenav-container" className="flex-column">
           <Nav className="MainHeader-usernav ml-auto">
-            {this._renderUserSection()}
+            {CurrentUser.isLoggedIn() ? this._renderUserSection() : this._renderLogInSection()}
           </Nav>
           <Nav className="MainHeader-pagenav mr-auto">
             <NavDropdown title="Projects" id="nav-projects">
@@ -103,12 +103,22 @@ class MainHeader extends React.Component<{||}, State > {
     )
   }
 
-  _renderUserSection() {
+  _renderLogInSection() {
     //on desktop, controls the top row/right justify nav items
     return (
       <React.Fragment>
         <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Item>
         <Nav.Link href={url.section(Section.LogIn)}>Log In</Nav.Link>
+      </React.Fragment>
+    )
+  }
+
+  _renderUserSection() {
+    return (
+      <React.Fragment>
+        <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Item>
+        <Nav.Link href={url.section(Section.MyProjects)}>My Projects</Nav.Link>
+        <Nav.Link href="/logout/">Log Out</Nav.Link>
       </React.Fragment>
     )
   }
