@@ -13,14 +13,22 @@
 .bg-navlight {
   background: $color-background-light;
 }
-.MainHeader-usernav-button {
-  display: block; // for log in button outside the hamburger on mobile
+.MainHeader-showmobile {
+  display: block; // show by default, hide in media query
+}
+.MainHeader-showdesktop {
+  display: none; // hide by default, show in media query
+}
+.MainHeader-login-button {
   margin-left: auto;
   margin-right: 1rem;
 }
 
 @include media-breakpoint-up(lg) {
-  .MainHeader-usernav-button {
+  .MainHeader-showmobile {
     display: none; // button only has to show on mobile so suppress at same breakpoint hamburger goes away
+  }
+  .MainHeader-showdesktop {
+    display: block;
   }
 }
