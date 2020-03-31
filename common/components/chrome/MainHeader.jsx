@@ -67,7 +67,6 @@ class MainHeader extends React.Component<{||}, State > {
     );
   }
 
-// TODO: Add a conditional checking user logged in state to the Log In button; it shouldn't render if user is logged in */
   _renderNavBar() {
     return (
       <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
@@ -104,7 +103,7 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderLogInSection() {
-    //on desktop, controls the top row/right justify nav items
+    //for logged out users, render login and similar
     return (
       <React.Fragment>
         <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Item>
@@ -114,6 +113,7 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderUserSection() {
+    //for logged in users, render user actions
     return (
       <React.Fragment>
         <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Item>
