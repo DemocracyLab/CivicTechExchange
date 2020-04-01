@@ -21,9 +21,6 @@
     "S3_BUCKET": {
       "required": true
     },
-    "DJANGO_DEBUG": {
-      "required": true
-    },
     "ADMIN_EMAIL": {
       "required": true
     },
