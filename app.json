@@ -3,6 +3,12 @@
   "scripts": {
   },
   "env": {
+    "HEROKU_APP_NAME": {
+      "required": true
+    },
+    "HEROKU_PARENT_APP_NAME": {
+      "required": true
+    },
     "AWS_ACCESS_KEY_ID": {
       "required": true
     },
@@ -45,5 +51,15 @@
     {
       "url": "heroku/python"
     }
-  ]
+  ],
+  "environments": {
+    "review": {
+      "scripts": {
+        "postdeploy": "source ./reviewapp-release.sh"
+      },
+      "env": {
+        "ADMIN_EMAIL": "marlon+reviewadmin@democracylab.org"
+      }
+    }
+  }
 }

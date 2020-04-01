@@ -296,7 +296,7 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
         'message': 'Needed to calculate volunteer renewal periods.'
     },
     'GR_SITEKEY': {
-        'error': True,
+        'error': False,
         'message': 'Contact Us page will not render correctly.'
     },
     'CONTACT_EMAIL': {
