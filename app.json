@@ -52,7 +52,7 @@
   "environments": {
     "review": {
       "scripts": {
-        "postdeploy": "source ./reviewapp-release.sh"
+        "postdeploy": "bash -c \"source ./reviewapp-release.sh\"",
       },
       "env": {
         "DJANGO_SECRET_KEY": {
