@@ -100,7 +100,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   _ourMission() {
     return (
       <div className="about-us-mission"
-      style={cdn.bgImage('AboutUs_Header.jpg')}>
+      style={cdn.bgImage('OurMissionBGoverlay.jpg')}>
         <div className="about-us-content container">
           <h1>Mission</h1>
           <p>Empower people who use technology to advance the public good.</p>
