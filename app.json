@@ -42,7 +42,8 @@
     }
   },
   "addons": [
-    "heroku-postgresql"
+    "heroku-postgresql",
+    "papertrail"
   ],
   "buildpacks": [
     {
