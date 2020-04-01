@@ -55,6 +55,10 @@
         "postdeploy": "source ./reviewapp-release.sh"
       },
       "env": {
+        "DJANGO_SECRET_KEY": {
+          "required": true,
+          "generator": "secret"
+        },
         "ADMIN_EMAIL": "marlon+reviewadmin@democracylab.org",
         "CONTACT_EMAIL": "marlon+reviewhello@democracylab.org",
         "PROTOCOL_DOMAIN": "PLACEHOLDER"
