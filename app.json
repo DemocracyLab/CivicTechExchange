@@ -55,7 +55,9 @@
         "postdeploy": "source ./reviewapp-release.sh"
       },
       "env": {
-        "ADMIN_EMAIL": "marlon+reviewadmin@democracylab.org"
+        "ADMIN_EMAIL": "marlon+reviewadmin@democracylab.org",
+        "CONTACT_EMAIL": "marlon+reviewhello@democracylab.org",
+        "PROTOCOL_DOMAIN": "PLACEHOLDER"
       }
     }
   }
