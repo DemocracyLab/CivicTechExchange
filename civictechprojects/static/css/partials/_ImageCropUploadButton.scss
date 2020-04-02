@@ -2,8 +2,13 @@
     position:relative;
     border: 1px solid black;
     border-radius:10px; 
-    .ImageCropUploadButton-doneButton {
-        display:block;
+
+    .ImageCropUploadButton-buttonGroup {
+        margin: 5px 0 10px 10px;
+
+        input[type="button"]:not(:last-child) {
+            margin-right: 10px;
+        }
     }
 
     .FileSelectButton-dragFiles {
