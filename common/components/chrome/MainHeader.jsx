@@ -104,6 +104,7 @@ class MainHeader extends React.Component<{||}, State > {
 
   _renderLogInSection() {
     //for logged out users, render login and similar
+    //TODO: Make login link return you to previous section, track down double-login error
     return (
       <React.Fragment>
         <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Item>
