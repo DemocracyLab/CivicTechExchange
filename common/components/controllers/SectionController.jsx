@@ -28,6 +28,7 @@ import DonateController from "./DonateController.jsx";
 import ThankYouController from "./ThankYouController.jsx";
 import PressController from './PressController.jsx';
 import ContactUsController from './ContactUsController.jsx';
+import LiveEventController from "./LiveEventController.jsx";
 
 type State = {|
   section: SectionType,
@@ -95,6 +96,8 @@ class SectionController extends React.Component<{||}, State> {
         return <PressController />;
       case Section.ContactUs:
         return <ContactUsController />;
+      case Section.LiveEvent:
+        return <LiveEventController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }

@@ -181,7 +181,8 @@ def index(request):
         'PRESS_LINKS': settings.PRESS_LINKS,
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt'),
         'GR_SITEKEY': settings.GR_SITEKEY,
-        'FAVICON_PATH': settings.FAVICON_PATH
+        'FAVICON_PATH': settings.FAVICON_PATH,
+        'TEST_IFRAME_URL': settings.TEST_IFRAME_URL
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
