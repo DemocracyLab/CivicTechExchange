@@ -97,15 +97,6 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
 
   _handleFileSelection(file): void {
     this.setState( { src: file, isCropping: true } );
-
-    // set cropping aspect ratio for selected image     
-    const image = new Image();
-    image.src = file;
-    image.onload = ({ target }) => {
-      if (!this.props.aspect && target.width && target.height) {
-        this.setState({crop: {...this.state.crop, aspect: target.width / target.height }})
-      }
-    }
   }
 
   makeClientCrop(crop) {
