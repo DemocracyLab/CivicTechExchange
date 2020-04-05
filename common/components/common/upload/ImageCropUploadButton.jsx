@@ -199,7 +199,8 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
       unit:"%",
       x:5,
       y:5,
-      width:90
+      width:90,
+      height: 90
     }
     cropSettings = this.props.aspect ? {...cropSettings, aspect: this.props.aspect} : cropSettings;
     return cropSettings;
