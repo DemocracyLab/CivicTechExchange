@@ -1,6 +1,4 @@
 // @flow
-// https://stackoverflow.com/questions/42635126/bootstrap-4-navbar-with-2-rows/42635243#42635243
-// https://www.codeply.com/go/26lFpoCSWx
 
 import type { FluxReduceStore } from 'flux/utils';
 import type { SectionType } from '../enums/Section.js';
@@ -40,8 +38,7 @@ class MainHeader extends React.Component<{||}, State > {
   constructor(): void {
     super();
     this.state = {
-      showMyProjects: false,
-      createProjectUrl: url.sectionOrLogIn(Section.CreateProject)
+      activeSection: NavigationStore.getSection()
     };
 
     this._handleHeightChange = this._handleHeightChange.bind(this);
@@ -119,6 +116,7 @@ class MainHeader extends React.Component<{||}, State > {
       <React.Fragment>
         <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Item>
         <Nav.Link href={url.section(Section.MyProjects)}>My Projects</Nav.Link>
+        <Nav.Link href={url.section(Section.EditProfile)}>My Profile</Nav.Link>
         <Nav.Link href="/logout/">Log Out</Nav.Link>
       </React.Fragment>
     )
