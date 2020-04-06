@@ -23,6 +23,11 @@
   margin-left: auto;
   margin-right: 1rem;
 }
+.MainHeader-nav-container {
+  .dropdown-toggle.nav-link {
+    font-weight: bold; // TODO: Replace this placeholder with a better denotation of "this is a link" vs "this is a dropdown" - chevron/caret?
+  }
+}
 
 @include media-breakpoint-up(lg) {
   .MainHeader-showmobile {
