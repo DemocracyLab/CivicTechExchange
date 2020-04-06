@@ -75,6 +75,7 @@ class MainHeader extends React.Component<{||}, State > {
             {CurrentUser.isLoggedIn() ? this._renderUserSection() : this._renderLogInSection()}
           </Nav>
           <Nav className="MainHeader-pagenav mr-auto">
+            <Nav.Link href={url.section(Section.Home)}>Home</Nav.Link>
             <NavDropdown title="Projects" id="nav-projects">
               <NavDropdown.Item href={url.section(Section.FindProjects)}>Find Projects</NavDropdown.Item>
               <NavDropdown.Item href={url.section(Section.CreateProject)}>Create Project</NavDropdown.Item>
