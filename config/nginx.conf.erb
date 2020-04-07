@@ -1,5 +1,5 @@
 
-daemon on;
+daemon off;
 #Heroku dynos have at least 4 cores.
 worker_processes <%= ENV['NGINX_WORKERS'] || 4 %>;
 
@@ -28,7 +28,7 @@ http {
 	client_body_timeout 5;
 
 	upstream app_server {
-		server unix:/tmp/nginx.socket fail_timeout=10;
+		server unix:/tmp/nginx.socket fail_timeout=0;
  	}
 
 	server {
@@ -51,7 +51,6 @@ http {
 		}
 
 		location /blog {
-			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 			proxy_set_header Host $http_host;
 			proxy_redirect off;
 			proxy_pass <%= ENV["BLOG_ADDRESS"] %>;
