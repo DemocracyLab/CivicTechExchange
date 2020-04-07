@@ -106,7 +106,7 @@ class MainHeader extends React.Component<{||}, State > {
     return (
       <React.Fragment>
         <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Item>
-        <Nav.Link href={url.section(Section.LogIn)}>Log In</Nav.Link>
+        <Nav.Link href={url.section(Section.LogIn, {prevPage: window.location.href.split('?section=')[1]})}>Log In</Nav.Link>
       </React.Fragment>
     )
   }
