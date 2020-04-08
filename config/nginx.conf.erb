@@ -27,9 +27,18 @@ http {
 	#Must read the body in 5 seconds.
 	client_body_timeout 5;
 
+	# handle SNI
+    proxy_ssl_server_name on;
+    # resolver needs to be set because we're using dynamic proxy_pass
+    resolver 8.8.8.8;
+
 	upstream app_server {
 		server unix:/tmp/nginx.socket fail_timeout=0;
  	}
+
+ 	upstream upstream_app_blog {
+        server democracylabblog.herokuapp.com:443;
+    }
 
 	server {
 		listen <%= ENV["PORT"] %>;
@@ -51,11 +60,18 @@ http {
 		}
 
 		location /blog {
-			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-			proxy_set_header Host $http_host;
-			proxy_redirect off;
-			proxy_pass <%= ENV["BLOG_ADDRESS"] %>;
-			client_max_body_size 15m;
+			set $upstream upstream_app_blog;
+            proxy_pass https://$upstream_app_blog;
+            proxy_ssl_name democracylabblog.herokuapp.com;
+            proxy_set_header x-forwarded-host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header Host democracylabblog.herokuapp.com;
+
+            # proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			# proxy_set_header Host $http_host;
+			# proxy_redirect off;
+			# proxy_pass <%= ENV["BLOG_ADDRESS"] %>;
+			# client_max_body_size 15m;
 		}
 	}
 }
