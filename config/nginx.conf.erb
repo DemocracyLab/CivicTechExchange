@@ -61,7 +61,7 @@ http {
 
 		location /blog {
 			set $upstream upstream_app_blog;
-            proxy_pass https://$upstream_app_blog;
+            proxy_pass https://$upstream;
             proxy_ssl_name democracylabblog.herokuapp.com;
             proxy_set_header x-forwarded-host $host;
             proxy_set_header X-Real-IP $remote_addr;
