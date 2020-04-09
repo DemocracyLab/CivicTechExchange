@@ -9,7 +9,6 @@
     color: $color-orange;
   }
   .navbar {
-    font-size: 18px;
     padding: 0.25rem; //override entire navbar padding values, set our own later
   }
   .navbar-brand {
@@ -37,8 +36,8 @@
   .dropdown-toggle.nav-link::after {
     content: '\25BC';
     padding-left: 5px;
-    font-weight: bold;
-    font-size: 16px;
+    font-size:12px;
+    vertical-align: text-top;
   }
 }
 
