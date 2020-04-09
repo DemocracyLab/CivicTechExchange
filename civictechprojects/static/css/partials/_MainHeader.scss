@@ -4,6 +4,39 @@
   width: 100%;
   position: fixed; /* fix the entire component, including AlertHeader and Nav */
 }
+.MainHeader-showmobile {
+  display: block; // show by default, hide in media query
+}
+.MainHeader-showdesktop {
+  display: none; // hide by default, show in media query
+}
+.MainHeader-login-button {
+  margin-left: auto;
+  margin-right: 1rem;
+}
+.MainHeader-useravatar {
+  height: 38px;
+  width: 38px;
+  border-radius: 50%;
+}
+.MainHeader-donatebutton {
+  height: 38px;
+  margin: auto 20px auto 0;
+}
+// TODO: Replace this placeholder with a better denotation of "this is a link" vs "this is a dropdown" - chevron/caret?
+.MainHeader-nav-container {
+  .dropdown-toggle.nav-link {
+    padding-right: 10px;
+  }
+  .dropdown-toggle.nav-link::after {
+    content: '\25BC';
+    padding-left: 5px;
+    font-size:12px;
+    vertical-align: text-top;
+  }
+}
+
+//  navbar overrides all go in here for specificity
 .MainHeader-root {
   a:hover, a:focus, .navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link:focus {
     color: $color-orange;
@@ -18,28 +51,7 @@
     background: $color-background-light;
   }
 }
-.MainHeader-showmobile {
-  display: block; // show by default, hide in media query
-}
-.MainHeader-showdesktop {
-  display: none; // hide by default, show in media query
-}
-.MainHeader-login-button {
-  margin-left: auto;
-  margin-right: 1rem;
-}
-// TODO: Replace this placeholder with a better denotation of "this is a link" vs "this is a dropdown" - chevron/caret?
-.MainHeader-nav-container {
-  .dropdown-toggle.nav-link {
-    padding-right: 10px;
-  }
-  .dropdown-toggle.nav-link::after {
-    content: '\25BC';
-    padding-left: 5px;
-    font-size:12px;
-    vertical-align: text-top;
-  }
-}
+// end navbar-specific override section
 
 @include media-breakpoint-up(lg) {
   .MainHeader-showmobile {

@@ -19,6 +19,7 @@ import _ from 'lodash';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 
 class MainHeader extends React.Component<{||}, State > {
@@ -115,12 +116,29 @@ class MainHeader extends React.Component<{||}, State > {
     //for logged in users, render user actions
     return (
       <React.Fragment>
-        <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Item>
-        <Nav.Link href={url.section(Section.MyProjects)}>My Projects</Nav.Link>
-        <Nav.Link href={url.section(Section.EditProfile)}>My Profile</Nav.Link>
-        <Nav.Link href="/logout/">Log Out</Nav.Link>
+        <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop MainHeader-donatebutton" href={url.section(Section.Donate)}>Donate</Nav.Item>
+        <Dropdown as={Nav.Item}>
+          <Dropdown.Toggle as={Nav.Link}>
+            {this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item href={url.section(Section.MyProjects)}>My Projects</Dropdown.Item>
+            <Dropdown.Item href={url.section(Section.EditProfile)}>My Profile</Dropdown.Item>
+            <Dropdown.Item href="/logout/">Log Out</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown.Divider className="MainHeader-showmobile"/>
       </React.Fragment>
     )
+  }
+
+// TODO: replace no-userimg output with a default avatar svg
+  _renderAvatar(): React$Node {
+    return (
+      !_.isEmpty(CurrentUser.userImgUrl()) ?
+        <img className="MainHeader-useravatar" src={CurrentUser.userImgUrl()} /> :
+        null
+    );
   }
 
   _onAlertHeaderUpdate() {
