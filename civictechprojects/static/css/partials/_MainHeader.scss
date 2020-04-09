@@ -9,7 +9,8 @@
     color: $color-orange;
   }
   .navbar {
-  padding: 0.25rem; //override entire navbar padding values, set our own later
+    font-size: 18px;
+    padding: 0.25rem; //override entire navbar padding values, set our own later
   }
   .navbar-brand {
     padding-right: 0.875rem;
@@ -28,9 +29,16 @@
   margin-left: auto;
   margin-right: 1rem;
 }
+// TODO: Replace this placeholder with a better denotation of "this is a link" vs "this is a dropdown" - chevron/caret?
 .MainHeader-nav-container {
   .dropdown-toggle.nav-link {
-    font-weight: bold; // TODO: Replace this placeholder with a better denotation of "this is a link" vs "this is a dropdown" - chevron/caret?
+    padding-right: 10px;
+  }
+  .dropdown-toggle.nav-link::after {
+    content: '\25BC';
+    padding-left: 5px;
+    font-weight: bold;
+    font-size: 16px;
   }
 }
 
