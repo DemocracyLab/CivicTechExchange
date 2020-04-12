@@ -59,9 +59,17 @@ http {
 			client_max_body_size 15m;
 		}
 
-		location /blog/ {
+		location /blog {
 			set $upstream upstream_app_blog;
             proxy_pass https://blog.democracylab.org/;
+            proxy_ssl_name blog.democracylab.org;
+            proxy_set_header Host blog.democracylab.org;
+            # proxy_redirect off;
+		}
+
+		location /blog/ {
+			set $upstream upstream_app_blog;
+            proxy_pass https://blog.democracylab.org;
             proxy_ssl_name blog.democracylab.org;
             proxy_set_header Host blog.democracylab.org;
             # proxy_redirect off;
