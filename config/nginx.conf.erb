@@ -50,12 +50,21 @@ http {
     	# root   ./;
 	#index  index.html index.htm;
 
+		location  / {
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header Host $http_host;
+			proxy_redirect off;
+			# 3001 needs to be hardcoded on the node server/webpack or whatsoever
+			proxy_pass http://0.0.0.0:3000;
+			client_max_body_size 15m;
+		}
+
 		location /blog {
 			set $upstream upstream_app_blog;
             proxy_pass https://$upstream/;
             proxy_ssl_name blog.democracylab.org;
             proxy_set_header Host blog.democracylab.org;
-            # proxy_redirect https://$upstream/blog https://$upstream/;
+            proxy_redirect https://$upstream/blog https://$upstream/;
 		}
 	}
 }
