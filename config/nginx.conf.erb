@@ -123,5 +123,69 @@ http {
             # proxy_redirect off;
 		}
 
+		location /images {
+			set $upstream upstream_app_blog;
+            proxy_pass https://blog.democracylab.org/;
+            proxy_ssl_name blog.democracylab.org;
+            proxy_set_header Host blog.democracylab.org;
+            # proxy_redirect off;
+		}
+
+		location /images/ {
+			set $upstream upstream_app_blog;
+            proxy_pass https://blog.democracylab.org/;
+            proxy_ssl_name blog.democracylab.org;
+            proxy_set_header Host blog.democracylab.org;
+            # proxy_redirect off;
+		}
+
+		location /js {
+			set $upstream upstream_app_blog;
+            proxy_pass https://blog.democracylab.org/;
+            proxy_ssl_name blog.democracylab.org;
+            proxy_set_header Host blog.democracylab.org;
+            # proxy_redirect off;
+		}
+
+		location /js/ {
+			set $upstream upstream_app_blog;
+            proxy_pass https://blog.democracylab.org/;
+            proxy_ssl_name blog.democracylab.org;
+            proxy_set_header Host blog.democracylab.org;
+            # proxy_redirect off;
+		}
+
+		location /built {
+			set $upstream upstream_app_blog;
+            proxy_pass https://blog.democracylab.org/;
+            proxy_ssl_name blog.democracylab.org;
+            proxy_set_header Host blog.democracylab.org;
+            # proxy_redirect off;
+		}
+
+		location /built/ {
+			set $upstream upstream_app_blog;
+            proxy_pass https://blog.democracylab.org/;
+            proxy_ssl_name blog.democracylab.org;
+            proxy_set_header Host blog.democracylab.org;
+            # proxy_redirect off;
+		}
+
+		location /ghost-sdk.min.js {
+			set $upstream upstream_app_blog;
+            proxy_pass https://blog.democracylab.org/;
+            proxy_ssl_name blog.democracylab.org;
+            proxy_set_header Host blog.democracylab.org;
+            # proxy_redirect off;
+		}
+
+		location /ghost-sdk.min.js/ {
+			set $upstream upstream_app_blog;
+            proxy_pass https://blog.democracylab.org/;
+            proxy_ssl_name blog.democracylab.org;
+            proxy_set_header Host blog.democracylab.org;
+            # proxy_redirect off;
+		}
+
 	}
 }
