@@ -59,11 +59,7 @@ http {
 			client_max_body_size 15m;
 		}
 
-               location /blog {
-                 return 302 /blog/;
-               }
-
-		location /blog/ {
+		location /blog {
 			set $upstream upstream_app_blog;
             proxy_pass https://$upstream/;
             proxy_ssl_name blog.democracylab.org;
