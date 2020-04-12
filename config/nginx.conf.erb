@@ -50,14 +50,6 @@ http {
     	# root   ./;
 	#index  index.html index.htm;
 
-		location / {
-			set $upstream upstream_app_blog;
-            proxy_pass https://$upstream/;
-            proxy_ssl_name blog.democracylab.org;
-            proxy_set_header Host blog.democracylab.org;
-            # proxy_redirect https://$upstream/blog https://$upstream/;
-		}
-
 		location /blog {
 			set $upstream upstream_app_blog;
             proxy_pass https://$upstream/;
