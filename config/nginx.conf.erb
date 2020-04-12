@@ -59,11 +59,10 @@ http {
 			client_max_body_size 15m;
 		}
 
-		location ~ /blog/(?<section>.+) {
-            proxy_pass https://blog.democracylab.org/$section;
+		location /blog {
+            proxy_pass https://blog.democracylab.org/;
             proxy_set_header Host blog.democracylab.org;
             proxy_ssl_name blog.democracylab.org;
 		}
-
 	}
 }
