@@ -67,5 +67,9 @@ http {
             # proxy_redirect off;
 		}
 
+		location ~ ^/blog(?:/(.*))?$ {
+			alias https://blog.democracylab.org/
+		}
+
 	}
 }
