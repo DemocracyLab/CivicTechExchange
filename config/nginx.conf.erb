@@ -65,10 +65,22 @@ http {
             proxy_ssl_name blog.democracylab.org;
 		}
 
-		location /blog/ {
-            proxy_pass https://blog.democracylab.org/;
-            proxy_set_header Host blog.democracylab.org;
-            proxy_ssl_name blog.democracylab.org;
+    location /assets {
+        proxy_pass https://blog.democracylab.org/;
+        proxy_set_header Host blog.democracylab.org;
+        proxy_ssl_name blog.democracylab.org;
+		}
+
+    location /public {
+        proxy_pass https://blog.democracylab.org/;
+        proxy_set_header Host blog.democracylab.org;
+        proxy_ssl_name blog.democracylab.org;
+		}
+
+    location /content {
+        proxy_pass https://blog.democracylab.org/;
+        proxy_set_header Host blog.democracylab.org;
+        proxy_ssl_name blog.democracylab.org;
 		}
 	}
 }
