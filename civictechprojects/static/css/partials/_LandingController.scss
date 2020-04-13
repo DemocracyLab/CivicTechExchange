@@ -1,5 +1,4 @@
 .RecentProjects {
-  background: $color-background-light;
   padding: 20px 0 60px 0; /* extra padding to keep background color correct between this and pathflows section */
 }
 .RecentProjects-title, .RecentProjects-button {
@@ -50,6 +49,9 @@
 }
 .LandingController-topsplash p {
   font-size: 24px;
+}
+.LandingController-midsplash h1 {
+  padding-top: 20px;
 }
 .LandingController-midsplash p, .PartnerSection p {
   font-size: 18px;
