@@ -114,10 +114,12 @@ class MainHeader extends React.Component<{||}, State > {
 
   _renderUserSection() {
     //for logged in users, render user actions
+    //TODO: Rebuild this component so deskop dropdown and mobile links aren't separated out
+
     return (
       <React.Fragment>
         <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop MainHeader-donatebutton" href={url.section(Section.Donate)}>Donate</Nav.Item>
-        <Dropdown as={Nav.Item}>
+        <Dropdown as={Nav.Item} className="MainHeader-showdesktop">
           <Dropdown.Toggle as={Nav.Link}>
             {this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}
           </Dropdown.Toggle>
@@ -127,7 +129,13 @@ class MainHeader extends React.Component<{||}, State > {
             <Dropdown.Item href="/logout/">Log Out</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown.Divider className="MainHeader-showmobile"/>
+        <div className="MainHeader-showmobile">
+          <Nav.Item>{this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}</Nav.Item>
+          <Nav.Link href={url.section(Section.MyProjects)}>My Projects</Nav.Link>
+          <Nav.Link href={url.section(Section.EditProfile)}>My Profile</Nav.Link>
+          <Nav.Link href="/logout/">Log Out</Nav.Link>
+          <Dropdown.Divider />
+        </div>
       </React.Fragment>
     )
   }

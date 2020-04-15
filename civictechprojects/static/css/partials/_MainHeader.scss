@@ -18,12 +18,13 @@
   height: 38px;
   width: 38px;
   border-radius: 50%;
+  margin-right: 0.5rem;
 }
 .MainHeader-donatebutton {
   height: 38px;
   margin: auto 20px auto 0;
 }
-// TODO: Replace this placeholder with a better denotation of "this is a link" vs "this is a dropdown" - chevron/caret?
+// adds a dropdown caret for nav menus, since Bootstrap's is disabled globally
 .MainHeader-nav-container {
   .dropdown-toggle.nav-link {
     padding-right: 10px;
@@ -35,6 +36,7 @@
     vertical-align: text-top;
   }
 }
+
 
 //  navbar overrides all go in here for specificity
 .MainHeader-root {
