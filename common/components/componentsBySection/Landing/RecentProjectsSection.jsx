@@ -109,7 +109,7 @@ class RecentProjectsSection extends React.Component<{||}, State> {
     //sets how many cards are shown at one time
     const width = this.state.windowWidth
     if (width < 992 && width >= 768) {
-      this.setState({cardCapacity: 4})
+      this.setState({cardCapacity: 4, cardStart: 0})
     } else {
       this.setState({cardCapacity: 3})
     }
