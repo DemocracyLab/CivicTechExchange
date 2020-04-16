@@ -70,7 +70,7 @@ class MainHeader extends React.Component<{||}, State > {
     return (
       <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
         <Navbar.Brand><a href={url.section(Section.Home)}><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></Navbar.Brand>
-        {CurrentUser.isLoggedIn() ? null : <Button className="MainHeader-showmobile MainHeader-login-button" variant="outline-primary" href={url.section(Section.LogIn)}>Log In</Button>}
+        {CurrentUser.isLoggedIn() ? null : <Button className="MainHeader-showmobile MainHeader-login-button" variant="outline-primary" href={url.section(Section.LogIn, {prev: this._generatePrev()})}>Log In</Button>}
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
         <Navbar.Collapse id="nav-pagenav-container" className="flex-column">
           <Nav className="MainHeader-usernav ml-auto">
@@ -108,9 +108,18 @@ class MainHeader extends React.Component<{||}, State > {
     return (
       <React.Fragment>
         <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Item>
-        <Nav.Link href={url.section(Section.LogIn, {prev: window.location.href.split('?section=')[1]})}>Log In</Nav.Link>
+        <Nav.Link href={url.section(Section.LogIn, {prev: this._generatePrev()})}>Log In</Nav.Link>
       </React.Fragment>
     )
+  }
+  _generatePrev() {
+    let queryString = window.location.href
+    //if query string contains &prev= don't append current section, otherwise do append it
+    if (queryString.includes('&prev=')) {
+      return window.location.href.split('&prev=')[1]
+    } else {
+      return window.location.href.split('?section=')[1];
+    }
   }
 
   _renderUserSection() {
