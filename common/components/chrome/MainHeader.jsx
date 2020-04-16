@@ -21,6 +21,7 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
+import UserIcon from '../svg/user-circle-solid.svg';
 
 class MainHeader extends React.Component<{||}, State > {
 
@@ -145,7 +146,7 @@ class MainHeader extends React.Component<{||}, State > {
     return (
       !_.isEmpty(CurrentUser.userImgUrl()) ?
         <img className="MainHeader-useravatar" src={CurrentUser.userImgUrl()} /> :
-        null
+        <UserIcon className="MainHeader-useravatar" />
     );
   }
 
