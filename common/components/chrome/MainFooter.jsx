@@ -39,11 +39,11 @@ class MainFooter extends React.Component<{||}> {
       <div className="MainFooter-border"></div>
       <div className="MainFooter-footer container">
         <div className="MainFooter-item col-12 text-center">
-          <h2>Made Possible With Generous Support From</h2>
+          <h3>Made Possible With Generous Support From</h3>
           <img src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png" alt="Bill and Melinda Gates Foundation logo"></img>
         </div>
         <div className="MainFooter-item col-12 text-center">
-          <h2>And Our Corporate Partners</h2>
+          <h3>And Our Corporate Partners</h3>
           <Button variant="primary" href={url.section(Section.PartnerWithUs)} className="MainFooter-pws-button">
             Partner With Us
           </Button>
