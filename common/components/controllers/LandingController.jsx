@@ -87,7 +87,7 @@ class LandingController extends React.PureComponent<{||}> {
             <p>Find people with the tech skills you need</p>
               <div className="LandingController-pathflows-stepcontainer">
                 <div className="LandingController-pathflows-item">
-                  <Rec1 />
+                  <Rec3 />
                   <p>1. Add Your Project</p>
                 </div>
                 <div className="LandingController-pathflows-arrow"><ArrowOrange /></div>
@@ -97,7 +97,7 @@ class LandingController extends React.PureComponent<{||}> {
                 </div>
                 <div className="LandingController-pathflows-arrow"><ArrowOrange /></div>
                 <div className="LandingController-pathflows-item">
-                  <Rec3 />
+                  <Rec1 />
                   <p>3. Recruit Skilled Volunteers</p>
                 </div>
               </div>
