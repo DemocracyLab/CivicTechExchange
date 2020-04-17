@@ -96,6 +96,7 @@ class MainHeader extends React.Component<{||}, State > {
               <NavDropdown.Item href={url.section(Section.Press)}>News</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link href={url.section(Section.Donate)} className="MainHeader-showmobile">Donate</Nav.Link>
+            {CurrentUser.isLoggedIn() ? <Nav.Link className="MainHeader-showmobile" href="/logout/">Log Out</Nav.Link> : <Nav.Link className="MainHeader-showmobile" href={url.section(Section.LogIn, {prev: this._generatePrev()})}>Log In</Nav.Link>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -104,11 +105,11 @@ class MainHeader extends React.Component<{||}, State > {
 
   _renderLogInSection() {
     //for logged out users, render login and similar
-    //TODO: Make login link return you to previous section, track down double-login error
+    //This is "desktop only" right now, see if we can combine it with mobile somehow?
     return (
       <React.Fragment>
         <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Item>
-        <Nav.Link href={url.section(Section.LogIn, {prev: this._generatePrev()})}>Log In</Nav.Link>
+        <Nav.Link className="MainHeader-showdesktop" href={url.section(Section.LogIn, {prev: this._generatePrev()})}>Log In</Nav.Link>
       </React.Fragment>
     )
   }
@@ -125,7 +126,7 @@ class MainHeader extends React.Component<{||}, State > {
   _renderUserSection() {
     //for logged in users, render user actions
     //TODO: Rebuild this component so deskop dropdown and mobile links aren't separated out
-
+    // Note that mobile does not have a Log Out link because it's rendered in the main nav for positioning purposes
     return (
       <React.Fragment>
         <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop MainHeader-donatebutton" href={url.section(Section.Donate)}>Donate</Nav.Item>
@@ -143,7 +144,6 @@ class MainHeader extends React.Component<{||}, State > {
           <Nav.Item>{this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}</Nav.Item>
           <Nav.Link href={url.section(Section.MyProjects)}>My Projects</Nav.Link>
           <Nav.Link href={url.section(Section.EditProfile)}>My Profile</Nav.Link>
-          <Nav.Link href="/logout/">Log Out</Nav.Link>
           <Dropdown.Divider />
         </div>
       </React.Fragment>
