@@ -7,6 +7,7 @@ import Section from "../enums/Section.js";
 import Sponsors, {SponsorMetadata} from "../utils/Sponsors.js";
 import NavigationStore from "../stores/NavigationStore.js";
 import _ from 'lodash';
+import Button from 'react-bootstrap/Button';
 
 const sectionsToShowFooter: $ReadOnlyArray<string> = [
   Section.FindProjects,
@@ -38,11 +39,14 @@ class MainFooter extends React.Component<{||}> {
       <div className="MainFooter-border"></div>
       <div className="MainFooter-footer container">
         <div className="MainFooter-item col-12 text-center">
-          <h2>Sponsors Make It Possible</h2>
-          <p>Support the acceleration of social change</p>
-          <a className="btn btn-primary" href={url.section(Section.PartnerWithUs)}>
-            PARTNER WITH US
-          </a>
+          <h3>Made Possible With Generous Support From</h3>
+          <img src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png" alt="Bill and Melinda Gates Foundation logo"></img>
+        </div>
+        <div className="MainFooter-item col-12 text-center">
+          <h3>And Our Corporate Partners</h3>
+          <Button variant="primary" href={url.section(Section.PartnerWithUs)} className="MainFooter-pws-button">
+            Partner With Us
+          </Button>
         </div>
         <div className="MainFooter-sponsor-container col-12">
             {this._renderSponsors("Visionary")}

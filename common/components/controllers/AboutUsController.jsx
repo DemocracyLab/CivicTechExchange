@@ -52,7 +52,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     const state: State = {
       board_of_directors: response.board_of_directors && JSON.parse(response.board_of_directors)
     };
-    
+
     if(response.project) {
       state.project = response.project;
       const activeVolunteers: $ReadOnlyArray<VolunteerDetailsAPIData> = response.project.project_volunteers.filter( (pv) => pv.isApproved);
@@ -75,7 +75,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         VolunteerUserDataEqualsBioPersonData);
       state.project_owners = uniqueOwners.map((po) => VolunteerUserDataToBioPersonData(po, "Owner"));
     }
-    
+
     this.setState(state, prerender.ready);
   }
 
@@ -217,18 +217,21 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       </div>
     )
   }
-  
+
   _boardOfDirectors() {
     return (this.state.board_of_directors ?
       <div className="about-us-team col">
         <h2>Board of Directors</h2>
-        <div className="about-us-team-card-container">
+        <p className="about-us-team-description">
+          Please review our <a href="https://d1agxr2dqkgkuy.cloudfront.net/documents/2019%20DemocracyLab%20Annual%20Report.pdf" >2019 Annual Report</a> to learn about the impact of our programs and platform last year.
+        </p>
+        <div className="about-us-team-card-container about-us-board-container">
           {this._renderBios(this.state.board_of_directors, true)}
         </div>
         <hr />
       </div> : null);
   }
-  
+
   _ourTeam() {
     return (this.state.project ?
       <div className="about-us-team col">
@@ -258,7 +261,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   _filterTeamSection(volunteers, role) {
     return volunteers[role] && this._renderBios(volunteers[role], false);
   }
-  
+
   _renderBios(volunteers: $ReadOnlyArray<BioPersonData>, allowUnsafeHtml: boolean) {
     return (
       volunteers.map((volunteer, i) => {

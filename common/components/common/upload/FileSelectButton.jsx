@@ -31,6 +31,7 @@ class FileSelectButton extends React.PureComponent<Props, State> {
     return (
       <FileDrop onDrop={this._handleDrop.bind(this)} className={this.props.hasImagePreview ? "FileSelectButton-wrapper FileSelectButton-imagePreview" : "FileSelectButton-wrapper"}>
         <div className="FileSelectButton-innerWrapper" style={previewImageStyle} >
+        <div className="FileSelectionButton-dragTargetArea"></div>
           <div className="FileSelectButton-innerContent">
             <div className="FileSelectButton-dragFiles">{this.props.dragText || "Drag Your Files Here or"}</div>
             <div className="FileSelectButton-button">

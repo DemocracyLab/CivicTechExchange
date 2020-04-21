@@ -235,6 +235,13 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         <DjangoCSRFToken/>
 
         <div className="form-group">
+          <div className='text-right'>
+            <input disabled={!this.state.formIsValid} type="submit" className="btn btn-success"
+                   value="Save Project" onClick={this.onSubmit.bind(this)}/>
+          </div>
+        </div>
+        
+        <div className="form-group">
           <ImageCropUploadFormElement form_id="project_thumbnail_location"
                                   buttonText="Upload Project Image"
                                   currentImage={this.state.formFields.project_thumbnail}/>

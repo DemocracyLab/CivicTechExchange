@@ -65,13 +65,13 @@ class LandingController extends React.PureComponent<{||}> {
           <p>Apply your tech skills to projects that need them</p>
           <div className="LandingController-pathflows-stepcontainer">
             <div className="LandingController-pathflows-item">
-              <Vo1 />
-              <p>1. Create a Profile</p>
+              <Vo2 />
+              <p>1. Browse Projects</p>
             </div>
             <div className="LandingController-pathflows-arrow"><ArrowBlack /></div>
             <div className="LandingController-pathflows-item">
-              <Vo2 />
-              <p>2. Search Projects</p>
+              <Vo1 />
+              <p>2. Create a Profile</p>
             </div>
             <div className="LandingController-pathflows-arrow"><ArrowBlack /></div>
             <div className="LandingController-pathflows-item">
@@ -87,18 +87,18 @@ class LandingController extends React.PureComponent<{||}> {
             <p>Find people with the tech skills you need</p>
               <div className="LandingController-pathflows-stepcontainer">
                 <div className="LandingController-pathflows-item">
-                  <Rec1 />
-                  <p>1. Add your organization</p>
+                  <Rec3 />
+                  <p>1. Add Your Project</p>
                 </div>
                 <div className="LandingController-pathflows-arrow"><ArrowOrange /></div>
                 <div className="LandingController-pathflows-item">
                   <Rec2 />
-                  <p>2. List your project needs</p>
+                  <p>2. List Your Needs</p>
                 </div>
                 <div className="LandingController-pathflows-arrow"><ArrowOrange /></div>
                 <div className="LandingController-pathflows-item">
-                  <Rec3 />
-                  <p>3. Find skilled volunteers</p>
+                  <Rec1 />
+                  <p>3. Recruit Skilled Volunteers</p>
                 </div>
               </div>
 
@@ -113,7 +113,7 @@ class LandingController extends React.PureComponent<{||}> {
 
     _renderMiddleSplash() {
       const header: string = "Accelerating Civic Innovation";
-      const text: string = "DemocracyLab is a nonprofit organization. \n\n Our mission is to empower people who use technology to advance the public good. \n\n We are accelerating innovation in the social, non-profit and civic sectors through the power of tech-for-good volunteerism."
+      const text: string = "DemocracyLab is a nonprofit organization. We are advancing tech innovation in the social, nonprofit and civic sectors through the power of tech-for-good volunteerism."
 
       return (
         <SplashScreen className="LandingController-midsplash" header={header} text={text} img={HeroImage.MidLanding}>
@@ -155,7 +155,7 @@ class LandingController extends React.PureComponent<{||}> {
 
       return (
         <div className="LandingController-partnersinaction">
-          <h2 className="text-center">Our Partners In Action</h2>
+          <h2 className="text-center">Our Community Partners</h2>
           <div className="LandingController-partnersinaction-container">{partnerLogos}</div>
         </div>
       )

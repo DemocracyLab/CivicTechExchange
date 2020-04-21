@@ -189,6 +189,16 @@ class EditProfileController extends React.PureComponent<{||},State> {
             <div className="EditProjectForm-root create-form white-bg">
               <DjangoCSRFToken/>
 
+              <div className="form-group text-right">
+                <input
+                  type="submit"
+                  className="btn btn-success"
+                  disabled={!this.state.formIsValid}
+                  value="Save Changes"
+                  onClick={this.onSubmit.bind(this)}
+                />
+              </div>
+
               <div className="form-group">
                 <ImageCropUploadFormElement form_id="user_thumbnail_location"
                                         buttonText="Upload Your Picture"

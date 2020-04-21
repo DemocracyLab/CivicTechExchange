@@ -24,7 +24,6 @@ class SocialFooter extends React.Component {
           <a href="https://www.facebook.com/democracylaborg"><i className={Glyph(GlyphStyles.FacebookSquare, GlyphSizes.X3)}></i></a>
           <a href="https://twitter.com/democracylab"><i className={Glyph(GlyphStyles.TwitterSquare, GlyphSizes.X3)}></i></a>
           <a href="https://www.linkedin.com/company/democracylab"><i className={Glyph(GlyphStyles.LinkedIn, GlyphSizes.X3)}></i></a>
-          <a href="https://medium.com/democracylab-org"><i className={Glyph(GlyphStyles.Medium, GlyphSizes.X3)}></i></a>
         </div>
       </div>
 
