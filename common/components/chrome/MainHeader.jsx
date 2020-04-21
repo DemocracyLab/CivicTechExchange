@@ -52,6 +52,8 @@ class MainHeader extends React.Component<{||}, State > {
     this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
   }
 
+
+
   render(): React$Node {
     return (
       <div ref={this.mainHeaderRef} className="MainHeader-root">
@@ -83,12 +85,14 @@ class MainHeader extends React.Component<{||}, State > {
               <NavDropdown.Item href={url.section(Section.CreateProject)}>Create Project</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Groups" id="nav-groups">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+              <NavDropdown.Item href="">Group Link #1</NavDropdown.Item>
+              <NavDropdown.Item href="">Group Link #2</NavDropdown.Item>
+              <NavDropdown.Item href="">Group Link #3</NavDropdown.Item>
+              <NavDropdown.Item href="">Group Link #4</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Events" id="nav-events">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+              <NavDropdown.Item href="">Events Link #1</NavDropdown.Item>
+              <NavDropdown.Item href="">Events Link #2</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="About" id="nav-about">
               <NavDropdown.Item href={url.section(Section.AboutUs)}>About Us</NavDropdown.Item>
@@ -114,12 +118,12 @@ class MainHeader extends React.Component<{||}, State > {
     )
   }
   _generatePrev() {
-    let queryString = window.location.href
+    let queryString = document.location.href
     //if query string contains &prev= don't append current section, otherwise do append it
     if (queryString.includes('&prev=')) {
-      return window.location.href.split('&prev=')[1]
+      return document.location.href.split('&prev=')[1]
     } else {
-      return window.location.href.split('?section=')[1];
+      return document.location.href.split('?section=')[1];
     }
   }
 
@@ -150,7 +154,6 @@ class MainHeader extends React.Component<{||}, State > {
     )
   }
 
-// TODO: replace no-userimg output with a default avatar svg
   _renderAvatar(): React$Node {
     return (
       !_.isEmpty(CurrentUser.userImgUrl()) ?
