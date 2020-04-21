@@ -24,6 +24,12 @@
   height: 38px;
   margin: auto 20px auto 0;
 }
+.MainHeader-active {
+  text-decoration: underline;
+  text-decoration-color: $color-orange;
+  text-underline-position: under;
+}
+
 // adds a dropdown caret for nav menus, since Bootstrap's is disabled globally
 .MainHeader-nav-container {
   .dropdown-toggle.nav-link {
@@ -53,6 +59,7 @@
     background: $color-background-light;
   }
   /* button hover states shouldn't change in the nav */
+  /* yes, this is stubbornly refusing to use !important */
   a.MainHeader-login-button.btn.btn-outline-primary:hover, a.MainHeader-login-button.btn.btn-outline-primary:focus {
     color: inherit;
   }
