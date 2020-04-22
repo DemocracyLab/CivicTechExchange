@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.template import loader
 from django.utils import timezone
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
 from urllib import parse as urlparse
@@ -166,6 +167,7 @@ def approve_project(request, project_id):
 
 
 @ensure_csrf_cookie
+@xframe_options_exempt
 def index(request):
     template = loader.get_template('new_index.html')
     context = {
