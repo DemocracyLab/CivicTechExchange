@@ -220,8 +220,12 @@
     flex-wrap: nowrap;
 
     .ProjectCard-root {
-      flex-basis: 31%;
-      min-width: 31%;
+      flex-basis: 26%;
+      min-width: 26%;
+    }
+
+    .ProjectCard-root:not(:last-child) {
+      margin-right: 10px;
     }
   }
   .RecentProjects-toggle {
