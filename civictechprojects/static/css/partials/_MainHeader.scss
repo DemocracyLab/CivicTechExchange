@@ -10,6 +10,9 @@
 .MainHeader-showdesktop {
   display: none; // hide by default, show in media query
 }
+.MainHeader-donate-link {
+  color: $color-text-dark;
+}
 .MainHeader-login-button {
   margin-left: auto;
   margin-right: 1rem;

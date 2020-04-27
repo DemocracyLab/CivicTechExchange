@@ -110,7 +110,7 @@ class MainHeader extends React.Component<{||}, State > {
     //This is "desktop only" right now, see if we can combine it with mobile somehow?
     return (
       <React.Fragment>
-        <Nav.Link className="MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Link>
+        <Button className="MainHeader-showdesktop MainHeader-donate-link" variant="link" href={url.section(Section.Donate)}>Donate</Button>
         <Button className="MainHeader-showdesktop MainHeader-login-button" variant="outline-primary" href={url.section(Section.LogIn, {prev: this._generatePrev()})}>Log In</Button>
       </React.Fragment>
     )
