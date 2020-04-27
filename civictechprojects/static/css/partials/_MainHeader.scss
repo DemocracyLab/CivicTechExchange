@@ -13,6 +13,7 @@
 .MainHeader-login-button {
   margin-left: auto;
   margin-right: 1rem;
+  color: $color-text-dark;
 }
 .MainHeader-useravatar {
   height: 38px;
@@ -39,7 +40,6 @@
     content: '\25BC';
     padding-left: 5px;
     font-size:12px;
-    vertical-align: text-top;
   }
 }
 
@@ -58,10 +58,16 @@
   .bg-navlight {
     background: $color-background-light;
   }
+  .navbar-nav .nav-link {
+    color: $color-text-dark;
+  }
   /* button hover states shouldn't change in the nav */
   /* yes, this is stubbornly refusing to use !important */
   a.MainHeader-login-button.btn.btn-outline-primary:hover, a.MainHeader-login-button.btn.btn-outline-primary:focus {
     color: inherit;
+  }
+  .dropdown-menu.show {
+    border: none;
   }
 }
 // end navbar-specific override section
@@ -73,4 +79,18 @@
   .MainHeader-showdesktop {
     display: block;
   }
+  .MainHeader-root .dropdown-menu.show {
+    border: 1px solid rgba(0, 0, 0, 0.15)
+  }
 }
+
+
+/* specific layout fixes for narrow devices, e.g. iphone 5 so nav doesn't spill onto 2 lines */
+@media (max-width: 370.0px) {
+  .navbar-brand img {
+    width: 140px;
+  }
+  .MainHeader-root .navbar-brand {
+    padding-right: 0;
+  }
+ }

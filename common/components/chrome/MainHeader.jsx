@@ -85,14 +85,12 @@ class MainHeader extends React.Component<{||}, State > {
               <NavDropdown.Item href={url.section(Section.CreateProject)}>Create Project</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Groups" id="nav-groups">
-              <NavDropdown.Item href="">Group Link #1</NavDropdown.Item>
-              <NavDropdown.Item href="">Group Link #2</NavDropdown.Item>
-              <NavDropdown.Item href="">Group Link #3</NavDropdown.Item>
-              <NavDropdown.Item href="">Group Link #4</NavDropdown.Item>
+              <NavDropdown.Item href="">Find Groups</NavDropdown.Item>
+              <NavDropdown.Item href="">Create Groups</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Events" id="nav-events">
-              <NavDropdown.Item href="">Events Link #1</NavDropdown.Item>
-              <NavDropdown.Item href="">Events Link #2</NavDropdown.Item>
+              <NavDropdown.Item href="">Find Events</NavDropdown.Item>
+              <NavDropdown.Item href="">Create Events</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="About" id="nav-about">
               <NavDropdown.Item href={url.section(Section.AboutUs)}>About Us</NavDropdown.Item>
@@ -112,8 +110,8 @@ class MainHeader extends React.Component<{||}, State > {
     //This is "desktop only" right now, see if we can combine it with mobile somehow?
     return (
       <React.Fragment>
-        <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Item>
-        <Nav.Link className="MainHeader-showdesktop" href={url.section(Section.LogIn, {prev: this._generatePrev()})}>Log In</Nav.Link>
+        <Nav.Link className="MainHeader-showdesktop" href={url.section(Section.Donate)}>Donate</Nav.Link>
+        <Button className="MainHeader-showdesktop MainHeader-login-button" variant="outline-primary" href={url.section(Section.LogIn, {prev: this._generatePrev()})}>Log In</Button>
       </React.Fragment>
     )
   }
