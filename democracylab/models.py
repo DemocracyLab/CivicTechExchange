@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -6,12 +7,13 @@ from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 import civictechprojects.models
 
-#  'user_files': '',
-#  'user_links': '[{"linkUrl":"http://www.google.com","linkName":"GOOGLE","visibility":"PUBLIC"},{"linkName":"link_linkedin","linkUrl":"http://www.linkedin.com","visibility":"PUBLIC"}]',
-
 
 class UserTaggedTechnologies(TaggedItemBase):
     content_object = models.ForeignKey('Contributor')
+
+
+def generate_uuid():
+    return uuid.uuid4().hex
 
 
 class Contributor(User):
@@ -22,6 +24,8 @@ class Contributor(User):
     about_me = models.CharField(max_length=100000, blank=True)
     user_technologies = TaggableManager(blank=True, through=UserTaggedTechnologies)
     user_technologies.remote_field.related_name = "+"
+    uuid = models.CharField(max_length=32, default=generate_uuid)
+    qiqo_uuid = models.CharField(max_length=50, null=True)
 
     def is_admin_contributor(self):
         return self.email == settings.ADMIN_EMAIL

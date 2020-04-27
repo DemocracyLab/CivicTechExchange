@@ -19,6 +19,7 @@ from .sitemaps import SitemapPages
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner
+from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from .forms import ProjectCreationForm
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
@@ -183,8 +184,7 @@ def index(request):
         'PRESS_LINKS': settings.PRESS_LINKS,
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt'),
         'GR_SITEKEY': settings.GR_SITEKEY,
-        'FAVICON_PATH': settings.FAVICON_PATH,
-        'TEST_IFRAME_URL': settings.TEST_IFRAME_URL
+        'FAVICON_PATH': settings.FAVICON_PATH
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
@@ -219,6 +219,8 @@ def index(request):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
+        context['QIQO_IFRAME_URL'] = get_user_qiqo_iframe(contributor)
+
         thumbnail = ProjectFile.objects.filter(file_user=request.user.id,
                                                file_category=FileCategory.THUMBNAIL.value).first()
         if thumbnail:
