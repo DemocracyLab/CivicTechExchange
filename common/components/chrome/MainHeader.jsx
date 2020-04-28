@@ -72,7 +72,7 @@ class MainHeader extends React.Component<{||}, State > {
     return (
       <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
         <Navbar.Brand><a href={url.section(Section.Home)}><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></Navbar.Brand>
-        {CurrentUser.isLoggedIn() ? null : <Button className="MainHeader-showmobile MainHeader-login-button" variant="outline-primary" href={url.section(Section.LogIn, {prev: this._generatePrev()})}>Log In</Button>}
+        {CurrentUser.isLoggedIn() ? null : <Button className="MainHeader-showmobile MainHeader-login-button" variant="outline-primary" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Button>}
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
         <Navbar.Collapse id="nav-pagenav-container" className="flex-column">
           <Nav className="MainHeader-usernav ml-auto">
@@ -97,8 +97,9 @@ class MainHeader extends React.Component<{||}, State > {
               <NavDropdown.Item href={url.section(Section.ContactUs)}>Contact Us</NavDropdown.Item>
               <NavDropdown.Item href={url.section(Section.Press)}>News</NavDropdown.Item>
             </NavDropdown>
+            <Nav.Link href="https://blog.democracylab.org">Blog</Nav.Link>
             <Nav.Link href={url.section(Section.Donate)} className="MainHeader-showmobile">Donate</Nav.Link>
-            {CurrentUser.isLoggedIn() ? <Nav.Link className="MainHeader-showmobile" href="/logout/">Log Out</Nav.Link> : <Nav.Link className="MainHeader-showmobile" href={url.section(Section.LogIn, {prev: this._generatePrev()})}>Log In</Nav.Link>}
+            {CurrentUser.isLoggedIn() ? <Nav.Link className="MainHeader-showmobile" href="/logout/">Log Out</Nav.Link> : <Nav.Link className="MainHeader-showmobile" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Nav.Link>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -111,18 +112,24 @@ class MainHeader extends React.Component<{||}, State > {
     return (
       <React.Fragment>
         <Button className="MainHeader-showdesktop MainHeader-donate-link" variant="link" href={url.section(Section.Donate)}>Donate</Button>
-        <Button className="MainHeader-showdesktop MainHeader-login-button" variant="outline-primary" href={url.section(Section.LogIn, {prev: this._generatePrev()})}>Log In</Button>
+        <Button className="MainHeader-showdesktop MainHeader-login-button" variant="outline-primary" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Button>
       </React.Fragment>
     )
   }
-  _generatePrev() {
-    let queryString = document.location.href
-    //if query string contains &prev= don't append current section, otherwise do append it
-    if (queryString.includes('&prev=')) {
-      return document.location.href.split('&prev=')[1]
-    } else {
-      return document.location.href.split('?section=')[1];
-    }
+
+  _renderNavLink(sec, text, type, classes = "") {
+    //sec = url.section to go to
+   // text = displayed link text
+   // type = Dropdown or Link
+   // classes (optional) any additional classnames that should be appended
+   // this helper method should also look at state.activesection and append an active class where url.section matches
+   // _renderNavLink("FindProjects", "Find Projects", "Dropdown")
+   if (type === "Dropdown") {
+     return <NavDropdown.Item className={classes} href={url.section(Section.sec)}>{text}</NavDropdown.Item>
+   }
+   if (type === "Link") {
+     return <Nav.Link className={classes} href={url.section(Section.sec)}>{text}</Nav.Link>
+   }
   }
 
   _renderUserSection() {
