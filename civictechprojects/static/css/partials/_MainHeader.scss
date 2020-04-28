@@ -33,6 +33,9 @@
   text-decoration-color: $color-orange;
   text-underline-position: under;
 }
+#nav-pagenav-container {
+  padding-left: 12px;
+}
 
 // adds a dropdown caret for nav menus, since Bootstrap's is disabled globally
 .MainHeader-nav-container {
@@ -89,6 +92,9 @@
     .navbar-brand {
       padding: 0 0.875rem;
     }
+  }
+  #nav-pagenav-container {
+    padding: 0;
   }
 }
 
