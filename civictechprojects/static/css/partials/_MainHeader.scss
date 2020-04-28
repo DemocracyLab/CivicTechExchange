@@ -56,7 +56,7 @@
     padding: 0.25rem; //override entire navbar padding values, set our own later
   }
   .navbar-brand {
-    padding-right: 0.875rem;
+    padding: 0 0.875rem 0 0;
   }
   .bg-navlight {
     background: $color-background-light;
@@ -84,6 +84,11 @@
   }
   .MainHeader-root .dropdown-menu.show {
     border: 1px solid rgba(0, 0, 0, 0.15)
+  }
+  .MainHeader-root {
+    .navbar-brand {
+      padding: 0 0.875rem;
+    }
   }
 }
 
