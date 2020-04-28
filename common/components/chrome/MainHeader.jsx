@@ -85,20 +85,20 @@ class MainHeader extends React.Component<{||}, State > {
               {this._renderNavDropdownItem(Section.CreateProject, "Create Project")}
             </NavDropdown>
             <NavDropdown title="Groups" id="nav-groups">
-              <NavDropdown.Item href="">Find Groups</NavDropdown.Item>
-              <NavDropdown.Item href="">Create Groups</NavDropdown.Item>
+              {this._renderNavDropdownItem(Section.FindGroups, "Find Groups")}
+              {this._renderNavDropdownItem(Section.CreateGroup, "Create Group")}
             </NavDropdown>
             <NavDropdown title="Events" id="nav-events">
-              <NavDropdown.Item href="">Find Events</NavDropdown.Item>
-              <NavDropdown.Item href="">Create Events</NavDropdown.Item>
+              {this._renderNavDropdownItem(Section.FindEvents, "Find Events")}
+              {this._renderNavDropdownItem(Section.CreateEvent, "Create Event")}
             </NavDropdown>
             <NavDropdown title="About" id="nav-about">
-              <NavDropdown.Item href={url.section(Section.AboutUs)}>About Us</NavDropdown.Item>
-              <NavDropdown.Item href={url.section(Section.ContactUs)}>Contact Us</NavDropdown.Item>
-              <NavDropdown.Item href={url.section(Section.Press)}>News</NavDropdown.Item>
+              {this._renderNavDropdownItem(Section.AboutUs, "About Us")}
+              {this._renderNavDropdownItem(Section.ContactUs, "Contact Us")}
+              {this._renderNavDropdownItem(Section.Press, "News")}
             </NavDropdown>
             <Nav.Link href="https://blog.democracylab.org">Blog</Nav.Link>
-            <Nav.Link href={url.section(Section.Donate)} className="MainHeader-showmobile">Donate</Nav.Link>
+            {this._renderNavLink(Section.Donate, "Donate", "MainHeader-showmobile")}
             {CurrentUser.isLoggedIn() ? <Nav.Link className="MainHeader-showmobile" href="/logout/">Log Out</Nav.Link> : <Nav.Link className="MainHeader-showmobile" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Nav.Link>}
           </Nav>
         </Navbar.Collapse>
@@ -118,6 +118,7 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
 //TODO: Refactor these to reduce duplication
+//TODO: Allow multiple arguments for url.section to handle url.getPreviousPageArg() - options object?
   _renderNavLink(sec, text, classes = "") {
     // example: this._renderNavLink("Section.FindProjects", "Find Projects")
     const urlArgs = url.arguments(url.section(sec))
@@ -147,15 +148,15 @@ class MainHeader extends React.Component<{||}, State > {
             {this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item href={url.section(Section.MyProjects)}>My Projects</Dropdown.Item>
-            <Dropdown.Item href={url.section(Section.EditProfile)}>My Profile</Dropdown.Item>
+            {this._renderNavDropdownItem(Section.MyProjects, "My Projects")}
+            {this._renderNavDropdownItem(Section.EditProfile, "Edit Profile")}
             <Dropdown.Item href="/logout/">Log Out</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <div className="MainHeader-showmobile">
           <Nav.Item>{this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}</Nav.Item>
-          <Nav.Link href={url.section(Section.MyProjects)}>My Projects</Nav.Link>
-          <Nav.Link href={url.section(Section.EditProfile)}>My Profile</Nav.Link>
+          {this._renderNavLink(Section.MyProjects, "My Projects")}
+          {this._renderNavLink(Section.EditProfile, "Edit Profile")}
           <Dropdown.Divider />
         </div>
       </React.Fragment>
