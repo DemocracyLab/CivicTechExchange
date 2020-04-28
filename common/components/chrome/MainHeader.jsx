@@ -79,10 +79,10 @@ class MainHeader extends React.Component<{||}, State > {
             {CurrentUser.isLoggedIn() ? this._renderUserSection() : this._renderLogInSection()}
           </Nav>
           <Nav className="MainHeader-pagenav mr-auto">
-            <Nav.Link href={url.section(Section.Home)}>Home</Nav.Link>
+            {this._renderNavLink(Section.Home, "Home")}
             <NavDropdown title="Projects" id="nav-projects">
-              <NavDropdown.Item href={url.section(Section.FindProjects)}>Find Projects</NavDropdown.Item>
-              <NavDropdown.Item href={url.section(Section.CreateProject)}>Create Project</NavDropdown.Item>
+              {this._renderNavDropdownItem(Section.FindProjects, "Find Projects")}
+              {this._renderNavDropdownItem(Section.CreateProject, "Create Project")}
             </NavDropdown>
             <NavDropdown title="Groups" id="nav-groups">
               <NavDropdown.Item href="">Find Groups</NavDropdown.Item>
@@ -117,20 +117,23 @@ class MainHeader extends React.Component<{||}, State > {
     )
   }
 
-  _renderNavLink(sec, text, type, classes = "") {
-    //sec = url.section to go to
-   // text = displayed link text
-   // type = Dropdown or Link
-   // classes (optional) any additional classnames that should be appended
-   // this helper method should also look at state.activesection and append an active class where url.section matches
-   // _renderNavLink("FindProjects", "Find Projects", "Dropdown")
-   if (type === "Dropdown") {
-     return <NavDropdown.Item className={classes} href={url.section(Section.sec)}>{text}</NavDropdown.Item>
-   }
-   if (type === "Link") {
-     return <Nav.Link className={classes} href={url.section(Section.sec)}>{text}</Nav.Link>
-   }
+//TODO: Refactor these to reduce duplication
+  _renderNavLink(sec, text, classes = "") {
+    // example: this._renderNavLink("Section.FindProjects", "Find Projects")
+    const urlArgs = url.arguments(url.section(sec))
+    if (urlArgs.section === this.state.activeSection) {
+      classes += " MainHeader-active"
+    }
+    return <Nav.Link className={classes} href={url.section(sec)}>{text}</Nav.Link>
   }
+  _renderNavDropdownItem(sec, text, classes = "") {
+    const urlArgs = url.arguments(url.section(sec))
+    if (urlArgs.section === this.state.activeSection) {
+      classes += " MainHeader-active"
+    }
+    return <NavDropdown.Item className={classes} href={url.section(sec)}>{text}</NavDropdown.Item>
+  }
+
 
   _renderUserSection() {
     //for logged in users, render user actions
