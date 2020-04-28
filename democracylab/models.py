@@ -24,8 +24,8 @@ class Contributor(User):
     about_me = models.CharField(max_length=100000, blank=True)
     user_technologies = TaggableManager(blank=True, through=UserTaggedTechnologies)
     user_technologies.remote_field.related_name = "+"
-    uuid = models.CharField(max_length=32, default=generate_uuid)
-    qiqo_uuid = models.CharField(max_length=50, null=True)
+    uuid = models.CharField(max_length=32, blank=True, default=generate_uuid)
+    qiqo_uuid = models.CharField(max_length=50, blank=True)
 
     def is_admin_contributor(self):
         return self.email == settings.ADMIN_EMAIL

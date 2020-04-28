@@ -1,6 +1,7 @@
 import json
 import requests
 import threading
+import civictechprojects.models
 from django.conf import settings
 
 
@@ -54,6 +55,13 @@ class SubscribeUserToQiqoChat(object):
                 "api_secret": settings.QIQO_API_SECRET
             }
         }
+
+        if self.user.about_me:
+            data['user']['about_me'] = self.user.about_me
+
+        thumbnail_files = list(civictechprojects.models.ProjectFile.objects.filter(file_user=self.user.id, file_category=civictechprojects.models.FileCategory.THUMBNAIL.value))
+        if len(thumbnail_files) > 0:
+            data['user']['photo_url'] = thumbnail_files[0].file_url
 
         r = requests.post(
             settings.QIQO_USERS_ENDPOINT,
