@@ -94,11 +94,11 @@ class RecentProjectsSection extends React.Component<{||}, State> {
             />
          );
     } else {
-      return  <Carousel className="w-100" indicators={false} interval={null} onSlid={(eventKey, direction) => this._onCarouselSlidHandler(eventKey, direction)} >{this._renderCardsForCarousel()}</Carousel>
+      return  <Carousel className="w-100" indicators={false} interval={null} onSlid={(eventKey, direction) => this._carouselSlidHandler(eventKey, direction)} >{this._renderCardsForCarousel()}</Carousel>
     }
   }
 
-  _onCarouselSlidHandler(eventKey, direction): void {
+  _carouselSlidHandler(eventKey, direction): void {
     if (eventKey === 1) {
       document.querySelector('.carousel-control-next-icon').setAttribute('style', "display:none");
       document.querySelector('.carousel-control-prev-icon').setAttribute('style', "display:inline-block");
