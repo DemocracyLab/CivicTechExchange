@@ -31,8 +31,6 @@ class RecentProjectsSection extends React.Component<{||}, State> {
       carouselIndex: 0
     };
     this._updateWindowDimensions = this._updateWindowDimensions.bind(this);
-    this._prevProjects = this._prevProjects.bind(this);
-    this._nextProjects = this._nextProjects.bind(this); 
   }
 
 
@@ -61,55 +59,13 @@ class RecentProjectsSection extends React.Component<{||}, State> {
       <div className="RecentProjects">
         <h2 className="RecentProjects-title">Active Projects</h2>
         <div className="RecentProjects-cards">
-          {this._renderPrevControl()}
           {this._renderCards()}
-          {this._renderNextControl()}
         </div>
         <div className="RecentProjects-button">
           <Button className="RecentProjects-all" href={url.section(Section.FindProjects)}>See All Projects</Button>
         </div>
       </div>
     );
-  }
-
-  _renderPrevControl(): $React$Node {
-    if (this.state.cardStart != 0) {
-      return (
-        <div className="RecentProjects-toggle RecentProjects-decrease" onClick={this._prevProjects}>
-          <i className={GlyphStyles.ChevronLeft}></i>
-        </div>
-      )
-    } else {
-      return null;
-    }
-  }
-
-  _renderNextControl(): $React$Node {
-    if (this.state.cardStart === 0) {
-      return (
-        <div className="RecentProjects-toggle RecentProjects-increase" onClick={this._nextProjects}>
-          <i className={GlyphStyles.ChevronRight}></i>
-        </div>
-      )
-    } else {
-      return null;
-    }
-  }
-
-  _nextProjects(): void {
-    this.setState(prevState => ({
-      cardStart: prevState.cardStart + this.state.cardCapacity,
-      carouselIndex: 1,
-      carouselSlide: 'right'
-    }));
-  }
-
-  _prevProjects(): void {
-    this.setState(prevState => ({
-      cardStart: prevState.cardStart - this.state.cardCapacity,
-      carouselIndex: 0,
-      carouselSlide: 'left'
-    }));
   }
 
   _setCardCapacity(): void {
@@ -138,7 +94,17 @@ class RecentProjectsSection extends React.Component<{||}, State> {
             />
          );
     } else {
-      return  <Carousel className="w-100" activeIndex={this.state.carouselIndex} onSelect={() => {}} controls={false} indicators={false} interval={null} >{this._renderCardsForCarousel()}</Carousel>
+      return  <Carousel className="w-100" indicators={false} interval={null} onSlid={(eventKey, direction) => this._onCarouselSlidHandler(eventKey, direction)} >{this._renderCardsForCarousel()}</Carousel>
+    }
+  }
+
+  _onCarouselSlidHandler(eventKey, direction): void {
+    if (eventKey === 1) {
+      document.querySelector('.carousel-control-next-icon').setAttribute('style', "display:none");
+      document.querySelector('.carousel-control-prev-icon').setAttribute('style', "display:inline-block");
+    } else if (eventKey === 0) {
+      document.querySelector('.carousel-control-prev-icon').setAttribute('style', "display:none");
+      document.querySelector('.carousel-control-next-icon').setAttribute('style', "display:inline-block");
     }
   }
 

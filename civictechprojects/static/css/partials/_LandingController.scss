@@ -220,13 +220,22 @@
     flex-wrap: nowrap;
 
     .ProjectCard-root {
-      flex-basis: 28%;
-      min-width: 28%;
+      flex-basis: 26%;
+      min-width: 26%;
     }
 
     .ProjectCard-root:not(:last-child) {
       margin-right: 10px;
     }
+
+    .carousel-control-prev, .carousel-control-next {
+      top: 180px;
+      align-items: self-start;
+    }
+    .carousel-control-prev-icon {
+      display: none
+    } 
+
   }
   .RecentProjects-toggle {
     margin: 120px 0 0 0;
@@ -241,3 +250,21 @@
   }
 
 }
+
+@include media-breakpoint-up(lg) {
+  .ProjectCard-root {
+    min-height: 535px;
+  }
+}
+@include media-breakpoint-up(xl) {
+  .ProjectCard-root {
+    min-height: 405px;
+  }
+}
+@include media-breakpoint-up(xxl) {
+  .ProjectCard-root {
+    min-height: 380px;
+  }
+}
+
+ 
