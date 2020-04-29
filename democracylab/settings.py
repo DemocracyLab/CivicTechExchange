@@ -403,3 +403,5 @@ MAX_COMMITS_PER_PROJECT = int(os.environ.get('MAX_COMMITS_PER_PROJECT', 30))
 BOARD_OF_DIRECTORS = os.environ.get('BOARD_OF_DIRECTORS', '')
 
 FAVICON_PATH = os.environ.get('FAVICON_PATH', 'https://d1agxr2dqkgkuy.cloudfront.net/img/favicon.png')
+
+BLOG_URL = os.environ.get('BLOG_URL', 'https://blog.democracylab.org')
