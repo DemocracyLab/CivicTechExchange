@@ -69,6 +69,7 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderNavBar() {
+    //TODO: Once the blog is 'settled in' remove the conditional, the window.BLOG_URL target, and just hardcode it in.
     return (
       <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
         <Navbar.Brand><a href={url.section(Section.Home)}><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></Navbar.Brand>
