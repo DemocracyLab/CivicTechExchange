@@ -120,20 +120,20 @@ class MainHeader extends React.Component<{||}, State > {
 
 //TODO: Refactor these to reduce duplication
 //TODO: Allow multiple arguments for url.section to handle url.getPreviousPageArg() - options object?
-  _renderNavLink(sec, text, classes = "") {
+  _renderNavLink(section, text, classes = "") {
     // example: this._renderNavLink("Section.FindProjects", "Find Projects")
-    const urlArgs = url.arguments(url.section(sec))
+    const urlArgs = url.arguments(url.section(section));
     if (urlArgs.section === this.state.activeSection) {
-      classes += " MainHeader-active"
-    }
-    return <Nav.Link className={classes} href={url.section(sec)}>{text}</Nav.Link>
+      classes += " MainHeader-active";
+    };
+    return <Nav.Link className={classes} href={url.section(section)}>{text}</Nav.Link>
   }
-  _renderNavDropdownItem(sec, text, classes = "") {
-    const urlArgs = url.arguments(url.section(sec))
+  _renderNavDropdownItem(section, text, classes = "") {
+    const urlArgs = url.arguments(url.section(section));
     if (urlArgs.section === this.state.activeSection) {
-      classes += " MainHeader-active"
-    }
-    return <NavDropdown.Item className={classes} href={url.section(sec)}>{text}</NavDropdown.Item>
+      classes += " MainHeader-active";
+    };
+    return <NavDropdown.Item className={classes} href={url.section(section)}>{text}</NavDropdown.Item>
   }
 
 
