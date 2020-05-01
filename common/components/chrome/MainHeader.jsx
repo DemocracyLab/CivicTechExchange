@@ -96,7 +96,7 @@ class MainHeader extends React.Component<{||}, State > {
             </NavDropdown>
             {window.BLOG_URL ? <Nav.Link href={window.BLOG_URL}>Blog</Nav.Link> : null}
             {this._renderNavLink(Section.Donate, "Donate", "MainHeader-showmobile")}
-            {CurrentUser.isLoggedIn() ? <Nav.Link className="MainHeader-showmobile" href="/logout/">Log Out</Nav.Link> : <Nav.Link className="MainHeader-showmobile" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Nav.Link>}
+            {CurrentUser.isLoggedIn() ? <Nav.Link className="MainHeader-showmobile mb-3" href="/logout/">Log Out</Nav.Link> : <Nav.Link className="MainHeader-showmobile" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Nav.Link>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -151,7 +151,7 @@ class MainHeader extends React.Component<{||}, State > {
           </Dropdown.Menu>
         </Dropdown>
         <div className="MainHeader-showmobile">
-          <Nav.Item>{this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}</Nav.Item>
+          <Nav.Item className="mt-3">{this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}</Nav.Item>
           {this._renderNavLink(Section.MyProjects, "My Projects")}
           {this._renderNavLink(Section.EditProfile, "Edit Profile")}
           <Dropdown.Divider />
