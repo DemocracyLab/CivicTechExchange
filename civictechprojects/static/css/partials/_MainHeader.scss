@@ -79,7 +79,7 @@
   }
   /* these two rules should help landscape mode phones with a position: fixed nav, see: https://github.com/twbs/bootstrap/issues/23374 */
   .navbar-collapse {
-    max-height: 60vh;
+    max-height: 65vh;
     overflow-y: auto;
     overflow-x: hidden;
   }
