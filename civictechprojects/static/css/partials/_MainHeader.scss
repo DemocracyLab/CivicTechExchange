@@ -105,6 +105,17 @@
     .navbar-brand {
       padding: 0 0.875rem;
     }
+    /* the mobile navbar fix breaks desktop, so clear all those rules out here */
+    .navbar-collapse {
+      max-height: unset;
+      overflow-y: unset;
+      overflow-x: unset;
+    }
+
+    .collapsing {
+      overflow-y: unset;
+      overflow-x: unset;
+    }
   }
   #nav-pagenav-container {
     padding: 0;
