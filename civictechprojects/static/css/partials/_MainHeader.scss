@@ -2,6 +2,9 @@
   z-index: 99;
   width: 100%;
   position: fixed; /* fix the entire component, including AlertHeader and Nav */
+  // height: 100vh;
+  // overflow-y: scroll; /* 100vh + scroll fixes landscape mode phone menus not scrolling with position: fixed */
+
 }
 .MainHeader-showmobile {
   display: block; // show by default, hide in media query
@@ -73,6 +76,17 @@
   }
   .dropdown-menu.show {
     border: none;
+  }
+  /* these two rules should help landscape mode phones with a position: fixed nav, see: https://github.com/twbs/bootstrap/issues/23374 */
+  .navbar-collapse {
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .collapsing {
+    overflow-y: hidden;
+    overflow-x: hidden;
   }
 }
 // end navbar-specific override section

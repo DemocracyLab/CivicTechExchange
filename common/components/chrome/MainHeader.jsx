@@ -85,10 +85,6 @@ class MainHeader extends React.Component<{||}, State > {
               {this._renderNavDropdownItem(Section.FindProjects, "Find Projects")}
               {this._renderNavDropdownItem(Section.CreateProject, "Create Project")}
             </NavDropdown>
-            <NavDropdown title="Groups" id="nav-groups">
-              {this._renderNavDropdownItem(Section.FindGroups, "Find Groups")}
-              {this._renderNavDropdownItem(Section.CreateGroup, "Create Group")}
-            </NavDropdown>
             <NavDropdown title="Events" id="nav-events">
               {this._renderNavDropdownItem(Section.FindEvents, "Find Events")}
               {this._renderNavDropdownItem(Section.CreateEvent, "Create Event")}
