@@ -16,8 +16,7 @@ type State = {|
   projects: List<Project>,
   windowWidth: number,
   cardStart: number,
-  cardCapacity: number,
-  carouselIndex: number
+  cardCapacity: number
 |};
 
 class RecentProjectsSection extends React.Component<{||}, State> {
@@ -27,8 +26,7 @@ class RecentProjectsSection extends React.Component<{||}, State> {
       projects: null,
       windowWidth: 0,
       cardStart: 0,
-      cardCapacity: 3,
-      carouselIndex: 0
+      cardCapacity: 3
     };
     this._updateWindowDimensions = this._updateWindowDimensions.bind(this);
   }
@@ -100,11 +98,11 @@ class RecentProjectsSection extends React.Component<{||}, State> {
 
   _carouselSlidHandler(eventKey, direction): void {
     if (eventKey === 1) {
-      document.querySelector('.carousel-control-next-icon').setAttribute('style', "display:none");
-      document.querySelector('.carousel-control-prev-icon').setAttribute('style', "display:inline-block");
+      document.querySelector('.carousel-control-next-icon').setAttribute("style", "display:none");
+      document.querySelector('.carousel-control-prev-icon').setAttribute("style", "display:inline-block");
     } else if (eventKey === 0) {
-      document.querySelector('.carousel-control-prev-icon').setAttribute('style', "display:none");
-      document.querySelector('.carousel-control-next-icon').setAttribute('style', "display:inline-block");
+      document.querySelector('.carousel-control-prev-icon').setAttribute("style", "display:none");
+      document.querySelector('.carousel-control-next-icon').setAttribute("style", "display:inline-block");
     }
   }
 
