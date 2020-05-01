@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.template import loader
 from django.utils import timezone
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
 from urllib import parse as urlparse
@@ -19,6 +20,7 @@ from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff
 from .forms import ProjectCreationForm, GroupCreationForm
+from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 from common.helpers.constants import FrontEndSection
@@ -343,6 +345,7 @@ def approve_project(request, project_id):
 
 
 @ensure_csrf_cookie
+@xframe_options_exempt
 def index(request):
     template = loader.get_template('new_index.html')
     context = {
@@ -393,6 +396,8 @@ def index(request):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
+        context['QIQO_IFRAME_URL'] = get_user_qiqo_iframe(contributor)
+
         thumbnail = ProjectFile.objects.filter(file_user=request.user.id,
                                                file_category=FileCategory.THUMBNAIL.value).first()
         if thumbnail:

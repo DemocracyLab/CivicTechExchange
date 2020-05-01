@@ -340,6 +340,7 @@ class ProjectRelationship(models.Model):
         
         return relationship
 
+
 class ProjectCommit(models.Model):
     commit_project = models.ForeignKey(Project, related_name='commits', blank=True, null=True)
     user_name = models.CharField(max_length=200)
@@ -393,6 +394,7 @@ class ProjectCommit(models.Model):
 class ProjectLink(models.Model):
     link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True)
     link_group = models.ForeignKey(Group, related_name='links', blank=True, null=True)
+    link_event = models.ForeignKey(Event, related_name='links', blank=True, null=True)
     link_user = models.ForeignKey(Contributor, related_name='links', blank=True, null=True)
     link_name = models.CharField(max_length=200, blank=True)
     link_url = models.CharField(max_length=2083)

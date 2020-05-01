@@ -222,6 +222,9 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return (this.state.board_of_directors ?
       <div className="about-us-team col">
         <h2>Board of Directors</h2>
+        <p className="about-us-team-description">
+          Please review our <a href="https://d1agxr2dqkgkuy.cloudfront.net/documents/2019%20DemocracyLab%20Annual%20Report.pdf" >2019 Annual Report</a> to learn about the impact of our programs and platform last year. 
+        </p>
         <div className="about-us-team-card-container">
           {this._renderBios(this.state.board_of_directors, true)}
         </div>

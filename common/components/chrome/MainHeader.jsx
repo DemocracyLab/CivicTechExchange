@@ -38,6 +38,7 @@ type State = {|
   createProjectUrl: string,
   showMyProjects: boolean,
   showMyGroups: boolean,
+  showHeader: boolean
 |};
 
 class MainHeader extends React.Component<{||}, State > {
@@ -52,6 +53,7 @@ class MainHeader extends React.Component<{||}, State > {
     const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
     const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
     return {
+      showHeader: !url.argument("embedded"),
       activeSection: NavigationStore.getSection(),
       showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects)),
       showMyGroups: myGroups && (!_.isEmpty(myGroups.owned_groups))
@@ -86,11 +88,11 @@ class MainHeader extends React.Component<{||}, State > {
 
   componentDidMount() {
     UniversalDispatcher.dispatch({type: 'INIT'});
-    this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
+    this._handleHeightChange(this.getHeaderHeight());
   }
 
-  render(): React$Node {
-    return (
+  render(): ?React$Node {
+    return this.state.showHeader && (
       <div ref={this.mainHeaderRef} className='MainHeader'>
         <AlertHeader
           onAlertClose={this._handleAlertClosing.bind(this)}
@@ -128,8 +130,12 @@ class MainHeader extends React.Component<{||}, State > {
     );
   }
   
+  getHeaderHeight(): number {
+    return this.mainHeaderRef.current ? this.mainHeaderRef.current.clientHeight : 0;
+  }
+  
   _onAlertHeaderUpdate() {
-    this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
+    this._handleHeightChange(this.getHeaderHeight());
   }
 
   _handleHeightChange(height) {
