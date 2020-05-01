@@ -98,11 +98,11 @@ class RecentProjectsSection extends React.Component<{||}, State> {
 
   _carouselSlidHandler(eventKey, direction): void {
     if (eventKey === 1) {
-      document.querySelector('.carousel-control-next-icon').setAttribute("style", "display:none");
-      document.querySelector('.carousel-control-prev-icon').setAttribute("style", "display:inline-block");
+      document.querySelector('.carousel-control-next').setAttribute("style", "display:none");
+      document.querySelector('.carousel-control-prev').setAttribute("style", "display:inline-block");
     } else if (eventKey === 0) {
-      document.querySelector('.carousel-control-prev-icon').setAttribute("style", "display:none");
-      document.querySelector('.carousel-control-next-icon').setAttribute("style", "display:inline-block");
+      document.querySelector('.carousel-control-prev').setAttribute("style", "display:none");
+      document.querySelector('.carousel-control-next').setAttribute("style", "display:inline-block");
     }
   }
 
