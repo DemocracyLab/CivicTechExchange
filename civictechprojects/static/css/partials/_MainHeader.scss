@@ -1,10 +1,7 @@
 .MainHeader-root {
   z-index: 99;
   width: 100%;
-  position: fixed; /* fix the entire component, including AlertHeader and Nav */
-  // height: 100vh;
-  // overflow-y: scroll; /* 100vh + scroll fixes landscape mode phone menus not scrolling with position: fixed */
-
+  position: fixed;
 }
 .MainHeader-showmobile {
   display: block; // show by default, hide in media query
@@ -51,7 +48,6 @@
   }
 }
 
-
 //  navbar overrides all go in here for specificity - in the future build a new theme instead of these overly specific selectors
 .MainHeader-root {
   a:hover, a:focus, .navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link:focus {
@@ -89,11 +85,10 @@
     overflow-x: hidden;
   }
 }
-// end navbar-specific override section
 
 @include media-breakpoint-up(lg) {
   .MainHeader-showmobile {
-    display: none; // button only has to show on mobile so suppress at same breakpoint hamburger goes away
+    display: none;
   }
   .MainHeader-showdesktop {
     display: block;
@@ -105,13 +100,12 @@
     .navbar-brand {
       padding: 0 0.875rem;
     }
-    /* the mobile navbar fix breaks desktop, so clear all those rules out here */
+    /* clearing mobile-only rules on desktop  */
     .navbar-collapse {
       max-height: unset;
       overflow-y: unset;
       overflow-x: unset;
     }
-
     .collapsing {
       overflow-y: unset;
       overflow-x: unset;

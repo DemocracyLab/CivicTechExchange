@@ -104,8 +104,7 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderLogInSection() {
-    //for logged out users, render login and similar
-    //This is "desktop only" right now, see if we can combine it with mobile somehow?
+    //This is desktop only for now, mobile has a different solution
     return (
       <React.Fragment>
         <Button className="MainHeader-showdesktop MainHeader-donate-link" variant="link" href={url.section(Section.Donate)}>Donate</Button>
@@ -117,7 +116,6 @@ class MainHeader extends React.Component<{||}, State > {
 //TODO: Refactor these to reduce duplication
 //TODO: Allow multiple arguments for url.section to handle url.getPreviousPageArg() - options object?
   _renderNavLink(section, text, classes = "") {
-    // example: this._renderNavLink("Section.FindProjects", "Find Projects")
     const urlArgs = url.arguments(url.section(section));
     if (urlArgs.section === this.state.activeSection) {
       classes += " MainHeader-active";
@@ -136,7 +134,6 @@ class MainHeader extends React.Component<{||}, State > {
   _renderUserSection() {
     //for logged in users, render user actions
     //TODO: Rebuild this component so deskop dropdown and mobile links aren't separated out
-    // Note that mobile does not have a Log Out link because it's rendered in the main nav for positioning purposes
     return (
       <React.Fragment>
         <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop MainHeader-donatebutton" href={url.section(Section.Donate)}>Donate</Nav.Item>
