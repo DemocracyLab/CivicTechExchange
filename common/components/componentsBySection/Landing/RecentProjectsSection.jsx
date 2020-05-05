@@ -92,17 +92,18 @@ class RecentProjectsSection extends React.Component<{||}, State> {
             />
          );
     } else {
-      return  <Carousel className="w-100" indicators={false} interval={null} onSlid={(eventKey, direction) => this._carouselSlidHandler(eventKey, direction)} >{this._renderCardsForCarousel()}</Carousel>
+      return  <Carousel className="RecentProjects-carousel w-100" indicators={false} interval={null} onSlid={(eventKey, direction) => this._carouselSlidHandler(eventKey, direction)} >{this._renderCardsForCarousel()}</Carousel>
     }
   }
 
   _carouselSlidHandler(eventKey, direction): void {
-    if (eventKey === 1) {
-      document.querySelector('.carousel-control-next').setAttribute("style", "display:none");
-      document.querySelector('.carousel-control-prev').setAttribute("style", "display:inline-block");
-    } else if (eventKey === 0) {
-      document.querySelector('.carousel-control-prev').setAttribute("style", "display:none");
-      document.querySelector('.carousel-control-next').setAttribute("style", "display:inline-block");
+    const carouselChildren = document.querySelectorAll(".RecentProjects-carousel")[0].children
+    for (let el of carouselChildren) {
+      if (el.className === "carousel-control-next") {
+          eventKey === 1 ? el.setAttribute('style', 'display:none') : el.setAttribute('style', 'display:flex')
+      } else if (el.className === "carousel-control-prev") {
+        eventKey === 0 ? el.setAttribute('style', 'display:none') : el.setAttribute('style', 'display:flex')
+      }
     }
   }
 
