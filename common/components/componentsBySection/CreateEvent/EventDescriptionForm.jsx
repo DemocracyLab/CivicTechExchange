@@ -31,7 +31,7 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
     const event: ProjectDetailsAPIData = props.project;
-    // TODO: Include eventbrite and qiqochat event links
+    // TODO: Include qiqochat event link
     this.state = {
       formIsValid: false,
       formFields: {

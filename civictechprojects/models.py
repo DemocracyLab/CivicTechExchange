@@ -273,10 +273,11 @@ class Event(Archived):
         self.save()
 
     def hydrate_to_json(self):
+        projects = ProjectRelationship.objects.filter(relationship_event=self.id)
         files = ProjectFile.objects.filter(file_event=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
-        links = ProjectLink.objects.filter(link_event=self.id)
+        # links = ProjectLink.objects.filter(link_event=self.id)
 
         event = {
             'event_agenda': self.event_agenda,
@@ -292,8 +293,11 @@ class Event(Archived):
             'event_name': self.event_name,
             'event_owners': [self.event_creator.hydrate_to_tile_json()],
             'event_short_description': self.event_short_description,
-            'event_issue_areas': self.get_issue_areas(),
+            'event_issue_areas': self.get_issue_areas()
         }
+
+        if len(projects) > 0:
+            event['event_projects'] = list(map(lambda project: project.relationship_project.hydrate_to_json(), projects))
 
         if len(thumbnail_files) > 0:
             event['event_thumbnail'] = thumbnail_files[0].to_json()
@@ -327,6 +331,9 @@ class ProjectRelationship(models.Model):
     relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True)
     relationship_group = models.ForeignKey(Group, related_name='relationships', blank=True, null=True)
     relationship_event = models.ForeignKey(Event, related_name='relationships', blank=True, null=True)
+
+    def __str__(self):
+        return self.relationship_event.event_name + ':' + self.relationship_project.project_name
 
     @staticmethod
     def create(owner, project):

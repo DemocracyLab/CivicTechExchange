@@ -155,7 +155,8 @@ class EventCreationForm(ModelForm):
         read_form_field_boolean(event, form, 'is_created')
     
         event.event_date_modified = timezone.now()
-    
+
+        # TODO: Edit thumbnail
         event.save()
     
         return event
