@@ -10,9 +10,8 @@ import _ from "lodash";
 
 
 type FormFields = {|
-  project_description: ?string,
-  project_description_solution: ?string,
-  project_description_actions: ?string,
+  event_description: ?string,
+  event_agenda: ?string,
 |};
 
 type Props = {|
@@ -26,23 +25,26 @@ type State = {|
 |} & FormStateBase<FormFields>;
 
 /**
- * Encapsulates form for Project Description section
+ * Encapsulates form for Event Description section
  */
 class ProjectDescriptionForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
-    const project: ProjectDetailsAPIData = props.project;
+    const event: ProjectDetailsAPIData = props.project;
+    // TODO: Include eventbrite and qiqochat event links
     this.state = {
       formIsValid: false,
       formFields: {
-        project_description: project ? project.project_description : "",
-        project_description_solution: project ? project.project_description_solution : "",
-        project_description_actions: project ? project.project_description_actions : ""
+        event_description: event ? event.event_description : "",
+        event_agenda: event ? event.event_agenda : ""
       },
       validations: [
         {
-          checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_description"]),
-          errorMessage: "Please enter Project Problem"
+          checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["event_description"]),
+          errorMessage: "Please enter Event Description"
+        }, {
+          checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["event_agenda"]),
+          errorMessage: "Please enter Event Agenda"
         }
       ]
     };
@@ -70,49 +72,28 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
   
         <div className="form-group">
           <label>
-            <strong>Problem*</strong>
-            {
-              window.PROJECT_DESCRIPTION_EXAMPLE_URL
-                ? (
-                  <a className="label-hint" target="_blank" rel="noopener noreferrer" href={_.unescape(window.PROJECT_DESCRIPTION_EXAMPLE_URL)}>
-                    (Example)
-                  </a>
-                )
-                : null
-            }
+            <strong>Description</strong>
           </label>
           <div className="character-count">
-            { (this.state.formFields.project_description || "").length} / 1000
+            { (this.state.formFields.event_description || "").length} / 4000
           </div>
-          <textarea className="form-control" id="project_description" name="project_description"
-                    placeholder="Describe the problem your project is solving..." rows="6" maxLength="1000"
-                    value={this.state.formFields.project_description} onChange={this.form.onInput.bind(this, "project_description")}>
+          <textarea className="form-control" id="event_description" name="event_description"
+                    placeholder="Describe the problem your project is solving..." rows="6" maxLength="4000"
+                    value={this.state.formFields.event_description} onChange={this.form.onInput.bind(this, "event_description")}>
           </textarea>
           *Required
         </div>
 
         <div className="form-group">
           <label>
-            <strong>Solution</strong>
+            <strong>Agenda</strong>
           </label>
           <div className="character-count">
-            { (this.state.formFields.project_description_solution || "").length} / 1000
+            { (this.state.formFields.event_agenda || "").length} / 4000
           </div>
-          <textarea className="form-control" id="project_description_solution" name="project_description_solution"
-                    placeholder="Describe the solution you plan to build..." rows="6" maxLength="1000"
-                    value={this.state.formFields.project_description_solution} onChange={this.form.onInput.bind(this, "project_description_solution")}></textarea>
-        </div>
-
-        <div className="form-group">
-          <label>
-            <strong>Action(s)</strong>
-          </label>
-          <div className="character-count">
-            { (this.state.formFields.project_description_actions || "").length} / 1000
-          </div>
-          <textarea className="form-control" id="project_description_actions" name="project_description_actions"
-                    placeholder="Describe the actions that needed to be token..." rows="6" maxLength="1000"
-                    value={this.state.formFields.project_description_actions} onChange={this.form.onInput.bind(this, "project_description_actions")}></textarea>
+          <textarea className="form-control" id="event_agenda" name="event_agenda"
+                    placeholder="Describe the solution you plan to build..." rows="6" maxLength="4000"
+                    value={this.state.formFields.event_agenda} onChange={this.form.onInput.bind(this, "event_agenda")}></textarea>
         </div>
 
         <FormValidation

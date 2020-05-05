@@ -37,6 +37,8 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
     const event: EventDetailsAPIData = props.project;
+    // TODO: Add location
+    // TODO: Add event_rsvp_url
     const formFields: FormFields = {
       event_name: event ? event.event_name : "",
       event_short_description: event ? event.event_short_description : "",

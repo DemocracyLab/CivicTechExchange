@@ -8,7 +8,7 @@ from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
-    merge_json_changes, merge_single_file, read_form_field_tags
+    merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime
 
 
 class ProjectCreationForm(ModelForm):
@@ -93,16 +93,6 @@ class ProjectCreationForm(ModelForm):
 
         return project
 
-    # event_agenda = models.CharField(max_length=4000, blank=True)
-    # event_date_end = models.DateTimeField()
-    # event_date_modified = models.DateTimeField(auto_now_add=True, null=True)
-    # event_date_start = models.DateTimeField()
-    # event_description = models.CharField(max_length=4000, blank=True)
-    # event_location = models.CharField(max_length=200, blank=True)
-    # event_rsvp_url = models.CharField(max_length=2083, blank=True)
-    # is_searchable = models.BooleanField(default=False)
-    # is_created = models.BooleanField(default=True)
-
 
 class EventCreationForm(ModelForm):
     class Meta:
@@ -140,9 +130,34 @@ class EventCreationForm(ModelForm):
 
         event.delete()
 
+
     @staticmethod
     def edit_event(request, event_id):
-        raise NotImplementedError("To be implemented")
+        event = Event.objects.get(id=event_id)
+
+        if not is_co_owner_or_staff(request.user, event):
+            raise PermissionDenied()
+    
+        form = ProjectCreationForm(request.POST)
+    
+        read_form_field_string(event, form, 'event_agenda')
+        read_form_field_string(event, form, 'event_description')
+        read_form_field_string(event, form, 'event_short_description')
+        read_form_field_string(event, form, 'event_name')
+        read_form_field_string(event, form, 'event_location')
+        read_form_field_string(event, form, 'event_rsvp_url')
+
+        read_form_field_datetime(event, form, 'event_date_start')
+        read_form_field_datetime(event, form, 'event_date_end')
+
+        read_form_field_boolean(event, form, 'is_searchable')
+        read_form_field_boolean(event, form, 'is_created')
+    
+        event.event_date_modified = timezone.now()
+    
+        event.save()
+    
+        return event
 
 
 class GroupCreationForm(ModelForm):
