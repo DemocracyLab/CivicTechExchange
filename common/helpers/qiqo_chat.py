@@ -6,7 +6,7 @@ from django.conf import settings
 
 
 def get_user_qiqo_iframe(contributor):
-    if contributor.qiqo_uuid is None:
+    if not contributor.qiqo_uuid:
         SubscribeUserToQiqoChat(contributor)
         return settings.TEST_IFRAME_URL
 
@@ -40,8 +40,6 @@ class SubscribeUserToQiqoChat(object):
                 self.print_error(key + ' not set')
                 return False
 
-        print(settings.QIQO_USERS_ENDPOINT)
-        # TODO: Add User Thumbnail
         data = {
             "user": {
                 "first_name": self.user.first_name,
