@@ -77,7 +77,7 @@ class CreateEventController extends React.PureComponent<{||},State> {
   }
   
   loadEventDetails(event: EventDetailsAPIData): void {
-    if(!CurrentUser.isOwner(event)) {
+    if(!EventAPIUtils.isOwner(event)) {
       // TODO: Handle someone other than owner
     } else {
       this.setState({

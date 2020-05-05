@@ -36,12 +36,12 @@ type State = {|
 class EventOverviewForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
-    const event: EventDetailsAPIData = props.event;
+    const event: EventDetailsAPIData = props.project;
     const formFields: FormFields = {
       event_name: event ? event.event_name : "",
       event_short_description: event ? event.event_short_description : "",
-      event_date_start: event ? event.event_date_start : "",
-      event_date_end: event ? event.event_date_end : "",
+      event_date_start: event ? new Date(event.event_date_start) : "",
+      event_date_end: event ? new Date(event.event_date_end) : "",
       event_thumbnail: event ? event.event_thumbnail : ""
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
