@@ -192,7 +192,11 @@ def event_create(request):
         # TODO: Log this
         return HttpResponse(status=403)
 
-    event = EventCreationForm.create_event(request)
+    event = None
+    try:
+        event = EventCreationForm.create_event(request)
+    except PermissionDenied:
+        return HttpResponseForbidden()
     return JsonResponse(event.hydrate_to_json())
 
 

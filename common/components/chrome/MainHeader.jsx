@@ -396,8 +396,7 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderSectionLinks(): React$Node {
-    const SectionsToShow = SectionLinkConfigs
-      .filter(config => !config.showOnlyWhenLoggedIn);
+    const SectionsToShow = SectionLinkConfigs.filter(this._showSectionInMainMenu);
     return SectionsToShow
       .map(config =>
         <SectionLink
@@ -407,6 +406,12 @@ class MainHeader extends React.Component<{||}, State > {
           title={config.title}
         />
       );
+  }
+  
+  _showSectionInMainMenu(config: SectionLinkConfigEntry): boolean {
+    // Don't show items that require login
+    // Only show admin-only options if user is an admin
+    return !config.showOnlyWhenLoggedIn && (!config.showAdminOnly || CurrentUser.isStaff());
   }
 
   _onLogInClick(): void {

@@ -1,6 +1,14 @@
 import Section from '../enums/Section.js'
+import type {SectionType} from "../enums/Section";
 
-const SectionLinkConfigs = [
+type SectionLinkConfigEntry = {|
+  section: SectionType,
+  title: string,
+  showOnlyWhenLoggedIn: ?boolean,
+  showAdminOnly: ?boolean
+|};
+
+const SectionLinkConfigs: $ReadOnlyArray<SectionLinkConfigEntry> = [
   {
     section: Section.FindProjects,
     title: 'Find Projects',
@@ -12,14 +20,9 @@ const SectionLinkConfigs = [
     showOnlyWhenLoggedIn: false
   },
   {
-    section: Section.CreateGroup,
-    title: 'Create Group',
-    showOnlyWhenLoggedIn: false
-  },
-  {
     section: Section.CreateEvent,
     title: 'Create Event',
-    showOnlyWhenLoggedIn: false
+    showAdminOnly: true
   },
   {
     section: Section.MyProjects,
