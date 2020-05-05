@@ -2,13 +2,12 @@
 
 import React from "react";
 import type {FileInfo} from "../../common/FileInfo.jsx";
+import DateRangeSelectors from "../../common/datetime/DateRangeSelectors.jsx";
 import ImageCropUploadFormElement from "../../../components/forms/ImageCropUploadFormElement.jsx";
-import TagCategory from "../../common/tags/TagCategory.jsx";
-import TagSelector from "../../common/tags/TagSelector.jsx";
 import DjangoCSRFToken from "django-react-csrftoken";
 import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
-import type {TagDefinition, EventDetailsAPIData} from "../../../components/utils/EventAPIUtils.js";
+import type {EventDetailsAPIData} from "../../../components/utils/EventAPIUtils.js";
 import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
 
@@ -16,7 +15,8 @@ import _ from "lodash";
 type FormFields = {|
   event_name: ?string,
   event_short_description: ?string,
-  event_issue_area?: Array<TagDefinition>,
+  event_date_start: ?string,
+  event_date_end: ?string,
   event_thumbnail?: FileInfo,
 |};
 
@@ -40,17 +40,23 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
     const formFields: FormFields = {
       event_name: event ? event.event_name : "",
       event_short_description: event ? event.event_short_description : "",
-      event_issue_area: event ? event.event_issue_area : [],
+      event_date_start: event ? event.event_date_start : "",
+      event_date_end: event ? event.event_date_end : "",
       event_thumbnail: event ? event.event_thumbnail : ""
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
         checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["event_name"]),
         errorMessage: "Please enter Event Name"
-      },
-      {
+      }, {
         checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["event_short_description"]),
         errorMessage: "Please enter Event Description"
+      }, {
+        checkFunc: (formFields: FormFields) => !!(formFields["event_date_start"]),
+        errorMessage: "Please enter Start Date"
+      }, {
+        checkFunc: (formFields: FormFields) => !!(formFields["event_date_end"]),
+        errorMessage: "Please enter End Date"
       }
     ];
   
@@ -77,6 +83,7 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
   }
 
   render(): React$Node {
+    
     return (
       <div className="EditEventForm-root">
 
@@ -95,17 +102,14 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
           <input type="text" className="form-control" id="event_name" name="event_name" maxLength="60"
                  value={this.state.formFields.event_name} onChange={this.form.onInput.bind(this, "event_name")}/>
         </div>
-
-        <div className="form-group">
-          <label>Issue Area</label>
-          <TagSelector
-            elementId="event_issue_area"
-            value={this.state.formFields.event_issue_area}
-            category={TagCategory.ISSUES}
-            allowMultiSelect={false}
-            onSelection={this.form.onSelection.bind(this, "event_issue_area")}
-          />
-        </div>
+        
+        <DateRangeSelectors
+          dateTimeStart={this.state.formFields.event_date_start}
+          dateTimeEnd={this.state.formFields.event_date_end}
+          onChangeTimeStart={this.form.onSelection.bind(this, "event_date_start")}
+          onChangeTimeEnd={this.form.onSelection.bind(this, "event_date_end")}
+          formIds={["event_date_start","event_date_end"]}
+        />
   
         <div className="form-group">
           <label>

@@ -1,7 +1,8 @@
+from dateutil.parser import parse
 from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
-from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Group
+from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group
 from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
@@ -91,6 +92,58 @@ class ProjectCreationForm(ModelForm):
             send_project_creation_notification(project)
 
         return project
+
+    # event_agenda = models.CharField(max_length=4000, blank=True)
+    # event_date_end = models.DateTimeField()
+    # event_date_modified = models.DateTimeField(auto_now_add=True, null=True)
+    # event_date_start = models.DateTimeField()
+    # event_description = models.CharField(max_length=4000, blank=True)
+    # event_location = models.CharField(max_length=200, blank=True)
+    # event_rsvp_url = models.CharField(max_length=2083, blank=True)
+    # is_searchable = models.BooleanField(default=False)
+    # is_created = models.BooleanField(default=True)
+
+
+class EventCreationForm(ModelForm):
+    class Meta:
+        model = Group
+        fields = '__all__'
+
+    @staticmethod
+    def create_event(request):
+
+        form = EventCreationForm(request.POST)
+        # TODO: Form validation
+        event = Event.objects.create(
+            event_creator=get_request_contributor(request),
+            event_date_created=timezone.now(),
+            event_name=form.data.get('event_name'),
+            event_date_start=parse(form.data.get('event_date_start'), fuzzy=True),
+            event_date_end=parse(form.data.get('event_date_end'), fuzzy=True),
+            event_short_description=form.data.get('event_short_description'),
+            is_created=False
+        )
+        event = Event.objects.get(id=event.id)
+
+        # TODO: confirm
+        merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
+
+        event.save()
+        return event
+
+    @staticmethod
+    def delete_event(request, event_id):
+        event = Event.objects.get(id=event_id)
+
+        if not is_creator_or_staff(request.user, event):
+            raise PermissionDenied()
+
+        event.delete()
+
+    @staticmethod
+    def edit_event(request, event_id):
+        raise NotImplementedError("To be implemented")
+
 
 class GroupCreationForm(ModelForm):
     class Meta:

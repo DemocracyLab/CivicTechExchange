@@ -9,8 +9,6 @@ import Headers from "../common/Headers.jsx";
 import EventOverviewForm from "../componentsBySection/CreateEvent/EventOverviewForm.jsx";
 import EventPreviewForm from "../componentsBySection/CreateEvent/EventPreviewForm.jsx";
 import EventDescriptionForm from "../componentsBySection/CreateEvent/EventDescriptionForm.jsx";
-import EventPositionsForm from "../componentsBySection/CreateEvent/EventPositionsForm.jsx";
-import EventResourcesForm from "../componentsBySection/CreateEvent/EventResourcesForm.jsx";
 import EventAPIUtils, {EventDetailsAPIData} from "../utils/EventAPIUtils.js";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
@@ -38,10 +36,9 @@ class CreateEventController extends React.PureComponent<{||},State> {
       steps: [
         {
           header: "Let's get started!",
-          subHeader: "Tell us how you want to create a better world.",
+          subHeader: "",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          // formComponent: () => <h1>Hello w2orld!</h1>,
           formComponent: EventOverviewForm
         }, {
           header: "Let others know what your Event is about...",
@@ -49,18 +46,6 @@ class CreateEventController extends React.PureComponent<{||},State> {
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: EventDescriptionForm
-        }, {
-          header: "What resources would you like to share?",
-          subHeader: "Let volunteers know how they can engage with your Event",
-          onSubmit: this.onSubmit,
-          onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: EventResourcesForm
-        }, {
-          header: "What type of volunteers does your Event need?",
-          subHeader: "You can always change the type of help your Event needs later.",
-          onSubmit: this.onSubmit,
-          onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: EventPositionsForm
         }, {
           header: "Ready to publish your Event?",
           subHeader: "Congratulations!  You have successfully created a tech-for-good Event.",
@@ -111,7 +96,7 @@ class CreateEventController extends React.PureComponent<{||},State> {
   onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (EventDetailsAPIData, () => void) => void): void {
     const formSubmitUrl: string = this.state.event && this.state.event.event_id
       ? "/events/edit/" + this.state.event.event_id + "/"
-      : "/events/signup/";
+      : "/events/create/";
     api.postForm(formSubmitUrl, formRef, onSubmitSuccess, response => null /* TODO: Report error to user */);
   }
   
