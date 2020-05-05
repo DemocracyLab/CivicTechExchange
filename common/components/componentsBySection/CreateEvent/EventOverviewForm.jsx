@@ -17,7 +17,8 @@ type FormFields = {|
   event_short_description: ?string,
   event_date_start: ?string,
   event_date_end: ?string,
-  event_thumbnail?: FileInfo,
+  event_rsvp_url: ?string,
+  event_thumbnail: ?FileInfo,
 |};
 
 type Props = {|
@@ -44,6 +45,7 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
       event_short_description: event ? event.event_short_description : "",
       event_date_start: event ? new Date(event.event_date_start) : "",
       event_date_end: event ? new Date(event.event_date_end) : "",
+      event_rsvp_url: event ? event.event_rsvp_url : "",
       event_thumbnail: event ? event.event_thumbnail : ""
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
@@ -59,7 +61,11 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
       }, {
         checkFunc: (formFields: FormFields) => !!(formFields["event_date_end"]),
         errorMessage: "Please enter End Date"
+      }, {
+        checkFunc: (formFields: FormFields) => !!(formFields["event_rsvp_url"]),
+        errorMessage: "Please enter Eventbrite link"
       }
+      
     ];
   
     const formIsValid: boolean = FormValidation.isValid(formFields, validations);
@@ -112,6 +118,12 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
           onChangeTimeEnd={this.form.onSelection.bind(this, "event_date_end")}
           formIds={["event_date_start","event_date_end"]}
         />
+  
+        <div className="form-group">
+          <label htmlFor="event_rsvp_url">Eventbrite Link</label>
+          <input type="text" className="form-control" id="event_rsvp_url" name="event_rsvp_url" maxLength="2075"
+                 value={this.state.formFields.event_rsvp_url} onChange={this.form.onInput.bind(this, "event_rsvp_url")}/>
+        </div>
   
         <div className="form-group">
           <label>
