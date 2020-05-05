@@ -111,6 +111,7 @@ class MainHeader extends React.Component<{||}, State > {
           <div className={this._cx.get('rightContent')}>
             {this._renderSectionLinks()}
             {window.BLOG_URL && <div className="SectionLink-root"><h3><a href={window.BLOG_URL}>Blog</a></h3></div>}
+            {window.EVENT_URL && <div className="SectionLink-root"><h3><a href={window.EVENT_URL}>Event</a></h3></div>}
             {this._renderHeaderLinks()}
             {this._renderHeaderButtons()}
             {
@@ -270,6 +271,13 @@ class MainHeader extends React.Component<{||}, State > {
                 </div>
               </a>
               <Divider />
+  
+              {window.EVENT_URL && <React.Fragment><a href={window.EVENT_URL}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Event
+                </div>
+              </a>
+              </React.Fragment>}
 
               <a href={this.state.createProjectUrl}>
                 <div className={'SubHeader-drawerDiv'} >

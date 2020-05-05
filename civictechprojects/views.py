@@ -366,7 +366,8 @@ def index(request):
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt'),
         'GR_SITEKEY': settings.GR_SITEKEY,
         'FAVICON_PATH': settings.FAVICON_PATH,
-        'BLOG_URL': settings.BLOG_URL
+        'BLOG_URL': settings.BLOG_URL,
+        'EVENT_URL': settings.EVENT_URL
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',

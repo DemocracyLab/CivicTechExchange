@@ -413,3 +413,5 @@ QIQO_API_SECRET = os.environ.get('QIQO_API_SECRET', 'SECRET')
 QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
 
 BLOG_URL = os.environ.get('BLOG_URL', '')
+
+EVENT_URL = os.environ.get('EVENT_URL', '')
