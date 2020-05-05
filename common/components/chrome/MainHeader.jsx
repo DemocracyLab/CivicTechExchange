@@ -110,6 +110,7 @@ class MainHeader extends React.Component<{||}, State > {
           {this._renderHamburgerSlider()}
           <div className={this._cx.get('rightContent')}>
             {this._renderSectionLinks()}
+            {window.BLOG_URL && <div className="SectionLink-root"><h3><a href={window.BLOG_URL}>Blog</a></h3></div>}
             {this._renderHeaderLinks()}
             {this._renderHeaderButtons()}
             {
@@ -290,6 +291,14 @@ class MainHeader extends React.Component<{||}, State > {
                 </div>
               </a>
               <Divider />
+
+              {window.BLOG_URL && <React.Fragment><a href={window.BLOG_URL}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Blog
+                </div>
+              </a>
+              <Divider />
+              </React.Fragment>}
 
               {this._renderHamburgerNavigationLinks()}
 

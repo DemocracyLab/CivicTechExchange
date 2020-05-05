@@ -411,3 +411,5 @@ QIQO_USERS_ENDPOINT = os.environ.get('QIQO_USERS_ENDPOINT', 'https://api.qiqocha
 QIQO_API_KEY = os.environ.get('QIQO_API_KEY', 'democracylab')
 QIQO_API_SECRET = os.environ.get('QIQO_API_SECRET', 'SECRET')
 QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
+
+BLOG_URL = os.environ.get('BLOG_URL', '')
