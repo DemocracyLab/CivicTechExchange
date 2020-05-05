@@ -15,6 +15,7 @@ import _ from "lodash";
 type FormFields = {|
   event_name: ?string,
   event_short_description: ?string,
+  event_location: ?string,
   event_date_start: ?string,
   event_date_end: ?string,
   event_rsvp_url: ?string,
@@ -43,6 +44,7 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
     const formFields: FormFields = {
       event_name: event ? event.event_name : "",
       event_short_description: event ? event.event_short_description : "",
+      event_location: event ? event.event_location : "",
       event_date_start: event ? new Date(event.event_date_start) : "",
       event_date_end: event ? new Date(event.event_date_end) : "",
       event_rsvp_url: event ? event.event_rsvp_url : "",
@@ -55,6 +57,9 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
       }, {
         checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["event_short_description"]),
         errorMessage: "Please enter Event Description"
+      }, {
+        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["event_location"]),
+        errorMessage: "Please enter Event Location"
       }, {
         checkFunc: (formFields: FormFields) => !!(formFields["event_date_start"]),
         errorMessage: "Please enter Start Date"
@@ -109,6 +114,18 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
           <label>Event Name</label>
           <input type="text" className="form-control" id="event_name" name="event_name" maxLength="60"
                  value={this.state.formFields.event_name} onChange={this.form.onInput.bind(this, "event_name")}/>
+        </div>
+  
+        <div className="form-group">
+          <label>
+            Location
+          </label>
+          <div className="character-count">
+            { (this.state.formFields.event_location || "").length} / 200
+          </div>
+          <textarea className="form-control" id="event_location" name="event_location"
+                    placeholder="Location for this Event" rows="3" maxLength="200"
+                    value={this.state.formFields.event_location} onChange={this.form.onInput.bind(this, "event_location")}></textarea>
         </div>
         
         <DateRangeSelectors
