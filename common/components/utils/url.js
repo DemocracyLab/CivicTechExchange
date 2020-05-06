@@ -36,6 +36,11 @@ class urlHelper {
     return sectionUrl;
   }
   
+  // Determine if we are on a given section
+  static atSection(section: string): string {
+    return urlHelper.argument("section") === section;
+  };
+  
   static getSectionArgs(url: ?string): SectionUrlArguments {
     let _url: string = url || window.location.href;
     let oldArgs: Dictionary<string> = urlHelper.arguments(_url);
