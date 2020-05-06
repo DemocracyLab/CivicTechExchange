@@ -12,6 +12,7 @@ import _ from "lodash";
 type FormFields = {|
   event_description: ?string,
   event_agenda: ?string,
+  event_live_id: ?string
 |};
 
 type Props = {|
@@ -36,7 +37,8 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
       formIsValid: false,
       formFields: {
         event_description: event ? event.event_description : "",
-        event_agenda: event ? event.event_agenda : ""
+        event_agenda: event ? event.event_agenda : "",
+        event_live_id: event ? event.event_live_id : ""
       },
       validations: [
         {
@@ -94,6 +96,12 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
           <textarea className="form-control" id="event_agenda" name="event_agenda"
                     placeholder="Describe the solution you plan to build..." rows="6" maxLength="4000"
                     value={this.state.formFields.event_agenda} onChange={this.form.onInput.bind(this, "event_agenda")}></textarea>
+        </div>
+  
+        <div className="form-group">
+          <label>QiqoChat Live Event ID (Optional)</label>
+          <input type="text" className="form-control" id="event_live_id" name="event_live_id" maxLength="50"
+                 value={this.state.formFields.event_live_id} onChange={this.form.onInput.bind(this, "event_live_id")}/>
         </div>
 
         <FormValidation

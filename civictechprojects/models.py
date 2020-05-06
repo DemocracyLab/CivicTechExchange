@@ -257,6 +257,7 @@ class Event(Archived):
     event_location = models.CharField(max_length=200, blank=True)
     event_name = models.CharField(max_length=200)
     event_rsvp_url = models.CharField(max_length=2083, blank=True)
+    event_live_id = models.CharField(max_length=50, blank=True)
     event_short_description = models.CharField(max_length=140, blank=True)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
@@ -290,6 +291,7 @@ class Event(Archived):
             'event_id': self.id,
             'event_location': self.event_location,
             'event_rsvp_url': self.event_rsvp_url,
+            'event_live_id': self.event_live_id,
             'event_name': self.event_name,
             'event_owners': [self.event_creator.hydrate_to_tile_json()],
             'event_short_description': self.event_short_description,
