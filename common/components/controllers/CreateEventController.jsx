@@ -3,14 +3,13 @@
 import React from "react";
 import CurrentUser from "../../components/utils/CurrentUser.js";
 import metrics from "../utils/metrics.js";
-import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
 import EventOverviewForm from "../componentsBySection/CreateEvent/EventOverviewForm.jsx";
 import EventPreviewForm from "../componentsBySection/CreateEvent/EventPreviewForm.jsx";
 import EventDescriptionForm from "../componentsBySection/CreateEvent/EventDescriptionForm.jsx";
 import EventProjectSelectionForm from "../componentsBySection/CreateEvent/EventProjectSelectionForm.jsx";
-import EventAPIUtils, {EventDetailsAPIData} from "../utils/EventAPIUtils.js";
+import EventAPIUtils, {EventData} from "../utils/EventAPIUtils.js";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
 import utils from "../utils/utils.js";
@@ -18,7 +17,7 @@ import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
 
 type State = {|
   id: ?number,
-  Event: ?EventDetailsAPIData,
+  Event: ?EventData,
   steps: $ReadOnlyArray<FormWorkflowStepConfig>
 |};
 

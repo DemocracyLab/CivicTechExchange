@@ -1,6 +1,8 @@
 // @flow
 
 import CurrentUser from "./CurrentUser.js";
+import {ProjectAPIData} from "./ProjectAPIUtils.js";
+import type {FileInfo} from "../common/FileInfo.jsx";
 
 export type EventData = {|
     id: string,
@@ -13,13 +15,13 @@ export type EventData = {|
     event_location: string,
     event_description: string,
     event_short_description: string,
-    // event_projects: any,
-    // event_files: any,
+    event_thumbnail: FileInfo,
+    event_projects: $ReadOnlyArray<ProjectAPIData>
 |};
 
 export default class EventAPIUtils {
     static fetchEventDetails(id: number, callback: (EventData) => void, errCallback: (APIError) => void): void {
-        fetch(new Request('/api/event/' + id + '/', {credentials: 'include'}))
+      fetch(new Request('/api/event/' + id + '/', {credentials: 'include'}))
           .then(response => {
               if (!response.ok) {
                   throw Error();

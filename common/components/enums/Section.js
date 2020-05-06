@@ -25,6 +25,7 @@ const Section = {
   ContactUs: 'ContactUs',
   CreateGroup: 'CreateGroup',
   CreateEvent: 'CreateEvent',
+  AboutEvent: 'AboutEvent',
   LiveEvent: 'LiveEvent'
 };
 

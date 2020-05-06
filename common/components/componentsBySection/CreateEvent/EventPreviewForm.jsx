@@ -2,12 +2,11 @@
 
 import React from "react";
 import DjangoCSRFToken from "django-react-csrftoken";
-import type {ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
-// import AboutProjectDisplay from "../../common/projects/AboutProjectDisplay.jsx";
 import {OnReadySubmitFunc} from "./EventFormCommon.jsx";
+import AboutEventDisplay from "./AboutEventDisplay.jsx";
 
 type Props = {|
-  project: ?ProjectDetailsAPIData,
+  event: ?ProjectDetailsAPIData,
   readyForSubmit: OnReadySubmitFunc
 |};
 
@@ -22,15 +21,15 @@ class ProjectPreviewForm extends React.PureComponent<Props> {
   }
 
   render(): React$Node {
+    
     return (
       <React.Fragment>
         <DjangoCSRFToken/>
-        <input type="hidden" name="is_created" value="True"/>
-        EVENT
-        {/* <AboutProjectDisplay
-          project={this.props.project}
+        <input type="hidden" name="is_searchable" value="True"/>
+        <AboutEventDisplay
+          event={this.props.project}
           viewOnly={true}
-        /> */}
+        />
       </React.Fragment>
     );
   }

@@ -61,6 +61,18 @@ class urlHelper {
       : urlHelper.section(Section.LogIn, {"prev": section});
   }
   
+  // Get url for logging in then returning to the previous page
+  static logInThenReturn(returnUrl: ?string): string {
+    let _url: string = returnUrl || window.location.href;
+    const oldArgs: SectionUrlArguments = urlHelper.getSectionArgs(_url);
+    const newArgs: SectionUrlArguments = {
+      section: Section.LogIn,
+      args: Object.assign({prev: oldArgs.section}, oldArgs.args)
+    };
+    
+    return urlHelper.fromSectionArgs(newArgs);
+  }
+  
   // Construct a url with properly-formatted query string for the given arguments
   static constructWithQueryString(url: string, args: Dictionary<string>): string {
     let result: string = url;
