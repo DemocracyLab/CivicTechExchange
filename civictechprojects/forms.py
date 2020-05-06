@@ -109,6 +109,7 @@ class EventCreationForm(ModelForm):
             event_date_created=timezone.now(),
             event_name=form.data.get('event_name'),
             event_location=form.data.get('event_location'),
+            event_rsvp_url=form.data.get('event_rsvp_url'),
             event_date_start=parse(form.data.get('event_date_start'), fuzzy=True),
             event_date_end=parse(form.data.get('event_date_end'), fuzzy=True),
             event_short_description=form.data.get('event_short_description'),

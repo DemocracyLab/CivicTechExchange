@@ -7,8 +7,8 @@ import type {FileInfo} from "../common/FileInfo.jsx";
 export type EventData = {|
     id: string,
     event_creator: string,
-    event_start_date: Date,
-    event_end_date: Date,
+    event_date_start: Date,
+    event_date_end: Date,
     event_name: string,
     event_rsvp_url: string,
     event_agenda: string,
