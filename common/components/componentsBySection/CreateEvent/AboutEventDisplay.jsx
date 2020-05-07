@@ -33,72 +33,66 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       });
     }
   }
-  
+
   render(): ?$React$Node {
     const event:EventData = this.state.event;
     return !event ? null : (
-      <div className='AboutProjects-root'>
-        <div className="AboutProjects-mainColumn">
-          {/*TODO: Date h3*/}
-          <h1>{event.event_name}</h1>
-          
-          <div className="AboutEvent-EventBanner">
-            <div className="AboutEvent-Info">
-              <h3>Info</h3>
-              {/*TODO: Handle multi-day events*/}
-              <h4>Date</h4>
-              <p>{moment(event.event_date_start).format("dddd, MMMM Do YYYY")}</p>
-              <h4>Time</h4>
-              {this._renderTimeRange()}
-              <h4>Location</h4>
-              <div className="AboutProjects-details-description">
-                <p>{this.state.event.event_location}</p>
-              </div>
-              {this.state.event.event_rsvp_url && this._renderRSVPButton()}
-              {!this.props.viewOnly && this._renderJoinLiveEventButton()}
-            </div>
-            <div className="AboutEvent-Splash">
-              <div className='AboutProjects-iconContainer'>
-                <img className='AboutProjects-icon' src={event.event_thumbnail.publicUrl} />
-              </div>
-            </div>
-          </div>
+      <div className="AboutEvent-root container">
 
-          <div className='AboutProjects-details AboutProjects-details-description'>
-            <div>
-              <h3>Details</h3>
-              <div>
-                {event.event_short_description}
-              </div>
-              <div>
-                {event.event_description}
-              </div>
-              <h3>What We Will Do</h3>
-              <div>
-                {event.event_agenda}
-              </div>
+        <div className="AboutEvent-title row">
+          <div className="col-12">
+            <div className="AboutEvent-title-date">
+              {moment.event.event_date_start).format("MMMM Do YYYY")}
             </div>
+            <h1>{event.event_name}</h1>
           </div>
-          {/*TODO: Show projects*/}
-
         </div>
 
+        <div className="AboutEvent-EventBanner row">
+          <div className="AboutEvent-info col-xs-12 col-lg-4">
+            <h3>Info</h3>
+            {/*TODO: Handle multi-day events*/}
+            <h4>Date</h4>
+            <p>{moment(event.event_date_start).format("dddd, MMMM Do YYYY")}</p>
+
+            <h4>Time</h4>
+            {this._renderTimeRange()}
+
+            <h4>Location</h4>
+            <p>{this.state.event.event_location}</p>
+
+            {this.state.event.event_rsvp_url && this._renderRSVPButton()}
+            {!this.props.viewOnly && this._renderJoinLiveEventButton()}
+          </div>
+          <div className="col-xs-12 col-lg-8 AboutEvent-splash">
+              <img src={event.event_thumbnail.publicUrl} />
+          </div>
+        </div>
+
+        <div className="AboutEvent-details col-12">
+          <h3>Details</h3>
+          <p>{event.event_short_description}</p>
+          <p>{event.event_description}</p>
+          <h3>What We Will Do</h3>
+          <p>{event.event_agenda}</p>
+        </div>
+          {/*TODO: Show projects*/}
       </div>
     )
   }
-  
+
   _renderTimeRange(): string {
     const timeFormat: string = "h:mm a";
     const timeZone: string = "PST";
     return moment(this.state.event.event_date_start).format(timeFormat) + " - " +
       moment(this.state.event.event_date_end).format(timeFormat) + " " + timeZone;
   }
-  
+
   _renderRSVPButton(): ?$React$Node {
     return (
       <Button
         variant="primary"
-        className="AboutProject-button"
+        className="AboutEvent-rsvp-btn"
         type="button"
         href={this.state.event.event_rsvp_url}
       >
@@ -106,7 +100,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       </Button>
     );
   }
-  
+
   _renderJoinLiveEventButton(): ?$React$Node {
     let text: string = "";
     let url: string = "";
@@ -118,11 +112,12 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       text = "Log In to Join Event";
       url = urlHelper.logInThenReturn();
     }
-    
+
     return (
       <Button
         variant="primary"
-        className="AboutProject-button"
+        size="lg"
+        className="AboutEvent-join-btn"
         type="button"
         title={text}
         href={url}
@@ -131,7 +126,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       </Button>
     );
   }
-  
+
 }
 
 export default AboutEventDisplay;

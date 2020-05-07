@@ -1,8 +1,14 @@
-.AboutEvent-EventBanner {
-  display: flex;
+.AboutEvent-info {
+  background: $color-background-default;
 }
-
-.AboutEvent-Info {
-  min-width: 200px;
-  background-color: $color-grey-medium;
+.AboutEvent-splash {
+  object-fit: contain;
+}
+.AboutEvent-title-date {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.AboutEvent-details p {
+  white-space: pre-wrap;
 }
