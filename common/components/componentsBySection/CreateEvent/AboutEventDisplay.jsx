@@ -50,15 +50,15 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
         <div className="AboutEvent-EventBanner row">
           <div className="AboutEvent-info col-xs-12 col-lg-4">
-            <h3>Info</h3>
+            <h4>Info</h4>
             {/*TODO: Handle multi-day events*/}
-            <h4>Date</h4>
+            <h5 className="AboutEvent-info-header">Date</h5>
             <p>{moment(event.event_date_start).format("dddd, MMMM Do YYYY")}</p>
 
-            <h4>Time</h4>
-            {this._renderTimeRange()}
+            <h5 className="AboutEvent-info-header">Time</h5>
+            <p>{this._renderTimeRange()}</p>
 
-            <h4>Location</h4>
+            <h5 className="AboutEvent-info-header">Location</h5>
             <p>{this.state.event.event_location}</p>
 
             {this.state.event.event_rsvp_url && this._renderRSVPButton()}

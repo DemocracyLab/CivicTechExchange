@@ -1,9 +1,17 @@
-.AboutEvent-info {
-  background: $color-background-default;
+.AboutEvent-root {
+  background: $color-background-light;
 }
 .AboutEvent-splash {
   object-fit: contain;
+  img {
+    max-width: 100%;
+  }
 }
+.AboutEvent-title h1 {
+  font-size: 2.25rem;
+  margin-bottom: 2rem;
+}
+
 .AboutEvent-title-date {
   font-size: 1.25rem;
   font-weight: bold;
@@ -11,4 +19,26 @@
 }
 .AboutEvent-details p {
   white-space: pre-wrap;
+}
+.AboutEvent-rsvp-btn, .AboutEvent-join-btn {
+  display: block;
+  margin: 1rem auto;
+  max-width: 280px;
+}
+.AboutEvent-details h3 {
+  margin-top: 2rem; /* acts as section spacing */
+}
+.AboutEvent-info {
+  order: 2;
+}
+.AboutEvent-splash {
+  order: 1;
+}
+@include media-breakpoint-up(lg) {
+  .AboutEvent-info {
+    order: 1;
+  }
+  .AboutEvent-splash {
+    order: 2;
+  }
 }
