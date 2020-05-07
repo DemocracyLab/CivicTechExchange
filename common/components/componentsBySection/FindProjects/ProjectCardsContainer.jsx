@@ -16,8 +16,10 @@ import LoadingMessage from '../../chrome/LoadingMessage.jsx';
 import prerender from "../../utils/prerender.js";
 
 type Props = {|
+  showSearchControls: ?boolean,
+  staticHeaderText: ?string,
   fullWidth: ?boolean,
-  onSelectProject: Function,
+  onSelectProject: ?Function,
   selectableCards: ?boolean,
   alreadySelectedProjects: ?List<string>, // todo: proper state management
 |}
@@ -54,8 +56,16 @@ class ProjectCardsContainer extends React.Component<Props, State> {
     return (
       <div className={`ProjectCardContainer col-12 ${this.props.fullWidth ? '' : 'col-md-9 col-xxl-10 p-0 m-0'}`}>        
         <div className="container-fluid">
-            <ProjectSearchSort />
-            <ProjectTagContainer />
+          {
+            this.props.showSearchControls
+            ? (
+              <React.Fragment>
+                <ProjectSearchSort/>
+                <ProjectTagContainer/>
+              </React.Fragment>
+              )
+            : null
+          }
           <div className="row">
             {!_.isEmpty(this.state.projects) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}
             {this._renderCards()}
@@ -69,7 +79,9 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   }
 
   _renderCardHeaderText(): React$Node {
-    if (this.state.keyword || this.state.tags.size > 0 || this.state.location) {
+    if (this.props.staticHeaderText) {
+      return this.props.staticHeaderText;
+    } else if (this.state.keyword || this.state.tags.size > 0 || this.state.location) {
       return this.state.project_count === 1 ? this.state.project_count + ' tech-for-good project found' : this.state.project_count + ' tech-for-good projects found'
     } else {
       return 'Find and volunteer with innovative tech-for-good projects'
@@ -91,7 +103,6 @@ class ProjectCardsContainer extends React.Component<Props, State> {
         <ProjectCard
           project={project}
           isSelectable={this.props.selectableCards}
-          // isSelectable={true}
           onProjectSelect={() => this.props.onSelectProject && this.props.onSelectProject(project)}
           key={index}
           textlen={140}

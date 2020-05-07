@@ -7,6 +7,9 @@ import CurrentUser from "../../utils/CurrentUser.js";
 import {EventData} from "../../utils/EventAPIUtils.js";
 import urlHelper from "../../utils/url.js";
 import Section from "../../enums/Section";
+import ProjectCardsContainer from "../FindProjects/ProjectCardsContainer.jsx";
+import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import _ from "lodash";
 
 
 type Props = {|
@@ -24,13 +27,17 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     this.state = {
       event: props.event
     };
+    
+    if(this.state.event) {
+      this.filterProjectsByOrgTag();
+    }
  }
 
   componentWillReceiveProps(nextProps: Props): void {
     if(nextProps.event !== this.props.event) {
       this.setState({
         event: nextProps.event
-      });
+      }, this.filterProjectsByOrgTag);
     }
   }
 
@@ -78,7 +85,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           <h3>What We Will Do</h3>
           <p>{event.event_agenda}</p>
         </div>
-          {/*TODO: Show projects*/}
+        {this._renderProjectList()}
       </div>
     )
   }
@@ -128,7 +135,33 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       </Button>
     );
   }
-
+  
+  filterProjectsByOrgTag() {
+    const event: EventData = this.state.event;
+    if (event && event.event_legacy_organization) {
+      ProjectSearchDispatcher.dispatch({
+        type: 'INIT',
+        findProjectsArgs: {
+          org: event.event_legacy_organization[0].tag_name
+        },
+        searchSettings: {
+          updateUrl: false
+        }});
+    }
+  }
+  
+  _renderProjectList(): ?$React$Node {
+    return (
+      <div className="row">
+        <ProjectCardsContainer
+          showSearchControls={false}
+          staticHeaderText="Participating Projects"
+          fullWidth={true}
+          selectableCards={false}
+        />
+      </div>
+    );
+  }
 }
 
 export default AboutEventDisplay;

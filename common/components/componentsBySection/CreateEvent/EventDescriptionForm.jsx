@@ -6,6 +6,10 @@ import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
 import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
+import TagSelector from "../../common/tags/TagSelector.jsx";
+import TagCategory from "../../common/tags/TagCategory.jsx";
+import type {TagDefinition} from "../../../components/utils/ProjectAPIUtils.js";
+import type {EventData} from "../../utils/EventAPIUtils.js";
 import _ from "lodash";
 
 
@@ -16,7 +20,7 @@ type FormFields = {|
 |};
 
 type Props = {|
-  project: ?ProjectDetailsAPIData,
+  project: ?EventData,
   readyForSubmit: () => () => boolean
 |} & FormPropsBase<FormFields>;
 
@@ -31,14 +35,15 @@ type State = {|
 class ProjectDescriptionForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
-    const event: ProjectDetailsAPIData = props.project;
+    const event: EventData = props.project;
     // TODO: Include qiqochat event link
     this.state = {
       formIsValid: false,
       formFields: {
         event_description: event ? event.event_description : "",
         event_agenda: event ? event.event_agenda : "",
-        event_live_id: event ? event.event_live_id : ""
+        event_live_id: event ? event.event_live_id : "",
+        event_legacy_organization: event ? event.event_legacy_organization: ""
       },
       validations: [
         {
@@ -57,6 +62,10 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
   componentDidMount() {
     // Initial validation check
     this.form.doValidation.bind(this)();
+  }
+  
+  onTagChange(formFieldName: string, value: $ReadOnlyArray<TagDefinition>): void {
+    this.state.formFields[formFieldName] = value;
   }
 
   onValidationCheck(formIsValid: boolean): void {
@@ -98,6 +107,17 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
                     value={this.state.formFields.event_agenda} onChange={this.form.onInput.bind(this, "event_agenda")}></textarea>
         </div>
   
+        <div className="form-group">
+          <label>Legacy Organization (Optional)</label>
+          <TagSelector
+            elementId="event_legacy_organization"
+            value={this.state.formFields.event_legacy_organization}
+            category={TagCategory.ORGANIZATION}
+            allowMultiSelect={false}
+            onSelection={this.onTagChange.bind(this, "event_legacy_organization")}
+          />
+        </div>
+        
         <div className="form-group">
           <label>QiqoChat Live Event ID (Optional)</label>
           <input type="text" className="form-control" id="event_live_id" name="event_live_id" maxLength="50"

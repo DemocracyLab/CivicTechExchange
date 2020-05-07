@@ -13,6 +13,10 @@ import urls from "../utils/url.js";
 import Section from "../enums/Section.js";
 import _ from 'lodash'
 
+export type SearchSettings = {|
+  updateUrl: boolean
+|};
+
 export type FindProjectsArgs = {|
   keyword: string,
   sortField: string,
@@ -41,6 +45,7 @@ type FindProjectsData = {|
 
 export type ProjectSearchActionType = {
   type: 'INIT',
+  searchSettings: SearchSettings,
   findProjectsArgs: FindProjectsArgs
 } | {
   type: 'ADD_TAG',
@@ -74,6 +79,9 @@ const DEFAULT_STATE = {
   page: 1,
   tags: List(),
   projectsData: {},
+  searchSettings: {
+    updateUrl: false
+  },
   findProjectsArgs: {},
   filterApplied: false,
   projectsLoading: false
@@ -86,6 +94,7 @@ class State extends Record(DEFAULT_STATE) {
   page: number;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
+  searchSettings: SearchSettings;
   findProjectsArgs: FindProjectsArgs;
   filterApplied: boolean;
   projectsLoading: boolean;
@@ -108,6 +117,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           initialState = this._initializeFilters(initialState, action.findProjectsArgs);
         }
         initialState = initialState.set('findProjectsArgs', action.findProjectsArgs || {});
+        initialState = initialState.set('searchSettings', action.searchSettings || {updateUrl: false});
         return this._loadProjects(initialState, true);
       case 'ADD_TAG':
         state = state.set('filterApplied', true);
@@ -249,7 +259,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       state = state.set('projectsData', {});
       state = state.set('filterApplied', false);
     }
-    if(!noUpdateUrl) {
+    if(state.searchSettings.updateUrl && !noUpdateUrl) {
       this._updateWindowUrl(state);
     }
     const url: string = urls.constructWithQueryString(`/api/projects?page=${state.page}`,

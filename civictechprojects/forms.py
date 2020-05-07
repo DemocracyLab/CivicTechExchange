@@ -154,6 +154,8 @@ class EventCreationForm(ModelForm):
 
         read_form_field_boolean(event, form, 'is_searchable')
         read_form_field_boolean(event, form, 'is_created')
+
+        read_form_field_tags(event, form, 'event_legacy_organization')
     
         event.event_date_modified = timezone.now()
 

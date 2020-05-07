@@ -129,7 +129,8 @@ class EventProjectSelectionForm extends React.PureComponent<Props,State> {
         </div>
 
           <div className="row">
-            <ProjectCardsContainer 
+            <ProjectCardsContainer
+              showSearchControls={true}
               alreadySelectedProjects={this.state.selectedProjects}
               onSelectProject={(project) => this.addProjectToSelectedProjects(project)} 
               fullWidth={true}

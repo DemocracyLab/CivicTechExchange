@@ -246,6 +246,10 @@ class Group(Archived):
         return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
 
 
+class TaggedEventOrganization(TaggedItemBase):
+    content_object = models.ForeignKey('Event')
+
+
 class Event(Archived):
     event_agenda = models.CharField(max_length=4000, blank=True)
     event_creator = models.ForeignKey(Contributor, related_name='event_creator')
@@ -259,6 +263,8 @@ class Event(Archived):
     event_rsvp_url = models.CharField(max_length=2083, blank=True)
     event_live_id = models.CharField(max_length=50, blank=True)
     event_short_description = models.CharField(max_length=140, blank=True)
+    event_legacy_organization = TaggableManager(blank=True, through=TaggedEventOrganization)
+    event_legacy_organization.remote_field.related_name = "+"
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
 
@@ -278,7 +284,6 @@ class Event(Archived):
         files = ProjectFile.objects.filter(file_event=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
-        # links = ProjectLink.objects.filter(link_event=self.id)
 
         event = {
             'event_agenda': self.event_agenda,
@@ -295,7 +300,7 @@ class Event(Archived):
             'event_name': self.event_name,
             'event_owners': [self.event_creator.hydrate_to_tile_json()],
             'event_short_description': self.event_short_description,
-            'event_issue_areas': self.get_issue_areas()
+            'event_legacy_organization': Tag.hydrate_to_json(self.id, list(self.event_legacy_organization.all().values())),
         }
 
         if len(projects) > 0:

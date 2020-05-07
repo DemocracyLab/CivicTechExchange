@@ -3,6 +3,7 @@
 import CurrentUser from "./CurrentUser.js";
 import {ProjectAPIData} from "./ProjectAPIUtils.js";
 import type {FileInfo} from "../common/FileInfo.jsx";
+import type {TagDefinition} from "./ProjectAPIUtils.js";
 
 export type EventData = {|
     id: string,
@@ -16,7 +17,8 @@ export type EventData = {|
     event_description: string,
     event_short_description: string,
     event_thumbnail: FileInfo,
-    event_projects: $ReadOnlyArray<ProjectAPIData>
+    event_projects: $ReadOnlyArray<ProjectAPIData>,
+    event_legacy_organization: $ReadOnlyArray<TagDefinition>
 |};
 
 export default class EventAPIUtils {
