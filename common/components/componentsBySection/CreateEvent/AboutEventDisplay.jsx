@@ -115,7 +115,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
     return (
       <Button
-        variant="primary"
+        variant="success"
         size="lg"
         className="AboutEvent-join-btn"
         type="button"
