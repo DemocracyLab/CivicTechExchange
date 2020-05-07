@@ -113,7 +113,8 @@ class EventCreationForm(ModelForm):
             event_date_start=parse(form.data.get('event_date_start'), fuzzy=True),
             event_date_end=parse(form.data.get('event_date_end'), fuzzy=True),
             event_short_description=form.data.get('event_short_description'),
-            is_created=False
+            is_created=True,
+            is_searchable=True
         )
         event = Event.objects.get(id=event.id)
 
