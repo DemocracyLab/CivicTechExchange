@@ -45,10 +45,9 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           <div className="AboutEvent-EventBanner">
             <div className="AboutEvent-Info">
               <h3>Info</h3>
-              {/*TODO: Date and Location Info*/}
               {/*TODO: Handle multi-day events*/}
               <h4>Date</h4>
-              <p>{moment(event.event_date_start).utc().format("dddd, MMMM Do YYYY")}</p>
+              <p>{moment(event.event_date_start).format("dddd, MMMM Do YYYY")}</p>
               <h4>Time</h4>
               {this._renderTimeRange()}
               <h4>Location</h4>
