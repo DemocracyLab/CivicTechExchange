@@ -3,15 +3,21 @@
   padding-bottom: 2rem;
 }
 .AboutEvent-splash {
-  object-fit: contain;
+  display: flex;
+  justify-content: center;
   img {
     max-width: 100%;
+    align-self: flex-start;
   }
   padding-bottom: 2rem;
+}
+.AboutEvent-title {
+  margin-top: 0.5rem;
 }
 .AboutEvent-title h1 {
   margin-bottom: 2rem;
 }
+.AboutEvent-info
 
 .AboutEvent-title-date {
   font-size: 1.25rem;
@@ -42,5 +48,10 @@
   .AboutEvent-splash {
     order: 2;
     padding-bottom: 0;
+  }
+  .AboutEvent-info-inner {
+    background: $color-background-default;
+    padding: 1rem;
+    margin: 1rem;
   }
 }
