@@ -42,7 +42,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         <div className="AboutEvent-title row">
           <div className="col-12">
             <div className="AboutEvent-title-date">
-              {moment.event.event_date_start).format("MMMM Do YYYY")}
+              {moment(event.event_date_start).format("MMMM Do YYYY")}
             </div>
             <h1>{event.event_name}</h1>
           </div>
