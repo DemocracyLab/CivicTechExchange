@@ -117,7 +117,6 @@ class EventCreationForm(ModelForm):
         )
         event = Event.objects.get(id=event.id)
 
-        # TODO: confirm
         merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
 
         event.save()
@@ -158,7 +157,8 @@ class EventCreationForm(ModelForm):
     
         event.event_date_modified = timezone.now()
 
-        # TODO: Edit thumbnail
+        merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
+
         event.save()
     
         return event
