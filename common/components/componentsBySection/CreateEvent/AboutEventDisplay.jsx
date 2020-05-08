@@ -72,7 +72,9 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
               <p>{this._renderTimeRange()}</p>
 
               <h5 className="AboutEvent-info-header">Location</h5>
-              <p>{this.state.event.event_location}</p>
+              <div className="AboutEvent-location">
+                <p>{this.state.event.event_location}</p>
+              </div>
 
               {this.state.event.event_rsvp_url && this._renderRSVPButton()}
               {!this.props.viewOnly && this._renderJoinLiveEventButton()}
