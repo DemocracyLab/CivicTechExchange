@@ -140,9 +140,10 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     const event: EventData = this.state.event;
     if (event && !_.isEmpty(event.event_legacy_organization)) {
       ProjectSearchDispatcher.dispatch({
-        type: 'INIT',
+        type: "INIT",
         findProjectsArgs: {
-          org: event.event_legacy_organization[0].tag_name
+          org: event.event_legacy_organization[0].tag_name,
+          sortField: "project_name"
         },
         searchSettings: {
           updateUrl: false
