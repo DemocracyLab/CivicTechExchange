@@ -2,7 +2,9 @@
 
 import React from 'react';
 import metrics from "../../utils/metrics.js";
-import {Modal, Button, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 import GroupAPIUtils from '../../utils/GroupAPIUtils.js'
 import CurrentUser from "../../utils/CurrentUser.js";
 import ConfirmationModal from '../../common/confirmation/ConfirmationModal.jsx';
@@ -65,19 +67,19 @@ class GroupVolunteerModal extends React.PureComponent<Props, State> {
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
     this._fieldsFilled = this._fieldsFilled.bind(this);
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     const noPositionOption: SelectOption = {value:"", label:"---"};
     const positionOptions: $ReadOnlyArray<SelectOption> =
       [noPositionOption].concat(
       nextProps.positions.map( (position: PositionInfo) => ({value:position.roleTag.tag_name, label:tagOptionDisplay(position.roleTag)})).concat(
       OtherRoleOption));
-  
+
     let state: State = {
       showModal: nextProps.showModal,
       positionOptions: positionOptions
     };
-    
+
     if(nextProps.positionToJoin) {
       const initialPositionSelection: SelectOption = nextProps.positionToJoin && positionOptions.find(
         (option) => option.value === nextProps.positionToJoin.roleTag.tag_name);
@@ -88,11 +90,11 @@ class GroupVolunteerModal extends React.PureComponent<Props, State> {
     this.setState(state);
     this.forceUpdate();
   }
-  
+
   handleChange(event: SyntheticInputEvent<HTMLInputElement>): void {
       this.setState({message: event.target.value});
   }
-  
+
   onRoleChange(role: $ReadOnlyArray<TagDefinition>): void {
     this.state.roleTag = role[0];
     this.forceUpdate();
@@ -109,17 +111,17 @@ class GroupVolunteerModal extends React.PureComponent<Props, State> {
     }
     this.setState({showConfirmationModal: false});
   }
-  
+
   handleExistingPositionSelection(positionOption: SelectOption): void {
     if(!_.isEmpty(positionOption.value)) {
       this.setState({existingPositionOption: positionOption});
     }
   }
-  
+
   handleVolunteerPeriodSelection(daysToVolunteerForOption: SelectOption): void {
     this.setState({daysToVolunteerForOption: daysToVolunteerForOption});
   }
-  
+
   handleSubmit() {
     this.setState({isSending:true});
     metrics.logVolunteerClickVolunteerSubmitConfirm(CurrentUser.userID(), this.props.groupId);
@@ -157,18 +159,19 @@ class GroupVolunteerModal extends React.PureComponent<Props, State> {
                   <Modal.Title>Volunteer Application</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <FormGroup>
+              <Form>
+                <Form.Group>
                   {!_.isEmpty(this.props.positions) ? this._renderExistingPositionDropdown() : null}
                   {_.isEmpty(this.props.positions) || (this.state.existingPositionOption && (this.state.existingPositionOption.value === OtherRoleOption.value))
                     ? this._renderOtherRoleDropdown()
                     : null}
-                  <ControlLabel>How long do you expect to be able to contribute to this group?</ControlLabel>
+                  <Form.Label>How long do you expect to be able to contribute to this group?</Form.Label>
                   {this._renderVolunteerPeriodDropdown()}
-                  <ControlLabel>Message:</ControlLabel>
+                  <Form.Label>Message:</Form.Label>
                   <div className="character-count">
                     { (this.state.message || "").length} / 3000
                   </div>
-                  <FormControl componentClass="textarea"
+                  <Form.Control as="textarea"
                     placeholder="I'm interested in helping with this group because..."
                     rows="4"
                     cols="50"
@@ -176,7 +179,8 @@ class GroupVolunteerModal extends React.PureComponent<Props, State> {
                     maxLength="3000"
                     value={this.state.message}
                     onChange={this.handleChange}/>
-                </FormGroup>
+                  </Form.Group>
+                </Form>
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.closeModal.bind(this, false)}>{"Cancel"}</Button>
@@ -189,25 +193,25 @@ class GroupVolunteerModal extends React.PureComponent<Props, State> {
       </div>
     );
   }
-  
+
   _fieldsFilled(): boolean {
     return this._selectedTag() && this.state.daysToVolunteerForOption && this.state.message;
   }
-  
+
   _selectedExistingPositionTag(): ?string {
     return this.state.existingPositionOption && (this.state.existingPositionOption.value !== OtherRoleOption.value)
       ? this.state.existingPositionOption.value
       : null;
   }
-  
+
   _selectedOtherRoleTag(): ?string {
     return this.state.roleTag && this.state.roleTag.tag_name;
   }
-  
+
   _selectedTag(): ?string {
     return this._selectedExistingPositionTag() || this._selectedOtherRoleTag();
   }
-  
+
   _renderExistingPositionDropdown(): React$Node{
     return (
     <div className="form-group">
@@ -224,7 +228,7 @@ class GroupVolunteerModal extends React.PureComponent<Props, State> {
     </div>
     );
   }
-  
+
   _renderOtherRoleDropdown(): React$Node{
     return (
       <div className="form-group">
@@ -239,7 +243,7 @@ class GroupVolunteerModal extends React.PureComponent<Props, State> {
       </div>
     );
   }
-  
+
   _renderVolunteerPeriodDropdown(): React$Node{
     return <Select
       options={volunteerPeriodsInDays}
