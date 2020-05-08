@@ -131,11 +131,11 @@ class MainHeader extends React.Component<{||}, State > {
       </div>
     );
   }
-  
+
   getHeaderHeight(): number {
     return this.mainHeaderRef.current ? this.mainHeaderRef.current.clientHeight : 0;
   }
-  
+
   _onAlertHeaderUpdate() {
     this._handleHeightChange(this.getHeaderHeight());
   }
@@ -271,12 +271,13 @@ class MainHeader extends React.Component<{||}, State > {
                 </div>
               </a>
               <Divider />
-  
-              {window.EVENT_URL && <React.Fragment><a href={window.EVENT_URL}>
+
+              {window.`EVENT_URL` && <React.Fragment><a href={_.unescape(window.EVENT_URL)}>
                 <div className={'SubHeader-drawerDiv'} >
                   Event
                 </div>
               </a>
+              <Divider />
               </React.Fragment>}
 
               <a href={this.state.createProjectUrl}>
@@ -415,7 +416,7 @@ class MainHeader extends React.Component<{||}, State > {
         />
       );
   }
-  
+
   _showSectionInMainMenu(config: SectionLinkConfigEntry): boolean {
     // Don't show items that require login
     // Only show admin-only options if user is an admin
