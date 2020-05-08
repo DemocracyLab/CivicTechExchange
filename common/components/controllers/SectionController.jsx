@@ -100,12 +100,12 @@ class SectionController extends React.Component<{||}, State> {
         return <PressController />;
       case Section.ContactUs:
         return <ContactUsController />;
-      case Section.CreateGroup:
-        return <CreateGroupController />;
+      // case Section.CreateGroup:
+      //   return <CreateGroupController />;
       case Section.CreateEvent:
         return <CreateEventController />;
-      case Section.MyGroups:
-        return <MyGroupsController />;
+      // case Section.MyGroups:
+      //   return <MyGroupsController />;
       case Section.AboutEvent:
         return <AboutEventController/>;
       case Section.LiveEvent:

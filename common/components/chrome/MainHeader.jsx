@@ -51,7 +51,7 @@ class MainHeader extends React.Component<{||}, State > {
 
   static calculateState(prevState: State): State {
     const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
-    const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
+    const myGroups: MyGroupsAPIResponse = null; //TODO: MyGroupsStore.getMyGroups();
     return {
       showHeader: !url.argument("embedded"),
       activeSection: NavigationStore.getSection(),

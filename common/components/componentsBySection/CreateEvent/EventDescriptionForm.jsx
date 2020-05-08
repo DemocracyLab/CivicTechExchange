@@ -36,7 +36,6 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
     const event: EventData = props.project;
-    // TODO: Include qiqochat event link
     this.state = {
       formIsValid: false,
       formFields: {
