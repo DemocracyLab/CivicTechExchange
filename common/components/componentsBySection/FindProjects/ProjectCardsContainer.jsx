@@ -54,7 +54,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
 
   render(): React$Node {
     return (
-      <div className={`ProjectCardContainer col-12 ${this.props.fullWidth ? '' : 'col-md-9 col-xxl-10 p-0 m-0'}`}>        
+      <div className={`ProjectCardContainer col-12 ${this.props.fullWidth ? '' : 'col-md-9 col-xxl-10 p-0 m-0'}`}>
         <div className="container-fluid">
           {
             this.props.showSearchControls
@@ -89,27 +89,22 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   }
 
   _renderCards(): React$Node {
-    if (!this.state.projects) {
-      return <LoadingMessage message="Loading projects..." />;
+    return !this.state.projects
+      ? <LoadingMessage message="Loading projects..." />
+      : this.state.projects.size === 0
+        ? 'No projects match the provided criteria. Try a different set of filters or search term.'
+        : this.state.projects.map(
+          (project, index) =>
+            <div className="col-sm-12 col-lg-6">
+              <ProjectCard
+              project={project}
+              key={index}
+              textlen={140}
+              skillslen={4}
+              />
+            </div>
+      );
     }
-  
-    const filteredAlreadySelectedProjects = this.state.projects
-      .filter(project => !(this.props.alreadySelectedProjects || []).includes(project))
-    if (filteredAlreadySelectedProjects.length) {
-      return 'No projects match the provided criteria. Try a different set of filters or search term.'
-    }
-    return filteredAlreadySelectedProjects.map(
-      (project, index) =>
-        <ProjectCard
-          project={project}
-          isSelectable={this.props.selectableCards}
-          onProjectSelect={() => this.props.onSelectProject && this.props.onSelectProject(project)}
-          key={index}
-          textlen={140}
-          skillslen={4}
-        />
-    );
-  }
 
   _handleFetchNextPage(e: object): void {
     e.preventDefault();
