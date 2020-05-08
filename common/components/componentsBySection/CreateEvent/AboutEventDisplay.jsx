@@ -77,7 +77,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
               </div>
 
               {this.state.event.event_rsvp_url && this._renderRSVPButton()}
-              {!this.props.viewOnly && this._renderJoinLiveEventButton()}
+              {!this.props.viewOnly && window.EVENT_URL && this._renderJoinLiveEventButton()}
             </div>
           </div>
           <div className="col-xs-12 col-lg-8 AboutEvent-splash">
