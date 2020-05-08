@@ -1,7 +1,7 @@
 import json
 from common.helpers.collections import find_first
 from common.models.tags import Tag
-from dateutil.parser import parse
+from common.helpers.date_helpers import parse_front_end_datetime
 from distutils.util import strtobool
 
 def read_form_field_string(model, form, field_name, transformation=None):
@@ -17,7 +17,7 @@ def read_form_field_boolean(model, form, field_name):
 
 
 def read_form_field_datetime(model, form, field_name):
-    read_form_field_string(model, form, field_name, lambda str: parse(str, fuzzy=True))
+    read_form_field_string(model, form, field_name, lambda str: parse_front_end_datetime(str))
 
 
 def read_form_field_tags(model, form, field_name):
