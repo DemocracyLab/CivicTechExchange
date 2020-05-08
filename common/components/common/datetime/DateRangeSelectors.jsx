@@ -47,18 +47,27 @@ export class DateRangeSelectors extends React.PureComponent<Props, State> {
   }
  
   onChangeDateTime(start: string, end: string): void {
-    //TODO: If user entered start time after end time, reverse the two
-    this.setState({
-      dateTimeStart: start,
-      dateTimeEnd: end
-    });
-    
-    if(start !== this.state.dateTimeStart) {
-      this.props.onChangeTimeStart(start);
+    //If user entered start time after end time, reverse the two
+    let _start:string, _end:string;
+    if(start < end || !start || !end) {
+      _start = start;
+      _end = end;
+    } else {
+      _start = end;
+      _end = start;
     }
   
-    if(end !== this.state.dateTimeEnd) {
-      this.props.onChangeTimeEnd(end);
+    this.setState({
+      dateTimeStart: _start,
+      dateTimeEnd: _end
+    });
+    
+    if(_start !== this.state.dateTimeStart) {
+      this.props.onChangeTimeStart(_start);
+    }
+  
+    if(_end !== this.state.dateTimeEnd) {
+      this.props.onChangeTimeEnd(_end);
     }
   }
 

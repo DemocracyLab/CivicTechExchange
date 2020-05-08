@@ -27,7 +27,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
 import AlertHeader from "./AlertHeader.jsx";
 import MyProjectsStore, {MyProjectsAPIResponse} from "../stores/MyProjectsStore.js";
-import MyGroupsStore, {MyGroupsAPIResponse} from "../stores/MyGroupsStore.js";
+// import MyGroupsStore, {MyGroupsAPIResponse} from "../stores/MyGroupsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import _ from 'lodash'
 
@@ -51,12 +51,12 @@ class MainHeader extends React.Component<{||}, State > {
 
   static calculateState(prevState: State): State {
     const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
-    const myGroups: MyGroupsAPIResponse = null; //TODO: MyGroupsStore.getMyGroups();
+    // const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
     return {
       showHeader: !url.argument("embedded"),
       activeSection: NavigationStore.getSection(),
-      showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects)),
-      showMyGroups: myGroups && (!_.isEmpty(myGroups.owned_groups))
+      showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects))
+      // showMyGroups: myGroups && (!_.isEmpty(myGroups.owned_groups))
     };
   }
 
