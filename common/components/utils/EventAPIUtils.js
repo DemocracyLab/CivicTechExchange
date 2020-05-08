@@ -6,7 +6,7 @@ import type {FileInfo} from "../common/FileInfo.jsx";
 import type {TagDefinition} from "./ProjectAPIUtils.js";
 
 export type EventData = {|
-    id: string,
+    event_id: string,
     event_creator: string,
     event_date_start: Date,
     event_date_end: Date,

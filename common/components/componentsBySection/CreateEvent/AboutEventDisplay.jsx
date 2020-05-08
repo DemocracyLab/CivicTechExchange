@@ -52,6 +52,11 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
               {moment(event.event_date_start).format("MMMM Do YYYY")}
             </div>
             <h1>{event.event_name}</h1>
+            {
+              !this.props.viewOnly
+              && (CurrentUser.userID() === this.state.event.event_creator || CurrentUser.isStaff())
+              && this._renderEditButton()
+            }
           </div>
         </div>
 
@@ -95,6 +100,19 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     const timeZone: string = "PST";
     return moment(this.state.event.event_date_start).format(timeFormat) + " - " +
       moment(this.state.event.event_date_end).format(timeFormat) + " " + timeZone;
+  }
+  
+  _renderEditButton(): ?$React$Node {
+    return (
+      <Button
+        variant="primary"
+        className="AboutEvent-edit-btn"
+        type="button"
+        href={urlHelper.section(Section.CreateEvent, {id: this.state.event.event_id})}
+      >
+        Edit
+      </Button>
+    );
   }
 
   _renderRSVPButton(): ?$React$Node {
