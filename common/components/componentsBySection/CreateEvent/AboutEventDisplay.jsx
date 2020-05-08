@@ -74,7 +74,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
             </div>
           </div>
           <div className="col-xs-12 col-lg-8 AboutEvent-splash">
-              <img src={event.event_thumbnail.publicUrl} />
+              <img src={event.event_thumbnail && event.event_thumbnail.publicUrl} />
           </div>
         </div>
 
@@ -85,7 +85,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           <h3>What We Will Do</h3>
           <p>{event.event_agenda}</p>
         </div>
-        {this._renderProjectList()}
+        {!_.isEmpty(event.event_legacy_organization) && this._renderProjectList()}
       </div>
     )
   }
@@ -138,7 +138,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
   
   filterProjectsByOrgTag() {
     const event: EventData = this.state.event;
-    if (event && event.event_legacy_organization) {
+    if (event && !_.isEmpty(event.event_legacy_organization)) {
       ProjectSearchDispatcher.dispatch({
         type: 'INIT',
         findProjectsArgs: {

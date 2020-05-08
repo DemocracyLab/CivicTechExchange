@@ -32,7 +32,7 @@ class EventProjectSelectionForm extends React.PureComponent<Props,State> {
     super(props);
     const event: EventData = props.project;
     this.state = {
-      selectedProjects: event.event_projects.map(ProjectAPIUtils.projectFromAPIData),
+      selectedProjects: event.event_projects ? event.event_projects.map(ProjectAPIUtils.projectFromAPIData) : [],
       formIsValid: false,
       formFields: {
         selectedProjects: [],
