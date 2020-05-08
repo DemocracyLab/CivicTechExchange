@@ -1,8 +1,6 @@
 // @flow
 
 import React from "react";
-import CurrentUser from "../../components/utils/CurrentUser.js";
-import metrics from "../utils/metrics.js";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
 import EventOverviewForm from "../componentsBySection/CreateEvent/EventOverviewForm.jsx";
@@ -47,12 +45,12 @@ class CreateEventController extends React.PureComponent<{||},State> {
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: EventDescriptionForm
         }, {
-          header: "Projects",
-          subHeader: "Which projects are participating?",
-          onSubmit: this.onSubmit,
-          onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: EventProjectSelectionForm
-        }, {
+        //   header: "Projects",
+        //   subHeader: "Which projects are participating?",
+        //   onSubmit: this.onSubmit,
+        //   onSubmitSuccess: this.onNextPageSuccess,
+        //   formComponent: EventProjectSelectionForm
+        // }, {
           header: "Ready to publish your Event?",
           subHeader: "Congratulations!  You have successfully created a tech-for-good Event.",
           onSubmit: this.onSubmit,
@@ -67,12 +65,6 @@ class CreateEventController extends React.PureComponent<{||},State> {
     if(this.state.eventId) {
       EventAPIUtils.fetchEventDetails(this.state.eventId, this.loadEventDetails.bind(this), this.handleLoadEventError.bind(this));
     }
-    // if(CurrentUser.isLoggedIn() && CurrentUser.isEmailVerified()) {
-    //   // Only fire event on initial page when the Event is not yet created
-    //   if(!url.argument("id")) {
-    //     metrics.logEventClickCreate(CurrentUser.userID());
-    //   }
-    // }
   }
 
   updatePageUrl() {
@@ -82,7 +74,7 @@ class CreateEventController extends React.PureComponent<{||},State> {
     utils.navigateToTopOfPage();
   }
   
-  loadEventDetails(event: EventDetailsAPIData): void {
+  loadEventDetails(event: EventData): void {
     if(!EventAPIUtils.isOwner(event)) {
       // TODO: Handle someone other than owner
     } else {
@@ -99,14 +91,14 @@ class CreateEventController extends React.PureComponent<{||},State> {
     });
   }
   
-  onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (EventDetailsAPIData, () => void) => void): void {
+  onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (EventData, () => void) => void): void {
     const formSubmitUrl: string = this.state.event && this.state.event.event_id
       ? "/events/edit/" + this.state.event.event_id + "/"
       : "/events/create/";
     api.postForm(formSubmitUrl, formRef, onSubmitSuccess, response => null /* TODO: Report error to user */);
   }
   
-  onNextPageSuccess(event: EventDetailsAPIData): void {
+  onNextPageSuccess(event: EventData): void {
     this.setState({
       event: event,
       eventId: event.event_id
@@ -114,10 +106,8 @@ class CreateEventController extends React.PureComponent<{||},State> {
     this.updatePageUrl();
   }
   
-  onFinalSubmitSuccess(event: EventDetailsAPIData): void {
-    metrics.logEventCreated(CurrentUser.userID());
-    // TODO: Fix bug with switching to this section without page reload
-    window.location.href = url.section(Section.MyEvents, {EventAwaitingApproval: event.event_name});
+  onFinalSubmitSuccess(event: EventData): void {
+    window.location.href = url.section(Section.AboutEvent, {id: event.event_id});
   }
   
   render(): React$Node {
