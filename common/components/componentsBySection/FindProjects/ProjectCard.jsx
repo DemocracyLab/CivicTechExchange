@@ -12,52 +12,21 @@ import GlyphStyles from "../../utils/glyphs.js";
 
 type Props = {|
   +project: Project,
-  isSelectable?: boolean, // hovering over a card shows the select option it
-  onProjectSelect: ?Function,
 |};
 //fontawesome fixed width class
 const glyphFixedWidth = ' fa-fw'
 
-type State = {|
-  isHovered: boolean,
-|}
-
-class ProjectCard extends React.Component<Props, State> {
+class ProjectCard extends React.PureComponent<Props> {
   _cx: cx;
 
   constructor(): void {
     super();
-    this.state = {
-      isHovered: false,
-    };
     this._cx = new cx('ProjectCard-');
   }
 
   render(): React$Node {
     return (
-      <div
-        onMouseEnter={() => this.setState({ isHovered: true})} 
-        onMouseLeave={() => this.setState({ isHovered: false })}
-        className="col-12 col-lg-6"
-      >
-        <div className="ProjectCardRelative ProjectCard-root">
-          {this.props.isSelectable && this.state.isHovered && <div 
-          // { <div 
-
-            className="ProjectCardOverlay"
-          >
-            <div 
-              className="ProjectCardOverlayContainer"
-            >
-            </div>
-            <div
-              onClick={() => this.props.onProjectSelect && this.props.onProjectSelect(this.state.project)}
-              className="ProjectCardSelectButton"
-            >
-              Select
-            </div>
-          </div>
-          }
+        <div className="ProjectCard-root">
           <a href={url.section(Section.AboutProject, {id: this.props.project.id})}
             rel="noopener noreferrer">
             {this._renderLogo()}
@@ -67,10 +36,8 @@ class ProjectCard extends React.Component<Props, State> {
             {this._renderSkillsNeeded()}
           </a>
         </div>
-      </div>
     );
   }
-  
   _renderLogo(): React$Node {
     return (
       <div className="ProjectCard-logo">
