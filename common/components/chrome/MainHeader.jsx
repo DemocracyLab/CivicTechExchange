@@ -272,7 +272,7 @@ class MainHeader extends React.Component<{||}, State > {
               </a>
               <Divider />
 
-              {window.`EVENT_URL` && <React.Fragment><a href={_.unescape(window.EVENT_URL)}>
+              {window.EVENT_URL && <React.Fragment><a href={_.unescape(window.EVENT_URL)}>
                 <div className={'SubHeader-drawerDiv'} >
                   Event
                 </div>
