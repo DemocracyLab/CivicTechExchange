@@ -88,7 +88,7 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
             { (this.state.formFields.event_description || "").length} / 4000
           </div>
           <textarea className="form-control" id="event_description" name="event_description"
-                    placeholder="Describe the problem your project is solving..." rows="6" maxLength="4000"
+                    placeholder="Describe the Event" rows="6" maxLength="4000"
                     value={this.state.formFields.event_description} onChange={this.form.onInput.bind(this, "event_description")}>
           </textarea>
           *Required
@@ -102,7 +102,7 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
             { (this.state.formFields.event_agenda || "").length} / 4000
           </div>
           <textarea className="form-control" id="event_agenda" name="event_agenda"
-                    placeholder="Describe the solution you plan to build..." rows="6" maxLength="4000"
+                    placeholder="List the items on the Event's agenda" rows="6" maxLength="4000"
                     value={this.state.formFields.event_agenda} onChange={this.form.onInput.bind(this, "event_agenda")}></textarea>
         </div>
   
