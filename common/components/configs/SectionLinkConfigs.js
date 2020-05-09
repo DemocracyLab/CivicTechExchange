@@ -25,6 +25,11 @@ const SectionLinkConfigs: $ReadOnlyArray<SectionLinkConfigEntry> = [
     showAdminOnly: true
   },
   {
+    section: Section.CreateGroup,
+    title: 'Create Group',
+    showOnlyWhenLoggedIn: false
+  },
+  {
     section: Section.MyProjects,
     title: 'My Projects',
     showOnlyWhenLoggedIn: true

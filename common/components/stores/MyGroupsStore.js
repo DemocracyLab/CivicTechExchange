@@ -39,15 +39,14 @@ class State extends Record(DEFAULT_STATE) {
   isLoading: boolean;
 }
 
-// class MyGroupsStore extends ReduceStore<State> {
-class MyGroupsStore {
-  // constructor(): void {
-  //   super(UniversalDispatcher);
-  // }
-  //
-  // getInitialState(): State {
-  //   return new State();
-  // }
+class MyGroupsStore extends ReduceStore<State> {
+  constructor(): void {
+    super(UniversalDispatcher);
+  }
+
+  getInitialState(): State {
+    return new State();
+  }
 
   reduce(state: State, action: MyProjectsActionType): State {
     // TODO: See if we need to ensure no duplicate action names between stores that use UniversalDispatcher
@@ -78,9 +77,9 @@ class MyGroupsStore {
         // });
       }
     );
-    // xhr.open('GET', '/api/my_groups');
-    // xhr.send();
-    // return state.set('isLoading', true);
+    xhr.open('GET', '/api/my_groups');
+    xhr.send();
+    return state.set('isLoading', true);
   }
 
   getMyGroups(): ?MyGroupsAPIResponse {

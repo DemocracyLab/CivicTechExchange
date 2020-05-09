@@ -286,6 +286,13 @@ class MainHeader extends React.Component<{||}, State > {
                 </div>
               </a>
               <Divider />
+  
+              <a href={url.section(Section.CreateGroup)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Create Group
+                </div>
+              </a>
+              <Divider />
 
               <a href={url.section(Section.AboutUs)}>
                 <div className={'SubHeader-drawerDiv'} >
