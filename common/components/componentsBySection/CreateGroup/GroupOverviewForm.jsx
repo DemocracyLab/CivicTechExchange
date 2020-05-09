@@ -40,7 +40,7 @@ type State = {|
 class GroupOverviewForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
-    const group: GroupDetailsAPIData = props.group;
+    const group: GroupDetailsAPIData = props.project;
     const formFields: FormFields = {
       group_name: group ? group.group_name : "",
       group_location: group ? group.group_location : "",

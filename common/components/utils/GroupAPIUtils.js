@@ -7,6 +7,7 @@ import type {FileInfo} from '../common/FileInfo.jsx'
 
 export type GroupDetailsAPIData = {|
     id: string,
+    group_creator: string,
     group_name: string,
     group_location: string,
     group_description: string,
@@ -19,7 +20,7 @@ export type GroupDetailsAPIData = {|
 
 export default class GroupAPIUtils {
     static fetchGroupDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
-        fetch(new Request('/api/groups/' + id + '/', {credentials: 'include'}))
+        fetch(new Request('/api/group/' + id + '/', {credentials: 'include'}))
             .then(response => {
                 if(!response.ok) {
                     throw Error();
