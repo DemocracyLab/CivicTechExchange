@@ -9,6 +9,7 @@ import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
 import ProjectCardsContainer from '../FindProjects/ProjectCardsContainer.jsx';
 import { projectSelectionStoreSingleton } from '../../controllers/CreateGroupController.jsx';
+import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
 
 type FormFields = {|
   project_description: ?string,
@@ -32,7 +33,6 @@ type State = {|
 class GroupProjectSelectionForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
-    console.log('GroupProjectSelectionForm:ctor:props', props)
     const project: ProjectDetailsAPIData = props.project;
     this.state = {
       selectedProjects: [],
@@ -47,13 +47,20 @@ class GroupProjectSelectionForm extends React.PureComponent<Props,State> {
     this.addProjectToSelectedProjects = this.addProjectToSelectedProjects.bind(this);
   }
   
+  componentWillMount(): void {
+    ProjectSearchDispatcher.dispatch({
+      type: "INIT",
+      searchSettings: {
+        updateUrl: false
+      }});
+  }
+  
   componentDidMount() {
     // Initial validation check
     this.form.doValidation.bind(this)();
   }
 
   onSubmit(submitFunc: Function): void {
-    console.log('ON SUBMIT IN SELECTION');
     this.setState({}, submitFunc);
   }
 
@@ -75,7 +82,7 @@ class GroupProjectSelectionForm extends React.PureComponent<Props,State> {
     projectSelectionStoreSingleton.push(project);
     this.setState({
       selectedProjects: [...projectSelectionStoreSingleton],
-    })
+    });
     console.log(`addProjectToSelectedProjects`, [...projectSelectionStoreSingleton]);
     // if (this.state.selectedProjects.includes(project)) {
     //   return;
