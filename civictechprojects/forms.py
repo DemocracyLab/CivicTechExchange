@@ -175,8 +175,8 @@ class GroupCreationForm(ModelForm):
     @staticmethod
     def create_group(request):
 
-        if not request.user.is_staff:
-            raise PermissionDenied()
+        # if not request.user.is_staff:
+        #     raise PermissionDenied()
 
         form = GroupCreationForm(request.POST)
         # TODO: Form validation
