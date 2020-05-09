@@ -33,6 +33,7 @@ import CreateEventController from './CreateEventController.jsx';
 import MyGroupsController from './MyGroupsController.jsx';
 import LiveEventController from "./LiveEventController.jsx";
 import AboutEventController from "./AboutEventController.jsx";
+import AboutGroupController from "./AboutGroupController.jsx";
 
 type State = {|
   section: SectionType,
@@ -104,6 +105,8 @@ class SectionController extends React.Component<{||}, State> {
         return <CreateGroupController />;
       case Section.CreateEvent:
         return <CreateEventController />;
+      case Section.AboutGroup:
+        return <AboutGroupController/>;
       case Section.MyGroups:
         return <MyGroupsController />;
       case Section.AboutEvent:

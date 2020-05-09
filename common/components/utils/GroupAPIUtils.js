@@ -6,20 +6,22 @@ import type {FileInfo} from '../common/FileInfo.jsx'
 // import {PositionInfo} from "../forms/PositionInfo.jsx";
 
 export type GroupDetailsAPIData = {|
-    id: string,
+    group_id: string,
     group_creator: string,
     group_name: string,
     group_location: string,
     group_description: string,
     group_short_description: string,
-    // group_projects: $ReadOnlyArray<Project>,
-    // group_links: $ReadOnlyArray<LinkInfo>,
-    // group_files: $ReadOnlyArray<FileInfo>,
+    group_date_modified: string,
+    group_thumbnail: FileInfo,
+    group_projects: $ReadOnlyArray<Project>,
+    group_links: $ReadOnlyArray<LinkInfo>,
+    group_files: $ReadOnlyArray<FileInfo>,
 |};
 
 
 export default class GroupAPIUtils {
-    static fetchGroupDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
+    static fetchGroupDetails(id: number, callback: (GroupDetailsAPIData) => void, errCallback: (APIError) => void): void {
         fetch(new Request('/api/group/' + id + '/', {credentials: 'include'}))
             .then(response => {
                 if(!response.ok) {
