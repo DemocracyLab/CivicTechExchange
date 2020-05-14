@@ -68,7 +68,7 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
         errorMessage: "Please enter End Date"
       }
     ];
-  
+
     const formIsValid: boolean = FormValidation.isValid(formFields, validations);
     this.state = {
       formIsValid: formIsValid,
@@ -78,7 +78,7 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
     props.readyForSubmit(formIsValid);
     this.form = form.setup();
   }
-  
+
   componentDidMount() {
     // Initial validation check
     this.form.doValidation.bind(this)();
@@ -92,7 +92,7 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
   }
 
   render(): React$Node {
-    
+
     return (
       <div className="EditEventForm-root">
 
@@ -104,6 +104,7 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
                                   currentImage={this.state.formFields.event_thumbnail}
                                   onSelection={this.form.onSelection.bind(this, "event_thumbnail")}
           />
+          <p><em>For best results, event images should be approximately 2:1 aspect ratio</em></p>
         </div>
 
         <div className="form-group">
@@ -111,7 +112,7 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
           <input type="text" className="form-control" id="event_name" name="event_name" maxLength="60"
                  value={this.state.formFields.event_name} onChange={this.form.onInput.bind(this, "event_name")}/>
         </div>
-  
+
         <div className="form-group">
           <label>
             Location
@@ -123,7 +124,7 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
                     placeholder="Location for this Event" rows="3" maxLength="200"
                     value={this.state.formFields.event_location} onChange={this.form.onInput.bind(this, "event_location")}></textarea>
         </div>
-        
+
         <DateRangeSelectors
           dateTimeStart={this.state.formFields.event_date_start}
           dateTimeEnd={this.state.formFields.event_date_end}
@@ -131,13 +132,13 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
           onChangeTimeEnd={this.form.onSelection.bind(this, "event_date_end")}
           formIds={["event_date_start","event_date_end"]}
         />
-  
+
         <div className="form-group">
           <label htmlFor="event_rsvp_url">Eventbrite Link</label>
           <input type="text" className="form-control" id="event_rsvp_url" name="event_rsvp_url" maxLength="2075"
                  value={this.state.formFields.event_rsvp_url} onChange={this.form.onInput.bind(this, "event_rsvp_url")}/>
         </div>
-  
+
         <div className="form-group">
           <label>
             Short Description
