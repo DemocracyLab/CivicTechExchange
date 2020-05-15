@@ -10,7 +10,8 @@ type Props = {|
   onChangeTimeStart: (string) => null,
   onChangeTimeEnd: (string) => null,
   formLabels: ?$ReadOnlyArray<string>,
-  formIds: ?$ReadOnlyArray<string>
+  formIds: ?$ReadOnlyArray<string>,
+  enforceTimeOrder: ?boolean
 |};
 
 type State = {|
@@ -47,9 +48,9 @@ export class DateRangeSelectors extends React.PureComponent<Props, State> {
   }
  
   onChangeDateTime(start: string, end: string): void {
-    //If user entered start time after end time, reverse the two
+    //If user entered start time after end time, reverse the two (if option enabled)
     let _start:string, _end:string;
-    if(start < end || !start || !end) {
+    if(!this.props.enforceTimeOrder || !start || !end || start < end) {
       _start = start;
       _end = end;
     } else {

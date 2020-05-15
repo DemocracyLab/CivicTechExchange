@@ -66,6 +66,9 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
       }, {
         checkFunc: (formFields: FormFields) => !!(formFields["event_date_end"]),
         errorMessage: "Please enter End Date"
+      }, {
+        checkFunc: (formFields: FormFields) => formFields["event_date_end"] > formFields["event_date_start"],
+        errorMessage: "End Date should come after Start Date"
       }
     ];
 
