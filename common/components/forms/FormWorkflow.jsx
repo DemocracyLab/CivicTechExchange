@@ -2,6 +2,7 @@
 
 import React from "react";
 import Button from 'react-bootstrap/Button';
+import _ from 'lodash'
 
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import StepIndicatorBars from "../common/StepIndicatorBars.jsx";
@@ -32,6 +33,7 @@ type State<T> = {|
   navigateToStepUponDiscardConfirmation: number,
   savedEmblemVisible: boolean,
   clickedNext: boolean,
+  initialFormFields: T,
   currentFormFields: T,
   preSubmitProcessing: ?Function
 |};
@@ -50,6 +52,8 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
       savedEmblemVisible: false,
       clickedNext: false,
       showConfirmDiscardChanges: false,
+      initialFormFields: null,
+      currentFormFields: null,
       preSubmitProcessing: null
     };
     // TODO: Replace with Guard helper function
@@ -61,12 +65,10 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
       this.setState({
         navigateToStepUponDiscardConfirmation: step,
         showConfirmDiscardChanges: true,
-        savedEmblemVisible: false
       });
     } else {
       this.setState(Object.assign(this.resetPageState(), {
-        currentStep: step,
-        savedEmblemVisible: false
+        currentStep: step
       }), utils.navigateToTopOfPage);
       this.forceUpdate();
     }
@@ -76,7 +78,9 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
     let _state: State = state || this.state;
     return Object.assign(_state, {
       fieldsUpdated: false,
-      formIsValid: false
+      formIsValid: false,
+      initialFormFields: null, 
+      currentFormFields: null
     });
   }
 
@@ -90,11 +94,14 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
     }
   }
 
-  onFormUpdate(formFields: {||}) {
-    if (!this.state.clickedNext && !_.isEqual(this.state.currentFormFields, formFields)) {
-      this.setState({savedEmblemVisible: false});
-    }
-    this.setState({fieldsUpdated: true, currentFormFields: formFields});
+  onFormUpdate(formFields: {||}): void {
+    !this.state.initialFormFields ? 
+      this.setState({initialFormFields: _.cloneDeep(formFields), currentFormFields: formFields}, this.setFieldsUpdated()) : 
+      this.setState({currentFormFields: formFields}, this.setFieldsUpdated());
+  }
+
+  setFieldsUpdated(): void {
+    _.isEqual(this.state.initialFormFields, this.state.currentFormFields) ? this.setState({fieldsUpdated: false}) : this.setState({fieldsUpdated: true});
   }
 
   confirmDiscardChanges(confirmDiscard: boolean): void {
@@ -118,13 +125,27 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
     this.state.preSubmitProcessing ? this.state.preSubmitProcessing(submitFunc) : submitFunc();
   }
 
-  onSubmitSuccess(onStepSubmitSuccess: (T) => void, formFields: T) {
-    onStepSubmitSuccess(formFields);
-    this.setState(this.resetPageState({
-      clickedNext: false,
-      currentStep: this.state.currentStep + 1,
-      savedEmblemVisible: true
-    }));
+  onSubmitSuccess(onStepSubmitSuccess: (T) => void, formFields: T) {  
+    if (this.state.fieldsUpdated) {
+      this.setState(this.resetPageState({ savedEmblemVisible: true }));
+      setTimeout(() => {
+        onStepSubmitSuccess(formFields);
+        this.setState(this.resetPageState({
+          clickedNext: false,
+          currentStep: this.state.currentStep + 1,
+          fieldsUpdated: false,
+          savedEmblemVisible: false
+        }));
+      }, 500);
+    } else {
+      onStepSubmitSuccess(formFields);
+      this.setState(this.resetPageState({
+        clickedNext: false,
+        currentStep: this.state.currentStep + 1,
+        fieldsUpdated: false,
+        savedEmblemVisible: false
+      }));
+    }
   }
 
   render(): React$Node {
@@ -134,7 +155,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
       <React.Fragment>
         <ConfirmationModal
           showModal={this.state.showConfirmDiscardChanges}
-          message="You have unsaved changes on this form.  Do you want to discard these changes?"
+          message="You have unsaved changes on this form. Do you want to discard these changes? (To save your changes press Next on the form.)"
           onSelection={this.confirmDiscardChanges.bind(this)}
         />
 
