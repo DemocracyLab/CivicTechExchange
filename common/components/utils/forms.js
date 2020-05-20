@@ -29,6 +29,11 @@ class formHelper {
       this.forceUpdate();
       _onFormUpdate(this, formValues);
     };
+
+    const triggerOnFormUpdate = function() {
+      const formValues: T = _getFormValues(this);
+      _onFormUpdate(this, formValues);
+    };
   
     const onSelection = function<V>(formFieldName: string, value: V): void {
       const formValues: T = _getFormValues(this);
@@ -43,6 +48,7 @@ class formHelper {
     
     return {
       onInput: onInput,
+      triggerOnFormUpdate: triggerOnFormUpdate,
       onSelection: onSelection,
       doValidation: doValidation
     };

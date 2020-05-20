@@ -70,6 +70,7 @@ class LinkList extends React.PureComponent<Props,State>  {
 
     this.setState({showAddEditModal: false});
     this.updateLinkField();
+    this.props.onChange && this.props.onChange();
   }
 
   updateLinkField(): void {
@@ -96,6 +97,7 @@ class LinkList extends React.PureComponent<Props,State>  {
       showDeleteModal: false,
       linkToDelete: null
     })
+    this.props.onChange && this.props.onChange();
   }
 
   render(): React$Node {
