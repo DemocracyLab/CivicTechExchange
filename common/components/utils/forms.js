@@ -30,7 +30,7 @@ class formHelper {
       _onFormUpdate(this, formValues);
     };
 
-    const triggerOnFormUpdate = function() {
+    const onFormChange = function() {
       const formValues: T = _getFormValues(this);
       _onFormUpdate(this, formValues);
     };
@@ -48,7 +48,7 @@ class formHelper {
     
     return {
       onInput: onInput,
-      triggerOnFormUpdate: triggerOnFormUpdate,
+      onFormChange: onFormChange,
       onSelection: onSelection,
       doValidation: doValidation
     };

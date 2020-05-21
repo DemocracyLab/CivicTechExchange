@@ -40,8 +40,8 @@ class ProjectPositionsForm extends React.PureComponent<Props,State> {
     };
 
     this.form = formHelper.setup();
-    // to push initial field values, through onFormUpdate, because form has no inputs
-    this.form.triggerOnFormUpdate.call(this);
+    // to trigger initial getFormValues, doValidation triggers onFormUpdate
+     this.form.doValidation.bind(this)();
     // All fields optional
     props.readyForSubmit(true);
   }
@@ -53,7 +53,7 @@ class ProjectPositionsForm extends React.PureComponent<Props,State> {
         <DjangoCSRFToken/>
 
         <div className="form-group">
-          <PositionList elementid="project_positions" positions={this.state.formFields.project_positions} onChange={this.form.triggerOnFormUpdate.bind(this)}/>
+          <PositionList elementid="project_positions" positions={this.state.formFields.project_positions} onChange={this.form.onFormChange.bind(this)}/>
         </div>
       </div>
     );

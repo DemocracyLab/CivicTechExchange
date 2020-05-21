@@ -171,11 +171,11 @@ class ProjectResourcesForm extends React.PureComponent<Props,State> {
         </div>
 
         <div className="form-group">
-          <LinkList elementid="project_links" title="Project Links" links={this.state.formFields.project_links} onChange={this.form.triggerOnFormUpdate.bind(this)}/>
+          <LinkList elementid="project_links" title="Project Links" links={this.state.formFields.project_links} onChange={this.form.onFormChange.bind(this)}/>
         </div>
 
         <div className="form-group">
-          <FileUploadList elementid="project_files" title="Project Files" files={this.state.formFields.project_files} onChange={this.form.triggerOnFormUpdate.bind(this)}/>
+          <FileUploadList elementid="project_files" title="Project Files" files={this.state.formFields.project_files} onChange={this.form.onFormChange.bind(this)}/>
         </div>
 
         <FormValidation 
