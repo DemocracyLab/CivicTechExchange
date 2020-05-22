@@ -36,7 +36,7 @@ class SplashScreen extends React.PureComponent<Props> {
   }
 
   render(): React$Node {
-    const opacityValue = isNaN(this.props.opacity) ? 0.5 : this.props.opacity;
+    const opacityValue = _.isNumber(this.props.opacity) ? this.props.opacity : 0.5;
     const backgroundUrl: string = this.props.img ? cdn.image(this.props.img) : this._heroRandomizer();
     const cssClass = "SplashScreen-root SplashScreen-opacity-layer " + this.props.className
     return (
