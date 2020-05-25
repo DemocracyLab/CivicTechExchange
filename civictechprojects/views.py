@@ -4,6 +4,8 @@ from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.gis.geos import Point
+from django.contrib.gis.measure import D
 from django.template import loader
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -278,6 +280,9 @@ def projects_list(request):
         if 'location' in query_params:
             project_list = projects_by_location(project_list, query_params['location'][0])
 
+        if 'location_distance' in query_params:
+            project_list = projects_by_location_coords(project_list, query_params['location_distance'][0])
+
         project_list = project_list.distinct()
 
         if 'sortField' in query_params:
@@ -373,6 +378,14 @@ def projects_by_roles(tags):
 
     # Get the list of projects linked to those roles
     return Project.objects.filter(positions__in=positions)
+
+
+def projects_by_location_coords(project_list, param):
+    param_parts = param.split(',')
+    location = Point(float(param_parts[0]), float(param_parts[1]))
+    radius = float(param_parts[2])
+    project_list = project_list.filter(project_location_coords__distance_lte=(location, D(mi=radius)))
+    return project_list
 
 
 def projects_with_meta_data(projects, project_pages, project_count):

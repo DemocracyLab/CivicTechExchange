@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.contrib.gis.db.models import PointField
 from enum import Enum
 from democracylab.models import Contributor
 from common.models.tags import Tag
@@ -79,6 +80,7 @@ class Project(Archived):
     project_organization_type = TaggableManager(blank=True, through=TaggedOrganizationType)
     project_organization_type.remote_field.related_name = "+"
     project_location = models.CharField(max_length=200, blank=True)
+    project_location_coords = PointField(null=True, blank=True, srid=4326, default='')
     project_name = models.CharField(max_length=200)
     project_url = models.CharField(max_length=2083, blank=True)
     project_date_created = models.DateTimeField(null=True)
