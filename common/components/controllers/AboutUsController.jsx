@@ -4,7 +4,7 @@ import React from 'react';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData, TeamAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn, {Images} from '../utils/cdn.js';
-import SplashScreen from '../componentsBySection/FindProjects/SplashScreen.jsx';
+import SplashScreen, {HeroImage} from '../componentsBySection/FindProjects/SplashScreen.jsx';
 import Headers from "../common/Headers.jsx";
 import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
 import BioThumbnail from "../componentsBySection/AboutUs/BioThumbnail.jsx";
@@ -103,7 +103,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     const header: string = "Mission";
     const text: string = "Empower people who use technology to advance the public good.";
     return (
-      <SplashScreen className="about-us-mission about-us-content" header={header} text={text} img={"CodeForGood_072719_MSReactor-003.jpg"}>
+      <SplashScreen className="about-us-mission about-us-content" header={header} text={text} img={HeroImage.AboutMission}>
       </SplashScreen>
     )
   }

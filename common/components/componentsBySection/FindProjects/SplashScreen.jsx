@@ -20,13 +20,15 @@ type Props = {|
 export const HeroImage: { [key: string]: string } = {
   TopLanding: "CodeForGood_072719_MSReactor-064.jpg",
   MidLanding: "CodeForGood_072719_MSReactor-034.jpg",
-  BottomLanding: "CodeForGood_072719_MSReactor-003.jpg",
+  BottomLanding: "SplashImage-7178-1400.jpg",
+  AboutMission: "CodeForGood_072719_MSReactor-003.jpg",
 };
 
 const heroImages: $ReadOnlyArray<string> = [
   HeroImage.TopLanding,
   "CodeForGood_072719_MSReactor-074.jpg",
-  "CodeForGood_072719_MSReactor-020.jpg"
+  "CodeForGood_072719_MSReactor-020.jpg",
+  "SplashImage-7054-1400.jpg"
 ];
 
 class SplashScreen extends React.PureComponent<Props> {
