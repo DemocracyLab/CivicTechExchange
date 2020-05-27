@@ -37,7 +37,7 @@ class DonateController extends React.Component<{||}, State> {
       donateMonthly: null
     };
   }
-  
+
   componentDidMount() {
     prerender.ready();
   }
@@ -50,53 +50,47 @@ class DonateController extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="DonateController-root">
+      <div className="DonateController-root container">
         <Headers
           title="democracyLab | Donate"
           description="We too are a nonprofit, and your tax-deductible gift helps us connect good people with good causes."
         />
-        <div className="panel donate-image">
-          <img src={cdn.image(Images.DONATE_SPLASH)}></img>
-        </div>
-        <div className="panel">
-
-          <div className="DonateController-text">
-            <h1>
-              Donate and make a difference
-            </h1>
-            <p>
-              DemocracyLab is building online infrastructure to support the technology-for-good movement. Your donation will help us support the many projects and volunteers who use our platform to make our world a better place. DemocracyLab is a 501(c)(3) nonprofit organization, and your donation may be tax-deductible.
-            </p>
+        <div className="row ml-0 mr-0">
+          <div className="col-xs-12 col-md-6 DonateController-image">
+            <img src={cdn.image(Images.DONATE_SPLASH)}></img>
           </div>
-
-          <div className="DonateController-options">
-            <div className="DonateController-amounts">
-              <RadioButtons
-                variant="outline-dark"
-                options={DonationAmountOptions}
-                onSelection={this.handleFieldSelection.bind(this, "donateAmount")}
-              />
+          <div className="col-xs-12 col-md-6 DonateController-form-container">
+            <div className="DonateController-text">
+              <h1>Donate and make a difference</h1>
+              <p>DemocracyLab is building online infrastructure to support the technology-for-good movement. Your donation will help us support the many projects and volunteers who use our platform to make our world a better place. DemocracyLab is a 501(c)(3) nonprofit organization, and your donation may be tax-deductible.</p>
+            </div>
+            <div className="DonateController-options">
+              <div className="DonateController-amounts">
+                <RadioButtons
+                  variant="outline-dark"
+                  options={DonationAmountOptions}
+                  onSelection={this.handleFieldSelection.bind(this, "donateAmount")}
+                />
+              </div>
             </div>
 
-            {this.state.donateAmount !== OtherAmountSelected
-              ? < div className="DonateController-monthly">
-              <RadioButtons
-                variant="outline-dark"
-                options={DonationMonthlyOptions}
-                defaultSelection={DonationMonthlyOptions[0]}
-                onSelection={this.handleFieldSelection.bind(this, "donateMonthly")}
+              {this.state.donateAmount !== OtherAmountSelected
+                ? < div className="DonateController-monthly">
+                <RadioButtons
+                  variant="outline-dark"
+                  options={DonationMonthlyOptions}
+                  defaultSelection={DonationMonthlyOptions[0]}
+                  onSelection={this.handleFieldSelection.bind(this, "donateMonthly")}
+                />
+                </div>
+                : null
+              }
+              <PaypalDonationButton
+              donateAmount={this.state.donateAmount}
+              donateMonthly={this.state.donateMonthly}
               />
-              </div>
-              : null
-            }
           </div>
-
-          <PaypalDonationButton
-            donateAmount={this.state.donateAmount}
-            donateMonthly={this.state.donateMonthly}
-          />
         </div>
-
       </div>
     );
   }
