@@ -5,6 +5,7 @@ import {Container} from 'flux/utils';
 import type {TagDefinition} from '../../../utils/ProjectAPIUtils.js';
 import LocationAutocomplete from "../../../common/location/LocationAutocomplete.jsx";
 import type {LocationInfo} from "../../../common/location/LocationInfo";
+import LocationSearchSection from "./LocationSearchSection.jsx";
 import ProjectAPIUtils from '../../../utils/ProjectAPIUtils.js';
 import ProjectSearchStore from "../../../stores/ProjectSearchStore.js";
 import ProjectSearchDispatcher from "../../../stores/ProjectSearchDispatcher.js";
@@ -73,17 +74,13 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     };
   }
 
-  onLocationSelect(locationInfo: LocationInfo): void {
-    //TODO
-    console.log(locationInfo);
-  }
-
   render(): React$Node {
     //should render a number of <RenderFilterCategory> child components
+    
     return (
       <div>
         { this.state.sortedTags ? this._renderFilterCategories() : null }
-        <LocationAutocomplete onSelect={this.onLocationSelect.bind(this)}/>
+        <LocationSearchSection/>
       </div>
     );
   }

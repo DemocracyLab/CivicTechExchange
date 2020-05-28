@@ -283,9 +283,6 @@ def projects_list(request):
         if 'location' in query_params:
             project_list = projects_by_location(project_list, query_params['location'][0])
 
-        if 'location_distance' in query_params:
-            project_list = projects_by_location_coords(project_list, query_params['location_distance'][0])
-
         project_list = project_list.distinct()
 
         if 'sortField' in query_params:
@@ -351,8 +348,12 @@ def projects_by_sortField(project_list, sortField):
     return project_list.order_by(sortField)
 
 
-def projects_by_location(project_list, location):
-    return project_list.filter(Q(project_location__icontains=location))
+def projects_by_location(project_list, param):
+    param_parts = param.split(',')
+    location = Point(float(param_parts[0]), float(param_parts[1]))
+    radius = float(param_parts[2])
+    project_list = project_list.filter(project_location_coords__distance_lte=(location, D(mi=radius)))
+    return project_list
 
 
 def projects_by_issue_areas(tags):
@@ -381,14 +382,6 @@ def projects_by_roles(tags):
 
     # Get the list of projects linked to those roles
     return Project.objects.filter(positions__in=positions)
-
-
-def projects_by_location_coords(project_list, param):
-    param_parts = param.split(',')
-    location = Point(float(param_parts[0]), float(param_parts[1]))
-    radius = float(param_parts[2])
-    project_list = project_list.filter(project_location_coords__distance_lte=(location, D(mi=radius)))
-    return project_list
 
 
 def projects_with_meta_data(projects, project_pages, project_count):
