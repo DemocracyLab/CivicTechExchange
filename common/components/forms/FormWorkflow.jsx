@@ -126,18 +126,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
   }
 
   onSubmitSuccess(onStepSubmitSuccess: (T) => void, formFields: T) {  
-    if (this.state.fieldsUpdated) {
-      this.setState(this.resetPageState({ savedEmblemVisible: true }));
-      setTimeout(() => {
-        onStepSubmitSuccess(formFields);
-        this.setState(this.resetPageState({
-          clickedNext: false,
-          currentStep: this.state.currentStep + 1,
-          fieldsUpdated: false,
-          savedEmblemVisible: false
-        }));
-      }, 500);
-    } else {
+    function submitSuccess()  {
       onStepSubmitSuccess(formFields);
       this.setState(this.resetPageState({
         clickedNext: false,
@@ -145,6 +134,14 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
         fieldsUpdated: false,
         savedEmblemVisible: false
       }));
+    }
+    if (this.state.fieldsUpdated) {
+      this.setState(this.resetPageState({ savedEmblemVisible: true }));
+      setTimeout(() => {
+        submitSuccess.call(this);
+      }, 500);
+    } else {
+      submitSuccess.call(this);
     }
   }
 
