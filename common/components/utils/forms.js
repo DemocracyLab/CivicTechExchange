@@ -31,8 +31,7 @@ class formHelper {
     };
 
     const onFormChange = function() {
-      const formValues: T = _getFormValues(this);
-      _onFormUpdate(this, formValues);
+      _onFormUpdate(this, _getFormValues(this));
     };
   
     const onSelection = function<V>(formFieldName: string, value: V): void {

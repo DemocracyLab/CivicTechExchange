@@ -40,10 +40,12 @@ class ProjectPositionsForm extends React.PureComponent<Props,State> {
     };
 
     this.form = formHelper.setup();
-    // to trigger initial getFormValues, doValidation triggers onFormUpdate
-     this.form.doValidation.bind(this)();
     // All fields optional
     props.readyForSubmit(true);
+  }
+
+  componentDidMount() {
+    this.form.doValidation.bind(this)();
   }
 
   render(): React$Node {
