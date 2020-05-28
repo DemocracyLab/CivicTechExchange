@@ -254,6 +254,8 @@ GR_SECRETKEY = os.environ.get('GOOGLE_RECAPTCHA_SECRET_KEY', '')
 
 STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
 
+HERE_CONFIG = os.environ.get('HERE_CONFIG', '')
+
 ENVIRONMENT_VARIABLE_WARNINGS = {
     'PRESS_LINKS': {
         'error': True,

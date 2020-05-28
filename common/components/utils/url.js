@@ -26,6 +26,7 @@ class urlHelper {
   }
   
   static section(section: string, args: ?Object): string {
+    // TODO: Implement with argsString
     let sectionUrl = "?section=" + section;
     if(args) {
       sectionUrl += _.reduce(args, function(argsString, value, key) {
@@ -123,6 +124,13 @@ class urlHelper {
       url = "http://" + url;
     }
     return url;
+  }
+  
+  static argsString(args: Dictionary<string>, startArgs: string): string {
+    return _.reduce(args, function(argsString, value, key) {
+      const prefix: string = !_.isEmpty(argsString) ? "&" : "?";
+      return `${argsString}${prefix}${key}=${value}`;
+    }, startArgs || "");
   }
   
   static beautify(url: string): string {

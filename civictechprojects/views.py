@@ -210,6 +210,9 @@ def index(request):
     if hasattr(settings, 'SOCIAL_APPS_VISIBILITY'):
         context['SOCIAL_APPS_VISIBILITY'] = json.dumps(settings.SOCIAL_APPS_VISIBILITY)
 
+    if hasattr(settings, 'HERE_CONFIG'):
+        context['HERE_CONFIG'] = settings.HERE_CONFIG
+
     if request.user.is_authenticated():
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
