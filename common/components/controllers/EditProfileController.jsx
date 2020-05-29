@@ -5,6 +5,7 @@ import DjangoCSRFToken from 'django-react-csrftoken'
 import UserAPIUtils from "../utils/UserAPIUtils.js";
 import type {UserAPIData} from "../utils/UserAPIUtils.js";
 import {CountrySelector, defaultCountryCode} from "../common/selection/CountrySelector.jsx";
+import {CountryData} from "../constants/Countries.js";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import TagSelector from "../common/tags/TagSelector.jsx";
 import LinkList from "../forms/LinkList.jsx";
@@ -125,9 +126,9 @@ class EditProfileController extends React.PureComponent<{||},State> {
     this.state.formFields[formFieldName] = value;
   }
 
-  handleCountrySelection(selectedValue: string): void {
+  handleCountrySelection(selectedValue: CountryData): void {
     let formFields: FormFields = this.state.formFields;
-    formFields.country = selectedValue;
+    formFields.country = selectedValue.ISO_2;
     this.setState({formFields: formFields}, function() {
       this.forceUpdate();
     });

@@ -23,6 +23,7 @@ type Props<T> = {|
   options: $ReadOnlyArray<T>,
   selected: T,
   labelGenerator: (T) => string,
+  valueStringGenerator: (T) => string,
   onSelection: (T) => void
 |} & SelectorFlags;
 
@@ -38,8 +39,9 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
     super();
     
     const labelGenerator: (T) => string = props.labelGenerator || _.toString;
+    const valueStringGenerator: (T) => string = props.valueStringGenerator || labelGenerator;
     const optionIndex: Dictionary<T> = createDictionary(props.options, labelGenerator);
-    const selectOptions: $ReadOnlyArray<SelectOption> = Object.keys(optionIndex).map(key => ({"value": key, "label": key}));
+    const selectOptions: $ReadOnlyArray<SelectOption> = props.options.map(key => ({"value": valueStringGenerator(key), "label": labelGenerator(key)}));
     const selected: SelectOption = this.findOption(selectOptions, labelGenerator(props.selected));
     this.state = {
       labelGenerator: labelGenerator,
