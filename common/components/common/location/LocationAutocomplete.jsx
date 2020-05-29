@@ -8,6 +8,7 @@ import type {SelectOption} from "../../types/SelectOption.jsx";
 import {getLocationInfoFromGeocodeResponse, LocationInfo} from "./LocationInfo.js";
 
 type Props = {|
+  countryCode: ?string,
   onSelect: (LocationInfo) => null
 |};
 
@@ -37,7 +38,7 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
   updateAutocompleteOptions(inputValue: string): void {
     if(inputValue && inputValue.length > 1) {
       this.setState({isLoading: true}, () => {
-        hereApi.autocompleteRequest({query: inputValue}, (response: HereAutocompleteResponse) => {
+        hereApi.autocompleteRequest({query: inputValue, country: this.props.countryCode}, (response: HereAutocompleteResponse) => {
           this.setState({isLoading: false, suggestions: this.getAutocompleteOptions(response)});
         });
       });
@@ -78,6 +79,7 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
     this.setState({geocodeResponse: response}, () => this.props.onSelect(locationInfo));
   }
 
+  // TODO: Replace with Selector component
   render(): ?React$Node {
     return hereApi.isConfigured()
     ? (
@@ -88,6 +90,7 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
         // value={this.state.selectedCountry}
         onInputChange={this.onInputChange.bind(this)}
         onChange={this.onOptionSelect.bind(this)}
+        isDisabled={!this.props.countryCode}
         simpleValue={false}
         clearable={false}
         multi={false}

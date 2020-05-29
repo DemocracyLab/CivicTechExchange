@@ -1,6 +1,12 @@
 // @flow
+import type {Dictionary} from "../types/Generics";
 
 export type CountryCodeFormat = "ISO_2" | "ISO_3";
+
+export const CountryCodeFormats: Dictionary<CountryCodeFormat> = {
+  ISO_2: "ISO_2",
+  ISO_3: "ISO_3"
+};
 
 export type CountryData = {|
   displayName: string,

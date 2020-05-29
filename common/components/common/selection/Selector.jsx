@@ -42,7 +42,7 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
     const valueStringGenerator: (T) => string = props.valueStringGenerator || labelGenerator;
     const optionIndex: Dictionary<T> = createDictionary(props.options, labelGenerator);
     const selectOptions: $ReadOnlyArray<SelectOption> = props.options.map(key => ({"value": valueStringGenerator(key), "label": labelGenerator(key)}));
-    const selected: SelectOption = this.findOption(selectOptions, labelGenerator(props.selected));
+    const selected: SelectOption = props.selected && this.findOption(selectOptions, labelGenerator(props.selected));
     this.state = {
       labelGenerator: labelGenerator,
       selected: selected,

@@ -2,12 +2,11 @@
 
 import React from 'react';
 import Selector from "./Selector.jsx";
-import {CountryList, CountryData, CountryCodeFormat} from "../../constants/Countries.js";
-
+import {CountryList, CountryData, CountryCodeFormat, CountryCodeFormats} from "../../constants/Countries.js";
 
 
 type Props = {|
-  countryCode: string,
+  countryCode: ?string,
   countryCodeFormat: CountryCodeFormat,
   onSelection: (CountryData) => void
 |};
@@ -17,12 +16,11 @@ type State = {|
   countryCodeFormat: CountryCodeFormat
 |};
 
-export const defaultCountryCode = "US";
 
 export class CountrySelector extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
-    const countryCodeFormat: string = props.countryCodeFormat || "ISO_2";
+    const countryCodeFormat: string = props.countryCodeFormat || CountryCodeFormats.ISO_2;
     this.state = {
       selectedCountry: this.getSelectedCountry(props.countryCode, countryCodeFormat),
       countryCodeFormat: countryCodeFormat
@@ -30,9 +28,14 @@ export class CountrySelector extends React.PureComponent<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Props): void {
-    this.setState({selectedCountry: this.getSelectedCountry(nextProps.countryCode, nextProps.countryCodeFormat || this.state.countryCodeFormat)}, function() {
-      this.forceUpdate();
-    });
+    if(nextProps.countryCode) {
+      const nextCountry: CountryData = this.getSelectedCountry(nextProps.countryCode, nextProps.countryCodeFormat || this.state.countryCodeFormat);
+      if(nextCountry !== this.state.selectedCountry) {
+        this.setState({selectedCountry: nextCountry}, function () {
+          this.forceUpdate();
+        });
+      }
+    }
   }
   
   getSelectedCountry(selectedCountryCode: string, countryCodeFormat: string): CountryData {
@@ -40,7 +43,7 @@ export class CountrySelector extends React.PureComponent<Props, State> {
   }
 
   handleSelection(selection: CountryData) {
-    this.props.onSelection(selection);
+    this.setState({selectedCountry: selection}, () => this.props.onSelection(selection));
   }
   
   render(): React$Node {

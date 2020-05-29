@@ -7,8 +7,12 @@ import ProjectSearchDispatcher from "../../../stores/ProjectSearchDispatcher.js"
 import LocationAutocomplete from "../../../common/location/LocationAutocomplete.jsx";
 import type {LocationInfo} from "../../../common/location/LocationInfo";
 import Selector from "../../../common/selection/Selector.jsx";
+import {CountrySelector} from "../../../common/selection/CountrySelector.jsx";
+import {CountryCodeFormats} from "../../../constants/Countries";
+import type {CountryData} from "../../../constants/Countries";
 
 type State = {|
+  countryCode: string,
   location: LocationRadius,
   locationInfo: LocationInfo,
   searchRadius: number
@@ -48,6 +52,12 @@ class LocationSearchSection extends React.Component<{||}, State> {
     }
   }
   
+  onCountrySelect(country: CountryData): void {
+    if(this.state.countryCode !== country.ISO_3) {
+      this.setState({countryCode: country.ISO_3});
+    }
+  }
+  
   onLocationSelect(locationInfo: LocationInfo): void {
     if(!this.state.locationInfo || this.state.locationInfo !== locationInfo.location_id ) {
       this.setState({locationInfo: locationInfo}, this.updateLocationState);
@@ -63,8 +73,19 @@ class LocationSearchSection extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <React.Fragment>
+        
+        <label>Country(Required)</label>
+        <CountrySelector
+          countryCodeFormat={CountryCodeFormats.ISO_3}
+          onSelection={this.onCountrySelect.bind(this)}
+        />
+        
         <label>Near</label>
-        <LocationAutocomplete onSelect={this.onLocationSelect.bind(this)}/>
+        <LocationAutocomplete
+          countryCode={this.state.countryCode}
+          onSelect={this.onLocationSelect.bind(this)}
+        />
+        
         <label>Distance</label>
         <Selector
           id="radius"
