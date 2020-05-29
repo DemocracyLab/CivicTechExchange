@@ -404,4 +404,14 @@ BOARD_OF_DIRECTORS = os.environ.get('BOARD_OF_DIRECTORS', '')
 
 FAVICON_PATH = os.environ.get('FAVICON_PATH', 'https://d1agxr2dqkgkuy.cloudfront.net/img/favicon.png')
 
+TEST_IFRAME_URL = os.environ.get('TEST_IFRAME_URL', 'about:blank')
+
+QIQO_IFRAME_URL = os.environ.get('QIQO_IFRAME_URL', 'https://qiqochat.com/api/v1/iframe?&source[api_key]={api_key}&source_user_uuid={source_user_uuid}&qiqo_user_uuid={qiqo_user_uuid}&return_to="/breakout/2/HqWdBUwtmmzLsfPvyEXwmiRZw?embedded=true"')
+QIQO_USERS_ENDPOINT = os.environ.get('QIQO_USERS_ENDPOINT', 'https://api.qiqochat.com/api/v1/users')
+QIQO_API_KEY = os.environ.get('QIQO_API_KEY', 'democracylab')
+QIQO_API_SECRET = os.environ.get('QIQO_API_SECRET', 'SECRET')
+QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
+
 BLOG_URL = os.environ.get('BLOG_URL', '')
+
+EVENT_URL = os.environ.get('EVENT_URL', '')

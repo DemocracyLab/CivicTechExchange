@@ -48,7 +48,7 @@ class apiHelper {
         if(!response.ok) {
           throw Error();
         }
-        return response.json();
+        return response.statusText !== 'No Content' ? response.json() : {};
       })
       .then(responsePayload => successCallback && successCallback(responsePayload))
       .catch(response => doError(response));
