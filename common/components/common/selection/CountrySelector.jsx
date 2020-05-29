@@ -6,6 +6,7 @@ import {CountryList, CountryData, CountryCodeFormat, CountryCodeFormats} from ".
 
 
 type Props = {|
+  id: ?string,
   countryCode: ?string,
   countryCodeFormat: CountryCodeFormat,
   onSelection: (CountryData) => void
@@ -49,7 +50,7 @@ export class CountrySelector extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <Selector
-        id="country"
+        id={this.props.id || "country"}
         isSearchable={true}
         isClearable={true}
         isMultiSelect={false}
