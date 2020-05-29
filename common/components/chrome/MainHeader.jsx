@@ -9,7 +9,6 @@ import cx from '../utils/cx';
 import CurrentUser from '../utils/CurrentUser.js';
 import NavigationLinks, {NavigationLink} from "../utils/NavigationLinks.js";
 import NavigationStore from '../stores/NavigationStore.js'
-import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
@@ -405,7 +404,39 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderSectionLinks(): React$Node {
-    const SectionsToShow = SectionLinkConfigs.filter(this._showSectionInMainMenu);
+    const SectionsToShow = [
+          {
+            section: Section.FindProjects,
+            title: 'Find Projects',
+            showOnlyWhenLoggedIn: false
+          },
+          {
+            section: Section.CreateProject,
+            title: 'Create Project',
+            showOnlyWhenLoggedIn: false
+          },
+          {
+            section: Section.MyProjects,
+            title: 'My Projects',
+            showOnlyWhenLoggedIn: true
+          },
+          {
+            section: Section.EditProfile,
+            title: 'My Profile',
+            showOnlyWhenLoggedIn: true
+          },
+          {
+            section: Section.AboutUs,
+            title: 'About Us',
+            showOnlyWhenLoggedIn: false
+          },
+          {
+            section: Section.Press,
+            title: 'News',
+            showOnlyWhenLoggedIn: false
+          }
+        ]
+      .filter(config => !config.showOnlyWhenLoggedIn);
     return SectionsToShow
       .map(config =>
         <SectionLink
