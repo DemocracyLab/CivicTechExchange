@@ -69,6 +69,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
       showDeleteModal: false,
       fileToDelete: null
     })
+    this.props.onChange && this.props.onChange();
   }
 
   handleFileSelection(fileUploadData: FileUploadData): void {
@@ -76,6 +77,7 @@ class FileUploadList extends React.PureComponent<Props,State>  {
     this.state.files.push(fileInfo);
     this.updateHiddenField();
     this.forceUpdate();
+    this.props.onChange && this.props.onChange();
   }
 
   render(): React$Node {
