@@ -285,6 +285,14 @@ class MainHeader extends React.Component<{||}, State > {
                 </div>
               </a>
               <Divider />
+  
+              { CurrentUser.isStaff() && <React.Fragment><a href={url.section(Section.CreateEvent)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Create Event
+                </div>
+              </a>
+              <Divider />
+              </React.Fragment>}
 
               <a href={url.section(Section.AboutUs)}>
                 <div className={'SubHeader-drawerDiv'} >
@@ -416,6 +424,12 @@ class MainHeader extends React.Component<{||}, State > {
             showOnlyWhenLoggedIn: false
           },
           {
+            section: Section.CreateEvent,
+            title: 'Create Event',
+            showOnlyWhenLoggedIn: true,
+            showAdminOnly: true
+          },
+          {
             section: Section.MyProjects,
             title: 'My Projects',
             showOnlyWhenLoggedIn: true
@@ -436,7 +450,8 @@ class MainHeader extends React.Component<{||}, State > {
             showOnlyWhenLoggedIn: false
           }
         ]
-      .filter(config => !config.showOnlyWhenLoggedIn);
+      .filter(config => (!config.showOnlyWhenLoggedIn || CurrentUser.isLoggedIn()) && (!config.showAdminOnly || CurrentUser.isStaff()));
+    
     return SectionsToShow
       .map(config =>
         <SectionLink
