@@ -430,16 +430,6 @@ class MainHeader extends React.Component<{||}, State > {
             showAdminOnly: true
           },
           {
-            section: Section.MyProjects,
-            title: 'My Projects',
-            showOnlyWhenLoggedIn: true
-          },
-          {
-            section: Section.EditProfile,
-            title: 'My Profile',
-            showOnlyWhenLoggedIn: true
-          },
-          {
             section: Section.AboutUs,
             title: 'About Us',
             showOnlyWhenLoggedIn: false
