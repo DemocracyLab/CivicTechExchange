@@ -42,7 +42,9 @@
   margin: 5px; /* override this on desktop */
 }
 .LandingController-root .SplashScreen-content {
-  margin: auto;
+  padding-bottom: 2rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 .LandingController-topsplash .SplashScreen-content h1 {
   font-size: 4rem;
