@@ -9,6 +9,7 @@ import Moment from 'react-moment';
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js"
 import GlyphStyles from "../../utils/glyphs.js";
+import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 
 type Props = {|
   +project: Project,
@@ -87,7 +88,7 @@ class ProjectCard extends React.PureComponent<Props> {
         {this.props.project.location &&
           <li>
             <i className={GlyphStyles.MapMarker + glyphFixedWidth}></i>
-            {this.props.project.location}
+            {ProjectAPIUtils.getLocationDisplayName(this.props.project)}
           </li>
         }
         {this.props.project.url &&

@@ -2,6 +2,7 @@
 import type {HereGeocodeResponse, HereGeocodeResponseAddress, HereGeocodeResponseLocation} from "../../utils/hereApi.js";
 import _ from "lodash";
 
+// TODO: Add data we want to store in database
 export type LocationInfo = {|
   latitude: number,
   longitude: number,

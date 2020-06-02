@@ -1,3 +1,4 @@
+// TODO: Delete?
 export const Locations = {
   OTHER: "Other",
   PRESET_LOCATIONS: [

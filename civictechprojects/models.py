@@ -81,6 +81,9 @@ class Project(Archived):
     project_organization_type.remote_field.related_name = "+"
     project_location = models.CharField(max_length=200, blank=True)
     project_location_coords = PointField(null=True, blank=True, srid=4326, default='')
+    project_country = models.CharField(max_length=100, blank=True)
+    project_state = models.CharField(max_length=100, blank=True)
+    project_city = models.CharField(max_length=100, blank=True)
     project_name = models.CharField(max_length=200)
     project_url = models.CharField(max_length=2083, blank=True)
     project_date_created = models.DateTimeField(null=True)
@@ -110,7 +113,8 @@ class Project(Archived):
         positions = ProjectPosition.objects.filter(position_project=self.id)
         volunteers = VolunteerRelation.objects.filter(project=self.id)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
-
+        # TODO: Don't return location id
+        # TODO: Reduce country down to 2-char code
         project = {
             'project_id': self.id,
             'project_name': self.project_name,
@@ -123,6 +127,9 @@ class Project(Archived):
             'project_short_description': self.project_short_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
+            'project_country': self.project_country,
+            'project_state': self.project_state,
+            'project_city': self.project_city,
             'project_organization': Tag.hydrate_to_json(self.id, list(self.project_organization.all().values())),
             'project_organization_type': Tag.hydrate_to_json(self.id, list(self.project_organization_type.all().values())),
             'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
@@ -154,6 +161,9 @@ class Project(Archived):
             'project_description': self.project_short_description if self.project_short_description else self.project_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
+            'project_country': self.project_country,
+            'project_state': self.project_state,
+            'project_city': self.project_city,
             'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
             'project_stage': Tag.hydrate_to_json(self.id, list(self.project_stage.all().values())),
             'project_positions': list(map(lambda position: position.to_json(), positions)),

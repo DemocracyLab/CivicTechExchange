@@ -271,3 +271,5 @@ export const CountryList: $ReadOnlyArray<CountryData> = [
   {displayName: "Zambia", ISO_2: "ZM", ISO_3: "ZMB"},
   {displayName: "Zimbabwe", ISO_2: "ZW", ISO_3: "ZWE"}
 ];
+
+export const DefaultCountry: CountryData = countryByCode("USA");
