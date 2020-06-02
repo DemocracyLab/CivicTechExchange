@@ -1,6 +1,7 @@
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 from common.helpers.mailing_list import SubscribeToMailingList
+from common.helpers.qiqo_chat import SubscribeUserToQiqoChat
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
@@ -61,6 +62,9 @@ def signup(request):
             if subscribe_checked:
                 SubscribeToMailingList(email=contributor.email, first_name=contributor.first_name,
                                        last_name=contributor.last_name)
+
+            SubscribeUserToQiqoChat(contributor)
+
             return redirect(section_url(FrontEndSection.SignedUp))
         else:
             errors = json.loads(form.errors.as_json())

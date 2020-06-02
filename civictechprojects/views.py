@@ -8,19 +8,21 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 from django.template import loader
 from django.utils import timezone
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
 from .helpers.projects import projects_tag_counts
 from .sitemaps import SitemapPages
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
-from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner
-from .forms import ProjectCreationForm
+from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff
+from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm
+from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 from common.helpers.constants import FrontEndSection
@@ -32,6 +34,7 @@ from common.helpers.caching import update_cached_project_url
 from distutils.util import strtobool
 from django.views.decorators.cache import cache_page
 import requests
+
 
 
 # TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
@@ -90,6 +93,186 @@ def to_rows(items, width):
 def to_tag_map(tags):
     tag_map = ((tag.tag_name, tag.display_name) for tag in tags)
     return list(tag_map)
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def group_create(request):
+    if not request.user.is_authenticated():
+        return redirect(section_url(FrontEndSection.LogIn))
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        # TODO: Log this
+        return HttpResponse(status=403)
+
+    group = GroupCreationForm.create_group(request)
+    return JsonResponse(group.hydrate_to_json())
+
+
+def group_edit(request, group_id):
+    if not request.user.is_authenticated():
+        return redirect('/signup')
+
+    group = None
+    try:
+        group = GroupCreationForm.edit_group(request, group_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+
+    if request.is_ajax():
+        return JsonResponse(group.hydrate_to_json())
+    else:
+        return redirect('/index/?section=AboutGroup&id=' + group_id)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def group_delete(request, group_id):
+    # if not logged in, send user to login page
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+    try:
+        GroupCreationForm.delete_group(request, group_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return HttpResponse(status=204)
+
+
+def get_group(request, group_id):
+    group = Group.objects.get(id=group_id)
+
+    if group is not None:
+        if group.is_searchable or is_creator_or_staff(get_request_contributor(request), group):
+            return JsonResponse(group.hydrate_to_json())
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
+@csrf_exempt
+def group_add_project(request, group_id):
+    body = json.loads(request.body)
+    group = Group.objects.get(id=group_id)
+
+    if group is not None and body["project_ids"] is not None:
+        if not is_creator_or_staff(get_request_contributor(request), group):
+            return HttpResponseForbidden()
+
+        projects = Project.objects.filter(id__in=body["project_ids"])
+
+        for project in projects:
+            ProjectRelationship.create(group, project)
+
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
+def group_delete_project(request, group_id):
+    body = json.loads(request.body)
+    group = Group.objects.get(id=group_id)
+    project = Project.objects.get(id=body["project_id"])
+
+    if group is not None and project is not None:
+        if is_creator_or_staff(get_request_contributor(request), group):
+            relationship = ProjectRelationship.objects.get(relationship_project=project.id, relationship_group=group.id)
+
+            if relationship is not None:
+                relationship.delete()
+                return HttpResponse(status=204)
+
+    return HttpResponse(status=404)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def event_create(request):
+    if not request.user.is_authenticated():
+        return redirect(section_url(FrontEndSection.LogIn))
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        # TODO: Log this
+        return HttpResponse(status=403)
+
+    event = None
+    try:
+        event = EventCreationForm.create_event(request)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return JsonResponse(event.hydrate_to_json())
+
+
+def event_edit(request, event_id):
+    if not request.user.is_authenticated():
+        return redirect('/signup')
+
+    event = None
+    try:
+        event = EventCreationForm.edit_event(request, event_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+
+    if request.is_ajax():
+        return JsonResponse(event.hydrate_to_json())
+    else:
+        return redirect('/index/?section=AboutEvent&id=' + event_id)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def event_delete(request, event_id):
+    # if not logged in, send user to login page
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+    try:
+        EventCreationForm.delete_event(request, event_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return HttpResponse(status=204)
+
+
+def get_event(request, event_id):
+    event = Event.objects.get(id=event_id)
+
+    if event is not None:
+        if event.is_searchable or is_creator_or_staff(get_request_contributor(request), event):
+            return JsonResponse(event.hydrate_to_json())
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
+def event_add_project(request, event_id):
+    body = json.loads(request.body)
+    event = Event.objects.get(id=event_id)
+
+    if event is not None and body["project_ids"] is not None:
+        if not is_creator_or_staff(get_request_contributor(request), event):
+            return HttpResponseForbidden()
+
+        projects = Project.objects.filter(id__in=body["project_ids"])
+
+        for project in projects:
+            ProjectRelationship.create(event, project)
+
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
+def event_delete_project(request, event_id):
+    body = json.loads(request.body)
+    event = Event.objects.get(id=event_id)
+    project = Project.objects.get(id=body["project_id"])
+
+    if event is not None and project is not None:
+        if is_creator_or_staff(get_request_contributor(request), event):
+            relationship = ProjectRelationship.objects.get(relationship_project=project.id, relationship_event=event.id)
+
+            if relationship is not None:
+                relationship.delete()
+                return HttpResponse(status=204)
+
+    return HttpResponse(status=404)
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
@@ -168,6 +351,7 @@ def approve_project(request, project_id):
 
 
 @ensure_csrf_cookie
+@xframe_options_exempt
 def index(request):
     template = loader.get_template('new_index.html')
     context = {
@@ -184,7 +368,8 @@ def index(request):
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt'),
         'GR_SITEKEY': settings.GR_SITEKEY,
         'FAVICON_PATH': settings.FAVICON_PATH,
-        'BLOG_URL': settings.BLOG_URL
+        'BLOG_URL': settings.BLOG_URL,
+        'EVENT_URL': settings.EVENT_URL
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
@@ -222,6 +407,8 @@ def index(request):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
+        context['QIQO_IFRAME_URL'] = get_user_qiqo_iframe(contributor)
+
         thumbnail = ProjectFile.objects.filter(file_user=request.user.id,
                                                file_category=FileCategory.THUMBNAIL.value).first()
         if thumbnail:
@@ -264,13 +451,44 @@ def my_projects(request):
         }
     return JsonResponse(response)
 
+def my_groups(request):
+    contributor = get_request_contributor(request)
+    response = {}
+    if contributor is not None:
+        owned_groups = Group.objects.filter(group_creator_id=contributor.id)
+        response = {
+            'owned_groups': [group.hydrate_to_list_json() for group in owned_groups],
+        }
+    return JsonResponse(response)
+
+def my_events(request):
+    contributor = get_request_contributor(request)
+    response = {}
+    if contributor is not None:
+        owned_events = Event.objects.filter(event_creator_id=contributor.id)
+        response = {
+            'owned_events': [event.hydrate_to_list_json() for event in owned_events],
+        }
+    return JsonResponse(response)
+
 
 def projects_list(request):
-    project_list = Project.objects.filter(is_searchable=True)
+    url_parts = request.GET.urlencode()
+    query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+    project_relationships = None
+
+    if 'group_id' in query_params:
+        project_relationships = ProjectRelationship.objects.filter(relationship_group=query_params['group_id'][0])
+    elif 'event_id' in query_params:
+        project_relationships = ProjectRelationship.objects.filter(relationship_event=query_params['event_id'][0])
+    
+    if project_relationships is not None:
+        project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
+        project_list = Project.objects.filter(id__in=project_ids, is_searchable=True)
+    else:
+        project_list = Project.objects.filter(is_searchable=True)
+    
     if request.method == 'GET':
-        url_parts = request.GET.urlencode()
-        query_params = urlparse.parse_qs(
-            url_parts, keep_blank_values=0, strict_parsing=0)
         project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
         project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
         project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)

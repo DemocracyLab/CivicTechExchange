@@ -19,7 +19,12 @@ class FindProjectsController extends React.PureComponent {
   componentWillMount(): void {
     let args: FindProjectsArgs = urls.arguments(document.location.search);
     args = _.pick(args, ['showSplash','keyword','sortField','location','page','issues','tech', 'role', 'org', 'stage']);
-    ProjectSearchDispatcher.dispatch({type: 'INIT', findProjectsArgs: !_.isEmpty(args) ? args : null});
+    ProjectSearchDispatcher.dispatch({
+      type: 'INIT',
+      findProjectsArgs: !_.isEmpty(args) ? args : null,
+      searchSettings: {
+        updateUrl: true
+      }});
     TagDispatcher.dispatch({type: 'INIT'});
   }
 
@@ -33,7 +38,7 @@ class FindProjectsController extends React.PureComponent {
         <div className="FindProjectsController-root container">
           <div className="row">
             <ProjectFilterContainer />
-            <ProjectCardsContainer />
+            <ProjectCardsContainer showSearchControls={true}/>
           </div>
         </div>
       </React.Fragment>

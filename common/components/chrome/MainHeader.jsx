@@ -26,6 +26,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
 import AlertHeader from "./AlertHeader.jsx";
 import MyProjectsStore, {MyProjectsAPIResponse} from "../stores/MyProjectsStore.js";
+// import MyGroupsStore, {MyGroupsAPIResponse} from "../stores/MyGroupsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import _ from 'lodash'
 
@@ -34,7 +35,9 @@ type State = {|
   dropdown: boolean,
   slider: boolean,
   createProjectUrl: string,
-  showMyProjects: boolean
+  showMyProjects: boolean,
+  showMyGroups: boolean,
+  showHeader: boolean
 |};
 
 class MainHeader extends React.Component<{||}, State > {
@@ -47,9 +50,12 @@ class MainHeader extends React.Component<{||}, State > {
 
   static calculateState(prevState: State): State {
     const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
+    // const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
     return {
+      showHeader: !url.argument("embedded"),
       activeSection: NavigationStore.getSection(),
       showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects))
+      // showMyGroups: myGroups && (!_.isEmpty(myGroups.owned_groups))
     };
   }
 
@@ -81,11 +87,11 @@ class MainHeader extends React.Component<{||}, State > {
 
   componentDidMount() {
     UniversalDispatcher.dispatch({type: 'INIT'});
-    this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
+    this._handleHeightChange(this.getHeaderHeight());
   }
 
-  render(): React$Node {
-    return (
+  render(): ?React$Node {
+    return this.state.showHeader && (
       <div ref={this.mainHeaderRef} className='MainHeader'>
         <AlertHeader
           onAlertClose={this._handleAlertClosing.bind(this)}
@@ -104,6 +110,7 @@ class MainHeader extends React.Component<{||}, State > {
           <div className={this._cx.get('rightContent')}>
             {this._renderSectionLinks()}
             {window.BLOG_URL && <div className="SectionLink-root"><h3><a href={window.BLOG_URL}>Blog</a></h3></div>}
+            {window.EVENT_URL && <div className="SectionLink-root"><h3><a href={_.unescape(window.EVENT_URL)}>Event</a></h3></div>}
             {this._renderHeaderLinks()}
             {this._renderHeaderButtons()}
             {
@@ -124,8 +131,12 @@ class MainHeader extends React.Component<{||}, State > {
     );
   }
 
+  getHeaderHeight(): number {
+    return this.mainHeaderRef.current ? this.mainHeaderRef.current.clientHeight : 0;
+  }
+
   _onAlertHeaderUpdate() {
-    this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
+    this._handleHeightChange(this.getHeaderHeight());
   }
 
   _handleHeightChange(height) {
@@ -171,6 +182,7 @@ class MainHeader extends React.Component<{||}, State > {
                     <p className="SubHeader-dropdown-name">{`${CurrentUser.firstName()} ${CurrentUser.lastName()}`}</p>
                     <MenuItem onClick={(e) => this.navigateToSection(e, 'EditProfile')}>My Profile</MenuItem>
                     {this.state.showMyProjects && <MenuItem onClick={(e) => this.navigateToSection(e, 'MyProjects')}>My Projects</MenuItem>}
+                    {this.state.showMyGroups && <MenuItem onClick={(e) => this.navigateToSection(e, 'MyGroups')}>My Groups</MenuItem>}
                   </MenuList>
                   <Divider />
                   <a href="/logout" onClick={this._closeDropdown}>
@@ -239,8 +251,18 @@ class MainHeader extends React.Component<{||}, State > {
                     <Divider />
                     ]
                   }
-                </div>
 
+                  {
+                    this.state.showMyGroups && [
+                    <a href="" onClick={(e) => this.navigateToSection(e, 'MyGroups')}>
+                      <div className={'SubHeader-drawerDiv'} >
+                        My Groups
+                      </div>
+                    </a>,
+                    <Divider />
+                    ]
+                  }
+                </div>
               }
               <a href={url.section(Section.FindProjects, {hideSplash: 1})}>
                 <div className={'SubHeader-drawerDiv'} >
@@ -249,12 +271,28 @@ class MainHeader extends React.Component<{||}, State > {
               </a>
               <Divider />
 
+              {window.EVENT_URL && <React.Fragment><a href={_.unescape(window.EVENT_URL)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Event
+                </div>
+              </a>
+              <Divider />
+              </React.Fragment>}
+
               <a href={this.state.createProjectUrl}>
                 <div className={'SubHeader-drawerDiv'} >
                   Create Project
                 </div>
               </a>
               <Divider />
+  
+              { CurrentUser.isStaff() && <React.Fragment><a href={url.section(Section.CreateEvent)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Create Event
+                </div>
+              </a>
+              <Divider />
+              </React.Fragment>}
 
               <a href={url.section(Section.AboutUs)}>
                 <div className={'SubHeader-drawerDiv'} >
@@ -386,14 +424,10 @@ class MainHeader extends React.Component<{||}, State > {
             showOnlyWhenLoggedIn: false
           },
           {
-            section: Section.MyProjects,
-            title: 'My Projects',
-            showOnlyWhenLoggedIn: true
-          },
-          {
-            section: Section.EditProfile,
-            title: 'My Profile',
-            showOnlyWhenLoggedIn: true
+            section: Section.CreateEvent,
+            title: 'Create Event',
+            showOnlyWhenLoggedIn: true,
+            showAdminOnly: true
           },
           {
             section: Section.AboutUs,
@@ -406,7 +440,8 @@ class MainHeader extends React.Component<{||}, State > {
             showOnlyWhenLoggedIn: false
           }
         ]
-      .filter(config => !config.showOnlyWhenLoggedIn);
+      .filter(config => (!config.showOnlyWhenLoggedIn || CurrentUser.isLoggedIn()) && (!config.showAdminOnly || CurrentUser.isStaff()));
+    
     return SectionsToShow
       .map(config =>
         <SectionLink
@@ -416,6 +451,12 @@ class MainHeader extends React.Component<{||}, State > {
           title={config.title}
         />
       );
+  }
+
+  _showSectionInMainMenu(config: SectionLinkConfigEntry): boolean {
+    // Don't show items that require login
+    // Only show admin-only options if user is an admin
+    return !config.showOnlyWhenLoggedIn && (!config.showAdminOnly || CurrentUser.isStaff());
   }
 
   _onLogInClick(): void {

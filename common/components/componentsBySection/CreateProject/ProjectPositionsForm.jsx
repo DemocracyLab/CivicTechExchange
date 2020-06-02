@@ -44,6 +44,10 @@ class ProjectPositionsForm extends React.PureComponent<Props,State> {
     props.readyForSubmit(true);
   }
 
+  componentDidMount() {
+    this.form.doValidation.bind(this)();
+  }
+
   render(): React$Node {
     PositionList
     return (
@@ -51,7 +55,7 @@ class ProjectPositionsForm extends React.PureComponent<Props,State> {
         <DjangoCSRFToken/>
 
         <div className="form-group">
-          <PositionList elementid="project_positions" positions={this.state.formFields.project_positions}/>
+          <PositionList elementid="project_positions" positions={this.state.formFields.project_positions} onChange={this.form.onFormChange.bind(this)}/>
         </div>
       </div>
     );

@@ -37,6 +37,11 @@ class urlHelper {
     return sectionUrl;
   }
   
+  // Determine if we are on a given section
+  static atSection(section: string): string {
+    return urlHelper.argument("section") === section;
+  };
+  
   static getSectionArgs(url: ?string): SectionUrlArguments {
     let _url: string = url || window.location.href;
     let oldArgs: Dictionary<string> = urlHelper.arguments(_url);
@@ -55,6 +60,18 @@ class urlHelper {
     return CurrentUser.isLoggedIn()
       ? urlHelper.section(section)
       : urlHelper.section(Section.LogIn, {"prev": section});
+  }
+  
+  // Get url for logging in then returning to the previous page
+  static logInThenReturn(returnUrl: ?string): string {
+    let _url: string = returnUrl || window.location.href;
+    const oldArgs: SectionUrlArguments = urlHelper.getSectionArgs(_url);
+    const newArgs: SectionUrlArguments = {
+      section: Section.LogIn,
+      args: Object.assign({prev: oldArgs.section}, oldArgs.args)
+    };
+    
+    return urlHelper.fromSectionArgs(newArgs);
   }
   
   // Construct a url with properly-formatted query string for the given arguments

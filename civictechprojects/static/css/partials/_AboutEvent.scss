@@ -1,0 +1,62 @@
+.AboutEvent-root {
+  background: $color-background-light;
+  padding-bottom: 2rem;
+}
+.AboutEvent-splash {
+  display: flex;
+  justify-content: center;
+  img {
+    max-width: 100%;
+    align-self: flex-start;
+  }
+  padding-bottom: 2rem;
+}
+.AboutEvent-title {
+  padding-top: 0.5rem;
+}
+.AboutEvent-title-date {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.AboutEvent-details p,.AboutEvent-location p {
+  white-space: pre-wrap;
+}
+.AboutEvent-rsvp-btn, .AboutEvent-join-btn {
+  display: block;
+  margin: 1rem auto;
+  max-width: 280px;
+}
+.AboutEvent-edit-btn {
+  float: right;
+}
+.AboutEvent-rsvp-btn, .AboutEvent-join-btn {
+  display: block;
+  margin: 1rem auto;
+  max-width: 280px;
+}
+.AboutEvent-details h3 {
+  margin-top: 2rem; /* acts as section spacing */
+}
+.AboutEvent-info {
+  order: 2;
+}
+.AboutEvent-splash {
+  order: 1;
+}
+.AboutEvent-header {
+  margin-bottom: 1rem;
+}
+@include media-breakpoint-up(lg) {
+  .AboutEvent-info {
+    order: 1;
+  }
+  .AboutEvent-splash {
+    order: 2;
+    padding-bottom: 0;
+  }
+  .AboutEvent-info-inner {
+    background: $color-background-default;
+    padding: 1rem;
+  }
+}
