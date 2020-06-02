@@ -155,6 +155,7 @@ DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
 
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 LOGIN_REDIRECT_URL = '/'
 
