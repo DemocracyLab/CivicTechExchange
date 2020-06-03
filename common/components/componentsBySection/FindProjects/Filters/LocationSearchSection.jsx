@@ -8,8 +8,7 @@ import LocationAutocomplete from "../../../common/location/LocationAutocomplete.
 import type {LocationInfo} from "../../../common/location/LocationInfo";
 import Selector from "../../../common/selection/Selector.jsx";
 import {CountrySelector} from "../../../common/selection/CountrySelector.jsx";
-import {CountryCodeFormats} from "../../../constants/Countries";
-import type {CountryData} from "../../../constants/Countries";
+import {CountryCodeFormats, CountryData, DefaultCountry} from "../../../constants/Countries.js";
 
 type State = {|
   countryCode: string,
@@ -22,7 +21,8 @@ class LocationSearchSection extends React.Component<{||}, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
-      searchRadius: 10
+      searchRadius: 10,
+      countryCode: DefaultCountry.ISO_3
     };
   
     this.updateLocationState = this.updateLocationState.bind(this);
@@ -76,6 +76,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
         
         <label>Country(Required)</label>
         <CountrySelector
+          countryCode={this.state.countryCode}
           countryCodeFormat={CountryCodeFormats.ISO_3}
           onSelection={this.onCountrySelect.bind(this)}
         />

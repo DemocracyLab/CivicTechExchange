@@ -25,7 +25,8 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
     this.state = {
-      isLoading: false
+      isLoading: false,
+      countryCode: props.countryCode && this.ensureCountryCodeFormat(props.countryCode)
     };
   }
 
