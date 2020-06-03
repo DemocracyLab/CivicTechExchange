@@ -121,13 +121,15 @@ class LocationSearchSection extends React.Component<{||}, State> {
 
   render() {
     return (
-        <div className={this.state.locationExpanded ? classCategoryExpanded : classCategoryCollapsed}>
-          <div className='ProjectFilterContainer-category-header' id="location-search-section" onClick={(e) => this._handleExpand(e)}>
-            <span>Location</span>
-            <span className="ProjectFilterContainer-showtext">{this.state.locationExpanded ? <i className={GlyphStyles.ChevronUp}></i> : <i className={GlyphStyles.ChevronDown}></i>}</span>
-          </div>
-          <div className="ProjectFilterContainer-content">
-            {this._renderSelector()}
+        <div className="LocationSearchContainer">
+          <div className={this.state.locationExpanded ? classCategoryExpanded : classCategoryCollapsed}>
+            <div className='ProjectFilterContainer-category-header' id="location-search-section" onClick={(e) => this._handleExpand(e)}>
+              <span>Location</span>
+              <span className="ProjectFilterContainer-showtext">{this.state.locationExpanded ? <i className={GlyphStyles.ChevronUp}></i> : <i className={GlyphStyles.ChevronDown}></i>}</span>
+            </div>
+            <div className="ProjectFilterContainer-content LocationSearchContainer-content">
+              {this._renderSelector()}
+            </div>
           </div>
         </div>
     );

@@ -111,12 +111,15 @@
   border-bottom: 1px solid $color-grey-medium;
 }
 
-.ProjectFilterDataContainer-root {
+.ProjectFilterDataContainer-root, .LocationSearchContainer {
   margin: 0 15px;
+}
+.LocationSearchContainer-content {
+  margin: 0 0 15px 0;
 }
 
 @include media-breakpoint-up(sm) {
-  .ProjectFilterDataContainer-root {
+  .ProjectFilterDataContainer-root, .LocationSearchContainer, .LocationSearchContainer-content {
     margin: 0;
   }
 }

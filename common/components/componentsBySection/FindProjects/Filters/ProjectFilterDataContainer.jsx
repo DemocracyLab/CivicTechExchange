@@ -76,7 +76,7 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
 
   render(): React$Node {
     //should render a number of <RenderFilterCategory> child components
-    
+
     return (
       <div>
         { this.state.sortedTags ? this._renderFilterCategories() : null }
