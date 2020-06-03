@@ -116,6 +116,13 @@
 }
 .LocationSearchContainer-content {
   margin: 0 0 15px 0;
+  padding: 12px 10px;
+}
+.LocationSearchContainer-content label {
+  padding-top: 24px;
+}
+.LocationSearchContainer-content label:first-of-type {
+  padding-top: 0;
 }
 
 @include media-breakpoint-up(sm) {
