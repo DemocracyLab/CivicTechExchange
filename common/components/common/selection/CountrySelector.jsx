@@ -52,7 +52,7 @@ export class CountrySelector extends React.PureComponent<Props, State> {
       <Selector
         id={this.props.id || "country"}
         isSearchable={true}
-        isClearable={true}
+        isClearable={false}
         isMultiSelect={false}
         options={CountryList}
         labelGenerator={(country: CountryData) => country.displayName}
