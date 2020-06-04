@@ -35,16 +35,16 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
       this.setState({countryCode: this.ensureCountryCodeFormat(nextProps.countryCode)}, this.updateAutocompleteOptions);
     }
   }
-  
+
   onInputChange(inputValue: string): void {
     this.updateAutocompleteOptions(inputValue);
   }
-  
+
   ensureCountryCodeFormat(code: string) {
     const country: CountryData = countryByCode(code);
     return country && country.ISO_3;
   }
-  
+
   updateAutocompleteOptions(inputValue: string): void {
     if(inputValue && inputValue.length > 1) {
       this.setState({isLoading: true}, () => {
@@ -57,9 +57,10 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
 
   // TODO: Move text parsing to helpers and unit test
   getSuggestionOption(suggestion: HereSuggestion): string {
-    return suggestion.label;
+    // HERE label returns broad to specific, switch that to show specific to broad
+    return suggestion['label'].split(',').reverse().join(', ');
   }
-  
+
   onOptionSelect(suggestion: ?HereSuggestion): void {
     if(suggestion) {
       hereApi.geocodeRequest({locationId: suggestion.locationId}, this.loadSelectionGeocode.bind(this));
@@ -67,7 +68,7 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
       this.props.onSelect(null);
     }
   }
-  
+
   loadSelectionGeocode(response: HereGeocodeResponse): void {
     const locationInfo: LocationInfo = getLocationInfoFromGeocodeResponse(response);
     this.setState({geocodeResponse: response}, () => this.props.onSelect(locationInfo));
