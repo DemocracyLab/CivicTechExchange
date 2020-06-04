@@ -79,6 +79,8 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
         <Selector
           id={this.props.id || "location-here"}
           options={this.state.suggestions}
+          placeholder="Address, city, or zip"
+          noOptionsMessage="Start typing location"
           labelGenerator={this.getSuggestionOption}
           valueStringGenerator={(suggestion: HereSuggestion) => suggestion.locationId}
           isMultiSelect={false}

@@ -22,6 +22,8 @@ type Props<T> = {|
   id: string,
   options: $ReadOnlyArray<T>,
   selected: T,
+  placeholder: string | React$Node,
+  noOptionsMessage: string | () => string | React$Node,
   labelGenerator: (T) => string,
   valueStringGenerator: (T) => string,
   onSelection: (T) => void,
@@ -32,6 +34,7 @@ type State<T> = {|
   labelGenerator: (T) => string,
   selected: SelectOption,
   selectOptions: $ReadOnlyArray<SelectOption>,
+  noOptionsMessage: () => string | React$Node,
   optionIndex: Dictionary<T>
 |};
 
@@ -48,6 +51,9 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
   
   updateOptions(props: Props, state: State): State {
     state.labelGenerator = props.labelGenerator || _.toString;
+    if(props.noOptionsMessage) {
+      state.noOptionsMessage = _.isString(props.noOptionsMessage) ? () => props.noOptionsMessage : props.noOptionsMessage;
+    }
     if(props.options) {
       state.optionIndex = createDictionary(props.options, state.labelGenerator);
       state.selectOptions = props.options.map(key => ({
@@ -83,6 +89,8 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
         value={this.state.selected}
         onChange={this.handleSelection.bind(this)}
         onInputChange={this.onInputChange.bind(this)}
+        placeholder={this.props.placeholder}
+        noOptionsMessage={this.state.noOptionsMessage}
         isSearchable={_.defaultTo(this.props.isSearchable, defaultFlags.isSearchable)}
         isClearable={_.defaultTo(this.props.isClearable, defaultFlags.isClearable)}
         isMulti={_.defaultTo(this.props.isMultiSelect, defaultFlags.isMultiSelect)}
