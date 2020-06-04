@@ -67,7 +67,7 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
   }
 
   handleSelection(selection: SelectOption) {
-    this.props.onSelection(this.state.optionIndex[selection.label]);
+    this.props.onSelection(selection ? this.state.optionIndex[selection.label] : null);
   }
   
   onInputChange(inputValue: string): void {
@@ -84,7 +84,7 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
         onChange={this.handleSelection.bind(this)}
         onInputChange={this.onInputChange.bind(this)}
         isSearchable={this.props.isSearchable || defaultFlags.isSearchable}
-        isClearable={this.props.isMultiSelect || defaultFlags.isMultiSelect}
+        isClearable={this.props.isClearable || defaultFlags.isClearable}
         isMulti={this.props.isMultiSelect || defaultFlags.isMultiSelect}
       />
     );

@@ -76,7 +76,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
   }
 
   onLocationSelect(locationInfo: LocationInfo): void {
-    if(!this.state.locationInfo || this.state.locationInfo !== locationInfo.location_id ) {
+    if(!this.state.locationInfo || !locationInfo || this.state.locationInfo !== locationInfo.location_id ) {
       this.setState({locationInfo: locationInfo}, this.updateLocationState);
     }
   }

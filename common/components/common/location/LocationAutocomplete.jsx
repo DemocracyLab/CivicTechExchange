@@ -60,8 +60,12 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
     return suggestion.label;
   }
   
-  onOptionSelect(suggestion: HereSuggestion): void {
-    hereApi.geocodeRequest({locationId: suggestion.locationId}, this.loadSelectionGeocode.bind(this));
+  onOptionSelect(suggestion: ?HereSuggestion): void {
+    if(suggestion) {
+      hereApi.geocodeRequest({locationId: suggestion.locationId}, this.loadSelectionGeocode.bind(this));
+    } else {
+      this.props.onSelect(null);
+    }
   }
   
   loadSelectionGeocode(response: HereGeocodeResponse): void {
