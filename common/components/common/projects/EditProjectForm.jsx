@@ -18,15 +18,18 @@ import url from '../../utils/url.js'
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import PositionList from "../../forms/PositionList.jsx";
 import _ from 'lodash'
-import {Locations} from "../../constants/ProjectConstants";
 import {DefaultLinkDisplayConfigurations} from "../../constants/LinkConstants.js";
 import metrics from "../../utils/metrics.js";
+import {CountrySelector} from "../selection/CountrySelector.jsx";
+import {CountryCodeFormats} from "../../constants/Countries.js";
+import type {CountryData} from "../../constants/Countries";
 
 
 
 type FormFields = {|
   project_name: ?string,
   project_location: ?string,
+  project_country: ?string,
   project_url: ?string,
   project_description: ?string,
   project_description_solution: ?string,
@@ -70,6 +73,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
       formFields: {
         project_name: "",
         project_location: "",
+        project_country: "",
         project_url: "",
         project_description: "",
         project_description_solution: "",
@@ -125,6 +129,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         formFields: {
           project_name: project.project_name,
           project_location: project.project_location,
+          project_country: project.project_country,
           project_url: project.project_url,
           project_description: project.project_description,
           project_description_solution: project.project_description_solution,
@@ -158,6 +163,10 @@ class EditProjectForm extends React.PureComponent<Props,State> {
 
   onTagChange(formFieldName: string, value: $ReadOnlyArray<TagDefinition>): void {
     this.state.formFields[formFieldName] = value;
+  }
+  
+  onCountrySelect(formFieldName: string, country: CountryData): void {
+    this.state.formFields[formFieldName] = country.ISO_2;
   }
 
   onSubmit(): void {
@@ -219,13 +228,19 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   }
 
   _renderLocationDropdown(): React$Node{
-    return <div className="form-group">
-      <label htmlFor="project_location">Project Location</label>
-      <select name="project_location" id="project_location" className="form-control" value={this.state.formFields.project_location} onChange={this.onFormFieldChange.bind(this, "project_location")}>
-        {!_.includes(Locations.PRESET_LOCATIONS, this.state.formFields.project_location) ? <option value={this.state.formFields.project_location}>{this.state.formFields.project_location}</option> : null}
-        {Locations.PRESET_LOCATIONS.map(location => <option key={location} value={location}>{location}</option>)}
-      </select>
-    </div>;
+    return (
+      <React.Fragment>
+        <div className="form-group">
+          <label>Country</label>
+          <CountrySelector
+            id="project_country"
+            countryCode={this.state.formFields.project_country}
+            countryCodeFormat={CountryCodeFormats.ISO_2}
+            onSelection={this.onCountrySelect.bind(this, "project_country")}
+          />
+        </div>
+      </React.Fragment>
+    );
   }
 
   _renderForm(): React$Node {
@@ -253,9 +268,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
                  value={this.state.formFields.project_name} onChange={this.onFormFieldChange.bind(this, "project_name")}/>
         </div>
 
-        <div className="form-group">
-          {this._renderLocationDropdown()}
-        </div>
+        {this._renderLocationDropdown()}
 
         <div className="form-group">
           <label htmlFor="project_url">Website URL</label>

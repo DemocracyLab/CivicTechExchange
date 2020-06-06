@@ -285,7 +285,7 @@ def project_create(request):
         # TODO: Log this
         return HttpResponse(status=403)
 
-    project = ProjectCreationForm.create_project(request)
+    project = ProjectCreationForm.create_or_edit_project(request, None)
     return JsonResponse(project.hydrate_to_json())
 
 
@@ -293,9 +293,8 @@ def project_edit(request, project_id):
     if not request.user.is_authenticated():
         return redirect('/signup')
 
-    project = None
     try:
-        project = ProjectCreationForm.edit_project(request, project_id)
+        project = ProjectCreationForm.create_or_edit_project(request, project_id)
         # TODO:
         # update_cached_project_url(project_id)
     except PermissionDenied:

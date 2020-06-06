@@ -8,17 +8,16 @@ import {OnReadySubmitFunc} from "./ProjectFormCommon.jsx";
 import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {TagDefinition, ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
-import {Locations} from "../../constants/ProjectConstants.js";
 import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
 import _ from "lodash";
 import url from "../../utils/url.js";
 import {CountrySelector} from "../../common/selection/CountrySelector.jsx";
-import {CountryCodeFormats} from "../../constants/Countries.js";
+import {CountryCodeFormats, CountryData, countryByCode} from "../../constants/Countries.js";
 import LocationAutocomplete from "../../common/location/LocationAutocomplete.jsx";
 
 
 type FormFields = {|
-  project_location: ?string,
+  project_country: ?string,
   project_url: ?string,
   project_stage?: Array<TagDefinition>,
   project_organization?: Array<TagDefinition>,
@@ -43,7 +42,7 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
     super(props);
     const project: ProjectDetailsAPIData = props.project;
     const formFields: FormFields = {
-      project_location: project ? project.project_location : "",
+      project_country: project ? project.project_country : "",
       project_url: project ? project.project_url : "",
       project_stage: project ? project.project_stage : [],
       project_organization: project ? project.project_organization : [],
@@ -86,15 +85,17 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
       <div className="EditProjectForm-root">
 
         <DjangoCSRFToken/>
-
+  
         <div className="form-group">
-          <label htmlFor="project_location">Project Location</label>
-          <select name="project_location" id="project_location" className="form-control" value={this.state.formFields.project_location} onChange={this.form.onInput.bind(this, "project_location")}>
-            {!_.includes(Locations.PRESET_LOCATIONS, this.state.formFields.project_location) ? <option value={this.state.formFields.project_location}>{this.state.formFields.project_location}</option> : null}
-            {Locations.PRESET_LOCATIONS.map(location => <option key={location} value={location}>{location}</option>)}
-          </select>
+          <label>Country</label>
+          <CountrySelector
+            id="project_country"
+            countryCode={this.state.formFields.project_country}
+            countryCodeFormat={CountryCodeFormats.ISO_2}
+            onSelection={this.form.onSelection.bind(this, "project_country")}
+          />
         </div>
-
+        
         <div className="form-group">
           <label htmlFor="project_url">Website URL</label>
           <input type="text" className="form-control" id="project_url" name="project_url" maxLength="2075"
