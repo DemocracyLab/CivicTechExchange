@@ -5,6 +5,7 @@ import {Container} from 'flux/utils';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import React from 'react';
+import _ from 'lodash';
 
 type State = {|
   keyword: string,
@@ -33,7 +34,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
       <React.Fragment>
         <button
           className="btn btn-primary btn-block reset-search-button"
-          disabled={!(this.state.keyword || this.state.tags.size > 0 || this.state.sortField || this.state.location) }
+          disabled={!(this.state.keyword || this.state.tags.size > 0 || this.state.sortField || !_.isEmpty(this.state.location)) }
           onClick={this._clearFilters.bind(this)}>
           Clear Filters
         </button>
