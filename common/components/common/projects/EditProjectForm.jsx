@@ -17,19 +17,20 @@ import type {APIError, TagDefinition, ProjectDetailsAPIData} from '../../../comp
 import url from '../../utils/url.js'
 import {PositionInfo} from "../../forms/PositionInfo.jsx";
 import PositionList from "../../forms/PositionList.jsx";
-import _ from 'lodash'
+import _ from "lodash";
 import {DefaultLinkDisplayConfigurations} from "../../constants/LinkConstants.js";
 import metrics from "../../utils/metrics.js";
 import {CountrySelector} from "../selection/CountrySelector.jsx";
-import {CountryCodeFormats} from "../../constants/Countries.js";
-import type {CountryData} from "../../constants/Countries";
+import {CountryCodeFormats, CountryData, countryByCode} from "../../constants/Countries.js";
+import {LocationInfo, getLocationInfoFromProject} from "../location/LocationInfo.js";
+import {LocationAutocompleteForm, LocationFormInputsByEntity} from "../../forms/LocationAutocompleteForm.jsx";
 
 
 
 type FormFields = {|
   project_name: ?string,
-  project_location: ?string,
-  project_country: ?string,
+  project_location: ?LocationInfo,
+  project_country: ?CountryData,
   project_url: ?string,
   project_description: ?string,
   project_description_solution: ?string,
@@ -72,8 +73,8 @@ class EditProjectForm extends React.PureComponent<Props,State> {
       formIsValid: false,
       formFields: {
         project_name: "",
-        project_location: "",
-        project_country: "",
+        project_location: null,
+        project_country: null,
         project_url: "",
         project_description: "",
         project_description_solution: "",
@@ -125,11 +126,12 @@ class EditProjectForm extends React.PureComponent<Props,State> {
       });
     } else {
       metrics.logProjectClickEdit(CurrentUser.userID(), this.props.projectId);
+      const location: LocationInfo = getLocationInfoFromProject(project);
       this.setState({
         formFields: {
           project_name: project.project_name,
-          project_location: project.project_location,
-          project_country: project.project_country,
+          project_location: location,
+          project_country: countryByCode(location.country),
           project_url: project.project_url,
           project_description: project.project_description,
           project_description_solution: project.project_description_solution,
@@ -159,6 +161,10 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   onFormFieldChange(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>): void {
     this.state.formFields[formFieldName] = event.target.value;
     this.forceUpdate();
+  }
+  
+  onFormFieldSelect<T>(formFieldName: string, value: T): void {
+    this.state.formFields[formFieldName] = value;
   }
 
   onTagChange(formFieldName: string, value: $ReadOnlyArray<TagDefinition>): void {
@@ -227,16 +233,25 @@ class EditProjectForm extends React.PureComponent<Props,State> {
     );
   }
 
-  _renderLocationDropdown(): React$Node{
+  _renderLocationSection(): React$Node{
     return (
       <React.Fragment>
         <div className="form-group">
           <label>Country</label>
           <CountrySelector
             id="project_country"
-            countryCode={this.state.formFields.project_country}
+            countryCode={this.state.formFields.project_country && this.state.formFields.project_country.ISO_2}
             countryCodeFormat={CountryCodeFormats.ISO_2}
             onSelection={this.onCountrySelect.bind(this, "project_country")}
+          />
+        </div>
+        <div className="form-group">
+          <label>Location</label>
+          <LocationAutocompleteForm
+            country={this.state.formFields.project_country}
+            onSelect={this.onFormFieldSelect.bind(this, "project_location")}
+            location={this.state.formFields.project_location}
+            formInputs={LocationFormInputsByEntity.Projects}
           />
         </div>
       </React.Fragment>
@@ -268,7 +283,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
                  value={this.state.formFields.project_name} onChange={this.onFormFieldChange.bind(this, "project_name")}/>
         </div>
 
-        {this._renderLocationDropdown()}
+        {this._renderLocationSection()}
 
         <div className="form-group">
           <label htmlFor="project_url">Website URL</label>

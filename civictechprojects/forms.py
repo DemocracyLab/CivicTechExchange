@@ -8,7 +8,7 @@ from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
-    merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime
+    merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, read_form_fields_point
 
 
 class ProjectCreationForm(ModelForm):
@@ -49,9 +49,14 @@ class ProjectCreationForm(ModelForm):
         read_form_field_string(project, form, 'project_description_solution')
         read_form_field_string(project, form, 'project_description_actions')
         read_form_field_string(project, form, 'project_short_description')
+        read_form_field_string(project, form, 'project_location')
         read_form_field_string(project, form, 'project_country')
+        read_form_field_string(project, form, 'project_state')
+        read_form_field_string(project, form, 'project_city')
         read_form_field_string(project, form, 'project_name')
         read_form_field_string(project, form, 'project_url')
+
+        read_form_fields_point(project, form, 'project_location_coords', 'project_latitude', 'project_longitude')
 
         read_form_field_tags(project, form, 'project_issue_area')
         read_form_field_tags(project, form, 'project_stage')

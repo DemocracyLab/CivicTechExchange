@@ -144,6 +144,10 @@ class Project(Archived):
             'project_date_modified': self.project_date_modified.__str__()
         }
 
+        if self.project_location_coords is not None:
+            project['project_latitude'] = self.project_location_coords.x
+            project['project_longitude'] = self.project_location_coords.y
+
         if len(thumbnail_files) > 0:
             project['project_thumbnail'] = thumbnail_files[0].to_json()
 
