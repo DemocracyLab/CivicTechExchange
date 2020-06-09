@@ -2,6 +2,8 @@
 import type {HereGeocodeResponse, HereGeocodeResponseAddress, HereGeocodeResponseLocation} from "../../utils/hereApi.js";
 import _ from "lodash";
 import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils";
+import type {CountryData} from "../../constants/Countries";
+import {countryByCode, DefaultCountry} from "../../constants/Countries";
 
 export type LocationInfo = {|
   city: string,
@@ -11,6 +13,19 @@ export type LocationInfo = {|
   location_id: string,
   state: string
 |};
+
+export function getLocationDisplayString(location: LocationInfo) {
+  const country: CountryData = countryByCode(location.country);
+  if(country === DefaultCountry) {
+    // US format
+    return _.compact([location.city, location.state, country.ISO_3]).join(", ");
+  } else if (country) {
+    // International format
+    return _.compact([location.city, country.displayName]).join(", ");
+  } else {
+    return location.location_id;
+  }
+}
 
 export function getLocationInfoFromGeocodeResponse(geocodeResponse:HereGeocodeResponse): ?LocationInfo {
   const geoCodeLocation: HereGeocodeResponseLocation = _.get(geocodeResponse, "Response.View[0].Result[0].Location");

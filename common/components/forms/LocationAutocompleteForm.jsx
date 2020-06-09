@@ -59,6 +59,7 @@ export class LocationAutocompleteForm extends React.PureComponent<Props, State> 
         <LocationAutocomplete
           countryCode={this.props.country && this.props.country.ISO_3}
           onSelect={this.onOptionSelect.bind(this)}
+          selected={this.state.location}
         />
       </React.Fragment>
     );

@@ -6,6 +6,11 @@ import {Dictionary, createDictionary} from "../../types/Generics.jsx";
 import type {SelectOption} from "../../types/SelectOption.jsx";
 import _ from "lodash";
 
+type SelectAction = {|
+  name: string,
+  action: "clear" | "select-option" | "deselect-option" | "remove-value" | "pop-value" | "set-value" | "create-option"
+|};
+
 type SelectorFlags = {|
   isSearchable: boolean,
   isClearable: boolean,
@@ -35,7 +40,8 @@ type State<T> = {|
   selected: SelectOption,
   selectOptions: $ReadOnlyArray<SelectOption>,
   noOptionsMessage: () => string | React$Node,
-  optionIndex: Dictionary<T>
+  optionIndex: Dictionary<T>,
+  isCleared: boolean
 |};
 
 class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
@@ -57,10 +63,20 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
     if(props.options) {
       state.optionIndex = createDictionary(props.options, state.labelGenerator);
       state.selectOptions = props.options.map(key => ({
-        "value": (props.valueStringGenerator || state.labelGenerator)(key),
-        "label": state.labelGenerator(key)
+        value: (props.valueStringGenerator || state.labelGenerator)(key),
+        label: state.labelGenerator(key)
       }));
-      state.selected = props.selected && this.findOption(state.selectOptions, state.labelGenerator(props.selected));
+    }
+    if(props.selected) {
+      if(props.options) {
+        state.selected = props.selected && this.findOption(state.selectOptions, state.labelGenerator(props.selected));
+      } else if(!state.isCleared) {
+        state.selectOptions = [{
+          value: (props.valueStringGenerator || state.labelGenerator)(props.selected),
+          label: state.labelGenerator(props.selected)
+        }];
+        state.selected = state.selectOptions[0];
+      }
     }
     return state;
   }
@@ -72,7 +88,18 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
     });
   }
 
-  handleSelection(selection: SelectOption) {
+  handleSelection(selection: SelectOption, selectionAction: SelectAction) {
+    if(selectionAction.action === "clear") {
+      this.setState((previousState: State) => {
+        return {
+          ...previousState,
+          isCleared: true,
+          selected: null,
+          selectOptions: []
+        };
+      });
+      this.forceUpdate();
+    }
     this.props.onSelection(selection ? this.state.optionIndex[selection.label] : null);
   }
   

@@ -5,6 +5,7 @@ import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 import {PositionInfo} from "../forms/PositionInfo.jsx";
 import {CountryData, DefaultCountry, countryByCode} from "../constants/Countries.js";
+import {LocationInfo, getLocationDisplayString} from "../common/location/LocationInfo.js";
 import _ from 'lodash';
 
 export type APIResponse = {|
@@ -150,17 +151,14 @@ class ProjectAPIUtils {
   }
   
   static getLocationDisplayName(project: ProjectAPIData | ProjectDetailsAPIData | ProjectData): string {
-    // TODO: Remove references to deprecated Project object
-    const country: CountryData = countryByCode(project.project_country || project.country);
-    if(country === DefaultCountry) {
-      // US format
-      return _.compact([project.project_city || project.city, project.project_state || project.state, country.ISO_3]).join(", ");
-    } else if (country) {
-      // International format
-      return _.compact([project.project_city || project.city, country.displayName]).join(", ");
-    } else {
-      return project.project_location || project.location;
-    }
+    // TODO: See if we can deprecate ProjectData
+    const location: LocationInfo = {
+      location_id: project.project_location || project.location,
+      city: project.project_city || project.city,
+      state: project.project_state || project.state,
+      country: project.project_country || project.country
+    };
+    return getLocationDisplayString(location);
   }
 
   static getSkillNames(positions: array) {

@@ -4,13 +4,14 @@ import React from "react";
 import hereApi from "../../utils/hereApi.js";
 import type {HereGeocodeResponse, HereAutocompleteResponse, HereSuggestion} from "../../types/HereTypes.jsx";
 import Selector from "../selection/Selector.jsx";
-import {getLocationInfoFromGeocodeResponse, LocationInfo} from "./LocationInfo.js";
+import {LocationInfo, getLocationInfoFromGeocodeResponse, getLocationDisplayString} from "./LocationInfo.js";
 import {CountryData, countryByCode} from "../../constants/Countries.js";
 
 type Props = {|
   id: ?string,
   countryCode: ?string,
-  onSelect: (LocationInfo) => null
+  onSelect: (LocationInfo) => null,
+  selected: ?LocationInfo
 |};
 
 type State = {|
@@ -18,7 +19,8 @@ type State = {|
   countryCode: ?string,
   suggestions: $ReadOnlyArray<HereSuggestion>,
   autocompleteResponse: ?HereAutocompleteResponse,
-  geocodeResponse: ?HereGeocodeResponse
+  geocodeResponse: ?HereGeocodeResponse,
+  selected: ?LocationInfo
 |};
 
 export class LocationAutocomplete extends React.PureComponent<Props, State> {
@@ -26,13 +28,17 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
     super();
     this.state = {
       isLoading: false,
-      countryCode: props.countryCode && this.ensureCountryCodeFormat(props.countryCode)
+      countryCode: props.countryCode && this.ensureCountryCodeFormat(props.countryCode),
+      selected: props.selected
     };
   }
 
   componentWillReceiveProps(nextProps: Props): void {
-    if(nextProps.countryCode !== this.state.countryCode) {
-      this.setState({countryCode: this.ensureCountryCodeFormat(nextProps.countryCode)}, this.updateAutocompleteOptions);
+    if(!_.isEqual(nextProps, this.props)) {
+      this.setState({
+        countryCode: this.ensureCountryCodeFormat(nextProps.countryCode),
+        selected: nextProps.selected
+      }, this.updateAutocompleteOptions);
     }
   }
 
@@ -56,22 +62,29 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
   }
 
   // TODO: Move text parsing to helpers and unit test
-  getSuggestionOption(suggestion: HereSuggestion): string {
-    // HERE label returns broad to specific, switch that to show specific to broad
-    return suggestion['label'].split(',').reverse().join(', ');
+  getSuggestionOption(suggestion: HereSuggestion | LocationInfo): string {
+    if(suggestion.location_id) {
+      return getLocationDisplayString(suggestion);
+    } else {
+      // HERE label returns broad to specific, switch that to show specific to broad
+      return suggestion['label'].split(',').reverse().join(', ');
+    }
   }
 
   onOptionSelect(suggestion: ?HereSuggestion): void {
     if(suggestion) {
       hereApi.geocodeRequest({locationId: suggestion.locationId}, this.loadSelectionGeocode.bind(this));
     } else {
-      this.props.onSelect(null);
+      this.setState({selected: null}, () => this.props.onSelect(null));
     }
   }
 
   loadSelectionGeocode(response: HereGeocodeResponse): void {
     const locationInfo: LocationInfo = getLocationInfoFromGeocodeResponse(response);
-    this.setState({geocodeResponse: response}, () => this.props.onSelect(locationInfo));
+    this.setState({
+      geocodeResponse: response,
+      selected: locationInfo
+    }, () => this.props.onSelect(locationInfo));
   }
 
   render(): ?React$Node {
@@ -80,10 +93,11 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
         <Selector
           id={this.props.id || "location-here"}
           options={this.state.suggestions}
+          selected={this.state.selected}
           placeholder="Address, city, or zip"
           noOptionsMessage="Start typing location"
           labelGenerator={this.getSuggestionOption}
-          valueStringGenerator={(suggestion: HereSuggestion) => suggestion.locationId}
+          valueStringGenerator={(suggestion: HereSuggestion | LocationInfo) => suggestion.locationId || suggestion.location_id}
           isMultiSelect={false}
           isClearable={true}
           isSearchable={true}
