@@ -83,6 +83,8 @@ export type VolunteerDetailsAPIData = {|
 export type ProjectDetailsAPIData = {|
   +project_id: number,
   +project_description: string,
+  +project_description_solution: string,
+  +project_description_actions: string,
   +project_short_description: string,
   +project_creator: number,
   +project_claimed: boolean,
@@ -95,6 +97,8 @@ export type ProjectDetailsAPIData = {|
   +project_technologies: $ReadOnlyArray<TagDefinition>,
   +project_positions: $ReadOnlyArray<PositionInfo>,
   +project_location: string,
+  +project_latitude: string,
+  +project_longitude: string,
   +project_country: string,
   +project_state: string,
   +project_city: string,

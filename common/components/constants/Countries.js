@@ -14,9 +14,11 @@ export type CountryData = {|
   ISO_3: string
 |};
 
-export function countryByCode(code: string): CountryData {
-  const codeFormat: CountryCodeFormat = "ISO_" + code.length;
-  return CountryList.find((country: CountryData) => country[codeFormat] === code);
+export function countryByCode(code: string): ?CountryData {
+  if (code) {
+    const codeFormat: CountryCodeFormat = "ISO_" + code.length;
+    return CountryList.find((country: CountryData) => country[codeFormat] === code);
+  }
 }
 
 export const CountryList: $ReadOnlyArray<CountryData> = [

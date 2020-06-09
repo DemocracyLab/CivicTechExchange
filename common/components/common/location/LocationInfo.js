@@ -1,13 +1,15 @@
 // @flow
 import type {HereGeocodeResponse, HereGeocodeResponseAddress, HereGeocodeResponseLocation} from "../../utils/hereApi.js";
 import _ from "lodash";
+import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils";
 
-// TODO: Add data we want to store in database
 export type LocationInfo = {|
+  city: string,
+  country: string,
   latitude: number,
   longitude: number,
   location_id: string,
-  name: string
+  state: string
 |};
 
 export function getLocationInfoFromGeocodeResponse(geocodeResponse:HereGeocodeResponse): ?LocationInfo {
@@ -16,24 +18,19 @@ export function getLocationInfoFromGeocodeResponse(geocodeResponse:HereGeocodeRe
     latitude: geoCodeLocation.DisplayPosition.Latitude,
     longitude: geoCodeLocation.DisplayPosition.Longitude,
     location_id: geoCodeLocation.LocationId,
-    name: getLocationTextForAddress(geoCodeLocation.Address)
+    city: geoCodeLocation.Address.City,
+    country: geoCodeLocation.Address.Country,
+    state: geoCodeLocation.Address.State
   };
 }
 
-// TODO: Unit test
-export function getLocationTextForAddress(address: HereGeocodeResponseAddress): string {
-  console.log(JSON.stringify(address));
-  // Get non-abbreviated country name
-  const countryData = address.AdditionalData.find(d => d.key === "CountryName");
-  let countryName = countryData ? countryData.value : address.Country;
-  
-  // If in the US, include the state and use country abbreviation
-  if(address.Country === "USA") {
-    countryName = address.State + ", USA";
-  }
-  if ("City" in address) {
-    return address.City + ", " + countryName;
-  } else {
-    return countryName;
-  }
+export function getLocationInfoFromProject(project: ProjectDetailsAPIData): ?LocationInfo {
+  return project && {
+    latitude: project.project_latitude,
+    longitude: project.project_longitude,
+    location_id: project.project_location,
+    city: project.project_city,
+    country: project.project_country,
+    state: project.project_state
+  };
 }
