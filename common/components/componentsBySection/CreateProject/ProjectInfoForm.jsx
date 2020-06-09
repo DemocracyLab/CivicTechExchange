@@ -9,15 +9,16 @@ import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {TagDefinition, ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
 import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
-import _ from "lodash";
 import url from "../../utils/url.js";
 import {CountrySelector} from "../../common/selection/CountrySelector.jsx";
 import {CountryCodeFormats, CountryData, countryByCode} from "../../constants/Countries.js";
-import LocationAutocomplete from "../../common/location/LocationAutocomplete.jsx";
+import {LocationInfo, getLocationInfoFromProject} from "../../common/location/LocationInfo.js";
+import {LocationAutocompleteForm, LocationFormInputsByEntity} from "../../forms/LocationAutocompleteForm.jsx";
 
 
 type FormFields = {|
-  project_country: ?string,
+  project_country: ?CountryData,
+  project_location: ?LocationInfo,
   project_url: ?string,
   project_stage?: Array<TagDefinition>,
   project_organization?: Array<TagDefinition>,
@@ -42,7 +43,8 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
     super(props);
     const project: ProjectDetailsAPIData = props.project;
     const formFields: FormFields = {
-      project_country: project ? project.project_country : "",
+      project_country: project ? countryByCode(project.project_country) : null,
+      project_location: project ? getLocationInfoFromProject(project) : null,
       project_url: project ? project.project_url : "",
       project_stage: project ? project.project_stage : [],
       project_organization: project ? project.project_organization : [],
@@ -90,9 +92,19 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
           <label>Country</label>
           <CountrySelector
             id="project_country"
-            countryCode={this.state.formFields.project_country}
+            countryCode={this.state.formFields.project_country && this.state.formFields.project_country.ISO_2}
             countryCodeFormat={CountryCodeFormats.ISO_2}
             onSelection={this.form.onSelection.bind(this, "project_country")}
+          />
+        </div>
+  
+        <div className="form-group">
+          <label>Location</label>
+          <LocationAutocompleteForm
+            country={this.state.formFields.project_country}
+            onSelect={this.form.onSelection.bind(this, "project_location")}
+            location={this.state.formFields.project_location}
+            formInputs={LocationFormInputsByEntity.Projects}
           />
         </div>
         
