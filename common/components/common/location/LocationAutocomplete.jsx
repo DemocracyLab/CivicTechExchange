@@ -55,10 +55,15 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
     if(inputValue && inputValue.length > 1) {
       this.setState({isLoading: true}, () => {
         hereApi.autocompleteRequest({query: inputValue, country: this.state.countryCode}, (response: HereAutocompleteResponse) => {
-          this.setState({isLoading: false, suggestions: response.suggestions});
+          this.setState({isLoading: false, suggestions: this.filterAutocompleteSuggestions(response.suggestions)});
         });
       });
     }
+  }
+  
+  filterAutocompleteSuggestions(suggestions: $ReadOnlyArray<HereSuggestion>): $ReadOnlyArray<HereSuggestion> {
+    // Only show suggestions that have a city and/or zip code component
+    return suggestions.filter((suggestion: HereSuggestion) => suggestion.address.city || suggestion.address.postalCode);
   }
 
   // TODO: Move text parsing to helpers and unit test
