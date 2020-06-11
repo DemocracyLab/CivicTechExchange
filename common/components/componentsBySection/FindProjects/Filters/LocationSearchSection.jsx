@@ -67,16 +67,18 @@ class LocationSearchSection extends React.Component<{||}, State> {
     }));
   }
 
-  updateLocationState(): void {
-    if(this.state.locationInfo && this.state.searchRadius) {
+  updateLocationState(locationInfo: LocationInfo): void {
+    if(!_.isEqual(locationInfo, this.state.locationInfo)) {
       const locationRadius: LocationRadius = {
-        latitude: this.state.locationInfo.latitude,
-        longitude: this.state.locationInfo.longitude,
+        latitude: locationInfo && locationInfo.latitude,
+        longitude: locationInfo && locationInfo.longitude,
         radius: this.state.searchRadius
       };
-      ProjectSearchDispatcher.dispatch({
-        type: 'SET_LOCATION',
-        location: locationRadius,
+      this.setState({locationInfo: locationInfo}, () => {
+        ProjectSearchDispatcher.dispatch({
+          type: 'SET_LOCATION',
+          location: locationRadius,
+        });
       });
     }
   }
@@ -89,7 +91,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
 
   onLocationSelect(locationInfo: LocationInfo): void {
     if(!this.state.locationInfo || !locationInfo || this.state.locationInfo !== locationInfo.location_id ) {
-      this.setState({locationInfo: locationInfo}, this.updateLocationState);
+      this.updateLocationState(locationInfo);
     }
   }
 

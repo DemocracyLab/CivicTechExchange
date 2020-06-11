@@ -182,7 +182,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       const findProjectsArgs: FindProjectsArgs = _.pickBy({
         keyword: state.keyword,
         sortField: state.sortField,
-        location: state.location && locationRadiusToString(state.location),
+        location: state.location && state.location.latitude && state.location.longitude && locationRadiusToString(state.location),
         issues: this._getTagCategoryParams(state, TagCategory.ISSUES),
         tech: this._getTagCategoryParams(state, TagCategory.TECHNOLOGIES_USED),
         role: this._getTagCategoryParams(state, TagCategory.ROLE),
