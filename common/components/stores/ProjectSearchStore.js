@@ -6,8 +6,7 @@ import {ReduceStore} from 'flux/utils';
 import ProjectSearchDispatcher from './ProjectSearchDispatcher.js';
 import {List, Record} from 'immutable'
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
-import type {Project, TagDefinition, ProjectAPIData} from '../utils/ProjectAPIUtils.js';
-import type {FileInfo} from '../../../common/FileInfo.jsx'
+import type {ProjectData, TagDefinition, ProjectAPIData} from '../utils/ProjectAPIUtils.js';
 import TagCategory from "../common/tags/TagCategory.jsx";
 import urls from "../utils/url.js";
 import Section from "../enums/Section.js";
@@ -38,7 +37,7 @@ type FindProjectsResponse = {|
 |};
 
 type FindProjectsData = {|
-  +projects: $ReadOnlyArray<Project>,
+  +projects: $ReadOnlyArray<ProjectData>,
   +numPages: number,
   +numProjects: number
 |};
@@ -313,7 +312,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     return this.getState().location;
   }
 
-  getProjects(): List<Project> {
+  getProjects(): List<ProjectData> {
     const state: State = this.getState();
     return state.projectsData && state.projectsData.projects;
   }

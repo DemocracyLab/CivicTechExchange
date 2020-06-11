@@ -10,10 +10,13 @@ import Selector from "../../../common/selection/Selector.jsx";
 import {CountrySelector} from "../../../common/selection/CountrySelector.jsx";
 import {CountryCodeFormats, CountryData, DefaultCountry} from "../../../constants/Countries.js";
 import GlyphStyles from '../../../utils/glyphs.js'
+import type {ProjectData} from "../../../utils/ProjectAPIUtils.js";
+import {countryByCode} from "../../../constants/Countries";
 
 
 type State = {|
   countryCode: string,
+  countryOptions: $ReadOnlyArray<CountryData>,
   location: LocationRadius,
   locationInfo: LocationInfo,
   searchRadius: number,
@@ -44,8 +47,17 @@ class LocationSearchSection extends React.Component<{||}, State> {
 
   static calculateState(prevState: State): State {
     return {
-      location: ProjectSearchStore.getLocation() || {}
+      location: ProjectSearchStore.getLocation() || {},
+      countryOptions: LocationSearchSection.getCountryOptions(ProjectSearchStore.getProjects())
     };
+  }
+  
+  static getCountryOptions(projects: List<ProjectData>): $ReadOnlyArray<CountryData> {
+    if(projects && projects.size > 0) {
+      const countryCodes: $ReadOnlyArray<string> = projects.toJS().map((project: ProjectData) => project.country);
+      const validUniqueCodes: $ReadOnlyArray<string> = _.compact(_.uniq(countryCodes));
+      return validUniqueCodes.map((code: string) => countryByCode(code));
+    }
   }
 
   //handle expand/collapse
@@ -94,6 +106,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
         <label>Country(Required)</label>
         <CountrySelector
           countryCode={this.state.countryCode}
+          countryOptions={this.state.countryOptions}
           countryCodeFormat={CountryCodeFormats.ISO_3}
           onSelection={this.onCountrySelect.bind(this)}
         />

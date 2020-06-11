@@ -172,7 +172,8 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   }
   
   onCountrySelect(formFieldName: string, country: CountryData): void {
-    this.state.formFields[formFieldName] = country.ISO_2;
+    this.state.formFields[formFieldName] = country;
+    this.forceUpdate();
   }
 
   onSubmit(): void {
