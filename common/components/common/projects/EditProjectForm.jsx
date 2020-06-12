@@ -173,6 +173,8 @@ class EditProjectForm extends React.PureComponent<Props,State> {
   
   onCountrySelect(formFieldName: string, country: CountryData): void {
     this.state.formFields[formFieldName] = country;
+    // De-select any existing location
+    this.state.formFields["project_location"] = null;
     this.forceUpdate();
   }
 

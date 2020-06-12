@@ -68,6 +68,7 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
     };
     props.readyForSubmit(formIsValid);
     this.form = formHelper.setup();
+    this.form.onSelection = this.form.onSelection.bind(this);
   }
 
   componentDidMount() {
@@ -94,7 +95,10 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
             id="project_country"
             countryCode={this.state.formFields.project_country && this.state.formFields.project_country.ISO_2}
             countryCodeFormat={CountryCodeFormats.ISO_2}
-            onSelection={this.form.onSelection.bind(this, "project_country")}
+            onSelection={(country: CountryData) => {
+              this.form.onSelection("project_country", country);
+              this.form.onSelection("project_location", null);
+            }}
           />
         </div>
   

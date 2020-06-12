@@ -77,6 +77,8 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
         }];
         state.selected = state.selectOptions[0];
       }
+    } else {
+      state.selected = null;
     }
     return state;
   }
