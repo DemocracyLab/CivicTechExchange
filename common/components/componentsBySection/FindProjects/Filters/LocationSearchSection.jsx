@@ -17,7 +17,7 @@ import {countryByCode} from "../../../constants/Countries";
 type State = {|
   countryCode: string,
   countryOptions: $ReadOnlyArray<CountryData>,
-  location: LocationRadius,
+  locationRadius: LocationRadius,
   locationPlaceholder: ?LocationInfo,
   locationInfo: LocationInfo,
   searchRadius: number,
@@ -52,11 +52,14 @@ class LocationSearchSection extends React.Component<{||}, State> {
     const state: State = {
       countryOptions: LocationSearchSection.getCountryOptions(ProjectSearchStore.getProjects())
     };
-    state.location = ProjectSearchStore.getLocation() || {};
-    if(!_.isEmpty(state.location) && (!prevState || !prevState.locationInfo)) {
+    state.locationRadius = ProjectSearchStore.getLocation() || {};
+    if(!_.isEmpty(state.locationRadius) && (!prevState || !prevState.locationInfo)) {
       state.countryCode = null;
-      state.locationInfo = {latitude: state.location.latitude, longitude: state.location.longitude};
-      state.searchRadius = state.location.radius;
+      state.locationInfo = {latitude: state.locationRadius.latitude, longitude: state.locationRadius.longitude};
+      state.searchRadius = state.locationRadius.radius;
+    } else if (_.isEmpty(state.locationRadius)) {
+      // If filters were cleared
+      state.locationInfo = null;
     }
     
     return state;
@@ -79,19 +82,28 @@ class LocationSearchSection extends React.Component<{||}, State> {
 
   updateLocationState(locationInfo: ?LocationInfo, searchRadius: ?number): void {
     if(searchRadius && !_.isEmpty(locationInfo)) {
+      // Case: Setting new location state filter
       const locationRadius: LocationRadius = {
         latitude: locationInfo.latitude,
         longitude: locationInfo.longitude,
         radius: searchRadius
       };
-      if(!_.isEqual(locationRadius, this.state.location)) {
+      if(!_.isEqual(locationRadius, this.state.locationRadius)) {
         this.setState({locationInfo: locationInfo}, () => {
           ProjectSearchDispatcher.dispatch({
             type: 'SET_LOCATION',
-            location: locationRadius,
+            locationRadius: locationRadius
           });
         });
       }
+    } else if (this.state.locationRadius) {
+      // Case: Clearing location state filter after clearing Near box
+      this.setState({locationRadius: null}, () => {
+        ProjectSearchDispatcher.dispatch({
+          type: 'SET_LOCATION',
+          locationRadius: null
+        });
+      });
     }
   }
 

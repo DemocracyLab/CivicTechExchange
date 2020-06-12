@@ -497,8 +497,8 @@ def projects_list(request):
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
 
-        if 'location' in query_params:
-            project_list = projects_by_location(project_list, query_params['location'][0])
+        if 'locationRadius' in query_params:
+            project_list = projects_by_location(project_list, query_params['locationRadius'][0])
 
         project_list = project_list.distinct()
 

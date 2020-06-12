@@ -19,7 +19,7 @@ export type SearchSettings = {|
 export type FindProjectsArgs = {|
   keyword: string,
   sortField: string,
-  location: string,
+  locationRadius: string,
   page: number,
   issues: string,
   tech: string,
@@ -81,7 +81,7 @@ export type ProjectSearchActionType = {
   sortField: string,
 } | {
   type: 'SET_LOCATION',
-  location: LocationRadius
+  locationRadius: LocationRadius
 } | {
   type: 'SET_PAGE',
   page: number,
@@ -95,7 +95,7 @@ export type ProjectSearchActionType = {
 const DEFAULT_STATE = {
   keyword: '',
   sortField: '',
-  location: null,
+  locationRadius: null,
   page: 1,
   tags: List(),
   projectsData: {},
@@ -110,7 +110,7 @@ const DEFAULT_STATE = {
 class State extends Record(DEFAULT_STATE) {
   keyword: string;
   sortField: string;
-  location: LocationRadius;
+  locationRadius: LocationRadius;
   page: number;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
@@ -151,7 +151,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       case 'SET_SORT':
         return this._loadProjects(this._addSortFieldToState(state, action.sortField));
       case 'SET_LOCATION':
-        return this._loadProjects(this._addLocationToState(state, action.location));
+        return this._loadProjects(this._addLocationToState(state, action.locationRadius));
       case 'SET_PAGE':
         return this._loadProjects(this._setPageNumberInState(state, action.page));
       case 'CLEAR_FILTERS':
@@ -182,7 +182,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       const findProjectsArgs: FindProjectsArgs = _.pickBy({
         keyword: state.keyword,
         sortField: state.sortField,
-        location: state.location && state.location.latitude && state.location.longitude && locationRadiusToString(state.location),
+        locationRadius: state.locationRadius && state.locationRadius.latitude && state.locationRadius.longitude && locationRadiusToString(state.locationRadius),
         issues: this._getTagCategoryParams(state, TagCategory.ISSUES),
         tech: this._getTagCategoryParams(state, TagCategory.TECHNOLOGIES_USED),
         role: this._getTagCategoryParams(state, TagCategory.ROLE),
@@ -216,7 +216,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = this._addTagFilters(state, findProjectsArgs.stage);
     state = this._addKeywordToState(state, findProjectsArgs.keyword);
     state = this._addSortFieldToState(state, findProjectsArgs.sortField);
-    state = this._addLocationToState(state, locationRadiusFromString(findProjectsArgs.location));
+    state = this._addLocationToState(state, locationRadiusFromString(findProjectsArgs.locationRadius));
 
     return state;
   }
@@ -248,8 +248,8 @@ class ProjectSearchStore extends ReduceStore<State> {
     return state;
   }
 
-  _addLocationToState(state: State, location: LocationRadius): State {
-    state = state.set('location', location);
+  _addLocationToState(state: State, locationRadius: LocationRadius): State {
+    state = state.set('locationRadius', locationRadius);
     state = state.set('filterApplied', true);
     return state;
   }
@@ -262,7 +262,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   _clearFilters(state: State): State {
     state = state.set('keyword', '');
     state = state.set('sortField', '');
-    state = state.set('location', {});
+    state = state.set('locationRadius', {});
     state = state.set('tags', List());
     state = state.set('page', 1);
     state = state.set('filterApplied', false);
@@ -309,7 +309,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   getLocation(): LocationRadius {
-    return this.getState().location;
+    return this.getState().locationRadius;
   }
 
   getProjects(): List<ProjectData> {
