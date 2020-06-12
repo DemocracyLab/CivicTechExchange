@@ -54,6 +54,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
     };
     state.locationRadius = ProjectSearchStore.getLocation() || {};
     if(!_.isEmpty(state.locationRadius) && (!prevState || !prevState.locationInfo)) {
+      // Placeholder lat/long location in Near field
       state.countryCode = null;
       state.locationInfo = {latitude: state.locationRadius.latitude, longitude: state.locationRadius.longitude};
       state.searchRadius = state.locationRadius.radius;
