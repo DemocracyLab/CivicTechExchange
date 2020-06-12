@@ -48,14 +48,14 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
   constructor(props: Props<T>): void {
     super();
     
-    this.state = this.updateOptions(props, {});
+    this.state = Selector.updateOptions(props, {});
   }
   
-  findOption<T>(selectOptions: $ReadOnlyArray<SelectOption>, option: string) {
+  static findOption<T>(selectOptions: $ReadOnlyArray<SelectOption>, option: string) {
     return selectOptions.find((selectOption: SelectOption) => selectOption.label === option);
   }
   
-  updateOptions(props: Props, state: State): State {
+  static updateOptions(props: Props, state: State): State {
     state.labelGenerator = props.labelGenerator || _.toString;
     if(props.noOptionsMessage) {
       state.noOptionsMessage = _.isString(props.noOptionsMessage) ? () => props.noOptionsMessage : props.noOptionsMessage;
@@ -69,7 +69,7 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
     }
     if(props.selected) {
       if(props.options) {
-        state.selected = props.selected && this.findOption(state.selectOptions, state.labelGenerator(props.selected));
+        state.selected = props.selected && Selector.findOption(state.selectOptions, state.labelGenerator(props.selected));
       } else if(!state.isCleared) {
         state.selectOptions = [{
           value: (props.valueStringGenerator || state.labelGenerator)(props.selected),
@@ -83,7 +83,7 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
   
 
   componentWillReceiveProps(nextProps: Props): void {
-    this.setState(this.updateOptions(nextProps, this.state), function() {
+    this.setState(Selector.updateOptions(nextProps, this.state), function() {
       this.forceUpdate();
     });
   }
@@ -101,6 +101,11 @@ class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
       this.forceUpdate();
     }
     this.props.onSelection(selection ? this.state.optionIndex[selection.label] : null);
+  }
+  
+  static getDerivedStateFromProps(props, state) {
+    // Fix for Bug where user has to click twice in order to remove placeholder selector item
+    return Selector.updateOptions(props, state);
   }
   
   onInputChange(inputValue: string): void {
