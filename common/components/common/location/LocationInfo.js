@@ -22,6 +22,9 @@ export function getLocationDisplayString(location: LocationInfo) {
   } else if (country) {
     // International format
     return _.compact([location.city, country.displayName]).join(", ");
+  } else if (location.latitude && location.longitude) {
+    // Case where we just have latitude/longitude
+    return location.latitude + "," + location.longitude;
   } else {
     return location.location_id;
   }

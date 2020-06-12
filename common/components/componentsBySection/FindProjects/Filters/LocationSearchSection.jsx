@@ -18,6 +18,7 @@ type State = {|
   countryCode: string,
   countryOptions: $ReadOnlyArray<CountryData>,
   location: LocationRadius,
+  locationPlaceholder: ?LocationInfo,
   locationInfo: LocationInfo,
   searchRadius: number,
   locationExpanded: boolean
@@ -29,11 +30,13 @@ const classCategoryCollapsed = 'ProjectFilterContainer-category ProjectFilterCon
 const classSubcategoryExpanded = 'ProjectFilterContainer-subcategory ProjectFilterContainer-expanded';
 const classSubcategoryCollapsed = 'ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed';
 
+const DefaultSearchRadius: number = 10;
+
 class LocationSearchSection extends React.Component<{||}, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
-      searchRadius: 10,
+      searchRadius: DefaultSearchRadius,
       countryCode: DefaultCountry.ISO_3,
       locationExpanded: false
     };
@@ -46,10 +49,17 @@ class LocationSearchSection extends React.Component<{||}, State> {
   }
 
   static calculateState(prevState: State): State {
-    return {
-      location: ProjectSearchStore.getLocation() || {},
+    const state: State = {
       countryOptions: LocationSearchSection.getCountryOptions(ProjectSearchStore.getProjects())
     };
+    state.location = ProjectSearchStore.getLocation() || {};
+    if(!_.isEmpty(state.location) && (!prevState || !prevState.locationInfo)) {
+      state.countryCode = null;
+      state.locationInfo = {latitude: state.location.latitude, longitude: state.location.longitude};
+      state.searchRadius = state.location.radius;
+    }
+    
+    return state;
   }
   
   static getCountryOptions(projects: List<ProjectData>): $ReadOnlyArray<CountryData> {
@@ -67,19 +77,21 @@ class LocationSearchSection extends React.Component<{||}, State> {
     }));
   }
 
-  updateLocationState(locationInfo: LocationInfo): void {
-    if(!_.isEqual(locationInfo, this.state.locationInfo)) {
+  updateLocationState(locationInfo: ?LocationInfo, searchRadius: ?number): void {
+    if(searchRadius && !_.isEmpty(locationInfo)) {
       const locationRadius: LocationRadius = {
-        latitude: locationInfo && locationInfo.latitude,
-        longitude: locationInfo && locationInfo.longitude,
-        radius: this.state.searchRadius
+        latitude: locationInfo.latitude,
+        longitude: locationInfo.longitude,
+        radius: searchRadius
       };
-      this.setState({locationInfo: locationInfo}, () => {
-        ProjectSearchDispatcher.dispatch({
-          type: 'SET_LOCATION',
-          location: locationRadius,
+      if(!_.isEqual(locationRadius, this.state.location)) {
+        this.setState({locationInfo: locationInfo}, () => {
+          ProjectSearchDispatcher.dispatch({
+            type: 'SET_LOCATION',
+            location: locationRadius,
+          });
         });
-      });
+      }
     }
   }
 
@@ -91,13 +103,13 @@ class LocationSearchSection extends React.Component<{||}, State> {
 
   onLocationSelect(locationInfo: LocationInfo): void {
     if(!this.state.locationInfo || !locationInfo || this.state.locationInfo !== locationInfo.location_id ) {
-      this.updateLocationState(locationInfo);
+      this.updateLocationState(locationInfo, this.state.searchRadius);
     }
   }
 
   onRadiusSelect(searchRadius: number): void {
     if(!this.state.searchRadius || this.state.searchRadius !== searchRadius ) {
-      this.setState({searchRadius: searchRadius}, this.updateLocationState);
+      this.setState({searchRadius: searchRadius}, () => this.updateLocationState(this.state.locationInfo, searchRadius));
     }
   }
 
@@ -117,6 +129,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
         <LocationAutocomplete
           countryCode={this.state.countryCode}
           onSelect={this.onLocationSelect.bind(this)}
+          selected={this.state.locationInfo}
         />
 
         <label>Distance</label>
@@ -127,7 +140,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
           isMultiSelect={false}
           options={[5,10,25,50,100,200]}
           labelGenerator={(num) => num + " Miles"}
-          selected={this.state.searchRadius}
+          selected={this.state.searchRadius || DefaultSearchRadius}
           onSelection={this.onRadiusSelect.bind(this)}
         />
       </React.Fragment>
