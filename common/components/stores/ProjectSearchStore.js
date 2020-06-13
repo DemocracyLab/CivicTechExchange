@@ -85,7 +85,7 @@ export type ProjectSearchActionType = {
   sortField: string,
 } | {
   type: 'SET_LOCATION',
-  locationRadius: LocationRadius
+  locationRadius: ?LocationRadius
 } | {
   type: 'SET_PAGE',
   page: number,

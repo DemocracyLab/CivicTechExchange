@@ -79,7 +79,8 @@ class LocationSearchSection extends React.Component<{||}, State> {
       const locationRadius: LocationRadius = {
         latitude: locationInfo.latitude,
         longitude: locationInfo.longitude,
-        radius: searchRadius
+        radius: searchRadius,
+        metadata: locationInfo
       };
       if(!_.isEqual(locationRadius, this.state.locationRadius)) {
         this.setState({locationInfo: locationInfo}, () => {

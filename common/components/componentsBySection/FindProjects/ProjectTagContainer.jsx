@@ -7,6 +7,7 @@ import CloseablePill from './CloseablePill.jsx';
 import React from 'react';
 import type {TagDefinition} from "../../utils/ProjectAPIUtils.js";
 import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import {getLocationDisplayString} from "../../common/location/LocationInfo.js";
 
 type PillConfig = {|
   label: string,
@@ -32,9 +33,28 @@ class ProjectTagContainer extends React.Component<{||}, State> {
       };
     }));
     
+    const locationRadius: LocationRadius = ProjectSearchStore.getLocation();
+    if(locationRadius && locationRadius.latitude && locationRadius.longitude) {
+      pillConfigs.push({
+        label: ProjectTagContainer.getLocationPillLabel(locationRadius),
+        closeAction: () => ProjectSearchDispatcher.dispatch({type: 'SET_LOCATION', locationRadius: null})
+      });
+    }
+    
     return {
       pillConfigs: pillConfigs
     };
+  }
+  
+  static getLocationPillLabel(locationRadius: LocationRadius): string {
+    let label: string = "Near: ";
+    if(locationRadius.metadata) {
+      label += getLocationDisplayString(locationRadius.metadata);
+    } else {
+      label += locationRadius.latitude + "," + locationRadius.longitude;
+    }
+    
+    return label;
   }
 
   render(): React$Node {
