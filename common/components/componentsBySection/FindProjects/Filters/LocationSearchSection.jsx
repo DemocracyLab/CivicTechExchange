@@ -65,14 +65,6 @@ class LocationSearchSection extends React.Component<{||}, State> {
     
     return state;
   }
-  
-  // static getCountryOptions(projects: List<ProjectData>): $ReadOnlyArray<CountryData> {
-  //   if(projects && projects.size > 0) {
-  //     const countryCodes: $ReadOnlyArray<string> = projects.toJS().map((project: ProjectData) => project.country);
-  //     const validUniqueCodes: $ReadOnlyArray<string> = _.compact(_.uniq(countryCodes));
-  //     return validUniqueCodes.map((code: string) => countryByCode(code));
-  //   }
-  // }
 
   //handle expand/collapse
   _handleExpand(event) {

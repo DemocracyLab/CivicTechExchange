@@ -1,17 +1,20 @@
 // @flow
 
 import type {FluxReduceStore} from 'flux/utils';
-// import type {Tag} from '../../stores/TagStore.js';
-import ResetSearchButton from './ResetSearchButton.jsx';
-import {List} from 'immutable'
 import {Container} from 'flux/utils';
-import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
-import ProjectTag from './ProjectTag.jsx';
+import ProjectSearchStore,{LocationRadius} from '../../stores/ProjectSearchStore.js';
+import CloseablePill from './CloseablePill.jsx';
 import React from 'react';
 import type {TagDefinition} from "../../utils/ProjectAPIUtils.js";
+import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+
+type PillConfig = {|
+  label: string,
+  closeAction: () => void
+|};
 
 type State = {|
-  tags: List<TagDefinition>
+  pillConfigs: $ReadOnlyArray<PillConfig>
 |};
 
 class ProjectTagContainer extends React.Component<{||}, State> {
@@ -21,19 +24,28 @@ class ProjectTagContainer extends React.Component<{||}, State> {
   }
 
   static calculateState(prevState: State): State {
+    let pillConfigs: Array<PillConfig> = [];
+    pillConfigs = pillConfigs.concat(ProjectSearchStore.getTags().toJS().map((tag: TagDefinition) => {
+      return {
+        label: tag.display_name,
+        closeAction: () => ProjectSearchDispatcher.dispatch({type: 'REMOVE_TAG', tag: tag})
+      };
+    }));
+    
     return {
-      tags: ProjectSearchStore.getTags() || []
+      pillConfigs: pillConfigs
     };
   }
 
   render(): React$Node {
     return (
-      <div
-        className="ProjectTagContainer-root">
+      <div className="ProjectTagContainer-root">
         {
-          this.state.tags.map(
-            tag => <ProjectTag key={tag.tag_name} tag={tag}/>,
-          )
+          this.state.pillConfigs.map( (pillConfig: PillConfig) => {
+            return (
+              <CloseablePill key={pillConfig.label} label={pillConfig.label} closeAction={pillConfig.closeAction}/>
+            );
+          })
         }
       </div>
     );
