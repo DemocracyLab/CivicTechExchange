@@ -90,7 +90,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
           });
         });
       }
-    } else if (this.state.locationRadius) {
+    } else if (!_.isEmpty(this.state.locationRadius)) {
       // Case: Clearing location state filter after clearing Near box
       this.setState({locationRadius: null}, () => {
         ProjectSearchDispatcher.dispatch({
