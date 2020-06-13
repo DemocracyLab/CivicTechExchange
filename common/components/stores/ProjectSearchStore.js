@@ -57,7 +57,7 @@ function locationRadiusToString(locationRadius: LocationRadius): string {
 }
 
 function locationRadiusFromString(str: string): LocationRadius {
-  const parts: $ReadOnlyArray<string> = str.split(",");
+  const parts: $ReadOnlyArray<string> = str && str.split(",");
   // TODO: Handle legacy city strings
   // decodeURI(findProjectsArgs.location)
   return parts && (parts.length > 2) && {
