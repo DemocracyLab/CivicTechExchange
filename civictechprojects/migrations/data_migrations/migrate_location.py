@@ -6,7 +6,7 @@ city_data = {
         "location_id": "NT_CbPeqdRa32sVQMUTQ08D9C",
         "latitude": 47.60358,
         "longitude": -122.32945,
-        "country": "USA",
+        "country": "US",
         "state": "WA",
         "city": "Seattle"
     },
@@ -14,7 +14,7 @@ city_data = {
         "location_id": "NT_d.OYCK1kz7SakO9I4kZqUA",
         "latitude": 47.67858,
         "longitude": -122.13158,
-        "country": "USA",
+        "country": "US",
         "state": "WA",
         "city": "Redmond"
     },
@@ -22,7 +22,7 @@ city_data = {
         "location_id": "NT_VyvcFZFRjJOcrPyS7OwZ0A",
         "latitude": 47.67887,
         "longitude": -122.20664,
-        "country": "USA",
+        "country": "US",
         "state": "WA",
         "city": "Kirkland"
     },
@@ -30,7 +30,7 @@ city_data = {
         "location_id": "NT_V.cegwTGmjVI-lfdHaRkAB",
         "latitude": 47.61003,
         "longitude": -122.18791,
-        "country": "USA",
+        "country": "US",
         "state": "WA",
         "city": "Bellevue"
     },
@@ -38,7 +38,7 @@ city_data = {
         "location_id": "NT_sHEOjAIscPhGaDlr-5I.JA",
         "latitude": 47.25514,
         "longitude": -122.44164,
-        "country": "USA",
+        "country": "US",
         "state": "WA",
         "city": "Tacoma"
     },
@@ -46,7 +46,7 @@ city_data = {
         "location_id": "NT_7UA8mAj3c3ThpWSHnPRm.C",
         "latitude": 47.03956,
         "longitude": -122.89166,
-        "country": "USA",
+        "country": "US",
         "state": "WA",
         "city": "Olympia"
     },
@@ -54,7 +54,7 @@ city_data = {
         "location_id": "NT_AuilSnazFMDxJ0LLqZ1gWB",
         "latitude": 45.5118,
         "longitude": -122.67563,
-        "country": "USA",
+        "country": "US",
         "state": "OR",
         "city": "Portland"
     },
@@ -62,7 +62,7 @@ city_data = {
         "location_id": "NT_R09PQHIIFEIptp3vXs5qEC",
         "latitude": 37.77713,
         "longitude": -122.41964,
-        "country": "USA",
+        "country": "US",
         "state": "CA",
         "city": "San Francisco"
     },
@@ -70,7 +70,7 @@ city_data = {
         "location_id": "NT_fe9IUAqC2ucydEAm37jDhC",
         "latitude": 39.29058,
         "longitude": -76.60926,
-        "country": "USA",
+        "country": "US",
         "state": "MD",
         "city": "Baltimore"
     }
