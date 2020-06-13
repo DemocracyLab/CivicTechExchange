@@ -501,6 +501,9 @@ def projects_list(request):
         if 'locationRadius' in query_params:
             project_list = projects_by_location(project_list, query_params['locationRadius'][0])
 
+        if 'location' in query_params:
+            project_list = projects_by_legacy_city(project_list, query_params['location'][0])
+
         project_list = project_list.distinct()
 
         if 'sortField' in query_params:
@@ -571,6 +574,13 @@ def projects_by_location(project_list, param):
     location = Point(float(param_parts[0]), float(param_parts[1]))
     radius = float(param_parts[2])
     project_list = project_list.filter(project_location_coords__distance_lte=(location, D(mi=radius)))
+    return project_list
+
+
+def projects_by_legacy_city(project_list, param):
+    param_parts = param.split(', ')
+    if len(param_parts) > 1:
+        project_list = project_list.filter(project_city=param_parts[0], project_state=param_parts[1])
     return project_list
 
 

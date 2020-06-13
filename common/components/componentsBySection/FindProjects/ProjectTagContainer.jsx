@@ -40,6 +40,14 @@ class ProjectTagContainer extends React.Component<{||}, State> {
         closeAction: () => ProjectSearchDispatcher.dispatch({type: 'SET_LOCATION', locationRadius: null})
       });
     }
+  
+    const legacyLocation: string = ProjectSearchStore.getLegacyLocation();
+    if(legacyLocation) {
+      pillConfigs.push({
+        label: "In: " + decodeURI(legacyLocation),
+        closeAction: () => ProjectSearchDispatcher.dispatch({type: 'UNSET_LEGACY_LOCATION'})
+      });
+    }
     
     return {
       pillConfigs: pillConfigs

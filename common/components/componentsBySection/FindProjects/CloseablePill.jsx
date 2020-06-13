@@ -8,7 +8,6 @@ type Props = {|
   closeAction: () => void
 |};
 
-//TODO: Rename component
 class CloseablePill extends React.PureComponent<Props> {
 
   render(): React$Node {

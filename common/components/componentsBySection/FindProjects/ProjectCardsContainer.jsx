@@ -30,6 +30,7 @@ type State = {|
   project_pages: number,
   current_page: number,
   project_count: number,
+  legacyLocation: string,
   location: LocationRadius
 |};
 
@@ -50,6 +51,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
       projects_loading: ProjectSearchStore.getProjectsLoading(),
       keyword: ProjectSearchStore.getKeyword() || '',
       tags: ProjectSearchStore.getTags() || [],
+      legacyLocation: ProjectSearchStore.getLegacyLocation() || '',
       location: ProjectSearchStore.getLocation() || ''
     };
   }
@@ -83,7 +85,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   _renderCardHeaderText(): React$Node {
     if (this.props.staticHeaderText) {
       return this.props.staticHeaderText;
-    } else if (this.state.keyword || this.state.tags.size > 0 || (this.state.location && this.state.location.latitude && this.state.location.longitude)) {
+    } else if (this.state.keyword || this.state.tags.size > 0 || this.state.legacyLocation || (this.state.location && this.state.location.latitude && this.state.location.longitude)) {
       return this.state.project_count === 1 ? this.state.project_count + ' tech-for-good project found' : this.state.project_count + ' tech-for-good projects found'
     } else {
       return 'Find and volunteer with innovative tech-for-good projects'
