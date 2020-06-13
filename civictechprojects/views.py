@@ -18,6 +18,7 @@ from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
 from .helpers.projects import projects_tag_counts
 from .sitemaps import SitemapPages
+from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff
@@ -601,9 +602,14 @@ def projects_by_roles(tags):
     return Project.objects.filter(positions__in=positions)
 
 
+def project_countries():
+    return unique_column_values(Project, 'project_country', lambda country: country and len(country) == 2)
+
+
 def projects_with_meta_data(projects, project_pages, project_count):
     return {
         'projects': [project.hydrate_to_tile_json() for project in projects],
+        'availableCountries': project_countries(),
         'tags': list(Tag.objects.values()),
         'numPages': project_pages,
         'numProjects': project_count
@@ -617,6 +623,7 @@ def available_tag_filters(projects, selected_tag_filters):
         if project_tags[tag]:
             project_tags.pop(tag)
     return project_tags
+
 
 def presign_project_thumbnail_upload(request):
     uploader = request.user.username

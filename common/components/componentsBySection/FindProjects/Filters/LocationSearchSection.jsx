@@ -50,7 +50,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
 
   static calculateState(prevState: State): State {
     const state: State = {
-      countryOptions: LocationSearchSection.getCountryOptions(ProjectSearchStore.getProjects())
+      countryOptions: ProjectSearchStore.getCountryList()
     };
     state.locationRadius = ProjectSearchStore.getLocation() || {};
     if(!_.isEmpty(state.locationRadius) && (!prevState || !prevState.locationInfo)) {
@@ -66,13 +66,13 @@ class LocationSearchSection extends React.Component<{||}, State> {
     return state;
   }
   
-  static getCountryOptions(projects: List<ProjectData>): $ReadOnlyArray<CountryData> {
-    if(projects && projects.size > 0) {
-      const countryCodes: $ReadOnlyArray<string> = projects.toJS().map((project: ProjectData) => project.country);
-      const validUniqueCodes: $ReadOnlyArray<string> = _.compact(_.uniq(countryCodes));
-      return validUniqueCodes.map((code: string) => countryByCode(code));
-    }
-  }
+  // static getCountryOptions(projects: List<ProjectData>): $ReadOnlyArray<CountryData> {
+  //   if(projects && projects.size > 0) {
+  //     const countryCodes: $ReadOnlyArray<string> = projects.toJS().map((project: ProjectData) => project.country);
+  //     const validUniqueCodes: $ReadOnlyArray<string> = _.compact(_.uniq(countryCodes));
+  //     return validUniqueCodes.map((code: string) => countryByCode(code));
+  //   }
+  // }
 
   //handle expand/collapse
   _handleExpand(event) {

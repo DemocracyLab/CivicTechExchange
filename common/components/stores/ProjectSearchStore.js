@@ -10,6 +10,7 @@ import type {ProjectData, TagDefinition, ProjectAPIData} from '../utils/ProjectA
 import TagCategory from "../common/tags/TagCategory.jsx";
 import urls from "../utils/url.js";
 import Section from "../enums/Section.js";
+import {CountryData, countryByCode} from "../constants/Countries.js";
 import _ from 'lodash'
 
 export type SearchSettings = {|
@@ -33,11 +34,14 @@ export type FindProjectsArgs = {|
 type FindProjectsResponse = {|
   +projects: $ReadOnlyArray<ProjectAPIData>,
   +numPages: number,
-  +numProjects: number
+  +numProjects: number,
+  +tags: $ReadOnlyArray<TagDefinition>,
+  +availableCountries: $ReadOnlyArray<string>
 |};
 
 type FindProjectsData = {|
   +projects: $ReadOnlyArray<ProjectData>,
+  +availableCountries: $ReadOnlyArray<string>,
   +numPages: number,
   +numProjects: number
 |};
@@ -160,6 +164,7 @@ class ProjectSearchStore extends ReduceStore<State> {
         let projects = action.projectsResponse.projects.map(ProjectAPIUtils.projectFromAPIData);
         let numPages = action.projectsResponse.numPages;
         let numProjects = action.projectsResponse.numProjects;
+        let availableCountries = action.projectsResponse.availableCountries;
         let allTags = _.mapKeys(action.projectsResponse.tags, (tag:TagDefinition) => tag.tag_name);
         // Remove all tag filters that don't match an existing tag name
         state = state.set('tags', state.tags.filter(tag => allTags[tag]));
@@ -169,6 +174,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           numPages: numPages,
           numProjects: numProjects,
           allTags: allTags,
+          availableCountries: availableCountries
         });
         return state.set('projectsLoading', false);
       default:
@@ -306,6 +312,11 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getSortField(): string {
     return this.getState().sortField;
+  }
+  
+  getCountryList(): $ReadOnlyArray<CountryData> {
+    const projectData: FindProjectsData = this.getState().projectsData;
+    return projectData && projectData.availableCountries && projectData.availableCountries.map(countryByCode);
   }
 
   getLocation(): LocationRadius {
