@@ -43,7 +43,7 @@ export function getLocationInfoFromGeocodeResponse(geocodeResponse:HereGeocodeRe
 }
 
 export function getLocationInfoFromProject(project: ProjectDetailsAPIData): ?LocationInfo {
-  return project && {
+  return project && project.project_location && {
     latitude: project.project_latitude,
     longitude: project.project_longitude,
     location_id: project.project_location,

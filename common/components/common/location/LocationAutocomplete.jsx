@@ -68,12 +68,16 @@ export class LocationAutocomplete extends React.PureComponent<Props, State> {
 
   // TODO: Move text parsing to helpers and unit test
   getSuggestionOption(suggestion: HereSuggestion | LocationInfo): string {
-    if(suggestion.latitude && suggestion.longitude) {
+    if(!suggestion) {
+      return null;
+    } else if(suggestion.latitude && suggestion.longitude) {
       // LocationInfo placeholder case
       return getLocationDisplayString(suggestion);
-    } else {
+    } else if(suggestion.label) {
       // HERE label returns broad to specific, switch that to show specific to broad
       return suggestion['label'].split(',').reverse().join(', ');
+    } else {
+      return suggestion.location_id;
     }
   }
 

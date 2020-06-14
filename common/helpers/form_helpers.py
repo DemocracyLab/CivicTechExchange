@@ -31,7 +31,8 @@ def read_form_fields_point(model, form, point_field_name, lat_field_name, long_f
     if lat_field_name in form.data and long_field_name in form.data:
         lat = form.data.get(lat_field_name)
         long = form.data.get(long_field_name)
-        setattr(model, point_field_name, Point(float(lat), float(long)))
+        if len(lat) > 0 and len(long) > 0:
+            setattr(model, point_field_name, Point(float(lat), float(long)))
 
 
 def merge_json_changes(model_class, model, form, field_name):
