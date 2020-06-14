@@ -11,7 +11,6 @@ import _ from "lodash";
 export const LocationFormInputsByEntity: Dictionary<(LocationInfo) => string> = {
   Projects: {
     project_location: (location: LocationInfo) => location.location_id,
-    project_country: (location: LocationInfo) => location.country,
     project_state: (location: LocationInfo) => location.state,
     project_city: (location: LocationInfo) => location.city,
     project_latitude: (location: LocationInfo) => location.latitude,
