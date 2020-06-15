@@ -30,7 +30,7 @@ const classCategoryCollapsed = 'ProjectFilterContainer-category ProjectFilterCon
 const classSubcategoryExpanded = 'ProjectFilterContainer-subcategory ProjectFilterContainer-expanded';
 const classSubcategoryCollapsed = 'ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed';
 
-const DefaultSearchRadius: number = 10;
+const DefaultSearchRadius: number = 50;
 
 class LocationSearchSection extends React.Component<{||}, State> {
   constructor(props: Props): void {
