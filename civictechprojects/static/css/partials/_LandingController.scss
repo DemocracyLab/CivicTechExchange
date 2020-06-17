@@ -64,6 +64,8 @@
 .LandingController-midsplash p {
   max-width: 500px;
   white-space: pre-wrap;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .LandingController-testimonial-container {
@@ -239,6 +241,9 @@
   }
   .RecentProjects-toggle:hover {
     color: $color-text-dark;
+  }
+  .LandingController-root .SplashScreen-content {
+    padding-bottom: 3rem;
   }
 
 }
