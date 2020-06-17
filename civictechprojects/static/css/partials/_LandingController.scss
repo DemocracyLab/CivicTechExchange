@@ -47,7 +47,7 @@
   margin-right: auto;
 }
 .LandingController-root .SplashScreen-content h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
 }
 .LandingController-topsplash .SplashScreen-content h1 {
   font-size: 4rem;
@@ -64,6 +64,9 @@
 .LandingController-midsplash p {
   max-width: 500px;
   white-space: pre-wrap;
+}
+/* midsplash isn't respecting margin rules because ??? */
+.LandingController-midsplash p, .LandingController-midsplash-btn {
   margin-left: auto;
   margin-right: auto;
 }
