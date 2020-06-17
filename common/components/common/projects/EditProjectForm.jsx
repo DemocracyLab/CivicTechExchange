@@ -131,7 +131,7 @@ class EditProjectForm extends React.PureComponent<Props,State> {
         formFields: {
           project_name: project.project_name,
           project_location: location,
-          project_country: countryByCode(location.country),
+          project_country: countryByCode(project.project_country),
           project_url: project.project_url,
           project_description: project.project_description,
           project_description_solution: project.project_description_solution,

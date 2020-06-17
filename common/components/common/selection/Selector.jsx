@@ -44,7 +44,7 @@ type State<T> = {|
   isCleared: boolean
 |};
 
-class Selector<T> extends React.PureComponent<Props<T>, State<T>> {
+class Selector<T> extends React.Component<Props<T>, State<T>> {
   constructor(props: Props<T>): void {
     super();
     

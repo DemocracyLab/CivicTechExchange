@@ -10,11 +10,11 @@ import _ from "lodash";
 
 export const LocationFormInputsByEntity: Dictionary<(LocationInfo) => string> = {
   Projects: {
-    project_location: (location: LocationInfo) => location.location_id,
-    project_state: (location: LocationInfo) => location.state,
-    project_city: (location: LocationInfo) => location.city,
-    project_latitude: (location: LocationInfo) => location.latitude,
-    project_longitude: (location: LocationInfo) => location.longitude
+    project_location: (location: LocationInfo) => location ? location.location_id : "",
+    project_state: (location: LocationInfo) => location ? location.state : "",
+    project_city: (location: LocationInfo) => location ? location.city : "",
+    project_latitude: (location: LocationInfo) => location ? location.latitude : "",
+    project_longitude: (location: LocationInfo) => location ? location.longitude : ""
   }
 };
 
@@ -29,7 +29,7 @@ type State = {|
   location: ?LocationInfo
 |};
 
-export class LocationAutocompleteForm extends React.PureComponent<Props, State> {
+export class LocationAutocompleteForm extends React.Component<Props, State> {
   constructor(props: Props): void {
     super();
     this.state = {

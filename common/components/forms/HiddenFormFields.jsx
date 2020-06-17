@@ -5,7 +5,7 @@ import type {Dictionary} from "../types/Generics.jsx";
 import _ from "lodash";
 
 type Props<T> = {|
-  sourceObject: T,
+  sourceObject: ?T,
   fields: Dictionary<(T) => string>
 |};
 
@@ -13,7 +13,7 @@ type Props<T> = {|
 /**
  * Render a list of hidden form fields based on an object
  */
-class HiddenFormFields extends React.PureComponent<Props>  {
+class HiddenFormFields extends React.Component<Props>  {
   constructor(props: Props): void {
     super(props);
   }
@@ -21,7 +21,7 @@ class HiddenFormFields extends React.PureComponent<Props>  {
   render(): React$Node {
     return (
       <React.Fragment>
-        {this.props.sourceObject && this.props.fields && _.keys(this.props.fields).map((fieldName) => {
+        {this.props.fields && _.keys(this.props.fields).map((fieldName) => {
           return <input type="hidden" key={fieldName} id={fieldName} name={fieldName} value={this.props.fields[fieldName](this.props.sourceObject)}/>;
         })}
       </React.Fragment>

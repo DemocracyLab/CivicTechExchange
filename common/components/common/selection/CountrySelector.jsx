@@ -20,7 +20,7 @@ type State = {|
 |};
 
 
-export class CountrySelector extends React.PureComponent<Props, State> {
+export class CountrySelector extends React.Component<Props, State> {
   constructor(props: Props): void {
     super();
     const countryCodeFormat: string = props.countryCodeFormat || CountryCodeFormats.ISO_2;

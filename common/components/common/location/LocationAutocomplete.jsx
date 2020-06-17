@@ -23,7 +23,7 @@ type State = {|
   selected: ?LocationInfo
 |};
 
-export class LocationAutocomplete extends React.PureComponent<Props, State> {
+export class LocationAutocomplete extends React.Component<Props, State> {
   constructor(props: Props): void {
     super();
     this.state = {
