@@ -310,6 +310,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'MAILCHIMP_API_KEY': {
         'error': False,
         'message': 'Mailchimp API key needed to subscribe users to mailing list'
+    },
+    'PRIVACY_POLICY_URL': {
+        'error': True,
+        'message': 'Privacy Policy url required'
     }
 }
 
@@ -415,3 +419,5 @@ QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
 BLOG_URL = os.environ.get('BLOG_URL', '')
 
 EVENT_URL = os.environ.get('EVENT_URL', '')
+
+PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')

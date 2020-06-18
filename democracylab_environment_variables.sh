@@ -113,3 +113,5 @@ export BOARD_OF_DIRECTORS='[{"first_name":"Mark","last_name":"Frischmuth","title
 export FAVICON_PATH=https://d1agxr2dqkgkuy.cloudfront.net/img/favicon.png
 
 export BLOG_URL='https://blog.democracylab.org'
+
+export PRIVACY_POLICY_URL='https://d1agxr2dqkgkuy.cloudfront.net/documents/2020.06%20DemocracyLab%20Privacy%20Policy.pdf'
