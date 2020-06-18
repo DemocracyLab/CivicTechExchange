@@ -4,8 +4,8 @@ import React from 'react'
 import DjangoCSRFToken from 'django-react-csrftoken'
 import UserAPIUtils from "../utils/UserAPIUtils.js";
 import type {UserAPIData} from "../utils/UserAPIUtils.js";
-import {CountrySelector, defaultCountryCode} from "../common/selection/CountrySelector.jsx";
-import {CountryData} from "../constants/Countries.js";
+import {CountrySelector} from "../common/selection/CountrySelector.jsx";
+import {CountryData, DefaultCountry} from "../constants/Countries.js";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import TagSelector from "../common/tags/TagSelector.jsx";
 import LinkList from "../forms/LinkList.jsx";
@@ -62,7 +62,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
       user_resume_file: [],
       user_technologies: [],
       postal_code: "",
-      country: defaultCountryCode,
+      country: DefaultCountry.ISO_2,
       user_links: [],
       user_files: []
     };
@@ -104,7 +104,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
         about_me: user.about_me,
         user_links: user.user_links,
         postal_code: user.postal_code,
-        country: user.country || defaultCountryCode,
+        country: user.country || DefaultCountry.ISO_2,
         user_technologies: user.user_technologies,
         user_resume_file: user.user_files.filter((file: FileInfo) => file.fileCategory === UserFileTypes.RESUME),
         user_files: user.user_files.filter((file: FileInfo) => file.fileCategory !== UserFileTypes.RESUME),
