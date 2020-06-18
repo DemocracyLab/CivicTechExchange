@@ -369,7 +369,8 @@ def index(request):
         'GR_SITEKEY': settings.GR_SITEKEY,
         'FAVICON_PATH': settings.FAVICON_PATH,
         'BLOG_URL': settings.BLOG_URL,
-        'EVENT_URL': settings.EVENT_URL
+        'EVENT_URL': settings.EVENT_URL,
+        'PRIVACY_POLICY_URL': settings.PRIVACY_POLICY_URL
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',

@@ -314,6 +314,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'MAILCHIMP_API_KEY': {
         'error': False,
         'message': 'Mailchimp API key needed to subscribe users to mailing list'
+    },
+    'PRIVACY_POLICY_URL': {
+        'error': True,
+        'message': 'Privacy Policy url required'
     }
 }
 
@@ -422,3 +426,5 @@ EVENT_URL = os.environ.get('EVENT_URL', '')
 
 GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH', '')
 GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH', '')
+
+PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
