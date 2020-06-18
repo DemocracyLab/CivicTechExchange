@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
 import Select from 'react-select'
-import {Countries} from "../../constants/Countries.js";
+import {CountryList} from "../../constants/Countries.js";
 import metrics from "../../utils/metrics.js";
 
 type CountryOption = {|

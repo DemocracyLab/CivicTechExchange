@@ -99,6 +99,9 @@ export GOOGLE_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 # GitHub token for expanding our rate limit for API calls
 # export GITHUB_API_TOKEN=SECRET
 
+# Configuration for HERE location api
+# export HERE_CONFIG='{"autocompleteUrl":"https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json","geocodeUrl":"https://geocoder.ls.hereapi.com/6.2/geocode.json","apiKey":"SECRET"}'
+
 # The date the DemocracyLab site was last updated.  Used in our sitemap
 export DL_PAGES_LAST_UPDATED='2019-12-05'
 

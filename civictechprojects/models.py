@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.contrib.gis.db.models import PointField
 from enum import Enum
 from democracylab.models import Contributor
 from common.models.tags import Tag
@@ -79,6 +80,10 @@ class Project(Archived):
     project_organization_type = TaggableManager(blank=True, through=TaggedOrganizationType)
     project_organization_type.remote_field.related_name = "+"
     project_location = models.CharField(max_length=200, blank=True)
+    project_location_coords = PointField(null=True, blank=True, srid=4326, default='')
+    project_country = models.CharField(max_length=100, blank=True)
+    project_state = models.CharField(max_length=100, blank=True)
+    project_city = models.CharField(max_length=100, blank=True)
     project_name = models.CharField(max_length=200)
     project_url = models.CharField(max_length=2083, blank=True)
     project_date_created = models.DateTimeField(null=True)
@@ -108,7 +113,8 @@ class Project(Archived):
         positions = ProjectPosition.objects.filter(position_project=self.id)
         volunteers = VolunteerRelation.objects.filter(project=self.id)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
-
+        # TODO: Don't return location id
+        # TODO: Reduce country down to 2-char code
         project = {
             'project_id': self.id,
             'project_name': self.project_name,
@@ -121,6 +127,9 @@ class Project(Archived):
             'project_short_description': self.project_short_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
+            'project_country': self.project_country,
+            'project_state': self.project_state,
+            'project_city': self.project_city,
             'project_organization': Tag.hydrate_to_json(self.id, list(self.project_organization.all().values())),
             'project_organization_type': Tag.hydrate_to_json(self.id, list(self.project_organization_type.all().values())),
             'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
@@ -134,6 +143,10 @@ class Project(Archived):
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__()
         }
+
+        if self.project_location_coords is not None:
+            project['project_latitude'] = self.project_location_coords.x
+            project['project_longitude'] = self.project_location_coords.y
 
         if len(thumbnail_files) > 0:
             project['project_thumbnail'] = thumbnail_files[0].to_json()
@@ -152,6 +165,9 @@ class Project(Archived):
             'project_description': self.project_short_description if self.project_short_description else self.project_description,
             'project_url': self.project_url,
             'project_location': self.project_location,
+            'project_country': self.project_country,
+            'project_state': self.project_state,
+            'project_city': self.project_city,
             'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
             'project_stage': Tag.hydrate_to_json(self.id, list(self.project_stage.all().values())),
             'project_positions': list(map(lambda position: position.to_json(), positions)),
