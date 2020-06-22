@@ -22,8 +22,6 @@ class Command(BaseCommand):
         to_bucket = options['bucket_name']
 
         for project_file in project_files:
-            if project_file.id != 3:
-                continue
 
             try:
                 file_name, new_file_name = get_new_file_name(project_file)
@@ -45,7 +43,7 @@ class Command(BaseCommand):
 
 def update_in_db(from_bucket, new_file_name, project_file, to_bucket):
     file_url = project_file.file_url.replace(from_bucket, to_bucket)
-    file_url = file_url.replace(urllib.parse.quote_plus(project_file.file_key), urllib.parse.quote_plus(new_file_name))
+    file_url = file_url.replace(urllib.parse.quote_plus(project_file.file_key), urllib.parse.quote(new_file_name))
     project_file.file_url = file_url
     project_file.file_key = new_file_name
     project_file.save()
