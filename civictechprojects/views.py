@@ -482,13 +482,13 @@ def projects_list(request):
         project_relationships = ProjectRelationship.objects.filter(relationship_group=query_params['group_id'][0])
     elif 'event_id' in query_params:
         project_relationships = ProjectRelationship.objects.filter(relationship_event=query_params['event_id'][0])
-    
+
     if project_relationships is not None:
         project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
         project_list = Project.objects.filter(id__in=project_ids, is_searchable=True)
     else:
         project_list = Project.objects.filter(is_searchable=True)
-    
+
     if request.method == 'GET':
         project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
         project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
@@ -637,13 +637,13 @@ def available_tag_filters(projects, selected_tag_filters):
 
 
 def presign_project_thumbnail_upload(request):
-    uploader = request.user.username
     file_name = request.GET['file_name'][:150]
     file_type = request.GET['file_type']
     file_extension = file_type.split('/')[-1]
-    unique_file_name = file_name + '_' + str(time())
-    s3_key = 'thumbnails/%s/%s.%s' % (
-        uploader, unique_file_name, file_extension)
+
+    unique_file_name = file_name.split('.' + file_extension)[0] + '_' + str(time())
+    s3_key = f"uploads/user/{request.user.id}/{unique_file_name}.{file_extension}"
+
     return presign_s3_upload(
         raw_key=s3_key, file_name=file_name, file_type=file_type, acl="public-read")
 
