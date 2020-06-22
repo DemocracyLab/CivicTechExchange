@@ -6,7 +6,7 @@ import requests
 github_api_endpoint='https://api.github.com'
 
 
-def fetch_github_info(github_url):
+def fetch_github_info(github_url, include_pagination=False):
     headers = {"Authorization":"token " + settings.GITHUB_API_TOKEN} if settings.GITHUB_API_TOKEN is not None else {}
     response = requests.get(github_url, headers=headers)
     try:
@@ -15,6 +15,12 @@ def fetch_github_info(github_url):
             print('Unable to read ' + github_url + ': ' + repo_info['message'])
             return None
         else:
+            if include_pagination:
+                while 'next' in response.links.keys():
+                    print(response.links['next']['url'])
+                    response=requests.get(response.links['next']['url'], headers=headers)
+                    repo_info.extend(response.json())
+
             return repo_info
     except:
         print('Invalid json: ' + github_url)
