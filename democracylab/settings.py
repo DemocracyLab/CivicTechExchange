@@ -77,7 +77,7 @@ if SOCIAL_APPS_environ is not None:
 
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
-        'SCOPE': ['read:user', 'user:email']
+        'SCOPE': ['read:user']
     },
     'google': {
         'SCOPE': ['profile', 'email'],
