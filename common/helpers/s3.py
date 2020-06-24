@@ -44,3 +44,12 @@ def delete_s3_file(raw_key):
 def user_has_permission_for_s3_file(username, raw_key):
     s3_key = S3Key(raw_key)
     return username == s3_key.username
+
+
+def upload_file_to_s3(file_name, file_path, s3_file_key, file_type):
+    s3 = client('s3')
+
+    content_disposition = 'attachment; filename="{0}"'.format(file_name)
+    extra_args = {'ACL': 'public-read', 'ContentDisposition': content_disposition, 'ContentType': file_type}
+    with open(file_path, 'rb') as data:
+        s3.upload_fileobj(data, settings.S3_BUCKET, s3_file_key, ExtraArgs=extra_args)

@@ -1,5 +1,6 @@
 import csv
 import math
+import os
 import traceback
 from datetime import timedelta, datetime
 
@@ -8,6 +9,7 @@ from django.core.management.base import BaseCommand
 from common.helpers.date_helpers import datetime_field_to_datetime
 from common.helpers.github import fetch_github_info, get_owner_repo_name_from_public_url, \
     get_repo_endpoint_from_owner_repo_name, get_repo_names_from_owner_repo_name
+from common.helpers.s3 import upload_file_to_s3
 
 COLUMN_MAP = {
     'project_name': 'Project Name',
@@ -58,8 +60,10 @@ def create_report():
     project_id_set = set()
     for github_link in project_github_links:
 
-        if not github_link.link_project.is_searchable:
+        if not github_link.link_project.is_searchable or\
+                github_link.link_project.project_date_created is None:
             continue
+
         try:
             if github_link.link_project.id not in project_id_set:
                 create_commit_report(github_link, project_list)
@@ -133,18 +137,20 @@ def populate_repo_statistics(commit_info, commit_post_dl, project, repo_name):
     no_of_weeks_pre_dl = (project.project_date_created.date() - last_commit_date_pre_dl).days // 7
 
     commit_pre_dl = len(commit_info) - commit_post_dl
-    avg_commit_pre_dl = math.ceil(commit_pre_dl / no_of_weeks_pre_dl)
-    avg_commit_post_dl = math.ceil(commit_post_dl / no_of_weeks_post_dl)
+    avg_commit_pre_dl = math.ceil(commit_pre_dl / no_of_weeks_pre_dl) if no_of_weeks_pre_dl > 0 else 0
+    avg_commit_post_dl = math.ceil(commit_post_dl / no_of_weeks_post_dl) if no_of_weeks_post_dl > 0 else 0
 
     change_in_avg_commit = round(100 * (avg_commit_post_dl - avg_commit_pre_dl) / avg_commit_pre_dl, 2) \
-        if commit_pre_dl > 0 else None
+        if commit_pre_dl > 0 and avg_commit_pre_dl > 0 else None
 
     repo_dict = {'project_name': project.project_name,
                  'repo_name': repo_name[1],
                  'date_joined': project.project_date_created.date().strftime('%m/%d/%Y'),
                  'avg_commit_pre_dl': avg_commit_pre_dl,
                  'avg_commit_post_dl': avg_commit_post_dl,
-                 'change_in_avg_commit': change_in_avg_commit}
+                 'change_in_avg_commit': change_in_avg_commit
+                 }
+
     return repo_dict
 
 
@@ -167,5 +173,8 @@ def write_to_csv(project_list):
 
             writer.writerow(data)
 
-    print(f'Commit Report completed - {file_name}')
+    file_path = os.path.join(os.getcwd(), file_name)
+    s3_file_key = 'report/' + file_name
+    upload_file_to_s3(file_name=file_name, file_path=file_path, s3_file_key=s3_file_key, file_type='text/csv')
 
+    print(f'Commit Report completed - {file_name}')
