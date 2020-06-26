@@ -35,3 +35,4 @@ class FrontEndSection(Enum):
     EditProfile = 'EditProfile'
     ThankYou = 'ThankYou'
     EmailVerified = 'EmailVerified'
+    Error = 'Error'

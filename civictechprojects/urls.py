@@ -16,10 +16,15 @@ Including another URLconf
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
+from common.helpers.error_handlers import handle500
 from .sitemaps import ProjectSitemap, SectionSitemap
 
 
 from . import views
+
+# Set custom error handler
+handler500 = handle500
+
 urlpatterns = [
 
     url(
