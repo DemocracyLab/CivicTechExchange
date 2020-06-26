@@ -21,8 +21,8 @@ class MissingOAuthFieldError(ReportableError):
         message -- explanation of the error to be reported in the logs
     """
 
-    def __init__(self, message, missing_fields):
-        super().__init__(message, {'missing_fields': ', '.join(missing_fields)})
+    def __init__(self, message, provider, missing_fields):
+        super().__init__(message, {'provider': provider, 'missing_fields': ', '.join(missing_fields)})
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
@@ -57,13 +57,11 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         first_name = data.get('first_name')
         last_name = data.get('last_name')
 
-        # print('Social Login: ' + [full_name, first_name, last_name].join(','))
-
         if full_name is None and first_name is None:
             missing_fields = ['name', 'first_name']
             msg = 'Social login Failed for {provider}.  Missing fields: {fields}'\
                 .format(provider=provider.name, fields=missing_fields)
-            raise MissingOAuthFieldError(msg, missing_fields)
+            raise MissingOAuthFieldError(msg, provider.name, missing_fields)
 
         sociallogin.user.first_name = first_name or full_name.split()[0]
         sociallogin.user.last_name = last_name or ' '.join(full_name.split()[1:])

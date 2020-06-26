@@ -14,7 +14,9 @@ type State = {|
 
 const ErrorMessagesByType: Dictionary<(ErrorArgs) => string> = {
   MissingOAuthFieldError: (errorArgs: ErrorArgs) => {
-    return "Sign up failed, as your account is missing the following fields: " + decodeURI(errorArgs.missing_fields);
+    const missingFields: string = decodeURI(errorArgs.missing_fields);
+    return `Sign up failed, as your account is missing the following fields: ${missingFields}. ` +
+      `Please update your ${errorArgs.provider} profile with this information or use another method to sign up for DemocracyLab. Thank you!`;
   }
 };
 
