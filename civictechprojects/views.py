@@ -572,7 +572,7 @@ def projects_by_sortField(project_list, sortField):
 
 def projects_by_location(project_list, param):
     param_parts = param.split(',')
-    location = Point(float(param_parts[0]), float(param_parts[1]))
+    location = Point(float(param_parts[1]), float(param_parts[0]))
     radius = float(param_parts[2])
     project_list = project_list.filter(project_location_coords__distance_lte=(location, D(mi=radius)))
     return project_list

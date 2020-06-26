@@ -86,7 +86,7 @@ def migrate_locations_from_city_list(*args):
             project.project_country = data["country"]
             project.project_state = data["state"]
             project.project_city = data["city"]
-            project.project_location_coords = Point(data['latitude'], data['longitude'])
+            project.project_location_coords = Point(data['longitude'], data['latitude'])
             project.save()
 
 
