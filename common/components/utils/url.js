@@ -166,6 +166,12 @@ class urlHelper {
   static isEmptyStringOrValidUrl(url: string): boolean {
     return (_.isEmpty(url) || this.isValidUrl(url));
   }
+  
+  static cleanDemocracyLabUrl(url: ?string): string {
+    // Remove url snippet
+    let _url: string = url || window.location.href;
+    return _url.replace("#_=_","");
+  }
 }
 
 export default urlHelper
