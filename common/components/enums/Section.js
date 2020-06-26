@@ -26,7 +26,8 @@ const Section = {
   CreateGroup: 'CreateGroup',
   CreateEvent: 'CreateEvent',
   AboutEvent: 'AboutEvent',
-  LiveEvent: 'LiveEvent'
+  LiveEvent: 'LiveEvent',
+  Error: 'Error'
 };
 
 export type SectionType = $Keys<typeof Section>;
