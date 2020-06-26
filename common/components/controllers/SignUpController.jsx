@@ -176,7 +176,12 @@ class SignUpController extends React.Component<Props, State> {
               type="checkbox"
               onChange={e => this.setState({didCheckTerms: !this.state.didCheckTerms})}
             />
-            <span> I have read and accepted the <PseudoLink text="Terms of Volunteering" onClick={e => this.setState({termsOpen: true})}/> </span>
+            <span>
+              I have read and accepted the
+              {" "}<PseudoLink text="Terms of Volunteering" onClick={e => this.setState({termsOpen: true})}/>
+              {" and "}
+              <a href={window.PRIVACY_POLICY_URL}>Privacy Policy</a>
+            </span>
             
           </div>
           

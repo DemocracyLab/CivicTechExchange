@@ -4,6 +4,7 @@ import React from 'react';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {ProjectDetailsAPIData, TeamAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn, {Images} from '../utils/cdn.js';
+import SplashScreen, {HeroImage} from '../componentsBySection/FindProjects/SplashScreen.jsx';
 import Headers from "../common/Headers.jsx";
 import BioModal from "../componentsBySection/AboutUs/BioModal.jsx";
 import BioThumbnail from "../componentsBySection/AboutUs/BioThumbnail.jsx";
@@ -97,26 +98,22 @@ class AboutUsController extends React.PureComponent<{||}, State> {
      });
   }
 
+
   _ourMission() {
+    const header: string = "Mission";
+    const text: string = "Empower people who use technology to advance the public good.";
     return (
-      <div className="about-us-mission"
-      style={cdn.bgImage('OurMissionBGoverlay.jpg')}>
-        <div className="about-us-content container">
-          <h1>Mission</h1>
-          <p>Empower people who use technology to advance the public good.</p>
-        </div>
-      </div>
+      <SplashScreen className="about-us-mission about-us-content" header={header} text={text} img={HeroImage.AboutMission}>
+      </SplashScreen>
     )
   }
   _ourVision() {
+    const header: string = "Vision";
+    const text: string = "Technology enables our collective intelligence to solve the most challenging social, economic, environmental and civic problems while empowering all members of our societies.";
+    const opacity: number = 0
     return (
-      <div className="about-us-vision"
-      style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
-        <div className="about-us-content container">
-          <h2>Vision</h2>
-          <p>Technology enables our collective intelligence to solve the most challenging social, economic, environmental and civic problems while empowering all members of our societies.</p>
-        </div>
-      </div>
+      <SplashScreen className="about-us-vision about-us-content" header={header} text={text} img={"OurVisionBGoverlay.jpg"} opacity={opacity}>
+      </SplashScreen>
     )
   }
 

@@ -4,6 +4,9 @@
 import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 import {PositionInfo} from "../forms/PositionInfo.jsx";
+import {CountryData, DefaultCountry, countryByCode} from "../constants/Countries.js";
+import {LocationInfo, getLocationDisplayString} from "../common/location/LocationInfo.js";
+import _ from 'lodash';
 
 export type APIResponse = {|
   +status: number
@@ -32,6 +35,9 @@ export type ProjectData = {|
   +issueArea: $ReadOnlyArray<TagDefinition>,
   +stage: $ReadOnlyArray<TagDefinition>,
   +location: string,
+  +country: string,
+  +state: string,
+  +city: string,
   +name: string,
   +thumbnail: FileInfo,
   +claimed: boolean,
@@ -45,6 +51,9 @@ export type ProjectAPIData = {|
   +project_issue_area: $ReadOnlyArray<TagDefinition>,
   +project_stage: $ReadOnlyArray<TagDefinition>,
   +project_location: string,
+  +project_country: string,
+  +project_state: string,
+  +project_city: string,
   +project_name: string,
   +project_thumbnail: FileInfo,
   +project_date_modified: string,
@@ -75,6 +84,8 @@ export type VolunteerDetailsAPIData = {|
 export type ProjectDetailsAPIData = {|
   +project_id: number,
   +project_description: string,
+  +project_description_solution: string,
+  +project_description_actions: string,
   +project_short_description: string,
   +project_creator: number,
   +project_claimed: boolean,
@@ -87,6 +98,11 @@ export type ProjectDetailsAPIData = {|
   +project_technologies: $ReadOnlyArray<TagDefinition>,
   +project_positions: $ReadOnlyArray<PositionInfo>,
   +project_location: string,
+  +project_latitude: string,
+  +project_longitude: string,
+  +project_country: string,
+  +project_state: string,
+  +project_city: string,
   +project_name: string,
   +project_thumbnail: FileInfo,
   +project_links: $ReadOnlyArray<LinkInfo>,
@@ -119,6 +135,9 @@ class ProjectAPIUtils {
           ? apiData.project_organization_type[0].display_name
           : 'None',
       location: apiData.project_location,
+      country: apiData.project_country,
+      state: apiData.project_state,
+      city: apiData.project_city,
       name: apiData.project_name,
       thumbnail: apiData.project_thumbnail,
       ownerId: apiData.project_creator,
@@ -129,6 +148,17 @@ class ProjectAPIUtils {
           ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
           : ['Contact Project for Details'],
     };
+  }
+  
+  static getLocationDisplayName(project: ProjectAPIData | ProjectDetailsAPIData | ProjectData): string {
+    // TODO: See if we can deprecate ProjectData
+    const location: LocationInfo = {
+      location_id: project.project_location || project.location,
+      city: project.project_city || project.city,
+      state: project.project_state || project.state,
+      country: project.project_country || project.country
+    };
+    return getLocationDisplayString(location);
   }
 
   static getSkillNames(positions: array) {
