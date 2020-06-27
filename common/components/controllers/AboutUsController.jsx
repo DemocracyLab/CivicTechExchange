@@ -112,7 +112,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     const text: string = "Technology enables our collective intelligence to solve the most challenging social, economic, environmental and civic problems while empowering all members of our societies.";
     const opacity: number = 0
     return (
-      <SplashScreen className="about-us-vision about-us-content" header={header} text={text} img={"OurVisionBGoverlay.jpg"} opacity={opacity}>
+      <SplashScreen className="about-us-vision about-us-content" header={header} text={text} img={"OurVisionBGoverlay.jpg"} opacity={opacity} doNotFillViewport>
       </SplashScreen>
     )
   }
