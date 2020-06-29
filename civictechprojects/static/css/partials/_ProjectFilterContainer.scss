@@ -111,12 +111,22 @@
   border-bottom: 1px solid $color-grey-medium;
 }
 
-.ProjectFilterDataContainer-root {
+.ProjectFilterDataContainer-root, .LocationSearchContainer {
   margin: 0 15px;
+}
+.LocationSearchContainer-content {
+  margin: 0 0 15px 0;
+  padding: 12px 10px;
+}
+.LocationSearchContainer-content label {
+  padding-top: 24px;
+}
+.LocationSearchContainer-content label:first-of-type {
+  padding-top: 0;
 }
 
 @include media-breakpoint-up(sm) {
-  .ProjectFilterDataContainer-root {
+  .ProjectFilterDataContainer-root, .LocationSearchContainer, .LocationSearchContainer-content {
     margin: 0;
   }
 }

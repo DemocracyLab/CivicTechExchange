@@ -14,6 +14,7 @@ import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import LoadingMessage from '../../chrome/LoadingMessage.jsx';
 import prerender from "../../utils/prerender.js";
+import type {LocationRadius} from "../../stores/ProjectSearchStore.js";
 
 type Props = {|
   showSearchControls: ?boolean,
@@ -28,7 +29,9 @@ type State = {|
   projects: List<Project>,
   project_pages: number,
   current_page: number,
-  project_count: number
+  project_count: number,
+  legacyLocation: string,
+  location: LocationRadius
 |};
 
 class ProjectCardsContainer extends React.Component<Props, State> {
@@ -48,13 +51,14 @@ class ProjectCardsContainer extends React.Component<Props, State> {
       projects_loading: ProjectSearchStore.getProjectsLoading(),
       keyword: ProjectSearchStore.getKeyword() || '',
       tags: ProjectSearchStore.getTags() || [],
+      legacyLocation: ProjectSearchStore.getLegacyLocation() || '',
       location: ProjectSearchStore.getLocation() || ''
     };
   }
 
   render(): React$Node {
     return (
-      <div className={`ProjectCardContainer col-12 ${this.props.fullWidth ? '' : 'col-md-9 col-xxl-10 p-0 m-0'}`}>
+      <div className={`ProjectCardContainer col-12 ${this.props.fullWidth ? '' : 'col-md-8 col-lg-9 p-0 m-0'}`}>
         <div className="container-fluid">
           {
             this.props.showSearchControls
@@ -81,7 +85,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   _renderCardHeaderText(): React$Node {
     if (this.props.staticHeaderText) {
       return this.props.staticHeaderText;
-    } else if (this.state.keyword || this.state.tags.size > 0 || this.state.location) {
+    } else if (this.state.keyword || this.state.tags.size > 0 || this.state.legacyLocation || (this.state.location && this.state.location.latitude && this.state.location.longitude)) {
       return this.state.project_count === 1 ? this.state.project_count + ' tech-for-good project found' : this.state.project_count + ' tech-for-good projects found'
     } else {
       return 'Find and volunteer with innovative tech-for-good projects'

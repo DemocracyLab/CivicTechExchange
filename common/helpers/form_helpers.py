@@ -3,6 +3,8 @@ from common.helpers.collections import find_first
 from common.models.tags import Tag
 from common.helpers.date_helpers import parse_front_end_datetime
 from distutils.util import strtobool
+from django.contrib.gis.geos import Point
+
 
 def read_form_field_string(model, form, field_name, transformation=None):
     if field_name in form.data:
@@ -23,6 +25,14 @@ def read_form_field_datetime(model, form, field_name):
 def read_form_field_tags(model, form, field_name):
     if field_name in form.data:
         Tag.merge_tags_field(getattr(model, field_name), form.data.get(field_name))
+
+
+def read_form_fields_point(model, form, point_field_name, lat_field_name, long_field_name):
+    if lat_field_name in form.data and long_field_name in form.data:
+        lat = form.data.get(lat_field_name)
+        long = form.data.get(long_field_name)
+        if len(lat) > 0 and len(long) > 0:
+            setattr(model, point_field_name, Point(float(long), float(lat)))
 
 
 def merge_json_changes(model_class, model, form, field_name):

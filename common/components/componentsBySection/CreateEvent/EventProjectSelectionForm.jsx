@@ -38,14 +38,14 @@ class EventProjectSelectionForm extends React.PureComponent<Props,State> {
         selectedProjects: [],
       },
     };
-    
+
     this.form = form.setup();
     props.readyForSubmit(true, this.onSubmit.bind(this));
     this.addProjectToSelectedProjects = this.addProjectToSelectedProjects.bind(this);
-  
+
     this.projectIdsField = React.createRef();
   }
-  
+
   componentDidMount() {
     // Initial validation check
     this.form.doValidation.bind(this)();
@@ -85,44 +85,17 @@ class EventProjectSelectionForm extends React.PureComponent<Props,State> {
         <div style={{ marginBottom: '20px' }}>
           Which projects are participating in your event?
         </div>
-  
+
         <input type="hidden" ref={this.projectIdsField} id="" name=""/>
-        
-        <
-          div
-          className="SelectProjectsPillsContainer"
-          style={{
-            marginBottom: '20px'
-          }}
-        >
+
+        <div className="create-selected-projects">
           {
             this.state.selectedProjects.map(project => {
               // need pill buttons or tags
               return (
-                <span
-                  style={{
-
-                    borderRadius: '20px',
-                    backgroundColor: '#F3A73C',
-                    height: '40px',
-                    padding: '10px 30px',
-                    display: 'flex',
-                    display: 'inline-block',
-                    margin: '0 10px 10px 0',
-
-                  }}
-                
-                >
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff',
-
-                  }}>
-                    {project.name}
-                  </div>
-                </span>
+                <div className="create-selected-project-name">
+                  {project.name}
+                </div>
               )
             })
           }
@@ -132,7 +105,7 @@ class EventProjectSelectionForm extends React.PureComponent<Props,State> {
             <ProjectCardsContainer
               showSearchControls={true}
               alreadySelectedProjects={this.state.selectedProjects}
-              onSelectProject={(project) => this.addProjectToSelectedProjects(project)} 
+              onSelectProject={(project) => this.addProjectToSelectedProjects(project)}
               fullWidth={true}
               selectableCards={true}
             />

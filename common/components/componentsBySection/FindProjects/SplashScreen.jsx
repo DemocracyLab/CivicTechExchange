@@ -13,13 +13,15 @@ type Props = {|
   bottomOverlayText: ?$ReadOnlyArray<string>,
   img: ?string,
   className: ?string,
+  opacity: ?number,
   onClickFindProjects: () => void
 |};
 
 export const HeroImage: { [key: string]: string } = {
   TopLanding: "CodeForGood_072719_MSReactor-064.jpg",
   MidLanding: "CodeForGood_072719_MSReactor-034.jpg",
-  BottomLanding: "CodeForGood_072719_MSReactor-003.jpg",
+  BottomLanding: "SplashImage-7178-1400.jpg",
+  AboutMission: "CodeForGood_072719_MSReactor-003.jpg",
 };
 
 const heroImages: $ReadOnlyArray<string> = [
@@ -35,10 +37,11 @@ class SplashScreen extends React.PureComponent<Props> {
   }
 
   render(): React$Node {
+    const opacityValue = _.isNumber(this.props.opacity) ? this.props.opacity : 0.5;
     const backgroundUrl: string = this.props.img ? cdn.image(this.props.img) : this._heroRandomizer();
-    const cssClass = "SplashScreen-root SplashScreen-opacity-layer SplashScreen-opacity50 " + this.props.className
+    const cssClass = "SplashScreen-root SplashScreen-opacity-layer " + this.props.className
     return (
-      <div className={cssClass} style={{backgroundImage: 'url(' + backgroundUrl + ')' }}>
+      <div className={cssClass} style={{backgroundImage: 'url(' + backgroundUrl + ')', backgroundColor: `rgba(0,0,0, ${opacityValue})`}}>
         <div className="SplashScreen-content">
           {this.props.header ? <h1>{this.props.header}</h1> : null}
           <div className="SplashScreen-section">

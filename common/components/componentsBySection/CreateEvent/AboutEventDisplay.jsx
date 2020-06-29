@@ -27,7 +27,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     this.state = {
       event: props.event
     };
-    
+
     if(this.state.event) {
       this.filterProjectsByOrgTag();
     }
@@ -47,16 +47,17 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       <div className="AboutEvent-root container">
 
         <div className="AboutEvent-title row">
-          <div className="col-12">
+          <div className="col-12 AboutEvent-header">
+          {
+            !this.props.viewOnly
+            && (CurrentUser.userID() === this.state.event.event_creator || CurrentUser.isStaff())
+            && this._renderEditButton()
+          }
             <div className="AboutEvent-title-date">
               {moment(event.event_date_start).format("MMMM Do YYYY")}
             </div>
             <h1>{event.event_name}</h1>
-            {
-              !this.props.viewOnly
-              && (CurrentUser.userID() === this.state.event.event_creator || CurrentUser.isStaff())
-              && this._renderEditButton()
-            }
+            <p>{event.event_short_description}</p>
           </div>
         </div>
 
@@ -87,7 +88,6 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
         <div className="AboutEvent-details col-12">
           <h3>Details</h3>
-          <p>{event.event_short_description}</p>
           <p>{event.event_description}</p>
           <h3>What We Will Do</h3>
           <p>{event.event_agenda}</p>
@@ -103,7 +103,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     return moment(this.state.event.event_date_start).format(timeFormat) + " - " +
       moment(this.state.event.event_date_end).format(timeFormat) + " " + timeZone;
   }
-  
+
   _renderEditButton(): ?$React$Node {
     return (
       <Button
@@ -112,7 +112,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         type="button"
         href={urlHelper.section(Section.CreateEvent, {id: this.state.event.event_id})}
       >
-        Edit
+        Edit Event
       </Button>
     );
   }
@@ -155,7 +155,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       </Button>
     );
   }
-  
+
   filterProjectsByOrgTag() {
     const event: EventData = this.state.event;
     if (event && !_.isEmpty(event.event_legacy_organization)) {
@@ -170,7 +170,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         }});
     }
   }
-  
+
   _renderProjectList(): ?$React$Node {
     return (
       <div className="row">

@@ -1,63 +1,71 @@
 // @flow
 
 import React from 'react';
-import Select from 'react-select'
-import {Countries} from "../../constants/Countries.js";
-
-type CountryOption = {|
-  value: string,
-  label: string,
-|};
+import Selector from "./Selector.jsx";
+import {CountryList, CountryData, CountryCodeFormat, CountryCodeFormats} from "../../constants/Countries.js";
+import _ from "lodash";
 
 type Props = {|
-  countryCode: string,
-  onSelection: (string) => void
+  id: ?string,
+  countryCode: ?string,
+  countryCodeFormat: CountryCodeFormat,
+  countryOptions: ?$ReadOnlyArray<CountryData>,
+  onSelection: (CountryData) => void
 |};
 
 type State = {|
-  selectedCountry: CountryOption,
-  countries: $ReadOnlyArray<CountryOption>
+  countryOptions: ?$ReadOnlyArray<CountryData>,
+  selectedCountry: CountryData,
+  countryCodeFormat: CountryCodeFormat
 |};
 
-export const defaultCountryCode = "US";
 
-export class CountrySelector extends React.PureComponent<Props, State> {
+export class CountrySelector extends React.Component<Props, State> {
   constructor(props: Props): void {
     super();
-    const countries: $ReadOnlyArray<CountryOption> = Object.keys(Countries).map(
-      countryCode => ({"value": countryCode, "label": Countries[countryCode]})
-    );
+    const countryCodeFormat: string = props.countryCodeFormat || CountryCodeFormats.ISO_2;
+    const countryList: ?$ReadOnlyArray<CountryData> = props.countryOptions || CountryList;
     this.state = {
-      countries: countries,
-      selectedCountry: this.getSelectedCountryOption(countries, props.countryCode || defaultCountryCode)
+      countryOptions: countryList,
+      selectedCountry: this.getSelectedCountry(props.countryCode, countryCodeFormat, countryList),
+      countryCodeFormat: countryCodeFormat
     };
   }
 
   componentWillReceiveProps(nextProps: Props): void {
-    this.setState({selectedCountry:this.getSelectedCountryOption(this.state.countries, nextProps.countryCode || defaultCountryCode)}, function() {
-      this.forceUpdate();
-    });
+    if(!_.isEqual(nextProps, this.props)) {
+      const countryCodeFormat: string = nextProps.countryCodeFormat || this.state.countryCodeFormat;
+      const countryList: ?$ReadOnlyArray<CountryData> = nextProps.countryOptions || CountryList;
+      const nextCountry: CountryData = this.getSelectedCountry(nextProps.countryCode, countryCodeFormat, countryList);
+      this.setState({
+        selectedCountry: nextCountry,
+        countryOptions: countryList
+      }, function () {
+        this.forceUpdate();
+      });
+    }
+  }
+  
+  getSelectedCountry(selectedCountryCode: string, countryCodeFormat: string, countryList: $ReadOnlyArray<CountryData>): CountryData {
+    return countryList.find((country:CountryData) => country[countryCodeFormat] === selectedCountryCode);
   }
 
-  handleSelection(selection: CountryOption) {
-    this.props.onSelection(selection.value);
+  handleSelection(selection: CountryData) {
+    this.setState({selectedCountry: selection}, () => this.props.onSelection(selection));
   }
-
-  getSelectedCountryOption(countries: $ReadOnlyArray<CountryOption>, countryCode: string) {
-    return countries.find(country => country.value === countryCode);
-  }
-
+  
   render(): React$Node {
     return (
-      <Select
-        id="country"
-        name="country"
-        options={this.state.countries}
-        value={this.state.selectedCountry}
-        onChange={this.handleSelection.bind(this)}
-        simpleValue={false}
-        clearable={false}
-        multi={false}
+      <Selector
+        id={this.props.id || "country"}
+        isSearchable={true}
+        isClearable={false}
+        isMultiSelect={false}
+        options={this.state.countryOptions}
+        labelGenerator={(country: CountryData) => country.displayName}
+        valueStringGenerator={(country: CountryData) => country[this.state.countryCodeFormat]}
+        selected={this.state.selectedCountry}
+        onSelection={this.handleSelection.bind(this)}
       />
     );
   }

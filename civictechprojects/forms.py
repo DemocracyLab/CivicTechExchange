@@ -8,38 +8,13 @@ from democracylab.emails import send_project_creation_notification
 from democracylab.models import get_request_contributor
 from common.models.tags import Tag
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
-    merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime
+    merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, read_form_fields_point
 
 
 class ProjectCreationForm(ModelForm):
     class Meta:
         model = Project
         fields = '__all__'
-
-    @staticmethod
-    def create_project(request):
-
-        form = ProjectCreationForm(request.POST)
-        # TODO: Form validation
-        project = Project.objects.create(
-            project_creator=get_request_contributor(request),
-            project_name=form.data.get('project_name'),
-            project_short_description=form.data.get('project_short_description'),
-            project_date_created=timezone.now(),
-            project_url='',
-            project_description='',
-            project_location='',
-            is_created=False
-        )
-        project = Project.objects.get(id=project.id)
-
-        # Tag fields operate like ManyToMany fields, and so cannot
-        # be added until after the object is created.
-        Tag.merge_tags_field(project.project_issue_area, form.data.get('project_issue_area'))
-        merge_single_file(project, form, FileCategory.THUMBNAIL, 'project_thumbnail_location')
-
-        project.save()
-        return project
 
     @staticmethod
     def delete_project(request, project_id):
@@ -52,13 +27,21 @@ class ProjectCreationForm(ModelForm):
         SitemapPages.update()
 
     @staticmethod
-    def edit_project(request, project_id):
-        project = Project.objects.get(id=project_id)
+    def create_or_edit_project(request, project_id):
+        form = ProjectCreationForm(request.POST)
+        if project_id is not None:
+            project = Project.objects.get(id=project_id)
+        else:
+            project = Project.objects.create(
+                project_creator=get_request_contributor(request),
+                project_name=form.data.get('project_name'),
+                project_date_created=timezone.now(),
+                is_created=False
+            )
 
         if not is_co_owner_or_staff(request.user, project):
             raise PermissionDenied()
 
-        form = ProjectCreationForm(request.POST)
         is_created_original = project.is_created
         read_form_field_boolean(project, form, 'is_created')
 
@@ -67,8 +50,13 @@ class ProjectCreationForm(ModelForm):
         read_form_field_string(project, form, 'project_description_actions')
         read_form_field_string(project, form, 'project_short_description')
         read_form_field_string(project, form, 'project_location')
+        read_form_field_string(project, form, 'project_country')
+        read_form_field_string(project, form, 'project_state')
+        read_form_field_string(project, form, 'project_city')
         read_form_field_string(project, form, 'project_name')
         read_form_field_string(project, form, 'project_url')
+
+        read_form_fields_point(project, form, 'project_location_coords', 'project_latitude', 'project_longitude')
 
         read_form_field_tags(project, form, 'project_issue_area')
         read_form_field_tags(project, form, 'project_stage')

@@ -14,6 +14,9 @@
     "buildtask:collectstatic": "python manage.py collectstatic --noinput -i *.scss",
     "test": "jest"
   },
+  "engines": {
+    "node": "13.7.x"
+  },
   "dependencies": {
     "@material-ui/core": "^3.5.1",
     "@material-ui/icons": "^3.0.1",

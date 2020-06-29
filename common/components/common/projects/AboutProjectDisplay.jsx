@@ -2,7 +2,7 @@
 
 import React from 'react';
 import _ from 'lodash'
-import type {ProjectDetailsAPIData} from '../../utils/ProjectAPIUtils.js';
+import ProjectAPIUtils,{ProjectDetailsAPIData} from '../../utils/ProjectAPIUtils.js';
 import ProjectDetails from '../../componentsBySection/FindProjects/ProjectDetails.jsx';
 import ContactProjectButton from "./ContactProjectButton.jsx";
 import ContactVolunteersButton from "./ContactVolunteersButton.jsx";
@@ -118,7 +118,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           </div>
 
           <div className='AboutProjects-details'>
-            <ProjectDetails projectLocation={project && project.project_location}
+            <ProjectDetails projectLocation={project && ProjectAPIUtils.getLocationDisplayName(project)}
             projectUrl={project && project.project_url}
             projectStage={project && !_.isEmpty(project.project_stage) ? project.project_stage[0].display_name : null}
             projectOrganizationType={project && !_.isEmpty(project.project_organization_type) ? project.project_organization_type[0].display_name : null}

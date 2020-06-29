@@ -1,3 +1,4 @@
+// TODO: Delete After Groups Implemented
 export const Locations = {
   OTHER: "Other",
   PRESET_LOCATIONS: [

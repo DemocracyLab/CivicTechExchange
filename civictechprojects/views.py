@@ -4,6 +4,8 @@ from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.gis.geos import Point
+from django.contrib.gis.measure import D
 from django.template import loader
 from django.utils import timezone
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -16,6 +18,7 @@ from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
 from .helpers.projects import projects_tag_counts
 from .sitemaps import SitemapPages
+from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff
@@ -283,7 +286,7 @@ def project_create(request):
         # TODO: Log this
         return HttpResponse(status=403)
 
-    project = ProjectCreationForm.create_project(request)
+    project = ProjectCreationForm.create_or_edit_project(request, None)
     return JsonResponse(project.hydrate_to_json())
 
 
@@ -291,9 +294,8 @@ def project_edit(request, project_id):
     if not request.user.is_authenticated():
         return redirect('/signup')
 
-    project = None
     try:
-        project = ProjectCreationForm.edit_project(request, project_id)
+        project = ProjectCreationForm.create_or_edit_project(request, project_id)
         # TODO:
         # update_cached_project_url(project_id)
     except PermissionDenied:
@@ -367,7 +369,8 @@ def index(request):
         'GR_SITEKEY': settings.GR_SITEKEY,
         'FAVICON_PATH': settings.FAVICON_PATH,
         'BLOG_URL': settings.BLOG_URL,
-        'EVENT_URL': settings.EVENT_URL
+        'EVENT_URL': settings.EVENT_URL,
+        'PRIVACY_POLICY_URL': settings.PRIVACY_POLICY_URL
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
@@ -392,6 +395,9 @@ def index(request):
 
     if hasattr(settings, 'SOCIAL_APPS_VISIBILITY'):
         context['SOCIAL_APPS_VISIBILITY'] = json.dumps(settings.SOCIAL_APPS_VISIBILITY)
+
+    if hasattr(settings, 'HERE_CONFIG'):
+        context['HERE_CONFIG'] = settings.HERE_CONFIG
 
     if request.user.is_authenticated():
         contributor = Contributor.objects.get(id=request.user.id)
@@ -493,8 +499,11 @@ def projects_list(request):
         if 'keyword' in query_params:
             project_list = project_list & projects_by_keyword(query_params['keyword'][0])
 
+        if 'locationRadius' in query_params:
+            project_list = projects_by_location(project_list, query_params['locationRadius'][0])
+
         if 'location' in query_params:
-            project_list = projects_by_location(project_list, query_params['location'][0])
+            project_list = projects_by_legacy_city(project_list, query_params['location'][0])
 
         project_list = project_list.distinct()
 
@@ -561,8 +570,19 @@ def projects_by_sortField(project_list, sortField):
     return project_list.order_by(sortField)
 
 
-def projects_by_location(project_list, location):
-    return project_list.filter(Q(project_location__icontains=location))
+def projects_by_location(project_list, param):
+    param_parts = param.split(',')
+    location = Point(float(param_parts[1]), float(param_parts[0]))
+    radius = float(param_parts[2])
+    project_list = project_list.filter(project_location_coords__distance_lte=(location, D(mi=radius)))
+    return project_list
+
+
+def projects_by_legacy_city(project_list, param):
+    param_parts = param.split(', ')
+    if len(param_parts) > 1:
+        project_list = project_list.filter(project_city=param_parts[0], project_state=param_parts[1])
+    return project_list
 
 
 def projects_by_issue_areas(tags):
@@ -593,9 +613,14 @@ def projects_by_roles(tags):
     return Project.objects.filter(positions__in=positions)
 
 
+def project_countries():
+    return unique_column_values(Project, 'project_country', lambda country: country and len(country) == 2)
+
+
 def projects_with_meta_data(projects, project_pages, project_count):
     return {
         'projects': [project.hydrate_to_tile_json() for project in projects],
+        'availableCountries': project_countries(),
         'tags': list(Tag.objects.values()),
         'numPages': project_pages,
         'numProjects': project_count
@@ -609,6 +634,7 @@ def available_tag_filters(projects, selected_tag_filters):
         if project_tags[tag]:
             project_tags.pop(tag)
     return project_tags
+
 
 def presign_project_thumbnail_upload(request):
     uploader = request.user.username

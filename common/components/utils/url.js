@@ -26,6 +26,7 @@ class urlHelper {
   }
   
   static section(section: string, args: ?Object): string {
+    // TODO: Implement with argsString
     let sectionUrl = "?section=" + section;
     if(args) {
       sectionUrl += _.reduce(args, function(argsString, value, key) {
@@ -142,6 +143,13 @@ class urlHelper {
     return url;
   }
   
+  static argsString(args: Dictionary<string>, startArgs: string): string {
+    return _.reduce(args, function(argsString, value, key) {
+      const prefix: string = !_.isEmpty(argsString) ? "&" : "?";
+      return `${argsString}${prefix}${key}=${value}`;
+    }, startArgs || "");
+  }
+  
   static beautify(url: string): string {
     // Remove http(s)
     return url.replace(regex.protocol, "");
@@ -157,6 +165,12 @@ class urlHelper {
 
   static isEmptyStringOrValidUrl(url: string): boolean {
     return (_.isEmpty(url) || this.isValidUrl(url));
+  }
+  
+  static cleanDemocracyLabUrl(url: ?string): string {
+    // Remove url snippet
+    let _url: string = url || window.location.href;
+    return _url.replace("#_=_","");
   }
 }
 

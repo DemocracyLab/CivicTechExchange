@@ -9,7 +9,6 @@ import cx from '../utils/cx';
 import CurrentUser from '../utils/CurrentUser.js';
 import NavigationLinks, {NavigationLink} from "../utils/NavigationLinks.js";
 import NavigationStore from '../stores/NavigationStore.js'
-import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
@@ -293,6 +292,14 @@ class MainHeader extends React.Component<{||}, State > {
                 </div>
               </a>
               <Divider />
+              
+              { CurrentUser.isStaff() && <React.Fragment><a href={url.section(Section.CreateEvent)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Create Event
+                </div>
+              </a>
+              <Divider />
+              </React.Fragment>}
 
               <a href={url.section(Section.AboutUs)}>
                 <div className={'SubHeader-drawerDiv'} >
@@ -412,7 +419,36 @@ class MainHeader extends React.Component<{||}, State > {
   }
 
   _renderSectionLinks(): React$Node {
-    const SectionsToShow = SectionLinkConfigs.filter(this._showSectionInMainMenu);
+    const SectionsToShow = [
+          {
+            section: Section.FindProjects,
+            title: 'Find Projects',
+            showOnlyWhenLoggedIn: false
+          },
+          {
+            section: Section.CreateProject,
+            title: 'Create Project',
+            showOnlyWhenLoggedIn: false
+          },
+          {
+            section: Section.CreateEvent,
+            title: 'Create Event',
+            showOnlyWhenLoggedIn: true,
+            showAdminOnly: true
+          },
+          {
+            section: Section.AboutUs,
+            title: 'About Us',
+            showOnlyWhenLoggedIn: false
+          },
+          {
+            section: Section.Press,
+            title: 'News',
+            showOnlyWhenLoggedIn: false
+          }
+        ]
+      .filter(config => (!config.showOnlyWhenLoggedIn || CurrentUser.isLoggedIn()) && (!config.showAdminOnly || CurrentUser.isStaff()));
+    
     return SectionsToShow
       .map(config =>
         <SectionLink
@@ -422,12 +458,6 @@ class MainHeader extends React.Component<{||}, State > {
           title={config.title}
         />
       );
-  }
-
-  _showSectionInMainMenu(config: SectionLinkConfigEntry): boolean {
-    // Don't show items that require login
-    // Only show admin-only options if user is an admin
-    return !config.showOnlyWhenLoggedIn && (!config.showAdminOnly || CurrentUser.isStaff());
   }
 
   _onLogInClick(): void {

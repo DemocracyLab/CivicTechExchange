@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.gis',
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.sites',
@@ -76,7 +77,7 @@ if SOCIAL_APPS_environ is not None:
 
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
-        'SCOPE': ['read:user']
+        'SCOPE': ['read:user', 'user:email']
     },
     'google': {
         'SCOPE': ['profile', 'email'],
@@ -144,7 +145,7 @@ HOSTNAME = os.environ.get('HOSTNAME', '127.0.0.1')
 
 DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'p0stgres!',
@@ -155,6 +156,7 @@ DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
 
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 LOGIN_REDIRECT_URL = '/'
 
@@ -254,6 +256,8 @@ GR_SECRETKEY = os.environ.get('GOOGLE_RECAPTCHA_SECRET_KEY', '')
 
 STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
 
+HERE_CONFIG = os.environ.get('HERE_CONFIG', '')
+
 ENVIRONMENT_VARIABLE_WARNINGS = {
     'PRESS_LINKS': {
         'error': True,
@@ -310,6 +314,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'MAILCHIMP_API_KEY': {
         'error': False,
         'message': 'Mailchimp API key needed to subscribe users to mailing list'
+    },
+    'PRIVACY_POLICY_URL': {
+        'error': True,
+        'message': 'Privacy Policy url required'
     }
 }
 
@@ -415,3 +423,8 @@ QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
 BLOG_URL = os.environ.get('BLOG_URL', '')
 
 EVENT_URL = os.environ.get('EVENT_URL', '')
+
+GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH', '')
+GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH', '')
+
+PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')

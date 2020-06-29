@@ -14,9 +14,6 @@
 .AboutEvent-title {
   padding-top: 0.5rem;
 }
-.AboutEvent-title h1 {
-  margin-bottom: 2rem;
-}
 .AboutEvent-title-date {
   font-size: 1.25rem;
   font-weight: bold;
@@ -46,6 +43,9 @@
 }
 .AboutEvent-splash {
   order: 1;
+}
+.AboutEvent-header {
+  margin-bottom: 1rem;
 }
 @include media-breakpoint-up(lg) {
   .AboutEvent-info {
