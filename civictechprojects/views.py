@@ -106,7 +106,7 @@ def group_create(request):
         # TODO: Log this
         return HttpResponse(status=403)
 
-    group = GroupCreationForm.create_group(request)
+    group = GroupCreationForm.create_or_edit_group(request, None)
     return JsonResponse(group.hydrate_to_json())
 
 
@@ -116,7 +116,7 @@ def group_edit(request, group_id):
 
     group = None
     try:
-        group = GroupCreationForm.edit_group(request, group_id)
+        group = GroupCreationForm.create_or_edit_group(request, group_id)
     except PermissionDenied:
         return HttpResponseForbidden()
 

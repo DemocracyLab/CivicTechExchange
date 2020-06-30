@@ -200,7 +200,11 @@ class Group(Archived):
     group_date_created = models.DateTimeField(null=True)
     group_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     group_description = models.CharField(max_length=4000, blank=True)
-    group_location = models.CharField(max_length=200, blank=True)
+    group_url = models.CharField(max_length=2083, blank=True)
+    group_location_coords = PointField(null=True, blank=True, srid=4326, default='')
+    group_country = models.CharField(max_length=100, blank=True)
+    group_state = models.CharField(max_length=100, blank=True)
+    group_city = models.CharField(max_length=100, blank=True)
     group_name = models.CharField(max_length=200)
     group_short_description = models.CharField(max_length=140, blank=True)
     is_searchable = models.BooleanField(default=False)
@@ -210,7 +214,7 @@ class Group(Archived):
         return str(self.id) + ':' + str(self.group_name)
 
     def delete(self):
-        self.is_searchable=False
+        self.is_searchable = False
         super().delete()
 
     def update_timestamp(self):
@@ -230,7 +234,7 @@ class Group(Archived):
             'group_files': list(map(lambda file: file.to_json(), other_files)),
             'group_id': self.id,
             'group_links': list(map(lambda link: link.to_json(), links)),
-            'group_location': self.group_location,
+            'group_url': self.group_url,
             'group_name': self.group_name,
             'group_owners': [self.group_creator.hydrate_to_tile_json()],
             'group_short_description': self.group_short_description,

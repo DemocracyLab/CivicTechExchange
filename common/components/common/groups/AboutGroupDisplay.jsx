@@ -3,7 +3,7 @@
 import React from 'react';
 import _ from 'lodash'
 import type {GroupDetailsAPIData} from '../../utils/GroupAPIUtils.js';
-// import GroupDetails from '../../componentsBySection/FindGroups/GroupDetails.jsx';
+import GroupDetails from "./GroupDetails.jsx";
 import ContactGroupButton from "./ContactGroupButton.jsx";
 import ContactVolunteersButton from "./ContactVolunteersButton.jsx";
 import GroupVolunteerButton from "./GroupVolunteerButton.jsx";
@@ -18,7 +18,6 @@ import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
-import DropdownMenu from "react-bootstrap/DropdownMenu";
 
 
 type Props = {|
@@ -108,15 +107,11 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
             <img className='AboutProjects-icon'src={group && group.group_thumbnail && group.group_thumbnail.publicUrl} />
           </div>
 
-          {/* <div className='AboutProjects-details'>
+          <div className='AboutProjects-details'>
             <GroupDetails
-              groupLocation={group && group.group_location}
               groupUrl={group && group.group_url}
-              groupStage={group && !_.isEmpty(group.group_stage) ? group.group_stage[0].display_name : null}
-              groupOrganizationType={group && !_.isEmpty(group.group_organization_type) ? group.group_organization_type[0].display_name : null}
-              dateModified={group && group.group_date_modified}
             />
-          </div> */}
+          </div>
 
           {group && !_.isEmpty(group.group_links) &&
             <React.Fragment>
