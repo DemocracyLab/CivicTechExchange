@@ -21,7 +21,7 @@ COLUMN_MAP = {
 }
 
 FIELD_FORMATS = {
-    'Change in Avg Commits after joining': '%.2f%%'
+    'Change in Avg Commits after joining': '%s%%'
 }
 
 
@@ -140,7 +140,7 @@ def populate_repo_statistics(commit_info, commit_post_dl, project, repo_name):
     avg_commit_pre_dl = math.ceil(commit_pre_dl / no_of_weeks_pre_dl) if no_of_weeks_pre_dl > 0 else 0
     avg_commit_post_dl = math.ceil(commit_post_dl / no_of_weeks_post_dl) if no_of_weeks_post_dl > 0 else 0
 
-    change_in_avg_commit = round(100 * (avg_commit_post_dl - avg_commit_pre_dl) / avg_commit_pre_dl, 2) \
+    change_in_avg_commit = (100 * (avg_commit_post_dl - avg_commit_pre_dl) / avg_commit_pre_dl)\
         if commit_pre_dl > 0 and avg_commit_pre_dl > 0 else None
 
     repo_dict = {'project_name': project.project_name,
