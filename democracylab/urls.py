@@ -17,8 +17,12 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import RedirectView
+from common.helpers.error_handlers import handle500
 
 from . import views
+
+# Set custom error handler
+handler500 = handle500
 
 urlpatterns = [
     url(r'^accounts/', include('oauth2.providers.github.urls')),

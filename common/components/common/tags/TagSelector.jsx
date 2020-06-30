@@ -39,7 +39,8 @@ class TagSelector extends React.PureComponent<Props, State> {
       tags: tags
     });
   }
-
+  
+  // TODO: Replace with Selector component
   render(): React$Node {
     return (
       <React.Fragment>

@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import PermissionDenied
 from .models import Contributor
 from civictechprojects.models import ProjectLink, ProjectFile, FileCategory
+from common.helpers.qiqo_chat import SubscribeUserToQiqoChat
 from common.models.tags import Tag
 
 
@@ -51,3 +52,5 @@ class DemocracyLabUserCreationForm(UserCreationForm):
         if len(user_resume_file) > 0:
             user_resume_file_json = json.loads(user_resume_file)
             ProjectFile.replace_single_file(user, FileCategory.RESUME, user_resume_file_json)
+
+        SubscribeUserToQiqoChat(user)

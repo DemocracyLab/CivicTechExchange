@@ -13,3 +13,8 @@ def db_is_initialized():
 def bulk_delete(Table, delete_results):
     ids = delete_results.values_list("id", flat=True)
     Table.objects.filter(pk__in=list(ids)).delete()
+
+
+def unique_column_values(model, column, filter_func):
+    values = map(lambda obj_property: obj_property[column], model.objects.values(column).distinct())
+    return list(filter(filter_func, values))
