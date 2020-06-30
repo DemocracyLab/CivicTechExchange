@@ -2,8 +2,6 @@
 
 import React from "react";
 import CurrentUser from "../../components/utils/CurrentUser.js";
-import metrics from "../utils/metrics.js";
-import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
 
@@ -15,18 +13,7 @@ import api from "../utils/api.js";
 import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
-import ProjectSearchDispatcher from '../stores/ProjectSearchDispatcher.js';
-import TagDispatcher from '../stores/TagDispatcher.js';
-import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
-import ProjectFilterContainer from '../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx';
-import {FindProjectsArgs} from "../stores/ProjectSearchStore.js";
-import urls from "../utils/url.js";
 
-let projectSelectionStoreSingleton = [
-
-];
-
-export { projectSelectionStoreSingleton };
 
 type State = {|
   id: ?number,
@@ -44,7 +31,6 @@ class CreateGroupController extends React.PureComponent<{||},State> {
     const groupId: number = url.argument("id");
     this.onNextPageSuccess = this.onNextPageSuccess.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.onProjectSelectionSubmit = this.onProjectSelectionSubmit.bind(this);
     this.onFinalSubmitSuccess = this.onFinalSubmitSuccess.bind(this);
     this.state = {
       groupId: groupId,
@@ -106,17 +92,6 @@ class CreateGroupController extends React.PureComponent<{||},State> {
     this.setState({
       error: "Failed to load Group information"
     });
-  }
-
-  onProjectSelectionSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (GroupDetailsAPIData, () => void) => void): void {
-    console.warn('on submit!!2', event, formRef);
-    
-    api.post(
-      "/groups/" + this.state.group.group_id + "/add_project/", 
-      { project_ids: projectSelectionStoreSingleton.map(project => project.id) },
-      onSubmitSuccess,
-      response => null /* TODO: Report error to user */
-    )
   }
   
   onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (GroupDetailsAPIData, () => void) => void): void {
