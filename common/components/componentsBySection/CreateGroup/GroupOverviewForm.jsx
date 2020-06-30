@@ -8,11 +8,17 @@ import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {GroupDetailsAPIData} from "../../../components/utils/GroupAPIUtils.js";
 import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
+import {CountrySelector} from "../../common/selection/CountrySelector.jsx";
+import {CountryData, CountryCodeFormats, countryByCode} from "../../constants/Countries.js";
+import {LocationAutocompleteForm, LocationFormInputsByEntity} from "../../forms/LocationAutocompleteForm.jsx";
+import {LocationInfo, getLocationInfoFromGroup} from "../../common/location/LocationInfo.js";
 import _ from "lodash";
 
 
 type FormFields = {|
   group_name: ?string,
+  group_country: ?CountryData,
+  group_location: ?LocationInfo,
   group_description: ?string,
   group_short_description: ?string,
   group_thumbnail?: FileInfo,
@@ -38,6 +44,8 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
     const formFields: FormFields = {
       group_name: group ? group.group_name : "",
       group_thumbnail: group ? group.group_thumbnail : "",
+      group_country: group ? countryByCode(group.group_country) : null,
+      group_location: group ? getLocationInfoFromGroup(group) : null,
       group_description: group ? group.group_description : "",
       group_short_description: group ? group.group_short_description : "",
     };
@@ -104,6 +112,25 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
             className="form-control"
             value={this.state.formFields.group_name}
             onChange={this.form.onInput.bind(this, "group_name")}
+          />
+        </div>
+  
+        <div className="form-group">
+          <label>Country</label>
+          <CountrySelector
+            id="group_country"
+            countryCode={this.state.formFields.group_country && this.state.formFields.group_country.ISO_2}
+            countryCodeFormat={CountryCodeFormats.ISO_2}
+            onSelection={this.form.onSelection.bind(this, "group_country")}
+          />
+        </div>
+        <div className="form-group">
+          <label>Location</label>
+          <LocationAutocompleteForm
+            country={this.state.formFields.group_country}
+            onSelect={this.form.onSelection.bind(this, "group_location")}
+            location={this.state.formFields.group_location}
+            formInputs={LocationFormInputsByEntity.Groups}
           />
         </div>
 

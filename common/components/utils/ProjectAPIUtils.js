@@ -98,8 +98,6 @@ export type ProjectDetailsAPIData = {|
   +project_technologies: $ReadOnlyArray<TagDefinition>,
   +project_positions: $ReadOnlyArray<PositionInfo>,
   +project_location: string,
-  +project_latitude: string,
-  +project_longitude: string,
   +project_country: string,
   +project_state: string,
   +project_city: string,

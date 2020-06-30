@@ -18,6 +18,8 @@ import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
+import ProjectAPIUtils from "../../utils/ProjectAPIUtils";
+import GroupAPIUtils from "../../utils/GroupAPIUtils.js";
 
 
 type Props = {|
@@ -110,6 +112,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
           <div className='AboutProjects-details'>
             <GroupDetails
               groupUrl={group && group.group_url}
+              groupLocation={group && GroupAPIUtils.getLocationDisplayName(group)}
             />
           </div>
 

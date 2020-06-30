@@ -185,6 +185,7 @@ class GroupCreationForm(ModelForm):
         read_form_field_string(group, form, 'group_description')
         read_form_field_string(group, form, 'group_short_description')
         read_form_field_string(group, form, 'group_country')
+        read_form_field_string(group, form, 'group_location')
         read_form_field_string(group, form, 'group_state')
         read_form_field_string(group, form, 'group_city')
         read_form_field_string(group, form, 'group_name')
