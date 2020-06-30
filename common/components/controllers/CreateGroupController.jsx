@@ -9,7 +9,6 @@ import Headers from "../common/Headers.jsx";
 
 import GroupOverviewForm from "../componentsBySection/CreateGroup/GroupOverviewForm.jsx";
 import GroupPreviewForm from "../componentsBySection/CreateGroup/GroupPreviewForm.jsx";
-import GroupProjectSelectionForm from "../componentsBySection/CreateGroup/GroupProjectSelectionForm.jsx";
 import GroupResourcesForm from "../componentsBySection/CreateGroup/GroupResourcesForm.jsx";
 import GroupAPIUtils, {GroupDetailsAPIData} from "../utils/GroupAPIUtils.js";
 import api from "../utils/api.js";
@@ -62,13 +61,6 @@ class CreateGroupController extends React.PureComponent<{||},State> {
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: GroupResourcesForm,
-        }, {
-          // TODO: bring in widget from common/components/controllers/FindProjectsController.jsx
-          header: "Which projects are in your group?",
-          subHeader: "You can always change details about your group later.",
-          onSubmit: this.onSubmit,
-          onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: GroupProjectSelectionForm,
         }, {
           header: "Ready to publish your group?",
           subHeader: "Congratulations!  You have successfully created a tech-for-good group.",
