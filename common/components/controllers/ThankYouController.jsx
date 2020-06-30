@@ -11,7 +11,7 @@ class ThankYouController extends React.Component<{||}> {
 
   render(): React$Node {
     return (
-      <div className="ThankYou-root container">
+      <div className="ThankYou-root container pl-0 pr-0">
         <div className="row ml-0 mr-0">
           <div className="ThankYou-leftImage col-xs-12 col-md-6">
             <img src={cdn.image(Images.THANK_YOU)}/>

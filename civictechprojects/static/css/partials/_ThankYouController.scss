@@ -3,6 +3,9 @@
   width: 100%;
   object-fit: cover;
 }
-.ThankYou-rightColumn {
-  padding: 2rem 0.5rem;
+.ThankYou-rightColumn h2 {
+  margin: 1.5rem 0;
+}
+.ThankYou-rightColumn p {
+  padding-bottom: 2rem;
 }
