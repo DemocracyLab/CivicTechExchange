@@ -50,7 +50,7 @@ class DonateController extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="DonateController-root container">
+      <div className="DonateController-root container pl-0 pr-0">
         <Headers
           title="democracyLab | Donate"
           description="We too are a nonprofit, and your tax-deductible gift helps us connect good people with good causes."
@@ -66,6 +66,7 @@ class DonateController extends React.Component<{||}, State> {
             </div>
             <div className="DonateController-options">
               <div className="DonateController-amounts">
+              <h3 className="DonateController-subheader">Amount</h3>
                 <RadioButtons
                   variant="outline-dark"
                   options={DonationAmountOptions}
@@ -76,6 +77,7 @@ class DonateController extends React.Component<{||}, State> {
 
               {this.state.donateAmount !== OtherAmountSelected
                 ? < div className="DonateController-monthly">
+                <h3 className="DonateController-subheader">Frequency</h3>
                 <RadioButtons
                   variant="outline-dark"
                   options={DonationMonthlyOptions}

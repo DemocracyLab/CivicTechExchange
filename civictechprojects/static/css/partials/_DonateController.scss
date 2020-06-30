@@ -1,7 +1,7 @@
 .DonateController-root {
   .radio-button {
-    margin: 0px 0px 10px 15px;
-    min-width: 70px;
+    margin: 0.75rem 0.5rem;
+    min-width: 4.375rem;
     &:hover {
       color: $color-orange;
       border-color: $color-orange;
@@ -27,11 +27,18 @@
 .DonateController-amounts {
   display: flex;
   flex-wrap: wrap;
+  max-width: 350px; /* each button including padding is 86px so this makes it 4 wide at most */
 }
 
 .DonateController-monthly {
   display: flex;
+  flex-wrap: wrap;
+  max-width: 350px;
   padding: 1rem 0;
+  .radio-button {
+    width: 150px;
+    height: 40px;
+  }
 }
 .DonateController-text-container {
   padding: 2rem 0;
@@ -39,18 +46,15 @@
 .DonateController-text {
   padding: 2rem 0.5rem;
 }
-.DonateController-monthly .radio-button {
-  width: 150px;
-  height: 40px;
-}
 .PaypalDonationButton {
   padding-left: 0.5rem;
   padding-bottom: 1rem;
 }
-
+.DonateController-subheader {
+  width: 100%;
+}
 @include media-breakpoint-up(lg) {
-  .DonateController-monthly .radio-button {
-    width: 200px;
+  .DonateController-root .radio-button {
     height: 50px;
   }
 }
