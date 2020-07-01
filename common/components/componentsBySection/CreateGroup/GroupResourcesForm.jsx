@@ -143,9 +143,9 @@ class GroupResourcesForm extends React.PureComponent<Props,State> {
           <LinkList elementid="group_links" title="Group Links" links={this.state.formFields.group_links}/>
         </div>
   
-        <div className="form-group">
-          <FileUploadList elementid="group_files" title="Group Files" files={this.state.formFields.group_files}/>
-        </div>
+        {/*<div className="form-group">*/}
+        {/*  <FileUploadList elementid="group_files" title="Group Files" files={this.state.formFields.group_files}/>*/}
+        {/*</div>*/}
 
       </div>
     );

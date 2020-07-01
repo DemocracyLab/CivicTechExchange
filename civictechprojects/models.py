@@ -227,6 +227,7 @@ class Group(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_group=self.id)
+        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
 
         group = {
             'group_creator': self.group_creator.id,
@@ -243,8 +244,11 @@ class Group(Archived):
             'group_city': self.group_city,
             'group_owners': [self.group_creator.hydrate_to_tile_json()],
             'group_short_description': self.group_short_description,
-            'group_issue_areas': self.get_issue_areas(),
+            'group_issue_areas': self.get_issue_areas()
         }
+
+        if len(projects) > 0:
+            group['group_projects'] = list(map(lambda project: project.relationship_project.hydrate_to_tile_json(), projects))
 
         if len(thumbnail_files) > 0:
             group['group_thumbnail'] = thumbnail_files[0].to_json()
@@ -365,7 +369,14 @@ class ProjectRelationship(models.Model):
     relationship_event = models.ForeignKey(Event, related_name='relationships', blank=True, null=True)
 
     def __str__(self):
-        return self.relationship_event.event_name + ':' + self.relationship_project.project_name
+        if self.relationship_group is not None:
+            project_counterpart = ('Group', self.relationship_group)
+        elif self.relationship_event is not None:
+            project_counterpart = ('Event', self.relationship_event)
+        return "{proj} - ({type}) {counterpart}".format(
+            proj=self.relationship_project.__str__(),
+            type=project_counterpart[0],
+            counterpart=project_counterpart[1].__str__())
 
     @staticmethod
     def create(owner, project):

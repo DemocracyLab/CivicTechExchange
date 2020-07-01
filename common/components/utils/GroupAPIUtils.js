@@ -4,7 +4,7 @@ import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 import type {LocationInfo} from "../common/location/LocationInfo";
 import {getLocationDisplayString} from "../common/location/LocationInfo";
-import type {ProjectAPIData, ProjectData, ProjectDetailsAPIData} from "./ProjectAPIUtils";
+import type {ProjectAPIData} from "./ProjectAPIUtils.js";
 
 export type GroupDetailsAPIData = {|
     group_id: string,
@@ -19,7 +19,7 @@ export type GroupDetailsAPIData = {|
     group_url: ?string,
     group_date_modified: string,
     group_thumbnail: FileInfo,
-    group_projects: $ReadOnlyArray<Project>,
+    group_projects: $ReadOnlyArray<ProjectAPIData>,
     group_links: $ReadOnlyArray<LinkInfo>,
     group_files: $ReadOnlyArray<FileInfo>,
 |};
