@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # S3 bucket and credentials for uploading files
-#export AWS_ACCESS_KEY_ID=ASK
-#export AWS_SECRET_ACCESS_KEY=ASK
-#export S3_BUCKET=ASK
+export AWS_ACCESS_KEY_ID=AKIAIW4WV3HYE7V3PM5Q
+export AWS_SECRET_ACCESS_KEY=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
+export S3_BUCKET=democracylab-marlok
 
 # Password for account used to send email
 export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
