@@ -13,7 +13,8 @@ import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
 import GroupAPIUtils from "../../utils/GroupAPIUtils.js";
 import ProjectCard from "../../componentsBySection/FindProjects/ProjectCard.jsx";
-import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils, {TagDefinition} from "../../utils/ProjectAPIUtils.js";
+import type {ProjectAPIData} from "../../utils/ProjectAPIUtils";
 
 
 type Props = {|
@@ -23,6 +24,7 @@ type Props = {|
 
 type State = {|
   group: ?GroupDetailsAPIData,
+  issueAreas: $ReadOnlyArray<TagDefinition>,
   showJoinModal: boolean
 |};
 
@@ -30,17 +32,27 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
 
   constructor(props: Props): void{
     super(props);
+    const issueAreas: $ReadOnlyArray<TagDefinition> = this.getUniqueIssueAreas(props.group);
     this.state = {
       group: props.group,
-      showContactModal: false,
+      issueAreas: issueAreas
     };
  }
   
   componentWillReceiveProps(nextProps: Props): void {
+    const issueAreas: $ReadOnlyArray<TagDefinition> = this.getUniqueIssueAreas(nextProps.group);
     this.setState({
       group: nextProps.group,
-      volunteers: nextProps.group.group_volunteers
+      issueAreas: issueAreas
     });
+  }
+  
+  getUniqueIssueAreas(group: ?GroupDetailsAPIData): ?$ReadOnlyArray<TagDefinition> {
+    if(group && group.group_projects) {
+      let issues = group.group_projects.map((proj: ProjectAPIData) => proj.project_issue_area && proj.project_issue_area[0]);
+      issues = issues.filter((issue: TagDefinition) => issue && issue.tag_name !== "no-specific-issue");
+      return _.uniq(issues);
+    }
   }
 
   render(): $React$Node {
@@ -101,7 +113,12 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
             </div>
 
             <div className='AboutProjects-skills-container'>
-{/*TODO: Issue areas*/}
+              {!_.isEmpty(this.state.issueAreas) &&
+              <div className='AboutProjects-skills'>
+                <p id='skills-needed' className='AboutProjects-skills-title'>Issue Areas</p>
+                {this.state.issueAreas && this.state.issueAreas.map((issue: TagDefinition) => <p>{issue.display_name}</p>)}
+              </div>
+              }
             </div>
             
             {this.state.group.group_projects && this._renderProjectList()}
