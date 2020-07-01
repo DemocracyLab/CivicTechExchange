@@ -62,6 +62,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
             <GroupDetails
               groupUrl={group && group.group_url}
               groupLocation={group && GroupAPIUtils.getLocationDisplayName(group)}
+              projectCount={group.group_projects && group.group_projects.length}
             />
           </div>
 
