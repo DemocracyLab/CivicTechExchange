@@ -253,6 +253,32 @@ class Group(Archived):
             group['group_thumbnail'] = thumbnail_files[0].to_json()
 
         return group
+
+    def hydrate_to_tile_json(self):
+        files = ProjectFile.objects.filter(file_group=self.id)
+        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
+
+        group = {
+            'group_date_modified': self.group_date_modified.__str__(),
+            'group_id': self.id,
+            'group_name': self.group_name,
+            'group_location': self.group_location,
+            'group_country': self.group_country,
+            'group_state': self.group_state,
+            'group_city': self.group_city,
+            'group_short_description': self.group_short_description,
+            'group_project_count': 0
+        }
+
+        if len(projects) > 0:
+            group['group_project_count'] = projects.count()
+            # TODO: Issues
+
+        if len(thumbnail_files) > 0:
+            group['group_thumbnail'] = thumbnail_files[0].to_json()
+
+        return group
     
     def hydrate_to_list_json(self):
         group = {

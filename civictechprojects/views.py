@@ -26,7 +26,7 @@ from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm
 from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from common.helpers.constants import FrontEndSection
+from common.helpers.constants import FrontEndSection, TagCategory
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved, contact_democracylab_email
@@ -566,6 +566,7 @@ def projects_by_keyword(keyword):
                                   | Q(project_description_actions__icontains=keyword))
 
 
+# TODO: Rename to something generic
 def projects_by_sortField(project_list, sortField):
     return project_list.order_by(sortField)
 
@@ -634,6 +635,79 @@ def available_tag_filters(projects, selected_tag_filters):
         if project_tags[tag]:
             project_tags.pop(tag)
     return project_tags
+
+
+# TODO: Move group search code into new file
+def groups_list(request):
+    url_parts = request.GET.urlencode()
+    query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+    group_list = Group.objects.filter(is_searchable=True)
+
+    if request.method == 'GET':
+        # group_list = apply_tag_filters(group_list, query_params, 'issues', projects_by_issue_areas)
+        if 'keyword' in query_params:
+            group_list = group_list & groups_by_keyword(query_params['keyword'][0])
+
+        if 'locationRadius' in query_params:
+            group_list = groups_by_location(group_list, query_params['locationRadius'][0])
+
+        group_list = group_list.distinct()
+
+        if 'sortField' in query_params:
+            group_list = projects_by_sortField(group_list, query_params['sortField'][0])
+        else:
+            group_list = projects_by_sortField(group_list, '-group_date_modified')
+
+        group_count = len(group_list)
+
+        group_paginator = Paginator(group_list, settings.PROJECTS_PER_PAGE)
+
+        if 'page' in query_params:
+            group_list_page = group_paginator.page(query_params['page'][0])
+            group_pages = group_paginator.num_pages
+        else:
+            group_list_page = group_list
+            group_pages = 1
+
+    response = groups_with_meta_data(group_list_page, group_pages, group_count)
+
+    return JsonResponse(response)
+
+
+def groups_by_keyword(keyword):
+    return Group.objects.filter(Q(group_name__icontains=keyword)
+                                | Q(group_short_description__icontains=keyword)
+                                | Q(group_description__icontains=keyword))
+
+
+def groups_by_location(group_list, param):
+    param_parts = param.split(',')
+    location = Point(float(param_parts[1]), float(param_parts[0]))
+    radius = float(param_parts[2])
+    group_list = group_list.filter(group_location_coords__distance_lte=(location, D(mi=radius)))
+    return group_list
+
+
+def groups_by_issue_areas(group_projects, issue):
+    # Get group projects
+
+    # Filter projects by issue area
+    # Filter groups to match those projects
+    return Group.objects.filter(project_issue_area__name__in=tags)
+
+
+def groups_with_meta_data(groups, group_pages, group_count):
+    return {
+        'groups': [group.hydrate_to_tile_json() for group in groups],
+        'availableCountries': group_countries(),
+        'tags': list(Tag.objects.filter(category=TagCategory.ISSUE_ADDRESSED.value).values()),
+        'numPages': group_pages,
+        'numGroups': group_count
+    }
+
+
+def group_countries():
+    return unique_column_values(Group, 'group_country', lambda country: country and len(country) == 2)
 
 
 def presign_project_thumbnail_upload(request):

@@ -59,6 +59,7 @@ urlpatterns = [
     ),
     url(r'^api/projects/recent', views.recent_projects_list),
     url(r'^api/projects', views.projects_list),
+    url(r'^api/groups', views.groups_list),
     url(r'^api/my_projects', views.my_projects),
     url(r'^api/my_events', views.my_events),
     url(r'^api/my_groups', views.my_groups),
