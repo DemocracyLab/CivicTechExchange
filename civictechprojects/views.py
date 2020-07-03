@@ -644,7 +644,7 @@ def groups_list(request):
     group_list = Group.objects.filter(is_searchable=True)
 
     if request.method == 'GET':
-        group_list = apply_tag_filters(group_list, query_params, 'issues', projects_by_issue_areas)
+        group_list = group_list & apply_tag_filters(group_list, query_params, 'issues', groups_by_issue_areas)
         if 'keyword' in query_params:
             group_list = group_list & groups_by_keyword(query_params['keyword'][0])
 
@@ -669,9 +669,9 @@ def groups_list(request):
             group_list_page = group_list
             group_pages = 1
 
-    response = groups_with_meta_data(group_list_page, group_pages, group_count)
+        response = groups_with_meta_data(group_list_page, group_pages, group_count)
 
-    return JsonResponse(response)
+        return JsonResponse(response)
 
 
 def groups_by_keyword(keyword):
@@ -688,13 +688,12 @@ def groups_by_location(group_list, param):
     return group_list
 
 
-def groups_by_issue_areas(issue):
-    # Get group projects
+def groups_by_issue_areas(issues):
+    group_relationships = ProjectRelationship.objects.exclude(relationship_group=None)\
+        .filter(relationship_project__project_issue_area__name__in=issues)
+    relationship_ids = list(map(lambda pr: pr.relationship_group.id, group_relationships))
 
-
-    # Filter projects by issue area
-    # Filter groups to match those projects
-    return Group.objects.filter(project_issue_area__name__in=tags)
+    return Group.objects.filter(id__in=relationship_ids)
 
 
 def groups_with_meta_data(groups, group_pages, group_count):
