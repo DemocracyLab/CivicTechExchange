@@ -9,6 +9,7 @@ from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from common.helpers.form_helpers import is_json_field_empty
 from common.helpers.dictionaries import merge_dicts
+from common.helpers.collections import flatten, count_occurrences
 
 
 # Without the following classes, the following error occurs:
@@ -273,7 +274,7 @@ class Group(Archived):
 
         if len(projects) > 0:
             group['group_project_count'] = projects.count()
-            # TODO: Issues
+            group['group_issue_areas'] = self.get_project_issue_areas(projects)
 
         if len(thumbnail_files) > 0:
             group['group_thumbnail'] = thumbnail_files[0].to_json()
@@ -291,6 +292,13 @@ class Group(Archived):
         }
 
         return group
+
+    @staticmethod
+    def get_project_issue_areas(project_relationships):
+        all_issue_areas = flatten(list(map(lambda p: p.relationship_project.project_issue_area.all().values(), project_relationships)))
+        all_issue_area_names = list(map(lambda issue_tag: issue_tag['name'], all_issue_areas))
+        issue_area_counts = count_occurrences(all_issue_area_names)
+        return issue_area_counts
 
 
 class TaggedEventOrganization(TaggedItemBase):

@@ -644,7 +644,7 @@ def groups_list(request):
     group_list = Group.objects.filter(is_searchable=True)
 
     if request.method == 'GET':
-        # group_list = apply_tag_filters(group_list, query_params, 'issues', projects_by_issue_areas)
+        group_list = apply_tag_filters(group_list, query_params, 'issues', projects_by_issue_areas)
         if 'keyword' in query_params:
             group_list = group_list & groups_by_keyword(query_params['keyword'][0])
 
@@ -688,8 +688,9 @@ def groups_by_location(group_list, param):
     return group_list
 
 
-def groups_by_issue_areas(group_projects, issue):
+def groups_by_issue_areas(issue):
     # Get group projects
+
 
     # Filter projects by issue area
     # Filter groups to match those projects
