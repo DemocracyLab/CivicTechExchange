@@ -46,7 +46,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
     return {
       projects: ProjectSearchStore.getProjects(),
       project_pages: ProjectSearchStore.getProjectPages(),
-      project_count: ProjectSearchStore.getNumberOfGroups(),
+      project_count: ProjectSearchStore.getNumberOfProjects(),
       current_page: ProjectSearchStore.getCurrentPage(),
       projects_loading: ProjectSearchStore.getProjectsLoading(),
       keyword: ProjectSearchStore.getKeyword() || '',

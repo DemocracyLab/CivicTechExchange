@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import type {FluxReduceStore} from 'flux/utils';
-import {Container, ReduceStore} from 'flux/utils';
+import {Container} from 'flux/utils';
 import ProjectSearchStore, {LocationRadius}  from "../../../stores/ProjectSearchStore.js";
 import ProjectSearchDispatcher from "../../../stores/ProjectSearchDispatcher.js";
 import LocationAutocomplete from "../../../common/location/LocationAutocomplete.jsx";
@@ -10,15 +10,7 @@ import Selector from "../../../common/selection/Selector.jsx";
 import {CountrySelector} from "../../../common/selection/CountrySelector.jsx";
 import {CountryCodeFormats, CountryData, DefaultCountry} from "../../../constants/Countries.js";
 import GlyphStyles from '../../../utils/glyphs.js'
-import type {ProjectData} from "../../../utils/ProjectAPIUtils.js";
-import {countryByCode} from "../../../constants/Countries";
-import {Dispatcher} from "flux";
 
-// TODO: Implement these to support Groups
-type Props = {|
-  searchStore: ReduceStore,
-  searchDispatcher: Dispatcher
-|};
 
 type State = {|
   countryCode: string,
