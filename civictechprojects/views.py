@@ -18,6 +18,7 @@ from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
 from .helpers.projects import projects_tag_counts
 from .sitemaps import SitemapPages
+from common.helpers.collections import flatten, count_occurrences
 from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
@@ -75,6 +76,21 @@ def tags(request):
             queryset = Tag.objects.all()
             tags = list(queryset.values())
     return JsonResponse(tags, safe=False)
+
+
+@cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
+def group_tags_counts(request):
+    # Get all groups
+    all_groups = Group.objects.all()
+    # Get Groups issue areas
+    group_issues = list(map(lambda group: group.get_project_issue_areas(with_counts=False), all_groups))
+    # Count up instances of tags
+    group_issues_counts = count_occurrences(flatten(group_issues))
+    issue_tags = {}
+    for issue_tag in group_issues_counts.keys():
+        issue_tags[issue_tag] = Tag.hydrate_tag_model(Tag.get_by_name(issue_tag))
+        issue_tags[issue_tag]['num_times'] = group_issues_counts[issue_tag]
+    return JsonResponse(list(issue_tags.values()), safe=False)
 
 
 def to_rows(items, width):

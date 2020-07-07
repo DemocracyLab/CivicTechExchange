@@ -274,7 +274,7 @@ class Group(Archived):
 
         if len(projects) > 0:
             group['group_project_count'] = projects.count()
-            group['group_issue_areas'] = self.get_project_issue_areas(projects)
+            group['group_issue_areas'] = self.get_project_issue_areas(with_counts=True, project_relationships=projects)
 
         if len(thumbnail_files) > 0:
             group['group_thumbnail'] = thumbnail_files[0].to_json()
@@ -283,6 +283,7 @@ class Group(Archived):
     
     def hydrate_to_list_json(self):
         group = {
+            'group_date_modified': self.group_date_modified.__str__(),
             'group_id': self.id,
             'group_name': self.group_name,
             'group_creator': self.group_creator.id,
@@ -293,12 +294,16 @@ class Group(Archived):
 
         return group
 
-    @staticmethod
-    def get_project_issue_areas(project_relationships):
+    def get_project_issue_areas(self, with_counts, project_relationships=None):
+        if project_relationships is None:
+            project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
         all_issue_areas = flatten(list(map(lambda p: p.relationship_project.project_issue_area.all().values(), project_relationships)))
         all_issue_area_names = list(map(lambda issue_tag: issue_tag['name'], all_issue_areas))
-        issue_area_counts = count_occurrences(all_issue_area_names)
-        return issue_area_counts
+        if with_counts:
+            issue_area_counts = count_occurrences(all_issue_area_names)
+            return issue_area_counts
+        else:
+            return all_issue_area_names
 
 
 class TaggedEventOrganization(TaggedItemBase):

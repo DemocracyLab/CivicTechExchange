@@ -1,4 +1,5 @@
 // @flow
+import type {Dictionary} from "../types/Generics.jsx";
 import _ from 'lodash';
 
 class Sort {
@@ -21,6 +22,18 @@ class Sort {
     });
     // Concatenate remaining entries after named entries
     return namedEntries.concat(remainingEntries);
+  }
+  
+  /**
+   * Take a dictionary of numeric values and return the keys in order of their numeric values
+   * @param dict          Dictionary of numeric values
+   * @param ascending     Whether to sort ascending (default=descending)
+   * @returns {Array}     Sorted array of dictionary keys
+   */
+  static byCountDictionary(dict: Dictionary<number>, ascending: ?boolean): $ReadOnlyArray<string> {
+    // Handle descending sort by negating count
+    const reverseOperator: number = ascending ? 1 : -1;
+    return _.sortBy(_.keys(dict), (key: string) => reverseOperator * dict[key]);
   }
 }
 

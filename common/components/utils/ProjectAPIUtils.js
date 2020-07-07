@@ -1,10 +1,8 @@
 // @flow
 
-// import type {Project} from '../stores/ProjectSearchStore.js';
 import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 import {PositionInfo} from "../forms/PositionInfo.jsx";
-import {CountryData, DefaultCountry, countryByCode} from "../constants/Countries.js";
 import {LocationInfo, getLocationDisplayString} from "../common/location/LocationInfo.js";
 import _ from 'lodash';
 
@@ -17,7 +15,6 @@ export type APIError = {|
   +errorMessage: string
 |};
 
-// TODO: Condense redundant tag definitions
 export type TagDefinition = {|
   id: number,
   tag_name: string,
@@ -25,8 +22,12 @@ export type TagDefinition = {|
   caption: string,
   category: string,
   subcategory: string,
-  parent: string,
+  parent: string
 |};
+
+export type TagDefinitionCount = {|
+  num_times: number
+|} & TagDefinition;
 
 export type ProjectData = {|
   +id: number,

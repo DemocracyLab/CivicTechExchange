@@ -56,12 +56,20 @@ class metrics {
     _logEvent("searchByKeyword", {keyword: keyword});
   }
   
+  static logGroupSearchByKeywordEvent(keyword: string): void {
+    _logEvent("searchGroupByKeyword", {keyword: keyword});
+  }
+  
   static logSearchByLocationEvent(location: string): void {
     _logEvent("filter_by_location", {location: location});
   }
   
   static logSearchChangeSortEvent(sortField: string): void {
     _logEvent("sort_by_field", {sortField: sortField});
+  }
+  
+  static logGroupSearchChangeSortEvent(sortField: string): void {
+    _logEvent("group_sort_by_field", {sortField: sortField});
   }
   
   static logProjectClickCreate(userId: number): void {
