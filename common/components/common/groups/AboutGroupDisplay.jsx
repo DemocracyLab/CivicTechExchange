@@ -120,8 +120,11 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
               </div>
               }
             </div>
-
-            {this.state.group.group_projects && this._renderProjectList()}
+            <div className="container-fluid AboutGroup-card-container">
+              <div className="row">
+                {this.state.group.group_projects && this._renderProjectList()}
+              </div>
+            </div>
           </div>
 
         </div>
