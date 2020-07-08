@@ -468,6 +468,7 @@ def my_projects(request):
         }
     return JsonResponse(response)
 
+
 def my_groups(request):
     contributor = get_request_contributor(request)
     response = {}
@@ -477,6 +478,7 @@ def my_groups(request):
             'owned_groups': [group.hydrate_to_list_json() for group in owned_groups],
         }
     return JsonResponse(response)
+
 
 def my_events(request):
     contributor = get_request_contributor(request)

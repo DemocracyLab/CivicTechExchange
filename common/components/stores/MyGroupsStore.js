@@ -2,24 +2,18 @@
 
 import {ReduceStore} from 'flux/utils';
 import {Record} from 'immutable'
-// import type {TagDefinition, VolunteerUserData} from '../utils/ProjectAPIUtils.js';
 import UniversalDispatcher from './UniversalDispatcher.js';
 
 export type MyGroupData = {|
   +group_id: number,
   +group_name: string,
   +group_creator: number,
-//   +application_id: ?number,
-//   +user: ?VolunteerUserData,
-//   +application_text: ?string,
-//   +roleTag: ?TagDefinition,
   +isApproved: ?boolean,
   +isCreated: ?boolean,
 |};
 
 export type MyGroupsAPIResponse = {|
-  owned_groups: $ReadOnlyArray<MyGroupData>,
-//   volunteering_groups: $ReadOnlyArray<MyGroupData>
+  owned_groups: $ReadOnlyArray<MyGroupData>
 |};
 
 export type MyGroupsActionType = {
@@ -71,10 +65,10 @@ class MyGroupsStore extends ReduceStore<State> {
       'load',
       () => {
         const myGroupsApiResponse: MyGroupsAPIResponse = JSON.parse(xhr.response);
-        // UniversalDispatcher.dispatch({
-        //   type: 'SET_MY_GROUPS_DO_NOT_CALL_OUTSIDE_OF_STORE',
-        //   myGroupsResponse: myGroupsApiResponse
-        // });
+        UniversalDispatcher.dispatch({
+          type: 'SET_MY_GROUPS_DO_NOT_CALL_OUTSIDE_OF_STORE',
+          myGroupsResponse: myGroupsApiResponse
+        });
       }
     );
     xhr.open('GET', '/api/my_groups');

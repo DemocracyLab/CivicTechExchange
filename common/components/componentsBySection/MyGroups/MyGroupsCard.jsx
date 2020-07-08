@@ -7,12 +7,10 @@ import {Button} from 'react-bootstrap';
 import {MyGroupData} from "../../stores/MyGroupsStore.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 
-// //TODO: Update
-// type MyGroupClickCallback = (MyGroupData) => void;
 
 type Props = {|
   +group: MyGroupData,
-  +onGroupClickDelete: ?MyGroupClickCallback,
+  +onGroupClickDelete: (MyGroupData) => void,
 |};
 
 type State = {|
@@ -45,7 +43,7 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
                 <tr className="MyProjectCard-header">
                   Your Role
                 </tr>
-                <tr>{this.state.isOwner ? "Project Lead" : "Volunteer"}</tr>
+                <tr>{this.state.isOwner ? "Group Owner" : "Volunteer"}</tr>
               </td>
               <td className="MyProjectCard-column">
                 {this._renderGroupStatus()}
@@ -88,7 +86,6 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
   
   _renderButtons(): ?Array<React$Node>  {
     const id = {'id':this.props.group.group_id};
-    // TODO: Reorder buttons according to re-engagement spec
     let buttons: ?Array<React$Node> = [
       <Button className="MyProjectCard-button" href={url.section(Section.AboutGroup, id)} bsStyle="info">View</Button>
     ];
