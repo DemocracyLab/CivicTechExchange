@@ -269,7 +269,7 @@ class Group(Archived):
             'group_state': self.group_state,
             'group_city': self.group_city,
             'group_short_description': self.group_short_description,
-            'group_project_count': 0
+            'group_project_count': projects.count()
         }
 
         if len(projects) > 0:

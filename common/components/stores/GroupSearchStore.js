@@ -143,7 +143,7 @@ class GroupSearchStore extends ReduceStore<State> {
         state = state.set('groupsData', {
           groups: currentGroups.concat(action.groupsResponse.groups),
           numPages: action.groupsResponse.numPages,
-          numGroups: state.groupsData.numGroups,
+          numGroups: action.groupsResponse.numGroups,
           allTags: allTags,
           availableCountries: action.groupsResponse.availableCountries
         });
