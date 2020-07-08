@@ -29,7 +29,7 @@ class GroupCard extends React.PureComponent<Props> {
   render(): React$Node {
     return (
         <div className="ProjectCard-root">
-          <a href={url.section(Section.AboutProject, {id: this.props.group.group_id})}
+          <a href={url.section(Section.AboutGroup, {id: this.props.group.group_id})}
             rel="noopener noreferrer">
             {this._renderLogo()}
             {this._renderSubInfo()}

@@ -4,7 +4,7 @@ import type {Tag} from './TagStore';
 
 import {ReduceStore} from 'flux/utils';
 import GroupSearchDispatcher from "./GroupSearchDispatcher.js";
-import {SearchSettings, LocationRadius} from "./ProjectSearchStore.js";
+import {SearchSettings, LocationRadius, locationRadiusToString, locationRadiusFromString} from "./ProjectSearchStore.js";
 import {List, Record} from 'immutable'
 import type {TagDefinition} from '../utils/ProjectAPIUtils.js';
 import {GroupTileAPIData} from "../utils/GroupAPIUtils.js";

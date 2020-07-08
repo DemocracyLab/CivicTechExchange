@@ -53,14 +53,12 @@ export type LocationRadius = {|
   radius: number
 |};
 
-function locationRadiusToString(locationRadius: LocationRadius): string {
+export function locationRadiusToString(locationRadius: LocationRadius): string {
   return `${locationRadius.latitude},${locationRadius.longitude},${locationRadius.radius}`;
 }
 
-function locationRadiusFromString(str: string): LocationRadius {
+export function locationRadiusFromString(str: string): LocationRadius {
   const parts: $ReadOnlyArray<string> = str && str.split(",");
-  // TODO: Handle legacy city strings
-  // decodeURI(findProjectsArgs.location)
   return parts && (parts.length > 2) && {
     latitude: parseFloat(parts[0]),
     longitude: parseFloat(parts[1]),

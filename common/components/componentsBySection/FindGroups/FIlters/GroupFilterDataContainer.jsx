@@ -4,7 +4,7 @@ import React from "react"
 import {Container} from "flux/utils";
 import {ReduceStore} from "flux/utils";
 import {TagDefinition, TagDefinitionCount} from "../../../utils/ProjectAPIUtils.js";
-import LocationSearchSection from "../../FindProjects/Filters/LocationSearchSection.jsx";
+import GroupLocationSearchSection from "./GroupLocationSearchSection.jsx";
 import GroupAPIUtils from "../../../utils/GroupAPIUtils.js";
 import GroupSearchStore from "../../../stores/GroupSearchStore.js";
 import GroupSearchDispatcher from "../../../stores/GroupSearchDispatcher.js";
@@ -71,10 +71,7 @@ class GroupFilterDataContainer extends React.Component<Props, State> {
     return (
       <div>
         { this.state.tagsByCategory ? this._renderFilterCategories() : null }
-        <LocationSearchSection
-          searchStore={GroupSearchStore}
-          searchDispatcher={GroupSearchDispatcher}
-        />
+        <GroupLocationSearchSection />
       </div>
     );
   }
