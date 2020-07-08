@@ -100,6 +100,14 @@ class metrics {
     _logEvent("UserContactedProjectOwner", {userId: userId, projectId: projectId});
   }
   
+  static logUserClickContactGroupOwner(userId: number, groupId: number): void {
+    _logEvent("UserClickContactGroupOwner", {userId: userId, groupId: groupId});
+  }
+  
+  static logUserContactedGroupOwner(userId: number, groupId: number): void {
+    _logEvent("UserContactedGroupOwner", {userId: userId, groupId: groupId});
+  }
+  
   static logVolunteerClickVolunteerButton(userId: number, projectId: number): void {
     _logEvent("VolunteerClickVolunteerButton", {userId: userId, projectId: projectId});
   }

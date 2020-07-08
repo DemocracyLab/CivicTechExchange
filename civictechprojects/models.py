@@ -398,6 +398,8 @@ class ProjectRelationship(models.Model):
     relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True)
     relationship_group = models.ForeignKey(Group, related_name='relationships', blank=True, null=True)
     relationship_event = models.ForeignKey(Event, related_name='relationships', blank=True, null=True)
+    project_initiated = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         if self.relationship_group is not None:
@@ -412,12 +414,15 @@ class ProjectRelationship(models.Model):
     @staticmethod
     def create(owner, project):
         relationship = ProjectRelationship()
+        relationship.project_initiated = False
         relationship.relationship_project = project
         
         if type(owner) is Group:
             relationship.relationship_group = owner
+            relationship.is_approved = False
         else:
             relationship.relationship_event = owner
+            relationship.is_approved = True
         
         return relationship
 

@@ -30,7 +30,7 @@ from common.models.tags import Tag
 from common.helpers.constants import FrontEndSection, TagCategory
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
-    notify_project_owners_project_approved, contact_democracylab_email
+    notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners
 from common.helpers.front_end import section_url, get_page_section
 from common.helpers.caching import update_cached_project_url
 from distutils.util import strtobool
@@ -1068,6 +1068,35 @@ def leave_project(request, project_id):
 def update_project_timestamp(request, project):
     if not request.user.is_staff:
         project.update_timestamp()
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def contact_group_owner(request, group_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    message = body['message']
+
+    group = Group.objects.get(id=group_id)
+    email_subject = '{firstname} {lastname} would like to connect with {group}'.format(
+        firstname=user.first_name,
+        lastname=user.last_name,
+        group=group.group_name)
+    email_template = HtmlEmailTemplate(use_signature=False) \
+        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+        message=message,
+        firstname=user.first_name,
+        lastname=user.last_name)) \
+        .paragraph('To contact this person, email them at {email}'.format(email=user.email))
+    send_to_group_owners(group=group, sender=user, subject=email_subject, template=email_template)
+    return HttpResponse(status=200)
+
 
 #This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.
 #TODO: Return text strings to be displayed on the front end so we know specifically what happened

@@ -133,6 +133,17 @@ def send_to_project_owners(project, sender, subject, template):
     send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
 
 
+def send_to_group_owners(group, sender, subject, template):
+    email_msg = EmailMessage(
+        subject=subject,
+        from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
+        to=[group.group_creator.email],
+        reply_to=[sender.email]
+    )
+    email_msg = template.render(email_msg)
+    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
+
+
 def send_to_project_volunteer(volunteer_relation, subject, template):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project.id)
     co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
