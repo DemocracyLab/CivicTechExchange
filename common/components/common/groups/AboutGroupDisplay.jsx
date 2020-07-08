@@ -38,7 +38,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
       issueAreas: issueAreas
     };
  }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     const issueAreas: $ReadOnlyArray<TagDefinition> = this.getUniqueIssueAreas(nextProps.group);
     this.setState({
@@ -46,7 +46,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
       issueAreas: issueAreas
     });
   }
-  
+
   getUniqueIssueAreas(group: ?GroupDetailsAPIData): ?$ReadOnlyArray<TagDefinition> {
     if(group && group.group_projects) {
       let issues = group.group_projects.map((proj: ProjectAPIData) => proj.project_issue_area && proj.project_issue_area[0]);
@@ -86,7 +86,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
               </div>
             </React.Fragment>
           }
-          
+
         </div>
 
         <div className="AboutProjects-mainColumn">
@@ -107,7 +107,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
             </div>
           </div>
 
-          <div className='AboutProjects-details'>
+          <div className='AboutGroupDisplay-details'>
             <div id='group-details'>
               {group.group_description}
             </div>
@@ -120,10 +120,10 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
               </div>
               }
             </div>
-            
+
             {this.state.group.group_projects && this._renderProjectList()}
           </div>
-          
+
         </div>
 
       </div>
@@ -142,7 +142,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
       />
     );
   }
-  
+
   _renderContactAndVolunteerButtons(): React$Node {
     return (
       <div className='AboutProjects-owner'>
@@ -159,7 +159,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
       <IconLinkDisplay key={i} link={link}/>
     );
   }
-  
+
   _renderProjectList(): ?$React$Node {
     return (
       <React.Fragment>
