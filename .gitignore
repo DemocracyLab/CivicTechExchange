@@ -110,8 +110,5 @@ package-lock.json
 # Docker environment config
 docker_environment_init.sh
 
-#Django environment variables
-democracylab_environment_variables.sh
-
 .envrc
 tags
