@@ -1,3 +1,6 @@
+read -n 1 -r -s -p $'This is an example .sh file, and should not be run or changed unless new environment variables are added. Press any key to exit\n'
+exit 1
+
 #!/bin/bash
 
 # S3 bucket and credentials for uploading files
