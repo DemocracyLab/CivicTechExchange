@@ -2,12 +2,13 @@
 
 import React from 'react';
 import {Button} from 'react-bootstrap';
-import GroupAPIUtils, {GroupDetailsAPIData} from "../../utils/GroupAPIUtils.js";
+import type {GroupDetailsAPIData} from "../../utils/GroupAPIUtils.js";
+import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import Section from '../../enums/Section.js';
 import url from '../../utils/url.js';
-import ContactModal from "./ContactModal.jsx";
-import metrics from "../../utils/metrics";
+import ContactModal,{ContactModalFields} from "../projects/ContactModal.jsx";
+import metrics from "../../utils/metrics.js";
 
 type Props = {|
   group: ?GroupDetailsAPIData
@@ -55,9 +56,6 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
       newState.buttonDisabled = true;
       // TODO: Provide mechanism to re-send verification email
       newState.buttonTitle = "Please verify your email address before contacting group owner";
-    } else if(!group.group_claimed) {
-      newState.buttonDisabled = true;
-      newState.buttonTitle = "This group has not yet been claimed by its owner";
     }
 
     return newState;
@@ -73,12 +71,13 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
   }
   
   handleVolunteerContactModal(fields: ContactModalFields, closeModal: Function): void {
-    GroupAPIUtils.post("/contact/group/" + this.props.group.group_id + "/",
+    ProjectAPIUtils.post("/contact/group/" + this.props.group.group_id + "/",
       fields,
       response => closeModal(),
       response => null /* TODO: Report error to user */
     );
     metrics.logUserContactedGroupOwner(CurrentUser.userID(), this.props.group.group_id);
+    this.closeModal();
   }
   
   closeModal() {
@@ -148,7 +147,7 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
         <ContactModal
           headerText={"Send message to Group Owner"}
           explanationText={"The group owner will reply to your message via your registered email."}
-          messagePlaceholderText={"I'm interested in helping with this group because..."}
+          messagePlaceholderText={""}
           showModal={this.state.showContactModal}
           handleSubmission={this.handleVolunteerContactModal}
           handleClose={this.closeModal}

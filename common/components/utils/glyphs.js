@@ -37,7 +37,8 @@ export const GlyphStyles: {[key: string]: string} = {
   LoadingSpinner: "fas fa-spinner fa-spin",
   Envelope: "far fa-envelope",
   CreativeCommons: "fab fa-creative-commons",
-  CreativeCommonsBy: "fab fa-creative-commons-by"
+  CreativeCommonsBy: "fab fa-creative-commons-by",
+  Calendar: "far fa-calendar"
 };
 
 export const GlyphSizes: {[key: string]: string} = {

@@ -6,7 +6,6 @@ import Headers from "../common/Headers.jsx";
 import EventOverviewForm from "../componentsBySection/CreateEvent/EventOverviewForm.jsx";
 import EventPreviewForm from "../componentsBySection/CreateEvent/EventPreviewForm.jsx";
 import EventDescriptionForm from "../componentsBySection/CreateEvent/EventDescriptionForm.jsx";
-import EventProjectSelectionForm from "../componentsBySection/CreateEvent/EventProjectSelectionForm.jsx";
 import EventAPIUtils, {EventData} from "../utils/EventAPIUtils.js";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
@@ -45,12 +44,6 @@ class CreateEventController extends React.PureComponent<{||},State> {
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: EventDescriptionForm
         }, {
-        //   header: "Projects",
-        //   subHeader: "Which projects are participating?",
-        //   onSubmit: this.onSubmit,
-        //   onSubmitSuccess: this.onNextPageSuccess,
-        //   formComponent: EventProjectSelectionForm
-        // }, {
           header: "Ready to publish your Event?",
           subHeader: "Congratulations!  You have successfully created a tech-for-good Event.",
           onSubmit: this.onSubmit,

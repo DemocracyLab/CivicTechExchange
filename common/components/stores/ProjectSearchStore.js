@@ -262,7 +262,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = state.set('filterApplied', true);
     return state;
   }
-  
+
   _addLegacyLocationToState(state: State, location: ?string): State {
     state = state.set('location', location);
     state = state.set('filterApplied', true);
@@ -308,7 +308,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       Object.assign({}, state.findProjectsArgs));
     fetch(new Request(url))
       .then(response => response.json())
-      .then(getProjectsResponse => 
+      .then(getProjectsResponse =>
         ProjectSearchDispatcher.dispatch({
           type: 'SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
           projectsResponse: getProjectsResponse
@@ -329,7 +329,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   getSortField(): string {
     return this.getState().sortField;
   }
-  
+
   getCountryList(): $ReadOnlyArray<CountryData> {
     const projectData: FindProjectsData = this.getState().projectsData;
     return projectData && projectData.availableCountries && projectData.availableCountries.map(countryByCode);
@@ -338,7 +338,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   getLocation(): LocationRadius {
     return this.getState().locationRadius;
   }
-  
+
   getLegacyLocation(): string {
     return this.getState().location;
   }
@@ -361,7 +361,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     const state: State = this.getState();
     return state.projectsData && state.projectsData.numProjects;
   }
-  
+
   getProjectsLoading(): boolean {
     return this.getState().projectsLoading;
   }

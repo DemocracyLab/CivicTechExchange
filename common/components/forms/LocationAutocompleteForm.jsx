@@ -15,6 +15,13 @@ export const LocationFormInputsByEntity: Dictionary<(LocationInfo) => string> = 
     project_city: (location: LocationInfo) => location ? location.city : "",
     project_latitude: (location: LocationInfo) => location ? location.latitude : "",
     project_longitude: (location: LocationInfo) => location ? location.longitude : ""
+  },
+  Groups: {
+    group_location: (location: LocationInfo) => location ? location.location_id : "",
+    group_state: (location: LocationInfo) => location ? location.state : "",
+    group_city: (location: LocationInfo) => location ? location.city : "",
+    group_latitude: (location: LocationInfo) => location ? location.latitude : "",
+    group_longitude: (location: LocationInfo) => location ? location.longitude : ""
   }
 };
 
@@ -36,7 +43,7 @@ export class LocationAutocompleteForm extends React.Component<Props, State> {
       location: props.location
     };
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
     if(!_.isEqual(nextProps.location, this.state.location)) {
       this.setState({location: nextProps.location});

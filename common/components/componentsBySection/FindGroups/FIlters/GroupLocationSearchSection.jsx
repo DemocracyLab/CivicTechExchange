@@ -2,16 +2,15 @@
 import React from 'react';
 import type {FluxReduceStore} from 'flux/utils';
 import {Container} from 'flux/utils';
-import ProjectSearchStore, {LocationRadius}  from "../../../stores/ProjectSearchStore.js";
-import ProjectSearchDispatcher from "../../../stores/ProjectSearchDispatcher.js";
+import type {LocationRadius}  from "../../../stores/ProjectSearchStore.js";
+import GroupSearchStore from "../../../stores/GroupSearchStore.js";
+import GroupSearchDispatcher from "../../../stores/GroupSearchDispatcher.js";
 import LocationAutocomplete from "../../../common/location/LocationAutocomplete.jsx";
 import type {LocationInfo} from "../../../common/location/LocationInfo";
 import Selector from "../../../common/selection/Selector.jsx";
 import {CountrySelector} from "../../../common/selection/CountrySelector.jsx";
 import {CountryCodeFormats, CountryData, DefaultCountry} from "../../../constants/Countries.js";
 import GlyphStyles from '../../../utils/glyphs.js'
-import type {ProjectData} from "../../../utils/ProjectAPIUtils.js";
-import {countryByCode} from "../../../constants/Countries";
 
 
 type State = {|
@@ -27,12 +26,10 @@ type State = {|
 //define CSS classes as consts for toggling, same as RenderFilterCategory.jsx
 const classCategoryExpanded = 'ProjectFilterContainer-category ProjectFilterContainer-expanded';
 const classCategoryCollapsed = 'ProjectFilterContainer-category ProjectFilterContainer-collapsed';
-const classSubcategoryExpanded = 'ProjectFilterContainer-subcategory ProjectFilterContainer-expanded';
-const classSubcategoryCollapsed = 'ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed';
 
 const DefaultSearchRadius: number = 50;
 
-class LocationSearchSection extends React.Component<{||}, State> {
+class GroupLocationSearchSection extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
@@ -45,14 +42,14 @@ class LocationSearchSection extends React.Component<{||}, State> {
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore];
+    return [GroupSearchStore];
   }
 
   static calculateState(prevState: State): State {
     const state: State = {
-      countryOptions: ProjectSearchStore.getCountryList()
+      countryOptions: GroupSearchStore.getCountryList()
     };
-    state.locationRadius = ProjectSearchStore.getLocation() || {};
+    state.locationRadius = GroupSearchStore.getLocation() || {};
     if(!_.isEmpty(state.locationRadius) && (!prevState || !prevState.locationInfo)) {
       // Placeholder lat/long location in Near field
       state.countryCode = null;
@@ -62,7 +59,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
       // If filters were cleared
       state.locationInfo = null;
     }
-
+    
     return state;
   }
 
@@ -74,6 +71,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
   }
 
   updateLocationState(locationInfo: ?LocationInfo, searchRadius: ?number): void {
+    
     if(searchRadius && !_.isEmpty(locationInfo)) {
       // Case: Setting new location state filter
       const locationRadius: LocationRadius = {
@@ -84,7 +82,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
       };
       if(!_.isEqual(locationRadius, this.state.locationRadius)) {
         this.setState({locationInfo: locationInfo}, () => {
-          ProjectSearchDispatcher.dispatch({
+          GroupSearchDispatcher.dispatch({
             type: 'SET_LOCATION',
             locationRadius: locationRadius
           });
@@ -93,7 +91,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
     } else if (!_.isEmpty(this.state.locationRadius)) {
       // Case: Clearing location state filter after clearing Near box
       this.setState({locationRadius: null}, () => {
-        ProjectSearchDispatcher.dispatch({
+        GroupSearchDispatcher.dispatch({
           type: 'SET_LOCATION',
           locationRadius: null
         });
@@ -171,4 +169,4 @@ class LocationSearchSection extends React.Component<{||}, State> {
 
 }
 
-export default Container.create(LocationSearchSection);
+export default Container.create(GroupLocationSearchSection);

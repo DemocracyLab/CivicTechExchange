@@ -40,6 +40,7 @@ class GroupResourcesForm extends React.PureComponent<Props,State> {
     this.state = {
       formIsValid: false,
       formFields: {
+        group_url: group && group.group_url,
         group_links: group ? group.group_links : [],
         group_files: group ? group.group_files : [],
         link_coderepo: group ? group.link_coderepo : "",
@@ -109,6 +110,12 @@ class GroupResourcesForm extends React.PureComponent<Props,State> {
         <DjangoCSRFToken/>
   
         <div className="form-group">
+          <label htmlFor="group_url">Website URL</label>
+          <input type="text" className="form-control" id="group_url" name="group_url" maxLength="2075"
+                 value={this.state.formFields.group_url} onChange={this.form.onInput.bind(this, "group_url")}/>
+        </div>
+        
+        <div className="form-group">
           <label htmlFor="link_coderepo">Code Repository <span className="label-hint">(e.g. Github)</span></label>
           <input type="text" className="form-control" id="link_coderepo" name="link_coderepo" maxLength="2075"
                  value={this.state.formFields.link_coderepo} onChange={this.form.onInput.bind(this, "link_coderepo")}/>
@@ -136,9 +143,9 @@ class GroupResourcesForm extends React.PureComponent<Props,State> {
           <LinkList elementid="group_links" title="Group Links" links={this.state.formFields.group_links}/>
         </div>
   
-        <div className="form-group">
-          <FileUploadList elementid="group_files" title="Group Files" files={this.state.formFields.group_files}/>
-        </div>
+        {/*<div className="form-group">*/}
+        {/*  <FileUploadList elementid="group_files" title="Group Files" files={this.state.formFields.group_files}/>*/}
+        {/*</div>*/}
 
       </div>
     );

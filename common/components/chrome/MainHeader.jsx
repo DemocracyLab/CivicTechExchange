@@ -285,7 +285,14 @@ class MainHeader extends React.Component<{||}, State > {
                 </div>
               </a>
               <Divider />
-  
+
+              <a href={url.section(Section.CreateGroup)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Create Group
+                </div>
+              </a>
+              <Divider />
+
               { CurrentUser.isStaff() && <React.Fragment><a href={url.section(Section.CreateEvent)}>
                 <div className={'SubHeader-drawerDiv'} >
                   Create Event
@@ -441,7 +448,7 @@ class MainHeader extends React.Component<{||}, State > {
           }
         ]
       .filter(config => (!config.showOnlyWhenLoggedIn || CurrentUser.isLoggedIn()) && (!config.showAdminOnly || CurrentUser.isStaff()));
-    
+
     return SectionsToShow
       .map(config =>
         <SectionLink
@@ -451,12 +458,6 @@ class MainHeader extends React.Component<{||}, State > {
           title={config.title}
         />
       );
-  }
-
-  _showSectionInMainMenu(config: SectionLinkConfigEntry): boolean {
-    // Don't show items that require login
-    // Only show admin-only options if user is an admin
-    return !config.showOnlyWhenLoggedIn && (!config.showAdminOnly || CurrentUser.isStaff());
   }
 
   _onLogInClick(): void {

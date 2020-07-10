@@ -3,22 +3,22 @@
 import React from "react";
 import type {FileInfo} from "../../common/FileInfo.jsx";
 import ImageCropUploadFormElement from "../../../components/forms/ImageCropUploadFormElement.jsx";
-import TagCategory from "../../common/tags/TagCategory.jsx";
-import TagSelector from "../../common/tags/TagSelector.jsx";
 import DjangoCSRFToken from "django-react-csrftoken";
 import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
-import type {TagDefinition, GroupDetailsAPIData} from "../../../components/utils/GroupAPIUtils.js";
+import type {GroupDetailsAPIData} from "../../../components/utils/GroupAPIUtils.js";
 import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
-import {Locations} from "../../constants/ProjectConstants.js";
+import {CountrySelector} from "../../common/selection/CountrySelector.jsx";
+import {CountryData, CountryCodeFormats, countryByCode} from "../../constants/Countries.js";
+import {LocationAutocompleteForm, LocationFormInputsByEntity} from "../../forms/LocationAutocompleteForm.jsx";
+import {LocationInfo, getLocationInfoFromGroup} from "../../common/location/LocationInfo.js";
 import _ from "lodash";
-// Todo: Wrap this in proper state management
-import { projectSelectionStoreSingleton } from '../../controllers/CreateGroupController.jsx'
 
 
 type FormFields = {|
   group_name: ?string,
-  group_location: ?string,
+  group_country: ?CountryData,
+  group_location: ?LocationInfo,
   group_description: ?string,
   group_short_description: ?string,
   group_thumbnail?: FileInfo,
@@ -40,11 +40,12 @@ type State = {|
 class GroupOverviewForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
-    const group: GroupDetailsAPIData = props.group;
+    const group: GroupDetailsAPIData = props.project;
     const formFields: FormFields = {
       group_name: group ? group.group_name : "",
-      group_location: group ? group.group_location : "",
       group_thumbnail: group ? group.group_thumbnail : "",
+      group_country: group ? countryByCode(group.group_country) : null,
+      group_location: group ? getLocationInfoFromGroup(group) : null,
       group_description: group ? group.group_description : "",
       group_short_description: group ? group.group_short_description : "",
     };
@@ -113,6 +114,25 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
             onChange={this.form.onInput.bind(this, "group_name")}
           />
         </div>
+  
+        <div className="form-group">
+          <label>Country</label>
+          <CountrySelector
+            id="group_country"
+            countryCode={this.state.formFields.group_country && this.state.formFields.group_country.ISO_2}
+            countryCodeFormat={CountryCodeFormats.ISO_2}
+            onSelection={this.form.onSelection.bind(this, "group_country")}
+          />
+        </div>
+        <div className="form-group">
+          <label>Location</label>
+          <LocationAutocompleteForm
+            country={this.state.formFields.group_country}
+            onSelect={this.form.onSelection.bind(this, "group_location")}
+            location={this.state.formFields.group_location}
+            formInputs={LocationFormInputsByEntity.Groups}
+          />
+        </div>
 
         <div className="form-group">
           <label>Short Description</label>
@@ -129,19 +149,6 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
             value={this.state.formFields.group_short_description}
             onChange={this.form.onInput.bind(this, "group_short_description")}
           />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="group_location">Location</label>
-          <select
-            name="group_location"
-            id="group_location"
-            className="form-control"
-            value={this.state.formFields.group_location}
-            onChange={this.form.onInput.bind(this, "group_location")}>
-            {!_.includes(Locations.PRESET_LOCATIONS, this.state.formFields.group_location) ? <option value={this.state.formFields.group_location}>{this.state.formFields.project_location}</option> : null}
-            {Locations.PRESET_LOCATIONS.map(location => <option key={location} value={location}>{location}</option>)}
-          </select>
         </div>
 
         <div className="form-group">

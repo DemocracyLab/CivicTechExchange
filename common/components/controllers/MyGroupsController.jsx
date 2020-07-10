@@ -1,29 +1,22 @@
 // @flow
 
+import React from 'react';
+import {Container} from 'flux/utils';
 import CurrentUser from '../utils/CurrentUser.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import MyGroupsCard from '../componentsBySection/MyGroups/MyGroupsCard.jsx';
 import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx';
 import MyGroupsStore,{MyGroupData, MyGroupsAPIResponse} from "../stores/MyGroupsStore.js";
-import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import metrics from "../utils/metrics.js";
-import {Container} from 'flux/utils';
-import ProjectVolunteerRenewModal from "../common/projects/ProjectVolunteerRenewModal.jsx";
-import ProjectVolunteerConcludeModal from "../common/projects/ProjectVolunteerConcludeModal.jsx";
 import LogInController from "./LogInController.jsx";
-import url from "../utils/url.js";
 import Section from "../enums/Section";
-import React from 'react';
-import _ from 'lodash';
 import Headers from "../common/Headers.jsx";
+import _ from 'lodash';
 
 
 type State = {|
   ownedGroups: ?Array<MyGroupData>,
-//   volunteeringProjects: ?Array<MyProjectData>,
-//   showConfirmDeleteModal: boolean,
-//   showRenewVolunteerModal: boolean,
-//   showConcludeVolunteerModal: boolean
+  showConfirmDeleteModal: boolean,
 |};
 
 class MyGroupsController extends React.Component<{||}, State> {
@@ -31,10 +24,7 @@ class MyGroupsController extends React.Component<{||}, State> {
     super();
     this.state = {
       ownedGroups: null,
-      // volunteeringProjects: null,
-      // showConfirmDeleteModal: false,
-      // showRenewVolunteerModal: false,
-      // showConcludeVolunteerModal: false
+      showConfirmDeleteModal: false,
     };
   }
   
@@ -46,38 +36,13 @@ class MyGroupsController extends React.Component<{||}, State> {
     const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
     return {
       ownedGroups: myGroups && myGroups.owned_groups,
-      // volunteeringProjects: myGroups && myGroups.volunteering_projects
     };
-  }
-  
-  componentWillMount(): void {
-    // setTimeout(function() { // Run after dispatcher has finished
-    //   UniversalDispatcher.dispatch({type: 'INIT'});
-    // }, 0);
-    // const args = url.arguments(window.location.href);
-    // if ("from" in args && args.from === "renewal_notification_email" && CurrentUser.isLoggedIn()) {
-    //   metrics.logVolunteerClickReviewCommitmentsInEmail(CurrentUser.userID());
-    // }
   }
   
   clickDeleteGroup(group: MyGroupData): void {
     this.setState({
       showConfirmDeleteModal: true,
       groupToDelete: group,
-    });
-  }
-  
-  clickRenewVolunteerWithProject(project: MyProjectData): void {
-    this.setState({
-      showRenewVolunteerModal: true,
-      applicationId: project.application_id
-    });
-  }
-  
-  clickConcludeVolunteerWithProject(project: MyProjectData): void {
-    this.setState({
-      showConcludeVolunteerModal: true,
-      applicationId: project.application_id
     });
   }
 
@@ -108,7 +73,7 @@ class MyGroupsController extends React.Component<{||}, State> {
 
   render(): React$Node {
     if (!CurrentUser.isLoggedIn) {
-      return <LogInController prevPage={Section.MyGroup}/>;
+      return <LogInController prevPage={Section.MyGroups}/>;
     }
 
     return (
@@ -125,7 +90,6 @@ class MyGroupsController extends React.Component<{||}, State> {
           />
 
           {!_.isEmpty(this.state.ownedGroups) && this.renderGroupCollection("Owned Groups", this.state.ownedGroups)}
-          {/* {!_.isEmpty(this.state.volunteeringProjects) && this.renderProjectCollection("Volunteering With", this.state.volunteeringProjects)} */}
         </div>
       </React.Fragment>
     );

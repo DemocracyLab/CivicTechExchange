@@ -9,6 +9,7 @@ from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from common.helpers.form_helpers import is_json_field_empty
 from common.helpers.dictionaries import merge_dicts
+from common.helpers.collections import flatten, count_occurrences
 
 
 # Without the following classes, the following error occurs:
@@ -200,7 +201,12 @@ class Group(Archived):
     group_date_created = models.DateTimeField(null=True)
     group_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     group_description = models.CharField(max_length=4000, blank=True)
+    group_url = models.CharField(max_length=2083, blank=True)
     group_location = models.CharField(max_length=200, blank=True)
+    group_location_coords = PointField(null=True, blank=True, srid=4326, default='')
+    group_country = models.CharField(max_length=100, blank=True)
+    group_state = models.CharField(max_length=100, blank=True)
+    group_city = models.CharField(max_length=100, blank=True)
     group_name = models.CharField(max_length=200)
     group_short_description = models.CharField(max_length=140, blank=True)
     is_searchable = models.BooleanField(default=False)
@@ -210,7 +216,7 @@ class Group(Archived):
         return str(self.id) + ':' + str(self.group_name)
 
     def delete(self):
-        self.is_searchable=False
+        self.is_searchable = False
         super().delete()
 
     def update_timestamp(self):
@@ -222,6 +228,7 @@ class Group(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_group=self.id)
+        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
 
         group = {
             'group_creator': self.group_creator.id,
@@ -230,12 +237,44 @@ class Group(Archived):
             'group_files': list(map(lambda file: file.to_json(), other_files)),
             'group_id': self.id,
             'group_links': list(map(lambda link: link.to_json(), links)),
-            'group_location': self.group_location,
+            'group_url': self.group_url,
             'group_name': self.group_name,
+            'group_location': self.group_location,
+            'group_country': self.group_country,
+            'group_state': self.group_state,
+            'group_city': self.group_city,
             'group_owners': [self.group_creator.hydrate_to_tile_json()],
-            'group_short_description': self.group_short_description,
-            'group_issue_areas': self.get_issue_areas(),
+            'group_short_description': self.group_short_description
         }
+
+        if len(projects) > 0:
+            group['group_projects'] = list(map(lambda project: project.relationship_project.hydrate_to_tile_json(), projects))
+
+        if len(thumbnail_files) > 0:
+            group['group_thumbnail'] = thumbnail_files[0].to_json()
+
+        return group
+
+    def hydrate_to_tile_json(self):
+        files = ProjectFile.objects.filter(file_group=self.id)
+        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
+
+        group = {
+            'group_date_modified': self.group_date_modified.__str__(),
+            'group_id': self.id,
+            'group_name': self.group_name,
+            'group_location': self.group_location,
+            'group_country': self.group_country,
+            'group_state': self.group_state,
+            'group_city': self.group_city,
+            'group_short_description': self.group_short_description,
+            'group_project_count': projects.count()
+        }
+
+        if len(projects) > 0:
+            group['group_project_count'] = projects.count()
+            group['group_issue_areas'] = self.get_project_issue_areas(with_counts=True, project_relationships=projects)
 
         if len(thumbnail_files) > 0:
             group['group_thumbnail'] = thumbnail_files[0].to_json()
@@ -244,6 +283,7 @@ class Group(Archived):
     
     def hydrate_to_list_json(self):
         group = {
+            'group_date_modified': self.group_date_modified.__str__(),
             'group_id': self.id,
             'group_name': self.group_name,
             'group_creator': self.group_creator.id,
@@ -254,12 +294,16 @@ class Group(Archived):
 
         return group
 
-    def get_issue_areas(self):
-        project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
-        project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
-        project_list = Project.objects.filter(id__in=project_ids)
-
-        return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
+    def get_project_issue_areas(self, with_counts, project_relationships=None):
+        if project_relationships is None:
+            project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
+        all_issue_areas = flatten(list(map(lambda p: p.relationship_project.project_issue_area.all().values(), project_relationships)))
+        all_issue_area_names = list(map(lambda issue_tag: issue_tag['name'], all_issue_areas))
+        if with_counts:
+            issue_area_counts = count_occurrences(all_issue_area_names)
+            return issue_area_counts
+        else:
+            return all_issue_area_names
 
 
 class TaggedEventOrganization(TaggedItemBase):
@@ -354,19 +398,31 @@ class ProjectRelationship(models.Model):
     relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True)
     relationship_group = models.ForeignKey(Group, related_name='relationships', blank=True, null=True)
     relationship_event = models.ForeignKey(Event, related_name='relationships', blank=True, null=True)
+    project_initiated = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.relationship_event.event_name + ':' + self.relationship_project.project_name
+        if self.relationship_group is not None:
+            project_counterpart = ('Group', self.relationship_group)
+        elif self.relationship_event is not None:
+            project_counterpart = ('Event', self.relationship_event)
+        return "{proj} - ({type}) {counterpart}".format(
+            proj=self.relationship_project.__str__(),
+            type=project_counterpart[0],
+            counterpart=project_counterpart[1].__str__())
 
     @staticmethod
     def create(owner, project):
         relationship = ProjectRelationship()
+        relationship.project_initiated = False
         relationship.relationship_project = project
         
         if type(owner) is Group:
             relationship.relationship_group = owner
+            relationship.is_approved = False
         else:
             relationship.relationship_event = owner
+            relationship.is_approved = True
         
         return relationship
 

@@ -60,7 +60,7 @@ export class LocationAutocomplete extends React.Component<Props, State> {
       });
     }
   }
-  
+
   filterAutocompleteSuggestions(suggestions: $ReadOnlyArray<HereSuggestion>): $ReadOnlyArray<HereSuggestion> {
     // Only show suggestions that have a city and/or zip code component
     return suggestions.filter((suggestion: HereSuggestion) => suggestion.address.city || suggestion.address.postalCode);

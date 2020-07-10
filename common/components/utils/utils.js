@@ -14,6 +14,9 @@ class utils {
     return escapeEl.textContent;
   }
   
+  static pluralize(singular: string, plural: string, count: number): string {
+    return count === 1 ? singular : plural;
+  }
 }
 
 export default utils;

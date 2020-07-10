@@ -1,6 +1,5 @@
 // @flow
 
-// import type {Project} from '../stores/ProjectSearchStore.js';
 import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 import {PositionInfo} from "../forms/PositionInfo.jsx";
@@ -17,7 +16,6 @@ export type APIError = {|
   +errorMessage: string
 |};
 
-// TODO: Condense redundant tag definitions
 export type TagDefinition = {|
   id: number,
   tag_name: string,
@@ -25,8 +23,12 @@ export type TagDefinition = {|
   caption: string,
   category: string,
   subcategory: string,
-  parent: string,
+  parent: string
 |};
+
+export type TagDefinitionCount = {|
+  num_times: number
+|} & TagDefinition;
 
 export type ProjectData = {|
   +id: number,
@@ -149,7 +151,7 @@ class ProjectAPIUtils {
           : ['Contact Project for Details'],
     };
   }
-  
+
   static getLocationDisplayName(project: ProjectAPIData | ProjectDetailsAPIData | ProjectData): string {
     // TODO: See if we can deprecate ProjectData
     const location: LocationInfo = {
