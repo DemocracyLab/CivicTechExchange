@@ -16,6 +16,13 @@ class EmailSection(Enum):
     Header = 'Header'
     Button = 'Button'
     Paragraph = 'Paragraph'
+    Paragraph_Center = 'Paragraph_Center'
+
+
+class Html:
+    @staticmethod
+    def a(href, text):
+        return "<a href={href}>{text}</a>".format(href=href, text=text)
 
 
 class HtmlEmailTemplate:
@@ -23,7 +30,8 @@ class HtmlEmailTemplate:
     section_templates = {
         EmailSection.Header: loader.get_template('html_email_header.html'),
         EmailSection.Button: loader.get_template('html_email_button.html'),
-        EmailSection.Paragraph: loader.get_template('html_email_paragraph.html')
+        EmailSection.Paragraph: loader.get_template('html_email_paragraph.html'),
+        EmailSection.Paragraph_Center: loader.get_template('html_email_paragraph_center.html')
     }
 
     def __init__(self, use_signature=True):
@@ -40,6 +48,9 @@ class HtmlEmailTemplate:
 
     def paragraph(self, text):
         return self.add(EmailSection.Paragraph, {'text': text})
+
+    def paragraph_center(self, text):
+        return self.add(EmailSection.Paragraph_Center, {'text': text})
 
     def button(self, url, text):
         return self.add(EmailSection.Button, {'url': url, 'text': text})
@@ -276,6 +287,22 @@ def notify_project_owners_project_approved(project):
     )
     email_msg = email_template.render(email_msg, context)
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+
+
+def send_group_project_invitation_email(project_relation):
+    # TODO: Send message to individual group owners by name
+    project = project_relation.relationship_project
+    group = project_relation.relationship_group
+    project_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
+    group_url = section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
+    invite_header = project.project_name + " has been invited to connect!"
+    email_template = HtmlEmailTemplate() \
+        .header(invite_header) \
+        .paragraph('{group_link} has invited you to collaborate and connect'.format(
+            group_link=Html.a(href=group_url, text=group.group_name))) \
+        .paragraph('\"{message}\"'.format(message=project_relation.introduction_text)) \
+        .button(url=project_url, text='VIEW YOU GROUPS')
+    send_to_project_owners(project=project, sender=group.group_creator, subject=invite_header, template=email_template)
 
 
 def send_email(email_msg, email_acct=None):

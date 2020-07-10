@@ -108,6 +108,18 @@ class metrics {
     _logEvent("UserContactedGroupOwner", {userId: userId, groupId: groupId});
   }
   
+  static logGroupInviteProjectClick(groupId: number, projectId: number): void {
+    _logEvent("GroupInviteProjectClick", {groupId: groupId, projectId: projectId});
+  }
+  
+  static logGroupInviteProjectSubmit(groupId: number, projectId: number): void {
+    _logEvent("GroupInviteProjectSubmit", {groupId: groupId, projectId: projectId});
+  }
+  
+  static logGroupInviteProjectSubmitConfirm(groupId: number, projectId: number): void {
+    _logEvent("GroupInviteProjectSubmitConfirm", {groupId: groupId, projectId: projectId});
+  }
+  
   static logVolunteerClickVolunteerButton(userId: number, projectId: number): void {
     _logEvent("VolunteerClickVolunteerButton", {userId: userId, projectId: projectId});
   }

@@ -398,6 +398,7 @@ class ProjectRelationship(models.Model):
     relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True)
     relationship_group = models.ForeignKey(Group, related_name='relationships', blank=True, null=True)
     relationship_event = models.ForeignKey(Event, related_name='relationships', blank=True, null=True)
+    introduction_text = models.CharField(max_length=10000, blank=True)
     project_initiated = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
 
@@ -412,11 +413,12 @@ class ProjectRelationship(models.Model):
             counterpart=project_counterpart[1].__str__())
 
     @staticmethod
-    def create(owner, project):
+    def create(owner, project, introduction_text=""):
         relationship = ProjectRelationship()
         relationship.project_initiated = False
         relationship.relationship_project = project
-        
+        relationship.introduction_text = introduction_text
+
         if type(owner) is Group:
             relationship.relationship_group = owner
             relationship.is_approved = False

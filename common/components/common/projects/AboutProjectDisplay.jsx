@@ -19,6 +19,7 @@ import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
+import InviteProjectToGroupButton from "./InviteProjectToGroupButton.jsx";
 
 
 type Props = {|
@@ -160,6 +161,8 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
             </React.Fragment>
           }
+          
+          {/*TODO: Groups section*/}
 
           <div className='AboutProjects-team'>
             {
@@ -332,6 +335,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       <div className='AboutProjects-owner'>
         <ContactProjectButton project={this.state.project}/>
         <ContactVolunteersButton project={this.state.project}/>
+        <InviteProjectToGroupButton project={this.state.project}/>
         <ProjectVolunteerButton
           project={this.state.project}
           onVolunteerClick={this.handleShowVolunteerModal.bind(this)}

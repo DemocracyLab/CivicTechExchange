@@ -36,3 +36,8 @@ class FrontEndSection(Enum):
     ThankYou = 'ThankYou'
     EmailVerified = 'EmailVerified'
     Error = 'Error'
+    AboutGroup = 'AboutGroup'
+    EditGroup = 'EditGroup'
+    FindGroups = 'FindGroups'
+    CreateGroup = 'CreateGroup'
+    MyGroups = 'MyGroups'
