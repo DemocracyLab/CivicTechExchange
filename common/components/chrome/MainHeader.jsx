@@ -270,6 +270,13 @@ class MainHeader extends React.Component<{||}, State > {
                 </div>
               </a>
               <Divider />
+  
+              <a href={url.section(Section.FindGroups)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Find Groups
+                </div>
+              </a>
+              <Divider />
 
               {window.EVENT_URL && <React.Fragment><a href={_.unescape(window.EVENT_URL)}>
                 <div className={'SubHeader-drawerDiv'} >
@@ -429,6 +436,16 @@ class MainHeader extends React.Component<{||}, State > {
             section: Section.CreateProject,
             title: 'Create Project',
             showOnlyWhenLoggedIn: false
+          },
+          {
+            section: Section.FindGroups,
+            title: 'Find Groups',
+            showOnlyWhenLoggedIn: false
+          },
+          {
+            section: Section.CreateGroup,
+            title: 'Create Group',
+            showOnlyWhenLoggedIn: true
           },
           {
             section: Section.CreateEvent,
