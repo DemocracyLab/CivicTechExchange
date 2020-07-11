@@ -4,9 +4,8 @@ from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group
 from .sitemaps import SitemapPages
-from democracylab.emails import send_project_creation_notification
+from democracylab.emails import send_project_creation_notification, send_group_creation_notification
 from democracylab.models import get_request_contributor
-from common.models.tags import Tag
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
     merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, read_form_fields_point
 
@@ -203,8 +202,7 @@ class GroupCreationForm(ModelForm):
         merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
 
         if is_created_original != group.is_created:
-            print('notifying group creation')
-            # send_project_creation_notification(project)
+            send_group_creation_notification(group)
 
         return group
 

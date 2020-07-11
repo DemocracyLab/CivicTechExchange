@@ -30,7 +30,8 @@ from common.models.tags import Tag
 from common.helpers.constants import FrontEndSection, TagCategory
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
-    notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email
+    notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
+    notify_group_owners_group_approved
 from common.helpers.front_end import section_url, get_page_section
 from common.helpers.caching import update_cached_project_url
 from distutils.util import strtobool
@@ -198,6 +199,25 @@ def group_delete_project(request, group_id):
                 return HttpResponse(status=204)
 
     return HttpResponse(status=404)
+
+
+def approve_group(request, group_id):
+    group = Group.objects.get(id=group_id)
+    user = get_request_contributor(request)
+
+    if group is not None:
+        if user.is_staff:
+            group.is_searchable = True
+            group.save()
+            # SitemapPages.update()
+            notify_group_owners_group_approved(group)
+            messages.success(request, 'Group Approved')
+
+            return redirect(section_url(FrontEndSection.AboutGroup, {'id': str(group.id)}))
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it

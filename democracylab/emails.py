@@ -289,6 +289,44 @@ def notify_project_owners_project_approved(project):
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
+def send_group_creation_notification(group):
+    group_url = section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
+
+    verification_url = settings.PROTOCOL_DOMAIN + '/groups/approve/' + str(group.id)
+    email_template = HtmlEmailTemplate() \
+        .paragraph('{first_name} {last_name}({email}) has created the group "{group_name}": \n {group_url}'.format(
+        first_name=group.group_creator.first_name,
+        last_name=group.group_creator.last_name,
+        email=group.group_creator.email,
+        group_name=group.group_name,
+        group_url=group_url
+    )) \
+        .button(url=verification_url, text='APPROVE')
+    email_msg = EmailMessage(
+        subject='New DemocracyLab Group: ' + group.group_name,
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=[settings.ADMIN_EMAIL]
+    )
+    email_msg = email_template.render(email_msg)
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+
+
+def notify_group_owners_group_approved(group):
+    email_template = HtmlEmailTemplate() \
+        .paragraph('Your group "{{group_name}}" has been approved. You can see it at {{group_url}}')
+    context = {
+        'group_name': group.group_name,
+        'group_url': section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
+    }
+    email_msg = EmailMessage(
+        subject=group.group_name + " has been approved",
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=[group.group_creator.email]
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+
+
 def send_group_project_invitation_email(project_relation):
     # TODO: Send message to individual group owners by name
     project = project_relation.relationship_project
