@@ -4,6 +4,7 @@ import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 import {PositionInfo} from "../forms/PositionInfo.jsx";
 import {LocationInfo, getLocationDisplayString} from "../common/location/LocationInfo.js";
+import type {MyGroupData} from "../stores/MyGroupsStore.js";
 import _ from 'lodash';
 
 export type APIResponse = {|
@@ -98,6 +99,7 @@ export type ProjectDetailsAPIData = {|
   +project_stage: $ReadOnlyArray<TagDefinition>,
   +project_technologies: $ReadOnlyArray<TagDefinition>,
   +project_positions: $ReadOnlyArray<PositionInfo>,
+  +project_groups: $ReadOnlyArray<MyGroupData>,
   +project_location: string,
   +project_country: string,
   +project_state: string,

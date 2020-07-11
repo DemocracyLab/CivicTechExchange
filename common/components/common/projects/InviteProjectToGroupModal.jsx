@@ -147,10 +147,6 @@ class InviteProjectToGroupModal extends React.PureComponent<Props, State> {
     );
   }
 
-  // _fieldsFilled(): boolean {
-  //   return this._selectedTag() && this.state.daysToVolunteerForOption && this.state.message;
-  // }
-
   _renderGroupSelectionDropdown(): React$Node {
     const groups: $ReadOnlyArray<MyGroupData> = this.props.groups;
     // TODO: Remove clear X

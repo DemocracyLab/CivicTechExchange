@@ -1151,6 +1151,34 @@ def accept_group_invitation(request, invite_id):
         return redirect(about_project_url)
 
 
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def reject_group_invitation(request, invite_id):
+    # Redirect to login if not logged in
+    if not request.user.is_authenticated():
+        return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
+
+    project_relation = ProjectRelationship.objects.get(id=invite_id)
+    project = project_relation.relationship_project
+    about_project_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
+    if project_relation.is_approved:
+        messages.add_message(request, messages.ERROR, 'The project is already part of the group.')
+        return redirect(about_project_url)
+
+    user = get_request_contributor(request)
+    if is_co_owner_or_owner(user, project):
+        project_relation.delete()
+        update_project_timestamp(request, project)
+        if request.method == 'GET':
+            # messages.add_message(request, messages.SUCCESS, 'Your project is now part of the group ' + project_relation.relationship_group.group_name)
+            return redirect(about_project_url)
+        else:
+            return HttpResponse(status=200)
+    else:
+        messages.add_message(request, messages.ERROR, 'You do not have permission to reject this group invitation.')
+        return redirect(about_project_url)
+
+
 #This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.
 #TODO: Return text strings to be displayed on the front end so we know specifically what happened
 @csrf_exempt

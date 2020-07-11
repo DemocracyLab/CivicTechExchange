@@ -162,7 +162,6 @@ class GroupCreationForm(ModelForm):
 
     @staticmethod
     def create_or_edit_group(request, group_id):
-        print(group_id)
         form = GroupCreationForm(request.POST)
         if group_id is not None:
             group = Group.objects.get(id=group_id)

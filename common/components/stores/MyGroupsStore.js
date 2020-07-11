@@ -3,11 +3,17 @@
 import {ReduceStore} from 'flux/utils';
 import {Record} from 'immutable'
 import UniversalDispatcher from './UniversalDispatcher.js';
+import type {FileInfo} from "../common/FileInfo.jsx";
 
+// TODO: Rename isApproved to is_searchable
 export type MyGroupData = {|
+  +group_thumbnail: FileInfo,
+  +group_date_modified: Date,
   +group_id: number,
   +group_name: string,
   +group_creator: number,
+  +project_relationship_id: Number,
+  +relationship_is_approved: boolean,
   +isApproved: ?boolean,
   +isCreated: ?boolean,
 |};

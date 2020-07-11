@@ -113,6 +113,7 @@ class Project(Archived):
         links = ProjectLink.objects.filter(link_project=self.id)
         positions = ProjectPosition.objects.filter(position_project=self.id)
         volunteers = VolunteerRelation.objects.filter(project=self.id)
+        group_relationships = ProjectRelationship.objects.filter(relationship_project=self).exclude(relationship_group=None)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
         # TODO: Don't return location id
         # TODO: Reduce country down to 2-char code
@@ -140,6 +141,7 @@ class Project(Archived):
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links)),
             'project_commits': list(map(lambda commit: commit.to_json(), commits)),
+            'project_groups': list(map(lambda gr: gr.hydrate_to_list_json(), group_relationships)),
             'project_owners': [self.project_creator.hydrate_to_tile_json()],
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__()
@@ -282,15 +284,20 @@ class Group(Archived):
         return group
     
     def hydrate_to_list_json(self):
+        files = ProjectFile.objects.filter(file_group=self.id)
+        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+
         group = {
             'group_date_modified': self.group_date_modified.__str__(),
             'group_id': self.id,
             'group_name': self.group_name,
             'group_creator': self.group_creator.id,
-            'group_short_description': self.group_short_description,
             'isApproved': self.is_searchable,
             'isCreated': self.is_created
         }
+
+        if len(thumbnail_files) > 0:
+            group['group_thumbnail'] = thumbnail_files[0].to_json()
 
         return group
 
@@ -427,6 +434,19 @@ class ProjectRelationship(models.Model):
             relationship.is_approved = True
         
         return relationship
+
+    def is_group_relationship(self):
+        return self.relationship_group is not None
+
+    def hydrate_to_list_json(self):
+        list_json = {
+            'project_relationship_id': self.id,
+            'relationship_is_approved': self.is_approved
+        }
+        if self.is_group_relationship():
+            list_json = merge_dicts(list_json, self.relationship_group.hydrate_to_list_json())
+
+        return list_json
 
 
 class ProjectCommit(models.Model):

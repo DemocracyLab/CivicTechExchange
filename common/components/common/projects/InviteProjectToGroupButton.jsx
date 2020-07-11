@@ -89,13 +89,13 @@ class InviteProjectToGroupButton extends React.Component<Props, State> {
   }
 
   render(): ?React$Node {
-    if(!_.isEmpty(this.state.ownedGroups)) {
-      return (
+    return !_.isEmpty(this.state.ownedGroups)
+    ? (
         <div>
           {this.displayInviteProjectButton()}
         </div>
-      );
-    }
+      )
+    : null
   }
 }
 

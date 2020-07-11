@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import _ from 'lodash'
+import _ from "lodash";
 import ProjectAPIUtils,{ProjectDetailsAPIData} from '../../utils/ProjectAPIUtils.js';
 import ProjectDetails from '../../componentsBySection/FindProjects/ProjectDetails.jsx';
 import ContactProjectButton from "./ContactProjectButton.jsx";
@@ -20,6 +20,7 @@ import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
 import InviteProjectToGroupButton from "./InviteProjectToGroupButton.jsx";
+import ApproveGroupsSection from "./ApproveGroupsSection.jsx";
 
 
 type Props = {|
@@ -210,6 +211,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 <h1>{project && project.project_name}</h1>
                 <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
                 <p>{project && project.project_short_description}</p>
+                <ApproveGroupsSection project={this.props.project}/>
               </div>
 
               <ProjectVolunteerModal
