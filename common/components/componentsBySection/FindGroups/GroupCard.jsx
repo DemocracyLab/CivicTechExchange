@@ -54,7 +54,7 @@ class GroupCard extends React.PureComponent<Props> {
       <div className="ProjectCard-title">
         <h2>{group.group_name}</h2>
         <h4>
-          {group.group_project_count + " " + utils.pluralize("group","groups", group.group_project_count)}
+          {group.group_project_count + " " + utils.pluralize("project","projects", group.group_project_count)}
         </h4>
       </div>
     )
