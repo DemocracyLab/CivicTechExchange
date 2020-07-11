@@ -137,14 +137,14 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
         <div className="form-group">
           <label>Short Description</label>
           <div className="character-count">
-            { (this.state.formFields.group_short_description || "").length} / 50
+            { (this.state.formFields.group_short_description || "").length} / 140
           </div>
           <input
             id="group_short_description"
             name="group_short_description"
             placeholder="Group Description"
             type="text"
-            maxLength="50"
+            maxLength="140"
             className="form-control"
             value={this.state.formFields.group_short_description}
             onChange={this.form.onInput.bind(this, "group_short_description")}
@@ -155,18 +155,18 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
           <label>
             Description
           </label>
+          <div className="character-count">
+            { (this.state.formFields.group_description || "").length} / 3000
+          </div>
           <textarea
             id="group_description"
             name="group_description"
             placeholder="Briefly describe your group..."
             rows="4"
-            maxLength="300"
+            maxLength="3000"
             className="form-control"
             value={this.state.formFields.group_description} onChange={this.form.onInput.bind(this, "group_description")}
           ></textarea>
-          <div className="character-count">
-            { (this.state.formFields.group_short_description || "").length} / 300
-          </div>
         </div>
 
         <FormValidation
