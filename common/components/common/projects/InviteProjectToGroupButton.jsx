@@ -8,13 +8,14 @@ import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import metrics from "../../utils/metrics.js";
 import InviteProjectToGroupModal from "./InviteProjectToGroupModal.jsx";
+import {Dictionary, createDictionary} from "../../types/Generics.jsx";
 import _ from "lodash";
 
 type Props = {|
   project: ?ProjectDetailsAPIData
 |};
 type State = {|
-  project: ?ProjectDetailsAPIData,
+  projectGroups: $ReadOnlyArray<MyGroupData>,
   ownedGroups: $ReadOnlyArray<MyGroupData>,
   showModal: boolean,
   buttonDisabled: boolean,
@@ -29,7 +30,7 @@ class InviteProjectToGroupButton extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      project: props.project,
+      projectGroups: props.project.project_groups,
       showModal: false
     };
     this.handleShow = this.handleShow.bind(this);
@@ -42,14 +43,22 @@ class InviteProjectToGroupButton extends React.Component<Props, State> {
   
   static calculateState(prevState: State): State {
     const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
-    // TODO: Filter out groups that this project is already a part of
     return {
-      ownedGroups: myGroups && myGroups.owned_groups,
+      ownedGroups: myGroups && myGroups.owned_groups
     };
+  }
+  
+  getOwnedButNotInvitedGroups(myGroups: $ReadOnlyArray<MyGroupData>, invitedGroups: $ReadOnlyArray<MyGroupData>): $ReadOnlyArray<MyGroupData> {
+    if(!_.isEmpty(invitedGroups)) {
+      const invitations: Dictionary<MyGroupData> = createDictionary(invitedGroups, (group: MyGroupData) => group.group_id);
+      return myGroups.filter((group: MyGroupData) => !(invitations && invitations[group.group_id]));
+    } else {
+      return myGroups;
+    }
   }
 
   componentWillReceiveProps(nextProps: Props): void {
-    this.setState({project: nextProps.project});
+    this.setState({projectGroups: nextProps.project.project_groups});
   }
 
   handleShow() {
@@ -57,34 +66,37 @@ class InviteProjectToGroupButton extends React.Component<Props, State> {
     this.setState({ showModal: true });
   }
 
-  closeModal() {
-    this.setState({ showModal: false });
+  closeModal(invitedGroup: ?MyGroupData) {
+    const state: State = this.state;
+    state.showModal = false;
+    if(invitedGroup) {
+      state.projectGroups.push(invitedGroup);
+    }
+    this.setState(state);
+    this.forceUpdate();
   }
 
   displayInviteProjectButton(): ?React$Node {
-    const buttonText: string = "Invite Project to Group";
-    // TODO: Hide when project is already subscribed to all groups
-    if (CurrentUser.userID() !== this.props.project.project_creator) {
-    return (
-      <div>
-        <Button
-          variant="primary"
-          className="AboutProject-button"
-          type="button"
-          title={buttonText}
-          onClick={this.handleShow}
-        >
-          {buttonText}
-        </Button>
-        <InviteProjectToGroupModal
-          groups={this.state.ownedGroups}
-          projectId={this.props.project.project_id}
-          showModal={this.state.showModal}
-          handleSubmission={this.closeModal}
-          handleClose={this.closeModal}
-        />
-      </div>
-      );
+    const ownedButNotInvitedGroups: $ReadOnlyArray<MyGroupData> = this.getOwnedButNotInvitedGroups(this.state.ownedGroups, this.state.projectGroups);
+    if (CurrentUser.userID() !== this.props.project.project_creator && !_.isEmpty(ownedButNotInvitedGroups)) {
+      return (
+        <div>
+          <Button
+            variant="primary"
+            className="AboutProject-button"
+            type="button"
+            onClick={this.handleShow}
+          >
+            Invite Project to Group
+          </Button>
+          <InviteProjectToGroupModal
+            groups={ownedButNotInvitedGroups}
+            projectId={this.props.project.project_id}
+            showModal={this.state.showModal}
+            handleClose={this.closeModal}
+          />
+        </div>
+        );
     }
   }
 

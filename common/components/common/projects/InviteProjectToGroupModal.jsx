@@ -15,7 +15,7 @@ type Props = {|
   projectId: number,
   groups: $ReadOnlyArray<MyGroupData>,
   showModal: boolean,
-  handleClose: () => void
+  handleClose: (?MyGroupData) => void
 |};
 type State = {|
   showModal: boolean,
@@ -91,11 +91,11 @@ class InviteProjectToGroupModal extends React.PureComponent<Props, State> {
   }
 
   closeModal(submitted: boolean): void {
+    this.props.handleClose(submitted && this.state.selectedGroup);
     this.setState({
       isSending: false,
       selectedGroup: null
     });
-    this.props.handleClose(submitted);
   }
 
   render(): React$Node {
