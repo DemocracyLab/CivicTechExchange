@@ -13,6 +13,7 @@ type Props = {|
   bottomOverlayText: ?$ReadOnlyArray<string>,
   img: ?string,
   className: ?string,
+  doNotFillViewport: ?boolean,
   opacity: ?number,
   onClickFindProjects: () => void
 |};
@@ -39,7 +40,10 @@ class SplashScreen extends React.PureComponent<Props> {
   render(): React$Node {
     const opacityValue = _.isNumber(this.props.opacity) ? this.props.opacity : 0.5;
     const backgroundUrl: string = this.props.img ? cdn.image(this.props.img) : this._heroRandomizer();
-    const cssClass = "SplashScreen-root SplashScreen-opacity-layer " + this.props.className
+    const cssClass = _.compact(["SplashScreen-root SplashScreen-opacity-layer ",
+      this.props.className,
+      !this.props.doNotFillViewport && "SplashScreen-fill"])
+      .join(" ");
     return (
       <div className={cssClass} style={{backgroundImage: 'url(' + backgroundUrl + ')', backgroundColor: `rgba(0,0,0, ${opacityValue})`}}>
         <div className="SplashScreen-content">
