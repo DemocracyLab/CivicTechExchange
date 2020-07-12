@@ -59,22 +59,28 @@ class ApproveGroupsSection extends React.PureComponent<Props, State> {
         <span className="ApproveGroups-logo">
           <img src={group && group.group_thumbnail ? group.group_thumbnail.publicUrl : '/static/images/projectlogo-default.png'}/>
         </span>
-        <Button
-          className="ApproveGroups-button-approve"
-          variant="outline-secondary"
-          onClick={this.handleClick.bind(this, group, true)}
-        >
-          Approve
-        </Button>
-        <Button
-          className="ApproveGroups-button-reject"
-          variant="outline-secondary"
-          onClick={this.handleClick.bind(this, group, false)}
-        >
-          Reject
-        </Button>
-        for{" "}
-        <a href={url.section(Section.AboutGroup, {id: group.group_id})}>{group.group_name}</a>
+        <span>
+          <Button
+            className="ApproveGroups-button-approve"
+            variant="outline-secondary"
+            onClick={this.handleClick.bind(this, group, true)}
+          >
+            Approve
+          </Button>
+        </span>
+        <span>
+          <Button
+            className="ApproveGroups-button-reject"
+            variant="outline-secondary"
+            onClick={this.handleClick.bind(this, group, false)}
+          >
+            Reject
+          </Button>
+        </span>
+        <span>
+          for{" "}
+          <a href={url.section(Section.AboutGroup, {id: group.group_id})}>{group.group_name}</a>
+        </span>
       </div>
     );
   }
