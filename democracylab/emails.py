@@ -339,7 +339,7 @@ def send_group_project_invitation_email(project_relation):
         .paragraph('{group_link} has invited you to collaborate and connect'.format(
             group_link=Html.a(href=group_url, text=group.group_name))) \
         .paragraph('\"{message}\"'.format(message=project_relation.introduction_text)) \
-        .button(url=project_url, text='VIEW YOU GROUPS')
+        .button(url=project_url, text='VIEW YOUR GROUPS')
     send_to_project_owners(project=project, sender=group.group_creator, subject=invite_header, template=email_template)
 
 
