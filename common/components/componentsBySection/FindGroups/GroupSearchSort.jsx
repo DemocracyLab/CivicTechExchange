@@ -4,11 +4,11 @@ import type {FluxReduceStore} from 'flux/utils';
 import {Container} from 'flux/utils';
 import React from 'react';
 import Select from 'react-select';
-import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import GroupSearchBar from "./GroupSearchBar.jsx";
 import {SelectOption} from "../../types/SelectOption.jsx";
 import metrics from "../../utils/metrics.js";
 import GroupSearchStore from "../../stores/GroupSearchStore.js";
+import GroupSearchDispatcher from "../../stores/GroupSearchDispatcher.js";
 
 
 type State = {|
@@ -53,7 +53,7 @@ class GroupSearchSort extends React.Component<{||}, State> {
   }
 
   _onSubmitSortField(): void {
-    ProjectSearchDispatcher.dispatch({
+    GroupSearchDispatcher.dispatch({
       type: 'SET_SORT',
       sortField: this.state.sortField,
     });
