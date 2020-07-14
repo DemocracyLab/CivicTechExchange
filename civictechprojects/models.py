@@ -230,7 +230,7 @@ class Group(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_group=self.id)
-        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
+        project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id, relationship_project__is_searchable=True)
 
         group = {
             'group_creator': self.group_creator.id,
@@ -249,8 +249,8 @@ class Group(Archived):
             'group_short_description': self.group_short_description
         }
 
-        if len(projects) > 0:
-            group['group_projects'] = list(map(lambda project: project.relationship_project.hydrate_to_tile_json(), projects))
+        if len(project_relationships) > 0:
+            group['group_projects'] = list(map(lambda pr: pr.hydrate_to_project_tile_json(), project_relationships))
 
         if len(thumbnail_files) > 0:
             group['group_thumbnail'] = thumbnail_files[0].to_json()
@@ -445,6 +445,15 @@ class ProjectRelationship(models.Model):
         }
         if self.is_group_relationship():
             list_json = merge_dicts(list_json, self.relationship_group.hydrate_to_list_json())
+
+        return list_json
+
+    def hydrate_to_project_tile_json(self):
+        list_json = {
+            'project_relationship_id': self.id,
+            'relationship_is_approved': self.is_approved
+        }
+        list_json = merge_dicts(list_json, self.relationship_project.hydrate_to_tile_json())
 
         return list_json
 

@@ -15,6 +15,7 @@ import GroupAPIUtils from "../../utils/GroupAPIUtils.js";
 import ProjectCard from "../../componentsBySection/FindProjects/ProjectCard.jsx";
 import ProjectAPIUtils, {TagDefinition} from "../../utils/ProjectAPIUtils.js";
 import type {ProjectAPIData} from "../../utils/ProjectAPIUtils";
+import type {ProjectRelationshipAPIData} from "../../utils/GroupAPIUtils";
 
 
 type Props = {|
@@ -24,6 +25,7 @@ type Props = {|
 
 type State = {|
   group: ?GroupDetailsAPIData,
+  approvedProjects: $ReadOnlyArray<ProjectRelationshipAPIData>,
   issueAreas: $ReadOnlyArray<TagDefinition>,
   showJoinModal: boolean
 |};
@@ -32,27 +34,28 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
 
   constructor(props: Props): void{
     super(props);
-    const issueAreas: $ReadOnlyArray<TagDefinition> = this.getUniqueIssueAreas(props.group);
-    this.state = {
-      group: props.group,
-      issueAreas: issueAreas
-    };
+    this.state = this.loadGroupIntoState(props.group);
  }
 
   componentWillReceiveProps(nextProps: Props): void {
-    const issueAreas: $ReadOnlyArray<TagDefinition> = this.getUniqueIssueAreas(nextProps.group);
-    this.setState({
-      group: nextProps.group,
-      issueAreas: issueAreas
+    this.setState(this.loadGroupIntoState(nextProps.group));
+  }
+  
+  loadGroupIntoState(group: GroupDetailsAPIData): State {
+    const approvedProjects: $ReadOnlyArray<ProjectRelationshipAPIData> = !_.isEmpty(group.group_projects)
+      ? group.group_projects.filter((pr: ProjectRelationshipAPIData) => pr.relationship_is_approved)
+      : [];
+    return ({
+      group: group,
+      approvedProjects: approvedProjects,
+      issueAreas: this.getUniqueIssueAreas(approvedProjects)
     });
   }
 
-  getUniqueIssueAreas(group: ?GroupDetailsAPIData): ?$ReadOnlyArray<TagDefinition> {
-    if(group && group.group_projects) {
-      let issues = group.group_projects.map((proj: ProjectAPIData) => proj.project_issue_area && proj.project_issue_area[0]);
-      issues = issues.filter((issue: TagDefinition) => issue && issue.tag_name !== "no-specific-issue");
-      return _.uniqBy(issues, (issue: TagDefinition) => issue.tag_name);
-    }
+  getUniqueIssueAreas(projects: $ReadOnlyArray<ProjectRelationshipAPIData>): ?$ReadOnlyArray<TagDefinition> {
+    let issues = projects.map((proj: ProjectRelationshipAPIData) => proj.project_issue_area && proj.project_issue_area[0]);
+    issues = issues.filter((issue: TagDefinition) => issue && issue.tag_name !== "no-specific-issue");
+    return _.uniqBy(issues, (issue: TagDefinition) => issue.tag_name);
   }
 
   render(): $React$Node {
@@ -67,14 +70,14 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
         <div className="AboutProjects-infoColumn">
 
           <div className='AboutProjects-iconContainer'>
-            <img className='AboutProjects-icon'src={group && group.group_thumbnail && group.group_thumbnail.publicUrl} />
+            <img className='AboutProjects-icon' src={group && group.group_thumbnail && group.group_thumbnail.publicUrl} />
           </div>
 
           <div className='AboutProjects-details'>
             <GroupDetails
               groupUrl={group && group.group_url}
               groupLocation={group && GroupAPIUtils.getLocationDisplayName(group)}
-              projectCount={group.group_projects && group.group_projects.length}
+              projectCount={this.state.approvedProjects && this.state.approvedProjects.length}
             />
           </div>
 
@@ -122,7 +125,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
             </div>
             <div className="container-fluid AboutGroup-card-container">
               <div className="row">
-                {this.state.group.group_projects && this._renderProjectList()}
+                {this.state.approvedProjects && this._renderProjectList()}
               </div>
             </div>
           </div>
@@ -166,7 +169,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
   _renderProjectList(): ?$React$Node {
     return (
       <React.Fragment>
-        {this.state.group.group_projects.map(
+        {this.state.approvedProjects.map(
           (project, index) => {
             return (
               <div className="col-sm-12 col-lg-6">

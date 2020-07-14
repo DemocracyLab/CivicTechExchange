@@ -21,10 +21,15 @@ export type GroupDetailsAPIData = {|
     group_url: ?string,
     group_date_modified: string,
     group_thumbnail: FileInfo,
-    group_projects: $ReadOnlyArray<ProjectAPIData>,
+    group_projects: $ReadOnlyArray<ProjectRelationshipAPIData>,
     group_links: $ReadOnlyArray<LinkInfo>,
     group_files: $ReadOnlyArray<FileInfo>,
 |};
+
+export type ProjectRelationshipAPIData = {|
+    project_relationship_id: number,
+    relationship_is_approved: boolean
+|} & ProjectAPIData;
 
 export type GroupTileAPIData = {|
     group_id: string,
