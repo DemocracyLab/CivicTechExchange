@@ -77,14 +77,13 @@ class GroupCard extends React.PureComponent<Props> {
   _generateIssueList(): React$Node {
     // Get sorted truncated list of tag names
     let issueNames: $ReadOnlyArray<string> = Sort.byCountDictionary(this.props.group.group_issue_areas);
+    issueNames = issueNames.map((issueName: string) => this.props.tagDictionary[issueName].display_name);
     issueNames = Truncate.arrayT(issueNames, this.props.maxIssuesCount);
-    // Hydrate tags
-    const issues: $ReadOnlyArray = issueNames.map( (issueName: string) => this.props.tagDictionary[issueName]);
 
     return (
       <ul>
-        {issues.map((issueTag: TagDefinition, i: number) =>
-          <li key={i}>{issueTag.display_name}</li>
+        {issueNames.map((issueName: string, i: number) =>
+          <li key={i}>{issueName}</li>
         )}
       </ul>
     );
