@@ -51,7 +51,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
     if(group && group.group_projects) {
       let issues = group.group_projects.map((proj: ProjectAPIData) => proj.project_issue_area && proj.project_issue_area[0]);
       issues = issues.filter((issue: TagDefinition) => issue && issue.tag_name !== "no-specific-issue");
-      return _.uniq(issues);
+      return _.uniqBy(issues, (issue: TagDefinition) => issue.tag_name);
     }
   }
 
