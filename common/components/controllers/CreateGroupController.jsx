@@ -78,9 +78,7 @@ class CreateGroupController extends React.PureComponent<{||},State> {
   }
   
   loadGroupDetails(group: GroupDetailsAPIData): void {
-    if(CurrentUser.userID() !== group.group_creator) {
-      // TODO: Handle someone other than owner
-    } else {
+    if(CurrentUser.isGroupOwner(group) || CurrentUser.isStaff()) {
       this.setState({
         group: group,
         groupIsLoading: false
