@@ -16,7 +16,7 @@ class EmailSection(Enum):
     Header = 'Header'
     Button = 'Button'
     Paragraph = 'Paragraph'
-
+    License = 'Adobe Creative Commons'
 
 class HtmlEmailTemplate:
     base_template = loader.get_template('html_email_frame.html')
