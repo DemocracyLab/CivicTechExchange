@@ -6,7 +6,10 @@ import GroupCardsContainer from "../componentsBySection/FindGroups/GroupCardsCon
 import GroupFilterContainer from "../componentsBySection/FindGroups/FIlters/GroupFilterContainer.jsx";
 import {FindGroupsArgs} from "../stores/GroupSearchStore.js";
 import Headers from "../common/Headers.jsx";
-import urls from "../utils/url.js";
+import SplashScreen, {HeroImage} from "../componentsBySection/FindProjects/SplashScreen.jsx";
+import Button from "react-bootstrap/Button";
+import Section from "../enums/Section";
+import url from "../utils/url.js";
 import React from 'react';
 import _ from 'lodash'
 
@@ -17,7 +20,7 @@ class FindGroupsController extends React.PureComponent {
   }
 
   componentWillMount(): void {
-    let args: FindGroupsArgs = urls.arguments(document.location.search);
+    let args: FindGroupsArgs = url.arguments(document.location.search);
     args = _.pick(args, ['showSplash','keyword','sortField','locationRadius','page','issues']);
     GroupSearchDispatcher.dispatch({
       type: 'INIT',
@@ -36,16 +39,24 @@ class FindGroupsController extends React.PureComponent {
           title="DemocracyLab"
           description="Optimizing the connection between skilled volunteers and tech-for-good groups"
         />
-        <div className="FindProjectsController-root container">
-          <div className="row">
-            <GroupFilterContainer />
-            <GroupCardsContainer showSearchControls={true}/>
+          <SplashScreen className="FindGroups-topsplash" header={"Tech-for-Good Groups"} img={HeroImage.TopLanding} doNotFillViewport>
+            <Button variant="primary" className="FindGroups-splash-button" href={url.section(Section.FindGroups)}>
+              Find Groups
+            </Button>
+            <Button variant="outline-primary" className="FindGroups-splash-button FindGroups-splash-button-create" href={url.sectionOrLogIn(Section.CreateGroup)}>
+              Create A Group
+            </Button>
+          </SplashScreen>
+          <div className="container">
+            <div className="row">
+              <GroupFilterContainer />
+              <GroupCardsContainer showSearchControls={true}/>
+            </div>
           </div>
-        </div>
       </React.Fragment>
     );
   }
-  
+
 }
 
 export default FindGroupsController;

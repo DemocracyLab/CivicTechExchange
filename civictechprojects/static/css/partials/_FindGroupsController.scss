@@ -1,0 +1,22 @@
+.FindGroups-topsplash .SplashScreen-content h1 {
+  font-size: 4rem;
+  margin-bottom: 0;
+}
+.FindGroups-topsplash {
+  min-height: 500px;
+  .SplashScreen-content {
+    padding: 2rem 0;
+    margin: auto 0;
+  }
+  .FindGroups-splash-button {
+    margin: 0 1rem;
+  }
+  .FindGroups-splash-button-create {
+    color: $color-text-light;
+    border-color: $color-text-light;
+  }
+  .FindGroups-splash-button-create:hover {
+    background-color: $color-orange-dark;
+    border-color: $color-orange-dark;
+  }
+}
