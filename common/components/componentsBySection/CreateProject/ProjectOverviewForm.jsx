@@ -10,6 +10,8 @@ import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {TagDefinition, ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
 import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
+import ProjectTermsModal from "../../common/confirmation/ProjectTermsModal.jsx"
+import PseudoLink from "../../chrome/PseudoLink.jsx";
 import _ from "lodash";
 
 
@@ -18,6 +20,7 @@ type FormFields = {|
   project_short_description: ?string,
   project_issue_area?: Array<TagDefinition>,
   project_thumbnail?: FileInfo,
+  project_terms_of_service: ?boolean
 |};
 
 type Props = {|
@@ -41,7 +44,8 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
       project_name: project ? project.project_name : "",
       project_short_description: project ? project.project_short_description : "",
       project_issue_area: project ? project.project_issue_area : [],
-      project_thumbnail: project ? project.project_thumbnail : ""
+      project_thumbnail: project ? project.project_thumbnail : "",
+      project_terms_of_service: project ? true : false
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
@@ -51,6 +55,10 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
       {
         checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_short_description"]),
         errorMessage: "Please enter Project Description"
+      },
+      {
+        checkFunc: (formFields: FormFields) => formFields["project_terms_of_service"],
+        errorMessage: "Agree to terms of service"
       }
     ];
 
@@ -118,6 +126,22 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
                     placeholder="Give a one-sentence description of this project" rows="2" maxLength="140"
                     value={this.state.formFields.project_short_description} onChange={this.form.onInput.bind(this, "project_short_description")}></textarea>
         </div>
+
+        <div className="form-group">
+            <input
+              name="project_terms_of_service"
+              id="project_terms_of_service"
+              type="checkbox"
+              onChange={this.form.onCheckbox.bind(this, "project_terms_of_service")}
+            />
+            <span>
+              I have read and accepted the
+              {" "}<PseudoLink text="Terms of Service" onClick={e => this.setState({termsOpen: true})}/>
+            </span>
+
+        </div>
+
+        <ProjectTermsModal showModal={this.state.termsOpen} onSelection={() => this.setState({termsOpen: false})}/>
 
         <FormValidation
           validations={this.state.validations}

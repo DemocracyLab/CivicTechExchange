@@ -40,6 +40,13 @@ class formHelper {
       this.forceUpdate();
       _onFormUpdate(this, formValues);
     };
+
+    const onCheckbox = function(formFieldName: string, event: SyntheticInputEvent<HTMLInputElement>) {
+     const formValues: T = _getFormValues(this);
+     formValues[formFieldName] = event.target.checked;
+     this.forceUpdate();
+     _onFormUpdate(this, formValues);
+   };
     
     const doValidation = function(): void {
       _onFormUpdate(this, _getFormValues(this));
@@ -49,6 +56,7 @@ class formHelper {
       onInput: onInput,
       onFormChange: onFormChange,
       onSelection: onSelection,
+      onCheckbox: onCheckbox,
       doValidation: doValidation
     };
   }
