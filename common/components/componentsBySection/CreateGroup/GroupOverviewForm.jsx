@@ -55,11 +55,11 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
         errorMessage: "Please enter Group Name"
       },
       {
-        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["group_description"]),
+        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["group_short_description"]),
         errorMessage: "Please enter a one-sentence description"
       },
       {
-        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["group_short_description"]),
+        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["group_description"]),
         errorMessage: "Please enter Group Description"
       },
     ];
