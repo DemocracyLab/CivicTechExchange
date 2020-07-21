@@ -18,18 +18,20 @@ from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
 from .helpers.projects import projects_tag_counts
 from .sitemaps import SitemapPages
+from common.helpers.collections import flatten, count_occurrences
 from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
-from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff
+from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff, is_creator
 from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm
 from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from common.helpers.constants import FrontEndSection
+from common.helpers.constants import FrontEndSection, TagCategory
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
-    notify_project_owners_project_approved, contact_democracylab_email
+    notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
+    notify_group_owners_group_approved
 from common.helpers.front_end import section_url, get_page_section
 from common.helpers.caching import update_cached_project_url
 from distutils.util import strtobool
@@ -77,6 +79,21 @@ def tags(request):
     return JsonResponse(tags, safe=False)
 
 
+@cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
+def group_tags_counts(request):
+    # Get all groups
+    all_groups = Group.objects.all()
+    # Get Groups issue areas
+    group_issues = list(map(lambda group: group.get_project_issue_areas(with_counts=False), all_groups))
+    # Count up instances of tags
+    group_issues_counts = count_occurrences(flatten(group_issues))
+    issue_tags = {}
+    for issue_tag in group_issues_counts.keys():
+        issue_tags[issue_tag] = Tag.hydrate_tag_model(Tag.get_by_name(issue_tag))
+        issue_tags[issue_tag]['num_times'] = group_issues_counts[issue_tag]
+    return JsonResponse(list(issue_tags.values()), safe=False)
+
+
 def to_rows(items, width):
     rows = [[]]
     row_number = 0
@@ -106,7 +123,7 @@ def group_create(request):
         # TODO: Log this
         return HttpResponse(status=403)
 
-    group = GroupCreationForm.create_group(request)
+    group = GroupCreationForm.create_or_edit_group(request, None)
     return JsonResponse(group.hydrate_to_json())
 
 
@@ -116,7 +133,7 @@ def group_edit(request, group_id):
 
     group = None
     try:
-        group = GroupCreationForm.edit_group(request, group_id)
+        group = GroupCreationForm.create_or_edit_group(request, group_id)
     except PermissionDenied:
         return HttpResponseForbidden()
 
@@ -182,6 +199,25 @@ def group_delete_project(request, group_id):
                 return HttpResponse(status=204)
 
     return HttpResponse(status=404)
+
+
+def approve_group(request, group_id):
+    group = Group.objects.get(id=group_id)
+    user = get_request_contributor(request)
+
+    if group is not None:
+        if user.is_staff:
+            group.is_searchable = True
+            group.save()
+            # SitemapPages.update()
+            notify_group_owners_group_approved(group)
+            messages.success(request, 'Group Approved')
+
+            return redirect(section_url(FrontEndSection.AboutGroup, {'id': str(group.id)}))
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
@@ -452,6 +488,7 @@ def my_projects(request):
         }
     return JsonResponse(response)
 
+
 def my_groups(request):
     contributor = get_request_contributor(request)
     response = {}
@@ -461,6 +498,7 @@ def my_groups(request):
             'owned_groups': [group.hydrate_to_list_json() for group in owned_groups],
         }
     return JsonResponse(response)
+
 
 def my_events(request):
     contributor = get_request_contributor(request)
@@ -566,6 +604,7 @@ def projects_by_keyword(keyword):
                                   | Q(project_description_actions__icontains=keyword))
 
 
+# TODO: Rename to something generic
 def projects_by_sortField(project_list, sortField):
     return project_list.order_by(sortField)
 
@@ -636,6 +675,79 @@ def available_tag_filters(projects, selected_tag_filters):
     return project_tags
 
 
+# TODO: Move group search code into new file
+def groups_list(request):
+    url_parts = request.GET.urlencode()
+    query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+    group_list = Group.objects.filter(is_searchable=True)
+
+    if request.method == 'GET':
+        group_list = group_list & apply_tag_filters(group_list, query_params, 'issues', groups_by_issue_areas)
+        if 'keyword' in query_params:
+            group_list = group_list & groups_by_keyword(query_params['keyword'][0])
+
+        if 'locationRadius' in query_params:
+            group_list = groups_by_location(group_list, query_params['locationRadius'][0])
+
+        group_list = group_list.distinct()
+
+        if 'sortField' in query_params:
+            group_list = projects_by_sortField(group_list, query_params['sortField'][0])
+        else:
+            group_list = projects_by_sortField(group_list, '-group_date_modified')
+
+        group_count = len(group_list)
+
+        group_paginator = Paginator(group_list, settings.PROJECTS_PER_PAGE)
+
+        if 'page' in query_params:
+            group_list_page = group_paginator.page(query_params['page'][0])
+            group_pages = group_paginator.num_pages
+        else:
+            group_list_page = group_list
+            group_pages = 1
+
+        response = groups_with_meta_data(group_list_page, group_pages, group_count)
+
+        return JsonResponse(response)
+
+
+def groups_by_keyword(keyword):
+    return Group.objects.filter(Q(group_name__icontains=keyword)
+                                | Q(group_short_description__icontains=keyword)
+                                | Q(group_description__icontains=keyword))
+
+
+def groups_by_location(group_list, param):
+    param_parts = param.split(',')
+    location = Point(float(param_parts[1]), float(param_parts[0]))
+    radius = float(param_parts[2])
+    group_list = group_list.filter(group_location_coords__distance_lte=(location, D(mi=radius)))
+    return group_list
+
+
+def groups_by_issue_areas(issues):
+    group_relationships = ProjectRelationship.objects.exclude(relationship_group=None)\
+        .filter(relationship_project__project_issue_area__name__in=issues)
+    relationship_ids = list(map(lambda pr: pr.relationship_group.id, group_relationships))
+
+    return Group.objects.filter(id__in=relationship_ids)
+
+
+def groups_with_meta_data(groups, group_pages, group_count):
+    return {
+        'groups': [group.hydrate_to_tile_json() for group in groups],
+        'availableCountries': group_countries(),
+        'tags': list(Tag.objects.filter(category=TagCategory.ISSUE_ADDRESSED.value).values()),
+        'numPages': group_pages,
+        'numGroups': group_count
+    }
+
+
+def group_countries():
+    return unique_column_values(Group, 'group_country', lambda country: country and len(country) == 2)
+
+
 def presign_project_thumbnail_upload(request):
     uploader = request.user.username
     file_name = request.GET['file_name'][:150]
@@ -647,7 +759,7 @@ def presign_project_thumbnail_upload(request):
     return presign_s3_upload(
         raw_key=s3_key, file_name=file_name, file_type=file_type, acl="public-read")
 
-
+# TODO: Replace with is_co_owner_or_owner
 def volunteer_operation_is_authorized(request, volunteer_relation):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project)
     authorized_usernames = ([volunteer_relation.project.project_creator.username]
@@ -976,6 +1088,116 @@ def leave_project(request, project_id):
 def update_project_timestamp(request, project):
     if not request.user.is_staff:
         project.update_timestamp()
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def contact_group_owner(request, group_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    message = body['message']
+
+    group = Group.objects.get(id=group_id)
+    email_subject = '{firstname} {lastname} would like to connect with {group}'.format(
+        firstname=user.first_name,
+        lastname=user.last_name,
+        group=group.group_name)
+    email_template = HtmlEmailTemplate(use_signature=False) \
+        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+        message=message,
+        firstname=user.first_name,
+        lastname=user.last_name)) \
+        .paragraph('To contact this person, email them at {email}'.format(email=user.email))
+    send_to_group_owners(group=group, sender=user, subject=email_subject, template=email_template)
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def invite_project_to_group(request, group_id):
+    if not request.user.is_authenticated():
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    group = Group.objects.get(id=group_id)
+    if not is_creator(user, group):
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    project = Project.objects.get(id=body['projectId'])
+    message = body['message']
+    project_relation = ProjectRelationship.create(group, project, message)
+    project_relation.save()
+    send_group_project_invitation_email(project_relation)
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def accept_group_invitation(request, invite_id):
+    # Redirect to login if not logged in
+    if not request.user.is_authenticated():
+        return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
+
+    project_relation = ProjectRelationship.objects.get(id=invite_id)
+    project = project_relation.relationship_project
+    about_project_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
+    if project_relation.is_approved:
+        messages.add_message(request, messages.ERROR, 'The project is already part of the group.')
+        return redirect(about_project_url)
+
+    user = get_request_contributor(request)
+    if is_co_owner_or_owner(user, project):
+        # Set approved flag
+        project_relation.is_approved = True
+        project_relation.save()
+        update_project_timestamp(request, project)
+        if request.method == 'GET':
+            messages.add_message(request, messages.SUCCESS, 'Your project is now part of the group ' + project_relation.relationship_group.group_name)
+            return redirect(about_project_url)
+        else:
+            return HttpResponse(status=200)
+    else:
+        messages.add_message(request, messages.ERROR, 'You do not have permission to accept this group invitation.')
+        return redirect(about_project_url)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def reject_group_invitation(request, invite_id):
+    # Redirect to login if not logged in
+    if not request.user.is_authenticated():
+        return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
+
+    project_relation = ProjectRelationship.objects.get(id=invite_id)
+    project = project_relation.relationship_project
+    about_project_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
+    if project_relation.is_approved:
+        messages.add_message(request, messages.ERROR, 'The project is already part of the group.')
+        return redirect(about_project_url)
+
+    user = get_request_contributor(request)
+    if is_co_owner_or_owner(user, project):
+        project_relation.delete()
+        update_project_timestamp(request, project)
+        if request.method == 'GET':
+            # TODO: Add messaging of some kind to front end
+            return redirect(about_project_url)
+        else:
+            return HttpResponse(status=200)
+    else:
+        messages.add_message(request, messages.ERROR, 'You do not have permission to reject this group invitation.')
+        return redirect(about_project_url)
+
 
 #This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.
 #TODO: Return text strings to be displayed on the front end so we know specifically what happened

@@ -2,32 +2,18 @@
 
 import React from "react";
 import CurrentUser from "../../components/utils/CurrentUser.js";
-import metrics from "../utils/metrics.js";
-import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
 
 import GroupOverviewForm from "../componentsBySection/CreateGroup/GroupOverviewForm.jsx";
 import GroupPreviewForm from "../componentsBySection/CreateGroup/GroupPreviewForm.jsx";
-import GroupProjectSelectionForm from "../componentsBySection/CreateGroup/GroupProjectSelectionForm.jsx";
 import GroupResourcesForm from "../componentsBySection/CreateGroup/GroupResourcesForm.jsx";
 import GroupAPIUtils, {GroupDetailsAPIData} from "../utils/GroupAPIUtils.js";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
-import ProjectSearchDispatcher from '../stores/ProjectSearchDispatcher.js';
-import TagDispatcher from '../stores/TagDispatcher.js';
-import ProjectCardsContainer from '../componentsBySection/FindProjects/ProjectCardsContainer.jsx';
-import ProjectFilterContainer from '../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx';
-import {FindProjectsArgs} from "../stores/ProjectSearchStore.js";
-import urls from "../utils/url.js";
 
-let projectSelectionStoreSingleton = [
-
-];
-
-export { projectSelectionStoreSingleton };
 
 type State = {|
   id: ?number,
@@ -45,7 +31,6 @@ class CreateGroupController extends React.PureComponent<{||},State> {
     const groupId: number = url.argument("id");
     this.onNextPageSuccess = this.onNextPageSuccess.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.onProjectSelectionSubmit = this.onProjectSelectionSubmit.bind(this);
     this.onFinalSubmitSuccess = this.onFinalSubmitSuccess.bind(this);
     this.state = {
       groupId: groupId,
@@ -63,13 +48,6 @@ class CreateGroupController extends React.PureComponent<{||},State> {
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: GroupResourcesForm,
         }, {
-          // TODO: bring in widget from common/components/controllers/FindProjectsController.jsx
-          header: "Which projects are in your group?",
-          subHeader: "You can always change details about your group later.",
-          onSubmit: this.onSubmit,
-          onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: GroupProjectSelectionForm,
-        }, {
           header: "Ready to publish your group?",
           subHeader: "Congratulations!  You have successfully created a tech-for-good group.",
           onSubmit: this.onSubmit,
@@ -78,13 +56,6 @@ class CreateGroupController extends React.PureComponent<{||},State> {
         }
       ]
     };
-  }
-
-  componentWillMount(): void {
-    let args: FindProjectsArgs = urls.arguments(document.location.search);
-    args = _.pick(args, ['showSplash','keyword','sortField','location','page','issues','tech', 'role', 'org', 'stage']);
-    ProjectSearchDispatcher.dispatch({type: 'INIT', findProjectsArgs: !_.isEmpty(args) ? args : null});
-    TagDispatcher.dispatch({type: 'INIT'});
   }
   
   componentDidMount(): void {
@@ -107,9 +78,7 @@ class CreateGroupController extends React.PureComponent<{||},State> {
   }
   
   loadGroupDetails(group: GroupDetailsAPIData): void {
-    if(!CurrentUser.isOwner(group)) {
-      // TODO: Handle someone other than owner
-    } else {
+    if(CurrentUser.isGroupOwner(group) || CurrentUser.isStaff()) {
       this.setState({
         group: group,
         groupIsLoading: false
@@ -122,20 +91,8 @@ class CreateGroupController extends React.PureComponent<{||},State> {
       error: "Failed to load Group information"
     });
   }
-
-  onProjectSelectionSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (GroupDetailsAPIData, () => void) => void): void {
-    console.warn('on submit!!2', event, formRef);
-    
-    api.post(
-      "/groups/" + this.state.group.group_id + "/add_project/", 
-      { project_ids: projectSelectionStoreSingleton.map(project => project.id) },
-      onSubmitSuccess,
-      response => null /* TODO: Report error to user */
-    )
-  }
   
   onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (GroupDetailsAPIData, () => void) => void): void {
-    console.log('on submit!!', event, formRef)
     const formSubmitUrl: string = this.state.group && this.state.group.group_id
       ? "/groups/edit/" + this.state.group.group_id + "/"
       : "/groups/create/";

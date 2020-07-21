@@ -26,7 +26,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
 import AlertHeader from "./AlertHeader.jsx";
 import MyProjectsStore, {MyProjectsAPIResponse} from "../stores/MyProjectsStore.js";
-// import MyGroupsStore, {MyGroupsAPIResponse} from "../stores/MyGroupsStore.js";
+import MyGroupsStore, {MyGroupsAPIResponse} from "../stores/MyGroupsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import _ from 'lodash'
 
@@ -50,12 +50,12 @@ class MainHeader extends React.Component<{||}, State > {
 
   static calculateState(prevState: State): State {
     const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
-    // const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
+    const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
     return {
       showHeader: !url.argument("embedded"),
       activeSection: NavigationStore.getSection(),
-      showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects))
-      // showMyGroups: myGroups && (!_.isEmpty(myGroups.owned_groups))
+      showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects)),
+      showMyGroups: myGroups && (!_.isEmpty(myGroups.owned_groups))
     };
   }
 
@@ -270,6 +270,13 @@ class MainHeader extends React.Component<{||}, State > {
                 </div>
               </a>
               <Divider />
+  
+              <a href={url.section(Section.FindGroups)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Find Groups
+                </div>
+              </a>
+              <Divider />
 
               {window.EVENT_URL && <React.Fragment><a href={_.unescape(window.EVENT_URL)}>
                 <div className={'SubHeader-drawerDiv'} >
@@ -286,6 +293,13 @@ class MainHeader extends React.Component<{||}, State > {
               </a>
               <Divider />
   
+              <a href={url.section(Section.CreateGroup)}>
+                <div className={'SubHeader-drawerDiv'} >
+                  Create Group
+                </div>
+              </a>
+              <Divider />
+              
               { CurrentUser.isStaff() && <React.Fragment><a href={url.section(Section.CreateEvent)}>
                 <div className={'SubHeader-drawerDiv'} >
                   Create Event
@@ -424,6 +438,16 @@ class MainHeader extends React.Component<{||}, State > {
             showOnlyWhenLoggedIn: false
           },
           {
+            section: Section.FindGroups,
+            title: 'Find Groups',
+            showOnlyWhenLoggedIn: false
+          },
+          {
+            section: Section.CreateGroup,
+            title: 'Create Group',
+            showOnlyWhenLoggedIn: true
+          },
+          {
             section: Section.CreateEvent,
             title: 'Create Event',
             showOnlyWhenLoggedIn: true,
@@ -451,12 +475,6 @@ class MainHeader extends React.Component<{||}, State > {
           title={config.title}
         />
       );
-  }
-
-  _showSectionInMainMenu(config: SectionLinkConfigEntry): boolean {
-    // Don't show items that require login
-    // Only show admin-only options if user is an admin
-    return !config.showOnlyWhenLoggedIn && (!config.showAdminOnly || CurrentUser.isStaff());
   }
 
   _onLogInClick(): void {

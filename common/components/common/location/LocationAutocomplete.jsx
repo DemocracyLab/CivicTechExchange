@@ -70,7 +70,7 @@ export class LocationAutocomplete extends React.Component<Props, State> {
   getSuggestionOption(suggestion: HereSuggestion | LocationInfo): string {
     if(!suggestion) {
       return null;
-    } else if(suggestion.latitude && suggestion.longitude) {
+    } else if(suggestion.country) {
       // LocationInfo placeholder case
       return getLocationDisplayString(suggestion);
     } else if(suggestion.label) {

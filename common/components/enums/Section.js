@@ -8,6 +8,7 @@ const Section = {
   Landing: 'Landing',
   Home: 'Home',
   FindProjects: 'FindProjects',
+  FindGroups: 'FindGroups',
   MyProjects: 'MyProjects',
   MyGroups: 'MyGroups',
   Profile: 'Profile',

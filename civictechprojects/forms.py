@@ -4,9 +4,8 @@ from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group
 from .sitemaps import SitemapPages
-from democracylab.emails import send_project_creation_notification
+from democracylab.emails import send_project_creation_notification, send_group_creation_notification
 from democracylab.models import get_request_contributor
-from common.models.tags import Tag
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
     merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, read_form_fields_point
 
@@ -161,54 +160,36 @@ class GroupCreationForm(ModelForm):
         fields = '__all__'
 
     @staticmethod
-    def create_group(request):
-
-        if not request.user.is_staff:
-            raise PermissionDenied()
-
+    def create_or_edit_group(request, group_id):
         form = GroupCreationForm(request.POST)
-        # TODO: Form validation
-        group = Group.objects.create(
-            group_creator=get_request_contributor(request),
-            group_date_created=timezone.now(),
-            group_name=form.data.get('group_name'),
-            group_short_description=form.data.get('group_short_description'),
-            group_description=form.data.get('group_description'),
-            group_location=form.data.get('group_location'),
-            is_created=False
-        )
-        group = Group.objects.get(id=group.id)
-
-        # TODO: confirm    
-        merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
-
-        group.save()
-        return group
-
-    @staticmethod
-    def delete_group(request, group_id):
-        group = Group.objects.get(id=group_id)
-
-        if not is_creator_or_staff(request.user, group):
-            raise PermissionDenied()
-
-        group.delete()
-
-    @staticmethod
-    def edit_group(request, group_id):
-        group = Group.objects.get(id=group_id)
+        if group_id is not None:
+            group = Group.objects.get(id=group_id)
+        else:
+            group = Group.objects.create(
+                group_creator=get_request_contributor(request),
+                group_date_created=timezone.now(),
+                group_name=form.data.get('group_name'),
+                group_short_description=form.data.get('group_short_description'),
+                group_description=form.data.get('group_description'),
+                is_created=False
+            )
 
         if not is_co_owner_or_staff(request.user, group):
             raise PermissionDenied()
 
-        form = GroupCreationForm(request.POST)
         is_created_original = group.is_created
         read_form_field_boolean(group, form, 'is_created')
 
         read_form_field_string(group, form, 'group_description')
         read_form_field_string(group, form, 'group_short_description')
+        read_form_field_string(group, form, 'group_country')
         read_form_field_string(group, form, 'group_location')
+        read_form_field_string(group, form, 'group_state')
+        read_form_field_string(group, form, 'group_city')
         read_form_field_string(group, form, 'group_name')
+        read_form_field_string(group, form, 'group_url')
+
+        read_form_fields_point(group, form, 'group_location_coords', 'group_latitude', 'group_longitude')
 
         if not request.user.is_staff:
             group.group_date_modified = timezone.now()
@@ -220,9 +201,16 @@ class GroupCreationForm(ModelForm):
 
         merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
 
-        # TODO
-        #if is_created_original != group.is_created:
-            #print('notifying group creation')
-            #send_project_creation_notification(group)
+        if is_created_original != group.is_created:
+            send_group_creation_notification(group)
 
         return group
+
+    @staticmethod
+    def delete_group(request, group_id):
+        group = Group.objects.get(id=group_id)
+
+        if not is_creator_or_staff(request.user, group):
+            raise PermissionDenied()
+
+        group.delete()
