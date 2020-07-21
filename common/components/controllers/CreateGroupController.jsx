@@ -93,7 +93,6 @@ class CreateGroupController extends React.PureComponent<{||},State> {
   }
   
   onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (GroupDetailsAPIData, () => void) => void): void {
-    console.log('on submit!!', event, formRef)
     const formSubmitUrl: string = this.state.group && this.state.group.group_id
       ? "/groups/edit/" + this.state.group.group_id + "/"
       : "/groups/create/";

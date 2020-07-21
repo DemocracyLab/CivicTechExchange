@@ -44,7 +44,6 @@ class InviteProjectToGroupModal extends React.PureComponent<Props, State> {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.askForSendConfirmation = this.askForSendConfirmation.bind(this);
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
-    // this._fieldsFilled = this._fieldsFilled.bind(this);
   }
 
   componentWillReceiveProps(nextProps: Props): void {
