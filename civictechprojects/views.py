@@ -1190,7 +1190,7 @@ def reject_group_invitation(request, invite_id):
         project_relation.delete()
         update_project_timestamp(request, project)
         if request.method == 'GET':
-            # messages.add_message(request, messages.SUCCESS, 'Your project is now part of the group ' + project_relation.relationship_group.group_name)
+            # TODO: Add messaging of some kind to front end
             return redirect(about_project_url)
         else:
             return HttpResponse(status=200)
