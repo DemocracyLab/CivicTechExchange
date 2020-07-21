@@ -10,6 +10,9 @@ WORKDIR /code
 COPY requirements.txt /code/requirements.txt
 RUN pip install -r requirements.txt
 
+# dependecy needed
+RUN apt-get update && apt-get install -y libgdal-dev
+
 # Copy files needed for yarn install.
 COPY package.json yarn.lock /code/
 RUN yarn --frozen-lockfile --link-duplicates --ignore-scripts
