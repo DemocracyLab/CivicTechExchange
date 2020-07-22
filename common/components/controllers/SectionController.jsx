@@ -28,6 +28,14 @@ import DonateController from "./DonateController.jsx";
 import ThankYouController from "./ThankYouController.jsx";
 import PressController from './PressController.jsx';
 import ContactUsController from './ContactUsController.jsx';
+import CreateGroupController from './CreateGroupController.jsx';
+import CreateEventController from './CreateEventController.jsx';
+import MyGroupsController from './MyGroupsController.jsx';
+import LiveEventController from "./LiveEventController.jsx";
+import AboutEventController from "./AboutEventController.jsx";
+import AboutGroupController from "./AboutGroupController.jsx";
+import ErrorController from "./ErrorController.jsx";
+import FindGroupsController from "./FindGroupsController.jsx";
 
 type State = {|
   section: SectionType,
@@ -65,6 +73,8 @@ class SectionController extends React.Component<{||}, State> {
         return <EditProjectController />;
       case Section.FindProjects:
         return <FindProjectsController />;
+      case Section.FindGroups:
+        return <FindGroupsController />;
       case Section.Home:
         return <LandingController />;
       case Section.MyProjects:
@@ -95,6 +105,20 @@ class SectionController extends React.Component<{||}, State> {
         return <PressController />;
       case Section.ContactUs:
         return <ContactUsController />;
+      case Section.CreateGroup:
+        return <CreateGroupController />;
+      case Section.CreateEvent:
+        return <CreateEventController />;
+      case Section.AboutGroup:
+        return <AboutGroupController/>;
+      case Section.MyGroups:
+        return <MyGroupsController />;
+      case Section.AboutEvent:
+        return <AboutEventController/>;
+      case Section.LiveEvent:
+        return <LiveEventController />;
+      case Section.Error:
+        return <ErrorController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>
     }

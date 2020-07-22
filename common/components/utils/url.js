@@ -26,6 +26,7 @@ class urlHelper {
   }
   
   static section(section: string, args: ?Object): string {
+    // TODO: Implement with argsString
     let sectionUrl = "?section=" + section;
     if(args) {
       sectionUrl += _.reduce(args, function(argsString, value, key) {
@@ -35,6 +36,11 @@ class urlHelper {
     }
     return sectionUrl;
   }
+  
+  // Determine if we are on a given section
+  static atSection(section: string): string {
+    return urlHelper.argument("section") === section;
+  };
   
   static getSectionArgs(url: ?string): SectionUrlArguments {
     let _url: string = url || window.location.href;
@@ -54,6 +60,18 @@ class urlHelper {
     return CurrentUser.isLoggedIn()
       ? urlHelper.section(section)
       : urlHelper.section(Section.LogIn, {"prev": section});
+  }
+  
+  // Get url for logging in then returning to the previous page
+  static logInThenReturn(returnUrl: ?string): string {
+    let _url: string = returnUrl || window.location.href;
+    const oldArgs: SectionUrlArguments = urlHelper.getSectionArgs(_url);
+    const newArgs: SectionUrlArguments = {
+      section: Section.LogIn,
+      args: Object.assign({prev: oldArgs.section}, oldArgs.args)
+    };
+    
+    return urlHelper.fromSectionArgs(newArgs);
   }
   
   // Construct a url with properly-formatted query string for the given arguments
@@ -125,6 +143,13 @@ class urlHelper {
     return url;
   }
   
+  static argsString(args: Dictionary<string>, startArgs: string): string {
+    return _.reduce(args, function(argsString, value, key) {
+      const prefix: string = !_.isEmpty(argsString) ? "&" : "?";
+      return `${argsString}${prefix}${key}=${value}`;
+    }, startArgs || "");
+  }
+  
   static beautify(url: string): string {
     // Remove http(s)
     return url.replace(regex.protocol, "");
@@ -140,6 +165,12 @@ class urlHelper {
 
   static isEmptyStringOrValidUrl(url: string): boolean {
     return (_.isEmpty(url) || this.isValidUrl(url));
+  }
+  
+  static cleanDemocracyLabUrl(url: ?string): string {
+    // Remove url snippet
+    let _url: string = url || window.location.href;
+    return _url.replace("#_=_","");
   }
 }
 

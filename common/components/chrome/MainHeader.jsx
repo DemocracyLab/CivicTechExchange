@@ -7,13 +7,13 @@ import cdn from "../utils/cdn.js";
 import CurrentUser from '../utils/CurrentUser.js';
 import NavigationLinks, {NavigationLink} from "../utils/NavigationLinks.js";
 import NavigationStore from '../stores/NavigationStore.js'
-import SectionLinkConfigs from '../configs/SectionLinkConfigs.js';
 import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
 import url from '../utils/url.js'
 import AlertHeader from "./AlertHeader.jsx";
 import MyProjectsStore, {MyProjectsAPIResponse} from "../stores/MyProjectsStore.js";
+import MyGroupsStore, {MyGroupsAPIResponse} from "../stores/MyGroupsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import _ from 'lodash';
 import Navbar from 'react-bootstrap/Navbar';
@@ -31,10 +31,15 @@ class MainHeader extends React.Component<{||}, State > {
 
   static calculateState(prevState: State): State {
     const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
+    const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
     return {
-      showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects))
+      showHeader: !url.argument("embedded"),
+      showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects)),
+      showMyGroups: myGroups && (!_.isEmpty(myGroups.owned_groups))
     };
   }
+  // may need activeSection: NavigationStore.getSection() in calculateState, check that
+
 
 
   constructor(): void {
@@ -143,6 +148,7 @@ class MainHeader extends React.Component<{||}, State > {
           </Dropdown.Toggle>
           <Dropdown.Menu>
             {this._renderNavDropdownItem(Section.MyProjects, "My Projects")}
+            {this._renderNavDropDownItem(Section.MyGroups, "My Groups")}
             {this._renderNavDropdownItem(Section.EditProfile, "Edit Profile")}
             <Dropdown.Item href="/logout/">Log Out</Dropdown.Item>
           </Dropdown.Menu>
@@ -150,6 +156,7 @@ class MainHeader extends React.Component<{||}, State > {
         <div className="MainHeader-showmobile">
           <Nav.Item className="mt-3">{this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}</Nav.Item>
           {this._renderNavLink(Section.MyProjects, "My Projects")}
+          {this._renderNavLink(Section.MyGroups, "My Groups")}
           {this._renderNavLink(Section.EditProfile, "Edit Profile")}
           <Dropdown.Divider />
         </div>

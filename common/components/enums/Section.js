@@ -1,11 +1,16 @@
 const Section = {
   AboutProject: 'AboutProject',
+  AboutGroup: 'AboutGroup',
   AboutUs: 'AboutUs',
   CreateProject: 'CreateProject',
   EditProject: 'EditProject',
+  EditGroup: 'EditGroup',
+  Landing: 'Landing',
   Home: 'Home',
   FindProjects: 'FindProjects',
+  FindGroups: 'FindGroups',
   MyProjects: 'MyProjects',
+  MyGroups: 'MyGroups',
   Profile: 'Profile',
   SignUp: 'SignUp',
   LogIn: 'LogIn',
@@ -18,7 +23,12 @@ const Section = {
   Donate: 'Donate',
   ThankYou: 'ThankYou',
   Press: 'Press',
-  ContactUs: 'ContactUs'
+  ContactUs: 'ContactUs',
+  CreateGroup: 'CreateGroup',
+  CreateEvent: 'CreateEvent',
+  AboutEvent: 'AboutEvent',
+  LiveEvent: 'LiveEvent',
+  Error: 'Error'
 };
 
 export type SectionType = $Keys<typeof Section>;

@@ -1,0 +1,21 @@
+.ApproveGroups-row {
+  max-width: 100%;
+}
+
+.ApproveGroups-row span {
+  padding-right: 15px;
+}
+
+.ApproveGroups-logo img {
+  max-width: 50px;
+}
+
+.ApproveGroups-button-reject {
+  color: $color-red;
+  border-color: $color-red;
+}
+
+.ApproveGroups-button-approve {
+  color: $color-green;
+  border-color: $color-green;
+}

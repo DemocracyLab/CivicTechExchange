@@ -1,6 +1,7 @@
 // @flow
 import _ from 'lodash'
 import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
+import type {GroupDetailsAPIData} from "./GroupAPIUtils.js";
 
 class CurrentUser {
 
@@ -34,6 +35,10 @@ class CurrentUser {
 
   static isStaff() : boolean {
     return window.DLAB_GLOBAL_CONTEXT.isStaff;
+  }
+  
+  static isGroupOwner(group: GroupDetailsAPIData): boolean {
+    return this.userID() === group.group_creator;
   }
   
   static isOwner(project: ProjectDetailsAPIData): boolean {

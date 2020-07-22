@@ -65,6 +65,7 @@ class PositionList extends React.PureComponent<Props,State>  {
 
     this.setState({showAddEditModal: false});
     this.updatePositionsField();
+    this.props.onChange && this.props.onChange();
   }
 
   updatePositionsField(): void {
@@ -94,6 +95,7 @@ class PositionList extends React.PureComponent<Props,State>  {
       showDeleteModal: false,
       positionToDelete: null
     })
+    this.props.onChange && this.props.onChange();
   }
 
   render(): React$Node {

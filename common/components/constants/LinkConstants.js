@@ -12,27 +12,27 @@ export type LinkSourceDisplayConfig = {|
 
 export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConfig> = [
   {
-    sourceUrlPattern: new RegExp("github\\.com"),
+    sourceUrlPattern: new RegExp("github\.com", "i"),
     sourceDisplayName: "GitHub",
     iconClass: GlyphStyles.Github
   },
   {
-    sourceUrlPattern: new RegExp("meetup\\.com"),
+    sourceUrlPattern: new RegExp("meetup\.com", "i"),
     sourceDisplayName: "Meetup",
     iconClass: GlyphStyles.Meetup
   },
   {
-    sourceUrlPattern: new RegExp("slack\\.com"),
+    sourceUrlPattern: new RegExp("slack\.com", "i"),
     sourceDisplayName: "Slack",
     iconClass: GlyphStyles.Slack
   },
   {
-    sourceUrlPattern: new RegExp("trello\\.com"),
+    sourceUrlPattern: new RegExp("trello\.com", "i"),
     sourceDisplayName: "Trello",
     iconClass: GlyphStyles.Trello
   },
   {
-    sourceUrlPattern: new RegExp("drive\\.google\\.com"),
+    sourceUrlPattern: new RegExp("drive\.google\.com", "i"),
     sourceDisplayName: "Google Drive",
     iconClass: GlyphStyles.GoogleDrive
   },

@@ -9,14 +9,18 @@ import Moment from 'react-moment';
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js"
 import GlyphStyles from "../../utils/glyphs.js";
+import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 
+// TODO: Add props
 type Props = {|
   +project: Project,
+  +textlen: number
 |};
 //fontawesome fixed width class
 const glyphFixedWidth = ' fa-fw'
 
 class ProjectCard extends React.PureComponent<Props> {
+  // TODO: Remove unused prefix
   _cx: cx;
 
   constructor(): void {
@@ -87,7 +91,7 @@ class ProjectCard extends React.PureComponent<Props> {
         {this.props.project.location &&
           <li>
             <i className={GlyphStyles.MapMarker + glyphFixedWidth}></i>
-            {this.props.project.location}
+            {ProjectAPIUtils.getLocationDisplayName(this.props.project)}
           </li>
         }
         {this.props.project.url &&

@@ -30,9 +30,11 @@
 @import 'vendor/bootstrap/utilities';
   //import other third party CSS
 @import 'vendor/_react-select.min';
+@import 'vendor/react-datepicker/_react-datepicker';
 @import 'vendor/react-image-crop/ReactCrop';
 
   //import DemocracyLab component partials
+@import 'partials/AboutGroupDisplay';
 @import 'partials/AboutUs';
 @import 'partials/AboutUser';
 @import 'partials/BioModal';
@@ -84,3 +86,7 @@
 @import 'partials/FileSelectButton';
 @import 'partials/ImageCropUploadButton';
 @import 'partials/SignUpController';
+@import 'partials/AboutEvent';
+@import 'partials/LiveEvent';
+@import 'partials/CreateForm';
+@import 'partials/ApproveGroupsSection';

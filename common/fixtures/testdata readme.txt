@@ -2,11 +2,14 @@
 dev-admin (Admin only)
 Password: code4Gud!
 
-marlonakeating+test@google.com
+marlonakeating+test@gmail.com
 Password: Qwer1234!
 
-marlonakeating+test2@google.com
+marlonakeating+test2@gmail.com
 Password: Qwer1234!
 
-marlonakeating+test3@google.com
+marlonakeating+test3@gmail.com
+Password: Qwer1234!
+
+marlonakeating+testadmin@gmail.com
 Password: Qwer1234!
