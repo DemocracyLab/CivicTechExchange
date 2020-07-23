@@ -23,6 +23,13 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import UserIcon from '../svg/user-circle-solid.svg';
 
+type State = {|
+  showMyProjects: boolean,
+  showMyGroups: boolean,
+  showHeader: boolean
+|};
+
+
 class MainHeader extends React.Component<{||}, State > {
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -100,6 +107,7 @@ class MainHeader extends React.Component<{||}, State > {
               {this._renderNavDropdownItem(Section.Press, "News")}
             </NavDropdown>
             {window.BLOG_URL ? <Nav.Link href={window.BLOG_URL}>Blog</Nav.Link> : null}
+            {window.EVENT_URL ? <Nav.Link href={window.EVENT_URL}>Live Event</Nav.Link> : null}
             {this._renderNavLink(Section.Donate, "Donate", "MainHeader-showmobile")}
             {CurrentUser.isLoggedIn() ? <Nav.Link className="MainHeader-showmobile mb-3" href="/logout/">Log Out</Nav.Link> : <Nav.Link className="MainHeader-showmobile" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Nav.Link>}
           </Nav>
@@ -137,6 +145,8 @@ class MainHeader extends React.Component<{||}, State > {
 
 
   _renderUserSection() {
+    let showMyProjects = this.state.showMyProjects;
+    let showMyGroups = this.state.showMyGroups
     //for logged in users, render user actions
     //TODO: Rebuild this component so deskop dropdown and mobile links aren't separated out
     return (
@@ -147,16 +157,16 @@ class MainHeader extends React.Component<{||}, State > {
             {this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            {this._renderNavDropdownItem(Section.MyProjects, "My Projects")}
-            {this._renderNavDropDownItem(Section.MyGroups, "My Groups")}
+            {showMyProjects && this._renderNavDropdownItem(Section.MyProjects, "My Projects")}
+            {showMyGroups && this._renderNavDropdownItem(Section.MyGroups, "My Groups")}
             {this._renderNavDropdownItem(Section.EditProfile, "Edit Profile")}
             <Dropdown.Item href="/logout/">Log Out</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <div className="MainHeader-showmobile">
           <Nav.Item className="mt-3">{this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}</Nav.Item>
-          {this._renderNavLink(Section.MyProjects, "My Projects")}
-          {this._renderNavLink(Section.MyGroups, "My Groups")}
+          {showMyProjects && this._renderNavLink(Section.MyProjects, "My Projects")}
+          {showMyGroups && this._renderNavLink(Section.MyGroups, "My Groups")}
           {this._renderNavLink(Section.EditProfile, "Edit Profile")}
           <Dropdown.Divider />
         </div>
