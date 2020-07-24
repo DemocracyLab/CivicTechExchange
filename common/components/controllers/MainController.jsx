@@ -28,7 +28,7 @@ class MainController extends React.Component<{||}, State> {
   }
 
   loadPage(): void {
-    const args = url.arguments(window.location.href);
+    const args = url.arguments(url.cleanDemocracyLabUrl());
     if (args.section) {
       UniversalDispatcher.dispatch({
         type: 'SET_SECTION',

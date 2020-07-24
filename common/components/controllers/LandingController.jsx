@@ -165,7 +165,7 @@ class LandingController extends React.PureComponent<{||}> {
     const header: string = "What are you waiting for?";
 
     return (
-      <SplashScreen header={header} img={HeroImage.BottomLanding}>
+      <SplashScreen className="LandingController-bottom-splash" header={header} img={HeroImage.BottomLanding}>
         <Button variant="primary" className="LandingController-bottomsplash-btn" href={url.sectionOrLogIn(Section.FindProjects)}>Get Started</Button>
       </SplashScreen>
     );

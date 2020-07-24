@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.gis',
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.sites',
@@ -76,7 +77,7 @@ if SOCIAL_APPS_environ is not None:
 
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
-        'SCOPE': ['read:user']
+        'SCOPE': ['read:user', 'user:email']
     },
     'google': {
         'SCOPE': ['profile', 'email'],
@@ -144,7 +145,7 @@ HOSTNAME = os.environ.get('HOSTNAME', '127.0.0.1')
 
 DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'p0stgres!',
@@ -155,6 +156,7 @@ DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
 
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 LOGIN_REDIRECT_URL = '/'
 
@@ -254,6 +256,8 @@ GR_SECRETKEY = os.environ.get('GOOGLE_RECAPTCHA_SECRET_KEY', '')
 
 STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
 
+HERE_CONFIG = os.environ.get('HERE_CONFIG', '')
+
 ENVIRONMENT_VARIABLE_WARNINGS = {
     'PRESS_LINKS': {
         'error': True,
@@ -310,6 +314,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'MAILCHIMP_API_KEY': {
         'error': False,
         'message': 'Mailchimp API key needed to subscribe users to mailing list'
+    },
+    'PRIVACY_POLICY_URL': {
+        'error': True,
+        'message': 'Privacy Policy url required'
     }
 }
 
@@ -404,4 +412,19 @@ BOARD_OF_DIRECTORS = os.environ.get('BOARD_OF_DIRECTORS', '')
 
 FAVICON_PATH = os.environ.get('FAVICON_PATH', 'https://d1agxr2dqkgkuy.cloudfront.net/img/favicon.png')
 
+TEST_IFRAME_URL = os.environ.get('TEST_IFRAME_URL', 'about:blank')
+
+QIQO_IFRAME_URL = os.environ.get('QIQO_IFRAME_URL', 'https://qiqochat.com/api/v1/iframe?&source[api_key]={api_key}&source_user_uuid={source_user_uuid}&qiqo_user_uuid={qiqo_user_uuid}&return_to="/breakout/2/HqWdBUwtmmzLsfPvyEXwmiRZw?embedded=true"')
+QIQO_USERS_ENDPOINT = os.environ.get('QIQO_USERS_ENDPOINT', 'https://api.qiqochat.com/api/v1/users')
+QIQO_API_KEY = os.environ.get('QIQO_API_KEY', 'democracylab')
+QIQO_API_SECRET = os.environ.get('QIQO_API_SECRET', 'SECRET')
+QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
+
 BLOG_URL = os.environ.get('BLOG_URL', '')
+
+EVENT_URL = os.environ.get('EVENT_URL', '')
+
+GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH', '')
+GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH', '')
+
+PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')

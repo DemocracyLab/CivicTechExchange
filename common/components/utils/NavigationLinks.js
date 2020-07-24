@@ -1,6 +1,6 @@
 // @flow
 
-//for navigation links we want to be buttons or not Sections in our schema (those are controlled in common/components/configs/SectionLinkConfigs.js)
+//for navigation links we want to be buttons or not Sections in our schema
 import metrics from "./metrics.js";
 import CurrentUser from "./CurrentUser.js";
 

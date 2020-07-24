@@ -4,18 +4,15 @@ import type {FluxReduceStore} from 'flux/utils';
 import {Container} from 'flux/utils';
 import React from 'react';
 import Select from 'react-select'
-import TagCategory from "../../common/tags/TagCategory.jsx";
 import ProjectSearchDispatcher from '../../stores/ProjectSearchDispatcher.js';
 import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
 import ProjectSearchBar from './ProjectSearchBar.jsx'
-import {Locations} from "../../constants/ProjectConstants";
 import {SelectOption} from "../../types/SelectOption.jsx";
 import metrics from "../../utils/metrics.js";
 
 
 type State = {|
-  sortField: string,
-  location: string
+  sortField: string
 |};
 
 const sortOptions: $ReadOnlyArray<SelectOption>  = [
@@ -26,9 +23,6 @@ const sortOptions: $ReadOnlyArray<SelectOption>  = [
     {value: "-project_name", label: "Name - Descending"}
   ];
 
-const locationOptions: $ReadOnlyArray<SelectOption>  = [{value:"", label:" Select Location"}].concat(
-  Locations.PRESET_LOCATIONS.map(location => ({value:location, label:location})));
-
 class ProjectSearchSort extends React.Component<{||}, State> {
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -37,11 +31,9 @@ class ProjectSearchSort extends React.Component<{||}, State> {
 
   static calculateState(prevState: State): State {
     const sortField = ProjectSearchStore.getSortField();
-    const location = ProjectSearchStore.getLocation();
 
     const state = {
-      sortField: sortField ? sortOptions.find(option => option.value === sortField) : sortOptions[0],
-      location: location ? locationOptions.find(option => option.value === location) : locationOptions[0],
+      sortField: sortField ? sortOptions.find(option => option.value === sortField) : sortOptions[0]
     };
 
     return state;
@@ -52,7 +44,6 @@ class ProjectSearchSort extends React.Component<{||}, State> {
       <div className="ProjectSearchSort-container">
           <ProjectSearchBar />
           {this._renderSortFieldDropdown()}
-          {this._renderLocationDropdown()}
       </div>
     );
   }
@@ -60,12 +51,6 @@ class ProjectSearchSort extends React.Component<{||}, State> {
   _handleSubmitSortField(sortOption: SelectOption): void {
     this.setState({sortField: sortOption.value}, function () {
       this._onSubmitSortField();
-    });
-  }
-
-  _handleSubmitLocation(location: SelectOption): void {
-    this.setState({location: location.value}, function () {
-      this._onSubmitLocation();
     });
   }
 
@@ -77,32 +62,11 @@ class ProjectSearchSort extends React.Component<{||}, State> {
     metrics.logSearchChangeSortEvent(this.state.sortField);
   }
 
-  _onSubmitLocation(): void {
-    ProjectSearchDispatcher.dispatch({
-      type: 'SET_LOCATION',
-      location: this.state.location,
-    });
-    metrics.logSearchByLocationEvent(this.state.location);
-  }
-
   _renderSortFieldDropdown(): React$Node{
     return <Select
       options={sortOptions}
       value={this.state && this.state.sortField}
       onChange={this._handleSubmitSortField.bind(this)}
-      classNamePrefix="ProjectSearchSort"
-      className="form-control ProjectSearchSort-sortform"
-      simpleValue={true}
-      isClearable={false}
-      isMulti={false}
-    />
-  }
-
-  _renderLocationDropdown(): React$Node{
-    return <Select
-      options={locationOptions}
-      value={this.state && this.state.location}
-      onChange={this._handleSubmitLocation.bind(this)}
       classNamePrefix="ProjectSearchSort"
       className="form-control ProjectSearchSort-sortform"
       simpleValue={true}

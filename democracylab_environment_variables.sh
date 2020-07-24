@@ -1,3 +1,6 @@
+read -n 1 -r -s -p $'This is an example .sh file, and should not be run or changed unless new environment variables are added. Press any key to exit\n'
+exit 1
+
 #!/bin/bash
 
 # S3 bucket and credentials for uploading files
@@ -99,6 +102,9 @@ export GOOGLE_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 # GitHub token for expanding our rate limit for API calls
 # export GITHUB_API_TOKEN=SECRET
 
+# Configuration for HERE location api
+# export HERE_CONFIG='{"autocompleteUrl":"https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json","geocodeUrl":"https://geocoder.ls.hereapi.com/6.2/geocode.json","apiKey":"SECRET"}'
+
 # The date the DemocracyLab site was last updated.  Used in our sitemap
 export DL_PAGES_LAST_UPDATED='2019-12-05'
 
@@ -113,3 +119,8 @@ export BOARD_OF_DIRECTORS='[{"first_name":"Mark","last_name":"Frischmuth","title
 export FAVICON_PATH=https://d1agxr2dqkgkuy.cloudfront.net/img/favicon.png
 
 export BLOG_URL='https://blog.democracylab.org'
+
+export PRIVACY_POLICY_URL='https://d1agxr2dqkgkuy.cloudfront.net/documents/2020.06%20DemocracyLab%20Privacy%20Policy.pdf'
+
+# if we have a hackathon or similar event we want displayed in the nav for the duration, put it here
+export EVENT_URL='https://democracylab.org/index/?section=AboutEvent&id=1'

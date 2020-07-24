@@ -5,6 +5,9 @@ import NewsletterSignup from '../common/integrations/NewsletterSignup.jsx';
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 
+const sectionsToHideFooter: $ReadOnlyArray<string> = [
+  Section.LiveEvent
+];
 
 class SocialFooter extends React.Component {
   _dlCallToActions() {
@@ -53,8 +56,8 @@ class SocialFooter extends React.Component {
     )
   }
 
-  render() {
-    return (
+  render(): ?React$Node {
+    return !_.some(sectionsToHideFooter, section => url.atSection(section)) && (
       <div className="SocialFooter-root">
         <div className="container SocialFooter-container">
           <div className="SocialFooter-row">
@@ -67,7 +70,7 @@ class SocialFooter extends React.Component {
             </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

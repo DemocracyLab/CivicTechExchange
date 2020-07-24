@@ -5,10 +5,24 @@ https://django-allauth.readthedocs.io/en/latest/advanced.html
 from allauth.account.signals import user_logged_in
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.dispatch import receiver
+from common.helpers.error_handlers import ReportableError
 from civictechprojects.models import ProjectFile, FileCategory
 from democracylab.models import Contributor
 from django.contrib.auth.models import User
 from django.utils import timezone
+import simplejson as json
+
+
+class MissingOAuthFieldError(ReportableError):
+    """Exception raised when required fields are not returned from OAuth
+
+    Attributes:
+        missing_fields -- description of missing fields
+        message -- explanation of the error to be reported in the logs
+    """
+
+    def __init__(self, message, provider, missing_fields):
+        super().__init__(message, {'provider': provider, 'missing_fields': missing_fields})
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
@@ -35,12 +49,19 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         raising an ImmediateHttpResponse
         """
         # standardizing fields across different providers
-        data = sociallogin.account.get_provider().extract_common_fields(
+        provider = sociallogin.account.get_provider()
+        data = provider.extract_common_fields(
             sociallogin.account.extra_data)
 
         full_name = data.get('name')
         first_name = data.get('first_name')
         last_name = data.get('last_name')
+
+        if full_name is None and first_name is None:
+            missing_fields = ['name', 'first_name', 'last_name']
+            msg = 'Social login Failed for {provider}.  Missing fields: {fields}'\
+                .format(provider=provider.name, fields=missing_fields)
+            raise MissingOAuthFieldError(msg, provider.name, "Full Name")
 
         sociallogin.user.first_name = first_name or full_name.split()[0]
         sociallogin.user.last_name = last_name or ' '.join(full_name.split()[1:])
