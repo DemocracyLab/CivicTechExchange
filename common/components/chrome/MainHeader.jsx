@@ -107,7 +107,7 @@ class MainHeader extends React.Component<{||}, State > {
               {this._renderNavDropdownItem(Section.Press, "News")}
             </NavDropdown>
             {window.BLOG_URL ? <Nav.Link href={window.BLOG_URL}>Blog</Nav.Link> : null}
-            {window.EVENT_URL ? <Nav.Link href={window.EVENT_URL}>Live Event</Nav.Link> : null}
+            {window.EVENT_URL ? <Nav.Link href={_.unescape(window.EVENT_URL)}>Live Event</Nav.Link> : null}
             {this._renderNavLink(Section.Donate, "Donate", "MainHeader-showmobile")}
             {CurrentUser.isLoggedIn() ? <Nav.Link className="MainHeader-showmobile mb-3" href="/logout/">Log Out</Nav.Link> : <Nav.Link className="MainHeader-showmobile" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Nav.Link>}
           </Nav>
