@@ -520,13 +520,13 @@ def projects_list(request):
         project_relationships = ProjectRelationship.objects.filter(relationship_group=query_params['group_id'][0])
     elif 'event_id' in query_params:
         project_relationships = ProjectRelationship.objects.filter(relationship_event=query_params['event_id'][0])
-    
+
     if project_relationships is not None:
         project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
         project_list = Project.objects.filter(id__in=project_ids, is_searchable=True)
     else:
         project_list = Project.objects.filter(is_searchable=True)
-    
+
     if request.method == 'GET':
         project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
         project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
