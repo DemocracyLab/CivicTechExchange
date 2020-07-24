@@ -49,12 +49,6 @@
     margin-left: 5px;
     background-repeat: no-repeat;
     background-position: 0 50%; // center caret vertically
-    &:hover {
-      color: $color-orange;
-    }
-    &:active {
-      color: $color-orange;
-    }
   }
 }
 
