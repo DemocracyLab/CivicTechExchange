@@ -42,10 +42,16 @@
   margin: 5px; /* override this on desktop */
 }
 .LandingController-root .SplashScreen-content {
-  margin: auto;
+  padding-bottom: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+.LandingController-root .SplashScreen-content h1 {
+  font-size: 3rem;
 }
 .LandingController-topsplash .SplashScreen-content h1 {
   font-size: 4rem;
+  margin-bottom: 0;
 }
 .LandingController-topsplash p {
   font-size: 24px;
@@ -59,6 +65,11 @@
 .LandingController-midsplash p {
   max-width: 500px;
   white-space: pre-wrap;
+}
+/* midsplash isn't respecting margin rules because ??? */
+.LandingController-midsplash p, .LandingController-midsplash a {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .LandingController-testimonial-container {
@@ -248,6 +259,9 @@
   }
   .RecentProjects-toggle:hover {
     color: $color-text-dark;
+  }
+  .LandingController-root .SplashScreen-content {
+    padding-bottom: 3rem;
   }
 
 }
