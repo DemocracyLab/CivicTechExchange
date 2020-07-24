@@ -136,6 +136,9 @@
   min-height: 100%;
   min-width: 100%;
 }
+.about-us-team-avatar-default svg {
+  padding-top: 20px; /* offsets the svg away from the border where it matters */
+}
 
 .about-us-team-avatar, .about-us-team-avatar-default svg {
   height: 150px;
