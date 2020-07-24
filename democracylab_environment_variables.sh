@@ -123,4 +123,4 @@ export BLOG_URL='https://blog.democracylab.org'
 export PRIVACY_POLICY_URL='https://d1agxr2dqkgkuy.cloudfront.net/documents/2020.06%20DemocracyLab%20Privacy%20Policy.pdf'
 
 # if we have a hackathon or similar event we want displayed in the nav for the duration, put it here
-export EVENT_URL='https://democracylab.org/index/?section=LiveEvent&id=1'
+export EVENT_URL='https://democracylab.org/index/?section=AboutEvent&id=1'

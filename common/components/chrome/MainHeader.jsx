@@ -97,23 +97,35 @@ class MainHeader extends React.Component<{||}, State > {
               {this._renderNavDropdownItem(Section.FindProjects, "Find Projects")}
               {this._renderNavDropdownItem(Section.CreateProject, "Create Project")}
             </NavDropdown>
-            <NavDropdown title="Events" id="nav-events">
-              {this._renderNavDropdownItem(Section.FindEvents, "Find Events")}
-              {this._renderNavDropdownItem(Section.CreateEvent, "Create Event")}
-            </NavDropdown>
+            {this._renderEventNavItems()}
             <NavDropdown title="About" id="nav-about">
               {this._renderNavDropdownItem(Section.AboutUs, "About Us")}
               {this._renderNavDropdownItem(Section.ContactUs, "Contact Us")}
               {this._renderNavDropdownItem(Section.Press, "News")}
             </NavDropdown>
             {window.BLOG_URL ? <Nav.Link href={window.BLOG_URL}>Blog</Nav.Link> : null}
-            {window.EVENT_URL ? <Nav.Link href={_.unescape(window.EVENT_URL)}>Live Event</Nav.Link> : null}
             {this._renderNavLink(Section.Donate, "Donate", "MainHeader-showmobile")}
             {CurrentUser.isLoggedIn() ? <Nav.Link className="MainHeader-showmobile mb-3" href="/logout/">Log Out</Nav.Link> : <Nav.Link className="MainHeader-showmobile" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Nav.Link>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
     )
+  }
+  
+  _renderEventNavItems(): ?React$Node {
+    const eventLinks: Array<React$Node> = [];
+    if(CurrentUser.isStaff()) {
+      eventLinks.push(this._renderNavDropdownItem(Section.CreateEvent, "Create Event"));
+    }
+    if(window.EVENT_URL) {
+      eventLinks.push(<NavDropdown.Item href={_.unescape(window.EVENT_URL)}>Upcoming Event</NavDropdown.Item>);
+    }
+    return !_.isEmpty(eventLinks)
+    ? (
+      <NavDropdown title="Events" id="nav-events">
+        {eventLinks}
+      </NavDropdown>
+    ) : null;
   }
 
   _renderLogInSection() {
