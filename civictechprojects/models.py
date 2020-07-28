@@ -97,6 +97,7 @@ class Project(Archived):
 
     def delete(self):
         self.is_searchable=False
+        self.update_timestamp()
         super().delete()
 
     def all_owners(self):
