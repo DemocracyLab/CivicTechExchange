@@ -97,6 +97,7 @@ class Project(Archived):
 
     def delete(self):
         self.is_searchable=False
+        self.project_date_modified = timezone.now()
         super().delete()
 
     def all_owners(self):
