@@ -15,7 +15,7 @@
     "test": "jest"
   },
   "engines": {
-    "node": "13.7.x"
+    "node": "12.16.x"
   },
   "dependencies": {
     "bluebird": "^3.5.2",
