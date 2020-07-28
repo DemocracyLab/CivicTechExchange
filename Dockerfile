@@ -12,7 +12,7 @@ RUN pip install -r requirements.txt
 
 # Copy files needed for yarn install.
 COPY package.json yarn.lock /code/
-RUN yarn --frozen-lockfile --link-duplicates --ignore-scripts
+RUN yarn --frozen-lockfile --link-duplicates --ignore-scripts --ignore-engines
 # Permission issue with node-sass https://github.com/sass/node-sass/issues/1579
 RUN npm rebuild node-sass
 # Copy folders and files whitelisted by .dockerignore.
