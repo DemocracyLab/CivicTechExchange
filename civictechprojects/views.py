@@ -581,6 +581,44 @@ def recent_projects_list(request):
         return JsonResponse({'projects': hydrated_project_list})
 
 
+def limited_listings(request):
+    """Summarizes current positions in a format specified by the LinkedIn "Limited Listings" feature."""
+
+    def cdata(str):
+        # Using CDATA tags (and escaping the close sequence) protects us from XSS attacks when
+        # displaying user provided string values.
+        return f"<![CDATA[{str.replace(']]>', ']]]]><![CDATA[>')}]]>"
+    
+    def position_to_job(position):
+        project = position.position_project
+        roleTag = Tag.get_by_name(position.position_role.first().slug)
+
+        return f"""
+        <job>
+            <company>{cdata(project.project_name)}</company>
+            <title>{cdata(roleTag.display_name)}</title>
+            <description>{cdata(position.position_description)}</description>
+            <partnerJobId>{cdata(str(position.id))}</partnerJobId>
+            <location>{cdata(", ".join([project.project_city, project.project.state]))}</location>
+            <city>{cdata(project.project_city)}</city>
+            <state>{cdata(project.project_state)}</state>
+            <country>{cdata(project.project_country)}</country>
+            <applyUrl>{cdata(position.description_url or project.project_url)}</applyUrl>
+            <industryCodes><industryCode>{cdata("4")}</industryCode></industryCodes>
+        </job>
+        """
+    
+    xml_response = f"""<?xml version="1.0" encoding="UTF-8"?>
+    <source>
+        <lastBuildDate>{timezone.now().strftime('%a, %d %b %Y %H:%M:%S %Z')}</lastBuildDate> 
+        <publisherUrl>https://www.democracylab.org</publisherUrl>
+        <publisher>DemocracyLab</publisher>
+        {"".join(map(position_to_job, ProjectPosition.objects.all()))}
+    </source>"""
+
+    return HttpResponse(xml_response, content_type="application/xml")
+
+
 def apply_tag_filters(project_list, query_params, param_name, tag_filter):
     if param_name in query_params:
         tag_dict = get_tag_dictionary()
