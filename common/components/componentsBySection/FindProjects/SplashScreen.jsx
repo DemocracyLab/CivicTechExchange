@@ -23,12 +23,13 @@ export const HeroImage: { [key: string]: string } = {
   MidLanding: "CodeForGood_072719_MSReactor-034.jpg",
   BottomLanding: "SplashImage-7178-1400.jpg",
   AboutMission: "CodeForGood_072719_MSReactor-003.jpg",
+  FindEvents: "CodeForGood_072719_MSReactor-020.jpg"
 };
 
 const heroImages: $ReadOnlyArray<string> = [
   HeroImage.TopLanding,
   "CodeForGood_072719_MSReactor-074.jpg",
-  "CodeForGood_072719_MSReactor-020.jpg"
+  HeroImage.FindEvents
 ];
 
 class SplashScreen extends React.PureComponent<Props> {
