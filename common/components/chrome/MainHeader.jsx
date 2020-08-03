@@ -115,7 +115,7 @@ class MainHeader extends React.Component<{||}, State > {
       </Navbar>
     )
   }
-  
+
   _renderEventNavItems(): ?React$Node {
     const eventLinks: Array<React$Node> = [];
     if(CurrentUser.isStaff()) {
@@ -124,6 +124,7 @@ class MainHeader extends React.Component<{||}, State > {
     if(window.EVENT_URL) {
       eventLinks.push(<NavDropdown.Item href={_.unescape(window.EVENT_URL)}>Upcoming Event</NavDropdown.Item>);
     }
+    eventLinks.push(this._renderNavDropdownItem(Section.FindEvents, "Find Events"));
     return !_.isEmpty(eventLinks)
     ? (
       <NavDropdown title="Events" id="nav-events">
