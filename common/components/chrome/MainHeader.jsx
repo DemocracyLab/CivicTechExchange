@@ -61,13 +61,15 @@ class MainHeader extends React.Component<{||}, State > {
 
   componentDidMount() {
     UniversalDispatcher.dispatch({type: 'INIT'});
-    this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
+    if(this.mainHeaderRef && this.mainHeaderRef.current) {
+      this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
+    }
   }
 
 
 
   render(): React$Node {
-    return (
+    return this.state.showHeader ? (
       <div ref={this.mainHeaderRef} className="MainHeader-root">
         <AlertHeader
           onAlertClose={this._handleAlertClosing.bind(this)}
@@ -77,7 +79,7 @@ class MainHeader extends React.Component<{||}, State > {
           {this._renderNavBar()}
         </div>
       </div>
-    );
+    ) : null;
   }
 
   _renderNavBar() {
