@@ -3,6 +3,7 @@
 import Headers from "../common/Headers.jsx";
 import SplashScreen, {HeroImage} from "../componentsBySection/FindProjects/SplashScreen.jsx";
 import EventCardsContainer from "../componentsBySection/FindEvents/EventCardsContainer.jsx";
+import EventFilterContainer from "../componentsBySection/FindEvents/filters/EventFilterContainer.jsx";
 import React from 'react';
 import type {FindGroupsArgs} from "../stores/GroupSearchStore";
 import urls from "../utils/url";
@@ -13,7 +14,7 @@ class FindEventsController extends React.PureComponent {
   constructor(): void {
     super();
   }
-  
+
   componentWillMount(): void {
     let args: FindGroupsArgs = urls.arguments(document.location.search);
     args = _.pick(args, ['keyword', 'page']);
@@ -36,6 +37,7 @@ class FindEventsController extends React.PureComponent {
           <SplashScreen className="FindEventsController-topsplash" header={"Find Events Title Goes Here"} img={HeroImage.FindEvents} />
           <div className="container">
             <div className="row">
+              <EventFilterContainer />
               <EventCardsContainer showSearchControls={true}/>
             </div>
           </div>

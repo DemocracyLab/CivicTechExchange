@@ -28,7 +28,7 @@ class EventCard extends React.PureComponent<Props> {
 
   render(): React$Node {
     return (
-        <div className="ProjectCard-root">
+        <div className="EventCard-root">
           <a href={url.section(Section.AboutEvent, {id: this.props.event.event_id})}
             rel="noopener noreferrer">
             {this._renderLogo()}
@@ -42,7 +42,7 @@ class EventCard extends React.PureComponent<Props> {
   _renderLogo(): React$Node {
 
     return (
-      <div className="ProjectCard-logo">
+      <div className="EventCard-logo">
         <img src={this.props.event && this.props.event.event_thumbnail ? this.props.event.event_thumbnail.publicUrl : "/static/images/projectlogo-default.png"}/>
       </div>
     )
@@ -50,7 +50,7 @@ class EventCard extends React.PureComponent<Props> {
   _renderTitleAndIssue(): React$Node {
     const Event: EventTileAPIData = this.props.event;
     return (
-      <div className="ProjectCard-title">
+      <div className="EventCard-title">
         <h2>{Event.event_name}</h2>
         <h4>
           "DemocracyLab"
@@ -60,7 +60,7 @@ class EventCard extends React.PureComponent<Props> {
   }
   _renderEventDescription(): React$Node {
     return (
-        <div className="ProjectCard-description">
+        <div className="EventCard-description">
           <p>{Truncate.stringT(this.props.event.event_short_description, this.props.maxTextLength)}</p>
         </div>
     );
@@ -69,7 +69,7 @@ class EventCard extends React.PureComponent<Props> {
     const Event: EventTileAPIData = this.props.event;
     const location: string = Event.event_location;
     return (
-      <div className="ProjectCard-subinfo">
+      <div className="EventCard-subinfo">
         <ul>
         {location &&
           <li>

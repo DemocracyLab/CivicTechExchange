@@ -9,6 +9,7 @@ class EventFilterContainer extends React.PureComponent<{||}> {
   render(): React$Node {
     return (
       <div className="EventFilterContainer-root col-12 col-md-4 col-lg-3 pl-0 pr-0">
+        (Filters coming soon)
       </div>
     );
   }
