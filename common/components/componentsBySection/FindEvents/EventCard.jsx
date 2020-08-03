@@ -9,11 +9,11 @@ import Sort from "../../utils/sort.js";
 import Truncate from "../../utils/truncate.js";
 import GlyphStyles from "../../utils/glyphs.js";
 import utils from "../../utils/utils.js";
-import EventAPIUtils, {EventTileAPIData} from "../../utils/EventAPIUtils.js";
+import {EventTileAPIData} from "../../utils/EventAPIUtils.js";
 import type {TagDefinition} from "../../utils/ProjectAPIUtils.js";
 
 type Props = {|
-  Event: EventTileAPIData,
+  event: EventTileAPIData,
   tagDictionary: Dictionary<TagDefinition>,
   maxTextLength: number,
   maxIssuesCount: number
@@ -29,13 +29,12 @@ class EventCard extends React.PureComponent<Props> {
   render(): React$Node {
     return (
         <div className="ProjectCard-root">
-          <a href={url.section(Section.AboutEvent, {id: this.props.Event.Event_id})}
+          <a href={url.section(Section.AboutEvent, {id: this.props.event.event_id})}
             rel="noopener noreferrer">
             {this._renderLogo()}
             {this._renderSubInfo()}
             {this._renderTitleAndIssue()}
             {this._renderEventDescription()}
-            {this._renderIssueAreas()}
           </a>
         </div>
     );
@@ -44,17 +43,17 @@ class EventCard extends React.PureComponent<Props> {
 
     return (
       <div className="ProjectCard-logo">
-        <img src={this.props.Event && this.props.Event.Event_thumbnail ? this.props.Event.Event_thumbnail.publicUrl : "/static/images/projectlogo-default.png"}/>
+        <img src={this.props.event && this.props.event.event_thumbnail ? this.props.event.event_thumbnail.publicUrl : "/static/images/projectlogo-default.png"}/>
       </div>
     )
   }
   _renderTitleAndIssue(): React$Node {
-    const Event: EventTileAPIData = this.props.Event;
+    const Event: EventTileAPIData = this.props.event;
     return (
       <div className="ProjectCard-title">
-        <h2>{Event.Event_name}</h2>
+        <h2>{Event.event_name}</h2>
         <h4>
-          {Event.Event_project_count + " " + utils.pluralize("project","projects", Event.Event_project_count)}
+          "DemocracyLab"
         </h4>
       </div>
     )
@@ -62,35 +61,13 @@ class EventCard extends React.PureComponent<Props> {
   _renderEventDescription(): React$Node {
     return (
         <div className="ProjectCard-description">
-          <p>{Truncate.stringT(this.props.Event.Event_short_description, this.props.maxTextLength)}</p>
+          <p>{Truncate.stringT(this.props.event.event_short_description, this.props.maxTextLength)}</p>
         </div>
     );
   }
-  _renderIssueAreas(): React$Node {
-    return (
-    <div className="ProjectCard-skills">
-      <h3>Issues</h3>
-      {this._generateIssueList()}
-    </div>
-    )
-  }
-  _generateIssueList(): React$Node {
-    // Get sorted truncated list of tag names
-    let issueNames: $ReadOnlyArray<string> = Sort.byCountDictionary(this.props.Event.Event_issue_areas);
-    issueNames = issueNames.map((issueName: string) => this.props.tagDictionary[issueName].display_name);
-    issueNames = Truncate.arrayT(issueNames, this.props.maxIssuesCount);
-
-    return (
-      <ul>
-        {issueNames.map((issueName: string, i: number) =>
-          <li key={i}>{issueName}</li>
-        )}
-      </ul>
-    );
-  }
   _renderSubInfo(): React$Node {
-    const Event: EventTileAPIData = this.props.Event;
-    const location: string = Event.Event_country && EventAPIUtils.getLocationDisplayName(Event.Event_country);
+    const Event: EventTileAPIData = this.props.event;
+    const location: string = Event.event_location;
     return (
       <div className="ProjectCard-subinfo">
         <ul>
@@ -100,10 +77,10 @@ class EventCard extends React.PureComponent<Props> {
             {location}
           </li>
         }
-        {Event.Event_date_modified &&
+        {Event.event_date_start &&
           <li>
             <i className={GlyphStyles.Clock + glyphFixedWidth}></i>
-            <Moment fromNow>{Event.Event_date_modified}</Moment>
+            <Moment fromNow>{Event.event_date_start}</Moment>
           </li>
         }
         </ul>

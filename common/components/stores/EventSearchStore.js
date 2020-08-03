@@ -17,18 +17,15 @@ import _ from "lodash";
 
 export type FindEventsArgs = {|
   keyword: string,
-  sortField: string,
-  locationRadius: string,
-  page: number,
-  issues: string,
+  dateRangeStart: string,
+  dateRangeEnd: string,
+  page: number
 |};
 
 type FindEventsResponse = {|
   events: $ReadOnlyArray<EventTileAPIData>,
   numPages: number,
-  numEvents: number,
-  tags: $ReadOnlyArray<TagDefinition>,
-  availableCountries: $ReadOnlyArray<string>
+  numEvents: number
 |};
 
 type FindEventsData = {|
@@ -39,27 +36,13 @@ type FindEventsData = {|
   allTags: Dictionary<TagDefinition>
 |};
 
-
-
 export type EventSearchActionType = {
   type: 'INIT',
   searchSettings: SearchSettings,
   findEventsArgs: FindEventsArgs
 } | {
-  type: 'ADD_TAG',
-  tag: Tag,
-} | {
-  type: 'REMOVE_TAG',
-  tag: Tag,
-} | {
   type: 'SET_KEYWORD',
   keyword: string,
-} | {
-  type: 'SET_SORT',
-  sortField: string,
-} | {
-  type: 'SET_LOCATION',
-  locationRadius: ?LocationRadius
 } | {
   type: 'SET_PAGE',
   page: number,
@@ -118,34 +101,19 @@ class EventSearchStore extends ReduceStore<State> {
         initialState = initialState.set('findEventsArgs', action.findEventsArgs || {});
         initialState = initialState.set('searchSettings', action.searchSettings || {updateUrl: false});
         return this._loadEvents(initialState, true);
-      case 'ADD_TAG':
-        state = state.set('filterApplied', true);
-        return this._loadEvents(this._addTagToState(state, action.tag));
-      case 'REMOVE_TAG':
-        state = state.set('tags', state.tags.filter(tag => tag !== action.tag.tag_name));
-        state = state.set('filterApplied', true);
-        return this._loadEvents(state);
       case 'SET_KEYWORD':
         return this._loadEvents(this._addKeywordToState(state, action.keyword));
-      case 'SET_SORT':
-        return this._loadEvents(this._addSortFieldToState(state, action.sortField));
-      case 'SET_LOCATION':
-        return this._loadEvents(this._addLocationToState(state, action.locationRadius));
       case 'SET_PAGE':
         return this._loadEvents(this._setPageNumberInState(state, action.page));
       case 'CLEAR_FILTERS':
         return this._loadEvents(this._clearFilters(state));
-      case 'SET_GROUPS_DO_NOT_CALL_OUTSIDE_OF_STORE':
-        let allTags = _.mapKeys(action.eventsResponse.tags, (tag:TagDefinition) => tag.tag_name);
+      case 'SET_EVENTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
         // Remove all tag filters that don't match an existing tag name
-        state = state.set('tags', state.tags.filter(tag => allTags[tag]));
         let currentEvents = state.eventsData.events || List();
         state = state.set('eventsData', {
           events: currentEvents.concat(action.eventsResponse.events),
           numPages: action.eventsResponse.numPages,
           numEvents: action.eventsResponse.numEvents,
-          allTags: allTags,
-          availableCountries: action.eventsResponse.availableCountries
         });
         return state.set('eventsLoading', false);
       default:
@@ -158,10 +126,6 @@ class EventSearchStore extends ReduceStore<State> {
     if(state.eventsData && state.eventsData.allTags) {
       const findEventsArgs: FindEventsArgs = _.pickBy({
         keyword: state.keyword,
-        sortField: state.sortField,
-        location: state.location,
-        locationRadius: state.locationRadius && state.locationRadius.latitude && state.locationRadius.longitude && locationRadiusToString(state.locationRadius),
-        issues: this._getTagCategoryParams(state, TagCategory.ISSUES),
         url: state.url,
       }, _.identity);
       state = state.set('findEventsArgs', findEventsArgs);
@@ -180,7 +144,6 @@ class EventSearchStore extends ReduceStore<State> {
   }
 
   _initializeFilters(state: State, findEventsArgs: FindEventsArgs): State {
-    state = this._addTagFilters(state, findEventsArgs.issues);
     state = this._addKeywordToState(state, findEventsArgs.keyword);
     state = this._addSortFieldToState(state, findEventsArgs.sortField);
     state = this._addLocationToState(state, locationRadiusFromString(findEventsArgs.locationRadius));
@@ -188,39 +151,12 @@ class EventSearchStore extends ReduceStore<State> {
     return state;
   }
 
-  _addTagFilters(state: State, filter:string): State {
-    if(filter) {
-      filter.split(",").forEach((tag) => {
-        state = this._addTagToState(state, tag);
-      });
-    }
-    return state;
-  }
-
-  _addTagToState(state: State, tag: string): State {
-    const newTags:$ReadOnlyArray<string> = state.tags.concat(tag);
-    state = state.set('filterApplied', true);
-    return state.set('tags', newTags);
-  }
-
   _addKeywordToState(state: State, keyword: string): State {
     state = state.set('keyword', keyword);
     state = state.set('filterApplied', true);
     return state;
   }
-
-  _addSortFieldToState(state: State, sortField: string): State {
-    state = state.set('sortField', sortField);
-    state = state.set('filterApplied', true);
-    return state;
-  }
-
-  _addLocationToState(state: State, locationRadius: LocationRadius): State {
-    state = state.set('locationRadius', locationRadius);
-    state = state.set('filterApplied', true);
-    return state;
-  }
-
+  
   _setPageNumberInState(state: State, page: number): State {
     state = state.set('page', page);
     return state;
@@ -228,9 +164,6 @@ class EventSearchStore extends ReduceStore<State> {
 
   _clearFilters(state: State): State {
     state = state.set('keyword', '');
-    state = state.set('sortField', '');
-    state = state.set('locationRadius', {});
-    state = state.set('tags', List());
     state = state.set('page', 1);
     state = state.set('filterApplied', false);
     state = state.set('eventsData', {});
@@ -262,26 +195,8 @@ class EventSearchStore extends ReduceStore<State> {
     return state;
   }
 
-  _getTagCategoryParams(state: State, category: string): ?string {
-    const tags = this.getSelectedTags(state).filter(tag => tag.category === category);
-    return tags.map(tag => tag.tag_name).join(',');
-  }
-
   getKeyword(): string {
     return this.getState().keyword;
-  }
-
-  getSortField(): string {
-    return this.getState().sortField;
-  }
-
-  getCountryList(): $ReadOnlyArray<CountryData> {
-    const eventsData: FindEventsData = this.getState().eventsData;
-    return eventsData && eventsData.availableCountries && eventsData.availableCountries.map(countryByCode);
-  }
-
-  getLocation(): LocationRadius {
-    return this.getState().locationRadius;
   }
 
   getEvents(): List<EventTileAPIData> {
@@ -305,20 +220,6 @@ class EventSearchStore extends ReduceStore<State> {
 
   getEventsLoading(): boolean {
     return this.getState().eventsLoading;
-  }
-
-  getAllTags(): Dictionary<TagDefinition> {
-    const state: State = this.getState();
-    return state.eventsData && state.eventsData.allTags;
-  }
-
-  getSelectedTags(inProgressState: ?State): List<TagDefinition> {
-    const state: State = inProgressState || this.getState();
-    if(state.eventsData && state.eventsData.allTags && state.tags) {
-      return List(state.tags.map(tag => state.eventsData.allTags[tag]));
-    } else {
-      return List();
-    }
   }
 }
 

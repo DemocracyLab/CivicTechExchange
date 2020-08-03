@@ -47,10 +47,7 @@ class EventCardsContainer extends React.Component<Props, State> {
       event_count: EventSearchStore.getNumberOfEvents(),
       current_page: EventSearchStore.getCurrentPage(),
       events_loading: EventSearchStore.getEventsLoading(),
-      keyword: EventSearchStore.getKeyword() || '',
-      tags: EventSearchStore.getSelectedTags() || [],
-      location: EventSearchStore.getLocation() || '',
-      tagDictionary: EventSearchStore.getAllTags() || []
+      keyword: EventSearchStore.getKeyword() || ''
     };
   }
 
@@ -62,8 +59,8 @@ class EventCardsContainer extends React.Component<Props, State> {
             this.props.showSearchControls
             ? (
               <React.Fragment>
-                <EventSearchSort/>
-                <EventTagContainer/>
+                {/*<EventSearchSort/>*/}
+                {/*<EventTagContainer/>*/}
               </React.Fragment>
               )
             : null
@@ -83,7 +80,7 @@ class EventCardsContainer extends React.Component<Props, State> {
   _renderCardHeaderText(): React$Node {
     if (this.props.staticHeaderText) {
       return this.props.staticHeaderText;
-    } else if (this.state.keyword || this.state.tags.size > 0 || (this.state.location && this.state.location.latitude && this.state.location.longitude)) {
+    } else if (this.state.keyword) {
       return this.state.event_count + " " + utils.pluralize("event", "events", this.state.event_count) + " found";
     } else {
       return 'Find events that match your interests'

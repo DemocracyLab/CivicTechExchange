@@ -10,10 +10,6 @@ import _ from 'lodash';
 
 type State = {|
   keyword: string,
-  tags: List<TagDefinition>,
-  sortField: string,
-  location: string,
-  locationRadius: LocationRadius
 |};
 
 class ResetSearchButton extends React.Component<{||}, State> {
@@ -25,10 +21,6 @@ class ResetSearchButton extends React.Component<{||}, State> {
   static calculateState(prevState: State): State {
     return {
       keyword: ProjectSearchStore.getKeyword() || '',
-      tags: ProjectSearchStore.getTags() || [],
-      sortField: ProjectSearchStore.getSortField() || '',
-      location: ProjectSearchStore.getLegacyLocation() || '',
-      locationRadius: ProjectSearchStore.getLocation() || {}
     };
   }
 
@@ -37,7 +29,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
       <React.Fragment>
         <button
           className="btn btn-primary btn-block reset-search-button"
-          disabled={!(this.state.keyword || this.state.tags.size > 0 || this.state.sortField || this.state.location || !_.isEmpty(this.state.locationRadius)) }
+          disabled={!this.state.keyword}
           onClick={this._clearFilters.bind(this)}>
           Clear Filters
         </button>
