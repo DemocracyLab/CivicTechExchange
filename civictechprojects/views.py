@@ -748,6 +748,11 @@ def group_countries():
     return unique_column_values(Group, 'group_country', lambda country: country and len(country) == 2)
 
 
+def events_list(request):
+    events = Event.objects.filter(is_created=True, is_searchable=True)
+    return JsonResponse({'events': [event.hydrate_to_tile_json() for event in events]})
+
+
 def presign_project_thumbnail_upload(request):
     uploader = request.user.username
     file_name = request.GET['file_name'][:150]
