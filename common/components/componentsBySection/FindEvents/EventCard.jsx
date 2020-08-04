@@ -31,62 +31,55 @@ class EventCard extends React.PureComponent<Props> {
         <div className="EventCard-root">
           <a href={url.section(Section.AboutEvent, {id: this.props.event.event_id})}
             rel="noopener noreferrer">
-            {this._renderLogo()}
-            {this._renderSubInfo()}
-            {this._renderTitleAndIssue()}
-            {this._renderEventDescription()}
+            {this._renderEventLogo()}
+            {this._renderEventInformation()}
+            {this._renderEventTime()}
           </a>
         </div>
     );
   }
-  _renderLogo(): React$Node {
 
+  _renderEventLogo(): React$Node {
     return (
       <div className="EventCard-logo">
         <img src={this.props.event && this.props.event.event_thumbnail ? this.props.event.event_thumbnail.publicUrl : "/static/images/projectlogo-default.png"}/>
       </div>
-    )
-  }
-  _renderTitleAndIssue(): React$Node {
-    const Event: EventTileAPIData = this.props.event;
-    return (
-      <div className="EventCard-title">
-        <h2>{Event.event_name}</h2>
-        <h4>
-          "DemocracyLab"
-        </h4>
-      </div>
-    )
-  }
-  _renderEventDescription(): React$Node {
-    return (
-        <div className="EventCard-description">
-          <p>{Truncate.stringT(this.props.event.event_short_description, this.props.maxTextLength)}</p>
-        </div>
     );
   }
-  _renderSubInfo(): React$Node {
+
+  //TODO: add organizer field to create event form/db record so we can use that instead
+  _renderEventInformation(): React$Node {
     const Event: EventTileAPIData = this.props.event;
     const location: string = Event.event_location;
     return (
-      <div className="EventCard-subinfo">
-        <ul>
+      <div className="EventCard-info">
+        <h2>{Event.event_name}</h2>
+        <h4>
+          DemocracyLab
+        </h4>
         {location &&
-          <li>
-            <i className={GlyphStyles.MapMarker + glyphFixedWidth}></i>
-            {location}
-          </li>
+          <ul>
+            <li>
+              <i className={GlyphStyles.MapMarker + glyphFixedWidth}></i>
+              {location}
+            </li>
+          </ul>
         }
-        {Event.event_date_start &&
-          <li>
-            <i className={GlyphStyles.Clock + glyphFixedWidth}></i>
-            <Moment fromNow>{Event.event_date_start}</Moment>
-          </li>
-        }
-        </ul>
       </div>
-    )
+    );
   }
+
+  _renderEventTime(): React$Node {
+    const Event: EventTileAPIData = this.props.event;
+    return (
+      <div className="EventCard-time">
+        {Event.event_date_start &&
+          <p><Moment format="LT">{Event.event_date_start}</Moment></p>
+        }
+      </div>
+    );
+  }
+
 }
 
 export default EventCard;
