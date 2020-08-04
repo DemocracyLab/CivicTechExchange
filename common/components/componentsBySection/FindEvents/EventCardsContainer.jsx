@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import moment from 'moment';
 import type {ReduceStore} from 'flux/utils';
 import EventSearchSort from "./EventSearchSort.jsx";
 import EventTagContainer from "./EventTagContainer.jsx";
@@ -12,12 +13,18 @@ import EventSearchDispatcher from "../../stores/EventSearchDispatcher.js";
 import LoadingMessage from '../../chrome/LoadingMessage.jsx';
 import prerender from "../../utils/prerender.js";
 import type {LocationRadius} from "../../stores/ProjectSearchStore.js";
-import {Dictionary, createDictionary} from "../../types/Generics.jsx";
+import type {Dictionary} from "../../types/Generics.jsx";
 import type {TagDefinition} from "../../utils/ProjectAPIUtils.js";
 import type {EventTileAPIData} from "../../utils/EventAPIUtils.js";
 import utils from "../../utils/utils.js";
 import _ from 'lodash';
 
+function generateEventsDateListings(events: $ReadOnlyArray<EventTileAPIData>): Dictionary<$ReadOnlyArray<EventTileAPIData>> {
+  const dateHeaderFormat: string = "dddd, MMMM D, YYYY";
+  return _.groupBy(events, (event: EventTileAPIData) => {
+    return moment(event.event_date_start).startOf('day').format(dateHeaderFormat)
+  });
+}
 
 type Props = {|
   showSearchControls: ?boolean,
@@ -27,6 +34,7 @@ type Props = {|
 
 type State = {|
   events: List<EventTileAPIData>,
+  eventsByDate: Dictionary<$ReadOnlyArray<EventTileAPIData>>,
   event_pages: number,
   current_page: number,
   event_count: number,
@@ -41,8 +49,10 @@ class EventCardsContainer extends React.Component<Props, State> {
   }
 
   static calculateState(prevState: State): State {
+    const events: $ReadOnlyArray = EventSearchStore.getEvents();
     return {
-      events: EventSearchStore.getEvents(),
+      events: events,
+      eventsByDate: events && generateEventsDateListings(events.toJS()),
       event_pages: EventSearchStore.getEventPages(),
       event_count: EventSearchStore.getNumberOfEvents(),
       current_page: EventSearchStore.getCurrentPage(),
