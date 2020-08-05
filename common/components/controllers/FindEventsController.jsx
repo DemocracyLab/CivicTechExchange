@@ -34,7 +34,8 @@ class FindEventsController extends React.PureComponent {
           description="Optimizing the connection between skilled volunteers and tech-for-good events"
         />
         <div className="FindEventsController-root">
-          <SplashScreen className="FindEventsController-topsplash" header={"Find Events Title Goes Here"} img={HeroImage.FindEvents} />
+          <SplashScreen className="FindEventsController-topsplash" header={"Tech-for-Good Events"} img={HeroImage.FindEvents}>
+          </SplashScreen>
           <div className="container">
             <div className="row">
               <EventFilterContainer />
