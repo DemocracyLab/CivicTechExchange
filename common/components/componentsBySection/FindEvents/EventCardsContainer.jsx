@@ -19,11 +19,28 @@ import type {EventTileAPIData} from "../../utils/EventAPIUtils.js";
 import utils from "../../utils/utils.js";
 import _ from 'lodash';
 
-function generateEventsDateListings(events: $ReadOnlyArray<EventTileAPIData>): Dictionary<$ReadOnlyArray<EventTileAPIData>> {
-  const dateHeaderFormat: string = "dddd, MMMM D, YYYY";
-  return _.groupBy(events, (event: EventTileAPIData) => {
+type EventsDateGrouping = {|
+  date: Date,
+  dateString: string,
+  events: $ReadOnlyArray<EventTileAPIData>
+|};
+
+const dateHeaderFormat: string = "dddd, MMMM D, YYYY";
+
+function generateEventsDateListings(events: $ReadOnlyArray<EventTileAPIData>): $ReadOnlyArray<EventsDateGrouping> {
+  const groupings: Dictionary<EventTileAPIData> =  _.groupBy(events, (event: EventTileAPIData) => {
     return moment(event.event_date_start).startOf('day').format(dateHeaderFormat)
   });
+  
+  const eventsDateListings: $ReadOnlyArray<EventsDateGrouping> = Object.keys(groupings).map( (dateKey) => {
+    return {
+      date: moment(dateKey, dateHeaderFormat),
+      dateString: dateKey,
+      events: _.reverse(_.sortBy(groupings[dateKey], ['event_date_start']))
+    }
+  });
+  
+  return _.reverse(_.sortBy(eventsDateListings, ['date']));
 }
 
 type Props = {|
@@ -34,7 +51,7 @@ type Props = {|
 
 type State = {|
   events: List<EventTileAPIData>,
-  eventsByDate: Dictionary<$ReadOnlyArray<EventTileAPIData>>,
+  eventsByDate: $ReadOnlyArray<EventsDateGrouping>,
   event_pages: number,
   current_page: number,
   event_count: number,
