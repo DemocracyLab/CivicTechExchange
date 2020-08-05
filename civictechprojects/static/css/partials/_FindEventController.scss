@@ -9,12 +9,24 @@
   font-size: 4rem;
 }
 .EventCard-root h2 {
-  font-size: 1.333rem;
-  margin: 0.5rem 0;
+  font-size: 22px;
+  margin: 22px 0 12px 0;
 }
 .EventCard-root h4 {
-  font-size: 0.875rem;
+  font-size: 16px;
+  margin-bottom: 16px;
   color: $color-text-grey;
+}
+.EventCard-info {
+  display: flex;
+  flex-direction: column;
+}
+.EventCard-info li {
+  font-size: 18px;
+}
+.EventCard-info li i {
+  font-size: 13px; /* ratio determined, should be standardized */
+  margin-right: 5px;
 }
 .EventCard-root a {
   text-decoration: none;
@@ -24,6 +36,14 @@
   grid-template-rows: 100%;
   height: 100%;
 }
+// margin-bottom because we don't have pagination, keeping cards off the edge of the footer
+.EventCards-card-container {
+  margin-bottom: 3rem;
+}
+.EventCard-info, .EventCard-time {
+  margin-left: 0.5rem;
+}
+
 .EventCard-logo {
   grid-column: 1;
   grid-row: 1;
@@ -60,6 +80,9 @@
 .EventCard-time {
   grid-column: 1;
   grid-row: 3;
+  h2 {
+    font-weight: 400;
+  }
 }
 
 @include media-breakpoint-up(md) {
@@ -75,8 +98,12 @@
     grid-column: 2;
     grid-row: 1;
   }
+  .EventCard-info ul {
+    margin-top: auto;
+  }
   .EventCard-time {
     grid-column: 3;
     grid-row: 1;
+    margin: 0 16px 0 auto;
   }
 }

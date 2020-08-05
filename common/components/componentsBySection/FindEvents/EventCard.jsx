@@ -74,7 +74,7 @@ class EventCard extends React.PureComponent<Props> {
     return (
       <div className="EventCard-time">
         {Event.event_date_start &&
-          <p><Moment format="LT">{Event.event_date_start}</Moment></p>
+          <h2><Moment format="LT">{Event.event_date_start}</Moment></h2>
         }
       </div>
     );

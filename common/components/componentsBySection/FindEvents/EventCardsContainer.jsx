@@ -75,13 +75,13 @@ class EventCardsContainer extends React.Component<Props, State> {
               )
             : null
           }
-          <div className="row">
+          <div className="row EventCards-card-container">
             {!_.isEmpty(this.state.events) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}
             {this._renderCards()}
           </div>
-          <div>
+          {/*<div>
             {this._renderPagination()}
-          </div>
+          </div> */}
         </div>
       </div>
     );
@@ -104,7 +104,7 @@ class EventCardsContainer extends React.Component<Props, State> {
         ? 'No Events match the provided criteria. Try a different set of filters or search term.'
         : this.state.events.map(
           (event: EventTileAPIData, index: number) =>
-            <div className="col-12">
+            <div className="col-12 EventCards-card">
               <EventCard
                 event={event}
                 key={index}
