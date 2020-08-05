@@ -17,28 +17,13 @@
   text-decoration: none;
   color: $color-text-dark;
   display: grid;
-  grid-template-columns: 30% 50% 20%;
-  grid-template-rows: 1;
+  grid-template-columns: 100%;
+  grid-template-rows: 100%;
   height: 100%;
 }
-.EventCard-info {
-  grid-column: 2;
-  overflow-wrap: break-word;
-}
-.EventCard-info ul {
-  color: $color-text-grey;
-  list-style-type: none;
-  font-size: 0.875rem;
-  word-break: break-all; //break long items to stay in container
-  padding: 0;
-}
-.EventCard-info li {
-  margin-top: 0.25rem;
-  display: block;
-}
-
 .EventCard-logo {
   grid-column: 1;
+  grid-row: 1;
   display: grid;
 }
 .EventCard-url-text {
@@ -53,6 +38,42 @@
   display: block;
   margin: auto;
 }
+.EventCard-info {
+  grid-column: 1;
+  grid-row: 2;
+  overflow-wrap: break-word;
+}
+.EventCard-info ul {
+  color: $color-text-grey;
+  list-style-type: none;
+  font-size: 0.875rem;
+  word-break: break-all; //break long items to stay in container
+  padding: 0;
+}
+.EventCard-info li {
+  margin-top: 0.25rem;
+  display: block;
+}
 .EventCard-time {
-  grid-column: 3;
+  grid-column: 1;
+  grid-row: 3;
+}
+
+@include media-breakpoint-up(md) {
+  .EventCard-root a {
+    grid-template-columns: 30% 50% 20%;
+    grid-template-rows: 100%;
+  }
+  .EventCard-logo {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .EventCard-info {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .EventCard-time {
+    grid-column: 3;
+    grid-row: 1;
+  }
 }
