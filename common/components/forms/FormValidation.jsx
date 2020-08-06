@@ -41,7 +41,7 @@ class FormValidation<T> extends React.PureComponent<Props<T>,State>  {
   
   render(): React$Node {
     return (
-      <ul>
+      <ul className="error-message">
         {(this.state.errorMessages || []).map((msg,i) => (
           <li key={i}>{msg}</li>
         ))}
