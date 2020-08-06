@@ -100,7 +100,7 @@ class EventCreationForm(ModelForm):
             event_date_start=parse(form.data.get('event_date_start'), fuzzy=True),
             event_date_end=parse(form.data.get('event_date_end'), fuzzy=True),
             event_short_description=form.data.get('event_short_description'),
-            is_created=True,
+            is_created=False,
             is_searchable=True
         )
         event = Event.objects.get(id=event.id)
@@ -128,7 +128,7 @@ class EventCreationForm(ModelForm):
             raise PermissionDenied()
     
         form = ProjectCreationForm(request.POST)
-    
+
         read_form_field_string(event, form, 'event_agenda')
         read_form_field_string(event, form, 'event_description')
         read_form_field_string(event, form, 'event_short_description')
