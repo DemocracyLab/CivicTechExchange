@@ -233,7 +233,7 @@ def event_create(request):
 
     event = None
     try:
-        event = EventCreationForm.create_event(request)
+        event = EventCreationForm.create_or_edit_event(request, None)
     except PermissionDenied:
         return HttpResponseForbidden()
     return JsonResponse(event.hydrate_to_json())
@@ -245,7 +245,7 @@ def event_edit(request, event_id):
 
     event = None
     try:
-        event = EventCreationForm.edit_event(request, event_id)
+        event = EventCreationForm.create_or_edit_event(request, event_id)
     except PermissionDenied:
         return HttpResponseForbidden()
 
