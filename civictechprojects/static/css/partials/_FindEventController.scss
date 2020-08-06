@@ -1,10 +1,26 @@
 .EventCard-root {
   background-color: $color-background-light;
-  border-radius: 6px;
-  box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.15);
+  border: 1px solid $color-grey-frame-border;
   color: $color-text-dark;
-  margin: 0.5rem 0;
+  width: 100%;
 }
+
+// only round corners for top edge of first, bottom edge of last item per day grouping
+.EventCard-root:first-of-type {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.EventCard-root:last-of-type {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+// avoid double border for days with multiple events (thus multiple cards)
+.EventCard-root:nth-of-type(n+2) {
+  border-top: none;
+}
+
+
 .FindEventsController-topsplash h1 {
   font-size: 4rem;
 }
@@ -16,6 +32,14 @@
   font-size: 16px;
   margin-bottom: 16px;
   color: $color-text-grey;
+}
+.EventCard-dateheader, .EventCard-day-container {
+  width: 100%;
+}
+.EventCard-dateheader {
+  margin-top: 2rem;
+  font-size: 24px;
+  font-weight: 500;
 }
 .EventCard-info {
   display: flex;
@@ -52,12 +76,12 @@
 .EventCard-url-text {
     overflow: hidden;
     text-overflow: ellipsis;
-    white-Space: nowrap;
+    white-space: nowrap;
     margin: auto;
 }
 .EventCard-logo img {
-  max-width: 97%;
-  max-height: 95%;
+  max-width: calc(100% - 8px);
+  max-height: calc(100% - 8px);
   display: block;
   margin: auto;
 }
@@ -70,7 +94,6 @@
   color: $color-text-grey;
   list-style-type: none;
   font-size: 0.875rem;
-  word-break: break-all; //break long items to stay in container
   padding: 0;
 }
 .EventCard-info li {

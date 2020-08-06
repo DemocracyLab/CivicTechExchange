@@ -31,7 +31,7 @@ function generateEventsDateListings(events: $ReadOnlyArray<EventTileAPIData>): $
   const groupings: Dictionary<EventTileAPIData> =  _.groupBy(events, (event: EventTileAPIData) => {
     return moment(event.event_date_start).startOf('day').format(dateHeaderFormat)
   });
-  
+
   const eventsDateListings: $ReadOnlyArray<EventsDateGrouping> = Object.keys(groupings).map( (dateKey) => {
     return {
       date: moment(dateKey, dateHeaderFormat),
@@ -39,7 +39,7 @@ function generateEventsDateListings(events: $ReadOnlyArray<EventTileAPIData>): $
       events: _.reverse(_.sortBy(groupings[dateKey], ['event_date_start']))
     }
   });
-  
+
   return _.reverse(_.sortBy(eventsDateListings, ['date']));
 }
 
@@ -94,7 +94,7 @@ class EventCardsContainer extends React.Component<Props, State> {
           }
           <div className="row EventCards-card-container">
             {!_.isEmpty(this.state.events) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}
-            {this._renderCards()}
+            {this._renderEventsByDate()}
           </div>
           {/*<div>
             {this._renderPagination()}
@@ -111,27 +111,34 @@ class EventCardsContainer extends React.Component<Props, State> {
       return this.state.event_count + " " + utils.pluralize("event", "events", this.state.event_count) + " found";
     } else {
       return 'Find events that match your interests'
+    };
+  }
+
+  _renderEventsByDate(): React$Node {
+    if(this.state.eventsByDate) {
+      console.log(this.state.eventsByDate);
+      return (this.state.eventsByDate.map((input) => (
+        <React.Fragment>
+          <h4 className="EventCard-dateheader">{input.dateString}</h4>
+          <div className="EventCard-day-container">
+            {input.events.map(
+              (event: EventsDateGrouping, index: number) =>
+                  <EventCard
+                    event={event}
+                    key={index}
+                    maxTextLength={140}
+                    maxIssuesCount={4}
+                    tagDictionary={this.state.tagDictionary}
+                  />
+              )
+            }
+          </div>
+        </React.Fragment>
+      ))
+      );
     }
   }
 
-  _renderCards(): React$Node {
-    return !this.state.events
-      ? <LoadingMessage message="Loading events..." />
-      : this.state.events.size === 0
-        ? 'No Events match the provided criteria. Try a different set of filters or search term.'
-        : this.state.events.map(
-          (event: EventTileAPIData, index: number) =>
-            <div className="col-12 EventCards-card">
-              <EventCard
-                event={event}
-                key={index}
-                maxTextLength={140}
-                maxIssuesCount={4}
-                tagDictionary={this.state.tagDictionary}
-              />
-            </div>
-      );
-    }
 
   _handleFetchNextPage(e: object): void {
     e.preventDefault();
