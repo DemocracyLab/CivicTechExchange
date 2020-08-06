@@ -93,8 +93,8 @@ class EventCardsContainer extends React.Component<Props, State> {
             : null
           }
           <div className="row EventCards-card-container">
-            {!_.isEmpty(this.state.events) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}
-            {this._renderEventsByDate()}
+            {/*{!_.isEmpty(this.state.events) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}*/}
+            {!_.isEmpty(this.state.events) && this._renderEvents()}
           </div>
           {/*<div>
             {this._renderPagination()}
@@ -114,31 +114,50 @@ class EventCardsContainer extends React.Component<Props, State> {
     };
   }
 
-  _renderEventsByDate(): React$Node {
-    if(this.state.eventsByDate) {
-      console.log(this.state.eventsByDate);
-      return (this.state.eventsByDate.map((input) => (
+  _renderEvents(): React$Node {
+    const upcomingPastEvents: Array<$ReadOnlyArray<EventsDateGrouping>> = _.partition(this.state.eventsByDate, (event: EventsDateGrouping) => event.date > moment());
+    const upcomingEvents: $ReadOnlyArray<EventsDateGrouping> = upcomingPastEvents[0];
+    const pastEvents: $ReadOnlyArray<EventsDateGrouping> = upcomingPastEvents[1];
+    return (
+      <React.Fragment>
+        {!_.isEmpty(upcomingEvents) && (
+          <React.Fragment>
+            <h1>Upcoming Events</h1>
+            {this._renderEventsGrouping(upcomingEvents)}
+          </React.Fragment>
+          )
+        }
+        {!_.isEmpty(pastEvents) && (
+          <React.Fragment>
+            <h1>Past Events</h1>
+            {this._renderEventsGrouping(pastEvents)}
+          </React.Fragment>
+          )
+        }
+      </React.Fragment>
+    );
+  }
+  
+  _renderEventsGrouping(eventsByDate: $ReadOnlyArray<EventsDateGrouping>): React$Node {
+    return (eventsByDate.map((input) => (
         <React.Fragment>
           <h4 className="EventCard-dateheader">{input.dateString}</h4>
           <div className="EventCard-day-container">
             {input.events.map(
               (event: EventsDateGrouping, index: number) =>
-                  <EventCard
-                    event={event}
-                    key={index}
-                    maxTextLength={140}
-                    maxIssuesCount={4}
-                    tagDictionary={this.state.tagDictionary}
-                  />
-              )
-            }
+                <EventCard
+                  event={event}
+                  key={index}
+                  maxTextLength={140}
+                  maxIssuesCount={4}
+                  tagDictionary={this.state.tagDictionary}
+                />
+            )}
           </div>
         </React.Fragment>
       ))
-      );
-    }
+    );
   }
-
 
   _handleFetchNextPage(e: object): void {
     e.preventDefault();
