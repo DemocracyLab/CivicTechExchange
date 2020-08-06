@@ -80,7 +80,7 @@ class EventCardsContainer extends React.Component<Props, State> {
 
   render(): React$Node {
     return (
-      <div className={`ProjectCardContainer col-12 ${this.props.fullWidth ? '' : 'col-md-8 col-lg-9 p-0 m-0'}`}>
+      <div className={`ProjectCardContainer col-12 ${this.props.fullWidth ? '' : 'col-md-8 col-lg-9 p-lg-0 m-lg-0'}`}>
         <div className="container-fluid">
           {
             this.props.showSearchControls
