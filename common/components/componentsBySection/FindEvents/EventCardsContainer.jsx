@@ -120,12 +120,12 @@ class EventCardsContainer extends React.Component<Props, State> {
     const pastEvents: $ReadOnlyArray<EventsDateGrouping> = upcomingPastEvents[1];
     return (
       <React.Fragment>
-        {!_.isEmpty(upcomingEvents) && (
+        <h1>Upcoming Events</h1>
+        {!_.isEmpty(upcomingEvents) ? (
           <React.Fragment>
-            <h1>Upcoming Events</h1>
             {this._renderEventsGrouping(upcomingEvents)}
           </React.Fragment>
-          )
+        ) : (<div className="EventCard-day-container"><p>No events currently scheduled, check back soon!</p></div>)
         }
         {!_.isEmpty(pastEvents) && (
           <React.Fragment>
