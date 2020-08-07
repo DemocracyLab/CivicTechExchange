@@ -120,7 +120,7 @@ class EventCardsContainer extends React.Component<Props, State> {
     const pastEvents: $ReadOnlyArray<EventsDateGrouping> = upcomingPastEvents[1];
     return (
       <React.Fragment>
-        <h1>Upcoming Events</h1>
+        <h1 className="EventCardContainer-section-header">Upcoming Events</h1>
         {!_.isEmpty(upcomingEvents) ? (
           <React.Fragment>
             {this._renderEventsGrouping(upcomingEvents)}
@@ -129,7 +129,7 @@ class EventCardsContainer extends React.Component<Props, State> {
         }
         {!_.isEmpty(pastEvents) && (
           <React.Fragment>
-            <h1>Past Events</h1>
+            <h1 className="EventCardContainer-section-header">Past Events</h1>
             {this._renderEventsGrouping(pastEvents)}
           </React.Fragment>
           )
@@ -137,7 +137,7 @@ class EventCardsContainer extends React.Component<Props, State> {
       </React.Fragment>
     );
   }
-  
+
   _renderEventsGrouping(eventsByDate: $ReadOnlyArray<EventsDateGrouping>): React$Node {
     return (eventsByDate.map((input) => (
         <React.Fragment>
