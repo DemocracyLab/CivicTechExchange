@@ -9,6 +9,7 @@ const Section = {
   Home: 'Home',
   FindProjects: 'FindProjects',
   FindGroups: 'FindGroups',
+  FindEvents: 'FindEvents',
   MyProjects: 'MyProjects',
   MyGroups: 'MyGroups',
   Profile: 'Profile',

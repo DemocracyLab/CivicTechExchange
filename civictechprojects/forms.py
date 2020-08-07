@@ -1,4 +1,3 @@
-from dateutil.parser import parse
 from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
@@ -6,6 +5,7 @@ from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCate
 from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification, send_group_creation_notification
 from democracylab.models import get_request_contributor
+from common.helpers.date_helpers import parse_front_end_datetime
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
     merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, read_form_fields_point
 
@@ -87,48 +87,24 @@ class EventCreationForm(ModelForm):
         fields = '__all__'
 
     @staticmethod
-    def create_event(request):
-
+    def create_or_edit_event(request, event_id):
         form = EventCreationForm(request.POST)
-        # TODO: Form validation
-        event = Event.objects.create(
-            event_creator=get_request_contributor(request),
-            event_date_created=timezone.now(),
-            event_name=form.data.get('event_name'),
-            event_location=form.data.get('event_location'),
-            event_rsvp_url=form.data.get('event_rsvp_url'),
-            event_date_start=parse(form.data.get('event_date_start'), fuzzy=True),
-            event_date_end=parse(form.data.get('event_date_end'), fuzzy=True),
-            event_short_description=form.data.get('event_short_description'),
-            is_created=True,
-            is_searchable=True
-        )
-        event = Event.objects.get(id=event.id)
-
-        merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
-
-        event.save()
-        return event
-
-    @staticmethod
-    def delete_event(request, event_id):
-        event = Event.objects.get(id=event_id)
-
-        if not is_creator_or_staff(request.user, event):
-            raise PermissionDenied()
-
-        event.delete()
-
-
-    @staticmethod
-    def edit_event(request, event_id):
-        event = Event.objects.get(id=event_id)
+        if event_id is not None:
+            event = Event.objects.get(id=event_id)
+        else:
+            event = Event.objects.create(
+                event_creator=get_request_contributor(request),
+                event_date_created=timezone.now(),
+                event_name=form.data.get('event_name'),
+                event_date_start=parse_front_end_datetime(form.data.get('event_date_start')),
+                event_date_end=parse_front_end_datetime(form.data.get('event_date_end')),
+                is_created=False,
+                is_searchable=True
+            )
 
         if not is_co_owner_or_staff(request.user, event):
             raise PermissionDenied()
-    
-        form = ProjectCreationForm(request.POST)
-    
+
         read_form_field_string(event, form, 'event_agenda')
         read_form_field_string(event, form, 'event_description')
         read_form_field_string(event, form, 'event_short_description')
@@ -144,14 +120,23 @@ class EventCreationForm(ModelForm):
         read_form_field_boolean(event, form, 'is_created')
 
         read_form_field_tags(event, form, 'event_legacy_organization')
-    
+
         event.event_date_modified = timezone.now()
 
         merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
 
         event.save()
-    
+
         return event
+
+    @staticmethod
+    def delete_event(request, event_id):
+        event = Event.objects.get(id=event_id)
+
+        if not is_creator_or_staff(request.user, event):
+            raise PermissionDenied()
+
+        event.delete()
 
 
 class GroupCreationForm(ModelForm):

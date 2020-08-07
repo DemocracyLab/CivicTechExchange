@@ -4,16 +4,17 @@ import React from "react";
 import DjangoCSRFToken from "django-react-csrftoken";
 import {OnReadySubmitFunc} from "./EventFormCommon.jsx";
 import AboutEventDisplay from "./AboutEventDisplay.jsx";
+import type {EventData} from "../../utils/EventAPIUtils.js";
 
 type Props = {|
-  event: ?ProjectDetailsAPIData,
+  project: ?EventData,
   readyForSubmit: OnReadySubmitFunc
 |};
 
 /**
  * Shows preview for project before finalizing
  */
-class ProjectPreviewForm extends React.PureComponent<Props> {
+class EventPreviewForm extends React.PureComponent<Props> {
   constructor(props: Props): void {
     super(props);
     // All fields optional
@@ -25,7 +26,7 @@ class ProjectPreviewForm extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <DjangoCSRFToken/>
-        <input type="hidden" name="is_searchable" value="True"/>
+        <input type="hidden" name="is_created" value="True"/>
         <AboutEventDisplay
           event={this.props.project}
           viewOnly={true}
@@ -35,4 +36,4 @@ class ProjectPreviewForm extends React.PureComponent<Props> {
   }
 }
 
-export default ProjectPreviewForm;
+export default EventPreviewForm;

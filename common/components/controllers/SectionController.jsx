@@ -36,6 +36,7 @@ import AboutEventController from "./AboutEventController.jsx";
 import AboutGroupController from "./AboutGroupController.jsx";
 import ErrorController from "./ErrorController.jsx";
 import FindGroupsController from "./FindGroupsController.jsx";
+import FindEventsController from "./FindEventsController.jsx";
 
 type State = {|
   section: SectionType,
@@ -75,6 +76,8 @@ class SectionController extends React.Component<{||}, State> {
         return <FindProjectsController />;
       case Section.FindGroups:
         return <FindGroupsController />;
+      case Section.FindEvents:
+        return <FindEventsController />;
       case Section.Home:
         return <LandingController />;
       case Section.MyProjects:

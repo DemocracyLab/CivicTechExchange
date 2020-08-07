@@ -21,6 +21,16 @@ export type EventData = {|
     event_legacy_organization: $ReadOnlyArray<TagDefinition>
 |};
 
+export type EventTileAPIData = {|
+    event_id: string,
+    event_date_start: Date,
+    event_date_end: Date,
+    event_name: string,
+    event_location: string,
+    event_short_description: string,
+    event_thumbnail: FileInfo
+|};
+
 export default class EventAPIUtils {
     static fetchEventDetails(id: number, callback: (EventData) => void, errCallback: (APIError) => void): void {
       fetch(new Request('/api/event/' + id + '/', {credentials: 'include'}))
