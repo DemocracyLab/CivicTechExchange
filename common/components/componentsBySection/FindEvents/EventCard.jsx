@@ -7,7 +7,7 @@ import Moment from "react-moment";
 import type {Dictionary} from "../../types/Generics.jsx";
 import Sort from "../../utils/sort.js";
 import Truncate from "../../utils/truncate.js";
-import GlyphStyles from "../../utils/glyphs.js";
+import {Glyph, GlyphWidth, GlyphStyles} from "../../utils/glyphs.js";
 import utils from "../../utils/utils.js";
 import {EventTileAPIData} from "../../utils/EventAPIUtils.js";
 import type {TagDefinition} from "../../utils/ProjectAPIUtils.js";
@@ -18,8 +18,6 @@ type Props = {|
   maxTextLength: number,
   maxIssuesCount: number
 |};
-//fontawesome fixed width class
-const glyphFixedWidth = " fa-fw";
 
 class EventCard extends React.PureComponent<Props> {
   constructor(): void {
@@ -60,7 +58,7 @@ class EventCard extends React.PureComponent<Props> {
         {location &&
           <ul>
             <li>
-              <i className={GlyphStyles.MapMarker + glyphFixedWidth}></i>
+              <i className={Glyph(GlyphStyles.MapMarker, GlyphWidth.Fixed)}></i>
               {location}
             </li>
           </ul>
