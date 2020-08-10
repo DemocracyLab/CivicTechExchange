@@ -326,6 +326,7 @@ class Event(Archived):
     event_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     event_date_start = models.DateTimeField()
     event_description = models.CharField(max_length=4000, blank=True)
+    event_organizers_text = models.CharField(max_length=200, blank=True)
     event_location = models.CharField(max_length=200, blank=True)
     event_name = models.CharField(max_length=200)
     event_rsvp_url = models.CharField(max_length=2083, blank=True)
@@ -366,6 +367,7 @@ class Event(Archived):
             'event_rsvp_url': self.event_rsvp_url,
             'event_live_id': self.event_live_id,
             'event_name': self.event_name,
+            'event_organizers_text': self.event_organizers_text,
             'event_owners': [self.event_creator.hydrate_to_tile_json()],
             'event_short_description': self.event_short_description,
             'event_legacy_organization': Tag.hydrate_to_json(self.id, list(self.event_legacy_organization.all().values())),
@@ -389,6 +391,7 @@ class Event(Archived):
             'event_id': self.id,
             'event_location': self.event_location,
             'event_name': self.event_name,
+            'event_organizers_text': self.event_organizers_text,
             'event_short_description': self.event_short_description
         }
 

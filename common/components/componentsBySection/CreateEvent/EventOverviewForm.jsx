@@ -43,6 +43,7 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
     // TODO: Add event_rsvp_url
     const formFields: FormFields = {
       event_name: event ? event.event_name : "",
+      event_organizers_text: event ? event.event_organizers_text : "",
       event_short_description: event ? event.event_short_description : "",
       event_location: event ? event.event_location : "",
       event_date_start: event ? new Date(event.event_date_start) : "",
@@ -114,6 +115,12 @@ class EventOverviewForm extends React.PureComponent<Props,State> {
           <label>Event Name</label>
           <input type="text" className="form-control" id="event_name" name="event_name" maxLength="60"
                  value={this.state.formFields.event_name} onChange={this.form.onInput.bind(this, "event_name")}/>
+        </div>
+  
+        <div className="form-group">
+          <label>Event Organizers</label>
+          <input type="text" className="form-control" id="event_organizers_text" name="event_organizers_text" maxLength="200"
+                 value={this.state.formFields.event_organizers_text} onChange={this.form.onInput.bind(this, "event_organizers_text")}/>
         </div>
 
         <div className="form-group">
