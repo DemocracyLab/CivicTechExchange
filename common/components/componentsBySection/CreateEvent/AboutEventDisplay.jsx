@@ -123,14 +123,17 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
   }
 
   _renderRSVPButton(): ?$React$Node {
+    const eventbriteTest = new RegExp("eventbrite\.com", "i");
+    const url: string = this.state.event.event_rsvp_url;
+    const text: string = "RSVP" + (eventbriteTest.test(url) ? " on Eventbrite" : "");
     return (
       <Button
         variant="primary"
         className="AboutEvent-rsvp-btn"
         type="button"
-        href={this.state.event.event_rsvp_url}
+        href={url}
       >
-        RSVP on Eventbrite
+        {text}
       </Button>
     );
   }
