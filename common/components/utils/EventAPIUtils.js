@@ -12,6 +12,7 @@ export type EventData = {|
     event_date_end: Date,
     event_name: string,
     event_organizers_text: string,
+    event_live_id: string,
     event_rsvp_url: string,
     event_agenda: string,
     event_location: string,

@@ -120,13 +120,13 @@ class MainHeader extends React.Component<{||}, State > {
 
   _renderEventNavItems(): ?React$Node {
     const eventLinks: Array<React$Node> = [];
+    eventLinks.push(this._renderNavDropdownItem(Section.FindEvents, "Find Events"));
     if(CurrentUser.isStaff()) {
       eventLinks.push(this._renderNavDropdownItem(Section.CreateEvent, "Create Event"));
     }
     if(window.EVENT_URL) {
       eventLinks.push(<NavDropdown.Item href={_.unescape(window.EVENT_URL)}>Our Next Event</NavDropdown.Item>);
     }
-    eventLinks.push(this._renderNavDropdownItem(Section.FindEvents, "Find Events"));
     return !_.isEmpty(eventLinks)
     ? (
       <NavDropdown title="Events" id="nav-events">
