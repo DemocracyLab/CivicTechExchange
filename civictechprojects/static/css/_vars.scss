@@ -1,10 +1,12 @@
 //pattern for variable names: generic-to-specific.
 //when possible name variables after function
 
-//colors
-$color-orange: #f79e02; // brand
-$color-orange-dark: #de8e01; // accent/button borders
-$color-orange-light: #f7cf88; // footer button hover
+//new test colors
+$color-orange: #ed6600; // Stephanie's suggestion for brand
+$color-orange-dark: #d55b00; // accent/button borders (derived from base orange, not designed)
+$color-orange-light: #ee7519; // footer button hover (derived from base orange, not designed)
+
+
 $color-green: #86c232; //confirm-role buttons
 $color-green-dark: #61892f; //tag selectors and selected tags
 $color-red: #EB5757; //reject button
