@@ -29,6 +29,7 @@ const Section = {
   CreateEvent: 'CreateEvent',
   AboutEvent: 'AboutEvent',
   LiveEvent: 'LiveEvent',
+  CorporateHackathon: 'CorporateHackathon',
   Error: 'Error'
 };
 
