@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import moment from 'moment';
+import type Moment from 'moment';
+import datetime, {DateFormat} from "../../utils/datetime.js";
 import Button from 'react-bootstrap/Button';
 import CurrentUser from "../../utils/CurrentUser.js";
 import {EventData} from "../../utils/EventAPIUtils.js";
@@ -54,7 +55,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
             && this._renderEditButton()
           }
             <div className="AboutEvent-title-date">
-              {moment(event.event_date_start).format("MMMM Do YYYY")}
+              {datetime.parse(event.event_date_start).format(DateFormat.MONTH_DATE_YEAR)}
             </div>
             <h1>{event.event_name}</h1>
             <p>{event.event_short_description}</p>
@@ -67,8 +68,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
               <h3>Info</h3>
               {/*TODO: Handle multi-day events*/}
               <h5 className="AboutEvent-info-header">Date</h5>
-              <p>{moment(event.event_date_start).format("dddd, MMMM Do YYYY")}</p>
-  
+              <p>{datetime.parse(event.event_date_start).format(DateFormat.DAY_MONTH_DATE_YEAR)}</p>
               {this.state.event.event_organizers_text && (
                   <React.Fragment>
                     <h5 className="AboutEvent-info-header">Organizers</h5>
@@ -108,10 +108,10 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
   }
 
   _renderTimeRange(): string {
-    const timeFormat: string = "h:mm a";
-    const timeZone: string = "PST";
-    return moment(this.state.event.event_date_start).format(timeFormat) + " - " +
-      moment(this.state.event.event_date_end).format(timeFormat) + " " + timeZone;
+    const timeStart: Moment = datetime.parse(this.state.event.event_date_start);
+    const timeEnd: Moment = datetime.parse(this.state.event.event_date_end);
+    
+    return timeStart.format(DateFormat.TIME) + " - " + timeEnd.format(DateFormat.TIME_TIMEZONE);
   }
 
   _renderEditButton(): ?$React$Node {
