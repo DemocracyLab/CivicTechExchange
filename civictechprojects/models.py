@@ -439,7 +439,7 @@ class ProjectRelationship(models.Model):
             counterpart=project_counterpart[1].__str__())
 
     @staticmethod
-    def create(owner, project, introduction_text=""):
+    def create(owner, project, approved=False, introduction_text=""):
         relationship = ProjectRelationship()
         relationship.project_initiated = False
         relationship.relationship_project = project
@@ -447,7 +447,7 @@ class ProjectRelationship(models.Model):
 
         if type(owner) is Group:
             relationship.relationship_group = owner
-            relationship.is_approved = False
+            relationship.is_approved = approved
         else:
             relationship.relationship_event = owner
             relationship.is_approved = True
