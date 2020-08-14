@@ -170,7 +170,9 @@ class MainHeader extends React.Component<{||}, State > {
     //TODO: Rebuild this component so deskop dropdown and mobile links aren't separated out
     return (
       <React.Fragment>
-        <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop MainHeader-donatebutton" href={url.section(Section.Donate)}>Donate</Nav.Item>
+        <Nav.Item className="MainHeader-donate-loggedin-container MainHeader-showdesktop">
+          <Button variant="outline-secondary" className="MainHeader-donatebutton"  href={url.section(Section.Donate)}>Donate</Button>
+        </Nav.Item>
         <Dropdown as={Nav.Item} className="MainHeader-showdesktop">
           <Dropdown.Toggle as={Nav.Link}>
             {this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}
