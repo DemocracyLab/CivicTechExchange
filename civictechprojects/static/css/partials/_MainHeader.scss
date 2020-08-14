@@ -35,6 +35,9 @@
 #nav-pagenav-container {
   padding-left: 12px;
 }
+.MainHeader-donate-loggedin-container {
+  margin: auto;
+}
 
 // adds a dropdown caret for nav menus, since Bootstrap's is disabled globally
 .MainHeader-nav-container {
@@ -76,6 +79,9 @@
   /* yes, this is stubbornly refusing to use !important */
   a.MainHeader-login-button.btn.btn-outline-primary:hover, a.MainHeader-login-button.btn.btn-outline-primary:focus, a.MainHeader-login-button.btn.btn-outline-primary:active {
     color: inherit;
+  }
+  a.MainHeader-donatebutton:hover, a.MainHeader-donatebutton:active {
+    color: white;
   }
   .dropdown-menu.show {
     border: none;
