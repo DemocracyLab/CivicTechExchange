@@ -599,7 +599,7 @@ def limited_listings(request):
             <title>{cdata(roleTag.display_name)}</title>
             <description>{cdata(position.position_description)}</description>
             <partnerJobId>{cdata(str(position.id))}</partnerJobId>
-            <location>{cdata(", ".join([project.project_city, project.project.state]))}</location>
+            <location>{cdata(", ".join([project.project_city, project.project_state]))}</location>
             <city>{cdata(project.project_city)}</city>
             <state>{cdata(project.project_state)}</state>
             <country>{cdata(project.project_country)}</country>
