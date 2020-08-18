@@ -23,7 +23,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
       showContactModal: false
     };
   }
-  
+
   componentDidMount() {
     prerender.ready();
   }
@@ -39,7 +39,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
       />
     );
   }
-  
+
   onSubmit(): void {
     this.setState({showContactModal: false});
   }
@@ -66,7 +66,6 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <h1>Host a hackathon with us!</h1>
         <p>Create a unique employee engagement experience and deliver instant-impact tech projects.</p>
         <Button variant="primary" onClick={() => this.setState({showContactModal: true})}>Get Started</Button>
-        <div><p> img goes here</p></div>
         <h2>Public Hackathon Results</h2>
         <div className="corporate-hackathon-hostwithus-results">
           <div className="corporate-hackathon-hostwithus-results-item">
@@ -85,6 +84,13 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             <h3>100</h3>
             <p>Average Attendees/Event</p>
           </div>
+        </div>
+        <div className="corporate-hackathon-hostwithus-header">
+          <picture>
+            <source media="(max-width: 991px)" srcset={cdn.image("mobile-header-withbg.png")} />
+            <source media="(min-width: 992px)" srcset={cdn.image("header-withbg-img.png")} />
+            <img src={cdn.image("header-withbg-img.png")} alt="Header Image" />
+          </picture>
         </div>
       </div>
     )

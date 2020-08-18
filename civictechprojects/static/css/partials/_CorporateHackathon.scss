@@ -1,19 +1,39 @@
+//standard margin for this page, to be changed later
+$ch-margin: 35px;
+
 .corporate-hackathon-hostwithus {
   padding-top: 65px;
+  text-align: center;
   h1 {
     font-size: 20px;
+    margin-bottom: $ch-margin;
+  }
+  h2 {
+    text-align: left;
+    font-size: 12px;
+    margin: 35px 0 9px 0;
   }
   p {
-    text-align: center;
+  margin-bottom: $ch-margin;
   }
+}
+.corporate-hackathon-hostwithus-header {
+  margin-top: $ch-margin;
 }
 .corporate-hackathon-hostwithus-results {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  flex-basis: 25%;
+  flex-wrap: nowrap;
   justify-content: space-between;
 }
 .corporate-hackathon-hostwithus-results-item {
   text-align: center;
+  font-size: 12px;
+  flex: 0 1 25%;
+  margin-top: $ch-margin;
+
+  h3 {
+  font-size: 14px;
+  font-weight: 800;
+  }
 }
