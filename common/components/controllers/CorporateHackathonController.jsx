@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Headers from "../common/Headers.jsx";
-import ContactForm from "../forms/ContactForm.jsx";
+import ContactUsModal from "../forms/ContactUsModal.jsx";
 import prerender from "../utils/prerender.js";
 import url from "../utils/url.js";
 import Button from "react-bootstrap/Button";
@@ -12,9 +12,18 @@ import Ch2Icon from "../svg/corporatehackathon/two.svg";
 import Ch3Icon from "../svg/corporatehackathon/three.svg";
 import cdn from "../utils/cdn.js";
 
+type State = {|
+  showContactModal: boolean
+|};
 
-
-class CorporateHackathonController extends React.PureComponent<{||}> {
+class CorporateHackathonController extends React.PureComponent<{||}, State> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showContactModal: false
+    };
+  }
+  
   componentDidMount() {
     prerender.ready();
   }
@@ -30,11 +39,16 @@ class CorporateHackathonController extends React.PureComponent<{||}> {
       />
     );
   }
+  
+  onSubmit(): void {
+    this.setState({showContactModal: false});
+  }
 
    render(): $React$Node {
      return (
        <React.Fragment>
-        {this._renderHeader()}
+         <ContactUsModal showModal={this.state.showContactModal} onSubmit={this.onSubmit.bind(this)}/>
+         {this._renderHeader()}
          <div className="container corporate-hackathon-root">
           {this._hostWithUs()}
           {this._howItWorks()}
@@ -51,7 +65,7 @@ class CorporateHackathonController extends React.PureComponent<{||}> {
       <div className="corporate-hackathon-hostwithus">
         <h1>Host a hackathon with us!</h1>
         <p>Create a unique employee engagement experience and deliver instant-impact tech projects.</p>
-        <Button variant="primary">Get Started</Button>
+        <Button variant="primary" onClick={() => this.setState({showContactModal: true})}>Get Started</Button>
         <div><p> img goes here</p></div>
         <h2>Public Hackathon Results</h2>
         <div className="corporate-hackathon-hostwithus-results">

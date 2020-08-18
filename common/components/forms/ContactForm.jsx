@@ -5,6 +5,11 @@ import ReCAPTCHA from "react-google-recaptcha";
 import Guard from '../utils/guard.js';
 import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 
+type Props = {|
+  showCompany: boolean,
+  onSubmit: () => void
+|};
+
 type State = FormFields & ControlVariables
 
 type FormFields = {|
@@ -12,6 +17,7 @@ type FormFields = {|
   lname: string,
   emailaddr: string,
   message: string,
+  company_name: string,
   reCaptchaValue: string,
 |};
 
@@ -20,7 +26,7 @@ type ControlVariables = {|
   sendStatusClass: string
 |};
 
-class ContactForm extends React.Component {
+class ContactForm extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,6 +34,7 @@ class ContactForm extends React.Component {
       lname: '',
       emailaddr: '',
       message: '',
+      company_name: '',
       sendStatusMessage: null,
       sendStatusClass: null,
       reCaptchaValue: null,
@@ -47,6 +54,7 @@ class ContactForm extends React.Component {
           fname: this.state.fname,
           lname: this.state.lname,
           emailaddr: this.state.emailaddr,
+          company_name: this.state.company_name,
           message: this.state.message,
           reCaptchaValue: this.state.reCaptchaValue
         },
@@ -65,14 +73,15 @@ class ContactForm extends React.Component {
       lname: '',
       emailaddr: '',
       message: '',
-    })
+      company_name: ''
+    }, this.props.onSubmit)
   }
   showFailure() {
     //do not clear form when message fails, so the user does not have to retype
     this.setState({
       sendStatusMessage: 'We encountered an error sending your message. Please try again.',
       sendStatusClass: 'ContactForm-status-error'
-    })
+    }, this.props.onSubmit)
   }
 
   handleInputChange(event) {
@@ -100,6 +109,7 @@ class ContactForm extends React.Component {
         {this.state.sendStatusMessage ? <div className={"ContactForm-status-message" + " " + this.state.sendStatusClass}>{this.state.sendStatusMessage}</div> : null}
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
+            {this.props.showCompany && this._renderCompanyField()}
             <label htmlFor="fname">
               First name:
             </label>
@@ -160,9 +170,29 @@ class ContactForm extends React.Component {
             sitekey={window.GR_SITEKEY}
             onChange={this.reCaptchaOnChange}
           />
+          {/* TODO: Disable and say 'Sending' while sending */}
           <input type="submit" value="Send message" disabled={!this.state.reCaptchaValue} className="btn btn-primary ContactForm-submit-btn" />
         </form>
     </React.Fragment>
+    );
+  }
+  
+  _renderCompanyField(): ?React$Node {
+    return (
+      <div className="form-group">
+        <label htmlFor="fname">
+          Company (Optional):
+        </label>
+        <input
+          required
+          className="form-control"
+          name="company_name"
+          id="company_name"
+          type="text"
+          placeholder="Your first name"
+          value={this.state.company_name}
+          onChange={this.handleInputChange} />
+      </div>
     );
   }
 }
