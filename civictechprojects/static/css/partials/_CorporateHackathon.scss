@@ -1,0 +1,19 @@
+.corporate-hackathon-hostwithus {
+  padding-top: 65px;
+  h1 {
+    font-size: 20px;
+  }
+  p {
+    text-align: center;
+  }
+}
+.corporate-hackathon-hostwithus-results {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-basis: 25%;
+  justify-content: space-between;
+}
+.corporate-hackathon-hostwithus-results-item {
+  text-align: center;
+}
