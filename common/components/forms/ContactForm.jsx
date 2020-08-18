@@ -176,11 +176,11 @@ class ContactForm extends React.Component<Props, State> {
     </React.Fragment>
     );
   }
-  
+
   _renderCompanyField(): ?React$Node {
     return (
       <div className="form-group">
-        <label htmlFor="fname">
+        <label htmlFor="company_name">
           Company (Optional):
         </label>
         <input
@@ -189,7 +189,7 @@ class ContactForm extends React.Component<Props, State> {
           name="company_name"
           id="company_name"
           type="text"
-          placeholder="Your first name"
+          placeholder="Your company name"
           value={this.state.company_name}
           onChange={this.handleInputChange} />
       </div>
