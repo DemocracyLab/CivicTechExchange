@@ -100,19 +100,19 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
       <div className="corporate-hackathon-howitworks">
         <h2>How it works</h2>
         <p>As soon as you have signed up for a hackathon, the DemocracyLab team gets right to work on finding non-profits in need of tech volunteers. You can focus on team building; we’ll get everything set up with your specific goals in mind. There are just a few things we need from you!</p>
-        <div className="corporate-hackathon-howitworks-one">
+        <div className="corporate-hackathon-howitworks-item">
           <img src={cdn.image("recruit-icon.png")} alt="Recruit"/>
-          <p><Ch1Icon /> Recruit</p>
+          <h4><Ch1Icon /> Recruit</h4>
           <p>Encourage your employees to sign up for the hackathon! We’ll find non-profits with needs that are a good fit for your team.</p>
         </div>
-        <div className="corporate-hackathon-howitworks-two">
+        <div className="corporate-hackathon-howitworks-item">
           <img src={cdn.image("define-icon.png")} alt="Define"/>
-          <p><Ch2Icon /> Define</p>
+          <h4><Ch2Icon /> Define</h4>
           <p>We’ll work with the non-profits to identify achievable, instant-impact projects that are ready for your team, then connect you with the non-profit team to define the scope.</p>
         </div>
-        <div className="corporate-hackathon-howitworks-three">
+        <div className="corporate-hackathon-howitworks-item">
           <img src={cdn.image("hack-icon.png")} alt="Hack"/>
-          <p><Ch3Icon /> Hack</p>
+          <h4><Ch3Icon /> Hack</h4>
           <p>We’ll work with the non-profits to identify achievable, instant-impact projects that are ready for your team, then connect you with the non-profit team to define the scope.</p>
         </div>
         <p>Once the hackathon is finished, you’re all done! Your team can get back to work and enjoy renewed enthusiasm and deeper engagement. DemocracyLab will survey both volunteers and project owners to provide you a clear summary of the outcomes and impacts of the event.</p>
@@ -120,11 +120,14 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     )
   }
   _whyEngage(): $React$Node {
+    const whyStyle = {
+      listStyleImage: 'url(' + cdn.image("checkmark-icon.png") + ')',
+    }
     return (
       <div className="corporate-hackathon-whyengage">
         <h2>Why Engage?</h2>
         <p>Create a unique employee engagement experience and deliver instant-impact tech projects.</p>
-        <ul>
+        <ul style={whyStyle}>
           <li>
             <h3>Build Company Culture</h3>
             <p>Hackathons cultivate an open, agile company culture centered on innovation, flexibility, and idea sharing, even between positions and unrelated departments.</p>
