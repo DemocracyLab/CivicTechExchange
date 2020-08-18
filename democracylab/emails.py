@@ -371,7 +371,7 @@ def _get_account_from_email(email_acct):
 
 
 def contact_democracylab_email(first_name, last_name, email_address, body, company_name):
-    if company_name is not None:
+    if company_name and len(company_name) > 0:
         subject = subject = '{} {}({}) would like to contact DemocracyLab'.format(first_name, last_name, company_name)
     else:
         subject = '{} {} would like to contact DemocracyLab'.format(first_name, last_name)
