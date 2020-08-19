@@ -50,7 +50,7 @@ $ch-secpadding: 60px;
 }
 .corporate-hackathon-howitworks {
   padding-top: $ch-secpadding;
-  padding-bottom: $ch-secpadding;
+  padding-bottom: $ch-margin;
   background-color: $color-background-default;
 }
 .corporate-hackathon-howitworks-item {
@@ -66,7 +66,8 @@ $ch-secpadding: 60px;
 }
 .corporate-hackathon-whyengage {
   background-color: $color-background-light;
-  margin-bottom: $ch-margin;
+  padding-top: $ch-margin;
+  padding-bottom: $ch-margin; /* to keep background color correctly */
   h2 {
   margin-bottom: $ch-margin;
   }
@@ -87,8 +88,11 @@ $ch-secpadding: 60px;
     text-decoration: underline;
    }
 }
-.corporate-hackathon-whyengage-image img {
-  max-width: 100%;
+.corporate-hackathon-whyengage-image {
+  text-align: center;
+  img {
+    max-width: 100%;
+  }
 }
 .corporate-hackathon-strengthen {
   text-align: center;
@@ -102,8 +106,7 @@ $ch-secpadding: 60px;
 .corporate-hackathon-sponsorships {
   margin: $ch-margin 0;
   background-color: $color-background-default;
-  img {
-    max-width: 100%;
+  h2 {
     margin-bottom: $ch-margin;
   }
   h3, h4 {
@@ -114,6 +117,13 @@ $ch-secpadding: 60px;
   }
   p {
     font-size: 14px;
+  }
+}
+.corporate-hackathon-sponsorships-image {
+  text-align: center;
+  img {
+    max-width: 100%;
+    margin-bottom: $ch-margin;
   }
 }
 .corporate-hackathon-sponsorships-button {

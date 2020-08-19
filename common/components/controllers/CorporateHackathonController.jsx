@@ -166,7 +166,9 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <div className="corporate-hackathon-sponsorships col-12">
         <h2>Public Hackathon Sponsorships: Another Way To Engage</h2>
-        <img src={cdn.image("event-sponsorship-img.png")} alt="Event Sponsorships" />
+        <div className="corporate-hackathon-sponsorships-image">
+          <img src={cdn.image("event-sponsorship-img.png")} alt="Event Sponsorships" />
+        </div>
         <div className="corporate-hackathon-sponsorships-text">
           <h3>Event Sponsorship</h3>
           <h4>Starting at $500 per event</h4>
