@@ -53,7 +53,7 @@ class EventCard extends React.PureComponent<Props> {
       <div className="EventCard-info">
         <h2>{Event.event_name}</h2>
         <h4>
-          DemocracyLab
+          {Event.event_organizers_text}
         </h4>
         {location &&
           <ul>

@@ -11,6 +11,8 @@ export type EventData = {|
     event_date_start: Date,
     event_date_end: Date,
     event_name: string,
+    event_organizers_text: string,
+    event_live_id: string,
     event_rsvp_url: string,
     event_agenda: string,
     event_location: string,
@@ -26,6 +28,7 @@ export type EventTileAPIData = {|
     event_date_start: Date,
     event_date_end: Date,
     event_name: string,
+    event_organizers_text: string,
     event_location: string,
     event_short_description: string,
     event_thumbnail: FileInfo

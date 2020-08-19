@@ -36,7 +36,7 @@ function generateEventsDateListings(events: $ReadOnlyArray<EventTileAPIData>): $
     return {
       date: moment(dateKey, dateHeaderFormat),
       dateString: dateKey,
-      events: _.reverse(_.sortBy(groupings[dateKey], ['event_date_start']))
+      events: _.sortBy(groupings[dateKey], ['event_date_start'])
     }
   });
 
@@ -116,7 +116,7 @@ class EventCardsContainer extends React.Component<Props, State> {
 
   _renderEvents(): React$Node {
     const upcomingPastEvents: Array<$ReadOnlyArray<EventsDateGrouping>> = _.partition(this.state.eventsByDate, (event: EventsDateGrouping) => event.date > moment());
-    const upcomingEvents: $ReadOnlyArray<EventsDateGrouping> = upcomingPastEvents[0];
+    const upcomingEvents: $ReadOnlyArray<EventsDateGrouping> = _.reverse(upcomingPastEvents[0]);
     const pastEvents: $ReadOnlyArray<EventsDateGrouping> = upcomingPastEvents[1];
     return (
       <React.Fragment>
