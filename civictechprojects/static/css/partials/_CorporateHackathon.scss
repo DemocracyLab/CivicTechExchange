@@ -130,3 +130,42 @@ $ch-secpadding: 60px;
   text-align: center;
   margin-bottom: $ch-margin;
 }
+
+@include media-breakpoint-up(lg) {
+  .corporate-hackathon-hostwithus {
+    font-size: 16px;
+    text-align: left;
+    display: flex;
+    h1 {
+      font-size: 40px;
+    }
+    h2 {
+      font-size: 20px;
+      color: $color-text-grey;
+    }
+    p {
+      font-size: 20px;
+    }
+  }
+  .corporate-hackathon-hostwithus-left {
+    flex-basis: 60%;
+    padding-right: 50px;
+  }
+  .corporate-hackathon-hostwithus-right {
+    flex-basis: 40%;
+  }
+  .corporate-hackathon-hostwithus-header {
+    margin-top: 0;
+  }
+  .corporate-hackathon-hostwithus-results-item {
+    text-align: left;
+    h3 {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    p {
+      font-size: 16px;
+      color: $color-text-grey;
+    }
+  }
+}
