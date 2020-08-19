@@ -23,7 +23,8 @@ type FormFields = {|
 
 type ControlVariables = {|
   sendStatusMessage: string,
-  sendStatusClass: string
+  sendStatusClass: string,
+  isSending: boolean
 |};
 
 class ContactForm extends React.Component<Props, State> {
@@ -37,7 +38,8 @@ class ContactForm extends React.Component<Props, State> {
       company_name: '',
       sendStatusMessage: null,
       sendStatusClass: null,
-      reCaptchaValue: null,
+      isSending: false,
+      reCaptchaValue: null
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -47,6 +49,7 @@ class ContactForm extends React.Component<Props, State> {
 
   handleSubmit(event) {
     event.preventDefault();
+    this.setState({isSending: true});
     //get reCaptcha hash and submitted message and send it to backend
     //backend will validate the captcha and send the message if validated or return a failure message if there's a problem
     ProjectAPIUtils.post("/contact/democracylab",
@@ -73,14 +76,16 @@ class ContactForm extends React.Component<Props, State> {
       lname: '',
       emailaddr: '',
       message: '',
-      company_name: ''
+      company_name: '',
+      isSending: false
     }, this.props.onSubmit)
   }
   showFailure() {
     //do not clear form when message fails, so the user does not have to retype
     this.setState({
       sendStatusMessage: 'We encountered an error sending your message. Please try again.',
-      sendStatusClass: 'ContactForm-status-error'
+      sendStatusClass: 'ContactForm-status-error',
+      isSending: false
     }, this.props.onSubmit)
   }
 
@@ -170,8 +175,11 @@ class ContactForm extends React.Component<Props, State> {
             sitekey={window.GR_SITEKEY}
             onChange={this.reCaptchaOnChange}
           />
-          {/* TODO: Disable and say 'Sending' while sending */}
-          <input type="submit" value="Send message" disabled={!this.state.reCaptchaValue} className="btn btn-primary ContactForm-submit-btn" />
+          <input type="submit"
+                 className="btn btn-primary ContactForm-submit-btn"
+                 value={this.state.isSending ? "Sending" : "Send message"}
+                 disabled={!this.state.reCaptchaValue || this.state.isSending}
+          />
         </form>
     </React.Fragment>
     );
