@@ -191,6 +191,21 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
         .button(url=project_profile_url, text='REVIEW VOLUNTEER')\
         .button(url=approve_url, text='APPROVE VOLUNTEER')
     send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
+    
+     def send_welcome_email(contributor):
+    # Get token
+    user = Contributor.objects.get(id=contributor.id)
+    verification_token = default_token_generator.make_token(user)
+    verification_url = settings.PROTOCOL_DOMAIN + '/verify_user/' + str(contributor.id) + '/' + verification_token
+    # Send email with token
+    email_template = HtmlEmailTemplate()\
+        .header("Hi {{first_name}}, we're glad you're here.")\
+        .paragraph('Please confirm your email address by clicking the button below.')\
+        .button(url=verification_url, text='VERIFY YOUR EMAIL')
+    email_msg = EmailMessage(
+        subject='Welcome to DemocracyLab',
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=[contributor.email]
 
 
 volunteer_conclude_email_template = HtmlEmailTemplate() \
@@ -286,6 +301,10 @@ def notify_project_owners_project_approved(project):
         to=_get_co_owner_emails(project)
     )
     email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+    
+    )
+    email_msg = email_template.render(email_msg, {'first_name': user.first_name})
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
