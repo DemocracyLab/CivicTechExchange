@@ -1,6 +1,7 @@
 //standard margin for this page, to be changed later
 $ch-margin: 36px;
-$ch-secpadding: 60px;
+$ch-mobilepadding: 65px; 
+$ch-desktoppadding: 130px; // the average of all the disparate values
 
 .corporate-hackathon-root {
    h2 {
@@ -9,8 +10,6 @@ $ch-secpadding: 60px;
 }
 
 .corporate-hackathon-hostwithus {
-  padding-top: $ch-secpadding;
-  padding-bottom: $ch-secpadding;
   background-color: $color-background-light;
   text-align: center;
   h1 {
@@ -49,8 +48,6 @@ $ch-secpadding: 60px;
   }
 }
 .corporate-hackathon-howitworks {
-  padding-top: $ch-secpadding;
-  padding-bottom: $ch-margin;
   background-color: $color-background-default;
 }
 .corporate-hackathon-howitworks-item {
@@ -66,8 +63,6 @@ $ch-secpadding: 60px;
 }
 .corporate-hackathon-whyengage {
   background-color: $color-background-light;
-  padding-top: $ch-margin;
-  padding-bottom: $ch-margin; /* to keep background color correctly */
   h2 {
     margin-bottom: $ch-margin;
   }
@@ -89,6 +84,7 @@ $ch-secpadding: 60px;
 }
 .corporate-hackathon-whyengage-source {
   margin-bottom: $ch-margin;
+  padding-left: 40px; /* match the list items above it */
   color: $color-text-grey;
   font-size: 14px;
   a {
@@ -112,7 +108,6 @@ $ch-secpadding: 60px;
   }
 }
 .corporate-hackathon-sponsorships {
-  margin: $ch-margin 0;
   background-color: $color-background-default;
   h2 {
     margin-bottom: $ch-margin;
@@ -138,6 +133,11 @@ $ch-secpadding: 60px;
   text-align: center;
   margin-bottom: $ch-margin;
 }
+// mobile section padding
+.corporate-hackathon-hostwithus, .corporate-hackathon-howitworks, .corporate-hackathon-whyengage, .corporate-hackathon-sponsorships {
+  padding-top: $ch-mobilepadding;
+  padding-bottom: $ch-mobilepadding
+}
 
 @include media-breakpoint-up(lg) {
   .corporate-hackathon-hostwithus {
@@ -145,7 +145,8 @@ $ch-secpadding: 60px;
     text-align: left;
     display: flex;
     h1 {
-      font-size: 40px;
+      font-size: 48px;
+      font-weight: bold;
     }
     h2 {
       font-size: 20px;
@@ -187,11 +188,22 @@ $ch-secpadding: 60px;
     flex-direction: row;
     justify-content: space-around;
     margin: 0 $ch-margin;
-    padding-bottom: $ch-margin;
   }
   .corporate-hackathon-howitworks-item {
     font-size: 16px;
     padding: 0 24px;
+    img {
+      width: auto;
+      height: 61px; /* this is for alignment, and needs source image file fixing to remove */
+      margin-bottom: $ch-margin;
+    }
+    h4 {
+      display: inline-block;
+      vertical-align: bottom;
+    }
+    p {
+      margin-top: 40px;
+    }
   }
   .corporate-hackathon-howitworks-item:first-of-type {
     padding-left: 0;
@@ -215,7 +227,6 @@ $ch-secpadding: 60px;
     flex-direction: row;
     justify-content: space-around;
     margin: 0 $ch-margin;
-    padding-bottom: $ch-margin;
   }
   .corporate-hackathon-whyengage-left {
     flex-basis: 60%;
@@ -257,5 +268,10 @@ $ch-secpadding: 60px;
   .corporate-hackathon-sponsorships-text {
     padding-left: 16px;
     flex-basis: 50%;
+  }
+  // desktop section padding
+  .corporate-hackathon-hostwithus, .corporate-hackathon-howitworks, .corporate-hackathon-whyengage, .corporate-hackathon-sponsorships {
+    padding-top: $ch-desktoppadding;
+    padding-bottom: $ch-desktoppadding
   }
 }

@@ -109,17 +109,17 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-hackathon-howitworks-container">
           <div className="corporate-hackathon-howitworks-item">
             <img src={cdn.image("recruit-icon.png")} alt="Recruit"/>
-            <h4><Ch1Icon /> Recruit</h4>
+            <div><Ch1Icon /><h4>Recruit</h4></div>
             <p>Encourage your employees to sign up for the hackathon! We’ll find non-profits with needs that are a good fit for your team.</p>
           </div>
           <div className="corporate-hackathon-howitworks-item">
             <img src={cdn.image("define-icon.png")} alt="Define"/>
-            <h4><Ch2Icon /> Define</h4>
+            <div><Ch2Icon /><h4>Define</h4></div>
             <p>We’ll work with the non-profits to identify achievable, instant-impact projects that are ready for your team, then connect you with the non-profit team to define the scope.</p>
           </div>
           <div className="corporate-hackathon-howitworks-item">
             <img src={cdn.image("hack-icon.png")} alt="Hack"/>
-            <h4><Ch3Icon /> Hack</h4>
+            <div><Ch3Icon /><h4>Hack</h4></div>
             <p>On the day of the hackathon, your team of product, design, and development volunteers will collaborate and create civic tech! We’ll take care of everything else.</p>
           </div>
         </div>
