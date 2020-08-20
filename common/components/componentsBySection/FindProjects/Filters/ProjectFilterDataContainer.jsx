@@ -90,10 +90,11 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     //first get category names in an array to iterate over
 
 
+    const ignoreCategories = ["Organization"];
     //define the order we want our filters to be in (these must match database "category" values to be valid)
-    const fixedOrderCategories = ["Issue(s) Addressed", "Role", "Technologies Used", "Project Stage", "Organization"]
+    const fixedOrderCategories = ["Issue(s) Addressed", "Role", "Technologies Used", "Project Stage"];
     //get all the filters from API results so we display every filter category
-    const apiCategories = Object.keys(this.state.sortedTags)
+    const apiCategories = _.difference(Object.keys(this.state.sortedTags), ignoreCategories);
     //sort filters first by fixed order if applicable, then any others in alphabetical order
     //TODO: Extract this sort into another function for readability
     const orderedFilters = apiCategories.map(function(x) {
