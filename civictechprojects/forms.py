@@ -112,6 +112,7 @@ class EventCreationForm(ModelForm):
         read_form_field_string(event, form, 'event_location')
         read_form_field_string(event, form, 'event_rsvp_url')
         read_form_field_string(event, form, 'event_live_id')
+        read_form_field_string(event, form, 'event_organizers_text')
 
         read_form_field_datetime(event, form, 'event_date_start')
         read_form_field_datetime(event, form, 'event_date_end')

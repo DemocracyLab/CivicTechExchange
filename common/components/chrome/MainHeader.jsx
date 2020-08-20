@@ -120,13 +120,13 @@ class MainHeader extends React.Component<{||}, State > {
 
   _renderEventNavItems(): ?React$Node {
     const eventLinks: Array<React$Node> = [];
+    eventLinks.push(this._renderNavDropdownItem(Section.FindEvents, "Find Events"));
     if(CurrentUser.isStaff()) {
       eventLinks.push(this._renderNavDropdownItem(Section.CreateEvent, "Create Event"));
     }
     if(window.EVENT_URL) {
-      eventLinks.push(<NavDropdown.Item href={_.unescape(window.EVENT_URL)}>Upcoming Event</NavDropdown.Item>);
+      eventLinks.push(<NavDropdown.Item href={_.unescape(window.EVENT_URL)}>Our Next Event</NavDropdown.Item>);
     }
-    eventLinks.push(this._renderNavDropdownItem(Section.FindEvents, "Find Events"));
     return !_.isEmpty(eventLinks)
     ? (
       <NavDropdown title="Events" id="nav-events">
@@ -170,7 +170,9 @@ class MainHeader extends React.Component<{||}, State > {
     //TODO: Rebuild this component so deskop dropdown and mobile links aren't separated out
     return (
       <React.Fragment>
-        <Nav.Item as="button" className="btn btn-outline-secondary MainHeader-showdesktop MainHeader-donatebutton" href={url.section(Section.Donate)}>Donate</Nav.Item>
+        <Nav.Item className="MainHeader-donate-loggedin-container MainHeader-showdesktop">
+          <Button variant="outline-secondary" className="MainHeader-donatebutton"  href={url.section(Section.Donate)}>Donate</Button>
+        </Nav.Item>
         <Dropdown as={Nav.Item} className="MainHeader-showdesktop">
           <Dropdown.Toggle as={Nav.Link}>
             {this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}
