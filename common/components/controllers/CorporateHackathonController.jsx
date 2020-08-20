@@ -127,38 +127,46 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
       </div>
     )
   }
+
   _whyEngage(): $React$Node {
     const whyStyle = {
-      listStyleImage: 'url(' + cdn.image("checkmark-icon.png") + ')',
+      backgroundImage: 'url(' + cdn.image("checkmark-icon.png") + ')',
     }
     return (
       <div className="corporate-hackathon-whyengage col-12">
-        <h2>Why Engage?</h2>
-        <ul style={whyStyle}>
-          <li>
-            <h3>Build Company Culture</h3>
-            <p>Hackathons cultivate an open, agile company culture centered on innovation, flexibility, and idea sharing, even between positions and unrelated departments.</p>
-          </li>
-          <li>
-            <h3>Nurture innovation</h3>
-            <p>Corporate hackathons allow employees the opportunity to take risks, try bold new strategies, and share their knowledge and experience with others in a low-pressure environment.</p>
-          </li>
-          <li>
-            <h3>Create positive public relations</h3>
-            <p>Companies that participate in hackathons show themselves to be drivers of change in their industry and community, to both their employees and the public.</p>
-          </li>
-        </ul>
-        <div className="corporate-hackathon-whyengage-source">Source: “<a href="https://link.springer.com/chapter/10.1007/978-3-030-35333-9_27" target="_blank" rel="nofollow noopener">On the Benefits of Corporate Hackathons for Software Ecosystems - A Systemic Mapping Study</a>”</div>
-        <div className="corporate-hackathon-whyengage-image">
-        <picture>
-          <source media="(max-width: 991px)" srcset={cdn.image("mobile-why-engage-withbg.png")} />
-          <source media="(min-width: 992px)" srcset={cdn.image("why-engage-withbg-img.png")} />
-          <img src={cdn.image("why-engage-img.png")} alt="Header Image" />
-        </picture>
+        <div className="corporate-hackathon-whyengage-container">
+          <div className="corporate-hackathon-whyengage-left">
+            <h2>Why Engage?</h2>
+            <ul>
+              <li style={whyStyle}>
+                <h3>Build Company Culture</h3>
+                <p>Hackathons cultivate an open, agile company culture centered on innovation, flexibility, and idea sharing, even between positions and unrelated departments.</p>
+              </li>
+              <li style={whyStyle}>
+                <h3>Nurture innovation</h3>
+                <p>Corporate hackathons allow employees the opportunity to take risks, try bold new strategies, and share their knowledge and experience with others in a low-pressure environment.</p>
+              </li>
+              <li style={whyStyle}>
+                <h3>Create positive public relations</h3>
+                <p>Companies that participate in hackathons show themselves to be drivers of change in their industry and community, to both their employees and the public.</p>
+              </li>
+            </ul>
+            <div className="corporate-hackathon-whyengage-source">Source: “<a href="https://link.springer.com/chapter/10.1007/978-3-030-35333-9_27" target="_blank" rel="nofollow noopener">On the Benefits of Corporate Hackathons for Software Ecosystems - A Systemic Mapping Study</a>”</div>
+          </div>
+          <div className="corporate-hackathon-whyengage-right">
+            <div className="corporate-hackathon-whyengage-image">
+            <picture>
+              <source media="(max-width: 991px)" srcset={cdn.image("mobile-why-engage-withbg.png")} />
+              <source media="(min-width: 992px)" srcset={cdn.image("why-engage-withbg-img.png")} />
+              <img src={cdn.image("why-engage-img.png")} alt="Header Image" />
+            </picture>
+            </div>
+          </div>
         </div>
       </div>
     )
   }
+
   _strengthenTeam(): $React$Node {
     return (
       <div className="corporate-hackathon-strengthen col-12">
@@ -172,15 +180,17 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <div className="corporate-hackathon-sponsorships col-12">
         <h2>Public Hackathon Sponsorships: Another Way To Engage</h2>
-        <div className="corporate-hackathon-sponsorships-image">
-          <img src={cdn.image("event-sponsorship-img.png")} alt="Event Sponsorships" />
-        </div>
-        <div className="corporate-hackathon-sponsorships-text">
-          <h3>Event Sponsorship</h3>
-          <h4>Starting at $500 per event</h4>
-          <p>Not ready to host? Sponsor one of our public hackathons! Your sponsorship will help us drive innovation, support non-profits and civic tech organizations, and promote your brand before, during, and after the event!</p>
-          <div className="corporate-hackathon-sponsorships-button">
-            <Button variant="primary" href={url.section(Section.PartnerWithUs)}>Learn More</Button>
+        <div className="corporate-hackathon-sponsorships-container">
+          <div className="corporate-hackathon-sponsorships-image">
+            <img src={cdn.image("event-sponsorship-img.png")} alt="Event Sponsorships" />
+          </div>
+          <div className="corporate-hackathon-sponsorships-text">
+            <h3>Event Sponsorship</h3>
+            <h4>Starting at $500 per event</h4>
+            <p>Not ready to host? Sponsor one of our public hackathons! Your sponsorship will help us drive innovation, support non-profits and civic tech organizations, and promote your brand before, during, and after the event!</p>
+            <div className="corporate-hackathon-sponsorships-button">
+              <Button variant="primary" href={url.section(Section.PartnerWithUs)}>Learn More</Button>
+            </div>
           </div>
         </div>
       </div>

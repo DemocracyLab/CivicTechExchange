@@ -1,5 +1,5 @@
 //standard margin for this page, to be changed later
-$ch-margin: 35px;
+$ch-margin: 36px;
 $ch-secpadding: 60px;
 
 .corporate-hackathon-root {
@@ -45,7 +45,7 @@ $ch-secpadding: 60px;
 
   h3 {
   font-size: 14px;
-  font-weight: 800;
+  font-weight: bold;
   }
 }
 .corporate-hackathon-howitworks {
@@ -69,13 +69,21 @@ $ch-secpadding: 60px;
   padding-top: $ch-margin;
   padding-bottom: $ch-margin; /* to keep background color correctly */
   h2 {
-  margin-bottom: $ch-margin;
+    margin-bottom: $ch-margin;
   }
   h3 {
-  font-size: 15px;
-  font-weight: bold;
+    padding-top: 6px; /* align text with li checkmark */
+    font-size: 15px;
+    font-weight: bold;
+  }
+  ul {
+    list-style-type: none;
+    padding-left: 0;
   }
   li {
+    padding-left: 40px;
+    background-position: top left;
+    background-repeat: no-repeat;
     margin-bottom: $ch-margin;
   }
 }
@@ -161,7 +169,7 @@ $ch-secpadding: 60px;
     text-align: left;
     h3 {
       font-size: 18px;
-      font-weight: 800;
+      font-weight: bold;
     }
     p {
       font-size: 16px;
@@ -171,6 +179,7 @@ $ch-secpadding: 60px;
   .corporate-hackathon-howitworks {
     h2 {
       font-size: 40px;
+      font-weight: bold;
     }
   }
   .corporate-hackathon-howitworks-container {
@@ -182,7 +191,7 @@ $ch-secpadding: 60px;
   }
   .corporate-hackathon-howitworks-item {
     font-size: 16px;
-    padding: 0 16px;
+    padding: 0 24px;
   }
   .corporate-hackathon-howitworks-item:first-of-type {
     padding-left: 0;
@@ -190,5 +199,63 @@ $ch-secpadding: 60px;
   .corporate-hackathon-howitworks-item:last-of-type {
     padding-right: 0;
     margin-bottom: 0;
+  }
+  .corporate-hackathon-whyengage {
+    h2 {
+      font-size: 40px;
+      font-weight: bold;
+    }
+    h3 {
+      font-size: 24px;
+      padding-top: 1px; /* positions text next to checkmark image */
+    }
+  }
+  .corporate-hackathon-whyengage-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 0 $ch-margin;
+    padding-bottom: $ch-margin;
+  }
+  .corporate-hackathon-whyengage-left {
+    flex-basis: 60%;
+    padding-right: 50px;
+  }
+  .corporate-hackathon-whyengage-right {
+    flex-basis: 40%;
+  }
+  .corporate-hackathon-strengthen {
+    padding: 60px 16px;
+    h2 {
+      font-size: 32px;
+    }
+  }
+  .corporate-hackathon-sponsorships {
+    h2 {
+      font-size: 40px;
+      font-weight: bold;
+    }
+    h3 {
+      font-size: 36px;
+    }
+    h4 {
+      font-size: 22px;
+    }
+    p {
+      font-size: 16px;
+    }
+  }
+  .corporate-hackathon-sponsorships-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .corporate-hackathon-sponsorships-image {
+    flex-basis: 50%;
+    padding-right: 16px;
+  }
+  .corporate-hackathon-sponsorships-text {
+    padding-left: 16px;
+    flex-basis: 50%;
   }
 }
