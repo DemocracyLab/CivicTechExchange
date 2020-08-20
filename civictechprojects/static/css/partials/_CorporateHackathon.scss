@@ -168,4 +168,27 @@ $ch-secpadding: 60px;
       color: $color-text-grey;
     }
   }
+  .corporate-hackathon-howitworks {
+    h2 {
+      font-size: 40px;
+    }
+  }
+  .corporate-hackathon-howitworks-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 0 $ch-margin;
+    padding-bottom: $ch-margin;
+  }
+  .corporate-hackathon-howitworks-item {
+    font-size: 16px;
+    padding: 0 16px;
+  }
+  .corporate-hackathon-howitworks-item:first-of-type {
+    padding-left: 0;
+  }
+  .corporate-hackathon-howitworks-item:last-of-type {
+    padding-right: 0;
+    margin-bottom: 0;
+  }
 }
