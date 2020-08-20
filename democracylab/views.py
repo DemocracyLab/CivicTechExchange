@@ -12,6 +12,7 @@ import simplejson as json
 from .emails import send_verification_email, send_password_reset_email
 from .forms import DemocracyLabUserCreationForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
+from .tokens import email_verify_token_generator
 from oauth2 import registry
 
 
@@ -88,7 +89,7 @@ def verify_user(request, user_id, token):
     user = Contributor.objects.get(id=user_id)
 
     # Verify token
-    if default_token_generator.check_token(user, token):
+    if email_verify_token_generator.check_token(user, token):
         # TODO: Add feedback from the frontend to indicate success/failure
         contributor = Contributor.objects.get(id=user_id)
         contributor.email_verified = True

@@ -6,6 +6,7 @@ from enum import Enum
 from html.parser import unescape
 from common.models.tags import Tag
 from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datetime, datetime_to_string
+from democracylab.tokens import email_verify_token_generator
 from democracylab.models import Contributor
 from civictechprojects.models import VolunteerRelation
 from common.helpers.constants import FrontEndSection
@@ -71,7 +72,7 @@ class HtmlEmailTemplate:
 def send_verification_email(contributor):
     # Get token
     user = Contributor.objects.get(id=contributor.id)
-    verification_token = default_token_generator.make_token(user)
+    verification_token = email_verify_token_generator.make_token(user)
     verification_url = settings.PROTOCOL_DOMAIN + '/verify_user/' + str(contributor.id) + '/' + verification_token
     # Send email with token
     email_template = HtmlEmailTemplate()\
