@@ -599,7 +599,7 @@ def limited_listings(request):
             <title>{cdata(roleTag.display_name)}</title>
             <description>{cdata(position.position_description)}</description>
             <partnerJobId>{cdata(str(position.id))}</partnerJobId>
-            <location>{cdata(", ".join([project.project_city, project.project_state]))}</location>
+            <location>{cdata(", ".join([project.project_city, project.project_state]) if (project.project_city and project.project_state) else "")}</location>
             <city>{cdata(project.project_city)}</city>
             <state>{cdata(project.project_state)}</state>
             <country>{cdata(project.project_country)}</country>
@@ -607,13 +607,14 @@ def limited_listings(request):
             <industryCodes><industryCode>{cdata("4")}</industryCode></industryCodes>
         </job>
         """
-    
+
+    approved_projects = ProjectPosition.objects.filter(position_project__is_searchable=True)
     xml_response = f"""<?xml version="1.0" encoding="UTF-8"?>
     <source>
         <lastBuildDate>{timezone.now().strftime('%a, %d %b %Y %H:%M:%S %Z')}</lastBuildDate> 
         <publisherUrl>https://www.democracylab.org</publisherUrl>
         <publisher>DemocracyLab</publisher>
-        {"".join(map(position_to_job, ProjectPosition.objects.all()))}
+        {"".join(map(position_to_job, approved_projects))}
     </source>"""
 
     return HttpResponse(xml_response, content_type="application/xml")
