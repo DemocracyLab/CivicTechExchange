@@ -26,7 +26,7 @@ class SubscribeUserToQiqoChat(object):
         thread.start()
 
     def print_error(self, err_msg):
-        err_msg = 'Failed to subscribe {first} {last}({email})[{id}] to mailing list: {err_msg}'.format(
+        err_msg = 'Failed to subscribe {first} {last}({email})[{id}] to qiqochat: {err_msg}'.format(
             first=self.user.first_name,
             last=self.user.last_name,
             email=self.user.email,
