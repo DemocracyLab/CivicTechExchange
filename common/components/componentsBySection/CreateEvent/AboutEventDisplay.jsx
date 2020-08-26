@@ -150,7 +150,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       //TODO: Handle un-verified users
       text = "Join Event";
       //TODO: Incorporate live event id into Live Event page
-      url = urlHelper.section(Section.LiveEvent);
+      url = urlHelper.section(Section.LiveEvent, {id: this.props.event.event_live_id});
     } else {
       text = "Log In to Join Event";
       url = urlHelper.logInThenReturn();
