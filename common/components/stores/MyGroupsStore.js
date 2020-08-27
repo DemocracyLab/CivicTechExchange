@@ -4,6 +4,7 @@ import {ReduceStore} from 'flux/utils';
 import {Record} from 'immutable'
 import UniversalDispatcher from './UniversalDispatcher.js';
 import type {FileInfo} from "../common/FileInfo.jsx";
+import CurrentUser from "../utils/CurrentUser.js";
 
 // TODO: Rename isApproved to is_searchable
 export type MyGroupData = {|
@@ -52,7 +53,7 @@ class MyGroupsStore extends ReduceStore<State> {
     // TODO: See if we need to ensure no duplicate action names between stores that use UniversalDispatcher
     switch (action.type) {
       case 'INIT':
-        if(!state.isLoading || !state.myGroups) {
+        if(CurrentUser.isLoggedIn() && (!state.isLoading || !state.myGroups)) {
           return this._loadGroups(state);
         } else {
           return state;
