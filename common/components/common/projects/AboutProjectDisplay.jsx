@@ -21,6 +21,8 @@ import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
 import InviteProjectToGroupButton from "./InviteProjectToGroupButton.jsx";
 import ApproveGroupsSection from "./ApproveGroupsSection.jsx";
+import url from "../../utils/url.js";
+import Section from "../../enums/Section.js";
 
 
 type Props = {|
@@ -154,7 +156,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 <ul>
                   {
                     project.project_groups.map((group, i) => {
-                      return <li key={i}>{group.group_name}</li>
+                      return <li key={i}><a href={url.section(Section.AboutGroup, {id: group.group_id})}>{group.group_name}</a></li>
                     })
                   }
                 </ul>
