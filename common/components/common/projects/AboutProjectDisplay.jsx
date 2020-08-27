@@ -147,14 +147,14 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             </React.Fragment>
           }
 
-          {project && !_.isEmpty(project.project_organization) &&
+          {project && !_.isEmpty(project.project_groups) &&
             <React.Fragment>
-              <div className='AboutProjects-communities'>
-                <h4>Communities</h4>
+              <div className='AboutProjects-groups'>
+                <h4>Groups</h4>
                 <ul>
                   {
-                    project.project_organization.map((org, i) => {
-                      return <li key={i}>{org.display_name}</li>
+                    project.project_groups.map((group, i) => {
+                      return <li key={i}>{group.group_name}</li>
                     })
                   }
                 </ul>
@@ -162,7 +162,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
             </React.Fragment>
           }
-          
+
           {/*TODO: Groups section*/}
 
           <div className='AboutProjects-team'>
@@ -300,7 +300,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                     .map(commit => <ProjectCommitCard commit={commit} />)
                 }
                 { project.project_commits.length > this.state.maxActivity && (
-                  
+
                   <div className="AboutProjects-show-more-activity-container">
                     <div className="btn btn-primary AboutProjects-show-more-activity"
                       onClick={this.handleShowMoreActivity}
