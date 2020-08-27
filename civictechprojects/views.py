@@ -733,7 +733,7 @@ def groups_list(request):
         if 'sortField' in query_params:
             group_list = projects_by_sortField(group_list, query_params['sortField'][0])
         else:
-            group_list = projects_by_sortField(group_list, '-group_date_modified')
+            group_list = projects_by_sortField(group_list, 'group_name')
 
         group_count = len(group_list)
 
