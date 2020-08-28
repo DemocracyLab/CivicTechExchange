@@ -156,7 +156,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 <ul>
                   {
                     project.project_groups.map((group, i) => {
-                      return <li key={i}><a href={url.section(Section.AboutGroup, {id: group.group_id})}>{group.group_name}</a></li>
+                      return <li key={i}>{this._renderGroupIcon(group)} <a href={url.section(Section.AboutGroup, {id: group.group_id})}>{group.group_name}</a></li>
                     })
                   }
                 </ul>
@@ -379,6 +379,14 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
         />;
       });
     }
-}
+
+    _renderGroupIcon(group): ?Array<React$Node> {
+      if(!_.isEmpty(group.group_thumbnail)) {
+        return <div className="AboutProjects-group-image"><img src={group.group_thumbnail.publicUrl} alt={group.group_name + " Logo"} /></div>
+        } else {
+        return <div className="AboutProjects-group-image AboutProjects-group-image-no-logo"></div>
+        }
+      }
+  }
 
 export default AboutProjectDisplay;

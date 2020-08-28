@@ -287,7 +287,21 @@
   }
   li {
     list-style-type: none;
+    margin-bottom: 20px;
   }
+  a {
+    vertical-align: top; /* align text with top of group icon instead of bottom */
+  }
+}
+.AboutProjects-group-image {
+  height: 60px;
+  width: 60px;
+  display: inline-block;
+  margin-right: 10px;
+  img {
+    object-fit: contain;
+    max-width: 100%;
+    }
 }
 
 .AboutProjects-links  {
