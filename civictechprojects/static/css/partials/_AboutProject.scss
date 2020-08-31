@@ -298,10 +298,13 @@
   width: 60px;
   display: inline-block;
   margin-right: 10px;
-  img {
+  img, i {
     object-fit: contain;
     max-width: 100%;
     }
+  i {
+    color: $color-text-dark;
+  }
 }
 
 .AboutProjects-links  {

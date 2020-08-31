@@ -23,6 +23,8 @@ import InviteProjectToGroupButton from "./InviteProjectToGroupButton.jsx";
 import ApproveGroupsSection from "./ApproveGroupsSection.jsx";
 import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
+import {Glyph, GlyphStyles, GlyphSizes} from '../../utils/glyphs.js';
+
 
 
 type Props = {|
@@ -382,9 +384,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
     _renderGroupIcon(group): ?Array<React$Node> {
       if(!_.isEmpty(group.group_thumbnail)) {
-        return <div className="AboutProjects-group-image"><img src={group.group_thumbnail.publicUrl} alt={group.group_name + " Logo"} /></div>
+        return <div className="AboutProjects-group-image"><a href={url.section(Section.AboutGroup, {id: group.group_id})}><img src={group.group_thumbnail.publicUrl} alt={group.group_name + " Logo"} /></a></div>
         } else {
-        return <div className="AboutProjects-group-image AboutProjects-group-image-no-logo"></div>
+        return <div className="AboutProjects-group-image"><a href={url.section(Section.AboutGroup, {id: group.group_id})}><i className={Glyph(GlyphStyles.Users, GlyphSizes.X3)}></i></a></div>
         }
       }
   }
