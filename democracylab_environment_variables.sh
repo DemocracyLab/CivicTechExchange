@@ -124,3 +124,12 @@ export PRIVACY_POLICY_URL='https://d1agxr2dqkgkuy.cloudfront.net/documents/2020.
 
 # if we have a hackathon or similar event we want displayed in the nav for the duration, put it here
 export EVENT_URL='https://democracylab.org/index/?section=AboutEvent&id=1'
+
+# Qiqochat live event iframe url with placeholders
+export QIQO_IFRAME_URL='https://qiqochat.com/api/v1/iframe?&source[api_key]={api_key}&source_user_uuid={source_user_uuid}&qiqo_user_uuid={qiqo_user_uuid}&return_to="/breakout/0/EVENT_ID?embedded=true"'
+export QIQO_API_KEY=democracylab
+
+# For Qiqochat user registration, do not enable these unless you are working on this feature
+# export QIQO_API_SECRET=SECRET
+# export QIQO_USERS_ENDPOINT='https://api.qiqochat.com/api/v1/users'
+# export QIQO_CIRCLE_UUID=nmitq
