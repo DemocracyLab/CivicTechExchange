@@ -11,6 +11,7 @@ import api from "../utils/api.js";
 import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
+import CurrentUser from "../utils/CurrentUser";
 
 type State = {|
   id: ?number,
@@ -68,8 +69,8 @@ class CreateEventController extends React.PureComponent<{||},State> {
   }
   
   loadEventDetails(event: EventData): void {
-    if(!EventAPIUtils.isOwner(event)) {
-      // TODO: Handle someone other than owner
+    if(!EventAPIUtils.isOwner(event) && !CurrentUser.isStaff()) {
+      // TODO: Handle someone other than owner/admin
     } else {
       this.setState({
         event: event,
