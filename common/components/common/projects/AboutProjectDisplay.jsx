@@ -21,6 +21,10 @@ import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
 import InviteProjectToGroupButton from "./InviteProjectToGroupButton.jsx";
 import ApproveGroupsSection from "./ApproveGroupsSection.jsx";
+import url from "../../utils/url.js";
+import Section from "../../enums/Section.js";
+import {Glyph, GlyphStyles, GlyphSizes} from '../../utils/glyphs.js';
+
 
 
 type Props = {|
@@ -147,14 +151,14 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             </React.Fragment>
           }
 
-          {project && !_.isEmpty(project.project_organization) &&
+          {project && !_.isEmpty(project.project_groups) &&
             <React.Fragment>
-              <div className='AboutProjects-communities'>
-                <h4>Communities</h4>
+              <div className='AboutProjects-groups'>
+                <h4>Groups</h4>
                 <ul>
                   {
-                    project.project_organization.map((org, i) => {
-                      return <li key={i}>{org.display_name}</li>
+                    project.project_groups.map((group, i) => {
+                      return <li key={i}>{this._renderGroupIcon(group)} <a href={url.section(Section.AboutGroup, {id: group.group_id})}>{group.group_name}</a></li>
                     })
                   }
                 </ul>
@@ -162,7 +166,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
             </React.Fragment>
           }
-          
+
           {/*TODO: Groups section*/}
 
           <div className='AboutProjects-team'>
@@ -300,7 +304,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                     .map(commit => <ProjectCommitCard commit={commit} />)
                 }
                 { project.project_commits.length > this.state.maxActivity && (
-                  
+
                   <div className="AboutProjects-show-more-activity-container">
                     <div className="btn btn-primary AboutProjects-show-more-activity"
                       onClick={this.handleShowMoreActivity}
@@ -377,6 +381,18 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
         />;
       });
     }
-}
+
+    _renderGroupIcon(group): ?Array<React$Node> {
+      return (
+        <div className="AboutProjects-group-image">
+          <a href={url.section(Section.AboutGroup, {id: group.group_id})}>
+            {!_.isEmpty(group.group_thumbnail)
+            ? <img src={group.group_thumbnail.publicUrl} alt={group.group_name + " Logo"} />
+            : <i className={Glyph(GlyphStyles.Users, GlyphSizes.X3)}></i>}
+            </a>
+          </div>
+      )
+    }
+  }
 
 export default AboutProjectDisplay;
