@@ -147,6 +147,7 @@
 .AboutProjects_tabs {
   clear: both;
   display:flex;
+  flex-direction: row; // column mobile, row desktop
   flex-wrap: wrap;
   justify-self: flex-start;
   align-self: flex-end;
@@ -361,6 +362,9 @@
 
   .AboutProjects-positions-available {
     border-bottom: $color-grey-disabled solid 1px;
+  }
+  .AboutProjects_tabs {
+    flex-direction: column;
   }
 
 }
