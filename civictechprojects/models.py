@@ -143,6 +143,7 @@ class Project(Archived):
             'project_links': list(map(lambda link: link.to_json(), links)),
             'project_commits': list(map(lambda commit: commit.to_json(), commits)),
             'project_groups': list(map(lambda gr: gr.hydrate_to_list_json(), group_relationships)),
+            'project_events': list(map(lambda er: er.hydrate_to_tile_json(), self.get_project_events())),
             'project_owners': [self.project_creator.hydrate_to_tile_json()],
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__()
@@ -193,6 +194,10 @@ class Project(Archived):
         }
 
         return project
+
+    def get_project_events(self):
+        slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
+        return Event.objects.filter(event_legacy_organization__name__in=slugs)
 
     def update_timestamp(self, time=None):
         self.project_date_modified = time or timezone.now()
