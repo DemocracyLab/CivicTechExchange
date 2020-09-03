@@ -298,7 +298,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 <a name="project-events" id="project-events" className="position-absolute AboutProjects-jumplink"></a>
               </div>
               <div className='AboutProjects-events'>
-                <EventCardsListings events={project.project_events} />
+                <EventCardsListings events={project.project_events} showMessageForNoFutureEvents={false} />
               </div>
             </React.Fragment>
           }

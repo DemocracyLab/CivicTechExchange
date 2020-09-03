@@ -61,7 +61,7 @@ class EventCardsContainer extends React.Component<Props, State> {
           }
           <div className="row EventCards-card-container">
             {/*{!_.isEmpty(this.state.events) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}*/}
-            {!_.isEmpty(this.state.events) && <EventCardsListings events={this.state.events}/>}
+            {!_.isEmpty(this.state.events) && <EventCardsListings events={this.state.events} showMessageForNoFutureEvents={true}/>}
           </div>
           {/*<div>
             {this._renderPagination()}

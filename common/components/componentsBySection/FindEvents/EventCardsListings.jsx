@@ -32,7 +32,8 @@ function generateEventsDateListings(events: $ReadOnlyArray<EventTileAPIData>): $
 }
 
 type Props = {|
-  events: $ReadOnlyArray<EventTileAPIData>
+  events: $ReadOnlyArray<EventTileAPIData>,
+  showMessageForNoFutureEvents: boolean
 |}
 
 type State = {|
@@ -63,19 +64,39 @@ class EventCardsListings extends React.Component<Props, State> {
     const pastEvents: $ReadOnlyArray<EventsDateGrouping> = upcomingPastEvents && upcomingPastEvents[1];
     return (
       <React.Fragment>
-        <h1 className="EventCardContainer-section-header">Upcoming Events</h1>
+        {this._renderUpcomingEvents(upcomingEvents)}
+        {pastEvents && this._renderPastEvents(pastEvents)}
+      </React.Fragment>
+    );
+  }
+  
+  _renderUpcomingEvents(upcomingEvents: $ReadOnlyArray<EventsDateGrouping>): React$Node {
+    const showUpcomingEvents: boolean = this.props.showMessageForNoFutureEvents || !_.isEmpty(upcomingEvents);
+    return (
+      <React.Fragment>
+        {showUpcomingEvents && <h1 className="EventCardContainer-section-header">Upcoming Events</h1>}
         {!_.isEmpty(upcomingEvents) ? (
           <React.Fragment>
             {this._renderEventsGrouping(upcomingEvents)}
           </React.Fragment>
-        ) : (<div className="EventCard-day-container"><p>No events currently scheduled, check back soon!</p></div>)
+        ) : (this.props.showMessageForNoFutureEvents &&
+          <div className="EventCard-day-container">
+            <p>No events currently scheduled, check back soon!</p>
+          </div>)
         }
+      </React.Fragment>
+    );
+  }
+  
+  _renderPastEvents(pastEvents: $ReadOnlyArray<EventsDateGrouping>): React$Node {
+    return (
+      <React.Fragment>
         {!_.isEmpty(pastEvents) && (
           <React.Fragment>
             <h1 className="EventCardContainer-section-header">Past Events</h1>
             {this._renderEventsGrouping(pastEvents)}
           </React.Fragment>
-          )
+        )
         }
       </React.Fragment>
     );
