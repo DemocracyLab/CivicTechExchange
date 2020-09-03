@@ -24,6 +24,7 @@ import ApproveGroupsSection from "./ApproveGroupsSection.jsx";
 import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import {Glyph, GlyphStyles, GlyphSizes} from '../../utils/glyphs.js';
+import EventCardsListings from "../../componentsBySection/FindEvents/EventCardsListings.jsx";
 
 
 
@@ -99,9 +100,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   changeHighlighted(tab) {
    let tabs = {
       details: false,
+      events: false,
       skills: false,
       positions: false,
-      activity: false,
+      activity: false
     };
 
     tabs[tab] = true;
@@ -233,7 +235,11 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             <div className="AboutProjects_tabs">
 
               <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
-
+  
+              {project && !_.isEmpty(project.project_events) &&
+              <a onClick={() => this.changeHighlighted('events')} className={this.state.tabs.events ? 'AboutProjects_aHighlighted' : 'none'} href="#project-events">Events</a>
+              }
+              
               {project && !_.isEmpty(project.project_positions) &&
               <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
               }
@@ -285,6 +291,17 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
             </div>
           </div>
+  
+          {project && !_.isEmpty(project.project_events) &&
+            <React.Fragment>
+              <div className="position-relative">
+                <a name="project-events" id="project-events" className="position-absolute AboutProjects-jumplink"></a>
+              </div>
+              <div className='AboutProjects-events'>
+                <EventCardsListings events={project.project_events} />
+              </div>
+            </React.Fragment>
+          }
 
           <div className='AboutProjects-positions-available'>
             <div className="position-relative">
