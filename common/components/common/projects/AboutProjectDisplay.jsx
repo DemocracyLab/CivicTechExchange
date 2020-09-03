@@ -235,13 +235,13 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             <div className="AboutProjects_tabs">
 
               <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
-  
-              {project && !_.isEmpty(project.project_events) &&
-              <a onClick={() => this.changeHighlighted('events')} className={this.state.tabs.events ? 'AboutProjects_aHighlighted' : 'none'} href="#project-events">Events</a>
-              }
               
               {project && !_.isEmpty(project.project_positions) &&
               <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
+              }
+  
+              {project && !_.isEmpty(project.project_events) &&
+              <a onClick={() => this.changeHighlighted('events')} className={this.state.tabs.events ? 'AboutProjects_aHighlighted' : 'none'} href="#project-events">Events</a>
               }
 
               {project && !_.isEmpty(project.project_commits) &&
@@ -292,17 +292,6 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             </div>
           </div>
   
-          {project && !_.isEmpty(project.project_events) &&
-            <React.Fragment>
-              <div className="position-relative">
-                <a name="project-events" id="project-events" className="position-absolute AboutProjects-jumplink"></a>
-              </div>
-              <div className='AboutProjects-events'>
-                <EventCardsListings events={project.project_events} showMessageForNoFutureEvents={false} />
-              </div>
-            </React.Fragment>
-          }
-
           <div className='AboutProjects-positions-available'>
             <div className="position-relative">
               <a name="positions-available" id="positions-available" className="position-absolute AboutProjects-jumplink"></a>
@@ -311,6 +300,17 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               {project && !_.isEmpty(project.project_positions) && this._renderPositions()}
             </div>
           </div>
+  
+          {project && !_.isEmpty(project.project_events) &&
+          <React.Fragment>
+            <div className="position-relative">
+              <a name="project-events" id="project-events" className="position-absolute AboutProjects-jumplink"></a>
+            </div>
+            <div className='AboutProjects-events'>
+              <EventCardsListings events={project.project_events} showMessageForNoFutureEvents={false} />
+            </div>
+          </React.Fragment>
+          }
 
           {project && !_.isEmpty(project.project_commits) &&
             <div className='AboutProjects-recent-activity'>
