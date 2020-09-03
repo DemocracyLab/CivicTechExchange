@@ -14,7 +14,6 @@ import type {TagDefinition} from "../../utils/ProjectAPIUtils.js";
 
 type Props = {|
   event: EventTileAPIData,
-  tagDictionary: Dictionary<TagDefinition>,
   maxTextLength: number,
   maxIssuesCount: number
 |};
