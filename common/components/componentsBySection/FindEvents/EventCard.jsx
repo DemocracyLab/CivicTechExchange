@@ -4,13 +4,9 @@ import React from "react";
 import Section from "../../../components/enums/Section.js";
 import url from "../../utils/url.js";
 import Moment from "react-moment";
-import type {Dictionary} from "../../types/Generics.jsx";
-import Sort from "../../utils/sort.js";
-import Truncate from "../../utils/truncate.js";
+import moment from 'moment';
 import {Glyph, GlyphWidth, GlyphStyles} from "../../utils/glyphs.js";
-import utils from "../../utils/utils.js";
 import {EventTileAPIData} from "../../utils/EventAPIUtils.js";
-import type {TagDefinition} from "../../utils/ProjectAPIUtils.js";
 
 type Props = {|
   event: EventTileAPIData,
@@ -70,7 +66,7 @@ class EventCard extends React.PureComponent<Props> {
     const Event: EventTileAPIData = this.props.event;
     return (
       <div className="EventCard-time">
-        {Event.event_date_start &&
+        {Event.event_date_start && moment(Event.event_date_start) > moment() &&
           <h2><Moment format="LT">{Event.event_date_start}</Moment></h2>
         }
       </div>
