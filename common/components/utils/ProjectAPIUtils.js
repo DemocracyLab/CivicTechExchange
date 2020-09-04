@@ -5,6 +5,8 @@ import type {FileInfo} from '../common/FileInfo.jsx'
 import {PositionInfo} from "../forms/PositionInfo.jsx";
 import {LocationInfo, getLocationDisplayString} from "../common/location/LocationInfo.js";
 import type {MyGroupData} from "../stores/MyGroupsStore.js";
+import type {GroupTileAPIData} from "./GroupAPIUtils.js";
+import type {EventTileAPIData} from "./EventAPIUtils.js";
 import _ from 'lodash';
 
 export type APIResponse = {|
@@ -110,7 +112,9 @@ export type ProjectDetailsAPIData = {|
   +project_files: $ReadOnlyArray<FileInfo>,
   +project_owners: $ReadOnlyArray<VolunteerUserData>,
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
-  +project_date_modified: Date
+  +project_date_modified: Date,
+  +project_groups: $ReadOnlyArray<GroupTileAPIData>,
+  +project_events: $ReadOnlyArray<EventTileAPIData>
 |};
 
 export type TeamAPIData = {|

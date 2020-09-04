@@ -227,10 +227,22 @@
     width: 100%;
   }
 }
-
-.AboutProjects-recent-activity {
-  padding: 20px; /*as with description-details consider maxwidth */
-
+/* events section overrides from Event page style to About Project page style */
+.AboutProjects-events {
+  h1 {
+    font-size: 28px;
+    margin-top: 2.5rem;
+  }
+  h1:first-of-type {
+    margin-top: 0;
+  }
+  .EventCard-dateheader h4 {
+    font-size: 24px;
+    margin-bottom: 1rem;
+  }
+}
+.AboutProjects-recent-activity, .AboutProjects-events  {
+  padding: 25px 10px; /*as with description-details consider maxwidth */
   border-top: $color-grey-disabled solid 1px;
 }
 
