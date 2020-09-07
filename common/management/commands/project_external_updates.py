@@ -17,7 +17,7 @@ class Command(BaseCommand):
                     handle_project_github_updates(github_link)
             except:
                 # Keep processing if we run into errors with a particular update
-                print('Error processing ' + github_link.link_url)
+                print('Error processing Github Link: ' + github_link.link_url)
                 print(traceback.format_exc())
                 pass
 
