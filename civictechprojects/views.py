@@ -705,15 +705,6 @@ def projects_with_meta_data(projects, project_pages, project_count):
     }
 
 
-def available_tag_filters(projects, selected_tag_filters):
-    project_tags = projects_tag_counts(projects)
-    # Remove any filters that are already selected
-    for tag in selected_tag_filters:
-        if project_tags[tag]:
-            project_tags.pop(tag)
-    return project_tags
-
-
 # TODO: Move group search code into new file
 def groups_list(request):
     url_parts = request.GET.urlencode()
