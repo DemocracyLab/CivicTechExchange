@@ -13,9 +13,19 @@ class CacheWrapper:
         self._cache = cache_backend
 
     def get(self, key, generator_func):
+        """
+        Retrieve cached value, and cache the value if it is not already cached
+        :param key: Key of value to retrieve
+        :param generator_func: Function that generates value
+        :return: Value mapped to key
+        """
         return self._cache.get(key) or self._set(key, generator_func)
 
     def refresh(self, key):
+        """
+        Refresh the cached value for a given key, such as when the underlying data has changed
+        :param key: Key of value to re-cache
+        """
         self._cache.set(key, self._cache_generators[key]() if key in self._cache_generators else None)
 
     def _set(self, key, generator_func):
