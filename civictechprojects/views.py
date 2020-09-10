@@ -39,44 +39,20 @@ from django.views.decorators.cache import cache_page
 import requests
 
 
-
-# TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
-@cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
 def tags(request):
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
         url_parts, keep_blank_values=0, strict_parsing=0)
-    if 'category' in query_terms:
-        category = query_terms.get('category')[0]
-        queryset = get_tags_by_category(category)
-        countoption = bool(strtobool(query_terms.get('getCounts')[0]))
-        if countoption == True:
-            activetagdict = projects_tag_counts()
-            querydict = {tag.tag_name:tag for tag in queryset}
-            resultdict = {}
+    queryset = get_tags_by_category(query_terms.get('category')[0]) if 'category' in query_terms else Tag.objects.all()
+    activetagdict = projects_tag_counts()
+    querydict = {tag.tag_name: tag for tag in queryset}
+    resultdict = {}
 
-            for slug in querydict.keys():
-                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-            tags = list(resultdict.values())
-        else:
-            tags = list(queryset.values())
-    else:
-        countoption = bool(strtobool(query_terms.get('getCounts')[0]))
-        if countoption == True:
-            queryset = Tag.objects.all()
-            activetagdict = projects_tag_counts()
-            querydict = {tag.tag_name:tag for tag in queryset}
-            resultdict = {}
-
-            for slug in querydict.keys():
-                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-            tags = list(resultdict.values())
-        else:
-            queryset = Tag.objects.all()
-            tags = list(queryset.values())
-    return JsonResponse(tags, safe=False)
+    for slug in querydict.keys():
+        resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+        resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+    tags_list = list(resultdict.values())
+    return JsonResponse(tags_list, safe=False)
 
 
 @cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
@@ -703,15 +679,6 @@ def projects_with_meta_data(projects, project_pages, project_count):
         'numPages': project_pages,
         'numProjects': project_count
     }
-
-
-def available_tag_filters(projects, selected_tag_filters):
-    project_tags = projects_tag_counts(projects)
-    # Remove any filters that are already selected
-    for tag in selected_tag_filters:
-        if project_tags[tag]:
-            project_tags.pop(tag)
-    return project_tags
 
 
 # TODO: Move group search code into new file
