@@ -32,6 +32,7 @@ type State<T> = {|
   showConfirmDiscardChanges: boolean,
   navigateToStepUponDiscardConfirmation: number,
   savedEmblemVisible: boolean,
+  isSubmitting: boolean,
   clickedNext: boolean,
   initialFormFields: T,
   currentFormFields: T,
@@ -50,6 +51,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
       formIsValid: false,
       fieldsUpdated: false,
       savedEmblemVisible: false,
+      isSubmitting: false,
       clickedNext: false,
       showConfirmDiscardChanges: false,
       initialFormFields: null,
@@ -119,6 +121,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
   onSubmit(event: SyntheticEvent<HTMLFormElement>): void {
     event.preventDefault();
     const currentStep: FormWorkflowStepConfig = this.props.steps[this.state.currentStep];
+    this.setState({isSubmitting: true});
     const submitFunc: Function = () => {
       currentStep.onSubmit(event, this.formRef, this.onSubmitSuccess.bind(this, currentStep.onSubmitSuccess));
     };
@@ -132,7 +135,8 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
         clickedNext: false,
         currentStep: this.state.currentStep + 1,
         fieldsUpdated: false,
-        savedEmblemVisible: false
+        savedEmblemVisible: false,
+        isSubmitting: false
       }));
     }
     if (this.state.fieldsUpdated) {
@@ -207,7 +211,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
                   <span className='create-project-saved-emblem'><i className={GlyphStyles.CircleCheck} aria-hidden="true"></i> Saved</span>}
 
                 <input type="submit" className="btn btn-primary create-btn"
-                      disabled={!this.state.formIsValid}
+                      disabled={!this.state.formIsValid || this.state.isSubmitting}
                       value={this.onLastStep() ? "PUBLISH" : "Next"}
                 />
               </div>
