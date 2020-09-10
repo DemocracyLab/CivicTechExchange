@@ -12,19 +12,20 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         project_github_links = get_project_github_links()
         for github_link in project_github_links:
-            if github_link.link_project.is_searchable:
-                try:
+            try:
+                if github_link.link_project.is_searchable:
                     handle_project_github_updates(github_link)
-                except:
-                    # Keep processing if we run into errors with a particular update
-                    print('Error processing ' + github_link.link_url)
-                    print(traceback.format_exc())
-                    pass
+            except:
+                # Keep processing if we run into errors with a particular update
+                print('Error processing Github Link: ' + github_link.link_url)
+                print(traceback.format_exc())
+                pass
 
 
 def get_project_github_links():
     from civictechprojects.models import ProjectLink
-    return ProjectLink.objects.filter(link_name='link_coderepo', link_url__icontains='github.com/')
+    return ProjectLink.objects.filter(link_name='link_coderepo', link_url__icontains='github.com/')\
+        .exclude(link_project__isnull=True)
 
 
 def handle_project_github_updates(project_github_link):
