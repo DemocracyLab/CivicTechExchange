@@ -99,7 +99,7 @@ class CreateProjectController extends React.PureComponent<{||},State> {
   }
 
   loadProjectDetails(project: ProjectDetailsAPIData): void {
-    if(!CurrentUser.isOwner(project)) {
+    if(!CurrentUser.isCoOwnerOrOwner(project) && !CurrentUser.isStaff()) {
       // TODO: Handle someone other than owner
     } else {
       this.setState({
