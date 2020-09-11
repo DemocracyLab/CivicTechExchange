@@ -57,8 +57,14 @@ class Tag(models.Model):
 
     @staticmethod
     def merge_tags_field(tags_field, tag_entries):
+        """
+        Merge tag entries into a tag field
+        :param tags_field: model tag field
+        :param tag_entries: comma-separated string of tag slugs
+        :returns True if any changes were made
+        """
         tag_entries = tag_entries or ""
-        tag_entry_slugs = set(tag_entries.split(','))
+        tag_entry_slugs = set(tag_entries.split(',') if tag_entries else [])
         existing_tag_slugs = set(tags_field.slugs())
 
         tags_to_add = list(tag_entry_slugs - existing_tag_slugs)
@@ -70,3 +76,4 @@ class Tag(models.Model):
         for tag in tags_to_remove:
             if len(tag) > 0:
                 tags_field.remove(tag)
+        return len(tags_to_add) > 0 or len(tags_to_remove) > 0

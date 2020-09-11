@@ -23,8 +23,16 @@ def read_form_field_datetime(model, form, field_name):
 
 
 def read_form_field_tags(model, form, field_name):
+    """
+    Read tags form field into model field
+    :param model: Model containing tag field
+    :param form: Form data from front-end
+    :param field_name: Name of field shared by model and form
+    :return: True if changes to model tag field were made
+    """
     if field_name in form.data:
-        Tag.merge_tags_field(getattr(model, field_name), form.data.get(field_name))
+        return Tag.merge_tags_field(getattr(model, field_name), form.data.get(field_name))
+    return False
 
 
 def read_form_fields_point(model, form, point_field_name, lat_field_name, long_field_name):
