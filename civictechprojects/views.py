@@ -18,6 +18,7 @@ from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
 from .helpers.projects import projects_tag_counts
 from .sitemaps import SitemapPages
+from common.caching.cache import Cache, CacheKeys
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
@@ -352,6 +353,7 @@ def approve_project(request, project_id):
         if user.is_staff:
             project.is_searchable = True
             project.save()
+            Cache.refresh(CacheKeys.ProjectTagCounts)
             SitemapPages.update()
             notify_project_owners_project_approved(project)
             messages.success(request, 'Project Approved')
