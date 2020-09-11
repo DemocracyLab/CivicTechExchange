@@ -70,7 +70,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({
       project: nextProps.project,
-      viewOnly: props.viewOnly || url.argument('embedded'),
+      viewOnly: nextProps.viewOnly || url.argument('embedded'),
       volunteers: nextProps.project.project_volunteers
     });
   }
