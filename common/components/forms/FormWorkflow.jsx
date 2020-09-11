@@ -2,13 +2,12 @@
 
 import React from "react";
 import Button from 'react-bootstrap/Button';
-import _ from 'lodash'
-
+import {Glyph, GlyphStyles, GlyphSizes} from "../utils/glyphs.js";
+import _ from "lodash";
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import StepIndicatorBars from "../common/StepIndicatorBars.jsx";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import utils from "../utils/utils.js";
-import GlyphStyles from "../utils/glyphs.js";
 
 
 export type FormWorkflowStepConfig<T> = {|
@@ -179,7 +178,6 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
 
   _renderForm(): React$Node {
     const FormComponent: React$Node = this.props.steps[this.state.currentStep].formComponent;
-
     return (
       <form
         onSubmit={this.onSubmit.bind(this)}
@@ -210,10 +208,14 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
                 {!this.state.savedEmblemVisible ? "" :
                   <span className='create-project-saved-emblem'><i className={GlyphStyles.CircleCheck} aria-hidden="true"></i> Saved</span>}
 
-                <input type="submit" className="btn btn-primary create-btn"
+                <button type="submit" className="btn btn-primary create-btn"
                       disabled={!this.state.formIsValid || this.state.isSubmitting}
-                      value={this.onLastStep() ? "PUBLISH" : "Next"}
-                />
+                >
+                  {this.state.isSubmitting
+                    ? <i className={Glyph(GlyphStyles.LoadingSpinner, GlyphSizes.LG)}></i>
+                    : this.onLastStep() ? "PUBLISH" : "Next"
+                  }
+                </button>
               </div>
             </div>
       </form>
