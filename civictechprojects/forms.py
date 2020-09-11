@@ -72,7 +72,7 @@ class ProjectCreationForm(ModelForm):
 
         merge_json_changes(ProjectLink, project, form, 'project_links')
         merge_json_changes(ProjectFile, project, form, 'project_files')
-        merge_json_changes(ProjectPosition, project, form, 'project_positions')
+        tags_changed |= merge_json_changes(ProjectPosition, project, form, 'project_positions')
 
         merge_single_file(project, form, FileCategory.THUMBNAIL, 'project_thumbnail_location')
 

@@ -662,6 +662,12 @@ class ProjectPosition(models.Model):
 
     @staticmethod
     def merge_changes(project, positions):
+        """
+        Merge project position changes
+        :param project: Project with position changes
+        :param positions: Position changes
+        :return: True if there were position changes
+        """
         added_positions = list(filter(lambda position: 'id' not in position, positions))
         updated_positions = list(filter(lambda position: 'id' in position, positions))
         updated_positions_ids = set(map(lambda position: position['id'], updated_positions))
@@ -679,6 +685,8 @@ class ProjectPosition(models.Model):
 
         for deleted_position_id in deleted_position_ids:
             ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
+
+        return len(added_positions) > 0 or len(updated_positions) > 0 or len(deleted_position_ids) > 0
 
 
 class ProjectFile(models.Model):

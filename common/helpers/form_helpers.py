@@ -44,11 +44,20 @@ def read_form_fields_point(model, form, point_field_name, lat_field_name, long_f
 
 
 def merge_json_changes(model_class, model, form, field_name):
+    """
+    Merge changes from json form field to model field
+    :param model_class: Model class
+    :param model: Model instance
+    :param form: form wrapper
+    :param field_name: field name in model and form
+    :return: True if there were changes
+    """
     if field_name in form.data:
         json_text = form.data.get(field_name)
         if len(json_text) > 0:
             json_object = json.loads(json_text)
-            model_class.merge_changes(model, json_object)
+            return model_class.merge_changes(model, json_object)
+    return False
 
 
 def merge_single_file(model, form, file_category, field_name):
