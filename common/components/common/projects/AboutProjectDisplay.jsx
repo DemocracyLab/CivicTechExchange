@@ -35,6 +35,7 @@ type Props = {|
 
 type State = {|
   project: ?ProjectDetailsAPIData,
+  viewOnly: boolean,
   volunteers: ?$ReadOnlyArray<VolunteerDetailsAPIData>,
   showJoinModal: boolean,
   positionToJoin: ?PositionInfo,
@@ -50,6 +51,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     super();
     this.state = {
       project: props.project,
+      viewOnly: props.viewOnly || url.argument('embedded'),
       volunteers: props.project && props.project.project_volunteers,
       showContactModal: false,
       showPositionModal: false,
@@ -68,6 +70,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({
       project: nextProps.project,
+      viewOnly: props.viewOnly || url.argument('embedded'),
       volunteers: nextProps.project.project_volunteers
     });
   }
@@ -228,7 +231,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 handleClose={this.confirmJoinProject.bind(this)}
               />
 
-              {!this.props.viewOnly && this._renderContactAndVolunteerButtons()}
+              {!this.state.viewOnly && this._renderContactAndVolunteerButtons()}
 
             </div>
 
