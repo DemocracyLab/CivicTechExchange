@@ -79,7 +79,8 @@ class ProjectCreationForm(ModelForm):
             print('notifying project creation')
             send_project_creation_notification(project)
 
-        Cache.refresh(CacheKeys.ProjectTagCounts)
+        if project.is_searchable:
+            Cache.refresh(CacheKeys.ProjectTagCounts)
 
         return project
 
