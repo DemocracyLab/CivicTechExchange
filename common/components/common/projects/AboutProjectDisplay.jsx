@@ -390,7 +390,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   _renderPositions(): ?Array<React$Node> {
     const project: ProjectDetailsAPIData = this.state.project;
-    const canApply: boolean = CurrentUser.canVolunteerForProject(project);
+    const canApply: boolean = !this.state.viewOnly && CurrentUser.canVolunteerForProject(project);
     return project && project.project_positions && _.chain(project.project_positions).sortBy(['roleTag.subcategory', 'roleTag.display_name']).value()
       .map((position, i) => {
         return <AboutPositionEntry
