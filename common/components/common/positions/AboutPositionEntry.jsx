@@ -23,11 +23,13 @@ class AboutPositionEntry extends React.PureComponent<Props> {
   }
 
   render(): React$Node {
+    const showApplyButton: boolean = this.props.onClickApply && !CurrentUser.isOwnerOrVolunteering(this.props.project);
+    
     return (
         <div className="Position-entry">
           <div className="Position-header">
           {this._renderHeader()}
-          {!CurrentUser.isOwnerOrVolunteering(this.props.project) && this._renderApplyButton()}
+          {showApplyButton && this._renderApplyButton()}
           </div>
           { this.props.position.descriptionUrl &&
               <div className="Position-description-link"><a href={this.props.position.descriptionUrl} target="_blank" rel="noopener noreferrer">

@@ -58,11 +58,12 @@ class ProjectCreationForm(ModelForm):
 
         read_form_fields_point(project, form, 'project_location_coords', 'project_latitude', 'project_longitude')
 
-        read_form_field_tags(project, form, 'project_issue_area')
-        read_form_field_tags(project, form, 'project_stage')
-        read_form_field_tags(project, form, 'project_technologies')
-        read_form_field_tags(project, form, 'project_organization')
-        read_form_field_tags(project, form, 'project_organization_type')
+        tags_changed = False
+        tags_changed |= read_form_field_tags(project, form, 'project_issue_area')
+        tags_changed |= read_form_field_tags(project, form, 'project_stage')
+        tags_changed |= read_form_field_tags(project, form, 'project_technologies')
+        tags_changed |= read_form_field_tags(project, form, 'project_organization')
+        tags_changed |= read_form_field_tags(project, form, 'project_organization_type')
 
         if not request.user.is_staff:
             project.project_date_modified = timezone.now()
@@ -71,7 +72,7 @@ class ProjectCreationForm(ModelForm):
 
         merge_json_changes(ProjectLink, project, form, 'project_links')
         merge_json_changes(ProjectFile, project, form, 'project_files')
-        merge_json_changes(ProjectPosition, project, form, 'project_positions')
+        tags_changed |= merge_json_changes(ProjectPosition, project, form, 'project_positions')
 
         merge_single_file(project, form, FileCategory.THUMBNAIL, 'project_thumbnail_location')
 
@@ -79,7 +80,8 @@ class ProjectCreationForm(ModelForm):
             print('notifying project creation')
             send_project_creation_notification(project)
 
-        Cache.refresh(CacheKeys.ProjectTagCounts)
+        if project.is_searchable and tags_changed:
+            Cache.refresh(CacheKeys.ProjectTagCounts)
 
         return project
 
