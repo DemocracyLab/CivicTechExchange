@@ -7,6 +7,7 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
+from civictechprojects.caching.cache import ProjectCache
 from common.helpers.form_helpers import is_json_field_empty
 from common.helpers.dictionaries import merge_dicts
 from common.helpers.collections import flatten, count_occurrences
@@ -108,6 +109,9 @@ class Project(Archived):
         return owners + list(map(lambda pv: pv.volunteer, project_co_owners))
 
     def hydrate_to_json(self):
+        return ProjectCache.get(self) or ProjectCache.refresh(self, self._hydrate_to_json())
+
+    def _hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_project=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
