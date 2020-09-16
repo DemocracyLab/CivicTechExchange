@@ -5,6 +5,7 @@ from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCate
 from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification, send_group_creation_notification
 from democracylab.models import get_request_contributor
+from civictechprojects.caching.cache import ProjectCache
 from common.caching.cache import Cache, CacheKeys
 from common.helpers.date_helpers import parse_front_end_datetime
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
@@ -82,6 +83,9 @@ class ProjectCreationForm(ModelForm):
 
         if project.is_searchable and tags_changed:
             Cache.refresh(CacheKeys.ProjectTagCounts)
+
+        # TODO: Don't recache when nothing has changed
+        ProjectCache.refresh(project)
 
         return project
 
