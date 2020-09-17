@@ -25,6 +25,8 @@ class FindEventsController extends React.PureComponent {
       }});
   }
 
+
+//TODO: When enabling EventfilterContainer, remove "justify-content-center" class from row div
   render(): React$Node {
     return (
       <React.Fragment>
@@ -34,8 +36,8 @@ class FindEventsController extends React.PureComponent {
         />
         <div className="FindEventsController-root">
           <div className="container">
-            <div className="row">
-              <EventFilterContainer />
+            <div className="row justify-content-center">
+              {/*EventFilterContainer />*/}
               <EventCardsContainer showSearchControls={true}/>
             </div>
           </div>
