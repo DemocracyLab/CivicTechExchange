@@ -1,7 +1,6 @@
 // @flow
 
 import Headers from "../common/Headers.jsx";
-import SplashScreen, {HeroImage} from "../componentsBySection/FindProjects/SplashScreen.jsx";
 import EventCardsContainer from "../componentsBySection/FindEvents/EventCardsContainer.jsx";
 import EventFilterContainer from "../componentsBySection/FindEvents/filters/EventFilterContainer.jsx";
 import React from 'react';
@@ -26,6 +25,8 @@ class FindEventsController extends React.PureComponent {
       }});
   }
 
+
+//TODO: When enabling EventfilterContainer, remove "justify-content-center" class from row div
   render(): React$Node {
     return (
       <React.Fragment>
@@ -34,11 +35,9 @@ class FindEventsController extends React.PureComponent {
           description="Optimizing the connection between skilled volunteers and tech-for-good events"
         />
         <div className="FindEventsController-root">
-          <SplashScreen className="FindEventsController-topsplash" header={"Tech-for-Good Events"} img={HeroImage.FindEvents}>
-          </SplashScreen>
           <div className="container">
-            <div className="row">
-              <EventFilterContainer />
+            <div className="row justify-content-center">
+              {/*EventFilterContainer />*/}
               <EventCardsContainer showSearchControls={true}/>
             </div>
           </div>
