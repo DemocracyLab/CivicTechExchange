@@ -49,9 +49,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
        <React.Fragment>
          <ContactUsModal showModal={this.state.showContactModal} onSubmit={this.onSubmit.bind(this)}/>
          {this._renderHeader()}
-         <div className="container corporate-hackathon-root">
-           <div className="row">
+           <div className="hero-wide corporate-hackathon-root">
             {this._hostWithUs()}
+           </div>
+         <div className="container">
+           <div className="row">
             {this._howItWorks()}
             {this._whyEngage()}
             {this._strengthenTeam()}
@@ -64,7 +66,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
 
   _hostWithUs(): $React$Node {
     return (
-      <div className="corporate-hackathon-hostwithus col-12">
+      <div className="corporate-hackathon-hostwithus">
         <div className="corporate-hackathon-hostwithus-left">
           <h1>Host a hackathon with us!</h1>
           <p>Create a unique employee engagement experience and deliver instant-impact tech projects.</p>
