@@ -23,12 +23,25 @@ def read_form_field_string(model, form, field_name, transformation=None):
         setattr(model, field_name, form_field_content)
     return field_changed
 
+
 def read_form_field_boolean(model, form, field_name):
+    """
+    :param model: Model containing boolean field
+    :param form: Form data from front-end
+    :param field_name: Name of field shared by model and form
+    :return: True if changes to model boolean field were made
+    """
     read_form_field_string(model, form, field_name, lambda str: strtobool(str))
 
 
 def read_form_field_datetime(model, form, field_name):
-    read_form_field_string(model, form, field_name, lambda str: parse_front_end_datetime(str))
+    """
+    :param model: Model containing datetime field
+    :param form: Form data from front-end
+    :param field_name: Name of field shared by model and form
+    :return: True if changes to model datetime field were made
+    """
+    return read_form_field_string(model, form, field_name, lambda str: parse_front_end_datetime(str))
 
 
 def read_form_field_tags(model, form, field_name):
@@ -76,7 +89,6 @@ def merge_single_file(model, form, file_category, field_name):
     :param form: form wrapper
     :param file_category: File type
     :param field_name: field name in model and form
-    :return: True if there were changes
     :return: True if there were changes
     """
     from civictechprojects.models import ProjectFile

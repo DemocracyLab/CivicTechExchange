@@ -113,17 +113,18 @@ class EventCreationForm(ModelForm):
         if not is_co_owner_or_staff(request.user, event):
             raise PermissionDenied()
 
+        project_fields_changed = False
         read_form_field_string(event, form, 'event_agenda')
         read_form_field_string(event, form, 'event_description')
         read_form_field_string(event, form, 'event_short_description')
-        read_form_field_string(event, form, 'event_name')
-        read_form_field_string(event, form, 'event_location')
+        project_fields_changed |= read_form_field_string(event, form, 'event_name')
+        project_fields_changed |= read_form_field_string(event, form, 'event_location')
         read_form_field_string(event, form, 'event_rsvp_url')
         read_form_field_string(event, form, 'event_live_id')
-        read_form_field_string(event, form, 'event_organizers_text')
+        project_fields_changed |= read_form_field_string(event, form, 'event_organizers_text')
 
-        read_form_field_datetime(event, form, 'event_date_start')
-        read_form_field_datetime(event, form, 'event_date_end')
+        project_fields_changed |= read_form_field_datetime(event, form, 'event_date_start')
+        project_fields_changed |= read_form_field_datetime(event, form, 'event_date_end')
 
         read_form_field_boolean(event, form, 'is_searchable')
         read_form_field_boolean(event, form, 'is_created')
@@ -132,9 +133,12 @@ class EventCreationForm(ModelForm):
 
         event.event_date_modified = timezone.now()
 
-        merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
+        project_fields_changed |= merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
 
         event.save()
+
+        if project_fields_changed:
+            event.update_linked_items()
 
         return event
 

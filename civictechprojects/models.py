@@ -444,6 +444,12 @@ class Event(Archived):
 
         return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
 
+    def update_linked_items(self):
+        # Recache linked projects
+        project_relationships = ProjectRelationship.objects.filter(relationship_event=self)
+        for project_relationship in project_relationships:
+            project_relationship.relationship_project.recache()
+
 
 class ProjectRelationship(models.Model):
     relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True)
