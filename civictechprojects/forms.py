@@ -83,6 +83,9 @@ class ProjectCreationForm(ModelForm):
         if project.is_searchable and tags_changed:
             Cache.refresh(CacheKeys.ProjectTagCounts)
 
+        # TODO: Don't recache when nothing has changed
+        project.recache()
+
         return project
 
 
@@ -110,17 +113,18 @@ class EventCreationForm(ModelForm):
         if not is_co_owner_or_staff(request.user, event):
             raise PermissionDenied()
 
+        project_fields_changed = False
         read_form_field_string(event, form, 'event_agenda')
         read_form_field_string(event, form, 'event_description')
         read_form_field_string(event, form, 'event_short_description')
-        read_form_field_string(event, form, 'event_name')
-        read_form_field_string(event, form, 'event_location')
+        project_fields_changed |= read_form_field_string(event, form, 'event_name')
+        project_fields_changed |= read_form_field_string(event, form, 'event_location')
         read_form_field_string(event, form, 'event_rsvp_url')
         read_form_field_string(event, form, 'event_live_id')
-        read_form_field_string(event, form, 'event_organizers_text')
+        project_fields_changed |= read_form_field_string(event, form, 'event_organizers_text')
 
-        read_form_field_datetime(event, form, 'event_date_start')
-        read_form_field_datetime(event, form, 'event_date_end')
+        project_fields_changed |= read_form_field_datetime(event, form, 'event_date_start')
+        project_fields_changed |= read_form_field_datetime(event, form, 'event_date_end')
 
         read_form_field_boolean(event, form, 'is_searchable')
         read_form_field_boolean(event, form, 'is_created')
@@ -129,9 +133,12 @@ class EventCreationForm(ModelForm):
 
         event.event_date_modified = timezone.now()
 
-        merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
+        project_fields_changed |= merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
 
         event.save()
+
+        if project_fields_changed:
+            event.update_linked_items()
 
         return event
 
@@ -171,13 +178,14 @@ class GroupCreationForm(ModelForm):
         is_created_original = group.is_created
         read_form_field_boolean(group, form, 'is_created')
 
+        project_fields_changed = False
         read_form_field_string(group, form, 'group_description')
         read_form_field_string(group, form, 'group_short_description')
         read_form_field_string(group, form, 'group_country')
         read_form_field_string(group, form, 'group_location')
         read_form_field_string(group, form, 'group_state')
         read_form_field_string(group, form, 'group_city')
-        read_form_field_string(group, form, 'group_name')
+        project_fields_changed |= read_form_field_string(group, form, 'group_name')
         read_form_field_string(group, form, 'group_url')
 
         read_form_fields_point(group, form, 'group_location_coords', 'group_latitude', 'group_longitude')
@@ -190,7 +198,10 @@ class GroupCreationForm(ModelForm):
         merge_json_changes(ProjectLink, group, form, 'group_links')
         merge_json_changes(ProjectFile, group, form, 'group_files')
 
-        merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
+        project_fields_changed |= merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
+
+        if project_fields_changed:
+            group.update_linked_items()
 
         if is_created_original != group.is_created:
             send_group_creation_notification(group)

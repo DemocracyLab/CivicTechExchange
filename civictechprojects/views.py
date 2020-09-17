@@ -338,7 +338,7 @@ def get_project(request, project_id):
 
     if project is not None:
         if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
-            return JsonResponse(project.hydrate_to_json())
+            return JsonResponse(project.hydrate_to_json(), safe=False)
         else:
             return HttpResponseForbidden()
     else:

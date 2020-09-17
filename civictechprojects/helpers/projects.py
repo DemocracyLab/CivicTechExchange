@@ -5,7 +5,7 @@ from collections import Counter
 
 
 def projects_tag_counts():
-    return Cache.get(CacheKeys.ProjectTagCounts, _projects_tag_counts)
+    return Cache.get(CacheKeys.ProjectTagCounts, generator_func=_projects_tag_counts)
 
 
 def _projects_tag_counts():
