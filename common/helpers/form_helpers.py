@@ -7,12 +7,21 @@ from django.contrib.gis.geos import Point
 
 
 def read_form_field_string(model, form, field_name, transformation=None):
+    """
+    :param model: Model containing string field
+    :param form: Form data from front-end
+    :param field_name: Name of field shared by model and form
+    :param transformation: Transformation of form data to perform before inserting into model
+    :return: True if changes to model string field were made
+    """
+    field_changed = False
     if field_name in form.data:
         form_field_content = form.data.get(field_name)
         if transformation is not None:
             form_field_content = transformation(form_field_content)
+        field_changed = getattr(model, field_name) != form_field_content
         setattr(model, field_name, form_field_content)
-
+    return field_changed
 
 def read_form_field_boolean(model, form, field_name):
     read_form_field_string(model, form, field_name, lambda str: strtobool(str))
@@ -61,12 +70,23 @@ def merge_json_changes(model_class, model, form, field_name):
 
 
 def merge_single_file(model, form, file_category, field_name):
+    """
+    Merge change for a single file form field
+    :param model: Model instance
+    :param form: form wrapper
+    :param file_category: File type
+    :param field_name: field name in model and form
+    :return: True if there were changes
+    :return: True if there were changes
+    """
     from civictechprojects.models import ProjectFile
+    field_changed = False
     if field_name in form.data:
         file_content = form.data.get(field_name)
         if file_content and len(file_content) > 0:
             file_json = json.loads(file_content)
-            ProjectFile.replace_single_file(model, file_category, file_json)
+            field_changed = ProjectFile.replace_single_file(model, file_category, file_json)
+    return field_changed
 
 
 def is_json_field_empty(field_json):

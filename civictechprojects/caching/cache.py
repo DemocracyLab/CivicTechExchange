@@ -8,6 +8,7 @@ class ProjectCacheManager:
         return Cache.get(self._get_key(project))
 
     def refresh(self, project, value):
+        print('Re-caching project ' + str(project))
         Cache.refresh(self._get_key(project), value)
         return value
 

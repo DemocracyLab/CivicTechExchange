@@ -207,6 +207,9 @@ class Project(Archived):
         self.project_date_modified = time or timezone.now()
         self.save()
 
+    def recache(self):
+        ProjectCache.refresh(self, self._hydrate_to_json())
+
 
 class Group(Archived):
     group_creator = models.ForeignKey(Contributor, related_name='group_creator')
@@ -321,6 +324,16 @@ class Group(Archived):
             return issue_area_counts
         else:
             return all_issue_area_names
+
+    def get_group_projects(self):
+        slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
+        return Event.objects.filter(event_legacy_organization__name__in=slugs)
+
+    def update_linked_items(self):
+        # Recache linked projects
+        project_relationships = ProjectRelationship.objects.filter(relationship_group=self)
+        for project_relationship in project_relationships:
+            project_relationship.relationship_project.recache()
 
 
 class TaggedEventOrganization(TaggedItemBase):
@@ -759,6 +772,12 @@ class ProjectFile(models.Model):
 
     @staticmethod
     def replace_single_file(owner, file_category, file_json):
+        """
+        :param owner: Owner model instace of the file
+        :param file_category: File type
+        :param file_json: File metadata
+        :return: True if the file was changed
+        """
         if type(owner) is Project:
             existing_file = ProjectFile.objects.filter(file_project=owner.id, file_category=file_category.value).first()
         elif type(owner) is Group:
@@ -769,19 +788,24 @@ class ProjectFile(models.Model):
             existing_file = ProjectFile.objects.filter(file_user=owner.id, file_category=file_category.value).first()
 
         is_empty_field = is_json_field_empty(file_json)
+        file_changed = False
         if is_empty_field and existing_file:
             # Remove existing file
             existing_file.delete()
+            file_changed = True
         elif not is_empty_field:
             if not existing_file:
                 # Add new file
                 thumbnail = ProjectFile.from_json(owner, file_category, file_json)
                 thumbnail.save()
+                file_changed = True
             elif file_json['key'] != existing_file.file_key:
                 # Replace existing file
                 thumbnail = ProjectFile.from_json(owner, file_category, file_json)
                 thumbnail.save()
                 existing_file.delete()
+                file_changed = True
+        return file_changed
 
     @staticmethod
     def from_json(owner, file_category, file_json):

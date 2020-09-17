@@ -5,7 +5,6 @@ from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCate
 from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification, send_group_creation_notification
 from democracylab.models import get_request_contributor
-from civictechprojects.caching.cache import ProjectCache
 from common.caching.cache import Cache, CacheKeys
 from common.helpers.date_helpers import parse_front_end_datetime
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
@@ -85,7 +84,7 @@ class ProjectCreationForm(ModelForm):
             Cache.refresh(CacheKeys.ProjectTagCounts)
 
         # TODO: Don't recache when nothing has changed
-        ProjectCache.refresh(project)
+        project.recache()
 
         return project
 
@@ -175,13 +174,14 @@ class GroupCreationForm(ModelForm):
         is_created_original = group.is_created
         read_form_field_boolean(group, form, 'is_created')
 
+        project_fields_changed = False
         read_form_field_string(group, form, 'group_description')
         read_form_field_string(group, form, 'group_short_description')
         read_form_field_string(group, form, 'group_country')
         read_form_field_string(group, form, 'group_location')
         read_form_field_string(group, form, 'group_state')
         read_form_field_string(group, form, 'group_city')
-        read_form_field_string(group, form, 'group_name')
+        project_fields_changed |= read_form_field_string(group, form, 'group_name')
         read_form_field_string(group, form, 'group_url')
 
         read_form_fields_point(group, form, 'group_location_coords', 'group_latitude', 'group_longitude')
@@ -194,7 +194,10 @@ class GroupCreationForm(ModelForm):
         merge_json_changes(ProjectLink, group, form, 'group_links')
         merge_json_changes(ProjectFile, group, form, 'group_files')
 
-        merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
+        project_fields_changed |= merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
+
+        if project_fields_changed:
+            group.update_linked_items()
 
         if is_created_original != group.is_created:
             send_group_creation_notification(group)
