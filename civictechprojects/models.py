@@ -444,11 +444,20 @@ class Event(Archived):
 
         return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
 
+    def get_linked_projects(self):
+        # Get projects by legacy organization
+        projects = None
+        legacy_org_slugs = self.event_legacy_organization.slugs()
+        if legacy_org_slugs and len(legacy_org_slugs) > 0:
+            projects = Project.objects.filter(project_organization__name__in=legacy_org_slugs)
+        return projects
+
     def update_linked_items(self):
         # Recache linked projects
-        project_relationships = ProjectRelationship.objects.filter(relationship_event=self)
-        for project_relationship in project_relationships:
-            project_relationship.relationship_project.recache()
+        projects = self.get_linked_projects()
+        if projects:
+            for project in projects:
+                project.recache()
 
 
 class ProjectRelationship(models.Model):
