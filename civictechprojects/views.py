@@ -1163,6 +1163,7 @@ def invite_project_to_group(request, group_id):
     is_approved = is_co_owner_or_owner(user, project)
     project_relation = ProjectRelationship.create(group, project, is_approved, message)
     project_relation.save()
+    project_relation.relationship_project.recache()
     if not is_approved:
         send_group_project_invitation_email(project_relation)
     return HttpResponse(status=200)
@@ -1188,6 +1189,7 @@ def accept_group_invitation(request, invite_id):
         project_relation.is_approved = True
         project_relation.save()
         update_project_timestamp(request, project)
+        project_relation.relationship_project.recache()
         if request.method == 'GET':
             messages.add_message(request, messages.SUCCESS, 'Your project is now part of the group ' + project_relation.relationship_group.group_name)
             return redirect(about_project_url)
@@ -1214,8 +1216,10 @@ def reject_group_invitation(request, invite_id):
 
     user = get_request_contributor(request)
     if is_co_owner_or_owner(user, project):
+        project = Project.objects.get(id=project_relation.relationship_project.id)
         project_relation.delete()
         update_project_timestamp(request, project)
+        project.recache()
         if request.method == 'GET':
             # TODO: Add messaging of some kind to front end
             return redirect(about_project_url)
