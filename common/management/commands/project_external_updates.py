@@ -73,6 +73,7 @@ def add_commits_to_database(project, commits_to_ingest):
     from civictechprojects.models import ProjectCommit
     for commit_info in commits_to_ingest:
         ProjectCommit.create(project, commit_info[0], 'master', commit_info[1])
+    project.recache()
 
 
 def get_project_latest_commit_date(project):
