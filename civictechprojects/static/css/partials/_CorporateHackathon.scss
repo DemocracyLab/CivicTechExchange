@@ -1,9 +1,15 @@
 //standard margin for this page, to be changed later
 $ch-margin: 36px;
-$ch-mobile-vertical-padding: 65px;
-$ch-desktop-vertical-padding: 135px;
-$ch-horizontalpadding: 12.5%; // proportional scaling from 175px @ 1400, note that it overrides .container gutters of 15px.
+$ch-mobile-vertical-padding: 65px; //section vertical padding
+$ch-desktop-vertical-padding: 135px; //section vertical padding above 992px
+$ch-horizontalpadding: 12.5%; // proportional scaling from 175px @ 1400px width, note that it must override .container gutters of 15px or be calc(12.5% - 15px).
+$ch-greyfont: #6f6f6f;
 
+// regular: 400
+// medium: 500
+// semibold: 600
+// bold: 700
+// extrabold: 800
 
 .corporate-hackathon-root {
   .container {
@@ -86,10 +92,10 @@ $ch-horizontalpadding: 12.5%; // proportional scaling from 175px @ 1400, note th
 .corporate-hackathon-whyengage-source {
   margin-bottom: $ch-margin;
   padding-left: 40px; /* match the list items above it */
-  color: $color-text-grey;
+  color: $ch-greyfont;
   font-size: 14px;
   a {
-    color: $color-text-grey;
+    color: $ch-greyfont;
     text-decoration: underline;
    }
 }
@@ -110,16 +116,23 @@ $ch-horizontalpadding: 12.5%; // proportional scaling from 175px @ 1400, note th
 }
 .corporate-hackathon-sponsorships {
   h2 {
+    font-weight: bold;
     margin-bottom: $ch-margin;
+  }
+  h3 {
+    font-weight: 600;
   }
   h3, h4 {
     font-size: 16px;
+    margin-bottom: 24px;
   }
   h4 {
-    color: $color-text-grey;
+    color: $ch-greyfont;
   }
   p {
     font-size: 14px;
+    line-height: 2;
+    margin-bottom: 34px;
   }
 }
 .corporate-hackathon-sponsorships-image {
@@ -241,7 +254,7 @@ $ch-horizontalpadding: 12.5%; // proportional scaling from 175px @ 1400, note th
   .corporate-hackathon-sponsorships {
     h2 {
       font-size: 40px;
-      font-weight: bold;
+      margin-bottom: 80px;
     }
     h3 {
       font-size: 36px;
@@ -251,6 +264,7 @@ $ch-horizontalpadding: 12.5%; // proportional scaling from 175px @ 1400, note th
     }
     p {
       font-size: 16px;
+      margin-bottom: 34px;
     }
   }
   .corporate-hackathon-sponsorships-container {
@@ -260,11 +274,19 @@ $ch-horizontalpadding: 12.5%; // proportional scaling from 175px @ 1400, note th
   }
   .corporate-hackathon-sponsorships-image {
     flex-basis: 50%;
-    padding-right: 16px;
+    padding-right: 22px;
+    margin-bottom: 0;
+    img {
+      margin-bottom: 0;
+    }
   }
   .corporate-hackathon-sponsorships-text {
-    padding-left: 16px;
+    padding-left: 23px; // 22 + 23 = 45
     flex-basis: 50%;
+  }
+  .corporate-hackathon-sponsorships-button {
+    text-align: left;
+    margin-bottom: 0;
   }
   // desktop section padding
   .corporate-hackathon-hostwithus, .corporate-hackathon-howitworks, .corporate-hackathon-whyengage, .corporate-hackathon-sponsorships {
