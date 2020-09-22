@@ -121,7 +121,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </div>
           <div className="corporate-hackathon-howitworks-item">
             <img src={cdn.image("hack-icon.png")} alt="Hack"/>
-            <div><Ch3Icon /><h4>Hack</h4></div>
+            <div><Ch3Icon /><h4>Hack!</h4></div>
             <p>On the day of the hackathon, your team of product, design, and development volunteers will collaborate and create civic tech! We’ll take care of everything else.</p>
           </div>
         </div>
