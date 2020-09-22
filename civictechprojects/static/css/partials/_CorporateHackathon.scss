@@ -77,6 +77,7 @@ $ch-greyfont: #6f6f6f;
     padding-top: 6px; /* align text with li checkmark */
     font-size: 15px;
     font-weight: bold;
+    margin-bottom: 22px;
   }
   ul {
     list-style-type: none;
@@ -234,6 +235,12 @@ $ch-greyfont: #6f6f6f;
       font-size: 24px;
       padding-top: 1px; /* positions text next to checkmark image */
     }
+    li {
+      margin-bottom: 64px;
+    }
+    li:last-of-type {
+      margin-bottom: 26px;
+    }
   }
   .corporate-hackathon-whyengage-container {
     display: flex;
@@ -241,11 +248,13 @@ $ch-greyfont: #6f6f6f;
     justify-content: space-around;
   }
   .corporate-hackathon-whyengage-left {
-    flex-basis: 60%;
-    padding-right: 50px;
+    flex-basis: 50%;
+    padding-right: 46px; // 46 + 46 = 92px
   }
   .corporate-hackathon-whyengage-right {
-    flex-basis: 40%;
+    flex-basis: 50%;
+    margin: auto 0;
+    padding-left: 46px;
   }
   .corporate-hackathon-strengthen {
     h2 {

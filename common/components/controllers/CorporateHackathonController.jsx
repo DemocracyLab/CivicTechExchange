@@ -141,7 +141,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             <h2>Why Engage?</h2>
             <ul>
               <li style={whyStyle}>
-                <h3>Build Company Culture</h3>
+                <h3>Build company culture</h3>
                 <p>Hackathons cultivate an open, agile company culture centered on innovation, flexibility, and idea sharing, even between positions and unrelated departments.</p>
               </li>
               <li style={whyStyle}>
