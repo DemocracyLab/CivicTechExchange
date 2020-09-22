@@ -111,7 +111,9 @@ $ch-greyfont: #6f6f6f;
   font-size: 16px;
   background: $color-orange;
   h2 {
-    margin-bottom: 24px;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 50px;
   }
 }
 .corporate-hackathon-sponsorships {
@@ -246,11 +248,11 @@ $ch-greyfont: #6f6f6f;
     flex-basis: 40%;
   }
   .corporate-hackathon-strengthen {
-    padding: 60px 16px;
     h2 {
-      font-size: 32px;
+      font-size: 28px;
     }
   }
+
   .corporate-hackathon-sponsorships {
     h2 {
       font-size: 40px;
