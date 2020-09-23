@@ -205,7 +205,7 @@ $ch-greyfont: #6f6f6f;
   }
   .corporate-hackathon-howitworks-item {
     font-size: 16px;
-    padding: 0 24px;
+    padding: 0 45px; // 45+45 gives 70 between items 
     img {
       width: auto;
       height: 61px; /* this is for alignment, and needs source image file fixing to remove */
