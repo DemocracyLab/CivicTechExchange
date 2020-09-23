@@ -23,6 +23,9 @@ $ch-greyfont: #6f6f6f;
 .corporate-hackathon-hostwithus {
   background-color: $color-background-light;
   text-align: center;
+  h1, h2 {
+    font-weight: bold;
+  }
   h1 {
     font-size: 20px;
     margin-bottom: $ch-margin;
@@ -51,12 +54,17 @@ $ch-greyfont: #6f6f6f;
 .corporate-hackathon-hostwithus-results-item {
   text-align: center;
   font-size: 12px;
-  flex: 0 1 25%;
-
+  margin: 0 20px;
   h3 {
   font-size: 14px;
   font-weight: bold;
   }
+}
+.corporate-hackathon-hostwithus-results-item:first-of-type {
+  margin-left: 0;
+}
+.corporate-hackathon-hostwithus-results-item:last-of-type {
+  margin-right: 0;
 }
 .corporate-hackathon-howitworks-item {
   text-align: center;
@@ -150,7 +158,7 @@ $ch-greyfont: #6f6f6f;
   margin-bottom: $ch-margin;
 }
 // mobile section padding
-.corporate-hackathon-hostwithus, .corporate-hackathon-howitworks, .corporate-hackathon-whyengage, .corporate-hackathon-sponsorships {
+.corporate-hackathon-howitworks, .corporate-hackathon-whyengage, .corporate-hackathon-sponsorships {
   padding: $ch-mobile-vertical-padding $ch-horizontalpadding;
 }
 
@@ -158,26 +166,45 @@ $ch-greyfont: #6f6f6f;
   .corporate-hackathon-hostwithus {
     font-size: 16px;
     text-align: left;
-    display: flex;
+    padding-top: 105px;
+    padding-bottom: 95px;
     h1 {
       font-size: 48px;
-      font-weight: bold;
+      margin-bottom: 45px;
     }
     h2 {
       font-size: 20px;
-      color: $color-text-grey;
+      color: $ch-greyfont;
+      margin: 0 0 20px 0;
     }
     p {
       font-size: 20px;
     }
+    .hero-wide-content {
+      max-width: 2044px;
+      padding: 0 175px;
+      display: flex;
+      flex: 1;
+      justify-content: space-between;
+      margin: 0 auto;
+    }
+    .corporate-hackathon-hostwithus-left-text {
+      margin-bottom: 70px;
+    }
+    .corporate-hackathon-hostwithus-left-button {
+      margin-bottom: 88px;
+    }
+  }
+  .corporate-hackathon-hostwithus-left, .corporate-hackathon-hostwithus-right {
+    flex-basis: 50%;
+    max-width: 700px; // constrain these at high px width displays
   }
   .corporate-hackathon-hostwithus-left {
-    flex-basis: 60%;
-    padding-right: 50px;
+    padding-top: 65px;
   }
-  .corporate-hackathon-hostwithus-right {
-    flex-basis: 40%;
-  }
+  // .corporate-hackathon-hostwithus-right {
+  //   align-self: flex-end;
+  // }
   .corporate-hackathon-hostwithus-header {
     margin-top: 0;
   }
@@ -205,7 +232,7 @@ $ch-greyfont: #6f6f6f;
   }
   .corporate-hackathon-howitworks-item {
     font-size: 16px;
-    padding: 0 45px; // 45+45 gives 70 between items 
+    padding: 0 45px; // 45+45 gives 70 between items
     img {
       width: auto;
       height: 61px; /* this is for alignment, and needs source image file fixing to remove */
@@ -300,7 +327,7 @@ $ch-greyfont: #6f6f6f;
     margin-bottom: 0;
   }
   // desktop section padding
-  .corporate-hackathon-hostwithus, .corporate-hackathon-howitworks, .corporate-hackathon-whyengage, .corporate-hackathon-sponsorships {
+  .corporate-hackathon-howitworks, .corporate-hackathon-whyengage, .corporate-hackathon-sponsorships {
     padding: $ch-desktop-vertical-padding $ch-horizontalpadding;
   }
 }
