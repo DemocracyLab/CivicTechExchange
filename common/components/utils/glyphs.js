@@ -37,7 +37,8 @@ export const GlyphStyles: {[key: string]: string} = {
   Envelope: "far fa-envelope", // https://fontawesome.com/icons/envelope?style=regular
   CreativeCommons: "fab fa-creative-commons", //https://fontawesome.com/icons/creative-commons?style=brands
   CreativeCommonsBy: "fab fa-creative-commons-by", // https://fontawesome.com/icons/creative-commons-by?style=brands
-  Calendar: "far fa-calendar" // https://fontawesome.com/icons/calendar?style=regular
+  Calendar: "far fa-calendar", // https://fontawesome.com/icons/calendar?style=regular
+  Users: "fas fa-users" // https://fontawesome.com/icons/users?style=solid
 };
 
 export const GlyphSizes: {[key: string]: string} = {

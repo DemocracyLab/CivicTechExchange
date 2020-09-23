@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from common.helpers.collections import distinct
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
@@ -76,6 +77,17 @@ class Contributor(User):
             user['user_thumbnail'] = thumbnail_files[0].to_json()
 
         return user
+
+    def update_linked_items(self):
+        # Recache owned projects
+        owned_projects = civictechprojects.models.Project.objects.filter(project_creator=self)
+
+        # Recache projects user is volunteering with
+        volunteering_projects = list(map(lambda vr: vr.project, civictechprojects.models.VolunteerRelation.objects.filter(volunteer=self)))
+
+        all_projects = distinct(owned_projects, volunteering_projects, lambda project: project.id)
+        for project in all_projects:
+            project.recache()
 
 
 def get_contributor_by_username(username):

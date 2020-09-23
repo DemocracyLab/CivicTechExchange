@@ -199,7 +199,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         <div className="col-12 col-md-6">
           <div className="about-us-ps-problem">
           <h2>Problem</h2>
-            <p>Everyday people generate powerful ideas that can change the world. Most of these ideas never achieve their potential because of a lack of resources and support.</p>
+            <p>Too few tech-for-good projects launch, scale, and achieve impact in the world.</p>
           </div>
           <div className="about-us-show-sm-down col-12 col-md-6 about-us-ps-image">
             <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)}></img>

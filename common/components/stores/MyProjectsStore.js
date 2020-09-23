@@ -4,6 +4,7 @@ import {ReduceStore} from 'flux/utils';
 import {Record} from 'immutable'
 import type {TagDefinition, VolunteerUserData} from '../utils/ProjectAPIUtils.js';
 import UniversalDispatcher from './UniversalDispatcher.js';
+import CurrentUser from "../utils/CurrentUser.js";
 
 export type MyProjectData = {|
   +project_id: number,
@@ -55,7 +56,7 @@ class MyProjectsStore extends ReduceStore<State> {
     // TODO: See if we need to ensure no duplicate action names between stores that use UniversalDispatcher
     switch (action.type) {
       case 'INIT':
-        if(!state.isLoading || !state.myProjects) {
+        if(CurrentUser.isLoggedIn() && (!state.isLoading || !state.myProjects)) {
           return this._loadProjects(state);
         } else {
           return state;

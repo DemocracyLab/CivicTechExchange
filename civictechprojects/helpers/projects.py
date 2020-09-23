@@ -1,8 +1,14 @@
 from civictechprojects.models import Project, ProjectPosition
 from common.helpers.dictionaries import merge_dicts
+from common.caching.cache import Cache, CacheKeys
 from collections import Counter
 
+
 def projects_tag_counts():
+    return Cache.get(CacheKeys.ProjectTagCounts, generator_func=_projects_tag_counts)
+
+
+def _projects_tag_counts():
     projects = Project.objects.filter(is_searchable=True)
     issues, technologies, stage, organization, organization_type, positions = [], [], [], [], [], []
     if projects:

@@ -88,7 +88,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
               </div>
 
               {this.state.event.event_rsvp_url && this._renderRSVPButton()}
-              {!this.props.viewOnly && window.QIQO_IFRAME_URL && event.event_live_id && this._renderJoinLiveEventButton()}
+              {!this.props.viewOnly && event.event_live_id && this._renderJoinLiveEventButton()}
             </div>
           </div>
           <div className="col-xs-12 col-lg-8 AboutEvent-splash">
@@ -150,7 +150,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       //TODO: Handle un-verified users
       text = "Join Event";
       //TODO: Incorporate live event id into Live Event page
-      url = urlHelper.section(Section.LiveEvent);
+      url = urlHelper.section(Section.LiveEvent, {id: this.props.event.event_live_id});
     } else {
       text = "Log In to Join Event";
       url = urlHelper.logInThenReturn();

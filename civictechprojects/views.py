@@ -18,6 +18,7 @@ from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
 from .helpers.projects import projects_tag_counts
 from .sitemaps import SitemapPages
+from common.caching.cache import Cache, CacheKeys
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
@@ -39,44 +40,20 @@ from django.views.decorators.cache import cache_page
 import requests
 
 
-
-# TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
-@cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
 def tags(request):
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
         url_parts, keep_blank_values=0, strict_parsing=0)
-    if 'category' in query_terms:
-        category = query_terms.get('category')[0]
-        queryset = get_tags_by_category(category)
-        countoption = bool(strtobool(query_terms.get('getCounts')[0]))
-        if countoption == True:
-            activetagdict = projects_tag_counts()
-            querydict = {tag.tag_name:tag for tag in queryset}
-            resultdict = {}
+    queryset = get_tags_by_category(query_terms.get('category')[0]) if 'category' in query_terms else Tag.objects.all()
+    activetagdict = projects_tag_counts()
+    querydict = {tag.tag_name: tag for tag in queryset}
+    resultdict = {}
 
-            for slug in querydict.keys():
-                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-            tags = list(resultdict.values())
-        else:
-            tags = list(queryset.values())
-    else:
-        countoption = bool(strtobool(query_terms.get('getCounts')[0]))
-        if countoption == True:
-            queryset = Tag.objects.all()
-            activetagdict = projects_tag_counts()
-            querydict = {tag.tag_name:tag for tag in queryset}
-            resultdict = {}
-
-            for slug in querydict.keys():
-                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-            tags = list(resultdict.values())
-        else:
-            queryset = Tag.objects.all()
-            tags = list(queryset.values())
-    return JsonResponse(tags, safe=False)
+    for slug in querydict.keys():
+        resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+        resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+    tags_list = list(resultdict.values())
+    return JsonResponse(tags_list, safe=False)
 
 
 @cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
@@ -361,7 +338,7 @@ def get_project(request, project_id):
 
     if project is not None:
         if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
-            return JsonResponse(project.hydrate_to_json())
+            return JsonResponse(project.hydrate_to_json(), safe=False)
         else:
             return HttpResponseForbidden()
     else:
@@ -376,6 +353,7 @@ def approve_project(request, project_id):
         if user.is_staff:
             project.is_searchable = True
             project.save()
+            Cache.refresh(CacheKeys.ProjectTagCounts)
             SitemapPages.update()
             notify_project_owners_project_approved(project)
             messages.success(request, 'Project Approved')
@@ -581,6 +559,45 @@ def recent_projects_list(request):
         return JsonResponse({'projects': hydrated_project_list})
 
 
+def limited_listings(request):
+    """Summarizes current positions in a format specified by the LinkedIn "Limited Listings" feature."""
+
+    def cdata(str):
+        # Using CDATA tags (and escaping the close sequence) protects us from XSS attacks when
+        # displaying user provided string values.
+        return f"<![CDATA[{str.replace(']]>', ']]]]><![CDATA[>')}]]>"
+    
+    def position_to_job(position):
+        project = position.position_project
+        roleTag = Tag.get_by_name(position.position_role.first().slug)
+
+        return f"""
+        <job>
+            <company>{cdata(project.project_name)}</company>
+            <title>{cdata(roleTag.display_name)}</title>
+            <description>{cdata(position.position_description)}</description>
+            <partnerJobId>{cdata(str(position.id))}</partnerJobId>
+            <location>{cdata(", ".join([project.project_city, project.project_state]) if (project.project_city and project.project_state) else "")}</location>
+            <city>{cdata(project.project_city)}</city>
+            <state>{cdata(project.project_state)}</state>
+            <country>{cdata(project.project_country)}</country>
+            <applyUrl>{cdata(position.description_url or project.project_url)}</applyUrl>
+            <industryCodes><industryCode>{cdata("4")}</industryCode></industryCodes>
+        </job>
+        """
+
+    approved_projects = ProjectPosition.objects.filter(position_project__is_searchable=True)
+    xml_response = f"""<?xml version="1.0" encoding="UTF-8"?>
+    <source>
+        <lastBuildDate>{timezone.now().strftime('%a, %d %b %Y %H:%M:%S %Z')}</lastBuildDate> 
+        <publisherUrl>https://www.democracylab.org</publisherUrl>
+        <publisher>DemocracyLab</publisher>
+        {"".join(map(position_to_job, approved_projects))}
+    </source>"""
+
+    return HttpResponse(xml_response, content_type="application/xml")
+
+
 def apply_tag_filters(project_list, query_params, param_name, tag_filter):
     if param_name in query_params:
         tag_dict = get_tag_dictionary()
@@ -664,15 +681,6 @@ def projects_with_meta_data(projects, project_pages, project_count):
         'numPages': project_pages,
         'numProjects': project_count
     }
-
-
-def available_tag_filters(projects, selected_tag_filters):
-    project_tags = projects_tag_counts(projects)
-    # Remove any filters that are already selected
-    for tag in selected_tag_filters:
-        if project_tags[tag]:
-            project_tags.pop(tag)
-    return project_tags
 
 
 # TODO: Move group search code into new file
@@ -901,6 +909,7 @@ def volunteer_with_project(request, project_id):
         role=role,
         application_text=message)
     send_volunteer_application_email(volunteer_relation)
+    project.recache()
     return HttpResponse(status=200)
 
 
@@ -942,7 +951,9 @@ def conclude_volunteering_with_project(request, application_id):
     send_volunteer_conclude_email(user, volunteer_relation.project.project_name)
 
     body = json.loads(request.body)
+    project = Project.objects.get(id=volunteer_relation.project.id)
     volunteer_relation.delete()
+    project.recache()
 
     notify_project_owners_volunteer_concluded_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
@@ -967,6 +978,7 @@ def accept_project_volunteer(request, application_id):
         volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
         update_project_timestamp(request, volunteer_relation.project)
+        volunteer_relation.project.recache()
         if request.method == 'GET':
             messages.add_message(request, messages.SUCCESS, volunteer_relation.volunteer.full_name() + ' has been approved as a volunteer.')
             return redirect(about_project_url)
@@ -986,6 +998,7 @@ def promote_project_volunteer(request, application_id):
         volunteer_relation.is_co_owner = True
         volunteer_relation.save()
         update_project_timestamp(request, volunteer_relation.project)
+        volunteer_relation.project.recache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -1007,7 +1020,9 @@ def reject_project_volunteer(request, application_id):
                                   subject=email_subject,
                                   template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
+        project = Project.objects.get(id=volunteer_relation.project.id)
         volunteer_relation.delete()
+        project.recache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -1030,7 +1045,9 @@ def dismiss_project_volunteer(request, application_id):
                                subject=email_subject,
                                template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
+        project = Project.objects.get(id=volunteer_relation.project.id)
         volunteer_relation.delete()
+        project.recache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -1055,6 +1072,7 @@ def demote_project_volunteer(request, application_id):
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                subject=email_subject,
                                template=email_template)
+        volunteer_relation.project.recache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -1086,6 +1104,8 @@ def leave_project(request, project_id):
                                template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.delete()
+        project = Project.objects.get(id=project_id)
+        project.recache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -1140,9 +1160,12 @@ def invite_project_to_group(request, group_id):
     body = json.loads(request.body)
     project = Project.objects.get(id=body['projectId'])
     message = body['message']
-    project_relation = ProjectRelationship.create(group, project, message)
+    is_approved = is_co_owner_or_owner(user, project)
+    project_relation = ProjectRelationship.create(group, project, is_approved, message)
     project_relation.save()
-    send_group_project_invitation_email(project_relation)
+    project_relation.relationship_project.recache()
+    if not is_approved:
+        send_group_project_invitation_email(project_relation)
     return HttpResponse(status=200)
 
 
@@ -1166,6 +1189,7 @@ def accept_group_invitation(request, invite_id):
         project_relation.is_approved = True
         project_relation.save()
         update_project_timestamp(request, project)
+        project_relation.relationship_project.recache()
         if request.method == 'GET':
             messages.add_message(request, messages.SUCCESS, 'Your project is now part of the group ' + project_relation.relationship_group.group_name)
             return redirect(about_project_url)
@@ -1192,8 +1216,10 @@ def reject_group_invitation(request, invite_id):
 
     user = get_request_contributor(request)
     if is_co_owner_or_owner(user, project):
+        project = Project.objects.get(id=project_relation.relationship_project.id)
         project_relation.delete()
         update_project_timestamp(request, project)
+        project.recache()
         if request.method == 'GET':
             # TODO: Add messaging of some kind to front end
             return redirect(about_project_url)

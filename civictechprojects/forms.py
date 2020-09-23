@@ -5,6 +5,7 @@ from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCate
 from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification, send_group_creation_notification
 from democracylab.models import get_request_contributor
+from common.caching.cache import Cache, CacheKeys
 from common.helpers.date_helpers import parse_front_end_datetime
 from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
     merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, read_form_fields_point
@@ -57,11 +58,12 @@ class ProjectCreationForm(ModelForm):
 
         read_form_fields_point(project, form, 'project_location_coords', 'project_latitude', 'project_longitude')
 
-        read_form_field_tags(project, form, 'project_issue_area')
-        read_form_field_tags(project, form, 'project_stage')
-        read_form_field_tags(project, form, 'project_technologies')
-        read_form_field_tags(project, form, 'project_organization')
-        read_form_field_tags(project, form, 'project_organization_type')
+        tags_changed = False
+        tags_changed |= read_form_field_tags(project, form, 'project_issue_area')
+        tags_changed |= read_form_field_tags(project, form, 'project_stage')
+        tags_changed |= read_form_field_tags(project, form, 'project_technologies')
+        tags_changed |= read_form_field_tags(project, form, 'project_organization')
+        tags_changed |= read_form_field_tags(project, form, 'project_organization_type')
 
         if not request.user.is_staff:
             project.project_date_modified = timezone.now()
@@ -70,13 +72,19 @@ class ProjectCreationForm(ModelForm):
 
         merge_json_changes(ProjectLink, project, form, 'project_links')
         merge_json_changes(ProjectFile, project, form, 'project_files')
-        merge_json_changes(ProjectPosition, project, form, 'project_positions')
+        tags_changed |= merge_json_changes(ProjectPosition, project, form, 'project_positions')
 
         merge_single_file(project, form, FileCategory.THUMBNAIL, 'project_thumbnail_location')
 
         if is_created_original != project.is_created:
             print('notifying project creation')
             send_project_creation_notification(project)
+
+        if project.is_searchable and tags_changed:
+            Cache.refresh(CacheKeys.ProjectTagCounts)
+
+        # TODO: Don't recache when nothing has changed
+        project.recache()
 
         return project
 
@@ -105,17 +113,18 @@ class EventCreationForm(ModelForm):
         if not is_co_owner_or_staff(request.user, event):
             raise PermissionDenied()
 
+        project_fields_changed = False
         read_form_field_string(event, form, 'event_agenda')
         read_form_field_string(event, form, 'event_description')
         read_form_field_string(event, form, 'event_short_description')
-        read_form_field_string(event, form, 'event_name')
-        read_form_field_string(event, form, 'event_location')
+        project_fields_changed |= read_form_field_string(event, form, 'event_name')
+        project_fields_changed |= read_form_field_string(event, form, 'event_location')
         read_form_field_string(event, form, 'event_rsvp_url')
         read_form_field_string(event, form, 'event_live_id')
-        read_form_field_string(event, form, 'event_organizers_text')
+        project_fields_changed |= read_form_field_string(event, form, 'event_organizers_text')
 
-        read_form_field_datetime(event, form, 'event_date_start')
-        read_form_field_datetime(event, form, 'event_date_end')
+        project_fields_changed |= read_form_field_datetime(event, form, 'event_date_start')
+        project_fields_changed |= read_form_field_datetime(event, form, 'event_date_end')
 
         read_form_field_boolean(event, form, 'is_searchable')
         read_form_field_boolean(event, form, 'is_created')
@@ -124,9 +133,12 @@ class EventCreationForm(ModelForm):
 
         event.event_date_modified = timezone.now()
 
-        merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
+        project_fields_changed |= merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
 
         event.save()
+
+        if project_fields_changed:
+            event.update_linked_items()
 
         return event
 
@@ -166,13 +178,14 @@ class GroupCreationForm(ModelForm):
         is_created_original = group.is_created
         read_form_field_boolean(group, form, 'is_created')
 
+        project_fields_changed = False
         read_form_field_string(group, form, 'group_description')
         read_form_field_string(group, form, 'group_short_description')
         read_form_field_string(group, form, 'group_country')
         read_form_field_string(group, form, 'group_location')
         read_form_field_string(group, form, 'group_state')
         read_form_field_string(group, form, 'group_city')
-        read_form_field_string(group, form, 'group_name')
+        project_fields_changed |= read_form_field_string(group, form, 'group_name')
         read_form_field_string(group, form, 'group_url')
 
         read_form_fields_point(group, form, 'group_location_coords', 'group_latitude', 'group_longitude')
@@ -185,7 +198,10 @@ class GroupCreationForm(ModelForm):
         merge_json_changes(ProjectLink, group, form, 'group_links')
         merge_json_changes(ProjectFile, group, form, 'group_files')
 
-        merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
+        project_fields_changed |= merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
+
+        if project_fields_changed:
+            group.update_linked_items()
 
         if is_created_original != group.is_created:
             send_group_creation_notification(group)

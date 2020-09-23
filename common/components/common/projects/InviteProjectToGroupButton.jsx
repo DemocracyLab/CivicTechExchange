@@ -78,7 +78,7 @@ class InviteProjectToGroupButton extends React.Component<Props, State> {
 
   displayInviteProjectButton(): ?React$Node {
     const ownedButNotInvitedGroups: $ReadOnlyArray<MyGroupData> = this.getOwnedButNotInvitedGroups(this.state.ownedGroups, this.state.projectGroups);
-    if (CurrentUser.userID() !== this.props.project.project_creator && !_.isEmpty(ownedButNotInvitedGroups)) {
+    if (!_.isEmpty(ownedButNotInvitedGroups)) {
       return (
         <div>
           <Button

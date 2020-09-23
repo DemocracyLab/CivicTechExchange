@@ -7,6 +7,7 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
+from civictechprojects.caching.cache import ProjectCache
 from common.helpers.form_helpers import is_json_field_empty
 from common.helpers.dictionaries import merge_dicts
 from common.helpers.collections import flatten, count_occurrences
@@ -108,6 +109,9 @@ class Project(Archived):
         return owners + list(map(lambda pv: pv.volunteer, project_co_owners))
 
     def hydrate_to_json(self):
+        return ProjectCache.get(self) or ProjectCache.refresh(self, self._hydrate_to_json())
+
+    def _hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_project=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
@@ -143,6 +147,7 @@ class Project(Archived):
             'project_links': list(map(lambda link: link.to_json(), links)),
             'project_commits': list(map(lambda commit: commit.to_json(), commits)),
             'project_groups': list(map(lambda gr: gr.hydrate_to_list_json(), group_relationships)),
+            'project_events': list(map(lambda er: er.hydrate_to_tile_json(), self.get_project_events())),
             'project_owners': [self.project_creator.hydrate_to_tile_json()],
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__()
@@ -194,9 +199,16 @@ class Project(Archived):
 
         return project
 
+    def get_project_events(self):
+        slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
+        return Event.objects.filter(event_legacy_organization__name__in=slugs)
+
     def update_timestamp(self, time=None):
         self.project_date_modified = time or timezone.now()
         self.save()
+
+    def recache(self):
+        ProjectCache.refresh(self, self._hydrate_to_json())
 
 
 class Group(Archived):
@@ -313,6 +325,16 @@ class Group(Archived):
         else:
             return all_issue_area_names
 
+    def get_group_projects(self):
+        slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
+        return Event.objects.filter(event_legacy_organization__name__in=slugs)
+
+    def update_linked_items(self):
+        # Recache linked projects
+        project_relationships = ProjectRelationship.objects.filter(relationship_group=self)
+        for project_relationship in project_relationships:
+            project_relationship.relationship_project.recache()
+
 
 class TaggedEventOrganization(TaggedItemBase):
     content_object = models.ForeignKey('Event')
@@ -422,6 +444,21 @@ class Event(Archived):
 
         return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
 
+    def get_linked_projects(self):
+        # Get projects by legacy organization
+        projects = None
+        legacy_org_slugs = self.event_legacy_organization.slugs()
+        if legacy_org_slugs and len(legacy_org_slugs) > 0:
+            projects = Project.objects.filter(project_organization__name__in=legacy_org_slugs)
+        return projects
+
+    def update_linked_items(self):
+        # Recache linked projects
+        projects = self.get_linked_projects()
+        if projects:
+            for project in projects:
+                project.recache()
+
 
 class ProjectRelationship(models.Model):
     relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True)
@@ -442,7 +479,7 @@ class ProjectRelationship(models.Model):
             counterpart=project_counterpart[1].__str__())
 
     @staticmethod
-    def create(owner, project, introduction_text=""):
+    def create(owner, project, approved=False, introduction_text=""):
         relationship = ProjectRelationship()
         relationship.project_initiated = False
         relationship.relationship_project = project
@@ -450,7 +487,7 @@ class ProjectRelationship(models.Model):
 
         if type(owner) is Group:
             relationship.relationship_group = owner
-            relationship.is_approved = False
+            relationship.is_approved = approved
         else:
             relationship.relationship_event = owner
             relationship.is_approved = True
@@ -657,6 +694,12 @@ class ProjectPosition(models.Model):
 
     @staticmethod
     def merge_changes(project, positions):
+        """
+        Merge project position changes
+        :param project: Project with position changes
+        :param positions: Position changes
+        :return: True if there were position changes
+        """
         added_positions = list(filter(lambda position: 'id' not in position, positions))
         updated_positions = list(filter(lambda position: 'id' in position, positions))
         updated_positions_ids = set(map(lambda position: position['id'], updated_positions))
@@ -674,6 +717,8 @@ class ProjectPosition(models.Model):
 
         for deleted_position_id in deleted_position_ids:
             ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
+
+        return len(added_positions) > 0 or len(updated_positions) > 0 or len(deleted_position_ids) > 0
 
 
 class ProjectFile(models.Model):
@@ -742,6 +787,12 @@ class ProjectFile(models.Model):
 
     @staticmethod
     def replace_single_file(owner, file_category, file_json):
+        """
+        :param owner: Owner model instace of the file
+        :param file_category: File type
+        :param file_json: File metadata
+        :return: True if the file was changed
+        """
         if type(owner) is Project:
             existing_file = ProjectFile.objects.filter(file_project=owner.id, file_category=file_category.value).first()
         elif type(owner) is Group:
@@ -752,19 +803,24 @@ class ProjectFile(models.Model):
             existing_file = ProjectFile.objects.filter(file_user=owner.id, file_category=file_category.value).first()
 
         is_empty_field = is_json_field_empty(file_json)
+        file_changed = False
         if is_empty_field and existing_file:
             # Remove existing file
             existing_file.delete()
+            file_changed = True
         elif not is_empty_field:
             if not existing_file:
                 # Add new file
                 thumbnail = ProjectFile.from_json(owner, file_category, file_json)
                 thumbnail.save()
+                file_changed = True
             elif file_json['key'] != existing_file.file_key:
                 # Replace existing file
                 thumbnail = ProjectFile.from_json(owner, file_category, file_json)
                 thumbnail.save()
                 existing_file.delete()
+                file_changed = True
+        return file_changed
 
     @staticmethod
     def from_json(owner, file_category, file_json):

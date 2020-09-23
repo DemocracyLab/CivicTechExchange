@@ -72,7 +72,7 @@ class SectionController extends React.Component<{||}, State> {
       case Section.CreateProject:
         return <CreateProjectController />;
       case Section.EditProject:
-        return <EditProjectController />;
+        return <CreateProjectController />;
       case Section.FindProjects:
         return <FindProjectsController />;
       case Section.FindGroups:

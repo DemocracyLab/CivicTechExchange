@@ -2,13 +2,12 @@
 
 import React from "react";
 import Button from 'react-bootstrap/Button';
-import _ from 'lodash'
-
+import {Glyph, GlyphStyles, GlyphSizes} from "../utils/glyphs.js";
+import _ from "lodash";
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import StepIndicatorBars from "../common/StepIndicatorBars.jsx";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import utils from "../utils/utils.js";
-import GlyphStyles from "../utils/glyphs.js";
 
 
 export type FormWorkflowStepConfig<T> = {|
@@ -32,6 +31,7 @@ type State<T> = {|
   showConfirmDiscardChanges: boolean,
   navigateToStepUponDiscardConfirmation: number,
   savedEmblemVisible: boolean,
+  isSubmitting: boolean,
   clickedNext: boolean,
   initialFormFields: T,
   currentFormFields: T,
@@ -50,6 +50,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
       formIsValid: false,
       fieldsUpdated: false,
       savedEmblemVisible: false,
+      isSubmitting: false,
       clickedNext: false,
       showConfirmDiscardChanges: false,
       initialFormFields: null,
@@ -119,6 +120,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
   onSubmit(event: SyntheticEvent<HTMLFormElement>): void {
     event.preventDefault();
     const currentStep: FormWorkflowStepConfig = this.props.steps[this.state.currentStep];
+    this.setState({isSubmitting: true});
     const submitFunc: Function = () => {
       currentStep.onSubmit(event, this.formRef, this.onSubmitSuccess.bind(this, currentStep.onSubmitSuccess));
     };
@@ -132,7 +134,8 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
         clickedNext: false,
         currentStep: this.state.currentStep + 1,
         fieldsUpdated: false,
-        savedEmblemVisible: false
+        savedEmblemVisible: false,
+        isSubmitting: false
       }));
     }
     if (this.state.fieldsUpdated) {
@@ -175,7 +178,6 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
 
   _renderForm(): React$Node {
     const FormComponent: React$Node = this.props.steps[this.state.currentStep].formComponent;
-
     return (
       <form
         onSubmit={this.onSubmit.bind(this)}
@@ -206,10 +208,14 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>,State<T>> {
                 {!this.state.savedEmblemVisible ? "" :
                   <span className='create-project-saved-emblem'><i className={GlyphStyles.CircleCheck} aria-hidden="true"></i> Saved</span>}
 
-                <input type="submit" className="btn btn-primary create-btn"
-                      disabled={!this.state.formIsValid}
-                      value={this.onLastStep() ? "PUBLISH" : "Next"}
-                />
+                <button type="submit" className="btn btn-primary create-btn"
+                      disabled={!this.state.formIsValid || this.state.isSubmitting}
+                >
+                  {this.state.isSubmitting
+                    ? <i className={Glyph(GlyphStyles.LoadingSpinner, GlyphSizes.LG)}></i>
+                    : this.onLastStep() ? "PUBLISH" : "Next"
+                  }
+                </button>
               </div>
             </div>
       </form>
