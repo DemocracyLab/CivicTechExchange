@@ -66,18 +66,19 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           <div className="AboutEvent-info col-xs-12 col-lg-4">
             <div className="AboutEvent-info-inner">
               <h3>Info</h3>
+              {this.state.event.event_organizers_text && (
+                <React.Fragment>
+                  <h5 className="AboutEvent-info-header">Organizers</h5>
+                  <div className="AboutEvent-location">
+                    <p>{this.state.event.event_organizers_text}</p>
+                  </div>
+                </React.Fragment>
+              )
+              }
+  
               {/*TODO: Handle multi-day events*/}
               <h5 className="AboutEvent-info-header">Date</h5>
               <p>{datetime.parse(event.event_date_start).format(DateFormat.DAY_MONTH_DATE_YEAR)}</p>
-              {this.state.event.event_organizers_text && (
-                  <React.Fragment>
-                    <h5 className="AboutEvent-info-header">Organizers</h5>
-                    <div className="AboutEvent-location">
-                      <p>{this.state.event.event_organizers_text}</p>
-                    </div>
-                  </React.Fragment>
-                )
-              }
 
               <h5 className="AboutEvent-info-header">Time</h5>
               <p>{this._renderTimeRange()}</p>
