@@ -38,7 +38,7 @@ $ch-greyfont: #6f6f6f;
   }
   h2 {
     text-align: left;
-    font-size: 12px;
+    font-size: 18px;
     margin: $ch-margin 0 9px 0;
   }
   p {
@@ -64,17 +64,25 @@ $ch-greyfont: #6f6f6f;
 .corporate-hackathon-hostwithus-results {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: wrap; // only at small viewports
   justify-content: space-between;
 }
 .corporate-hackathon-hostwithus-results-item {
   text-align: center;
   font-size: 12px;
   margin: 0 20px;
+  flex: 1;
+  flex-basis: 26%; // make these show in a 2x2 on narrow phones
   h3 {
   font-size: 14px;
   font-weight: bold;
   }
+}
+.corporate-hackathon-howitworks-container {
+  margin-bottom: 48px; // half of desktop
+}
+.corporate-hackathon-howitworks h2 {
+  margin-bottom: 40px; //half of desktop
 }
 .corporate-hackathon-howitworks-item {
   padding: 0 22px; // half of desktop
@@ -91,9 +99,7 @@ $ch-greyfont: #6f6f6f;
     padding-bottom: 7px;
   }
 }
-.corporate-hackathon-howitworks-item:last-of-type {
-  margin-bottom: $ch-margin;
-}
+
 .corporate-hackathon-whyengage {
   h2 {
     margin-bottom: $ch-margin;
@@ -188,6 +194,10 @@ $ch-greyfont: #6f6f6f;
   .corporate-hackathon-hostwithus-results-item:last-of-type {
     margin-right: 0;
   }
+  .corporate-hackathon-hostwithus-results {
+    flex-wrap: nowrap; // only at small viewports
+    flex-basis: 0;
+  }
 }
 
 @include media-breakpoint-up(lg) {
@@ -237,9 +247,6 @@ $ch-greyfont: #6f6f6f;
   .corporate-hackathon-hostwithus-header {
     margin-top: 0;
   }
-  .corporate-hackathon-hostwithus-results {
-    position: absolute; // allow this list to take full width of content container when in narrow 2-col layout
-  }
   .corporate-hackathon-hostwithus-results-item {
     text-align: left;
     h3 {
@@ -255,13 +262,20 @@ $ch-greyfont: #6f6f6f;
     h2 {
       font-size: 40px;
       font-weight: bold;
+      margin-bottom: 80px;
     }
+    p {
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
   }
   .corporate-hackathon-howitworks-container {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     flex: 1;
+    margin-bottom: 96px;
   }
   .corporate-hackathon-howitworks-item {
     padding: 0 45px; // 45+45 gives 70 between items
@@ -273,6 +287,11 @@ $ch-greyfont: #6f6f6f;
     }
     p {
       margin-top: 40px;
+      font-size: 16px;
+      line-height: 2;
+    }
+    svg {
+      height: 84px; // make all heights the same so they line up horizntally
     }
   }
   .corporate-hackathon-howitworks-item:last-of-type {
@@ -371,8 +390,5 @@ $ch-greyfont: #6f6f6f;
   }
   .corporate-hackathon-hostwithus-left {
     margin-right: 0;
-  }
-  .corporate-hackathon-hostwithus-results {
-    position: static; // reset this to keep it inside the left column now that the screen is wide enough
   }
 }

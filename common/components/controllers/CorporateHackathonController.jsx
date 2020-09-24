@@ -72,23 +72,25 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             <h1>Host a hackathon with us!</h1>
             <p className="corporate-hackathon-hostwithus-left-text">Create a unique employee engagement experience and deliver instant-impact tech projects.</p>
             <Button className="corporate-hackathon-hostwithus-left-button" variant="primary" onClick={() => this.setState({showContactModal: true})}>Get Started</Button>
-            <h2>Public Hackathon Results</h2>
-            <div className="corporate-hackathon-hostwithus-results">
-              <div className="corporate-hackathon-hostwithus-results-item">
-                <h3>$1 million +</h3>
-                <p>Public Value Created</p>
-              </div>
-              <div className="corporate-hackathon-hostwithus-results-item">
-                <h3>1200</h3>
-                <p>Volunteers</p>
-              </div>
-              <div className="corporate-hackathon-hostwithus-results-item">
-                <h3>100 +</h3>
-                <p>Projects</p>
-              </div>
-              <div className="corporate-hackathon-hostwithus-results-item">
-                <h3>100</h3>
-                <p>Average Attendees/Event</p>
+            <div className="corporate-hackathon-hostwithus-results-container">
+              <h2>Public Hackathon Results</h2>
+              <div className="corporate-hackathon-hostwithus-results">
+                <div className="corporate-hackathon-hostwithus-results-item">
+                  <h3>$1 million +</h3>
+                  <p>Public Value Created</p>
+                </div>
+                <div className="corporate-hackathon-hostwithus-results-item">
+                  <h3>1200</h3>
+                  <p>Volunteers</p>
+                </div>
+                <div className="corporate-hackathon-hostwithus-results-item">
+                  <h3>100 +</h3>
+                  <p>Projects</p>
+                </div>
+                <div className="corporate-hackathon-hostwithus-results-item">
+                  <h3>100</h3>
+                  <p>Average Attendees/Event</p>
+                </div>
               </div>
             </div>
           </div>
@@ -109,7 +111,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _howItWorks(): $React$Node {
     return (
       <div className="corporate-hackathon-howitworks col-12 ch-divider">
-        <h2>How it works</h2>
+        <h2>How It Works</h2>
         <p>As soon as you have signed up for a hackathon, the DemocracyLab team gets right to work on finding non-profits in need of tech volunteers. You can focus on team building; we’ll get everything set up with your specific goals in mind. There are just a few things we need from you!</p>
         <div className="corporate-hackathon-howitworks-container">
           <div className="corporate-hackathon-howitworks-item">
