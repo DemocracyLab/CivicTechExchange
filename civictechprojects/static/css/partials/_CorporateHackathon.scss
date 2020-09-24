@@ -365,6 +365,9 @@ $ch-greyfont: #6f6f6f;
   }
   .corporate-hackathon-hostwithus-right {
     margin-left: 0; // at this point flex can handle spacing, and relative margins will cause issues @ high res
+    img {
+      min-width: 100%; // TODO: Test this!!! get the image to scale a little past 100% so it stays in sync with text.
+    }
   }
   .corporate-hackathon-hostwithus-left {
     margin-right: 0;
