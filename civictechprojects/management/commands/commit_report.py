@@ -92,7 +92,7 @@ def calculate_total_commit(project_list, project_name='All Projects'):
 
 def get_project_github_links():
     from civictechprojects.models import ProjectLink
-    return ProjectLink.objects.filter(link_name='link_coderepo', link_url__icontains='github.com/')
+    return ProjectLink.objects.filter(link_name='link_coderepo', link_url__icontains='github.com/').exclude(link_project=None)
 
 
 def create_commit_report(project_github_link, project_list):
