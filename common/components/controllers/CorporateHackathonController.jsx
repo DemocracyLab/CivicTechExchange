@@ -47,19 +47,19 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
    render(): $React$Node {
      return (
        <React.Fragment>
-         <ContactUsModal showModal={this.state.showContactModal} onSubmit={this.onSubmit.bind(this)}/>
+         <ContactUsModal showModal={this.state.showContactModal} onSubmit={this.onSubmit.bind(this)} />
          {this._renderHeader()}
-           <div className="corporate-hackathon-root">
-            {this._hostWithUs()}
-             <div className="container">
-               <div className="row">
-                {this._howItWorks()}
-                {this._whyEngage()}
-                {this._strengthenTeam()}
-                {this._hackathonSponsorships()}
-                </div>
-             </div>
-           </div>
+        <div className="corporate-hackathon-root">
+          {this._hostWithUs()}
+          <div className="container">
+            <div className="row">
+              {this._howItWorks()}
+              {this._whyEngage()}
+              {this._strengthenTeam()}
+              {this._hackathonSponsorships()}
+            </div>
+          </div>
+        </div>
        </React.Fragment>
      )
    }
@@ -103,8 +103,9 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </div>
         </div>
       </div>
-    )
+    );
   }
+
   _howItWorks(): $React$Node {
     return (
       <div className="corporate-hackathon-howitworks col-12 ch-divider">

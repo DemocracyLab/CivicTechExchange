@@ -232,6 +232,7 @@ $ch-greyfont: #6f6f6f;
   .corporate-hackathon-hostwithus-right {
     margin-left: 8%; // enforce minimum space between these elements
     align-self: center;
+    text-align: right; // keep image as far right as it can be
   }
   .corporate-hackathon-hostwithus-header {
     margin-top: 0;
@@ -363,7 +364,7 @@ $ch-greyfont: #6f6f6f;
     }
   }
   .corporate-hackathon-hostwithus-right {
-    margin-left: 0;
+    margin-left: 0; // at this point flex can handle spacing, and relative margins will cause issues @ high res
   }
   .corporate-hackathon-hostwithus-left {
     margin-right: 0;
