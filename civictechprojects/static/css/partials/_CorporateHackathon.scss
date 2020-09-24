@@ -38,7 +38,17 @@ $ch-greyfont: #6f6f6f;
   p {
   margin-bottom: $ch-margin;
   }
+  .hero-wide-content {
+    padding: 0 $ch-horizontalpadding; // this turns fixed 175 eventually to prevent problems @ high res
+  }
 }
+.corporate-hackathon-hostwithus-left {
+  padding-top: $ch-mobile-vertical-padding;
+}
+.corporate-hackathon-hostwithus-right {
+  padding-bottom: $ch-mobile-vertical-padding;
+}
+
 .corporate-hackathon-hostwithus-header {
   margin-top: $ch-margin;
   img {
@@ -73,6 +83,12 @@ $ch-greyfont: #6f6f6f;
   width: 35px;
   }
   font-size: 14px;
+  h4 {
+    display: inline-block;
+    vertical-align: bottom;
+    margin-left: -6px;
+    padding-bottom: 7px;
+  }
 }
 .corporate-hackathon-howitworks-item:last-of-type {
   margin-bottom: $ch-margin;
@@ -182,7 +198,6 @@ $ch-greyfont: #6f6f6f;
     }
     .hero-wide-content {
       max-width: 2044px;
-      padding: 0 175px;
       display: flex;
       flex: 1;
       justify-content: space-between;
@@ -200,13 +215,17 @@ $ch-greyfont: #6f6f6f;
     max-width: 700px; // constrain these at high px width displays
   }
   .corporate-hackathon-hostwithus-left {
-    padding-top: 65px;
+    margin-right: 8%; // enforce minimum space between these elements
   }
-  // .corporate-hackathon-hostwithus-right {
-  //   align-self: flex-end;
-  // }
+  .corporate-hackathon-hostwithus-right {
+    margin-left: 8%; // enforce minimum space between these elements
+    align-self: center;
+  }
   .corporate-hackathon-hostwithus-header {
     margin-top: 0;
+  }
+  .corporate-hackathon-hostwithus-results {
+    position: absolute; // allow this list to take full width of content container when in narrow 2-col layout
   }
   .corporate-hackathon-hostwithus-results-item {
     text-align: left;
@@ -237,10 +256,6 @@ $ch-greyfont: #6f6f6f;
       width: auto;
       height: 61px; /* this is for alignment, and needs source image file fixing to remove */
       margin-bottom: $ch-margin;
-    }
-    h4 {
-      display: inline-block;
-      vertical-align: bottom;
     }
     p {
       margin-top: 40px;
@@ -329,5 +344,22 @@ $ch-greyfont: #6f6f6f;
   // desktop section padding
   .corporate-hackathon-howitworks, .corporate-hackathon-whyengage, .corporate-hackathon-sponsorships {
     padding: $ch-desktop-vertical-padding $ch-horizontalpadding;
+  }
+}
+
+@include media-breakpoint-up(xxl) {
+  .corporate-hackathon-hostwithus {
+    .hero-wide-content {
+      padding: 0 175px;
+    }
+  }
+  .corporate-hackathon-hostwithus-right {
+    margin-left: 0;
+  }
+  .corporate-hackathon-hostwithus-left {
+    margin-right: 0;
+  }
+  .corporate-hackathon-hostwithus-results {
+    position: static; // reset this to keep it inside the left column now that the screen is wide enough
   }
 }
