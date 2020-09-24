@@ -59,14 +59,14 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 {this._hackathonSponsorships()}
                 </div>
              </div>
-         </div>
+           </div>
        </React.Fragment>
      )
    }
 
   _hostWithUs(): $React$Node {
     return (
-      <div className="corporate-hackathon-hostwithus hero-wide">
+      <div className="corporate-hackathon-hostwithus hero-wide ch-divider">
         <div className="hero-wide-content">
           <div className="corporate-hackathon-hostwithus-left">
             <h1>Host a hackathon with us!</h1>
@@ -107,7 +107,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   }
   _howItWorks(): $React$Node {
     return (
-      <div className="corporate-hackathon-howitworks col-12">
+      <div className="corporate-hackathon-howitworks col-12 ch-divider">
         <h2>How it works</h2>
         <p>As soon as you have signed up for a hackathon, the DemocracyLab team gets right to work on finding non-profits in need of tech volunteers. You can focus on team building; we’ll get everything set up with your specific goals in mind. There are just a few things we need from you!</p>
         <div className="corporate-hackathon-howitworks-container">

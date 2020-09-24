@@ -12,6 +12,12 @@ $ch-greyfont: #6f6f6f;
 // extrabold: 800
 
 .corporate-hackathon-root {
+  button {
+    font-weight: 600;
+  }
+  .ch-divider {
+    border-bottom: 3px solid #ccc;
+  }
   .container {
     background-color: $color-background-light;
   }
@@ -58,7 +64,7 @@ $ch-greyfont: #6f6f6f;
 .corporate-hackathon-hostwithus-results {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 .corporate-hackathon-hostwithus-results-item {
@@ -70,13 +76,8 @@ $ch-greyfont: #6f6f6f;
   font-weight: bold;
   }
 }
-.corporate-hackathon-hostwithus-results-item:first-of-type {
-  margin-left: 0;
-}
-.corporate-hackathon-hostwithus-results-item:last-of-type {
-  margin-right: 0;
-}
 .corporate-hackathon-howitworks-item {
+  padding: 0 22px; // half of desktop
   text-align: center;
   img {
   margin-top: $ch-margin;
@@ -177,6 +178,17 @@ $ch-greyfont: #6f6f6f;
 .corporate-hackathon-howitworks, .corporate-hackathon-whyengage, .corporate-hackathon-sponsorships {
   padding: $ch-mobile-vertical-padding $ch-horizontalpadding;
 }
+@include media-breakpoint-up(md) {
+  .corporate-hackathon-hostwithus {
+    flex-wrap: nowrap;
+  }
+  .corporate-hackathon-hostwithus-results-item:first-of-type {
+    margin-left: 0;
+  }
+  .corporate-hackathon-hostwithus-results-item:last-of-type {
+    margin-right: 0;
+  }
+}
 
 @include media-breakpoint-up(lg) {
   .corporate-hackathon-hostwithus {
@@ -248,10 +260,11 @@ $ch-greyfont: #6f6f6f;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    flex: 1;
   }
   .corporate-hackathon-howitworks-item {
-    font-size: 16px;
     padding: 0 45px; // 45+45 gives 70 between items
+    font-size: 16px;
     img {
       width: auto;
       height: 61px; /* this is for alignment, and needs source image file fixing to remove */
@@ -261,11 +274,7 @@ $ch-greyfont: #6f6f6f;
       margin-top: 40px;
     }
   }
-  .corporate-hackathon-howitworks-item:first-of-type {
-    padding-left: 0;
-  }
   .corporate-hackathon-howitworks-item:last-of-type {
-    padding-right: 0;
     margin-bottom: 0;
   }
   .corporate-hackathon-whyengage {
