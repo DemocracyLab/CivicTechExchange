@@ -1,6 +1,6 @@
 //standard margin for this page, to be changed later
 $ch-margin: 36px;
-$ch-mobile-vertical-padding: 65px; //section vertical padding
+$ch-mobile-vertical-padding: 68px; //section vertical padding
 $ch-desktop-vertical-padding: 135px; //section vertical padding above 992px
 $ch-horizontalpadding: 12.5%; // proportional scaling from 175px @ 1400px width, note that it must override .container gutters of 15px or be calc(12.5% - 15px).
 $ch-greyfont: #6f6f6f;
@@ -120,6 +120,9 @@ $ch-greyfont: #6f6f6f;
     background-repeat: no-repeat;
     margin-bottom: $ch-margin;
   }
+}
+.corporate-hackathon-whyengage li p {
+  line-height: 2;
 }
 .corporate-hackathon-whyengage-source {
   margin-bottom: $ch-margin;
