@@ -68,29 +68,32 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <div className="corporate-hackathon-hostwithus hero-wide ch-divider">
         <div className="hero-wide-content">
-          <div className="corporate-hackathon-hostwithus-left">
-            <h1>Host a hackathon with us!</h1>
-            <p className="corporate-hackathon-hostwithus-left-text">Create a unique employee engagement experience and deliver instant-impact tech projects.</p>
-            <Button className="corporate-hackathon-hostwithus-left-button" variant="primary" onClick={() => this.setState({showContactModal: true})}>Get Started</Button>
-            {this._publicHackathonResults()}
-          </div>
-          <div className="corporate-hackathon-hostwithus-right">
-            <div className="corporate-hackathon-hostwithus-header">
-              <picture>
-                <source media="(max-width: 991px)" srcSet={cdn.image("mobile-header-withbg.png")} />
-                <source media="(min-width: 992px)" srcSet={cdn.image("header-withbg-img.png")} />
-                <img src={cdn.image("header-withbg-img.png")} alt="Header Image" />
-              </picture>
+          <div className="hero-wide-flex-content">
+            <div className="corporate-hackathon-hostwithus-left">
+              <h1>Host a hackathon with us!</h1>
+              <p className="corporate-hackathon-hostwithus-left-text">Create a unique employee engagement experience and deliver instant-impact tech projects.</p>
+              <Button className="corporate-hackathon-hostwithus-left-button" variant="primary" onClick={() => this.setState({showContactModal: true})}>Get Started</Button>
+              {this._publicHackathonResults("d-lg-none d-xl-block")}
+            </div>
+            <div className="corporate-hackathon-hostwithus-right">
+              <div className="corporate-hackathon-hostwithus-header">
+                <picture>
+                  <source media="(max-width: 991px)" srcSet={cdn.image("mobile-header-withbg.png")} />
+                  <source media="(min-width: 992px)" srcSet={cdn.image("header-withbg-img.png")} />
+                  <img src={cdn.image("header-withbg-img.png")} alt="Header Image" />
+                </picture>
+              </div>
             </div>
           </div>
+          {this._publicHackathonResults("d-none d-lg-block d-xl-none")}
         </div>
       </div>
     );
   }
 
-  _publicHackathonResults(): $React$Node {
+  _publicHackathonResults(classes): $React$Node {
     return (
-      <div className="corporate-hackathon-hostwithus-results-container">
+      <div className={classes}>
         <h2>Public Hackathon Results</h2>
         <div className="corporate-hackathon-hostwithus-results">
           <div className="corporate-hackathon-hostwithus-results-item">

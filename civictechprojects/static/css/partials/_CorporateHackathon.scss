@@ -221,7 +221,7 @@ $ch-greyfont: #6f6f6f;
     p {
       font-size: 20px;
     }
-    .hero-wide-content {
+    .hero-wide-flex-content {
       max-width: 2044px;
       display: flex;
       flex: 1;
@@ -386,12 +386,12 @@ $ch-greyfont: #6f6f6f;
     }
   }
   .corporate-hackathon-hostwithus-right {
-    margin-left: 0; // at this point flex can handle spacing, and relative margins will cause issues @ high res
+    margin-left: 100px; // at this point flex can handle spacing scaling so set the minimum because relative margins will cause issues @ high res
     img {
       min-width: 100%; // TODO: Test this!!! get the image to scale a little past 100% so it stays in sync with text.
     }
   }
   .corporate-hackathon-hostwithus-left {
-    margin-right: 0;
+    margin-right: 100px;
   }
 }
