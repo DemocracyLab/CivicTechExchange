@@ -72,33 +72,13 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             <h1>Host a hackathon with us!</h1>
             <p className="corporate-hackathon-hostwithus-left-text">Create a unique employee engagement experience and deliver instant-impact tech projects.</p>
             <Button className="corporate-hackathon-hostwithus-left-button" variant="primary" onClick={() => this.setState({showContactModal: true})}>Get Started</Button>
-            <div className="corporate-hackathon-hostwithus-results-container">
-              <h2>Public Hackathon Results</h2>
-              <div className="corporate-hackathon-hostwithus-results">
-                <div className="corporate-hackathon-hostwithus-results-item">
-                  <h3>$1 million +</h3>
-                  <p>Public Value Created</p>
-                </div>
-                <div className="corporate-hackathon-hostwithus-results-item">
-                  <h3>1200</h3>
-                  <p>Volunteers</p>
-                </div>
-                <div className="corporate-hackathon-hostwithus-results-item">
-                  <h3>100 +</h3>
-                  <p>Projects</p>
-                </div>
-                <div className="corporate-hackathon-hostwithus-results-item">
-                  <h3>100</h3>
-                  <p>Average Attendees/Event</p>
-                </div>
-              </div>
-            </div>
+            {this._publicHackathonResults()}
           </div>
           <div className="corporate-hackathon-hostwithus-right">
             <div className="corporate-hackathon-hostwithus-header">
               <picture>
-                <source media="(max-width: 991px)" srcset={cdn.image("mobile-header-withbg.png")} />
-                <source media="(min-width: 992px)" srcset={cdn.image("header-withbg-img.png")} />
+                <source media="(max-width: 991px)" srcSet={cdn.image("mobile-header-withbg.png")} />
+                <source media="(min-width: 992px)" srcSet={cdn.image("header-withbg-img.png")} />
                 <img src={cdn.image("header-withbg-img.png")} alt="Header Image" />
               </picture>
             </div>
@@ -107,6 +87,32 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
       </div>
     );
   }
+
+  _publicHackathonResults(): $React$Node {
+    return (
+      <div className="corporate-hackathon-hostwithus-results-container">
+        <h2>Public Hackathon Results</h2>
+        <div className="corporate-hackathon-hostwithus-results">
+          <div className="corporate-hackathon-hostwithus-results-item">
+            <h3>$1 million +</h3>
+            <p>Public Value Created</p>
+          </div>
+          <div className="corporate-hackathon-hostwithus-results-item">
+            <h3>1200</h3>
+            <p>Volunteers</p>
+          </div>
+          <div className="corporate-hackathon-hostwithus-results-item">
+            <h3>100 +</h3>
+            <p>Projects</p>
+          </div>
+          <div className="corporate-hackathon-hostwithus-results-item">
+            <h3>100</h3>
+            <p>Average Attendees/Event</p>
+          </div>
+        </div>
+      </div>
+    )
+  };
 
   _howItWorks(): $React$Node {
     return (
@@ -163,8 +169,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="corporate-hackathon-whyengage-right">
             <div className="corporate-hackathon-whyengage-image">
             <picture>
-              <source media="(max-width: 991px)" srcset={cdn.image("mobile-why-engage-withbg.png")} />
-              <source media="(min-width: 992px)" srcset={cdn.image("why-engage-withbg-img.png")} />
+              <source media="(max-width: 991px)" srcSet={cdn.image("mobile-why-engage-withbg.png")} />
+              <source media="(min-width: 992px)" srcSet={cdn.image("why-engage-withbg-img.png")} />
               <img src={cdn.image("why-engage-img.png")} alt="Header Image" />
             </picture>
             </div>
