@@ -92,6 +92,8 @@ class Project(Archived):
     project_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
+    _full_text_capacity = 200000
+    full_text = models.CharField(max_length=_full_text_capacity, blank=True)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
@@ -120,8 +122,6 @@ class Project(Archived):
         volunteers = VolunteerRelation.objects.filter(project=self.id)
         group_relationships = ProjectRelationship.objects.filter(relationship_project=self).exclude(relationship_group=None)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
-        # TODO: Don't return location id
-        # TODO: Reduce country down to 2-char code
         project = {
             'project_id': self.id,
             'project_name': self.project_name,
@@ -208,7 +208,20 @@ class Project(Archived):
         self.save()
 
     def recache(self):
-        ProjectCache.refresh(self, self._hydrate_to_json())
+        hydrated_project = self._hydrate_to_json()
+        ProjectCache.refresh(self, hydrated_project)
+        self.generate_full_text()
+
+    def generate_full_text(self):
+        base_json = self.hydrate_to_json()
+        # Don't cache volunteers because they take up too much space and aren't useful in search
+        del base_json['project_volunteers']
+        full_text = str(base_json)
+        if len(full_text) >= Project._full_text_capacity:
+            full_text = full_text[:Project._full_text_capacity - 1]
+            print('Project Full Text Field Overflow Alert: ' + self.__str__())
+        self.full_text = full_text
+        self.save()
 
 
 class Group(Archived):
