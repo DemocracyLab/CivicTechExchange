@@ -214,8 +214,11 @@ class Project(Archived):
 
     def generate_full_text(self):
         base_json = self.hydrate_to_json()
-        # Don't cache volunteers because they take up too much space and aren't useful in search
+        # Don't cache external entities because they take up space and aren't useful in project search
         del base_json['project_volunteers']
+        del base_json['project_events']
+        del base_json['project_groups']
+        del base_json['project_commits']
         full_text = str(base_json)
         if len(full_text) >= Project._full_text_capacity:
             full_text = full_text[:Project._full_text_capacity - 1]
