@@ -97,7 +97,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <h2>Public Hackathon Results</h2>
         <div className="corporate-hackathon-hostwithus-results">
           <div className="corporate-hackathon-hostwithus-results-item">
-            <h3>$1 million +</h3>
+            <h3>$1 <span className="text-nowrap">million +</span></h3>
             <p>Public Value Created</p>
           </div>
           <div className="corporate-hackathon-hostwithus-results-item">
@@ -105,7 +105,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             <p>Volunteers</p>
           </div>
           <div className="corporate-hackathon-hostwithus-results-item">
-            <h3>100 +</h3>
+            <h3>100+</h3>
             <p>Projects</p>
           </div>
           <div className="corporate-hackathon-hostwithus-results-item">

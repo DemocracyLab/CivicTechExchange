@@ -203,6 +203,16 @@ $ch-greyfont: #6f6f6f;
   }
 }
 
+@include media-breakpoint-only(lg) {
+  // this whole section is specific overrides for the top section of the page at narrow desktop, and should ideally be served by a redesign of the results section and a refactor
+  .corporate-hackathon-hostwithus-results {
+    justify-content: flex-start;
+  }
+  .corporate-hackathon-hostwithus-results-item {
+    flex: 0 auto;
+  }
+}
+
 @include media-breakpoint-up(lg) {
   .corporate-hackathon-hostwithus {
     font-size: 16px;
@@ -276,13 +286,14 @@ $ch-greyfont: #6f6f6f;
   .corporate-hackathon-howitworks-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     flex: 1;
-    margin-bottom: 96px;
+    margin: 0 32px 96px 32px;
   }
   .corporate-hackathon-howitworks-item {
-    padding: 0 45px; // 45+45 gives 70 between items
+    padding: 0;
     font-size: 16px;
+    width: calc(33% - 46px);
     img {
       width: auto;
       height: 61px; /* this is for alignment, and needs source image file fixing to remove */
@@ -297,9 +308,7 @@ $ch-greyfont: #6f6f6f;
       height: 84px; // make all heights the same so they line up horizntally
     }
   }
-  .corporate-hackathon-howitworks-item:last-of-type {
-    margin-bottom: 0;
-  }
+
   .corporate-hackathon-whyengage {
     h2 {
       font-size: 40px;
