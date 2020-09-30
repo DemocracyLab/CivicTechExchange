@@ -62,6 +62,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   _renderProjectHeader(project: ProjectDetailsAPIData): React$Node {
+    // TODO: Remove this
     const title: string = project.project_name + " | DemocracyLab";
     const description: string = project.project_short_description || Truncate.stringT(project.project_description, 300);
 
