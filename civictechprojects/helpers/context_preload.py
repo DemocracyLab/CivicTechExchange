@@ -1,15 +1,18 @@
 from django.conf import settings
-from civictechprojects.models import Project
+from civictechprojects.caching.cache import ProjectCache
 from common.helpers.constants import FrontEndSection
 
 
 def about_project_preload(context, query_args):
     context = default_preload(context, query_args)
     project_id = query_args['id'][0]
-    project = Project.objects.get(id=project_id)
-    context['title'] = project.project_name + ' | DemocracyLab'
-    context['description'] = project.project_short_description or project.project_description[:300]
-    # TODO: Return project thumbnail if set
+    project_json = ProjectCache.get(project_id)
+    if project_json is None:
+        print('Failed to preload project info, no cache entry found: ' + project_id)
+    context['title'] = project_json['project_name'] + ' | DemocracyLab'
+    context['description'] = project_json['project_short_description'] or project_json['project_description'][:300]
+    if 'project_thumbnail' in project_json:
+        context['og_image'] = project_json['project_thumbnail']['publicUrl']
     return context
 
 
