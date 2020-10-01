@@ -7,12 +7,13 @@ def about_project_preload(context, query_args):
     context = default_preload(context, query_args)
     project_id = query_args['id'][0]
     project_json = ProjectCache.get(project_id)
-    if project_json is None:
+    if project_json is not None:
+        context['title'] = project_json['project_name'] + ' | DemocracyLab'
+        context['description'] = project_json['project_short_description'] or project_json['project_description'][:300]
+        if 'project_thumbnail' in project_json:
+            context['og_image'] = project_json['project_thumbnail']['publicUrl']
+    else:
         print('Failed to preload project info, no cache entry found: ' + project_id)
-    context['title'] = project_json['project_name'] + ' | DemocracyLab'
-    context['description'] = project_json['project_short_description'] or project_json['project_description'][:300]
-    if 'project_thumbnail' in project_json:
-        context['og_image'] = project_json['project_thumbnail']['publicUrl']
     return context
 
 
