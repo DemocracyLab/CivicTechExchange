@@ -79,7 +79,10 @@
       window.BLOG_URL = '{{BLOG_URL}}';
       window.EVENT_URL = '{{EVENT_URL}}';
       window.PRIVACY_POLICY_URL = '{{PRIVACY_POLICY_URL}}';
-      window.preloadedContent = {{PRELOADED_CONTENT|safe}};
+
+      {% if PRELOADED_CONTENT %}
+        window.preloadedContent = {{PRELOADED_CONTENT|safe}};
+      {% endif %}
 
       window.DLAB_MESSAGES = [];
       {% for message in messages %}
