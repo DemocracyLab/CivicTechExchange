@@ -173,13 +173,7 @@ class ProjectAPIUtils {
   }
 
   static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
-    fetch(new Request('/api/project/' + id + '/', {credentials: 'include'}))
-      .then(response => {
-        if(!response.ok) {
-          throw Error();
-        }
-        return response.json();
-      })
+    ProjectAPIUtils.fetchIfNotPreloaded('/api/project/' + id + '/', {credentials: 'include'})
       .then(projectDetails => {
         callback(projectDetails);
         // TODO: Get catch to return http status code
@@ -220,6 +214,20 @@ class ProjectAPIUtils {
     .catch(err => {
       console.log('Error fetching team details. Error: ' + err)
     })
+  }
+  
+  static fetchIfNotPreloaded<T>(url: string, headers: object): Promise<T> {
+    const preloaded: string = _.get(preloadedContent, url);
+    if (preloaded) {
+      return Promise.resolve(preloaded);
+    } else {
+      return fetch(new Request(url, headers)).then(response => {
+        if(!response.ok) {
+          throw Error();
+        }
+        return response.json();
+      });
+    }
   }
 
   static post(url: string, body: {||},successCallback: (APIResponse) => void, errCallback: (APIError) => void) {
