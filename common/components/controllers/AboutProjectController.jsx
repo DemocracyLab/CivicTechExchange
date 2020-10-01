@@ -55,23 +55,8 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   _renderDetails(): React$Node {
     return (
       <React.Fragment>
-        {this._renderProjectHeader(this.state.project)}
         <AboutProjectDisplay project={this.state.project} viewOnly={false}/>
       </React.Fragment>
-    );
-  }
-
-  _renderProjectHeader(project: ProjectDetailsAPIData): React$Node {
-    // TODO: Remove this
-    const title: string = project.project_name + " | DemocracyLab";
-    const description: string = project.project_short_description || Truncate.stringT(project.project_description, 300);
-
-    return (
-      <Headers
-        title={title}
-        description={description}
-        thumbnailUrl={project.project_thumbnail && project.project_thumbnail.publicUrl}
-      />
     );
   }
   
