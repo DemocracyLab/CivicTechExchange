@@ -217,7 +217,7 @@ class ProjectAPIUtils {
   }
   
   static fetchIfNotPreloaded<T>(url: string, headers: object): Promise<T> {
-    const preloaded: string = _.get(preloadedContent, url);
+    const preloaded: string = _.get(window.preloadedContent, url);
     if (preloaded) {
       return Promise.resolve(preloaded);
     } else {
