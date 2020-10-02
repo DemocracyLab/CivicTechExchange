@@ -20,7 +20,7 @@ def about_project_preload(context, query_args):
         context['description'] = project_json['project_short_description'] or project_json['project_description'][:300]
         if 'project_thumbnail' in project_json:
             context['og_image'] = project_json['project_thumbnail']['publicUrl']
-        preload_api_call(context, '/api/project/{id}/'.format(id=project_id), project_json)
+        # preload_api_call(context, '/api/project/{id}/'.format(id=project_id), project_json)
     else:
         print('Failed to preload project info, no cache entry found: ' + project_id)
     return context
