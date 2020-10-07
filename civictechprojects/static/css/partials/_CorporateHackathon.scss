@@ -201,7 +201,6 @@ $ch-greyfont: #6f6f6f;
   .corporate-hackathon-hostwithus {
     font-size: 16px;
     text-align: left;
-    padding-top: 105px;
     padding-bottom: 95px;
     h1 {
       font-size: 48px;
@@ -380,6 +379,7 @@ $ch-greyfont: #6f6f6f;
 
 @include media-breakpoint-up(xxl) {
   .corporate-hackathon-hostwithus {
+    padding-top: 105px;
     .hero-wide-content {
       padding: 0 175px;
     }
