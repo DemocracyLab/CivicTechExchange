@@ -34,7 +34,7 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
     notify_group_owners_group_approved
 from civictechprojects.helpers.context_preload import context_preload
-from common.helpers.front_end import section_url, get_page_section
+from common.helpers.front_end import section_url, get_page_section, get_clean_url
 from common.helpers.request_helpers import url_params
 from common.helpers.caching import update_cached_project_url
 from distutils.util import strtobool
@@ -369,6 +369,12 @@ def approve_project(request, project_id):
 @ensure_csrf_cookie
 @xframe_options_exempt
 def index(request):
+    page_url = request.get_full_path()
+    clean_url = get_clean_url(page_url)
+    if clean_url != page_url:
+        print('Redirecting {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url))
+        return redirect(clean_url)
+
     template = loader.get_template('new_index.html')
     context = {
         'DLAB_PROJECT_ID': settings.DLAB_PROJECT_ID or '',
@@ -1278,3 +1284,4 @@ def team(request):
         response['project'] = project.hydrate_to_json()
 
     return JsonResponse(response)
+
