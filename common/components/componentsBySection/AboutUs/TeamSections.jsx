@@ -52,6 +52,10 @@ const SectionConfigs: $ReadOnlyArray<SectionConfig> = [
     sectionRoleCategory: "Marketing",
     topRoles: ["marketing-lead"]
   }, {
+    title: "Salesforce Dev/Admin",
+    sectionRoleCategory: "Operations",
+    topRoles: []
+  }, {
     title: "Operations",
     sectionRoleCategory: "Business",
     topRoles: []
@@ -144,7 +148,9 @@ class TeamSections extends React.PureComponent<Props, State> {
   
   _ourTeam(): ?React$Node {
     if(this.state.project) {
-      const teamSections: $ReadOnlyArray<?React$Node> = SectionConfigs.map((sc: SectionConfig) => this._renderTeamSection(sc));
+      const teamSections: $ReadOnlyArray<?React$Node> = SectionConfigs
+        .filter((sc: SectionConfig) => sc.sectionRoleCategory in this.state.project_volunteers)
+        .map((sc: SectionConfig) => this._renderTeamSection(sc));
   
       return (
         <div className="about-us-team col">
@@ -163,17 +169,19 @@ class TeamSections extends React.PureComponent<Props, State> {
   }
   
   _renderTeamSection(sectionConfig: SectionConfig): ?React$Node {
-    const team: $ReadOnlyArray<BioPersonData> = this.state.project_volunteers[sectionConfig.sectionRoleCategory];
-    const sortedTeam: $ReadOnlyArray<BioPersonData> = Sort.byNamedEntries(team, sectionConfig.topRoles, (p: BioPersonData) => p.title_tag);
-    
-    return (
-      <React.Fragment>
-        <h4>{sectionConfig.title}</h4>
-        <div className="about-us-team-card-container">
-          {this._renderBios(sortedTeam, false)}
-        </div>
-      </React.Fragment>
-    );
+    if(sectionConfig.sectionRoleCategory in this.state.project_volunteers) {
+      const team: $ReadOnlyArray<BioPersonData> = this.state.project_volunteers[sectionConfig.sectionRoleCategory];
+      const sortedTeam: $ReadOnlyArray<BioPersonData> = Sort.byNamedEntries(team, sectionConfig.topRoles, (p: BioPersonData) => p.title_tag);
+  
+      return (
+        <React.Fragment>
+          <h4>{sectionConfig.title}</h4>
+          <div className="about-us-team-card-container">
+            {this._renderBios(sortedTeam, false)}
+          </div>
+        </React.Fragment>
+      );
+    }
   }
   
   _renderBioModal(): ?React$Node {
