@@ -6,16 +6,18 @@ export type BioPersonData = {|
   first_name: string,
   last_name: string,
   title: ?$ReadOnlyArray<string>,
+  title_tag: ?string,
   user_thumbnail: ?string,
   bio_text: ?string,
   profile_id: ?number
 |};
 
-export function VolunteerUserDataToBioPersonData(v: VolunteerUserData, title: string): BioPersonData {
+export function VolunteerUserDataToBioPersonData(v: VolunteerUserData, title: string, title_tag: ?string): BioPersonData {
     return {
       first_name: v.first_name,
       last_name: v.last_name,
       title: [title],
+      title_tag: title_tag,
       user_thumbnail: v.user_thumbnail && v.user_thumbnail.publicUrl,
       bio_text: v.about_me,
       profile_id: v.id

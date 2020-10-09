@@ -8,13 +8,11 @@ import Section from "../../enums/Section.js";
 import LoadingMessage from "../../chrome/LoadingMessage.jsx";
 import type {ProjectDetailsAPIData, TeamAPIData, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
 import BioThumbnail from "./BioThumbnail.jsx";
-import {
-  VolunteerDetailsAPIDataEqualsBioPersonData,
-  VolunteerUserDataEqualsBioPersonData,
-  VolunteerUserDataToBioPersonData
-} from "./BioPersonData.jsx";
+import {VolunteerDetailsAPIDataEqualsBioPersonData, VolunteerUserDataToBioPersonData} from "./BioPersonData.jsx";
 import GroupBy from "../../utils/groupBy.js";
 import BioModal from "./BioModal.jsx";
+import Sort from "../../utils/sort.js";
+import array from "../../utils/array";
 
 type Props = {|
   teamResponse: TeamAPIData
@@ -24,12 +22,41 @@ type State = {|
   project: ?ProjectDetailsAPIData,
   board_of_directors: ?$ReadOnlyArray<BioPersonData>,
   project_volunteers: ?{ [key: string]: BioPersonData },
-  project_owners: ?$ReadOnlyArray<BioPersonData>,
   showBiographyModal: boolean,
   allowModalUnsafeHtml: boolean,
   modalPerson: ?BioPersonData,
   personTitle: string
 |};
+
+type SectionConfig = {|
+  title: string,
+  sectionRoleCategory: string,
+  topRoles: ?$ReadOnlyArray<string>
+|};
+
+const SectionConfigs: $ReadOnlyArray<SectionConfig> = [
+  {
+    title: "Development",
+    sectionRoleCategory: "Software Development",
+    topRoles: ["technical-director", "technical-lead"]
+  }, {
+    title: "Design",
+    sectionRoleCategory: "Design",
+    topRoles: ["design-lead", "creative-director"]
+  }, {
+    title: "Product Management",
+    sectionRoleCategory: "Product Management",
+    topRoles: ["product-manager-lead"]
+  }, {
+    title: "Marketing",
+    sectionRoleCategory: "Marketing",
+    topRoles: ["marketing-lead"]
+  }, {
+    title: "Operations",
+    sectionRoleCategory: "Business",
+    topRoles: []
+  }
+];
 
 class TeamSections extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
@@ -64,16 +91,10 @@ class TeamSections extends React.PureComponent<Props, State> {
         VolunteerDetailsAPIDataEqualsBioPersonData);
       state.project_volunteers = GroupBy.andTransform(
         uniqueVolunteers,
-        (pv) => pv.roleTag.subcategory,
-        (pv) => {
-          return VolunteerUserDataToBioPersonData(pv.user, pv.roleTag.display_name);
+        (pv: VolunteerDetailsAPIData) => pv.roleTag.subcategory,
+        (pv: VolunteerDetailsAPIData) => {
+          return VolunteerUserDataToBioPersonData(pv.user, pv.roleTag.display_name, pv.roleTag.tag_name);
         });
-      // Remove board members from owner list
-      const uniqueOwners: $ReadOnlyArray<BioPersonData> = _.differenceWith(
-        response.project.project_owners,
-        state.board_of_directors,
-        VolunteerUserDataEqualsBioPersonData);
-      state.project_owners = uniqueOwners.map((po) => VolunteerUserDataToBioPersonData(po, "Owner"));
     }
     
     return state;
@@ -107,7 +128,7 @@ class TeamSections extends React.PureComponent<Props, State> {
     );
   }
   
-  _boardOfDirectors() {
+  _boardOfDirectors(): ?React$Node {
     return (this.state.board_of_directors ?
       <div className="about-us-team col">
         <h2>Board of Directors</h2>
@@ -121,37 +142,41 @@ class TeamSections extends React.PureComponent<Props, State> {
       </div> : null);
   }
   
-  _ourTeam() {
-    return (this.state.project ?
-      <div className="about-us-team col">
-        <h2>Our Team</h2>
-        <p className="about-us-team-description">
-          We are volunteer engineers, marketers, organizers, strategists, designers, project managers, and citizens committed to our vision, and driven by our mission.
-          Please visit our <a href={url.section(Section.AboutProject, {id: this.state.project.project_id})}>project profile</a> to learn how you can get involved!
-        </p>
-        <h4>Business & Operations</h4>
-        <div className="about-us-team-card-container">
-          {this._renderBios(this.state.project_owners)}
-          {this._filterTeamSection(this.state.project_volunteers, 'Business')}
-        </div>
-        <hr />
-        <h4>Design</h4>
-        <div className="about-us-team-card-container">
-          {this._filterTeamSection(this.state.project_volunteers, 'Design')}
-        </div>
-        <hr />
-        <h4>Development</h4>
-        <div className="about-us-team-card-container">
-          {this._filterTeamSection(this.state.project_volunteers, 'Software Development')}
-        </div>
-      </div> : <div className="about-us-team col"><LoadingMessage message="Loading our team information..." /></div>)
+  _ourTeam(): ?React$Node {
+    if(this.state.project) {
+      const teamSections: $ReadOnlyArray<?React$Node> = SectionConfigs.map((sc: SectionConfig) => this._renderTeamSection(sc));
+  
+      return (
+        <div className="about-us-team col">
+          <h2>Our Team</h2>
+          <p className="about-us-team-description">
+            We are volunteer engineers, marketers, organizers, strategists, designers, project managers, and citizens
+            committed to our vision, and driven by our mission.
+            Please visit our <a href={url.section(Section.AboutProject, {id: this.state.project.project_id})}>project
+            profile</a> to learn how you can get involved!
+          </p>
+          {array.join(teamSections, <hr/>)}
+        </div>);
+    } else {
+      return <div className="about-us-team col"><LoadingMessage message="Loading our team information..."/></div>;
+    }
   }
   
-  _filterTeamSection(volunteers, role) {
-    return volunteers[role] && this._renderBios(volunteers[role], false);
+  _renderTeamSection(sectionConfig: SectionConfig): ?React$Node {
+    const team: $ReadOnlyArray<BioPersonData> = this.state.project_volunteers[sectionConfig.sectionRoleCategory];
+    const sortedTeam: $ReadOnlyArray<BioPersonData> = Sort.byNamedEntries(team, sectionConfig.topRoles, (p: BioPersonData) => p.title_tag);
+    
+    return (
+      <React.Fragment>
+        <h4>{sectionConfig.title}</h4>
+        <div className="about-us-team-card-container">
+          {this._renderBios(sortedTeam, false)}
+        </div>
+      </React.Fragment>
+    );
   }
   
-  _renderBioModal() {
+  _renderBioModal(): ?React$Node {
     return <BioModal
       size="lg"
       showModal={this.state.showBiographyModal}
@@ -161,7 +186,7 @@ class TeamSections extends React.PureComponent<Props, State> {
     />
   }
   
-  _renderBios(volunteers: $ReadOnlyArray<BioPersonData>, allowUnsafeHtml: boolean) {
+  _renderBios(volunteers: $ReadOnlyArray<BioPersonData>, allowUnsafeHtml: boolean): ?React$Node {
     return (
       volunteers.map((volunteer, i) => {
         return (
