@@ -20,6 +20,7 @@ import metrics from "../utils/metrics.js";
 import CurrentUser from "../utils/CurrentUser.js";
 import _ from 'lodash';
 import Headers from "../common/Headers.jsx";
+import url from "../utils/url.js";
 
 const UserLinkNames = ['link_linkedin'];
 
@@ -42,6 +43,7 @@ type FormFields = {|
 |};
 
 type State = {|
+  userId: number,
   formFields: FormFields,
   formIsValid: boolean,
   validations: $ReadOnlyArray<Validator>
@@ -76,17 +78,17 @@ class EditProfileController extends React.PureComponent<{||},State> {
     const formIsValid: boolean = FormValidation.isValid(
       formFields, validations);
     this.state = {
+      userId: (CurrentUser.isStaff() && url.argument("id")) || window.DLAB_GLOBAL_CONTEXT.userID,
       formFields: formFields,
       formIsValid: formIsValid,
       validations: validations
-    }
+    };
     this.form = formHelper.setup();
   }
 
   componentDidMount(): void {
     // TODO: Show error message on failure to load
-    UserAPIUtils.fetchUserDetails(
-      window.DLAB_GLOBAL_CONTEXT.userID, this.loadUserDetails.bind(this));
+    UserAPIUtils.fetchUserDetails(this.state.userId, this.loadUserDetails.bind(this));
     this.form.doValidation.bind(this)();
   }
 
@@ -186,7 +188,7 @@ class EditProfileController extends React.PureComponent<{||},State> {
       />
       <div className="wrapper-gray">
         <div className="container">
-          <form action={`/api/user/edit/${window.DLAB_GLOBAL_CONTEXT.userID}/`} method="post">
+          <form action={`/api/user/edit/${this.state.userId}/`} method="post">
             <div className="EditProjectForm-root create-form white-bg">
               <DjangoCSRFToken/>
 
