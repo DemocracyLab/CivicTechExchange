@@ -5,7 +5,6 @@ import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
 import type {TeamAPIData} from '../utils/ProjectAPIUtils.js';
 import cdn, {Images} from '../utils/cdn.js';
 import SplashScreen, {HeroImage} from '../componentsBySection/FindProjects/SplashScreen.jsx';
-import Headers from "../common/Headers.jsx";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import TeamSections from "../componentsBySection/AboutUs/TeamSections.jsx";
@@ -167,24 +166,10 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     )
   }
 
-  _renderHeader(): React$Node {
-    const title: string = "DemocracyLab | About";
-    const description: string = "Learn About democracyLab, the nonprofit connecting skilled individuals to tech-for-good projects."
-
-    return (
-      <Headers
-        title={title}
-        description={description}
-      />
-    );
-  }
-
-
    render(): $React$Node {
     return (
        <React.Fragment>
          <div className="container-fluid pl-0 pr-0 about-us-root">
-           {this._renderHeader()}
            {this._ourMission()}
            {this._ourVision()}
          </div>
