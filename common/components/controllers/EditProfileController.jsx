@@ -19,7 +19,6 @@ import urlHelper from "../utils/url.js";
 import metrics from "../utils/metrics.js";
 import CurrentUser from "../utils/CurrentUser.js";
 import _ from 'lodash';
-import Headers from "../common/Headers.jsx";
 import url from "../utils/url.js";
 
 const UserLinkNames = ['link_linkedin'];
@@ -182,10 +181,6 @@ class EditProfileController extends React.PureComponent<{||},State> {
   render(): React$Node {
     return (
       <React.Fragment>
-      <Headers
-      title="Update User Profile | DemocracyLab"
-      description="Update User Profile page"
-      />
       <div className="wrapper-gray">
         <div className="container">
           <form action={`/api/user/edit/${this.state.userId}/`} method="post">
