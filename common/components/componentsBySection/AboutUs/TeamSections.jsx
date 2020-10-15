@@ -12,7 +12,8 @@ import {VolunteerDetailsAPIDataEqualsBioPersonData, VolunteerUserDataToBioPerson
 import GroupBy from "../../utils/groupBy.js";
 import BioModal from "./BioModal.jsx";
 import Sort from "../../utils/sort.js";
-import array from "../../utils/array";
+import array from "../../utils/array.js";
+import type {Dictionary} from "../../types/Generics.jsx";
 
 type Props = {|
   teamResponse: TeamAPIData
@@ -54,13 +55,17 @@ const SectionConfigs: $ReadOnlyArray<SectionConfig> = [
   }, {
     title: "Salesforce Dev/Admin",
     sectionRoleCategory: "Operations",
-    topRoles: []
+    topRoles: ["business-operations-lead"]
   }, {
     title: "Operations",
     sectionRoleCategory: "Business",
     topRoles: []
   }
 ];
+
+const roleNameOverride: Dictionary<string> = {
+  "business-operations-lead": "Salesforce Team Lead"
+};
 
 class TeamSections extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
@@ -97,7 +102,7 @@ class TeamSections extends React.PureComponent<Props, State> {
         uniqueVolunteers,
         (pv: VolunteerDetailsAPIData) => pv.roleTag.subcategory,
         (pv: VolunteerDetailsAPIData) => {
-          return VolunteerUserDataToBioPersonData(pv.user, pv.roleTag.display_name, pv.roleTag.tag_name);
+          return VolunteerUserDataToBioPersonData(pv.user, pv.roleTag.display_name, pv.roleTag.tag_name, roleNameOverride);
         });
     }
     

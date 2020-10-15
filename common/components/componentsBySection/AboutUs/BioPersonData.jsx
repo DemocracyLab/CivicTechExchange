@@ -1,6 +1,7 @@
 // @flow
 
 import type {VolunteerUserData, VolunteerDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
+import type {Dictionary} from "../../types/Generics.jsx";
 
 export type BioPersonData = {|
   first_name: string,
@@ -12,16 +13,17 @@ export type BioPersonData = {|
   profile_id: ?number
 |};
 
-export function VolunteerUserDataToBioPersonData(v: VolunteerUserData, title: string, title_tag: ?string): BioPersonData {
-    return {
-      first_name: v.first_name,
-      last_name: v.last_name,
-      title: [title],
-      title_tag: title_tag,
-      user_thumbnail: v.user_thumbnail && v.user_thumbnail.publicUrl,
-      bio_text: v.about_me,
-      profile_id: v.id
-    };
+export function VolunteerUserDataToBioPersonData(v: VolunteerUserData, title: string, title_tag: ?string, nameOverrides: ?Dictionary<string>): BioPersonData {
+  const _title: string = nameOverrides && title_tag in nameOverrides ? nameOverrides[title_tag] : title;
+  return {
+    first_name: v.first_name,
+    last_name: v.last_name,
+    title: [_title],
+    title_tag: title_tag,
+    user_thumbnail: v.user_thumbnail && v.user_thumbnail.publicUrl,
+    bio_text: v.about_me,
+    profile_id: v.id
+  };
 }
 
 export function VolunteerDetailsAPIDataEqualsBioPersonData(v: VolunteerDetailsAPIData, b: BioPersonData): boolean {
