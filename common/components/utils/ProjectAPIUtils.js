@@ -209,7 +209,7 @@ class ProjectAPIUtils {
       }));
   }
   //fetch DemocracyLab board information
-  static fetchTeamDetails(callback) {
+  static fetchTeamDetails(callback: (TeamAPIData) => void): void {
     fetch('/api/team')
     .then(response => {
       return response.json()
