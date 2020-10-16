@@ -251,7 +251,7 @@ $ch-greyfont: #6f6f6f;
   }
   .corporate-hackathon-hostwithus-right {
     padding-left: 8%; // enforce minimum space between these elements
-    align-self: center; // vertically center image 
+    align-self: center; // vertically center image
     text-align: right; // keep image as far right as it can be
   }
   .corporate-hackathon-hostwithus-header {
@@ -285,6 +285,11 @@ $ch-greyfont: #6f6f6f;
     }
     p {
       font-size: 20px;
+    }
+  }
+  .corporate-hackathon-hostwithus-results-item {
+    p {
+      font-size: 16px;
     }
   }
   .corporate-hackathon-hostwithus-left {
