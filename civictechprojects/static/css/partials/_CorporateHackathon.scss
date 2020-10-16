@@ -199,6 +199,7 @@ $ch-greyfont: #6f6f6f;
 }
 @include media-breakpoint-up(md) {
   .corporate-hackathon-hostwithus {
+    flex: 0 0 50%;
     flex-wrap: nowrap;
     h1 {
       font-size: 32px;
@@ -223,17 +224,7 @@ $ch-greyfont: #6f6f6f;
     font-size: 16px;
     text-align: left;
     padding-bottom: 95px;
-    h1 {
-      font-size: 48px;
-      margin-bottom: 45px;
-    }
-    h2 {
-      font-size: 20px;
-      margin: 0 0 20px 0;
-    }
-    p {
-      font-size: 20px;
-    }
+
     .hero-wide-content {
       max-width: 2044px;
       margin: 0 auto;
@@ -256,11 +247,11 @@ $ch-greyfont: #6f6f6f;
     max-width: 700px; // constrain these at high px width displays
   }
   .corporate-hackathon-hostwithus-left {
-    margin-right: 8%; // enforce minimum space between these elements
+    padding-right: 8%; // enforce minimum space between these elements
   }
   .corporate-hackathon-hostwithus-right {
-    margin-left: 8%; // enforce minimum space between these elements
-    align-self: center;
+    padding-left: 8%; // enforce minimum space between these elements
+    align-self: center; // vertically center image 
     text-align: right; // keep image as far right as it can be
   }
   .corporate-hackathon-hostwithus-header {
@@ -283,11 +274,26 @@ $ch-greyfont: #6f6f6f;
   }
 }
 @include media-breakpoint-up(xl) {
+  .corporate-hackathon-hostwithus {
+    h1 {
+      font-size: 48px;
+      margin-bottom: 45px;
+    }
+    h2 {
+      font-size: 20px;
+      margin: 0 0 20px 0;
+    }
+    p {
+      font-size: 20px;
+    }
+  }
   .corporate-hackathon-hostwithus-left {
-    margin-right: 5%;
+    width: 50%; // max-width 700 declared in xxl, but this should keep the stats section from overwhelming the right side image due to space pressure in flex
+    padding-right: 5%;
   }
   .corporate-hackathon-hostwithus-right {
-    margin-left: 5%; // making "the image bigger" from 1200-1400, the only way possible
+    width: 50%;
+    padding-left: 5%; // making "the image bigger" from 1200-1400, the only way possible
   }
   .corporate-hackathon-howitworks {
     h2 {
@@ -417,13 +423,13 @@ $ch-greyfont: #6f6f6f;
     }
   }
   .corporate-hackathon-hostwithus-right {
-    margin-left: 100px; // at this point flex can handle spacing scaling so set the minimum because relative margins will cause issues @ high res
+    padding-left: 100px; // at this point flex can handle spacing scaling so set the minimum because relative margins will cause issues @ high res
     img {
       min-width: 100%;
     }
   }
   .corporate-hackathon-hostwithus-left {
-    margin-right: 100px;
+    padding-right: 100px;
   }
   .corporate-hackathon-hostwithus-results-item {
     flex: 0 0 auto;
