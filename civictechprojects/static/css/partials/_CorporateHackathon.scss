@@ -32,8 +32,8 @@ $ch-greyfont: #6f6f6f;
   }
   h2 {
     text-align: left;
-    font-size: 18px;
-    margin: $ch-margin 0 16px 0;
+    font-size: 12px;
+    margin: $ch-margin 0 20px 0;
     color: $ch-greyfont;
   }
   p {
@@ -64,7 +64,7 @@ $ch-greyfont: #6f6f6f;
 }
 .corporate-hackathon-hostwithus-results-item {
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   margin: 0 20px;
   flex: 1 1 26%;
   h3 {
@@ -122,7 +122,7 @@ $ch-greyfont: #6f6f6f;
   margin-bottom: $ch-margin;
   padding-left: 40px; /* match the list items above it */
   color: $ch-greyfont;
-  font-size: 14px;
+  font-size: 12px;
   a {
     color: $ch-greyfont;
     text-decoration: underline;
@@ -181,9 +181,31 @@ $ch-greyfont: #6f6f6f;
 .corporate-hackathon-howitworks, .corporate-hackathon-whyengage, .corporate-hackathon-sponsorships {
   padding: $ch-mobile-vertical-padding $ch-horizontalpadding;
 }
+@include media-breakpoint-up(sm) {
+  .corporate-hackathon-hostwithus-results {
+    flex-wrap: nowrap;
+  }
+  .corporate-hackathon-hostwithus-results-item {
+    flex: 1 auto;
+  }
+  .corporate-hackathon-howitworks-item {
+    img {
+    width: 50px;
+    }
+    p {
+      margin-top: 15px;
+    }
+  }
+}
 @include media-breakpoint-up(md) {
   .corporate-hackathon-hostwithus {
     flex-wrap: nowrap;
+    h1 {
+      font-size: 32px;
+    }
+    h2 {
+      font-size: 14px;
+    }
   }
   .corporate-hackathon-hostwithus-results-item:first-of-type {
     margin-left: 0;
@@ -191,9 +213,8 @@ $ch-greyfont: #6f6f6f;
   .corporate-hackathon-hostwithus-results-item:last-of-type {
     margin-right: 0;
   }
-  .corporate-hackathon-hostwithus-results {
-    flex-wrap: nowrap; // only at small viewports
-    flex-basis: auto;
+  .corporate-hackathon-howitworks h2, .corporate-hackathon-whyengage h2, .corporate-hackathon-sponsorships h2 {
+    font-size: 24px;
   }
 }
 
@@ -259,6 +280,14 @@ $ch-greyfont: #6f6f6f;
       font-size: 16px;
       color: $color-text-grey;
     }
+  }
+}
+@include media-breakpoint-up(xl) {
+  .corporate-hackathon-hostwithus-left {
+    margin-right: 5%;
+  }
+  .corporate-hackathon-hostwithus-right {
+    margin-left: 5%; // making "the image bigger" from 1200-1400, the only way possible
   }
   .corporate-hackathon-howitworks {
     h2 {
@@ -374,6 +403,9 @@ $ch-greyfont: #6f6f6f;
   // desktop section padding
   .corporate-hackathon-howitworks, .corporate-hackathon-whyengage, .corporate-hackathon-sponsorships {
     padding: $ch-desktop-vertical-padding $ch-horizontalpadding;
+  }
+  .corporate-hackathon-whyengage-source {
+    font-size: 14px;
   }
 }
 
