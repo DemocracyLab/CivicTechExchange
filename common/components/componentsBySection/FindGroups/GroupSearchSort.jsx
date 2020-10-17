@@ -16,10 +16,10 @@ type State = {|
 |};
 
 const sortOptions: $ReadOnlyArray<SelectOption>  = [
-    {value: "", label: "Date Modified"},
-    {value: "group_name", label: "Name - Ascending"},
-    {value: "-group_name", label: "Name - Descending"}
-  ];
+  {value: "", label: "Name - Ascending"},
+  {value: "-group_name", label: "Name - Descending"},
+  {value: "-group_date_modified", label: "Date Modified"}
+];
 
 class GroupSearchSort extends React.Component<{||}, State> {
 
