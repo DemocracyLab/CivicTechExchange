@@ -121,7 +121,7 @@ class SectionController extends React.Component<{||}, State> {
         return <AboutEventController/>;
       case Section.LiveEvent:
         return <LiveEventController />;
-      case Section.CorporateHackathon:
+      case Section.CorporateEvent:
         return <CoroporateHackathonController />
       case Section.Error:
         return <ErrorController />;
