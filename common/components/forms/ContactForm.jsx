@@ -192,7 +192,6 @@ class ContactForm extends React.Component<Props, State> {
           Company (Optional):
         </label>
         <input
-          required
           className="form-control"
           name="company_name"
           id="company_name"
