@@ -20,7 +20,7 @@ class DemocracyLabUserCreationForm(UserCreationForm):
     def edit_user(request, user_id):
         user = Contributor.objects.get(id=user_id)
 
-        if not request.user.username == user.username:
+        if not (request.user.username == user.username or request.user.is_staff):
             raise PermissionDenied()
 
         project_fields_changed = False

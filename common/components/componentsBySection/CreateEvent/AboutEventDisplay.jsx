@@ -44,6 +44,9 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   render(): ?$React$Node {
     const event:EventData = this.state.event;
+    const startDate: Moment = datetime.parse(event.event_date_start);
+    const endDate: Moment = datetime.parse(event.event_date_end);
+    const isSingleDayEvent: boolean = datetime.isOnSame('day', startDate, endDate);
     return !event ? null : (
       <div className="AboutEvent-root container">
 
@@ -55,7 +58,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
             && this._renderEditButton()
           }
             <div className="AboutEvent-title-date">
-              {datetime.parse(event.event_date_start).format(DateFormat.MONTH_DATE_YEAR)}
+              {startDate.format(DateFormat.MONTH_DATE_YEAR)}
             </div>
             <h1>{event.event_name}</h1>
             <p>{event.event_short_description}</p>
@@ -66,22 +69,18 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           <div className="AboutEvent-info col-xs-12 col-lg-4">
             <div className="AboutEvent-info-inner">
               <h3>Info</h3>
-              {/*TODO: Handle multi-day events*/}
-              <h5 className="AboutEvent-info-header">Date</h5>
-              <p>{datetime.parse(event.event_date_start).format(DateFormat.DAY_MONTH_DATE_YEAR)}</p>
               {this.state.event.event_organizers_text && (
-                  <React.Fragment>
-                    <h5 className="AboutEvent-info-header">Organizers</h5>
-                    <div className="AboutEvent-location">
-                      <p>{this.state.event.event_organizers_text}</p>
-                    </div>
-                  </React.Fragment>
-                )
+                <React.Fragment>
+                  <h5 className="AboutEvent-info-header">Organizers</h5>
+                  <div className="AboutEvent-location">
+                    <p>{this.state.event.event_organizers_text}</p>
+                  </div>
+                </React.Fragment>
+              )
               }
-
-              <h5 className="AboutEvent-info-header">Time</h5>
-              <p>{this._renderTimeRange()}</p>
-
+              
+              {isSingleDayEvent ? this._renderDateTimeSections(startDate, endDate) : this._renderDatesSection(startDate, endDate)}
+              
               <h5 className="AboutEvent-info-header">Location</h5>
               <div className="AboutEvent-location">
                 <p>{this.state.event.event_location}</p>
@@ -106,12 +105,28 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       </div>
     )
   }
-
-  _renderTimeRange(): string {
-    const timeStart: Moment = datetime.parse(this.state.event.event_date_start);
-    const timeEnd: Moment = datetime.parse(this.state.event.event_date_end);
-    
-    return timeStart.format(DateFormat.TIME) + " - " + timeEnd.format(DateFormat.TIME_TIMEZONE);
+  
+  _renderDatesSection(startDate: Moment, endDate: Moment): $React$Node {
+    return (
+      <React.Fragment>
+        <h5 className="AboutEvent-info-header">Dates</h5>
+        <p>{startDate.format(DateFormat.DAY_MONTH_DATE_YEAR_TIME)}</p>
+        <h6>To</h6>
+        <p>{endDate.format(DateFormat.DAY_MONTH_DATE_YEAR_TIME)}</p>
+      </React.Fragment>
+    );
+  }
+  
+  _renderDateTimeSections(startDate: Moment, endDate: Moment): $React$Node {
+    return (
+      <React.Fragment>
+        <h5 className="AboutEvent-info-header">Date</h5>
+        <p>{startDate.format(DateFormat.DAY_MONTH_DATE_YEAR)}</p>
+  
+        <h5 className="AboutEvent-info-header">Time</h5>
+        <p>{startDate.format(DateFormat.TIME) + " - " + endDate.format(DateFormat.TIME_TIMEZONE)}</p>
+      </React.Fragment>
+    );
   }
 
   _renderEditButton(): ?$React$Node {

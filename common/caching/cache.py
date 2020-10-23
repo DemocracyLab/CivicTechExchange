@@ -28,13 +28,13 @@ class CacheWrapper:
         :param value: Value to cache
         """
         _value = value or (self._cache_generators[key]() if key in self._cache_generators else None)
-        self._cache.set(key, _value)
+        self._cache.set(key, _value, timeout=None)
 
     def _set_with_generator(self, key, generator_func):
         if generator_func is not None:
             self._cache_generators[key] = generator_func
         generated_value = self._cache_generators[key]()
-        self._cache.set(key, generated_value)
+        self._cache.set(key, generated_value, timeout=None)
         return generated_value
 
 

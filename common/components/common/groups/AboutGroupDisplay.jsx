@@ -47,7 +47,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
       : [];
     return ({
       group: group,
-      approvedProjects: approvedProjects,
+      approvedProjects: _.reverse(_.sortBy(approvedProjects, (p: ProjectRelationshipAPIData) => p.project_date_modified)),
       issueAreas: this.getUniqueIssueAreas(approvedProjects)
     });
   }

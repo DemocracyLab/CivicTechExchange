@@ -1,5 +1,6 @@
 import re
 from django.conf import settings
+from html import unescape
 
 
 def section_url(section, args_dict=None):
@@ -16,3 +17,8 @@ def get_page_section(url):
     if match is not None:
         groups = match.groups()
         return groups[0]
+
+
+def get_clean_url(url):
+    clean_url = unescape(url)
+    return clean_url

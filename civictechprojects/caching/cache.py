@@ -13,7 +13,9 @@ class ProjectCacheManager:
         return value
 
     def _get_key(self, project):
-        return self._cache_key_prefix + str(project.id)
+        from civictechprojects.models import Project
+        project_id = str(project.id) if isinstance(project, Project) else project
+        return self._cache_key_prefix + project_id
 
 
 ProjectCache = ProjectCacheManager()
