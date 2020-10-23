@@ -37,6 +37,7 @@ import AboutGroupController from "./AboutGroupController.jsx";
 import ErrorController from "./ErrorController.jsx";
 import FindGroupsController from "./FindGroupsController.jsx";
 import FindEventsController from "./FindEventsController.jsx";
+import CoroporateHackathonController from "./CorporateHackathonController.jsx";
 
 type State = {|
   section: SectionType,
@@ -120,6 +121,8 @@ class SectionController extends React.Component<{||}, State> {
         return <AboutEventController/>;
       case Section.LiveEvent:
         return <LiveEventController />;
+      case Section.CorporateEvent:
+        return <CoroporateHackathonController />
       case Section.Error:
         return <ErrorController />;
       default:

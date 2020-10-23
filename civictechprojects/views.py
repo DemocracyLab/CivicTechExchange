@@ -1253,11 +1253,12 @@ def contact_democracylab(request):
 
     if r.json()['success']:
         # Successfuly validated, send email
-        fn = body['fname']
-        ln = body['lname']
-        em = body['emailaddr']
-        ms = body['message']
-        contact_democracylab_email(fn, ln, em ,ms)
+        first_name = body['fname']
+        last_name = body['lname']
+        email_addr = body['emailaddr']
+        message = body['message']
+        company_name = body['company_name'] if 'message' in body else None
+        contact_democracylab_email(first_name, last_name, email_addr, message, company_name)
         return HttpResponse(status=200)
 
     # Error while verifying the captcha, do not send the email
