@@ -27,7 +27,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   componentDidMount() {
     prerender.ready();
   }
-
+//TODO: Get headers from the back end, see PR #446 for example of the change
   _renderHeader(): React$Node {
     const title: string = "DemocracyLab | Corporate Hackathons";
     const description: string = "Host a hackathon with DemocracyLab!"
