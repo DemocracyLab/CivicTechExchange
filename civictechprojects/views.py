@@ -32,7 +32,7 @@ from common.helpers.constants import FrontEndSection, TagCategory
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
-    notify_group_owners_group_approved
+    notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
 from common.helpers.front_end import section_url, get_page_section, get_clean_url
 from common.helpers.request_helpers import url_params
@@ -360,6 +360,23 @@ def approve_project(request, project_id):
             notify_project_owners_project_approved(project)
             messages.success(request, 'Project Approved')
             return redirect('/index/?section=AboutProject&id=' + str(project.id))
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
+
+def approve_event(request, event_id):
+    event = Event.objects.get(id=event_id)
+    user = get_request_contributor(request)
+
+    if event is not None:
+        if user.is_staff:
+            event.is_searchable = True
+            event.save()
+            notify_event_owners_event_approved(event)
+            messages.success(request, 'Event Approved')
+            return redirect(section_url(FrontEndSection.AboutEvent, {'id': str(event.id)}))
         else:
             return HttpResponseForbidden()
     else:

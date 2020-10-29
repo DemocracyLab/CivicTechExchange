@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^groups/(?P<group_id>[0-9]+)/add_project/$', views.group_add_project, name='group_add_project'),
     url(r'^groups/(?P<group_id>[0-9]+)/remove_project/$', views.group_delete_project, name='group_remove_project'),
     url(r'^events/create/$', views.event_create, name='event_create'),
+    url(r'^events/approve/(?P<event_id>[0-9]+)/$', views.approve_event, name='approve_event'),
     url(r'^events/edit/(?P<event_id>[0-9]+)/$', views.event_edit, name='event_edit'),
     url(r'^events/delete/(?P<event_id>[0-9]+)/$', views.event_delete, name='event_delete'),
     url(r'^events/(?P<event_id>[0-9]+)/add_project/$', views.event_add_project, name='event_add_project'),

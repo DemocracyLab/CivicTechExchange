@@ -108,6 +108,8 @@ class CreateEventController extends React.PureComponent<{||},State> {
     
     return (
       <React.Fragment>
+        {/*TODO: Move headers to backend */}
+        {/*TODO: Uncomment Login section */}
         <Headers
           title="Create an Event | DemocracyLab"
           description="Create event page"

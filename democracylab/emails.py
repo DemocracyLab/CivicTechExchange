@@ -132,6 +132,28 @@ def send_project_creation_notification(project):
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
+def send_event_creation_notification(event):
+    event_url = section_url(FrontEndSection.AboutEvent, {'id': str(event.id)})
+
+    verification_url = settings.PROTOCOL_DOMAIN + '/events/approve/' + str(event.id)
+    email_template = HtmlEmailTemplate() \
+        .paragraph('{first_name} {last_name}({email}) has created the event "{event_name}": \n {event_url}'.format(
+        first_name=event.event_creator.first_name,
+        last_name=event.event_creator.last_name,
+        email=event.event_creator.email,
+        event_name=event.event_name,
+        event_url=event_url
+    )) \
+        .button(url=verification_url, text='APPROVE')
+    email_msg = EmailMessage(
+        subject='New DemocracyLab Event: ' + event.event_name,
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=[settings.ADMIN_EMAIL]
+    )
+    email_msg = email_template.render(email_msg)
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+
+
 def send_to_project_owners(project, sender, subject, template):
     project_volunteers = VolunteerRelation.objects.filter(project=project.id)
     co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
@@ -285,6 +307,22 @@ def notify_project_owners_project_approved(project):
         subject=project.project_name + " has been approved",
         from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
         to=_get_co_owner_emails(project)
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+
+
+def notify_event_owners_event_approved(event):
+    email_template = HtmlEmailTemplate() \
+        .paragraph('Your event "{{event_name}}" has been approved. You can see it at {{event_url}}')
+    context = {
+        'event_name': event.event_name,
+        'event_url': section_url(FrontEndSection.AboutEvent, {'id': str(event.id)})
+    }
+    email_msg = EmailMessage(
+        subject=event.event_name + " has been approved",
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=[event.event_creator.email]
     )
     email_msg = email_template.render(email_msg, context)
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
