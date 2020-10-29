@@ -14,6 +14,7 @@ import {CountrySelector} from "../../common/selection/CountrySelector.jsx";
 import {CountryCodeFormats, CountryData, countryByCode} from "../../constants/Countries.js";
 import {LocationInfo, getLocationInfoFromProject} from "../../common/location/LocationInfo.js";
 import {LocationAutocompleteForm, LocationFormInputsByEntity} from "../../forms/LocationAutocompleteForm.jsx";
+import CurrentUser from "../../utils/CurrentUser";
 
 
 type FormFields = {|
@@ -128,17 +129,20 @@ class ProjectInfoForm extends React.PureComponent<Props,State> {
             onSelection={this.form.onSelection.bind(this, "project_stage")}
           />
         </div>
-
-        <div className="form-group">
-          <label>Organization</label>
-          <TagSelector
-            elementId="project_organization"
-            value={this.state.formFields.project_organization}
-            category={TagCategory.ORGANIZATION}
-            allowMultiSelect={true}
-            onSelection={this.form.onSelection.bind(this, "project_organization")}
-          />
-        </div>
+  
+        {/* Only show to Admin */}
+        { CurrentUser.isStaff() &&
+          <div className="form-group">
+            <label>Organization</label>
+            <TagSelector
+              elementId="project_organization"
+              value={this.state.formFields.project_organization}
+              category={TagCategory.ORGANIZATION}
+              allowMultiSelect={true}
+              onSelection={this.form.onSelection.bind(this, "project_organization")}
+            />
+          </div>
+        }
 
         <div className="form-group">
           <label>Organization Type</label>
