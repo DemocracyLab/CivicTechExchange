@@ -118,9 +118,6 @@ class EventCreationForm(ModelForm):
         read_form_field_string(event, form, 'event_agenda')
         read_form_field_string(event, form, 'event_description')
         read_form_field_string(event, form, 'event_short_description')
-        project_fields_changed |= read_form_field_boolean(event, form, 'is_private')
-        # TODO: Ensure slug is unique
-        project_fields_changed |= read_form_field_string(event, form, 'event_slug')
         project_fields_changed |= read_form_field_string(event, form, 'event_name')
         project_fields_changed |= read_form_field_string(event, form, 'event_location')
         read_form_field_string(event, form, 'event_rsvp_url')
@@ -132,6 +129,18 @@ class EventCreationForm(ModelForm):
 
         read_form_field_boolean(event, form, 'is_searchable')
         read_form_field_boolean(event, form, 'is_created')
+        project_fields_changed |= read_form_field_boolean(event, form, 'is_private')
+
+        slug = form.data.get('event_slug')
+        slug_event = Event.get_by_slug(slug)
+        if slug_event and slug_event.id != event.id:
+            print('Could not change event {event} slug to {slug} because another event already has that slug: {existing_event}'.format(
+                event=event.__str__(),
+                slug=slug,
+                existing_event=slug_event
+            ))
+        else:
+            project_fields_changed |= read_form_field_string(event, form, 'event_slug')
 
         read_form_field_tags(event, form, 'event_legacy_organization')
 

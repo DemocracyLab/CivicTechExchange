@@ -456,7 +456,11 @@ class Event(Archived):
         }
 
         return event
-    
+
+    @staticmethod
+    def get_by_slug(slug):
+        return Event.objects.filter(event_slug=slug).first()
+
     def get_issue_areas(self):
         project_relationships = ProjectRelationship.objects.filter(relationship_event=self.id)
         project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
