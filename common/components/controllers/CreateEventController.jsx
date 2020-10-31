@@ -11,10 +11,12 @@ import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
 import CurrentUser from "../utils/CurrentUser";
+import LogInController from "./LogInController.jsx";
+import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 
 type State = {|
-  id: ?number,
-  Event: ?EventData,
+  eventId: ?number,
+  event: ?EventData,
   steps: $ReadOnlyArray<FormWorkflowStepConfig>
 |};
 
@@ -104,18 +106,10 @@ class CreateEventController extends React.PureComponent<{||},State> {
   }
   
   render(): React$Node {
-    
     return (
       <React.Fragment>
-        {/*TODO: Uncomment Login section */}
-
         <div className="form-body">
-          <FormWorkflow
-                      steps={this.state.steps}
-                      isLoading={this.state.eventId && !this.state.event}
-                      formFields={this.state.event}
-                    />
-          {/* {!CurrentUser.isLoggedIn()
+          {!CurrentUser.isLoggedIn()
             ? <LogInController prevPage={Section.CreateEvent}/>
             : <React.Fragment>
                 {CurrentUser.isEmailVerified()
@@ -128,7 +122,7 @@ class CreateEventController extends React.PureComponent<{||},State> {
                   )
                   : <VerifyEmailBlurb/>}
               </React.Fragment>
-          } */}
+          }
         </div>
       </React.Fragment>
     );
