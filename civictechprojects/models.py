@@ -372,6 +372,8 @@ class Event(Archived):
     event_short_description = models.CharField(max_length=140, blank=True)
     event_legacy_organization = TaggableManager(blank=True, through=TaggedEventOrganization)
     event_legacy_organization.remote_field.related_name = "+"
+    event_slug = models.CharField(max_length=100, blank=True)
+    is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
 
@@ -409,6 +411,8 @@ class Event(Archived):
             'event_owners': [self.event_creator.hydrate_to_tile_json()],
             'event_short_description': self.event_short_description,
             'event_legacy_organization': Tag.hydrate_to_json(self.id, list(self.event_legacy_organization.all().values())),
+            'event_slug': self.event_slug,
+            'is_private': self.is_private
         }
 
         if len(projects) > 0:

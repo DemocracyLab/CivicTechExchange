@@ -118,6 +118,9 @@ class EventCreationForm(ModelForm):
         read_form_field_string(event, form, 'event_agenda')
         read_form_field_string(event, form, 'event_description')
         read_form_field_string(event, form, 'event_short_description')
+        project_fields_changed |= read_form_field_boolean(event, form, 'is_private')
+        # TODO: Ensure slug is unique
+        project_fields_changed |= read_form_field_string(event, form, 'event_slug')
         project_fields_changed |= read_form_field_string(event, form, 'event_name')
         project_fields_changed |= read_form_field_string(event, form, 'event_location')
         read_form_field_string(event, form, 'event_rsvp_url')
