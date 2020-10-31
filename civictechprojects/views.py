@@ -788,7 +788,7 @@ def group_countries():
 
 
 def events_list(request):
-    events = Event.objects.filter(is_created=True, is_searchable=True)
+    events = Event.objects.filter(is_created=True, is_searchable=True, is_private=False)
     return JsonResponse({'events': [event.hydrate_to_tile_json() for event in events]})
 
 

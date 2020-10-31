@@ -201,7 +201,7 @@ class Project(Archived):
 
     def get_project_events(self):
         slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
-        return Event.objects.filter(event_legacy_organization__name__in=slugs)
+        return Event.objects.filter(event_legacy_organization__name__in=slugs, is_private=False)
 
     def update_timestamp(self, time=None):
         self.project_date_modified = time or timezone.now()

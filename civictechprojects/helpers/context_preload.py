@@ -31,6 +31,13 @@ def edit_profile_preload(context, query_args):
     return context
 
 
+def create_event_preload(context, query_args):
+    context = default_preload(context, query_args)
+    context['title'] = 'Create an Event | DemocracyLab'
+    context['description'] = 'Create event page'
+    return context
+
+
 def default_preload(context, query_args):
     context['title'] = 'DemocracyLab'
     context['description'] = 'Everyone has something to contribute to the technical solutions society needs. ' \
@@ -43,7 +50,8 @@ def default_preload(context, query_args):
 preload_urls = [
     {'section': FrontEndSection.AboutProject.value, 'handler': about_project_preload},
     {'section': FrontEndSection.EditProfile.value, 'handler': edit_profile_preload},
-    {'section': FrontEndSection.AboutUs.value, 'handler': about_us_preload}
+    {'section': FrontEndSection.AboutUs.value, 'handler': about_us_preload},
+    {'section': FrontEndSection.CreateEvent.value, 'handler': create_event_preload}
 ]
 
 

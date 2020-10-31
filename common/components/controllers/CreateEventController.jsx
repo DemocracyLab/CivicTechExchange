@@ -2,7 +2,6 @@
 
 import React from "react";
 import Section from "../enums/Section.js";
-import Headers from "../common/Headers.jsx";
 import EventOverviewForm from "../componentsBySection/CreateEvent/EventOverviewForm.jsx";
 import EventPreviewForm from "../componentsBySection/CreateEvent/EventPreviewForm.jsx";
 import EventDescriptionForm from "../componentsBySection/CreateEvent/EventDescriptionForm.jsx";
@@ -108,13 +107,8 @@ class CreateEventController extends React.PureComponent<{||},State> {
     
     return (
       <React.Fragment>
-        {/*TODO: Move headers to backend */}
         {/*TODO: Uncomment Login section */}
-        <Headers
-          title="Create an Event | DemocracyLab"
-          description="Create event page"
-        />
-        
+
         <div className="form-body">
           <FormWorkflow
                       steps={this.state.steps}
