@@ -248,7 +248,14 @@ def event_delete(request, event_id):
 
 
 def get_event(request, event_id):
-    event = Event.objects.get(id=event_id)
+    if event_id.isnumeric():
+        event = Event.objects.get(id=event_id)
+        requester_creator_or_staff = is_creator_or_staff(get_request_contributor(request), event)
+
+        if event.is_private and not requester_creator_or_staff:
+            return HttpResponseForbidden()
+    else:
+        event = Event.get_by_slug(event_id)
 
     if event is not None:
         if event.is_searchable or is_creator_or_staff(get_request_contributor(request), event):
@@ -257,6 +264,7 @@ def get_event(request, event_id):
             return HttpResponseForbidden()
     else:
         return HttpResponse(status=404)
+
 
 def event_add_project(request, event_id):
     body = json.loads(request.body)
