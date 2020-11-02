@@ -6,7 +6,9 @@ import UniversalDispatcher from '../stores/UniversalDispatcher.js';
 import React from 'react';
 import MainFooter from "../chrome/MainFooter.jsx";
 import SocialFooter from "../chrome/SocialFooter.jsx";
-import url from '../../components/utils/url.js'
+import url from '../../components/utils/url.js';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
+
 
 type State = {|
   headerHeight: number,
@@ -46,13 +48,24 @@ class MainController extends React.Component<{||}, State> {
     });
   }
 
-  render(): Array<React$Node> {
-    return [
-      <MainHeader key='main_header' onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}/>,
-      <SectionController key='section_controller' headerHeight={this.state.headerHeight}/>,
-      <MainFooter key='main_footer'/>,
-      <SocialFooter key='social_footer'/>
-    ];
+  render() {
+    return (
+      // because the ReCaptcha has to wrap the whole site it's acting as the one element for render() 
+      <GoogleReCaptchaProvider
+        reCaptchaKey={window.GRV3_SITEKEY}
+        useRecaptchaNet
+        scriptProps={{
+          async: true,
+          defer: true,
+          appendTo: "head"
+        }}
+      >
+        <MainHeader key='main_header' onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}/>
+        <SectionController key='section_controller' headerHeight={this.state.headerHeight}/>
+        <MainFooter key='main_footer'/>
+        <SocialFooter key='social_footer'/>
+      </GoogleReCaptchaProvider>
+    );
   }
 }
 

@@ -250,9 +250,13 @@ GOOGLE_ADS_ID = os.environ.get('GOOGLE_ADS_ID', '')
 GOOGLE_TAGS_ID = os.environ.get('GOOGLE_TAGS_ID', '')
 GOOGLE_CONVERSION_IDS = ast.literal_eval(os.environ.get('GOOGLE_CONVERSION_IDS', 'None'))
 
-#Google ReCaptcha keys - site key is exposed to the front end, secret is not
+#Google ReCaptcha V2 keys - site key is exposed to the front end, secret is not
 GR_SITEKEY = os.environ.get('GOOGLE_RECAPTCHA_SITE_KEY', '')
 GR_SECRETKEY = os.environ.get('GOOGLE_RECAPTCHA_SECRET_KEY', '')
+
+#Google ReCaptcha V3 keys - site is public, secret is not, as with V2
+GRV3_SITEKEY = os.environ.get('GOOGLE_RECAPTCHA_V3_SITE_KEY', '')
+GRV3_SECRETKEY = os.environ.get('GOOGLE_RECAPTCHA_V3_SECRET_KEY', '')
 
 STATIC_CDN_URL = os.environ.get('STATIC_CDN_URL', '')
 

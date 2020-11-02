@@ -389,6 +389,7 @@ def index(request):
         'PRESS_LINKS': settings.PRESS_LINKS,
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt'),
         'GR_SITEKEY': settings.GR_SITEKEY,
+        'GRV3_SITEKEY': settings.GRV3_SITEKEY,
         'FAVICON_PATH': settings.FAVICON_PATH,
         'BLOG_URL': settings.BLOG_URL,
         'EVENT_URL': settings.EVENT_URL,
@@ -576,7 +577,7 @@ def limited_listings(request):
         # Using CDATA tags (and escaping the close sequence) protects us from XSS attacks when
         # displaying user provided string values.
         return f"<![CDATA[{str.replace(']]>', ']]]]><![CDATA[>')}]]>"
-    
+
     def position_to_job(position):
         project = position.position_project
         roleTag = Tag.get_by_name(position.position_role.first().slug)
@@ -599,7 +600,7 @@ def limited_listings(request):
     approved_projects = ProjectPosition.objects.filter(position_project__is_searchable=True)
     xml_response = f"""<?xml version="1.0" encoding="UTF-8"?>
     <source>
-        <lastBuildDate>{timezone.now().strftime('%a, %d %b %Y %H:%M:%S %Z')}</lastBuildDate> 
+        <lastBuildDate>{timezone.now().strftime('%a, %d %b %Y %H:%M:%S %Z')}</lastBuildDate>
         <publisherUrl>https://www.democracylab.org</publisherUrl>
         <publisher>DemocracyLab</publisher>
         {"".join(map(position_to_job, approved_projects))}
@@ -1285,4 +1286,3 @@ def team(request):
         response['project'] = project.hydrate_to_json()
 
     return JsonResponse(response)
-

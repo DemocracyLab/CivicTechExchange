@@ -3542,7 +3542,7 @@ hmac-drbg@^1.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hoist-non-react-statics@^3.3.0:
+hoist-non-react-statics@3.3.2, hoist-non-react-statics@^3.3.0:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
   dependencies:
@@ -6179,6 +6179,13 @@ react-file-drop@^0.2.8:
   resolved "https://registry.yarnpkg.com/react-file-drop/-/react-file-drop-0.2.8.tgz#de1e26cef0f1a5855fa1fb1e0cee32bc03c34466"
   dependencies:
     prop-types "^15.6.1"
+
+react-google-recaptcha-v3@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-google-recaptcha-v3/-/react-google-recaptcha-v3-1.7.0.tgz#b072464d4237b8f147beaf28fb833264534dc222"
+  integrity sha512-yV7muvRmeD2T0oa6yFfCuVD9caTWqsFGoQBsFryRw+IMgyB2IXNK25NTEt7KYIeloGaJh94GZbB92xFne5HdEw==
+  dependencies:
+    hoist-non-react-statics "3.3.2"
 
 react-google-recaptcha@^1.1.0:
   version "1.1.0"

@@ -1,0 +1,10 @@
+// https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
+// display required text
+.grecaptcha-required-text {
+  font-size: 14px;
+  margin: 1rem 0;
+}

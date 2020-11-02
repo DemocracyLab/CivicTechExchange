@@ -1,5 +1,5 @@
 # https://hub.docker.com/r/nikolaik/python-nodejs
-FROM nikolaik/python-nodejs:python3.8-nodejs12	
+FROM nikolaik/python-nodejs:python3.8-nodejs12
 
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -101,9 +101,13 @@ ENV PAYPAL_PAYEE 'mark@democracylab.org'
 # Press page links (TODO: convert to db entries)
 ENV PRESS_LINKS '[{"date":"March 11, 2019","href":"https://www.washingtontechnology.org/the-pulse-of-tech-for-good-in-seattle/","title":"The Pulse of Tech for Good in Seattle","source":"Washington Technology Industry Association"},{"date":"February 10, 2019","href":"https://www.esal.us/blog/democracylab-empowering-the-civic-tech-movement/","title":"DemocracyLab: Empowering the Civic Tech Movement","source":"Engineers and Scientists Acting Locally"},{"date":"January 22, 2019","href":"https://givingcompass.org/article/untapped-potential-of-civic-technology/","title":"The Untapped Potential of Civic Technology","source":"Giving Compass"},{"date":"January 18, 2019","href":"http://techtalk.seattle.gov/2019/01/18/civic-tech-community-tackles-pressing-issues-with-seattles-open-data/","title":"Civic Tech Community Tackles Pressing Issues with Seattle’s Open Data","source":"Seattle IT Tech Talk Blog"},{"date":"January 9, 2019","href":"https://socrata.com/blog/seattle-hackathon-real-world-impact/","title":"Seattle Hackathon Innovates for ‘Real World Impact’","source":"Socrata Blog"},{"date":"August 8, 2018","href":"https://www.geekwire.com/2018/can-tech-government-innovate-together-social-good-inside-new-effort-change-tide/","title":"Can tech and government innovate together for social good? Inside a new effort to change the tide","source":"GeekWire"}]'
 
-# Google ReCaptcha development (NON PRODUCTION) keys
+# Google ReCaptcha V2 development (NON PRODUCTION) keys
 # These should always result in no captcha and always succeeding the check
 ENV GOOGLE_RECAPTCHA_SECRET_KEY "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
 ENV GOOGLE_RECAPTCHA_SITE_KEY "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+
+# Google ReCaptcha V3 development keys
+ENV GOOGLE_RECAPTCHA_V3_SITE_KEY "6LdRmtwZAAAAAI_WUIFZowtyPfH86P9C-ZRKJ8j7"
+ENV GOOGLE_RECAPTCHA_V3_SECRET_KEY "ASK"
 
 EXPOSE 8000

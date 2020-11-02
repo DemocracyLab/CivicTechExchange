@@ -91,10 +91,14 @@ export PAYPAL_PAYEE='mark@democracylab.org'
 # Press page links (TODO: convert to db entries)
 export PRESS_LINKS='[{"date":"March 11, 2019","href":"https://www.washingtontechnology.org/the-pulse-of-tech-for-good-in-seattle/","title":"The Pulse of Tech for Good in Seattle","source":"Washington Technology Industry Association"},{"date":"February 10, 2019","href":"https://www.esal.us/blog/democracylab-empowering-the-civic-tech-movement/","title":"DemocracyLab: Empowering the Civic Tech Movement","source":"Engineers and Scientists Acting Locally"},{"date":"January 22, 2019","href":"https://givingcompass.org/article/untapped-potential-of-civic-technology/","title":"The Untapped Potential of Civic Technology","source":"Giving Compass"},{"date":"January 18, 2019","href":"http://techtalk.seattle.gov/2019/01/18/civic-tech-community-tackles-pressing-issues-with-seattles-open-data/","title":"Civic Tech Community Tackles Pressing Issues with Seattle’s Open Data","source":"Seattle IT Tech Talk Blog"},{"date":"January 9, 2019","href":"https://socrata.com/blog/seattle-hackathon-real-world-impact/","title":"Seattle Hackathon Innovates for ‘Real World Impact’","source":"Socrata Blog"},{"date":"August 8, 2018","href":"https://www.geekwire.com/2018/can-tech-government-innovate-together-social-good-inside-new-effort-change-tide/","title":"Can tech and government innovate together for social good? Inside a new effort to change the tide","source":"GeekWire"}]'
 
-# Google ReCaptcha development (NON PRODUCTION) keys
+# Google ReCaptcha v2 development (NON PRODUCTION) keys
 # These should always result in no captcha and always succeeding the check
 export GOOGLE_RECAPTCHA_SECRET_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
 export GOOGLE_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+
+# Google ReCaptcha V3 keys - can be used in parallel with v2
+export GOOGLE_RECAPTCHA_V3_SITE_KEY=6LdRmtwZAAAAAI_WUIFZowtyPfH86P9C-ZRKJ8j7
+export GOOGLE_RECAPTCHA_V3_SECRET_KEY='ask'
 
 # Sample OAuth configuration
 # export SOCIAL_APPS='{"github": {"id": 1, "name": "DLab Social Login", "client_id": "CONFIGURE", "secret": "CONFIGURE", "public": True}, "google": {"id": 2,"name": "DLab Social Login","client_id": "CONFIGURE","secret": "CONFIGURE", "public": True}, "linkedin": {"id": 3,"name": "DLab Social Login","client_id": "CONFIGURE","secret": "CONFIGURE", "public": True}, "facebook": {"id": 4,"name": "DLab Social Login","client_id": "CONFIGURE","secret": "CONFIGURE", "public": True}}'
