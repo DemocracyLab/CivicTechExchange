@@ -144,7 +144,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   _renderRSVPButton(): ?$React$Node {
     const eventbriteTest = new RegExp("eventbrite\.com", "i");
-    const url: string = this.state.event.event_rsvp_url;
+    const url: string = urlHelper.appendHttpIfMissingProtocol(this.state.event.event_rsvp_url);
     const text: string = "RSVP" + (eventbriteTest.test(url) ? " on Eventbrite" : "");
     return (
       <Button
