@@ -250,10 +250,9 @@ def event_delete(request, event_id):
 def get_event(request, event_id):
     if event_id.isnumeric():
         event = Event.objects.get(id=event_id)
-        requester_creator_or_staff = is_creator_or_staff(get_request_contributor(request), event)
-
-        if event.is_private and not requester_creator_or_staff:
-            return HttpResponseForbidden()
+        if event.is_private:
+            if not request.user.is_authenticated() or not is_creator_or_staff(get_request_contributor(request), event):
+                return HttpResponseForbidden()
     else:
         event = Event.get_by_slug(event_id)
 
@@ -383,6 +382,7 @@ def approve_event(request, event_id):
             event.is_searchable = True
             event.save()
             notify_event_owners_event_approved(event)
+            event.update_linked_items()
             messages.success(request, 'Event Approved')
             return redirect(section_url(FrontEndSection.AboutEvent, {'id': str(event.id)}))
         else:
