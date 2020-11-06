@@ -27,6 +27,7 @@ class Contributor(User):
     user_technologies.remote_field.related_name = "+"
     uuid = models.CharField(max_length=32, blank=True, default=generate_uuid)
     qiqo_uuid = models.CharField(max_length=50, blank=True)
+    qiqo_signup_time = models.DateTimeField(null=True, blank=True)
 
     def is_admin_contributor(self):
         return self.email == settings.ADMIN_EMAIL
