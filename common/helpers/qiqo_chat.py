@@ -25,7 +25,8 @@ class SubscribeUserToQiqoChat(object):
         # Throttle user creation calls to qiqochat
         # TODO: Make timeout configurable
         print('Subscribe attempt to qiqochat at {time}'.format(time=timezone.now()))
-        if not self.user.qiqo_signup_time or (timezone.now() - self.user.qiqo_signup_time).total_seconds() > 5:
+        if not self.user.qiqo_signup_time \
+                or (timezone.now() - self.user.qiqo_signup_time).total_seconds() > settings.QIQO_SIGNUP_TIMEOUT_SECONDS:
             print('Subscribing!')
             self.user.qiqo_signup_time = timezone.now()
             self.user.save()
