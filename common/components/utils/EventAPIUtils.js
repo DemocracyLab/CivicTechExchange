@@ -20,7 +20,9 @@ export type EventData = {|
     event_short_description: string,
     event_thumbnail: FileInfo,
     event_projects: $ReadOnlyArray<ProjectAPIData>,
-    event_legacy_organization: $ReadOnlyArray<TagDefinition>
+    event_legacy_organization: $ReadOnlyArray<TagDefinition>,
+    event_slug: string,
+    is_private: boolean
 |};
 
 export type EventTileAPIData = {|

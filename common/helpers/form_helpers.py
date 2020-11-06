@@ -31,7 +31,7 @@ def read_form_field_boolean(model, form, field_name):
     :param field_name: Name of field shared by model and form
     :return: True if changes to model boolean field were made
     """
-    read_form_field_string(model, form, field_name, lambda str: strtobool(str))
+    return read_form_field_string(model, form, field_name, lambda str: strtobool(str))
 
 
 def read_form_field_datetime(model, form, field_name):

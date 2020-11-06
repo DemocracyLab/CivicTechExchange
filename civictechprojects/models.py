@@ -201,7 +201,7 @@ class Project(Archived):
 
     def get_project_events(self):
         slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
-        return Event.objects.filter(event_legacy_organization__name__in=slugs)
+        return Event.objects.filter(event_legacy_organization__name__in=slugs, is_private=False)
 
     def update_timestamp(self, time=None):
         self.project_date_modified = time or timezone.now()
@@ -372,6 +372,8 @@ class Event(Archived):
     event_short_description = models.CharField(max_length=140, blank=True)
     event_legacy_organization = TaggableManager(blank=True, through=TaggedEventOrganization)
     event_legacy_organization.remote_field.related_name = "+"
+    event_slug = models.CharField(max_length=100, blank=True)
+    is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
 
@@ -409,6 +411,8 @@ class Event(Archived):
             'event_owners': [self.event_creator.hydrate_to_tile_json()],
             'event_short_description': self.event_short_description,
             'event_legacy_organization': Tag.hydrate_to_json(self.id, list(self.event_legacy_organization.all().values())),
+            'event_slug': self.event_slug,
+            'is_private': self.is_private
         }
 
         if len(projects) > 0:
@@ -452,7 +456,11 @@ class Event(Archived):
         }
 
         return event
-    
+
+    @staticmethod
+    def get_by_slug(slug):
+        return Event.objects.filter(event_slug=slug).first()
+
     def get_issue_areas(self):
         project_relationships = ProjectRelationship.objects.filter(relationship_event=self.id)
         project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))

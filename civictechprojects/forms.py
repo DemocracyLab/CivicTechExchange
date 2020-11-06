@@ -3,7 +3,7 @@ from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group
 from .sitemaps import SitemapPages
-from democracylab.emails import send_project_creation_notification, send_group_creation_notification
+from democracylab.emails import send_project_creation_notification, send_group_creation_notification, send_event_creation_notification
 from democracylab.models import get_request_contributor
 from common.caching.cache import Cache, CacheKeys
 from common.helpers.date_helpers import parse_front_end_datetime
@@ -107,12 +107,13 @@ class EventCreationForm(ModelForm):
                 event_date_start=parse_front_end_datetime(form.data.get('event_date_start')),
                 event_date_end=parse_front_end_datetime(form.data.get('event_date_end')),
                 is_created=False,
-                is_searchable=True
+                is_searchable=False
             )
 
         if not is_co_owner_or_staff(request.user, event):
             raise PermissionDenied()
 
+        is_created_original = event.is_created
         project_fields_changed = False
         read_form_field_string(event, form, 'event_agenda')
         read_form_field_string(event, form, 'event_description')
@@ -128,6 +129,18 @@ class EventCreationForm(ModelForm):
 
         read_form_field_boolean(event, form, 'is_searchable')
         read_form_field_boolean(event, form, 'is_created')
+        project_fields_changed |= read_form_field_boolean(event, form, 'is_private')
+
+        slug = form.data.get('event_slug')
+        slug_event = Event.get_by_slug(slug)
+        if slug_event and slug_event.id != event.id:
+            print('Could not change event {event} slug to {slug} because another event already has that slug: {existing_event}'.format(
+                event=event.__str__(),
+                slug=slug,
+                existing_event=slug_event
+            ))
+        else:
+            project_fields_changed |= read_form_field_string(event, form, 'event_slug')
 
         read_form_field_tags(event, form, 'event_legacy_organization')
 
@@ -136,6 +149,9 @@ class EventCreationForm(ModelForm):
         project_fields_changed |= merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
 
         event.save()
+
+        if is_created_original != event.is_created:
+            send_event_creation_notification(event)
 
         if project_fields_changed:
             event.update_linked_items()

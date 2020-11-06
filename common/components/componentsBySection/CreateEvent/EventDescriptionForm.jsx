@@ -10,13 +10,18 @@ import TagSelector from "../../common/tags/TagSelector.jsx";
 import TagCategory from "../../common/tags/TagCategory.jsx";
 import type {TagDefinition} from "../../../components/utils/ProjectAPIUtils.js";
 import type {EventData} from "../../utils/EventAPIUtils.js";
+import CurrentUser from "../../utils/CurrentUser.js";
+import CheckBox from "../../common/selection/CheckBox.jsx";
 import _ from "lodash";
 
 
 type FormFields = {|
   event_description: ?string,
   event_agenda: ?string,
-  event_live_id: ?string
+  event_live_id: ?string,
+  event_legacy_organization: ?$ReadOnlyArray<TagDefinition>,
+  event_slug: ?string,
+  is_private: ?boolean
 |};
 
 type Props = {|
@@ -42,7 +47,9 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
         event_description: event ? event.event_description : "",
         event_agenda: event ? event.event_agenda : "",
         event_live_id: event ? event.event_live_id : "",
-        event_legacy_organization: event ? event.event_legacy_organization: ""
+        event_legacy_organization: event ? event.event_legacy_organization: "",
+        event_slug: event ? event.event_slug : "",
+        is_private: event ? event.is_private : false
       },
       validations: [
         {
@@ -105,7 +112,37 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
                     placeholder="List the items on the Event's agenda" rows="6" maxLength="4000"
                     value={this.state.formFields.event_agenda} onChange={this.form.onInput.bind(this, "event_agenda")}></textarea>
         </div>
+        
+        {CurrentUser.isStaff() && this._renderAdminControls()}
+
+        <FormValidation
+          validations={this.state.validations}
+          onValidationCheck={this.onValidationCheck.bind(this)}
+          formState={this.state.formFields}
+        />
+
+      </div>
+    );
+  }
   
+  _renderAdminControls(): React$Node {
+    return (
+      <React.Fragment>
+        <div className="form-group">
+          <label>Event Url Slug</label>
+          <input type="text" className="form-control" id="event_slug" name="event_slug" maxLength="60"
+                 value={this.state.formFields.event_slug} onChange={this.form.onInput.bind(this, "event_slug")}/>
+        </div>
+  
+        <div>
+          <CheckBox
+            id="is_private"
+            value={this.state.formFields.is_private}
+            onCheck={this.form.onSelection.bind(this, "is_private")}
+          />
+          <span> Private Event</span>
+        </div>
+        
         <div className="form-group">
           <label>Legacy Organization (Optional)</label>
           <TagSelector
@@ -116,20 +153,13 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
             onSelection={this.onTagChange.bind(this, "event_legacy_organization")}
           />
         </div>
-        
+  
         <div className="form-group">
           <label>QiqoChat Live Event ID (Optional)</label>
           <input type="text" className="form-control" id="event_live_id" name="event_live_id" maxLength="50"
                  value={this.state.formFields.event_live_id} onChange={this.form.onInput.bind(this, "event_live_id")}/>
         </div>
-
-        <FormValidation
-          validations={this.state.validations}
-          onValidationCheck={this.onValidationCheck.bind(this)}
-          formState={this.state.formFields}
-        />
-
-      </div>
+      </React.Fragment>
     );
   }
 }

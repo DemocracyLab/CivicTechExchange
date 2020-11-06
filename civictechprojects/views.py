@@ -32,7 +32,7 @@ from common.helpers.constants import FrontEndSection, TagCategory
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
-    notify_group_owners_group_approved
+    notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
 from common.helpers.front_end import section_url, get_page_section, get_clean_url
 from common.helpers.request_helpers import url_params
@@ -248,7 +248,13 @@ def event_delete(request, event_id):
 
 
 def get_event(request, event_id):
-    event = Event.objects.get(id=event_id)
+    if event_id.isnumeric():
+        event = Event.objects.get(id=event_id)
+        if event.is_private:
+            if not request.user.is_authenticated() or not is_creator_or_staff(get_request_contributor(request), event):
+                return HttpResponseForbidden()
+    else:
+        event = Event.get_by_slug(event_id)
 
     if event is not None:
         if event.is_searchable or is_creator_or_staff(get_request_contributor(request), event):
@@ -257,6 +263,7 @@ def get_event(request, event_id):
             return HttpResponseForbidden()
     else:
         return HttpResponse(status=404)
+
 
 def event_add_project(request, event_id):
     body = json.loads(request.body)
@@ -360,6 +367,24 @@ def approve_project(request, project_id):
             notify_project_owners_project_approved(project)
             messages.success(request, 'Project Approved')
             return redirect('/index/?section=AboutProject&id=' + str(project.id))
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
+
+def approve_event(request, event_id):
+    event = Event.objects.get(id=event_id)
+    user = get_request_contributor(request)
+
+    if event is not None:
+        if user.is_staff:
+            event.is_searchable = True
+            event.save()
+            notify_event_owners_event_approved(event)
+            event.update_linked_items()
+            messages.success(request, 'Event Approved')
+            return redirect(section_url(FrontEndSection.AboutEvent, {'id': str(event.id)}))
         else:
             return HttpResponseForbidden()
     else:
@@ -763,7 +788,7 @@ def group_countries():
 
 
 def events_list(request):
-    events = Event.objects.filter(is_created=True, is_searchable=True)
+    events = Event.objects.filter(is_created=True, is_searchable=True, is_private=False)
     return JsonResponse({'events': [event.hydrate_to_tile_json() for event in events]})
 
 
