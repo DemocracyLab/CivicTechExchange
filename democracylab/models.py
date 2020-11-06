@@ -35,6 +35,9 @@ class Contributor(User):
     def full_name(self):
         return self.first_name + ' ' + self.last_name
 
+    def id_full_name(self):
+        return '({id}){name}'.format(id=self.id, name=self.full_name())
+
     def is_up_for_volunteering_renewal(self):
         from civictechprojects.models import VolunteerRelation
         volunteer_relations_up_for_renewal = list(filter(lambda vr: vr.is_up_for_renewal(), VolunteerRelation.get_by_user(self)))

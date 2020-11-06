@@ -23,18 +23,18 @@ class SubscribeUserToQiqoChat(object):
     def __init__(self, contributor):
         self.user = contributor
         # Throttle user creation calls to qiqochat
-        # TODO: Make timeout configurable
-        print('Subscribe attempt to qiqochat at {time}'.format(time=timezone.now()))
+        log_result = 'Subscribe attempt to qiqochat for {user} at {time}'\
+            .format(time=timezone.now(), user=self.user.id_full_name())
         if not self.user.qiqo_signup_time \
                 or (timezone.now() - self.user.qiqo_signup_time).total_seconds() > settings.QIQO_SIGNUP_TIMEOUT_SECONDS:
-            print('Subscribing!')
             self.user.qiqo_signup_time = timezone.now()
             self.user.save()
             thread = threading.Thread(target=self.run, args=())
             thread.daemon = True
             thread.start()
         else:
-            print('Not subscribing')
+            log_result += ':Aborting, last request < {time}s ago'.format(time=settings.QIQO_SIGNUP_TIMEOUT_SECONDS)
+        print(log_result)
 
     def print_error(self, err_msg):
         err_msg = 'Failed to subscribe {first} {last}({email})[{id}] to qiqochat: {err_msg}'.format(
