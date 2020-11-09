@@ -14,6 +14,7 @@ import url from '../utils/url.js'
 import AlertHeader from "./AlertHeader.jsx";
 import MyProjectsStore, {MyProjectsAPIResponse} from "../stores/MyProjectsStore.js";
 import MyGroupsStore, {MyGroupsAPIResponse} from "../stores/MyGroupsStore.js";
+import MyEventsStore, {MyEventsAPIResponse} from "../stores/MyEventsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import _ from 'lodash';
 import Navbar from 'react-bootstrap/Navbar';
@@ -26,6 +27,7 @@ import UserIcon from '../svg/user-circle-solid.svg';
 type State = {|
   showMyProjects: boolean,
   showMyGroups: boolean,
+  showMyEvents: boolean,
   showHeader: boolean
 |};
 
@@ -33,16 +35,18 @@ type State = {|
 class MainHeader extends React.Component<{||}, State > {
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [NavigationStore, MyProjectsStore];
+    return [NavigationStore, MyProjectsStore, MyGroupsStore, MyEventsStore];
   }
 
   static calculateState(prevState: State): State {
     const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
     const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
+    const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
     return {
       showHeader: !url.argument("embedded"),
       showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects)),
-      showMyGroups: myGroups && (!_.isEmpty(myGroups.owned_groups))
+      showMyGroups: myGroups && (!_.isEmpty(myGroups.owned_groups)),
+      showMyEvents: myEvents && (!_.isEmpty(myEvents.owned_events) || CurrentUser.isStaff())
     };
   }
   // may need activeSection: NavigationStore.getSection() in calculateState, check that
@@ -166,7 +170,8 @@ class MainHeader extends React.Component<{||}, State > {
 
   _renderUserSection() {
     let showMyProjects = this.state.showMyProjects;
-    let showMyGroups = this.state.showMyGroups
+    let showMyGroups = this.state.showMyGroups;
+    let showMyEvents = this.state.showMyEvents;
     //for logged in users, render user actions
     //TODO: Rebuild this component so deskop dropdown and mobile links aren't separated out
     return (
@@ -181,6 +186,7 @@ class MainHeader extends React.Component<{||}, State > {
           <Dropdown.Menu>
             {showMyProjects && this._renderNavDropdownItem(Section.MyProjects, "My Projects")}
             {showMyGroups && this._renderNavDropdownItem(Section.MyGroups, "My Groups")}
+            {showMyEvents && this._renderNavDropdownItem(Section.MyEvents, "My Events")}
             {this._renderNavDropdownItem(Section.EditProfile, "Edit Profile")}
             <Dropdown.Item href="/logout/">Log Out</Dropdown.Item>
           </Dropdown.Menu>
@@ -189,6 +195,7 @@ class MainHeader extends React.Component<{||}, State > {
           <Nav.Item className="mt-3">{this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}</Nav.Item>
           {showMyProjects && this._renderNavLink(Section.MyProjects, "My Projects")}
           {showMyGroups && this._renderNavLink(Section.MyGroups, "My Groups")}
+          {showMyEvents && this._renderNavLink(Section.MyEvents, "My Events")}
           {this._renderNavLink(Section.EditProfile, "Edit Profile")}
           <Dropdown.Divider />
         </div>

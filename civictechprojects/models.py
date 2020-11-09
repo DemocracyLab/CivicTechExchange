@@ -443,17 +443,10 @@ class Event(Archived):
         return group
 
     def hydrate_to_list_json(self):
-        event = {
-            'event_creator': self.event_creator.id,
-            'event_date_end': self.event_date_end.__str__(),
-            'event_date_start': self.event_date_start.__str__(),
-            'event_id': self.id,
-            'event_location': self.event_location,
-            'event_name': self.event_name,
-            'event_short_description': self.event_short_description,
-            'isApproved': self.is_searchable,
-            'isCreated': self.is_created,
-        }
+        event = self.hydrate_to_tile_json()
+        event['event_creator'] = self.event_creator.id
+        event['is_searchable'] = self.is_searchable
+        event['is_created'] = self.is_created
 
         return event
 

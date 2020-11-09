@@ -70,6 +70,7 @@ class EventCardsListings extends React.Component<Props, State> {
     );
   }
   
+  // TODO: Make header size configurable
   _renderUpcomingEvents(upcomingEvents: $ReadOnlyArray<EventsDateGrouping>): React$Node {
     const showUpcomingEvents: boolean = this.props.showMessageForNoFutureEvents || !_.isEmpty(upcomingEvents);
     return (

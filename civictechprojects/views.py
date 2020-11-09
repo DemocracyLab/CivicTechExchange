@@ -519,8 +519,11 @@ def my_events(request):
     if contributor is not None:
         owned_events = Event.objects.filter(event_creator_id=contributor.id)
         response = {
-            'owned_events': [event.hydrate_to_list_json() for event in owned_events],
+            'owned_events': [event.hydrate_to_list_json() for event in owned_events]
         }
+        if contributor.is_staff:
+            private_events = Event.objects.filter(is_private=True).exclude(event_creator_id=contributor.id)
+            response['private_events'] = [event.hydrate_to_list_json() for event in private_events]
     return JsonResponse(response)
 
 

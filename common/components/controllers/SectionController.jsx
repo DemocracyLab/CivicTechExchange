@@ -7,7 +7,6 @@ import {Container} from 'flux/utils';
 import AboutProjectController from './AboutProjectController.jsx'
 import AboutUsController from './AboutUsController.jsx'
 import CreateProjectController from './CreateProjectController.jsx'
-import EditProjectController from './EditProjectController.jsx'
 import FindProjectsController  from './FindProjectsController.jsx'
 import LandingController from './LandingController.jsx'
 import MyProjectsController from './MyProjectsController.jsx'
@@ -38,6 +37,7 @@ import ErrorController from "./ErrorController.jsx";
 import FindGroupsController from "./FindGroupsController.jsx";
 import FindEventsController from "./FindEventsController.jsx";
 import CoroporateHackathonController from "./CorporateHackathonController.jsx";
+import MyEventsController from "./MyEventsController.jsx";
 
 type State = {|
   section: SectionType,
@@ -117,6 +117,8 @@ class SectionController extends React.Component<{||}, State> {
         return <AboutGroupController/>;
       case Section.MyGroups:
         return <MyGroupsController />;
+      case Section.MyEvents:
+        return <MyEventsController />;
       case Section.AboutEvent:
         return <AboutEventController/>;
       case Section.LiveEvent:
