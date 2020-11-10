@@ -23,11 +23,11 @@ class MyEventsController extends React.Component<{||}, State> {
       privateEvents: null
     };
   }
-  
+
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [MyEventsStore];
   }
-  
+
   static calculateState(prevState: State): State {
     const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
     return {
@@ -44,20 +44,22 @@ class MyEventsController extends React.Component<{||}, State> {
     return (
       // TODO: Headers
       <React.Fragment>
-        <div className="MyProjectsController-root">
+        <div className="MyEventsController-root container">
           {this.renderEvents("Owned Events", this.state.ownedEvents)}
           {this.renderEvents("All Private Events", this.state.privateEvents)}
         </div>
       </React.Fragment>
     );
   }
-  
+
   renderEvents(title:string, events: $ReadOnlyArray<MyGroupData>): ?React$Node {
     return !_.isEmpty(events) && (
-      <React.Fragment>
-        <h1>{title}</h1>
-        <EventCardsListings events={events} showMessageForNoFutureEvents={false}/>
-      </React.Fragment>
+      <div className="row MyEvents-eventsection">
+        <div className="col-12">
+          <h1>{title}</h1>
+          <EventCardsListings events={events} showMessageForNoFutureEvents={false}/>
+        </div>
+      </div>
     );
   }
 }
