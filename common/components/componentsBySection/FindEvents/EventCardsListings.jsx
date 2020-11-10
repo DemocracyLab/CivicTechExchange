@@ -75,7 +75,7 @@ class EventCardsListings extends React.Component<Props, State> {
     const showUpcomingEvents: boolean = this.props.showMessageForNoFutureEvents || !_.isEmpty(upcomingEvents);
     return (
       <React.Fragment>
-        {showUpcomingEvents && <h1 className="EventCardContainer-section-header">Upcoming Events</h1>}
+        {showUpcomingEvents && <h2 className="EventCardContainer-section-header">Upcoming Events</h2>}
         {!_.isEmpty(upcomingEvents) ? (
           <React.Fragment>
             {this._renderEventsGrouping(upcomingEvents)}
@@ -94,7 +94,7 @@ class EventCardsListings extends React.Component<Props, State> {
       <React.Fragment>
         {!_.isEmpty(pastEvents) && (
           <React.Fragment>
-            <h1 className="EventCardContainer-section-header">Past Events</h1>
+            <h2 className="EventCardContainer-section-header">Past Events</h2>
             {this._renderEventsGrouping(pastEvents)}
           </React.Fragment>
         )

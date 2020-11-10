@@ -55,7 +55,7 @@ class MyEventsController extends React.Component<{||}, State> {
   renderEvents(title:string, events: $ReadOnlyArray<MyGroupData>): ?React$Node {
     return !_.isEmpty(events) && (
       <React.Fragment>
-        <h3>{title}</h3>
+        <h1>{title}</h1>
         <EventCardsListings events={events} showMessageForNoFutureEvents={false}/>
       </React.Fragment>
     );
