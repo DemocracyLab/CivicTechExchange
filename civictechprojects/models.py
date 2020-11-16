@@ -431,6 +431,7 @@ class Event(Archived):
             'event_date_end': self.event_date_end.__str__(),
             'event_date_start': self.event_date_start.__str__(),
             'event_id': self.id,
+            'event_slug': self.event_slug,
             'event_location': self.event_location,
             'event_name': self.event_name,
             'event_organizers_text': self.event_organizers_text,
