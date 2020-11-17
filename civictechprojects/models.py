@@ -453,7 +453,10 @@ class Event(Archived):
 
     @staticmethod
     def get_by_slug(slug):
-        return Event.objects.filter(event_slug=slug).first()
+        if slug is not None:
+            _slug = slug.strip()
+            if len(_slug) > 0:
+                return Event.objects.filter(event_slug=_slug).first()
 
     def get_issue_areas(self):
         project_relationships = ProjectRelationship.objects.filter(relationship_event=self.id)
