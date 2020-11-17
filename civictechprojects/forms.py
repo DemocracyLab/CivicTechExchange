@@ -142,7 +142,9 @@ class EventCreationForm(ModelForm):
         else:
             project_fields_changed |= read_form_field_string(event, form, 'event_slug')
 
-        read_form_field_tags(event, form, 'event_legacy_organization')
+        pre_change_projects = list(event.get_linked_projects().all())
+        org_changed = read_form_field_tags(event, form, 'event_legacy_organization')
+        project_fields_changed |= org_changed
 
         event.event_date_modified = timezone.now()
 
@@ -155,6 +157,8 @@ class EventCreationForm(ModelForm):
 
         if project_fields_changed:
             event.update_linked_items()
+            for project in pre_change_projects:
+                project.recache()
 
         return event
 
