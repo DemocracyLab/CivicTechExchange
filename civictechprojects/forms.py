@@ -142,7 +142,8 @@ class EventCreationForm(ModelForm):
         else:
             project_fields_changed |= read_form_field_string(event, form, 'event_slug')
 
-        pre_change_projects = list(event.get_linked_projects().all())
+        pre_change_projects = event.get_linked_projects()
+        pre_change_projects = pre_change_projects and list(pre_change_projects.all())
         org_changed = read_form_field_tags(event, form, 'event_legacy_organization')
         project_fields_changed |= org_changed
 
@@ -157,8 +158,9 @@ class EventCreationForm(ModelForm):
 
         if project_fields_changed:
             event.update_linked_items()
-            for project in pre_change_projects:
-                project.recache()
+            if pre_change_projects:
+                for project in pre_change_projects:
+                    project.recache()
 
         return event
 
