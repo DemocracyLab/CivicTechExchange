@@ -13,6 +13,7 @@ import type {EventData} from "../../utils/EventAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import CheckBox from "../../common/selection/CheckBox.jsx";
 import _ from "lodash";
+import stringHelper from "../../utils/string.js";
 
 
 type FormFields = {|
@@ -58,6 +59,12 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
         }, {
           checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["event_agenda"]),
           errorMessage: "Please enter Event Agenda"
+        }, {
+          checkFunc: (formFields: FormFields) => !stringHelper.isWhitespace(formFields["event_slug"]),
+          errorMessage: "Event slug cannot consist of only whitespace"
+        }, {
+          checkFunc: (formFields: FormFields) => !stringHelper.contains(formFields["event_slug"], ["&", "?"]),
+          errorMessage: "Event slug cannot contain url-reserved characters(&,?)"
         }
       ]
     };
