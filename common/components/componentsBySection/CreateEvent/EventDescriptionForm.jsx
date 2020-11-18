@@ -41,6 +41,7 @@ type State = {|
 class ProjectDescriptionForm extends React.PureComponent<Props,State> {
   constructor(props: Props): void {
     super(props);
+    this.nonAlphanumericSlugPattern = new RegExp("[^A-Za-z0-9\-]");
     const event: EventData = props.project;
     this.state = {
       formIsValid: false,
@@ -60,11 +61,8 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
           checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["event_agenda"]),
           errorMessage: "Please enter Event Agenda"
         }, {
-          checkFunc: (formFields: FormFields) => !stringHelper.isWhitespace(formFields["event_slug"]),
-          errorMessage: "Event slug cannot consist of only whitespace"
-        }, {
-          checkFunc: (formFields: FormFields) => !stringHelper.contains(formFields["event_slug"], ["&", "?"]),
-          errorMessage: "Event slug cannot contain url-reserved characters(&,?)"
+          checkFunc: (formFields: FormFields) => !this.nonAlphanumericSlugPattern.test(formFields["event_slug"]),
+          errorMessage: "Event slug can only contain alphanumeric characters and dashes"
         }
       ]
     };
