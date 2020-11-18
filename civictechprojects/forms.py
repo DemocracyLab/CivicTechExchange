@@ -132,7 +132,7 @@ class EventCreationForm(ModelForm):
         project_fields_changed |= read_form_field_boolean(event, form, 'is_private')
 
         slug = form.data.get('event_slug')
-        if slug:
+        if slug is not None:
             slug = slug.lower()
             slug_event = Event.get_by_slug(slug)
             if slug_event and slug_event.id != event.id:
