@@ -454,7 +454,7 @@ class Event(Archived):
     @staticmethod
     def get_by_slug(slug):
         if slug is not None:
-            _slug = slug.strip()
+            _slug = slug.strip().lower()
             if len(_slug) > 0:
                 return Event.objects.filter(event_slug=_slug).first()
 

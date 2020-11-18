@@ -132,15 +132,17 @@ class EventCreationForm(ModelForm):
         project_fields_changed |= read_form_field_boolean(event, form, 'is_private')
 
         slug = form.data.get('event_slug')
-        slug_event = Event.get_by_slug(slug)
-        if slug_event and slug_event.id != event.id:
-            print('Could not change event {event} slug to {slug} because another event already has that slug: {existing_event}'.format(
-                event=event.__str__(),
-                slug=slug,
-                existing_event=slug_event
-            ))
-        else:
-            project_fields_changed |= read_form_field_string(event, form, 'event_slug')
+        if slug:
+            slug = slug.lower()
+            slug_event = Event.get_by_slug(slug)
+            if slug_event and slug_event.id != event.id:
+                print('Could not change event {event} slug to {slug} because another event already has that slug: {existing_event}'.format(
+                    event=event.__str__(),
+                    slug=slug,
+                    existing_event=slug_event
+                ))
+            else:
+                project_fields_changed |= read_form_field_string(event, form, 'event_slug', lambda str: str.lower())
 
         pre_change_projects = event.get_linked_projects()
         pre_change_projects = pre_change_projects and list(pre_change_projects.all())
