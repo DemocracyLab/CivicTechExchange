@@ -20,9 +20,10 @@ class EventCard extends React.PureComponent<Props> {
   }
 
   render(): React$Node {
+    const eventId: string = this.props.event.event_slug || this.props.event.event_id;
     return (
         <div className="EventCard-root">
-          <a href={url.section(Section.AboutEvent, {id: this.props.event.event_id})}
+          <a href={url.section(Section.AboutEvent, {id: eventId})}
             rel="noopener noreferrer">
             {this._renderEventLogo()}
             {this._renderEventInformation()}

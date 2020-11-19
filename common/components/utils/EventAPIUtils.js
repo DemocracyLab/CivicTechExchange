@@ -27,6 +27,7 @@ export type EventData = {|
 
 export type EventTileAPIData = {|
     event_id: string,
+    event_slug: string,
     event_date_start: Date,
     event_date_end: Date,
     event_name: string,

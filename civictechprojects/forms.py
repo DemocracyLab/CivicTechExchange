@@ -132,17 +132,22 @@ class EventCreationForm(ModelForm):
         project_fields_changed |= read_form_field_boolean(event, form, 'is_private')
 
         slug = form.data.get('event_slug')
-        slug_event = Event.get_by_slug(slug)
-        if slug_event and slug_event.id != event.id:
-            print('Could not change event {event} slug to {slug} because another event already has that slug: {existing_event}'.format(
-                event=event.__str__(),
-                slug=slug,
-                existing_event=slug_event
-            ))
-        else:
-            project_fields_changed |= read_form_field_string(event, form, 'event_slug')
+        if slug is not None:
+            slug = slug.lower()
+            slug_event = Event.get_by_slug(slug)
+            if slug_event and slug_event.id != event.id:
+                print('Could not change event {event} slug to {slug} because another event already has that slug: {existing_event}'.format(
+                    event=event.__str__(),
+                    slug=slug,
+                    existing_event=slug_event
+                ))
+            else:
+                project_fields_changed |= read_form_field_string(event, form, 'event_slug', lambda str: str.lower())
 
-        read_form_field_tags(event, form, 'event_legacy_organization')
+        pre_change_projects = event.get_linked_projects()
+        pre_change_projects = pre_change_projects and list(pre_change_projects.all())
+        org_changed = read_form_field_tags(event, form, 'event_legacy_organization')
+        project_fields_changed |= org_changed
 
         event.event_date_modified = timezone.now()
 
@@ -155,6 +160,9 @@ class EventCreationForm(ModelForm):
 
         if project_fields_changed:
             event.update_linked_items()
+            if pre_change_projects:
+                for project in pre_change_projects:
+                    project.recache()
 
         return event
 

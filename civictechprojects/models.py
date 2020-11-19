@@ -201,7 +201,7 @@ class Project(Archived):
 
     def get_project_events(self):
         slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
-        return Event.objects.filter(event_legacy_organization__name__in=slugs, is_private=False)
+        return Event.objects.filter(event_legacy_organization__name__in=slugs, is_private=False, is_searchable=True)
 
     def update_timestamp(self, time=None):
         self.project_date_modified = time or timezone.now()
@@ -431,6 +431,7 @@ class Event(Archived):
             'event_date_end': self.event_date_end.__str__(),
             'event_date_start': self.event_date_start.__str__(),
             'event_id': self.id,
+            'event_slug': self.event_slug,
             'event_location': self.event_location,
             'event_name': self.event_name,
             'event_organizers_text': self.event_organizers_text,
@@ -452,7 +453,10 @@ class Event(Archived):
 
     @staticmethod
     def get_by_slug(slug):
-        return Event.objects.filter(event_slug=slug).first()
+        if slug is not None:
+            _slug = slug.strip().lower()
+            if len(_slug) > 0:
+                return Event.objects.filter(event_slug=_slug).first()
 
     def get_issue_areas(self):
         project_relationships = ProjectRelationship.objects.filter(relationship_event=self.id)
