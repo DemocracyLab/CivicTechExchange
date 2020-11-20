@@ -26,7 +26,7 @@ class LiveEventController extends React.Component<{||}, State> {
         ? <LogInController prevPage={Section.LiveEvent}/>
         : (
           <div className="LiveEvent-root">
-            <iframe src={_.unescape(this.state.iframeUrl)} />
+            <iframe src={_.unescape(this.state.iframeUrl)} allow="camera *;microphone *"/>
           </div>
         )
     );
