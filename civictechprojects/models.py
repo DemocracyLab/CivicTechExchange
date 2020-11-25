@@ -470,7 +470,7 @@ class Event(Archived):
             if _slug.isnumeric():
                 event = Event.objects.get(id=_slug)
             elif len(_slug) > 0:
-                event = Event.objects.filter(event_slug=_slug).first()
+                event = Event.objects.filter(event_slug=_slug).first() or NameRecord.get_event(_slug)
         if event and event.is_private and user is not None:
             if not user.is_authenticated() or not is_creator_or_staff(user, event):
                 raise PermissionDenied()
@@ -502,6 +502,16 @@ class Event(Archived):
     def recache(self):
         hydrated_event = self._hydrate_to_json()
         EventCache.refresh(self, hydrated_event)
+
+
+class NameRecord(models.Model):
+    event = models.ForeignKey(Event, related_name='old_slugs', blank=True, null=True)
+    name = models.CharField(max_length=100, blank=True)
+
+    @staticmethod
+    def get_event(name):
+        record = NameRecord.objects.filter(name=name).first()
+        return record and record.event
 
 
 class ProjectRelationship(models.Model):

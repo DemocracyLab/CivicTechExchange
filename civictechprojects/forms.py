@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
-from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group
+from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group, NameRecord
 from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification, send_group_creation_notification, send_event_creation_notification
 from democracylab.models import get_request_contributor
@@ -135,15 +135,22 @@ class EventCreationForm(ModelForm):
         slug = form.data.get('event_slug')
         if slug is not None:
             slug = slug.lower()
-            slug_event = Event.get_by_slug(slug)
+            slug_event = Event.get_by_id_or_slug(slug)
             if slug_event and slug_event.id != event.id:
                 print('Could not change event {event} slug to {slug} because another event already has that slug: {existing_event}'.format(
                     event=event.__str__(),
                     slug=slug,
-                    existing_event=slug_event
+                    existing_event=slug_event.__str__()
                 ))
             else:
-                project_fields_changed |= read_form_field_string(event, form, 'event_slug', lambda str: str.lower())
+                # TODO: If we change back to an old slug, delete that NameRecord
+                old_slug = event.event_slug
+                slug_changed = read_form_field_string(event, form, 'event_slug', lambda str: str.lower())
+                if slug_changed:
+                    project_fields_changed = True
+                    if old_slug:
+                        name_record = NameRecord.objects.create(event=event, name=old_slug)
+                        name_record.save()
 
         pre_change_projects = event.get_linked_projects()
         pre_change_projects = pre_change_projects and list(pre_change_projects.all())
