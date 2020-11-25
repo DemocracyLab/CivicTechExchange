@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.utils import timezone
 from django.contrib.gis.db.models import PointField
@@ -8,10 +9,9 @@ from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from civictechprojects.caching.cache import ProjectCache, EventCache
-from common.helpers.form_helpers import is_json_field_empty
+from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts
 from common.helpers.collections import flatten, count_occurrences
-
 
 # Without the following classes, the following error occurs:
 #
@@ -463,12 +463,19 @@ class Event(Archived):
         return event
 
     @staticmethod
-    def get_by_slug(slug):
+    def get_by_id_or_slug(slug, user=None):
         # TODO: Support old slugs
         if slug is not None:
             _slug = slug.strip().lower()
-            if len(_slug) > 0:
-                return Event.objects.filter(event_slug=_slug).first()
+            if _slug.isnumeric():
+                event = Event.objects.get(id=_slug)
+            elif len(_slug) > 0:
+                event = Event.objects.filter(event_slug=_slug).first()
+        if event and event.is_private and user is not None:
+            if not user.is_authenticated() or not is_creator_or_staff(user, event):
+                raise PermissionDenied()
+
+        return event
 
     def get_issue_areas(self):
         project_relationships = ProjectRelationship.objects.filter(relationship_event=self.id)
