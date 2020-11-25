@@ -513,6 +513,15 @@ class NameRecord(models.Model):
         record = NameRecord.objects.filter(name=name).first()
         return record and record.event
 
+    @staticmethod
+    def delete_record(name):
+        record = NameRecord.objects.filter(name=name).first()
+        if record:
+            record.delete()
+            return True
+        else:
+            return False
+
 
 class ProjectRelationship(models.Model):
     relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True)

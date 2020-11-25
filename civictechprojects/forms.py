@@ -151,6 +151,8 @@ class EventCreationForm(ModelForm):
                     if old_slug:
                         name_record = NameRecord.objects.create(event=event, name=old_slug)
                         name_record.save()
+                    # If we're changing to an old slug, delete the Name Record for that slug
+                    NameRecord.delete_record(slug)
 
         pre_change_projects = event.get_linked_projects()
         pre_change_projects = pre_change_projects and list(pre_change_projects.all())
