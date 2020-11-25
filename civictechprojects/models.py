@@ -219,6 +219,8 @@ class Project(Archived):
         del base_json['project_events']
         del base_json['project_groups']
         del base_json['project_commits']
+        # Don't cache files because they contain noise without adequate signal
+        del base_json['project_thumbnail']
         full_text = str(base_json)
         if len(full_text) >= Project._full_text_capacity:
             full_text = full_text[:Project._full_text_capacity - 1]
