@@ -114,21 +114,22 @@ class EventCreationForm(ModelForm):
             raise PermissionDenied()
 
         is_created_original = event.is_created
+        fields_changed = False
         project_fields_changed = False
-        read_form_field_string(event, form, 'event_agenda')
-        read_form_field_string(event, form, 'event_description')
-        read_form_field_string(event, form, 'event_short_description')
+        fields_changed |= read_form_field_string(event, form, 'event_agenda')
+        fields_changed |= read_form_field_string(event, form, 'event_description')
+        fields_changed |= read_form_field_string(event, form, 'event_short_description')
         project_fields_changed |= read_form_field_string(event, form, 'event_name')
         project_fields_changed |= read_form_field_string(event, form, 'event_location')
-        read_form_field_string(event, form, 'event_rsvp_url')
-        read_form_field_string(event, form, 'event_live_id')
+        fields_changed |= read_form_field_string(event, form, 'event_rsvp_url')
+        fields_changed |= read_form_field_string(event, form, 'event_live_id')
         project_fields_changed |= read_form_field_string(event, form, 'event_organizers_text')
 
         project_fields_changed |= read_form_field_datetime(event, form, 'event_date_start')
         project_fields_changed |= read_form_field_datetime(event, form, 'event_date_end')
 
-        read_form_field_boolean(event, form, 'is_searchable')
-        read_form_field_boolean(event, form, 'is_created')
+        fields_changed |= read_form_field_boolean(event, form, 'is_searchable')
+        fields_changed |= read_form_field_boolean(event, form, 'is_created')
         project_fields_changed |= read_form_field_boolean(event, form, 'is_private')
 
         slug = form.data.get('event_slug')
@@ -158,6 +159,8 @@ class EventCreationForm(ModelForm):
         if is_created_original != event.is_created:
             send_event_creation_notification(event)
 
+        if fields_changed:
+            event.recache()
         if project_fields_changed:
             event.update_linked_items()
             if pre_change_projects:

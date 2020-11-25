@@ -7,7 +7,7 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
-from civictechprojects.caching.cache import ProjectCache
+from civictechprojects.caching.cache import ProjectCache, EventCache
 from common.helpers.form_helpers import is_json_field_empty
 from common.helpers.dictionaries import merge_dicts
 from common.helpers.collections import flatten, count_occurrences
@@ -211,6 +211,14 @@ class Project(Archived):
         hydrated_project = self._hydrate_to_json()
         ProjectCache.refresh(self, hydrated_project)
         self.generate_full_text()
+        self.update_linked_items()
+
+    def update_linked_items(self):
+        # Recache events
+        owned_events = self.get_project_events()
+
+        for event in owned_events:
+            event.recache()
 
     def generate_full_text(self):
         base_json = self.hydrate_to_json()
@@ -389,6 +397,9 @@ class Event(Archived):
         self.save()
 
     def hydrate_to_json(self):
+        return EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
+
+    def _hydrate_to_json(self):
         projects = ProjectRelationship.objects.filter(relationship_event=self.id)
         files = ProjectFile.objects.filter(file_event=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
@@ -453,6 +464,7 @@ class Event(Archived):
 
     @staticmethod
     def get_by_slug(slug):
+        # TODO: Support old slugs
         if slug is not None:
             _slug = slug.strip().lower()
             if len(_slug) > 0:
@@ -479,6 +491,10 @@ class Event(Archived):
         if projects:
             for project in projects:
                 project.recache()
+
+    def recache(self):
+        hydrated_event = self._hydrate_to_json()
+        EventCache.refresh(self, hydrated_event)
 
 
 class ProjectRelationship(models.Model):
