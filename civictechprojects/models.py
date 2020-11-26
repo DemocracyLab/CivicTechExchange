@@ -218,6 +218,12 @@ class Project(Archived):
         omit_fields = ['project_volunteers', 'project_owners', 'project_events', 'project_groups', 'project_commits']
         # Don't cache files because they contain noise without adequate signal
         omit_fields += ['project_thumbnail', 'project_files']
+        # Don't cache boolean fields
+        omit_fields += ['project_claimed', 'project_approved']
+        # Don't cache numeric fields
+        omit_fields += ['project_id', 'project_creator', 'project_latitude', 'project_longitude']
+        # Don't cache date fields
+        omit_fields += ['project_date_modified']
         for field in omit_fields:
             base_json.pop(field, None)
         full_text = str(base_json)
