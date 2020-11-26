@@ -429,3 +429,5 @@ GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH', '')
 GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH', '')
 
 PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
+
+DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')

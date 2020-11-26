@@ -13,14 +13,15 @@ class DonateBlurb extends React.Component<{||}, State> {
       "GivingTuesday": this._givingTuesday
     };
     this.state = {
-      blurbType: "GivingTuesday"
+      blurbType: window.DONATE_PAGE_BLURB
     };
   }
   
   render(): React$Node {
+    const showBlurb: boolean = this.state.blurbType in this.blurbs;
     return (
       <React.Fragment>
-        {this.state.blurbType && this.blurbs[this.state.blurbType]()}
+        {showBlurb && this.blurbs[this.state.blurbType]()}
       </React.Fragment>
     );
   }
