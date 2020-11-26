@@ -6,6 +6,7 @@ import Headers from "../common/Headers.jsx";
 import RadioButtons from "../common/selection/RadioButtons.jsx";
 import PaypalDonationButton, {OtherAmountSelected} from "../common/integrations/PaypalDonationButton.jsx";
 import {SelectOption} from "../types/SelectOption.jsx";
+import DonateBlurb from "../componentsBySection/Donate/DonateBlurb.jsx";
 import prerender from "../utils/prerender.js";
 
 type State = {|
@@ -38,6 +39,7 @@ class DonateController extends React.Component<{||}, State> {
     };
   }
   
+  // TODO: Remove
   componentDidMount() {
     prerender.ready();
   }
@@ -51,6 +53,7 @@ class DonateController extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className="DonateController-root">
+        {/*TODO: Preload header */}
         <Headers
           title="democracyLab | Donate"
           description="We too are a nonprofit, and your tax-deductible gift helps us connect good people with good causes."
@@ -67,6 +70,7 @@ class DonateController extends React.Component<{||}, State> {
             <p>
               DemocracyLab is building online infrastructure to support the technology-for-good movement. Your donation will help us support the many projects and volunteers who use our platform to make our world a better place. DemocracyLab is a 501(c)(3) nonprofit organization, and your donation may be tax-deductible.
             </p>
+            <DonateBlurb/>
           </div>
 
           <div className="DonateController-options">
