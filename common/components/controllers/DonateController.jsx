@@ -2,12 +2,10 @@
 
 import React from 'react';
 import cdn,{Images} from "../utils/cdn.js";
-import Headers from "../common/Headers.jsx";
 import RadioButtons from "../common/selection/RadioButtons.jsx";
 import PaypalDonationButton, {OtherAmountSelected} from "../common/integrations/PaypalDonationButton.jsx";
 import {SelectOption} from "../types/SelectOption.jsx";
 import DonateBlurb from "../componentsBySection/Donate/DonateBlurb.jsx";
-import prerender from "../utils/prerender.js";
 
 type State = {|
   donateAmount: ?string,
@@ -38,11 +36,6 @@ class DonateController extends React.Component<{||}, State> {
       donateMonthly: null
     };
   }
-  
-  // TODO: Remove
-  componentDidMount() {
-    prerender.ready();
-  }
 
   handleFieldSelection(field: string, option: SelectOption): void {
     let state: State = this.state;
@@ -53,11 +46,6 @@ class DonateController extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className="DonateController-root">
-        {/*TODO: Preload header */}
-        <Headers
-          title="democracyLab | Donate"
-          description="We too are a nonprofit, and your tax-deductible gift helps us connect good people with good causes."
-        />
         <div className="panel donate-image">
           <img src={cdn.image(Images.DONATE_SPLASH)}></img>
         </div>
