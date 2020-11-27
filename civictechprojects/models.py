@@ -464,7 +464,7 @@ class Event(Archived):
 
     @staticmethod
     def get_by_id_or_slug(slug, user=None):
-        # TODO: Support old slugs
+        event = None
         if slug is not None:
             _slug = slug.strip().lower()
             if _slug.isnumeric():
