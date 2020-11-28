@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Project, Group, Event, ProjectRelationship, UserAlert, VolunteerRelation, ProjectCommit
+from .models import Project, Group, Event, ProjectRelationship, UserAlert, VolunteerRelation, ProjectCommit, NameRecord
 
 project_text_fields = ['project_name', 'project_description', 'project_description_solution', 'project_description_actions', 'project_short_description', 'project_location', 'project_country', 'project_state', 'project_city', 'project_url']
 project_filter_fields = ('project_date_created', 'project_date_modified', 'is_searchable', 'is_created')
@@ -47,6 +47,11 @@ class ProjectCommitAdmin(admin.ModelAdmin):
     search_fields = project_commit_text_fields + ['commit_project__project_name']
     list_filter = project_commit_filter_fields
 
+name_record_text_fields = ['name']
+class NameRecordAdmin(admin.ModelAdmin):
+    list_display = tuple(name_record_text_fields + ['event'])
+    search_fields = name_record_text_fields
+
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectRelationship, ProjectRelationshipAdmin)
 admin.site.register(Group, GroupAdmin)
@@ -54,3 +59,4 @@ admin.site.register(Event, EventAdmin)
 admin.site.register(UserAlert, UserAlertAdmin)
 admin.site.register(VolunteerRelation, VolunteerRelationAdmin)
 admin.site.register(ProjectCommit, ProjectCommitAdmin)
+admin.site.register(NameRecord, NameRecordAdmin)
