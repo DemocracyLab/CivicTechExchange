@@ -406,7 +406,8 @@ def index(request):
         'FAVICON_PATH': settings.FAVICON_PATH,
         'BLOG_URL': settings.BLOG_URL,
         'EVENT_URL': settings.EVENT_URL,
-        'PRIVACY_POLICY_URL': settings.PRIVACY_POLICY_URL
+        'PRIVACY_POLICY_URL': settings.PRIVACY_POLICY_URL,
+        'DONATE_PAGE_BLURB': settings.DONATE_PAGE_BLURB
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',

@@ -44,6 +44,13 @@ def about_us_preload(context, request):
     return context
 
 
+def donate_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Donate | DemocracyLab'
+    context['description'] = 'We too are a nonprofit, and your tax-deductible gift helps us connect good people with good causes.'
+    return context
+
+
 def edit_profile_preload(context, request):
     context = default_preload(context, request)
     context['title'] = 'Update User Profile | DemocracyLab'
@@ -80,7 +87,8 @@ preload_urls = [
     {'section': FrontEndSection.EditProfile.value, 'handler': edit_profile_preload},
     {'section': FrontEndSection.AboutUs.value, 'handler': about_us_preload},
     {'section': FrontEndSection.CreateEvent.value, 'handler': create_event_preload},
-    {'section': FrontEndSection.MyEvents.value, 'handler': my_events_preload}
+    {'section': FrontEndSection.MyEvents.value, 'handler': my_events_preload},
+    {'section': FrontEndSection.Donate.value, 'handler': donate_preload}
 ]
 
 
