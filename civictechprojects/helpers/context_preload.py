@@ -1,10 +1,14 @@
 from django.conf import settings
-from civictechprojects.caching.cache import ProjectCache
+from civictechprojects.models import Event
+from civictechprojects.caching.cache import ProjectCache, EventCache
 from common.helpers.constants import FrontEndSection
+from common.helpers.request_helpers import url_params
+from democracylab.models import get_request_contributor
 
 
-def about_project_preload(context, query_args):
-    context = default_preload(context, query_args)
+def about_project_preload(context, request):
+    context = default_preload(context, request)
+    query_args = url_params(request)
     project_id = query_args['id'][0]
     project_json = ProjectCache.get(project_id)
     if project_json is not None:
@@ -17,42 +21,58 @@ def about_project_preload(context, query_args):
     return context
 
 
-def about_us_preload(context, query_args):
-    context = default_preload(context, query_args)
+def about_event_preload(context, request):
+    context = default_preload(context, request)
+    query_args = url_params(request)
+    event_id = query_args['id'][0]
+    event = Event.get_by_id_or_slug(event_id, get_request_contributor(request))
+    event_json = event.hydrate_to_json()
+    if event_json is not None:
+        context['title'] = event_json['event_name'] + ' | DemocracyLab'
+        context['description'] = event_json['event_short_description']
+        if 'event_thumbnail' in event_json:
+            context['og_image'] = event_json['event_thumbnail']['publicUrl']
+    else:
+        print('Failed to preload event info, no cache entry found: ' + event_id)
+    return context
+
+
+def about_us_preload(context, request):
+    context = default_preload(context, request)
     context['title'] = 'DemocracyLab | About'
     context['description'] = 'Learn About democracyLab, the nonprofit connecting skilled individuals to tech-for-good projects.'
     return context
 
 
-def donate_preload(context, query_args):
-    context = default_preload(context, query_args)
+def donate_preload(context, request):
+    context = default_preload(context, request)
     context['title'] = 'Donate | DemocracyLab'
     context['description'] = 'We too are a nonprofit, and your tax-deductible gift helps us connect good people with good causes.'
     return context
 
 
-def edit_profile_preload(context, query_args):
-    context = default_preload(context, query_args)
+def edit_profile_preload(context, request):
+    context = default_preload(context, request)
     context['title'] = 'Update User Profile | DemocracyLab'
     context['description'] = 'Update User Profile page'
     return context
 
 
-def create_event_preload(context, query_args):
-    context = default_preload(context, query_args)
+def create_event_preload(context, request):
+    context = default_preload(context, request)
     context['title'] = 'Create an Event | DemocracyLab'
     context['description'] = 'Create event page'
     return context
 
 
-def my_events_preload(context, query_args):
-    context = default_preload(context, query_args)
+def my_events_preload(context, request):
+    context = default_preload(context, request)
     context['title'] = 'My Events | DemocracyLab'
     context['description'] = 'My Events page'
     return context
 
 
-def default_preload(context, query_args):
+def default_preload(context, request):
     context['title'] = 'DemocracyLab'
     context['description'] = 'Everyone has something to contribute to the technical solutions society needs. ' \
                              'Volunteer today to connect with other professionals volunteering their time.'
@@ -63,6 +83,7 @@ def default_preload(context, query_args):
 
 preload_urls = [
     {'section': FrontEndSection.AboutProject.value, 'handler': about_project_preload},
+    {'section': FrontEndSection.AboutEvent.value, 'handler': about_event_preload},
     {'section': FrontEndSection.EditProfile.value, 'handler': edit_profile_preload},
     {'section': FrontEndSection.AboutUs.value, 'handler': about_us_preload},
     {'section': FrontEndSection.CreateEvent.value, 'handler': create_event_preload},
@@ -71,7 +92,7 @@ preload_urls = [
 ]
 
 
-def context_preload(section, query_args, context):
+def context_preload(section, request, context):
     handler = next((preload_url['handler'] for preload_url in preload_urls if preload_url['section'] == section), default_preload)
-    return handler(context, query_args)
+    return handler(context, request)
 

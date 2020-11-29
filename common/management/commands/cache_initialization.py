@@ -1,12 +1,21 @@
 from django.core.management.base import BaseCommand
-from django.utils import timezone
-from django.conf import settings
-from democracylab.emails import send_volunteer_application_email
+
+
+def cache_projects():
+    from civictechprojects.models import Project
+    projects_to_cache = Project.objects.filter(is_searchable=True, deleted=False)
+    for project in projects_to_cache:
+        project.recache()
+
+
+def cache_events():
+    from civictechprojects.models import Event
+    events_to_cache = Event.objects.filter(is_searchable=True, deleted=False)
+    for event in events_to_cache:
+        event.recache()
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        from civictechprojects.models import Project
-        projects_to_cache = Project.objects.filter(is_searchable=True, deleted=False)
-        for project in projects_to_cache:
-            project.recache()
+        cache_projects()
+        cache_events()

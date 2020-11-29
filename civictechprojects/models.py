@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.utils import timezone
 from django.contrib.gis.db.models import PointField
@@ -7,11 +8,10 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
-from civictechprojects.caching.cache import ProjectCache
-from common.helpers.form_helpers import is_json_field_empty
+from civictechprojects.caching.cache import ProjectCache, EventCache
+from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts
 from common.helpers.collections import flatten, count_occurrences
-
 
 # Without the following classes, the following error occurs:
 #
@@ -211,6 +211,14 @@ class Project(Archived):
         hydrated_project = self._hydrate_to_json()
         ProjectCache.refresh(self, hydrated_project)
         self.generate_full_text()
+        self.update_linked_items()
+
+    def update_linked_items(self):
+        # Recache events
+        owned_events = self.get_project_events()
+
+        for event in owned_events:
+            event.recache()
 
     def generate_full_text(self):
         base_json = self.hydrate_to_json()
@@ -396,6 +404,9 @@ class Event(Archived):
         self.save()
 
     def hydrate_to_json(self):
+        return EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
+
+    def _hydrate_to_json(self):
         projects = ProjectRelationship.objects.filter(relationship_event=self.id)
         files = ProjectFile.objects.filter(file_event=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
@@ -459,11 +470,19 @@ class Event(Archived):
         return event
 
     @staticmethod
-    def get_by_slug(slug):
+    def get_by_id_or_slug(slug, user=None):
+        event = None
         if slug is not None:
             _slug = slug.strip().lower()
-            if len(_slug) > 0:
-                return Event.objects.filter(event_slug=_slug).first()
+            if _slug.isnumeric():
+                event = Event.objects.get(id=_slug)
+            elif len(_slug) > 0:
+                event = Event.objects.filter(event_slug=_slug).first() or NameRecord.get_event(_slug)
+        if event and event.is_private and user is not None:
+            if not user.is_authenticated() or not is_creator_or_staff(user, event):
+                raise PermissionDenied()
+
+        return event
 
     def get_issue_areas(self):
         project_relationships = ProjectRelationship.objects.filter(relationship_event=self.id)
@@ -486,6 +505,29 @@ class Event(Archived):
         if projects:
             for project in projects:
                 project.recache()
+
+    def recache(self):
+        hydrated_event = self._hydrate_to_json()
+        EventCache.refresh(self, hydrated_event)
+
+
+class NameRecord(models.Model):
+    event = models.ForeignKey(Event, related_name='old_slugs', blank=True, null=True)
+    name = models.CharField(max_length=100, blank=True)
+
+    @staticmethod
+    def get_event(name):
+        record = NameRecord.objects.filter(name=name).first()
+        return record and record.event
+
+    @staticmethod
+    def delete_record(name):
+        record = NameRecord.objects.filter(name=name).first()
+        if record:
+            record.delete()
+            return True
+        else:
+            return False
 
 
 class ProjectRelationship(models.Model):

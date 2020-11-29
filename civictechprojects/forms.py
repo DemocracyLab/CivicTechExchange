@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
-from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group
+from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group, NameRecord
 from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification, send_group_creation_notification, send_event_creation_notification
 from democracylab.models import get_request_contributor
@@ -114,35 +114,40 @@ class EventCreationForm(ModelForm):
             raise PermissionDenied()
 
         is_created_original = event.is_created
+        fields_changed = False
         project_fields_changed = False
-        read_form_field_string(event, form, 'event_agenda')
-        read_form_field_string(event, form, 'event_description')
-        read_form_field_string(event, form, 'event_short_description')
+        fields_changed |= read_form_field_string(event, form, 'event_agenda')
+        fields_changed |= read_form_field_string(event, form, 'event_description')
+        fields_changed |= read_form_field_string(event, form, 'event_short_description')
         project_fields_changed |= read_form_field_string(event, form, 'event_name')
         project_fields_changed |= read_form_field_string(event, form, 'event_location')
-        read_form_field_string(event, form, 'event_rsvp_url')
-        read_form_field_string(event, form, 'event_live_id')
+        fields_changed |= read_form_field_string(event, form, 'event_rsvp_url')
+        fields_changed |= read_form_field_string(event, form, 'event_live_id')
         project_fields_changed |= read_form_field_string(event, form, 'event_organizers_text')
 
         project_fields_changed |= read_form_field_datetime(event, form, 'event_date_start')
         project_fields_changed |= read_form_field_datetime(event, form, 'event_date_end')
 
-        read_form_field_boolean(event, form, 'is_searchable')
-        read_form_field_boolean(event, form, 'is_created')
+        fields_changed |= read_form_field_boolean(event, form, 'is_searchable')
+        fields_changed |= read_form_field_boolean(event, form, 'is_created')
         project_fields_changed |= read_form_field_boolean(event, form, 'is_private')
 
         slug = form.data.get('event_slug')
         if slug is not None:
             slug = slug.lower()
-            slug_event = Event.get_by_slug(slug)
+            slug_event = Event.get_by_id_or_slug(slug)
             if slug_event and slug_event.id != event.id:
                 print('Could not change event {event} slug to {slug} because another event already has that slug: {existing_event}'.format(
                     event=event.__str__(),
                     slug=slug,
-                    existing_event=slug_event
+                    existing_event=slug_event.__str__()
                 ))
             else:
-                project_fields_changed |= read_form_field_string(event, form, 'event_slug', lambda str: str.lower())
+                slug_changed = read_form_field_string(event, form, 'event_slug', lambda str: str.lower())
+                if slug_changed:
+                    project_fields_changed = True
+                    name_record = NameRecord.objects.create(event=event, name=slug)
+                    name_record.save()
 
         pre_change_projects = event.get_linked_projects()
         pre_change_projects = pre_change_projects and list(pre_change_projects.all())
@@ -158,6 +163,8 @@ class EventCreationForm(ModelForm):
         if is_created_original != event.is_created:
             send_event_creation_notification(event)
 
+        if fields_changed:
+            event.recache()
         if project_fields_changed:
             event.update_linked_items()
             if pre_change_projects:
