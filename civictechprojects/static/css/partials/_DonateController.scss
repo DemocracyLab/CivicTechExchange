@@ -2,6 +2,10 @@
   display: flex;
   max-width: 1400px;
   margin: 0 auto;
+  background-color: $color-background-light;
+  h2 {
+    margin-top: 2rem;
+  }
 }
 
 .donate-image img{
@@ -42,7 +46,7 @@
 
 @media (min-width: 900px) {
   .DonateController-text {
-    padding: 50px;
+    padding: 40px 25px;
   }
 
   .PaypalDonationButton {
