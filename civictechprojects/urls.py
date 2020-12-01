@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
 from common.helpers.error_handlers import handle500
-from .sitemaps import ProjectSitemap, SectionSitemap
+from .sitemaps import ProjectSitemap, SectionSitemap, GroupSitemap
 
 
 from . import views
@@ -30,7 +30,7 @@ urlpatterns = [
     url(
         r'^sitemap\.xml$',
         sitemap,
-        {'sitemaps': {'projects': ProjectSitemap(), 'sections': SectionSitemap()}},
+        {'sitemaps': {'sections': SectionSitemap(), 'projects': ProjectSitemap(), 'groups': GroupSitemap}},
         name='django.contrib.sitemaps.views.sitemap'
     ),
     url(r'^robots\.txt$', views.robots, name='robots'),

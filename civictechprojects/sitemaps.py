@@ -1,7 +1,8 @@
 from common.helpers.constants import FrontEndSection
+from common.helpers.front_end import section_path
 from django.conf import settings
 from django.contrib.sitemaps import Sitemap
-from .models import Project
+from .models import Project, Group, Event
 
 
 class SectionSitemap(Sitemap):
@@ -37,15 +38,30 @@ class ProjectSitemap(Sitemap):
         return Project.objects.filter(is_searchable=True).order_by('id')
 
     def location(self, project):
-        return '/index/?section=AboutProject&id=' + str(project.id)
+        return section_path(FrontEndSection.AboutProject.value, {'id': project.id})
 
     def lastmod(self, project):
         return project.project_date_modified
 
 
+class GroupSitemap(Sitemap):
+    protocol = "https"
+    changefreq = "daily"
+    priority = 0.5
+
+    def items(self):
+        return Group.objects.filter(is_searchable=True).order_by('id')
+
+    def location(self, group):
+        return section_path(FrontEndSection.AboutGroup.value, {'id': group.id})
+
+    def lastmod(self, group):
+        return group.group_date_modified
+
+
 def get_all_sitemap_paths():
     sitemap_paths = []
-    for sitemap_class in [SectionSitemap, ProjectSitemap]:
+    for sitemap_class in [SectionSitemap, ProjectSitemap, GroupSitemap]:
         sitemap_instance = sitemap_class()
         sitemap_paths = sitemap_paths + list(map(lambda item: sitemap_instance.location(item), sitemap_instance.items()))
 
