@@ -59,9 +59,25 @@ class GroupSitemap(Sitemap):
         return group.group_date_modified
 
 
+class EventSitemap(Sitemap):
+    protocol = "https"
+    changefreq = "daily"
+    priority = 0.5
+
+    def items(self):
+        return Event.objects.filter(is_searchable=True, is_private=False).order_by('id')
+
+    def location(self, event):
+        event_id = event.event_slug or event.id
+        return section_path(FrontEndSection.AboutEvent.value, {'id': event_id})
+
+    def lastmod(self, event):
+        return event.event_date_modified
+
+
 def get_all_sitemap_paths():
     sitemap_paths = []
-    for sitemap_class in [SectionSitemap, ProjectSitemap, GroupSitemap]:
+    for sitemap_class in [SectionSitemap, ProjectSitemap, GroupSitemap, EventSitemap]:
         sitemap_instance = sitemap_class()
         sitemap_paths = sitemap_paths + list(map(lambda item: sitemap_instance.location(item), sitemap_instance.items()))
 
