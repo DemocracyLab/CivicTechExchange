@@ -15,6 +15,8 @@ from common.helpers.front_end import section_url
 
 class EmailSection(Enum):
     Header = 'Header'
+    Headerleft = 'Headerleft'
+    Subheader = 'Subheader'
     Button = 'Button'
     Paragraph = 'Paragraph'
     Paragraph_Center = 'Paragraph_Center'
@@ -30,6 +32,8 @@ class HtmlEmailTemplate:
     base_template = loader.get_template('html_email_frame.html')
     section_templates = {
         EmailSection.Header: loader.get_template('html_email_header.html'),
+        EmailSection.Headerleft: loader.get_template('html_email_headerleft.html'),
+        EmailSection.Subheader: loader.get_template('html_email_subheader.html'),
         EmailSection.Button: loader.get_template('html_email_button.html'),
         EmailSection.Paragraph: loader.get_template('html_email_paragraph.html'),
         EmailSection.Paragraph_Center: loader.get_template('html_email_paragraph_center.html')
@@ -205,7 +209,15 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
         project=project.project_name,
         role=role_text)
     email_template = HtmlEmailTemplate()\
-        .header("You Have a New Volunteer!")\
+        .subheader("Opportunity Information:")\
+        .paragraph("Title:")\
+        .paragraph("Organization:")\
+        .paragraph("Date:")\
+        .subheader("Volunteer Information:")\
+        .paragraph("Name:")\
+        .paragraph("Email:")\
+        .paragraph("Phone:")\
+        .headerleft("You Have a New Volunteer!")\
         .paragraph('\"{message}\" -{firstname} {lastname}'.format(
             message=volunteer_relation.application_text,
             firstname=user.first_name,
