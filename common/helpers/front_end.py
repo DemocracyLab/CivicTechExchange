@@ -2,7 +2,7 @@ import re
 from django.conf import settings
 from html import unescape
 
-# TODO: Unit tests
+
 def section_url(section, args_dict=None):
     return settings.PROTOCOL_DOMAIN + section_path(section, args_dict)
 
