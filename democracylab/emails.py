@@ -221,18 +221,22 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
         role=role_text)
     email_template = HtmlEmailTemplate()\
         .subheader("Opportunity Information:")\
-        .text_line("Title: {role}".format(role=role_text))\
+        .text_line("Title: {role}".format(role=role_details.display_name))\
         .text_line("Organization: {project}".format(project=project.project_name))\
-        .text_line("Date:")\
+        .text_line("Date: {currentdate}".format(currentdate=models.DateTimeField(auto_now_add=True, null=True)))\
         .subheader("Volunteer Information:")\
         .text_line("Name: {firstname} {lastname}".format(
             firstname=user.first_name,
             lastname=user.last_name))\
-        .text_line("Email: {email}".format(email=user.email))\
+        .text_line("Email: {email}".format(email=Html.a(href='mailto:' + user.email, text=user.email)))\
         .text_line("Zip: {zip}".format(zip=user.postal_code))\
         .headerleft("You Have a New Volunteer!")\
-        .paragraph("{message}".format(message=volunteer_relation.application_text))\
-        .paragraph('You can reply to this email to contact this volunteer, or use the buttons below to review their profile or approve them to be part of your project team.')\
+        .paragraph('\"{message}\" -{firstname} {lastname}'.format(
+            message=volunteer_relation.application_text,
+            firstname=user.first_name,
+            lastname=user.last_name))\
+        .text_line("Estimated Duration: Until {projected_end_date}".format(projected_end_date=datetime_to_string(datetime_field_to_datetime(volunteer_relation.projected_end_date), DateTimeFormats.DATE_LOCALIZED))\
+        .paragraph('To contact this volunteer directly, you can reply to this email. To review their profile or approve their application, use the buttons below.')\
         .button(url=project_profile_url, text='REVIEW VOLUNTEER')\
         .button(url=approve_url, text='APPROVE VOLUNTEER')
     send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
