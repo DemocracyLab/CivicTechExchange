@@ -20,6 +20,7 @@ class EmailSection(Enum):
     Button = 'Button'
     Paragraph = 'Paragraph'
     Paragraph_Center = 'Paragraph_Center'
+    Text_Line = 'Text_Line'
 
 
 class Html:
@@ -36,7 +37,8 @@ class HtmlEmailTemplate:
         EmailSection.Subheader: loader.get_template('html_email_subheader.html'),
         EmailSection.Button: loader.get_template('html_email_button.html'),
         EmailSection.Paragraph: loader.get_template('html_email_paragraph.html'),
-        EmailSection.Paragraph_Center: loader.get_template('html_email_paragraph_center.html')
+        EmailSection.Paragraph_Center: loader.get_template('html_email_paragraph_center.html'),
+        EmailSection.Text_Line: loader.get_template('html_email_text_line.html'),
     }
 
     def __init__(self, use_signature=True):
@@ -51,11 +53,20 @@ class HtmlEmailTemplate:
     def header(self, text):
         return self.add(EmailSection.Header, {'text': text})
 
+    def headerleft(self, text):
+        return self.add(EmailSection.Headerleft, {'text': text})
+
+    def subheader(self, text):
+        return self.add(EmailSection.Subheader, {'text': text})
+
     def paragraph(self, text):
         return self.add(EmailSection.Paragraph, {'text': text})
 
     def paragraph_center(self, text):
         return self.add(EmailSection.Paragraph_Center, {'text': text})
+
+    def text_line(self, text):
+        return self.add(EmailSection.Text_Line, {'text': text})
 
     def button(self, url, text):
         return self.add(EmailSection.Button, {'url': url, 'text': text})
@@ -210,18 +221,17 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
         role=role_text)
     email_template = HtmlEmailTemplate()\
         .subheader("Opportunity Information:")\
-        .paragraph("Title:")\
-        .paragraph("Organization:")\
-        .paragraph("Date:")\
+        .text_line("Title: {role}".format(role=role_text))\
+        .text_line("Organization: {project}".format(project=project.project_name))\
+        .text_line("Date:")\
         .subheader("Volunteer Information:")\
-        .paragraph("Name:")\
-        .paragraph("Email:")\
-        .paragraph("Phone:")\
-        .headerleft("You Have a New Volunteer!")\
-        .paragraph('\"{message}\" -{firstname} {lastname}'.format(
-            message=volunteer_relation.application_text,
+        .text_line("Name: {firstname} {lastname}".format(
             firstname=user.first_name,
             lastname=user.last_name))\
+        .text_line("Email: {email}".format(email=user.email))\
+        .text_line("Zip: {zip}".format(zip=user.postal_code))\
+        .headerleft("You Have a New Volunteer!")\
+        .paragraph("{message}".format(message=volunteer_relation.application_text))\
         .paragraph('You can reply to this email to contact this volunteer, or use the buttons below to review their profile or approve them to be part of your project team.')\
         .button(url=project_profile_url, text='REVIEW VOLUNTEER')\
         .button(url=approve_url, text='APPROVE VOLUNTEER')
