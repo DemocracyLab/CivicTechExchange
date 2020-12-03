@@ -27,7 +27,7 @@ class EmailSection(Enum):
 class Html:
     @staticmethod
     def a(href, text):
-        return "<a href={href}>{text}</a>".format(href=href, text=text)
+        return """<a href="{href}">{text}</a>""".format(href=href, text=text)
 
 
 class HtmlEmailTemplate:
@@ -224,12 +224,12 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
         .subheader("Opportunity Information:")\
         .text_line("Title: {role}".format(role=role_details.display_name))\
         .text_line("Organization: {projectname}".format(projectname=project.project_name))\
-        .text_line("Date: {currentdate}".format(currentdate=datetime_to_string(timezone.now(), DateTimeFormats.DATE_LOCALIZED)))\
+        .text_line("Date: {currentdate}".format(currentdate=datetime_to_string(timezone.now(), DateTimeFormats.MONTH_DD_YYYY)))\
         .subheader("Volunteer Information:")\
         .text_line("Name: {firstname} {lastname}".format(
             firstname=user.first_name,
             lastname=user.last_name))\
-        .text_line("Email: {email}".format(email=Html.a(href='mailto:{useremail}'.format(useremail=user.email), text=user.email)))\
+        .text_line("Email: " + Html.a(href='mailto:' + user.email, text=user.email))\
         .text_line("Zip: {zip}".format(zip=user.postal_code))\
         .header_left("You Have a New Volunteer!")\
         .paragraph('\"{message}\" -{firstname} {lastname}'.format(
