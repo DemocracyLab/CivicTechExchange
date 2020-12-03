@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from django.template import loader, Template, Context
+from django.utils import timezone
 from enum import Enum
 from html.parser import unescape
 from common.models.tags import Tag
@@ -15,7 +16,7 @@ from common.helpers.front_end import section_url
 
 class EmailSection(Enum):
     Header = 'Header'
-    Headerleft = 'Headerleft'
+    Header_Left = 'Header_Left'
     Subheader = 'Subheader'
     Button = 'Button'
     Paragraph = 'Paragraph'
@@ -33,12 +34,12 @@ class HtmlEmailTemplate:
     base_template = loader.get_template('html_email_frame.html')
     section_templates = {
         EmailSection.Header: loader.get_template('html_email_header.html'),
-        EmailSection.Headerleft: loader.get_template('html_email_headerleft.html'),
+        EmailSection.Header_Left: loader.get_template('html_email_headerleft.html'),
         EmailSection.Subheader: loader.get_template('html_email_subheader.html'),
         EmailSection.Button: loader.get_template('html_email_button.html'),
         EmailSection.Paragraph: loader.get_template('html_email_paragraph.html'),
         EmailSection.Paragraph_Center: loader.get_template('html_email_paragraph_center.html'),
-        EmailSection.Text_Line: loader.get_template('html_email_text_line.html'),
+        EmailSection.Text_Line: loader.get_template('html_email_text_line.html')
     }
 
     def __init__(self, use_signature=True):
@@ -53,8 +54,8 @@ class HtmlEmailTemplate:
     def header(self, text):
         return self.add(EmailSection.Header, {'text': text})
 
-    def headerleft(self, text):
-        return self.add(EmailSection.Headerleft, {'text': text})
+    def header_left(self, text):
+        return self.add(EmailSection.Header_Left, {'text': text})
 
     def subheader(self, text):
         return self.add(EmailSection.Subheader, {'text': text})
@@ -222,20 +223,19 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
     email_template = HtmlEmailTemplate()\
         .subheader("Opportunity Information:")\
         .text_line("Title: {role}".format(role=role_details.display_name))\
-        .text_line("Organization: {project}".format(project=project.project_name))\
-        .text_line("Date: {currentdate}".format(currentdate=models.DateTimeField(auto_now_add=True, null=True)))\
+        .text_line("Organization: {projectname}".format(projectname=project.project_name))\
+        .text_line("Date: {currentdate}".format(currentdate=datetime_to_string(timezone.now(), DateTimeFormats.DATE_LOCALIZED)))\
         .subheader("Volunteer Information:")\
         .text_line("Name: {firstname} {lastname}".format(
             firstname=user.first_name,
             lastname=user.last_name))\
-        .text_line("Email: {email}".format(email=Html.a(href='mailto:' + user.email, text=user.email)))\
+        .text_line("Email: {email}".format(email=Html.a(href='mailto:{useremail}'.format(useremail=user.email), text=user.email)))\
         .text_line("Zip: {zip}".format(zip=user.postal_code))\
-        .headerleft("You Have a New Volunteer!")\
+        .header_left("You Have a New Volunteer!")\
         .paragraph('\"{message}\" -{firstname} {lastname}'.format(
             message=volunteer_relation.application_text,
             firstname=user.first_name,
             lastname=user.last_name))\
-        .text_line("Estimated Duration: Until {projected_end_date}".format(projected_end_date=datetime_to_string(datetime_field_to_datetime(volunteer_relation.projected_end_date), DateTimeFormats.DATE_LOCALIZED))\
         .paragraph('To contact this volunteer directly, you can reply to this email. To review their profile or approve their application, use the buttons below.')\
         .button(url=project_profile_url, text='REVIEW VOLUNTEER')\
         .button(url=approve_url, text='APPROVE VOLUNTEER')
