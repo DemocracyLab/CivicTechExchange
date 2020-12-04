@@ -476,11 +476,11 @@ class Event(Archived):
             _slug = slug.strip().lower()
             if _slug.isnumeric():
                 event = Event.objects.get(id=_slug)
+                if event and event.is_private:
+                    if not user or not user.is_authenticated() or not is_creator_or_staff(user, event):
+                        raise PermissionDenied()
             elif len(_slug) > 0:
                 event = Event.objects.filter(event_slug=_slug).first() or NameRecord.get_event(_slug)
-        if event and event.is_private and user is not None:
-            if not user.is_authenticated() or not is_creator_or_staff(user, event):
-                raise PermissionDenied()
 
         return event
 
