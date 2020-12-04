@@ -47,7 +47,7 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
       project_short_description: project ? project.project_short_description : "",
       project_issue_area: project ? project.project_issue_area : [],
       project_thumbnail: project ? project.project_thumbnail : "",
-      didCheckTerms: false
+      didCheckTerms: !!project
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
@@ -130,18 +130,19 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
                     value={this.state.formFields.project_short_description} onChange={this.form.onInput.bind(this, "project_short_description")}></textarea>
         </div>
   
-        {/*TODO: Don't show if project has been created*/}
-        <div>
-          <CheckBox
-            id="didCheckTerms"
-            value={this.state.formFields.didCheckTerms}
-            onCheck={this.form.onSelection.bind(this, "didCheckTerms")}
-          />
-          <span>
+        { !this.props.project &&
+          <div>
+            <CheckBox
+              id="didCheckTerms"
+              value={this.state.formFields.didCheckTerms}
+              onCheck={this.form.onSelection.bind(this, "didCheckTerms")}
+            />
+            <span>
             {" "}I have read and accepted the
-            {" "}<PseudoLink text="Terms of Volunteering" onClick={e => this.setState({termsOpen: true})}/>
-          </span>
-        </div>
+              {" "}<PseudoLink text="Terms of Volunteering" onClick={e => this.setState({termsOpen: true})}/>
+            </span>
+          </div>
+        }
   
         <TermsModal
           termsType={TermsTypes.OrgSignup}
