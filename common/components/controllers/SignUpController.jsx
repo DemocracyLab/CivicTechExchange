@@ -10,7 +10,7 @@ import _ from 'lodash';
 import Headers from "../common/Headers.jsx";
 import PseudoLink from "../chrome/PseudoLink.jsx";
 import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
-import TermsModal from "../common/confirmation/TermsModal.jsx";
+import TermsModal,{TermsTypes} from "../common/confirmation/TermsModal.jsx";
 
 type Props = {|
   +errors: {+[key: string]: $ReadOnlyArray<string>},
@@ -185,7 +185,11 @@ class SignUpController extends React.Component<Props, State> {
             
           </div>
           
-          <TermsModal showModal={this.state.termsOpen} onSelection={() => this.setState({termsOpen: false})}/>
+          <TermsModal
+            termsType={TermsTypes.UserSignup}
+            showModal={this.state.termsOpen}
+            onSelection={() => this.setState({termsOpen: false})}
+          />
 
           {/* TODO: Replace with visible forms, or modify backend. */}
           <input name="username" value={this.state.email} type="hidden" />
