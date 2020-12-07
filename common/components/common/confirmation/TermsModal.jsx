@@ -12,6 +12,11 @@ export const TermsTypes: Dictionary<string> = {
 
 export type TermsType = $Keys<typeof TermsTypes>;
 
+type TermsConfig = {|
+  headerText: string,
+  termsContent: () => React$Node
+|};
+
 type Props = {|
   termsType: TermsType,
   showModal: boolean,
@@ -19,6 +24,7 @@ type Props = {|
 |};
 type State = {|
   showModal: boolean,
+  termsConfigurations: Dictionary<TermsConfig>
 |};
 
 /**
@@ -27,12 +33,12 @@ type State = {|
 class TermsModal extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.termsDictionary = _.fromPairs([
-      [TermsTypes.UserSignup, this._renderUserSignupTerms],
-      [TermsTypes.OrgSignup, this._renderOrgSignupTerms]
-    ]);
     this.state = {
-      showModal: false
+      showModal: false,
+      termsConfigurations:_.fromPairs([
+        [TermsTypes.UserSignup, {headerText: "Terms of Volunteering", termsContent: this._renderUserSignupTerms}],
+        [TermsTypes.OrgSignup, {headerText: "Terms of Use", termsContent: this._renderOrgSignupTerms}]
+      ])
     }
   }
 
@@ -48,10 +54,11 @@ class TermsModal extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
+    const termsConfig = this.state.termsConfigurations[this.props.termsType];
     return (
-      <NotificationModal headerText="Terms of Volunteering" buttonText="Close and Continue" showModal={this.state.showModal} onClickButton={this.confirm.bind(this)}>
+      <NotificationModal headerText={termsConfig.headerText} buttonText="Close and Continue" showModal={this.state.showModal} onClickButton={this.confirm.bind(this)}>
         <div className="Terms-body">
-          {this.termsDictionary[this.props.termsType]()}
+          {termsConfig.termsContent()}
         </div>
       </NotificationModal>
     );

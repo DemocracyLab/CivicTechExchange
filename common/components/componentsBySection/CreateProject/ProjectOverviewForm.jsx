@@ -60,7 +60,7 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
       },
       {
         checkFunc: (formFields: FormFields) => formFields.didCheckTerms,
-        errorMessage: "Agree to terms of service"
+        errorMessage: "Agree to Terms of Use"
       }
     ];
 
@@ -139,7 +139,7 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
             />
             <span>
             {" "}I have read and accepted the
-              {" "}<PseudoLink text="Terms of Volunteering" onClick={e => this.setState({termsOpen: true})}/>
+              {" "}<PseudoLink text="Terms of Use" onClick={e => this.setState({termsOpen: true})}/>
             </span>
           </div>
         }
