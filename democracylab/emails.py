@@ -27,7 +27,7 @@ class EmailSection(Enum):
 class Html:
     @staticmethod
     def a(href, text):
-        return """<a href="{href}">{text}</a>""".format(href=href, text=text)
+        return '<a href="{href}">{text}</a>'.format(href=href, text=text)
 
 
 class HtmlEmailTemplate:
@@ -229,9 +229,10 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
         .text_line("Name: {firstname} {lastname}".format(
             firstname=user.first_name,
             lastname=user.last_name))\
-        .text_line("Email: " + Html.a(href='mailto:' + user.email, text=user.email))\
-        .text_line("Zip: {zip}".format(zip=user.postal_code))\
-        .header_left("You Have a New Volunteer!")\
+        .text_line("Email: " + Html.a(href='mailto:' + user.email, text=user.email))
+    if user.postal_code:
+        email_template = email_template.text_line("Zip: {zip}".format(zip=user.postal_code))
+    email_template = email_template.header_left("You Have a New Volunteer!")\
         .paragraph('\"{message}\" -{firstname} {lastname}'.format(
             message=volunteer_relation.application_text,
             firstname=user.first_name,
