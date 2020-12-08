@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from django.template import loader, Template, Context
+from django.utils import timezone
 from enum import Enum
 from html.parser import unescape
 from common.models.tags import Tag
@@ -15,24 +16,30 @@ from common.helpers.front_end import section_url
 
 class EmailSection(Enum):
     Header = 'Header'
+    Header_Left = 'Header_Left'
+    Subheader = 'Subheader'
     Button = 'Button'
     Paragraph = 'Paragraph'
     Paragraph_Center = 'Paragraph_Center'
+    Text_Line = 'Text_Line'
 
 
 class Html:
     @staticmethod
     def a(href, text):
-        return "<a href={href}>{text}</a>".format(href=href, text=text)
+        return '<a href="{href}">{text}</a>'.format(href=href, text=text)
 
 
 class HtmlEmailTemplate:
     base_template = loader.get_template('html_email_frame.html')
     section_templates = {
         EmailSection.Header: loader.get_template('html_email_header.html'),
+        EmailSection.Header_Left: loader.get_template('html_email_headerleft.html'),
+        EmailSection.Subheader: loader.get_template('html_email_subheader.html'),
         EmailSection.Button: loader.get_template('html_email_button.html'),
         EmailSection.Paragraph: loader.get_template('html_email_paragraph.html'),
-        EmailSection.Paragraph_Center: loader.get_template('html_email_paragraph_center.html')
+        EmailSection.Paragraph_Center: loader.get_template('html_email_paragraph_center.html'),
+        EmailSection.Text_Line: loader.get_template('html_email_text_line.html')
     }
 
     def __init__(self, use_signature=True):
@@ -47,11 +54,20 @@ class HtmlEmailTemplate:
     def header(self, text):
         return self.add(EmailSection.Header, {'text': text})
 
+    def header_left(self, text):
+        return self.add(EmailSection.Header_Left, {'text': text})
+
+    def subheader(self, text):
+        return self.add(EmailSection.Subheader, {'text': text})
+
     def paragraph(self, text):
         return self.add(EmailSection.Paragraph, {'text': text})
 
     def paragraph_center(self, text):
         return self.add(EmailSection.Paragraph_Center, {'text': text})
+
+    def text_line(self, text):
+        return self.add(EmailSection.Text_Line, {'text': text})
 
     def button(self, url, text):
         return self.add(EmailSection.Button, {'url': url, 'text': text})
@@ -205,12 +221,23 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
         project=project.project_name,
         role=role_text)
     email_template = HtmlEmailTemplate()\
-        .header("You Have a New Volunteer!")\
+        .subheader("Opportunity Information:")\
+        .text_line("Title: {role}".format(role=role_details.display_name))\
+        .text_line("Organization: {projectname}".format(projectname=project.project_name))\
+        .text_line("Date: {currentdate}".format(currentdate=datetime_to_string(timezone.now(), DateTimeFormats.MONTH_DD_YYYY)))\
+        .subheader("Volunteer Information:")\
+        .text_line("Name: {firstname} {lastname}".format(
+            firstname=user.first_name,
+            lastname=user.last_name))\
+        .text_line("Email: " + Html.a(href='mailto:' + user.email, text=user.email))
+    if user.postal_code:
+        email_template = email_template.text_line("Zip: {zip}".format(zip=user.postal_code))
+    email_template = email_template.header_left("You Have a New Volunteer!")\
         .paragraph('\"{message}\" -{firstname} {lastname}'.format(
             message=volunteer_relation.application_text,
             firstname=user.first_name,
             lastname=user.last_name))\
-        .paragraph('You can reply to this email to contact this volunteer, or use the buttons below to review their profile or approve them to be part of your project team.')\
+        .paragraph('To contact this volunteer directly, you can reply to this email. To review their profile or approve their application, use the buttons below.')\
         .button(url=project_profile_url, text='REVIEW VOLUNTEER')\
         .button(url=approve_url, text='APPROVE VOLUNTEER')
     send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
