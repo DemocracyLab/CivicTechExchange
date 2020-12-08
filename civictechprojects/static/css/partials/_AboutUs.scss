@@ -299,6 +299,15 @@
     padding-left: 20px;
     padding-right: 20px;
   }
+  /* awkward container align for the flex items inside this container */
+  .about-us-annualreport {
+    .about-us-annualreport-left {
+      padding-left: 0;
+    }
+    .about-us-annualreport-right {
+      padding-right: 0;
+    }
+  }
 }
 @include media-breakpoint-up(xl) {
   .about-us-team-card {
