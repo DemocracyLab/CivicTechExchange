@@ -94,9 +94,27 @@
 .about-us-volunteer h2 {
   margin-bottom: 1rem;
 }
-
 .about-us-volunteer-logo {
   display: none;
+}
+.about-us-annualreport {
+  background: $color-orange;
+  h3, p, i, a {
+    color: $color-text-light;
+  }
+  a {
+    text-decoration: underline;
+  }
+  p {
+    margin-bottom: 0;
+  }
+}
+.about-us-annualreport-container {
+  display: flex;
+  align-items: center;
+}
+.about-us-annualreport-left, .about-us-annualreport-right {
+  padding: 2rem 1rem;
 }
 .about-us-team-card-container {
   display: flex;
@@ -277,7 +295,7 @@
   .about-us-team-card {
     margin-bottom: 50px;
   }
-  .about-us-values, .about-us-team, .about-us-volunteer {
+  .about-us-values, .about-us-team, .about-us-volunteer, .about-us-annualreport {
     padding-left: 20px;
     padding-right: 20px;
   }
@@ -292,7 +310,7 @@
   .about-us-content {
     padding: 0 580px 0 168px;
   }
-  .about-us-values, .about-us-team, .about-us-volunteer, .about-us-ps {
+  .about-us-values, .about-us-team, .about-us-volunteer, .about-us-ps, .about-us-annualreport {
     padding-left: 153px; /* match 168px from Vision/Mission, subtract 30 */
     padding-right: 153px;
   }
