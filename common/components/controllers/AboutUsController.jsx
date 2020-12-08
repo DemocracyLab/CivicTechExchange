@@ -193,7 +193,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
            {this._ourMission()}
            {this._ourVision()}
          </div>
-         <div className="container pl-0 pr-0 about-us-root">
+         <div className="container about-us-root">
            {this._ourValues()}
            {this._problemSolution()}
            {this._annualReport()}
