@@ -105,6 +105,9 @@
   a {
     text-decoration: underline;
   }
+  a:hover {
+    color: $color-text-dark;
+  }
   p {
     margin-bottom: 0;
   }
