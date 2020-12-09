@@ -8,6 +8,8 @@ import SplashScreen, {HeroImage} from '../componentsBySection/FindProjects/Splas
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import TeamSections from "../componentsBySection/AboutUs/TeamSections.jsx";
+import {Glyph, GlyphStyles, GlyphSizes, GlyphWidth} from "../utils/glyphs.js";
+
 
 type State = {|
   teamResponse: TeamAPIData,
@@ -49,7 +51,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
   _ourValues() {
     return (
-      <div className="row ml-0 mr-0 about-us-values">
+      <div className="row about-us-values">
         <div className="col-12 col-md-6 about-us-values-core">
           <h2>Core Values</h2>
           <div className="about-us-values-list">
@@ -121,7 +123,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
   }
   _problemSolution() {
     return (
-      <div className="row ml-0 mr-0 about-us-ps">
+      <div className="row about-us-ps">
         <hr/>
         <div className="about-us-show-md-up col-12 col-md-6 about-us-ps-image">
           <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)}></img>
@@ -166,6 +168,24 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     )
   }
 
+  _annualReport(): $React$Node {
+    return (
+      <div className="about-us-annualreport row">
+        <div className="col about-us-annualreport-container">
+          <div className="about-us-annualreport-left">
+            <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X5)}></i>
+          </div>
+          <div className="about-us-annualreport-right">
+            <h3>Annual Report</h3>
+            <p>
+              Please review our <a href="https://d1agxr2dqkgkuy.cloudfront.net/documents/2019%20DemocracyLab%20Annual%20Report.pdf" >2019 Annual Report</a> to learn about the impact of our programs and platform last year.
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
    render(): $React$Node {
     return (
        <React.Fragment>
@@ -173,9 +193,10 @@ class AboutUsController extends React.PureComponent<{||}, State> {
            {this._ourMission()}
            {this._ourVision()}
          </div>
-         <div className="container pl-0 pr-0 about-us-root">
+         <div className="container about-us-root">
            {this._ourValues()}
            {this._problemSolution()}
+           {this._annualReport()}
            <TeamSections teamResponse={this.state.teamResponse} />
            {this._volunteerWithUs()}
          </div>
