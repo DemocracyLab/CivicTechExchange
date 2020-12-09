@@ -47,7 +47,7 @@
   margin-right: auto;
 }
 .LandingController-root .SplashScreen-content h1 {
-  font-size: 3rem;
+  font-size: 2rem; /* at small display sizes 3rem is too big for a single word to fit */
 }
 .LandingController-topsplash .SplashScreen-content h1 {
   font-size: 4rem;
@@ -200,6 +200,9 @@
       flex-basis: 45%;
       min-width: 45%;
     }
+  }
+  .LandingController-root .SplashScreen-content h1 {
+    font-size: 3rem; 
   }
 }
 
