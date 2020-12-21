@@ -3865,10 +3865,10 @@ findup-sync@^3.0.0:
     micromatch "^3.0.4"
     resolve-dir "^1.0.1"
 
-flow-bin@^0.59.0:
-  version "0.59.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.59.0.tgz#8c151ee7f09f1deed9bf0b9d1f2e8ab9d470f1bb"
-  integrity sha512-yJDRffvby5mCTkbwOdXwiGDjeea8Z+BPVuP53/tHqHIZC+KtQD790zopVf7mHk65v+wRn+TZ7tkRSNA9oDmyLg==
+flow-bin@^0.75.0:
+  version "0.75.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.75.0.tgz#b96d1ee99d3b446a3226be66b4013224ce9df260"
+  integrity sha1-uW0e6Z07RGoyJr5mtAEyJM6d8mA=
 
 flush-write-stream@^1.0.0:
   version "1.1.1"
