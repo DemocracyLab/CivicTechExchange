@@ -139,14 +139,14 @@ class AlertHeader extends React.Component<Props, State> {
   }
   
   render(): ?React$Node {
-    return this.state.showHeader && this.state.currentAlert && (
+    return this.state.showHeader && this.state.currentAlert ? (
       <div className="AlertHeader-root">
         {this._renderCurrentAlert()}
         <div className="AlertHeader-close" onClick={() => this.hideHeader()}>
           <i className={Glyph(GlyphStyles.Close,GlyphSizes.LG)} aria-hidden="true"></i>
         </div>
       </div>
-    );
+    ) : null;
   }
   
   _renderCurrentAlert(): React$Node {
