@@ -10,7 +10,7 @@ import civictechprojects.models
 
 
 class UserTaggedTechnologies(TaggedItemBase):
-    content_object = models.ForeignKey('Contributor')
+    content_object = models.ForeignKey('Contributor', on_delete=models.CASCADE)
 
 
 def generate_uuid():
