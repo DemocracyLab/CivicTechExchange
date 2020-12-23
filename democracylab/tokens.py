@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.conf import settings
-from django.utils import six
+from six import text_type
 from django.utils.crypto import constant_time_compare, salted_hmac
 from django.utils.http import base36_to_int, int_to_base36
 
@@ -70,7 +70,7 @@ class EmailVerifyTokenGenerator(object):
     def _make_hash_value(self, user, timestamp):
         # Ensure results are consistent across DB backends
         return (
-                six.text_type(user.pk) + user.password + six.text_type(timestamp)
+                text_type(user.pk) + user.password + text_type(timestamp)
         )
 
     def _num_days(self, dt):
