@@ -26,6 +26,6 @@ rjsmin==1.0.12
 s3transfer==0.1.11
 simplejson==3.12.0
 six==1.15.0
-whitenoise==3.3.0
+whitenoise==5.2.0
 django-seo-js==0.3.2
 newrelic
