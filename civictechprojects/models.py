@@ -65,22 +65,21 @@ class Archived(models.Model):
 
 
 class Project(Archived):
-    # TODO: Change related name to 'created_projects' or something similar
-    project_creator = models.ForeignKey(Contributor, related_name='creator', on_delete=models.CASCADE)
+    project_creator = models.ForeignKey(Contributor, related_name='created_projects', on_delete=models.CASCADE)
     project_description = models.CharField(max_length=4000, blank=True)
     project_description_solution = models.CharField(max_length=4000, blank=True)
     project_description_actions = models.CharField(max_length=4000, blank=True)
     project_short_description = models.CharField(max_length=140, blank=True)
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
-    project_issue_area.remote_field.related_name = "+"
+    project_issue_area.remote_field.related_name = 'issue_projects'
     project_stage = TaggableManager(blank=True, through=TaggedStage)
-    project_stage.remote_field.related_name = "+"
+    project_stage.remote_field.related_name = related_name='stage_projects'
     project_technologies = TaggableManager(blank=True, through=TaggedTechnologies)
-    project_technologies.remote_field.related_name = "+"
+    project_technologies.remote_field.related_name = 'technology_projects'
     project_organization = TaggableManager(blank=True, through=TaggedOrganization)
-    project_organization.remote_field.related_name = "+"
+    project_organization.remote_field.related_name = 'org_projects'
     project_organization_type = TaggableManager(blank=True, through=TaggedOrganizationType)
-    project_organization_type.remote_field.related_name = "+"
+    project_organization_type.remote_field.related_name = 'org_type_projects'
     project_location = models.CharField(max_length=200, blank=True)
     project_location_coords = PointField(null=True, blank=True, srid=4326, default='')
     project_country = models.CharField(max_length=100, blank=True)
@@ -386,7 +385,7 @@ class Event(Archived):
     event_live_id = models.CharField(max_length=50, blank=True)
     event_short_description = models.CharField(max_length=140, blank=True)
     event_legacy_organization = TaggableManager(blank=True, through=TaggedEventOrganization)
-    event_legacy_organization.remote_field.related_name = "+"
+    event_legacy_organization.remote_field.related_name = 'org_events'
     event_slug = models.CharField(max_length=100, blank=True)
     is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
