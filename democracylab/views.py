@@ -131,7 +131,7 @@ def change_password(request):
 
 
 def user_edit(request, user_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn))
 
     DemocracyLabUserCreationForm.edit_user(request, user_id)
@@ -147,7 +147,7 @@ def user_details(request, user_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def send_verification_email_request(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)

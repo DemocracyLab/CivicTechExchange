@@ -92,7 +92,7 @@ def to_tag_map(tags):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def group_create(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn))
 
     user = get_request_contributor(request)
@@ -105,7 +105,7 @@ def group_create(request):
 
 
 def group_edit(request, group_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect('/signup')
 
     group = None
@@ -124,7 +124,7 @@ def group_edit(request, group_id):
 @csrf_exempt
 def group_delete(request, group_id):
     # if not logged in, send user to login page
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
     try:
         GroupCreationForm.delete_group(request, group_id)
@@ -200,7 +200,7 @@ def approve_group(request, group_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def event_create(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn))
 
     user = get_request_contributor(request)
@@ -217,7 +217,7 @@ def event_create(request):
 
 
 def event_edit(request, event_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect('/signup')
 
     event = None
@@ -236,7 +236,7 @@ def event_edit(request, event_id):
 @csrf_exempt
 def event_delete(request, event_id):
     # if not logged in, send user to login page
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
     try:
         EventCreationForm.delete_event(request, event_id)
@@ -289,7 +289,7 @@ def event_delete_project(request, event_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def project_create(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn))
 
     user = get_request_contributor(request)
@@ -302,7 +302,7 @@ def project_create(request):
 
 
 def project_edit(request, project_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect('/signup')
 
     try:
@@ -322,7 +322,7 @@ def project_edit(request, project_id):
 @csrf_exempt
 def project_delete(request, project_id):
     # if not logged in, send user to login page
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
     try:
         ProjectCreationForm.delete_project(request, project_id)
@@ -437,7 +437,7 @@ def index(request):
     if hasattr(settings, 'HERE_CONFIG'):
         context['HERE_CONFIG'] = settings.HERE_CONFIG
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id
         context['emailVerified'] = contributor.email_verified
@@ -820,7 +820,7 @@ def delete_uploaded_file(request, s3_key):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def contact_project_owner(request, project_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -848,7 +848,7 @@ def contact_project_owner(request, project_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def contact_project_volunteers(request, project_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -882,7 +882,7 @@ def contact_project_volunteers(request, project_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def contact_project_volunteer(request, application_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -913,7 +913,7 @@ def contact_project_volunteer(request, application_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def volunteer_with_project(request, project_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -939,7 +939,7 @@ def volunteer_with_project(request, project_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def renew_volunteering_with_project(request, application_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -962,7 +962,7 @@ def renew_volunteering_with_project(request, application_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def conclude_volunteering_with_project(request, application_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -986,7 +986,7 @@ def conclude_volunteering_with_project(request, application_id):
 @csrf_exempt
 def accept_project_volunteer(request, application_id):
     # Redirect to login if not logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
 
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
@@ -1141,7 +1141,7 @@ def update_project_timestamp(request, project):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def contact_group_owner(request, group_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -1169,7 +1169,7 @@ def contact_group_owner(request, group_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def invite_project_to_group(request, group_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -1196,7 +1196,7 @@ def invite_project_to_group(request, group_id):
 @csrf_exempt
 def accept_group_invitation(request, invite_id):
     # Redirect to login if not logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
 
     project_relation = ProjectRelationship.objects.get(id=invite_id)
@@ -1227,7 +1227,7 @@ def accept_group_invitation(request, invite_id):
 @csrf_exempt
 def reject_group_invitation(request, invite_id):
     # Redirect to login if not logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
 
     project_relation = ProjectRelationship.objects.get(id=invite_id)
