@@ -81,7 +81,7 @@ class ProjectCreationForm(ModelForm):
             send_project_creation_notification(project)
 
         if project.is_searchable and tags_changed:
-            Cache.refresh(CacheKeys.ProjectTagCounts)
+            Cache.refresh(CacheKeys.ProjectTagCounts.value)
 
         # TODO: Don't recache when nothing has changed
         project.recache()

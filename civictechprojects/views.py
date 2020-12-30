@@ -351,7 +351,7 @@ def approve_project(request, project_id):
         if user.is_staff:
             project.is_searchable = True
             project.save()
-            Cache.refresh(CacheKeys.ProjectTagCounts)
+            Cache.refresh(CacheKeys.ProjectTagCounts.value)
             SitemapPages.update()
             notify_project_owners_project_approved(project)
             messages.success(request, 'Project Approved')
