@@ -10,7 +10,7 @@ import civictechprojects.models
 
 
 class UserTaggedTechnologies(TaggedItemBase):
-    content_object = models.ForeignKey('Contributor')
+    content_object = models.ForeignKey('Contributor', on_delete=models.CASCADE)
 
 
 def generate_uuid():
@@ -24,7 +24,7 @@ class Contributor(User):
     phone_primary = models.CharField(max_length=200, blank=True)
     about_me = models.CharField(max_length=100000, blank=True)
     user_technologies = TaggableManager(blank=True, through=UserTaggedTechnologies)
-    user_technologies.remote_field.related_name = "+"
+    user_technologies.remote_field.related_name = "technology_users"
     uuid = models.CharField(max_length=32, blank=True, default=generate_uuid)
     qiqo_uuid = models.CharField(max_length=50, blank=True)
     qiqo_signup_time = models.DateTimeField(null=True, blank=True)
