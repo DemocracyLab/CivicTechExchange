@@ -324,6 +324,8 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
 
 # TODO: Set to True in productions
 # SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
