@@ -25,6 +25,7 @@ import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import {Glyph, GlyphStyles, GlyphSizes} from '../../utils/glyphs.js';
 import EventCardsListings from "../../componentsBySection/FindEvents/EventCardsListings.jsx";
+import type {MyGroupData} from "../../stores/MyGroupsStore.js";
 
 
 
@@ -156,23 +157,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             </React.Fragment>
           }
 
-          {project && !_.isEmpty(project.project_groups) &&
-            <React.Fragment>
-              <div className='AboutProjects-groups'>
-                <h4>Groups</h4>
-                <ul>
-                  {
-                    project.project_groups.map((group, i) => {
-                      return <li key={i}>{this._renderGroupIcon(group)} <a href={url.section(Section.AboutGroup, {id: group.group_id})}>{group.group_name}</a></li>
-                    })
-                  }
-                </ul>
-              </div>
-
-            </React.Fragment>
-          }
-
-          {/*TODO: Groups section*/}
+          {this._renderGroups(project)}
 
           <div className='AboutProjects-team'>
             {
@@ -401,6 +386,25 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
         />;
       });
     }
+  
+  _renderGroups(project: ?ProjectDetailsAPIData): ?Array<React$Node> {
+    const groups: ?$ReadOnlyArray<MyGroupData> = project && project.project_groups && project.project_groups.filter((group) => group.relationship_is_approved);
+    return !_.isEmpty(groups) &&
+      (
+        <React.Fragment>
+          <div className='AboutProjects-groups'>
+            <h4>Groups</h4>
+            <ul>
+              {
+                project.project_groups.map((group, i) => {
+                  return <li key={i}>{this._renderGroupIcon(group)} <a href={url.section(Section.AboutGroup, {id: group.group_id})}>{group.group_name}</a></li>
+                })
+              }
+            </ul>
+          </div>
+        </React.Fragment>
+      );
+  }
 
     _renderGroupIcon(group): ?Array<React$Node> {
       return (
