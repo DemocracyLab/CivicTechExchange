@@ -87,6 +87,9 @@ ENV/
 # Heroku local environment variables
 .env
 
+# VS Code Files
+.vscode/
+
 # IntelliJ IDEA files
 *.iml
 .idea/
