@@ -273,7 +273,9 @@ class Group(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_group=self.id)
-        project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id, relationship_project__is_searchable=True)
+        project_relationships = ProjectRelationship.objects\
+            .filter(relationship_group=self.id, relationship_project__is_searchable=True)\
+            .filter(is_approved=True)
 
         group = {
             'group_creator': self.group_creator.id,
