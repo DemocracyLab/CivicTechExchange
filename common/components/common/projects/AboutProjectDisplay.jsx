@@ -388,7 +388,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     }
   
   _renderGroups(project: ?ProjectDetailsAPIData): ?Array<React$Node> {
-    const groups: ?$ReadOnlyArray<MyGroupData> = project && project.project_groups && project.project_groups.filter((group) => group.relationship_is_approved);
+    const groups: ?$ReadOnlyArray<MyGroupData> = project && project.project_groups && project.project_groups.filter((group) => group.isApproved && group.relationship_is_approved);
     return !_.isEmpty(groups) &&
       (
         <React.Fragment>
