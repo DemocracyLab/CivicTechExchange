@@ -163,7 +163,7 @@ class EventCreationForm(ModelForm):
         if is_created_original != event.is_created:
             send_event_creation_notification(event)
 
-        if fields_changed:
+        if fields_changed or project_fields_changed:
             event.recache()
         if project_fields_changed:
             event.update_linked_items()
