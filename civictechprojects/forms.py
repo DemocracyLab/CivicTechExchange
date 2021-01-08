@@ -81,7 +81,7 @@ class ProjectCreationForm(ModelForm):
             send_project_creation_notification(project)
 
         if project.is_searchable and tags_changed:
-            Cache.refresh(CacheKeys.ProjectTagCounts)
+            Cache.refresh(CacheKeys.ProjectTagCounts.value)
 
         # TODO: Don't recache when nothing has changed
         project.recache()
@@ -163,13 +163,19 @@ class EventCreationForm(ModelForm):
         if is_created_original != event.is_created:
             send_event_creation_notification(event)
 
-        if fields_changed:
+        if fields_changed or project_fields_changed:
             event.recache()
         if project_fields_changed:
-            event.update_linked_items()
+            change_projects = []
             if pre_change_projects:
-                for project in pre_change_projects:
-                    project.recache()
+                change_projects += pre_change_projects
+            post_change_projects = event.get_linked_projects()
+            if post_change_projects: 
+                change_projects += post_change_projects.all()
+            change_projects = list(set(change_projects))
+            if change_projects:
+                for project in change_projects:
+                    project.recache(recache_linked=False)
 
         return event
 

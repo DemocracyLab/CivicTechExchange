@@ -104,6 +104,7 @@ AUTHENTICATION_BACKENDS = (
 MIDDLEWARE = [
     'common.helpers.caching.DebugUserAgentMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',

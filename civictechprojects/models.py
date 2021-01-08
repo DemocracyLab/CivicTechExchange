@@ -22,23 +22,23 @@ from common.helpers.collections import flatten, count_occurrences
 # because when the parameter is omitted, identical defaults are provided.
 # See: https://django-taggit.readthedocs.io/en/latest/api.html#TaggableManager
 class TaggedIssueAreas(TaggedItemBase):
-    content_object = models.ForeignKey('Project')
+    content_object = models.ForeignKey('Project', on_delete=models.CASCADE)
 
 
 class TaggedStage(TaggedItemBase):
-    content_object = models.ForeignKey('Project')
+    content_object = models.ForeignKey('Project', on_delete=models.CASCADE)
 
 
 class TaggedTechnologies(TaggedItemBase):
-    content_object = models.ForeignKey('Project')
+    content_object = models.ForeignKey('Project', on_delete=models.CASCADE)
 
 
 class TaggedOrganization(TaggedItemBase):
-    content_object = models.ForeignKey('Project')
+    content_object = models.ForeignKey('Project', on_delete=models.CASCADE)
 
 
 class TaggedOrganizationType(TaggedItemBase):
-    content_object = models.ForeignKey('Project')
+    content_object = models.ForeignKey('Project', on_delete=models.CASCADE)
 
 
 class ArchiveManager(models.Manager):
@@ -65,22 +65,21 @@ class Archived(models.Model):
 
 
 class Project(Archived):
-    # TODO: Change related name to 'created_projects' or something similar
-    project_creator = models.ForeignKey(Contributor, related_name='creator')
+    project_creator = models.ForeignKey(Contributor, related_name='created_projects', on_delete=models.CASCADE)
     project_description = models.CharField(max_length=4000, blank=True)
     project_description_solution = models.CharField(max_length=4000, blank=True)
     project_description_actions = models.CharField(max_length=4000, blank=True)
     project_short_description = models.CharField(max_length=140, blank=True)
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
-    project_issue_area.remote_field.related_name = "+"
+    project_issue_area.remote_field.related_name = 'issue_projects'
     project_stage = TaggableManager(blank=True, through=TaggedStage)
-    project_stage.remote_field.related_name = "+"
+    project_stage.remote_field.related_name = related_name='stage_projects'
     project_technologies = TaggableManager(blank=True, through=TaggedTechnologies)
-    project_technologies.remote_field.related_name = "+"
+    project_technologies.remote_field.related_name = 'technology_projects'
     project_organization = TaggableManager(blank=True, through=TaggedOrganization)
-    project_organization.remote_field.related_name = "+"
+    project_organization.remote_field.related_name = 'org_projects'
     project_organization_type = TaggableManager(blank=True, through=TaggedOrganizationType)
-    project_organization_type.remote_field.related_name = "+"
+    project_organization_type.remote_field.related_name = 'org_type_projects'
     project_location = models.CharField(max_length=200, blank=True)
     project_location_coords = PointField(null=True, blank=True, srid=4326, default='')
     project_country = models.CharField(max_length=100, blank=True)
@@ -207,11 +206,12 @@ class Project(Archived):
         self.project_date_modified = time or timezone.now()
         self.save()
 
-    def recache(self):
+    def recache(self, recache_linked=True):
         hydrated_project = self._hydrate_to_json()
         ProjectCache.refresh(self, hydrated_project)
         self.generate_full_text()
-        self.update_linked_items()
+        if recache_linked:
+            self.update_linked_items()
 
     def update_linked_items(self):
         # Recache events
@@ -243,7 +243,7 @@ class Project(Archived):
 
 
 class Group(Archived):
-    group_creator = models.ForeignKey(Contributor, related_name='group_creator')
+    group_creator = models.ForeignKey(Contributor, related_name='group_creator', on_delete=models.CASCADE)
     group_date_created = models.DateTimeField(null=True)
     group_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     group_description = models.CharField(max_length=4000, blank=True)
@@ -370,12 +370,12 @@ class Group(Archived):
 
 
 class TaggedEventOrganization(TaggedItemBase):
-    content_object = models.ForeignKey('Event')
+    content_object = models.ForeignKey('Event', on_delete=models.CASCADE)
 
 
 class Event(Archived):
     event_agenda = models.CharField(max_length=4000, blank=True)
-    event_creator = models.ForeignKey(Contributor, related_name='event_creator')
+    event_creator = models.ForeignKey(Contributor, related_name='event_creator', on_delete=models.CASCADE)
     event_date_created = models.DateTimeField(null=True)
     event_date_end = models.DateTimeField()
     event_date_modified = models.DateTimeField(auto_now_add=True, null=True)
@@ -388,7 +388,7 @@ class Event(Archived):
     event_live_id = models.CharField(max_length=50, blank=True)
     event_short_description = models.CharField(max_length=140, blank=True)
     event_legacy_organization = TaggableManager(blank=True, through=TaggedEventOrganization)
-    event_legacy_organization.remote_field.related_name = "+"
+    event_legacy_organization.remote_field.related_name = 'org_events'
     event_slug = models.CharField(max_length=100, blank=True)
     is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
@@ -479,7 +479,7 @@ class Event(Archived):
             if _slug.isnumeric():
                 event = Event.objects.get(id=_slug)
                 if event and event.is_private:
-                    if not user or not user.is_authenticated() or not is_creator_or_staff(user, event):
+                    if not user or not user.is_authenticated or not is_creator_or_staff(user, event):
                         raise PermissionDenied()
             elif len(_slug) > 0:
                 event = Event.objects.filter(event_slug=_slug).first() or NameRecord.get_event(_slug)
@@ -506,7 +506,7 @@ class Event(Archived):
         projects = self.get_linked_projects()
         if projects:
             for project in projects:
-                project.recache()
+                project.recache(recache_linked=False)
 
     def recache(self):
         hydrated_event = self._hydrate_to_json()
@@ -514,7 +514,7 @@ class Event(Archived):
 
 
 class NameRecord(models.Model):
-    event = models.ForeignKey(Event, related_name='old_slugs', blank=True, null=True)
+    event = models.ForeignKey(Event, related_name='old_slugs', blank=True, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True)
 
     @staticmethod
@@ -533,9 +533,9 @@ class NameRecord(models.Model):
 
 
 class ProjectRelationship(models.Model):
-    relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True)
-    relationship_group = models.ForeignKey(Group, related_name='relationships', blank=True, null=True)
-    relationship_event = models.ForeignKey(Event, related_name='relationships', blank=True, null=True)
+    relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True, on_delete=models.CASCADE)
+    relationship_group = models.ForeignKey(Group, related_name='relationships', blank=True, null=True, on_delete=models.CASCADE)
+    relationship_event = models.ForeignKey(Event, related_name='relationships', blank=True, null=True, on_delete=models.CASCADE)
     introduction_text = models.CharField(max_length=10000, blank=True)
     project_initiated = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
@@ -590,7 +590,7 @@ class ProjectRelationship(models.Model):
 
 
 class ProjectCommit(models.Model):
-    commit_project = models.ForeignKey(Project, related_name='commits', blank=True, null=True)
+    commit_project = models.ForeignKey(Project, related_name='commits', blank=True, null=True, on_delete=models.CASCADE)
     user_name = models.CharField(max_length=200)
     user_link = models.CharField(max_length=2083)
     user_avatar_link = models.CharField(max_length=2083)
@@ -640,10 +640,10 @@ class ProjectCommit(models.Model):
 
 
 class ProjectLink(models.Model):
-    link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True)
-    link_group = models.ForeignKey(Group, related_name='links', blank=True, null=True)
-    link_event = models.ForeignKey(Event, related_name='links', blank=True, null=True)
-    link_user = models.ForeignKey(Contributor, related_name='links', blank=True, null=True)
+    link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
+    link_group = models.ForeignKey(Group, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
+    link_event = models.ForeignKey(Event, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
+    link_user = models.ForeignKey(Contributor, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
     link_name = models.CharField(max_length=200, blank=True)
     link_url = models.CharField(max_length=2083)
     link_visibility = models.CharField(max_length=50)
@@ -722,11 +722,11 @@ class ProjectLink(models.Model):
 
 
 class TaggedPositionRole(TaggedItemBase):
-    content_object = models.ForeignKey('ProjectPosition')
+    content_object = models.ForeignKey('ProjectPosition', on_delete=models.CASCADE)
 
 
 class ProjectPosition(models.Model):
-    position_project = models.ForeignKey(Project, related_name='positions')
+    position_project = models.ForeignKey(Project, related_name='positions', on_delete=models.CASCADE)
     position_role = TaggableManager(blank=False, through=TaggedPositionRole)
     position_description = models.CharField(max_length=3000, blank=True)
     description_url = models.CharField(max_length=2083, default='')
@@ -795,10 +795,10 @@ class ProjectPosition(models.Model):
 
 class ProjectFile(models.Model):
     # TODO: Add ForeignKey pointing to Contributor, see https://stackoverflow.com/a/20935513/6326903
-    file_project = models.ForeignKey(Project, related_name='files', blank=True, null=True)
-    file_user = models.ForeignKey(Contributor, related_name='files', blank=True, null=True)
-    file_group = models.ForeignKey(Group, related_name='files', blank=True, null=True)
-    file_event = models.ForeignKey(Event, related_name='files', blank=True, null=True)
+    file_project = models.ForeignKey(Project, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
+    file_user = models.ForeignKey(Contributor, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
+    file_group = models.ForeignKey(Group, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
+    file_event = models.ForeignKey(Event, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
     file_visibility = models.CharField(max_length=50)
     file_name = models.CharField(max_length=150)
     file_key = models.CharField(max_length=200)
@@ -946,12 +946,12 @@ class UserAlert(models.Model):
 
 
 class TaggedVolunteerRole(TaggedItemBase):
-    content_object = models.ForeignKey('VolunteerRelation')
+    content_object = models.ForeignKey('VolunteerRelation', on_delete=models.CASCADE)
 
 
 class VolunteerRelation(Archived):
-    project = models.ForeignKey(Project, related_name='volunteer_relations')
-    volunteer = models.ForeignKey(Contributor, related_name='volunteer_relations')
+    project = models.ForeignKey(Project, related_name='volunteer_relations', on_delete=models.CASCADE)
+    volunteer = models.ForeignKey(Contributor, related_name='volunteer_relations', on_delete=models.CASCADE)
     role = TaggableManager(blank=True, through=TaggedVolunteerRole)
     role.remote_field.related_name = "+"
     application_text = models.CharField(max_length=10000, blank=True)
