@@ -5,7 +5,7 @@ def cache_projects():
     from civictechprojects.models import Project
     projects_to_cache = Project.objects.filter(is_searchable=True, deleted=False)
     for project in projects_to_cache:
-        project.recache()
+        project.recache(recache_linked=False)
 
 
 def cache_events():
