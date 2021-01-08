@@ -172,6 +172,7 @@ class EventCreationForm(ModelForm):
             post_change_projects = event.get_linked_projects()
             if post_change_projects: 
                 change_projects += post_change_projects.all()
+            change_projects = list(set(change_projects))
             if change_projects:
                 for project in change_projects:
                     project.recache(recache_linked=False)
