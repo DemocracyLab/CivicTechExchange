@@ -206,11 +206,12 @@ class Project(Archived):
         self.project_date_modified = time or timezone.now()
         self.save()
 
-    def recache(self):
+    def recache(self, recache_linked=True):
         hydrated_project = self._hydrate_to_json()
         ProjectCache.refresh(self, hydrated_project)
         self.generate_full_text()
-        self.update_linked_items()
+        if recache_linked:
+            self.update_linked_items()
 
     def update_linked_items(self):
         # Recache events
@@ -505,7 +506,7 @@ class Event(Archived):
         projects = self.get_linked_projects()
         if projects:
             for project in projects:
-                project.recache()
+                project.recache(recache_linked=False)
 
     def recache(self):
         hydrated_event = self._hydrate_to_json()

@@ -166,10 +166,15 @@ class EventCreationForm(ModelForm):
         if fields_changed or project_fields_changed:
             event.recache()
         if project_fields_changed:
-            event.update_linked_items()
+            change_projects = []
             if pre_change_projects:
-                for project in pre_change_projects:
-                    project.recache()
+                change_projects += pre_change_projects
+            post_change_projects = event.get_linked_projects()
+            if post_change_projects: 
+                change_projects += post_change_projects.all()
+            if change_projects:
+                for project in change_projects:
+                    project.recache(recache_linked=False)
 
         return event
 
