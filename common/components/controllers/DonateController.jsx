@@ -62,6 +62,7 @@ class DonateController extends React.Component<{||}, State > {
 
               <div className="DonateController-options">
                 <div className="DonateController-amounts">
+                  <h3 className="DonateController-subheader">Amount</h3>
                   <RadioButtons
                     variant="outline-dark"
                     options={DonationAmountOptions}
