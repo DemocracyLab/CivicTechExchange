@@ -56,7 +56,7 @@ describe('utils', () => {
 
   	expect(str).toEqual('someday...');
   	expect(lines.split('\n').length).toEqual(3);
-  	expect(arr.length).toEqual(3);
+  	expect(arr).toEqual([1, 2, '2 more']);
   });
 
   test('url', () => {

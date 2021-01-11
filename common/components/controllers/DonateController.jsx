@@ -2,11 +2,10 @@
 
 import React from 'react';
 import cdn,{Images} from "../utils/cdn.js";
-import Headers from "../common/Headers.jsx";
 import RadioButtons from "../common/selection/RadioButtons.jsx";
 import PaypalDonationButton, {OtherAmountSelected} from "../common/integrations/PaypalDonationButton.jsx";
 import {SelectOption} from "../types/SelectOption.jsx";
-import prerender from "../utils/prerender.js";
+import DonateBlurb from "../componentsBySection/Donate/DonateBlurb.jsx";
 
 type State = {|
   donateAmount: ?string,
@@ -37,10 +36,13 @@ class DonateController extends React.Component<{||}, State> {
       donateMonthly: null
     };
   }
+<<<<<<< HEAD
 
   componentDidMount() {
     prerender.ready();
   }
+=======
+>>>>>>> master
 
   handleFieldSelection(field: string, option: SelectOption): void {
     let state: State = this.state;
@@ -50,6 +52,7 @@ class DonateController extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
+<<<<<<< HEAD
       <div className="DonateController-root container pl-0 pr-0">
         <Headers
           title="democracyLab | Donate"
@@ -58,6 +61,22 @@ class DonateController extends React.Component<{||}, State> {
         <div className="row ml-0 mr-0">
           <div className="col-xs-12 col-md-6 DonateController-image">
             <img src={cdn.image(Images.DONATE_SPLASH)}></img>
+=======
+      <div className="DonateController-root">
+        <div className="panel donate-image">
+          <img src={cdn.image(Images.DONATE_SPLASH)}></img>
+        </div>
+        <div className="panel">
+
+          <div className="DonateController-text">
+            <h1>
+              Donate and make a difference
+            </h1>
+            <p>
+              DemocracyLab is building online infrastructure to support the technology-for-good movement. Your donation will help us support the many projects and volunteers who use our platform to make our world a better place. DemocracyLab is a 501(c)(3) nonprofit organization, and your donation may be tax-deductible.
+            </p>
+            <DonateBlurb/>
+>>>>>>> master
           </div>
           <div className="col-xs-12 col-md-6 DonateController-form-container">
             <div className="DonateController-text">

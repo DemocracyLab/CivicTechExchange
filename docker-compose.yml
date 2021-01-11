@@ -2,7 +2,7 @@ version: '2.4'
 
 services:
   db:
-    image: postgres
+    image: postgis/postgis
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=p0stgres!
@@ -26,6 +26,7 @@ services:
   web:
     build: .
     command: bash -c 'source ./docker_environment_init.sh || true &&
+                      . /.nvm/nvm.sh use default &&
                       npm run dev &&
                       python manage.py runserver 0.0.0.0:8000'
     ports:

@@ -8,8 +8,11 @@ const Section = {
   Landing: 'Landing',
   Home: 'Home',
   FindProjects: 'FindProjects',
+  FindGroups: 'FindGroups',
+  FindEvents: 'FindEvents',
   MyProjects: 'MyProjects',
   MyGroups: 'MyGroups',
+  MyEvents: 'MyEvents',
   Profile: 'Profile',
   SignUp: 'SignUp',
   LogIn: 'LogIn',
@@ -27,6 +30,7 @@ const Section = {
   CreateEvent: 'CreateEvent',
   AboutEvent: 'AboutEvent',
   LiveEvent: 'LiveEvent',
+  CorporateEvent: 'CorporateEvent',
   Error: 'Error'
 };
 

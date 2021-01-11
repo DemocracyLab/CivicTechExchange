@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import moment from 'moment';
+import type Moment from 'moment';
+import datetime, {DateFormat} from "../../utils/datetime.js";
 import Button from 'react-bootstrap/Button';
 import CurrentUser from "../../utils/CurrentUser.js";
 import {EventData} from "../../utils/EventAPIUtils.js";
@@ -43,6 +44,9 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   render(): ?$React$Node {
     const event:EventData = this.state.event;
+    const startDate: Moment = datetime.parse(event.event_date_start);
+    const endDate: Moment = datetime.parse(event.event_date_end);
+    const isSingleDayEvent: boolean = datetime.isOnSame('day', startDate, endDate);
     return !event ? null : (
       <div className="AboutEvent-root container">
 
@@ -54,7 +58,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
             && this._renderEditButton()
           }
             <div className="AboutEvent-title-date">
-              {moment(event.event_date_start).format("MMMM Do YYYY")}
+              {startDate.format(DateFormat.MONTH_DATE_YEAR)}
             </div>
             <h1>{event.event_name}</h1>
             <p>{event.event_short_description}</p>
@@ -65,20 +69,25 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           <div className="AboutEvent-info col-xs-12 col-lg-4">
             <div className="AboutEvent-info-inner">
               <h3>Info</h3>
-              {/*TODO: Handle multi-day events*/}
-              <h5 className="AboutEvent-info-header">Date</h5>
-              <p>{moment(event.event_date_start).format("dddd, MMMM Do YYYY")}</p>
-
-              <h5 className="AboutEvent-info-header">Time</h5>
-              <p>{this._renderTimeRange()}</p>
-
+              {this.state.event.event_organizers_text && (
+                <React.Fragment>
+                  <h5 className="AboutEvent-info-header">Organizers</h5>
+                  <div className="AboutEvent-location">
+                    <p>{this.state.event.event_organizers_text}</p>
+                  </div>
+                </React.Fragment>
+              )
+              }
+              
+              {isSingleDayEvent ? this._renderDateTimeSections(startDate, endDate) : this._renderDatesSection(startDate, endDate)}
+              
               <h5 className="AboutEvent-info-header">Location</h5>
               <div className="AboutEvent-location">
                 <p>{this.state.event.event_location}</p>
               </div>
 
               {this.state.event.event_rsvp_url && this._renderRSVPButton()}
-              {!this.props.viewOnly && window.EVENT_URL && this._renderJoinLiveEventButton()}
+              {!this.props.viewOnly && event.event_live_id && this._renderJoinLiveEventButton()}
             </div>
           </div>
           <div className="col-xs-12 col-lg-8 AboutEvent-splash">
@@ -96,12 +105,28 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       </div>
     )
   }
-
-  _renderTimeRange(): string {
-    const timeFormat: string = "h:mm a";
-    const timeZone: string = "PST";
-    return moment(this.state.event.event_date_start).format(timeFormat) + " - " +
-      moment(this.state.event.event_date_end).format(timeFormat) + " " + timeZone;
+  
+  _renderDatesSection(startDate: Moment, endDate: Moment): $React$Node {
+    return (
+      <React.Fragment>
+        <h5 className="AboutEvent-info-header">Dates</h5>
+        <p>{startDate.format(DateFormat.DAY_MONTH_DATE_YEAR_TIME)}</p>
+        <h6>To</h6>
+        <p>{endDate.format(DateFormat.DAY_MONTH_DATE_YEAR_TIME)}</p>
+      </React.Fragment>
+    );
+  }
+  
+  _renderDateTimeSections(startDate: Moment, endDate: Moment): $React$Node {
+    return (
+      <React.Fragment>
+        <h5 className="AboutEvent-info-header">Date</h5>
+        <p>{startDate.format(DateFormat.DAY_MONTH_DATE_YEAR)}</p>
+  
+        <h5 className="AboutEvent-info-header">Time</h5>
+        <p>{startDate.format(DateFormat.TIME) + " - " + endDate.format(DateFormat.TIME_TIMEZONE)}</p>
+      </React.Fragment>
+    );
   }
 
   _renderEditButton(): ?$React$Node {
@@ -118,14 +143,17 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
   }
 
   _renderRSVPButton(): ?$React$Node {
+    const eventbriteTest = new RegExp("eventbrite\.com", "i");
+    const url: string = urlHelper.appendHttpIfMissingProtocol(this.state.event.event_rsvp_url);
+    const text: string = "RSVP" + (eventbriteTest.test(url) ? " on Eventbrite" : "");
     return (
       <Button
         variant="primary"
         className="AboutEvent-rsvp-btn"
         type="button"
-        href={this.state.event.event_rsvp_url}
+        href={url}
       >
-        RSVP on Eventbrite
+        {text}
       </Button>
     );
   }
@@ -136,7 +164,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     if(CurrentUser.isLoggedIn()) {
       //TODO: Handle un-verified users
       text = "Join Event";
-      url = urlHelper.section(Section.LiveEvent);
+      //TODO: Incorporate live event id into Live Event page
+      url = urlHelper.section(Section.LiveEvent, {id: this.props.event.event_live_id});
     } else {
       text = "Log In to Join Event";
       url = urlHelper.logInThenReturn();

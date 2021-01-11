@@ -2,10 +2,12 @@ from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from django.template import loader, Template, Context
+from django.utils import timezone
 from enum import Enum
 from html.parser import unescape
 from common.models.tags import Tag
 from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datetime, datetime_to_string
+from democracylab.tokens import email_verify_token_generator
 from democracylab.models import Contributor
 from civictechprojects.models import VolunteerRelation
 from common.helpers.constants import FrontEndSection
@@ -14,16 +16,30 @@ from common.helpers.front_end import section_url
 
 class EmailSection(Enum):
     Header = 'Header'
+    Header_Left = 'Header_Left'
+    Subheader = 'Subheader'
     Button = 'Button'
     Paragraph = 'Paragraph'
+    Paragraph_Center = 'Paragraph_Center'
+    Text_Line = 'Text_Line'
+
+
+class Html:
+    @staticmethod
+    def a(href, text):
+        return '<a href="{href}">{text}</a>'.format(href=href, text=text)
 
 
 class HtmlEmailTemplate:
     base_template = loader.get_template('html_email_frame.html')
     section_templates = {
         EmailSection.Header: loader.get_template('html_email_header.html'),
+        EmailSection.Header_Left: loader.get_template('html_email_headerleft.html'),
+        EmailSection.Subheader: loader.get_template('html_email_subheader.html'),
         EmailSection.Button: loader.get_template('html_email_button.html'),
-        EmailSection.Paragraph: loader.get_template('html_email_paragraph.html')
+        EmailSection.Paragraph: loader.get_template('html_email_paragraph.html'),
+        EmailSection.Paragraph_Center: loader.get_template('html_email_paragraph_center.html'),
+        EmailSection.Text_Line: loader.get_template('html_email_text_line.html')
     }
 
     def __init__(self, use_signature=True):
@@ -38,8 +54,20 @@ class HtmlEmailTemplate:
     def header(self, text):
         return self.add(EmailSection.Header, {'text': text})
 
+    def header_left(self, text):
+        return self.add(EmailSection.Header_Left, {'text': text})
+
+    def subheader(self, text):
+        return self.add(EmailSection.Subheader, {'text': text})
+
     def paragraph(self, text):
         return self.add(EmailSection.Paragraph, {'text': text})
+
+    def paragraph_center(self, text):
+        return self.add(EmailSection.Paragraph_Center, {'text': text})
+
+    def text_line(self, text):
+        return self.add(EmailSection.Text_Line, {'text': text})
 
     def button(self, url, text):
         return self.add(EmailSection.Button, {'url': url, 'text': text})
@@ -60,7 +88,7 @@ class HtmlEmailTemplate:
 def send_verification_email(contributor):
     # Get token
     user = Contributor.objects.get(id=contributor.id)
-    verification_token = default_token_generator.make_token(user)
+    verification_token = email_verify_token_generator.make_token(user)
     verification_url = settings.PROTOCOL_DOMAIN + '/verify_user/' + str(contributor.id) + '/' + verification_token
     # Send email with token
     email_template = HtmlEmailTemplate()\
@@ -120,6 +148,28 @@ def send_project_creation_notification(project):
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
+def send_event_creation_notification(event):
+    event_url = section_url(FrontEndSection.AboutEvent, {'id': str(event.id)})
+
+    verification_url = settings.PROTOCOL_DOMAIN + '/events/approve/' + str(event.id)
+    email_template = HtmlEmailTemplate() \
+        .paragraph('{first_name} {last_name}({email}) has created the event "{event_name}": \n {event_url}'.format(
+        first_name=event.event_creator.first_name,
+        last_name=event.event_creator.last_name,
+        email=event.event_creator.email,
+        event_name=event.event_name,
+        event_url=event_url
+    )) \
+        .button(url=verification_url, text='APPROVE')
+    email_msg = EmailMessage(
+        subject='New DemocracyLab Event: ' + event.event_name,
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=[settings.ADMIN_EMAIL]
+    )
+    email_msg = email_template.render(email_msg)
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+
+
 def send_to_project_owners(project, sender, subject, template):
     project_volunteers = VolunteerRelation.objects.filter(project=project.id)
     co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
@@ -127,6 +177,17 @@ def send_to_project_owners(project, sender, subject, template):
         subject=subject,
         from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
         to=[project.project_creator.email] + co_owner_emails,
+        reply_to=[sender.email]
+    )
+    email_msg = template.render(email_msg)
+    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
+
+
+def send_to_group_owners(group, sender, subject, template):
+    email_msg = EmailMessage(
+        subject=subject,
+        from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
+        to=[group.group_creator.email],
         reply_to=[sender.email]
     )
     email_msg = template.render(email_msg)
@@ -160,12 +221,23 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
         project=project.project_name,
         role=role_text)
     email_template = HtmlEmailTemplate()\
-        .header("You Have a New Volunteer!")\
+        .subheader("Opportunity Information:")\
+        .text_line("Title: {role}".format(role=role_details.display_name))\
+        .text_line("Organization: {projectname}".format(projectname=project.project_name))\
+        .text_line("Date: {currentdate}".format(currentdate=datetime_to_string(timezone.now(), DateTimeFormats.MONTH_DD_YYYY)))\
+        .subheader("Volunteer Information:")\
+        .text_line("Name: {firstname} {lastname}".format(
+            firstname=user.first_name,
+            lastname=user.last_name))\
+        .text_line("Email: " + Html.a(href='mailto:' + user.email, text=user.email))
+    if user.postal_code:
+        email_template = email_template.text_line("Zip: {zip}".format(zip=user.postal_code))
+    email_template = email_template.header_left("You Have a New Volunteer!")\
         .paragraph('\"{message}\" -{firstname} {lastname}'.format(
             message=volunteer_relation.application_text,
             firstname=user.first_name,
             lastname=user.last_name))\
-        .paragraph('Please click below to review this volunteer')\
+        .paragraph('To contact this volunteer directly, you can reply to this email. To review their profile or approve their application, use the buttons below.')\
         .button(url=project_profile_url, text='REVIEW VOLUNTEER')\
         .button(url=approve_url, text='APPROVE VOLUNTEER')
     send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
@@ -267,6 +339,76 @@ def notify_project_owners_project_approved(project):
     send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
 
 
+def notify_event_owners_event_approved(event):
+    email_template = HtmlEmailTemplate() \
+        .paragraph('Your event "{{event_name}}" has been approved. You can see it at {{event_url}}')
+    context = {
+        'event_name': event.event_name,
+        'event_url': section_url(FrontEndSection.AboutEvent, {'id': str(event.id)})
+    }
+    email_msg = EmailMessage(
+        subject=event.event_name + " has been approved",
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=[event.event_creator.email]
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+
+
+def send_group_creation_notification(group):
+    group_url = section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
+
+    verification_url = settings.PROTOCOL_DOMAIN + '/groups/approve/' + str(group.id)
+    email_template = HtmlEmailTemplate() \
+        .paragraph('{first_name} {last_name}({email}) has created the group "{group_name}": \n {group_url}'.format(
+        first_name=group.group_creator.first_name,
+        last_name=group.group_creator.last_name,
+        email=group.group_creator.email,
+        group_name=group.group_name,
+        group_url=group_url
+    )) \
+        .button(url=verification_url, text='APPROVE')
+    email_msg = EmailMessage(
+        subject='New DemocracyLab Group: ' + group.group_name,
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=[settings.ADMIN_EMAIL]
+    )
+    email_msg = email_template.render(email_msg)
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+
+
+def notify_group_owners_group_approved(group):
+    email_template = HtmlEmailTemplate() \
+        .paragraph('Your group "{{group_name}}" has been approved. You can see it at {{group_url}}')
+    context = {
+        'group_name': group.group_name,
+        'group_url': section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
+    }
+    email_msg = EmailMessage(
+        subject=group.group_name + " has been approved",
+        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        to=[group.group_creator.email]
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+
+
+def send_group_project_invitation_email(project_relation):
+    # TODO: Send message to individual group owners by name
+    project = project_relation.relationship_project
+    group = project_relation.relationship_group
+    project_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
+    group_url = section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
+    invite_header = project.project_name + " has been invited to connect!"
+    email_template = HtmlEmailTemplate() \
+        .header(invite_header) \
+        .paragraph('{group_link} has invited you to collaborate and connect'.format(
+            group_link=Html.a(href=group_url, text=group.group_name))) \
+        .paragraph('\"{message}\"'.format(message=project_relation.introduction_text)) \
+        .button(url=project_url, text='VIEW YOUR GROUPS')
+    send_to_project_owners(project=project, sender=group.group_creator, subject=invite_header, template=email_template)
+
+
 def send_email(email_msg, email_acct=None):
     if not settings.FAKE_EMAILS:
         email_msg.connection = email_acct['connection'] if email_acct is not None else settings.EMAIL_SUPPORT_ACCT['connection']
@@ -293,8 +435,12 @@ def _get_co_owner_emails(project):
 def _get_account_from_email(email_acct):
     return email_acct['from_name'] if email_acct is not None else 'DemocracyLab'
 
-def contact_democracylab_email(first_name, last_name, email_address, body):
-    subject = '{} {} would like to contact DemocracyLab'.format(first_name, last_name)
+
+def contact_democracylab_email(first_name, last_name, email_address, body, company_name):
+    if company_name and len(company_name) > 0:
+        subject = subject = '{} {}({}) would like to contact DemocracyLab'.format(first_name, last_name, company_name)
+    else:
+        subject = '{} {} would like to contact DemocracyLab'.format(first_name, last_name)
     email_msg = EmailMessage(
         subject=subject,
         body=body,

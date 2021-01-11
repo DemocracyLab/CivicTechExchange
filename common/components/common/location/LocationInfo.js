@@ -1,9 +1,9 @@
 // @flow
 import type {HereGeocodeResponse, HereGeocodeResponseAddress, HereGeocodeResponseLocation} from "../../utils/hereApi.js";
 import _ from "lodash";
-import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils";
-import type {CountryData} from "../../constants/Countries";
-import {countryByCode, DefaultCountry} from "../../constants/Countries";
+import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
+import type {GroupDetailsAPIData} from "../../utils/GroupAPIUtils.js";
+import {countryByCode, DefaultCountry, CountryData} from "../../constants/Countries.js";
 
 export type LocationInfo = {|
   city: string,
@@ -44,11 +44,18 @@ export function getLocationInfoFromGeocodeResponse(geocodeResponse:HereGeocodeRe
 
 export function getLocationInfoFromProject(project: ProjectDetailsAPIData): ?LocationInfo {
   return project && project.project_location && {
-    latitude: project.project_latitude,
-    longitude: project.project_longitude,
     location_id: project.project_location,
     city: project.project_city,
     country: project.project_country,
     state: project.project_state
+  };
+}
+
+export function getLocationInfoFromGroup(group: GroupDetailsAPIData): ?LocationInfo {
+  return group && group.group_location && {
+    location_id: group.group_location,
+    city: group.group_city,
+    country: group.group_country,
+    state: group.group_state
   };
 }

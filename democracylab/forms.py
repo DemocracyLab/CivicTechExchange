@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import PermissionDenied
 from .models import Contributor
 from civictechprojects.models import ProjectLink, ProjectFile, FileCategory
+from common.helpers.form_helpers import read_form_field_string
 from common.helpers.qiqo_chat import SubscribeUserToQiqoChat
 from common.models.tags import Tag
 
@@ -19,15 +20,16 @@ class DemocracyLabUserCreationForm(UserCreationForm):
     def edit_user(request, user_id):
         user = Contributor.objects.get(id=user_id)
 
-        if not request.user.username == user.username:
+        if not (request.user.username == user.username or request.user.is_staff):
             raise PermissionDenied()
 
+        project_fields_changed = False
         form = DemocracyLabUserCreationForm(request.POST)
-        user.about_me = form.data.get('about_me')
-        user.postal_code = form.data.get('postal_code')
-        user.country = form.data.get('country')
-        user.first_name = form.data.get('first_name')
-        user.last_name = form.data.get('last_name')
+        project_fields_changed |= read_form_field_string(user, form, 'first_name')
+        project_fields_changed |= read_form_field_string(user, form, 'last_name')
+        read_form_field_string(user, form, 'about_me')
+        read_form_field_string(user, form, 'postal_code')
+        read_form_field_string(user, form, 'country')
 
         Tag.merge_tags_field(user.user_technologies, form.data.get('user_technologies'))
 
@@ -46,11 +48,14 @@ class DemocracyLabUserCreationForm(UserCreationForm):
         user_thumbnail_location = form.data.get('user_thumbnail_location')
         if len(user_thumbnail_location) > 0:
             thumbnail_file_json = json.loads(user_thumbnail_location)
-            ProjectFile.replace_single_file(user, FileCategory.THUMBNAIL, thumbnail_file_json)
+            project_fields_changed |= ProjectFile.replace_single_file(user, FileCategory.THUMBNAIL, thumbnail_file_json)
 
         user_resume_file = form.data.get('user_resume_file')
         if len(user_resume_file) > 0:
             user_resume_file_json = json.loads(user_resume_file)
             ProjectFile.replace_single_file(user, FileCategory.RESUME, user_resume_file_json)
+
+        if project_fields_changed:
+            user.update_linked_items()
 
         SubscribeUserToQiqoChat(user)

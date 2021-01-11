@@ -104,6 +104,7 @@ AUTHENTICATION_BACKENDS = (
 MIDDLEWARE = [
     'common.helpers.caching.DebugUserAgentMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -419,6 +420,7 @@ QIQO_USERS_ENDPOINT = os.environ.get('QIQO_USERS_ENDPOINT', 'https://api.qiqocha
 QIQO_API_KEY = os.environ.get('QIQO_API_KEY', 'democracylab')
 QIQO_API_SECRET = os.environ.get('QIQO_API_SECRET', 'SECRET')
 QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
+QIQO_SIGNUP_TIMEOUT_SECONDS = int(os.environ.get('QIQO_SIGNUP_TIMEOUT_SECONDS', 5))
 
 BLOG_URL = os.environ.get('BLOG_URL', '')
 
@@ -428,3 +430,5 @@ GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH', '')
 GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH', '')
 
 PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
+
+DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')

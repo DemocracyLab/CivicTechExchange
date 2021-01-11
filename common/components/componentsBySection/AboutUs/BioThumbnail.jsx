@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import Person from '@material-ui/icons/Person';
+import Person from '../../svg/person.svg';
 import type {BioPersonData} from "./BioPersonData.jsx";
 
 type Props = {|
@@ -18,7 +18,7 @@ class BioThumbnail extends React.PureComponent<Props> {
   handleClick(): BioPersonData {
     this.props.handleClick(this.props.person);
   }
-  
+
   render(): React$Node {
     return this.props.person && (
       <div className="about-us-team-card" onClick={()=>this.handleClick()}>
@@ -30,10 +30,9 @@ class BioThumbnail extends React.PureComponent<Props> {
       </div>
     );
   }
-  
+
   _renderAvatar() {
     //modified version of common/components/common/avatar.jsx - to allow for variable sizing via CSS mediaquery instead of provided value as prop
-    //TODO: Remove <Person> component from Material UI and have our own default avatar image or SVG
     return (
       this.props.person.user_thumbnail
         ? <div className="about-us-team-avatar" style={{backgroundImage: `url(${this.props.person.user_thumbnail})`}}></div>

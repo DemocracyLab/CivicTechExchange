@@ -2,7 +2,7 @@ from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 from common.helpers.mailing_list import SubscribeToMailingList
 from common.helpers.qiqo_chat import SubscribeUserToQiqoChat
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -12,6 +12,7 @@ import simplejson as json
 from .emails import send_verification_email, send_password_reset_email
 from .forms import DemocracyLabUserCreationForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
+from .tokens import email_verify_token_generator
 from oauth2 import registry
 
 
@@ -37,6 +38,11 @@ def login_view(request, provider=None):
     else:
         return redirect(section_url(FrontEndSection.LogIn))
 
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+    
 
 def signup(request):
     if request.method == 'POST':
@@ -88,7 +94,7 @@ def verify_user(request, user_id, token):
     user = Contributor.objects.get(id=user_id)
 
     # Verify token
-    if default_token_generator.check_token(user, token):
+    if email_verify_token_generator.check_token(user, token):
         # TODO: Add feedback from the frontend to indicate success/failure
         contributor = Contributor.objects.get(id=user_id)
         contributor.email_verified = True
@@ -130,7 +136,7 @@ def change_password(request):
 
 
 def user_edit(request, user_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn))
 
     DemocracyLabUserCreationForm.edit_user(request, user_id)
@@ -146,7 +152,7 @@ def user_details(request, user_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def send_verification_email_request(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)

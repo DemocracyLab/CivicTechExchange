@@ -1,10 +1,25 @@
 # https://hub.docker.com/r/nikolaik/python-nodejs
-FROM nikolaik/python-nodejs:python3.8-nodejs13	
+FROM nikolaik/python-nodejs:python3.8-nodejs12	
+
+# Replace shell with bash so we can source files
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /code
 WORKDIR /code
+
+RUN apt-get update && apt-get install -y libgdal-dev
+
+# Install and set up nvm
+RUN mkdir /.nvm
+ENV NVM_DIR /.nvm
+ENV NODE_VERSION 12.16.0
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.35.0/install.sh | bash \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
 
 # Install pip and yarn depedencies before copying directory to Docker image.
 COPY requirements.txt /code/requirements.txt
@@ -12,6 +27,7 @@ RUN pip install -r requirements.txt
 
 # Copy files needed for yarn install.
 COPY package.json yarn.lock /code/
+RUN yarn config set ignore-engines true
 RUN yarn --frozen-lockfile --link-duplicates --ignore-scripts
 # Permission issue with node-sass https://github.com/sass/node-sass/issues/1579
 RUN npm rebuild node-sass

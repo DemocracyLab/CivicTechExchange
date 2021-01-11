@@ -10,8 +10,6 @@ import Selector from "../../../common/selection/Selector.jsx";
 import {CountrySelector} from "../../../common/selection/CountrySelector.jsx";
 import {CountryCodeFormats, CountryData, DefaultCountry} from "../../../constants/Countries.js";
 import GlyphStyles from '../../../utils/glyphs.js'
-import type {ProjectData} from "../../../utils/ProjectAPIUtils.js";
-import {countryByCode} from "../../../constants/Countries";
 
 
 type State = {|

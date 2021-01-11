@@ -11,13 +11,16 @@ import urlHelper from "../../utils/url.js"
 import GlyphStyles from "../../utils/glyphs.js";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 
+// TODO: Add props
 type Props = {|
   +project: Project,
+  +textlen: number
 |};
 //fontawesome fixed width class
 const glyphFixedWidth = ' fa-fw'
 
 class ProjectCard extends React.PureComponent<Props> {
+  // TODO: Remove unused prefix
   _cx: cx;
 
   constructor(): void {

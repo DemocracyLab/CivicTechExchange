@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.utils import timezone
 from django.contrib.gis.db.models import PointField
@@ -7,9 +8,10 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
-from common.helpers.form_helpers import is_json_field_empty
+from civictechprojects.caching.cache import ProjectCache, EventCache
+from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts
-
+from common.helpers.collections import flatten, count_occurrences
 
 # Without the following classes, the following error occurs:
 #
@@ -20,23 +22,23 @@ from common.helpers.dictionaries import merge_dicts
 # because when the parameter is omitted, identical defaults are provided.
 # See: https://django-taggit.readthedocs.io/en/latest/api.html#TaggableManager
 class TaggedIssueAreas(TaggedItemBase):
-    content_object = models.ForeignKey('Project')
+    content_object = models.ForeignKey('Project', on_delete=models.CASCADE)
 
 
 class TaggedStage(TaggedItemBase):
-    content_object = models.ForeignKey('Project')
+    content_object = models.ForeignKey('Project', on_delete=models.CASCADE)
 
 
 class TaggedTechnologies(TaggedItemBase):
-    content_object = models.ForeignKey('Project')
+    content_object = models.ForeignKey('Project', on_delete=models.CASCADE)
 
 
 class TaggedOrganization(TaggedItemBase):
-    content_object = models.ForeignKey('Project')
+    content_object = models.ForeignKey('Project', on_delete=models.CASCADE)
 
 
 class TaggedOrganizationType(TaggedItemBase):
-    content_object = models.ForeignKey('Project')
+    content_object = models.ForeignKey('Project', on_delete=models.CASCADE)
 
 
 class ArchiveManager(models.Manager):
@@ -63,22 +65,21 @@ class Archived(models.Model):
 
 
 class Project(Archived):
-    # TODO: Change related name to 'created_projects' or something similar
-    project_creator = models.ForeignKey(Contributor, related_name='creator')
+    project_creator = models.ForeignKey(Contributor, related_name='created_projects', on_delete=models.CASCADE)
     project_description = models.CharField(max_length=4000, blank=True)
     project_description_solution = models.CharField(max_length=4000, blank=True)
     project_description_actions = models.CharField(max_length=4000, blank=True)
     project_short_description = models.CharField(max_length=140, blank=True)
     project_issue_area = TaggableManager(blank=True, through=TaggedIssueAreas)
-    project_issue_area.remote_field.related_name = "+"
+    project_issue_area.remote_field.related_name = 'issue_projects'
     project_stage = TaggableManager(blank=True, through=TaggedStage)
-    project_stage.remote_field.related_name = "+"
+    project_stage.remote_field.related_name = related_name='stage_projects'
     project_technologies = TaggableManager(blank=True, through=TaggedTechnologies)
-    project_technologies.remote_field.related_name = "+"
+    project_technologies.remote_field.related_name = 'technology_projects'
     project_organization = TaggableManager(blank=True, through=TaggedOrganization)
-    project_organization.remote_field.related_name = "+"
+    project_organization.remote_field.related_name = 'org_projects'
     project_organization_type = TaggableManager(blank=True, through=TaggedOrganizationType)
-    project_organization_type.remote_field.related_name = "+"
+    project_organization_type.remote_field.related_name = 'org_type_projects'
     project_location = models.CharField(max_length=200, blank=True)
     project_location_coords = PointField(null=True, blank=True, srid=4326, default='')
     project_country = models.CharField(max_length=100, blank=True)
@@ -90,12 +91,15 @@ class Project(Archived):
     project_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
+    _full_text_capacity = 200000
+    full_text = models.CharField(max_length=_full_text_capacity, blank=True)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
 
     def delete(self):
         self.is_searchable=False
+        self.update_timestamp()
         super().delete()
 
     def all_owners(self):
@@ -106,15 +110,17 @@ class Project(Archived):
         return owners + list(map(lambda pv: pv.volunteer, project_co_owners))
 
     def hydrate_to_json(self):
+        return ProjectCache.get(self) or ProjectCache.refresh(self, self._hydrate_to_json())
+
+    def _hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_project=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_project=self.id)
         positions = ProjectPosition.objects.filter(position_project=self.id)
         volunteers = VolunteerRelation.objects.filter(project=self.id)
+        group_relationships = ProjectRelationship.objects.filter(relationship_project=self).exclude(relationship_group=None)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
-        # TODO: Don't return location id
-        # TODO: Reduce country down to 2-char code
         project = {
             'project_id': self.id,
             'project_name': self.project_name,
@@ -139,6 +145,8 @@ class Project(Archived):
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links)),
             'project_commits': list(map(lambda commit: commit.to_json(), commits)),
+            'project_groups': list(map(lambda gr: gr.hydrate_to_list_json(), group_relationships)),
+            'project_events': list(map(lambda er: er.hydrate_to_tile_json(), self.get_project_events())),
             'project_owners': [self.project_creator.hydrate_to_tile_json()],
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__()
@@ -190,17 +198,61 @@ class Project(Archived):
 
         return project
 
+    def get_project_events(self):
+        slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
+        return Event.objects.filter(event_legacy_organization__name__in=slugs, is_private=False, is_searchable=True)
+
     def update_timestamp(self, time=None):
         self.project_date_modified = time or timezone.now()
         self.save()
 
+    def recache(self, recache_linked=True):
+        hydrated_project = self._hydrate_to_json()
+        ProjectCache.refresh(self, hydrated_project)
+        self.generate_full_text()
+        if recache_linked:
+            self.update_linked_items()
+
+    def update_linked_items(self):
+        # Recache events
+        owned_events = self.get_project_events()
+
+        for event in owned_events:
+            event.recache()
+
+    def generate_full_text(self):
+        base_json = self.hydrate_to_json()
+        # Don't cache external entities because they take up space and aren't useful in project search
+        omit_fields = ['project_volunteers', 'project_owners', 'project_events', 'project_groups', 'project_commits']
+        # Don't cache files because they contain noise without adequate signal
+        omit_fields += ['project_thumbnail', 'project_files']
+        # Don't cache boolean fields
+        omit_fields += ['project_claimed', 'project_approved']
+        # Don't cache numeric fields
+        omit_fields += ['project_id', 'project_creator', 'project_latitude', 'project_longitude']
+        # Don't cache date fields
+        omit_fields += ['project_date_modified']
+        for field in omit_fields:
+            base_json.pop(field, None)
+        full_text = str(base_json)
+        if len(full_text) >= Project._full_text_capacity:
+            full_text = full_text[:Project._full_text_capacity - 1]
+            print('Project Full Text Field Overflow Alert: ' + self.__str__())
+        self.full_text = full_text
+        self.save()
+
 
 class Group(Archived):
-    group_creator = models.ForeignKey(Contributor, related_name='group_creator')
+    group_creator = models.ForeignKey(Contributor, related_name='group_creator', on_delete=models.CASCADE)
     group_date_created = models.DateTimeField(null=True)
     group_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     group_description = models.CharField(max_length=4000, blank=True)
+    group_url = models.CharField(max_length=2083, blank=True)
     group_location = models.CharField(max_length=200, blank=True)
+    group_location_coords = PointField(null=True, blank=True, srid=4326, default='')
+    group_country = models.CharField(max_length=100, blank=True)
+    group_state = models.CharField(max_length=100, blank=True)
+    group_city = models.CharField(max_length=100, blank=True)
     group_name = models.CharField(max_length=200)
     group_short_description = models.CharField(max_length=140, blank=True)
     is_searchable = models.BooleanField(default=False)
@@ -210,7 +262,7 @@ class Group(Archived):
         return str(self.id) + ':' + str(self.group_name)
 
     def delete(self):
-        self.is_searchable=False
+        self.is_searchable = False
         super().delete()
 
     def update_timestamp(self):
@@ -222,6 +274,9 @@ class Group(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_group=self.id)
+        project_relationships = ProjectRelationship.objects\
+            .filter(relationship_group=self.id, relationship_project__is_searchable=True)\
+            .filter(is_approved=True)
 
         group = {
             'group_creator': self.group_creator.id,
@@ -230,12 +285,44 @@ class Group(Archived):
             'group_files': list(map(lambda file: file.to_json(), other_files)),
             'group_id': self.id,
             'group_links': list(map(lambda link: link.to_json(), links)),
-            'group_location': self.group_location,
+            'group_url': self.group_url,
             'group_name': self.group_name,
+            'group_location': self.group_location,
+            'group_country': self.group_country,
+            'group_state': self.group_state,
+            'group_city': self.group_city,
             'group_owners': [self.group_creator.hydrate_to_tile_json()],
-            'group_short_description': self.group_short_description,
-            'group_issue_areas': self.get_issue_areas(),
+            'group_short_description': self.group_short_description
         }
+
+        if len(project_relationships) > 0:
+            group['group_projects'] = list(map(lambda pr: pr.hydrate_to_project_tile_json(), project_relationships))
+
+        if len(thumbnail_files) > 0:
+            group['group_thumbnail'] = thumbnail_files[0].to_json()
+
+        return group
+
+    def hydrate_to_tile_json(self):
+        files = ProjectFile.objects.filter(file_group=self.id)
+        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
+
+        group = {
+            'group_date_modified': self.group_date_modified.__str__(),
+            'group_id': self.id,
+            'group_name': self.group_name,
+            'group_location': self.group_location,
+            'group_country': self.group_country,
+            'group_state': self.group_state,
+            'group_city': self.group_city,
+            'group_short_description': self.group_short_description,
+            'group_project_count': projects.count()
+        }
+
+        if len(projects) > 0:
+            group['group_project_count'] = projects.count()
+            group['group_issue_areas'] = self.get_project_issue_areas(with_counts=True, project_relationships=projects)
 
         if len(thumbnail_files) > 0:
             group['group_thumbnail'] = thumbnail_files[0].to_json()
@@ -243,44 +330,67 @@ class Group(Archived):
         return group
     
     def hydrate_to_list_json(self):
+        files = ProjectFile.objects.filter(file_group=self.id)
+        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+
         group = {
+            'group_date_modified': self.group_date_modified.__str__(),
             'group_id': self.id,
             'group_name': self.group_name,
             'group_creator': self.group_creator.id,
-            'group_short_description': self.group_short_description,
             'isApproved': self.is_searchable,
             'isCreated': self.is_created
         }
 
+        if len(thumbnail_files) > 0:
+            group['group_thumbnail'] = thumbnail_files[0].to_json()
+
         return group
 
-    def get_issue_areas(self):
-        project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
-        project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
-        project_list = Project.objects.filter(id__in=project_ids)
+    def get_project_issue_areas(self, with_counts, project_relationships=None):
+        if project_relationships is None:
+            project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
+        all_issue_areas = flatten(list(map(lambda p: p.relationship_project.project_issue_area.all().values(), project_relationships)))
+        all_issue_area_names = list(map(lambda issue_tag: issue_tag['name'], all_issue_areas))
+        if with_counts:
+            issue_area_counts = count_occurrences(all_issue_area_names)
+            return issue_area_counts
+        else:
+            return all_issue_area_names
 
-        return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
+    def get_group_projects(self):
+        slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
+        return Event.objects.filter(event_legacy_organization__name__in=slugs)
+
+    def update_linked_items(self):
+        # Recache linked projects
+        project_relationships = ProjectRelationship.objects.filter(relationship_group=self)
+        for project_relationship in project_relationships:
+            project_relationship.relationship_project.recache()
 
 
 class TaggedEventOrganization(TaggedItemBase):
-    content_object = models.ForeignKey('Event')
+    content_object = models.ForeignKey('Event', on_delete=models.CASCADE)
 
 
 class Event(Archived):
     event_agenda = models.CharField(max_length=4000, blank=True)
-    event_creator = models.ForeignKey(Contributor, related_name='event_creator')
+    event_creator = models.ForeignKey(Contributor, related_name='event_creator', on_delete=models.CASCADE)
     event_date_created = models.DateTimeField(null=True)
     event_date_end = models.DateTimeField()
     event_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     event_date_start = models.DateTimeField()
     event_description = models.CharField(max_length=4000, blank=True)
+    event_organizers_text = models.CharField(max_length=200, blank=True)
     event_location = models.CharField(max_length=200, blank=True)
     event_name = models.CharField(max_length=200)
     event_rsvp_url = models.CharField(max_length=2083, blank=True)
     event_live_id = models.CharField(max_length=50, blank=True)
     event_short_description = models.CharField(max_length=140, blank=True)
     event_legacy_organization = TaggableManager(blank=True, through=TaggedEventOrganization)
-    event_legacy_organization.remote_field.related_name = "+"
+    event_legacy_organization.remote_field.related_name = 'org_events'
+    event_slug = models.CharField(max_length=100, blank=True)
+    is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
 
@@ -296,6 +406,9 @@ class Event(Archived):
         self.save()
 
     def hydrate_to_json(self):
+        return EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
+
+    def _hydrate_to_json(self):
         projects = ProjectRelationship.objects.filter(relationship_event=self.id)
         files = ProjectFile.objects.filter(file_event=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
@@ -314,9 +427,12 @@ class Event(Archived):
             'event_rsvp_url': self.event_rsvp_url,
             'event_live_id': self.event_live_id,
             'event_name': self.event_name,
+            'event_organizers_text': self.event_organizers_text,
             'event_owners': [self.event_creator.hydrate_to_tile_json()],
             'event_short_description': self.event_short_description,
             'event_legacy_organization': Tag.hydrate_to_json(self.id, list(self.event_legacy_organization.all().values())),
+            'event_slug': self.event_slug,
+            'is_private': self.is_private
         }
 
         if len(projects) > 0:
@@ -326,22 +442,50 @@ class Event(Archived):
             event['event_thumbnail'] = thumbnail_files[0].to_json()
 
         return event
-    
-    def hydrate_to_list_json(self):
-        event = {
-            'event_creator': self.event_creator.id,
+
+    def hydrate_to_tile_json(self):
+        files = ProjectFile.objects.filter(file_event=self.id)
+        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+
+        group = {
             'event_date_end': self.event_date_end.__str__(),
             'event_date_start': self.event_date_start.__str__(),
             'event_id': self.id,
+            'event_slug': self.event_slug,
             'event_location': self.event_location,
             'event_name': self.event_name,
-            'event_short_description': self.event_short_description,
-            'isApproved': self.is_searchable,
-            'isCreated': self.is_created,
+            'event_organizers_text': self.event_organizers_text,
+            'event_short_description': self.event_short_description
         }
 
+        if len(thumbnail_files) > 0:
+            group['event_thumbnail'] = thumbnail_files[0].to_json()
+
+        return group
+
+    def hydrate_to_list_json(self):
+        event = self.hydrate_to_tile_json()
+        event['event_creator'] = self.event_creator.id
+        event['is_searchable'] = self.is_searchable
+        event['is_created'] = self.is_created
+
         return event
-    
+
+    @staticmethod
+    def get_by_id_or_slug(slug, user=None):
+        event = None
+        if slug is not None:
+            _slug = slug.strip().lower()
+            if _slug.isnumeric():
+                event = Event.objects.get(id=_slug)
+                if event and event.is_private:
+                    if not user or not user.is_authenticated or not is_creator_or_staff(user, event):
+                        raise PermissionDenied()
+            elif len(_slug) > 0:
+                event = Event.objects.filter(event_slug=_slug).first() or NameRecord.get_event(_slug)
+
+        return event
+
     def get_issue_areas(self):
         project_relationships = ProjectRelationship.objects.filter(relationship_event=self.id)
         project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
@@ -349,30 +493,104 @@ class Event(Archived):
 
         return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
 
+    def get_linked_projects(self):
+        # Get projects by legacy organization
+        projects = None
+        legacy_org_slugs = self.event_legacy_organization.slugs()
+        if legacy_org_slugs and len(legacy_org_slugs) > 0:
+            projects = Project.objects.filter(project_organization__name__in=legacy_org_slugs)
+        return projects
 
-class ProjectRelationship(models.Model):
-    relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True)
-    relationship_group = models.ForeignKey(Group, related_name='relationships', blank=True, null=True)
-    relationship_event = models.ForeignKey(Event, related_name='relationships', blank=True, null=True)
+    def update_linked_items(self):
+        # Recache linked projects
+        projects = self.get_linked_projects()
+        if projects:
+            for project in projects:
+                project.recache(recache_linked=False)
 
-    def __str__(self):
-        return self.relationship_event.event_name + ':' + self.relationship_project.project_name
+    def recache(self):
+        hydrated_event = self._hydrate_to_json()
+        EventCache.refresh(self, hydrated_event)
+
+
+class NameRecord(models.Model):
+    event = models.ForeignKey(Event, related_name='old_slugs', blank=True, null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, blank=True)
 
     @staticmethod
-    def create(owner, project):
+    def get_event(name):
+        record = NameRecord.objects.filter(name=name).first()
+        return record and record.event
+
+    @staticmethod
+    def delete_record(name):
+        record = NameRecord.objects.filter(name=name).first()
+        if record:
+            record.delete()
+            return True
+        else:
+            return False
+
+
+class ProjectRelationship(models.Model):
+    relationship_project = models.ForeignKey(Project, related_name='relationships', blank=True, null=True, on_delete=models.CASCADE)
+    relationship_group = models.ForeignKey(Group, related_name='relationships', blank=True, null=True, on_delete=models.CASCADE)
+    relationship_event = models.ForeignKey(Event, related_name='relationships', blank=True, null=True, on_delete=models.CASCADE)
+    introduction_text = models.CharField(max_length=10000, blank=True)
+    project_initiated = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        if self.relationship_group is not None:
+            project_counterpart = ('Group', self.relationship_group)
+        elif self.relationship_event is not None:
+            project_counterpart = ('Event', self.relationship_event)
+        return "{proj} - ({type}) {counterpart}".format(
+            proj=self.relationship_project.__str__(),
+            type=project_counterpart[0],
+            counterpart=project_counterpart[1].__str__())
+
+    @staticmethod
+    def create(owner, project, approved=False, introduction_text=""):
         relationship = ProjectRelationship()
+        relationship.project_initiated = False
         relationship.relationship_project = project
-        
+        relationship.introduction_text = introduction_text
+
         if type(owner) is Group:
             relationship.relationship_group = owner
+            relationship.is_approved = approved
         else:
             relationship.relationship_event = owner
+            relationship.is_approved = True
         
         return relationship
 
+    def is_group_relationship(self):
+        return self.relationship_group is not None
+
+    def hydrate_to_list_json(self):
+        list_json = {
+            'project_relationship_id': self.id,
+            'relationship_is_approved': self.is_approved
+        }
+        if self.is_group_relationship():
+            list_json = merge_dicts(list_json, self.relationship_group.hydrate_to_list_json())
+
+        return list_json
+
+    def hydrate_to_project_tile_json(self):
+        list_json = {
+            'project_relationship_id': self.id,
+            'relationship_is_approved': self.is_approved
+        }
+        list_json = merge_dicts(list_json, self.relationship_project.hydrate_to_tile_json())
+
+        return list_json
+
 
 class ProjectCommit(models.Model):
-    commit_project = models.ForeignKey(Project, related_name='commits', blank=True, null=True)
+    commit_project = models.ForeignKey(Project, related_name='commits', blank=True, null=True, on_delete=models.CASCADE)
     user_name = models.CharField(max_length=200)
     user_link = models.CharField(max_length=2083)
     user_avatar_link = models.CharField(max_length=2083)
@@ -422,10 +640,10 @@ class ProjectCommit(models.Model):
 
 
 class ProjectLink(models.Model):
-    link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True)
-    link_group = models.ForeignKey(Group, related_name='links', blank=True, null=True)
-    link_event = models.ForeignKey(Event, related_name='links', blank=True, null=True)
-    link_user = models.ForeignKey(Contributor, related_name='links', blank=True, null=True)
+    link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
+    link_group = models.ForeignKey(Group, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
+    link_event = models.ForeignKey(Event, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
+    link_user = models.ForeignKey(Contributor, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
     link_name = models.CharField(max_length=200, blank=True)
     link_url = models.CharField(max_length=2083)
     link_visibility = models.CharField(max_length=50)
@@ -504,11 +722,11 @@ class ProjectLink(models.Model):
 
 
 class TaggedPositionRole(TaggedItemBase):
-    content_object = models.ForeignKey('ProjectPosition')
+    content_object = models.ForeignKey('ProjectPosition', on_delete=models.CASCADE)
 
 
 class ProjectPosition(models.Model):
-    position_project = models.ForeignKey(Project, related_name='positions')
+    position_project = models.ForeignKey(Project, related_name='positions', on_delete=models.CASCADE)
     position_role = TaggableManager(blank=False, through=TaggedPositionRole)
     position_description = models.CharField(max_length=3000, blank=True)
     description_url = models.CharField(max_length=2083, default='')
@@ -548,6 +766,12 @@ class ProjectPosition(models.Model):
 
     @staticmethod
     def merge_changes(project, positions):
+        """
+        Merge project position changes
+        :param project: Project with position changes
+        :param positions: Position changes
+        :return: True if there were position changes
+        """
         added_positions = list(filter(lambda position: 'id' not in position, positions))
         updated_positions = list(filter(lambda position: 'id' in position, positions))
         updated_positions_ids = set(map(lambda position: position['id'], updated_positions))
@@ -566,13 +790,15 @@ class ProjectPosition(models.Model):
         for deleted_position_id in deleted_position_ids:
             ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
 
+        return len(added_positions) > 0 or len(updated_positions) > 0 or len(deleted_position_ids) > 0
+
 
 class ProjectFile(models.Model):
     # TODO: Add ForeignKey pointing to Contributor, see https://stackoverflow.com/a/20935513/6326903
-    file_project = models.ForeignKey(Project, related_name='files', blank=True, null=True)
-    file_user = models.ForeignKey(Contributor, related_name='files', blank=True, null=True)
-    file_group = models.ForeignKey(Group, related_name='files', blank=True, null=True)
-    file_event = models.ForeignKey(Event, related_name='files', blank=True, null=True)
+    file_project = models.ForeignKey(Project, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
+    file_user = models.ForeignKey(Contributor, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
+    file_group = models.ForeignKey(Group, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
+    file_event = models.ForeignKey(Event, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
     file_visibility = models.CharField(max_length=50)
     file_name = models.CharField(max_length=150)
     file_key = models.CharField(max_length=200)
@@ -633,6 +859,12 @@ class ProjectFile(models.Model):
 
     @staticmethod
     def replace_single_file(owner, file_category, file_json):
+        """
+        :param owner: Owner model instace of the file
+        :param file_category: File type
+        :param file_json: File metadata
+        :return: True if the file was changed
+        """
         if type(owner) is Project:
             existing_file = ProjectFile.objects.filter(file_project=owner.id, file_category=file_category.value).first()
         elif type(owner) is Group:
@@ -643,19 +875,24 @@ class ProjectFile(models.Model):
             existing_file = ProjectFile.objects.filter(file_user=owner.id, file_category=file_category.value).first()
 
         is_empty_field = is_json_field_empty(file_json)
+        file_changed = False
         if is_empty_field and existing_file:
             # Remove existing file
             existing_file.delete()
+            file_changed = True
         elif not is_empty_field:
             if not existing_file:
                 # Add new file
                 thumbnail = ProjectFile.from_json(owner, file_category, file_json)
                 thumbnail.save()
+                file_changed = True
             elif file_json['key'] != existing_file.file_key:
                 # Replace existing file
                 thumbnail = ProjectFile.from_json(owner, file_category, file_json)
                 thumbnail.save()
                 existing_file.delete()
+                file_changed = True
+        return file_changed
 
     @staticmethod
     def from_json(owner, file_category, file_json):
@@ -709,12 +946,12 @@ class UserAlert(models.Model):
 
 
 class TaggedVolunteerRole(TaggedItemBase):
-    content_object = models.ForeignKey('VolunteerRelation')
+    content_object = models.ForeignKey('VolunteerRelation', on_delete=models.CASCADE)
 
 
 class VolunteerRelation(Archived):
-    project = models.ForeignKey(Project, related_name='volunteer_relations')
-    volunteer = models.ForeignKey(Contributor, related_name='volunteer_relations')
+    project = models.ForeignKey(Project, related_name='volunteer_relations', on_delete=models.CASCADE)
+    volunteer = models.ForeignKey(Contributor, related_name='volunteer_relations', on_delete=models.CASCADE)
     role = TaggableManager(blank=True, through=TaggedVolunteerRole)
     role.remote_field.related_name = "+"
     application_text = models.CharField(max_length=10000, blank=True)

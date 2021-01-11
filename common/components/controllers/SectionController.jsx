@@ -7,7 +7,6 @@ import {Container} from 'flux/utils';
 import AboutProjectController from './AboutProjectController.jsx'
 import AboutUsController from './AboutUsController.jsx'
 import CreateProjectController from './CreateProjectController.jsx'
-import EditProjectController from './EditProjectController.jsx'
 import FindProjectsController  from './FindProjectsController.jsx'
 import LandingController from './LandingController.jsx'
 import MyProjectsController from './MyProjectsController.jsx'
@@ -33,7 +32,12 @@ import CreateEventController from './CreateEventController.jsx';
 import MyGroupsController from './MyGroupsController.jsx';
 import LiveEventController from "./LiveEventController.jsx";
 import AboutEventController from "./AboutEventController.jsx";
+import AboutGroupController from "./AboutGroupController.jsx";
 import ErrorController from "./ErrorController.jsx";
+import FindGroupsController from "./FindGroupsController.jsx";
+import FindEventsController from "./FindEventsController.jsx";
+import CoroporateHackathonController from "./CorporateHackathonController.jsx";
+import MyEventsController from "./MyEventsController.jsx";
 
 type State = {|
   section: SectionType,
@@ -68,9 +72,13 @@ class SectionController extends React.Component<{||}, State> {
       case Section.CreateProject:
         return <CreateProjectController />;
       case Section.EditProject:
-        return <EditProjectController />;
+        return <CreateProjectController />;
       case Section.FindProjects:
         return <FindProjectsController />;
+      case Section.FindGroups:
+        return <FindGroupsController />;
+      case Section.FindEvents:
+        return <FindEventsController />;
       case Section.Home:
         return <LandingController />;
       case Section.MyProjects:
@@ -101,16 +109,22 @@ class SectionController extends React.Component<{||}, State> {
         return <PressController />;
       case Section.ContactUs:
         return <ContactUsController />;
-      // case Section.CreateGroup:
-      //   return <CreateGroupController />;
+      case Section.CreateGroup:
+        return <CreateGroupController />;
       case Section.CreateEvent:
         return <CreateEventController />;
-      // case Section.MyGroups:
-      //   return <MyGroupsController />;
+      case Section.AboutGroup:
+        return <AboutGroupController/>;
+      case Section.MyGroups:
+        return <MyGroupsController />;
+      case Section.MyEvents:
+        return <MyEventsController />;
       case Section.AboutEvent:
         return <AboutEventController/>;
       case Section.LiveEvent:
         return <LiveEventController />;
+      case Section.CorporateEvent:
+        return <CoroporateHackathonController />
       case Section.Error:
         return <ErrorController />;
       default:

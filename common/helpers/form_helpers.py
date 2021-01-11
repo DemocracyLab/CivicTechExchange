@@ -7,24 +7,54 @@ from django.contrib.gis.geos import Point
 
 
 def read_form_field_string(model, form, field_name, transformation=None):
+    """
+    :param model: Model containing string field
+    :param form: Form data from front-end
+    :param field_name: Name of field shared by model and form
+    :param transformation: Transformation of form data to perform before inserting into model
+    :return: True if changes to model string field were made
+    """
+    field_changed = False
     if field_name in form.data:
         form_field_content = form.data.get(field_name)
         if transformation is not None:
             form_field_content = transformation(form_field_content)
+        field_changed = getattr(model, field_name) != form_field_content
         setattr(model, field_name, form_field_content)
+    return field_changed
 
 
 def read_form_field_boolean(model, form, field_name):
-    read_form_field_string(model, form, field_name, lambda str: strtobool(str))
+    """
+    :param model: Model containing boolean field
+    :param form: Form data from front-end
+    :param field_name: Name of field shared by model and form
+    :return: True if changes to model boolean field were made
+    """
+    return read_form_field_string(model, form, field_name, lambda str: strtobool(str))
 
 
 def read_form_field_datetime(model, form, field_name):
-    read_form_field_string(model, form, field_name, lambda str: parse_front_end_datetime(str))
+    """
+    :param model: Model containing datetime field
+    :param form: Form data from front-end
+    :param field_name: Name of field shared by model and form
+    :return: True if changes to model datetime field were made
+    """
+    return read_form_field_string(model, form, field_name, lambda str: parse_front_end_datetime(str))
 
 
 def read_form_field_tags(model, form, field_name):
+    """
+    Read tags form field into model field
+    :param model: Model containing tag field
+    :param form: Form data from front-end
+    :param field_name: Name of field shared by model and form
+    :return: True if changes to model tag field were made
+    """
     if field_name in form.data:
-        Tag.merge_tags_field(getattr(model, field_name), form.data.get(field_name))
+        return Tag.merge_tags_field(getattr(model, field_name), form.data.get(field_name))
+    return False
 
 
 def read_form_fields_point(model, form, point_field_name, lat_field_name, long_field_name):
@@ -36,20 +66,39 @@ def read_form_fields_point(model, form, point_field_name, lat_field_name, long_f
 
 
 def merge_json_changes(model_class, model, form, field_name):
+    """
+    Merge changes from json form field to model field
+    :param model_class: Model class
+    :param model: Model instance
+    :param form: form wrapper
+    :param field_name: field name in model and form
+    :return: True if there were changes
+    """
     if field_name in form.data:
         json_text = form.data.get(field_name)
         if len(json_text) > 0:
             json_object = json.loads(json_text)
-            model_class.merge_changes(model, json_object)
+            return model_class.merge_changes(model, json_object)
+    return False
 
 
 def merge_single_file(model, form, file_category, field_name):
+    """
+    Merge change for a single file form field
+    :param model: Model instance
+    :param form: form wrapper
+    :param file_category: File type
+    :param field_name: field name in model and form
+    :return: True if there were changes
+    """
     from civictechprojects.models import ProjectFile
+    field_changed = False
     if field_name in form.data:
         file_content = form.data.get(field_name)
         if file_content and len(file_content) > 0:
             file_json = json.loads(file_content)
-            ProjectFile.replace_single_file(model, file_category, file_json)
+            field_changed = ProjectFile.replace_single_file(model, file_category, file_json)
+    return field_changed
 
 
 def is_json_field_empty(field_json):

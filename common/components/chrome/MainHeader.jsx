@@ -2,10 +2,8 @@
 
 import type { FluxReduceStore } from 'flux/utils';
 import type { SectionType } from '../enums/Section.js';
-
 import { Container } from 'flux/utils';
 import cdn from "../utils/cdn.js";
-import cx from '../utils/cx';
 import CurrentUser from '../utils/CurrentUser.js';
 import NavigationLinks, {NavigationLink} from "../utils/NavigationLinks.js";
 import NavigationStore from '../stores/NavigationStore.js'
@@ -13,130 +11,208 @@ import SectionLink from './SectionLink.jsx';
 import React from 'react';
 import Section from '../enums/Section.js'
 import url from '../utils/url.js'
-import Person from '@material-ui/icons/Person';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import Popper from '@material-ui/core/Popper';
-import Divider from '@material-ui/core/Divider';
-import MenuIcon from '@material-ui/icons/Menu';
-import IconButton from '@material-ui/core/IconButton';
-import Drawer from '@material-ui/core/Drawer';
 import AlertHeader from "./AlertHeader.jsx";
 import MyProjectsStore, {MyProjectsAPIResponse} from "../stores/MyProjectsStore.js";
-// import MyGroupsStore, {MyGroupsAPIResponse} from "../stores/MyGroupsStore.js";
+import MyGroupsStore, {MyGroupsAPIResponse} from "../stores/MyGroupsStore.js";
+import MyEventsStore, {MyEventsAPIResponse} from "../stores/MyEventsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
-import _ from 'lodash'
+import _ from 'lodash';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Button from 'react-bootstrap/Button';
+import UserIcon from '../svg/user-circle-solid.svg';
 
 type State = {|
-  +activeSection: SectionType,
-  dropdown: boolean,
-  slider: boolean,
-  createProjectUrl: string,
   showMyProjects: boolean,
   showMyGroups: boolean,
+  showMyEvents: boolean,
   showHeader: boolean
 |};
 
+
 class MainHeader extends React.Component<{||}, State > {
 
-  _cx: cx;
-
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [NavigationStore, MyProjectsStore];
+    return [NavigationStore, MyProjectsStore, MyGroupsStore, MyEventsStore];
   }
 
   static calculateState(prevState: State): State {
     const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
-    // const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
+    const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
+    const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
     return {
       showHeader: !url.argument("embedded"),
-      activeSection: NavigationStore.getSection(),
-      showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects))
-      // showMyGroups: myGroups && (!_.isEmpty(myGroups.owned_groups))
+      showMyProjects: myProjects && (!_.isEmpty(myProjects.volunteering_projects) || !_.isEmpty(myProjects.owned_projects)),
+      showMyGroups: myGroups && (!_.isEmpty(myGroups.owned_groups)),
+      showMyEvents: myEvents && (!_.isEmpty(myEvents.owned_events) || CurrentUser.isStaff())
     };
   }
+  // may need activeSection: NavigationStore.getSection() in calculateState, check that
 
-  navigateToSection(e, section: string): void {
-    this._closeDropdown(e);
-    UniversalDispatcher.dispatch({
-      type: 'SET_SECTION',
-      section: section,
-      url: url.section(section)
-    });
-  }
+
 
   constructor(): void {
     super();
-    this._cx = new cx('SubHeader-');
     this.state = {
-      dropdown: false,
-      slider: false,
-      showMyProjects: false,
-      createProjectUrl: url.sectionOrLogIn(Section.CreateProject)
+      activeSection: NavigationStore.getSection()
     };
-    this._toggleDropdown = this._toggleDropdown.bind(this);
-    this._closeDropdown = this._closeDropdown.bind(this);
-    this._renderHamburgerSlider = this._renderHamburgerSlider.bind(this);
-    this._toggleSlider = this._toggleSlider.bind(this);
+
     this._handleHeightChange = this._handleHeightChange.bind(this);
     this.mainHeaderRef = React.createRef();
   }
 
   componentDidMount() {
     UniversalDispatcher.dispatch({type: 'INIT'});
-    this._handleHeightChange(this.getHeaderHeight());
+    if(this.mainHeaderRef && this.mainHeaderRef.current) {
+      this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
+    }
   }
 
-  render(): ?React$Node {
-    return this.state.showHeader && (
-      <div ref={this.mainHeaderRef} className='MainHeader'>
+
+
+  render(): React$Node {
+    return this.state.showHeader ? (
+      <div ref={this.mainHeaderRef} className="MainHeader-root">
         <AlertHeader
           onAlertClose={this._handleAlertClosing.bind(this)}
           onUpdate={this._onAlertHeaderUpdate.bind(this)}
         />
-        <div className={this._cx.get('root')}>
-          <a href={url.section(Section.Home)}>
-            <div className="SubHeader-logo-container">
-              <img
-                className="SubHeader-logo"
-                src={cdn.image("dl_logo.png")}
-              />
-            </div>
-          </a>
-          {this._renderHamburgerSlider()}
-          <div className={this._cx.get('rightContent')}>
-            {this._renderSectionLinks()}
-            {window.BLOG_URL && <div className="SectionLink-root"><h3><a href={window.BLOG_URL}>Blog</a></h3></div>}
-            {window.EVENT_URL && <div className="SectionLink-root"><h3><a href={_.unescape(window.EVENT_URL)}>Event</a></h3></div>}
-            {this._renderHeaderLinks()}
-            {this._renderHeaderButtons()}
-            {
-              <React.Fragment>
-                <div className="SubHeader-divider-container">
-                  <div className="vertical-divider"></div>
-                </div>
-              </React.Fragment>
-            }
-            {
-              CurrentUser.isLoggedIn() ?
-                this._renderAccountInfo() :
-                this._renderLogInLink()
-            }
-          </div>
+        <div className="MainHeader-nav-container">
+          {this._renderNavBar()}
         </div>
       </div>
+    ) : null;
+  }
+
+  _renderNavBar() {
+    //TODO: Once the blog is 'settled in' remove the conditional, the window.BLOG_URL target, and just hardcode it in.
+    return (
+      <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
+        <Navbar.Brand><a href={url.section(Section.Home)}><img src={cdn.image("dl_logo.png")} alt="DemocracyLab" /></a></Navbar.Brand>
+        {CurrentUser.isLoggedIn() ? null : <Button className="MainHeader-showmobile MainHeader-login-button" variant="outline-primary" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Button>}
+        <Navbar.Toggle aria-controls="nav-pagenav-container" />
+        <Navbar.Collapse id="nav-pagenav-container" className="flex-column">
+          <Nav className="MainHeader-usernav ml-auto">
+            {CurrentUser.isLoggedIn() ? this._renderUserSection() : this._renderLogInSection()}
+          </Nav>
+          <Nav className="MainHeader-pagenav mr-auto">
+            {this._renderNavLink(Section.Home, "Home")}
+            <NavDropdown title="Projects" id="nav-projects">
+              {this._renderNavDropdownItem(Section.FindProjects, "Find Projects")}
+              {this._renderNavDropdownItem(Section.CreateProject, "Create Project")}
+            </NavDropdown>
+            <NavDropdown title="Groups" id="nav-group">
+              {this._renderNavDropdownItem(Section.FindGroups, "Find Groups")}
+              {this._renderNavDropdownItem(Section.CreateGroup, "Create Group")}
+            </NavDropdown>
+            {this._renderEventNavItems()}
+            <NavDropdown title="About" id="nav-about">
+              {this._renderNavDropdownItem(Section.AboutUs, "About Us")}
+              {this._renderNavDropdownItem(Section.ContactUs, "Contact Us")}
+              {this._renderNavDropdownItem(Section.Press, "News")}
+            </NavDropdown>
+            {window.BLOG_URL ? <Nav.Link href={window.BLOG_URL}>Blog</Nav.Link> : null}
+            {this._renderNavLink(Section.Donate, "Donate", "MainHeader-showmobile")}
+            {CurrentUser.isLoggedIn() ? <Nav.Link className="MainHeader-showmobile mb-3" href="/logout/">Log Out</Nav.Link> : <Nav.Link className="MainHeader-showmobile" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Nav.Link>}
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    )
+  }
+
+  _renderEventNavItems(): ?React$Node {
+    const eventLinks: Array<React$Node> = [];
+    eventLinks.push(this._renderNavDropdownItem(Section.FindEvents, "Find Events"));
+    if(CurrentUser.isStaff()) {
+      eventLinks.push(this._renderNavDropdownItem(Section.CreateEvent, "Create Event"));
+    }
+    if(window.EVENT_URL) {
+      eventLinks.push(<NavDropdown.Item href={_.unescape(window.EVENT_URL)}>Our Next Event</NavDropdown.Item>);
+    }
+    eventLinks.push(this._renderNavDropdownItem(Section.CorporateEvent, "Corporate Events"));
+    return !_.isEmpty(eventLinks)
+    ? (
+      <NavDropdown title="Events" id="nav-events">
+        {eventLinks}
+      </NavDropdown>
+    ) : null;
+  }
+
+  _renderLogInSection() {
+    //This is desktop only for now, mobile has a different solution
+    return (
+      <React.Fragment>
+        <Button className="MainHeader-showdesktop MainHeader-donate-link" variant="link" href={url.section(Section.Donate)}>Donate</Button>
+        <Button className="MainHeader-showdesktop MainHeader-login-button" variant="outline-primary" href={url.section(Section.LogIn, url.getPreviousPageArg())}>Log In</Button>
+      </React.Fragment>
+    )
+  }
+
+//TODO: Refactor these to reduce duplication
+//TODO: Allow multiple arguments for url.section to handle url.getPreviousPageArg() - options object?
+  _renderNavLink(section, text, classes = "") {
+    const urlArgs = url.arguments(url.section(section));
+    if (urlArgs.section === this.state.activeSection) {
+      classes += " MainHeader-active";
+    };
+    return <Nav.Link className={classes} href={url.section(section)}>{text}</Nav.Link>
+  }
+  _renderNavDropdownItem(section, text, classes = "") {
+    const urlArgs = url.arguments(url.section(section));
+    if (urlArgs.section === this.state.activeSection) {
+      classes += " MainHeader-active";
+    };
+    return <NavDropdown.Item className={classes} href={url.section(section)}>{text}</NavDropdown.Item>
+  }
+
+
+  _renderUserSection() {
+    let showMyProjects = this.state.showMyProjects;
+    let showMyGroups = this.state.showMyGroups;
+    let showMyEvents = this.state.showMyEvents;
+    //for logged in users, render user actions
+    //TODO: Rebuild this component so deskop dropdown and mobile links aren't separated out
+    return (
+      <React.Fragment>
+        <Nav.Item className="MainHeader-donate-loggedin-container MainHeader-showdesktop">
+          <Button variant="outline-secondary" className="MainHeader-donatebutton"  href={url.section(Section.Donate)}>Donate</Button>
+        </Nav.Item>
+        <Dropdown as={Nav.Item} className="MainHeader-showdesktop">
+          <Dropdown.Toggle as={Nav.Link}>
+            {this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {showMyProjects && this._renderNavDropdownItem(Section.MyProjects, "My Projects")}
+            {showMyGroups && this._renderNavDropdownItem(Section.MyGroups, "My Groups")}
+            {showMyEvents && this._renderNavDropdownItem(Section.MyEvents, "My Events")}
+            {this._renderNavDropdownItem(Section.EditProfile, "Edit Profile")}
+            <Dropdown.Item href="/logout/">Log Out</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <div className="MainHeader-showmobile">
+          <Nav.Item className="mt-3">{this._renderAvatar()} {CurrentUser.firstName()} {CurrentUser.lastName()}</Nav.Item>
+          {showMyProjects && this._renderNavLink(Section.MyProjects, "My Projects")}
+          {showMyGroups && this._renderNavLink(Section.MyGroups, "My Groups")}
+          {showMyEvents && this._renderNavLink(Section.MyEvents, "My Events")}
+          {this._renderNavLink(Section.EditProfile, "Edit Profile")}
+          <Dropdown.Divider />
+        </div>
+      </React.Fragment>
+    )
+  }
+
+  _renderAvatar(): React$Node {
+    return (
+      !_.isEmpty(CurrentUser.userImgUrl()) ?
+        <img className="MainHeader-useravatar" src={CurrentUser.userImgUrl()} /> :
+        <UserIcon className="MainHeader-useravatar" />
     );
   }
 
-  getHeaderHeight(): number {
-    return this.mainHeaderRef.current ? this.mainHeaderRef.current.clientHeight : 0;
-  }
-
   _onAlertHeaderUpdate() {
-    this._handleHeightChange(this.getHeaderHeight());
+    this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
   }
 
   _handleHeightChange(height) {
@@ -148,324 +224,6 @@ class MainHeader extends React.Component<{||}, State > {
     this._handleHeightChange(header.clientHeight - header.firstChild.clientHeight);
   }
 
-  _renderLogInLink(): void {
-    return (
-      <SectionLink
-          activeSection={this.state.activeSection}
-          key="LogIn"
-          section={Section.LogIn}
-          title="Log In"
-        />
-    );
-  }
-
-  _renderAccountInfo(): void {
-    return (
-      <div className="SubHeader-userImg-container">
-        <button
-          className="SubHeader-user-btn"
-          ref={node => { this.anchorEl = node }}
-          onClick={this._toggleDropdown}
-        >
-          {this._renderIcon()}
-        </button>
-        <Popper open={this.state.dropdown} anchorEl={this.anchorEl} transition>
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              id="menu-list-grow"
-              style={{ transformOrigin: 'top' }}
-            >
-              <Paper className="SubHeader-dropdown-menu">
-                <ClickAwayListener onClickAway={this._closeDropdown}>
-                  <MenuList>
-                    <p className="SubHeader-dropdown-name">{`${CurrentUser.firstName()} ${CurrentUser.lastName()}`}</p>
-                    <MenuItem onClick={(e) => this.navigateToSection(e, 'EditProfile')}>My Profile</MenuItem>
-                    {this.state.showMyProjects && <MenuItem onClick={(e) => this.navigateToSection(e, 'MyProjects')}>My Projects</MenuItem>}
-                    {this.state.showMyGroups && <MenuItem onClick={(e) => this.navigateToSection(e, 'MyGroups')}>My Groups</MenuItem>}
-                  </MenuList>
-                  <Divider />
-                  <a href="/logout" onClick={this._closeDropdown}>
-                    <MenuItem>
-                      Sign Out
-                    </MenuItem>
-                  </a>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
-      </div>
-    )
-  }
-
-  _toggleDropdown(): void {
-    this.setState({ dropdown: !this.state.dropdown });
-  };
-
-  _closeDropdown(event): void {
-    if (this.anchorEl && this.anchorEl.contains(event.target)) {
-      return;
-    }
-    this.setState({ dropdown: false });
-  };
-
-  _renderHamburgerSlider(): React$Node {
-    // TODO: Refactor into separate component
-    return (
-      <React.Fragment>
-        <div className="SubHeader-hamburger" onClick={() => this._toggleSlider(true)}>
-          <IconButton >
-            <MenuIcon />
-          </IconButton>
-        </div>
-        <Drawer anchor="right" open={this.state.slider} onClose={() => this._toggleSlider(false)} styles={{overflow: 'hidden'}}>
-          <div
-            tabIndex={0}
-            role="button"
-            onClick={() => this._toggleSlider(false)}
-            onKeyDown={() => this._toggleSlider(false)}
-          >
-            <div className="SubHeader-navDrawer">
-              {
-                CurrentUser.isLoggedIn() &&
-                <div>
-                  <div className='SubHeader-slider-icon'>
-                    {this._renderIcon()}
-                  </div>
-                  <p className='SubHeader-slider-name'>{CurrentUser.firstName() + ' ' + CurrentUser.lastName()} </p>
-                  <a href="" onClick={(e) => this.navigateToSection(e, 'EditProfile')}>
-                    <div className={'SubHeader-drawerDiv'} >
-                      My Profile
-                    </div>
-                  </a>
-                  <Divider />
-
-                  {
-                    this.state.showMyProjects && [
-                    <a href="" onClick={(e) => this.navigateToSection(e, 'MyProjects')}>
-                      <div className={'SubHeader-drawerDiv'} >
-                        My Projects
-                      </div>
-                    </a>,
-                    <Divider />
-                    ]
-                  }
-
-                  {
-                    this.state.showMyGroups && [
-                    <a href="" onClick={(e) => this.navigateToSection(e, 'MyGroups')}>
-                      <div className={'SubHeader-drawerDiv'} >
-                        My Groups
-                      </div>
-                    </a>,
-                    <Divider />
-                    ]
-                  }
-                </div>
-              }
-              <a href={url.section(Section.FindProjects, {hideSplash: 1})}>
-                <div className={'SubHeader-drawerDiv'} >
-                  Find Projects
-                </div>
-              </a>
-              <Divider />
-
-              {window.EVENT_URL && <React.Fragment><a href={_.unescape(window.EVENT_URL)}>
-                <div className={'SubHeader-drawerDiv'} >
-                  Event
-                </div>
-              </a>
-              <Divider />
-              </React.Fragment>}
-
-              <a href={this.state.createProjectUrl}>
-                <div className={'SubHeader-drawerDiv'} >
-                  Create Project
-                </div>
-              </a>
-              <Divider />
-  
-              { CurrentUser.isStaff() && <React.Fragment><a href={url.section(Section.CreateEvent)}>
-                <div className={'SubHeader-drawerDiv'} >
-                  Create Event
-                </div>
-              </a>
-              <Divider />
-              </React.Fragment>}
-
-              <a href={url.section(Section.AboutUs)}>
-                <div className={'SubHeader-drawerDiv'} >
-                  About Us
-                </div>
-              </a>
-              <Divider />
-
-              <a href={url.section(Section.Press)}>
-                <div className={'SubHeader-drawerDiv'} >
-                  News
-                </div>
-              </a>
-              <Divider />
-
-              {window.BLOG_URL && <React.Fragment><a href={window.BLOG_URL}>
-                <div className={'SubHeader-drawerDiv'} >
-                  Blog
-                </div>
-              </a>
-              <Divider />
-              </React.Fragment>}
-
-              {this._renderHamburgerNavigationLinks()}
-
-              <Divider />
-              {
-                !CurrentUser.isLoggedIn() &&
-                <React.Fragment>
-                  <div className={'SubHeader-drawerDiv'} onClick={this._onLogInClick}>
-                    <a href="" > Log In </a>
-                  </div>
-                  <Divider />
-                </React.Fragment>
-              }
-              {
-                CurrentUser.isLoggedIn() &&
-                <a href="/logout/">
-                  <div className={'SubHeader-drawerDiv'}>
-                    Logout
-                  </div>
-                </a>
-              }
-            </div>
-          </div>
-        </Drawer>
-      </React.Fragment>
-
-    )
-  }
-
-  _renderHamburgerNavigationLinks(): $ReadOnlyArray<React$Node> {
-    //TODO: refactor NavigationLinks to define link behavior on a per-link basis
-    return NavigationLinks.list().map((link) => {
-      return (
-        <React.Fragment key={link.url}>
-          <a key={link.url} href={link.url} rel="noopener noreferrer" onClick={NavigationLinks.logClick.bind(this, link)}>
-            <div className={'SubHeader-drawerDiv'}>
-              {link.name}
-            </div>
-          </a>
-          <Divider />
-        </React.Fragment>
-      );
-    });
-  }
-
-  _toggleSlider(open: boolean): void {
-    this.setState({ slider: open })
-  }
-
-  _renderHeaderLinks(): React$Node {
-    //TODO: Same issue as NavigationLinks, refactor to pass link behavior as part of env variable
-    const headerLinks: $ReadOnlyArray<NavigationLink> = NavigationLinks.list().filter((link) => !link.isButton);
-    return (
-      <React.Fragment>
-        {
-          headerLinks.map((link) => {
-            return (
-              <div key={link.url} className="SectionLink-root">
-                <a className="SubHeader-anchor" href={link.url} rel="noopener noreferrer" onClick={NavigationLinks.logClick.bind(this, link)}>
-                  <h3>{link.name}</h3>
-                </a>
-              </div>
-            );
-          })
-        }
-      </React.Fragment>
-    );
-  }
-
-  _renderHeaderButtons(): React$Node {
-    const headerButtonLinks: $ReadOnlyArray<React$Node> = NavigationLinks.list().filter((link) => link.isButton);
-    return (
-      headerButtonLinks.map((link) => {
-        return (
-          <a key={link.url}
-             href={link.url}
-             className="SubHeader-donate-btn-container"
-             onClick={NavigationLinks.logClick.bind(this, link)}
-          >
-            <button className="SubHeader-donate-btn">
-              {link.name}
-            </button>
-          </a>
-        );
-      })
-    )
-  }
-
-  _renderIcon(): React$Node {
-    return (
-      !_.isEmpty(CurrentUser.userImgUrl()) ?
-        <img className="SubHeader-userImg" src={CurrentUser.userImgUrl()} /> :
-        <Person className="SubHeader-userIcon" />
-    );
-  }
-
-  _renderSectionLinks(): React$Node {
-    const SectionsToShow = [
-          {
-            section: Section.FindProjects,
-            title: 'Find Projects',
-            showOnlyWhenLoggedIn: false
-          },
-          {
-            section: Section.CreateProject,
-            title: 'Create Project',
-            showOnlyWhenLoggedIn: false
-          },
-          {
-            section: Section.CreateEvent,
-            title: 'Create Event',
-            showOnlyWhenLoggedIn: true,
-            showAdminOnly: true
-          },
-          {
-            section: Section.AboutUs,
-            title: 'About Us',
-            showOnlyWhenLoggedIn: false
-          },
-          {
-            section: Section.Press,
-            title: 'News',
-            showOnlyWhenLoggedIn: false
-          }
-        ]
-      .filter(config => (!config.showOnlyWhenLoggedIn || CurrentUser.isLoggedIn()) && (!config.showAdminOnly || CurrentUser.isStaff()));
-    
-    return SectionsToShow
-      .map(config =>
-        <SectionLink
-          activeSection={this.state.activeSection}
-          key={config.title}
-          section={config.section}
-          title={config.title}
-        />
-      );
-  }
-
-  _showSectionInMainMenu(config: SectionLinkConfigEntry): boolean {
-    // Don't show items that require login
-    // Only show admin-only options if user is an admin
-    return !config.showOnlyWhenLoggedIn && (!config.showAdminOnly || CurrentUser.isStaff());
-  }
-
-  _onLogInClick(): void {
-    UniversalDispatcher.dispatch({
-      type: 'SET_SECTION',
-      section: Section.LogIn,
-      url: url.section(Section.LogIn, url.getPreviousPageArg())
-    });
-  }
 }
 
 export default Container.create(MainHeader);

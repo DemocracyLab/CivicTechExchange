@@ -47,7 +47,7 @@
   margin-right: auto;
 }
 .LandingController-root .SplashScreen-content h1 {
-  font-size: 3rem;
+  font-size: 2rem; /* at small display sizes 3rem is too big for a single word to fit */
 }
 .LandingController-topsplash .SplashScreen-content h1 {
   font-size: 4rem;
@@ -201,6 +201,9 @@
       min-width: 45%;
     }
   }
+  .LandingController-root .SplashScreen-content h1 {
+    font-size: 3rem; 
+  }
 }
 
 @include media-breakpoint-up(lg) {
@@ -231,12 +234,26 @@
     flex-wrap: nowrap;
 
     .ProjectCard-root {
-      flex-basis: 31%;
-      min-width: 31%;
+      flex-basis: 30%;
+      min-width: 30%;
     }
+
+    .ProjectCard-root:not(:last-child) {
+      margin-right: 10px;
+    }
+
+    .carousel-control-prev, .carousel-control-next {
+      top: 180px;
+      width: 25px;
+      align-items: self-start;
+    }
+    .carousel-control-prev {
+      display: none
+    } 
+
   }
   .RecentProjects-toggle {
-    margin: auto 0;
+    margin: 120px 0 0 0;
     display: inline-block;
     width: 20px;
     color: $color-grey-medium;
@@ -251,3 +268,21 @@
   }
 
 }
+
+@include media-breakpoint-up(lg) {
+  .ProjectCard-root {
+    min-height: 535px;
+  }
+}
+@include media-breakpoint-up(xl) {
+  .ProjectCard-root {
+    min-height: 405px;
+  }
+}
+@include media-breakpoint-up(xxl) {
+  .ProjectCard-root {
+    min-height: 380px;
+  }
+}
+
+ 

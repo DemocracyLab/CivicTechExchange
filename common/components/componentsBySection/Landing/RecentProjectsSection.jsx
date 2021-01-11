@@ -9,6 +9,7 @@ import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import Button from "react-bootstrap/Button";
 import url from "../../utils/url.js";
 import Section from '../../enums/Section.js';
+import Carousel from 'react-bootstrap/Carousel';
 
 
 type State = {|
@@ -28,8 +29,6 @@ class RecentProjectsSection extends React.Component<{||}, State> {
       cardCapacity: 3
     };
     this._updateWindowDimensions = this._updateWindowDimensions.bind(this);
-    this._prevProjects = this._prevProjects.bind(this);
-    this._nextProjects = this._nextProjects.bind(this);
   }
 
 
@@ -58,51 +57,13 @@ class RecentProjectsSection extends React.Component<{||}, State> {
       <div className="RecentProjects">
         <h2 className="RecentProjects-title">Active Projects</h2>
         <div className="RecentProjects-cards">
-          {this._renderPrevControl()}
           {this._renderCards()}
-          {this._renderNextControl()}
         </div>
         <div className="RecentProjects-button">
           <Button className="RecentProjects-all" href={url.section(Section.FindProjects)}>See All Projects</Button>
         </div>
       </div>
     );
-  }
-
-  _renderPrevControl(): $React$Node {
-    if (this.state.cardStart != 0) {
-      return (
-        <div className="RecentProjects-toggle RecentProjects-decrease" onClick={this._prevProjects}>
-          <i className={GlyphStyles.ChevronLeft}></i>
-        </div>
-      )
-    } else {
-      return null;
-    }
-  }
-
-  _renderNextControl(): $React$Node {
-    if (this.state.cardStart === 0) {
-      return (
-        <div className="RecentProjects-toggle RecentProjects-increase" onClick={this._nextProjects}>
-          <i className={GlyphStyles.ChevronRight}></i>
-        </div>
-      )
-    } else {
-      return null;
-    }
-  }
-
-  _nextProjects(): void {
-    this.setState(prevState => ({
-      cardStart: prevState.cardStart + this.state.cardCapacity
-    }));
-  }
-
-  _prevProjects(): void {
-    this.setState(prevState => ({
-      cardStart: prevState.cardStart - this.state.cardCapacity
-    }));
   }
 
   _setCardCapacity(): void {
@@ -116,9 +77,11 @@ class RecentProjectsSection extends React.Component<{||}, State> {
   }
 
   _renderCards(): $ReadOnlyArray<React$Node> {
-    return !this.state.projects
-      ? <i className={Glyph(GlyphStyles.LoadingSpinner, GlyphSizes.X2)}></i>
-      : this.state.projects.slice(this.state.cardStart, this.state.cardStart + this.state.cardCapacity).map(
+    if (!this.state.projects) {
+      return  <i className={Glyph(GlyphStyles.LoadingSpinner, GlyphSizes.X2)}></i>
+    }
+    if (this.state.windowWidth < 992) {
+      return this.state.projects.slice(this.state.cardStart, this.state.cardStart + this.state.cardCapacity).map(
           (project, index) =>
             <ProjectCard
               className="RecentProjects-card"
@@ -127,8 +90,31 @@ class RecentProjectsSection extends React.Component<{||}, State> {
               textlen={140}
               skillslen={4}
             />
-        );
+         );
+    } else {
+      return  <Carousel className="RecentProjects-carousel w-100" indicators={false} interval={null} onSlid={(eventKey, direction) => this._carouselSlidHandler(eventKey, direction)} >{this._renderCardsForCarousel()}</Carousel>
+    }
   }
+
+  _carouselSlidHandler(eventKey, direction): void {
+    const carouselChildren = document.querySelectorAll(".RecentProjects-carousel")[0].children
+    for (let el of carouselChildren) {
+      if (el.className === "carousel-control-next") {
+          eventKey === 1 ? el.setAttribute('style', 'display:none') : el.setAttribute('style', 'display:flex')
+      } else if (el.className === "carousel-control-prev") {
+        eventKey === 0 ? el.setAttribute('style', 'display:none') : el.setAttribute('style', 'display:flex')
+      }
+    }
+  }
+
+  _renderCardsForCarousel(): $ReadOnlyArray<ReactNode> {
+    const carouselItem0 = <Carousel.Item key="0"><div className="d-flex justify-content-center">{this.state.projects.slice(0, 3)
+                          .map((project, index) => <ProjectCard className="RecentProjects-card" project={project} key={index} textlen={140} skillslen={4} /> )}</div></Carousel.Item>
+    const carouselItem1 = <Carousel.Item key="1"><div className="d-flex justify-content-center">{this.state.projects.slice(3, 6)
+                          .map((project, index) => <ProjectCard className="RecentProjects-card" project={project} key={index} textlen={140} skillslen={4} /> )}</div></Carousel.Item>
+   return [carouselItem0, carouselItem1]
+  }
+  
 }
 
 

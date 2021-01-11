@@ -27,7 +27,8 @@ class SubscribeToMailingList(object):
 
         api = Mailchimp(api_key)
         try:
-            api.lists.subscribe(list_id, {'email': self.email})
+            merge_vars = {'FNAME': self.first_name, 'LNAME': self.last_name}
+            api.lists.subscribe(list_id, {'email': self.email}, merge_vars=merge_vars)
         except (ListDoesNotExistError, EmailNotExistsError, ListAlreadySubscribedError, Error) as e:
             self.print_error(repr(e))
             return False

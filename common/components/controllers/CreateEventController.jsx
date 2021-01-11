@@ -2,20 +2,21 @@
 
 import React from "react";
 import Section from "../enums/Section.js";
-import Headers from "../common/Headers.jsx";
 import EventOverviewForm from "../componentsBySection/CreateEvent/EventOverviewForm.jsx";
 import EventPreviewForm from "../componentsBySection/CreateEvent/EventPreviewForm.jsx";
 import EventDescriptionForm from "../componentsBySection/CreateEvent/EventDescriptionForm.jsx";
-import EventProjectSelectionForm from "../componentsBySection/CreateEvent/EventProjectSelectionForm.jsx";
 import EventAPIUtils, {EventData} from "../utils/EventAPIUtils.js";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
+import CurrentUser from "../utils/CurrentUser";
+import LogInController from "./LogInController.jsx";
+import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 
 type State = {|
-  id: ?number,
-  Event: ?EventData,
+  eventId: ?number,
+  event: ?EventData,
   steps: $ReadOnlyArray<FormWorkflowStepConfig>
 |};
 
@@ -45,12 +46,6 @@ class CreateEventController extends React.PureComponent<{||},State> {
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: EventDescriptionForm
         }, {
-        //   header: "Projects",
-        //   subHeader: "Which projects are participating?",
-        //   onSubmit: this.onSubmit,
-        //   onSubmitSuccess: this.onNextPageSuccess,
-        //   formComponent: EventProjectSelectionForm
-        // }, {
           header: "Ready to publish your Event?",
           subHeader: "Congratulations!  You have successfully created a tech-for-good Event.",
           onSubmit: this.onSubmit,
@@ -75,8 +70,8 @@ class CreateEventController extends React.PureComponent<{||},State> {
   }
   
   loadEventDetails(event: EventData): void {
-    if(!EventAPIUtils.isOwner(event)) {
-      // TODO: Handle someone other than owner
+    if(!EventAPIUtils.isOwner(event) && !CurrentUser.isStaff()) {
+      // TODO: Handle someone other than owner/admin
     } else {
       this.setState({
         event: event,
@@ -107,25 +102,14 @@ class CreateEventController extends React.PureComponent<{||},State> {
   }
   
   onFinalSubmitSuccess(event: EventData): void {
-    window.location.href = url.section(Section.AboutEvent, {id: event.event_id});
+    window.location.href = url.section(Section.AboutEvent, {id: event.event_id, eventAwaitingApproval: event.event_name});
   }
   
   render(): React$Node {
-    
     return (
       <React.Fragment>
-        <Headers
-          title="Create an Event | DemocracyLab"
-          description="Create event page"
-        />
-        
         <div className="form-body">
-          <FormWorkflow
-                      steps={this.state.steps}
-                      isLoading={this.state.eventId && !this.state.event}
-                      formFields={this.state.event}
-                    />
-          {/* {!CurrentUser.isLoggedIn()
+          {!CurrentUser.isLoggedIn()
             ? <LogInController prevPage={Section.CreateEvent}/>
             : <React.Fragment>
                 {CurrentUser.isEmailVerified()
@@ -138,7 +122,7 @@ class CreateEventController extends React.PureComponent<{||},State> {
                   )
                   : <VerifyEmailBlurb/>}
               </React.Fragment>
-          } */}
+          }
         </div>
       </React.Fragment>
     );

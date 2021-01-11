@@ -4,6 +4,12 @@
   <head>
     {% seo_js_head %}
     <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <meta name="og:title" content="{{ title }}" />
+    <meta name="description" content="{{ description }}" />
+    <meta name="og:description" content="{{ description }}" />
+    <meta name="og:type" content="{{ og_type }}" />
+    <meta name="og:image" content="{{ og_image }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/static/js/runtime.bundle.js" defer></script>
     <script src="/static/js/main.bundle.js" defer></script>
@@ -73,6 +79,7 @@
       window.BLOG_URL = '{{BLOG_URL}}';
       window.EVENT_URL = '{{EVENT_URL}}';
       window.PRIVACY_POLICY_URL = '{{PRIVACY_POLICY_URL}}';
+      window.DONATE_PAGE_BLURB = '{{DONATE_PAGE_BLURB}}';
 
       window.DLAB_MESSAGES = [];
       {% for message in messages %}

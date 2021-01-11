@@ -1,11 +1,12 @@
 // @flow
 
-// import type {Project} from '../stores/ProjectSearchStore.js';
 import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
 import type {FileInfo} from '../common/FileInfo.jsx'
 import {PositionInfo} from "../forms/PositionInfo.jsx";
-import {CountryData, DefaultCountry, countryByCode} from "../constants/Countries.js";
 import {LocationInfo, getLocationDisplayString} from "../common/location/LocationInfo.js";
+import type {MyGroupData} from "../stores/MyGroupsStore.js";
+import type {GroupTileAPIData} from "./GroupAPIUtils.js";
+import type {EventTileAPIData} from "./EventAPIUtils.js";
 import _ from 'lodash';
 
 export type APIResponse = {|
@@ -17,7 +18,6 @@ export type APIError = {|
   +errorMessage: string
 |};
 
-// TODO: Condense redundant tag definitions
 export type TagDefinition = {|
   id: number,
   tag_name: string,
@@ -25,8 +25,12 @@ export type TagDefinition = {|
   caption: string,
   category: string,
   subcategory: string,
-  parent: string,
+  parent: string
 |};
+
+export type TagDefinitionCount = {|
+  num_times: number
+|} & TagDefinition;
 
 export type ProjectData = {|
   +id: number,
@@ -97,9 +101,8 @@ export type ProjectDetailsAPIData = {|
   +project_stage: $ReadOnlyArray<TagDefinition>,
   +project_technologies: $ReadOnlyArray<TagDefinition>,
   +project_positions: $ReadOnlyArray<PositionInfo>,
+  +project_groups: $ReadOnlyArray<MyGroupData>,
   +project_location: string,
-  +project_latitude: string,
-  +project_longitude: string,
   +project_country: string,
   +project_state: string,
   +project_city: string,
@@ -109,7 +112,9 @@ export type ProjectDetailsAPIData = {|
   +project_files: $ReadOnlyArray<FileInfo>,
   +project_owners: $ReadOnlyArray<VolunteerUserData>,
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
-  +project_date_modified: Date
+  +project_date_modified: Date,
+  +project_groups: $ReadOnlyArray<GroupTileAPIData>,
+  +project_events: $ReadOnlyArray<EventTileAPIData>
 |};
 
 export type TeamAPIData = {|
@@ -204,7 +209,7 @@ class ProjectAPIUtils {
       }));
   }
   //fetch DemocracyLab board information
-  static fetchTeamDetails(callback) {
+  static fetchTeamDetails(callback: (TeamAPIData) => void): void {
     fetch('/api/team')
     .then(response => {
       return response.json()

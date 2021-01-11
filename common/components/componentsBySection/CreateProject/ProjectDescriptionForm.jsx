@@ -111,7 +111,7 @@ class ProjectDescriptionForm extends React.PureComponent<Props,State> {
             { (this.state.formFields.project_description_actions || "").length} / 1000
           </div>
           <textarea className="form-control" id="project_description_actions" name="project_description_actions"
-                    placeholder="Describe the actions that needed to be token..." rows="6" maxLength="1000"
+                    placeholder="Describe the actions that need to be taken..." rows="6" maxLength="1000"
                     value={this.state.formFields.project_description_actions} onChange={this.form.onInput.bind(this, "project_description_actions")}></textarea>
         </div>
 

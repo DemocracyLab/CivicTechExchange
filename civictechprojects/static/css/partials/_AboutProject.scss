@@ -79,11 +79,11 @@
   }
 }
 
-.AboutProjects-links, .AboutProjects-files, .AboutProjects-communities, .AboutProjects-team {
+.AboutProjects-links, .AboutProjects-files, .AboutProjects-groups, .AboutProjects-team {
   padding: 10px 5px 10px 15px;
 }
 
-.AboutProjects-links, .AboutProjects-files, .AboutProjects-communities {
+.AboutProjects-links, .AboutProjects-files, .AboutProjects-groups {
   border-bottom: $color-grey-disabled solid 1px;
 }
 
@@ -147,6 +147,7 @@
 .AboutProjects_tabs {
   clear: both;
   display:flex;
+  flex-direction: row; // column mobile, row desktop
   flex-wrap: wrap;
   justify-self: flex-start;
   align-self: flex-end;
@@ -226,10 +227,22 @@
     width: 100%;
   }
 }
-
-.AboutProjects-recent-activity {
-  padding: 20px; /*as with description-details consider maxwidth */
-
+/* events section overrides from Event page style to About Project page style */
+.AboutProjects-events {
+  h1 {
+    font-size: 28px;
+    margin-top: 2.5rem;
+  }
+  h1:first-of-type {
+    margin-top: 0;
+  }
+  .EventCard-dateheader h4 {
+    font-size: 24px;
+    margin-bottom: 1rem;
+  }
+}
+.AboutProjects-recent-activity, .AboutProjects-events  {
+  padding: 25px 10px; /*as with description-details consider maxwidth */
   border-top: $color-grey-disabled solid 1px;
 }
 
@@ -281,9 +294,29 @@
   }
 }
 
-.AboutProjects-communities {
+.AboutProjects-groups {
+  ul {
+    padding-left: 0;
+  }
   li {
     list-style-type: none;
+    margin-bottom: 20px;
+  }
+  a {
+    vertical-align: top; /* align text with top of group icon instead of bottom */
+  }
+}
+.AboutProjects-group-image {
+  height: 60px;
+  width: 60px;
+  display: inline-block;
+  margin-right: 10px;
+  img, i {
+    object-fit: contain;
+    max-width: 100%;
+    }
+  i {
+    color: $color-text-dark;
   }
 }
 
@@ -341,6 +374,9 @@
 
   .AboutProjects-positions-available {
     border-bottom: $color-grey-disabled solid 1px;
+  }
+  .AboutProjects_tabs {
+    flex-direction: column;
   }
 
 }

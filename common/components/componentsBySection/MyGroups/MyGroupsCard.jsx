@@ -7,12 +7,10 @@ import {Button} from 'react-bootstrap';
 import {MyGroupData} from "../../stores/MyGroupsStore.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 
-// //TODO: Update
-// type MyGroupClickCallback = (MyGroupData) => void;
 
 type Props = {|
   +group: MyGroupData,
-  +onGroupClickDelete: ?MyGroupClickCallback,
+  +onGroupClickDelete: (MyGroupData) => void,
 |};
 
 type State = {|
@@ -26,7 +24,7 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
       isOwner: (props.group.group_creator === CurrentUser.userID())
     };
   }
-  
+
   render(): React$Node {
     return (
       <div className="MyProjectCard-root">
@@ -45,7 +43,7 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
                 <tr className="MyProjectCard-header">
                   Your Role
                 </tr>
-                <tr>{this.state.isOwner ? "Project Lead" : "Volunteer"}</tr>
+                <tr>{this.state.isOwner ? "Group Owner" : "Volunteer"}</tr>
               </td>
               <td className="MyProjectCard-column">
                 {this._renderGroupStatus()}
@@ -64,14 +62,14 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
     if (this.state.isOwner) {
       return this.props.group.isApproved ? "Published" : "Unpublished";
     }
-    
+
     if (!this.props.group.isApproved) {
       return "Awaiting Approval";
-    } 
-    
+    }
+
     return "Active";
   }
-  
+
   _renderGroupStatus(): React$Node {
     const header: string = this.state.isOwner ? "Group Status" : "Volunteer Status";
     const status: string = this._getGroupStatus();
@@ -85,23 +83,22 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
       </React.Fragment>
     );
   }
-  
+
   _renderButtons(): ?Array<React$Node>  {
     const id = {'id':this.props.group.group_id};
-    // TODO: Reorder buttons according to re-engagement spec
     let buttons: ?Array<React$Node> = [
-      <Button className="MyProjectCard-button" href={url.section(Section.AboutGroup, id)} bsStyle="info">View</Button>
+      <Button className="MyProjectCard-button" href={url.section(Section.AboutGroup, id)} variant="info">View</Button>
     ];
-  
+
     if(this.state.isOwner){
-      const editUrl: string = this.props.group.isCreated ? url.section(Section.EditGroup, id) : url.section(Section.CreateGroup, id);
+      const editUrl: string = url.section(Section.CreateGroup, id);
       buttons = buttons.concat(
         [
-            <Button className="MyProjectCard-button" href={editUrl} bsStyle="info">Edit</Button>,
-            <Button className="MyProjectCard-button" bsStyle="danger" onClick={() => this.props.onGroupClickDelete(this.props.group)}>Delete</Button>
+            <Button className="MyProjectCard-button" href={editUrl} variant="info">Edit</Button>,
+            <Button className="MyProjectCard-button" variant="danger" onClick={() => this.props.onGroupClickDelete(this.props.group)}>Delete</Button>
         ]);
     }
-    
+
     return buttons;
   }
 }

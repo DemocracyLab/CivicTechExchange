@@ -10,6 +10,9 @@ import FormValidation from "../../../components/forms/FormValidation.jsx";
 import type {Validator} from "../../../components/forms/FormValidation.jsx";
 import type {TagDefinition, ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
 import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
+import TermsModal, {TermsTypes} from "../../common/confirmation/TermsModal.jsx";
+import PseudoLink from "../../chrome/PseudoLink.jsx";
+import CheckBox from "../../common/selection/CheckBox.jsx";
 import _ from "lodash";
 
 
@@ -18,6 +21,7 @@ type FormFields = {|
   project_short_description: ?string,
   project_issue_area?: Array<TagDefinition>,
   project_thumbnail?: FileInfo,
+  didCheckTerms: boolean
 |};
 
 type Props = {|
@@ -26,6 +30,7 @@ type Props = {|
 |} & FormPropsBase<FormFields>;
 
 type State = {|
+  termsOpen: boolean,
   formIsValid: boolean,
   validations: $ReadOnlyArray<Validator>
 |} & FormStateBase<FormFields>;
@@ -41,7 +46,8 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
       project_name: project ? project.project_name : "",
       project_short_description: project ? project.project_short_description : "",
       project_issue_area: project ? project.project_issue_area : [],
-      project_thumbnail: project ? project.project_thumbnail : ""
+      project_thumbnail: project ? project.project_thumbnail : "",
+      didCheckTerms: !!project
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
@@ -51,6 +57,10 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
       {
         checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["project_short_description"]),
         errorMessage: "Please enter Project Description"
+      },
+      {
+        checkFunc: (formFields: FormFields) => formFields.didCheckTerms,
+        errorMessage: "Agree to Terms of Use"
       }
     ];
 
@@ -58,7 +68,8 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
     this.state = {
       formIsValid: formIsValid,
       formFields: formFields,
-      validations: validations
+      validations: validations,
+      termsOpen: false
     };
     props.readyForSubmit(formIsValid);
     this.form = formHelper.setup();
@@ -118,6 +129,26 @@ class ProjectOverviewForm extends React.PureComponent<Props,State> {
                     placeholder="Give a one-sentence description of this project" rows="2" maxLength="140"
                     value={this.state.formFields.project_short_description} onChange={this.form.onInput.bind(this, "project_short_description")}></textarea>
         </div>
+  
+        { !this.props.project &&
+          <div>
+            <CheckBox
+              id="didCheckTerms"
+              value={this.state.formFields.didCheckTerms}
+              onCheck={this.form.onSelection.bind(this, "didCheckTerms")}
+            />
+            <span>
+            {" "}I have read and accepted the
+              {" "}<PseudoLink text="Terms of Use" onClick={e => this.setState({termsOpen: true})}/>
+            </span>
+          </div>
+        }
+  
+        <TermsModal
+          termsType={TermsTypes.OrgSignup}
+          showModal={this.state.termsOpen}
+          onSelection={() => this.setState({termsOpen: false})}
+        />
 
         <FormValidation
           validations={this.state.validations}

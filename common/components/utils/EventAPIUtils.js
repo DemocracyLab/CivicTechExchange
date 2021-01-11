@@ -11,6 +11,8 @@ export type EventData = {|
     event_date_start: Date,
     event_date_end: Date,
     event_name: string,
+    event_organizers_text: string,
+    event_live_id: string,
     event_rsvp_url: string,
     event_agenda: string,
     event_location: string,
@@ -18,7 +20,21 @@ export type EventData = {|
     event_short_description: string,
     event_thumbnail: FileInfo,
     event_projects: $ReadOnlyArray<ProjectAPIData>,
-    event_legacy_organization: $ReadOnlyArray<TagDefinition>
+    event_legacy_organization: $ReadOnlyArray<TagDefinition>,
+    event_slug: string,
+    is_private: boolean
+|};
+
+export type EventTileAPIData = {|
+    event_id: string,
+    event_slug: string,
+    event_date_start: Date,
+    event_date_end: Date,
+    event_name: string,
+    event_organizers_text: string,
+    event_location: string,
+    event_short_description: string,
+    event_thumbnail: FileInfo
 |};
 
 export default class EventAPIUtils {

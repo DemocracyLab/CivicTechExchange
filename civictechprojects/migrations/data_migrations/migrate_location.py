@@ -78,15 +78,16 @@ city_data = {
 
 
 def migrate_locations_from_city_list(*args):
-    for project in Project.objects.all():
-        if project.project_location in city_data:
-            print('Migrating location data for ' + str(project))
-            data = city_data[project.project_location]
-            project.project_location = data["location_id"]
-            project.project_country = data["country"]
-            project.project_state = data["state"]
-            project.project_city = data["city"]
-            project.project_location_coords = Point(data['longitude'], data['latitude'])
-            project.save()
+    if Project.objects.count() > 0:
+        for project in Project.objects.all():
+            if project.project_location in city_data:
+                print('Migrating location data for ' + str(project))
+                data = city_data[project.project_location]
+                project.project_location = data["location_id"]
+                project.project_country = data["country"]
+                project.project_state = data["state"]
+                project.project_city = data["city"]
+                project.project_location_coords = Point(data['longitude'], data['latitude'])
+                project.save()
 
 

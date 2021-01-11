@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import _ from 'lodash'
+import _ from "lodash";
 import ProjectAPIUtils,{ProjectDetailsAPIData} from '../../utils/ProjectAPIUtils.js';
 import ProjectDetails from '../../componentsBySection/FindProjects/ProjectDetails.jsx';
 import ContactProjectButton from "./ContactProjectButton.jsx";
@@ -19,6 +19,14 @@ import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import {LinkTypes} from "../../constants/LinkConstants.js";
+import InviteProjectToGroupButton from "./InviteProjectToGroupButton.jsx";
+import ApproveGroupsSection from "./ApproveGroupsSection.jsx";
+import url from "../../utils/url.js";
+import Section from "../../enums/Section.js";
+import {Glyph, GlyphStyles, GlyphSizes} from '../../utils/glyphs.js';
+import EventCardsListings from "../../componentsBySection/FindEvents/EventCardsListings.jsx";
+import type {MyGroupData} from "../../stores/MyGroupsStore.js";
+
 
 
 type Props = {|
@@ -28,6 +36,7 @@ type Props = {|
 
 type State = {|
   project: ?ProjectDetailsAPIData,
+  viewOnly: boolean,
   volunteers: ?$ReadOnlyArray<VolunteerDetailsAPIData>,
   showJoinModal: boolean,
   positionToJoin: ?PositionInfo,
@@ -43,6 +52,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     super();
     this.state = {
       project: props.project,
+      viewOnly: props.viewOnly || url.argument('embedded'),
       volunteers: props.project && props.project.project_volunteers,
       showContactModal: false,
       showPositionModal: false,
@@ -61,6 +71,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({
       project: nextProps.project,
+      viewOnly: nextProps.viewOnly || url.argument('embedded'),
       volunteers: nextProps.project.project_volunteers
     });
   }
@@ -93,9 +104,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   changeHighlighted(tab) {
    let tabs = {
       details: false,
+      events: false,
       skills: false,
       positions: false,
-      activity: false,
+      activity: false
     };
 
     tabs[tab] = true;
@@ -145,21 +157,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             </React.Fragment>
           }
 
-          {project && !_.isEmpty(project.project_organization) &&
-            <React.Fragment>
-              <div className='AboutProjects-communities'>
-                <h4>Communities</h4>
-                <ul>
-                  {
-                    project.project_organization.map((org, i) => {
-                      return <li key={i}>{org.display_name}</li>
-                    })
-                  }
-                </ul>
-              </div>
-
-            </React.Fragment>
-          }
+          {this._renderGroups(project)}
 
           <div className='AboutProjects-team'>
             {
@@ -207,6 +205,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 <h1>{project && project.project_name}</h1>
                 <p className='AboutProjects-description-issue'>{project && project.project_issue_area && project.project_issue_area.map(issue => issue.display_name).join(',')}</p>
                 <p>{project && project.project_short_description}</p>
+                <ApproveGroupsSection project={this.props.project}/>
               </div>
 
               <ProjectVolunteerModal
@@ -217,16 +216,20 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 handleClose={this.confirmJoinProject.bind(this)}
               />
 
-              {!this.props.viewOnly && this._renderContactAndVolunteerButtons()}
+              {!this.state.viewOnly && this._renderContactAndVolunteerButtons()}
 
             </div>
 
             <div className="AboutProjects_tabs">
 
               <a onClick={() => this.changeHighlighted('details')} className={this.state.tabs.details ? 'AboutProjects_aHighlighted' : 'none'}href="#project-details">Details</a>
-
+              
               {project && !_.isEmpty(project.project_positions) &&
               <a onClick={() => this.changeHighlighted('skills')} className={this.state.tabs.skills ? 'AboutProjects_aHighlighted' : 'none'} href="#positions-available">Skills Needed</a>
+              }
+  
+              {project && !_.isEmpty(project.project_events) &&
+              <a onClick={() => this.changeHighlighted('events')} className={this.state.tabs.events ? 'AboutProjects_aHighlighted' : 'none'} href="#project-events">Events</a>
               }
 
               {project && !_.isEmpty(project.project_commits) &&
@@ -276,7 +279,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
             </div>
           </div>
-
+  
           <div className='AboutProjects-positions-available'>
             <div className="position-relative">
               <a name="positions-available" id="positions-available" className="position-absolute AboutProjects-jumplink"></a>
@@ -285,6 +288,17 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               {project && !_.isEmpty(project.project_positions) && this._renderPositions()}
             </div>
           </div>
+  
+          {project && !_.isEmpty(project.project_events) &&
+          <React.Fragment>
+            <div className="position-relative">
+              <a name="project-events" id="project-events" className="position-absolute AboutProjects-jumplink"></a>
+            </div>
+            <div className='AboutProjects-events'>
+              <EventCardsListings events={project.project_events} showMessageForNoFutureEvents={false} />
+            </div>
+          </React.Fragment>
+          }
 
           {project && !_.isEmpty(project.project_commits) &&
             <div className='AboutProjects-recent-activity'>
@@ -295,7 +309,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                     .map(commit => <ProjectCommitCard commit={commit} />)
                 }
                 { project.project_commits.length > this.state.maxActivity && (
-                  
+
                   <div className="AboutProjects-show-more-activity-container">
                     <div className="btn btn-primary AboutProjects-show-more-activity"
                       onClick={this.handleShowMoreActivity}
@@ -332,6 +346,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       <div className='AboutProjects-owner'>
         <ContactProjectButton project={this.state.project}/>
         <ContactVolunteersButton project={this.state.project}/>
+        <InviteProjectToGroupButton project={this.state.project}/>
         <ProjectVolunteerButton
           project={this.state.project}
           onVolunteerClick={this.handleShowVolunteerModal.bind(this)}
@@ -360,7 +375,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   _renderPositions(): ?Array<React$Node> {
     const project: ProjectDetailsAPIData = this.state.project;
-    const canApply: boolean = CurrentUser.canVolunteerForProject(project);
+    const canApply: boolean = !this.state.viewOnly && CurrentUser.canVolunteerForProject(project);
     return project && project.project_positions && _.chain(project.project_positions).sortBy(['roleTag.subcategory', 'roleTag.display_name']).value()
       .map((position, i) => {
         return <AboutPositionEntry
@@ -371,6 +386,37 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
         />;
       });
     }
-}
+  
+  _renderGroups(project: ?ProjectDetailsAPIData): ?Array<React$Node> {
+    const groups: ?$ReadOnlyArray<MyGroupData> = project && project.project_groups && project.project_groups.filter((group) => group.isApproved && group.relationship_is_approved);
+    return !_.isEmpty(groups) &&
+      (
+        <React.Fragment>
+          <div className='AboutProjects-groups'>
+            <h4>Groups</h4>
+            <ul>
+              {
+                project.project_groups.map((group, i) => {
+                  return <li key={i}>{this._renderGroupIcon(group)} <a href={url.section(Section.AboutGroup, {id: group.group_id})}>{group.group_name}</a></li>
+                })
+              }
+            </ul>
+          </div>
+        </React.Fragment>
+      );
+  }
+
+    _renderGroupIcon(group): ?Array<React$Node> {
+      return (
+        <div className="AboutProjects-group-image">
+          <a href={url.section(Section.AboutGroup, {id: group.group_id})}>
+            {!_.isEmpty(group.group_thumbnail)
+            ? <img src={group.group_thumbnail.publicUrl} alt={group.group_name + " Logo"} />
+            : <i className={Glyph(GlyphStyles.Users, GlyphSizes.X3)}></i>}
+            </a>
+          </div>
+      )
+    }
+  }
 
 export default AboutProjectDisplay;

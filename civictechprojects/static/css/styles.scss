@@ -20,17 +20,21 @@
 @import 'vendor/bootstrap/close';
 @import 'vendor/bootstrap/carousel';
 @import 'vendor/bootstrap/dropdown';
-@import 'vendor/bootstrap/modal';
 @import 'vendor/bootstrap/forms';
-@import 'vendor/bootstrap/utilities';
+@import 'vendor/bootstrap/modal';
+@import 'vendor/bootstrap/nav';
+@import 'vendor/bootstrap/navbar';
 @import 'vendor/bootstrap/print';
 @import 'vendor/bootstrap/pagination';
+@import 'vendor/bootstrap/transitions';
+@import 'vendor/bootstrap/utilities';
   //import other third party CSS
 @import 'vendor/_react-select.min';
 @import 'vendor/react-datepicker/_react-datepicker';
 @import 'vendor/react-image-crop/ReactCrop';
 
   //import DemocracyLab component partials
+@import 'partials/AboutGroupDisplay';
 @import 'partials/AboutUs';
 @import 'partials/AboutUser';
 @import 'partials/BioModal';
@@ -85,3 +89,7 @@
 @import 'partials/AboutEvent';
 @import 'partials/LiveEvent';
 @import 'partials/CreateForm';
+@import 'partials/ApproveGroupsSection';
+@import 'partials/FindEventController';
+@import 'partials/CorporateHackathon';
+@import 'partials/MyEvents';
