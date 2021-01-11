@@ -242,11 +242,14 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           <div className='AboutProjects-details AboutProjects-details-description'>
             <div className="position-relative"><a className="position-absolute AboutProjects-jumplink" id="project-details" name="project-details"></a></div>
             <div>
+              {!_.isEmpty(project.project_description_solution || project.project_description.actions) && 
+                <h3 className="AboutProjects-details-sectionheader">Problem</h3>
+              }
               {project.project_description}
               {!_.isEmpty(project.project_description_solution) &&
                 <React.Fragment>
-                  <div>
-                    <br></br>
+                  <div>                    
+                    <h3 className="AboutProjects-details-sectionheader pt-4">Solution</h3>
                     {project.project_description_solution}
                   </div>
                 </React.Fragment>
@@ -254,7 +257,8 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               {!_.isEmpty(project.project_description_actions) &&
                 <React.Fragment>
                   <div>
-                    <br></br>
+                    
+                    <h3 className="AboutProjects-details-sectionheader pt-4">Action</h3>
                     {project.project_description_actions}
                   </div>
                 </React.Fragment>
