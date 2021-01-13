@@ -8,3 +8,11 @@ def merge_dicts(*dict_args):
     for dictionary in dict_args:
         result.update(dictionary)
     return result
+
+
+def keys_subset(base_dict, keys):
+    """
+    Generate a dictionary that contains a subset of the entries of the base dictionary
+    with the given keys
+    """
+    return dict((k, base_dict[k]) for k in keys if k in base_dict) 
