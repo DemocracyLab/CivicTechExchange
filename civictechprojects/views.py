@@ -41,6 +41,7 @@ import requests
 
 
 def tags(request):
+    # TODO: Support filtering by event
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
         url_parts, keep_blank_values=0, strict_parsing=0)

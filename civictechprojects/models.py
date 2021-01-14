@@ -435,6 +435,7 @@ class Event(Archived):
             'is_private': self.is_private
         }
 
+        # TODO: Don't cache this since it isn't used
         if len(projects) > 0:
             event['event_projects'] = list(map(lambda project: project.relationship_project.hydrate_to_tile_json(), projects))
 
@@ -444,6 +445,7 @@ class Event(Archived):
         return event
 
     def hydrate_to_tile_json(self):
+        # TODO: Use cached version
         files = ProjectFile.objects.filter(file_event=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
 

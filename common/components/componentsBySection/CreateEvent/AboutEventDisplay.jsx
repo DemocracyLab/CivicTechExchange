@@ -10,6 +10,7 @@ import urlHelper from "../../utils/url.js";
 import Section from "../../enums/Section";
 import ProjectCardsContainer from "../FindProjects/ProjectCardsContainer.jsx";
 import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
 import _ from "lodash";
 
 type Props = {|
@@ -110,8 +111,9 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           <h3>What We Will Do</h3>
           <p>{event.event_agenda}</p>
         </div>
-        {!_.isEmpty(event.event_legacy_organization) &&
-          this._renderProjectList()}
+        {!_.isEmpty(event.event_legacy_organization) && (
+          <ProfileProjectSearch />
+        )}
       </div>
     );
   }
