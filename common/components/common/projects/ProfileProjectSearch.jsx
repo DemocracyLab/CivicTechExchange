@@ -8,6 +8,7 @@ import ProjectSearchBar from "../../componentsBySection/FindProjects/ProjectSear
 import ProjectCardsContainer from "../../componentsBySection/FindProjects/ProjectCardsContainer.jsx";
 import ProjectSearchSort from "../../componentsBySection/FindProjects/ProjectSearchSort.jsx";
 import ProjectTagContainer from "../../componentsBySection/FindProjects/ProjectTagContainer.jsx";
+import CollapsiblePreviewPanel from "../CollapsiblePreviewPanel.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -24,13 +25,19 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
   }
 
   render(): ?$React$Node {
+    const tagContainer: React$Node = <ProjectTagContainer />;
+    const filterContainer: React$Node = (
+      <ProjectFilterDataContainer title="Filter by" />
+    );
     return (
       <React.Fragment>
         <ProjectSearchBar />
         <ResetSearchButton />
-        {/*TODO: Put ProjectTagContainer and ProjectFilterDataContainer in a collapsible container*/}
-        <ProjectTagContainer />
-        <ProjectFilterDataContainer title="Filter by" />
+        <CollapsiblePreviewPanel
+          previewContent={tagContainer}
+          collapsibleContent={filterContainer}
+          expanded={false}
+        />
         <ProjectSearchSort />
         <div className="row">
           <ProjectCardsContainer
