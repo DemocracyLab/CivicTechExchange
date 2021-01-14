@@ -1,84 +1,57 @@
 .DonateController-root {
-  display: flex;
-  max-width: 1400px;
-  margin: 0 auto;
-  background-color: $color-background-light;
-  h2 {
-    margin-top: 2rem;
+  .radio-button {
+    margin: 0.75rem 0.5rem;
+    min-width: 4.375rem;
+    &:hover {
+      color: $color-orange;
+      border-color: $color-orange;
+      background: none;
+    }
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba($color-orange-dark, 0.5);
+    }
+  }
+
+  .checked .radio-button {
+    color: $color-orange-dark;
+    border-color: $color-orange-dark;
   }
 }
 
-.donate-image img{
+.DonateController-image img {
+  height: 100%;
   width: 100%;
+  object-fit: cover;
 }
-
-.DonateController-root .panel {
-  width: 50%;
-}
-
 
 .DonateController-amounts {
   display: flex;
   flex-wrap: wrap;
+  max-width: 350px; /* each button including padding is 86px so this makes it 4 wide at most */
 }
 
 .DonateController-monthly {
   display: flex;
-}
-
-.radio-button {
-  margin: 0px 0px 10px 15px;
-  min-width: 70px;
-  &:hover {
-    color: $color-orange;
-    border-color: $color-orange;
-    background: none;
-  }
-  &:focus {
-    box-shadow: 0 0 0 .2rem rgba($color-orange-dark, 0.5)
-  }
-}
-
-.checked .radio-button {
-  color: $color-orange-dark;
-  border-color: $color-orange-dark;
-}
-
-@media (min-width: 900px) {
-  .DonateController-text {
-    padding: 40px 25px;
-  }
-
-  .PaypalDonationButton {
-    float: right;
-  }
-
-  .DonateController-options {
-    padding-left: 40px;
-    padding-right: 40px;
-  }
-
-  .DonateController-monthly .radio-button {
-    width: 200px;
-    height: 50px;
-  }
-}
-
-@media (max-width: 900px) {
-  .DonateController-root {
-    flex-direction: column;
-  }
-
-  .DonateController-text {
-    padding: 20px;
-  }
-
-  .DonateController-root .panel {
-    width: 100%;
-  }
-
-  .DonateController-monthly .radio-button {
+  flex-wrap: wrap;
+  max-width: 350px;
+  padding: 1rem 0;
+  .radio-button {
     width: 150px;
     height: 40px;
+  }
+}
+.DonateController-text-container {
+  padding: 2rem 0;
+}
+.PaypalDonationButton {
+  padding-left: 0.5rem;
+  padding-bottom: 1rem;
+}
+.DonateController-subheader {
+  width: 100%;
+}
+@include media-breakpoint-up(lg) {
+  .DonateController-root .radio-button {
+    height: 50px;
   }
 }
