@@ -56,9 +56,9 @@ class CollapsiblePreviewPanel extends React.PureComponent<Props, State> {
           onClick={this.toggleExpansion.bind(this)}
         >
           {this.state.expanded ? (
-            <i className={GlyphStyles.ChevronDown}></i>
-          ) : (
             <i className={GlyphStyles.ChevronUp}></i>
+          ) : (
+            <i className={GlyphStyles.ChevronDown}></i>
           )}
         </span>
       </React.Fragment>
