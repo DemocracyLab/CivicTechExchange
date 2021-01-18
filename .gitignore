@@ -92,7 +92,15 @@ ENV/
 .idea/
 
 # VisualStudio Code
-.vscode/
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+
+# VisualStudioCode Patch
+# Ignore all local history of files
+.history
+.ionide
 
 # Local database
 mydatabase
