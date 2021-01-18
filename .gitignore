@@ -122,4 +122,3 @@ package-lock.json
 docker_environment_init.sh
 
 .envrc
-tags
