@@ -13,6 +13,10 @@
   }
   .preview-panel-toggle {
     padding: 8px 16px;
+    cursor: pointer; // hint that this is interactable
+  }
+  .ProjectFilterContainer-list-item {
+    padding-left: 1rem;
   }
 }
 
@@ -25,4 +29,14 @@ h3.ProjectProfileSearch-sectiontitle {
   font-size: 1rem;
   margin: auto 8px auto 0;
   flex-shrink: 0; // ensures title will not wrap onto two lines
+}
+
+@include media-breakpoint-up(lg) {
+  .ProjectProfileSearch-root {
+    .ProjectFilterContainer-category-header,
+    .ProjectFilterContainer-subcategory-header,
+    .ProjectFilterContainer-filter-list {
+      margin: 0 2rem;
+    }
+  }
 }
