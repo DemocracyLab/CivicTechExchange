@@ -31,14 +31,29 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
     );
     return (
       <React.Fragment>
-        <ProjectSearchBar />
-        <ResetSearchButton />
-        <CollapsiblePreviewPanel
-          previewContent={tagContainer}
-          collapsibleContent={filterContainer}
-          expanded={false}
-        />
-        <ProjectSearchSort />
+        <div className="row justify-content-center ProjectProfileSearch-root">
+          <div className="col-12 col-lg-10">
+            <h3 className="ProjectProfileSearch-sectiontitle pt-4">
+              Search Participating Projects
+            </h3>
+            <ProjectSearchBar />
+            <div className="d-flex justify-content-between pt-4 pb-2">
+              <h3 className="ProjectProfileSearch-sectiontitle">Filter By</h3>
+              <ResetSearchButton />
+            </div>
+            <CollapsiblePreviewPanel
+              previewContent={tagContainer}
+              collapsibleContent={filterContainer}
+              expanded={false}
+            />
+          </div>
+        </div>
+        <div className="ProjectProfileSearch-sort row">
+          <div className="col-12 pt-4 d-flex justify-content-end">
+            <h4>Sort By</h4>
+            <ProjectSearchSort />
+          </div>
+        </div>
         <div className="row">
           <ProjectCardsContainer
             showSearchControls={false}
