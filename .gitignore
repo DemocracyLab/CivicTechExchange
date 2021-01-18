@@ -91,6 +91,9 @@ ENV/
 *.iml
 .idea/
 
+# VisualStudio Code
+.vscode/
+
 # Local database
 mydatabase
 
