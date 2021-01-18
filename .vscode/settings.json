@@ -1,3 +1,8 @@
 {
-    "python.linting.pylintEnabled": false
+    "python.linting.pylintEnabled": false,
+    "editor.fontSize": 16,
+    "files.exclude": {
+        "**/.github": true,
+        "**/node_modules": true
+    }
 }
