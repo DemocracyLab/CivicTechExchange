@@ -1,0 +1,25 @@
+.ProjectProfileSearch-root {
+  button.reset-search-button {
+    max-width: 120px;
+  }
+  .ProjectTagContainer-root {
+      border: 0;
+      padding: 0;
+      margin: 8px;
+  }
+  .preview-panel {
+      border: 1px solid $color-text-dark;
+      border-radius: 0.5rem;
+  }
+}
+
+h3.ProjectProfileSearch-sectiontitle {
+  font-size: 18px;
+  margin-top: auto;
+}
+
+.ProjectProfileSearch-sort h4 {
+    font-size: 1rem;
+    margin: auto 0.5rem auto 0;
+    flex-shrink: 0; // ensures title will not wrap onto two lines
+}
