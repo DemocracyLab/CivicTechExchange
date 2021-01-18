@@ -41,8 +41,10 @@ class CollapsiblePreviewPanel extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div className="preview-panel">
-        {this.state.previewContent}
-        {this._renderExpandCollapse()}
+        <div className="d-flex justify-content-between">
+          {this.state.previewContent}
+          {this._renderExpandCollapse()}
+        </div>
         {this.state.expanded && this.state.collapsibleContent}
       </div>
     );

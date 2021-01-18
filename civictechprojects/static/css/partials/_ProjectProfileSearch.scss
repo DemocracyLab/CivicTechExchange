@@ -3,13 +3,16 @@
     max-width: 120px;
   }
   .ProjectTagContainer-root {
-      border: 0;
-      padding: 0;
-      margin: 8px;
+    border: 0;
+    padding: 0;
+    margin: 8px;
   }
   .preview-panel {
-      border: 1px solid $color-text-dark;
-      border-radius: 0.5rem;
+    border: 1px solid $color-text-dark;
+    border-radius: 8px;
+  }
+  .preview-panel-toggle {
+    padding: 8px 16px;
   }
 }
 
@@ -19,7 +22,7 @@ h3.ProjectProfileSearch-sectiontitle {
 }
 
 .ProjectProfileSearch-sort h4 {
-    font-size: 1rem;
-    margin: auto 0.5rem auto 0;
-    flex-shrink: 0; // ensures title will not wrap onto two lines
+  font-size: 1rem;
+  margin: auto 8px auto 0;
+  flex-shrink: 0; // ensures title will not wrap onto two lines
 }
