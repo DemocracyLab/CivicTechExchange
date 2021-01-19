@@ -19,7 +19,6 @@ import type {LocationRadius} from "../../stores/ProjectSearchStore.js";
 type Props = {|
   showSearchControls: ?boolean,
   staticHeaderText: ?string,
-  fullWidth: ?boolean,
   onSelectProject: ?Function,
   selectableCards: ?boolean,
   alreadySelectedProjects: ?List<string>, // todo: proper state management

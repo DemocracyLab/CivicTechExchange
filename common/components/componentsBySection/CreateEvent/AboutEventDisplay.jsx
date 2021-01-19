@@ -230,7 +230,6 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         <ProjectCardsContainer
           showSearchControls={false}
           staticHeaderText="Participating Projects"
-          fullWidth={true}
           selectableCards={false}
         />
       </div>
