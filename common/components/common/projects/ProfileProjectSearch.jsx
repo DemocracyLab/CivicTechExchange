@@ -36,7 +36,7 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
             <h3 className="ProjectProfileSearch-sectiontitle pt-4">
               Search Participating Projects
             </h3>
-            <ProjectSearchBar />
+            <ProjectSearchBar placeholder="Skill, keyword, or issue areas" />
             <div className="d-flex justify-content-between pt-4 pb-2">
               <h3 className="ProjectProfileSearch-sectiontitle">Filter By</h3>
               <ResetSearchButton />
