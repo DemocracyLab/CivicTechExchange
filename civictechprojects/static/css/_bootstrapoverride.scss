@@ -16,11 +16,11 @@ $grid-breakpoints: (
 );
 
 $container-max-widths: (
-  sm: 540px,
-  md: 720px,
-  lg: 960px,
-  xl: 1140px,
-  xxl: 1400px
+  sm: 540px, // 12 col @ 45px/ea inc. gutters
+  md: 720px, // 12 col @ 60px/ea inc. gutters
+  lg: 960px, // 12 col @ 80px/ea inc. gutters
+  xl: 1140px, // 12 col @ 95px/ea inc. gutters
+  xxl: 1392px, // 12 col @ 116px/ea inc. gutters
 );
 
 //define our font stack
