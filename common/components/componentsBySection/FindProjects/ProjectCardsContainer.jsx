@@ -58,8 +58,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
 
   render(): React$Node {
     return (
-      <div className={`ProjectCardContainer col-12 ${this.props.fullWidth ? '' : 'col-md-8 col-lg-9 p-0 m-0'}`}>
-        <div className="container-fluid">
+      <div className="ProjectCardContainer col">
           {
             this.props.showSearchControls
             ? (
@@ -77,7 +76,6 @@ class ProjectCardsContainer extends React.Component<Props, State> {
           <div>
             {this._renderPagination()}
           </div>
-        </div>
       </div>
     );
   }
