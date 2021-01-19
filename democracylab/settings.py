@@ -110,7 +110,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware'
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'democracylab.urls'
@@ -326,6 +327,17 @@ CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
+
+CSP_DEFAULT_SRC = ("'none'",)
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", 'fonts.googleapis.com', '*.fontawesome.com')
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", '*.facebook.net/')
+CSP_CONNECT_SRC = ("'self'",'*.qiqochat.com')
+CSP_FONT_SRC = ("'self'", 'fonts.googleapis.com', 'fonts.gstatic.com', 'use.fontawesome.com')
+CSP_IMG_SRC = ("'self'", '*.cloudfront.net', '*.s3.amazonaws.com', '*.facebook.net/')
+# TODO: Make sure environment variable entries added to other CSP headers
+CSP_FRAME_SRC = os.environ.get('CSP_FRAME_SRC', None)
+if CSP_FRAME_SRC is not None:
+    CSP_FRAME_SRC = ast.literal_eval(CSP_FRAME_SRC)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

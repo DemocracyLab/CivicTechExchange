@@ -1,0 +1,45 @@
+diff --git a/democracylab/settings.py b/democracylab/settings.py
+index 4cca5498..d1f3085c 100644
+--- a/democracylab/settings.py
++++ b/democracylab/settings.py
+@@ -110,7 +110,8 @@ MIDDLEWARE = [
+     'django.middleware.common.CommonMiddleware',
+     'django.middleware.csrf.CsrfViewMiddleware',
+     'django.contrib.messages.middleware.MessageMiddleware',
+-    'django.middleware.clickjacking.XFrameOptionsMiddleware'
++    'django.middleware.clickjacking.XFrameOptionsMiddleware',
++    'csp.middleware.CSPMiddleware',
+ ]
+ 
+ ROOT_URLCONF = 'democracylab.urls'
+@@ -327,6 +328,18 @@ SESSION_COOKIE_SECURE = not DEBUG
+ CSRF_COOKIE_SAMESITE = 'None'
+ SESSION_COOKIE_SAMESITE = 'None'
+ 
++CSP_DEFAULT_SRC = ("'none'",)
++CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", 'fonts.googleapis.com', '*.fontawesome.com')
++CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", '*.facebook.net/')
++CSP_CONNECT_SRC = ("'self'",'*.qiqochat.com')
++CSP_FONT_SRC = ("'self'", 'fonts.googleapis.com', 'fonts.gstatic.com', 'use.fontawesome.com')
++CSP_IMG_SRC = ("'self'", '*.cloudfront.net', '*.s3.amazonaws.com', 'data:image/svg+xml', 'data:image/svg+xml,%3Csvg', '*.facebook.net/')
++CSP_FRAME_SRC = os.environ.get('CSP_FRAME_SRC', None)
++if CSP_FRAME_SRC is not None:
++    CSP_FRAME_SRC = ast.literal_eval(CSP_FRAME_SRC)
++from pprint import pprint
++pprint(CSP_FRAME_SRC)
++
+ # Internationalization
+ # https://docs.djangoproject.com/en/1.11/topics/i18n/
+ 
+diff --git a/requirements.txt b/requirements.txt
+index df773c32..0dd55edb 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -7,6 +7,7 @@ django-appconf==1.0.2
+ django-autofixture==0.12.1
+ django-compressor==2.1.1
+ django-core==1.4.1
++django-csp==3.7
+ django-registration==2.1.2
+ django-s3direct==0.4.2
+ django-storages==1.5.1
