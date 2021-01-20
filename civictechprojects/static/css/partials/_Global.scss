@@ -8,39 +8,44 @@ body {
   background-color: $color-background-light;
   color: $color-text-dark;
 }
-.btn-footer a, .btn-footer a[type="button"] {
+.btn-footer a,
+.btn-footer a[type="button"] {
   color: $color-text-dark;
   text-decoration: none;
 }
-.btn-footer:hover, .btn-footer:active {
+.btn-footer:hover,
+.btn-footer:active {
   background-color: $color-orange-light;
   color: $color-text-dark;
   border-color: $color-orange-dark;
 }
-a.btn-footer:hover, a.btn-footer:active, a[type="button"].btn-footer:hover, a[type="button"].btn-footer:active  {
+a.btn-footer:hover,
+a.btn-footer:active,
+a[type="button"].btn-footer:hover,
+a[type="button"].btn-footer:active {
   text-decoration: none;
 }
 
 //Sets button states to be our specific values instead of default computed by Bootstrap
 //I don't think we're going to call these colors manually at any point so no vars here
-.btn-success:active, .btn-success:hover {
+.btn-success:active,
+.btn-success:hover {
   background-color: #395e00;
 }
-.btn-danger:active, .btn-danger:hover {
+.btn-danger:active,
+.btn-danger:hover {
   background-color: #b20000;
 }
-.btn-info:active, .btn-info:hover {
+.btn-info:active,
+.btn-info:hover {
   background-color: #025d87;
 }
-
 
 //Global override of disabled state input elements
 input[type="submit"]:disabled {
   background: $color-grey-disabled;
   border: $color-disabled-border;
 }
-
-
 
 //for on-page actions we want to appear as links
 .pseudo-link {
@@ -54,6 +59,9 @@ input[type="submit"]:disabled {
 }
 
 // .bounded-content should be used inside a .container-fluid; letting us have full width background with .container width content */
+.bounded-content {
+  margin: auto;
+}
 @include media-breakpoint-up(sm) {
   .bounded-content {
     width: 540px;
@@ -77,7 +85,7 @@ input[type="submit"]:disabled {
 }
 @include media-breakpoint-up(xxl) {
   .bounded-content {
-    width: 1400px;
+    width: 1392px;
   }
 }
 
