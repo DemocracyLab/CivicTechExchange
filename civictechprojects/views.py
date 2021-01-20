@@ -35,17 +35,12 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
 from common.helpers.front_end import section_url, get_page_section, get_clean_url
-from common.helpers.caching import update_cached_project_url
 from django.views.decorators.cache import cache_page
 import requests
 
 
-def tags(request):
-    url_parts = request.GET.urlencode()
-    query_terms = urlparse.parse_qs(
-        url_parts, keep_blank_values=0, strict_parsing=0)
-    queryset = get_tags_by_category(query_terms.get('category')[0]) if 'category' in query_terms else Tag.objects.all()
-    event = query_terms.get('event')[0] if 'event' in query_terms else None
+def get_tag_counts(category=None, event=None):
+    queryset = get_tags_by_category(category) if category is not None else Tag.objects.all()
     activetagdict = ProjectSearchTagsCache.get(event)
     querydict = {tag.tag_name: tag for tag in queryset}
     resultdict = {}
@@ -53,8 +48,15 @@ def tags(request):
     for slug in querydict.keys():
         resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
         resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-    tags_list = list(resultdict.values())
-    return JsonResponse(tags_list, safe=False)
+    return list(resultdict.values())
+
+
+def tags(request):
+    url_parts = request.GET.urlencode()
+    query_terms = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+    tag_counts = get_tag_counts(category=query_terms.get('category')[0] if 'category' in query_terms else None,
+                                event=query_terms.get('event')[0] if 'event' in query_terms else None)
+    return JsonResponse(tag_counts, safe=False)
 
 
 @cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
@@ -521,11 +523,14 @@ def projects_list(request):
     url_parts = request.GET.urlencode()
     query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
     project_relationships = None
+    event = None
 
     if 'group_id' in query_params:
         project_relationships = ProjectRelationship.objects.filter(relationship_group=query_params['group_id'][0])
     elif 'event_id' in query_params:
-        project_relationships = ProjectRelationship.objects.filter(relationship_event=query_params['event_id'][0])
+        event_id = query_params['event_id'][0]
+        project_relationships = ProjectRelationship.objects.filter(relationship_event=event_id)
+        event = Event.get_by_id_or_slug(event_id)
 
     if project_relationships is not None:
         project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
@@ -567,8 +572,8 @@ def projects_list(request):
             project_list_page = project_list
             project_pages = 1
 
-
-    response = projects_with_meta_data(project_list_page, project_pages, project_count)
+    tag_counts = get_tag_counts(category=None, event=event)
+    response = projects_with_meta_data(project_list_page, project_pages, project_count, tag_counts)
 
     return JsonResponse(response)
 
@@ -697,11 +702,11 @@ def project_countries():
     return unique_column_values(Project, 'project_country', lambda country: country and len(country) == 2)
 
 
-def projects_with_meta_data(projects, project_pages, project_count):
+def projects_with_meta_data(projects, project_pages, project_count, tag_counts):
     return {
         'projects': [project.hydrate_to_tile_json() for project in projects],
         'availableCountries': project_countries(),
-        'tags': list(Tag.objects.values()),
+        'tags': tag_counts,
         'numPages': project_pages,
         'numProjects': project_count
     }

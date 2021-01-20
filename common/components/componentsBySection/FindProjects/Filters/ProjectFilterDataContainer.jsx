@@ -12,6 +12,7 @@ import ProjectSearchDispatcher from "../../../stores/ProjectSearchDispatcher.js"
 import RenderFilterCategory from "./RenderFilterCategory.jsx";
 import metrics from "../../../utils/metrics";
 import _ from "lodash";
+import { List } from "immutable";
 
 /**
  * @category: Tag category to pull from
@@ -38,11 +39,31 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
       filterCounts: null,
     };
 
-    // passing true to fetchTagsByCategory asks backend to return num_times in API response
-    ProjectAPIUtils.fetchAllTags(true, tags => {
+    this._checkEnabled = this._checkEnabled.bind(this);
+    this._selectOption = this._selectOption.bind(this);
+  }
+
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [ProjectSearchStore];
+  }
+
+  static calculateState(prevState: State): State {
+    const state: State =
+      this.processTags(ProjectSearchStore.getAllTags()) || {};
+
+    return Object.assign(state, {
+      selectedTags: _.mapKeys(
+        ProjectSearchStore.getTags().toArray(),
+        (tag: TagDefinition) => tag.tag_name
+      ),
+    });
+  }
+
+  static processTags(tags: List<TagDefinition>): ?State {
+    if (!_.isEmpty(tags)) {
       //Need to do some work before setting state: Remove empty tags, generate cat/subcat totals, cleanup, then set state.
       //Remove tags from API with num_times=0 before doing anything else
-      let filteredTags = tags.filter(function(key) {
+      let filteredTags = _.values(tags).filter(function(key) {
         return key.num_times > 0;
       });
       //Generate category and subcategory totals - this is number of FILTERS and not total number of PROJECTS
@@ -56,27 +77,12 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
       let sorted = _.groupBy(filteredTags, "category");
 
       //last, set state with our computed data
-      this.setState({
+      return {
         tags: filteredTags,
         filterCounts: countMergeResult,
         sortedTags: sorted,
-      });
-    });
-    this._checkEnabled = this._checkEnabled.bind(this);
-    this._selectOption = this._selectOption.bind(this);
-  }
-
-  static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore];
-  }
-
-  static calculateState(prevState: State): State {
-    return {
-      selectedTags: _.mapKeys(
-        ProjectSearchStore.getTags().toArray(),
-        (tag: TagDefinition) => tag.tag_name
-      ),
-    };
+      };
+    }
   }
 
   render(): React$Node {
