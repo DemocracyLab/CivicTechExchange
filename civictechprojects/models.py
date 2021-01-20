@@ -8,7 +8,7 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
-from civictechprojects.caching.cache import ProjectCache, EventCache
+from civictechprojects.caching.cache import ProjectCache, EventCache, ProjectSearchTagsCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts
 from common.helpers.collections import flatten, count_occurrences
@@ -513,6 +513,7 @@ class Event(Archived):
     def recache(self):
         hydrated_event = self._hydrate_to_json()
         EventCache.refresh(self, hydrated_event)
+        ProjectSearchTagsCache.refresh(self)
 
 
 class NameRecord(models.Model):

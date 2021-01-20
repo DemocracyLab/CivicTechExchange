@@ -16,9 +16,9 @@ import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
-from .helpers.projects import projects_tag_counts
 from .sitemaps import SitemapPages
-from common.caching.cache import Cache, CacheKeys
+from .caching.cache import ProjectSearchTagsCache
+from common.caching.cache import Cache
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
@@ -41,12 +41,12 @@ import requests
 
 
 def tags(request):
-    # TODO: Support filtering by event
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(
         url_parts, keep_blank_values=0, strict_parsing=0)
     queryset = get_tags_by_category(query_terms.get('category')[0]) if 'category' in query_terms else Tag.objects.all()
-    activetagdict = projects_tag_counts()
+    event = query_terms.get('event')[0] if 'event' in query_terms else None
+    activetagdict = ProjectSearchTagsCache.get(event)
     querydict = {tag.tag_name: tag for tag in queryset}
     resultdict = {}
 
@@ -352,7 +352,7 @@ def approve_project(request, project_id):
         if user.is_staff:
             project.is_searchable = True
             project.save()
-            Cache.refresh(CacheKeys.ProjectTagCounts.value)
+            ProjectSearchTagsCache.refresh()
             SitemapPages.update()
             notify_project_owners_project_approved(project)
             messages.success(request, 'Project Approved')
