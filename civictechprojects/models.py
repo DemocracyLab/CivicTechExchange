@@ -409,7 +409,6 @@ class Event(Archived):
         return EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
 
     def _hydrate_to_json(self):
-        projects = ProjectRelationship.objects.filter(relationship_event=self.id)
         files = ProjectFile.objects.filter(file_event=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))

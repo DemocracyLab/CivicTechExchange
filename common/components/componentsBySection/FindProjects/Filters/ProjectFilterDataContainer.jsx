@@ -28,8 +28,6 @@ type State = {|
   selectedTags: ?{ [key: string]: boolean },
 |};
 
-// TODO: Don't show legacy organization tags
-
 class ProjectFilterDataContainer extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
