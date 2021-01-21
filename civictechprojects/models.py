@@ -435,10 +435,6 @@ class Event(Archived):
             'is_private': self.is_private
         }
 
-        # TODO: Don't cache this since it isn't used
-        if len(projects) > 0:
-            event['event_projects'] = list(map(lambda project: project.relationship_project.hydrate_to_tile_json(), projects))
-
         if len(thumbnail_files) > 0:
             event['event_thumbnail'] = thumbnail_files[0].to_json()
 
