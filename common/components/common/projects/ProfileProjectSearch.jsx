@@ -32,7 +32,7 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
     return (
       <React.Fragment>
         <div className="row justify-content-center ProjectProfileSearch-root">
-          <div className="col-12 col-lg-10">
+          <div className="col-12 col-md-10 col-lg-9 col-xl-8">
             <h3 className="ProjectProfileSearch-sectiontitle pt-4">
               Search Participating Projects
             </h3>
