@@ -51,6 +51,10 @@
 .AboutEvent-root .ProjectSearchSort-sortform {
   max-width: 260px;
 }
+//visually has to match the filters
+.AboutEvent-root .LocationSearchContainer-content {
+  margin: 0 0 0 1rem;
+}
 @include media-breakpoint-up(lg) {
   .AboutEvent-info {
     order: 1;
@@ -62,5 +66,8 @@
   .AboutEvent-info-inner {
     background: $color-background-default;
     padding: 1rem;
+  }
+  .AboutEvent-root .LocationSearchContainer-content {
+    margin: 0 2rem 0 3rem; 
   }
 }
