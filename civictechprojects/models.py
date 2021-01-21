@@ -422,25 +422,12 @@ class Event(Archived):
         return event
 
     def hydrate_to_tile_json(self):
-        # TODO: Use cached version
-        files = ProjectFile.objects.filter(file_event=self.id)
-        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+        keys = [
+            'event_date_end', 'event_date_start', 'event_id', 'event_slug', 'event_location', 'event_name',
+            'event_organizers_text', 'event_short_description', 'event_thumbnail'
+        ]
 
-        group = {
-            'event_date_end': self.event_date_end.__str__(),
-            'event_date_start': self.event_date_start.__str__(),
-            'event_id': self.id,
-            'event_slug': self.event_slug,
-            'event_location': self.event_location,
-            'event_name': self.event_name,
-            'event_organizers_text': self.event_organizers_text,
-            'event_short_description': self.event_short_description
-        }
-
-        if len(thumbnail_files) > 0:
-            group['event_thumbnail'] = thumbnail_files[0].to_json()
-
-        return group
+        return keys_subset(self.hydrate_to_json(), keys)
 
     def hydrate_to_list_json(self):
         event = self.hydrate_to_tile_json()
