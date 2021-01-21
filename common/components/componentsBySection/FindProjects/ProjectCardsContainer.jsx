@@ -19,7 +19,6 @@ import ProjectSearchBar from "./ProjectSearchBar.jsx";
 type Props = {|
   showSearchControls: ?boolean,
   staticHeaderText: ?string,
-  fullWidth: ?boolean,
   onSelectProject: ?Function,
   selectableCards: ?boolean,
   alreadySelectedProjects: ?List<string>, // todo: proper state management
@@ -56,33 +55,23 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   }
 
   render(): React$Node {
-    ProjectSearchBar;
     return (
-      <div
-        className={`ProjectCardContainer col-12 ${
-          this.props.fullWidth ? "" : "col-md-8 col-lg-9 p-0 m-0"
-        }`}
-      >
-        <div className="container-fluid">
-          {this.props.showSearchControls ? (
-            <React.Fragment>
-              <div className="ProjectSearchSort-container">
-                <ProjectSearchBar />
-                <ProjectSearchSort />
-              </div>
-              <ProjectTagContainer />
-            </React.Fragment>
-          ) : null}
-          <div className="row">
-            {!_.isEmpty(this.state.projects) && (
-              <h2 className="ProjectCardContainer-header">
-                {this._renderCardHeaderText()}
-              </h2>
-            )}
-            {this._renderCards()}
-          </div>
-          <div>{this._renderPagination()}</div>
+      <div className="ProjectCardContainer col">
+        {this.props.showSearchControls ? (
+          <React.Fragment>
+            <ProjectSearchSort />
+            <ProjectTagContainer />
+          </React.Fragment>
+        ) : null}
+        <div className="row">
+          {!_.isEmpty(this.state.projects) && (
+            <h2 className="ProjectCardContainer-header">
+              {this._renderCardHeaderText()}
+            </h2>
+          )}
+          {this._renderCards()}
         </div>
+        <div>{this._renderPagination()}</div>
       </div>
     );
   }

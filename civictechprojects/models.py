@@ -10,7 +10,7 @@ from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from civictechprojects.caching.cache import ProjectCache, EventCache, ProjectSearchTagsCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
-from common.helpers.dictionaries import merge_dicts
+from common.helpers.dictionaries import merge_dicts, keys_subset
 from common.helpers.collections import flatten, count_occurrences
 
 # Without the following classes, the following error occurs:
@@ -162,30 +162,12 @@ class Project(Archived):
         return project
 
     def hydrate_to_tile_json(self):
-        files = ProjectFile.objects.filter(file_project=self.id)
-        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
-        positions = ProjectPosition.objects.filter(position_project=self.id)
+        keys = [
+            'project_id', 'project_name', 'project_creator', 'project_description', 'project_url', 'project_location', 'project_country', 
+            'project_state', 'project_city', 'project_issue_area', 'project_stage', 'project_positions', 'project_date_modified', 'project_thumbnail'
+        ]
 
-        project = {
-            'project_id': self.id,
-            'project_name': self.project_name,
-            'project_creator': self.project_creator.id,
-            'project_description': self.project_short_description if self.project_short_description else self.project_description,
-            'project_url': self.project_url,
-            'project_location': self.project_location,
-            'project_country': self.project_country,
-            'project_state': self.project_state,
-            'project_city': self.project_city,
-            'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
-            'project_stage': Tag.hydrate_to_json(self.id, list(self.project_stage.all().values())),
-            'project_positions': list(map(lambda position: position.to_json(), positions)),
-            'project_date_modified': self.project_date_modified.__str__()
-        }
-
-        if len(thumbnail_files) > 0:
-            project['project_thumbnail'] = thumbnail_files[0].to_json()
-
-        return project
+        return keys_subset(self.hydrate_to_json(), keys)
 
     def hydrate_to_list_json(self):
         project = {

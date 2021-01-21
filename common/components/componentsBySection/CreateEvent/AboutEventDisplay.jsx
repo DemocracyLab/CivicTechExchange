@@ -105,11 +105,13 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           </div>
         </div>
 
-        <div className="AboutEvent-details col-12">
-          <h3>Details</h3>
-          <p>{event.event_description}</p>
-          <h3>What We Will Do</h3>
-          <p>{event.event_agenda}</p>
+        <div className="AboutEvent-details row">
+          <div className="col-12">
+            <h3>Details</h3>
+            <p>{event.event_description}</p>
+            <h3>What We Will Do</h3>
+            <p>{event.event_agenda}</p>
+          </div>
         </div>
         {!_.isEmpty(event.event_legacy_organization) && (
           <ProfileProjectSearch />
@@ -229,7 +231,6 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         <ProjectCardsContainer
           showSearchControls={false}
           staticHeaderText="Participating Projects"
-          fullWidth={true}
           selectableCards={false}
         />
       </div>

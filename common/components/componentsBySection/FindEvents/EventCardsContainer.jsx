@@ -1,33 +1,31 @@
 // @flow
 
-import React from 'react';
-import type {ReduceStore} from 'flux/utils';
-import {Container} from 'flux/utils';
-import {List} from 'immutable'
+import React from "react";
+import type { ReduceStore } from "flux/utils";
+import { Container } from "flux/utils";
+import { List } from "immutable";
 import EventSearchStore from "../../stores/EventSearchStore.js";
 import EventSearchDispatcher from "../../stores/EventSearchDispatcher.js";
 import EventCardsListings from "./EventCardsListings.jsx";
-import type {LocationRadius} from "../../stores/ProjectSearchStore.js";
-import type {EventTileAPIData} from "../../utils/EventAPIUtils.js";
+import type { LocationRadius } from "../../stores/ProjectSearchStore.js";
+import type { EventTileAPIData } from "../../utils/EventAPIUtils.js";
 import utils from "../../utils/utils.js";
-import _ from 'lodash';
+import _ from "lodash";
 
 type Props = {|
   showSearchControls: ?boolean,
   staticHeaderText: ?string,
-  fullWidth: ?boolean,
-|}
+|};
 
 type State = {|
   events: List<EventTileAPIData>,
   event_pages: number,
   current_page: number,
   event_count: number,
-  location: LocationRadius
+  location: LocationRadius,
 |};
 
 class EventCardsContainer extends React.Component<Props, State> {
-
   static getStores(): $ReadOnlyArray<ReduceStore> {
     return [EventSearchStore];
   }
@@ -40,33 +38,31 @@ class EventCardsContainer extends React.Component<Props, State> {
       event_count: EventSearchStore.getNumberOfEvents(),
       current_page: EventSearchStore.getCurrentPage(),
       events_loading: EventSearchStore.getEventsLoading(),
-      keyword: EventSearchStore.getKeyword() || ''
+      keyword: EventSearchStore.getKeyword() || "",
     };
   }
 
   render(): React$Node {
-    
     return (
-      <div className={`ProjectCardContainer col-12 ${this.props.fullWidth ? '' : 'col-md-8 col-lg-9 p-lg-0 m-lg-0'}`}>
-        <div className="container-fluid">
-          {
-            this.props.showSearchControls
-            ? (
-              <React.Fragment>
-                {/*<EventSearchSort/>*/}
-                {/*<EventTagContainer/>*/}
-              </React.Fragment>
-              )
-            : null
-          }
-          <div className="row EventCards-card-container">
-            {/*{!_.isEmpty(this.state.events) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}*/}
-            {!_.isEmpty(this.state.events) && <EventCardsListings events={this.state.events} showMessageForNoFutureEvents={true}/>}
-          </div>
-          {/*<div>
+      <div className="ProjectCardContainer col">
+        {this.props.showSearchControls ? (
+          <React.Fragment>
+            {/*<EventSearchSort/>*/}
+            {/*<EventTagContainer/>*/}
+          </React.Fragment>
+        ) : null}
+        <div className="row EventCards-card-container">
+          {/*{!_.isEmpty(this.state.events) && <h2 className="ProjectCardContainer-header">{this._renderCardHeaderText()}</h2>}*/}
+          {!_.isEmpty(this.state.events) && (
+            <EventCardsListings
+              events={this.state.events}
+              showMessageForNoFutureEvents={true}
+            />
+          )}
+        </div>
+        {/*<div>
             {this._renderPagination()}
           </div> */}
-        </div>
       </div>
     );
   }
@@ -75,52 +71,58 @@ class EventCardsContainer extends React.Component<Props, State> {
     if (this.props.staticHeaderText) {
       return this.props.staticHeaderText;
     } else if (this.state.keyword) {
-      return this.state.event_count + " " + utils.pluralize("event", "events", this.state.event_count) + " found";
+      return (
+        this.state.event_count +
+        " " +
+        utils.pluralize("event", "events", this.state.event_count) +
+        " found"
+      );
     } else {
-      return 'Find events that match your interests'
-    };
+      return "Find events that match your interests";
+    }
   }
 
   _handleFetchNextPage(e: object): void {
     e.preventDefault();
 
-    const nextPage = this.state.current_page + 1 <= this.state.event_pages
-      ? this.state.current_page + 1
-      : this.state.current_page;
+    const nextPage =
+      this.state.current_page + 1 <= this.state.event_pages
+        ? this.state.current_page + 1
+        : this.state.current_page;
 
-    this.setState({current_page: nextPage }, function () {
+    this.setState({ current_page: nextPage }, function() {
       EventSearchDispatcher.dispatch({
-        type: 'SET_PAGE',
+        type: "SET_PAGE",
         page: this.state.current_page,
       });
     });
   }
 
   _renderPagination(): ?React$Node {
-    if ((this.state.current_page === this.state.event_pages) && !this.state.events_loading ) {
+    if (
+      this.state.current_page === this.state.event_pages &&
+      !this.state.events_loading
+    ) {
       return null;
     }
     if (!_.isEmpty(this.state.events) && this.state.events_loading) {
       return (
         <div className="page_selection_footer">
-          <button className="btn btn-primary disabled">
-            Loading...
-          </button>
+          <button className="btn btn-primary disabled">Loading...</button>
         </div>
-      )
+      );
     }
-    return (
-      this.state.events && this.state.events.size !== 0
-      ? <div className="page_selection_footer">
-        <button className="btn btn-primary" onClick={this._handleFetchNextPage.bind(this)}>
+    return this.state.events && this.state.events.size !== 0 ? (
+      <div className="page_selection_footer">
+        <button
+          className="btn btn-primary"
+          onClick={this._handleFetchNextPage.bind(this)}
+        >
           More Events...
         </button>
       </div>
-      : null
-    );
+    ) : null;
   }
 }
-
-
 
 export default Container.create(EventCardsContainer);
