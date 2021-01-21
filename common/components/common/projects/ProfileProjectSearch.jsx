@@ -51,7 +51,7 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
         <div className="ProjectProfileSearch-sort row">
           <div className="col-12 pt-4 d-flex justify-content-end">
             <h4>Sort By</h4>
-            <ProjectSearchSort />
+            <ProjectSearchSort hideSearch={true} />
           </div>
         </div>
         <div className="row">

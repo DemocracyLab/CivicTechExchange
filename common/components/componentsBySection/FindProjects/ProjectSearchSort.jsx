@@ -9,6 +9,10 @@ import ProjectSearchBar from "./ProjectSearchBar.jsx";
 import { SelectOption } from "../../types/SelectOption.jsx";
 import metrics from "../../utils/metrics.js";
 
+type Props = {|
+  hideSearch: ?boolean,
+|};
+
 type State = {|
   sortField: string,
 |};
@@ -21,7 +25,7 @@ const sortOptions: $ReadOnlyArray<SelectOption> = [
   { value: "-project_name", label: "Name - Descending" },
 ];
 
-class ProjectSearchSort extends React.Component<{||}, State> {
+class ProjectSearchSort extends React.Component<Props, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [ProjectSearchStore];
   }
@@ -39,7 +43,14 @@ class ProjectSearchSort extends React.Component<{||}, State> {
   }
 
   render(): React$Node {
-    return <React.Fragment>{this._renderSortFieldDropdown()}</React.Fragment>;
+    return this.props.hideSearch ? (
+      <React.Fragment>{this._renderSortFieldDropdown()}</React.Fragment>
+    ) : (
+      <div className="ProjectSearchSort-container">
+        <ProjectSearchBar />
+        {this._renderSortFieldDropdown()}
+      </div>
+    );
   }
 
   _handleSubmitSortField(sortOption: SelectOption): void {
