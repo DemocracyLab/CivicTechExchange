@@ -47,6 +47,10 @@
 .AboutEvent-header {
   margin-bottom: 1rem;
 }
+//on this page the sort controller needs specific width constraint, unlike Find Projects
+.AboutEvent-root .ProjectSearchSort-sortform {
+  max-width: 260px;
+}
 @include media-breakpoint-up(lg) {
   .AboutEvent-info {
     order: 1;
