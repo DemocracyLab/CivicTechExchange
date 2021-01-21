@@ -522,19 +522,16 @@ def my_events(request):
 def projects_list(request):
     url_parts = request.GET.urlencode()
     query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
-    project_relationships = None
     event = None
 
     if 'group_id' in query_params:
         project_relationships = ProjectRelationship.objects.filter(relationship_group=query_params['group_id'][0])
-    elif 'event_id' in query_params:
-        event_id = query_params['event_id'][0]
-        project_relationships = ProjectRelationship.objects.filter(relationship_event=event_id)
-        event = Event.get_by_id_or_slug(event_id)
-
-    if project_relationships is not None:
         project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
         project_list = Project.objects.filter(id__in=project_ids, is_searchable=True)
+    elif 'event_id' in query_params:
+        event_id = query_params['event_id'][0]
+        event = Event.get_by_id_or_slug(event_id)
+        project_list = event.get_linked_projects()
     else:
         project_list = Project.objects.filter(is_searchable=True)
 

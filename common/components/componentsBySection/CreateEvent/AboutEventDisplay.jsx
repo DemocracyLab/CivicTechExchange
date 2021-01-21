@@ -30,7 +30,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     };
 
     if (this.state.event) {
-      this.filterProjectsByOrgTag();
+      this.initProjectSearch();
     }
   }
 
@@ -40,7 +40,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         {
           event: nextProps.event,
         },
-        this.filterProjectsByOrgTag
+        this.initProjectSearch
       );
     }
   }
@@ -208,14 +208,13 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     );
   }
 
-  filterProjectsByOrgTag() {
+  initProjectSearch() {
     const event: EventData = this.state.event;
     if (event && !_.isEmpty(event.event_legacy_organization)) {
       ProjectSearchDispatcher.dispatch({
         type: "INIT",
         findProjectsArgs: {
-          org: event.event_legacy_organization[0].tag_name,
-          sortField: "project_name",
+          event_id: event.event_id,
         },
         searchSettings: {
           updateUrl: false,

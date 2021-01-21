@@ -354,6 +354,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = state.set("page", 1);
     state = state.set("filterApplied", false);
     state = state.set("projectsData", {});
+    // TODO: Don't reset remaining fields, just the page
     state = state.set("findProjectsArgs", { page: 1 });
     return state;
   }
