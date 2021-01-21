@@ -15,7 +15,14 @@ def cache_events():
         event.recache()
 
 
+def cache_tags():
+    from civictechprojects.caching.cache import ProjectSearchTagsCache
+    # Just cache the full tags call.  The tags calls filtered by event are taken care of by cache_events
+    ProjectSearchTagsCache.refresh(event=None)
+
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
         cache_projects()
         cache_events()
+        cache_tags()

@@ -2,10 +2,6 @@ from django.core.cache import cache
 from enum import Enum
 
 
-class CacheKeys(Enum):
-    ProjectTagCounts = 'project_tag_counts'
-
-
 class CacheWrapper:
     _cache_generators = {}
 

@@ -17,13 +17,14 @@
   width: 100%;
 }
 
-.ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
+.ProjectFilterContainer-subcategory-header,
+.ProjectFilterContainer-category-header {
   font-size: 16px;
   font-weight: bold;
   padding: 12px 0;
-
 }
-.ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
+.ProjectFilterContainer-subcategory-header,
+.ProjectFilterContainer-category-header {
   display: flex;
   justify-content: space-between;
 }
@@ -33,8 +34,6 @@
   padding-inline-start: 0;
   -webkit-padding-start: 0;
 }
-
-
 
 .ProjectFilterContainer-filter-list li {
   color: $color-text-grey;
@@ -52,12 +51,12 @@
   padding: 12px 10px;
 }
 
-.ProjectFilterContainer-filter-list input[type=checkbox]:checked + label {
+.ProjectFilterContainer-filter-list input[type="checkbox"]:checked + label {
   background: $color-orange;
   color: $color-text-dark;
 }
 
-.ProjectFilterContainer-filter-list input[type=checkbox] {
+.ProjectFilterContainer-filter-list input[type="checkbox"] {
   display: none;
 }
 
@@ -85,7 +84,6 @@
   font-weight: normal;
 }
 
-
 /*if subcategory is expanded */
 .ProjectFilterContainer-subcategory.ProjectFilterContainer-expanded ul {
   border-left: 2px solid $color-grey-frame-border;
@@ -111,7 +109,8 @@
   border-bottom: 1px solid $color-grey-medium;
 }
 
-.ProjectFilterDataContainer-root, .LocationSearchContainer {
+.ProjectFilterDataContainer-root,
+.LocationSearchContainer {
   margin: 0 15px;
 }
 .LocationSearchContainer-content {
@@ -124,9 +123,21 @@
 .LocationSearchContainer-content label:first-of-type {
   padding-top: 0;
 }
+//this is a lot of declarations but we have a lot of intermeshing elements which need cursor:pointer. TODO: See if we can clean this up.
+.ProjectFilterDataContainer-root {
+  span.ProjectFilterContainer-showtext,
+  .ProjectFilterContainer-category-header,
+  .ProjectFilterContainer-subcategory-header,
+  .ProjectFilterContainer-filter-list li,
+  .ProjectFilterContainer-list-item label {
+    cursor: pointer; // visual hint that the interactables are clickable
+  }
+}
 
 @include media-breakpoint-up(sm) {
-  .ProjectFilterDataContainer-root, .LocationSearchContainer, .LocationSearchContainer-content {
+  .ProjectFilterDataContainer-root,
+  .LocationSearchContainer,
+  .LocationSearchContainer-content {
     margin: 0;
   }
 }

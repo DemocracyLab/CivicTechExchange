@@ -8,7 +8,7 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
-from civictechprojects.caching.cache import ProjectCache, EventCache
+from civictechprojects.caching.cache import ProjectCache, EventCache, ProjectSearchTagsCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts, keys_subset
 from common.helpers.collections import flatten, count_occurrences
@@ -391,7 +391,6 @@ class Event(Archived):
         return EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
 
     def _hydrate_to_json(self):
-        projects = ProjectRelationship.objects.filter(relationship_event=self.id)
         files = ProjectFile.objects.filter(file_event=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
@@ -417,33 +416,18 @@ class Event(Archived):
             'is_private': self.is_private
         }
 
-        if len(projects) > 0:
-            event['event_projects'] = list(map(lambda project: project.relationship_project.hydrate_to_tile_json(), projects))
-
         if len(thumbnail_files) > 0:
             event['event_thumbnail'] = thumbnail_files[0].to_json()
 
         return event
 
     def hydrate_to_tile_json(self):
-        files = ProjectFile.objects.filter(file_event=self.id)
-        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+        keys = [
+            'event_date_end', 'event_date_start', 'event_id', 'event_slug', 'event_location', 'event_name',
+            'event_organizers_text', 'event_short_description', 'event_thumbnail'
+        ]
 
-        group = {
-            'event_date_end': self.event_date_end.__str__(),
-            'event_date_start': self.event_date_start.__str__(),
-            'event_id': self.id,
-            'event_slug': self.event_slug,
-            'event_location': self.event_location,
-            'event_name': self.event_name,
-            'event_organizers_text': self.event_organizers_text,
-            'event_short_description': self.event_short_description
-        }
-
-        if len(thumbnail_files) > 0:
-            group['event_thumbnail'] = thumbnail_files[0].to_json()
-
-        return group
+        return keys_subset(self.hydrate_to_json(), keys)
 
     def hydrate_to_list_json(self):
         event = self.hydrate_to_tile_json()
@@ -493,6 +477,7 @@ class Event(Archived):
     def recache(self):
         hydrated_event = self._hydrate_to_json()
         EventCache.refresh(self, hydrated_event)
+        ProjectSearchTagsCache.refresh(self)
 
 
 class NameRecord(models.Model):
