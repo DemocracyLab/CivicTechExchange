@@ -36,6 +36,7 @@ export type FindProjectsArgs = {|
   orgType: string,
   stage: string,
   url: string,
+  event_id: number,
 |};
 
 type FindProjectsResponse = {|
@@ -237,6 +238,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _updateFindProjectArgs(state: State): State {
+    const oldArgs: FindProjectsArgs = state.findProjectsArgs;
     if (state.projectsData && state.projectsData.allTags) {
       const findProjectsArgs: FindProjectsArgs = _.pickBy(
         {
@@ -262,6 +264,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           stage: this._getTagCategoryParams(state, TagCategory.PROJECT_STAGE),
           url: state.url,
           positions: state.positions,
+          event_id: oldArgs.event_id,
         },
         _.identity
       );
@@ -354,8 +357,13 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = state.set("page", 1);
     state = state.set("filterApplied", false);
     state = state.set("projectsData", {});
-    // TODO: Don't reset remaining fields, just the page
-    state = state.set("findProjectsArgs", { page: 1 });
+    const findProjectsArgs: FindProjectsArgs = _.pick(state.findProjectsArgs, [
+      "event_id",
+    ]);
+    state = state.set(
+      "findProjectsArgs",
+      Object.assign(findProjectsArgs, { page: 1 })
+    );
     return state;
   }
 
