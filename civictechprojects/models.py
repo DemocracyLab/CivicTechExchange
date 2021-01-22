@@ -163,11 +163,17 @@ class Project(Archived):
 
     def hydrate_to_tile_json(self):
         keys = [
-            'project_id', 'project_name', 'project_creator', 'project_description', 'project_url', 'project_location', 'project_country', 
-            'project_state', 'project_city', 'project_issue_area', 'project_stage', 'project_positions', 'project_date_modified', 'project_thumbnail'
+            'project_id', 'project_name', 'project_creator',  'project_url', 'project_location', 'project_country',
+            'project_state', 'project_city', 'project_issue_area', 'project_stage', 'project_positions',
+            'project_date_modified', 'project_thumbnail', 'project_description'
         ]
+        json_base = self.hydrate_to_json()
+        json_result = keys_subset(json_base, keys)
+        project_short_description = json_base['project_short_description']
+        if len(project_short_description) > 0:
+            json_result['project_description'] = project_short_description
 
-        return keys_subset(self.hydrate_to_json(), keys)
+        return json_result
 
     def hydrate_to_list_json(self):
         project = {
