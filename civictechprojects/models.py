@@ -202,11 +202,11 @@ class Project(Archived):
             self.update_linked_items()
 
     def update_linked_items(self):
-        # Recache events
-        owned_events = self.get_project_events()
-
-        for event in owned_events:
-            event.recache()
+        # Recache events, but only if project is searchable
+        if self.is_searchable:
+            owned_events = self.get_project_events()
+            for event in owned_events:
+                event.recache()
 
     def generate_full_text(self):
         base_json = self.hydrate_to_json()
