@@ -49,7 +49,7 @@ class ProjectSearchTagsCacheManager:
     # Retrieve cached project tag counts for event (or all projects if event=None)
     def get(self, event=None):
         key = self._get_key(event)
-        return Cache.get(key) or self.refresh(key)
+        return Cache.get(key) or self.refresh(event)
 
     # Re-cache project tag counts for event (or all projects if event=None)
     def refresh(self, event=None):
