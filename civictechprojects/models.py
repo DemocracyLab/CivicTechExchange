@@ -194,7 +194,7 @@ class Project(Archived):
         self.project_date_modified = time or timezone.now()
         self.save()
 
-    def recache(self, recache_linked=True):
+    def recache(self, recache_linked=False):
         hydrated_project = self._hydrate_to_json()
         ProjectCache.refresh(self, hydrated_project)
         self.generate_full_text()

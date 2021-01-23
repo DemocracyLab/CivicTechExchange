@@ -24,6 +24,7 @@ class ProjectCreationForm(ModelForm):
             raise PermissionDenied()
 
         project.delete()
+        project.recache(recache_linked=True)
         SitemapPages.update()
 
     @staticmethod
@@ -90,7 +91,8 @@ class ProjectCreationForm(ModelForm):
                 project.update_linked_items()
 
         if fields_changed:
-            project.recache()
+            # Only recache linked events if tags were changed
+            project.recache(recache_linked=tags_changed)
 
         return project
 
