@@ -355,6 +355,7 @@ def approve_project(request, project_id):
         if user.is_staff:
             project.is_searchable = True
             project.save()
+            project.recache(recache_linked=True)
             ProjectSearchTagsCache.refresh()
             SitemapPages.update()
             notify_project_owners_project_approved(project)
