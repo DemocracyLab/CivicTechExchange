@@ -23,8 +23,11 @@ class ProjectCreationForm(ModelForm):
         if not is_creator_or_staff(request.user, project):
             raise PermissionDenied()
 
+        linked_events = project.get_project_events()
         project.delete()
-        project.recache(recache_linked=True)
+        # Refresh linked event tag counts
+        for event in linked_events:
+            ProjectSearchTagsCache.refresh(event=event)
         SitemapPages.update()
 
     @staticmethod
