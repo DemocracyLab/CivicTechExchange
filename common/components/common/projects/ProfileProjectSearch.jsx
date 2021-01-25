@@ -25,12 +25,29 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
   }
 
   render(): ?$React$Node {
+    return (
+      <React.Fragment>
+        {!this.props.viewOnly && this._renderSearchControls()}
+        <div className="row">
+          <ProjectCardsContainer
+            showSearchControls={false}
+            staticHeaderText="Participating Projects"
+            fullWidth={true}
+            selectableCards={false}
+          />
+        </div>
+      </React.Fragment>
+    );
+  }
+
+  _renderSearchControls(): ?$React$Node {
     const tagContainer: React$Node = <ProjectTagContainer />;
     const filterContainer: React$Node = (
       <ProjectFilterDataContainer title="Filter by" />
     );
     return (
       <React.Fragment>
+        {" "}
         <div className="row justify-content-center ProjectProfileSearch-root">
           <div className="col-12 col-md-10 col-lg-9 col-xl-8">
             <h3 className="ProjectProfileSearch-sectiontitle pt-4">
@@ -53,14 +70,6 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
             <h4>Sort By</h4>
             <ProjectSearchSort hideSearch={true} />
           </div>
-        </div>
-        <div className="row">
-          <ProjectCardsContainer
-            showSearchControls={false}
-            staticHeaderText="Participating Projects"
-            fullWidth={true}
-            selectableCards={false}
-          />
         </div>
       </React.Fragment>
     );

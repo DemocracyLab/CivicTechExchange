@@ -8,7 +8,6 @@ import CurrentUser from "../../utils/CurrentUser.js";
 import { EventData } from "../../utils/EventAPIUtils.js";
 import urlHelper from "../../utils/url.js";
 import Section from "../../enums/Section";
-import ProjectCardsContainer from "../FindProjects/ProjectCardsContainer.jsx";
 import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
 import _ from "lodash";
@@ -114,7 +113,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           </div>
         </div>
         {!_.isEmpty(event.event_legacy_organization) && (
-          <ProfileProjectSearch />
+          <ProfileProjectSearch viewOnly={this.props.viewOnly} />
         )}
       </div>
     );
@@ -223,18 +222,6 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         },
       });
     }
-  }
-
-  _renderProjectList(): ?$React$Node {
-    return (
-      <div className="row">
-        <ProjectCardsContainer
-          showSearchControls={false}
-          staticHeaderText="Participating Projects"
-          selectableCards={false}
-        />
-      </div>
-    );
   }
 }
 

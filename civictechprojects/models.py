@@ -163,11 +163,17 @@ class Project(Archived):
 
     def hydrate_to_tile_json(self):
         keys = [
-            'project_id', 'project_name', 'project_creator', 'project_description', 'project_url', 'project_location', 'project_country', 
-            'project_state', 'project_city', 'project_issue_area', 'project_stage', 'project_positions', 'project_date_modified', 'project_thumbnail'
+            'project_id', 'project_name', 'project_creator',  'project_url', 'project_location', 'project_country',
+            'project_state', 'project_city', 'project_issue_area', 'project_stage', 'project_positions',
+            'project_date_modified', 'project_thumbnail', 'project_description'
         ]
+        json_base = self.hydrate_to_json()
+        json_result = keys_subset(json_base, keys)
+        project_short_description = json_base['project_short_description']
+        if len(project_short_description) > 0:
+            json_result['project_description'] = project_short_description
 
-        return keys_subset(self.hydrate_to_json(), keys)
+        return json_result
 
     def hydrate_to_list_json(self):
         project = {
@@ -188,7 +194,7 @@ class Project(Archived):
         self.project_date_modified = time or timezone.now()
         self.save()
 
-    def recache(self, recache_linked=True):
+    def recache(self, recache_linked=False):
         hydrated_project = self._hydrate_to_json()
         ProjectCache.refresh(self, hydrated_project)
         self.generate_full_text()
@@ -196,11 +202,11 @@ class Project(Archived):
             self.update_linked_items()
 
     def update_linked_items(self):
-        # Recache events
-        owned_events = self.get_project_events()
-
-        for event in owned_events:
-            event.recache()
+        # Recache events, but only if project is searchable
+        if self.is_searchable:
+            owned_events = self.get_project_events()
+            for event in owned_events:
+                event.recache()
 
     def generate_full_text(self):
         base_json = self.hydrate_to_json()
