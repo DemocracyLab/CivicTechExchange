@@ -1,17 +1,17 @@
 // @flow
 
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form'
-import ConfirmationModal from '../../common/confirmation/ConfirmationModal.jsx';
+import React from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import ConfirmationModal from "../../common/confirmation/ConfirmationModal.jsx";
 import formHelper from "../../utils/forms.js";
 import _ from "lodash";
 
 export type ContactModalFields = {|
   subject: ?string,
-  message: string
-|}
+  message: string,
+|};
 
 type Props = {|
   headerText: string,
@@ -20,13 +20,13 @@ type Props = {|
   showSubject: ?boolean,
   showModal: boolean,
   handleClose: () => void,
-  handleSubmission: (ContactModalFields, () => void) => void
+  handleSubmission: (ContactModalFields, () => void) => void,
 |};
 type State = {|
   showModal: boolean,
   isSending: boolean,
   formFields: ContactModalFields,
-  showConfirmationModal: boolean
+  showConfirmationModal: boolean,
 |};
 
 /**
@@ -41,9 +41,9 @@ class ContactModal extends React.PureComponent<Props, State> {
       isSending: false,
       formFields: {
         subject: "",
-        message: ""
+        message: "",
       },
-      showConfirmationModal: false
+      showConfirmationModal: false,
     };
     this.closeModal = this.closeModal.bind(this, this.props.handleClose);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -59,23 +59,23 @@ class ContactModal extends React.PureComponent<Props, State> {
   }
 
   askForSendConfirmation(): void {
-    this.setState({showConfirmationModal:true});
+    this.setState({ showConfirmationModal: true });
   }
 
   receiveSendConfirmation(confirmation: boolean): void {
     if (confirmation) {
       this.handleSubmit();
     }
-    this.setState({showConfirmationModal: false});
+    this.setState({ showConfirmationModal: false });
   }
 
   handleSubmit() {
-    this.setState({isSending: true});
+    this.setState({ isSending: true });
     this.props.handleSubmission(this.state.formFields, this.closeModal);
   }
 
-  closeModal(){
-    this.setState({isSending:false});
+  closeModal() {
+    this.setState({ isSending: false });
     this.props.handleClose();
   }
 
@@ -87,32 +87,42 @@ class ContactModal extends React.PureComponent<Props, State> {
           message="Do you want to send this?"
           onSelection={this.receiveSendConfirmation}
         />
-          <Modal show={this.state.showModal}
-                 onHide={this.closeModal}
-          >
-              <Modal.Header closeButton>
-                  <Modal.Title>{this.props.headerText}</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <p>{this.props.explanationText}</p>
-                {this.props.showSubject ? this._renderSubjectLineBox() : null}
-                <Form>
-                  <Form.Group>
-                    <Form.Label>Message:</Form.Label>
-                    <Form.Control as="textarea"
-                      placeholder={this.props.messagePlaceholderText}
-                      rows="4"
-                      name="message"
-                      value={this.state.formFields.message}
-                      onChange={this.form.onInput.bind(this, "message")}/>
-                  </Form.Group>
-                </Form>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="outline-secondary" onClick={this.closeModal}>{"Cancel"}</Button>
-                <Button variant="primary" disabled={this.state.isSending || _.isEmpty(this.state.formFields.message)} onClick={this.askForSendConfirmation}>{this.state.isSending ? "Sending" : "Send"}</Button>
-              </Modal.Footer>
-          </Modal>
+        <Modal show={this.state.showModal} onHide={this.closeModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>{this.props.headerText}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>{this.props.explanationText}</p>
+            {this.props.showSubject ? this._renderSubjectLineBox() : null}
+            <Form>
+              <Form.Group>
+                <Form.Label>Message:</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  placeholder={this.props.messagePlaceholderText}
+                  rows="4"
+                  name="message"
+                  value={this.state.formFields.message}
+                  onChange={this.form.onInput.bind(this, "message")}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-secondary" onClick={this.closeModal}>
+              {"Cancel"}
+            </Button>
+            <Button
+              variant="primary"
+              disabled={
+                this.state.isSending || _.isEmpty(this.state.formFields.message)
+              }
+              onClick={this.askForSendConfirmation}
+            >
+              {this.state.isSending ? "Sending" : "Send"}
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -121,8 +131,13 @@ class ContactModal extends React.PureComponent<Props, State> {
     return (
       <Form>
         <Form.Label>Subject</Form.Label>
-        <Form.Control componentClass="input" name="subject" maxLength="60"
-               value={this.state.formFields.subject} onChange={this.form.onInput.bind(this, "subject")}/>
+        <Form.Control
+          componentClass="input"
+          name="subject"
+          maxLength="60"
+          value={this.state.formFields.subject}
+          onChange={this.form.onInput.bind(this, "subject")}
+        />
       </Form>
     );
   }

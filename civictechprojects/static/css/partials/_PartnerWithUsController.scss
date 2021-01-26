@@ -10,7 +10,6 @@
   flex-wrap: wrap;
 }
 
-
 .PartnerWithUsController-sponsorTypeSection img {
   max-width: 100%;
   padding-bottom: 16px;
@@ -51,7 +50,6 @@
   text-align: center;
   margin: 0 auto; /* centers sponsor image inside assigned width if required */
 }
-
 
 @include media-breakpoint-up(md) {
   .PartnerWithUsController-sponsor {

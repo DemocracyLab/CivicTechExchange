@@ -1,9 +1,12 @@
 // @flow
 
-import React from "react"
-import {Container} from "flux/utils";
-import {ReduceStore} from "flux/utils";
-import {TagDefinition, TagDefinitionCount} from "../../../utils/ProjectAPIUtils.js";
+import React from "react";
+import { Container } from "flux/utils";
+import { ReduceStore } from "flux/utils";
+import {
+  TagDefinition,
+  TagDefinitionCount,
+} from "../../../utils/ProjectAPIUtils.js";
 import EventLocationSearchSection from "./EventLocationSearchSection.jsx";
 import EventAPIUtils from "../../../utils/EventAPIUtils.js";
 import EventSearchStore from "../../../stores/EventSearchStore.js";
@@ -16,7 +19,7 @@ import _ from "lodash";
  * @title: Title of the dropdown
  */
 type Props = {|
-  title: string
+  title: string,
 |};
 
 type State = {|
@@ -31,7 +34,7 @@ class EventFilterDataContainer extends React.Component<Props, State> {
     this.state = {
       tags: null,
       selectedTags: null,
-      filterCounts: null
+      filterCounts: null,
     };
 
     // passing true to fetchTagsByCategory asks backend to return num_times in API response
@@ -39,16 +42,16 @@ class EventFilterDataContainer extends React.Component<Props, State> {
       //Need to do some work before setting state: Remove empty tags, generate cat/subcat totals, cleanup, then set state.
       //Generate category and subcategory totals - this is number of FILTERS and not total number of PROJECTS
       //So this may be used for "Select All" checkbox reference but will not be used for display of counts in DOM
-      let subcatCount = _.countBy(tags, "subcategory" );
+      let subcatCount = _.countBy(tags, "subcategory");
       let catCount = _.countBy(tags, "category");
-      let countMergeResult = _.merge(catCount, subcatCount)
+      let countMergeResult = _.merge(catCount, subcatCount);
       //Event tags by category before generating child components
       let sorted = _.groupBy(tags, "category");
 
       //last, set state with our computed data
       this.setState({
         filterCounts: countMergeResult,
-        tagsByCategory: sorted
+        tagsByCategory: sorted,
       });
     });
     this._checkEnabled = this._checkEnabled.bind(this);
@@ -61,7 +64,10 @@ class EventFilterDataContainer extends React.Component<Props, State> {
 
   static calculateState(prevState: State): State {
     return {
-      selectedTags:_.mapKeys(EventSearchStore.getSelectedTags().toArray(), (tag: TagDefinition) => tag.tag_name)
+      selectedTags: _.mapKeys(
+        EventSearchStore.getSelectedTags().toArray(),
+        (tag: TagDefinition) => tag.tag_name
+      ),
     };
   }
 
@@ -70,7 +76,7 @@ class EventFilterDataContainer extends React.Component<Props, State> {
 
     return (
       <div>
-        { this.state.tagsByCategory ? this._renderFilterCategories() : null }
+        {this.state.tagsByCategory ? this._renderFilterCategories() : null}
         <EventLocationSearchSection />
       </div>
     );
@@ -78,22 +84,27 @@ class EventFilterDataContainer extends React.Component<Props, State> {
 
   _renderFilterCategories(): void {
     // TODO: Display in sorted order if we have more than one tag category
-    const categories: $ReadOnlyArray<string> = Object.keys(this.state.tagsByCategory);
-    const displayFilters: $ReadOnlyArray<React$Node> = categories.map(key =>
+    const categories: $ReadOnlyArray<string> = Object.keys(
+      this.state.tagsByCategory
+    );
+    const displayFilters: $ReadOnlyArray<React$Node> = categories.map(key => (
       <RenderFilterCategory
         key={key}
         categoryCount={_.sumBy(this.state.tagsByCategory[key], "num_times")} //for displaying "category total" numbers
         category={key}
-        data={_.sortBy(this.state.tagsByCategory[key], (tag) => tag.display_name.toUpperCase())}
-        hasSubcategories={_.every(this.state.tagsByCategory[key], "subcategory")}
+        data={_.sortBy(this.state.tagsByCategory[key], tag =>
+          tag.display_name.toUpperCase()
+        )}
+        hasSubcategories={_.every(
+          this.state.tagsByCategory[key],
+          "subcategory"
+        )}
         checkEnabled={this._checkEnabled}
         selectOption={this._selectOption}
       />
-    );
+    ));
     return (
-        <div className="ProjectFilterDataContainer-root">
-            {displayFilters}
-        </div>
+      <div className="ProjectFilterDataContainer-root">{displayFilters}</div>
     );
   }
 
@@ -104,7 +115,7 @@ class EventFilterDataContainer extends React.Component<Props, State> {
   _selectOption(tag: TagDefinition): void {
     let tagInState = _.has(this.state.selectedTags, tag.tag_name);
     //if tag is NOT currently in state, add it, otherwise remove
-    if(!tagInState) {
+    if (!tagInState) {
       EventSearchDispatcher.dispatch({
         type: "ADD_TAG",
         tag: tag.tag_name,
@@ -118,6 +129,5 @@ class EventFilterDataContainer extends React.Component<Props, State> {
     }
   }
 }
-
 
 export default Container.create(EventFilterDataContainer);

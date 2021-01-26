@@ -7,12 +7,12 @@ import CurrentUser from "./CurrentUser.js";
 export type NavigationLink = {|
   url: string,
   name: string,
-  isButton: boolean
+  isButton: boolean,
 |};
 
 const navLinks = [
   { url: "/index/?section=Donate", name: "Donate", isButton: true },
-]
+];
 
 class NavigationLinks {
   static list() {

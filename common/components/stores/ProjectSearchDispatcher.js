@@ -1,8 +1,8 @@
 // @flow
 
-import type {ProjectSearchActionType} from './ProjectSearchStore';
+import type { ProjectSearchActionType } from "./ProjectSearchStore";
 
-import {Dispatcher} from 'flux';
+import { Dispatcher } from "flux";
 
 const ProjectSearchDispatcher: Dispatcher<ProjectSearchActionType> = new Dispatcher();
 

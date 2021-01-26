@@ -2,13 +2,13 @@
 
 import React from "react";
 import DjangoCSRFToken from "django-react-csrftoken";
-import {OnReadySubmitFunc} from "./EventFormCommon.jsx";
+import { OnReadySubmitFunc } from "./EventFormCommon.jsx";
 import AboutEventDisplay from "./AboutEventDisplay.jsx";
-import type {EventData} from "../../utils/EventAPIUtils.js";
+import type { EventData } from "../../utils/EventAPIUtils.js";
 
 type Props = {|
   project: ?EventData,
-  readyForSubmit: OnReadySubmitFunc
+  readyForSubmit: OnReadySubmitFunc,
 |};
 
 /**
@@ -22,15 +22,11 @@ class EventPreviewForm extends React.PureComponent<Props> {
   }
 
   render(): React$Node {
-    
     return (
       <React.Fragment>
-        <DjangoCSRFToken/>
-        <input type="hidden" name="is_created" value="True"/>
-        <AboutEventDisplay
-          event={this.props.project}
-          viewOnly={true}
-        />
+        <DjangoCSRFToken />
+        <input type="hidden" name="is_created" value="True" />
+        <AboutEventDisplay event={this.props.project} viewOnly={true} />
       </React.Fragment>
     );
   }

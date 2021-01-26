@@ -1,15 +1,14 @@
 // @flow
 
 import GlyphStyles from "../../utils/glyphs.js";
-import React from 'react';
+import React from "react";
 
 type Props = {|
   label: string,
-  closeAction: () => void
+  closeAction: () => void,
 |};
 
 class CloseablePill extends React.PureComponent<Props> {
-
   render(): React$Node {
     return (
       <span className="ProjectTag-root">
@@ -21,10 +20,8 @@ class CloseablePill extends React.PureComponent<Props> {
 
   _renderCloseButton(): React$Node {
     return (
-      <span
-        className="ProjectTag-closeButton"
-        onClick={this.props.closeAction}>
-      <i className={GlyphStyles.Close}></i>
+      <span className="ProjectTag-closeButton" onClick={this.props.closeAction}>
+        <i className={GlyphStyles.Close}></i>
       </span>
     );
   }

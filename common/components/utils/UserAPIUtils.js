@@ -1,9 +1,9 @@
 // @flow
 
-import type {Project} from "../stores/ProjectSearchStore.js";
-import type {LinkInfo} from "../../components/forms/LinkInfo.jsx";
-import type {FileInfo} from "../common/FileInfo.jsx";
-import {APIError, APIResponse} from "./api.js";
+import type { Project } from "../stores/ProjectSearchStore.js";
+import type { LinkInfo } from "../../components/forms/LinkInfo.jsx";
+import type { FileInfo } from "../common/FileInfo.jsx";
+import { APIError, APIResponse } from "./api.js";
 
 export type UserAPIData = {|
   +id: number,
@@ -20,39 +20,65 @@ export type UserAPIData = {|
 |};
 
 class UserAPIUtils {
-  static fetchUserDetails(id: number, callback: (UserAPIData) => void, errCallback: (APIError) => void): void {
-    fetch(new Request('/api/user/' + id + '/'))
+  static fetchUserDetails(
+    id: number,
+    callback: UserAPIData => void,
+    errCallback: APIError => void
+  ): void {
+    fetch(new Request("/api/user/" + id + "/"))
       .then(response => {
-        if(!response.ok) {
+        if (!response.ok) {
           throw Error();
         }
         return response.json();
       })
       .then(projectDetails => callback(projectDetails))
-      .catch(response => errCallback && errCallback({
-        errorCode: response.status,
-        errorMessage: JSON.stringify(response)
-      }));
+      .catch(
+        response =>
+          errCallback &&
+          errCallback({
+            errorCode: response.status,
+            errorMessage: JSON.stringify(response),
+          })
+      );
   }
-  
-  // TODO: Refactor generic code into separate file
-  static post(url: string, body: {||},successCallback: (APIResponse) => void, errCallback: (APIError) => void) {
-    const doError = (response) => errCallback && errCallback({
-      errorCode: response.status,
-      errorMessage: JSON.stringify(response)
-    });
 
-    fetch(new Request(url, {method:"POST", body:JSON.stringify(body), credentials:"include", headers: {
-      'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/json'
-    },}))
-      .then(response => UserAPIUtils.isSuccessResponse(response) ? successCallback() : doError(response))
+  // TODO: Refactor generic code into separate file
+  static post(
+    url: string,
+    body: {||},
+    successCallback: APIResponse => void,
+    errCallback: APIError => void
+  ) {
+    const doError = response =>
+      errCallback &&
+      errCallback({
+        errorCode: response.status,
+        errorMessage: JSON.stringify(response),
+      });
+
+    fetch(
+      new Request(url, {
+        method: "POST",
+        body: JSON.stringify(body),
+        credentials: "include",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+      })
+    )
+      .then(response =>
+        UserAPIUtils.isSuccessResponse(response)
+          ? successCallback()
+          : doError(response)
+      )
       .catch(response => doError(response));
   }
 
-  static isSuccessResponse(response:APIResponse): boolean {
+  static isSuccessResponse(response: APIResponse): boolean {
     return response.status < 400;
   }
 }
 
-export default UserAPIUtils
+export default UserAPIUtils;

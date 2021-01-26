@@ -10,7 +10,7 @@
 
 .IconLink-root i {
   color: $color-text-dark;
-  align-items:center;
+  align-items: center;
   display: block;
 }
 
@@ -18,24 +18,22 @@
   float: left;
   width: 60px;
   height: 64px;
-  padding:15px;
+  padding: 15px;
   border: 1px solid lightgray;
-  border-top-left-radius:5px;
+  border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-
 }
 
 .IconLink-right {
   float: right;
   width: 200px;
-  height:64px;
+  height: 64px;
   line-height: 23px;
   border-top: 1px solid lightgray;
   border-top-right-radius: 5px;
   border-right: 1px solid lightgray;
   border-bottom-right-radius: 5px;
   border-bottom: 1px solid lightgray;
-
 }
 
 .IconLink-topText {

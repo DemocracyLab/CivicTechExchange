@@ -1,9 +1,9 @@
 // @flow
 
-import React from 'react';
-import cdn,{Images} from "../utils/cdn.js";
-import url from '../utils/url.js'
-import Section from '../enums/Section.js'
+import React from "react";
+import cdn, { Images } from "../utils/cdn.js";
+import url from "../utils/url.js";
+import Section from "../enums/Section.js";
 
 class EmailVerifiedController extends React.Component<{||}> {
   constructor(): void {
@@ -14,12 +14,18 @@ class EmailVerifiedController extends React.Component<{||}> {
     return (
       <div className="EmailVerifiedController-root">
         <div className="EmailVerifiedController-logo">
-          <img src={cdn.image(Images.DL_GLYPH)}/>
+          <img src={cdn.image(Images.DL_GLYPH)} />
         </div>
         <div className="EmailVerifiedController-greeting">
           <h3>Your email has been verified</h3>
-          <p>Get started by finding tech-for-good projects that match your skill and interests.</p>
-          <a className="btn btn-primary" href={url.section(Section.FindProjects, {showSplash: 1})}>
+          <p>
+            Get started by finding tech-for-good projects that match your skill
+            and interests.
+          </p>
+          <a
+            className="btn btn-primary"
+            href={url.section(Section.FindProjects, { showSplash: 1 })}
+          >
             FIND PROJECTS
           </a>
         </div>

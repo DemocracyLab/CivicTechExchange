@@ -1,22 +1,22 @@
 .ImageCropUploadButton-cropper {
-    position:relative;
-    border: 1px solid black;
-    border-radius:10px; 
-    padding: 10px;
+  position: relative;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
 
-    .ImageCropUploadButton-buttonGroup {
-        margin-top: 5px;
+  .ImageCropUploadButton-buttonGroup {
+    margin-top: 5px;
 
-        input[type="button"]:not(:last-child) {
-            margin-right: 10px;
-        }
+    input[type="button"]:not(:last-child) {
+      margin-right: 10px;
     }
+  }
 
-    .FileSelectButton-dragFiles {
-        color:#FFF;
-        font-weight:bold;
-    }
-    .ReactCrop__image {
-        height:100%;
-    }
+  .FileSelectButton-dragFiles {
+    color: #fff;
+    font-weight: bold;
+  }
+  .ReactCrop__image {
+    height: 100%;
+  }
 }

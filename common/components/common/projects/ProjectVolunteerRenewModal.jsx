@@ -1,33 +1,33 @@
 // @flow
 
-import React from 'react';
+import React from "react";
 import metrics from "../../utils/metrics.js";
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
-import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js'
-import {SelectOption} from "../../types/SelectOption.jsx";
-import Select from 'react-select'
-import moment from 'moment';
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import { SelectOption } from "../../types/SelectOption.jsx";
+import Select from "react-select";
+import moment from "moment";
 
 type Props = {|
   applicationId: number,
   showModal: boolean,
-  handleClose: (boolean) => void
+  handleClose: boolean => void,
 |};
 type State = {|
   showModal: boolean,
   isSending: boolean,
   daysToVolunteerForOption: ?SelectOption,
-  message: ?string
+  message: ?string,
 |};
 
 const volunteerPeriodsInDays: $ReadOnlyArray<SelectOption> = [
-  ["1 week - 1 month",30],
-  ["1 month - 3 months",90],
-  ["3 months - 6 months",180],
-  ["6 months - 1 year",365]
-].map((textDaysPair) => ({label:textDaysPair[0], value:textDaysPair[1]}));
+  ["1 week - 1 month", 30],
+  ["1 month - 3 months", 90],
+  ["3 months - 6 months", 180],
+  ["6 months - 1 year", 365],
+].map(textDaysPair => ({ label: textDaysPair[0], value: textDaysPair[1] }));
 
 /**
  * Modal for renewing volunteer commitment
@@ -49,7 +49,7 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
 
   componentWillReceiveProps(nextProps: Props): void {
     let state: State = {
-      showModal: nextProps.showModal
+      showModal: nextProps.showModal,
     };
 
     this.setState(state);
@@ -57,29 +57,33 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
   }
 
   handleMessageChange(event: SyntheticInputEvent<HTMLInputElement>): void {
-      this.setState({message: event.target.value});
+    this.setState({ message: event.target.value });
   }
 
   handleVolunteerPeriodSelection(daysToVolunteerForOption: SelectOption): void {
-    this.setState({daysToVolunteerForOption: daysToVolunteerForOption});
+    this.setState({ daysToVolunteerForOption: daysToVolunteerForOption });
   }
 
   handleSubmit() {
-    this.setState({isSending:true});
+    this.setState({ isSending: true });
     // TODO: Add metrics
-    ProjectAPIUtils.post("/volunteer/renew/" + this.props.applicationId + "/",
+    ProjectAPIUtils.post(
+      "/volunteer/renew/" + this.props.applicationId + "/",
       {
-        projectedEndDate: moment().utc().add(this.state.daysToVolunteerForOption.value, 'days').format(),
-        message: this.state.message
+        projectedEndDate: moment()
+          .utc()
+          .add(this.state.daysToVolunteerForOption.value, "days")
+          .format(),
+        message: this.state.message,
       },
       response => this.closeModal(true),
       response => null /* TODO: Report error to user */
-      );
+    );
   }
 
-  closeModal(sent: boolean){
+  closeModal(sent: boolean) {
     this.setState({
-      isSending: false
+      isSending: false,
     });
     this.props.handleClose(sent);
   }
@@ -87,43 +91,53 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div>
-          <Modal show={this.state.showModal}
-             onHide={this.closeModal.bind(this, false)}
-          >
-              <Modal.Header closeButton>
-                  <Modal.Title>Volunteer Renewal Application</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <Form>
-                  <Form.Group>
-                    <Form.Label>How long do you expect to be able to contribute to this project?</Form.Label>
-                    {this._renderVolunteerPeriodDropdown()}
-                    <Form.Label>Message:</Form.Label>
-                    <div className="character-count">
-                      { (this.state.message || "").length} / 3000
-                    </div>
-                    <Form.Control as="textarea"
-                      placeholder="Message for Project Owner (Optional)"
-                      rows="4"
-                      name="message"
-                      maxLength="3000"
-                      value={this.state.message}
-                      onChange={this.handleMessageChange}/>
-                  </Form.Group>
-              </Form>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button
-                  variant="outline-secondary"
-                  onClick={this.closeModal.bind(this, false)}>{"Cancel"}
-                </Button>
-                <Button
-                  variant="primary"
-                  disabled={this.state.isSending || !(this._fieldsFilled())}
-                  onClick={this.handleSubmit}>{this.state.isSending ? "Sending" : "Send"}
-                </Button>
-              </Modal.Footer>
-          </Modal>
+        <Modal
+          show={this.state.showModal}
+          onHide={this.closeModal.bind(this, false)}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Volunteer Renewal Application</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group>
+                <Form.Label>
+                  How long do you expect to be able to contribute to this
+                  project?
+                </Form.Label>
+                {this._renderVolunteerPeriodDropdown()}
+                <Form.Label>Message:</Form.Label>
+                <div className="character-count">
+                  {(this.state.message || "").length} / 3000
+                </div>
+                <Form.Control
+                  as="textarea"
+                  placeholder="Message for Project Owner (Optional)"
+                  rows="4"
+                  name="message"
+                  maxLength="3000"
+                  value={this.state.message}
+                  onChange={this.handleMessageChange}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="outline-secondary"
+              onClick={this.closeModal.bind(this, false)}
+            >
+              {"Cancel"}
+            </Button>
+            <Button
+              variant="primary"
+              disabled={this.state.isSending || !this._fieldsFilled()}
+              onClick={this.handleSubmit}
+            >
+              {this.state.isSending ? "Sending" : "Send"}
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -132,15 +146,17 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
     return this.state.daysToVolunteerForOption !== null;
   }
 
-  _renderVolunteerPeriodDropdown(): React$Node{
-    return <Select
-      options={volunteerPeriodsInDays}
-      value={this.state.daysToVolunteerForOption}
-      onChange={this.handleVolunteerPeriodSelection.bind(this)}
-      simpleValue={true}
-      isClearable={false}
-      isMulti={false}
-    />
+  _renderVolunteerPeriodDropdown(): React$Node {
+    return (
+      <Select
+        options={volunteerPeriodsInDays}
+        value={this.state.daysToVolunteerForOption}
+        onChange={this.handleVolunteerPeriodSelection.bind(this)}
+        simpleValue={true}
+        isClearable={false}
+        isMulti={false}
+      />
+    );
   }
 }
 

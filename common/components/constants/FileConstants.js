@@ -1,3 +1,3 @@
 export const FileCategoryNames = {
-  'RESUME': "Resume",
+  RESUME: "Resume",
 };

@@ -1,8 +1,8 @@
 // @flow
 
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import React from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 type Props = {|
   showModal: boolean,
@@ -15,7 +15,7 @@ type Props = {|
 |};
 type State = {|
   showModal: boolean,
-  feedbackText: string
+  feedbackText: string,
 |};
 
 /**
@@ -26,8 +26,8 @@ class FeedbackModal extends React.PureComponent<Props, State> {
     super(props);
     this.state = {
       showModal: false,
-      feedbackText: ""
-    }
+      feedbackText: "",
+    };
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -41,36 +41,51 @@ class FeedbackModal extends React.PureComponent<Props, State> {
 
   confirm(confirmation: boolean): void {
     this.props.onConfirm(confirmation, this.state.feedbackText);
-    if(confirmation) {
-      this.setState({feedbackText: ""});
+    if (confirmation) {
+      this.setState({ feedbackText: "" });
     }
   }
 
   render(): React$Node {
     return (
       <div>
-          <Modal show={this.state.showModal}
-                 onHide={this.confirm.bind(this, false)}
-          >
-              <Modal.Header closeButton>
-                  <Modal.Title>{this.props.headerText}</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                {this.props.messagePrompt}
-                <div className="character-count">
-                  { (this.state.feedbackText || "").length} / {this.props.maxCharacterCount}
-                </div>
-                <textarea className="form-control" rows="4" maxLength={this.props.maxCharacterCount} value={this.state.feedbackText}
-                          onChange={this.onTextChange.bind(this)}>
-                </textarea>
-              </Modal.Body>
-              <Modal.Footer>
-                  <Button variant="outline-secondary" onClick={this.confirm.bind(this, false)}>Cancel</Button>
-                  <Button variant="primary" disabled={this.props.requireMessage && !this.state.feedbackText} onClick={this.confirm.bind(this, true)}>
-                    {this.props.confirmButtonText}
-                  </Button>
-              </Modal.Footer>
-          </Modal>
+        <Modal
+          show={this.state.showModal}
+          onHide={this.confirm.bind(this, false)}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>{this.props.headerText}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {this.props.messagePrompt}
+            <div className="character-count">
+              {(this.state.feedbackText || "").length} /{" "}
+              {this.props.maxCharacterCount}
+            </div>
+            <textarea
+              className="form-control"
+              rows="4"
+              maxLength={this.props.maxCharacterCount}
+              value={this.state.feedbackText}
+              onChange={this.onTextChange.bind(this)}
+            ></textarea>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="outline-secondary"
+              onClick={this.confirm.bind(this, false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              disabled={this.props.requireMessage && !this.state.feedbackText}
+              onClick={this.confirm.bind(this, true)}
+            >
+              {this.props.confirmButtonText}
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }

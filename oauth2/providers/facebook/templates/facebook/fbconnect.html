@@ -1,6 +1,9 @@
 {% load staticfiles %}
 <div id="fb-root"></div>
 <script id="allauth-facebook-settings" type="application/json">
-{{ fb_data }}
+  {{ fb_data }}
 </script>
-<script type="text/javascript" src="{% static 'facebook/js/fbconnect.js' %}"></script>
+<script
+  type="text/javascript"
+  src="{% static 'facebook/js/fbconnect.js' %}"
+></script>

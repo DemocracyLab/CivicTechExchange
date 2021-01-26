@@ -1,19 +1,28 @@
 // @flow
 
 import React from "react";
-import type {FileInfo} from "../../common/FileInfo.jsx";
+import type { FileInfo } from "../../common/FileInfo.jsx";
 import ImageCropUploadFormElement from "../../../components/forms/ImageCropUploadFormElement.jsx";
 import DjangoCSRFToken from "django-react-csrftoken";
 import FormValidation from "../../../components/forms/FormValidation.jsx";
-import type {Validator} from "../../../components/forms/FormValidation.jsx";
-import type {GroupDetailsAPIData} from "../../../components/utils/GroupAPIUtils.js";
-import form, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
-import {CountrySelector} from "../../common/selection/CountrySelector.jsx";
-import {CountryData, CountryCodeFormats, countryByCode} from "../../constants/Countries.js";
-import {LocationAutocompleteForm, LocationFormInputsByEntity} from "../../forms/LocationAutocompleteForm.jsx";
-import {LocationInfo, getLocationInfoFromGroup} from "../../common/location/LocationInfo.js";
+import type { Validator } from "../../../components/forms/FormValidation.jsx";
+import type { GroupDetailsAPIData } from "../../../components/utils/GroupAPIUtils.js";
+import form, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
+import { CountrySelector } from "../../common/selection/CountrySelector.jsx";
+import {
+  CountryData,
+  CountryCodeFormats,
+  countryByCode,
+} from "../../constants/Countries.js";
+import {
+  LocationAutocompleteForm,
+  LocationFormInputsByEntity,
+} from "../../forms/LocationAutocompleteForm.jsx";
+import {
+  LocationInfo,
+  getLocationInfoFromGroup,
+} from "../../common/location/LocationInfo.js";
 import _ from "lodash";
-
 
 type FormFields = {|
   group_name: ?string,
@@ -26,18 +35,18 @@ type FormFields = {|
 
 type Props = {|
   group: ?GroupDetailsAPIData,
-  readyForSubmit: () => () => boolean
+  readyForSubmit: () => () => boolean,
 |} & FormPropsBase<FormFields>;
 
 type State = {|
   formIsValid: boolean,
-  validations: $ReadOnlyArray<Validator>
+  validations: $ReadOnlyArray<Validator>,
 |} & FormStateBase<FormFields>;
 
 /**
  * Encapsulates form for Group Overview section
  */
-class GroupOverviewForm extends React.PureComponent<Props,State> {
+class GroupOverviewForm extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     const group: GroupDetailsAPIData = props.project;
@@ -51,37 +60,43 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
-        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["group_name"]),
-        errorMessage: "Please enter Group Name"
+        checkFunc: (formFields: FormFields) =>
+          !_.isEmpty(formFields["group_name"]),
+        errorMessage: "Please enter Group Name",
       },
       {
-        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["group_short_description"]),
-        errorMessage: "Please enter a one-sentence description"
+        checkFunc: (formFields: FormFields) =>
+          !_.isEmpty(formFields["group_short_description"]),
+        errorMessage: "Please enter a one-sentence description",
       },
       {
-        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["group_description"]),
-        errorMessage: "Please enter Group Description"
+        checkFunc: (formFields: FormFields) =>
+          !_.isEmpty(formFields["group_description"]),
+        errorMessage: "Please enter Group Description",
       },
     ];
-  
-    const formIsValid: boolean = FormValidation.isValid(formFields, validations);
+
+    const formIsValid: boolean = FormValidation.isValid(
+      formFields,
+      validations
+    );
     this.state = {
       formIsValid: formIsValid,
       formFields: formFields,
-      validations: validations
+      validations: validations,
     };
     props.readyForSubmit(formIsValid);
     this.form = form.setup();
   }
-  
+
   componentDidMount() {
     // Initial validation check
     this.form.doValidation.bind(this)();
   }
 
   onValidationCheck(formIsValid: boolean): void {
-    if(formIsValid !== this.state.formIsValid) {
-      this.setState({formIsValid});
+    if (formIsValid !== this.state.formIsValid) {
+      this.setState({ formIsValid });
       this.props.readyForSubmit(formIsValid);
     }
   }
@@ -89,8 +104,7 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
   render(): React$Node {
     return (
       <div className="EditGroupForm-root">
-
-        <DjangoCSRFToken/>
+        <DjangoCSRFToken />
 
         <div className="form-group">
           <ImageCropUploadFormElement
@@ -114,12 +128,15 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
             onChange={this.form.onInput.bind(this, "group_name")}
           />
         </div>
-  
+
         <div className="form-group">
           <label>Country</label>
           <CountrySelector
             id="group_country"
-            countryCode={this.state.formFields.group_country && this.state.formFields.group_country.ISO_2}
+            countryCode={
+              this.state.formFields.group_country &&
+              this.state.formFields.group_country.ISO_2
+            }
             countryCodeFormat={CountryCodeFormats.ISO_2}
             onSelection={this.form.onSelection.bind(this, "group_country")}
           />
@@ -137,7 +154,7 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
         <div className="form-group">
           <label>Short Description</label>
           <div className="character-count">
-            { (this.state.formFields.group_short_description || "").length} / 140
+            {(this.state.formFields.group_short_description || "").length} / 140
           </div>
           <input
             id="group_short_description"
@@ -152,11 +169,9 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
         </div>
 
         <div className="form-group">
-          <label>
-            Description
-          </label>
+          <label>Description</label>
           <div className="character-count">
-            { (this.state.formFields.group_description || "").length} / 3000
+            {(this.state.formFields.group_description || "").length} / 3000
           </div>
           <textarea
             id="group_description"
@@ -165,7 +180,8 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
             rows="4"
             maxLength="3000"
             className="form-control"
-            value={this.state.formFields.group_description} onChange={this.form.onInput.bind(this, "group_description")}
+            value={this.state.formFields.group_description}
+            onChange={this.form.onInput.bind(this, "group_description")}
           ></textarea>
         </div>
 
@@ -174,7 +190,6 @@ class GroupOverviewForm extends React.PureComponent<Props,State> {
           onValidationCheck={this.onValidationCheck.bind(this)}
           formState={this.state.formFields}
         />
-
       </div>
     );
   }

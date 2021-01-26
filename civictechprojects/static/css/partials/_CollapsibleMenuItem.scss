@@ -1,6 +1,6 @@
 .CollapsibleCategoryItem-root {
   cursor: pointer;
-  margin-left:10px;
+  margin-left: 10px;
 }
 
 .CollapsibleCategoryItem-root:last-child {
@@ -17,6 +17,6 @@
   background-color: $color-green-dark;
 }
 
-.CollapsibleMenuItem > input[type=checkbox] {
+.CollapsibleMenuItem > input[type="checkbox"] {
   margin-right: 5px;
 }
