@@ -459,7 +459,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       project &&
       project.project_files &&
       project.project_files.map((file, i) => (
-        <div key={i}>
+        <div key={i} className="AboutProjects-file-link">
           <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">
             {file.fileName}
           </a>
