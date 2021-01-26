@@ -286,6 +286,7 @@ class Group(Archived):
             'group_short_description': self.group_short_description
         }
 
+        # TODO: Don't include this
         if len(project_relationships) > 0:
             group['group_projects'] = list(map(lambda pr: pr.hydrate_to_project_tile_json(), project_relationships))
 
@@ -295,6 +296,7 @@ class Group(Archived):
         return group
 
     def hydrate_to_tile_json(self):
+        # TODO: Render from cached
         files = ProjectFile.objects.filter(file_group=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         projects = ProjectRelationship.objects.filter(relationship_group=self.id)
