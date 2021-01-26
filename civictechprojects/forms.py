@@ -248,6 +248,7 @@ class GroupCreationForm(ModelForm):
 
         project_fields_changed |= merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
 
+        # TODO: Recache group if changed
         if project_fields_changed:
             group.update_linked_items()
 

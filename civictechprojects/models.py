@@ -8,7 +8,7 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
-from civictechprojects.caching.cache import ProjectCache, EventCache, ProjectSearchTagsCache
+from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts, keys_subset
 from common.helpers.collections import flatten, count_occurrences
@@ -258,6 +258,9 @@ class Group(Archived):
         self.save()
 
     def hydrate_to_json(self):
+        return GroupCache.get(self) or GroupCache.refresh(self, self._hydrate_to_json())
+
+    def _hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_group=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
@@ -350,11 +353,16 @@ class Group(Archived):
         slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
         return Event.objects.filter(event_legacy_organization__name__in=slugs)
 
+    def recache(self):
+        hydrated_group = self._hydrate_to_json()
+        GroupCache.refresh(self, hydrated_group)
+        ProjectSearchTagsCache.refresh(self)
+
     def update_linked_items(self):
         # Recache linked projects
         project_relationships = ProjectRelationship.objects.filter(relationship_group=self)
         for project_relationship in project_relationships:
-            project_relationship.relationship_project.recache()
+            project_relationship.relationship_project.recache(recache_linked=False)
 
 
 class TaggedEventOrganization(TaggedItemBase):

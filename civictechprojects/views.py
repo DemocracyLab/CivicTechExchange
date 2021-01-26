@@ -41,7 +41,7 @@ import requests
 
 def get_tag_counts(category=None, event=None):
     queryset = get_tags_by_category(category) if category is not None else Tag.objects.all()
-    activetagdict = ProjectSearchTagsCache.get(event)
+    activetagdict = ProjectSearchTagsCache.get(event=event)
     querydict = {tag.tag_name: tag for tag in queryset}
     resultdict = {}
 
@@ -191,6 +191,7 @@ def approve_group(request, group_id):
             group.is_searchable = True
             group.save()
             # SitemapPages.update()
+            # TODO: Recache group tags
             notify_group_owners_group_approved(group)
             messages.success(request, 'Group Approved')
 
