@@ -336,6 +336,13 @@
   font-size: 14px;
   margin-top: 16px;
 }
+.AboutProjects-file-link {
+  /* if a file has a very long filename, it overflows the container and if a project has many files the list is hard to read */
+  margin: 12px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 @media (max-width: 1000px) {
   // buttons will align below "-description"
