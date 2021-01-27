@@ -39,9 +39,9 @@ from django.views.decorators.cache import cache_page
 import requests
 
 
-def get_tag_counts(category=None, event=None):
+def get_tag_counts(category=None, event=None, group=None):
     queryset = get_tags_by_category(category) if category is not None else Tag.objects.all()
-    activetagdict = ProjectSearchTagsCache.get(event=event)
+    activetagdict = ProjectSearchTagsCache.get(event=event, group=group)
     querydict = {tag.tag_name: tag for tag in queryset}
     resultdict = {}
 
@@ -526,8 +526,11 @@ def projects_list(request):
     url_parts = request.GET.urlencode()
     query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
     event = None
+    group = None
 
     if 'group_id' in query_params:
+        group_id = query_params['group_id'][0]
+        group = Group.objects.get(id=group_id)
         project_relationships = ProjectRelationship.objects.filter(relationship_group=query_params['group_id'][0])
         project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
         project_list = Project.objects.filter(id__in=project_ids, is_searchable=True)
@@ -572,7 +575,7 @@ def projects_list(request):
             project_list_page = project_list
             project_pages = 1
 
-    tag_counts = get_tag_counts(category=None, event=event)
+    tag_counts = get_tag_counts(category=None, event=event, group=group)
     response = projects_with_meta_data(project_list_page, project_pages, project_count, tag_counts)
 
     return JsonResponse(response)

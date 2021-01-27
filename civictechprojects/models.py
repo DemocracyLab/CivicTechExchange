@@ -352,13 +352,14 @@ class Group(Archived):
             return all_issue_area_names
 
     def get_group_projects(self):
-        slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
-        return Event.objects.filter(event_legacy_organization__name__in=slugs)
+        project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
+        project_ids = list(map(lambda pr: pr.relationship_project.id, project_relationships))
+        return Project.objects.filter(id__in=project_ids)
 
     def recache(self):
         hydrated_group = self._hydrate_to_json()
         GroupCache.refresh(self, hydrated_group)
-        ProjectSearchTagsCache.refresh(self)
+        ProjectSearchTagsCache.refresh(event=None, group=self)
 
     def update_linked_items(self):
         # Recache linked projects
@@ -493,7 +494,7 @@ class Event(Archived):
     def recache(self):
         hydrated_event = self._hydrate_to_json()
         EventCache.refresh(self, hydrated_event)
-        ProjectSearchTagsCache.refresh(self)
+        ProjectSearchTagsCache.refresh(event=self)
 
 
 class NameRecord(models.Model):
