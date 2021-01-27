@@ -124,9 +124,6 @@ class AboutGroupDisplay extends React.Component<Props, State> {
 
               {!this.props.viewOnly && this._renderContactAndVolunteerButtons()}
             </div>
-
-            {/*TODO: Get rid of this? */}
-            <div className="AboutProjects_tabs"></div>
           </div>
 
           <div className="AboutGroupDisplay-details">
