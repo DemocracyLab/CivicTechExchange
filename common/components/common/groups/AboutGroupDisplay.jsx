@@ -1,24 +1,29 @@
 // @flow
 
 import React from "react";
+import type { FluxReduceStore } from "flux/utils";
 import _ from "lodash";
 import type { GroupDetailsAPIData } from "../../utils/GroupAPIUtils.js";
 import GroupDetails from "./GroupDetails.jsx";
 import ContactGroupButton from "./ContactGroupButton.jsx";
 import IconLinkDisplay from "../../componentsBySection/AboutProject/IconLinkDisplay.jsx";
-import CurrentUser from "../../utils/CurrentUser.js";
 import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import { LinkTypes } from "../../constants/LinkConstants.js";
-import GroupAPIUtils from "../../utils/GroupAPIUtils.js";
-import ProjectCard from "../../componentsBySection/FindProjects/ProjectCard.jsx";
-import ProjectAPIUtils, { TagDefinition } from "../../utils/ProjectAPIUtils.js";
-import type { ProjectAPIData } from "../../utils/ProjectAPIUtils";
-import type { ProjectRelationshipAPIData } from "../../utils/GroupAPIUtils";
+import GroupAPIUtils, {
+  ProjectRelationshipAPIData,
+} from "../../utils/GroupAPIUtils.js";
+import type {
+  TagDefinition,
+  TagDefinitionCount,
+} from "../../utils/ProjectAPIUtils.js";
 import ProfileProjectSearch from "../projects/ProfileProjectSearch.jsx";
-import { EventData } from "../../utils/EventAPIUtils";
 import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import { Container } from "flux/utils";
+import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
+import { Dictionary } from "../../types/Generics.jsx";
+import TagCategory from "../tags/TagCategory.jsx";
 
 type Props = {|
   group: ?GroupDetailsAPIData,
@@ -32,51 +37,33 @@ type State = {|
   showJoinModal: boolean,
 |};
 
-class AboutGroupDisplay extends React.PureComponent<Props, State> {
+class AboutGroupDisplay extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.state = this.loadGroupIntoState(props.group);
+    this.state = { group: props.group };
     this.initProjectSearch(this.state);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState(
-      this.loadGroupIntoState(nextProps.group),
-      this.initProjectSearch
-    );
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [ProjectSearchStore];
   }
 
-  loadGroupIntoState(group: GroupDetailsAPIData): State {
-    const approvedProjects: $ReadOnlyArray<ProjectRelationshipAPIData> = !_.isEmpty(
-      group.group_projects
-    )
-      ? group.group_projects.filter(
-          (pr: ProjectRelationshipAPIData) => pr.relationship_is_approved
-        )
-      : [];
-    return {
-      group: group,
-      approvedProjects: _.reverse(
-        _.sortBy(
-          approvedProjects,
-          (p: ProjectRelationshipAPIData) => p.project_date_modified
-        )
-      ),
-      issueAreas: this.getUniqueIssueAreas(approvedProjects),
-    };
+  static calculateState(prevState: State): State {
+    const issueAreas: ?$ReadOnlyArray<TagDefinition> = this.getIssueAreas();
+    return Object.assign(prevState || {}, {
+      issueAreas: issueAreas,
+    });
   }
 
-  getUniqueIssueAreas(
-    projects: $ReadOnlyArray<ProjectRelationshipAPIData>
-  ): ?$ReadOnlyArray<TagDefinition> {
-    let issues = projects.map(
-      (proj: ProjectRelationshipAPIData) =>
-        proj.project_issue_area && proj.project_issue_area[0]
+  static getIssueAreas(): ?$ReadOnlyArray<TagDefinition> {
+    const tags: Dictionary<TagDefinitionCount> = ProjectSearchStore.getAllTags();
+    const presentTags: $ReadOnlyArray<TagDefinitionCount> = _.values(
+      tags
+    ).filter(
+      (tag: TagDefinitionCount) =>
+        tag.num_times > 0 && tag.category === TagCategory.ISSUES
     );
-    issues = issues.filter(
-      (issue: TagDefinition) => issue && issue.tag_name !== "no-specific-issue"
-    );
-    return _.uniqBy(issues, (issue: TagDefinition) => issue.tag_name);
+    return _.reverse(_.sortBy(presentTags, "num_times"));
   }
 
   render(): $React$Node {
@@ -138,6 +125,7 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
               {!this.props.viewOnly && this._renderContactAndVolunteerButtons()}
             </div>
 
+            {/*TODO: Get rid of this? */}
             <div className="AboutProjects_tabs"></div>
           </div>
 
@@ -222,4 +210,4 @@ class AboutGroupDisplay extends React.PureComponent<Props, State> {
   }
 }
 
-export default AboutGroupDisplay;
+export default Container.create(AboutGroupDisplay, { pure: false });

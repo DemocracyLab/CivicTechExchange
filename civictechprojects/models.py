@@ -265,9 +265,6 @@ class Group(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_group=self.id)
-        project_relationships = ProjectRelationship.objects\
-            .filter(relationship_group=self.id, relationship_project__is_searchable=True)\
-            .filter(is_approved=True)
 
         group = {
             'group_creator': self.group_creator.id,
@@ -285,10 +282,6 @@ class Group(Archived):
             'group_owners': [self.group_creator.hydrate_to_tile_json()],
             'group_short_description': self.group_short_description
         }
-
-        # TODO: Don't include this
-        if len(project_relationships) > 0:
-            group['group_projects'] = list(map(lambda pr: pr.hydrate_to_project_tile_json(), project_relationships))
 
         if len(thumbnail_files) > 0:
             group['group_thumbnail'] = thumbnail_files[0].to_json()
