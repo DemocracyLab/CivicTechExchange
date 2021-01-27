@@ -20,10 +20,6 @@
 !*.scss
 !*.css
 
-# html
-!*.html
-!*.htm 
-
 # markdown
 !*.md
 
