@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" style="height: 100%">
-  {% load django_seo_js %}
+{% load django_seo_js %}
   <head>
     {% seo_js_head %}
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <title>{{ title }}</title>
     <meta name="og:title" content="{{ title }}" />
     <meta name="description" content="{{ description }}" />
     <meta name="og:description" content="{{ description }}" />
     <meta name="og:type" content="{{ og_type }}" />
     <meta name="og:image" content="{{ og_image }}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/static/js/runtime.bundle.js" defer></script>
     <script src="/static/js/main.bundle.js" defer></script>
     <script src="/static/js/vendors.bundle.js" defer></script>
-    <link rel="stylesheet" type="text/css" href="/static/css/main.styles.css" />
-    <link rel="icon" type="image/png" href="{{FAVICON_PATH}}" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-      integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-      crossorigin="anonymous"
-    />
-    <!-- prettier-ignore -->
-    {{ googleTagsHeadScript }} {{ organizationSnippet }}
-    <!-- prettier-ignore -->
-    {{ hotjarScript }} {{ googleScript }}
+    <link rel="stylesheet" type="text/css" href="/static/css/main.styles.css"/>
+    <link rel="icon" type="image/png" href="{{FAVICON_PATH}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    {{ googleTagsHeadScript }}
+    {{ organizationSnippet }}
+    {{ hotjarScript }}
+    {{ googleScript }}
   </head>
   <body>
     {{ googleTagsBodyScript }}
@@ -36,26 +31,22 @@
     <script>
       window.fbAsyncInit = function() {
         FB.init({
-          appId: "137258853647008",
-          cookie: true,
-          xfbml: true,
-          version: "v2.10",
+          appId      : '137258853647008',
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v2.10',
         });
         FB.AppEvents.logPageView();
-        window.democracyLabEvents = { fbLoaded: true };
-        window.dispatchEvent(new Event("fbLoaded"));
+        window.democracyLabEvents = {'fbLoaded': true};
+        window.dispatchEvent(new Event('fbLoaded'));
       };
-      (function(d, s, id) {
-        var js,
-          fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {
-          return;
-        }
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-      })(document, "script", "facebook-jssdk");
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "https://connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
     </script>
     <script type="text/javascript">
       window.DLAB_GLOBAL_CONTEXT =
@@ -95,13 +86,6 @@
         window.DLAB_MESSAGES.push({message: '{{message}}', level: '{{message.tags}}'})
       {% endfor %}
     </script>
-    <div
-      id="MainController"
-      data-elementId="brief_description"
-      data-maxLength="3000"
-      class="__react-root"
-    >
-      Loading . . .
-    </div>
+    <div id="MainController" data-elementId="brief_description" data-maxLength="3000" class="__react-root">Loading . . .</div>
   </body>
 </html>
