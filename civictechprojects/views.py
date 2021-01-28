@@ -191,7 +191,7 @@ def approve_group(request, group_id):
             group.is_searchable = True
             group.save()
             # SitemapPages.update()
-            # TODO: Recache group tags
+            ProjectSearchTagsCache.refresh(event=None, group=group)
             notify_group_owners_group_approved(group)
             messages.success(request, 'Group Approved')
 
@@ -1196,6 +1196,7 @@ def invite_project_to_group(request, group_id):
     project_relation = ProjectRelationship.create(group, project, is_approved, message)
     project_relation.save()
     project_relation.relationship_project.recache()
+    project_relation.relationship_group.recache()
     if not is_approved:
         send_group_project_invitation_email(project_relation)
     return HttpResponse(status=200)
@@ -1222,6 +1223,7 @@ def accept_group_invitation(request, invite_id):
         project_relation.save()
         update_project_timestamp(request, project)
         project_relation.relationship_project.recache()
+        project_relation.relationship_group.recache()
         if request.method == 'GET':
             messages.add_message(request, messages.SUCCESS, 'Your project is now part of the group ' + project_relation.relationship_group.group_name)
             return redirect(about_project_url)
