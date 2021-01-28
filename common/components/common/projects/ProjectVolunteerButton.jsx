@@ -1,25 +1,25 @@
 // @flow
 
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
+import React from "react";
+import Button from "react-bootstrap/Button";
+import type { ProjectDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import FeedbackModal from "../FeedbackModal.jsx";
-import {PositionInfo} from "../../forms/PositionInfo.jsx";
+import { PositionInfo } from "../../forms/PositionInfo.jsx";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import Section from "../../enums/Section.js";
 import metrics from "../../utils/metrics.js";
 import url from "../../utils/url.js";
-import _ from 'lodash'
+import _ from "lodash";
 
 type LeaveProjectParams = {|
-  departure_message: string
+  departure_message: string,
 |};
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
   positionToJoin: ?PositionInfo,
-  onVolunteerClick: () => void
+  onVolunteerClick: () => void,
 |};
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -27,7 +27,7 @@ type State = {|
   showContactModal: boolean,
   showLeaveProjectModal: boolean,
   buttonDisabled: boolean,
-  buttonTitle: string
+  buttonTitle: string,
 |};
 
 /**
@@ -47,20 +47,26 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
     const project = props.project;
     const newState = {
       project: project,
-      isAlreadyVolunteering: _.some(props.project.project_volunteers, (volunteer: VolunteerDetailsAPIData) => volunteer.user.id === CurrentUser.userID()),
+      isAlreadyVolunteering: _.some(
+        props.project.project_volunteers,
+        (volunteer: VolunteerDetailsAPIData) =>
+          volunteer.user.id === CurrentUser.userID()
+      ),
       buttonDisabled: false,
-      buttonTitle: ""
+      buttonTitle: "",
     };
-    if(!CurrentUser.isLoggedIn()) {
+    if (!CurrentUser.isLoggedIn()) {
       newState.buttonDisabled = false;
       newState.buttonTitle = "Please sign up or log in to volunteer";
-    } else if(!CurrentUser.isEmailVerified()) {
+    } else if (!CurrentUser.isEmailVerified()) {
       newState.buttonDisabled = true;
       // TODO: Provide mechanism to re-send verification email
-      newState.buttonTitle = "Please verify your email address before volunteering";
-    } else if(!project.project_claimed) {
+      newState.buttonTitle =
+        "Please verify your email address before volunteering";
+    } else if (!project.project_claimed) {
       newState.buttonDisabled = true;
-      newState.buttonTitle = "This project has not yet been claimed by its owner";
+      newState.buttonTitle =
+        "This project has not yet been claimed by its owner";
     }
 
     return newState;
@@ -71,33 +77,48 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   }
 
   handleShowJoinModal() {
-    metrics.logVolunteerClickVolunteerButton(CurrentUser.userID(), this.props.project.project_id);
+    metrics.logVolunteerClickVolunteerButton(
+      CurrentUser.userID(),
+      this.props.project.project_id
+    );
     this.props.onVolunteerClick();
   }
 
   handleShowLeaveModal() {
-    metrics.logVolunteerClickLeaveButton(CurrentUser.userID(), this.props.project.project_id);
+    metrics.logVolunteerClickLeaveButton(
+      CurrentUser.userID(),
+      this.props.project.project_id
+    );
     this.setState({ showLeaveProjectModal: true });
   }
 
-  confirmLeaveProject(confirmLeaving: boolean, departureMessage: string):void {
-    if(confirmLeaving) {
-      const params: LeaveProjectParams = {departure_message: departureMessage};
-      ProjectAPIUtils.post("/volunteer/leave/" + this.props.project.project_id + "/",params,() => {
-        metrics.logVolunteerClickLeaveConfirm(CurrentUser.userID(), this.props.project.project_id);
-        window.location.reload(true);
-      });
+  confirmLeaveProject(confirmLeaving: boolean, departureMessage: string): void {
+    if (confirmLeaving) {
+      const params: LeaveProjectParams = {
+        departure_message: departureMessage,
+      };
+      ProjectAPIUtils.post(
+        "/volunteer/leave/" + this.props.project.project_id + "/",
+        params,
+        () => {
+          metrics.logVolunteerClickLeaveConfirm(
+            CurrentUser.userID(),
+            this.props.project.project_id
+          );
+          window.location.reload(true);
+        }
+      );
     } else {
       this.setState({
-        showLeaveProjectModal: false
+        showLeaveProjectModal: false,
       });
     }
   }
 
   render(): ?React$Node {
-    if(this.state) {
-      if(CurrentUser.isLoggedIn()) {
-        if(CurrentUser.userID() !== this.props.project.project_creator){
+    if (this.state) {
+      if (CurrentUser.isLoggedIn()) {
+        if (CurrentUser.userID() !== this.props.project.project_creator) {
           return (
             <div>
               {this._renderVolunteerButton()}
@@ -116,11 +137,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
           return null;
         }
       } else {
-        return (
-          <div>
-            {this._renderLinkToSignInButton()}
-          </div>
-        );
+        return <div>{this._renderLinkToSignInButton()}</div>;
       }
     } else {
       return null;
@@ -128,30 +145,28 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   }
 
   _renderVolunteerButton(): React$Node {
-    return this.state.isAlreadyVolunteering
-      ? (
-        // TODO: Make this its own component and hook up to My Projects page
-        <Button
-          className="AboutProject-button"
-          type="button"
-          variant="danger"
-          onClick={this.handleShowLeaveModal}
-        >
-          Leave Project
-        </Button>
-      )
-      : (
-        <Button
-          variant="primary"
-          className="AboutProject-button"
-          type="button"
-          disabled={this.state.buttonDisabled}
-          title={this.state.buttonTitle}
-          onClick={this.handleShowJoinModal}
-        >
-          Volunteer With Project
-        </Button>
-      );
+    return this.state.isAlreadyVolunteering ? (
+      // TODO: Make this its own component and hook up to My Projects page
+      <Button
+        className="AboutProject-button"
+        type="button"
+        variant="danger"
+        onClick={this.handleShowLeaveModal}
+      >
+        Leave Project
+      </Button>
+    ) : (
+      <Button
+        variant="primary"
+        className="AboutProject-button"
+        type="button"
+        disabled={this.state.buttonDisabled}
+        title={this.state.buttonTitle}
+        onClick={this.handleShowJoinModal}
+      >
+        Volunteer With Project
+      </Button>
+    );
   }
 
   _renderLinkToSignInButton(): React$Node {

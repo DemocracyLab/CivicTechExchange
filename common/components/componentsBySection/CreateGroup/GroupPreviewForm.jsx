@@ -2,13 +2,13 @@
 
 import React from "react";
 import DjangoCSRFToken from "django-react-csrftoken";
-import type {GroupDetailsAPIData} from "../../../components/utils/GroupAPIUtils.js";
+import type { GroupDetailsAPIData } from "../../../components/utils/GroupAPIUtils.js";
 import AboutGroupDisplay from "../../common/groups/AboutGroupDisplay.jsx";
-import {OnReadySubmitFunc} from "./GroupFormCommon.jsx";
+import { OnReadySubmitFunc } from "./GroupFormCommon.jsx";
 
 type Props = {|
   project: ?GroupDetailsAPIData, // TODO: Fix the key this is passed down as
-  readyForSubmit: OnReadySubmitFunc
+  readyForSubmit: OnReadySubmitFunc,
 |};
 
 /**
@@ -24,12 +24,9 @@ class GroupPreviewForm extends React.PureComponent<Props> {
   render(): React$Node {
     return (
       <React.Fragment>
-        <DjangoCSRFToken/>
-        <input type="hidden" name="is_created" value="True"/>
-        <AboutGroupDisplay
-          group={this.props.project}
-          viewOnly={true}
-        />
+        <DjangoCSRFToken />
+        <input type="hidden" name="is_created" value="True" />
+        <AboutGroupDisplay group={this.props.project} viewOnly={true} />
       </React.Fragment>
     );
   }

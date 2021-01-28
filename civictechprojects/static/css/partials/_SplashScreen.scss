@@ -9,8 +9,10 @@
   width: 100%;
 }
 
-.SplashScreen-fill{
-  min-height: calc(100vh - #{$header-height} - #{$footer-height}); /* use min-height to fix wide but short viewports */
+.SplashScreen-fill {
+  min-height: calc(
+    100vh - #{$header-height} - #{$footer-height}
+  ); /* use min-height to fix wide but short viewports */
 }
 
 .SplashScreen-content {
@@ -64,10 +66,10 @@
   background-blend-mode: multiply;
 }
 .SplashScreen-opacity50 {
-  background-color: rgba($color-opacity-layer, 0.5)
+  background-color: rgba($color-opacity-layer, 0.5);
 }
 .SplashScreen-opacity20 {
-  background-color: rgba($color-opacity-layer, 0.2)
+  background-color: rgba($color-opacity-layer, 0.2);
 }
 @include media-breakpoint-up(md) {
   .SplashScreen-mission p {

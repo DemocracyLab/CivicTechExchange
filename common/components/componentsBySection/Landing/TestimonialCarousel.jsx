@@ -1,12 +1,17 @@
-import React from 'react';
-import Testimonials from './Testimonials.jsx';
-import Carousel from 'react-bootstrap/Carousel';
+import React from "react";
+import Testimonials from "./Testimonials.jsx";
+import Carousel from "react-bootstrap/Carousel";
 
-const carouselItems = Testimonials.map((i) =>
+const carouselItems = Testimonials.map(i => (
   <Carousel.Item className="carousel-item" key={i.name}>
     <div className="carousel-item-content">
       <div className="carousel-item-left">
-        {i.avatar ? <div className="carousel-avatar" style={{backgroundImage: `url(${i.avatar})`}}></div> : null}
+        {i.avatar ? (
+          <div
+            className="carousel-avatar"
+            style={{ backgroundImage: `url(${i.avatar})` }}
+          ></div>
+        ) : null}
       </div>
       <div className="carousel-item-right">
         <h3>{i.name}</h3>
@@ -16,13 +21,15 @@ const carouselItems = Testimonials.map((i) =>
       </div>
     </div>
   </Carousel.Item>
-);
+));
 
 class TestimonialCarousel extends React.PureComponent {
   render(): React$Node {
     return (
-      <Carousel interval={this.props.interval ? this.props.interval : 6000}>{carouselItems}</Carousel>
-    )
+      <Carousel interval={this.props.interval ? this.props.interval : 6000}>
+        {carouselItems}
+      </Carousel>
+    );
   }
 }
 

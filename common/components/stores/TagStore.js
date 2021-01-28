@@ -1,15 +1,17 @@
 // @flow
 
-import {ReduceStore} from 'flux/utils';
-import TagDispatcher from './TagDispatcher.js';
-import {List, Record} from 'immutable'
+import { ReduceStore } from "flux/utils";
+import TagDispatcher from "./TagDispatcher.js";
+import { List, Record } from "immutable";
 
-export type TagActionType = {
-  type: 'INIT',
-} | {
-  type: 'SET_TAGS_DO_NOT_CALL_OUTSIDE_OF_STORE',
-  tags: List<Tag>,
-};
+export type TagActionType =
+  | {
+      type: "INIT",
+    }
+  | {
+      type: "SET_TAGS_DO_NOT_CALL_OUTSIDE_OF_STORE",
+      tags: List<Tag>,
+    };
 
 // TODO: Condense redundant tag definitions
 export type Tag = {|
@@ -19,7 +21,7 @@ export type Tag = {|
   +id: number,
   +parent: string,
   +subcategory: string,
-  +tagName: string
+  +tagName: string,
 |};
 
 type TagAPIData = {|
@@ -29,7 +31,7 @@ type TagAPIData = {|
   +id: number,
   +parent: string,
   +subcategory: string,
-  +tag_name: string
+  +tag_name: string,
 |};
 
 const DEFAULT_STATE = {
@@ -51,11 +53,11 @@ class TagStore extends ReduceStore<State> {
 
   reduce(state: State, action: TagActionType): State {
     switch (action.type) {
-      case 'INIT':
+      case "INIT":
         this._init();
         return new State();
-      case 'SET_TAGS_DO_NOT_CALL_OUTSIDE_OF_STORE':
-        return state.set('tags', action.tags);
+      case "SET_TAGS_DO_NOT_CALL_OUTSIDE_OF_STORE":
+        return state.set("tags", action.tags);
       default:
         (action: empty);
         return state;
@@ -63,13 +65,13 @@ class TagStore extends ReduceStore<State> {
   }
 
   _init(): void {
-    fetch(new Request('/api/tags'))
+    fetch(new Request("/api/tags"))
       .then(response => response.json())
       .then(tags =>
         TagDispatcher.dispatch({
-          type: 'SET_TAGS_DO_NOT_CALL_OUTSIDE_OF_STORE',
+          type: "SET_TAGS_DO_NOT_CALL_OUTSIDE_OF_STORE",
           tags: List(tags.map(this._tagFromAPIData)),
-        }),
+        })
       );
   }
 
@@ -81,7 +83,7 @@ class TagStore extends ReduceStore<State> {
       id: apiData.id,
       parent: apiData.parent,
       subcategory: apiData.subcategory,
-      tagName: apiData.tag_name
+      tagName: apiData.tag_name,
     };
   }
 
@@ -91,7 +93,7 @@ class TagStore extends ReduceStore<State> {
 
   getIssueAreas(): List<Tag> {
     return this.getState().tags.filter(
-      tag => tag.category === 'Issue(s) Addressed',
+      tag => tag.category === "Issue(s) Addressed"
     );
   }
 }

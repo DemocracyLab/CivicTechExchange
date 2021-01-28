@@ -1,0 +1,42 @@
+# Prettier ignore config - https://prettier.io/docs/en/ignore.html
+
+# This model acts to disallow by default and then enable for specific file types; then exclude within those file types selectively, e.g. include our css, don't include third-party css
+
+# disallow everything, even extensionless files
+*
+# allow directories so the below rules can take effect
+!*/
+
+
+### Allowed File Types ###
+
+# javascript
+!*.jsx
+!*.js
+!*.json
+
+
+# css/sass
+!*.scss
+!*.css
+
+# markdown
+!*.md
+
+
+
+### Exceptions ###
+
+# disallow third-party files
+**/vendor/**
+
+# disallow build location
+staticfiles/**
+
+# disallow bundles and already minified files
+*.bundle.js
+*.min.js
+*.min.css
+webpack.*.js
+
+

@@ -24,10 +24,9 @@
 }
 
 // avoid double border for days with multiple events (thus multiple cards)
-.EventCard-root:nth-of-type(n+2) {
+.EventCard-root:nth-of-type(n + 2) {
   border-top: none;
 }
-
 
 .FindEventsController-topsplash h1 {
   font-size: 4rem;
@@ -41,7 +40,8 @@
   margin-bottom: 16px;
   color: $color-text-grey;
 }
-.EventCard-dateheader, .EventCard-day-container {
+.EventCard-dateheader,
+.EventCard-day-container {
   width: 100%;
 }
 .EventCard-dateheader {
@@ -72,7 +72,8 @@
 .EventCards-card-container {
   margin-bottom: 3rem;
 }
-.EventCard-info, .EventCard-time {
+.EventCard-info,
+.EventCard-time {
   margin-left: 0.5rem;
 }
 
@@ -82,10 +83,10 @@
   display: grid;
 }
 .EventCard-url-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: auto;
 }
 .EventCard-logo img {
   max-width: 98%;

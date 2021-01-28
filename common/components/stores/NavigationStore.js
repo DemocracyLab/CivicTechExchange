@@ -1,23 +1,23 @@
 // @flow
 
-import type {SectionType} from '../enums/Section.js';
+import type { SectionType } from "../enums/Section.js";
 
-import {ReduceStore} from 'flux/utils';
-import UniversalDispatcher from './UniversalDispatcher.js';
-import {Record} from 'immutable'
-import Section from '../enums/Section.js';
+import { ReduceStore } from "flux/utils";
+import UniversalDispatcher from "./UniversalDispatcher.js";
+import { Record } from "immutable";
+import Section from "../enums/Section.js";
 import url from "../utils/url.js";
 
 export type NavigationActionType = {
-  type: 'SET_SECTION',
+  type: "SET_SECTION",
   section: SectionType,
   url: string,
-  fromUrl: ?boolean
+  fromUrl: ?boolean,
 };
 
 const DEFAULT_STATE = {
   section: Section.FindProjects,
-  url: url.section(Section.FindProjects, {showSplash: 1})
+  url: url.section(Section.FindProjects, { showSplash: 1 }),
 };
 
 class State extends Record(DEFAULT_STATE) {
@@ -37,13 +37,13 @@ class NavigationStore extends ReduceStore<State> {
 
   reduce(state: State, action: NavigationActionType): State {
     switch (action.type) {
-      case 'SET_SECTION':
-        if(action.fromUrl) {
-          history.replaceState({}, '', action.url);
+      case "SET_SECTION":
+        if (action.fromUrl) {
+          history.replaceState({}, "", action.url);
         } else {
-          history.pushState({}, '', action.url);
+          history.pushState({}, "", action.url);
         }
-        return state.set('section', action.section);
+        return state.set("section", action.section);
       default:
         (action: empty);
         return state;

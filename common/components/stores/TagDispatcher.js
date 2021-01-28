@@ -1,10 +1,10 @@
 // @flow
 
-'use strict';
+"use strict";
 
-import type {TagActionType} from './TagStore';
+import type { TagActionType } from "./TagStore";
 
-import {Dispatcher} from 'flux';
+import { Dispatcher } from "flux";
 
 const TagDispatcher: Dispatcher<TagActionType> = new Dispatcher();
 

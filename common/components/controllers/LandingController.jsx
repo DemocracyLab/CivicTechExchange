@@ -1,7 +1,9 @@
 // @flow
 
-import React from 'react';
-import SplashScreen, {HeroImage} from "../componentsBySection/FindProjects/SplashScreen.jsx";
+import React from "react";
+import SplashScreen, {
+  HeroImage,
+} from "../componentsBySection/FindProjects/SplashScreen.jsx";
 import RecentProjectsSection from "../componentsBySection/Landing/RecentProjectsSection.jsx";
 import TestimonialCarousel from "../componentsBySection/Landing/TestimonialCarousel.jsx";
 import Partners from "../componentsBySection/Landing/Partners.jsx";
@@ -19,7 +21,6 @@ import Rec3 from "../svg/recruit3.svg";
 import ArrowOrange from "../svg/arrowright-orange.svg";
 
 class LandingController extends React.PureComponent<{||}> {
-
   constructor(): void {
     super();
   }
@@ -29,7 +30,7 @@ class LandingController extends React.PureComponent<{||}> {
       <div className="LandingController-root">
         {this._renderTopSplash()}
         <div className="container">
-          <RecentProjectsSection className="row"/>
+          <RecentProjectsSection className="row" />
           {this._renderPathFlows()}
           {this._renderMiddleSplash()}
           {this._renderTestimonials()}
@@ -43,14 +44,27 @@ class LandingController extends React.PureComponent<{||}> {
 
   _renderTopSplash(): React$Node {
     const header: string = "Make Tech.  Do Good.";
-    const text: string = "We connect skilled volunteers and tech-for-good projects";
+    const text: string =
+      "We connect skilled volunteers and tech-for-good projects";
 
     return (
-      <SplashScreen className="LandingController-topsplash" header={header} text={text}>
-        <Button variant="primary" className="SplashScreen-find-projects-btn" href={url.section(Section.FindProjects)}>
+      <SplashScreen
+        className="LandingController-topsplash"
+        header={header}
+        text={text}
+      >
+        <Button
+          variant="primary"
+          className="SplashScreen-find-projects-btn"
+          href={url.section(Section.FindProjects)}
+        >
           Find Projects
         </Button>
-        <Button variant="primary" className="SplashScreen-create-project-btn" href={url.sectionOrLogIn(Section.CreateProject)}>
+        <Button
+          variant="primary"
+          className="SplashScreen-create-project-btn"
+          href={url.sectionOrLogIn(Section.CreateProject)}
+        >
           Create A Project
         </Button>
       </SplashScreen>
@@ -68,108 +82,158 @@ class LandingController extends React.PureComponent<{||}> {
               <Vo2 />
               <p>1. Browse Projects</p>
             </div>
-            <div className="LandingController-pathflows-arrow"><ArrowBlack /></div>
+            <div className="LandingController-pathflows-arrow">
+              <ArrowBlack />
+            </div>
             <div className="LandingController-pathflows-item">
               <Vo1 />
               <p>2. Create a Profile</p>
             </div>
-            <div className="LandingController-pathflows-arrow"><ArrowBlack /></div>
+            <div className="LandingController-pathflows-arrow">
+              <ArrowBlack />
+            </div>
             <div className="LandingController-pathflows-item">
               <Vo3 />
               <p>3. Connect with Project Leaders</p>
             </div>
           </div>
-            <Button href={url.section(Section.FindProjects)} variant="light">Start Volunteering!</Button>
-
-          </div>
-          <div className="col-xs-12 col-lg-6 LandingController-recruit-flow">
-            <h3>Need Volunteers?</h3>
-            <p>Find people with the tech skills you need</p>
-              <div className="LandingController-pathflows-stepcontainer">
-                <div className="LandingController-pathflows-item">
-                  <Rec3 />
-                  <p>1. Add Your Project</p>
-                </div>
-                <div className="LandingController-pathflows-arrow"><ArrowOrange /></div>
-                <div className="LandingController-pathflows-item">
-                  <Rec2 />
-                  <p>2. List Your Needs</p>
-                </div>
-                <div className="LandingController-pathflows-arrow"><ArrowOrange /></div>
-                <div className="LandingController-pathflows-item">
-                  <Rec1 />
-                  <p>3. Recruit Skilled Volunteers</p>
-                </div>
-              </div>
-
-
-
-              <Button href={url.sectionOrLogIn(Section.CreateProject)} variant="primary">Start Recruiting!</Button>
-
+          <Button href={url.section(Section.FindProjects)} variant="light">
+            Start Volunteering!
+          </Button>
+        </div>
+        <div className="col-xs-12 col-lg-6 LandingController-recruit-flow">
+          <h3>Need Volunteers?</h3>
+          <p>Find people with the tech skills you need</p>
+          <div className="LandingController-pathflows-stepcontainer">
+            <div className="LandingController-pathflows-item">
+              <Rec3 />
+              <p>1. Add Your Project</p>
+            </div>
+            <div className="LandingController-pathflows-arrow">
+              <ArrowOrange />
+            </div>
+            <div className="LandingController-pathflows-item">
+              <Rec2 />
+              <p>2. List Your Needs</p>
+            </div>
+            <div className="LandingController-pathflows-arrow">
+              <ArrowOrange />
+            </div>
+            <div className="LandingController-pathflows-item">
+              <Rec1 />
+              <p>3. Recruit Skilled Volunteers</p>
             </div>
           </div>
-        )
-      }
 
-    _renderMiddleSplash() {
-      const header: string = "Accelerating Civic Innovation";
-      const text: string = "DemocracyLab is a nonprofit organization. We are advancing tech innovation in the social, nonprofit and civic sectors through the power of tech-for-good volunteerism."
-
-      return (
-        <SplashScreen className="LandingController-midsplash" header={header} text={text} img={HeroImage.MidLanding}>
-          <Button variant="primary" className="LandingController-midsplash-btn SplashScreen-create-project-btn" href={url.section(Section.AboutUs)}>Learn More</Button>
-        </SplashScreen>
-      );
-    }
-
-    _renderTestimonials() {
-      return (
-        <div className="LandingController-testimonial-container">
-          <h2 className="text-center">Testimonials</h2>
-          <TestimonialCarousel className="LandingController-testimonial" interval={15000} />
+          <Button
+            href={url.sectionOrLogIn(Section.CreateProject)}
+            variant="primary"
+          >
+            Start Recruiting!
+          </Button>
         </div>
-      )
-    }
+      </div>
+    );
+  }
 
-    _renderPartnerSection() {
-      return (
-        <div className="LandingController-partner-section" style={cdn.bgImage('OurVisionBGoverlay.jpg')}>
-          <div className="PartnerSection text-center">
-            <h2>Partner With Us To Organize Your Next Hackathon</h2>
-            <p>DemocracyLab is a leading organizer of tech-for-good hackathons.</p>
-            <p>Let us help your company, non-profit or group strengthen your culture and make an impact!</p>
-            <Button variant="outline-dark" href={url.section(Section.PartnerWithUs)}>
-              Learn More
-            </Button>
-          </div>
-        </div>
-      )
-    }
+  _renderMiddleSplash() {
+    const header: string = "Accelerating Civic Innovation";
+    const text: string =
+      "DemocracyLab is a nonprofit organization. We are advancing tech innovation in the social, nonprofit and civic sectors through the power of tech-for-good volunteerism.";
 
-    _renderPartnersInAction() {
-      const partnerLogos = Partners.map((i) =>
-        <div key={i.name} className="LandingController-partnersinaction-logo">
-          <a href={i.link}><img src={i.logo} alt={i.name} /></a>
-        </div>
-      );
+    return (
+      <SplashScreen
+        className="LandingController-midsplash"
+        header={header}
+        text={text}
+        img={HeroImage.MidLanding}
+      >
+        <Button
+          variant="primary"
+          className="LandingController-midsplash-btn SplashScreen-create-project-btn"
+          href={url.section(Section.AboutUs)}
+        >
+          Learn More
+        </Button>
+      </SplashScreen>
+    );
+  }
 
-      return (
-        <div className="LandingController-partnersinaction">
-          <h2 className="text-center">Our Community Partners</h2>
-          <div className="LandingController-partnersinaction-container">{partnerLogos}</div>
+  _renderTestimonials() {
+    return (
+      <div className="LandingController-testimonial-container">
+        <h2 className="text-center">Testimonials</h2>
+        <TestimonialCarousel
+          className="LandingController-testimonial"
+          interval={15000}
+        />
+      </div>
+    );
+  }
+
+  _renderPartnerSection() {
+    return (
+      <div
+        className="LandingController-partner-section"
+        style={cdn.bgImage("OurVisionBGoverlay.jpg")}
+      >
+        <div className="PartnerSection text-center">
+          <h2>Partner With Us To Organize Your Next Hackathon</h2>
+          <p>
+            DemocracyLab is a leading organizer of tech-for-good hackathons.
+          </p>
+          <p>
+            Let us help your company, non-profit or group strengthen your
+            culture and make an impact!
+          </p>
+          <Button
+            variant="outline-dark"
+            href={url.section(Section.PartnerWithUs)}
+          >
+            Learn More
+          </Button>
         </div>
-      )
-    }
+      </div>
+    );
+  }
+
+  _renderPartnersInAction() {
+    const partnerLogos = Partners.map(i => (
+      <div key={i.name} className="LandingController-partnersinaction-logo">
+        <a href={i.link}>
+          <img src={i.logo} alt={i.name} />
+        </a>
+      </div>
+    ));
+
+    return (
+      <div className="LandingController-partnersinaction">
+        <h2 className="text-center">Our Community Partners</h2>
+        <div className="LandingController-partnersinaction-container">
+          {partnerLogos}
+        </div>
+      </div>
+    );
+  }
 
   _renderBottomSplash(): React$Node {
     const header: string = "What are you waiting for?";
 
     return (
-      <SplashScreen className="LandingController-bottom-splash" header={header} img={HeroImage.BottomLanding}>
-        <Button variant="primary" className="LandingController-bottomsplash-btn" href={url.sectionOrLogIn(Section.FindProjects)}>Get Started</Button>
+      <SplashScreen
+        className="LandingController-bottom-splash"
+        header={header}
+        img={HeroImage.BottomLanding}
+      >
+        <Button
+          variant="primary"
+          className="LandingController-bottomsplash-btn"
+          href={url.sectionOrLogIn(Section.FindProjects)}
+        >
+          Get Started
+        </Button>
       </SplashScreen>
     );
   }
-
 }
 export default LandingController;

@@ -1,20 +1,20 @@
 // @flow
 
-import type {FluxReduceStore} from 'flux/utils';
-import type {SectionType} from '../enums/Section.js';
+import type { FluxReduceStore } from "flux/utils";
+import type { SectionType } from "../enums/Section.js";
 
-import {Container} from 'flux/utils';
-import AboutProjectController from './AboutProjectController.jsx'
-import AboutUsController from './AboutUsController.jsx'
-import CreateProjectController from './CreateProjectController.jsx'
-import FindProjectsController  from './FindProjectsController.jsx'
-import LandingController from './LandingController.jsx'
-import MyProjectsController from './MyProjectsController.jsx'
-import NavigationStore from '../stores/NavigationStore.js'
-import React from 'react';
-import Section from '../enums/Section.js'
-import LogInController from './LogInController.jsx'
-import SignUpController from './SignUpController.jsx'
+import { Container } from "flux/utils";
+import AboutProjectController from "./AboutProjectController.jsx";
+import AboutUsController from "./AboutUsController.jsx";
+import CreateProjectController from "./CreateProjectController.jsx";
+import FindProjectsController from "./FindProjectsController.jsx";
+import LandingController from "./LandingController.jsx";
+import MyProjectsController from "./MyProjectsController.jsx";
+import NavigationStore from "../stores/NavigationStore.js";
+import React from "react";
+import Section from "../enums/Section.js";
+import LogInController from "./LogInController.jsx";
+import SignUpController from "./SignUpController.jsx";
 import ResetPasswordController from "./ResetPasswordController.jsx";
 import ChangePasswordController from "./ChangePasswordController.jsx";
 import EditProfileController from "./EditProfileController.jsx";
@@ -25,11 +25,11 @@ import PartnerWithUsController from "./PartnerWithUsController.jsx";
 import FlashMessage from "../chrome/FlashMessage.jsx";
 import DonateController from "./DonateController.jsx";
 import ThankYouController from "./ThankYouController.jsx";
-import PressController from './PressController.jsx';
-import ContactUsController from './ContactUsController.jsx';
-import CreateGroupController from './CreateGroupController.jsx';
-import CreateEventController from './CreateEventController.jsx';
-import MyGroupsController from './MyGroupsController.jsx';
+import PressController from "./PressController.jsx";
+import ContactUsController from "./ContactUsController.jsx";
+import CreateGroupController from "./CreateGroupController.jsx";
+import CreateEventController from "./CreateEventController.jsx";
+import MyGroupsController from "./MyGroupsController.jsx";
 import LiveEventController from "./LiveEventController.jsx";
 import AboutEventController from "./AboutEventController.jsx";
 import AboutGroupController from "./AboutGroupController.jsx";
@@ -56,8 +56,11 @@ class SectionController extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="SectionBody" style={{ paddingTop: this.props.headerHeight }}>
-        <FlashMessage key='flash_message'/>
+      <div
+        className="SectionBody"
+        style={{ paddingTop: this.props.headerHeight }}
+      >
+        <FlashMessage key="flash_message" />
         {this._getController()}
       </div>
     );
@@ -114,21 +117,21 @@ class SectionController extends React.Component<{||}, State> {
       case Section.CreateEvent:
         return <CreateEventController />;
       case Section.AboutGroup:
-        return <AboutGroupController/>;
+        return <AboutGroupController />;
       case Section.MyGroups:
         return <MyGroupsController />;
       case Section.MyEvents:
         return <MyEventsController />;
       case Section.AboutEvent:
-        return <AboutEventController/>;
+        return <AboutEventController />;
       case Section.LiveEvent:
         return <LiveEventController />;
       case Section.CorporateEvent:
-        return <CoroporateHackathonController />
+        return <CoroporateHackathonController />;
       case Section.Error:
         return <ErrorController />;
       default:
-        return <div>Section not yet implemented: {this.state.section}</div>
+        return <div>Section not yet implemented: {this.state.section}</div>;
     }
   }
 }
