@@ -37,6 +37,7 @@ export type FindProjectsArgs = {|
   stage: string,
   url: string,
   event_id: number,
+  group_id: number,
 |};
 
 type FindProjectsResponse = {|
@@ -265,6 +266,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           url: state.url,
           positions: state.positions,
           event_id: oldArgs.event_id,
+          group_id: oldArgs.group_id,
         },
         _.identity
       );
@@ -359,6 +361,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = state.set("projectsData", {});
     const findProjectsArgs: FindProjectsArgs = _.pick(state.findProjectsArgs, [
       "event_id",
+      "group_id",
     ]);
     state = state.set(
       "findProjectsArgs",

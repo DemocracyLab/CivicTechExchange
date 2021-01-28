@@ -18,9 +18,17 @@ class CloseablePill extends React.PureComponent<Props> {
     );
   }
 
+  onClickCloseButton(event) {
+    event.stopPropagation();
+    this.props.closeAction();
+  }
+
   _renderCloseButton(): React$Node {
     return (
-      <span className="ProjectTag-closeButton" onClick={this.props.closeAction}>
+      <span
+        className="ProjectTag-closeButton"
+        onClick={this.onClickCloseButton.bind(this)}
+      >
         <i className={GlyphStyles.Close}></i>
       </span>
     );

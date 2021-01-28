@@ -15,14 +15,22 @@ def cache_events():
         event.recache()
 
 
+def cache_groups():
+    from civictechprojects.models import Group
+    groups_to_cache = Group.objects.filter(is_searchable=True, deleted=False)
+    for group in groups_to_cache:
+        group.recache()
+
+
 def cache_tags():
     from civictechprojects.caching.cache import ProjectSearchTagsCache
-    # Just cache the full tags call.  The tags calls filtered by event are taken care of by cache_events
-    ProjectSearchTagsCache.refresh(event=None)
+    # Just cache the full tags call.  The tags calls filtered by events/groups are handled above
+    ProjectSearchTagsCache.refresh(event=None, group=None)
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
         cache_projects()
         cache_events()
+        cache_groups()
         cache_tags()

@@ -1,35 +1,17 @@
 // @flow
 
-import type { LinkInfo } from "../../components/forms/LinkInfo.jsx";
+import type { LinkInfo } from "../forms/LinkInfo.jsx";
 import type { FileInfo } from "../common/FileInfo.jsx";
-import type { LocationInfo } from "../common/location/LocationInfo";
-import { getLocationDisplayString } from "../common/location/LocationInfo";
-import type { ProjectAPIData } from "./ProjectAPIUtils.js";
+import {
+  LocationInfo,
+  getLocationDisplayString,
+} from "../common/location/LocationInfo.js";
+import type {
+  ProjectAPIData,
+  TagDefinition,
+  APIError,
+} from "./ProjectAPIUtils.js";
 import type { Dictionary } from "../types/Generics.jsx";
-import type { APIError, TagDefinition } from "./ProjectAPIUtils";
-
-export type GroupDetailsAPIData = {|
-  group_id: string,
-  group_creator: string,
-  group_name: string,
-  group_description: string,
-  group_short_description: string,
-  group_location: ?string,
-  group_country: ?string,
-  group_state: ?string,
-  group_city: ?string,
-  group_url: ?string,
-  group_date_modified: string,
-  group_thumbnail: FileInfo,
-  group_projects: $ReadOnlyArray<ProjectRelationshipAPIData>,
-  group_links: $ReadOnlyArray<LinkInfo>,
-  group_files: $ReadOnlyArray<FileInfo>,
-|};
-
-export type ProjectRelationshipAPIData = {|
-  project_relationship_id: number,
-  relationship_is_approved: boolean,
-|} & ProjectAPIData;
 
 export type GroupTileAPIData = {|
   group_id: string,
@@ -41,8 +23,21 @@ export type GroupTileAPIData = {|
   group_city: ?string,
   group_thumbnail: FileInfo,
   group_project_count: number,
-  group_issue_areas: Dictionary<number>,
+  group_issue_areas: Dictionary<TagDefinition>,
 |};
+
+export type GroupDetailsAPIData = {|
+  group_creator: string,
+  group_description: string,
+  group_short_description: string,
+  group_links: $ReadOnlyArray<LinkInfo>,
+  group_files: $ReadOnlyArray<FileInfo>,
+|} & GroupTileAPIData;
+
+export type ProjectRelationshipAPIData = {|
+  project_relationship_id: number,
+  relationship_is_approved: boolean,
+|} & ProjectAPIData;
 
 export default class GroupAPIUtils {
   static fetchGroupDetails(

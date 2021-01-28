@@ -8,7 +8,7 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
-from civictechprojects.caching.cache import ProjectCache, EventCache, ProjectSearchTagsCache
+from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts, keys_subset
 from common.helpers.collections import flatten, count_occurrences
@@ -258,13 +258,14 @@ class Group(Archived):
         self.save()
 
     def hydrate_to_json(self):
+        return GroupCache.get(self) or GroupCache.refresh(self, self._hydrate_to_json())
+
+    def _hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_group=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_group=self.id)
-        project_relationships = ProjectRelationship.objects\
-            .filter(relationship_group=self.id, relationship_project__is_searchable=True)\
-            .filter(is_approved=True)
+        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
 
         group = {
             'group_creator': self.group_creator.id,
@@ -280,11 +281,12 @@ class Group(Archived):
             'group_state': self.group_state,
             'group_city': self.group_city,
             'group_owners': [self.group_creator.hydrate_to_tile_json()],
-            'group_short_description': self.group_short_description
+            'group_short_description': self.group_short_description,
+            'group_project_count': projects.count()
         }
 
-        if len(project_relationships) > 0:
-            group['group_projects'] = list(map(lambda pr: pr.hydrate_to_project_tile_json(), project_relationships))
+        if len(projects) > 0:
+            group['group_issue_areas'] = self.get_project_issue_areas(with_counts=True, project_relationships=projects)
 
         if len(thumbnail_files) > 0:
             group['group_thumbnail'] = thumbnail_files[0].to_json()
@@ -292,30 +294,12 @@ class Group(Archived):
         return group
 
     def hydrate_to_tile_json(self):
-        files = ProjectFile.objects.filter(file_group=self.id)
-        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
-        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
+        keys = [
+            'group_date_modified', 'group_id', 'group_name', 'group_location', 'group_country', 'group_state',
+            'group_city', 'group_short_description', 'group_project_count', 'group_issue_areas', 'group_thumbnail'
+        ]
 
-        group = {
-            'group_date_modified': self.group_date_modified.__str__(),
-            'group_id': self.id,
-            'group_name': self.group_name,
-            'group_location': self.group_location,
-            'group_country': self.group_country,
-            'group_state': self.group_state,
-            'group_city': self.group_city,
-            'group_short_description': self.group_short_description,
-            'group_project_count': projects.count()
-        }
-
-        if len(projects) > 0:
-            group['group_project_count'] = projects.count()
-            group['group_issue_areas'] = self.get_project_issue_areas(with_counts=True, project_relationships=projects)
-
-        if len(thumbnail_files) > 0:
-            group['group_thumbnail'] = thumbnail_files[0].to_json()
-
-        return group
+        return keys_subset(self.hydrate_to_json(), keys)
     
     def hydrate_to_list_json(self):
         files = ProjectFile.objects.filter(file_group=self.id)
@@ -347,14 +331,20 @@ class Group(Archived):
             return all_issue_area_names
 
     def get_group_projects(self):
-        slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
-        return Event.objects.filter(event_legacy_organization__name__in=slugs)
+        project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
+        project_ids = list(map(lambda pr: pr.relationship_project.id, project_relationships))
+        return Project.objects.filter(id__in=project_ids)
+
+    def recache(self):
+        hydrated_group = self._hydrate_to_json()
+        GroupCache.refresh(self, hydrated_group)
+        ProjectSearchTagsCache.refresh(event=None, group=self)
 
     def update_linked_items(self):
         # Recache linked projects
         project_relationships = ProjectRelationship.objects.filter(relationship_group=self)
         for project_relationship in project_relationships:
-            project_relationship.relationship_project.recache()
+            project_relationship.relationship_project.recache(recache_linked=False)
 
 
 class TaggedEventOrganization(TaggedItemBase):
@@ -483,7 +473,7 @@ class Event(Archived):
     def recache(self):
         hydrated_event = self._hydrate_to_json()
         EventCache.refresh(self, hydrated_event)
-        ProjectSearchTagsCache.refresh(self)
+        ProjectSearchTagsCache.refresh(event=self)
 
 
 class NameRecord(models.Model):

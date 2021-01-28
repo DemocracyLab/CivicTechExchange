@@ -42,29 +42,67 @@ class EventCacheManager:
 EventCache = EventCacheManager()
 
 
+class GroupCacheManager:
+    _cache_key_prefix = 'group_'
+
+    def get(self, group):
+        return Cache.get(self._get_key(group))
+
+    def refresh(self, group, value):
+        print('Re-caching group ' + str(group))
+        Cache.refresh(self._get_key(group), value)
+        return value
+
+    def _get_key(self, group):
+        from civictechprojects.models import Group
+        event_id = str(group.id) if isinstance(group, Group) else group
+        return self._cache_key_prefix + event_id
+
+
+GroupCache = GroupCacheManager()
+
+
 # Caches the tag counts for project searches
 class ProjectSearchTagsCacheManager:
     _cache_key_prefix = 'project_search_tags_'
 
-    # Retrieve cached project tag counts for event (or all projects if event=None)
-    def get(self, event=None):
-        key = self._get_key(event)
-        return Cache.get(key) or self.refresh(event)
+    # Retrieve cached project tag counts for event, group, or all projects if both arguments=None
+    def get(self, event=None, group=None):
+        key = self._get_key(event=event, group=group)
+        return Cache.get(key) or self.refresh(event=event, group=group)
 
-    # Re-cache project tag counts for event (or all projects if event=None)
-    def refresh(self, event=None):
-        print('Re-caching tag counts' + (' for event:' + str(event.id) if event is not None else ''))
-        value = self._projects_tag_counts(event)
+    # Re-cache project tag counts for event, group, or all projects if both arguments=None
+    def refresh(self, event=None, group=None):
+        log_line = 'Re-caching tag counts'
+        if event is not None:
+            log_line += ' for event:' + str(event.id)
+        elif group is not None:
+            log_line += ' for group:' + str(group.id)
+        print(log_line)
+        value = self._projects_tag_counts(event, group)
         Cache.refresh(self._get_key(event), value)
         return value
 
-    def _get_key(self, event):
-        return self._cache_key_prefix + ('event_' + str(event.id) if event is not None else 'all')
+    def _get_key(self, event=None, group=None):
+        key = self._cache_key_prefix
+        if event is not None:
+            key += 'event_' + str(event.id)
+        elif group is not None:
+            key += 'group_' + str(group.id)
+        else:
+            key += 'all'
+        return key
 
     @staticmethod
-    def _projects_tag_counts(event):
+    def _projects_tag_counts(event=None, group=None):
         from civictechprojects.models import Project, ProjectPosition
-        projects = event.get_linked_projects() if event is not None else Project.objects.filter(is_searchable=True)
+        projects = None
+        if event is not None:
+            projects = event.get_linked_projects()
+        elif group is not None:
+            projects = group.get_group_projects()
+        else:
+            projects = Project.objects.filter(is_searchable=True)
         issues, technologies, stage, organization, organization_type, positions = [], [], [], [], [], []
         if projects:
             for project in projects:

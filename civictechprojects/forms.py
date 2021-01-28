@@ -7,8 +7,8 @@ from democracylab.emails import send_project_creation_notification, send_group_c
 from democracylab.models import get_request_contributor
 from .caching.cache import ProjectSearchTagsCache
 from common.helpers.date_helpers import parse_front_end_datetime
-from common.helpers.form_helpers import is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, read_form_field_boolean, \
-    merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, read_form_fields_point
+from common.helpers.form_helpers import is_creator, is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, \
+    read_form_field_boolean, merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, read_form_fields_point
 
 
 class ProjectCreationForm(ModelForm):
@@ -226,30 +226,35 @@ class GroupCreationForm(ModelForm):
         is_created_original = group.is_created
         read_form_field_boolean(group, form, 'is_created')
 
+        fields_changed = False
         project_fields_changed = False
-        read_form_field_string(group, form, 'group_description')
-        read_form_field_string(group, form, 'group_short_description')
-        read_form_field_string(group, form, 'group_country')
-        read_form_field_string(group, form, 'group_location')
-        read_form_field_string(group, form, 'group_state')
-        read_form_field_string(group, form, 'group_city')
+        fields_changed |= read_form_field_string(group, form, 'group_description')
+        fields_changed |= read_form_field_string(group, form, 'group_short_description')
+        fields_changed |= read_form_field_string(group, form, 'group_country')
+        fields_changed |= read_form_field_string(group, form, 'group_location')
+        fields_changed |= read_form_field_string(group, form, 'group_state')
+        fields_changed |= read_form_field_string(group, form, 'group_city')
+        fields_changed |= read_form_field_string(group, form, 'group_url')
         project_fields_changed |= read_form_field_string(group, form, 'group_name')
-        read_form_field_string(group, form, 'group_url')
 
         read_form_fields_point(group, form, 'group_location_coords', 'group_latitude', 'group_longitude')
 
-        if not request.user.is_staff:
+        if is_creator(request.user, group):
             group.group_date_modified = timezone.now()
 
         group.save()
 
-        merge_json_changes(ProjectLink, group, form, 'group_links')
-        merge_json_changes(ProjectFile, group, form, 'group_files')
+        fields_changed |= merge_json_changes(ProjectLink, group, form, 'group_links')
+        fields_changed |= merge_json_changes(ProjectFile, group, form, 'group_files')
 
         project_fields_changed |= merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
 
+        fields_changed |=  project_fields_changed
+
         if project_fields_changed:
             group.update_linked_items()
+        if fields_changed:
+            group.recache()
 
         if is_created_original != group.is_created:
             send_group_creation_notification(group)

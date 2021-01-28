@@ -41,7 +41,10 @@ class CollapsiblePreviewPanel extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div className="preview-panel">
-        <div className="d-flex justify-content-between">
+        <div
+          className="d-flex justify-content-between"
+          onClick={this.toggleExpansion.bind(this)}
+        >
           {this.state.previewContent}
           {this._renderExpandCollapse()}
         </div>
@@ -53,10 +56,7 @@ class CollapsiblePreviewPanel extends React.PureComponent<Props, State> {
   _renderExpandCollapse(): React$Node {
     return (
       <React.Fragment>
-        <span
-          className="preview-panel-toggle"
-          onClick={this.toggleExpansion.bind(this)}
-        >
+        <span className="preview-panel-toggle">
           {this.state.expanded ? (
             <i className={GlyphStyles.ChevronUp}></i>
           ) : (
