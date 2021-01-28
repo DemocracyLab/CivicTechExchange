@@ -1,45 +1,50 @@
 // @flow
 
-import React from 'react';
+import React from "react";
 import Headers from "../common/Headers.jsx";
-import {APIError} from "../utils/api.js";
+import { APIError } from "../utils/api.js";
 import url from "../utils/url.js";
 import prerender from "../utils/prerender.js";
-import GroupAPIUtils, {GroupDetailsAPIData} from "../utils/GroupAPIUtils.js";
+import GroupAPIUtils, { GroupDetailsAPIData } from "../utils/GroupAPIUtils.js";
 import AboutGroupDisplay from "../common/groups/AboutGroupDisplay.jsx";
-
 
 type State = {|
   group: ?GroupDetailsAPIData,
   loadStatusMsg: string,
-  statusCode: string
+  statusCode: string,
 |};
 
 class AboutGroupController extends React.PureComponent<{||}, State> {
-
-  constructor(): void{
+  constructor(): void {
     super();
     this.state = {
       project: null,
       loadStatusMsg: "Loading...",
     };
- }
+  }
 
   componentDidMount() {
     const groupId: string = url.argument("id");
-    GroupAPIUtils.fetchGroupDetails(groupId, this.loadGroupDetails.bind(this), this.handleLoadGroupFailure.bind(this));
+    GroupAPIUtils.fetchGroupDetails(
+      groupId,
+      this.loadGroupDetails.bind(this),
+      this.handleLoadGroupFailure.bind(this)
+    );
   }
 
   loadGroupDetails(group: GroupDetailsAPIData) {
-    this.setState({
-      group: group
-    }, prerender.ready);
+    this.setState(
+      {
+        group: group,
+      },
+      prerender.ready
+    );
   }
 
   handleLoadGroupFailure(error: APIError) {
     this.setState({
       loadStatusMsg: "Could not load Group",
-      statusCode: "404"
+      statusCode: "404",
     });
   }
 
@@ -51,7 +56,7 @@ class AboutGroupController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         {this._renderGroupHeader(this.state.group)}
-        <AboutGroupDisplay group={this.state.group} viewOnly={false}/>
+        <AboutGroupDisplay group={this.state.group} viewOnly={false} />
       </React.Fragment>
     );
   }
@@ -68,7 +73,7 @@ class AboutGroupController extends React.PureComponent<{||}, State> {
       />
     );
   }
-  
+
   _renderLoadMessage(): React$Node {
     return (
       <React.Fragment>

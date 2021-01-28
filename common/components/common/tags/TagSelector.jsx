@@ -1,8 +1,8 @@
 // @flow
 
-import React from 'react'
-import type {TagDefinition} from '../../utils/ProjectAPIUtils.js';
-import ProjectAPIUtils from '../../utils/ProjectAPIUtils.js';
+import React from "react";
+import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import TagSelectWrapper from "./TagSelectWrapper.jsx";
 
 type Props = {|
@@ -10,14 +10,16 @@ type Props = {|
   category: string,
   allowMultiSelect: boolean,
   value?: $ReadOnlyArray<TagDefinition>,
-  onSelection: ($ReadOnlyArray<TagDefinition>) => void
+  onSelection: ($ReadOnlyArray<TagDefinition>) => void,
 |};
 type State = {|
-  tags: $ReadOnlyArray<TagDefinition>
+  tags: $ReadOnlyArray<TagDefinition>,
 |};
 
 export function tagOptionDisplay(tag: TagDefinition) {
-  return tag.subcategory ? tag.subcategory + ": " + tag.display_name : tag.display_name;
+  return tag.subcategory
+    ? tag.subcategory + ": " + tag.display_name
+    : tag.display_name;
 }
 
 /**
@@ -26,20 +28,24 @@ export function tagOptionDisplay(tag: TagDefinition) {
 class TagSelector extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
-  
-    ProjectAPIUtils.fetchTagsByCategory(props.category, false, this.handleFetchTags.bind(this));
-    
+
+    ProjectAPIUtils.fetchTagsByCategory(
+      props.category,
+      false,
+      this.handleFetchTags.bind(this)
+    );
+
     this.state = {
-      tags: null
+      tags: null,
     };
   }
-  
-  handleFetchTags(tags: Array<TagDefinition>): void {                                                                                 
+
+  handleFetchTags(tags: Array<TagDefinition>): void {
     this.setState({
-      tags: tags
+      tags: tags,
     });
   }
-  
+
   // TODO: Replace with Selector component
   render(): React$Node {
     return (
@@ -55,7 +61,5 @@ class TagSelector extends React.PureComponent<Props, State> {
     );
   }
 }
-
-
 
 export default TagSelector;

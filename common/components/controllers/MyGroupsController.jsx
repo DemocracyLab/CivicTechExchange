@@ -1,18 +1,20 @@
 // @flow
 
-import React from 'react';
-import {Container} from 'flux/utils';
-import CurrentUser from '../utils/CurrentUser.js';
-import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
-import MyGroupsCard from '../componentsBySection/MyGroups/MyGroupsCard.jsx';
-import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx';
-import MyGroupsStore,{MyGroupData, MyGroupsAPIResponse} from "../stores/MyGroupsStore.js";
+import React from "react";
+import { Container } from "flux/utils";
+import CurrentUser from "../utils/CurrentUser.js";
+import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
+import MyGroupsCard from "../componentsBySection/MyGroups/MyGroupsCard.jsx";
+import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
+import MyGroupsStore, {
+  MyGroupData,
+  MyGroupsAPIResponse,
+} from "../stores/MyGroupsStore.js";
 import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section";
 import Headers from "../common/Headers.jsx";
-import _ from 'lodash';
-
+import _ from "lodash";
 
 type State = {|
   ownedGroups: ?Array<MyGroupData>,
@@ -27,18 +29,18 @@ class MyGroupsController extends React.Component<{||}, State> {
       showConfirmDeleteModal: false,
     };
   }
-  
+
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [MyGroupsStore];
   }
-  
+
   static calculateState(prevState: State): State {
     const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
     return {
       ownedGroups: myGroups && myGroups.owned_groups,
     };
   }
-  
+
   clickDeleteGroup(group: MyGroupData): void {
     this.setState({
       showConfirmDeleteModal: true,
@@ -47,9 +49,12 @@ class MyGroupsController extends React.Component<{||}, State> {
   }
 
   removeGroupFromList(): void {
-    metrics.logProjectDeleted(CurrentUser.userID(), this.state.groupToDelete.group_id);
+    metrics.logProjectDeleted(
+      CurrentUser.userID(),
+      this.state.groupToDelete.group_id
+    );
     this.setState({
-      ownedGroup: _.pull(this.state.ownedGroups, this.state.groupToDelete)
+      ownedGroup: _.pull(this.state.ownedGroups, this.state.groupToDelete),
     });
     this.forceUpdate();
   }
@@ -67,13 +72,13 @@ class MyGroupsController extends React.Component<{||}, State> {
       );
     }
     this.setState({
-      showConfirmDeleteModal:false
+      showConfirmDeleteModal: false,
     });
   }
 
   render(): React$Node {
     if (!CurrentUser.isLoggedIn) {
-      return <LogInController prevPage={Section.MyGroups}/>;
+      return <LogInController prevPage={Section.MyGroups} />;
     }
 
     return (
@@ -89,22 +94,28 @@ class MyGroupsController extends React.Component<{||}, State> {
             onSelection={this.confirmDeleteProject.bind(this)}
           />
 
-          {!_.isEmpty(this.state.ownedGroups) && this.renderGroupCollection("Owned Groups", this.state.ownedGroups)}
+          {!_.isEmpty(this.state.ownedGroups) &&
+            this.renderGroupCollection("Owned Groups", this.state.ownedGroups)}
         </div>
       </React.Fragment>
     );
   }
-  
-  renderGroupCollection(title:string, groups: $ReadOnlyArray<MyGroupData>): React$Node{
+
+  renderGroupCollection(
+    title: string,
+    groups: $ReadOnlyArray<MyGroupData>
+  ): React$Node {
     return (
       <div>
         <h3>{title}</h3>
         {groups.map(group => {
-          return <MyGroupsCard
-            key={group.group_name}
-            group={group}
-            onGroupClickDelete={this.clickDeleteGroup.bind(this)}
-          />;
+          return (
+            <MyGroupsCard
+              key={group.group_name}
+              group={group}
+              onGroupClickDelete={this.clickDeleteGroup.bind(this)}
+            />
+          );
         })}
       </div>
     );

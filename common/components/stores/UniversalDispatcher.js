@@ -1,14 +1,17 @@
 // @flow
 
-'use strict';
+"use strict";
 
-import type {MyProjectsActionType} from './MyProjectsStore.js';
-import type {MyGroupsActionType} from "./MyGroupsStore.js";
-import type {NavigationActionType} from './NavigationStore.js';
+import type { MyProjectsActionType } from "./MyProjectsStore.js";
+import type { MyGroupsActionType } from "./MyGroupsStore.js";
+import type { NavigationActionType } from "./NavigationStore.js";
 
-import {Dispatcher} from 'flux';
+import { Dispatcher } from "flux";
 
-type UniversalActionType = MyProjectsActionType | MyGroupsActionType| NavigationActionType;
+type UniversalActionType =
+  | MyProjectsActionType
+  | MyGroupsActionType
+  | NavigationActionType;
 
 const UniversalDispatcher: Dispatcher<UniversalActionType> = new Dispatcher();
 

@@ -1,21 +1,20 @@
 // @flow
 
-import React from 'react';
-import { Container } from 'flux/utils';
-import NavigationStore from '../stores/NavigationStore';
-import _ from 'lodash';
+import React from "react";
+import { Container } from "flux/utils";
+import NavigationStore from "../stores/NavigationStore";
+import _ from "lodash";
 
 type State = {|
   section: SectionType,
 |};
 
 class FlashMessage extends React.Component<{||}, State> {
-
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [NavigationStore];
   }
 
-  static calculateState(prevState: State): State {    
+  static calculateState(prevState: State): State {
     return {
       section: NavigationStore.getSection(),
     };
@@ -28,21 +27,17 @@ class FlashMessage extends React.Component<{||}, State> {
   }
 
   render(): React$Node {
-    return (
-      <div className="FlashMessage-root">
-        {this._renderMessages()}
-      </div>
-    );
+    return <div className="FlashMessage-root">{this._renderMessages()}</div>;
   }
 
   _renderMessages(): React$Node {
     return window.DLAB_MESSAGES.map((msg, i) => {
       return (
-          <div key={i} className={msg.level}>
-            {_.unescape(msg.message)}
-          </div>
-      )
-    })
+        <div key={i} className={msg.level}>
+          {_.unescape(msg.message)}
+        </div>
+      );
+    });
   }
 }
 

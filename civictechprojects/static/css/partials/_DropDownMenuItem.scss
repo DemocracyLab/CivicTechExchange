@@ -15,7 +15,8 @@
   padding-right: 29px;
 }
 
-.DropDownMenuItem-root.disabled,.DropDownCategoryItem-root.disabled{
+.DropDownMenuItem-root.disabled,
+.DropDownCategoryItem-root.disabled {
   color: $color-grey-disabled;
 }
 

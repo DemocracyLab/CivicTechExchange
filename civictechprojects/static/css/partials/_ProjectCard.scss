@@ -1,17 +1,19 @@
 .ProjectCard-root {
   background-color: $color-background-light;
   border-radius: 6px;
-  box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.15);
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.15);
   color: $color-text-dark;
   margin: 0.5rem 0;
-  height: calc(100% - 1rem) /* for desktop cards to match height in a 2 wide row */
+  height: calc(
+    100% - 1rem
+  ); /* for desktop cards to match height in a 2 wide row */
 }
 .ProjectCard-root h2 {
   font-size: 1.333rem;
   margin: 0.5rem 0.5rem 0.5rem 0; /* left margin is built into card design */
 }
 .ProjectCard-root h3 {
-  font-size: 1.0rem;
+  font-size: 1rem;
   font-weight: bold;
 }
 .ProjectCard-root h4 {
@@ -68,10 +70,10 @@
   display: grid;
 }
 .ProjectCard-url-text {
-    overflow: hidden;
-    text-Overflow: ellipsis;
-    white-Space: nowrap;
-    margin: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: auto;
 }
 .ProjectCard-logo img {
   max-width: 97%;

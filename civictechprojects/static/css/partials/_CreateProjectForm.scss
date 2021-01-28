@@ -1,28 +1,28 @@
 .form-body {
-    h1 {
-        font-size: 36px;
-    }
-    h2 {
-        font-size: 18px;
-    }
+  h1 {
+    font-size: 36px;
+  }
+  h2 {
+    font-size: 18px;
+  }
 }
 
 .create-form.white-bg {
-    background-color: $color-background-light;
-    padding: 20px;
-    border-bottom: 2px solid $color-grey-medium;
-    border-top: 2px solid $color-grey-medium;
+  background-color: $color-background-light;
+  padding: 20px;
+  border-bottom: 2px solid $color-grey-medium;
+  border-top: 2px solid $color-grey-medium;
 }
 
 .create-form.grey-bg {
-    background-color: $color-background-default;
-    padding: 20px;
+  background-color: $color-background-default;
+  padding: 20px;
 }
 
 .create-project-saved-emblem {
-    margin: auto 1rem auto auto;
-    font-weight: bold;
-    color: $color-orange;
+  margin: auto 1rem auto auto;
+  font-weight: bold;
+  color: $color-orange;
 }
 .create-form-buttonrow {
   display: flex;

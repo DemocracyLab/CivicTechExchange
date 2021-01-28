@@ -7,14 +7,14 @@
  */
 
 function initializeSelectionControl(selectElementId, config) {
-    //Merge configuration settings in with defaults
-    config = _.merge(config || {}, {
-        persist: false,
-        maxItems: null,
-        hideSelected: true,
-        closeAfterSelect: true,
-        allowEmptyOption: true
-    });
+  //Merge configuration settings in with defaults
+  config = _.merge(config || {}, {
+    persist: false,
+    maxItems: null,
+    hideSelected: true,
+    closeAfterSelect: true,
+    allowEmptyOption: true,
+  });
 
-    $("#" + selectElementId).selectize(config);
+  $("#" + selectElementId).selectize(config);
 }

@@ -1,21 +1,24 @@
 // @flow
 
-import type {LinkInfo} from '../../components/forms/LinkInfo.jsx'
-import type {FileInfo} from '../common/FileInfo.jsx'
-import {PositionInfo} from "../forms/PositionInfo.jsx";
-import {LocationInfo, getLocationDisplayString} from "../common/location/LocationInfo.js";
-import type {MyGroupData} from "../stores/MyGroupsStore.js";
-import type {GroupTileAPIData} from "./GroupAPIUtils.js";
-import type {EventTileAPIData} from "./EventAPIUtils.js";
-import _ from 'lodash';
+import type { LinkInfo } from "../../components/forms/LinkInfo.jsx";
+import type { FileInfo } from "../common/FileInfo.jsx";
+import { PositionInfo } from "../forms/PositionInfo.jsx";
+import {
+  LocationInfo,
+  getLocationDisplayString,
+} from "../common/location/LocationInfo.js";
+import type { MyGroupData } from "../stores/MyGroupsStore.js";
+import type { GroupTileAPIData } from "./GroupAPIUtils.js";
+import type { EventTileAPIData } from "./EventAPIUtils.js";
+import _ from "lodash";
 
 export type APIResponse = {|
-  +status: number
+  +status: number,
 |};
 
 export type APIError = {|
   +errorCode: number,
-  +errorMessage: string
+  +errorMessage: string,
 |};
 
 export type TagDefinition = {|
@@ -25,11 +28,11 @@ export type TagDefinition = {|
   caption: string,
   category: string,
   subcategory: string,
-  parent: string
+  parent: string,
 |};
 
 export type TagDefinitionCount = {|
-  num_times: number
+  num_times: number,
 |} & TagDefinition;
 
 export type ProjectData = {|
@@ -45,7 +48,7 @@ export type ProjectData = {|
   +name: string,
   +thumbnail: FileInfo,
   +claimed: boolean,
-  +date_modified: string
+  +date_modified: string,
 |};
 
 export type ProjectAPIData = {|
@@ -62,7 +65,7 @@ export type ProjectAPIData = {|
   +project_thumbnail: FileInfo,
   +project_date_modified: string,
   +project_url: string,
-  +project_positions: $ReadOnlyArray<PositionInfo>
+  +project_positions: $ReadOnlyArray<PositionInfo>,
 |};
 
 export type VolunteerUserData = {|
@@ -70,8 +73,8 @@ export type VolunteerUserData = {|
   +first_name: string,
   +last_name: string,
   +user_thumbnail: FileInfo,
-  +about_me: string
-|}
+  +about_me: string,
+|};
 
 export type VolunteerDetailsAPIData = {|
   +application_id: number,
@@ -82,8 +85,8 @@ export type VolunteerDetailsAPIData = {|
   +roleTag: TagDefinition,
   +isApproved: boolean,
   +isCoOwner: boolean,
-  +isUpForRenewal: boolean
-|}
+  +isUpForRenewal: boolean,
+|};
 
 export type ProjectDetailsAPIData = {|
   +project_id: number,
@@ -114,13 +117,13 @@ export type ProjectDetailsAPIData = {|
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date,
   +project_groups: $ReadOnlyArray<GroupTileAPIData>,
-  +project_events: $ReadOnlyArray<EventTileAPIData>
+  +project_events: $ReadOnlyArray<EventTileAPIData>,
 |};
 
 export type TeamAPIData = {|
   +board_of_directors: string,
-  +project: ProjectDetailsAPIData
-|}
+  +project: ProjectDetailsAPIData,
+|};
 
 class ProjectAPIUtils {
   static projectFromAPIData(apiData: ProjectAPIData): ProjectData {
@@ -130,15 +133,16 @@ class ProjectAPIUtils {
       issueArea:
         apiData.project_issue_area && apiData.project_issue_area.length != 0
           ? apiData.project_issue_area[0].display_name
-          : 'None',
+          : "None",
       stage:
-        apiData.project_stage && apiData.project_stage.length !=0
+        apiData.project_stage && apiData.project_stage.length != 0
           ? apiData.project_stage[0].display_name
-          : 'None',
+          : "None",
       project_organization_type:
-        apiData.project_organization_type && apiData.project_organization_type.length != 0
+        apiData.project_organization_type &&
+        apiData.project_organization_type.length != 0
           ? apiData.project_organization_type[0].display_name
-          : 'None',
+          : "None",
       location: apiData.project_location,
       country: apiData.project_country,
       state: apiData.project_state,
@@ -150,32 +154,38 @@ class ProjectAPIUtils {
       date_modified: apiData.project_date_modified,
       url: apiData.project_url,
       positions: !_.isEmpty(apiData.project_positions)
-          ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
-          : ['Contact Project for Details'],
+        ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
+        : ["Contact Project for Details"],
     };
   }
-  
-  static getLocationDisplayName(project: ProjectAPIData | ProjectDetailsAPIData | ProjectData): string {
+
+  static getLocationDisplayName(
+    project: ProjectAPIData | ProjectDetailsAPIData | ProjectData
+  ): string {
     // TODO: See if we can deprecate ProjectData
     const location: LocationInfo = {
       location_id: project.project_location || project.location,
       city: project.project_city || project.city,
       state: project.project_state || project.state,
-      country: project.project_country || project.country
+      country: project.project_country || project.country,
     };
     return getLocationDisplayString(location);
   }
 
   static getSkillNames(positions: array) {
     return positions.map(function(data) {
-      return data.roleTag.display_name
+      return data.roleTag.display_name;
     });
   }
 
-  static fetchProjectDetails(id: number, callback: (ProjectDetailsAPIData) => void, errCallback: (APIError) => void): void {
-    fetch(new Request('/api/project/' + id + '/', {credentials: 'include'}))
+  static fetchProjectDetails(
+    id: number,
+    callback: ProjectDetailsAPIData => void,
+    errCallback: APIError => void
+  ): void {
+    fetch(new Request("/api/project/" + id + "/", { credentials: "include" }))
       .then(response => {
-        if(!response.ok) {
+        if (!response.ok) {
           throw Error();
         }
         return response.json();
@@ -183,62 +193,107 @@ class ProjectAPIUtils {
       .then(projectDetails => {
         callback(projectDetails);
         // TODO: Get catch to return http status code
-      }).catch(response => errCallback && errCallback({
-        errorCode: response.status,
-        errorMessage: JSON.stringify(response)
-      }));
+      })
+      .catch(
+        response =>
+          errCallback &&
+          errCallback({
+            errorCode: response.status,
+            errorMessage: JSON.stringify(response),
+          })
+      );
   }
   // fetch specific category of tags
-  static fetchTagsByCategory(tagCategory: string, getCounts: boolean, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): Promise<$ReadOnlyArray<TagDefinition>> {
-    return fetch(new Request('/api/tags?category=' + tagCategory + '&getCounts=' + getCounts || 'false')) //default to false if call doesn't pass a getCounts arg
+  static fetchTagsByCategory(
+    tagCategory: string,
+    getCounts: boolean,
+    callback: ($ReadOnlyArray<TagDefinition>) => void,
+    errCallback: APIError => void
+  ): Promise<$ReadOnlyArray<TagDefinition>> {
+    return fetch(
+      new Request(
+        "/api/tags?category=" + tagCategory + "&getCounts=" + getCounts ||
+          "false"
+      )
+    ) //default to false if call doesn't pass a getCounts arg
       .then(response => response.json())
       .then(tags => callback(tags))
-      .catch(response => errCallback && errCallback({
-        errorCode: response.status,
-        errorMessage: JSON.stringify(response)
-      }));
+      .catch(
+        response =>
+          errCallback &&
+          errCallback({
+            errorCode: response.status,
+            errorMessage: JSON.stringify(response),
+          })
+      );
   }
   // fetch all tags in one API request
-  static fetchAllTags(getCounts: boolean, callback: ($ReadOnlyArray<TagDefinition>) => void, errCallback: (APIError) => void): Promise<$ReadOnlyArray<TagDefinition>> {
-    return fetch(new Request('/api/tags?getCounts=' + getCounts || 'false'))
+  static fetchAllTags(
+    getCounts: boolean,
+    callback: ($ReadOnlyArray<TagDefinition>) => void,
+    errCallback: APIError => void
+  ): Promise<$ReadOnlyArray<TagDefinition>> {
+    return fetch(new Request("/api/tags?getCounts=" + getCounts || "false"))
       .then(response => response.json())
       .then(tags => callback(tags))
-      .catch(response => errCallback && errCallback({
-        errorCode: response.status,
-        errorMessage: JSON.stringify(response)
-      }));
+      .catch(
+        response =>
+          errCallback &&
+          errCallback({
+            errorCode: response.status,
+            errorMessage: JSON.stringify(response),
+          })
+      );
   }
   //fetch DemocracyLab board information
-  static fetchTeamDetails(callback: (TeamAPIData) => void): void {
-    fetch('/api/team')
-    .then(response => {
-      return response.json()
-    })
-    .then(data => {
-      callback(data);
-    })
-    .catch(err => {
-      console.log('Error fetching team details. Error: ' + err)
-    })
+  static fetchTeamDetails(callback: TeamAPIData => void): void {
+    fetch("/api/team")
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        callback(data);
+      })
+      .catch(err => {
+        console.log("Error fetching team details. Error: " + err);
+      });
   }
 
-  static post(url: string, body: {||},successCallback: (APIResponse) => void, errCallback: (APIError) => void) {
-    const doError = (response) => errCallback && errCallback({
-      errorCode: response.status,
-      errorMessage: JSON.stringify(response)
-    });
+  static post(
+    url: string,
+    body: {||},
+    successCallback: APIResponse => void,
+    errCallback: APIError => void
+  ) {
+    const doError = response =>
+      errCallback &&
+      errCallback({
+        errorCode: response.status,
+        errorMessage: JSON.stringify(response),
+      });
 
-    fetch(new Request(url, {method:"POST", body:JSON.stringify(body), credentials:"include", headers: {
-      'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/json'
-    },}))
-      .then(response => ProjectAPIUtils.isSuccessResponse(response) ? successCallback() : doError(response))
+    fetch(
+      new Request(url, {
+        method: "POST",
+        body: JSON.stringify(body),
+        credentials: "include",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+      })
+    )
+      .then(response =>
+        ProjectAPIUtils.isSuccessResponse(response)
+          ? successCallback()
+          : doError(response)
+      )
       .catch(response => doError(response));
   }
 
-  static isSuccessResponse(response:APIResponse): boolean {
+  static isSuccessResponse(response: APIResponse): boolean {
     return response.status < 400;
   }
 }
 
-export default ProjectAPIUtils
+export default ProjectAPIUtils;

@@ -1,12 +1,12 @@
 // @flow
 
-import React from 'react';
+import React from "react";
 import ProjectOwnerCard from "./ProjectOwnerCard.jsx";
-import {VolunteerUserData} from "../../utils/ProjectAPIUtils.js";
-import _ from 'lodash'
+import { VolunteerUserData } from "../../utils/ProjectAPIUtils.js";
+import _ from "lodash";
 
 type Props = {|
-  +owners: $ReadOnlyArray<VolunteerUserData>
+  +owners: $ReadOnlyArray<VolunteerUserData>,
 |};
 
 type State = {|
@@ -17,16 +17,12 @@ class ProjectOwnersSection extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
-      owners:_.cloneDeep(props.owners),
+      owners: _.cloneDeep(props.owners),
     };
   }
 
   render(): React$Node {
-    return (
-      <div>
-     {this._renderProjectOwners()}
-      </div>
-    );
+    return <div>{this._renderProjectOwners()}</div>;
   }
 
   _renderProjectOwners(): ?React$Node {
@@ -35,20 +31,18 @@ class ProjectOwnersSection extends React.PureComponent<Props, State> {
       : null;
   }
 
-  _renderOwnersSection(owners: ?Array<VolunteerUserData>, header: string): React$Node {
-      return !_.isEmpty(owners)
-      ?   <div className="Text-section ProjectOwners-projectOwnersList">
-              {
-                owners.map((owner,i) =>
-                  <ProjectOwnerCard
-                    key={i}
-                    owner={owner}
-                 />)
-              }
-            </div>
-      : null;
+  _renderOwnersSection(
+    owners: ?Array<VolunteerUserData>,
+    header: string
+  ): React$Node {
+    return !_.isEmpty(owners) ? (
+      <div className="Text-section ProjectOwners-projectOwnersList">
+        {owners.map((owner, i) => (
+          <ProjectOwnerCard key={i} owner={owner} />
+        ))}
+      </div>
+    ) : null;
   }
-
 }
 
 export default ProjectOwnersSection;
