@@ -265,6 +265,7 @@ class Group(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_group=self.id)
+        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
 
         group = {
             'group_creator': self.group_creator.id,
@@ -280,8 +281,12 @@ class Group(Archived):
             'group_state': self.group_state,
             'group_city': self.group_city,
             'group_owners': [self.group_creator.hydrate_to_tile_json()],
-            'group_short_description': self.group_short_description
+            'group_short_description': self.group_short_description,
+            'group_project_count': projects.count()
         }
+
+        if len(projects) > 0:
+            group['group_issue_areas'] = self.get_project_issue_areas(with_counts=True, project_relationships=projects)
 
         if len(thumbnail_files) > 0:
             group['group_thumbnail'] = thumbnail_files[0].to_json()
@@ -289,31 +294,12 @@ class Group(Archived):
         return group
 
     def hydrate_to_tile_json(self):
-        # TODO: Render from cached
-        files = ProjectFile.objects.filter(file_group=self.id)
-        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
-        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
+        keys = [
+            'group_date_modified', 'group_id', 'group_name', 'group_location', 'group_country', 'group_state',
+            'group_city', 'group_short_description', 'group_project_count', 'group_issue_areas', 'group_thumbnail'
+        ]
 
-        group = {
-            'group_date_modified': self.group_date_modified.__str__(),
-            'group_id': self.id,
-            'group_name': self.group_name,
-            'group_location': self.group_location,
-            'group_country': self.group_country,
-            'group_state': self.group_state,
-            'group_city': self.group_city,
-            'group_short_description': self.group_short_description,
-            'group_project_count': projects.count()
-        }
-
-        if len(projects) > 0:
-            group['group_project_count'] = projects.count()
-            group['group_issue_areas'] = self.get_project_issue_areas(with_counts=True, project_relationships=projects)
-
-        if len(thumbnail_files) > 0:
-            group['group_thumbnail'] = thumbnail_files[0].to_json()
-
-        return group
+        return keys_subset(self.hydrate_to_json(), keys)
     
     def hydrate_to_list_json(self):
         files = ProjectFile.objects.filter(file_group=self.id)
