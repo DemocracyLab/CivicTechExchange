@@ -113,7 +113,9 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           </div>
         </div>
         {!_.isEmpty(event.event_legacy_organization) && (
+          <div className="">
           <ProfileProjectSearch viewOnly={this.props.viewOnly} />
+          </div>
         )}
       </div>
     );

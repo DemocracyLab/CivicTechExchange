@@ -143,7 +143,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
               )}
             </div>
             <div className="AboutGroup-card-container">
-              <ProfileProjectSearch viewOnly={this.props.viewOnly} />
+              <ProfileProjectSearch viewOnly={this.props.viewOnly} wide />
             </div>
           </div>
         </div>

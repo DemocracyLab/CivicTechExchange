@@ -11,6 +11,7 @@ import CollapsiblePreviewPanel from "../CollapsiblePreviewPanel.jsx";
 
 type Props = {|
   viewOnly: boolean,
+  wide: boolean,
 |};
 
 class ProfileProjectSearch extends React.PureComponent<Props> {
@@ -43,7 +44,7 @@ class ProfileProjectSearch extends React.PureComponent<Props> {
       <React.Fragment>
         {" "}
         <div className="row justify-content-center ProjectProfileSearch-root">
-          <div className="col-12 col-md-10 col-lg-9 col-xl-8">
+          <div className={ this.props.wide ? "col-12 col-md-10" : "col-12 col-md-10 col-lg-9 col-xl-8"}> 
             <h3 className="ProjectProfileSearch-sectiontitle pt-4">
               Search Participating Projects
             </h3>
