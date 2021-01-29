@@ -1,0 +1,42 @@
+.ProjectProfileSearch-root {
+  button.reset-search-button {
+    max-width: 120px;
+  }
+  .ProjectTagContainer-root {
+    border: 0;
+    padding: 0;
+    margin: 8px;
+  }
+  .preview-panel {
+    border: 1px solid $color-grey-frame-border;
+    border-radius: 8px;
+  }
+  .preview-panel-toggle {
+    padding: 8px 16px;
+    cursor: pointer; // hint that this is interactable
+  }
+  .ProjectFilterContainer-list-item {
+    padding-left: 1rem;
+  }
+}
+
+h3.ProjectProfileSearch-sectiontitle {
+  font-size: 18px;
+  margin-top: auto;
+}
+
+.ProjectProfileSearch-sort h4 {
+  font-size: 1rem;
+  margin: auto 8px auto 0;
+  flex-shrink: 0; // ensures title will not wrap onto two lines
+}
+
+@include media-breakpoint-up(lg) {
+  .ProjectProfileSearch-root {
+    .ProjectFilterContainer-category-header,
+    .ProjectFilterContainer-subcategory-header,
+    .ProjectFilterContainer-filter-list {
+      margin: 0 2rem;
+    }
+  }
+}

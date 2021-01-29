@@ -1,8 +1,8 @@
 // @flow
 
-import React from 'react';
+import React from "react";
 import CurrentUser from "../utils/CurrentUser.js";
-import cdn,{Images} from "../utils/cdn.js";
+import cdn, { Images } from "../utils/cdn.js";
 import Headers from "../common/Headers.jsx";
 
 class SignedUpController extends React.Component<{||}> {
@@ -15,14 +15,17 @@ class SignedUpController extends React.Component<{||}> {
     return (
       <div className="SignedUpController-root">
         <div className="SignedUpController-logo">
-          <img src={cdn.image(Images.DL_GLYPH)}/>
+          <img src={cdn.image(Images.DL_GLYPH)} />
         </div>
         <div className="SignedUpController-greeting">
           <h3>Check your email</h3>
-          <p>We've sent a message to {CurrentUser.email()} <br/> with a link to verify your account.</p>
+          <p>
+            We've sent a message to {CurrentUser.email()} <br /> with a link to
+            verify your account.
+          </p>
           <p>
             Didn't get an email?
-            <br/>
+            <br />
             <a href="/verify_user">Resend verification email</a>
           </p>
         </div>

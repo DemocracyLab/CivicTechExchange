@@ -6,6 +6,7 @@ class DateTimeFormats(Enum):
     UTC_DATETIME = '%Y-%m-%dT%H:%M:%SZ'
     DATE_LOCALIZED = '%x'
     DATEPICKER_DATE = '%a %b %d %Y %H:%M:%S GMT%z'
+    MONTH_DD_YYYY = '%B %d, %Y'
 
 
 def datetime_field_to_datetime(field):

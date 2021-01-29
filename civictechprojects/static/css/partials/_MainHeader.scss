@@ -57,10 +57,14 @@
 
 //  navbar overrides all go in here for specificity - in the future build a new theme instead of these overly specific selectors
 .MainHeader-nav-container {
-  a:hover, a:focus, .navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link:focus {
+  a:hover,
+  a:focus,
+  .navbar-light .navbar-nav .nav-link:hover,
+  .navbar-light .navbar-nav .nav-link:focus {
     color: $color-orange;
   }
-  a:active, .navbar-light .navbar-nav .nav-link:active {
+  a:active,
+  .navbar-light .navbar-nav .nav-link:active {
     color: inherit;
   }
   .navbar {
@@ -77,10 +81,13 @@
   }
   /* button hover states shouldn't change in the nav */
   /* yes, this is stubbornly refusing to use !important */
-  a.MainHeader-login-button.btn.btn-outline-primary:hover, a.MainHeader-login-button.btn.btn-outline-primary:focus, a.MainHeader-login-button.btn.btn-outline-primary:active {
+  a.MainHeader-login-button.btn.btn-outline-primary:hover,
+  a.MainHeader-login-button.btn.btn-outline-primary:focus,
+  a.MainHeader-login-button.btn.btn-outline-primary:active {
     color: inherit;
   }
-  a.MainHeader-donatebutton:hover, a.MainHeader-donatebutton:active {
+  a.MainHeader-donatebutton:hover,
+  a.MainHeader-donatebutton:active {
     color: white;
   }
   .dropdown-menu.show {
@@ -107,7 +114,7 @@
     display: block;
   }
   .MainHeader-root .dropdown-menu.show {
-    border: 1px solid rgba(0, 0, 0, 0.15)
+    border: 1px solid rgba(0, 0, 0, 0.15);
   }
   .MainHeader-root {
     .navbar-brand {
@@ -123,7 +130,8 @@
       overflow-y: unset;
       overflow-x: unset;
     }
-    .MainHeader-pagenav > a, .MainHeader-pagenav > div {
+    .MainHeader-pagenav > a,
+    .MainHeader-pagenav > div {
       margin: 0 0.5rem;
     }
   }
@@ -132,13 +140,12 @@
   }
 }
 
-
 /* specific layout fixes for narrow devices, e.g. iphone 5 so nav doesn't spill onto 2 lines */
-@media (max-width: 370.0px) {
+@media (max-width: 370px) {
   .navbar-brand img {
     width: 140px;
   }
   .MainHeader-root .navbar-brand {
     padding-right: 0;
   }
- }
+}

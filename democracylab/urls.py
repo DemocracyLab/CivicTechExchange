@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^login/$', views.login_view, name='login_view'),
     url(r'^login/(?P<provider>\w+)', views.login_view, name='login_view'),
-    url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
+    url(r'^logout/$', views.logout_view, name='logout_view'),
     url(
         r'^password_reset/$',
         views.password_reset,

@@ -1,60 +1,68 @@
 // @flow
 
 import CurrentUser from "./CurrentUser.js";
-import {ProjectAPIData} from "./ProjectAPIUtils.js";
-import type {FileInfo} from "../common/FileInfo.jsx";
-import type {TagDefinition} from "./ProjectAPIUtils.js";
+import { ProjectAPIData } from "./ProjectAPIUtils.js";
+import type { FileInfo } from "../common/FileInfo.jsx";
+import type { TagDefinition } from "./ProjectAPIUtils.js";
 
 export type EventData = {|
-    event_id: string,
-    event_creator: string,
-    event_date_start: Date,
-    event_date_end: Date,
-    event_name: string,
-    event_organizers_text: string,
-    event_live_id: string,
-    event_rsvp_url: string,
-    event_agenda: string,
-    event_location: string,
-    event_description: string,
-    event_short_description: string,
-    event_thumbnail: FileInfo,
-    event_projects: $ReadOnlyArray<ProjectAPIData>,
-    event_legacy_organization: $ReadOnlyArray<TagDefinition>,
-    event_slug: string,
-    is_private: boolean
+  event_id: string,
+  event_creator: string,
+  event_date_start: Date,
+  event_date_end: Date,
+  event_name: string,
+  event_organizers_text: string,
+  event_live_id: string,
+  event_rsvp_url: string,
+  event_agenda: string,
+  event_location: string,
+  event_description: string,
+  event_short_description: string,
+  event_thumbnail: FileInfo,
+  event_projects: $ReadOnlyArray<ProjectAPIData>,
+  event_legacy_organization: $ReadOnlyArray<TagDefinition>,
+  event_slug: string,
+  is_private: boolean,
 |};
 
 export type EventTileAPIData = {|
-    event_id: string,
-    event_slug: string,
-    event_date_start: Date,
-    event_date_end: Date,
-    event_name: string,
-    event_organizers_text: string,
-    event_location: string,
-    event_short_description: string,
-    event_thumbnail: FileInfo
+  event_id: string,
+  event_slug: string,
+  event_date_start: Date,
+  event_date_end: Date,
+  event_name: string,
+  event_organizers_text: string,
+  event_location: string,
+  event_short_description: string,
+  event_thumbnail: FileInfo,
 |};
 
 export default class EventAPIUtils {
-    static fetchEventDetails(id: number, callback: (EventData) => void, errCallback: (APIError) => void): void {
-      fetch(new Request('/api/event/' + id + '/', {credentials: 'include'}))
-          .then(response => {
-              if (!response.ok) {
-                  throw Error();
-              }
-              return response.json();
+  static fetchEventDetails(
+    id: number,
+    callback: EventData => void,
+    errCallback: APIError => void
+  ): void {
+    fetch(new Request("/api/event/" + id + "/", { credentials: "include" }))
+      .then(response => {
+        if (!response.ok) {
+          throw Error();
+        }
+        return response.json();
+      })
+      .then(eventDetails => callback(eventDetails))
+      // TODO: Get catch to return http status code
+      .catch(
+        response =>
+          errCallback &&
+          errCallback({
+            errorCode: response.status,
+            errorMessage: JSON.stringify(response),
           })
-          .then(eventDetails => callback(eventDetails))
-          // TODO: Get catch to return http status code
-          .catch(response => errCallback && errCallback({
-              errorCode: response.status,
-              errorMessage: JSON.stringify(response)
-          }));
-    }
-    
-    static isOwner(event: EventData): boolean {
-        return CurrentUser.userID() === event.event_creator;
-    }
+      );
+  }
+
+  static isOwner(event: EventData): boolean {
+    return CurrentUser.userID() === event.event_creator;
+  }
 }

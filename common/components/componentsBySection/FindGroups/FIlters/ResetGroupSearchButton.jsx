@@ -1,32 +1,31 @@
 // @flow
-import type {ReduceStore} from 'flux/utils';
-import {List} from 'immutable'
-import {Container} from 'flux/utils';
+import type { ReduceStore } from "flux/utils";
+import { List } from "immutable";
+import { Container } from "flux/utils";
 import GroupSearchStore from "../../../stores/GroupSearchStore.js";
 import GroupSearchDispatcher from "../../../stores/GroupSearchDispatcher.js";
-import type {LocationRadius} from "../../stores/ProjectSearchStore.js";
-import React from 'react';
-import _ from 'lodash';
+import type { LocationRadius } from "../../stores/ProjectSearchStore.js";
+import React from "react";
+import _ from "lodash";
 
 type State = {|
   keyword: string,
   tags: List<TagDefinition>,
   sortField: string,
-  locationRadius: LocationRadius
+  locationRadius: LocationRadius,
 |};
 
 class ResetGroupSearchButton extends React.Component<{||}, State> {
-
   static getStores(): $ReadOnlyArray<ReduceStore> {
     return [GroupSearchStore];
   }
 
   static calculateState(prevState: State): State {
     return {
-      keyword: GroupSearchStore.getKeyword() || '',
+      keyword: GroupSearchStore.getKeyword() || "",
       tags: GroupSearchStore.getSelectedTags() || [],
-      sortField: GroupSearchStore.getSortField() || '',
-      locationRadius: GroupSearchStore.getLocation() || {}
+      sortField: GroupSearchStore.getSortField() || "",
+      locationRadius: GroupSearchStore.getLocation() || {},
     };
   }
 
@@ -35,8 +34,16 @@ class ResetGroupSearchButton extends React.Component<{||}, State> {
       <React.Fragment>
         <button
           className="btn btn-primary btn-block reset-search-button"
-          disabled={!(this.state.keyword || this.state.tags.size > 0 || this.state.sortField || !_.isEmpty(this.state.locationRadius)) }
-          onClick={this._clearFilters.bind(this)}>
+          disabled={
+            !(
+              this.state.keyword ||
+              this.state.tags.size > 0 ||
+              this.state.sortField ||
+              !_.isEmpty(this.state.locationRadius)
+            )
+          }
+          onClick={this._clearFilters.bind(this)}
+        >
           Clear Filters
         </button>
       </React.Fragment>
@@ -44,7 +51,7 @@ class ResetGroupSearchButton extends React.Component<{||}, State> {
   }
   _clearFilters(): void {
     GroupSearchDispatcher.dispatch({
-      type: 'CLEAR_FILTERS',
+      type: "CLEAR_FILTERS",
     });
   }
 }

@@ -1,51 +1,55 @@
 // @flow
 
-import React from 'react';
-import type { FileUploadData } from '../common/upload/FileUploadButton.jsx'
-import type { FileInfo } from '../common/FileInfo.jsx'
-import Visibility from '../common/Visibility.jsx'
-import FileUploadButton from '../common/upload/FileUploadButton.jsx'
-import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
-import { deleteFromS3 } from '../utils/s3.js'
-import _ from 'lodash'
+import React from "react";
+import type { FileUploadData } from "../common/upload/FileUploadButton.jsx";
+import type { FileInfo } from "../common/FileInfo.jsx";
+import Visibility from "../common/Visibility.jsx";
+import FileUploadButton from "../common/upload/FileUploadButton.jsx";
+import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
+import { deleteFromS3 } from "../utils/s3.js";
+import _ from "lodash";
 import GlyphStyles from "../utils/glyphs";
 
 type Props = {|
   files: Array<FileInfo>,
   elementid: string,
   title: ?string,
-  singleFileOnly: ?boolean
+  singleFileOnly: ?boolean,
 |};
 type State = {|
   showDeleteModal: boolean,
   fileToDelete: FileInfo,
-  files: Array<FileInfo>
+  files: Array<FileInfo>,
 |};
 
 /**
  * Allows uploading list of files
  */
-class FileUploadList extends React.PureComponent<Props,State>  {
+class FileUploadList extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
       files: this.props.files || [],
       title: "",
       showDeleteModal: false,
-      fileToDelete: null
+      fileToDelete: null,
     };
   }
 
   componentWillReceiveProps(nextProps: Props): void {
-    if(nextProps.files) {
-      this.setState({files: nextProps.files || []});
+    if (nextProps.files) {
+      this.setState({ files: nextProps.files || [] });
       this.updateHiddenField();
     }
   }
 
   updateHiddenField(): void {
     // Serialize as a single value instead of array if this is a single-select list
-    const valueToSerialize: string = JSON.stringify(this.props.singleFileOnly && this.state.files.length > 0 ? this.state.files[0] : this.state.files);
+    const valueToSerialize: string = JSON.stringify(
+      this.props.singleFileOnly && this.state.files.length > 0
+        ? this.state.files[0]
+        : this.state.files
+    );
 
     this.refs.hiddenFormField.value = valueToSerialize;
   }
@@ -53,13 +57,18 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   askForDeleteConfirmation(fileToDelete: FileInfo): void {
     this.setState({
       fileToDelete: fileToDelete,
-      showDeleteModal: true
-    })
+      showDeleteModal: true,
+    });
   }
 
   confirmDelete(confirmed: boolean): void {
-    if(confirmed) {
-      _.remove(this.state.files, (file) => file.publicUrl + file.id === this.state.fileToDelete.publicUrl + this.state.fileToDelete.id);
+    if (confirmed) {
+      _.remove(
+        this.state.files,
+        file =>
+          file.publicUrl + file.id ===
+          this.state.fileToDelete.publicUrl + this.state.fileToDelete.id
+      );
       deleteFromS3(this.state.fileToDelete.key);
     }
 
@@ -67,8 +76,8 @@ class FileUploadList extends React.PureComponent<Props,State>  {
 
     this.setState({
       showDeleteModal: false,
-      fileToDelete: null
-    })
+      fileToDelete: null,
+    });
     this.props.onChange && this.props.onChange();
   }
 
@@ -83,7 +92,12 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   render(): React$Node {
     return (
       <div>
-        <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
+        <input
+          type="hidden"
+          ref="hiddenFormField"
+          id={this.props.elementid}
+          name={this.props.elementid}
+        />
 
         {this._renderUploadButton()}
 
@@ -99,9 +113,14 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   }
 
   _renderUploadButton(): ?React$Node {
-    const hideButton: boolean = this.props.singleFileOnly && this.state.files && this.state.files.length > 0;
+    const hideButton: boolean =
+      this.props.singleFileOnly &&
+      this.state.files &&
+      this.state.files.length > 0;
 
-    return hideButton ? <label>{this.props.title || "File"} &nbsp;</label> : (
+    return hideButton ? (
+      <label>{this.props.title || "File"} &nbsp;</label>
+    ) : (
       <FileUploadButton
         acceptedFileTypes="*"
         buttonText={this.props.title || "Files"}
@@ -112,12 +131,18 @@ class FileUploadList extends React.PureComponent<Props,State>  {
   }
 
   _renderFiles(): Array<React$Node> {
-    return this.state.files.map((file,i) =>
+    return this.state.files.map((file, i) => (
       <div key={i}>
-        <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">{file.fileName}</a>
-        <i className={GlyphStyles.Delete} aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this,file)}></i>
+        <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">
+          {file.fileName}
+        </a>
+        <i
+          className={GlyphStyles.Delete}
+          aria-hidden="true"
+          onClick={this.askForDeleteConfirmation.bind(this, file)}
+        ></i>
       </div>
-    );
+    ));
   }
 }
 

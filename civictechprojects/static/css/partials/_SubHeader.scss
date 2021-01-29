@@ -52,7 +52,7 @@
 }
 
 .SubHeader-donate-btn-container {
-    align-self: center;
+  align-self: center;
 }
 
 .SubHeader-donate-btn {
@@ -89,7 +89,7 @@
     border-radius: 50%;
     color: $color-text-light;
     background: $color-text-grey;
-    opacity: .5;
+    opacity: 0.5;
     transition: 300ms;
   }
 }
@@ -124,7 +124,7 @@
   margin-left: -145px;
   margin-top: 10px;
   &:before {
-    content: '';
+    content: "";
     position: relative;
     top: -27px;
     left: 164px;
@@ -217,7 +217,7 @@
 }
 
 .vertical-divider {
-  color: rgba(0,0,0,0.4);
+  color: rgba(0, 0, 0, 0.4);
   border-left: 2px solid;
   height: 2em;
 }

@@ -16,8 +16,6 @@
   "partners": [],
   "data": [],
   "tags": [],
-  "links": [
-    "https://www.democracylab.org/index/?section=AboutProject&id=1"
-  ],
+  "links": ["https://www.democracylab.org/index/?section=AboutProject&id=1"],
   "id": "https://raw.githubusercontent.com/DCgov/civic.json/master/schemas/schema-v1.json"
 }

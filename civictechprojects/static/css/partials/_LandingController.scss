@@ -1,7 +1,8 @@
 .RecentProjects {
   padding: 20px 0 60px 0; /* extra padding to keep background color correct between this and pathflows section */
 }
-.RecentProjects-title, .RecentProjects-button {
+.RecentProjects-title,
+.RecentProjects-button {
   text-align: center;
 }
 .RecentProjects-button {
@@ -11,14 +12,13 @@
   display: none; /* these only show at desktop */
 }
 
-
 .RecentProjects-cards {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   margin-bottom: 20px;
 
-/* layout for project cards */
+  /* layout for project cards */
   .ProjectCard-root {
     flex-basis: 100%;
     min-width: 100%;
@@ -47,7 +47,7 @@
   margin-right: auto;
 }
 .LandingController-root .SplashScreen-content h1 {
-  font-size: 3rem;
+  font-size: 2rem; /* at small display sizes 3rem is too big for a single word to fit */
 }
 .LandingController-topsplash .SplashScreen-content h1 {
   font-size: 4rem;
@@ -59,7 +59,8 @@
 .LandingController-midsplash h1 {
   padding-top: 20px;
 }
-.LandingController-midsplash p, .PartnerSection p {
+.LandingController-midsplash p,
+.PartnerSection p {
   font-size: 18px;
 }
 .LandingController-midsplash p {
@@ -67,7 +68,8 @@
   white-space: pre-wrap;
 }
 /* midsplash isn't respecting margin rules because ??? */
-.LandingController-midsplash p, .LandingController-midsplash a {
+.LandingController-midsplash p,
+.LandingController-midsplash a {
   margin-left: auto;
   margin-right: auto;
 }
@@ -90,7 +92,8 @@
 .LandingController-recruit-flow {
   background: $color-background-light;
 }
-.LandingController-volunteer-flow, .LandingController-recruit-flow {
+.LandingController-volunteer-flow,
+.LandingController-recruit-flow {
   padding: 20px;
   text-align: center;
 }
@@ -191,7 +194,6 @@
 }
 
 @include media-breakpoint-up(md) {
-
   .RecentProjects-cards {
     flex-direction: row;
     flex-wrap: wrap;
@@ -200,6 +202,9 @@
       flex-basis: 45%;
       min-width: 45%;
     }
+  }
+  .LandingController-root .SplashScreen-content h1 {
+    font-size: 3rem;
   }
 }
 
@@ -239,15 +244,15 @@
       margin-right: 10px;
     }
 
-    .carousel-control-prev, .carousel-control-next {
+    .carousel-control-prev,
+    .carousel-control-next {
       top: 180px;
       width: 25px;
       align-items: self-start;
     }
     .carousel-control-prev {
-      display: none
-    } 
-
+      display: none;
+    }
   }
   .RecentProjects-toggle {
     margin: 120px 0 0 0;
@@ -263,7 +268,6 @@
   .LandingController-root .SplashScreen-content {
     padding-bottom: 3rem;
   }
-
 }
 
 @include media-breakpoint-up(lg) {
@@ -281,5 +285,3 @@
     min-height: 380px;
   }
 }
-
- 

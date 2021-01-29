@@ -19,10 +19,12 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
-.AboutEvent-details p,.AboutEvent-location p {
+.AboutEvent-details p,
+.AboutEvent-location p {
   white-space: pre-wrap;
 }
-.AboutEvent-rsvp-btn, .AboutEvent-join-btn {
+.AboutEvent-rsvp-btn,
+.AboutEvent-join-btn {
   display: block;
   margin: 1rem auto;
   max-width: 280px;
@@ -30,7 +32,8 @@
 .AboutEvent-edit-btn {
   float: right;
 }
-.AboutEvent-rsvp-btn, .AboutEvent-join-btn {
+.AboutEvent-rsvp-btn,
+.AboutEvent-join-btn {
   display: block;
   margin: 1rem auto;
   max-width: 280px;
@@ -47,6 +50,14 @@
 .AboutEvent-header {
   margin-bottom: 1rem;
 }
+//on this page the sort controller needs specific width constraint, unlike Find Projects
+.AboutEvent-root .ProjectSearchSort-sortform {
+  max-width: 260px;
+}
+//visually has to match the filters
+.AboutEvent-root .LocationSearchContainer-content {
+  margin: 0 0 0 1rem;
+}
 @include media-breakpoint-up(lg) {
   .AboutEvent-info {
     order: 1;
@@ -58,5 +69,8 @@
   .AboutEvent-info-inner {
     background: $color-background-default;
     padding: 1rem;
+  }
+  .AboutEvent-root .LocationSearchContainer-content {
+    margin: 0 2rem 0 3rem;
   }
 }

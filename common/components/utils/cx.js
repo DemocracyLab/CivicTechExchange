@@ -4,7 +4,7 @@ class cx {
   }
 
   get(...classnames) {
-    return this._prefix + classnames.join(' ' + this._prefix);
+    return this._prefix + classnames.join(" " + this._prefix);
   }
 }
 

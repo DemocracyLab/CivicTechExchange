@@ -104,6 +104,7 @@ AUTHENTICATION_BACKENDS = (
 MIDDLEWARE = [
     'common.helpers.caching.DebugUserAgentMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -429,3 +430,5 @@ GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH', '')
 GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH', '')
 
 PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
+
+DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')

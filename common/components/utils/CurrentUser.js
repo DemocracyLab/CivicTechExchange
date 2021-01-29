@@ -1,10 +1,9 @@
 // @flow
-import _ from 'lodash'
-import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
-import type {GroupDetailsAPIData} from "./GroupAPIUtils.js";
+import _ from "lodash";
+import type { ProjectDetailsAPIData } from "../utils/ProjectAPIUtils.js";
+import type { GroupDetailsAPIData } from "./GroupAPIUtils.js";
 
 class CurrentUser {
-
   static userID(): ?number {
     return Number(window.DLAB_GLOBAL_CONTEXT.userID) || null;
   }
@@ -33,14 +32,14 @@ class CurrentUser {
     return _.unescape(window.DLAB_GLOBAL_CONTEXT.userImgUrl);
   }
 
-  static isStaff() : boolean {
+  static isStaff(): boolean {
     return window.DLAB_GLOBAL_CONTEXT.isStaff;
   }
-  
+
   static isGroupOwner(group: GroupDetailsAPIData): boolean {
     return this.userID() === group.group_creator;
   }
-  
+
   static isOwner(project: ProjectDetailsAPIData): boolean {
     return this.userID() === project.project_creator;
   }
@@ -51,28 +50,39 @@ class CurrentUser {
     const thisVolunteer = CurrentUser._getVolunteerStatus(project);
     return thisVolunteer && thisVolunteer.isCoOwner;
   }
-  
+
   static isOwnerOrVolunteering(project: ProjectDetailsAPIData): boolean {
-    return CurrentUser.isOwner(project) || CurrentUser._getVolunteerStatus(project);
+    return (
+      CurrentUser.isOwner(project) || CurrentUser._getVolunteerStatus(project)
+    );
   }
 
   static isCoOwnerOrOwner(project: ProjectDetailsAPIData): boolean {
     return CurrentUser.isOwner(project) || CurrentUser.isCoOwner(project);
   }
-  
+
   static canVolunteerForProject(project: ProjectDetailsAPIData): boolean {
-    return project.project_claimed
-      && CurrentUser.isLoggedIn()
-      && CurrentUser.isEmailVerified()
-      && !CurrentUser._getVolunteerStatus(project)
-      && !CurrentUser.isOwner(project);
+    return (
+      project.project_claimed &&
+      CurrentUser.isLoggedIn() &&
+      CurrentUser.isEmailVerified() &&
+      !CurrentUser._getVolunteerStatus(project) &&
+      !CurrentUser.isOwner(project)
+    );
   }
-  
-  static _getVolunteerStatus(project: ProjectDetailsAPIData): ?VolunteerDetailsAPIData {
-    return project.project_volunteers && project.project_volunteers.find(volunteer => volunteer.user.id === CurrentUser.userID());
+
+  static _getVolunteerStatus(
+    project: ProjectDetailsAPIData
+  ): ?VolunteerDetailsAPIData {
+    return (
+      project.project_volunteers &&
+      project.project_volunteers.find(
+        volunteer => volunteer.user.id === CurrentUser.userID()
+      )
+    );
   }
-  
-  static isVolunteeringUpForRenewal() : boolean {
+
+  static isVolunteeringUpForRenewal(): boolean {
     return window.DLAB_GLOBAL_CONTEXT.volunteeringUpForRenewal;
   }
 }

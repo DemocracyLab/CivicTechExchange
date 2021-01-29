@@ -43,7 +43,7 @@ class GitHubOAuth2Adapter(OAuth2Adapter):
         if resp.status_code == 200 and emails:
             email = emails[0]
             primary_emails = [
-                e for e in emails if not isinstance(e, dict) or e.get("primary")
+                e for e in emails if not isinstance(e, dict) or e.get('primary')
             ]
             if primary_emails:
                 email = primary_emails[0]

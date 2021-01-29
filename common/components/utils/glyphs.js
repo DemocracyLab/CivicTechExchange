@@ -1,13 +1,13 @@
 // @flow
 
-export const GlyphStyles: {[key: string]: string} = {
+export const GlyphStyles: { [key: string]: string } = {
   Close: "fas fa-times", // https://fontawesome.com/icons/times?style=solid
   Delete: "far fa-trash-alt", // https://fontawesome.com/icons/trash-alt?style=regular
   Edit: "far fa-edit", // https://fontawesome.com/icons/edit?style=regular
   Add: "fas fa-plus", // https://fontawesome.com/icons/plus?style=solid
   MapMarker: "fas fa-map-marker-alt", //https://fontawesome.com/icons/map-marker-alt?style=solid
-  Globe:"fas fa-globe-americas", // https://fontawesome.com/icons/globe-americas?style=solid
-  University:"fas fa-university", // https://fontawesome.com/icons/university?style=solid
+  Globe: "fas fa-globe-americas", // https://fontawesome.com/icons/globe-americas?style=solid
+  University: "fas fa-university", // https://fontawesome.com/icons/university?style=solid
   Clock: "fas fa-clock", // https://fontawesome.com/icons/clock?style=solid
   Search: "fas fa-search", // https://fontawesome.com/icons/search?style=solid
   Github: "fab fa-github", // https://fontawesome.com/icons/github?style=brands
@@ -38,10 +38,11 @@ export const GlyphStyles: {[key: string]: string} = {
   CreativeCommons: "fab fa-creative-commons", //https://fontawesome.com/icons/creative-commons?style=brands
   CreativeCommonsBy: "fab fa-creative-commons-by", // https://fontawesome.com/icons/creative-commons-by?style=brands
   Calendar: "far fa-calendar", // https://fontawesome.com/icons/calendar?style=regular
-  Users: "fas fa-users" // https://fontawesome.com/icons/users?style=solid
+  Users: "fas fa-users", // https://fontawesome.com/icons/users?style=solid
+  PDF: "far fa-file-pdf", // https://fontawesome.com/icons/file-pdf?style=regular
 };
 
-export const GlyphSizes: {[key: string]: string} = {
+export const GlyphSizes: { [key: string]: string } = {
   XS: " fa-xs",
   SM: " fa-sm",
   LG: " fa-lg",
@@ -49,15 +50,15 @@ export const GlyphSizes: {[key: string]: string} = {
   X3: " fa-3x",
   X5: " fa-5x",
   X7: " fa-7x",
-  X10: " fa-10x"
+  X10: " fa-10x",
 };
 
-export const GlyphWidth: {[key: string]: string} = {
+export const GlyphWidth: { [key: string]: string } = {
   Fixed: " fa-fw",
-}
+};
 
 export function Glyph(style: string, ...args): string {
-  return style += args.join('');
+  return (style += args.join(""));
 }
 
 export default GlyphStyles;

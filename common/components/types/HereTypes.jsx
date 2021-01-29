@@ -1,7 +1,7 @@
 // @flow
 
 type HereOptions = {|
-  apiKey: string
+  apiKey: string,
 |};
 
 export type HereAutocompleteParams = {|
@@ -9,11 +9,11 @@ export type HereAutocompleteParams = {|
   maxresults: ?number,
   country: ?string,
   beginHighlight: ?string,
-  endHighlight: ?string
+  endHighlight: ?string,
 |} & HereOptions;
 
 export type HereAutocompleteResponse = {|
-  suggestions: $ReadOnlyArray<HereSuggestion>
+  suggestions: $ReadOnlyArray<HereSuggestion>,
 |};
 
 export type HereSuggestion = {|
@@ -22,7 +22,7 @@ export type HereSuggestion = {|
   label: string,
   language: string,
   locationId: string,
-  matchLevel: string
+  matchLevel: string,
 |};
 
 export type HereAddress = {|
@@ -33,33 +33,33 @@ export type HereAddress = {|
   postalCode: ?string,
   state: ?string,
   street: ?string,
-  houseNumber: ?string
+  houseNumber: ?string,
 |};
 
 export type HereGeocodeParams = {|
-  locationId: string
+  locationId: string,
 |} & HereOptions;
 
 export type HereGeocodeResponse = {|
-// for now the only information we're interested in is inside Response.View[0].Result[0].Location
+  // for now the only information we're interested in is inside Response.View[0].Result[0].Location
   Response: {|
-    View: $ReadOnlyArray< {|
-      Result: $ReadOnlyArray< {|
-        Location: HereGeocodeResponseLocation
-      |} >
-    |} >
-  |}
+    View: $ReadOnlyArray<{|
+      Result: $ReadOnlyArray<{|
+        Location: HereGeocodeResponseLocation,
+      |}>,
+    |}>,
+  |},
 |};
 
 export type HereGeocodeResponseLocation = {|
   LocationId: string,
   DisplayPosition: HereGeocodeResponseDisplayPosition,
-  Address: HereGeocodeResponseAddress
+  Address: HereGeocodeResponseAddress,
 |};
 
 export type HereGeocodeResponseDisplayPosition = {|
   Latitude: number,
-  Longitude: number
+  Longitude: number,
 |};
 
 export type HereGeocodeResponseAddress = {|
@@ -72,5 +72,5 @@ export type HereGeocodeResponseAddress = {|
   Street: string,
   HouseNumber: string,
   PostalCode: string,
-  AdditionalData: $ReadOnlyArray<{|value:string,key:string|}>
+  AdditionalData: $ReadOnlyArray<{| value: string, key: string |}>,
 |};

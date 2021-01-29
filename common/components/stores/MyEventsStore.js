@@ -1,10 +1,10 @@
 // // @flow
 
-import {ReduceStore} from "flux/utils";
-import {Record} from "immutable";
+import { ReduceStore } from "flux/utils";
+import { Record } from "immutable";
 import UniversalDispatcher from "./UniversalDispatcher.js";
 import CurrentUser from "../utils/CurrentUser.js";
-import type {EventTileAPIData} from "../utils/EventAPIUtils.js";
+import type { EventTileAPIData } from "../utils/EventAPIUtils.js";
 
 export type MyEventData = {|
   +event_creator: string,
@@ -14,19 +14,21 @@ export type MyEventData = {|
 
 export type MyEventsAPIResponse = {|
   owned_events: $ReadOnlyArray<MyEventData>,
-  private_events: ?$ReadOnlyArray<MyEventData>
+  private_events: ?$ReadOnlyArray<MyEventData>,
 |};
 
-export type MyEventsActionType = {
-  type: "INIT"
-} | {
-  type: "SET_MY_EVENTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
-  myEventsResponse: MyEventsAPIResponse
-};
+export type MyEventsActionType =
+  | {
+      type: "INIT",
+    }
+  | {
+      type: "SET_MY_EVENTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
+      myEventsResponse: MyEventsAPIResponse,
+    };
 
 const DEFAULT_STATE = {
   myEvents: null,
-  isLoading: false
+  isLoading: false,
 };
 
 class State extends Record(DEFAULT_STATE) {
@@ -46,7 +48,7 @@ class MyEventsStore extends ReduceStore<State> {
   reduce(state: State, action: MyEventsActionType): State {
     switch (action.type) {
       case "INIT":
-        if(CurrentUser.isLoggedIn() && (!state.isLoading || !state.myEvents)) {
+        if (CurrentUser.isLoggedIn() && (!state.isLoading || !state.myEvents)) {
           return this._loadEvents(state);
         } else {
           return state;
@@ -58,19 +60,16 @@ class MyEventsStore extends ReduceStore<State> {
         return state;
     }
   }
-  
+
   _loadEvents(state: State): State {
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener(
-      "load",
-      () => {
-        const myEventsAPIResponse: MyEventsAPIResponse = JSON.parse(xhr.response);
-        UniversalDispatcher.dispatch({
-          type: "SET_MY_EVENTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
-          myEventsResponse: myEventsAPIResponse
-        });
-      }
-    );
+    xhr.addEventListener("load", () => {
+      const myEventsAPIResponse: MyEventsAPIResponse = JSON.parse(xhr.response);
+      UniversalDispatcher.dispatch({
+        type: "SET_MY_EVENTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
+        myEventsResponse: myEventsAPIResponse,
+      });
+    });
     xhr.open("GET", "/api/my_events");
     xhr.send();
     return state.set("isLoading", true);

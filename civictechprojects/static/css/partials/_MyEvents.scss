@@ -3,12 +3,12 @@
   padding: 1rem 0 2rem 0;
 
   //keep subheaders within a section apart
-  .EventCardContainer-section-header:nth-of-type(n+2) {
+  .EventCardContainer-section-header:nth-of-type(n + 2) {
     margin-top: 3rem;
   }
 }
 
 // keep multiple sections apart
-.MyEvents-eventsection:nth-of-type(n+2) {
+.MyEvents-eventsection:nth-of-type(n + 2) {
   margin-top: 3rem;
 }

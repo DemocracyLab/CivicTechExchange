@@ -4,5 +4,5 @@ export type FileInfo = {|
   fileName: string,
   fileCategory: string,
   publicUrl: string,
-  visibility: ?string
+  visibility: ?string,
 |};
