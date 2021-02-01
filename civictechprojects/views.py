@@ -252,7 +252,10 @@ def event_delete(request, event_id):
 
 def get_event(request, event_id):
     try:
-        event = Event.get_by_id_or_slug(event_id, get_request_contributor(request))
+        event = Event.get_by_id_or_slug(event_id)
+        if event_id.isnumeric() and event.is_private and not is_creator_or_staff(get_request_contributor(request), event):
+            # Don't let non-admins/non-owners load a private event by numeric id
+            raise PermissionDenied()
     except PermissionDenied:
         return HttpResponseForbidden()
 

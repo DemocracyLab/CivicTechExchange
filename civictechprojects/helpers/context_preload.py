@@ -25,7 +25,7 @@ def about_event_preload(context, request):
     context = default_preload(context, request)
     query_args = url_params(request)
     event_id = query_args['id'][0]
-    event = Event.get_by_id_or_slug(event_id, get_request_contributor(request))
+    event = Event.get_by_id_or_slug(event_id)
     event_json = event.hydrate_to_json()
     if event_json is not None:
         context['title'] = event_json['event_name'] + ' | DemocracyLab'
