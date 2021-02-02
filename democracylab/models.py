@@ -1,8 +1,8 @@
-import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from common.helpers.collections import distinct
+from common.helpers.random import generate_uuid
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
@@ -11,10 +11,6 @@ import civictechprojects.models
 
 class UserTaggedTechnologies(TaggedItemBase):
     content_object = models.ForeignKey('Contributor', on_delete=models.CASCADE)
-
-
-def generate_uuid():
-    return uuid.uuid4().hex
 
 
 class Contributor(User):
