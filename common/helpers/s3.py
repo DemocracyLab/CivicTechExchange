@@ -68,12 +68,17 @@ def copy_external_file_to_s3(file_url, source, owner):
     print('Downloaded {url}, file size: {size}'.format(url=file_url, size=len(file_data)))
     s3 = client('s3')
     content_disposition = 'attachment; filename="{0}"'.format(file_name)
-    response = s3.put_object(Body=file_data,
-                             Bucket=settings.S3_BUCKET,
-                             Key=key,
-                             ACL='public-read',
-                             ContentType=content_type,
-                             ContentDisposition=content_disposition)
+    put_args = {
+        'Body': file_data,
+        'Bucket': settings.S3_BUCKET,
+        'Key': key,
+        'ACL': 'public-read',
+        'ContentType': content_type,
+        'ContentDisposition': content_disposition
+    }
+    if 'Content-Encoding' in file_stream.headers:
+        put_args['ContentEncoding'] = file_stream.headers['Content-Encoding']
+    response = s3.put_object(**put_args)
     print('Uploaded file to S3. Response Code: ' + str(response['ResponseMetadata']['HTTPStatusCode']))
     return {
         'publicUrl': s3_key_to_public_url(key),
