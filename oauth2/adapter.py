@@ -86,6 +86,4 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         user_avatar_url = sociallogin.account.get_provider().get_avatar_url(sociallogin)
         if user_avatar_url:
             file_json = copy_external_file_to_s3(user_avatar_url, sociallogin.account.provider, owner)
-            from pprint import pprint
-            pprint(file_json)
             ProjectFile.replace_single_file(owner, FileCategory.THUMBNAIL, file_json)
