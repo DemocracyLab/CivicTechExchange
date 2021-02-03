@@ -74,7 +74,7 @@ def copy_external_file_to_s3(file_url, source, owner):
                              ACL='public-read',
                              ContentType=content_type,
                              ContentDisposition=content_disposition)
-    # TODO: check response success
+    print('Uploaded file to S3. Response Code: ' + str(response['ResponseMetadata']['HTTPStatusCode']))
     return {
         'publicUrl': s3_key_to_public_url(key),
         'file_user': owner,
