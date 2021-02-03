@@ -1,5 +1,5 @@
 import requests
-from mimetypes import guess_extension
+from mimetypes import guess_extension, guess_all_extensions
 from boto3 import client
 from django.conf import settings
 from django.http import JsonResponse
@@ -54,6 +54,7 @@ def user_has_permission_for_s3_file(username, raw_key):
 
 
 def copy_external_file_to_s3(file_url, source, owner):
+    from pprint import pprint
     # Download external file
     print('Downloading ' + file_url)
     key = f'avatar/{owner.id}/{source}_{generate_uuid()}'
@@ -64,6 +65,8 @@ def copy_external_file_to_s3(file_url, source, owner):
     content_type = file_stream.headers['Content-Type']
     # Add file extension if we can
     file_extension = guess_extension(content_type)
+    pprint(file_stream.headers)
+    pprint(guess_all_extensions(content_type))
     key += file_extension
     print('Downloaded {url}, file size: {size}'.format(url=file_url, size=len(file_data)))
     s3 = client('s3')
