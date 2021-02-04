@@ -440,6 +440,10 @@ def index(request):
         context['googleTagsHeadScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_head.txt', google_tag_context)
         context['googleTagsBodyScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_body.txt', google_tag_context)
 
+    if settings.HEAP_ANALYTICS_ID:
+        heap_tag_context = {'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID}
+        context['headAnalyticsHeadScript'] = loader.render_to_string('scripts/heap_analytics_snippet_head.txt', heap_tag_context)
+
     if hasattr(settings, 'SOCIAL_APPS_VISIBILITY'):
         context['SOCIAL_APPS_VISIBILITY'] = json.dumps(settings.SOCIAL_APPS_VISIBILITY)
 
