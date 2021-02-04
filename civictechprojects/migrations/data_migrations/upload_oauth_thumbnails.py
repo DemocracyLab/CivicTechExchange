@@ -1,7 +1,7 @@
 import traceback
 from django.conf import settings
 from civictechprojects.models import ProjectFile, FileCategory
-from common.helpers.s3 import copy_external_file_to_s3
+from common.helpers.s3 import copy_external_thumbnail_to_s3
 
 
 def upload_oauth_thumbnails():
@@ -11,7 +11,7 @@ def upload_oauth_thumbnails():
             owner = thumbnail.file_user
             print('Uploading OAuth thumbnail to s3 for user: ' + str(owner.id))
             try:
-                file_json = copy_external_file_to_s3(thumbnail.file_url, 'UNKNOWN', owner)
+                file_json = copy_external_thumbnail_to_s3(thumbnail.file_url, 'UNKNOWN', owner)
                 # TODO: Remove logging after testing
                 from pprint import pprint
                 pprint(file_json)

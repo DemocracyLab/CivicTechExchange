@@ -53,7 +53,7 @@ def user_has_permission_for_s3_file(username, raw_key):
     return username == s3_key.username
 
 
-def copy_external_file_to_s3(file_url, source, owner):
+def copy_external_thumbnail_to_s3(file_url, source, owner):
     from pprint import pprint
     # Download external file
     print('Downloading ' + file_url)
@@ -63,12 +63,14 @@ def copy_external_file_to_s3(file_url, source, owner):
     file_stream = requests.get(file_url, stream=True)
     file_data = file_stream.raw.read()
     content_type = file_stream.headers['Content-Type']
+    is_image = 'image' in content_type
     # Add file extension if we can
     file_extension = guess_extension(content_type)
     pprint(file_stream.headers)
     pprint(guess_all_extensions(content_type))
     key += file_extension
-    print('Downloaded {url}, file size: {size}'.format(url=file_url, size=len(file_data)))
+    print('Downloaded {url}, content type: {content_type}, file size: {size}'.
+          format(url=file_url, content_type=content_type, size=len(file_data)))
     s3 = client('s3')
     content_disposition = 'attachment; filename="{0}"'.format(file_name)
     put_args = {
@@ -86,7 +88,7 @@ def copy_external_file_to_s3(file_url, source, owner):
     return {
         'publicUrl': s3_key_to_public_url(key),
         'file_user': owner,
-        'file_category': FileCategory.THUMBNAIL.value,
+        'file_category': FileCategory.THUMBNAIL.value if is_image else 'THUMBNAIL_ERROR',
         'visibility': 'PUBLIC',
         'fileName': f'{owner.first_name}{owner.last_name}_{source}_avatar_thumbnail.{file_extension}',
         'key': key
