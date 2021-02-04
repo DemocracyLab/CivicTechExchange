@@ -15,7 +15,7 @@ def upload_oauth_thumbnails():
                 # TODO: Remove logging after testing
                 from pprint import pprint
                 pprint(file_json)
-                ProjectFile.replace_single_file(owner, file_json['file_category'], file_json)
+                ProjectFile.replace_single_file(owner, FileCategory(file_json['file_category']), file_json)
             except:
                 # Keep processing if we run into errors with a particular thumbnail
                 print('Error uploading: ' + thumbnail.file_url)
