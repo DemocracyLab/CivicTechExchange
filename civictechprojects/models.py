@@ -821,13 +821,15 @@ class ProjectFile(models.Model):
             ProjectFile.objects.get(id=file_id).delete()
 
     @staticmethod
-    def replace_single_file(owner, file_category, file_json):
+    def replace_single_file(owner, file_category, file_json, new_file_category=None):
         """
         :param owner: Owner model instace of the file
         :param file_category: File type
         :param file_json: File metadata
+        :param new_file_category: New file type
         :return: True if the file was changed
         """
+        new_file_category = new_file_category or file_category
         if type(owner) is Project:
             existing_file = ProjectFile.objects.filter(file_project=owner.id, file_category=file_category.value).first()
         elif type(owner) is Group:
@@ -846,12 +848,12 @@ class ProjectFile(models.Model):
         elif not is_empty_field:
             if not existing_file:
                 # Add new file
-                thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+                thumbnail = ProjectFile.from_json(owner, new_file_category, file_json)
                 thumbnail.save()
                 file_changed = True
             elif file_json['key'] != existing_file.file_key:
                 # Replace existing file
-                thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+                thumbnail = ProjectFile.from_json(owner, new_file_category, file_json)
                 thumbnail.save()
                 existing_file.delete()
                 file_changed = True
