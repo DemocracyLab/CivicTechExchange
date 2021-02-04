@@ -88,7 +88,7 @@ def copy_external_thumbnail_to_s3(file_url, source, owner):
     return {
         'publicUrl': s3_key_to_public_url(key),
         'file_user': owner,
-        'file_category': FileCategory.THUMBNAIL.value if is_image else 'THUMBNAIL_ERROR',
+        'file_category': FileCategory.THUMBNAIL.value if is_image else FileCategory.THUMBNAIL_ERROR.value,
         'visibility': 'PUBLIC',
         'fileName': f'{owner.first_name}{owner.last_name}_{source}_avatar_thumbnail.{file_extension}',
         'key': key

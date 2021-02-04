@@ -883,6 +883,7 @@ class ProjectFile(models.Model):
 
 class FileCategory(Enum):
     THUMBNAIL = 'THUMBNAIL'
+    THUMBNAIL_ERROR = 'THUMBNAIL_ERROR'
     RESUME = 'RESUME'
     ETC = 'ETC'
 
