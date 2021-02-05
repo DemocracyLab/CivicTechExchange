@@ -54,7 +54,7 @@ class NameRecordAdmin(admin.ModelAdmin):
     search_fields = name_record_text_fields
 
 class ProjectFileAdmin(admin.ModelAdmin):
-    list_display = ('file_project', 'file_user', 'file_group', 'file_event', 'file_category', 'file_name', 'file_type')
+    list_display = ('file_name', 'file_type', 'file_category', 'file_project', 'file_user', 'file_group', 'file_event', )
     search_fields = ['file_user__email', 'file_project__project_name', 'file_group__group_name', 'file_event__event_name', 'file_key']
     list_filter = ('file_category', 'file_type',)
 
