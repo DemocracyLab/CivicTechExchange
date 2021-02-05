@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from urllib import parse
 from civictechprojects.models import FileCategory
 from .random import generate_uuid
+from .request_helpers import ResourceNotFound
 
 class S3Key:
     def __init__(self, raw_key):
@@ -63,11 +64,12 @@ def copy_external_thumbnail_to_s3(file_url, source, owner):
     file_stream = requests.get(file_url, stream=True)
     file_data = file_stream.raw.read()
     pprint(file_stream.headers)
+    if 'Content-Type' not in file_stream.headers:
+        raise ResourceNotFound(file_url)
     content_type = file_stream.headers['Content-Type']
     is_image = 'image' in content_type
     # Add file extension if we can
     file_extension = guess_extension(content_type)
-    pprint(guess_all_extensions(content_type))
     key += file_extension
     print('Downloaded {url}, content type: {content_type}, file size: {size}'.
           format(url=file_url, content_type=content_type, size=len(file_data)))

@@ -24,7 +24,7 @@ def upload_oauth_thumbnails():
             print('Uploading OAuth thumbnail to s3 for user: ' + str(thumbnail.file_user.id))
             try:
                 retry(func=lambda: _upload_thumbnail(thumbnail), retry_count=3, retry_seconds=2, job_name='Uploading ' + thumbnail.file_url)
-            except NotThumbnailException as ex:
+            except Exception as ex:
                 # Keep processing if we run into errors with a particular thumbnail
                 print(traceback.format_exc())
                 print('Error uploading: ' + str(thumbnail))
