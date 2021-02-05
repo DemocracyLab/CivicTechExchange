@@ -769,6 +769,10 @@ class ProjectFile(models.Model):
     file_type = models.CharField(max_length=50)
     file_category = models.CharField(max_length=50)
 
+    def __str__(self):
+        owner = self.get_owner() or ''
+        return f'[{owner}]:{self.file_name}.{self.file_type}({self.file_category})'
+
     @staticmethod
     def create(owner, file_url, file_name, file_key, file_type, file_category, file_visibility):
         # TODO: Validate input
@@ -858,6 +862,9 @@ class ProjectFile(models.Model):
                 existing_file.delete()
                 file_changed = True
         return file_changed
+
+    def get_owner(self):
+        return self.file_project or self.file_group or self.file_event or self.file_user
 
     @staticmethod
     def from_json(owner, file_category, file_json):

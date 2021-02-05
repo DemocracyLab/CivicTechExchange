@@ -25,6 +25,9 @@ class Contributor(User):
     qiqo_uuid = models.CharField(max_length=50, blank=True)
     qiqo_signup_time = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self):
+        return self.id_full_name()
+
     def is_admin_contributor(self):
         return self.email == settings.ADMIN_EMAIL
 
@@ -32,7 +35,7 @@ class Contributor(User):
         return self.first_name + ' ' + self.last_name
 
     def id_full_name(self):
-        return '({id}){name}'.format(id=self.id, name=self.full_name())
+        return '{id}: {name}'.format(id=self.id, name=self.full_name())
 
     def is_up_for_volunteering_renewal(self):
         from civictechprojects.models import VolunteerRelation

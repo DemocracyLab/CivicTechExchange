@@ -19,7 +19,7 @@ def upload_oauth_thumbnails():
                                                 new_file_category=FileCategory(file_json['file_category']))
             except:
                 # Keep processing if we run into errors with a particular thumbnail
-                print('Error uploading: ' + thumbnail.file_url)
+                print('Error uploading: ' + str(thumbnail))
                 print(traceback.format_exc())
                 thumbnail.file_category = FileCategory.THUMBNAIL_ERROR.value
                 thumbnail.save()
