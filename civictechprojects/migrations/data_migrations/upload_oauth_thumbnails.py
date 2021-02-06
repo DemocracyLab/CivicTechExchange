@@ -12,9 +12,8 @@ class NotThumbnailException(Exception):
         not_thumbnail -- ProjectFile object representing the final file that was downloaded
     """
 
-
-def __init__(self, not_thumbnail):
-    self.not_thumbnail = not_thumbnail
+    def __init__(self, not_thumbnail):
+        self.not_thumbnail = not_thumbnail
 
 
 def upload_oauth_thumbnails():

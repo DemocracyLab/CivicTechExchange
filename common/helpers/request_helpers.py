@@ -2,12 +2,11 @@ from urllib import parse as urlparse
 
 
 class ResourceNotFound(Exception):
-    """Raised when we attempt to download a thumbnail, and fail to download a usable image
+    """Raised when a remote resource can't be found
 
     Attributes:
-        not_thumbnail -- ProjectFile object representing the final file that was downloaded
+        url -- Url of resource request that failed
     """
-
 
     def __init__(self, url):
         self.url = url

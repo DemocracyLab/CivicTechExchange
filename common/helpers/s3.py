@@ -1,4 +1,5 @@
 import requests
+from pprint import pprint
 from mimetypes import guess_extension, guess_all_extensions
 from boto3 import client
 from django.conf import settings
@@ -7,6 +8,7 @@ from urllib import parse
 from civictechprojects.models import FileCategory
 from .random import generate_uuid
 from .request_helpers import ResourceNotFound
+
 
 class S3Key:
     def __init__(self, raw_key):
@@ -55,7 +57,6 @@ def user_has_permission_for_s3_file(username, raw_key):
 
 
 def copy_external_thumbnail_to_s3(file_url, source, owner):
-    from pprint import pprint
     # Download external file
     print('Downloading ' + file_url)
     key = f'avatar/{owner.id}/{source}_{generate_uuid()}'
