@@ -252,7 +252,10 @@ def event_delete(request, event_id):
 
 def get_event(request, event_id):
     try:
-        event = Event.get_by_id_or_slug(event_id, get_request_contributor(request))
+        event = Event.get_by_id_or_slug(event_id)
+        if event_id.isnumeric() and event.is_private and not is_creator_or_staff(get_request_contributor(request), event):
+            # Don't let non-admins/non-owners load a private event by numeric id
+            raise PermissionDenied()
     except PermissionDenied:
         return HttpResponseForbidden()
 
@@ -436,6 +439,10 @@ def index(request):
         google_tag_context = {'GOOGLE_TAGS_ID': settings.GOOGLE_TAGS_ID}
         context['googleTagsHeadScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_head.txt', google_tag_context)
         context['googleTagsBodyScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_body.txt', google_tag_context)
+
+    if settings.HEAP_ANALYTICS_ID:
+        heap_tag_context = {'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID}
+        context['headAnalyticsHeadScript'] = loader.render_to_string('scripts/heap_analytics_snippet_head.txt', heap_tag_context)
 
     if hasattr(settings, 'SOCIAL_APPS_VISIBILITY'):
         context['SOCIAL_APPS_VISIBILITY'] = json.dumps(settings.SOCIAL_APPS_VISIBILITY)
