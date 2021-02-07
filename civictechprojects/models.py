@@ -190,6 +190,11 @@ class Project(Archived):
         slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
         return Event.objects.filter(event_legacy_organization__name__in=slugs, is_private=False, is_searchable=True)
 
+    def get_project_groups(self):
+        project_relationships = ProjectRelationship.objects.filter(relationship_project=self.id)
+        groups_ids = list(map(lambda pr: pr.relationship_group.id, project_relationships))
+        return Group.objects.filter(id__in=groups_ids)
+
     def update_timestamp(self, time=None):
         self.project_date_modified = time or timezone.now()
         self.save()
