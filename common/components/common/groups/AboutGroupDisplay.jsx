@@ -7,8 +7,6 @@ import type { GroupDetailsAPIData } from "../../utils/GroupAPIUtils.js";
 import GroupDetails from "./GroupDetails.jsx";
 import ContactGroupButton from "./ContactGroupButton.jsx";
 import IconLinkDisplay from "../../componentsBySection/AboutProject/IconLinkDisplay.jsx";
-import Headers from "../Headers.jsx";
-import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import { LinkTypes } from "../../constants/LinkConstants.js";
 import GroupAPIUtils, {
@@ -78,7 +76,6 @@ class AboutGroupDisplay extends React.Component<Props, State> {
     const group: GroupDetailsAPIData = this.state.group;
     return (
       <div className="AboutProjects-root">
-        {this._renderHeader(group)}
         <div className="AboutProjects-infoColumn">
           <div className="AboutProjects-iconContainer">
             <img
@@ -150,21 +147,6 @@ class AboutGroupDisplay extends React.Component<Props, State> {
           </div>
         </div>
       </div>
-    );
-  }
-
-  _renderHeader(group: GroupDetailsAPIData): React$Node {
-    const title: string = group.group_name + " | DemocracyLab";
-    const description: string =
-      group.group_short_description ||
-      Truncate.stringT(group.group_description, 300);
-
-    return (
-      <Headers
-        title={title}
-        description={description}
-        thumbnailUrl={group.group_thumbnail && group.group_thumbnail.publicUrl}
-      />
     );
   }
 

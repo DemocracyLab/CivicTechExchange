@@ -1,6 +1,6 @@
 from django.conf import settings
 from civictechprojects.models import Event
-from civictechprojects.caching.cache import ProjectCache, EventCache
+from civictechprojects.caching.cache import ProjectCache, GroupCache
 from common.helpers.constants import FrontEndSection
 from common.helpers.request_helpers import url_params
 from democracylab.models import get_request_contributor
@@ -34,6 +34,21 @@ def about_event_preload(context, request):
             context['og_image'] = event_json['event_thumbnail']['publicUrl']
     else:
         print('Failed to preload event info, no cache entry found: ' + event_id)
+    return context
+
+
+def about_group_preload(context, request):
+    context = default_preload(context, request)
+    query_args = url_params(request)
+    group_id = query_args['id'][0]
+    group_json = GroupCache.get(group_id)
+    if group_json is not None:
+        context['title'] = group_json['group_name'] + ' | DemocracyLab'
+        context['description'] = group_json['group_short_description']
+        if 'group_thumbnail' in group_json:
+            context['og_image'] = group_json['group_thumbnail']['publicUrl']
+    else:
+        print('Failed to preload group info, no cache entry found: ' + group_id)
     return context
 
 
@@ -88,7 +103,8 @@ preload_urls = [
     {'section': FrontEndSection.AboutUs.value, 'handler': about_us_preload},
     {'section': FrontEndSection.CreateEvent.value, 'handler': create_event_preload},
     {'section': FrontEndSection.MyEvents.value, 'handler': my_events_preload},
-    {'section': FrontEndSection.Donate.value, 'handler': donate_preload}
+    {'section': FrontEndSection.Donate.value, 'handler': donate_preload},
+    {'section': FrontEndSection.AboutGroup.value, 'handler': about_group_preload}
 ]
 
 
