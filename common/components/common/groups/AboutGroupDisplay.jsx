@@ -75,7 +75,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
   }
 
   _renderDetails(): React$Node {
-    const group = this.state.group;
+    const group: GroupDetailsAPIData = this.state.group;
     return (
       <div className="AboutProjects-root">
         {this._renderHeader(group)}
@@ -142,9 +142,11 @@ class AboutGroupDisplay extends React.Component<Props, State> {
                 </div>
               )}
             </div>
-            <div className="AboutGroup-card-container">
-              <ProfileProjectSearch viewOnly={this.props.viewOnly} wide />
-            </div>
+            {group.group_project_count > 0 && (
+              <div className="AboutGroup-card-container">
+                <ProfileProjectSearch viewOnly={this.props.viewOnly} wide />
+              </div>
+            )}
           </div>
         </div>
       </div>
