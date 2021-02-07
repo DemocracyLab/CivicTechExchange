@@ -330,10 +330,12 @@ class Group(Archived):
         else:
             return all_issue_area_names
 
-    def get_group_projects(self):
+    def get_group_projects(self, approved_only=True):
         project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
+        if approved_only:
+            project_relationships = project_relationships.filter(is_approved=True)
         project_ids = list(map(lambda pr: pr.relationship_project.id, project_relationships))
-        return Project.objects.filter(id__in=project_ids)
+        return Project.objects.filter(id__in=project_ids, is_searchable=True)
 
     def recache(self):
         hydrated_group = self._hydrate_to_json()

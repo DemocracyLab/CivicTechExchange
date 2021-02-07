@@ -23,6 +23,7 @@ class ProjectCreationForm(ModelForm):
         if not is_creator_or_staff(request.user, project):
             raise PermissionDenied()
 
+        # TODO: Recache linked group tags
         linked_events = project.get_project_events()
         project.delete()
         # Refresh linked event tag counts
