@@ -265,7 +265,7 @@ class Group(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_group=self.id)
-        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
+        projects = self.get_group_project_relationships(approved_only=True)
 
         group = {
             'group_creator': self.group_creator.id,
@@ -330,12 +330,15 @@ class Group(Archived):
         else:
             return all_issue_area_names
 
-    def get_group_projects(self, approved_only=True):
+    def get_group_project_relationships(self, approved_only=True):
         project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
         if approved_only:
-            project_relationships = project_relationships.filter(is_approved=True)
-        project_ids = list(map(lambda pr: pr.relationship_project.id, project_relationships))
-        return Project.objects.filter(id__in=project_ids, is_searchable=True)
+            project_relationships = project_relationships.filter(is_approved=True, relationship_project__is_searchable=True)
+        return project_relationships
+
+    def get_group_projects(self, approved_only=True):
+        project_ids = list(map(lambda pr: pr.relationship_project.id, self.get_group_project_relationships(approved_only=approved_only)))
+        return Project.objects.filter(id__in=project_ids)
 
     def recache(self):
         hydrated_group = self._hydrate_to_json()
