@@ -100,7 +100,7 @@ class ProjectSearchTagsCacheManager:
         if event is not None:
             projects = event.get_linked_projects()
         elif group is not None:
-            projects = group.get_group_projects()
+            projects = group.get_group_projects(approved_only=True)
         else:
             projects = Project.objects.filter(is_searchable=True)
         issues, technologies, stage, organization, organization_type, positions = [], [], [], [], [], []

@@ -538,9 +538,7 @@ def projects_list(request):
     if 'group_id' in query_params:
         group_id = query_params['group_id'][0]
         group = Group.objects.get(id=group_id)
-        project_relationships = ProjectRelationship.objects.filter(relationship_group=query_params['group_id'][0])
-        project_ids = list(map(lambda relationship: relationship.relationship_project.id, project_relationships))
-        project_list = Project.objects.filter(id__in=project_ids, is_searchable=True)
+        project_list = group.get_group_projects(approved_only=True)
     elif 'event_id' in query_params:
         event_id = query_params['event_id'][0]
         event = Event.get_by_id_or_slug(event_id)

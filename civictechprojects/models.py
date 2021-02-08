@@ -190,6 +190,11 @@ class Project(Archived):
         slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
         return Event.objects.filter(event_legacy_organization__name__in=slugs, is_private=False, is_searchable=True)
 
+    def get_project_groups(self):
+        project_relationships = ProjectRelationship.objects.filter(relationship_project=self.id)
+        groups_ids = list(map(lambda pr: pr.relationship_group.id, project_relationships))
+        return Group.objects.filter(id__in=groups_ids)
+
     def update_timestamp(self, time=None):
         self.project_date_modified = time or timezone.now()
         self.save()
@@ -265,7 +270,7 @@ class Group(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_group=self.id)
-        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
+        projects = self.get_group_project_relationships(approved_only=True)
 
         group = {
             'group_creator': self.group_creator.id,
@@ -330,9 +335,14 @@ class Group(Archived):
         else:
             return all_issue_area_names
 
-    def get_group_projects(self):
+    def get_group_project_relationships(self, approved_only=True):
         project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
-        project_ids = list(map(lambda pr: pr.relationship_project.id, project_relationships))
+        if approved_only:
+            project_relationships = project_relationships.filter(is_approved=True, relationship_project__is_searchable=True)
+        return project_relationships
+
+    def get_group_projects(self, approved_only=True):
+        project_ids = list(map(lambda pr: pr.relationship_project.id, self.get_group_project_relationships(approved_only=approved_only)))
         return Project.objects.filter(id__in=project_ids)
 
     def recache(self):
@@ -766,6 +776,10 @@ class ProjectFile(models.Model):
     file_type = models.CharField(max_length=50)
     file_category = models.CharField(max_length=50)
 
+    def __str__(self):
+        owner = self.get_owner() or ''
+        return f'[{owner}]:{self.file_name}.{self.file_type}({self.file_category})'
+
     @staticmethod
     def create(owner, file_url, file_name, file_key, file_type, file_category, file_visibility):
         # TODO: Validate input
@@ -818,13 +832,15 @@ class ProjectFile(models.Model):
             ProjectFile.objects.get(id=file_id).delete()
 
     @staticmethod
-    def replace_single_file(owner, file_category, file_json):
+    def replace_single_file(owner, file_category, file_json, new_file_category=None):
         """
         :param owner: Owner model instace of the file
         :param file_category: File type
         :param file_json: File metadata
+        :param new_file_category: New file type
         :return: True if the file was changed
         """
+        new_file_category = new_file_category or file_category
         if type(owner) is Project:
             existing_file = ProjectFile.objects.filter(file_project=owner.id, file_category=file_category.value).first()
         elif type(owner) is Group:
@@ -843,16 +859,19 @@ class ProjectFile(models.Model):
         elif not is_empty_field:
             if not existing_file:
                 # Add new file
-                thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+                thumbnail = ProjectFile.from_json(owner, new_file_category, file_json)
                 thumbnail.save()
                 file_changed = True
             elif file_json['key'] != existing_file.file_key:
                 # Replace existing file
-                thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+                thumbnail = ProjectFile.from_json(owner, new_file_category, file_json)
                 thumbnail.save()
                 existing_file.delete()
                 file_changed = True
         return file_changed
+
+    def get_owner(self):
+        return self.file_project or self.file_group or self.file_event or self.file_user
 
     @staticmethod
     def from_json(owner, file_category, file_json):
@@ -880,6 +899,7 @@ class ProjectFile(models.Model):
 
 class FileCategory(Enum):
     THUMBNAIL = 'THUMBNAIL'
+    THUMBNAIL_ERROR = 'THUMBNAIL_ERROR'
     RESUME = 'RESUME'
     ETC = 'ETC'
 
