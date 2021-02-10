@@ -59,6 +59,5 @@ urlpatterns = [
     url(r'^', include('civictechprojects.urls')),
     url(r'^$', RedirectView.as_view(url='/index/?section=Home', permanent=False)),
     url(r'^admin/', admin.site.urls),
-    url(r'^platform$', RedirectView.as_view(url='http://connect.democracylab.org/platform/', permanent=False)),
-    # url(r'^.*$', RedirectView.as_view(url='/index/', permanent=False))
+    url(r'^platform$', RedirectView.as_view(url='http://connect.democracylab.org/platform/', permanent=False))
 ]

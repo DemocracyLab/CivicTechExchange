@@ -1,5 +1,5 @@
 # https://hub.docker.com/r/nikolaik/python-nodejs
-FROM nikolaik/python-nodejs:python3.8-nodejs12	
+FROM nikolaik/python-nodejs:python3.8-nodejs12
 
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -62,7 +62,7 @@ ENV HEADER_ALERT="<p>You are invited to our upcoming event, St. Hat-trick's day!
 ENV SPONSORS_METADATA='[{"displayName":"Textio","url":"https://medium.com/democracylab-org/textio-engages-employees-to-accelerate-civic-innovation-5984609a95ce","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/textio_logo_315_trans.png","description":"Textio is the inventor of augmented writing. Textio transforms your rough ideas into powerful language by hitting Tab."},{"displayName":"HERE Technologies","url":"https://www.here.com/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/here_technologies.png","description":"By building a digital representation of reality entirely built upon location data, we are radically transforming the way the world lives, moves and interacts"},{"displayName":"Amazon","url":"https://www.aboutamazon.com/our-communities/amazon-in-the-community","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/amazon_logo.png","description":"At Amazon, we focus on building long-term and innovative programs that will have a lasting, positive impact in communities around the world."}]'
 
 # Configure project description example link
-ENV PROJECT_DESCRIPTION_EXAMPLE_URL "https://www.democracylab.org/index/?section=AboutProject&id=1"
+ENV PROJECT_DESCRIPTION_EXAMPLE_URL "https://www.democracylab.org/projects/1"
 
 # Configure position description example link
 ENV POSITION_DESCRIPTION_EXAMPLE_URL "https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit"

@@ -127,7 +127,7 @@ def send_password_reset_email(contributor):
 
 
 def send_project_creation_notification(project):
-    project_url = settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
+    project_url = settings.PROTOCOL_DOMAIN + section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
 
     verification_url = settings.PROTOCOL_DOMAIN + '/projects/approve/' + str(project.id)
     email_template = HtmlEmailTemplate() \
@@ -212,7 +212,7 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
     user = volunteer_relation.volunteer
     role_details = Tag.from_field(volunteer_relation.role)
     role_text = "{subcategory}: {name}".format(subcategory=role_details.subcategory, name=role_details.display_name)
-    project_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
+    project_profile_url = settings.PROTOCOL_DOMAIN + section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
     approve_url = settings.PROTOCOL_DOMAIN + '/volunteer/approve/' + str(volunteer_relation.id) + '/'
     email_subject = '{is_reminder}{firstname} {lastname} would like to volunteer with {project} as {role}'.format(
         is_reminder='REMINDER: ' if is_reminder else '',
@@ -328,7 +328,7 @@ def notify_project_owners_project_approved(project):
         .paragraph('Your project "{{project_name}}" has been approved. You can see it at {{project_url}}')
     context = {
         'project_name': project.project_name,
-        'project_url': settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
+        'project_url': settings.PROTOCOL_DOMAIN + section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
     }
     email_msg = EmailMessage(
         subject=project.project_name + " has been approved",

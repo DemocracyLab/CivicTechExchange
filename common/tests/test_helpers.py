@@ -16,12 +16,13 @@ class CommonHelperTests(TestCase):
     def test_do_not_prerender_urls(self):
         urls = [
             '/projects/signup/',
-            '/index/?section=FindProjects&sortField=project_name'
+            section_url(FrontEndSection.FindProjects, {'sortField': 'project_name'})
         ]
         for url in urls:
             self.assertFalse(is_sitemap_url(url), 'Should not be able to prerender ' + url)
 
 
+# TODO: Update
 class FrontEndHelperTests(TestCase):
     def test_section_path(self):
         expected = '/index/?section=AboutEvent&id=test-slug'

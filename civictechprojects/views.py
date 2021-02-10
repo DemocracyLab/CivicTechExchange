@@ -121,7 +121,7 @@ def group_edit(request, group_id):
     if request.is_ajax():
         return JsonResponse(group.hydrate_to_json())
     else:
-        return redirect('/index/?section=AboutGroup&id=' + group_id)
+        return redirect(section_url(FrontEndSection.AboutGroup, {'id': group_id}))
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
@@ -234,7 +234,7 @@ def event_edit(request, event_id):
     if request.is_ajax():
         return JsonResponse(event.hydrate_to_json())
     else:
-        return redirect('/index/?section=AboutEvent&id=' + event_id)
+        return redirect(section_url(FrontEndSection.AboutEvent, {'id': event_id}))
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
@@ -323,7 +323,7 @@ def project_edit(request, project_id):
     if request.is_ajax():
         return JsonResponse(project.hydrate_to_json())
     else:
-        return redirect('/index/?section=AboutProject&id=' + project_id)
+        return redirect(section_url(FrontEndSection.AboutProject, {'id': project_id}))
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
@@ -364,7 +364,7 @@ def approve_project(request, project_id):
             SitemapPages.update()
             notify_project_owners_project_approved(project)
             messages.success(request, 'Project Approved')
-            return redirect('/index/?section=AboutProject&id=' + str(project.id))
+            return redirect(section_url(FrontEndSection.AboutProject, {'id': project_id}))
         else:
             return HttpResponseForbidden()
     else:

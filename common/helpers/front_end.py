@@ -12,6 +12,7 @@ def section_path(section, args_dict=None):
         args_dict = {}
     section_string = section.value if hasattr(section, 'value') else section
     arg_string = "".join(map(lambda kv: '&' + kv[0] + '=' + str(kv[1]), args_dict.items()))
+    # TODO: Update this
     url = '/index/?section=' + section_string + arg_string
     return url
 
