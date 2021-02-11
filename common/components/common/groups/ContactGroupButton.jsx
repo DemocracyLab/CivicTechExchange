@@ -81,7 +81,7 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
     closeModal: Function
   ): void {
     ProjectAPIUtils.post(
-      "/contact/group/" + this.props.group.group_id + "/",
+      "/api/contact/group/" + this.props.group.group_id + "/",
       fields,
       response => closeModal(),
       response => null /* TODO: Report error to user */

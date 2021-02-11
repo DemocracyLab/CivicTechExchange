@@ -18,7 +18,7 @@ import FormWorkflow, {
 } from "../forms/FormWorkflow.jsx";
 
 type State = {|
-  id: ?number,
+  groupId: ?number,
   group: ?GroupDetailsAPIData,
   steps: $ReadOnlyArray<FormWorkflowStepConfig>,
 |};
@@ -108,8 +108,8 @@ class CreateGroupController extends React.PureComponent<{||}, State> {
   ): void {
     const formSubmitUrl: string =
       this.state.group && this.state.group.group_id
-        ? "/groups/edit/" + this.state.group.group_id + "/"
-        : "/groups/create/";
+        ? "/api/groups/edit/" + this.state.group.group_id + "/"
+        : "/api/groups/create/";
     api.postForm(
       formSubmitUrl,
       formRef,

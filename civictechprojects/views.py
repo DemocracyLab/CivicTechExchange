@@ -148,39 +148,6 @@ def get_group(request, group_id):
     else:
         return HttpResponse(status=404)
 
-@csrf_exempt
-def group_add_project(request, group_id):
-    body = json.loads(request.body)
-    group = Group.objects.get(id=group_id)
-
-    if group is not None and body["project_ids"] is not None:
-        if not is_creator_or_staff(get_request_contributor(request), group):
-            return HttpResponseForbidden()
-
-        projects = Project.objects.filter(id__in=body["project_ids"])
-
-        for project in projects:
-            ProjectRelationship.create(group, project)
-
-        return HttpResponse(status=204)
-    else:
-        return HttpResponse(status=404)
-
-def group_delete_project(request, group_id):
-    body = json.loads(request.body)
-    group = Group.objects.get(id=group_id)
-    project = Project.objects.get(id=body["project_id"])
-
-    if group is not None and project is not None:
-        if is_creator_or_staff(get_request_contributor(request), group):
-            relationship = ProjectRelationship.objects.get(relationship_project=project.id, relationship_group=group.id)
-
-            if relationship is not None:
-                relationship.delete()
-                return HttpResponse(status=204)
-
-    return HttpResponse(status=404)
-
 
 def approve_group(request, group_id):
     group = Group.objects.get(id=group_id)

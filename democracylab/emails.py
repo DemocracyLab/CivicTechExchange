@@ -358,7 +358,7 @@ def notify_event_owners_event_approved(event):
 def send_group_creation_notification(group):
     group_url = section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
 
-    verification_url = settings.PROTOCOL_DOMAIN + '/groups/approve/' + str(group.id)
+    verification_url = settings.PROTOCOL_DOMAIN + '/api/groups/approve/' + str(group.id) + '/'
     email_template = HtmlEmailTemplate() \
         .paragraph('{first_name} {last_name}({email}) has created the group "{group_name}": \n {group_url}'.format(
         first_name=group.group_creator.first_name,
