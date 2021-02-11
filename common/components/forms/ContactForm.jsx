@@ -53,7 +53,7 @@ class ContactForm extends React.Component<Props, State> {
     //get reCaptcha hash and submitted message and send it to backend
     //backend will validate the captcha and send the message if validated or return a failure message if there's a problem
     ProjectAPIUtils.post(
-      "/contact/democracylab",
+      "/api/contact/democracylab",
       {
         fname: this.state.fname,
         lname: this.state.lname,
