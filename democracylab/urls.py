@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^accounts/', include('oauth2.providers.linkedin.urls')),
     url(r'^accounts/', include('oauth2.providers.facebook.urls')),
     url(r'^accounts/', include('allauth.urls')),
-    url(r'^signup/$', views.signup, name='signup'),
+    url(r'^api/signup/$', views.signup, name='signup'),
     url(r'^login/$', views.login_view, name='login_view'),
     url(r'^login/(?P<provider>\w+)', views.login_view, name='login_view'),
     url(r'^logout/$', views.logout_view, name='logout_view'),

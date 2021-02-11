@@ -104,7 +104,7 @@ class SignUpController extends React.Component<Props, State> {
           <div className="LogInController-greeting">
             SIGN UP, IT'S EASY AND FREE
           </div>
-          <form action="/signup/" method="post">
+          <form action="/api/signup/" method="post">
             <DjangoCSRFToken />
             <div>First Name:</div>
             <div>
