@@ -227,7 +227,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
 
   handleVolunteerContactModal(formFields, closeModal): void {
     ProjectAPIUtils.post(
-      "/contact/volunteer/" +
+      "/api/contact/volunteer/" +
         this.state.volunteerToActUpon.application_id +
         "/",
       formFields,

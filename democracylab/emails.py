@@ -129,7 +129,7 @@ def send_password_reset_email(contributor):
 def send_project_creation_notification(project):
     project_url = settings.PROTOCOL_DOMAIN + section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
 
-    verification_url = settings.PROTOCOL_DOMAIN + '/projects/approve/' + str(project.id)
+    verification_url = settings.PROTOCOL_DOMAIN + '/api/projects/approve/' + str(project.id) + '/'
     email_template = HtmlEmailTemplate() \
         .paragraph('{first_name} {last_name}({email}) has created the project "{project_name}": \n {project_url}'.format(
             first_name=project.project_creator.first_name,
