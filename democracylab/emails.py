@@ -151,7 +151,7 @@ def send_project_creation_notification(project):
 def send_event_creation_notification(event):
     event_url = section_url(FrontEndSection.AboutEvent, {'id': str(event.id)})
 
-    verification_url = settings.PROTOCOL_DOMAIN + '/events/approve/' + str(event.id)
+    verification_url = settings.PROTOCOL_DOMAIN + '/api/events/approve/' + str(event.id) + '/'
     email_template = HtmlEmailTemplate() \
         .paragraph('{first_name} {last_name}({email}) has created the event "{event_name}": \n {event_url}'.format(
         first_name=event.event_creator.first_name,
