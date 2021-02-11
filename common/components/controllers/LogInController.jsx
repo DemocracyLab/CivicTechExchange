@@ -34,7 +34,7 @@ class LogInController extends React.Component<Props, State> {
         <div className="LogInController-greeting">
           WELCOME BACK. LOG INTO YOUR ACCOUNT
         </div>
-        <form action="/login/" method="post">
+        <form action="/api/login/" method="post">
           <DjangoCSRFToken />
           <div>Email:</div>
           <div>

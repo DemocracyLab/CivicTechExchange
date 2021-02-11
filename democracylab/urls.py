@@ -31,8 +31,8 @@ urlpatterns = [
     url(r'^accounts/', include('oauth2.providers.facebook.urls')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^api/signup/$', views.signup, name='signup'),
-    url(r'^login/$', views.login_view, name='login_view'),
-    url(r'^login/(?P<provider>\w+)', views.login_view, name='login_view'),
+    url(r'^api/login/$', views.login_view, name='login_view'),
+    url(r'^api/login/(?P<provider>\w+)', views.login_view, name='login_view'),
     url(r'^logout/$', views.logout_view, name='logout_view'),
     url(
         r'^password_reset/$',
