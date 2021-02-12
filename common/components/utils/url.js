@@ -5,6 +5,36 @@ import Section from "../enums/Section.js";
 import { Dictionary } from "../types/Generics.jsx";
 import _ from "lodash";
 import isURL from "validator/lib/isURL";
+import urls_v1 from "../urls/urls_v1.json";
+
+type UrlPattern = {|
+  name: string,
+  pattern: string,
+  regex: RegExp,
+|};
+
+function importUrls(urls_vx): Dictionary<UrlPattern> {
+  const sanitizePattern: string => string = pattern => {
+    return "/" + pattern.replace("\\", "");
+  };
+
+  _.remove(
+    urls_vx,
+    entry => entry.name === "TODOInvestigateWhyThisIsNeededForDjango"
+  );
+
+  return _.mapKeys(
+    urls_vx.map(entry =>
+      Object.assign(entry, {
+        regex: new RegExp(entry.pattern),
+        pattern: sanitizePattern(entry.pattern),
+      })
+    ),
+    (urlPattern: UrlPattern) => urlPattern.name
+  );
+}
+
+const urls: Dictionary<UrlPattern> = importUrls(urls_v1);
 
 const regex = {
   protocol: new RegExp("^(f|ht)tps?://", "i"),
@@ -26,8 +56,8 @@ class urlHelper {
   }
 
   static section(section: string, args: ?Object): string {
-    // TODO: Implement with argsString
-    let sectionUrl = "?section=" + section;
+    // TODO: Update for new url system
+    let sectionUrl = urls[section].pattern;
     if (args) {
       sectionUrl += _.reduce(
         args,
@@ -41,15 +71,25 @@ class urlHelper {
   }
 
   // Determine if we are on a given section
-  static atSection(section: string): string {
-    return urlHelper.argument("section") === section;
+  static atSection(section: string, url: ?string): string {
+    let _url: string = url || window.location.href;
+    return urlHelper.getSection(_url) === section;
+  }
+
+  // Determine which section we're on
+  static getSection(url: ?string): ?string {
+    let _url: string = url || window.location.href;
+    let urlMatch: UrlPattern = _.values(urls).find((urlPattern: UrlPattern) =>
+      urlPattern.regex.test(_url)
+    );
+    return urlMatch && urlMatch.name;
   }
 
   static getSectionArgs(url: ?string): SectionUrlArguments {
     let _url: string = url || window.location.href;
     let oldArgs: Dictionary<string> = urlHelper.arguments(_url);
     const args = {
-      section: oldArgs.section,
+      section: urlHelper.getSection(_url),
       args: _.omit(oldArgs, ["section"]),
     };
     return args;
@@ -84,8 +124,8 @@ class urlHelper {
   ): string {
     let result: string = url;
     if (!_.isEmpty(args)) {
-      const existingArgs: { [key: string]: number } = urlHelper.arguments(url);
-      result += _.isEmpty(existingArgs) ? "?" : "&";
+      // const existingArgs: { [key: string]: number } = urlHelper.arguments(url);
+      result += url.indexOf("?") < 0 ? "?" : "&";
       result += _.keys(args)
         .map(key => key + "=" + args[key])
         .join("&");
@@ -102,6 +142,8 @@ class urlHelper {
       // Pull the key and value out of each arg substring into array pairs of [key,value]
       let argMatches = args.map(arg => regex.argumentSplit.exec(arg));
       let argPairs = argMatches.map(argMatch => [argMatch[1], argMatch[2]]);
+      // Remove section argument, if applicable
+      _.remove(argPairs, argPair => argPair[0] === "section");
       // Construct object from array pairs
       return _.fromPairs(argPairs);
     } else {

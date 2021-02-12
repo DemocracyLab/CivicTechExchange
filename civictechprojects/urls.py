@@ -13,10 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
 from common.helpers.error_handlers import handle500
+from common.urls import v1_urls
 from .sitemaps import ProjectSitemap, SectionSitemap, GroupSitemap, EventSitemap
 
 
@@ -69,7 +70,7 @@ urlpatterns = [
     url(r'^api/my_groups', views.my_groups),
     url(r'^api/tags/groups', views.group_tags_counts),
     url(r'^api/tags', views.tags),
-    url(r'^index/$', views.index),
+    url(r'', include(v1_urls)),
     url(r'^api/team$', views.team, name='team'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
     url(r'^api/group/(?P<group_id>[0-9]+)/invite$', views.invite_project_to_group, name='invite_project_to_group'),

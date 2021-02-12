@@ -28,15 +28,16 @@ class MainController extends React.Component<{||}, State> {
   }
 
   loadPage(): void {
-    const args = url.arguments(url.cleanDemocracyLabUrl());
-    if (args.section) {
+    const currentUrl: string = url.cleanDemocracyLabUrl();
+    const section: string = url.getSection(currentUrl);
+    if (section) {
       UniversalDispatcher.dispatch({
         type: "SET_SECTION",
-        section: args.section,
+        section: section,
         url: window.location.href,
         fromUrl: true,
       });
-      this.setState({ currentSection: args.section });
+      this.setState({ currentSection: section });
     }
   }
 
