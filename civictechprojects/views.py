@@ -326,7 +326,7 @@ def approve_event(request, event_id):
 
 @ensure_csrf_cookie
 @xframe_options_exempt
-def index(request):
+def index(request, id):
     page_url = request.get_full_path()
     clean_url = get_clean_url(page_url)
     if clean_url != page_url:

@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
 from common.helpers.error_handlers import handle500
-from common.urls import v1_urls
+from common.urls import v1_urls, v2_urls
 from .sitemaps import ProjectSitemap, SectionSitemap, GroupSitemap, EventSitemap
 
 
@@ -70,6 +70,7 @@ urlpatterns = [
     url(r'^api/my_groups', views.my_groups),
     url(r'^api/tags/groups', views.group_tags_counts),
     url(r'^api/tags', views.tags),
+    url(r'', include(v2_urls)),
     url(r'', include(v1_urls)),
     url(r'^api/team$', views.team, name='team'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),

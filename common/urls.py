@@ -19,4 +19,4 @@ def generate_url_patterns(spec_path):
 
 
 v1_urls = generate_url_patterns('./components/urls/urls_v1.json')
-
+v2_urls = generate_url_patterns('./components/urls/urls_v2.json')

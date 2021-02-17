@@ -5,17 +5,45 @@ import Section from "../enums/Section.js";
 import { Dictionary } from "../types/Generics.jsx";
 import _ from "lodash";
 import isURL from "validator/lib/isURL";
-import urls_v1 from "../urls/urls_v1.json";
+import urls_v2 from "../urls/urls_v2.json";
 
+const regex = {
+  protocol: new RegExp("^(f|ht)tps?://", "i"),
+  argumentSplit: new RegExp("([^=]+)=(.*)"),
+  regexControlChars: new RegExp("[\\^\\$]", "g"),
+};
+
+// TODO: need pattern for anything?
+type TemplateFunc = Object => string;
+// TODO: Rename name to section
 type UrlPattern = {|
   name: string,
   pattern: string,
+  templateFunc: TemplateFunc,
   regex: RegExp,
 |};
 
+type ProcessedUrlPattern = {|
+  url: string,
+  args: Dictionary<string>,
+|} & UrlPattern;
+
 function importUrls(urls_vx): Dictionary<UrlPattern> {
-  const sanitizePattern: string => string = pattern => {
-    return "/" + pattern.replace("\\", "");
+  const sanitizePattern: string => string = (pattern: string) => {
+    return "/" + pattern.replace(regex.regexControlChars, "");
+  };
+
+  const idPlaceholderRegex: RegExp = new RegExp("\\(.+\\)");
+  const generateTemplateFunc: string => TemplateFunc = (pattern: string) => {
+    const scrubbed: string = sanitizePattern(pattern);
+    const templateText: string = scrubbed.replace(idPlaceholderRegex, "${id}");
+    const template: TemplateFunc = _.template(templateText);
+    return templateArgs => template(templateArgs || { id: "" });
+  };
+
+  const fromPythonRegex: string => RegExp = (pattern: string) => {
+    const newPattern: string = pattern.replace("?P", "?");
+    return new RegExp(newPattern);
   };
 
   _.remove(
@@ -26,20 +54,17 @@ function importUrls(urls_vx): Dictionary<UrlPattern> {
   return _.mapKeys(
     urls_vx.map(entry =>
       Object.assign(entry, {
-        regex: new RegExp(entry.pattern),
+        name: entry.name,
+        regex: fromPythonRegex(entry.pattern),
         pattern: sanitizePattern(entry.pattern),
+        templateFunc: generateTemplateFunc(entry.pattern),
       })
     ),
     (urlPattern: UrlPattern) => urlPattern.name
   );
 }
 
-const urls: Dictionary<UrlPattern> = importUrls(urls_v1);
-
-const regex = {
-  protocol: new RegExp("^(f|ht)tps?://", "i"),
-  argumentSplit: new RegExp("([^=]+)=(.*)"),
-};
+const urls: Dictionary<UrlPattern> = importUrls(urls_v2);
 
 type SectionUrlArguments = {|
   section: string,
@@ -56,13 +81,14 @@ class urlHelper {
   }
 
   static section(section: string, args: ?Object): string {
-    // TODO: Update for new url system
-    let sectionUrl = urls[section].pattern;
+    let sectionUrl = urls[section].templateFunc(args);
     if (args) {
+      const _args = _.omit(args, "id");
       sectionUrl += _.reduce(
-        args,
+        _args,
         function(argsString, value, key) {
-          return `${argsString}&${key}=${value}`;
+          const argSymbol: string = _.isEmpty(argsString) ? "?" : "&";
+          return `${argsString}${argSymbol}${key}=${value}`;
         },
         ""
       );
@@ -79,10 +105,15 @@ class urlHelper {
   // Determine which section we're on
   static getSection(url: ?string): ?string {
     let _url: string = url || window.location.href;
-    let urlMatch: UrlPattern = _.values(urls).find((urlPattern: UrlPattern) =>
+    let urlMatch: UrlPattern = urlHelper.getSectionUrlPattern(_url);
+    return urlMatch && urlMatch.name;
+  }
+
+  static getSectionUrlPattern(url: ?string): ?UrlPattern {
+    let _url: string = url || window.location.href;
+    return _.values(urls).find((urlPattern: UrlPattern) =>
       urlPattern.regex.test(_url)
     );
-    return urlMatch && urlMatch.name;
   }
 
   static getSectionArgs(url: ?string): SectionUrlArguments {
@@ -124,7 +155,6 @@ class urlHelper {
   ): string {
     let result: string = url;
     if (!_.isEmpty(args)) {
-      // const existingArgs: { [key: string]: number } = urlHelper.arguments(url);
       result += url.indexOf("?") < 0 ? "?" : "&";
       result += _.keys(args)
         .map(key => key + "=" + args[key])
@@ -135,7 +165,11 @@ class urlHelper {
 
   static arguments(fromUrl: ?string): Dictionary<string> {
     // Take argument section of url and split args into substrings
-    const url = fromUrl || document.location.search;
+    const url = urlHelper._urlOrCurrentUrl(fromUrl);
+    let processedUrlPattern: ProcessedUrlPattern = urlHelper._regexArguments(
+      url
+    );
+    let _arguments = processedUrlPattern ? processedUrlPattern.args : {};
     const argStart = url.indexOf("?");
     if (argStart > -1) {
       let args = url.slice(argStart + 1).split("&");
@@ -145,10 +179,27 @@ class urlHelper {
       // Remove section argument, if applicable
       _.remove(argPairs, argPair => argPair[0] === "section");
       // Construct object from array pairs
-      return _.fromPairs(argPairs);
-    } else {
-      return {};
+      _arguments = Object.assign(_arguments, _.fromPairs(argPairs));
     }
+
+    return _arguments;
+  }
+
+  static _regexArguments(url: ?string): ProcessedUrlPattern {
+    //TODO: Cache this result for the current page?
+    let processedUrlPattern: ProcessedUrlPattern = null;
+    let urlPattern: UrlPattern = _.values(urls).find((urlPattern: UrlPattern) =>
+      urlPattern.regex.test(url)
+    );
+    if (urlPattern) {
+      const matches = urlPattern.regex.exec(url);
+      const args = _.size(matches) > 1 ? { id: matches[1] } : {};
+      processedUrlPattern = {
+        url: url,
+        args: args,
+      };
+    }
+    return processedUrlPattern;
   }
 
   static argument(key: string): ?string {
@@ -231,6 +282,11 @@ class urlHelper {
     // Remove url snippet
     let _url: string = url || window.location.href;
     return _url.replace("#_=_", "");
+  }
+
+  // TODO: Use this for every method
+  static _urlOrCurrentUrl(url: ?string): string {
+    return url || window.location.href;
   }
 }
 

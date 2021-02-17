@@ -14,7 +14,7 @@ export type NavigationActionType = {
   url: string,
   fromUrl: ?boolean,
 };
-
+// TODO: Remove showsplash argument
 const DEFAULT_STATE = {
   section: Section.FindProjects,
   url: url.section(Section.FindProjects, { showSplash: 1 }),
