@@ -28,6 +28,6 @@
   {"name": "ChangePassword", "pattern": "password/change"},
   {"name": "ThankYou", "pattern": "donate/thankyou"},
   {"name": "Donate", "pattern": "donate"},
-  {"name": "ContactUs", "pattern": "^contact"},
+  {"name": "ContactUs", "pattern": "contact"},
   {"name": "Error", "pattern": "error"}
 ]
