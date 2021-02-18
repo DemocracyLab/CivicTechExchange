@@ -23,8 +23,7 @@ class LogInController extends React.Component<Props, State> {
     this.state = {
       username: "",
       password: "",
-      prevPage:
-        window.location.href.split("&prev=")[1] || this.props.prevPage || "",
+      prevPage: url.argument("prev") || this.props.prevPage || "",
     };
   }
 

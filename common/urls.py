@@ -6,7 +6,9 @@ from civictechprojects import views
 
 
 def url_generator_from_pattern(pattern):
+    # Scrub regex characters
     _pattern = pattern.replace('^', '').replace('$', '')
+    # Replace id capturing group with string placeholder
     return re.sub("\\(.+\\)", "{id}", _pattern)
 
 
