@@ -110,10 +110,11 @@ class urlHelper {
   }
 
   static getSectionUrlPattern(url: ?string): ?UrlPattern {
-    let _url: string = url || window.location.href;
-    return _.values(urls).find((urlPattern: UrlPattern) =>
+    let _url: string = urlHelper._urlOrCurrentUrl(url);
+    const pattern: UrlPattern = _.values(urls).find((urlPattern: UrlPattern) =>
       urlPattern.regex.test(_url)
     );
+    return pattern || urls[Section.Home];
   }
 
   static getSectionArgs(url: ?string): SectionUrlArguments {
@@ -234,12 +235,12 @@ class urlHelper {
   }
 
   static getPreviousPageArg(): Dictionary<string> {
-    const url: string = window.location.href;
+    const url: string = urlHelper._urlOrCurrentUrl();
     // If prev arg already exists, use that
-    const existingPrevSection: string = url.split("&prev=");
-    return existingPrevSection.length > 1
-      ? { prev: existingPrevSection[1] }
-      : { prev: url.split("?section=")[1] };
+    const existingPreviousPageArg: string = urlHelper.argument("prev");
+    return existingPreviousPageArg
+      ? { prev: existingPreviousPageArg }
+      : { prev: urlHelper.getSection(url) };
   }
 
   static appendHttpIfMissingProtocol(url: string): string {
