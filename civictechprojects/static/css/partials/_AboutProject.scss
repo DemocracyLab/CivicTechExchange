@@ -409,3 +409,48 @@
     padding-top: 24px;
   }
 }
+
+
+//
+//
+//
+// new CSS here 
+// delete everything above when we get Groups and Project profiles in the same template 
+// some of this may move into generic .Profile-x-y classes when we do groups
+// but only if it's universal between both
+//
+
+.AboutProject-top-logo {
+  width: 25%;
+  padding: 0.5rem;
+  border: 1px solid $color-grey-frame-border;
+  border-radius: 5px;
+  img {
+    object-fit: contain;
+    max-width: 100%;
+  }
+  flex-basis: 25%;
+  order: 1;
+}
+
+.AboutProject-top-details {
+  flex-basis: 100%;
+  order: 3;
+}
+
+.AboutProject-top-interactions {
+  flex-basis: 75%;
+  order: 2;
+}
+
+@include media-breakpoint-up(lg) {
+  .AboutProject-top-details {
+    flex-basis: auto;
+    order: 2;
+  }
+  .AboutProject-top-interactions {
+    flex-basis: auto;
+    order: 3;
+    flex-shrink: 0;
+  }
+}

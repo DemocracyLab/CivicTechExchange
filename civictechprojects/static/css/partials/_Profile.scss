@@ -3,3 +3,20 @@
 .Profile-root {
     background: $color-background-light;
 }
+
+.Profile-top-section-content  {
+    border: 1px solid $color-grey-frame-border;
+    border-radius: 5px;
+    padding: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+//TODO: make sure lg is the right breakpoint for switching layouts
+@include media-breakpoint-up(lg) {
+    .Profile-top-section-content {
+        margin: 1rem;
+        padding: 1rem;
+        flex-wrap: nowrap;
+    }
+}

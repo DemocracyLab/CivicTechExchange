@@ -107,7 +107,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       <div>{this.state.loadStatusMsg}</div>
     );
   }
-  // TODO: Remove Headers component and get them from the backend, like we're doing on newer pages
+  // TODO: Remove Headers component and get them from the backend
+  // TODO: See if there's a more elegant way to construct this than passing the project prop repeatedly
+
   _renderPageLayout(): React$Node {
     const project = this.state.project;
     return (
@@ -119,11 +121,11 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           </div>
         </div>
         <div className="row">
-          <div className="Profile-primary-section col-12">
+          <div className="Profile-primary-section col-12 col-lg-9">
             {this._renderMainSection(project)}
           </div>
 
-          <div className="Profile-secondary-section col-12">
+          <div className="Profile-secondary-section col-12 col-lg-3">
             {this._renderSecondarySection(project)}
           </div>
         </div>
@@ -133,7 +135,17 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   _renderTopSection(project) {
     return (
-      <React.Fragment>
+      <div className="Profile-top-section-content">
+        <div className="AboutProject-top-logo">
+        <img
+          src={
+            project &&
+            project.project_thumbnail &&
+            project.project_thumbnail.publicUrl
+          }
+        />
+        </div>
+        <div className="AboutProject-top-details">
         <h1>{project && project.project_name}</h1>
         <p>
           {project &&
@@ -143,26 +155,6 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               .join(",")}
         </p>
         <p>{project && project.project_short_description}</p>
-        <ApproveGroupsSection project={this.props.project} />
-
-        <ProjectVolunteerModal
-          projectId={this.state.project && this.state.project.project_id}
-          positions={this.state.project && this.state.project.project_positions}
-          positionToJoin={this.state.positionToJoin}
-          showModal={this.state.showJoinModal}
-          handleClose={this.confirmJoinProject.bind(this)}
-        />
-
-        {!this.state.viewOnly && this._renderContactAndVolunteerButtons()}
-        <img
-          className="OLD_AboutProjects-icon"
-          src={
-            project &&
-            project.project_thumbnail &&
-            project.project_thumbnail.publicUrl
-          }
-        />
-
         <ProjectDetails
           projectLocation={
             project && ProjectAPIUtils.getLocationDisplayName(project)
@@ -180,7 +172,24 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           }
           dateModified={project && project.project_date_modified}
         />
-      </React.Fragment>
+        </div>
+
+        <div className="AboutProject-top-interactions">
+        <ApproveGroupsSection project={this.props.project} />
+
+        <ProjectVolunteerModal
+          projectId={this.state.project && this.state.project.project_id}
+          positions={this.state.project && this.state.project.project_positions}
+          positionToJoin={this.state.positionToJoin}
+          showModal={this.state.showJoinModal}
+          handleClose={this.confirmJoinProject.bind(this)}
+        />
+
+        {!this.state.viewOnly && this._renderContactAndVolunteerButtons()}
+        </div>
+
+        
+      </div>
     );
   }
 
@@ -252,38 +261,38 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             )}
 
             <div className="OLD_AboutProjects-positions-available">
-                {project &&
-                  !_.isEmpty(project.project_positions) &&
-                  this._renderPositions()}
+              {project &&
+                !_.isEmpty(project.project_positions) &&
+                this._renderPositions()}
             </div>
           </div>
 
           <div className="Profile-tab Profile-tab-events">
-              <div className="OLD_AboutProjects-events">
-                <EventCardsListings
-                  events={project.project_events}
-                  showMessageForNoFutureEvents={false}
-                />
-              </div>
+            <div className="OLD_AboutProjects-events">
+              <EventCardsListings
+                events={project.project_events}
+                showMessageForNoFutureEvents={false}
+              />
+            </div>
           </div>
 
           <div className="Profile-tab Profile-tab-recent-activity">
-                <h4>Recent Activity</h4>
-                {project.project_commits
-                  .slice(0, this.state.maxActivity)
-                  .map(commit => (
-                    <ProjectCommitCard commit={commit} />
-                  ))}
-                {project.project_commits.length > this.state.maxActivity && (
-                  <div className="OLD_AboutProjects-show-more-activity-container">
-                    <div
-                      className="btn btn-primary AboutProjects-show-more-activity"
-                      onClick={this.handleShowMoreActivity}
-                    >
-                      Show more activity
-                    </div>
-                  </div>
-                )}
+            <h4>Recent Activity</h4>
+            {project.project_commits
+              .slice(0, this.state.maxActivity)
+              .map(commit => (
+                <ProjectCommitCard commit={commit} />
+              ))}
+            {project.project_commits.length > this.state.maxActivity && (
+              <div className="OLD_AboutProjects-show-more-activity-container">
+                <div
+                  className="btn btn-primary AboutProjects-show-more-activity"
+                  onClick={this.handleShowMoreActivity}
+                >
+                  Show more activity
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </React.Fragment>
