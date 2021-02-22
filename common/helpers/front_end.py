@@ -40,7 +40,7 @@ def get_page_section(url):
 def get_page_path_parameters(url, page_section_generator=None):
     page_section_generator = page_section_generator or get_page_section_generator(url)
     match = page_section_generator['regex'].search(url)
-    return match.groupsdict()
+    return match.groupdict()
 
 
 def get_clean_url(url):

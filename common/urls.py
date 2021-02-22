@@ -24,7 +24,7 @@ def generate_url_patterns(spec_path, set_url_generators=False):
             if set_url_generators:
                 url_generators[url_spec_json['name']] = {
                     'section': url_spec_json['name'],
-                    'regex': re.compile(url_spec_json['pattern']),
+                    'regex': re.compile('/' + url_spec_json['pattern']),
                     'generator': url_generator_from_pattern(url_spec_json['pattern'])
                 }
     return url_patterns
