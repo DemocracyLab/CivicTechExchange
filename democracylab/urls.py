@@ -14,8 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include, url
-from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.views.generic.base import RedirectView
 from common.helpers.error_handlers import handle500
 
@@ -58,6 +56,5 @@ urlpatterns = [
     url(r'^api/user/edit/(?P<user_id>[0-9]+)/$', views.user_edit, name='user_edit'),
     url(r'', include('civictechprojects.urls')),
     url(r'^$', RedirectView.as_view(url='/index/?section=Home', permanent=False)),
-    url(r'^admin/', admin.site.urls),
     url(r'^platform$', RedirectView.as_view(url='http://connect.democracylab.org/platform/', permanent=False))
 ]
