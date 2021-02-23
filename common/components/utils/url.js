@@ -46,11 +46,6 @@ function importUrls(urls_vx): Dictionary<UrlPattern> {
     return new RegExp(newPattern);
   };
 
-  _.remove(
-    urls_vx,
-    entry => entry.name === "TODOInvestigateWhyThisIsNeededForDjango"
-  );
-
   return _.mapKeys(
     urls_vx.map(entry =>
       Object.assign(entry, {

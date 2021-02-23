@@ -1,5 +1,4 @@
 [
-  {"name": "TODOInvestigateWhyThisIsNeededForDjango", "pattern": "index/"},
   {"name": "CreateProject", "pattern": "projects/create/(?P<id>[\\w\\-]*)"},
   {"name": "AboutProject", "pattern": "projects/(?P<id>[\\w\\-]+)"},
   {"name": "FindProjects", "pattern": "projects"},

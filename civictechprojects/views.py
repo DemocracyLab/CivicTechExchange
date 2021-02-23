@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.exceptions import PermissionDenied
@@ -1254,3 +1255,11 @@ def team(request):
 
     return JsonResponse(response)
 
+
+def redirect_v1_urls(request):
+    page_url = request.get_full_path()
+    clean_url = get_clean_url(page_url)
+    print('Redirecting ' + clean_url)
+    section_match = re.findall(r'/index/\?section=(\w+)', clean_url)
+    section_name = section_match[0] if len(section_match) > 0 else FrontEndSection.Home
+    return redirect(section_url(section_name))
