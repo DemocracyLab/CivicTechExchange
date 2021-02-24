@@ -75,10 +75,21 @@ class urlHelper {
     });
   }
 
-  static section(section: string, args: ?Object): string {
+  /**
+   *
+   * @param section             Section to link to
+   * @param args                Arguments for the section url
+   * @param includeIdInArgs     Whether to include id in the arguments (default=false)
+   * @returns url for the given section and its arguments
+   */
+  static section(
+    section: string,
+    args: ?Object,
+    includeIdInArgs: boolean
+  ): string {
     let sectionUrl = urls[section].templateFunc(args);
     if (args) {
-      const _args = _.omit(args, "id");
+      const _args = includeIdInArgs ? args : _.omit(args, "id");
       sectionUrl += _.reduce(
         _args,
         function(argsString, value, key) {

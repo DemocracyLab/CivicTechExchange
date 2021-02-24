@@ -9,6 +9,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import simplejson as json
+import ast
 from .emails import send_verification_email, send_password_reset_email
 from .forms import DemocracyLabUserCreationForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
@@ -23,10 +24,11 @@ def login_view(request, provider=None):
         email = request.POST['username']
         password = request.POST['password']
         prev_page = request.POST['prevPage']
+        prev_page_args = ast.literal_eval(request.POST['prevPageArgs'])
         user = authenticate(username=email.lower(), password=password)
         if user is not None and user.is_authenticated:
             login(request, user)
-            redirect_url = prev_page if prev_page.startswith('/') else section_url(prev_page)
+            redirect_url = prev_page if prev_page.startswith('/') else section_url(prev_page, prev_page_args)
             return redirect(redirect_url)
         else:
             messages.error(request, 'Incorrect Email or Password')

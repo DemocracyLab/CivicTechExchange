@@ -25,12 +25,14 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import UserIcon from "../svg/user-circle-solid.svg";
+import { Dictionary } from "../types/Generics.jsx";
 
 type State = {|
   showMyProjects: boolean,
   showMyGroups: boolean,
   showMyEvents: boolean,
   showHeader: boolean,
+  loginUrl: string,
 |};
 
 class MainHeader extends React.Component<{||}, State> {
@@ -42,6 +44,10 @@ class MainHeader extends React.Component<{||}, State> {
     const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
     const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
     const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
+    const prevPageArgs: Dictionary<string> = Object.assign(
+      url.arguments(),
+      url.getPreviousPageArg()
+    );
     return {
       showHeader: !url.argument("embedded"),
       showMyProjects:
@@ -52,6 +58,7 @@ class MainHeader extends React.Component<{||}, State> {
       showMyEvents:
         myEvents &&
         (!_.isEmpty(myEvents.owned_events) || CurrentUser.isStaff()),
+      loginUrl: url.section(Section.LogIn, prevPageArgs, true),
     };
   }
   // may need activeSection: NavigationStore.getSection() in calculateState, check that
@@ -98,7 +105,7 @@ class MainHeader extends React.Component<{||}, State> {
           <Button
             className="MainHeader-showmobile MainHeader-login-button"
             variant="outline-primary"
-            href={url.section(Section.LogIn, url.getPreviousPageArg())}
+            href={this.state.loginUrl}
           >
             Log In
           </Button>
@@ -147,7 +154,7 @@ class MainHeader extends React.Component<{||}, State> {
             ) : (
               <Nav.Link
                 className="MainHeader-showmobile"
-                href={url.section(Section.LogIn, url.getPreviousPageArg())}
+                href={this.state.loginUrl}
               >
                 Log In
               </Nav.Link>
@@ -199,7 +206,7 @@ class MainHeader extends React.Component<{||}, State> {
         <Button
           className="MainHeader-showdesktop MainHeader-login-button"
           variant="outline-primary"
-          href={url.section(Section.LogIn, url.getPreviousPageArg())}
+          href={this.state.loginUrl}
         >
           Log In
         </Button>
