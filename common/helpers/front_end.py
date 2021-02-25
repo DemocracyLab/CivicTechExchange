@@ -13,7 +13,7 @@ def section_path(section, args_dict=None):
     if args_dict is None:
         args_dict = {}
     section_string = section.value if hasattr(section, 'value') else section
-    id_arg = {}
+    id_arg = {'id': ''}
     if args_dict and 'id' in args_dict:
         id_arg = {'id': args_dict['id']}
         args_dict = keys_omit(args_dict, ['id'])
