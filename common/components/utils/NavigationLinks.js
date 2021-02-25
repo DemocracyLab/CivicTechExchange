@@ -3,6 +3,8 @@
 //for navigation links we want to be buttons or not Sections in our schema
 import metrics from "./metrics.js";
 import CurrentUser from "./CurrentUser.js";
+import url from "./url.js";
+import Section from "../enums/Section.js";
 
 export type NavigationLink = {|
   url: string,
@@ -11,7 +13,7 @@ export type NavigationLink = {|
 |};
 
 const navLinks = [
-  { url: "/index/?section=Donate", name: "Donate", isButton: true },
+  { url: url.section(Section.Donate), name: "Donate", isButton: true },
 ];
 
 class NavigationLinks {
