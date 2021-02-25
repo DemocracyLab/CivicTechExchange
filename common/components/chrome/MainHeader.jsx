@@ -44,10 +44,6 @@ class MainHeader extends React.Component<{||}, State> {
     const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
     const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
     const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
-    const prevPageArgs: Dictionary<string> = Object.assign(
-      url.arguments(),
-      url.getPreviousPageArg()
-    );
     return {
       showHeader: !url.argument("embedded"),
       showMyProjects:
@@ -58,7 +54,7 @@ class MainHeader extends React.Component<{||}, State> {
       showMyEvents:
         myEvents &&
         (!_.isEmpty(myEvents.owned_events) || CurrentUser.isStaff()),
-      loginUrl: url.section(Section.LogIn, prevPageArgs, true),
+      loginUrl: url.logInThenReturn(),
     };
   }
   // may need activeSection: NavigationStore.getSection() in calculateState, check that

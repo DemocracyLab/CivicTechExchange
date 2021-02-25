@@ -146,13 +146,11 @@ class urlHelper {
   // Get url for logging in then returning to the previous page
   static logInThenReturn(returnUrl: ?string): string {
     let _url: string = returnUrl || window.location.href;
-    const oldArgs: SectionUrlArguments = urlHelper.getSectionArgs(_url);
-    const newArgs: SectionUrlArguments = {
-      section: Section.LogIn,
-      args: Object.assign({ prev: oldArgs.section }, oldArgs.args),
-    };
-
-    return urlHelper.fromSectionArgs(newArgs);
+    const prevPageArgs: Dictionary<string> = Object.assign(
+      urlHelper.arguments(_url),
+      urlHelper.getPreviousPageArg(_url)
+    );
+    return urlHelper.section(Section.LogIn, prevPageArgs, true);
   }
 
   // Construct a url with properly-formatted query string for the given arguments
@@ -240,13 +238,13 @@ class urlHelper {
     return newUrl;
   }
 
-  static getPreviousPageArg(): Dictionary<string> {
-    const url: string = urlHelper._urlOrCurrentUrl();
+  static getPreviousPageArg(url: ?string): Dictionary<string> {
+    const _url: string = urlHelper._urlOrCurrentUrl(url);
     // If prev arg already exists, use that
     const existingPreviousPageArg: string = urlHelper.argument("prev");
     return existingPreviousPageArg
       ? { prev: existingPreviousPageArg }
-      : { prev: urlHelper.getSection(url) };
+      : { prev: urlHelper.getSection(_url) };
   }
 
   static appendHttpIfMissingProtocol(url: string): string {
