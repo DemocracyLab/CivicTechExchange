@@ -1,6 +1,7 @@
 // @flow
 
 import React from "react";
+import Linkify from "react-linkify";
 import type Moment from "moment";
 import datetime, { DateFormat } from "../../utils/datetime.js";
 import Button from "react-bootstrap/Button";
@@ -106,10 +107,12 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
         <div className="AboutEvent-details row">
           <div className="col-12">
-            <h3>Details</h3>
-            <p>{event.event_description}</p>
-            <h3>What We Will Do</h3>
-            <p>{event.event_agenda}</p>
+            <Linkify>
+              <h3>Details</h3>
+              <p>{event.event_description}</p>
+              <h3>What We Will Do</h3>
+              <p>{event.event_agenda}</p>
+            </Linkify>
           </div>
         </div>
         {!_.isEmpty(event.event_legacy_organization) && (
