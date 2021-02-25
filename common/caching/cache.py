@@ -15,6 +15,7 @@ class CacheWrapper:
         :param generator_func: Function that generates value
         :return: Value mapped to key
         """
+        print('Fetching key: ' + key)
         return self._cache.get(key) or (generator_func and self._set_with_generator(key, generator_func))
 
     def refresh(self, key, value=None):
@@ -23,6 +24,7 @@ class CacheWrapper:
         :param key: Key of value to re-cache
         :param value: Value to cache
         """
+        print('Re-caching key "{key}" with value: {value}'.format(key=key, value=value))
         _value = value or (self._cache_generators[key]() if key in self._cache_generators else None)
         self._cache.set(key, _value, timeout=None)
 
