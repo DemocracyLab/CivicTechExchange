@@ -55,6 +55,5 @@ urlpatterns = [
     url(r'^api/user/(?P<user_id>[0-9]+)/$', views.user_details, name='user_details'),
     url(r'^api/user/edit/(?P<user_id>[0-9]+)/$', views.user_edit, name='user_edit'),
     url(r'', include('civictechprojects.urls')),
-    url(r'^$', RedirectView.as_view(url='/index/?section=Home', permanent=False)),
     url(r'^platform$', RedirectView.as_view(url='http://connect.democracylab.org/platform/', permanent=False))
 ]
