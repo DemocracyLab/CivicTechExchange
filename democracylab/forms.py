@@ -60,6 +60,7 @@ class DemocracyLabUserCreationForm(UserCreationForm):
             user.update_linked_items()
 
         SubscribeUserToQiqoChat(user)
+<<<<<<< HEAD
 
 
 class DemocracyLabUserAddDetailsForm(forms.Form):
@@ -68,3 +69,7 @@ class DemocracyLabUserAddDetailsForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+=======
+        sf = Salesforce.getInstance
+        sf.upsert_user(user)
+>>>>>>> refactor for a common API client
