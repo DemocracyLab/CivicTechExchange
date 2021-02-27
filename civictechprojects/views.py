@@ -1207,6 +1207,7 @@ def reject_group_invitation(request, invite_id):
 
 #This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.
 #TODO: Return text strings to be displayed on the front end so we know specifically what happened
+#TODO: Figure out why changing the endpoint to /api/contact/democracylab results in CSRF issues
 @csrf_exempt
 def contact_democracylab(request):
     #first prepare all the data from the request body

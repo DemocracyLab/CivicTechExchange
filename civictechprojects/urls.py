@@ -72,6 +72,7 @@ urlpatterns = [
     url(r'^api/tags/groups', views.group_tags_counts),
     url(r'^api/tags', views.tags),
     url(r'^admin/', admin.site.urls),
+    url(r'^contact/democracylab$', views.contact_democracylab, name='contact_democracylab'),
     url(r'', include(v2_urls)),
     url(r'', include(v1_urls)),
     url(r'^api/team$', views.team, name='team'),
@@ -94,8 +95,7 @@ urlpatterns = [
     url(r'^volunteer/demote/(?P<application_id>[0-9]+)/$', views.demote_project_volunteer, name='demote_project_volunteer'),
     url(r'^volunteer/renew/(?P<application_id>[0-9]+)/$', views.renew_volunteering_with_project, name='renew_volunteering_with_project'),
     url(r'^volunteer/conclude/(?P<application_id>[0-9]+)/$', views.conclude_volunteering_with_project, name='conclude_volunteering_with_project'),
-    url(r'^alert/create/$', views.add_alert, name='add_alert'),
-    url(r'^api/contact/democracylab$', views.contact_democracylab, name='contact_democracylab')
+    url(r'^alert/create/$', views.add_alert, name='add_alert')
 
 ]
 
