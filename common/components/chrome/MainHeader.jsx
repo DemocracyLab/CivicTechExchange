@@ -213,8 +213,7 @@ class MainHeader extends React.Component<{||}, State> {
   //TODO: Refactor these to reduce duplication
   //TODO: Allow multiple arguments for url.section to handle url.getPreviousPageArg() - options object?
   _renderNavLink(section, text, classes = "") {
-    const urlArgs = url.arguments(url.section(section));
-    if (urlArgs.section === this.state.activeSection) {
+    if (section === this.state.activeSection) {
       classes += " MainHeader-active";
     }
     return (
@@ -224,8 +223,7 @@ class MainHeader extends React.Component<{||}, State> {
     );
   }
   _renderNavDropdownItem(section, text, classes = "") {
-    const urlArgs = url.arguments(url.section(section));
-    if (urlArgs.section === this.state.activeSection) {
+    if (section === this.state.activeSection) {
       classes += " MainHeader-active";
     }
     return (
