@@ -24,7 +24,7 @@ class LogInController extends React.Component<Props, State> {
   constructor(props): void {
     super(props);
     const args: Dictionary<string> = url.arguments();
-    const prevPage: string = args["prev"];
+    const prevPage: string = props.prevPage || args["prev"];
     const prevPageArgs: Dictionary<string> = _.omit(args, "prev");
     this.state = {
       username: "",
