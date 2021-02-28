@@ -87,7 +87,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     closeModal: Function
   ): void {
     ProjectAPIUtils.post(
-      "/api/contact/project/" + this.props.project.project_id + "/",
+      "/contact/project/" + this.props.project.project_id + "/",
       fields,
       response => closeModal(),
       response => null /* TODO: Report error to user */

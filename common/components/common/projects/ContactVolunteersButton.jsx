@@ -43,7 +43,7 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
   _handleSubmission(fields, closeModal): ?React$Node {
     // TODO: Get close modal working
     ProjectAPIUtils.post(
-      "/api/contact/volunteers/" + this.props.project.project_id + "/",
+      "/contact/volunteers/" + this.props.project.project_id + "/",
       fields,
       closeModal, //Send function to close modal
       response => null /* TODO: Report error to user */
