@@ -1,5 +1,5 @@
 [
-  {"name": "EditProfile", "pattern": "my/profile"},
+  {"name": "EditProfile", "pattern": "my/profile/(?P<id>[\\w\\-]*)"},
   {"name": "MyProjects", "pattern": "my/projects"},
   {"name": "MyGroups", "pattern": "my/groups"},
   {"name": "MyEvents", "pattern": "my/events"},
