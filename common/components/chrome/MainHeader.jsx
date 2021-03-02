@@ -25,12 +25,14 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import UserIcon from "../svg/user-circle-solid.svg";
+import { Dictionary } from "../types/Generics.jsx";
 
 type State = {|
   showMyProjects: boolean,
   showMyGroups: boolean,
   showMyEvents: boolean,
   showHeader: boolean,
+  loginUrl: string,
 |};
 
 class MainHeader extends React.Component<{||}, State> {
@@ -52,6 +54,7 @@ class MainHeader extends React.Component<{||}, State> {
       showMyEvents:
         myEvents &&
         (!_.isEmpty(myEvents.owned_events) || CurrentUser.isStaff()),
+      loginUrl: url.logInThenReturn(),
     };
   }
   // may need activeSection: NavigationStore.getSection() in calculateState, check that
@@ -98,7 +101,7 @@ class MainHeader extends React.Component<{||}, State> {
           <Button
             className="MainHeader-showmobile MainHeader-login-button"
             variant="outline-primary"
-            href={url.section(Section.LogIn, url.getPreviousPageArg())}
+            href={this.state.loginUrl}
           >
             Log In
           </Button>
@@ -147,7 +150,7 @@ class MainHeader extends React.Component<{||}, State> {
             ) : (
               <Nav.Link
                 className="MainHeader-showmobile"
-                href={url.section(Section.LogIn, url.getPreviousPageArg())}
+                href={this.state.loginUrl}
               >
                 Log In
               </Nav.Link>
@@ -199,7 +202,7 @@ class MainHeader extends React.Component<{||}, State> {
         <Button
           className="MainHeader-showdesktop MainHeader-login-button"
           variant="outline-primary"
-          href={url.section(Section.LogIn, url.getPreviousPageArg())}
+          href={this.state.loginUrl}
         >
           Log In
         </Button>
@@ -210,8 +213,7 @@ class MainHeader extends React.Component<{||}, State> {
   //TODO: Refactor these to reduce duplication
   //TODO: Allow multiple arguments for url.section to handle url.getPreviousPageArg() - options object?
   _renderNavLink(section, text, classes = "") {
-    const urlArgs = url.arguments(url.section(section));
-    if (urlArgs.section === this.state.activeSection) {
+    if (section === this.state.activeSection) {
       classes += " MainHeader-active";
     }
     return (
@@ -221,8 +223,7 @@ class MainHeader extends React.Component<{||}, State> {
     );
   }
   _renderNavDropdownItem(section, text, classes = "") {
-    const urlArgs = url.arguments(url.section(section));
-    if (urlArgs.section === this.state.activeSection) {
+    if (section === this.state.activeSection) {
       classes += " MainHeader-active";
     }
     return (

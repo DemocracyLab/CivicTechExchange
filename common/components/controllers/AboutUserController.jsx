@@ -10,8 +10,8 @@ import { FileInfo } from "../common/FileInfo.jsx";
 import { LinkInfo } from "../forms/LinkInfo.jsx";
 import Avatar from "../common/avatar.jsx";
 import _ from "lodash";
-import Headers from "../common/Headers.jsx";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
+import url from "../utils/url.js";
 
 type State = {|
   user: ?UserAPIData,
@@ -27,8 +27,10 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   }
 
   componentDidMount() {
-    var userId = new RegExp("id=([^&]+)").exec(document.location.search)[1];
-    UserAPIUtils.fetchUserDetails(userId, this.loadUserDetails.bind(this));
+    UserAPIUtils.fetchUserDetails(
+      url.argument("id"),
+      this.loadUserDetails.bind(this)
+    );
   }
 
   loadUserDetails(user: UserAPIData) {
@@ -49,11 +51,6 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     const user: UserAPIData = this.state.user;
     return (
       <React.Fragment>
-        <Headers
-          title={
-            user && user.first_name + " " + user.last_name + " | DemocracyLab"
-          }
-        />
         <div className="AboutProjectController-root">
           <div className="container">
             <div className="row background-light about-user-section">

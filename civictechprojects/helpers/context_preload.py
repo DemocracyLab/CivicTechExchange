@@ -9,7 +9,7 @@ from democracylab.models import get_request_contributor
 def about_project_preload(context, request):
     context = default_preload(context, request)
     query_args = url_params(request)
-    project_id = query_args['id'][0]
+    project_id = query_args['id']
     project_json = ProjectCache.get(project_id)
     if project_json is not None:
         context['title'] = project_json['project_name'] + ' | DemocracyLab'
@@ -24,7 +24,7 @@ def about_project_preload(context, request):
 def about_event_preload(context, request):
     context = default_preload(context, request)
     query_args = url_params(request)
-    event_id = query_args['id'][0]
+    event_id = query_args['id']
     event = Event.get_by_id_or_slug(event_id)
     event_json = event.hydrate_to_json()
     if event_json is not None:
@@ -40,7 +40,7 @@ def about_event_preload(context, request):
 def about_group_preload(context, request):
     context = default_preload(context, request)
     query_args = url_params(request)
-    group_id = query_args['id'][0]
+    group_id = query_args['id']
     group_json = GroupCache.get(group_id)
     if group_json is not None:
         context['title'] = group_json['group_name'] + ' | DemocracyLab'

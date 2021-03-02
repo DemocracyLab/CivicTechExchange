@@ -61,7 +61,8 @@ class MyGroupsController extends React.Component<{||}, State> {
 
   confirmDeleteProject(confirmedDelete: boolean): void {
     if (confirmedDelete) {
-      const url = "/groups/delete/" + this.state.groupToDelete.group_id + "/";
+      const url =
+        "/api/groups/delete/" + this.state.groupToDelete.group_id + "/";
       //TODO: this should be ProjectAPIUtils.delete, not post
       ProjectAPIUtils.post(
         url,

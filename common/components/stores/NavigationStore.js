@@ -16,8 +16,8 @@ export type NavigationActionType = {
 };
 
 const DEFAULT_STATE = {
-  section: Section.FindProjects,
-  url: url.section(Section.FindProjects, { showSplash: 1 }),
+  section: Section.Home,
+  url: url.section(Section.Home),
 };
 
 class State extends Record(DEFAULT_STATE) {

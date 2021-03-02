@@ -6,6 +6,8 @@ import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import metrics from "../utils/metrics.js";
 import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
+import { Dictionary } from "../types/Generics.jsx";
+import _ from "lodash";
 
 type Props = {|
   prevPage: string,
@@ -15,16 +17,20 @@ type State = {|
   username: string,
   password: string,
   prevPage: string,
+  prevPageArgs: Dictionary<string>,
 |};
 
 class LogInController extends React.Component<Props, State> {
   constructor(props): void {
     super(props);
+    const args: Dictionary<string> = url.arguments();
+    const prevPage: string = props.prevPage || args["prev"];
+    const prevPageArgs: Dictionary<string> = _.omit(args, "prev");
     this.state = {
       username: "",
       password: "",
-      prevPage:
-        window.location.href.split("&prev=")[1] || this.props.prevPage || "",
+      prevPage: prevPage,
+      prevPageArgs: prevPageArgs,
     };
   }
 
@@ -34,7 +40,7 @@ class LogInController extends React.Component<Props, State> {
         <div className="LogInController-greeting">
           WELCOME BACK. LOG INTO YOUR ACCOUNT
         </div>
-        <form action="/login/" method="post">
+        <form action="/api/login/" method="post">
           <DjangoCSRFToken />
           <div>Email:</div>
           <div>
@@ -55,6 +61,11 @@ class LogInController extends React.Component<Props, State> {
             />
           </div>
           <input name="prevPage" value={this.state.prevPage} type="hidden" />
+          <input
+            name="prevPageArgs"
+            value={JSON.stringify(this.state.prevPageArgs)}
+            type="hidden"
+          />
           <div className="LogInController-bottomSection">
             <a
               href=""

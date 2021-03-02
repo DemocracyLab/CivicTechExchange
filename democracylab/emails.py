@@ -127,9 +127,9 @@ def send_password_reset_email(contributor):
 
 
 def send_project_creation_notification(project):
-    project_url = settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
+    project_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
 
-    verification_url = settings.PROTOCOL_DOMAIN + '/projects/approve/' + str(project.id)
+    verification_url = settings.PROTOCOL_DOMAIN + '/api/projects/approve/' + str(project.id) + '/'
     email_template = HtmlEmailTemplate() \
         .paragraph('{first_name} {last_name}({email}) has created the project "{project_name}": \n {project_url}'.format(
             first_name=project.project_creator.first_name,
@@ -151,7 +151,7 @@ def send_project_creation_notification(project):
 def send_event_creation_notification(event):
     event_url = section_url(FrontEndSection.AboutEvent, {'id': str(event.id)})
 
-    verification_url = settings.PROTOCOL_DOMAIN + '/events/approve/' + str(event.id)
+    verification_url = settings.PROTOCOL_DOMAIN + '/api/events/approve/' + str(event.id) + '/'
     email_template = HtmlEmailTemplate() \
         .paragraph('{first_name} {last_name}({email}) has created the event "{event_name}": \n {event_url}'.format(
         first_name=event.event_creator.first_name,
@@ -212,7 +212,7 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
     user = volunteer_relation.volunteer
     role_details = Tag.from_field(volunteer_relation.role)
     role_text = "{subcategory}: {name}".format(subcategory=role_details.subcategory, name=role_details.display_name)
-    project_profile_url = settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
+    project_profile_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
     approve_url = settings.PROTOCOL_DOMAIN + '/volunteer/approve/' + str(volunteer_relation.id) + '/'
     email_subject = '{is_reminder}{firstname} {lastname} would like to volunteer with {project} as {role}'.format(
         is_reminder='REMINDER: ' if is_reminder else '',
@@ -328,7 +328,7 @@ def notify_project_owners_project_approved(project):
         .paragraph('Your project "{{project_name}}" has been approved. You can see it at {{project_url}}')
     context = {
         'project_name': project.project_name,
-        'project_url': settings.PROTOCOL_DOMAIN + '/index/?section=AboutProject&id=' + str(project.id)
+        'project_url': section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
     }
     email_msg = EmailMessage(
         subject=project.project_name + " has been approved",
@@ -358,7 +358,7 @@ def notify_event_owners_event_approved(event):
 def send_group_creation_notification(group):
     group_url = section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
 
-    verification_url = settings.PROTOCOL_DOMAIN + '/groups/approve/' + str(group.id)
+    verification_url = settings.PROTOCOL_DOMAIN + '/api/groups/approve/' + str(group.id) + '/'
     email_template = HtmlEmailTemplate() \
         .paragraph('{first_name} {last_name}({email}) has created the group "{group_name}": \n {group_url}'.format(
         first_name=group.group_creator.first_name,

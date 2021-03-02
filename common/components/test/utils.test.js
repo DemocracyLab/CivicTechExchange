@@ -65,20 +65,20 @@ describe("utils", () => {
     expect(urlHelper.beautify("https://testing.us")).toEqual("testing.us");
     expect(urlHelper.beautify("http://testing.us")).toEqual("testing.us");
 
-    urlHelper.navigateToSection("Login");
-    expect(NavigationStore.getSection()).toEqual("Login");
+    urlHelper.navigateToSection("LogIn");
+    expect(NavigationStore.getSection()).toEqual("LogIn");
 
-    let url = urlHelper.section("test", { next: 1 });
-    expect(url).toEqual("?section=test&next=1");
+    let url = urlHelper.section("FindProjects", { next: 1 });
+    expect(url).toEqual("/projects?next=1");
 
     url = urlHelper.sectionOrLogIn("CreateProject");
-    expect(url).toEqual("?section=CreateProject");
+    expect(url).toEqual("/projects/create/");
 
     url = urlHelper.constructWithQueryString("/api/test", { query: "test" });
     expect(url).toEqual("/api/test?query=test");
 
-    const args = urlHelper.arguments("/api/test?query=test&page=1");
-    expect(args["query"]).toEqual("test");
+    const args = urlHelper.arguments("/projects?issues=test-issue&page=1");
+    expect(args["issues"]).toEqual("test-issue");
     expect(args["page"]).toEqual("1");
   });
 
