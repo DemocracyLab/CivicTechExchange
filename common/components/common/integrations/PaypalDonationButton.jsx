@@ -3,6 +3,7 @@
 import React from "react";
 import cdn, { Images } from "../../utils/cdn.js";
 import url from "../../utils/url.js";
+import Section from "../../enums/Section.js";
 
 export const OtherAmountSelected: string = "OTHER";
 
@@ -44,11 +45,11 @@ class PaypalDonationButton extends React.Component<Props> {
 
   _renderFormHiddenFields(): $ReadOnlyArray<React$Node> {
     let fields: Array<React$Node> = [
-      <input type="hidden" name="cancel_return" value="/index/" />,
+      <input type="hidden" name="cancel_return" value="" />,
       <input
         type="hidden"
         name="return"
-        value={url.hostname() + "/index/?section=ThankYou"}
+        value={url.hostname() + url.section(Section.ThankYou)}
       />,
       <input type="hidden" name="no_note" value="1" />,
       <input type="hidden" name="no_shipping" value="1" />,

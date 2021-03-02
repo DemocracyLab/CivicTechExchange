@@ -95,11 +95,12 @@ class MyProjectCard extends React.PureComponent<Props, State> {
     ];
 
     if (this.state.isOwner) {
-      const editUrl: string = this.props.project.isCreated
-        ? url.section(Section.EditProject, id)
-        : url.section(Section.CreateProject, id);
       buttons = buttons.concat([
-        <Button className="MyProjectCard-button" href={editUrl} variant="info">
+        <Button
+          className="MyProjectCard-button"
+          href={url.section(Section.CreateProject, id)}
+          variant="info"
+        >
           Edit
         </Button>,
         <Button

@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.exceptions import PermissionDenied
@@ -121,7 +122,7 @@ def group_edit(request, group_id):
     if request.is_ajax():
         return JsonResponse(group.hydrate_to_json())
     else:
-        return redirect('/index/?section=AboutGroup&id=' + group_id)
+        return redirect(section_url(FrontEndSection.AboutGroup, {'id': group_id}))
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
@@ -147,39 +148,6 @@ def get_group(request, group_id):
             return HttpResponseForbidden()
     else:
         return HttpResponse(status=404)
-
-@csrf_exempt
-def group_add_project(request, group_id):
-    body = json.loads(request.body)
-    group = Group.objects.get(id=group_id)
-
-    if group is not None and body["project_ids"] is not None:
-        if not is_creator_or_staff(get_request_contributor(request), group):
-            return HttpResponseForbidden()
-
-        projects = Project.objects.filter(id__in=body["project_ids"])
-
-        for project in projects:
-            ProjectRelationship.create(group, project)
-
-        return HttpResponse(status=204)
-    else:
-        return HttpResponse(status=404)
-
-def group_delete_project(request, group_id):
-    body = json.loads(request.body)
-    group = Group.objects.get(id=group_id)
-    project = Project.objects.get(id=body["project_id"])
-
-    if group is not None and project is not None:
-        if is_creator_or_staff(get_request_contributor(request), group):
-            relationship = ProjectRelationship.objects.get(relationship_project=project.id, relationship_group=group.id)
-
-            if relationship is not None:
-                relationship.delete()
-                return HttpResponse(status=204)
-
-    return HttpResponse(status=404)
 
 
 def approve_group(request, group_id):
@@ -234,7 +202,7 @@ def event_edit(request, event_id):
     if request.is_ajax():
         return JsonResponse(event.hydrate_to_json())
     else:
-        return redirect('/index/?section=AboutEvent&id=' + event_id)
+        return redirect(section_url(FrontEndSection.AboutEvent, {'id': event_id}))
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
@@ -261,38 +229,6 @@ def get_event(request, event_id):
 
     return JsonResponse(event.hydrate_to_json()) if event else HttpResponse(status=404)
 
-
-def event_add_project(request, event_id):
-    body = json.loads(request.body)
-    event = Event.objects.get(id=event_id)
-
-    if event is not None and body["project_ids"] is not None:
-        if not is_creator_or_staff(get_request_contributor(request), event):
-            return HttpResponseForbidden()
-
-        projects = Project.objects.filter(id__in=body["project_ids"])
-
-        for project in projects:
-            ProjectRelationship.create(event, project)
-
-        return HttpResponse(status=204)
-    else:
-        return HttpResponse(status=404)
-
-def event_delete_project(request, event_id):
-    body = json.loads(request.body)
-    event = Event.objects.get(id=event_id)
-    project = Project.objects.get(id=body["project_id"])
-
-    if event is not None and project is not None:
-        if is_creator_or_staff(get_request_contributor(request), event):
-            relationship = ProjectRelationship.objects.get(relationship_project=project.id, relationship_event=event.id)
-
-            if relationship is not None:
-                relationship.delete()
-                return HttpResponse(status=204)
-
-    return HttpResponse(status=404)
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
@@ -323,7 +259,7 @@ def project_edit(request, project_id):
     if request.is_ajax():
         return JsonResponse(project.hydrate_to_json())
     else:
-        return redirect('/index/?section=AboutProject&id=' + project_id)
+        return redirect(section_url(FrontEndSection.AboutProject, {'id': project_id}))
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
@@ -364,7 +300,7 @@ def approve_project(request, project_id):
             SitemapPages.update()
             notify_project_owners_project_approved(project)
             messages.success(request, 'Project Approved')
-            return redirect('/index/?section=AboutProject&id=' + str(project.id))
+            return redirect(section_url(FrontEndSection.AboutProject, {'id': project_id}))
         else:
             return HttpResponseForbidden()
     else:
@@ -391,7 +327,7 @@ def approve_event(request, event_id):
 
 @ensure_csrf_cookie
 @xframe_options_exempt
-def index(request):
+def index(request, id=None):
     page_url = request.get_full_path()
     clean_url = get_clean_url(page_url)
     if clean_url != page_url:
@@ -1271,6 +1207,7 @@ def reject_group_invitation(request, invite_id):
 
 #This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.
 #TODO: Return text strings to be displayed on the front end so we know specifically what happened
+#TODO: Figure out why changing the endpoint to /api/contact/democracylab results in CSRF issues
 @csrf_exempt
 def contact_democracylab(request):
     #first prepare all the data from the request body
@@ -1319,3 +1256,14 @@ def team(request):
 
     return JsonResponse(response)
 
+
+def redirect_v1_urls(request):
+    page_url = request.get_full_path()
+    print(page_url)
+    clean_url = get_clean_url(page_url)
+    print('Redirecting v1 url: ' + clean_url)
+    section_match = re.findall(r'/index/\?section=(\w+)', clean_url)
+    section_name = section_match[0] if len(section_match) > 0 else FrontEndSection.Home
+    section_id_match = re.findall(r'&id=([\w-]+)', clean_url)
+    section_id = section_id_match[0] if len(section_id_match) > 0 else ''
+    return redirect(section_url(section_name, {'id': section_id}))

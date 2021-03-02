@@ -28,7 +28,6 @@ class FrontEndSection(Enum):
     ContactUs = 'ContactUs'
     Home = "Home"
     CreateProject = 'CreateProject'
-    EditProject = 'EditProject'
     MyProjects = 'MyProjects'
     Profile = 'Profile'
     SignUp = 'SignUp'
@@ -37,7 +36,6 @@ class FrontEndSection(Enum):
     EmailVerified = 'EmailVerified'
     Error = 'Error'
     AboutGroup = 'AboutGroup'
-    EditGroup = 'EditGroup'
     FindGroups = 'FindGroups'
     FindEvents = 'FindEvents'
     CreateEvent = 'CreateEvent'

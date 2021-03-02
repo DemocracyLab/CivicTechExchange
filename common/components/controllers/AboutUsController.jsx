@@ -207,7 +207,9 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             </p>
             <div className="about-us-volunteer-buttons">
               <a
-                href={"/index/?section=AboutProject&id=" + this.state.projectId}
+                href={url.section(Section.AboutProject, {
+                  id: this.state.projectId,
+                })}
                 className="SubHeader-donate-btn-container"
               >
                 <button className="SubHeader-donate-btn">Join Us</button>

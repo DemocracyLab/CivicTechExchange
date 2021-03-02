@@ -2,6 +2,8 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+from common.helpers.constants import FrontEndSection
+from common.helpers.front_end import section_path
 from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datetime, datetime_to_string
 from democracylab.emails import send_email,_get_account_from_email, send_volunteer_conclude_email, HtmlEmailTemplate, \
     notify_project_owners_volunteer_concluded_email
@@ -66,7 +68,7 @@ def send_reminder_email(email_template, volunteer_relation):
     send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
 
 
-review_commitment_url = settings.PROTOCOL_DOMAIN + '/index/?section=MyProjects&from=renewal_notification_email'
+review_commitment_url = settings.PROTOCOL_DOMAIN + section_path(FrontEndSection.MyProjects, {'from': 'renewal_notification_email'})
 
 
 def get_first_email_template():
