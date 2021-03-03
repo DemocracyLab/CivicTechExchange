@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='group',
             name='group_location_coords',
-            field=django.contrib.gis.db.models.fields.PointField(blank=True, default='', null=True, srid=4326),
+            field=django.contrib.gis.db.models.fields.PointField(blank=True, default='POINT EMPTY', null=True, srid=4326),
         ),
         migrations.AddField(
             model_name='group',

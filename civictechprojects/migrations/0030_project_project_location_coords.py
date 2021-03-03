@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='project_location_coords',
-            field=django.contrib.gis.db.models.fields.PointField(blank=True, default='', null=True, srid=4326),
+            field=django.contrib.gis.db.models.fields.PointField(blank=True, default='POINT EMPTY', null=True, srid=4326),
         ),
     ]
