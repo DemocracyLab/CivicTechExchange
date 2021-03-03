@@ -441,16 +441,21 @@
 .AboutProject-top-interactions {
   flex-basis: 75%;
   order: 2;
+  display: flex; 
+  flex: 1 0 auto; // make the buttons stay in column
+  flex-direction: column;
 }
 
 @include media-breakpoint-up(lg) {
   .AboutProject-top-details {
     flex-basis: auto;
     order: 2;
+    padding: 0 30px;
   }
   .AboutProject-top-interactions {
     flex-basis: auto;
     order: 3;
     flex-shrink: 0;
   }
+  
 }

@@ -28,6 +28,8 @@ import Section from "../../enums/Section.js";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import EventCardsListings from "../../componentsBySection/FindEvents/EventCardsListings.jsx";
 import type { MyGroupData } from "../../stores/MyGroupsStore.js";
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
@@ -120,12 +122,12 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             {this._renderTopSection(project)}
           </div>
         </div>
-        <div className="row">
-          <div className="Profile-primary-section col-12 col-lg-9">
+        <div className="row flex-lg-nowrap">
+          <div className="Profile-primary-section col-12 col-lg-auto flex-lg-shrink-1">
             {this._renderMainSection(project)}
           </div>
 
-          <div className="Profile-secondary-section col-12 col-lg-3">
+          <div className="Profile-secondary-section col-12 col-lg-auto">
             {this._renderSecondarySection(project)}
           </div>
         </div>
@@ -193,12 +195,12 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     );
   }
 
-  //TODO: Conditional rendering of each section, tab controller to hide/show
+  // tabbed main section content
   _renderMainSection(project) {
     return (
-      <React.Fragment>
-        <div className="Profile-tab-container">
-          <div className="Profile-tab Profile-tab-details">
+      <div className="Profile-tab-container">
+        <Tabs defaultActiveKey="proj-details" id="AboutProject-tabs"> 
+          <Tab eventKey="proj-details" title="Details" className="Profile-tab Profile-tab-details">
             {!_.isEmpty(
               project.project_description_solution ||
                 project.project_description_actions
@@ -228,9 +230,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 </div>
               </React.Fragment>
             )}
-          </div>
+            </Tab>
 
-          <div className="Profile-tab Profile-tab-skillsneeded">
+          <Tab eventKey="proj-skills" title="Skills Needed" className="Profile-tab Profile-tab-skillsneeded">
             {project && !_.isEmpty(project.project_positions) && (
               <div className="OLD_AboutProjects-skills">
                 <p
@@ -265,18 +267,18 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 !_.isEmpty(project.project_positions) &&
                 this._renderPositions()}
             </div>
-          </div>
+          </Tab>
 
-          <div className="Profile-tab Profile-tab-events">
+          <Tab eventKey="proj-events" title="Events" className="Profile-tab Profile-tab-events">
             <div className="OLD_AboutProjects-events">
               <EventCardsListings
                 events={project.project_events}
                 showMessageForNoFutureEvents={false}
               />
             </div>
-          </div>
+          </Tab>
 
-          <div className="Profile-tab Profile-tab-recent-activity">
+          <Tab eventKey="proj-activity" title="Recent Activity" className="Profile-tab Profile-tab-recent-activity">
             <h4>Recent Activity</h4>
             {project.project_commits
               .slice(0, this.state.maxActivity)
@@ -293,9 +295,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 </div>
               </div>
             )}
-          </div>
-        </div>
-      </React.Fragment>
+          </Tab>
+        </Tabs>
+      </div>
     );
   }
 
