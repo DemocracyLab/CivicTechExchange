@@ -1,10 +1,14 @@
-.about-us-root h1, .about-us-root h2, .about-us-root h3 {
+.about-us-root h1,
+.about-us-root h2,
+.about-us-root h3 {
   font-weight: bold;
 }
-.about-us-mission .SplashScreen-content, .about-us-vision .SplashScreen-content {
+.about-us-mission .SplashScreen-content,
+.about-us-vision .SplashScreen-content {
   margin: auto 0;
   text-align: left;
-  h1, h2 {
+  h1,
+  h2 {
     font-size: 48px;
   }
   p {
@@ -12,7 +16,8 @@
   }
 }
 
-.about-us-mission, .about-us-vision {
+.about-us-mission,
+.about-us-vision {
   background-color: $color-text-grey;
   color: $color-text-light;
 }
@@ -37,7 +42,8 @@
 .about-us-content {
   padding: 2rem 0 2rem 1rem;
 }
-.about-us-content h1, .about-us-content h2 {
+.about-us-content h1,
+.about-us-content h2 {
   font-size: 48px;
 }
 .about-us-content p {
@@ -57,7 +63,9 @@
   margin-top: 25px;
   margin-bottom: 25px;
 }
-.about-us-team, .about-us-volunteer, .about-us-ps {
+.about-us-team,
+.about-us-volunteer,
+.about-us-ps {
   padding-top: 36px;
   padding-bottom: 36px;
 }
@@ -68,7 +76,8 @@
 .about-us-values-image {
   order: 1;
 }
-.about-us-values-image img, .about-us-ps-image img {
+.about-us-values-image img,
+.about-us-ps-image img {
   max-width: 100%;
 }
 .about-us-values-list {
@@ -99,7 +108,10 @@
 }
 .about-us-annualreport {
   background: $color-orange;
-  h3, p, i, a {
+  h3,
+  p,
+  i,
+  a {
     color: $color-text-light;
   }
   a {
@@ -116,7 +128,8 @@
   display: flex;
   align-items: center;
 }
-.about-us-annualreport-left, .about-us-annualreport-right {
+.about-us-annualreport-left,
+.about-us-annualreport-right {
   padding: 2rem 1rem;
 }
 .about-us-team-card-container {
@@ -136,7 +149,8 @@
 .about-us-team-card p {
   font-size: 18px;
 }
-.about-us-team-avatar, .about-us-team-avatar-default svg {
+.about-us-team-avatar,
+.about-us-team-avatar-default svg {
   border-radius: 50%;
 }
 .about-us-team-card svg {
@@ -147,7 +161,8 @@
   color: $color-orange;
   margin-bottom: 0.5rem;
 }
-.about-us-team-avatar, .about-us-team-avatar-default {
+.about-us-team-avatar,
+.about-us-team-avatar-default {
   margin: auto; //centers avatar inside card
   background-repeat: no-repeat; //centers image inside avatar
   background-size: cover;
@@ -161,7 +176,8 @@
   padding-top: 20px; /* offsets the svg away from the border where it matters */
 }
 
-.about-us-team-avatar, .about-us-team-avatar-default svg {
+.about-us-team-avatar,
+.about-us-team-avatar-default svg {
   height: 150px;
   width: 150px;
 }
@@ -212,7 +228,8 @@
 .about-us-ps h2 {
   color: $color-orange;
 }
-.about-us-ps-problem, .about-us-ps-solution {
+.about-us-ps-problem,
+.about-us-ps-solution {
   margin: 20px 0;
 }
 
@@ -259,13 +276,13 @@
   .about-us-team-card {
     margin-bottom: 30px;
   }
-
 }
 @include media-breakpoint-up(md) {
   .about-us-content {
-    padding:  0 256px 0 64px /* check that this makes text break into two lines but not three */
+    padding: 0 256px 0 64px; /* check that this makes text break into two lines but not three */
   }
-  .about-us-team-avatar, .about-us-team-avatar-default svg {
+  .about-us-team-avatar,
+  .about-us-team-avatar-default svg {
     height: 200px;
     width: 200px;
   }
@@ -291,14 +308,18 @@
   .about-us-content {
     padding: 0 404px 0 84px; /*  rules to get linebreaks where the design wants them */
   }
-  .about-us-team-avatar, .about-us-team-avatar-default svg {
+  .about-us-team-avatar,
+  .about-us-team-avatar-default svg {
     height: 230px;
     width: 230px;
   }
   .about-us-team-card {
     margin-bottom: 50px;
   }
-  .about-us-values, .about-us-team, .about-us-volunteer, .about-us-annualreport {
+  .about-us-values,
+  .about-us-team,
+  .about-us-volunteer,
+  .about-us-annualreport {
     padding-left: 20px;
     padding-right: 20px;
   }
@@ -322,7 +343,11 @@
   .about-us-content {
     padding: 0 580px 0 168px;
   }
-  .about-us-values, .about-us-team, .about-us-volunteer, .about-us-ps, .about-us-annualreport {
+  .about-us-values,
+  .about-us-team,
+  .about-us-volunteer,
+  .about-us-ps,
+  .about-us-annualreport {
     padding-left: 153px; /* match 168px from Vision/Mission, subtract 30 */
     padding-right: 153px;
   }

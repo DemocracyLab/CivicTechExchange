@@ -1,8 +1,8 @@
-import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from common.helpers.collections import distinct
+from common.helpers.random import generate_uuid
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
@@ -11,10 +11,6 @@ import civictechprojects.models
 
 class UserTaggedTechnologies(TaggedItemBase):
     content_object = models.ForeignKey('Contributor', on_delete=models.CASCADE)
-
-
-def generate_uuid():
-    return uuid.uuid4().hex
 
 
 class Contributor(User):
@@ -29,6 +25,9 @@ class Contributor(User):
     qiqo_uuid = models.CharField(max_length=50, blank=True)
     qiqo_signup_time = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self):
+        return self.id_full_name()
+
     def is_admin_contributor(self):
         return self.email == settings.ADMIN_EMAIL
 
@@ -36,7 +35,7 @@ class Contributor(User):
         return self.first_name + ' ' + self.last_name
 
     def id_full_name(self):
-        return '({id}){name}'.format(id=self.id, name=self.full_name())
+        return '{id}: {name}'.format(id=self.id, name=self.full_name())
 
     def is_up_for_volunteering_renewal(self):
         from civictechprojects.models import VolunteerRelation

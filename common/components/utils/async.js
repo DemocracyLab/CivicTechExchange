@@ -9,17 +9,22 @@ class async {
    * timeout: Milliseconds to wait between tries
    * maxRetries(optional): Number of times to attempt a retry
    */
-  static doWhenReady<T>(readyFunc: () => T, doFunc: (T) => void, timeout: number, maxRetries?: number): T {
+  static doWhenReady<T>(
+    readyFunc: () => T,
+    doFunc: T => void,
+    timeout: number,
+    maxRetries?: number
+  ): T {
     let value: T = readyFunc();
     let numTries: number = 0;
-    if(!value) {
+    if (!value) {
       let intervalId = null;
       let checkFunc: () => T = function() {
         value = readyFunc();
         if (value) {
           doFunc(value);
         }
-        if (value || (maxRetries && (++numTries > maxRetries))) {
+        if (value || (maxRetries && ++numTries > maxRetries)) {
           window.clearInterval(intervalId);
         }
       };
@@ -28,7 +33,7 @@ class async {
       doFunc(value);
     }
   }
-  
+
   /**
    * Wait until a global(window) event has fired before performing the action.  Besides subscribing to the event,
    * it will also check window.democracyLabEvents for the event (in case event fired before the subscription was made)
@@ -49,4 +54,4 @@ class async {
   }
 }
 
-export default async
+export default async;

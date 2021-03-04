@@ -1,57 +1,65 @@
 // @flow
 
 import React from "react";
-import {LocationInfo} from "../common/location/LocationInfo.js";
-import {CountryData} from "../constants/Countries.js";
-import type {Dictionary} from "../types/Generics.jsx";
+import { LocationInfo } from "../common/location/LocationInfo.js";
+import { CountryData } from "../constants/Countries.js";
+import type { Dictionary } from "../types/Generics.jsx";
 import HiddenFormFields from "./HiddenFormFields.jsx";
 import LocationAutocomplete from "../common/location/LocationAutocomplete.jsx";
 import _ from "lodash";
 
-export const LocationFormInputsByEntity: Dictionary<(LocationInfo) => string> = {
+export const LocationFormInputsByEntity: Dictionary<
+  (LocationInfo) => string
+> = {
   Projects: {
-    project_location: (location: LocationInfo) => location ? location.location_id : "",
-    project_state: (location: LocationInfo) => location ? location.state : "",
-    project_city: (location: LocationInfo) => location ? location.city : "",
-    project_latitude: (location: LocationInfo) => location ? location.latitude : "",
-    project_longitude: (location: LocationInfo) => location ? location.longitude : ""
+    project_location: (location: LocationInfo) =>
+      location ? location.location_id : "",
+    project_state: (location: LocationInfo) => (location ? location.state : ""),
+    project_city: (location: LocationInfo) => (location ? location.city : ""),
+    project_latitude: (location: LocationInfo) =>
+      location ? location.latitude : "",
+    project_longitude: (location: LocationInfo) =>
+      location ? location.longitude : "",
   },
   Groups: {
-    group_location: (location: LocationInfo) => location ? location.location_id : "",
-    group_state: (location: LocationInfo) => location ? location.state : "",
-    group_city: (location: LocationInfo) => location ? location.city : "",
-    group_latitude: (location: LocationInfo) => location ? location.latitude : "",
-    group_longitude: (location: LocationInfo) => location ? location.longitude : ""
-  }
+    group_location: (location: LocationInfo) =>
+      location ? location.location_id : "",
+    group_state: (location: LocationInfo) => (location ? location.state : ""),
+    group_city: (location: LocationInfo) => (location ? location.city : ""),
+    group_latitude: (location: LocationInfo) =>
+      location ? location.latitude : "",
+    group_longitude: (location: LocationInfo) =>
+      location ? location.longitude : "",
+  },
 };
 
 type Props = {|
   location: ?LocationInfo,
   country: ?CountryData,
   formInputs: Dictionary<(LocationInfo) => string>,
-  onSelect: (LocationInfo) => null
+  onSelect: LocationInfo => null,
 |};
 
 type State = {|
-  location: ?LocationInfo
+  location: ?LocationInfo,
 |};
 
 export class LocationAutocompleteForm extends React.Component<Props, State> {
   constructor(props: Props): void {
     super();
     this.state = {
-      location: props.location
+      location: props.location,
     };
   }
-  
+
   componentWillReceiveProps(nextProps: Props): void {
-    if(!_.isEqual(nextProps.location, this.state.location)) {
-      this.setState({location: nextProps.location});
+    if (!_.isEqual(nextProps.location, this.state.location)) {
+      this.setState({ location: nextProps.location });
     }
   }
 
   onOptionSelect(location: LocationInfo): void {
-    this.setState({location: location}, () => this.props.onSelect(location));
+    this.setState({ location: location }, () => this.props.onSelect(location));
   }
 
   render(): ?React$Node {

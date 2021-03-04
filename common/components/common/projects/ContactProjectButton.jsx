@@ -1,22 +1,24 @@
 // @flow
 
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import ProjectAPIUtils, {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
+import React from "react";
+import Button from "react-bootstrap/Button";
+import ProjectAPIUtils, {
+  ProjectDetailsAPIData,
+} from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
-import Section from '../../enums/Section.js';
-import url from '../../utils/url.js';
+import Section from "../../enums/Section.js";
+import url from "../../utils/url.js";
 import ContactModal from "./ContactModal.jsx";
 import metrics from "../../utils/metrics";
 
 type Props = {|
-  project: ?ProjectDetailsAPIData
+  project: ?ProjectDetailsAPIData,
 |};
 type State = {|
   project: ?ProjectDetailsAPIData,
   showContactModal: boolean,
   buttonDisabled: boolean,
-  buttonTitle: string
+  buttonTitle: string,
 |};
 
 /**
@@ -25,19 +27,21 @@ type State = {|
 class ContactProjectButton extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
-    if(props.project) {
+    if (props.project) {
       this.state = this.getButtonDisplaySetup(props);
     } else {
       this.state = {
         project: null,
         showContactModal: false,
         buttonDisabled: false,
-        buttonTitle: ""
+        buttonTitle: "",
       };
     }
     this.handleShow = this.handleShow.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    this.handleVolunteerContactModal = this.handleVolunteerContactModal.bind(this);
+    this.handleVolunteerContactModal = this.handleVolunteerContactModal.bind(
+      this
+    );
   }
 
   getButtonDisplaySetup(props: Props): State {
@@ -46,18 +50,21 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
       project: project,
       showContactModal: false,
       buttonDisabled: false,
-      buttonTitle: ""
+      buttonTitle: "",
     };
-    if(!CurrentUser.isLoggedIn()) {
+    if (!CurrentUser.isLoggedIn()) {
       newState.buttonDisabled = false;
-      newState.buttonTitle = "Please sign up or log in to contact project owner";
-    } else if(!CurrentUser.isEmailVerified()) {
+      newState.buttonTitle =
+        "Please sign up or log in to contact project owner";
+    } else if (!CurrentUser.isEmailVerified()) {
       newState.buttonDisabled = true;
       // TODO: Provide mechanism to re-send verification email
-      newState.buttonTitle = "Please verify your email address before contacting project owner";
-    } else if(!project.project_claimed) {
+      newState.buttonTitle =
+        "Please verify your email address before contacting project owner";
+    } else if (!project.project_claimed) {
       newState.buttonDisabled = true;
-      newState.buttonTitle = "This project has not yet been claimed by its owner";
+      newState.buttonTitle =
+        "This project has not yet been claimed by its owner";
     }
 
     return newState;
@@ -68,17 +75,27 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   }
 
   handleShow() {
-    metrics.logUserClickContactProjectOwner(CurrentUser.userID(), this.props.project.project_id);
+    metrics.logUserClickContactProjectOwner(
+      CurrentUser.userID(),
+      this.props.project.project_id
+    );
     this.setState({ showContactModal: true });
   }
 
-  handleVolunteerContactModal(fields: ContactModalFields, closeModal: Function): void {
-    ProjectAPIUtils.post("/contact/project/" + this.props.project.project_id + "/",
+  handleVolunteerContactModal(
+    fields: ContactModalFields,
+    closeModal: Function
+  ): void {
+    ProjectAPIUtils.post(
+      "/contact/project/" + this.props.project.project_id + "/",
       fields,
       response => closeModal(),
       response => null /* TODO: Report error to user */
     );
-    metrics.logUserContactedProjectOwner(CurrentUser.userID(), this.props.project.project_id);
+    metrics.logUserContactedProjectOwner(
+      CurrentUser.userID(),
+      this.props.project.project_id
+    );
   }
 
   closeModal() {
@@ -86,19 +103,19 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   }
 
   _renderEditProjectButton(): React$Node {
-    const id = {'id':this.props.project.project_id};
-    const section: string = this.props.project.project_approved ? Section.EditProject : Section.CreateProject;
     return (
-        <Button
-          variant="primary"
-          className="AboutProject-button"
-          type="button"
-          disabled={this.state.buttonDisabled}
-          title={this.state.buttonTitle}
-          href={url.section(section, id)}
-        >
-          Edit Project
-        </Button>
+      <Button
+        variant="primary"
+        className="AboutProject-button"
+        type="button"
+        disabled={this.state.buttonDisabled}
+        title={this.state.buttonTitle}
+        href={url.section(Section.CreateProject, {
+          id: this.props.project.project_id,
+        })}
+      >
+        Edit Project
+      </Button>
     );
   }
 
@@ -125,7 +142,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
-        href={`/index/?section=LogIn&prev=${window.location.href.split('?section=')[1]}`}
+        href={url.logInThenReturn()}
       >
         Sign in to Contact Project
       </Button>
@@ -133,49 +150,48 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   }
 
   displayEditProjectButton(): ?React$Node {
-    if (CurrentUser.userID() === this.props.project.project_creator
-      || CurrentUser.isCoOwner(this.props.project)
-      || CurrentUser.isStaff()) {
-      return (
-      <div>
-        {this._renderEditProjectButton()}
-      </div>
-      );
+    if (
+      CurrentUser.userID() === this.props.project.project_creator ||
+      CurrentUser.isCoOwner(this.props.project) ||
+      CurrentUser.isStaff()
+    ) {
+      return <div>{this._renderEditProjectButton()}</div>;
     }
   }
 
   displayContactProjectButton(): ?React$Node {
     if (CurrentUser.userID() !== this.props.project.project_creator) {
-    return (
-      <div>
-        {this._renderContactProjectButton()}
-        <ContactModal
-          headerText={"Send message to Project Owner"}
-          explanationText={"The project owner will reply to your message via your registered email."}
-          messagePlaceholderText={"I'm interested in helping with this project because..."}
-          showModal={this.state.showContactModal}
-          handleSubmission={this.handleVolunteerContactModal}
-          handleClose={this.closeModal}
-        />
-      </div>
+      return (
+        <div>
+          {this._renderContactProjectButton()}
+          <ContactModal
+            headerText={"Send message to Project Owner"}
+            explanationText={
+              "The project owner will reply to your message via your registered email."
+            }
+            messagePlaceholderText={
+              "I'm interested in helping with this project because..."
+            }
+            showModal={this.state.showContactModal}
+            handleSubmission={this.handleVolunteerContactModal}
+            handleClose={this.closeModal}
+          />
+        </div>
       );
     }
   }
 
   render(): ?React$Node {
-    if(this.state) {
-      if(CurrentUser.isLoggedIn()) {
-        return (
-        <div>
-          {this.displayEditProjectButton()}
-          {this.displayContactProjectButton()}
-        </div>)
-      } else {
+    if (this.state) {
+      if (CurrentUser.isLoggedIn()) {
         return (
           <div>
-            {this._renderLinkToSignInButton()}
+            {this.displayEditProjectButton()}
+            {this.displayContactProjectButton()}
           </div>
         );
+      } else {
+        return <div>{this._renderLinkToSignInButton()}</div>;
       }
     } else {
       return null;

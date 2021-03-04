@@ -1,25 +1,25 @@
 // @flow
 
-import _ from 'lodash';
+import _ from "lodash";
 
 export type SponsorMetadata = {|
   displayName: string,
   url: string,
   thumbnailUrl: string,
   description: string,
-  category: string
+  category: string,
 |};
 
 class Sponsors {
   static list(): $ReadOnlyArray<SponsorMetadata> {
     try {
-      const sponsorMetadata:string = window.SPONSORS_METADATA;
-      if(!_.isEmpty(sponsorMetadata)) {
+      const sponsorMetadata: string = window.SPONSORS_METADATA;
+      if (!_.isEmpty(sponsorMetadata)) {
         return JSON.parse(_.unescape(sponsorMetadata));
       } else {
         return [];
       }
-    } catch(ex) {
+    } catch (ex) {
       console.error("Failed to parse sponsor metadata. ", ex);
       return [];
     }

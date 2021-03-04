@@ -1,51 +1,56 @@
 // @flow
 
-import React from 'react';
-import Helmet from 'react-helmet';
-import ProjectAPIUtils from '../utils/ProjectAPIUtils.js';
-import type {ProjectDetailsAPIData} from '../utils/ProjectAPIUtils.js';
+import React from "react";
+import Helmet from "react-helmet";
+import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
+import type { ProjectDetailsAPIData } from "../utils/ProjectAPIUtils.js";
 import metrics from "../utils/metrics.js";
 import Headers from "../common/Headers.jsx";
 import Truncate from "../utils/truncate.js";
 import AboutProjectDisplay from "../common/projects/AboutProjectDisplay.jsx";
-import {APIError} from "../utils/api.js";
+import { APIError } from "../utils/api.js";
 import url from "../utils/url.js";
 import prerender from "../utils/prerender.js";
-import EventAPIUtils, {EventData} from "../utils/EventAPIUtils.js";
+import EventAPIUtils, { EventData } from "../utils/EventAPIUtils.js";
 import AboutEventDisplay from "../componentsBySection/CreateEvent/AboutEventDisplay.jsx";
-
 
 type State = {|
   event: ?EventData,
   loadStatusMsg: string,
-  statusCode: string
+  statusCode: string,
 |};
 
 class AboutEventController extends React.PureComponent<{||}, State> {
-
-  constructor(): void{
+  constructor(): void {
     super();
     this.state = {
       project: null,
       loadStatusMsg: "Loading...",
     };
- }
+  }
 
   componentDidMount() {
     const projectId: string = url.argument("id");
-    EventAPIUtils.fetchEventDetails(projectId, this.loadEventDetails.bind(this), this.handleLoadEventFailure.bind(this));
+    EventAPIUtils.fetchEventDetails(
+      projectId,
+      this.loadEventDetails.bind(this),
+      this.handleLoadEventFailure.bind(this)
+    );
   }
 
   loadEventDetails(event: EventData) {
-    this.setState({
-      event: event
-    }, prerender.ready);
+    this.setState(
+      {
+        event: event,
+      },
+      prerender.ready
+    );
   }
 
   handleLoadEventFailure(error: APIError) {
     this.setState({
       loadStatusMsg: "Could not load Event",
-      statusCode: "404"
+      statusCode: "404",
     });
   }
 
@@ -57,7 +62,7 @@ class AboutEventController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         {this._renderEventHeader(this.state.event)}
-        <AboutEventDisplay event={this.state.event} viewOnly={false}/>
+        <AboutEventDisplay event={this.state.event} viewOnly={false} />
       </React.Fragment>
     );
   }
@@ -74,7 +79,7 @@ class AboutEventController extends React.PureComponent<{||}, State> {
       />
     );
   }
-  
+
   _renderLoadMessage(): React$Node {
     return (
       <React.Fragment>

@@ -1,6 +1,6 @@
 from django.conf import settings
 from civictechprojects.models import Event
-from civictechprojects.caching.cache import ProjectCache, EventCache
+from civictechprojects.caching.cache import ProjectCache, GroupCache
 from common.helpers.constants import FrontEndSection
 from common.helpers.request_helpers import url_params
 from democracylab.models import get_request_contributor
@@ -9,7 +9,7 @@ from democracylab.models import get_request_contributor
 def about_project_preload(context, request):
     context = default_preload(context, request)
     query_args = url_params(request)
-    project_id = query_args['id'][0]
+    project_id = query_args['id']
     project_json = ProjectCache.get(project_id)
     if project_json is not None:
         context['title'] = project_json['project_name'] + ' | DemocracyLab'
@@ -24,8 +24,8 @@ def about_project_preload(context, request):
 def about_event_preload(context, request):
     context = default_preload(context, request)
     query_args = url_params(request)
-    event_id = query_args['id'][0]
-    event = Event.get_by_id_or_slug(event_id, get_request_contributor(request))
+    event_id = query_args['id']
+    event = Event.get_by_id_or_slug(event_id)
     event_json = event.hydrate_to_json()
     if event_json is not None:
         context['title'] = event_json['event_name'] + ' | DemocracyLab'
@@ -34,6 +34,21 @@ def about_event_preload(context, request):
             context['og_image'] = event_json['event_thumbnail']['publicUrl']
     else:
         print('Failed to preload event info, no cache entry found: ' + event_id)
+    return context
+
+
+def about_group_preload(context, request):
+    context = default_preload(context, request)
+    query_args = url_params(request)
+    group_id = query_args['id']
+    group_json = GroupCache.get(group_id)
+    if group_json is not None:
+        context['title'] = group_json['group_name'] + ' | DemocracyLab'
+        context['description'] = group_json['group_short_description']
+        if 'group_thumbnail' in group_json:
+            context['og_image'] = group_json['group_thumbnail']['publicUrl']
+    else:
+        print('Failed to preload group info, no cache entry found: ' + group_id)
     return context
 
 
@@ -88,7 +103,8 @@ preload_urls = [
     {'section': FrontEndSection.AboutUs.value, 'handler': about_us_preload},
     {'section': FrontEndSection.CreateEvent.value, 'handler': create_event_preload},
     {'section': FrontEndSection.MyEvents.value, 'handler': my_events_preload},
-    {'section': FrontEndSection.Donate.value, 'handler': donate_preload}
+    {'section': FrontEndSection.Donate.value, 'handler': donate_preload},
+    {'section': FrontEndSection.AboutGroup.value, 'handler': about_group_preload}
 ]
 
 

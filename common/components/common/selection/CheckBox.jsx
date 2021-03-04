@@ -1,11 +1,11 @@
 // @flow
 
-import React from 'react';
+import React from "react";
 
 type Props = {|
   id: string,
   value: boolean,
-  onCheck: (boolean) => void
+  onCheck: boolean => void,
 |};
 
 // Checkbox wrapper that harmonizes with django's form handling
@@ -13,7 +13,7 @@ class CheckBox extends React.PureComponent<Props> {
   constructor(props: Props): void {
     super();
   }
-  
+
   _onCheck(event: SyntheticInputEvent<HTMLInputElement>): void {
     const checkValue: boolean = event.target.checked;
     this.props.onCheck(checkValue);

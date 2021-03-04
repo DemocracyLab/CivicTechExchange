@@ -12,15 +12,14 @@ Next, follow DemocracyLab's [Contributor Guide](https://docs.google.com/document
 
 ## Built With
 
-* [React](https://reactjs.org)
-* [Flux](https://facebook.github.io/flux/)
-* [Django](https://djangoproject.com)
+- [React](https://reactjs.org)
+- [Flux](https://facebook.github.io/flux/)
+- [Django](https://djangoproject.com)
 
 ## Contributing
 
-Please read the Getting Started section of this README and our  [Contributing Guide](https://github.com/DemocracyLab/CivicTechExchange/blob/master/CONTRIBUTING.md) for details on the process for submitting pull requests to us.
-
+Please read the Getting Started section of this README and our [Contributing Guide](https://github.com/DemocracyLab/CivicTechExchange/blob/master/CONTRIBUTING.md) for details on the process for submitting pull requests to us.
 
 ## Acknowledgments
 
-* **Billie Thompson** - *Readme and Contributing Guides templates* - [PurpleBooth](https://github.com/PurpleBooth)
+- **Billie Thompson** - _Readme and Contributing Guides templates_ - [PurpleBooth](https://github.com/PurpleBooth)

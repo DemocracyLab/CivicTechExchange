@@ -8,7 +8,8 @@
   align-self: flex-end;
 
   &:hover {
-    h3, h3 > a {
+    h3,
+    h3 > a {
       color: $color-orange;
     }
   }
@@ -34,11 +35,11 @@
 @include media-breakpoint-up(md) {
   // .SectionLink-root {
   //   margin: 13px 4%;
-    // padding-bottom: 8px;
+  // padding-bottom: 8px;
   // }
 }
 
-@include media-breakpoint-between(sm,md) {
+@include media-breakpoint-between(sm, md) {
   // .SectionLink-root {
   //   margin: 10px 8px 0px 8px;
   // }

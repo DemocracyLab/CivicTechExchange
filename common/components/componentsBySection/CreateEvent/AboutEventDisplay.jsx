@@ -1,62 +1,67 @@
 // @flow
 
-import React from 'react';
-import type Moment from 'moment';
-import datetime, {DateFormat} from "../../utils/datetime.js";
-import Button from 'react-bootstrap/Button';
+import React from "react";
+import Linkify from "react-linkify";
+import type Moment from "moment";
+import datetime, { DateFormat } from "../../utils/datetime.js";
+import Button from "react-bootstrap/Button";
 import CurrentUser from "../../utils/CurrentUser.js";
-import {EventData} from "../../utils/EventAPIUtils.js";
+import { EventData } from "../../utils/EventAPIUtils.js";
 import urlHelper from "../../utils/url.js";
 import Section from "../../enums/Section";
-import ProjectCardsContainer from "../FindProjects/ProjectCardsContainer.jsx";
 import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
 import _ from "lodash";
-
 
 type Props = {|
   event: ?EventData,
-  viewOnly: boolean
+  viewOnly: boolean,
 |};
 
 type State = {|
-  event: ?EventData
+  event: ?EventData,
 |};
 
 class AboutEventDisplay extends React.PureComponent<Props, State> {
-  constructor(props: Props): void{
+  constructor(props: Props): void {
     super();
     this.state = {
-      event: props.event
+      event: props.event,
     };
 
-    if(this.state.event) {
-      this.filterProjectsByOrgTag();
+    if (this.state.event) {
+      this.initProjectSearch();
     }
- }
+  }
 
   componentWillReceiveProps(nextProps: Props): void {
-    if(nextProps.event !== this.props.event) {
-      this.setState({
-        event: nextProps.event
-      }, this.filterProjectsByOrgTag);
+    if (nextProps.event !== this.props.event) {
+      this.setState(
+        {
+          event: nextProps.event,
+        },
+        this.initProjectSearch
+      );
     }
   }
 
   render(): ?$React$Node {
-    const event:EventData = this.state.event;
+    const event: EventData = this.state.event;
     const startDate: Moment = datetime.parse(event.event_date_start);
     const endDate: Moment = datetime.parse(event.event_date_end);
-    const isSingleDayEvent: boolean = datetime.isOnSame('day', startDate, endDate);
+    const isSingleDayEvent: boolean = datetime.isOnSame(
+      "day",
+      startDate,
+      endDate
+    );
     return !event ? null : (
       <div className="AboutEvent-root container">
-
         <div className="AboutEvent-title row">
           <div className="col-12 AboutEvent-header">
-          {
-            !this.props.viewOnly
-            && (CurrentUser.userID() === this.state.event.event_creator || CurrentUser.isStaff())
-            && this._renderEditButton()
-          }
+            {!this.props.viewOnly &&
+              (CurrentUser.userID() === this.state.event.event_creator ||
+                CurrentUser.isStaff()) &&
+              this._renderEditButton()}
             <div className="AboutEvent-title-date">
               {startDate.format(DateFormat.MONTH_DATE_YEAR)}
             </div>
@@ -76,36 +81,47 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                     <p>{this.state.event.event_organizers_text}</p>
                   </div>
                 </React.Fragment>
-              )
-              }
-              
-              {isSingleDayEvent ? this._renderDateTimeSections(startDate, endDate) : this._renderDatesSection(startDate, endDate)}
-              
+              )}
+
+              {isSingleDayEvent
+                ? this._renderDateTimeSections(startDate, endDate)
+                : this._renderDatesSection(startDate, endDate)}
+
               <h5 className="AboutEvent-info-header">Location</h5>
               <div className="AboutEvent-location">
                 <p>{this.state.event.event_location}</p>
               </div>
 
               {this.state.event.event_rsvp_url && this._renderRSVPButton()}
-              {!this.props.viewOnly && event.event_live_id && this._renderJoinLiveEventButton()}
+              {!this.props.viewOnly &&
+                event.event_live_id &&
+                this._renderJoinLiveEventButton()}
             </div>
           </div>
           <div className="col-xs-12 col-lg-8 AboutEvent-splash">
-              <img src={event.event_thumbnail && event.event_thumbnail.publicUrl} />
+            <img
+              src={event.event_thumbnail && event.event_thumbnail.publicUrl}
+            />
           </div>
         </div>
 
-        <div className="AboutEvent-details col-12">
-          <h3>Details</h3>
-          <p>{event.event_description}</p>
-          <h3>What We Will Do</h3>
-          <p>{event.event_agenda}</p>
+        <div className="AboutEvent-details row">
+          <div className="col-12">
+            <Linkify>
+              <h3>Details</h3>
+              <p>{event.event_description}</p>
+              <h3>What We Will Do</h3>
+              <p>{event.event_agenda}</p>
+            </Linkify>
+          </div>
         </div>
-        {!_.isEmpty(event.event_legacy_organization) && this._renderProjectList()}
+        {!_.isEmpty(event.event_legacy_organization) && (
+          <ProfileProjectSearch viewOnly={this.props.viewOnly} />
+        )}
       </div>
-    )
+    );
   }
-  
+
   _renderDatesSection(startDate: Moment, endDate: Moment): $React$Node {
     return (
       <React.Fragment>
@@ -116,15 +132,19 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       </React.Fragment>
     );
   }
-  
+
   _renderDateTimeSections(startDate: Moment, endDate: Moment): $React$Node {
     return (
       <React.Fragment>
         <h5 className="AboutEvent-info-header">Date</h5>
         <p>{startDate.format(DateFormat.DAY_MONTH_DATE_YEAR)}</p>
-  
+
         <h5 className="AboutEvent-info-header">Time</h5>
-        <p>{startDate.format(DateFormat.TIME) + " - " + endDate.format(DateFormat.TIME_TIMEZONE)}</p>
+        <p>
+          {startDate.format(DateFormat.TIME) +
+            " - " +
+            endDate.format(DateFormat.TIME_TIMEZONE)}
+        </p>
       </React.Fragment>
     );
   }
@@ -135,7 +155,9 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         variant="primary"
         className="AboutEvent-edit-btn"
         type="button"
-        href={urlHelper.section(Section.CreateEvent, {id: this.state.event.event_id})}
+        href={urlHelper.section(Section.CreateEvent, {
+          id: this.state.event.event_id,
+        })}
       >
         Edit Event
       </Button>
@@ -143,9 +165,12 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
   }
 
   _renderRSVPButton(): ?$React$Node {
-    const eventbriteTest = new RegExp("eventbrite\.com", "i");
-    const url: string = urlHelper.appendHttpIfMissingProtocol(this.state.event.event_rsvp_url);
-    const text: string = "RSVP" + (eventbriteTest.test(url) ? " on Eventbrite" : "");
+    const eventbriteTest = new RegExp("eventbrite.com", "i");
+    const url: string = urlHelper.appendHttpIfMissingProtocol(
+      this.state.event.event_rsvp_url
+    );
+    const text: string =
+      "RSVP" + (eventbriteTest.test(url) ? " on Eventbrite" : "");
     return (
       <Button
         variant="primary"
@@ -161,11 +186,13 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
   _renderJoinLiveEventButton(): ?$React$Node {
     let text: string = "";
     let url: string = "";
-    if(CurrentUser.isLoggedIn()) {
+    if (CurrentUser.isLoggedIn()) {
       //TODO: Handle un-verified users
       text = "Join Event";
       //TODO: Incorporate live event id into Live Event page
-      url = urlHelper.section(Section.LiveEvent, {id: this.props.event.event_live_id});
+      url = urlHelper.section(Section.LiveEvent, {
+        id: this.props.event.event_live_id,
+      });
     } else {
       text = "Log In to Join Event";
       url = urlHelper.logInThenReturn();
@@ -185,32 +212,19 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     );
   }
 
-  filterProjectsByOrgTag() {
+  initProjectSearch() {
     const event: EventData = this.state.event;
     if (event && !_.isEmpty(event.event_legacy_organization)) {
       ProjectSearchDispatcher.dispatch({
         type: "INIT",
         findProjectsArgs: {
-          org: event.event_legacy_organization[0].tag_name,
-          sortField: "project_name"
+          event_id: event.event_id,
         },
         searchSettings: {
-          updateUrl: false
-        }});
+          updateUrl: false,
+        },
+      });
     }
-  }
-
-  _renderProjectList(): ?$React$Node {
-    return (
-      <div className="row">
-        <ProjectCardsContainer
-          showSearchControls={false}
-          staticHeaderText="Participating Projects"
-          fullWidth={true}
-          selectableCards={false}
-        />
-      </div>
-    );
   }
 }
 

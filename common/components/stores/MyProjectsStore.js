@@ -1,9 +1,12 @@
 // @flow
 
-import {ReduceStore} from 'flux/utils';
-import {Record} from 'immutable'
-import type {TagDefinition, VolunteerUserData} from '../utils/ProjectAPIUtils.js';
-import UniversalDispatcher from './UniversalDispatcher.js';
+import { ReduceStore } from "flux/utils";
+import { Record } from "immutable";
+import type {
+  TagDefinition,
+  VolunteerUserData,
+} from "../utils/ProjectAPIUtils.js";
+import UniversalDispatcher from "./UniversalDispatcher.js";
 import CurrentUser from "../utils/CurrentUser.js";
 
 export type MyProjectData = {|
@@ -18,24 +21,26 @@ export type MyProjectData = {|
   +isCreated: ?boolean,
   +isCoOwner: ?boolean,
   +isUpForRenewal: ?boolean,
-  +projectedEndDate: ?Date
+  +projectedEndDate: ?Date,
 |};
 
 export type MyProjectsAPIResponse = {|
   owned_projects: $ReadOnlyArray<MyProjectData>,
-  volunteering_projects: $ReadOnlyArray<MyProjectData>
+  volunteering_projects: $ReadOnlyArray<MyProjectData>,
 |};
 
-export type MyProjectsActionType = {
-  type: 'INIT'
-} | {
-  type: 'SET_MY_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
-  myProjectsResponse: MyProjectsAPIResponse
-};
+export type MyProjectsActionType =
+  | {
+      type: "INIT",
+    }
+  | {
+      type: "SET_MY_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
+      myProjectsResponse: MyProjectsAPIResponse,
+    };
 
 const DEFAULT_STATE = {
   myProjects: null,
-  isLoading: false
+  isLoading: false,
 };
 
 class State extends Record(DEFAULT_STATE) {
@@ -55,35 +60,37 @@ class MyProjectsStore extends ReduceStore<State> {
   reduce(state: State, action: MyProjectsActionType): State {
     // TODO: See if we need to ensure no duplicate action names between stores that use UniversalDispatcher
     switch (action.type) {
-      case 'INIT':
-        if(CurrentUser.isLoggedIn() && (!state.isLoading || !state.myProjects)) {
+      case "INIT":
+        if (
+          CurrentUser.isLoggedIn() &&
+          (!state.isLoading || !state.myProjects)
+        ) {
           return this._loadProjects(state);
         } else {
           return state;
         }
-      case 'SET_MY_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE':
-        state = state.set('isLoading', false);
-        return state.set('myProjects', action.myProjectsResponse);
+      case "SET_MY_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE":
+        state = state.set("isLoading", false);
+        return state.set("myProjects", action.myProjectsResponse);
       default:
         return state;
     }
   }
-  
+
   _loadProjects(state: State): State {
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener(
-      'load',
-      () => {
-        const myProjectsApiResponse: MyProjectsAPIResponse = JSON.parse(xhr.response);
-        UniversalDispatcher.dispatch({
-          type: 'SET_MY_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE',
-          myProjectsResponse: myProjectsApiResponse
-        });
-      }
-    );
-    xhr.open('GET', '/api/my_projects');
+    xhr.addEventListener("load", () => {
+      const myProjectsApiResponse: MyProjectsAPIResponse = JSON.parse(
+        xhr.response
+      );
+      UniversalDispatcher.dispatch({
+        type: "SET_MY_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
+        myProjectsResponse: myProjectsApiResponse,
+      });
+    });
+    xhr.open("GET", "/api/my_projects");
     xhr.send();
-    return state.set('isLoading', true);
+    return state.set("isLoading", true);
   }
 
   getMyProjects(): ?MyProjectsAPIResponse {

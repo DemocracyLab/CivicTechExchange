@@ -1,15 +1,14 @@
 // @flow
-import _ from 'lodash';
-
+import _ from "lodash";
 
 class stringHelper {
   /**
    * @returns {boolean}   true if string is non-blank and consists of nothing but whitespace
    */
   static isWhitespace(str: string): void {
-    return str.length > 0 &&  _.trim(str) === "";
+    return str.length > 0 && _.trim(str) === "";
   }
-  
+
   /**
    * @param str         string to search in
    * @param substrings  substrings to search for
@@ -20,4 +19,4 @@ class stringHelper {
   }
 }
 
-export default stringHelper
+export default stringHelper;

@@ -26,7 +26,7 @@ class SectionSitemap(Sitemap):
         return self.pages
 
     def location(self, page):
-        return '/index/?section=' + page
+        return section_path(page)
 
 
 class ProjectSitemap(Sitemap):

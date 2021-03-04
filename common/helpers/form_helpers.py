@@ -78,7 +78,9 @@ def merge_json_changes(model_class, model, form, field_name):
         json_text = form.data.get(field_name)
         if len(json_text) > 0:
             json_object = json.loads(json_text)
-            return model_class.merge_changes(model, json_object)
+            model_class.merge_changes(model, json_object)
+        # TODO: Actually check if the json content changed
+        return True
     return False
 
 

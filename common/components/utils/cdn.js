@@ -8,7 +8,7 @@ export const Images: { [key: string]: string } = {
   DONATE_SPLASH: "SplashImage-7178-1400.jpg",
   PAYPAL_BUTTON: "PaypalDonateButton.png",
   CORE_VALUES_BG: "CoreValuesBG520.png",
-  PROBLEM_SOLUTION_BG: "PuzzleBG.png"
+  PROBLEM_SOLUTION_BG: "PuzzleBG.png",
 };
 
 class cdn {
@@ -18,9 +18,9 @@ class cdn {
 
   static bgImage(fileName: string): string {
     const pathAndFile = cdn.image(fileName);
-    return ({
-      backgroundImage: `url(${pathAndFile})`
-    })
+    return {
+      backgroundImage: `url(${pathAndFile})`,
+    };
   }
 }
 

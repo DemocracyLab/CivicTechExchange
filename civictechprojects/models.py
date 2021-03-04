@@ -8,9 +8,9 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
-from civictechprojects.caching.cache import ProjectCache, EventCache
+from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
-from common.helpers.dictionaries import merge_dicts
+from common.helpers.dictionaries import merge_dicts, keys_subset
 from common.helpers.collections import flatten, count_occurrences
 
 # Without the following classes, the following error occurs:
@@ -162,30 +162,18 @@ class Project(Archived):
         return project
 
     def hydrate_to_tile_json(self):
-        files = ProjectFile.objects.filter(file_project=self.id)
-        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
-        positions = ProjectPosition.objects.filter(position_project=self.id)
+        keys = [
+            'project_id', 'project_name', 'project_creator',  'project_url', 'project_location', 'project_country',
+            'project_state', 'project_city', 'project_issue_area', 'project_stage', 'project_positions',
+            'project_date_modified', 'project_thumbnail', 'project_description'
+        ]
+        json_base = self.hydrate_to_json()
+        json_result = keys_subset(json_base, keys)
+        project_short_description = json_base['project_short_description']
+        if len(project_short_description) > 0:
+            json_result['project_description'] = project_short_description
 
-        project = {
-            'project_id': self.id,
-            'project_name': self.project_name,
-            'project_creator': self.project_creator.id,
-            'project_description': self.project_short_description if self.project_short_description else self.project_description,
-            'project_url': self.project_url,
-            'project_location': self.project_location,
-            'project_country': self.project_country,
-            'project_state': self.project_state,
-            'project_city': self.project_city,
-            'project_issue_area': Tag.hydrate_to_json(self.id, list(self.project_issue_area.all().values())),
-            'project_stage': Tag.hydrate_to_json(self.id, list(self.project_stage.all().values())),
-            'project_positions': list(map(lambda position: position.to_json(), positions)),
-            'project_date_modified': self.project_date_modified.__str__()
-        }
-
-        if len(thumbnail_files) > 0:
-            project['project_thumbnail'] = thumbnail_files[0].to_json()
-
-        return project
+        return json_result
 
     def hydrate_to_list_json(self):
         project = {
@@ -202,22 +190,28 @@ class Project(Archived):
         slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
         return Event.objects.filter(event_legacy_organization__name__in=slugs, is_private=False, is_searchable=True)
 
+    def get_project_groups(self):
+        project_relationships = ProjectRelationship.objects.filter(relationship_project=self.id)
+        groups_ids = list(map(lambda pr: pr.relationship_group.id, project_relationships))
+        return Group.objects.filter(id__in=groups_ids)
+
     def update_timestamp(self, time=None):
         self.project_date_modified = time or timezone.now()
         self.save()
 
-    def recache(self):
+    def recache(self, recache_linked=False):
         hydrated_project = self._hydrate_to_json()
         ProjectCache.refresh(self, hydrated_project)
         self.generate_full_text()
-        self.update_linked_items()
+        if recache_linked:
+            self.update_linked_items()
 
     def update_linked_items(self):
-        # Recache events
-        owned_events = self.get_project_events()
-
-        for event in owned_events:
-            event.recache()
+        # Recache events, but only if project is searchable
+        if self.is_searchable:
+            owned_events = self.get_project_events()
+            for event in owned_events:
+                event.recache()
 
     def generate_full_text(self):
         base_json = self.hydrate_to_json()
@@ -269,11 +263,14 @@ class Group(Archived):
         self.save()
 
     def hydrate_to_json(self):
+        return GroupCache.get(self) or GroupCache.refresh(self, self._hydrate_to_json())
+
+    def _hydrate_to_json(self):
         files = ProjectFile.objects.filter(file_group=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_group=self.id)
-        project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id, relationship_project__is_searchable=True)
+        projects = self.get_group_project_relationships(approved_only=True)
 
         group = {
             'group_creator': self.group_creator.id,
@@ -289,11 +286,12 @@ class Group(Archived):
             'group_state': self.group_state,
             'group_city': self.group_city,
             'group_owners': [self.group_creator.hydrate_to_tile_json()],
-            'group_short_description': self.group_short_description
+            'group_short_description': self.group_short_description,
+            'group_project_count': projects.count()
         }
 
-        if len(project_relationships) > 0:
-            group['group_projects'] = list(map(lambda pr: pr.hydrate_to_project_tile_json(), project_relationships))
+        if len(projects) > 0:
+            group['group_issue_areas'] = self.get_project_issue_areas(with_counts=True, project_relationships=projects)
 
         if len(thumbnail_files) > 0:
             group['group_thumbnail'] = thumbnail_files[0].to_json()
@@ -301,30 +299,12 @@ class Group(Archived):
         return group
 
     def hydrate_to_tile_json(self):
-        files = ProjectFile.objects.filter(file_group=self.id)
-        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
-        projects = ProjectRelationship.objects.filter(relationship_group=self.id)
+        keys = [
+            'group_date_modified', 'group_id', 'group_name', 'group_location', 'group_country', 'group_state',
+            'group_city', 'group_short_description', 'group_project_count', 'group_issue_areas', 'group_thumbnail'
+        ]
 
-        group = {
-            'group_date_modified': self.group_date_modified.__str__(),
-            'group_id': self.id,
-            'group_name': self.group_name,
-            'group_location': self.group_location,
-            'group_country': self.group_country,
-            'group_state': self.group_state,
-            'group_city': self.group_city,
-            'group_short_description': self.group_short_description,
-            'group_project_count': projects.count()
-        }
-
-        if len(projects) > 0:
-            group['group_project_count'] = projects.count()
-            group['group_issue_areas'] = self.get_project_issue_areas(with_counts=True, project_relationships=projects)
-
-        if len(thumbnail_files) > 0:
-            group['group_thumbnail'] = thumbnail_files[0].to_json()
-
-        return group
+        return keys_subset(self.hydrate_to_json(), keys)
     
     def hydrate_to_list_json(self):
         files = ProjectFile.objects.filter(file_group=self.id)
@@ -355,15 +335,26 @@ class Group(Archived):
         else:
             return all_issue_area_names
 
-    def get_group_projects(self):
-        slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
-        return Event.objects.filter(event_legacy_organization__name__in=slugs)
+    def get_group_project_relationships(self, approved_only=True):
+        project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
+        if approved_only:
+            project_relationships = project_relationships.filter(is_approved=True, relationship_project__is_searchable=True)
+        return project_relationships
+
+    def get_group_projects(self, approved_only=True):
+        project_ids = list(map(lambda pr: pr.relationship_project.id, self.get_group_project_relationships(approved_only=approved_only)))
+        return Project.objects.filter(id__in=project_ids)
+
+    def recache(self):
+        hydrated_group = self._hydrate_to_json()
+        GroupCache.refresh(self, hydrated_group)
+        ProjectSearchTagsCache.refresh(event=None, group=self)
 
     def update_linked_items(self):
         # Recache linked projects
         project_relationships = ProjectRelationship.objects.filter(relationship_group=self)
         for project_relationship in project_relationships:
-            project_relationship.relationship_project.recache()
+            project_relationship.relationship_project.recache(recache_linked=False)
 
 
 class TaggedEventOrganization(TaggedItemBase):
@@ -406,7 +397,6 @@ class Event(Archived):
         return EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
 
     def _hydrate_to_json(self):
-        projects = ProjectRelationship.objects.filter(relationship_event=self.id)
         files = ProjectFile.objects.filter(file_event=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
@@ -432,33 +422,18 @@ class Event(Archived):
             'is_private': self.is_private
         }
 
-        if len(projects) > 0:
-            event['event_projects'] = list(map(lambda project: project.relationship_project.hydrate_to_tile_json(), projects))
-
         if len(thumbnail_files) > 0:
             event['event_thumbnail'] = thumbnail_files[0].to_json()
 
         return event
 
     def hydrate_to_tile_json(self):
-        files = ProjectFile.objects.filter(file_event=self.id)
-        thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
+        keys = [
+            'event_date_end', 'event_date_start', 'event_id', 'event_slug', 'event_location', 'event_name',
+            'event_organizers_text', 'event_short_description', 'event_thumbnail'
+        ]
 
-        group = {
-            'event_date_end': self.event_date_end.__str__(),
-            'event_date_start': self.event_date_start.__str__(),
-            'event_id': self.id,
-            'event_slug': self.event_slug,
-            'event_location': self.event_location,
-            'event_name': self.event_name,
-            'event_organizers_text': self.event_organizers_text,
-            'event_short_description': self.event_short_description
-        }
-
-        if len(thumbnail_files) > 0:
-            group['event_thumbnail'] = thumbnail_files[0].to_json()
-
-        return group
+        return keys_subset(self.hydrate_to_json(), keys)
 
     def hydrate_to_list_json(self):
         event = self.hydrate_to_tile_json()
@@ -469,15 +444,12 @@ class Event(Archived):
         return event
 
     @staticmethod
-    def get_by_id_or_slug(slug, user=None):
+    def get_by_id_or_slug(slug):
         event = None
         if slug is not None:
             _slug = slug.strip().lower()
             if _slug.isnumeric():
                 event = Event.objects.get(id=_slug)
-                if event and event.is_private:
-                    if not user or not user.is_authenticated or not is_creator_or_staff(user, event):
-                        raise PermissionDenied()
             elif len(_slug) > 0:
                 event = Event.objects.filter(event_slug=_slug).first() or NameRecord.get_event(_slug)
 
@@ -503,11 +475,12 @@ class Event(Archived):
         projects = self.get_linked_projects()
         if projects:
             for project in projects:
-                project.recache()
+                project.recache(recache_linked=False)
 
     def recache(self):
         hydrated_event = self._hydrate_to_json()
         EventCache.refresh(self, hydrated_event)
+        ProjectSearchTagsCache.refresh(event=self)
 
 
 class NameRecord(models.Model):
@@ -803,6 +776,10 @@ class ProjectFile(models.Model):
     file_type = models.CharField(max_length=50)
     file_category = models.CharField(max_length=50)
 
+    def __str__(self):
+        owner = self.get_owner() or ''
+        return f'[{owner}]:{self.file_name}.{self.file_type}({self.file_category})'
+
     @staticmethod
     def create(owner, file_url, file_name, file_key, file_type, file_category, file_visibility):
         # TODO: Validate input
@@ -855,13 +832,15 @@ class ProjectFile(models.Model):
             ProjectFile.objects.get(id=file_id).delete()
 
     @staticmethod
-    def replace_single_file(owner, file_category, file_json):
+    def replace_single_file(owner, file_category, file_json, new_file_category=None):
         """
         :param owner: Owner model instace of the file
         :param file_category: File type
         :param file_json: File metadata
+        :param new_file_category: New file type
         :return: True if the file was changed
         """
+        new_file_category = new_file_category or file_category
         if type(owner) is Project:
             existing_file = ProjectFile.objects.filter(file_project=owner.id, file_category=file_category.value).first()
         elif type(owner) is Group:
@@ -880,16 +859,19 @@ class ProjectFile(models.Model):
         elif not is_empty_field:
             if not existing_file:
                 # Add new file
-                thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+                thumbnail = ProjectFile.from_json(owner, new_file_category, file_json)
                 thumbnail.save()
                 file_changed = True
             elif file_json['key'] != existing_file.file_key:
                 # Replace existing file
-                thumbnail = ProjectFile.from_json(owner, file_category, file_json)
+                thumbnail = ProjectFile.from_json(owner, new_file_category, file_json)
                 thumbnail.save()
                 existing_file.delete()
                 file_changed = True
         return file_changed
+
+    def get_owner(self):
+        return self.file_project or self.file_group or self.file_event or self.file_user
 
     @staticmethod
     def from_json(owner, file_category, file_json):
@@ -917,6 +899,7 @@ class ProjectFile(models.Model):
 
 class FileCategory(Enum):
     THUMBNAIL = 'THUMBNAIL'
+    THUMBNAIL_ERROR = 'THUMBNAIL_ERROR'
     RESUME = 'RESUME'
     ETC = 'ETC'
 

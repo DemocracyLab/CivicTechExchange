@@ -33,10 +33,10 @@ export DJANGO_DEBUG=True
 export HEADER_ALERT="<p>You are invited to our upcoming event, St. Hat-trick's day!  Come with a team or join a new one on Saturday, March 16.  Be sure to RSVP on <a href='https://www.eventbrite.com/e/st-hack-tricks-day-tickets-54897293282'>Eventbrite</a>!</p>"
 
 # Sponsor information
-export SPONSORS_METADATA='[{"displayName":"Amazon","url":"https://www.aboutamazon.com/our-communities/amazon-in-the-community","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/amazon_300_transparent.png","description":"At Amazon, we focus on building long-term and innovative programs that will have a lasting, positive impact in communities around the world.","category":"Sustaining"},{"displayName":"Microsoft","url":"https://www.microsoft.com/en-us/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/microsoft_200_transparent.png","description":"We’re on a mission to empower every person and every organization on the planet to achieve more.","category":"Advancing"},{"displayName":"HERE Technologies","url":"https://www.here.com/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/here_200_transparent.png","description":"By building a digital representation of reality entirely built upon location data, we are radically transforming the way the world lives, moves and interacts","category":"Advancing"}]'
+export SPONSORS_METADATA='[{"displayName":"Microsoft","url":"https://www.microsoft.com/en-us/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/microsoft_300_transparent.png","description":"We’re on a mission to empower every person and every organization on the planet to achieve more.","category":"Sustaining"},{"displayName":"Amazon","url":"https://www.aboutamazon.com/our-communities/amazon-in-the-community","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/amazon_300_transparent.png","description":"At Amazon, we focus on building long-term and innovative programs that will have a lasting, positive impact in communities around the world.","category":"Sustaining"},{"displayName":"Heap","url":"https://heap.io/why-product-analytics","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/heap_rgb_logo_horizontal_lockup_color_300.png","description":"Heap is an analytics platform that helps product, marketing, and customer success teams craft exceptional digital experiences that convert and retain users.","category":"Sustaining"}]'
 
 # Configure project description example link
-export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/index/?section=AboutProject&id=1'
+export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/projects/1'
 
 # Configure position description example link
 export POSITION_DESCRIPTION_EXAMPLE_URL='https://docs.google.com/document/d/142NH4uRblJP6XvKdmW4GiFwoOmVWY6BJfEjGrlSP3Uk/edit'
@@ -123,7 +123,7 @@ export BLOG_URL='https://blog.democracylab.org'
 export PRIVACY_POLICY_URL='https://d1agxr2dqkgkuy.cloudfront.net/documents/2020.06%20DemocracyLab%20Privacy%20Policy.pdf'
 
 # if we have a hackathon or similar event we want displayed in the nav for the duration, put it here
-export EVENT_URL='https://democracylab.org/index/?section=AboutEvent&id=1'
+export EVENT_URL='https://democracylab.org/events/1'
 
 # Qiqochat live event iframe url with placeholders
 export QIQO_IFRAME_URL='https://qiqochat.com/api/v1/iframe?&source[api_key]={api_key}&source_user_uuid={source_user_uuid}&qiqo_user_uuid={qiqo_user_uuid}&return_to="/breakout/0/EVENT_ID?embedded=true"'

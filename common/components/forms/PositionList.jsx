@@ -1,31 +1,30 @@
 // @flow
 
-import React from 'react';
-import Button from 'react-bootstrap/Button';
+import React from "react";
+import Button from "react-bootstrap/Button";
 
-import ConfirmationModal from '../common/confirmation/ConfirmationModal.jsx'
-import {PositionInfo} from "./PositionInfo.jsx";
+import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
+import { PositionInfo } from "./PositionInfo.jsx";
 import PositionEntryModal from "./PositionEntryModal.jsx";
 import GlyphStyles from "../utils/glyphs.js";
-import _ from 'lodash'
-
+import _ from "lodash";
 
 type Props = {|
   positions: $ReadOnlyArray<PositionInfo>,
-  elementid: string
+  elementid: string,
 |};
 type State = {|
   showAddEditModal: boolean,
   showDeleteModal: boolean,
   existingPosition: PositionInfo,
   positionToDelete: number,
-  positions: Array<PositionInfo>
+  positions: Array<PositionInfo>,
 |};
 
 /**
  * Lists project positions and provides add/edit functionality for them
  */
-class PositionList extends React.PureComponent<Props,State>  {
+class PositionList extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
@@ -33,13 +32,13 @@ class PositionList extends React.PureComponent<Props,State>  {
       showAddEditModal: false,
       showDeleteModal: false,
       existingPosition: null,
-      positionToDelete: null
+      positionToDelete: null,
     };
   }
 
   componentWillReceiveProps(nextProps: Props): void {
-    if(nextProps.positions) {
-      this.setState({positions: nextProps.positions || []});
+    if (nextProps.positions) {
+      this.setState({ positions: nextProps.positions || [] });
       this.updatePositionsField();
     }
   }
@@ -49,7 +48,7 @@ class PositionList extends React.PureComponent<Props,State>  {
   }
 
   onModalCancel(): void {
-    this.setState({showAddEditModal: false})
+    this.setState({ showAddEditModal: false });
   }
 
   editPosition(position: PositionInfo): void {
@@ -57,13 +56,13 @@ class PositionList extends React.PureComponent<Props,State>  {
   }
 
   savePosition(position: PositionInfo): void {
-    if(!this.state.existingPosition) {
+    if (!this.state.existingPosition) {
       this.state.positions.push(position);
     } else {
       _.assign(this.state.existingPosition, position);
     }
 
-    this.setState({showAddEditModal: false});
+    this.setState({ showAddEditModal: false });
     this.updatePositionsField();
     this.props.onChange && this.props.onChange();
   }
@@ -75,33 +74,38 @@ class PositionList extends React.PureComponent<Props,State>  {
   openModal(position: ?PositionInfo): void {
     this.setState({
       showAddEditModal: true,
-      existingPosition: position
+      existingPosition: position,
     });
   }
 
   askForDeleteConfirmation(positionToDelete: number): void {
     this.setState({
       positionToDelete: positionToDelete,
-      showDeleteModal: true
-    })
+      showDeleteModal: true,
+    });
   }
 
   confirmDelete(confirmed: boolean): void {
-    if(confirmed) {
+    if (confirmed) {
       this.state.positions.splice(this.state.positionToDelete, 1);
       this.updatePositionsField();
     }
     this.setState({
       showDeleteModal: false,
-      positionToDelete: null
-    })
+      positionToDelete: null,
+    });
     this.props.onChange && this.props.onChange();
   }
 
   render(): React$Node {
     return (
       <div>
-        <input type="hidden" ref="hiddenFormField" id={this.props.elementid} name={this.props.elementid}/>
+        <input
+          type="hidden"
+          ref="hiddenFormField"
+          id={this.props.elementid}
+          name={this.props.elementid}
+        />
         <label>Roles Needed &nbsp;</label>
         <Button
           variant="primary"
@@ -130,19 +134,34 @@ class PositionList extends React.PureComponent<Props,State>  {
   }
 
   _renderPositions(): Array<React$Node> {
-    return this.state.positions.map((position,i) => {
-      const positionDisplay = position.roleTag.subcategory + ":" + position.roleTag.display_name;
+    return this.state.positions.map((position, i) => {
+      const positionDisplay =
+        position.roleTag.subcategory + ":" + position.roleTag.display_name;
       return (
         <div key={i}>
-          {
-            position.descriptionUrl
-            ? <a href={position.descriptionUrl} target="_blank" rel="noopener noreferrer">{positionDisplay}</a>
-            : <span>{positionDisplay}</span>
-          }
-          <i className={GlyphStyles.Edit} aria-hidden="true" onClick={this.editPosition.bind(this, position)}></i>
-          <i className={GlyphStyles.Delete} aria-hidden="true" onClick={this.askForDeleteConfirmation.bind(this, i)}></i>
+          {position.descriptionUrl ? (
+            <a
+              href={position.descriptionUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {positionDisplay}
+            </a>
+          ) : (
+            <span>{positionDisplay}</span>
+          )}
+          <i
+            className={GlyphStyles.Edit}
+            aria-hidden="true"
+            onClick={this.editPosition.bind(this, position)}
+          ></i>
+          <i
+            className={GlyphStyles.Delete}
+            aria-hidden="true"
+            onClick={this.askForDeleteConfirmation.bind(this, i)}
+          ></i>
         </div>
-      )
+      );
     });
   }
 }
