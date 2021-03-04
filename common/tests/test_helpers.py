@@ -25,11 +25,11 @@ class CommonHelperTests(TestCase):
 # TODO: Update
 class FrontEndHelperTests(TestCase):
     def test_section_path(self):
-        expected = '/index/?section=AboutEvent&id=test-slug'
+        expected = '/events/test-slug'
         self.assertEqual(expected, section_path(FrontEndSection.AboutEvent, {'id': 'test-slug'}))
 
     def test_section_url(self):
-        expected = settings.PROTOCOL_DOMAIN + '/index/?section=AboutEvent&id=test-slug'
+        expected = settings.PROTOCOL_DOMAIN + '/events/test-slug'
         self.assertEqual(expected, section_url(FrontEndSection.AboutEvent, {'id': 'test-slug'}))
 
     def test_get_clean_url(self):
@@ -38,7 +38,7 @@ class FrontEndHelperTests(TestCase):
 
     def test_get_page_section(self):
         expected = 'AboutEvent'
-        self.assertEqual(expected, get_page_section('/index/?section=AboutEvent&id=test-slug'))
+        self.assertEqual(expected, get_page_section('/events/test-slug'))
 
 
 class DictionaryHelperTests(TestCase):
