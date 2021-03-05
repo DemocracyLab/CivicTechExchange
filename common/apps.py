@@ -2,6 +2,7 @@ import sys
 from django.apps import AppConfig
 from django.conf import settings
 from common.helpers.db import db_is_initialized
+from salesforce import client
 
 
 class CommonConfig(AppConfig):
@@ -9,6 +10,7 @@ class CommonConfig(AppConfig):
 
     def ready(self):
         self.display_missing_environment_variables()
+        #if settings.SALESFORCE_CONNECTED
         from common.helpers.tags import import_tags_from_csv
         if 'loaddata' in sys.argv:
             self.loaddata_clean()
