@@ -133,3 +133,5 @@ export QIQO_API_KEY=democracylab
 # export QIQO_API_SECRET=SECRET
 # export QIQO_USERS_ENDPOINT='https://api.qiqochat.com/api/v1/users'
 # export QIQO_CIRCLE_UUID=nmitq
+
+#TODO: Add CSP variable examples

@@ -338,7 +338,9 @@ CSP_CONNECT_SRC = ("'self'", '*.qiqochat.com', 'qiqocableeu.herokuapp.com')
 CSP_FONT_SRC = ("'self'", 'fonts.googleapis.com', 'fonts.gstatic.com', 'use.fontawesome.com')
 CSP_IMG_SRC = ("'self'", "data:", "'unsafe-eval'", '*.cloudfront.net', '*.s3.amazonaws.com', '*.facebook.net/', '*.facebook.com/', 'heapanalytics.com/')
 # TODO: Make sure environment variable entries added to other CSP headers
-CSP_FRAME_ANCESTORS = ('*.qiqochat.com', '*.google.com')
+CSP_FRAME_ANCESTORS = os.environ.get('CSP_FRAME_ANCESTORS', None)
+if CSP_FRAME_ANCESTORS is not None:
+    CSP_FRAME_ANCESTORS = ast.literal_eval(CSP_FRAME_ANCESTORS)
 CSP_FRAME_SRC = os.environ.get('CSP_FRAME_SRC', None)
 if CSP_FRAME_SRC is not None:
     CSP_FRAME_SRC = ast.literal_eval(CSP_FRAME_SRC)
