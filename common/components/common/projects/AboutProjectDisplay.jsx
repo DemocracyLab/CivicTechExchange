@@ -233,36 +233,34 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             </Tab>
 
           <Tab eventKey="proj-skills" title="Skills Needed" className="Profile-tab Profile-tab-skillsneeded">
+            
+            <div className="AboutProject-skilltech-container">
             {project && !_.isEmpty(project.project_positions) && (
-              <div className="OLD_AboutProjects-skills">
-                <p
-                  id="skills-needed"
-                  className="OLD_AboutProjects-skills-title"
-                >
-                  Skills Needed
-                </p>
+              <div className="AboutProject-skills">
+                <h4>Skills Needed</h4>              
                 {project &&
                   project.project_positions &&
                   project.project_positions.map(position => (
-                    <p>{position.roleTag.display_name}</p>
+                    <span className="Profile-pill">{position.roleTag.display_name}</span>
                   ))}
               </div>
             )}
 
             {project && !_.isEmpty(project.project_technologies) && (
-              <div className="OLD_AboutProjects-technologies">
-                <p className="OLD_AboutProjects-tech-title">
+              <div className="AboutProject-technologies">
+                <h4>
                   Technologies Used
-                </p>
+                </h4>
                 {project &&
                   project.project_technologies &&
                   project.project_technologies.map(tech => (
-                    <p>{tech.display_name}</p>
+                    <span className="Profile-pill">{tech.display_name}</span>
                   ))}
               </div>
             )}
+            </div>
 
-            <div className="OLD_AboutProjects-positions-available">
+            <div className="AboutProject-positions-available">
               {project &&
                 !_.isEmpty(project.project_positions) &&
                 this._renderPositions()}

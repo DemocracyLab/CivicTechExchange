@@ -418,6 +418,8 @@
 // some of this may move into generic .Profile-x-y classes when we do groups
 // but only if it's universal between both
 //
+//
+//
 
 .AboutProject-top-logo {
   width: 25%; // check this, and set a min-width at larger breakpoints so it's not squeezed
@@ -443,6 +445,17 @@
   display: flex;
   flex: 1 0 auto; // make the buttons stay in column
   flex-direction: column;
+}
+
+.AboutProject-positions-available {
+  .Position-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .Text-section {
+    margin-top: 1rem;
+  }
 }
 
 .AboutProject-secondary-section {
