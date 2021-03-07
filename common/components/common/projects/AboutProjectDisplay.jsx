@@ -198,7 +198,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   // tabbed main section content
   _renderMainSection(project) {
     return (
-      <div className="Profile-tab-container">
+      <div className="Profile-main-container">
         <Tabs defaultActiveKey="proj-details" id="AboutProject-tabs"> 
           <Tab eventKey="proj-details" title="Details" className="Profile-tab Profile-tab-details">
             {!_.isEmpty(
@@ -303,10 +303,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   _renderSecondarySection(project) {
     return (
-      <div className="Profile-secondary-section col-12">
+      <div className="Profile-secondary-container">
         {project && !_.isEmpty(project.project_links) && (
           <React.Fragment>
-            <div className="OLD_AboutProjects-links">
+            <div className="AboutProject-links AboutProject-secondary-section">
               <h4>Links</h4>
               {this._renderLinks()}
             </div>
@@ -315,7 +315,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
         {project && !_.isEmpty(project.project_files) && (
           <React.Fragment>
-            <div className="OLD_AboutProjects-files">
+            <div className="AboutProject-files AboutProject-secondary-section">
               <h4>Files</h4>
               {this._renderFiles()}
             </div>
@@ -324,7 +324,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
         {this._renderGroups(project)}
 
-        <div>
+        <div className="AboutProject-staff AboutProject-secondary-section">
           {!_.isEmpty(this.state.volunteers) ? (
             <VolunteerSection
               volunteers={this.state.volunteers}

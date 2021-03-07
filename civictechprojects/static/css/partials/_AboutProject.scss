@@ -410,20 +410,18 @@
   }
 }
 
-
 //
 //
 //
-// new CSS here 
-// delete everything above when we get Groups and Project profiles in the same template 
+// new CSS here
+// delete everything above when we get Groups and Project profiles in the same template
 // some of this may move into generic .Profile-x-y classes when we do groups
 // but only if it's universal between both
 //
 
 .AboutProject-top-logo {
-  width: 25%;
+  width: 25%; // check this, and set a min-width at larger breakpoints so it's not squeezed
   padding: 0.5rem;
-  border: 1px solid $color-grey-frame-border;
   border-radius: 5px;
   img {
     object-fit: contain;
@@ -436,14 +434,22 @@
 .AboutProject-top-details {
   flex-basis: 100%;
   order: 3;
+  padding: 15px 0 0 0;
 }
 
 .AboutProject-top-interactions {
   flex-basis: 75%;
   order: 2;
-  display: flex; 
+  display: flex;
   flex: 1 0 auto; // make the buttons stay in column
   flex-direction: column;
+}
+
+.AboutProject-secondary-section {
+  margin: 15px 0;
+  padding: 15px;
+  border: 1px solid $color-grey-frame-border;
+  border-radius: 5px;
 }
 
 @include media-breakpoint-up(lg) {
@@ -457,5 +463,19 @@
     order: 3;
     flex-shrink: 0;
   }
-  
+  .AboutProject-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h4 {
+      min-width: 260px;
+    }
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .AboutProject-top-logo {
+    min-width: 300px;
+  }
 }
