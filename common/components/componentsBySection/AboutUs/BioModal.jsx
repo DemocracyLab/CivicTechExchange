@@ -5,6 +5,8 @@ import Modal from "react-bootstrap/Modal";
 import _ from "lodash";
 import type { BioPersonData } from "./BioPersonData.jsx";
 import utils from "../../utils/utils.js";
+import url from "../../utils/url.js";
+import Section from "../../enums/Section.js";
 
 type Props = {|
   showModal: boolean,
@@ -95,7 +97,9 @@ class BioModal extends React.PureComponent<Props, State> {
       <h4 className="bio-modal-name">
         {this.props.person.profile_id ? (
           <a
-            href={"/index/?section=Profile&id=" + this.props.person.profile_id}
+            href={url.section(Section.Profile, {
+              id: this.props.person.profile_id,
+            })}
           >
             {this.props.person.first_name} {this.props.person.last_name}
           </a>

@@ -6,6 +6,7 @@ from allauth.account.signals import user_logged_in
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.dispatch import receiver
 from common.helpers.error_handlers import ReportableError
+from common.helpers.s3 import copy_external_thumbnail_to_s3
 from civictechprojects.models import ProjectFile, FileCategory
 from democracylab.models import Contributor
 from django.contrib.auth.models import User
@@ -84,12 +85,5 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         owner = sociallogin.user.contributor
         user_avatar_url = sociallogin.account.get_provider().get_avatar_url(sociallogin)
         if user_avatar_url:
-            file_json = {
-                'publicUrl': user_avatar_url,
-                'file_user': owner,
-                'file_category': FileCategory.THUMBNAIL.value,
-                'visibility': 'PUBLIC',
-                'fileName': f'{owner.first_name}{owner.last_name}_thumbnail.{sociallogin.account.provider} avatar',
-                'key': f'{sociallogin.account.provider}/{owner.username}'
-            }
-            ProjectFile.replace_single_file(owner, FileCategory.THUMBNAIL, file_json)
+            file_json = copy_external_thumbnail_to_s3(user_avatar_url, sociallogin.account.provider, owner)
+            ProjectFile.replace_single_file(owner, FileCategory(file_json['file_category']), file_json)

@@ -102,8 +102,8 @@ class CreateEventController extends React.PureComponent<{||}, State> {
   ): void {
     const formSubmitUrl: string =
       this.state.event && this.state.event.event_id
-        ? "/events/edit/" + this.state.event.event_id + "/"
-        : "/events/create/";
+        ? "/api/events/edit/" + this.state.event.event_id + "/"
+        : "/api/events/create/";
     api.postForm(
       formSubmitUrl,
       formRef,

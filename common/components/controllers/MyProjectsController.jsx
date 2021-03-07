@@ -105,7 +105,7 @@ class MyProjectsController extends React.Component<{||}, State> {
   confirmDeleteProject(confirmedDelete: boolean): void {
     if (confirmedDelete) {
       const url =
-        "/projects/delete/" + this.state.projectToDelete.project_id + "/";
+        "/api/projects/delete/" + this.state.projectToDelete.project_id + "/";
       //TODO: this should be ProjectAPIUtils.delete, not post
       ProjectAPIUtils.post(
         url,

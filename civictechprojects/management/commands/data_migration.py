@@ -1,10 +1,12 @@
 from django.core.management.base import BaseCommand
 from civictechprojects.migrations.data_migrations.migrate_location import migrate_locations_from_city_list
 from civictechprojects.migrations.data_migrations.backfill_uuid import backfill_user_uuids
+from civictechprojects.migrations.data_migrations.upload_oauth_thumbnails import upload_oauth_thumbnails
 
 data_migrations = {
     "migrate_locations": migrate_locations_from_city_list,
-    "backfill_user_uuids": backfill_user_uuids
+    "backfill_user_uuids": backfill_user_uuids,
+    'upload_oauth_thumbnails': upload_oauth_thumbnails
 }
 data_migration_names = ','.join(data_migrations.keys())
 

@@ -137,8 +137,8 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
   ): void {
     const formSubmitUrl: string =
       this.state.project && this.state.project.project_id
-        ? "/projects/edit/" + this.state.project.project_id + "/"
-        : "/projects/signup/";
+        ? "/api/projects/edit/" + this.state.project.project_id + "/"
+        : "/api/projects/create/";
     api.postForm(
       formSubmitUrl,
       formRef,

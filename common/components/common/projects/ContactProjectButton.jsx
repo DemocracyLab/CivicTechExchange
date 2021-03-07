@@ -103,10 +103,6 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
   }
 
   _renderEditProjectButton(): React$Node {
-    const id = { id: this.props.project.project_id };
-    const section: string = this.props.project.project_approved
-      ? Section.EditProject
-      : Section.CreateProject;
     return (
       <Button
         variant="primary"
@@ -114,7 +110,9 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
-        href={url.section(section, id)}
+        href={url.section(Section.CreateProject, {
+          id: this.props.project.project_id,
+        })}
       >
         Edit Project
       </Button>
@@ -144,9 +142,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
-        href={`/index/?section=LogIn&prev=${
-          window.location.href.split("?section=")[1]
-        }`}
+        href={url.logInThenReturn()}
       >
         Sign in to Contact Project
       </Button>

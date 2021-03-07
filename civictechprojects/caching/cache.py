@@ -79,8 +79,9 @@ class ProjectSearchTagsCacheManager:
         elif group is not None:
             log_line += ' for group:' + str(group.id)
         print(log_line)
-        value = self._projects_tag_counts(event, group)
-        Cache.refresh(self._get_key(event), value)
+        key = self._get_key(event=event, group=group)
+        value = self._projects_tag_counts(event=event, group=group)
+        Cache.refresh(key, value)
         return value
 
     def _get_key(self, event=None, group=None):
@@ -100,7 +101,7 @@ class ProjectSearchTagsCacheManager:
         if event is not None:
             projects = event.get_linked_projects()
         elif group is not None:
-            projects = group.get_group_projects()
+            projects = group.get_group_projects(approved_only=True)
         else:
             projects = Project.objects.filter(is_searchable=True)
         issues, technologies, stage, organization, organization_type, positions = [], [], [], [], [], []

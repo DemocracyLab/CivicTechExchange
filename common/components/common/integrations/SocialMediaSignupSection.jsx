@@ -82,7 +82,7 @@ class SocialMediaSignupSection extends React.Component<{||}, State> {
             (config.iconClass ? " " + config.iconClass : "");
           return (
             <div className="LogInController-socialLink">
-              <a href={"/login/" + app} key={app}>
+              <a href={"/api/login/" + app} key={app}>
                 <span style={{ color: config.iconColor }} className={iconClass}>
                   {config.iconElement}
                 </span>
