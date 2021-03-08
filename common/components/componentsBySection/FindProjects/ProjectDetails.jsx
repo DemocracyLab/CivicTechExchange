@@ -67,7 +67,7 @@ class ProjectDetails extends React.PureComponent<Props, State> {
         {this.state.projectOrganizationType && (
           <div className="AboutProjects-icon-row">
             <i className={Glyph(GlyphStyles.University, GlyphSizes.LG)} />
-            <p className="AboutProjects-icon-text">
+            <p className="AboutProjects-icon-text text-break">
               {this.state.projectOrganizationType}
             </p>
           </div>
