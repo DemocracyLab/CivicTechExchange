@@ -460,9 +460,24 @@
     margin-top: 1rem;
   }
 }
+.AboutProject-skilltech-container {
+  display: flex;  
+}
 .AboutProject-skills, .AboutProjects-technologies {
-  margin: 15px 0;
+  padding: 15px 0;
   flex-basis: 100%;
+}
+.AboutProject-positions-available {
+  margin: 15px 0;
+  .Position-entry {
+    border: 1px solid $color-grey-frame-border;
+    border-radius: 5px;
+    margin: 30px 0;
+    padding: 15px;
+  }
+  .Position-entry:first-of-type {
+    margin-top: 0;
+  }
 }
 
 .AboutProject-secondary-section {
