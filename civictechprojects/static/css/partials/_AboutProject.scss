@@ -461,7 +461,8 @@
   }
 }
 .AboutProject-skilltech-container {
-  display: flex;  
+  display: flex;
+  flex-direction: column;  
 }
 .AboutProject-skills, .AboutProject-technologies {
   padding: 15px 0;
@@ -532,6 +533,9 @@
     h4 {
       min-width: 260px;
     }
+  }
+  .AboutProject-skilltech-container {
+    flex-direction: row;  
   }
   .AboutProject-skills, .AboutProjects-technologies {
     flex-basis: 50%;
