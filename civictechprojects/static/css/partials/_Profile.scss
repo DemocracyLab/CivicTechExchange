@@ -21,6 +21,7 @@
   border-radius: 20px;
   padding: 4px 10px 4px 10px;
   margin: 4px;
+  display: inline-block; // so they wrap properly
 }
 //customize react-bootstrap Tabs component style
 //TODO: Clean up some of these very specific selectors, possibly with adding a class to the component <Tab>

@@ -310,7 +310,7 @@
   }
   li {
     list-style-type: none;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
   a {
     vertical-align: top; /* align text with top of group icon instead of bottom */
@@ -442,9 +442,12 @@
 .AboutProject-top-interactions {
   flex-basis: 75%;
   order: 2;
+}
+// make buttons stay in column even if the section is wide enough to stack horizontally
+.AboutProject-owner, .AboutProject-top-interactions {
   display: flex;
-  flex: 1 0 auto; // make the buttons stay in column
   flex-direction: column;
+  flex: 1 0 auto;
 }
 
 .AboutProject-positions-available {
@@ -457,12 +460,42 @@
     margin-top: 1rem;
   }
 }
+.AboutProject-skills, .AboutProjects-technologies {
+  margin: 15px 0;
+  flex-basis: 100%;
+}
 
 .AboutProject-secondary-section {
   margin: 15px 0;
   padding: 15px;
   border: 1px solid $color-grey-frame-border;
   border-radius: 5px;
+}
+.AboutProject-groups {
+  ul {
+    padding-left: 0;
+  }
+  li {
+    list-style-type: none;
+    margin-bottom: 15px;
+  }
+  a {
+    vertical-align: top; /* align text with top of group icon instead of bottom */
+  }
+}
+.AboutProject-group-image {
+  height: 60px;
+  width: 60px;
+  display: inline-block;
+  margin-right: 10px;
+  img,
+  i {
+    object-fit: contain;
+    max-width: 100%;
+  }
+  i {
+    color: $color-text-dark;
+  }
 }
 
 @include media-breakpoint-up(lg) {
@@ -484,6 +517,9 @@
     h4 {
       min-width: 260px;
     }
+  }
+  .AboutProject-skills, .AboutProjects-technologies {
+    flex-basis: 50%;
   }
 }
 

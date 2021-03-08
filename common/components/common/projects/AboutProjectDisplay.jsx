@@ -28,8 +28,8 @@ import Section from "../../enums/Section.js";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import EventCardsListings from "../../componentsBySection/FindEvents/EventCardsListings.jsx";
 import type { MyGroupData } from "../../stores/MyGroupsStore.js";
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
@@ -139,58 +139,58 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     return (
       <div className="Profile-top-section-content">
         <div className="AboutProject-top-logo">
-        <img
-          src={
-            project &&
-            project.project_thumbnail &&
-            project.project_thumbnail.publicUrl
-          }
-        />
+          <img
+            src={
+              project &&
+              project.project_thumbnail &&
+              project.project_thumbnail.publicUrl
+            }
+          />
         </div>
         <div className="AboutProject-top-details">
-        <h1>{project && project.project_name}</h1>
-        <p>
-          {project &&
-            project.project_issue_area &&
-            project.project_issue_area
-              .map(issue => issue.display_name)
-              .join(",")}
-        </p>
-        <p>{project && project.project_short_description}</p>
-        <ProjectDetails
-          projectLocation={
-            project && ProjectAPIUtils.getLocationDisplayName(project)
-          }
-          projectUrl={project && project.project_url}
-          projectStage={
-            project && !_.isEmpty(project.project_stage)
-              ? project.project_stage[0].display_name
-              : null
-          }
-          projectOrganizationType={
-            project && !_.isEmpty(project.project_organization_type)
-              ? project.project_organization_type[0].display_name
-              : null
-          }
-          dateModified={project && project.project_date_modified}
-        />
+          <h1>{project && project.project_name}</h1>
+          <p>
+            {project &&
+              project.project_issue_area &&
+              project.project_issue_area
+                .map(issue => issue.display_name)
+                .join(",")}
+          </p>
+          <p>{project && project.project_short_description}</p>
+          <ProjectDetails
+            projectLocation={
+              project && ProjectAPIUtils.getLocationDisplayName(project)
+            }
+            projectUrl={project && project.project_url}
+            projectStage={
+              project && !_.isEmpty(project.project_stage)
+                ? project.project_stage[0].display_name
+                : null
+            }
+            projectOrganizationType={
+              project && !_.isEmpty(project.project_organization_type)
+                ? project.project_organization_type[0].display_name
+                : null
+            }
+            dateModified={project && project.project_date_modified}
+          />
         </div>
 
         <div className="AboutProject-top-interactions">
-        <ApproveGroupsSection project={this.props.project} />
+          <ApproveGroupsSection project={this.props.project} />
 
-        <ProjectVolunteerModal
-          projectId={this.state.project && this.state.project.project_id}
-          positions={this.state.project && this.state.project.project_positions}
-          positionToJoin={this.state.positionToJoin}
-          showModal={this.state.showJoinModal}
-          handleClose={this.confirmJoinProject.bind(this)}
-        />
+          <ProjectVolunteerModal
+            projectId={this.state.project && this.state.project.project_id}
+            positions={
+              this.state.project && this.state.project.project_positions
+            }
+            positionToJoin={this.state.positionToJoin}
+            showModal={this.state.showJoinModal}
+            handleClose={this.confirmJoinProject.bind(this)}
+          />
 
-        {!this.state.viewOnly && this._renderContactAndVolunteerButtons()}
+          {!this.state.viewOnly && this._renderContactAndVolunteerButtons()}
         </div>
-
-        
       </div>
     );
   }
@@ -199,8 +199,12 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   _renderMainSection(project) {
     return (
       <div className="Profile-main-container">
-        <Tabs defaultActiveKey="proj-details" id="AboutProject-tabs"> 
-          <Tab eventKey="proj-details" title="Details" className="Profile-tab Profile-tab-details">
+        <Tabs defaultActiveKey="proj-details" id="AboutProject-tabs">
+          <Tab
+            eventKey="proj-details"
+            title="Details"
+            className="Profile-tab Profile-tab-details"
+          >
             {!_.isEmpty(
               project.project_description_solution ||
                 project.project_description_actions
@@ -230,70 +234,93 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 </div>
               </React.Fragment>
             )}
-            </Tab>
-
-          <Tab eventKey="proj-skills" title="Skills Needed" className="Profile-tab Profile-tab-skillsneeded">
-            
-            <div className="AboutProject-skilltech-container">
-            {project && !_.isEmpty(project.project_positions) && (
-              <div className="AboutProject-skills">
-                <h4>Skills Needed</h4>              
-                {project &&
-                  project.project_positions &&
-                  project.project_positions.map(position => (
-                    <span className="Profile-pill">{position.roleTag.display_name}</span>
-                  ))}
-              </div>
-            )}
-
-            {project && !_.isEmpty(project.project_technologies) && (
-              <div className="AboutProject-technologies">
-                <h4>
-                  Technologies Used
-                </h4>
-                {project &&
-                  project.project_technologies &&
-                  project.project_technologies.map(tech => (
-                    <span className="Profile-pill">{tech.display_name}</span>
-                  ))}
-              </div>
-            )}
-            </div>
-
-            <div className="AboutProject-positions-available">
-              {project &&
-                !_.isEmpty(project.project_positions) &&
-                this._renderPositions()}
-            </div>
           </Tab>
 
-          <Tab eventKey="proj-events" title="Events" className="Profile-tab Profile-tab-events">
-            <div className="OLD_AboutProjects-events">
-              <EventCardsListings
-                events={project.project_events}
-                showMessageForNoFutureEvents={false}
-              />
-            </div>
-          </Tab>
+          {project &&
+            !_.isEmpty(
+              project.project_positions ||
+                project.project_technologies ||
+                project.project_positions
+            ) && (
+              <Tab
+                eventKey="proj-skills"
+                title="Skills Needed"
+                className="Profile-tab Profile-tab-skillsneeded"
+              >
+                <div className="AboutProject-skilltech-container">
+                  {project && !_.isEmpty(project.project_positions) && (
+                    <div className="AboutProject-skills">
+                      <h4>Skills Needed</h4>
+                      {project.project_positions.map(position => (
+                        <span className="Profile-pill">
+                          {position.roleTag.display_name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
-          <Tab eventKey="proj-activity" title="Recent Activity" className="Profile-tab Profile-tab-recent-activity">
-            <h4>Recent Activity</h4>
-            {project.project_commits
-              .slice(0, this.state.maxActivity)
-              .map(commit => (
-                <ProjectCommitCard commit={commit} />
-              ))}
-            {project.project_commits.length > this.state.maxActivity && (
-              <div className="OLD_AboutProjects-show-more-activity-container">
-                <div
-                  className="btn btn-primary AboutProjects-show-more-activity"
-                  onClick={this.handleShowMoreActivity}
-                >
-                  Show more activity
+                  {project && !_.isEmpty(project.project_technologies) && (
+                    <div className="AboutProject-technologies">
+                      <h4>Technologies Used</h4>
+                      {project &&
+                        project.project_technologies &&
+                        project.project_technologies.map(tech => (
+                          <span className="Profile-pill">
+                            {tech.display_name}
+                          </span>
+                        ))}
+                    </div>
+                  )}
                 </div>
-              </div>
+
+                <div className="AboutProject-positions-available">
+                  <h4>Positions Available</h4>
+                  {project &&
+                    !_.isEmpty(project.project_positions) &&
+                    this._renderPositions()}
+                </div>
+              </Tab>
             )}
-          </Tab>
+
+          {project.project_events && !_.isEmpty(project.project_events) && (
+            <Tab
+              eventKey="proj-events"
+              title="Events"
+              className="Profile-tab Profile-tab-events"
+            >
+              <div className="OLD_AboutProjects-events">
+                <EventCardsListings
+                  events={project.project_events}
+                  showMessageForNoFutureEvents={false}
+                />
+              </div>
+            </Tab>
+          )}
+
+          {project.project_commits && !_.isEmpty(project.project_commits) && (
+            <Tab
+              eventKey="proj-activity"
+              title="Recent Activity"
+              className="Profile-tab Profile-tab-recent-activity"
+            >
+              <h4>Recent Activity</h4>
+              {project.project_commits
+                .slice(0, this.state.maxActivity)
+                .map(commit => (
+                  <ProjectCommitCard commit={commit} />
+                ))}
+              {project.project_commits.length > this.state.maxActivity && (
+                <div className="OLD_AboutProjects-show-more-activity-container">
+                  <div
+                    className="btn btn-primary AboutProjects-show-more-activity"
+                    onClick={this.handleShowMoreActivity}
+                  >
+                    Show more activity
+                  </div>
+                </div>
+              )}
+            </Tab>
+          )}
         </Tabs>
       </div>
     );
@@ -372,7 +399,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   _renderContactAndVolunteerButtons(): React$Node {
     return (
-      <div className="OLD_AboutProjects-owner">
+      <div className="AboutProject-owner">
         <ContactProjectButton project={this.state.project} />
         <ContactVolunteersButton project={this.state.project} />
         <InviteProjectToGroupButton project={this.state.project} />
@@ -457,7 +484,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     return (
       !_.isEmpty(groups) && (
         <React.Fragment>
-          <div className="OLD_AboutProjects-groups">
+          <div className="AboutProject-group">
             <h4>Groups</h4>
             <ul>
               {project.project_groups.map((group, i) => {
@@ -483,7 +510,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   _renderGroupIcon(group): ?Array<React$Node> {
     return (
-      <div className="OLD_AboutProjects-group-image">
+      <div className="AboutProject-group-image">
         <a href={url.section(Section.AboutGroup, { id: group.group_id })}>
           {!_.isEmpty(group.group_thumbnail) ? (
             <img
