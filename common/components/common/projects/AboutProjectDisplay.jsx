@@ -484,7 +484,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     return (
       !_.isEmpty(groups) && (
         <React.Fragment>
-          <div className="AboutProject-group">
+          <div className="AboutProject-group AboutProject-secondary-section">
             <h4>Groups</h4>
             <ul>
               {project.project_groups.map((group, i) => {
