@@ -548,6 +548,7 @@
   }
   .AboutProject-skills, .AboutProjects-technologies {
     flex-basis: 50%;
+    flex-shrink: 0;
   }
 }
 
