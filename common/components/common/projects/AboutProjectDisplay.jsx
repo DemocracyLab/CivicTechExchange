@@ -30,6 +30,7 @@ import EventCardsListings from "../../componentsBySection/FindEvents/EventCardsL
 import type { MyGroupData } from "../../stores/MyGroupsStore.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
+import Button from "react-bootstrap/Button";
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
@@ -208,18 +209,12 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             {!_.isEmpty(
               project.project_description_solution ||
                 project.project_description_actions
-            ) && (
-              <h3 className="OLD_AboutProjects-details-sectionheader">
-                Problem
-              </h3>
-            )}
+            ) && <h3>Problem</h3>}
             {project.project_description}
             {!_.isEmpty(project.project_description_solution) && (
               <React.Fragment>
                 <div>
-                  <h3 className="OLD_AboutProjects-details-sectionheader pt-4">
-                    Solution
-                  </h3>
+                  <h3 className="pt-4">Solution</h3>
                   {project.project_description_solution}
                 </div>
               </React.Fragment>
@@ -227,9 +222,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             {!_.isEmpty(project.project_description_actions) && (
               <React.Fragment>
                 <div>
-                  <h3 className="OLD_AboutProjects-details-sectionheader pt-4">
-                    Action
-                  </h3>
+                  <h3 className="pt-4">Action</h3>
                   {project.project_description_actions}
                 </div>
               </React.Fragment>
@@ -288,7 +281,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               title="Events"
               className="Profile-tab Profile-tab-events"
             >
-              <div className="OLD_AboutProjects-events">
+              <div>
                 <EventCardsListings
                   events={project.project_events}
                   showMessageForNoFutureEvents={false}
@@ -310,13 +303,13 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                   <ProjectCommitCard commit={commit} />
                 ))}
               {project.project_commits.length > this.state.maxActivity && (
-                <div className="OLD_AboutProjects-show-more-activity-container">
-                  <div
-                    className="btn btn-primary AboutProjects-show-more-activity"
+                <div className="AboutProject-show-more-activity-container">
+                  <Button
+                    variant="primary"
                     onClick={this.handleShowMoreActivity}
                   >
                     Show more activity
-                  </div>
+                  </Button>
                 </div>
               )}
             </Tab>
@@ -417,7 +410,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       project &&
       project.project_files &&
       project.project_files.map((file, i) => (
-        <div key={i} className="OLD_AboutProjects-file-link">
+        <div key={i} className="AboutProject-file-link">
           <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">
             {file.fileName}
           </a>

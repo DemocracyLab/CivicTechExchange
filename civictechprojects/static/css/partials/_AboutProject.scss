@@ -445,11 +445,12 @@
 }
 // make buttons stay in column even if the section is wide enough to stack horizontally
 // on narrow mobile devices keep them constrained to a little less than 65% for visual spacing
-.AboutProject-owner, .AboutProject-top-interactions {
+.AboutProject-owner,
+.AboutProject-top-interactions {
   display: flex;
   flex-direction: column;
-  flex: 0 0 60%; 
-  margin-left: auto; 
+  flex: 0 0 60%;
+  margin-left: auto;
 }
 
 .AboutProject-positions-available {
@@ -464,9 +465,10 @@
 }
 .AboutProject-skilltech-container {
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
 }
-.AboutProject-skills, .AboutProject-technologies {
+.AboutProject-skills,
+.AboutProject-technologies {
   padding: 15px 0;
   flex-basis: 100%;
 }
@@ -518,6 +520,15 @@
     color: $color-text-dark;
   }
 }
+.AboutProject-file-link {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.AboutProject-show-more-activity-container {
+  display: flex;
+  justify-content: space-evenly;
+}
 
 @include media-breakpoint-up(lg) {
   .AboutProject-top-logo {
@@ -544,9 +555,10 @@
     }
   }
   .AboutProject-skilltech-container {
-    flex-direction: row;  
+    flex-direction: row;
   }
-  .AboutProject-skills, .AboutProjects-technologies {
+  .AboutProject-skills,
+  .AboutProjects-technologies {
     flex-basis: 50%;
     flex-shrink: 0;
   }
