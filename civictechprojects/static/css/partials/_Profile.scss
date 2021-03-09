@@ -1,0 +1,127 @@
+// common elements for project/group/etc profile pages
+
+.Profile-root {
+  background: $color-background-light;
+}
+
+.Profile-top-section-content {
+  border: 1px solid $color-grey-frame-border;
+  border-radius: 5px;
+  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.Profile-tab {
+  padding: 1rem;
+}
+.Profile-pill {
+  background: $color-grey-medium;
+  border-radius: 20px;
+  padding: 4px 10px 4px 10px;
+  margin: 4px;
+  display: inline-block; // so they wrap properly
+}
+//customize react-bootstrap Tabs component style
+//TODO: Clean up some of these very specific selectors, possibly with adding a class to the component <Tab>
+.Profile-main-container {
+  margin: 15px 0;
+
+  //customize tab bar
+  .nav-tabs {
+    border: 1px solid $color-grey-frame-border;
+    border-radius: 5px;
+    font-size: 1.25rem;
+    a.nav-item.nav-link {
+      color: $color-text-dark;
+    }
+    a.nav-item.nav-link:hover
+    {
+      color: $color-orange;
+      border: none;
+    }
+    a.nav-item.nav-link.active,
+    a.nav-item.nav-link.active:hover,
+    a.nav-item.nav-link.active:focus {
+      border: none;
+      border-bottom: 3px solid $color-orange !important; //keep this visible even in hover/focus state
+    }
+  }
+  //border around tab content
+  .tab-content {
+    border: 1px solid $color-grey-frame-border;
+    border-radius: 5px;
+    margin-top: 1rem;
+  }
+}
+
+//TODO: make sure lg is the right breakpoint for switching layouts
+@include media-breakpoint-up(lg) {
+  .Profile-top-section-content {
+    margin: 15px 0;
+    padding: 15px;
+    flex-wrap: nowrap;
+  }
+  .Profile-primary-section {
+    width: 100%; // don't shrink section if content is narrow in one tab vs another
+  }
+  .Profile-main-container {
+    .nav-tabs {
+      display: flex;
+      justify-content: space-around;
+    }
+  }
+  // min-width here ensures it stays on one row with main section content when we want that
+  .Profile-secondary-section {
+    min-width: 260px;
+  }
+}
+
+// font selection stuff
+// test run for deploying this globally, at which point remove this whole block
+.Profile-root {
+  p, span, li {
+    line-height: 1.618;
+  }
+  h1 {
+    font-size: 27px;
+  }
+  h2 {
+    font-size: 21px;
+  }
+  h3 {
+    font-size: 17px;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  p, span, li {
+    font-size: 15px;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .Profile-root {
+    p, span, li {
+      line-height: 1.5;
+    }
+    h1 {
+      font-size: 39px;
+    }
+    h2 {
+      font-size: 23px;
+    }
+    h3 {
+      font-size: 19px;
+    }
+    h4 {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    p, span, li {
+      font-size: 16px;
+    }
+  }
+}

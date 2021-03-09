@@ -310,7 +310,7 @@
   }
   li {
     list-style-type: none;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
   a {
     vertical-align: top; /* align text with top of group icon instead of bottom */
@@ -407,5 +407,165 @@
 @media (max-width: 400px) {
   .AboutProjects_tabs {
     padding-top: 24px;
+  }
+}
+
+//
+//
+//
+// new CSS here
+// delete everything above when we get Groups and Project profiles in the same template
+// some of this may move into generic .Profile-x-y classes when we do groups
+// but only if it's universal between both
+//
+//
+//
+
+.AboutProject-top-logo {
+  min-width: 35%; // no squeezing the image allowed
+  padding: 0.5rem;
+  border-radius: 5px;
+  img {
+    object-fit: contain;
+    max-width: 100%;
+  }
+  flex-basis: 35%;
+  order: 1;
+}
+
+.AboutProject-top-details {
+  flex-basis: 100%;
+  order: 3;
+  padding: 15px 0 0 0;
+}
+
+.AboutProject-top-interactions {
+  flex-basis: 65%;
+  order: 2;
+}
+// make buttons stay in column even if the section is wide enough to stack horizontally
+// on narrow mobile devices keep them constrained to a little less than 65% for visual spacing
+.AboutProject-owner,
+.AboutProject-top-interactions {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 60%;
+  margin-left: auto;
+}
+
+.AboutProject-positions-available {
+  .Position-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .Text-section {
+    margin-top: 1rem;
+  }
+}
+.AboutProject-skilltech-container {
+  display: flex;
+  flex-direction: column;
+}
+.AboutProject-skills,
+.AboutProject-technologies {
+  padding: 15px 0;
+  flex-basis: 100%;
+}
+.AboutProject-positions-available {
+  margin: 15px 0;
+  .Position-entry {
+    border: 1px solid $color-grey-medium;
+    border-radius: 5px;
+    margin: 30px 0;
+    padding: 15px;
+  }
+  .Position-entry:first-of-type {
+    margin-top: 0;
+  }
+}
+
+.AboutProject-secondary-section {
+  margin: 15px 0;
+  padding: 15px;
+  border: 1px solid $color-grey-frame-border;
+  border-radius: 5px;
+}
+.AboutProject-links .IconLink-right {
+  width: 196px; // fixes issue at 320px
+}
+.AboutProject-group {
+  ul {
+    padding-left: 0;
+  }
+  li {
+    list-style-type: none;
+    margin-bottom: 15px;
+  }
+  a {
+    vertical-align: top; /* align text with top of group icon instead of bottom */
+  }
+}
+.AboutProject-group-image {
+  height: 60px;
+  width: 60px;
+  display: inline-block;
+  margin-right: 10px;
+  img,
+  i {
+    object-fit: contain;
+    max-width: 100%;
+  }
+  i {
+    color: $color-text-dark;
+  }
+}
+.AboutProject-file-link {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.AboutProject-show-more-activity-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+@include media-breakpoint-up(lg) {
+  .AboutProject-top-logo {
+    flex-basis: 25%;
+    min-width: 25%;
+  }
+  .AboutProject-top-details {
+    flex-basis: auto;
+    order: 2;
+    padding: 0 30px;
+  }
+  .AboutProject-top-interactions {
+    flex-basis: auto;
+    order: 3;
+    flex-shrink: 0;
+  }
+  .AboutProject-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h4 {
+      min-width: 260px;
+    }
+  }
+  .AboutProject-skilltech-container {
+    flex-direction: row;
+  }
+  .AboutProject-skills,
+  .AboutProjects-technologies {
+    flex-basis: 50%;
+    flex-shrink: 0;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .AboutProject-top-logo {
+    min-width: 300px;
   }
 }
