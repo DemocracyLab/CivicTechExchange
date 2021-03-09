@@ -11,6 +11,7 @@ import _ from "lodash";
 type State = {|
   keyword: string,
   tags: List<TagDefinition>,
+  defaultSort: string,
   sortField: string,
   location: string,
   locationRadius: LocationRadius,
@@ -25,6 +26,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
     return {
       keyword: ProjectSearchStore.getKeyword() || "",
       tags: ProjectSearchStore.getTags() || [],
+      defaultSort: ProjectSearchStore.getDefaultSortField() || "",
       sortField: ProjectSearchStore.getSortField() || "",
       location: ProjectSearchStore.getLegacyLocation() || "",
       locationRadius: ProjectSearchStore.getLocation() || {},
@@ -40,7 +42,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
             !(
               this.state.keyword ||
               this.state.tags.size > 0 ||
-              this.state.sortField ||
+              this.state.sortField !== this.state.defaultSort ||
               this.state.location ||
               !_.isEmpty(this.state.locationRadius)
             )

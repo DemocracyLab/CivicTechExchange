@@ -21,6 +21,7 @@ import _ from "lodash";
 
 export type SearchSettings = {|
   updateUrl: boolean,
+  defaultSort: string,
 |};
 
 export type FindProjectsArgs = {|
@@ -119,6 +120,8 @@ export type ProjectSearchActionType =
       projectsResponse: FindProjectsResponse,
     };
 
+const defaultSort = "-project_date_modified";
+
 const DEFAULT_STATE = {
   keyword: "",
   sortField: "",
@@ -129,6 +132,7 @@ const DEFAULT_STATE = {
   projectsData: {},
   searchSettings: {
     updateUrl: false,
+    defaultSort: defaultSort,
   },
   findProjectsArgs: {},
   filterApplied: false,
@@ -174,7 +178,10 @@ class ProjectSearchStore extends ReduceStore<State> {
         );
         initialState = initialState.set(
           "searchSettings",
-          action.searchSettings || { updateUrl: false }
+          action.searchSettings || {
+            updateUrl: false,
+            defaultSort: defaultSort,
+          }
         );
         return this._loadProjects(initialState, true);
       case "ADD_TAG":
@@ -352,7 +359,7 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   _clearFilters(state: State): State {
     state = state.set("keyword", "");
-    state = state.set("sortField", "");
+    state = state.set("sortField", state.searchSettings.defaultSort);
     state = state.set("location", "");
     state = state.set("locationRadius", {});
     state = state.set("tags", List());
@@ -403,6 +410,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getKeyword(): string {
     return this.getState().keyword;
+  }
+
+  getDefaultSortField(): string {
+    return this.getState().searchSettings.defaultSort;
   }
 
   getSortField(): string {

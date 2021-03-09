@@ -182,9 +182,11 @@ class AboutGroupDisplay extends React.Component<Props, State> {
         type: "INIT",
         findProjectsArgs: {
           group_id: group.group_id,
+          sortField: "-project_date_modified",
         },
         searchSettings: {
           updateUrl: false,
+          defaultSort: "-project_date_modified",
         },
       });
     }

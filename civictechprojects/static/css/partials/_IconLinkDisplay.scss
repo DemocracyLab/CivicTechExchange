@@ -19,7 +19,7 @@
   width: 60px;
   height: 64px;
   padding: 15px;
-  border: 1px solid lightgray;
+  border: 1px solid $color-grey-medium;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 }
@@ -29,11 +29,11 @@
   width: 200px;
   height: 64px;
   line-height: 23px;
-  border-top: 1px solid lightgray;
+  border-top: 1px solid $color-grey-medium;
   border-top-right-radius: 5px;
-  border-right: 1px solid lightgray;
+  border-right: 1px solid $color-grey-medium;
   border-bottom-right-radius: 5px;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid $color-grey-medium;
 }
 
 .IconLink-topText {

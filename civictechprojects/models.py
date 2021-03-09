@@ -81,7 +81,7 @@ class Project(Archived):
     project_organization_type = TaggableManager(blank=True, through=TaggedOrganizationType)
     project_organization_type.remote_field.related_name = 'org_type_projects'
     project_location = models.CharField(max_length=200, blank=True)
-    project_location_coords = PointField(null=True, blank=True, srid=4326, default='')
+    project_location_coords = PointField(null=True, blank=True, srid=4326, default='POINT EMPTY')
     project_country = models.CharField(max_length=100, blank=True)
     project_state = models.CharField(max_length=100, blank=True)
     project_city = models.CharField(max_length=100, blank=True)
@@ -242,7 +242,7 @@ class Group(Archived):
     group_description = models.CharField(max_length=4000, blank=True)
     group_url = models.CharField(max_length=2083, blank=True)
     group_location = models.CharField(max_length=200, blank=True)
-    group_location_coords = PointField(null=True, blank=True, srid=4326, default='')
+    group_location_coords = PointField(null=True, blank=True, srid=4326, default='POINT EMPTY')
     group_country = models.CharField(max_length=100, blank=True)
     group_state = models.CharField(max_length=100, blank=True)
     group_city = models.CharField(max_length=100, blank=True)

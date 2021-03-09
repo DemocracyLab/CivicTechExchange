@@ -166,7 +166,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     return (
-      <div>
+      <React.Fragment>
         <ConfirmationModal
           showModal={this.state.showConfirmationModal}
           message="Do you want to apply to this project?"
@@ -228,7 +228,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
             </Button>
           </Modal.Footer>
         </Modal>
-      </div>
+      </React.Fragment>
     );
   }
 
