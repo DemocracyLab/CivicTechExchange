@@ -149,13 +149,13 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
         </div>
         <div className="AboutProject-top-details">
           <h1>{project && project.project_name}</h1>
-          <p>
+          <h3>
             {project &&
               project.project_issue_area &&
               project.project_issue_area
                 .map(issue => issue.display_name)
                 .join(",")}
-          </p>
+          </h3>
           <p>{project && project.project_short_description}</p>
           <ProjectDetails
             projectLocation={

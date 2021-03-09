@@ -77,3 +77,51 @@
     min-width: 260px;
   }
 }
+
+// font selection stuff
+// test run for deploying this globally, at which point remove this whole block
+.Profile-root {
+  p, span, li {
+    line-height: 1.618;
+  }
+  h1 {
+    font-size: 27px;
+  }
+  h2 {
+    font-size: 21px;
+  }
+  h3 {
+    font-size: 17px;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  p, span, li {
+    font-size: 15px;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .Profile-root {
+    p, span, li {
+      line-height: 1.5;
+    }
+    h1 {
+      font-size: 39px;
+    }
+    h2 {
+      font-size: 23px;
+    }
+    h3 {
+      font-size: 19px;
+    }
+    h4 {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    p, span, li {
+      font-size: 16px;
+    }
+  }
+}
