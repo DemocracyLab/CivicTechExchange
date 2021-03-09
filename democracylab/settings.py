@@ -333,7 +333,7 @@ SESSION_COOKIE_SAMESITE = 'None'
 
 CSP_DEFAULT_SRC = ("'none'",)
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", 'fonts.googleapis.com', '*.fontawesome.com')
-CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", '*.facebook.net/', '*.heapanalytics.com/')
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", '*.facebook.net/', '*.heapanalytics.com/', '*.google.com/', '*.gstatic.com')
 CSP_CONNECT_SRC = ("'self'", '*.qiqochat.com', 'qiqocableeu.herokuapp.com')
 CSP_FONT_SRC = ("'self'", 'fonts.googleapis.com', 'fonts.gstatic.com', 'use.fontawesome.com')
 CSP_IMG_SRC = ("'self'", "data:", "'unsafe-eval'", '*.cloudfront.net', '*.s3.amazonaws.com', '*.facebook.net/', '*.facebook.com/', 'heapanalytics.com/')
