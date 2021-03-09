@@ -219,9 +219,11 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         type: "INIT",
         findProjectsArgs: {
           event_id: event.event_id,
+          sortField: "project_name",
         },
         searchSettings: {
           updateUrl: false,
+          defaultSort: "project_name",
         },
       });
     }
