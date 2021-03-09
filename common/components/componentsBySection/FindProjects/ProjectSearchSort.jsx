@@ -16,11 +16,8 @@ type Props = {|
 type State = {|
   sortField: string,
 |};
-
 const sortOptions: $ReadOnlyArray<SelectOption> = [
-  // {value: '", label: "---"},
-  // {value: "project_date_modified", label: "Date Modified - Ascending"},
-  { value: "", label: "Date Modified" },
+  { value: "-project_date_modified", label: "Date Modified" },
   { value: "project_name", label: "Name - Ascending" },
   { value: "-project_name", label: "Name - Descending" },
 ];
@@ -32,11 +29,12 @@ class ProjectSearchSort extends React.Component<Props, State> {
 
   static calculateState(prevState: State): State {
     const sortField = ProjectSearchStore.getSortField();
+    const defaultSort = ProjectSearchStore.getDefaultSortField();
 
     const state = {
-      sortField: sortField
-        ? sortOptions.find(option => option.value === sortField)
-        : sortOptions[0],
+      sortField: sortOptions.find(
+        option => option.value === (sortField || defaultSort)
+      ),
     };
 
     return state;

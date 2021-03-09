@@ -31,11 +31,15 @@ class FindProjectsController extends React.PureComponent {
       "org",
       "stage",
     ]);
+    if (!args.sortField) {
+      args.sortField = "-project_date_modified";
+    }
     ProjectSearchDispatcher.dispatch({
       type: "INIT",
       findProjectsArgs: !_.isEmpty(args) ? args : null,
       searchSettings: {
         updateUrl: true,
+        defaultSort: "-project_date_modified",
       },
     });
     TagDispatcher.dispatch({ type: "INIT" });
