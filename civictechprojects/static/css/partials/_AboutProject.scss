@@ -489,6 +489,9 @@
   border: 1px solid $color-grey-frame-border;
   border-radius: 5px;
 }
+.AboutProject-links .IconLink-right {
+  width: 196px; // fixes issue at 320px
+}
 .AboutProject-group {
   ul {
     padding-left: 0;
