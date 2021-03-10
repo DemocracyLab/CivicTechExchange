@@ -329,8 +329,9 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
 
 CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SAMESITE = 'None'
+if not DEBUG:
+    CSRF_COOKIE_SAMESITE = 'None'
+    SESSION_COOKIE_SAMESITE = 'None'
 
 CSP_DEFAULT_SRC = ("'none'",)
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", 'fonts.googleapis.com', '*.fontawesome.com')
