@@ -45,7 +45,6 @@ type State = {|
   positionToJoin: ?PositionInfo,
   showPositionModal: boolean,
   shownPosition: ?PositionInfo,
-  tabs: object,
   maxActivity: number,
 |};
 
@@ -59,11 +58,6 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       showContactModal: false,
       showPositionModal: false,
       shownPosition: null,
-      tabs: {
-        details: true,
-        skills: false,
-        activity: false,
-      },
       maxActivity: 5,
     };
     this.handleUpdateVolunteers = this.handleUpdateVolunteers.bind(this);
@@ -204,7 +198,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           <Tab
             eventKey="proj-details"
             title="Details"
-            className="Profile-tab Profile-tab-details"
+            className="Profile-tab AboutProject-tab-details"
           >
             {!_.isEmpty(
               project.project_description_solution ||
@@ -238,7 +232,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               <Tab
                 eventKey="proj-skills"
                 title="Skills Needed"
-                className="Profile-tab Profile-tab-skillsneeded"
+                className="Profile-tab AboutProject-tab-skillsneeded"
               >
                 <div className="AboutProject-skilltech-container">
                   {project && !_.isEmpty(project.project_positions) && (
@@ -279,7 +273,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             <Tab
               eventKey="proj-events"
               title="Events"
-              className="Profile-tab Profile-tab-events"
+              className="Profile-tab AboutProject-tab-events"
             >
               <div>
                 <EventCardsListings
@@ -294,7 +288,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             <Tab
               eventKey="proj-activity"
               title="Recent Activity"
-              className="Profile-tab Profile-tab-recent-activity"
+              className="Profile-tab AboutProject-tab-recent-activity"
             >
               <h4>Recent Activity</h4>
               {project.project_commits
