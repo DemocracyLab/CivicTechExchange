@@ -372,7 +372,10 @@ class ProjectSearchStore extends ReduceStore<State> {
     ]);
     state = state.set(
       "findProjectsArgs",
-      Object.assign(findProjectsArgs, { page: 1 })
+      Object.assign(findProjectsArgs, {
+        page: 1,
+        sortField: state.searchSettings.defaultSort,
+      })
     );
     return state;
   }
