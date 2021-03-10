@@ -134,4 +134,6 @@ export QIQO_API_KEY=democracylab
 # export QIQO_USERS_ENDPOINT='https://api.qiqochat.com/api/v1/users'
 # export QIQO_CIRCLE_UUID=nmitq
 
-#TODO: Add CSP variable examples
+#Add CSP variable examples
+export CSP_FRAME_SRC='["qiqochat.com", "*.qiqochat.com", "*.google.com", "democracylab.org", "democracy-lab-prod-mirror.herokuapp.com", "democracy-lab-dev.herokuapp.com", "democracy-lab-staging.herokuapp.com"]'
+export CSP_FRAME_ANCESTORS='["qiqochat.com", "*.qiqochat.com", "*.google.com", "democracylab.org", "democracy-lab-prod-mirror.herokuapp.com", "democracy-lab-dev.herokuapp.com", "democracy-lab-staging.herokuapp.com"]'
