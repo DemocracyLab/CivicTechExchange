@@ -333,10 +333,10 @@ SESSION_COOKIE_SAMESITE = 'None'
 
 CSP_DEFAULT_SRC = ("'none'",)
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", 'fonts.googleapis.com', '*.fontawesome.com')
-CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", '*.facebook.net/', '*.heapanalytics.com/', '*.google.com/', '*.gstatic.com', '*.googletagmanager.com', '*.google-analytics.com', '*.googleadservices.com', '*.doubleclick.net', '*.newrelic.com')
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", '*.facebook.net/', '*.heapanalytics.com/', '*.google.com/', '*.gstatic.com', '*.googletagmanager.com', '*.google-analytics.com', '*.googleadservices.com', '*.doubleclick.net', '*.newrelic.com', '*.nr-data.net')
 CSP_CONNECT_SRC = ("'self'", '*.qiqochat.com', 'qiqocableeu.herokuapp.com', '*.google-analytics.com',)
 CSP_FONT_SRC = ("'self'", 'fonts.googleapis.com', 'fonts.gstatic.com', 'use.fontawesome.com')
-CSP_IMG_SRC = ("'self'", "data:", "'unsafe-eval'", '*.cloudfront.net', '*.s3.amazonaws.com', '*.facebook.net/', '*.facebook.com/', 'heapanalytics.com/', "*.google.com", '*.google-analytics.com')
+CSP_IMG_SRC = ("'self'", "data:", "'unsafe-eval'", '*.cloudfront.net', '*.s3.amazonaws.com', '*.facebook.net/', '*.facebook.com/', 'heapanalytics.com/', "*.google.com", '*.google-analytics.com', '*.googletagmanager.com', '*.paypal.com')
 CSP_FRAME_ANCESTORS = os.environ.get('CSP_FRAME_ANCESTORS', None)
 if CSP_FRAME_ANCESTORS is not None:
     CSP_FRAME_ANCESTORS = ast.literal_eval(CSP_FRAME_ANCESTORS)
