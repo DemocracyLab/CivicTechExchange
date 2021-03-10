@@ -452,6 +452,9 @@
   flex: 0 0 60%;
   margin-left: auto;
 }
+.AboutProject-tab-details {
+  white-space: pre-wrap; // preserve line breaks
+}
 
 .AboutProject-positions-available {
   .Position-header {

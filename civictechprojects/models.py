@@ -152,7 +152,7 @@ class Project(Archived):
             'project_date_modified': self.project_date_modified.__str__()
         }
 
-        if self.project_location_coords is not None:
+        if self.project_location_coords is not None and not self.project_location_coords.empty:
             project['project_latitude'] = self.project_location_coords.x
             project['project_longitude'] = self.project_location_coords.y
 
