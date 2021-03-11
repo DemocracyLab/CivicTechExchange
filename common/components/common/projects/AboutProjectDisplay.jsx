@@ -224,11 +224,8 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           </Tab>
 
           {project &&
-            !_.isEmpty(
-              project.project_positions ||
-                project.project_technologies ||
-                project.project_positions
-            ) && (
+            (!_.isEmpty(project.project_positions) ||
+              !_.isEmpty(project.project_technologies)) && (
               <Tab
                 eventKey="proj-skills"
                 title="Skills Needed"
@@ -249,23 +246,21 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                   {project && !_.isEmpty(project.project_technologies) && (
                     <div className="AboutProject-technologies">
                       <h4>Technologies Used</h4>
-                      {project &&
-                        project.project_technologies &&
-                        project.project_technologies.map(tech => (
-                          <span className="Profile-pill">
-                            {tech.display_name}
-                          </span>
-                        ))}
+                      {project.project_technologies.map(tech => (
+                        <span className="Profile-pill">
+                          {tech.display_name}
+                        </span>
+                      ))}
                     </div>
                   )}
                 </div>
 
-                <div className="AboutProject-positions-available">
-                  <h4>Positions Available</h4>
-                  {project &&
-                    !_.isEmpty(project.project_positions) &&
-                    this._renderPositions()}
-                </div>
+                {project && !_.isEmpty(project.project_positions) && (
+                  <div className="AboutProject-positions-available">
+                    <h4>Positions Available</h4>
+                    {this._renderPositions()}
+                  </div>
+                )}
               </Tab>
             )}
 
