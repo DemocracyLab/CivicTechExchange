@@ -565,6 +565,10 @@
   .AboutProject-top-logo {
     min-width: 250px;
     width: 250px;
+    flex-basis: auto;
+    img {
+      width: 100%;
+    }
   }
   .AboutProject-top-details {
     max-width: initial;
