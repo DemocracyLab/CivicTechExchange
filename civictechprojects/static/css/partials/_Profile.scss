@@ -53,6 +53,8 @@
     border: 1px solid $color-grey-frame-border;
     border-radius: 5px;
     margin-top: 1rem;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 }
 

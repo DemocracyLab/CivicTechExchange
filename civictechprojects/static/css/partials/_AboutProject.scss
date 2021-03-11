@@ -325,6 +325,7 @@
   i {
     object-fit: contain;
     max-width: 100%;
+    max-height: 100%;
   }
   i {
     color: $color-text-dark;
@@ -417,6 +418,7 @@
 // delete everything above when we get Groups and Project profiles in the same template
 // some of this may move into generic .Profile-x-y classes when we do groups
 // but only if it's universal between both
+// the use of AboutProject, singular, as the prefix is intended and required
 //
 //
 //
@@ -429,14 +431,39 @@
     object-fit: contain;
     max-width: 100%;
   }
-  flex-basis: 35%;
   order: 1;
+  flex-basis: 35%;
 }
 
 .AboutProject-top-details {
   flex-basis: 100%;
   order: 3;
   padding: 15px 0 0 0;
+  max-width: 100%; // this and the break-words keep very long one word titles from breaking container
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.AboutProject-icon-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+  max-width: 450px; // constrains super-long URLs, text from breaking container
+}
+.AboutProject-icon-text {
+  margin-left: 10px;
+  margin-bottom: 0;
+}
+.AboutProject-url-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @extend .AboutProject-icon-text;
+  color: $color-orange;
+  &:hover {
+    color: $color-orange-dark;
+  }
 }
 
 .AboutProject-top-interactions {
@@ -527,6 +554,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  margin: 0.75rem 0;
 }
 .AboutProject-show-more-activity-container {
   display: flex;
@@ -535,10 +563,11 @@
 
 @include media-breakpoint-up(lg) {
   .AboutProject-top-logo {
-    flex-basis: 25%;
-    min-width: 25%;
+    min-width: 250px;
+    width: 250px;
   }
   .AboutProject-top-details {
+    max-width: initial;
     flex-basis: auto;
     order: 2;
     padding: 0 30px;
@@ -568,7 +597,7 @@
 }
 
 @include media-breakpoint-up(xl) {
-  .AboutProject-top-logo {
-    min-width: 300px;
+  .AboutProject-icon-row {
+    max-width: 550px;
   }
 }
