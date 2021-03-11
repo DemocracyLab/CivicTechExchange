@@ -469,12 +469,18 @@
 .AboutProject-top-interactions {
   flex-basis: 65%;
   order: 2;
+  .ApproveGroups-section {
+    margin-left: auto;
+  }
   .ApproveGroups-row {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     flex-wrap: wrap;
     align-items: flex-end;
     text-align: right;
+    border: 1px solid $color-grey-medium;
+    border-radius: 5px;
+    padding: 8px;
     span {
       margin: 8px 0;
     }
