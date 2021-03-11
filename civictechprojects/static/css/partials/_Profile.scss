@@ -74,11 +74,22 @@
       justify-content: space-around;
     }
   }
-  // min-width here ensures it stays on one row with main section content when we want that
+  // fixed width at this viewport ensures layout consistency, but we need to widen at successive viewports
   .Profile-secondary-section {
-    min-width: 260px;
+    width: 340px;
   }
 }
+@include media-breakpoint-up(xl) {
+    .Profile-secondary-section {
+      width: 380px;
+    }
+}
+@include media-breakpoint-up(xxl) {
+  .Profile-secondary-section {
+    width: 420px;
+  }
+}
+
 
 // font selection stuff
 // test run for deploying this globally, at which point remove this whole block (because it's kinda messy)
