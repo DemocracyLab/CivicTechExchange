@@ -430,6 +430,7 @@
   img {
     object-fit: contain;
     max-width: 100%;
+    max-height: 250px; // so very tall images don't ruin mobile
   }
   order: 1;
   flex-basis: 35%;
@@ -568,6 +569,7 @@
     flex-basis: auto;
     img {
       width: 100%;
+      max-height: unset;
     }
   }
   .AboutProject-top-details {
