@@ -459,7 +459,6 @@
 .AboutProject-url-text {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
   @extend .AboutProject-icon-text;
   color: $color-orange;
   &:hover {
@@ -470,6 +469,16 @@
 .AboutProject-top-interactions {
   flex-basis: 65%;
   order: 2;
+  .ApproveGroups-row {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    text-align: right;
+    span {
+      margin: 8px 0;
+    }
+  }
 }
 // make buttons stay in column even if the section is wide enough to stack horizontally
 // on narrow mobile devices keep them constrained to a little less than 65% for visual spacing
