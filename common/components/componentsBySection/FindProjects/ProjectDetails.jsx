@@ -27,17 +27,17 @@ class ProjectDetails extends React.PureComponent<Props, State> {
     return (
       <React.Fragment>
         {this.state.projectLocation && (
-          <div className="AboutProjects-icon-row">
+          <div className="AboutProject-icon-row">
             <i className={Glyph(GlyphStyles.MapMarker, GlyphSizes.LG)} />
-            <p className="AboutProjects-icon-text">
+            <p className="AboutProject-icon-text">
               {this.state.projectLocation}
             </p>
           </div>
         )}
         {this.state.projectUrl && (
-          <div className="AboutProjects-icon-row">
+          <div className="AboutProject-icon-row">
             <i className={Glyph(GlyphStyles.Globe, GlyphSizes.LG)} />
-            <p className="AboutProjects-url-text">
+            <p className="AboutProject-url-text">
               <a
                 href={urlHelper.appendHttpIfMissingProtocol(
                   this.state.projectUrl
@@ -51,23 +51,23 @@ class ProjectDetails extends React.PureComponent<Props, State> {
           </div>
         )}
         {this.state.dateModified && (
-          <div className="AboutProjects-icon-row">
+          <div className="AboutProject-icon-row">
             <i className={Glyph(GlyphStyles.Clock, GlyphSizes.LG)} />
-            <p className="AboutProjects-icon-text">
+            <p className="AboutProject-icon-text">
               <Moment fromNow>{this.state.dateModified}</Moment>
             </p>
           </div>
         )}
         {this.state.projectStage && (
-          <div className="AboutProjects-icon-row">
+          <div className="AboutProject-icon-row">
             <i className={Glyph(GlyphStyles.ChartBar, GlyphSizes.LG)} />
-            <p className="AboutProjects-icon-text">{this.state.projectStage}</p>
+            <p className="AboutProject-icon-text">{this.state.projectStage}</p>
           </div>
         )}
         {this.state.projectOrganizationType && (
-          <div className="AboutProjects-icon-row">
+          <div className="AboutProject-icon-row">
             <i className={Glyph(GlyphStyles.University, GlyphSizes.LG)} />
-            <p className="AboutProjects-icon-text text-break">
+            <p className="AboutProject-icon-text text-break">
               {this.state.projectOrganizationType}
             </p>
           </div>

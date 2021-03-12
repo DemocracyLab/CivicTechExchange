@@ -325,6 +325,7 @@
   i {
     object-fit: contain;
     max-width: 100%;
+    max-height: 100%;
   }
   i {
     color: $color-text-dark;
@@ -417,6 +418,7 @@
 // delete everything above when we get Groups and Project profiles in the same template
 // some of this may move into generic .Profile-x-y classes when we do groups
 // but only if it's universal between both
+// the use of AboutProject, singular, as the prefix is intended and required
 //
 //
 //
@@ -428,20 +430,61 @@
   img {
     object-fit: contain;
     max-width: 100%;
+    max-height: 250px; // so very tall images don't ruin mobile
   }
-  flex-basis: 35%;
   order: 1;
+  flex-basis: 35%;
 }
 
 .AboutProject-top-details {
   flex-basis: 100%;
   order: 3;
   padding: 15px 0 0 0;
+  max-width: 100%; // this and the break-words keep very long one word titles from breaking container
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.AboutProject-icon-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+  max-width: 450px; // constrains super-long URLs, text from breaking container
+}
+.AboutProject-icon-text {
+  margin-left: 10px;
+  margin-bottom: 0;
+}
+.AboutProject-url-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @extend .AboutProject-icon-text;
+  color: $color-orange;
+  &:hover {
+    color: $color-orange-dark;
+  }
 }
 
 .AboutProject-top-interactions {
   flex-basis: 65%;
   order: 2;
+  .ApproveGroups-section {
+    margin-left: auto;
+  }
+  .ApproveGroups-row {
+    display: inline-flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    text-align: right;
+    border: 1px solid $color-grey-medium;
+    border-radius: 5px;
+    padding: 8px;
+    span {
+      margin: 8px 0;
+    }
+  }
 }
 // make buttons stay in column even if the section is wide enough to stack horizontally
 // on narrow mobile devices keep them constrained to a little less than 65% for visual spacing
@@ -451,6 +494,9 @@
   flex-direction: column;
   flex: 0 0 60%;
   margin-left: auto;
+}
+.AboutProject-tab-details {
+  white-space: pre-wrap; // preserve line breaks
 }
 
 .AboutProject-positions-available {
@@ -524,6 +570,17 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  margin: 0.75rem 0;
+}
+.AboutProject-staff {
+  .person-icon-container {
+    width: 80px;
+    height: 81px;
+    svg {
+      width: 70px;
+      height: 70px;
+    }
+  }
 }
 .AboutProject-show-more-activity-container {
   display: flex;
@@ -532,10 +589,16 @@
 
 @include media-breakpoint-up(lg) {
   .AboutProject-top-logo {
-    flex-basis: 25%;
-    min-width: 25%;
+    min-width: 250px;
+    width: 250px;
+    flex-basis: auto;
+    img {
+      width: 100%;
+      max-height: unset;
+    }
   }
   .AboutProject-top-details {
+    max-width: initial;
     flex-basis: auto;
     order: 2;
     padding: 0 30px;
@@ -565,7 +628,7 @@
 }
 
 @include media-breakpoint-up(xl) {
-  .AboutProject-top-logo {
-    min-width: 300px;
+  .AboutProject-icon-row {
+    max-width: 550px;
   }
 }
