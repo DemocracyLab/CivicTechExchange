@@ -12,7 +12,6 @@
   flex-wrap: wrap;
 }
 
-
 .Profile-tab {
   padding: 1rem;
 }
@@ -32,12 +31,13 @@
   .nav-tabs {
     border: 1px solid $color-grey-frame-border;
     border-radius: 5px;
-    font-size: 1.25rem;
+    a {
+      font-size: 18px;
+    }
     a.nav-item.nav-link {
       color: $color-text-dark;
     }
-    a.nav-item.nav-link:hover
-    {
+    a.nav-item.nav-link:hover {
       color: $color-orange;
       border: none;
     }
@@ -74,16 +74,34 @@
       justify-content: space-around;
     }
   }
-  // min-width here ensures it stays on one row with main section content when we want that
+  // fixed width at this viewport ensures layout consistency, but we need to widen at successive viewports
   .Profile-secondary-section {
-    min-width: 260px;
+    width: 340px;
+  }
+}
+@include media-breakpoint-up(xl) {
+    .Profile-secondary-section {
+      width: 380px;
+    }
+}
+@include media-breakpoint-up(xxl) {
+  .Profile-secondary-section {
+    width: 420px;
   }
 }
 
+
 // font selection stuff
-// test run for deploying this globally, at which point remove this whole block
+// test run for deploying this globally, at which point remove this whole block (because it's kinda messy)
 .Profile-root {
-  p, span, li {
+  line-height: 1.618;
+  font-size: 15px;
+  //then specifically, to fit some edge cases
+  p,
+  div,
+  span,
+  li,
+  a {
     line-height: 1.618;
   }
   h1 {
@@ -99,14 +117,23 @@
     font-size: 15px;
     font-weight: 600;
   }
-  p, span, li {
+  p,
+  div,
+  span,
+  li,
+  a {
     font-size: 15px;
   }
 }
-
 @include media-breakpoint-up(md) {
   .Profile-root {
-    p, span, li {
+    font-size: 16px;
+    line-height: 1.618;
+    p,
+    div,
+    span,
+    li,
+    a {
       line-height: 1.5;
     }
     h1 {
@@ -122,7 +149,11 @@
       font-size: 16px;
       font-weight: 500;
     }
-    p, span, li {
+    p,
+    div,
+    span,
+    li,
+    a {
       font-size: 16px;
     }
   }

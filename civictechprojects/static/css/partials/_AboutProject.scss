@@ -430,6 +430,7 @@
   img {
     object-fit: contain;
     max-width: 100%;
+    max-height: 250px; // so very tall images don't ruin mobile
   }
   order: 1;
   flex-basis: 35%;
@@ -458,7 +459,6 @@
 .AboutProject-url-text {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
   @extend .AboutProject-icon-text;
   color: $color-orange;
   &:hover {
@@ -469,6 +469,22 @@
 .AboutProject-top-interactions {
   flex-basis: 65%;
   order: 2;
+  .ApproveGroups-section {
+    margin-left: auto;
+  }
+  .ApproveGroups-row {
+    display: inline-flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    text-align: right;
+    border: 1px solid $color-grey-medium;
+    border-radius: 5px;
+    padding: 8px;
+    span {
+      margin: 8px 0;
+    }
+  }
 }
 // make buttons stay in column even if the section is wide enough to stack horizontally
 // on narrow mobile devices keep them constrained to a little less than 65% for visual spacing
@@ -556,6 +572,16 @@
   text-overflow: ellipsis;
   margin: 0.75rem 0;
 }
+.AboutProject-staff {
+  .person-icon-container {
+    width: 80px;
+    height: 81px;
+    svg {
+      width: 70px;
+      height: 70px;
+    }
+  }
+}
 .AboutProject-show-more-activity-container {
   display: flex;
   justify-content: space-evenly;
@@ -565,6 +591,11 @@
   .AboutProject-top-logo {
     min-width: 250px;
     width: 250px;
+    flex-basis: auto;
+    img {
+      width: 100%;
+      max-height: unset;
+    }
   }
   .AboutProject-top-details {
     max-width: initial;
