@@ -197,7 +197,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
         <Tabs defaultActiveKey="proj-details" id="AboutProject-tabs">
           <Tab
             eventKey="proj-details"
-            title="Details"
+            title="Project Details"
             className="Profile-tab AboutProject-tab-details"
           >
             {!_.isEmpty(
@@ -221,48 +221,36 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 </div>
               </React.Fragment>
             )}
-          </Tab>
-
-          {project &&
-            (!_.isEmpty(project.project_positions) ||
-              !_.isEmpty(project.project_technologies)) && (
-              <Tab
-                eventKey="proj-skills"
-                title="Skills Needed"
-                className="Profile-tab AboutProject-tab-skillsneeded"
-              >
-                <div className="AboutProject-skilltech-container">
-                  {project && !_.isEmpty(project.project_positions) && (
-                    <div className="AboutProject-skills">
-                      <h4>Skills Needed</h4>
-                      {project.project_positions.map(position => (
-                        <span className="Profile-pill">
-                          {position.roleTag.display_name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {project && !_.isEmpty(project.project_technologies) && (
-                    <div className="AboutProject-technologies">
-                      <h4>Technologies Used</h4>
-                      {project.project_technologies.map(tech => (
-                        <span className="Profile-pill">
-                          {tech.display_name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+            
+            <div className="AboutProject-skilltech-container pt-4"> 
+              {project && !_.isEmpty(project.project_positions) && (
+                <div className="AboutProject-skills">
+                  <h4>Skills Needed</h4>
+                  {project.project_positions.map(position => (
+                    <span className="Profile-pill">
+                      {position.roleTag.display_name}
+                    </span>
+                  ))}
                 </div>
+              )}
 
-                {project && !_.isEmpty(project.project_positions) && (
-                  <div className="AboutProject-positions-available">
-                    <h4>Positions Available</h4>
-                    {this._renderPositions()}
-                  </div>
-                )}
-              </Tab>
+              {project && !_.isEmpty(project.project_technologies) && (
+                <div className="AboutProject-technologies">
+                  <h4>Technologies Used</h4>
+                  {project.project_technologies.map(tech => (
+                    <span className="Profile-pill">{tech.display_name}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {project && !_.isEmpty(project.project_positions) && (
+              <div className="AboutProject-positions-available pt-4">
+                <h3>Positions Available</h3>
+                {this._renderPositions()}
+              </div>
             )}
+          </Tab>
 
           {project.project_events && !_.isEmpty(project.project_events) && (
             <Tab
@@ -285,7 +273,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               title="Recent Activity"
               className="Profile-tab AboutProject-tab-recent-activity"
             >
-              <h4>Recent Activity</h4>
+              <h3>Recent Activity</h3>
               {project.project_commits
                 .slice(0, this.state.maxActivity)
                 .map(commit => (
