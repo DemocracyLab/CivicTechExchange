@@ -245,8 +245,8 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             </div>
 
             {project && !_.isEmpty(project.project_positions) && (
-              <div className="AboutProject-positions-available">
-                <h4>Positions Available</h4>
+              <div className="AboutProject-positions-available pt-4">
+                <h3>Positions Available</h3>
                 {this._renderPositions()}
               </div>
             )}
@@ -273,7 +273,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               title="Recent Activity"
               className="Profile-tab AboutProject-tab-recent-activity"
             >
-              <h4>Recent Activity</h4>
+              <h3>Recent Activity</h3>
               {project.project_commits
                 .slice(0, this.state.maxActivity)
                 .map(commit => (
