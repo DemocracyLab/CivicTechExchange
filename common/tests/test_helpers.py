@@ -1,4 +1,4 @@
-from collections import OrderedDict
+import re
 from django.conf import settings
 from django.test import TestCase
 from common.helpers.caching import is_sitemap_url
@@ -28,11 +28,15 @@ class FrontEndHelperTests(TestCase):
         expected = '/events/test-slug'
         self.assertEqual(expected, section_path(FrontEndSection.AboutEvent, {'id': 'test-slug'}))
 
-    # TODO: Add test for multiple args
     def test_section_path_with_single_arg(self):
         expected = '/events/test-slug?a=1'
-        arg_dict = OrderedDict([('id', 'test-slug'), ('a', '1')])
+        arg_dict = {'id': 'test-slug', 'a': '1'}
         self.assertEqual(expected, section_path(FrontEndSection.AboutEvent, arg_dict))
+
+    def test_section_path_with_single_arg(self):
+        expected_pattern = re.compile(r'/events/test-slug(\?a=1&b=2|\?b=2&a=1)')
+        arg_dict = {'id': 'test-slug', 'a': '1', 'b': '2'}
+        self.assertRegexpMatches(section_path(FrontEndSection.AboutEvent, arg_dict), expected_pattern)
 
     def test_section_url(self):
         expected = settings.PROTOCOL_DOMAIN + '/events/test-slug'
