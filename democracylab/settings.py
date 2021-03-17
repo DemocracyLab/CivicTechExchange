@@ -33,6 +33,7 @@ DEBUG = strtobool(os.environ.get('DJANGO_DEBUG'))
 ALLOWED_HOSTS = ['*']
 
 S3_BUCKET = os.environ.get('S3_BUCKET')
+S3_BUCKET_URL = 'https://{bucket}.s3.amazonaws.com'.format(bucket=S3_BUCKET)
 
 # Application definition
 
@@ -110,7 +111,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware'
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'democracylab.urls'
@@ -325,8 +327,24 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     }
 }
 
-# TODO: Set to True in productions
-# SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+if not DEBUG:
+    CSRF_COOKIE_SAMESITE = 'None'
+    SESSION_COOKIE_SAMESITE = 'None'
+
+CSP_DEFAULT_SRC = ("'none'",)
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", 'fonts.googleapis.com', '*.fontawesome.com')
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", '*.facebook.net/', '*.heapanalytics.com/', '*.google.com/', '*.gstatic.com', '*.googletagmanager.com', '*.google-analytics.com', '*.googleadservices.com', '*.doubleclick.net', '*.newrelic.com', '*.nr-data.net', '*.hotjar.com')
+CSP_CONNECT_SRC = ("'self'", S3_BUCKET_URL, '*.qiqochat.com', 'qiqocableeu.herokuapp.com', '*.google-analytics.com', '*.nr-data.net', '*.hereapi.com', '*.hotjar.com')
+CSP_FONT_SRC = ("'self'", 'fonts.googleapis.com', 'fonts.gstatic.com', 'use.fontawesome.com')
+CSP_IMG_SRC = ("'self'", "data:", "blob:", "'unsafe-eval'", '*.cloudfront.net', '*.s3.amazonaws.com', '*.facebook.net/', '*.facebook.com/', 'heapanalytics.com/', "*.google.com", '*.google-analytics.com', '*.googletagmanager.com', '*.paypal.com', '*.paypalobjects.com', '*.githubusercontent.com')
+CSP_FRAME_ANCESTORS = os.environ.get('CSP_FRAME_ANCESTORS', None)
+if CSP_FRAME_ANCESTORS is not None:
+    CSP_FRAME_ANCESTORS = ast.literal_eval(CSP_FRAME_ANCESTORS)
+CSP_FRAME_SRC = os.environ.get('CSP_FRAME_SRC', None)
+if CSP_FRAME_SRC is not None:
+    CSP_FRAME_SRC = ast.literal_eval(CSP_FRAME_SRC)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

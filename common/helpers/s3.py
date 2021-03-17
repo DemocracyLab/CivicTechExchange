@@ -19,7 +19,7 @@ class S3Key:
 
 
 def s3_key_to_public_url(key):
-    return 'https://%s.s3.amazonaws.com/%s' % (settings.S3_BUCKET, parse.quote_plus(key))
+    return '{url}/{key}'.format(url=settings.S3_BUCKET_URL, key=parse.quote_plus(key))
 
 
 def presign_s3_upload(raw_key, file_name, file_type, acl):

@@ -53,7 +53,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     super();
     this.state = {
       project: props.project,
-      viewOnly: props.viewOnly || url.argument("embedded"),
+      viewOnly: props.viewOnly,
       volunteers: props.project && props.project.project_volunteers,
       showContactModal: false,
       showPositionModal: false,
