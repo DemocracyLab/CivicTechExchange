@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from django.conf import settings
 from django.test import TestCase
 from common.helpers.caching import is_sitemap_url
@@ -22,11 +23,16 @@ class CommonHelperTests(TestCase):
             self.assertFalse(is_sitemap_url(url), 'Should not be able to prerender ' + url)
 
 
-# TODO: Update
 class FrontEndHelperTests(TestCase):
     def test_section_path(self):
         expected = '/events/test-slug'
         self.assertEqual(expected, section_path(FrontEndSection.AboutEvent, {'id': 'test-slug'}))
+
+    # TODO: Add test for multiple args
+    def test_section_path_with_single_arg(self):
+        expected = '/events/test-slug?a=1'
+        arg_dict = OrderedDict([('id', 'test-slug'), ('a', '1')])
+        self.assertEqual(expected, section_path(FrontEndSection.AboutEvent, arg_dict))
 
     def test_section_url(self):
         expected = settings.PROTOCOL_DOMAIN + '/events/test-slug'
