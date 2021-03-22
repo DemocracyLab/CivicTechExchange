@@ -24,7 +24,7 @@ class EmailVerifiedController extends React.Component<{||}> {
           </p>
           <a
             className="btn btn-primary"
-            href={url.section(Section.FindProjects, { showSplash: 1 })}
+            href={url.section(Section.FindProjects)}
           >
             FIND PROJECTS
           </a>
