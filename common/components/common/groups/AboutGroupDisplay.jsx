@@ -134,17 +134,15 @@ class AboutGroupDisplay extends React.Component<Props, State> {
   _renderPrimarySection(group): React$Node {
     return (
       <div className="Profile-primary-container">
-        <div className="tab-content">
+        <div className="Profile-tab tab-content">
         {group.group_description}
-        <div className="AboutProjects-skills-container">
+        <div className="AboutProject-skills-container">
               {!_.isEmpty(this.state.issueAreas) && (
-                <div className="AboutProjects-skills">
-                  <p id="skills-needed" className="AboutProjects-skills-title">
-                    Issue Areas
-                  </p>
+                <div className="AboutProject-skills">
+                  <h4>Issue Areas</h4>
                   {this.state.issueAreas &&
                     this.state.issueAreas.map((issue: TagDefinition) => (
-                      <p>{issue.display_name}</p>
+                      <span className="Profile-pill">{issue.display_name}</span>
                     ))}
                 </div>
               )}
@@ -166,7 +164,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
       <div className="Profile-secondary-container">
       {group && !_.isEmpty(group.group_links) && (
         <React.Fragment>
-          <div className="AboutProjects-links">
+          <div className="AboutProject-links AboutProject-secondary-section">
             <h4>Links</h4>
             {this._renderLinks()}
           </div>
