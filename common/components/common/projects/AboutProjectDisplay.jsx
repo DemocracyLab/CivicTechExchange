@@ -119,7 +119,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
         </div>
         <div className="row flex-lg-nowrap">
           <div className="Profile-primary-section col-12 col-lg-auto flex-lg-shrink-1">
-            {this._renderMainSection(project)}
+            {this._renderPrimarySection(project)}
           </div>
 
           <div className="Profile-secondary-section col-12 col-lg-auto">
@@ -190,10 +190,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     );
   }
 
-  // tabbed main section content
-  _renderMainSection(project) {
+  // tabbed primary section content
+  _renderPrimarySection(project) {
     return (
-      <div className="Profile-main-container">
+      <div className="Profile-primary-container">
         <Tabs defaultActiveKey="proj-details" id="AboutProject-tabs">
           <Tab
             eventKey="proj-details"
