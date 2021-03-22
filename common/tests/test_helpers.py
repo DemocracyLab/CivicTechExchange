@@ -33,7 +33,7 @@ class FrontEndHelperTests(TestCase):
         arg_dict = {'id': 'test-slug', 'a': '1'}
         self.assertEqual(expected, section_path(FrontEndSection.AboutEvent, arg_dict))
 
-    def test_section_path_with_single_arg(self):
+    def test_section_path_with_multiple_args(self):
         expected_pattern = re.compile(r'/events/test-slug(\?a=1&b=2|\?b=2&a=1)')
         arg_dict = {'id': 'test-slug', 'a': '1', 'b': '2'}
         self.assertRegexpMatches(section_path(FrontEndSection.AboutEvent, arg_dict), expected_pattern)
