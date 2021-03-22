@@ -19,17 +19,17 @@ class GroupDetails extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         {this.props.groupLocation && (
-          <div className="AboutProjects-icon-row">
+          <div className="AboutProject-icon-row">
             <i className={Glyph(GlyphStyles.MapMarker, GlyphSizes.LG)} />
-            <p className="AboutProjects-icon-text">
+            <p className="AboutProject-icon-text">
               {this.props.groupLocation}
             </p>
           </div>
         )}
         {this.props.groupUrl && (
-          <div className="AboutProjects-icon-row">
+          <div className="AboutProject-icon-row">
             <i className={Glyph(GlyphStyles.Globe, GlyphSizes.LG)} />
-            <p className="AboutProjects-url-text">
+            <p className="AboutProject-url-text">
               <a
                 href={this.props.groupUrl}
                 target="_blank"
@@ -41,9 +41,9 @@ class GroupDetails extends React.PureComponent<Props> {
           </div>
         )}
         {this.props.projectCount > 0 && (
-          <div className="AboutProjects-icon-row">
+          <div className="AboutProject-icon-row">
             <i className={Glyph(GlyphStyles.Calendar, GlyphSizes.LG)} />
-            <p className="AboutProjects-icon-text">
+            <p className="AboutProject-icon-text">
               {this.props.projectCount +
                 " " +
                 utils.pluralize("project", "projects", this.props.projectCount)}
