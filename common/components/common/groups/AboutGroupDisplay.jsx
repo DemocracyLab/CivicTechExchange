@@ -96,88 +96,79 @@ class AboutGroupDisplay extends React.Component<Props, State> {
 
   _renderTopSection(group): React$Node {
     return (
-    <div className="Profile-top-section-content">
-      <div className="AboutProject-top-logo">
-        <img
-        src={
-          group &&
-          group.group_thumbnail &&
-          group.group_thumbnail.publicUrl
-        }
-        />
+      <div className="Profile-top-section-content">
+        <div className="AboutProject-top-logo">
+          <img
+            src={
+              group && group.group_thumbnail && group.group_thumbnail.publicUrl
+            }
+          />
+        </div>
+        <div className="AboutProject-top-details">
+          <h1>{group && group.group_name}</h1>
+          <p>{group && group.group_short_description}</p>
+
+          <GroupDetails
+            groupUrl={group && group.group_url}
+            groupLocation={group && GroupAPIUtils.getLocationDisplayName(group)}
+            projectCount={
+              this.state.approvedProjects && this.state.approvedProjects.length
+            }
+          />
+        </div>
+        <div className="AboutProject-top-interactions">
+          {!this.props.viewOnly && this._renderContactAndVolunteerButtons()}
+        </div>
       </div>
-      <div className="AboutProject-top-details">
-      <h1>{group && group.group_name}</h1>
-                <p>{group && group.group_short_description}</p>
-
-
-      <GroupDetails
-              groupUrl={group && group.group_url}
-              groupLocation={
-                group && GroupAPIUtils.getLocationDisplayName(group)
-              }
-              projectCount={
-                this.state.approvedProjects &&
-                this.state.approvedProjects.length
-              }
-            />
-            </div>
-            <div className="AboutProject-top-interactions">
-
-              {!this.props.viewOnly && this._renderContactAndVolunteerButtons()}
-              </div>
-
-    </div>)
+    );
   }
 
-//reusing some of the Profile tab classes for styling; but not <Tabs> themselves
+  //reusing some of the Profile tab classes for styling; but not <Tabs> themselves
   _renderPrimarySection(group): React$Node {
     return (
       <div className="Profile-primary-container">
         <div className="Profile-tab tab-content">
-        {group.group_description}
-        <div className="AboutProject-skills-container">
-              {!_.isEmpty(this.state.issueAreas) && (
-                <div className="AboutProject-skills">
-                  <h4>Issue Areas</h4>
-                  {this.state.issueAreas &&
-                    this.state.issueAreas.map((issue: TagDefinition) => (
-                      <span className="Profile-pill">{issue.display_name}</span>
-                    ))}
-                </div>
-              )}
-            </div>
-            {group.group_project_count > 0 && (
-              <div className="AboutGroup-card-container">
-                <ProfileProjectSearch viewOnly={this.props.viewOnly} wide />
-              </div>
+          <h3>Group Description - PLACEHOLDER TITLE</h3>
+          {group.group_description}
+          <div className="AboutGroup-issue-areas pt-4">
+            {!_.isEmpty(this.state.issueAreas) && (
+              <React.Fragment>
+                <h4>Issue Areas</h4>
+                {this.state.issueAreas &&
+                  this.state.issueAreas.map((issue: TagDefinition) => (
+                    <span className="Profile-pill">{issue.display_name}</span>
+                  ))}
+              </React.Fragment>
             )}
-
+          </div>
+          {group.group_project_count > 0 && (
+            <div className="AboutGroup-card-container pt-4">
+              <ProfileProjectSearch viewOnly={this.props.viewOnly} wide />
+            </div>
+          )}
         </div>
       </div>
-
     );
   }
 
   _renderSecondarySection(group): React$Node {
     return (
       <div className="Profile-secondary-container">
-      {group && !_.isEmpty(group.group_links) && (
-        <React.Fragment>
-          <div className="AboutProject-links AboutProject-secondary-section">
-            <h4>Links</h4>
-            {this._renderLinks()}
-          </div>
-        </React.Fragment>
-      )}
+        {group && !_.isEmpty(group.group_links) && (
+          <React.Fragment>
+            <div className="AboutProject-links AboutProject-secondary-section">
+              <h4>Links</h4>
+              {this._renderLinks()}
+            </div>
+          </React.Fragment>
+        )}
       </div>
     );
   }
 
- 
   _renderContactAndVolunteerButtons(): React$Node {
     return (
-      <div className="AboutProjects-owner">
+      <div className="AboutProject-owner">
         <ContactGroupButton group={this.state.group} />
       </div>
     );
