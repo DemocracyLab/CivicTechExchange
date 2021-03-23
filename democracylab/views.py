@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 import simplejson as json
 import ast
 from .emails import send_verification_email, send_password_reset_email
-from .forms import DemocracyLabUserCreationForm
+from .forms import DemocracyLabUserCreationForm, DemocracyLabUserAddDetailsForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
 from .tokens import email_verify_token_generator
 from oauth2 import registry
@@ -89,6 +89,32 @@ def signup(request):
             return redirect(section_url(FrontEndSection.SignUp))
     else:
         return redirect(section_url(FrontEndSection.SignUp))
+
+
+def add_signup_details(request):
+    contributor = get_request_contributor(request)
+    form = DemocracyLabUserAddDetailsForm(request.POST)
+    if form.is_valid():
+        contributor.first_name = form.cleaned_data.get('first_name')
+        contributor.last_name = form.cleaned_data.get('last_name')
+        contributor.save()
+
+        # SubscribeUserToQiqoChat(contributor)
+    else:
+        errors = json.loads(form.errors.as_json())
+
+        # inform server console of form invalidity
+        print('Invalid form', errors)
+
+        # inform client of form invalidity
+        for fieldName in errors:
+            fieldErrors = errors[fieldName]
+            for fieldError in fieldErrors:
+                messages.error(request, fieldError['message'])
+
+        return redirect(section_url(FrontEndSection.AddUserDetails))
+
+    return redirect(section_url(FrontEndSection.Home))
 
 
 def verify_user(request, user_id, token):

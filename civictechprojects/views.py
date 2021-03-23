@@ -327,7 +327,12 @@ def approve_event(request, event_id):
 
 @ensure_csrf_cookie
 @xframe_options_exempt
-def index(request, id=None):
+def index(request):
+    page = get_page_section(request.get_full_path())
+    # Redirect to AddUserDetails page if First/Last name hasn't been entered yet
+    if page != FrontEndSection.AddUserDetails.value and request.user.is_authenticated and (not request.user.first_name or not request.user.last_name):
+        return redirect(section_url(FrontEndSection.AddUserDetails))
+
     page_url = request.get_full_path()
     clean_url = get_clean_url(page_url)
     if clean_url != page_url:
@@ -359,7 +364,6 @@ def index(request, id=None):
                                                           {'HOTJAR_APPLICATION_ID': settings.HOTJAR_APPLICATION_ID})
 
     GOOGLE_CONVERSION_ID = None
-    page = get_page_section(request.get_full_path())
     context = context_preload(page, request, context)
     if page and settings.GOOGLE_CONVERSION_IDS and page in settings.GOOGLE_CONVERSION_IDS:
         GOOGLE_CONVERSION_ID = settings.GOOGLE_CONVERSION_IDS[page]

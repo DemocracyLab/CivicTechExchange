@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^accounts/', include('oauth2.providers.linkedin.urls')),
     url(r'^accounts/', include('oauth2.providers.facebook.urls')),
     url(r'^accounts/', include('allauth.urls')),
+    url(r'^api/signup/add/$', views.add_signup_details, name='add_signup_details'),
     url(r'^api/signup/$', views.signup, name='signup'),
     url(r'^api/login/$', views.login_view, name='login_view'),
     url(r'^api/login/(?P<provider>\w+)', views.login_view, name='login_view'),
