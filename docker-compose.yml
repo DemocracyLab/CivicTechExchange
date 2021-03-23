@@ -18,11 +18,29 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./civictechprojects/:/code/civictechprojects/
+      - ./common/:/code/common/
+      - ./democracylab/:/code/democracylab/
+      - ./oauth2/:/code/oauth2/
+      - ./.babelrc:/code/.babelrc
+      - ./manage.py:/code/manage.py
+      - ./webpack.common.js:/code/webpack.common.js
+      - ./webpack.dev.js:/code/webpack.dev.js
   migrate:
     build: .
     command: python manage.py migrate
     depends_on:
       - create_table
+    volumes:
+      - ./civictechprojects/:/code/civictechprojects/
+      - ./common/:/code/common/
+      - ./democracylab/:/code/democracylab/
+      - ./oauth2/:/code/oauth2/
+      - ./.babelrc:/code/.babelrc
+      - ./manage.py:/code/manage.py
+      - ./webpack.common.js:/code/webpack.common.js
+      - ./webpack.dev.js:/code/webpack.dev.js
   web:
     build: .
     command: bash -c 'source ./docker_environment_init.sh || true &&
@@ -34,3 +52,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./civictechprojects/:/code/civictechprojects/
+      - ./common/:/code/common/
+      - ./democracylab/:/code/democracylab/
+      - ./oauth2/:/code/oauth2/
+      - ./.babelrc:/code/.babelrc
+      - ./manage.py:/code/manage.py
+      - ./webpack.common.js:/code/webpack.common.js
+      - ./webpack.dev.js:/code/webpack.dev.js

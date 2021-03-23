@@ -31,8 +31,6 @@ RUN yarn config set ignore-engines true
 RUN yarn --frozen-lockfile --link-duplicates --ignore-scripts
 # Permission issue with node-sass https://github.com/sass/node-sass/issues/1579
 RUN npm rebuild node-sass
-# Copy folders and files whitelisted by .dockerignore.
-COPY . /code/
 
 # Password for account used to send email
 ENV EMAIL_HOST_PASSWORD "betterDemocracyViaTechnology"
