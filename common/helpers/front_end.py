@@ -4,6 +4,13 @@ from html import unescape
 from common.helpers.dictionaries import keys_omit
 
 
+def args_dict_to_string(args_dict):
+    def arg_string(idx, key, value):
+        prefix = '?' if idx == 0 else '&'
+        return '{prefix}{key}={value}'.format(prefix=prefix, key=key, value=value)
+    return "".join(map(lambda ikv: arg_string(idx=ikv[0], key=ikv[1][0], value=ikv[1][1]), enumerate(args_dict.items())))
+
+
 def section_url(section, args_dict=None):
     return settings.PROTOCOL_DOMAIN + section_path(section, args_dict)
 
@@ -18,7 +25,7 @@ def section_path(section, args_dict=None):
         id_arg = {'id': args_dict['id']}
         args_dict = keys_omit(args_dict, ['id'])
     section_path_url = '/' + url_generators[section_string]['generator'].format(**id_arg)
-    section_path_url += "".join(map(lambda kv: '&' + kv[0] + '=' + str(kv[1]), args_dict.items()))
+    section_path_url += args_dict_to_string(args_dict)
     return section_path_url
 
 
