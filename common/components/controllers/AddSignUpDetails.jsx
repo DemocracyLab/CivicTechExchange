@@ -4,8 +4,9 @@ import DjangoCSRFToken from "django-react-csrftoken";
 import React from "react";
 import type { Validator } from "../forms/FormValidation.jsx";
 import FormValidation from "../forms/FormValidation.jsx";
-import _ from "lodash";
 import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
+import url from "../utils/url.js";
+import _ from "lodash";
 
 type State = {|
   service: string,
@@ -20,7 +21,7 @@ class AddSignUpDetails extends React.Component<{||}, State> {
     super();
 
     this.state = {
-      service: "[TODO: Insert Service Here]",
+      service: url.argument("provider"),
       firstName: "",
       lastName: "",
       isValid: false,

@@ -58,8 +58,9 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         first_name = data.get('first_name')
         last_name = data.get('last_name')
 
-        sociallogin.user.first_name = first_name or full_name.split()[0]
-        sociallogin.user.last_name = last_name or ' '.join(full_name.split()[1:])
+        if full_name or (first_name and last_name):
+            sociallogin.user.first_name = first_name or full_name.split()[0]
+            sociallogin.user.last_name = last_name or ' '.join(full_name.split()[1:])
         # Set username to lowercase email
         sociallogin.user.username = sociallogin.user.email.lower()
 
