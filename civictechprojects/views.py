@@ -332,8 +332,8 @@ def index(request):
     # Redirect to AddUserDetails page if First/Last name hasn't been entered yet
     if page != FrontEndSection.AddUserDetails.value and request.user.is_authenticated and (not request.user.first_name or not request.user.last_name):
         from allauth.socialaccount.models import SocialAccount
-        provider = SocialAccount.objects.filter(user=request.user).first()
-        return redirect(section_url(FrontEndSection.AddUserDetails, {'provider': provider.provider}))
+        account = SocialAccount.objects.filter(user=request.user).first()
+        return redirect(section_url(FrontEndSection.AddUserDetails, {'provider': account.provider}))
 
     page_url = request.get_full_path()
     clean_url = get_clean_url(page_url)

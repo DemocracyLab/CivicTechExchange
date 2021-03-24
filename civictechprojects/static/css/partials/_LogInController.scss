@@ -9,6 +9,10 @@
   overflow: auto;
 }
 
+.LogInController-root b {
+  font-weight: bold;
+}
+
 .LogInController-input {
   border: solid 1px $color-grey-frame-border;
   height: 40px;
