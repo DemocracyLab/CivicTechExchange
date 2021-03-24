@@ -1,16 +1,11 @@
 .LogInController-root {
   background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
-  font-weight: 300;
   width: 90%;
   max-width: 800px;
   margin: 76px auto;
   padding: 58px 5% 30px 5%;
   overflow: auto;
-}
-
-.LogInController-root b {
-  font-weight: bold;
 }
 
 .LogInController-input {

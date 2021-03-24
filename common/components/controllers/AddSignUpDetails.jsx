@@ -50,8 +50,8 @@ class AddSignUpDetails extends React.Component<{||}, State> {
         <div className="LogInController-root">
           <div className="LogInController-greeting">
             <p>
-              We were not able to obtain your <b>First Name</b> and{" "}
-              <b>Last Name</b> from {this.state.service}.
+              We were not able to obtain your <strong>First Name</strong> and{" "}
+              <strong>Last Name</strong> from {this.state.service}.
             </p>
             <p>Please update the missing information.</p>
           </div>
