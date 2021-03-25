@@ -29,6 +29,7 @@ const Section = {
   LiveEvent: "LiveEvent",
   CorporateEvent: "CorporateEvent",
   Error: "Error",
+  AddUserDetails: "AddUserDetails",
 };
 
 export type SectionType = $Keys<typeof Section>;

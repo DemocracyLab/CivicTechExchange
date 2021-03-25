@@ -20,6 +20,7 @@
   {"name": "FindGroups", "pattern": "groups"},
   {"name": "Profile", "pattern": "user/(?P<id>[\\w\\-]+)"},
   {"name": "SignedUp", "pattern": "signup/verify"},
+  {"name": "AddUserDetails", "pattern": "signup/finish"},
   {"name": "EmailVerified", "pattern": "signup/done"},
   {"name": "SignUp", "pattern": "signup"},
   {"name": "LogIn", "pattern": "login"},

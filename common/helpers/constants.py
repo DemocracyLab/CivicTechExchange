@@ -44,3 +44,4 @@ class FrontEndSection(Enum):
     MyGroups = 'MyGroups'
     MyEvents = 'MyEvents'
     CorporateEvent = 'CorporateEvent'
+    AddUserDetails = 'AddUserDetails'
