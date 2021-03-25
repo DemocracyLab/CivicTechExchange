@@ -1,4 +1,5 @@
 import json
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import PermissionDenied
 from .models import Contributor
@@ -59,3 +60,11 @@ class DemocracyLabUserCreationForm(UserCreationForm):
             user.update_linked_items()
 
         SubscribeUserToQiqoChat(user)
+
+
+class DemocracyLabUserAddDetailsForm(forms.Form):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
