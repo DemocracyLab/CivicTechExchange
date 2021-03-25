@@ -327,7 +327,7 @@ def approve_event(request, event_id):
 
 @ensure_csrf_cookie
 @xframe_options_exempt
-def index(request):
+def index(request, id='Unused but needed for routing purposes; do not remove!'):
     page = get_page_section(request.get_full_path())
     # Redirect to AddUserDetails page if First/Last name hasn't been entered yet
     if page != FrontEndSection.AddUserDetails.value and request.user.is_authenticated and (not request.user.first_name or not request.user.last_name):
