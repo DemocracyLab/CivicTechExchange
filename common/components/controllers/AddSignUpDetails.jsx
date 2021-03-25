@@ -91,7 +91,10 @@ class AddSignUpDetails extends React.Component<{||}, State> {
             </button>
           </form>
           <div className="SignUpController-socialSection">
-            <SocialMediaSignupSection hideApps={[this.state.service]} />
+            <SocialMediaSignupSection
+              hideApps={[this.state.service]}
+              showEmail={true}
+            />
           </div>
         </div>
       </React.Fragment>

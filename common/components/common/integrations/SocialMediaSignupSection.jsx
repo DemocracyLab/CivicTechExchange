@@ -7,6 +7,9 @@ import GithubSVG from "../../svg/github.svg";
 import GoogleSVG from "../../svg/google.svg";
 import LinkedInSVG from "../../svg/linkedin.svg";
 import type { Dictionary } from "../../types/Generics.jsx";
+import url from "../../utils/url.js";
+import Section from "../../enums/Section.js";
+import GlyphStyles, { Glyph, GlyphSizes } from "../../utils/glyphs.js";
 import _ from "lodash";
 
 const socialAppVisibility: Dictionary<boolean> = !_.isEmpty(
@@ -45,6 +48,7 @@ const socialSignInLinkDisplayConfigMap: {
 
 type Props = {|
   hideApps: $ReadOnlyArray<string>,
+  showEmail: boolean,
 |};
 
 type State = {|
@@ -90,8 +94,22 @@ class SocialMediaSignupSection extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <h5 className="text-center">OR</h5>
+        {this.props.showEmail && this._renderEmailSignup()}
         {this._renderSocialLogins()}
       </React.Fragment>
+    );
+  }
+
+  _renderEmailSignup(): React$Node {
+    return (
+      <div className="LogInController-socialLink">
+        <a href={url.section(Section.SignUp)} key="email">
+          <span className="LogInController-socialIcon">
+            <i className={Glyph(GlyphStyles.EnvelopeSolid, GlyphSizes.X3)} />
+          </span>
+          <span>Continue with Email</span>
+        </a>
+      </div>
     );
   }
 
