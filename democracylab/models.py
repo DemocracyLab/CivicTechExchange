@@ -25,6 +25,10 @@ class Contributor(User):
     qiqo_uuid = models.CharField(max_length=50, blank=True)
     qiqo_signup_time = models.DateTimeField(null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        if self.first_name and self.last_name:
+            super(Contributor, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.id_full_name()
 
