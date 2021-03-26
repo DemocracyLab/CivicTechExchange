@@ -26,7 +26,8 @@ class Contributor(User):
     qiqo_signup_time = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if self.first_name and self.last_name:
+        existing_user = Contributor.objects.filter(email=self.email).exists()
+        if not existing_user or (self.first_name and self.last_name):
             super(Contributor, self).save(*args, **kwargs)
 
     def __str__(self):
