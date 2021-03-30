@@ -84,6 +84,12 @@
   }
 }
 
+.LogInController-socialIcon i {
+  cursor: pointer;
+  width: 55px;
+  color: $color-text-grey;
+}
+
 .LogInController-socialIcon svg {
   overflow: hidden;
   width: 55px;
