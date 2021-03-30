@@ -25,7 +25,7 @@ class LogInController extends React.Component<Props, State> {
     super(props);
     const args: Dictionary<string> = url.arguments();
     let checkPrevPage: string = props.prevPage || args["prev"];
-    const prevPage: string = (checkPrevPage === 'SignUp' ? "Home" : checkPrevPage);
+    const prevPage: string = (checkPrevPage === Section.SignUp ? Section.Home : checkPrevPage);
     const prevPageArgs: Dictionary<string> = _.omit(args, "prev");
     this.state = {
       username: "",
