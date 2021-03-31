@@ -1,4 +1,4 @@
-version: '2.4'
+version: '3.7'
 
 services:
   db:
@@ -7,6 +7,10 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=p0stgres!
       - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - demolab:/var/lib/postgresql/data/
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -34,3 +38,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+volumes: 
+  demolab:
