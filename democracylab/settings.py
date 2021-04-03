@@ -149,10 +149,10 @@ HOSTNAME = os.environ.get('HOSTNAME', '127.0.0.1')
 DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'p0stgres!',
-        'HOST': HOSTNAME,
+        'NAME': os.getenv("POSTGRES_DB"),
+        'USER': os.getenv("POSTGRES_USER"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+        'HOST': os.getenv("POSTGRES_HOST"),
         'PORT': '5432',
     }
 }
