@@ -394,6 +394,10 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
     if hasattr(settings, 'HERE_CONFIG'):
         context['HERE_CONFIG'] = settings.HERE_CONFIG
 
+    if hasattr(settings, 'GHOST_URL'):
+        context['GHOST_URL'] = settings.GHOST_URL
+        context['GHOST_CONTENT_API_KEY'] = settings.GHOST_CONTENT_API_KEY
+
     if request.user.is_authenticated:
         contributor = Contributor.objects.get(id=request.user.id)
         context['userID'] = request.user.id

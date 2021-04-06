@@ -324,7 +324,15 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'PRIVACY_POLICY_URL': {
         'error': True,
         'message': 'Privacy Policy url required'
-    }
+    },
+    'GHOST_URL': {
+        'error': False,
+        'message': 'Ghost url needed to display blog posts on site'
+    },
+    'GHOST_CONTENT_API_KEY': {
+        'error': False,
+        'message': 'Ghost content api key needed to display blog posts on site'
+    },
 }
 
 CSRF_COOKIE_SECURE = not DEBUG
@@ -453,3 +461,9 @@ GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH', '')
 PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
+
+GHOST_URL = os.environ.get('GHOST_URL', '')
+GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '')
+
+if GHOST_URL:
+    CSP_CONNECT_SRC = CSP_CONNECT_SRC + (GHOST_URL,)

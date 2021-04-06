@@ -12,6 +12,11 @@ import Ch3Icon from "../svg/corporatehackathon/three.svg";
 import cdn from "../utils/cdn.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
+import ghostApiHelper, { GhostPost } from "../utils/ghostApi.js";
+
+type State = {|
+  ghostPosts: $ReadOnlyArray<GhostPost>,
+|};
 
 class CorporateHackathonController extends React.PureComponent<{||}, State> {
   constructor(props) {
@@ -19,9 +24,16 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   }
 
   componentDidMount() {
-    prerender.ready();
+    ghostApiHelper &&
+      ghostApiHelper.browse("highlighted", this.loadGhostPosts.bind(this));
   }
-  //TODO: Get headers from the back end, see PR #446 for example of the change
+
+  loadGhostPosts(ghostPosts: $ReadOnlyArray<GhostPost>) {
+    console.log(JSON.stringify(ghostPosts));
+    this.setState({ ghostPosts: ghostPosts });
+  }
+
+  //TODO: Get headers from the back end, see PR #446 for example of the change.  Let's make sure to do it with this page revamp
   _renderHeader(): React$Node {
     const title: string = "DemocracyLab | Corporate Hackathons";
     const description: string = "Host a hackathon with DemocracyLab!";
@@ -35,10 +47,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         {this._renderHeader()}
         <div className="corporate-root container">
           <div className="row">
-              {this._renderTop()}
-              {this._renderTabs()}
-              {this._renderContact()}
-              {this._renderBottomImage()}
+            {this._renderTop()}
+            {this._renderTabs()}
+            {this._renderContact()}
+            {this._renderBottomImage()}
           </div>
         </div>
       </React.Fragment>
@@ -64,15 +76,15 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-section col-12">
-        <p>tabs container</p>
-        <Tabs defaultActiveKey="tab-hackathon" id="corporate-tabs">
-          <Tab eventKey="tab-hackathon" title="Host a Hackathon">
-            <p>Hackathon tab content</p>
-          </Tab>
-          <Tab eventKey="tab-sponsorship" title="Sponsorship">
-            <p>Sponsorship tab content</p>
-          </Tab>
-        </Tabs>
+          <p>tabs container</p>
+          <Tabs defaultActiveKey="tab-hackathon" id="corporate-tabs">
+            <Tab eventKey="tab-hackathon" title="Host a Hackathon">
+              <p>Hackathon tab content</p>
+            </Tab>
+            <Tab eventKey="tab-sponsorship" title="Sponsorship">
+              <p>Sponsorship tab content</p>
+            </Tab>
+          </Tabs>
         </div>
       </React.Fragment>
     );
@@ -82,8 +94,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-section col-12">
-        <a id="contact"></a>
-        <p>contact us/take the first step section</p>
+          <a id="contact"></a>
+          <p>contact us/take the first step section</p>
         </div>
       </React.Fragment>
     );
@@ -93,7 +105,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-section col-12">
-        <p>bottom image with a gradient fade on the top edge</p>
+          <p>bottom image with a gradient fade on the top edge</p>
         </div>
       </React.Fragment>
     );
