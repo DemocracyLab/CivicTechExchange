@@ -25,7 +25,7 @@ $container-max-widths: (
     xl: 1140px,
   // 12 col @ 95px/ea inc. gutters
     xxl: 1392px,
-  // 12 col @ 116px/ea inc. gutters,
+  // 12 col @ 116px/ea inc. gutters,,,,
 );
 
 //define our font stack
@@ -36,12 +36,10 @@ $font-family-sans-serif: "Montserrat", -apple-system, BlinkMacSystemFont,
 //add DL colors to themes for button variants, etc
 $theme-colors: (
   "primary": #f79e02,
-  // use this for "action"
-    "success": #528305,
-  // check for hover #395e00
-    "danger": #e4100e,
-  // check for hover #b20000
-    "info": #107fb0 // check for hover #025d87,
+  "success": #528305,
+  "danger": #e4100e,
+  "info": #107fb0,
+  "cta": #b1d3fb,
 );
 
 //disables dropdown caret by default
