@@ -35,12 +35,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         {this._renderHeader()}
         <div className="corporate-root container">
           <div className="row">
-            <div className="col-12">
               {this._renderTop()}
               {this._renderTabs()}
               {this._renderContact()}
               {this._renderBottomImage()}
-            </div>
           </div>
         </div>
       </React.Fragment>
@@ -51,7 +49,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderTop(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-section">
+        <div className="corporate-section col-12">
           <p>top section</p>
           <Button variant="cta" href="#contact">
             Partner With Us
@@ -65,7 +63,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderTabs(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-section">
+        <div className="corporate-section col-12">
         <p>tabs container</p>
         <Tabs defaultActiveKey="tab-hackathon" id="corporate-tabs">
           <Tab eventKey="tab-hackathon" title="Host a Hackathon">
@@ -83,7 +81,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderContact(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-section">
+        <div className="corporate-section col-12">
         <a id="contact"></a>
         <p>contact us/take the first step section</p>
         </div>
@@ -94,7 +92,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderBottomImage(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-section">
+        <div className="corporate-section col-12">
         <p>bottom image with a gradient fade on the top edge</p>
         </div>
       </React.Fragment>
