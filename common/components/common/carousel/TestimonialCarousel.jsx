@@ -1,8 +1,9 @@
 import React from "react";
-import Testimonials from "./Testimonials.jsx";
 import Carousel from "react-bootstrap/Carousel";
 
-const carouselItems = Testimonials.map(i => (
+let testimonialItems = this.props.items;
+
+const carouselItems = testimonialItems.map(i => (
   <Carousel.Item className="carousel-item" key={i.name}>
     <div className="carousel-item-content">
       <div className="carousel-item-left">

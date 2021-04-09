@@ -5,7 +5,8 @@ import SplashScreen, {
   HeroImage,
 } from "../componentsBySection/FindProjects/SplashScreen.jsx";
 import RecentProjectsSection from "../componentsBySection/Landing/RecentProjectsSection.jsx";
-import TestimonialCarousel from "../componentsBySection/Landing/TestimonialCarousel.jsx";
+import TestimonialCarousel from "../common/carousel/TestimonialCarousel.jsx";
+import Testimonials from "../componentsBySection/Landing/HomepageTestimonials.jsx";
 import Partners from "../componentsBySection/Landing/Partners.jsx";
 import cdn from "../utils/cdn";
 import Button from "react-bootstrap/Button";
@@ -165,6 +166,7 @@ class LandingController extends React.PureComponent<{||}> {
         <h2 className="text-center">Testimonials</h2>
         <TestimonialCarousel
           className="LandingController-testimonial"
+          items={Testimonials}
           interval={15000}
         />
       </div>

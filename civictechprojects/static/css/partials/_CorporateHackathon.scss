@@ -11,3 +11,17 @@
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
+.corporate-cta-button {
+  display: block;
+}
+.corporate-hackathon-card, .corporate-sponsorship-card {
+  border: 1px solid $color-grey-frame-border;
+  background: $color-background-light;
+  margin-bottom: 30px;
+}
+
+@include media-breakpoint-up(lg) {
+  .corporate-cta-button {
+    display: initial;
+  }
+}
