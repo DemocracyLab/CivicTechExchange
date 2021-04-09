@@ -2,8 +2,8 @@ from django.conf import settings
 from civictechprojects.models import Event
 from civictechprojects.caching.cache import ProjectCache, GroupCache
 from common.helpers.constants import FrontEndSection
+from common.helpers.front_end import section_url
 from common.helpers.request_helpers import url_params
-from democracylab.models import get_request_contributor
 
 
 def about_project_preload(context, request):
@@ -32,6 +32,8 @@ def about_event_preload(context, request):
         context['description'] = event_json['event_short_description']
         if 'event_thumbnail' in event_json:
             context['og_image'] = event_json['event_thumbnail']['publicUrl']
+        slug_or_id = event.event_slug or event.id
+        context['canonical_url'] = section_url(FrontEndSection.AboutEvent,  {'id': slug_or_id})
     else:
         print('Failed to preload event info, no cache entry found: ' + event_id)
     return context
