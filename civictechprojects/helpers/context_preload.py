@@ -93,6 +93,7 @@ def default_preload(context, request):
                              'Volunteer today to connect with other professionals volunteering their time.'
     context['og_type'] = 'website'
     context['og_image'] = settings.STATIC_CDN_URL + '/img/Democracylab_is_a_global_volunteer_tech_for_good_nonprofit.png'
+    context['canonical_url'] = settings.PROTOCOL_DOMAIN + request.get_full_path()
     return context
 
 
