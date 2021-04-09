@@ -26,6 +26,10 @@
     width: 80%; /* give space for the arrows on left and right */
     margin: auto;
   }
+  .carousel-item {
+    border: 1px solid $color-grey-frame-border;
+    border-radius: 5px;
+  }
 
   .carousel-item p {
     padding: 10px 0 20px 0;
@@ -58,10 +62,14 @@
   }
 }
 @include media-breakpoint-up(lg) {
-  /* these rules call out Testimonial cards on screens big enough to not just use the whole div */
+ /* these rules call out Testimonial cards on screens big enough to not just use the whole div */
   .carousel-testimonial-root {
     background: $color-background-default;
     text-align: left;
+    .carousel-item {
+        border: none;
+        border-radius: initial;
+      }
     .carousel-item-content {
       display: flex;
       flex-flow: row nowrap;
