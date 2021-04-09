@@ -7,6 +7,9 @@ import cdn from "../utils/cdn.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import ghostApiHelper, { GhostPost } from "../utils/ghostApi.js";
+import TestimonialCarousel from "../../components/common/carousel/TestimonialCarousel.jsx";
+// !!! TODO: this import is for testing only! don't let it into prod. 
+import Testimonials from "../../components/componentsBySection/Landing/HomepageTestimonials.jsx";
 
 type State = {|
   ghostPosts: $ReadOnlyArray<GhostPost>,
@@ -162,7 +165,9 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         </div>
         <div className="corporate-hackathon-saying">
           <h3>What People Are Saying</h3>
-          <p>hackathon testimonials</p>
+          <div className="carousel-testimonial-root">
+            <TestimonialCarousel items={Testimonials} interval={false} />
+          </div>
         </div>
         <div className="corporate-hackathon-stories">
           <h3>Impact Stories</h3>
@@ -251,7 +256,9 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         </div>
         <div className="corporate-sponsorship-saying">
           <h3>What People Are Saying</h3>
-          <p>carousel here</p>
+          <div className="carousel-testimonial-root">
+            <TestimonialCarousel items={Testimonials} interval={false} />
+          </div>
         </div>
         <div className="corporate-sponsorship-impact">
           <h3>Impact Stories</h3>
