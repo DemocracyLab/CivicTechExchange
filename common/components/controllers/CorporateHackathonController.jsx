@@ -166,7 +166,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-hackathon-saying">
           <h3>What People Are Saying</h3>
           <div className="carousel-testimonial-root">
-            <TestimonialCarousel items={Testimonials} interval={false} />
+            <TestimonialCarousel items={Testimonials} interval={600000} />
           </div>
         </div>
         <div className="corporate-hackathon-stories">
@@ -257,7 +257,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-sponsorship-saying">
           <h3>What People Are Saying</h3>
           <div className="carousel-testimonial-root">
-            <TestimonialCarousel items={Testimonials} interval={false} />
+            <TestimonialCarousel items={Testimonials} interval={600000} />
           </div>
         </div>
         <div className="corporate-sponsorship-impact">
