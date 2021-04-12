@@ -1,4 +1,5 @@
 from django.conf import settings
+from urllib.parse import urljoin, urlparse
 from civictechprojects.models import Event
 from civictechprojects.caching.cache import ProjectCache, GroupCache
 from common.helpers.constants import FrontEndSection
@@ -95,7 +96,9 @@ def default_preload(context, request):
                              'Volunteer today to connect with other professionals volunteering their time.'
     context['og_type'] = 'website'
     context['og_image'] = settings.STATIC_CDN_URL + '/img/Democracylab_is_a_global_volunteer_tech_for_good_nonprofit.png'
-    context['canonical_url'] = settings.PROTOCOL_DOMAIN + request.get_full_path()
+    url = settings.PROTOCOL_DOMAIN + request.get_full_path()
+    # Remove parameters for canonical urls by default
+    context['canonical_url'] = urljoin(url, urlparse(url).path)
     return context
 
 
