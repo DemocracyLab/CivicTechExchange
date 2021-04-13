@@ -1,3 +1,46 @@
+/* universal carousel styles */
+.carousel-testimonial-root,
+.carousel-blog-root {
+  .carousel-spacer {
+    display: inline-block;
+    width: 50px;
+    height: 1px;
+    border-bottom: 1px solid $color-text-dark;
+    margin: 20px 0 10px 0;
+  }
+  .carousel-item-content {
+    padding: 1rem 1rem 4rem 1rem; /* pushes card indicator dots off edge of content */
+    width: 80%; /* give space for the arrows on left and right */
+    margin: auto;
+  }
+  .carousel-item {
+    border: 1px solid $color-grey-frame-border;
+    border-radius: 5px;
+  }
+  .carousel-indicators li {
+    background-color: $color-text-grey;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+  }
+  .carousel-indicators .active {
+    background-color: $color-text-dark;
+  }
+}
+
+/* blog carousel-specific styles */
+.carousel-blog-root {
+  .carousel-feature-image {
+    display: flex;
+    img {
+      max-width: 100%;
+      max-height: 350px;
+      margin: 0 auto;
+    }
+  }
+}
+
+/* testimonial carousel-specific styles */
 .carousel-testimonial-root {
   text-align: center;
   h2 {
@@ -9,45 +52,18 @@
   h4 {
     font-size: 18px;
   }
-  .carousel-spacer {
-    display: inline-block;
-    width: 50px;
-    height: 1px;
-    border-bottom: 1px solid $color-text-dark;
-    margin: 20px 0 10px 0;
-  }
+
   .carousel-item-left {
     /* centers the avatar on mobile */
     display: flex;
     justify-content: center;
   }
-  .carousel-item-content {
-    padding: 1rem;
-    width: 80%; /* give space for the arrows on left and right */
-    margin: auto;
-  }
-  .carousel-item {
-    border: 1px solid $color-grey-frame-border;
-    border-radius: 5px;
-  }
 
   .carousel-item p {
-    padding: 10px 0 20px 0;
+    padding-top: 10px;
     text-align: left;
   }
-  .carousel-inner {
-    margin-bottom: 20px; /* because the indicators are absolutely positioned in the div, this effectively pushes them down a bit */
-  }
 
-  .carousel-indicators li {
-    background-color: $color-text-grey;
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-  }
-  .carousel-indicators .active {
-    background-color: $color-text-dark;
-  }
   .carousel-avatar {
     height: 200px;
     width: 200px;
@@ -62,25 +78,37 @@
   }
 }
 @include media-breakpoint-up(lg) {
- /* these rules call out Testimonial cards on screens big enough to not just use the whole div */
-  .carousel-testimonial-root {
+  /* these rules call out Testimonial cards on screens big enough to not just use the whole div */
+  .carousel-testimonial-root,
+  .carousel-blog-root {
     background: $color-background-default;
     text-align: left;
     .carousel-item {
-        border: none;
-        border-radius: initial;
-      }
+      border: none;
+      border-radius: initial;
+    }
     .carousel-item-content {
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-      min-height: 375px; /* this value MUST be at least the height of the tallest content item we have for desktop view of Testimonial cards. Round up 5-10px for browser differences just in case. */
       background: $color-background-light;
       border: 1px solid $color-grey-frame-border;
       border-radius: 5px;
     }
+  }
+  /* testimonial-only rules */
+  .carousel-testimonial-root {
+    .carousel-item-content {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      min-height: 375px; /* fixing minimum heights to reduce content shift */
+    }
     .carousel-avatar {
       margin: 0 1rem;
+    }
+  }
+  /* blog only rules */
+  .carousel-blog-root {
+    .carousel-item-content {
+      min-height: 630px; /* fixing minimum heights to reduce content shift */
     }
   }
 }

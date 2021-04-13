@@ -8,7 +8,10 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import ghostApiHelper, { GhostPost } from "../utils/ghostApi.js";
 import TestimonialCarousel from "../../components/common/carousel/TestimonialCarousel.jsx";
-// !!! TODO: this import is for testing only! don't let it into prod. 
+import BlogCarousel from "../../components/common/carousel/BlogCarousel.jsx";
+import _ from "lodash";
+
+// !!! TODO: this import is for testing only! don't let it into prod.
 import Testimonials from "../../components/componentsBySection/Landing/HomepageTestimonials.jsx";
 
 type State = {|
@@ -18,11 +21,12 @@ type State = {|
 class CorporateHackathonController extends React.PureComponent<{||}, State> {
   constructor(props) {
     super(props);
+    this.state = { ghostPosts: {} };
   }
 
   componentDidMount() {
     ghostApiHelper &&
-      ghostApiHelper.browse("highlighted", this.loadGhostPosts.bind(this));
+      ghostApiHelper.browse("tech-for-good", this.loadGhostPosts.bind(this));
   }
 
   loadGhostPosts(ghostPosts: $ReadOnlyArray<GhostPost>) {
@@ -171,7 +175,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         </div>
         <div className="corporate-hackathon-stories">
           <h3>Impact Stories</h3>
-          <p>hackathon blog posts</p>
+          <div className="carousel-blog-root">
+            {!_.isEmpty(this.state.ghostPosts) && (
+              <BlogCarousel items={this.state.ghostPosts} interval={600000} />
+            )}
+          </div>
         </div>
       </React.Fragment>
     );
@@ -262,7 +270,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         </div>
         <div className="corporate-sponsorship-impact">
           <h3>Impact Stories</h3>
-          <p>carousel here</p>
+          <div className="carousel-blog-root">
+            {!_.isEmpty(this.state.ghostPosts) && (
+              <BlogCarousel items={this.state.ghostPosts} interval={600000} />
+            )}
+          </div>
         </div>
       </React.Fragment>
     );
