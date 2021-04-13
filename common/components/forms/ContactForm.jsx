@@ -62,9 +62,11 @@ class ContactForm extends React.Component<Props, State> {
         fname: this.state.fname,
         lname: this.state.lname,
         emailaddr: this.state.emailaddr,
-        company_name: this.state.company_name,
         message: this.state.message,
         reCaptchaValue: this.state.reCaptchaValue,
+        interest_sponsor: this.state.interest_sponsor,
+        interest_hackathon: this.state.interest_hackathon,
+        interest_other: this.state.interest_other
       },
       response => this.showSuccess(),
       response => this.showFailure()
