@@ -1,27 +1,75 @@
 // corporate page (hackathons and sponsorships)
 
-// .corporate-root {}
+.corporate-root {
+  .nav {
+    justify-content: space-evenly;
+  }
+  .nav-tabs {
+    background: $color-background-light;
+    border-bottom: 5px solid $color-orange;
+  }
+  .nav-tabs a {
+    text-align: center;
+    flex-basis: calc(50% - 20px);
+    color: $color-text-dark;
+  }
+  .nav-link, .nav-link:hover {
+    border: 1px solid $color-text-dark;
+  }
+  .nav-link {
+    border-bottom: none;
+  }
+  .nav-link.active {
+    font-weight: bolder;
+    color: $color-text-dark;
+    background: $color-orange;
+    border: 1px solid $color-text-dark;
+    border-bottom: 1px solid $color-orange;
+  }
+  .corporate-sources-citation a {
+    color: $color-text-dark;
+    text-decoration: underline;
+  }
+  .corporate-sources-citation a:hover {
+    color: $color-text-dark;
+  }
+}
 
-//sponsorship section .corporate-sponsorship {}
+.corporate-top, .corporate-hackathon-saying, .corporate-hackathon-saying .carousel-testimonial-root, .corporate-contact, .corporate-bottom-section  {
+  background-color: $color-background-light;
+} 
 
-// hackathon section .corporate-hackathon {}
+.corporate-top {
+  padding-top: 3rem;
+  h2 {
+    padding-top: 3rem;
+  }
+}
 
-//temporary so the skeleton sections are more obvious
 .corporate-section {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 }
 .corporate-cta-button {
   display: block;
+  margin: 0 auto;
+  max-width: 450px;
 }
 .corporate-hackathon-card, .corporate-sponsorship-card {
   border: 1px solid $color-grey-frame-border;
   background: $color-background-light;
   margin-bottom: 30px;
+  padding: 15px;
+  h4 {
+    padding: 8px 0 16px 0; 
+  }
 }
 
 @include media-breakpoint-up(lg) {
   .corporate-cta-button {
     display: initial;
+  }
+  .corporate-hackathon-card, .corporate-sponsorship-card {
+    min-height: 100%; // equal height cards when displayed in a row
   }
 }
