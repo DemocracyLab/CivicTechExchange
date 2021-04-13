@@ -1234,13 +1234,14 @@ def contact_democracylab(request):
     )
 
     if r.json()['success']:
-        # Successfuly validated, send email
+        # Successfully validated, send email
         first_name = body['fname']
         last_name = body['lname']
         email_addr = body['emailaddr']
         message = body['message']
-        company_name = body['company_name'] if 'message' in body else None
-        contact_democracylab_email(first_name, last_name, email_addr, message, company_name)
+        company_name = body['company_name'] if 'company_name' in body else None
+        interest_flags = list(filter(lambda key: body[key] and isinstance(body[key], bool), body.keys()))
+        contact_democracylab_email(first_name, last_name, email_addr, message, company_name, interest_flags)
         return HttpResponse(status=200)
 
     # Error while verifying the captcha, do not send the email

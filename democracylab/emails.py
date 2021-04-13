@@ -436,11 +436,15 @@ def _get_account_from_email(email_acct):
     return email_acct['from_name'] if email_acct is not None else 'DemocracyLab'
 
 
-def contact_democracylab_email(first_name, last_name, email_address, body, company_name):
+def contact_democracylab_email(first_name, last_name, email_address, body, company_name, interest_flags=None):
     if company_name and len(company_name) > 0:
-        subject = subject = '{} {}({}) would like to contact DemocracyLab'.format(first_name, last_name, company_name)
+        subject = '{} {}({}) would like to contact DemocracyLab'.format(first_name, last_name, company_name)
     else:
         subject = '{} {} would like to contact DemocracyLab'.format(first_name, last_name)
+    if interest_flags:
+        interest_strings = list(map(lambda flag: flag.replace('interest_', ''), interest_flags))
+        interest_text = 'Interests: ' + ','.join(interest_strings)
+        body = interest_text + '\n' + body
     email_msg = EmailMessage(
         subject=subject,
         body=body,
