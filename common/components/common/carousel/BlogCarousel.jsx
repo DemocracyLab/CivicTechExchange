@@ -22,7 +22,10 @@ class BlogCarousel extends React.PureComponent {
               </div>
               <h3>{i.title}</h3>
               <p>{i.custom_excerpt ? i.custom_excerpt : i.excerpt}</p>
-              <a href={i.url}>Read More</a>
+              <div className="text-center"><a href={i.url} target="_blank">
+                Read More
+              </a>
+              </div>
             </div>
           </Carousel.Item>
         ))}

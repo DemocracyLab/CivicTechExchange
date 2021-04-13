@@ -54,7 +54,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderTop(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-section col-12">
+        <div className="corporate-top col-12">
           <h1>Together we can advance technology for the public good.</h1>
           <p>
             DemocracyLab's success depends on creating value for our corporate
@@ -80,6 +80,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           >
             Partner With Us
           </Button>
+          <h2>Learn more about opportunities below.</h2>
         </div>
       </React.Fragment>
     );
@@ -88,8 +89,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderTabs(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-section col-12">
-          <h2>Learn more about opportunities below.</h2>
+        <div className="corporate-tab-section">
           <Tabs defaultActiveKey="tab-hackathon" id="corporate-tabs">
             <Tab eventKey="tab-hackathon" title="Host a Hackathon">
               {this._renderHackathonTab()}
@@ -106,7 +106,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderHackathonTab(): $React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-hackathon-whyhost">
+        <div className="corporate-hackathon-whyhost col-12">
           <h3>Why Host a Hackathon?</h3>
           <div className="row">
             <div className="col-sm-12 col-lg-4">
@@ -156,32 +156,71 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </div>
           </div>
           <p className="corporate-sources-citation">
-            Sources: DemocracyLab post-event surveys, Deloitte{" "}
-            <a href="https://www2.deloitte.com/us/en/pages/about-deloitte/articles/culture-of-purpose.html">
+            Sources:
+            <br />
+            DemocracyLab post-event surveys <br />
+            Deloitte{" "}
+            <a
+              href="https://www2.deloitte.com/us/en/pages/about-deloitte/articles/culture-of-purpose.html"
+              target="_blank"
+            >
               "Culture of Purpose"
             </a>
           </p>
         </div>
-        <div className="corporate-hackathon-howitworks">
+        <div className="corporate-hackathon-howitworks corporate-section col-12">
           <h3>How it Works</h3>
-          <p>recruit define hack stuff here</p>
           <img src={cdn.image("recruit-icon.png")} alt="Recruit" />
+          <h4>Recruit</h4>
+          <p>
+            We find tech-for-good projects that are a good fit for your team and
+            help you motivate your employees to participate.
+          </p>
           <img src={cdn.image("define-icon.png")} alt="Define" />
+          <h4>Define</h4>
+          <p>
+            We work with projects to define a narrow scope of work that will
+            help them fulfill their mission.
+          </p>
           <img src={cdn.image("hack-icon.png")} alt="Hack" />
+          <h4>Hack</h4>
+          <p>
+            Your employees collaborate with project leaders to create innovative
+            tech-for-good solutions.
+          </p>
+
+          <p>
+            After the event, DemocracyLab reports on the resulting engagement,
+            outcomes, and impact.
+          </p>
+          <Button
+            variant="cta"
+            href="#contact"
+            className="corporate-cta-button"
+          >
+            Learn More
+          </Button>
         </div>
-        <div className="corporate-hackathon-saying">
+        <div className="corporate-hackathon-saying corporate-section col-12">
           <h3>What People Are Saying</h3>
           <div className="carousel-testimonial-root">
             <TestimonialCarousel items={Testimonials} interval={600000} />
           </div>
         </div>
-        <div className="corporate-hackathon-stories">
+        <div className="corporate-hackathon-stories corporate-section col-12">
           <h3>Impact Stories</h3>
           <div className="carousel-blog-root">
             {!_.isEmpty(this.state.ghostPosts) && (
               <BlogCarousel items={this.state.ghostPosts} interval={600000} />
             )}
           </div>
+          <p>
+            Read about other previous events in our{" "}
+            <a href={window.BLOG_URL} target="_blank">
+              blog
+            </a>
+            , or other events that are coming up <a href="/events">here</a>.
+          </p>
         </div>
       </React.Fragment>
     );
@@ -190,7 +229,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderSponsorshipTab(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-sponsorship-why">
+        <div className="corporate-sponsorship-why col-12">
           <h3>Why Partner With Us?</h3>
           <div className="row">
             <div className="col-sm-12 col-lg-4">
@@ -242,7 +281,24 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             Public hackathons are an opportunity to contribute with great
             visibility.
           </h4>
-          <p>4 stat items here, public value, volunteers, event attendees...</p>
+          <div className="corporate-sponsorship-stat-container">
+            <div className="corporate-sponsorship-stat">
+              <h4>$1 Million+</h4>
+              <p>Public Value Created</p>
+            </div>
+            <div className="corporate-sponsorship-stat">
+              <h4>1500+</h4>
+              <p>Volunteers</p>
+            </div>
+            <div className="corporate-sponsorship-stat">
+              <h4>100</h4>
+              <p>Avg Event Attendees</p>
+            </div>
+            <div className="corporate-sponsorship-stat">
+              <h4>250+</h4>
+              <p>Project Teams</p>
+            </div>
+          </div>
         </div>
         <div className="corporate-sponsorship-how">
           <h3>How it Works</h3>
@@ -264,29 +320,34 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             Learn More
           </Button>
         </div>
-        <div className="corporate-sponsorship-saying">
+        <div className="corporate-sponsorship-saying col-12">
           <h3>What People Are Saying</h3>
           <div className="carousel-testimonial-root">
             <TestimonialCarousel items={Testimonials} interval={600000} />
           </div>
         </div>
-        <div className="corporate-sponsorship-impact">
+        <div className="corporate-sponsorship-impact col-12">
           <h3>Impact Stories</h3>
           <div className="carousel-blog-root">
             {!_.isEmpty(this.state.ghostPosts) && (
               <BlogCarousel items={this.state.ghostPosts} interval={600000} />
             )}
           </div>
+          <p>
+            Read about other previous events in our{" "}
+            <a href={window.BLOG_URL} target="_blank">
+              blog
+            </a>
+            , or other events that are coming up <a href="/events">here</a>.
+          </p>
         </div>
       </React.Fragment>
     );
   }
-  //TODO: reusable anchor component, reads nav height for an offset value (position relative, top -xyz px)
-
   _renderContact(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-section col-12">
+        <div className="corporate-section corporate-contact col-12">
           <JumpAnchor id="contact" />
           <h3>Take The First Step!</h3>
           <ContactForm showInterests={true} />
@@ -298,7 +359,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderBottomImage(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-section col-12">
+        <div className="corporate-section corporate-bottom-section col-12">
           <p>bottom image with a gradient fade to white on the top edge</p>
         </div>
       </React.Fragment>
