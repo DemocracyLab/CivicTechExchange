@@ -17,7 +17,9 @@ type FormFields = {|
   lname: string,
   emailaddr: string,
   message: string,
-  company_name: string,
+  interest_sponsor: boolean,
+  interest_hackathon: boolean,
+  interest_other: boolean,
   reCaptchaValue: string,
 |};
 
@@ -35,7 +37,9 @@ class ContactForm extends React.Component<Props, State> {
       lname: "",
       emailaddr: "",
       message: "",
-      company_name: "",
+      interest_sponsor: false,
+      interest_hackathon: false,
+      interest_other: false,
       sendStatusMessage: null,
       sendStatusClass: null,
       isSending: false,
@@ -130,7 +134,6 @@ class ContactForm extends React.Component<Props, State> {
         ) : null}
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
-            {this.props.showCompany && this._renderCompanyField()}
             <label htmlFor="fname">First name:</label>
             <input
               required
@@ -169,6 +172,8 @@ class ContactForm extends React.Component<Props, State> {
               onChange={this.handleInputChange}
             />
           </div>
+          {this.props.showInterests && this._renderInterestFields()}
+
           <div className="form-group">
             <label htmlFor="message">Message:</label>
             <textarea
@@ -198,19 +203,45 @@ class ContactForm extends React.Component<Props, State> {
     );
   }
 
-  _renderCompanyField(): ?React$Node {
+  _renderInterestFields(): ?React$Node {
     return (
       <div className="form-group">
-        <label htmlFor="company_name">Company (Optional):</label>
-        <input
-          className="form-control"
-          name="company_name"
-          id="company_name"
-          type="text"
-          placeholder="Your company name"
-          value={this.state.company_name}
-          onChange={this.handleInputChange}
-        />
+        <h4>Areas of Interest</h4>
+        <ul className="ContactForm-list">
+          <li>
+            <label htmlFor="interest_hackathon">Hosting a Hackathon</label>
+            <input
+              className="form-check"
+              name="interest_hackathon"
+              id="interest_hackathon"
+              type="checkbox"
+              value={this.state.interest_hackathon}
+              onChange={this.handleInputChange}
+            />
+          </li>
+          <li>
+            <label htmlFor="interest_sponsorship">Event Sponsorship</label>
+            <input
+              className="form-check"
+              name="interest_sponsorship"
+              id="interest_sponsorship"
+              type="checkbox"
+              value={this.state.interest_sponsorship}
+              onChange={this.handleInputChange}
+            />
+          </li>
+          <li>
+            <label htmlFor="interest_other">Other</label>
+            <input
+              className="form-check"
+              name="interest_other"
+              id="interest_other"
+              type="checkbox"
+              value={this.state.interest_other}
+              onChange={this.handleInputChange}
+            />
+          </li>
+        </ul>
       </div>
     );
   }

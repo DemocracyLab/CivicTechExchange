@@ -9,6 +9,7 @@ import Tab from "react-bootstrap/Tab";
 import ghostApiHelper, { GhostPost } from "../utils/ghostApi.js";
 import TestimonialCarousel from "../../components/common/carousel/TestimonialCarousel.jsx";
 import BlogCarousel from "../../components/common/carousel/BlogCarousel.jsx";
+import ContactForm from "../../components/forms/ContactForm.jsx";
 import _ from "lodash";
 
 // !!! TODO: this import is for testing only! don't let it into prod.
@@ -287,7 +288,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-section col-12">
           <a id="contact"></a>
           <h3>Take The First Step!</h3>
-          <p>contact form goes here</p>
+          <ContactForm showInterests={true} />
         </div>
       </React.Fragment>
     );
