@@ -13,6 +13,7 @@ const ghostContentAPI =
 export type GhostPost = {|
   title: string,
   url: string,
+  slug: string,
   excerpt: ?string,
   custom_excerpt: ?string,
   feature_image: string,
@@ -27,7 +28,7 @@ class ghostApiHelper {
     ghostContentAPI.posts
       .browse({
         filter: "tag:" + tag,
-        fields: "title, url, excerpt, custom_excerpt, feature_image",
+        fields: "title, url, slug, excerpt, custom_excerpt, feature_image",
       })
       .then(postsResponse => {
         successCallback
