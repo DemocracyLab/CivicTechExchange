@@ -437,6 +437,7 @@ def _get_account_from_email(email_acct):
 
 
 def contact_democracylab_email(first_name, last_name, email_address, body, company_name, interest_flags=None):
+    # TODO: Remove if we aren't going to use company in the future
     if company_name and len(company_name) > 0:
         subject = '{} {}({}) would like to contact DemocracyLab'.format(first_name, last_name, company_name)
     else:

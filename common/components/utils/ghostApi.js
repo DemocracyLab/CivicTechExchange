@@ -13,7 +13,8 @@ const ghostContentAPI =
 export type GhostPost = {|
   title: string,
   url: string,
-  excerpt: string,
+  excerpt: ?string,
+  custom_excerpt: ?string,
   feature_image: string,
 |};
 
@@ -24,7 +25,10 @@ class ghostApiHelper {
     errCallback: string => void
   ) {
     ghostContentAPI.posts
-      .browse({ filter: "tag:" + tag })
+      .browse({
+        filter: "tag:" + tag,
+        fields: "title, url, excerpt, custom_excerpt, feature_image",
+      })
       .then(postsResponse => {
         successCallback
           ? successCallback(postsResponse)
