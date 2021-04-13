@@ -10,6 +10,7 @@ import ghostApiHelper, { GhostPost } from "../utils/ghostApi.js";
 import TestimonialCarousel from "../../components/common/carousel/TestimonialCarousel.jsx";
 import BlogCarousel from "../../components/common/carousel/BlogCarousel.jsx";
 import ContactForm from "../../components/forms/ContactForm.jsx";
+import JumpAnchor from "../common/JumpAnchor.jsx";
 import _ from "lodash";
 
 // !!! TODO: this import is for testing only! don't let it into prod.
@@ -286,7 +287,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-section col-12">
-          <a id="contact"></a>
+          <JumpAnchor id="contact" />
           <h3>Take The First Step!</h3>
           <ContactForm showInterests={true} />
         </div>
