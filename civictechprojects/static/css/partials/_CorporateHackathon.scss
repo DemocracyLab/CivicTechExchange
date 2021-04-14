@@ -1,9 +1,70 @@
 // font overrides (remove this when we make them globally changed, hopefully apr-2021
 .corporate-root {
-  
-
+  line-height: 1.618;
+  font-size: 15px;
+  //then specifically, to fit some edge cases
+  p,
+  div,
+  span,
+  li,
+  a {
+    line-height: 1.618;
+  }
+  h1 {
+    font-size: 27px;
+  }
+  h2 {
+    font-size: 21px;
+  }
+  h3 {
+    font-size: 17px;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  p,
+  div,
+  span,
+  li,
+  a {
+    font-size: 15px;
+  }
 }
-
+@include media-breakpoint-up(md) {
+  .corporate-root {
+    font-size: 16px;
+    line-height: 1.618;
+    p,
+    div,
+    span,
+    li,
+    a {
+      line-height: 1.5;
+    }
+    h1 {
+      font-size: 39px;
+    }
+    h2 {
+      font-size: 23px;
+    }
+    h3 {
+      font-size: 19px;
+    }
+    h4 {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    p,
+    div,
+    span,
+    li,
+    a {
+      font-size: 16px;
+    }
+  }
+}
+//end font stuff
 
 // corporate page (hackathons and sponsorships)
 .corporate-root {
@@ -55,7 +116,8 @@
   h2 {
     padding-top: 3rem;
   }
-  .corporate-top-overlay, .corporate-bottom-overlay {
+  .corporate-top-overlay,
+  .corporate-bottom-overlay {
     background-blend-mode: multiply;
   }
   .corporate-top-overlay {
