@@ -66,7 +66,7 @@ class ContactForm extends React.Component<Props, State> {
         reCaptchaValue: this.state.reCaptchaValue,
         interest_sponsor: this.state.interest_sponsor,
         interest_hackathon: this.state.interest_hackathon,
-        interest_other: this.state.interest_other
+        interest_other: this.state.interest_other,
       },
       response => this.showSuccess(),
       response => this.showFailure()
@@ -135,71 +135,76 @@ class ContactForm extends React.Component<Props, State> {
           </div>
         ) : null}
         <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="fname">First name:</label>
-            <input
-              required
-              className="form-control"
-              name="fname"
-              id="fname"
-              type="text"
-              placeholder="Your first name"
-              value={this.state.fname}
-              onChange={this.handleInputChange}
-            />
+          <div className="ContactForm-container">
+            <div className="ContactForm-group">
+              <div className="form-group">
+                <label htmlFor="fname">First name:</label>
+                <input
+                  required
+                  className="form-control"
+                  name="fname"
+                  id="fname"
+                  type="text"
+                  placeholder="Your first name"
+                  value={this.state.fname}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="lname">Last name:</label>
+                <input
+                  required
+                  className="form-control"
+                  name="lname"
+                  id="lname"
+                  type="text"
+                  placeholder="Your last name"
+                  value={this.state.lname}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="emailaddr">Your email address:</label>
+                <input
+                  required
+                  className="form-control"
+                  name="emailaddr"
+                  type="email"
+                  id="emailaddr"
+                  placeholder="name@example.com"
+                  value={this.state.emailaddr}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              {this.props.showInterests && this._renderInterestFields()}
+            </div>
+            <div className="ContactForm-group">
+              <div className="form-group">
+                <label htmlFor="message">Message:</label>
+                <textarea
+                  required
+                  className="form-control"
+                  name="message"
+                  id="message"
+                  placeholder="Type your message here"
+                  rows="8"
+                  value={this.state.message}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              <p>Before sending your message, please complete this captcha.</p>
+              <ReCAPTCHA
+                sitekey={window.GR_SITEKEY}
+                onChange={this.reCaptchaOnChange}
+              />
+              <input
+                type="submit"
+                className="btn btn-primary ContactForm-submit-btn"
+                value={this.state.isSending ? "Sending" : "Send message"}
+                disabled={!this.state.reCaptchaValue || this.state.isSending}
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="lname">Last name:</label>
-            <input
-              required
-              className="form-control"
-              name="lname"
-              id="lname"
-              type="text"
-              placeholder="Your last name"
-              value={this.state.lname}
-              onChange={this.handleInputChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="emailaddr">Your email address:</label>
-            <input
-              required
-              className="form-control"
-              name="emailaddr"
-              type="email"
-              id="emailaddr"
-              placeholder="name@example.com"
-              value={this.state.emailaddr}
-              onChange={this.handleInputChange}
-            />
-          </div>
-          {this.props.showInterests && this._renderInterestFields()}
-
-          <div className="form-group">
-            <label htmlFor="message">Message:</label>
-            <textarea
-              required
-              className="form-control"
-              name="message"
-              id="message"
-              placeholder="Type your message here"
-              rows="8"
-              value={this.state.message}
-              onChange={this.handleInputChange}
-            />
-          </div>
-          <p>Before sending your message, please complete this captcha.</p>
-          <ReCAPTCHA
-            sitekey={window.GR_SITEKEY}
-            onChange={this.reCaptchaOnChange}
-          />
-          <input
-            type="submit"
-            className="btn btn-primary ContactForm-submit-btn"
-            value={this.state.isSending ? "Sending" : "Send message"}
-            disabled={!this.state.reCaptchaValue || this.state.isSending}
-          />
         </form>
       </React.Fragment>
     );
