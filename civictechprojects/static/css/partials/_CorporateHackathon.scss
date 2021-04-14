@@ -1,3 +1,6 @@
+// BEGIN OVERRIDES
+// these pieces will likely be replaced wholesale upon refactors
+
 // font overrides (remove this when we make them globally changed, hopefully apr-2021
 .corporate-root {
   line-height: 1.618;
@@ -75,7 +78,61 @@
     }
   }
 }
-//end font stuff
+
+// edge-to-edge class schema, temporary for now: https://gist.github.com/JayHoltslander/e464ac3ac8f3814999a9
+// TODO: update splash screen component to accept gradient overlays, heights based on image
+.container > .corporate-edge {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.corporate-edge {
+  padding-top: 0;
+  padding-bottom: 0;
+  .row {
+  margin-left: 0;
+  margin-right: 0;
+  }
+}
+//end edge-to-edge
+
+
+// quick and dirty top and bottom image sizing
+// TODO: save me from this terrible CSS
+.corporate-bottom-image {
+  height: 101px;
+}
+.corporate-top-image {
+  height: 300px
+}
+@include media-breakpoint-up(md) {
+  .corporate-top-image {
+    height: 400px;
+  }
+  .corporate-bottom-image {
+    height: 150px;
+  }
+}
+@include media-breakpoint-up(lg) {
+  .corporate-top-image {
+    height: 533px;
+  }
+  .corporate-bottom-image {
+    height: 252px;
+  }
+}
+@include media-breakpoint-up(xl) {
+  .corporate-top-image {
+    height: 630px;
+  }
+  .corporate-bottom-image {
+    height: 323px;
+  }
+}
+// end awful image sizing zone
+
+//END OVERRIDES
+
+//begin regular CSS for the page
 
 // corporate page (hackathons and sponsorships)
 .corporate-root {
@@ -172,21 +229,6 @@
   );
 }
 
-// edge-to-edge class schema, temporary for now: https://gist.github.com/JayHoltslander/e464ac3ac8f3814999a9
-// TODO: update splash screen component to accept gradient overlays, heights based on image
-.container > .corporate-edge {
-  margin-left: -15px;
-  margin-right: -15px;
-}
-.corporate-edge {
-  padding-top: 0;
-  padding-bottom: 0;
-  .row {
-  margin-left: 0;
-  margin-right: 0;
-  }
-}
-//end e-to-e
 
 .corporate-section {
   padding-top: 3rem;
@@ -206,39 +248,12 @@
   padding: 15px;
 }
 
-// quick and dirty top and bottom image sizing
-// TODO: save me from this terrible CSS
-.corporate-bottom-image {
-  height: 101px;
-}
-.corporate-top-image {
-  height: 300px
-}
-@include media-breakpoint-up(md) {
-  .corporate-top-image {
-    height: 400px;
-  }
-  .corporate-bottom-image {
-    height: 150px;
+.corporate-contact {
+  h2 {
+    padding: 30px 0;
   }
 }
-@include media-breakpoint-up(lg) {
-  .corporate-top-image {
-    height: 533px;
-  }
-  .corporate-bottom-image {
-    height: 252px;
-  }
-}
-@include media-breakpoint-up(xl) {
-  .corporate-top-image {
-    height: 630px;
-  }
-  .corporate-bottom-image {
-    height: 323px;
-  }
-}
-// end awful image sizing zone
+
 
 @include media-breakpoint-up(lg) {
   .corporate-cta-button {
