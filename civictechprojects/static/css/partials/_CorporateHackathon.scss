@@ -1,5 +1,11 @@
-// corporate page (hackathons and sponsorships)
+// font overrides (remove this when we make them globally changed, hopefully apr-2021
+.corporate-root {
+  
 
+}
+
+
+// corporate page (hackathons and sponsorships)
 .corporate-root {
   .nav {
     justify-content: space-evenly;
@@ -13,7 +19,8 @@
     flex-basis: calc(50% - 20px);
     color: $color-text-dark;
   }
-  .nav-link, .nav-link:hover {
+  .nav-link,
+  .nav-link:hover {
     border: 1px solid $color-text-dark;
   }
   .nav-link {
@@ -35,14 +42,37 @@
   }
 }
 
-.corporate-top, .corporate-hackathon-saying, .corporate-hackathon-saying .carousel-testimonial-root, .corporate-contact, .corporate-bottom-section  {
+.corporate-top,
+.corporate-hackathon-saying,
+.corporate-hackathon-saying .carousel-testimonial-root,
+.corporate-contact,
+.corporate-bottom-section {
   background-color: $color-background-light;
-} 
+}
 
 .corporate-top {
   padding-top: 3rem;
   h2 {
     padding-top: 3rem;
+  }
+  .corporate-top-overlay, .corporate-bottom-overlay {
+    background-blend-mode: multiply;
+  }
+  .corporate-top-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.05) 27.79%,
+      rgba(0, 0, 0, 0.64) 64.62%,
+      rgba(0, 0, 0, 0.84) 100%
+    );
+  }
+  .corporate-bottom-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0) 45%
+    );
   }
 }
 
@@ -55,13 +85,14 @@
   margin: 0 auto;
   max-width: 450px;
 }
-.corporate-hackathon-card, .corporate-sponsorship-card {
+.corporate-hackathon-card,
+.corporate-sponsorship-card {
   border: 1px solid $color-grey-frame-border;
   background: $color-background-light;
   margin-bottom: 30px;
   padding: 15px;
   h4 {
-    padding: 8px 0 16px 0; 
+    padding: 8px 0 16px 0;
   }
 }
 
@@ -69,7 +100,11 @@
   .corporate-cta-button {
     display: initial;
   }
-  .corporate-hackathon-card, .corporate-sponsorship-card {
+  .corporate-hackathon-card,
+  .corporate-sponsorship-card {
     min-height: 100%; // equal height cards when displayed in a row
+  }
+  .corporate-bottom-section {
+    min-height: 326px;
   }
 }

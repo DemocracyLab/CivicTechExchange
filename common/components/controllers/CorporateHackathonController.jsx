@@ -17,23 +17,34 @@ import _ from "lodash";
 import Testimonials from "../../components/componentsBySection/Landing/HomepageTestimonials.jsx";
 
 type State = {|
-  ghostPosts: $ReadOnlyArray<GhostPost>,
+  partnerPosts: $ReadOnlyArray<GhostPost>,
+  hackathonPosts: $ReadOnlyArray<GhostPost>,
 |};
 
 class CorporateHackathonController extends React.PureComponent<{||}, State> {
   constructor(props) {
     super(props);
-    this.state = { ghostPosts: {} };
+    this.state = { partnerPosts: [], hackathonPosts: [] };
   }
 
   componentDidMount() {
     ghostApiHelper &&
-      ghostApiHelper.browse("tech-for-good", this.loadGhostPosts.bind(this));
+      ghostApiHelper.browse(
+        "partner-highlights",
+        this.loadPartnerPosts.bind(this)
+      );
+    ghostApiHelper &&
+      ghostApiHelper.browse(
+        "hackathon-highlights",
+        this.loadHackathonPosts.bind(this)
+      );
   }
-
-  loadGhostPosts(ghostPosts: $ReadOnlyArray<GhostPost>) {
-    console.log(JSON.stringify(ghostPosts));
-    this.setState({ ghostPosts: ghostPosts });
+  //TODO: make this one function which takes args
+  loadPartnerPosts(ghostPosts: $ReadOnlyArray<GhostPost>) {
+    this.setState({ partnerPosts: ghostPosts });
+  }
+  loadHackathonPosts(ghostPosts: $ReadOnlyArray<GhostPost>) {
+    this.setState({ hackathonPosts: ghostPosts });
   }
 
   render(): $React$Node {
@@ -55,7 +66,15 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-top col-12">
-          <h1>Together we can advance technology for the public good.</h1>
+          <div
+            className="no-gutters corporate-top-overlay"
+            style={{
+              backgroundImage: "url(" + cdn.image("corporate_header.jpg") + ")",
+            }}
+          >
+            <h1>Together we can advance technology for the public good.</h1>
+          </div>
+
           <p>
             DemocracyLab's success depends on creating value for our corporate
             partners:
@@ -210,8 +229,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-hackathon-stories corporate-section col-12">
           <h3>Impact Stories</h3>
           <div className="carousel-blog-root">
-            {!_.isEmpty(this.state.ghostPosts) && (
-              <BlogCarousel items={this.state.ghostPosts} interval={600000} />
+            {!_.isEmpty(this.state.hackathonPosts) && (
+              <BlogCarousel items={this.state.hackathonPosts} interval={600000} />
             )}
           </div>
           <p>
@@ -329,8 +348,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-sponsorship-impact col-12">
           <h3>Impact Stories</h3>
           <div className="carousel-blog-root">
-            {!_.isEmpty(this.state.ghostPosts) && (
-              <BlogCarousel items={this.state.ghostPosts} interval={600000} />
+            {!_.isEmpty(this.state.partnerPosts) && (
+              <BlogCarousel items={this.state.partnerPosts} interval={600000} />
             )}
           </div>
           <p>
@@ -350,6 +369,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-section corporate-contact col-12">
           <JumpAnchor id="contact" />
           <h3>Take The First Step!</h3>
+          <h4>
+            To receive more information about becoming a corporate partner,
+            complete and submit the form below.
+          </h4>
           <ContactForm showInterests={true} />
         </div>
       </React.Fragment>
@@ -359,9 +382,12 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderBottomImage(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-section corporate-bottom-section col-12">
-          <p>bottom image with a gradient fade to white on the top edge</p>
-        </div>
+        <div
+          className="corporate-bottom corporate-bottom-overlay col-12 no-gutters"
+          style={{
+            backgroundImage: "url(" + cdn.image("corporate_footer.jpg") + ")",
+          }}
+        ></div>
       </React.Fragment>
     );
   }

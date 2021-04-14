@@ -108,7 +108,7 @@
   /* blog only rules */
   .carousel-blog-root {
     .carousel-item-content {
-      min-height: 630px; /* fixing minimum heights to reduce content shift */
+      min-height: 0; /* fixing minimum heights to reduce content shift */
     }
   }
 }
