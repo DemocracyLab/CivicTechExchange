@@ -51,12 +51,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-root container">
-          <div className="row">
-            {this._renderTop()}
-            {this._renderTabs()}
-            {this._renderContact()}
-            {this._renderBottomImage()}
-          </div>
+          {this._renderTop()}
+          <div className="row">{this._renderTabs()}</div>
+          <div className="row">{this._renderContact()}</div>
+          {this._renderBottomImage()}
         </div>
       </React.Fragment>
     );
@@ -65,41 +63,49 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderTop(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-top col-12">
-          <div
-            className="no-gutters corporate-top-overlay"
-            style={{
-              backgroundImage: "url(" + cdn.image("corporate_header.jpg") + ")",
-            }}
-          >
-            <h1>Together we can advance technology for the public good.</h1>
+        <div className="corporate-edge">
+          <div className="row">
+            <div
+              className="col-12 corporate-top-image"
+              style={{
+                backgroundImage:
+                  "url(" + cdn.image("corporate_header.jpg") + ")",
+              }}
+            >
+              <div className="corporate-top-overlay">
+                <h1>Together we can advance technology for the public good.</h1>
+              </div>
+            </div>
           </div>
-
-          <p>
-            DemocracyLab's success depends on creating value for our corporate
-            partners:
-          </p>
-          <ul>
-            <li>
-              Our custom employee engagement events build a culture of purpose
-              and spur innovation.
-            </li>
-            <li>
-              Sponsorship of our public hackathons differentiates your brand and
-              amplifies the impact of our diverse community.
-            </li>
-          </ul>
-          <p>
-            We make it easy and fun for your company to do well by doing good.
-          </p>
-          <Button
-            variant="cta"
-            href="#contact"
-            className="corporate-cta-button"
-          >
-            Partner With Us
-          </Button>
-          <h2>Learn more about opportunities below.</h2>
+        </div>
+        <div className="row">
+          <div className="corporate-top col-12 corporate-section">
+            <p>
+              DemocracyLab's success depends on creating value for our corporate
+              partners:
+            </p>
+            <ul>
+              <li>
+                Our custom employee engagement events build a culture of purpose
+                and spur innovation.
+              </li>
+              <li>
+                Sponsorship of our public hackathons differentiates your brand
+                and amplifies the impact of our diverse community.
+              </li>
+            </ul>
+            <p>
+              We make it easy and fun for your company to do well by doing good.
+            </p>
+            <Button
+              variant="cta"
+              href="#contact"
+              className="corporate-cta-button"
+            >
+              Partner With Us
+            </Button>
+            <h2>Learn more about opportunities below.</h2>
+          </div>
         </div>
       </React.Fragment>
     );
@@ -126,11 +132,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-hackathon-whyhost col-12">
-          <h3>Why Host a Hackathon?</h3>
+          <h1>Why Host a Hackathon?</h1>
           <div className="row">
             <div className="col-sm-12 col-lg-4">
               <div className="corporate-hackathon-card">
-                <h4>Cultivate Culture</h4>
+                <h2>Cultivate Culture</h2>
                 <p>
                   Our events allow your employees to take risks, try bold new
                   strategies, and share their knowledge in a low-pressure
@@ -145,7 +151,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </div>
             <div className="col-sm-12 col-lg-4">
               <div className="corporate-hackathon-card">
-                <h4>Drive Performance</h4>
+                <h2>Drive Performance</h2>
                 <p>
                   91% of respondents (executives and employees) who said their
                   company had a strong sense of purpose also said their company
@@ -160,7 +166,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </div>
             <div className="col-sm-12 col-lg-4">
               <div className="corporate-hackathon-card">
-                <h4>Amplify Impact</h4>
+                <h2>Amplify Impact</h2>
                 <p>
                   Systematic change requires a shift in power. That means that a
                   top-down approach to social innovation won’t produce the
@@ -174,12 +180,13 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </div>
             </div>
           </div>
-          <p className="corporate-sources-citation">
+          <p className="corporate-sources-citation overline">
             Sources:
             <br />
             DemocracyLab post-event surveys <br />
             Deloitte{" "}
             <a
+              className="overline"
               href="https://www2.deloitte.com/us/en/pages/about-deloitte/articles/culture-of-purpose.html"
               target="_blank"
             >
@@ -188,25 +195,27 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </p>
         </div>
         <div className="corporate-hackathon-howitworks corporate-section col-12">
-          <h3>How it Works</h3>
+          <h1>How it Works</h1>
           <img src={cdn.image("recruit-icon.png")} alt="Recruit" />
-          <h4>Recruit</h4>
+          <h2>Recruit</h2>
           <p>
             We find tech-for-good projects that are a good fit for your team and
             help you motivate your employees to participate.
           </p>
           <img src={cdn.image("define-icon.png")} alt="Define" />
-          <h4>Define</h4>
+          <h2>Define</h2>
           <p>
             We work with projects to define a narrow scope of work that will
             help them fulfill their mission.
           </p>
           <img src={cdn.image("hack-icon.png")} alt="Hack" />
-          <h4>Hack</h4>
+          <h2>Hack</h2>
           <p>
             Your employees collaborate with project leaders to create innovative
             tech-for-good solutions.
           </p>
+
+          <hr className="corporate-hr-line"></hr>
 
           <p>
             After the event, DemocracyLab reports on the resulting engagement,
@@ -221,24 +230,27 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </Button>
         </div>
         <div className="corporate-hackathon-saying corporate-section col-12">
-          <h3>What People Are Saying</h3>
+          <h1>What People Are Saying</h1>
           <div className="carousel-testimonial-root">
             <TestimonialCarousel items={Testimonials} interval={600000} />
           </div>
         </div>
         <div className="corporate-hackathon-stories corporate-section col-12">
-          <h3>Impact Stories</h3>
+          <h1>Impact Stories</h1>
           <div className="carousel-blog-root">
             {!_.isEmpty(this.state.hackathonPosts) && (
-              <BlogCarousel items={this.state.hackathonPosts} interval={600000} />
+              <BlogCarousel
+                items={this.state.hackathonPosts}
+                interval={600000}
+              />
             )}
           </div>
-          <p>
+          <p className="size-h2">
             Read about other previous events in our{" "}
-            <a href={window.BLOG_URL} target="_blank">
+            <a className="size-h2" href={window.BLOG_URL} target="_blank">
               blog
             </a>
-            , or other events that are coming up <a href="/events">here</a>.
+            , or other events that are coming up <a className="size-h2" href="/events">here</a>.
           </p>
         </div>
       </React.Fragment>
@@ -253,7 +265,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="row">
             <div className="col-sm-12 col-lg-4">
               <div className="corporate-sponsorship-card">
-                <h4>Impact</h4>
+                <h2>Impact</h2>
                 <p>
                   Your investment will support hundreds of tech-for-good
                   projects that use DemocracyLab’s platform to attract the
@@ -268,7 +280,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </div>
             <div className="col-sm-12 col-lg-4">
               <div className="corporate-sponsorship-card">
-                <h4>Differentiation</h4>
+                <h2>Differentiation</h2>
                 <p>
                   DemocracyLab’s unique product and positioning make sponsorship
                   a bold way to demonstrate your company’s commitment to social
@@ -283,7 +295,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </div>
             <div className="col-sm-12 col-lg-4">
               <div className="corporate-sponsorship-card">
-                <h4>Value</h4>
+                <h2>Value</h2>
                 <p>
                   For a fraction of the cost of a typical corporate event, your
                   company can become part of the accelerating tech-for-good
@@ -296,10 +308,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </div>
             </div>
           </div>
-          <h4>
+          <h2>
             Public hackathons are an opportunity to contribute with great
             visibility.
-          </h4>
+          </h2>
           <div className="corporate-sponsorship-stat-container">
             <div className="corporate-sponsorship-stat">
               <h4>$1 Million+</h4>
@@ -320,11 +332,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </div>
         </div>
         <div className="corporate-sponsorship-how">
-          <h3>How it Works</h3>
+          <h1>How it Works</h1>
           <p>image</p>
-          <h4>
+          <h2>
             Our public tech-for-good hackathons are the pulse of our community
-          </h4>
+          </h2>
           <p>
             Six times a year, the DemocracyLab community convenes to move the
             needle on projects and build connections around the world. Your
@@ -382,12 +394,19 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderBottomImage(): React$Node {
     return (
       <React.Fragment>
-        <div
-          className="corporate-bottom corporate-bottom-overlay col-12 no-gutters"
-          style={{
-            backgroundImage: "url(" + cdn.image("corporate_footer.jpg") + ")",
-          }}
-        ></div>
+        <div className="corporate-edge">
+          <div className="row">
+            <div
+              className="corporate-bottom-image col-12"
+              style={{
+                backgroundImage:
+                  "url(" + cdn.image("corporate_footer.jpg") + ")",
+              }}
+            >
+              <div className="corporate-bottom-overlay"></div>
+            </div>
+          </div>
+        </div>
       </React.Fragment>
     );
   }
