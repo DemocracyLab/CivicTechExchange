@@ -1,9 +1,10 @@
 from django.conf import settings
+from urllib.parse import urljoin, urlparse
 from civictechprojects.models import Event
 from civictechprojects.caching.cache import ProjectCache, GroupCache
 from common.helpers.constants import FrontEndSection
+from common.helpers.front_end import section_url
 from common.helpers.request_helpers import url_params
-from democracylab.models import get_request_contributor
 
 
 def about_project_preload(context, request):
@@ -32,6 +33,8 @@ def about_event_preload(context, request):
         context['description'] = event_json['event_short_description']
         if 'event_thumbnail' in event_json:
             context['og_image'] = event_json['event_thumbnail']['publicUrl']
+        slug_or_id = event.event_slug or event.id
+        context['canonical_url'] = section_url(FrontEndSection.AboutEvent,  {'id': slug_or_id})
     else:
         print('Failed to preload event info, no cache entry found: ' + event_id)
     return context
@@ -93,6 +96,9 @@ def default_preload(context, request):
                              'Volunteer today to connect with other professionals volunteering their time.'
     context['og_type'] = 'website'
     context['og_image'] = settings.STATIC_CDN_URL + '/img/Democracylab_is_a_global_volunteer_tech_for_good_nonprofit.png'
+    url = settings.PROTOCOL_DOMAIN + request.get_full_path()
+    # Remove parameters for canonical urls by default
+    context['canonical_url'] = urljoin(url, urlparse(url).path)
     return context
 
 
