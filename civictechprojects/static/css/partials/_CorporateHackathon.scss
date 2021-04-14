@@ -259,4 +259,14 @@
       padding: 15px;
     }
   }
+  .corporate-root .ContactForm-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex: 0 0 auto;
+    justify-content: space-around;
+  }
+  .corporate-root .ContactForm-group {
+    flex-basis: 45%;
+  }
 }

@@ -380,11 +380,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
       <React.Fragment>
         <div className="corporate-section corporate-contact col-12">
           <JumpAnchor id="contact" />
-          <h3>Take The First Step!</h3>
-          <h4>
+          <h1>Take The First Step!</h1>
+          <h2>
             To receive more information about becoming a corporate partner,
             complete and submit the form below.
-          </h4>
+          </h2>
           <ContactForm showInterests={true} />
         </div>
       </React.Fragment>
