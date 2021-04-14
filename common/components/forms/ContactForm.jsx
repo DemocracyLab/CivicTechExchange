@@ -216,37 +216,43 @@ class ContactForm extends React.Component<Props, State> {
         <h4>Areas of Interest</h4>
         <ul className="ContactForm-list">
           <li>
-            <label htmlFor="interest_hackathon">Hosting a Hackathon</label>
             <input
-              className="form-check"
+              className="form-check-input"
               name="interest_hackathon"
               id="interest_hackathon"
               type="checkbox"
               value={this.state.interest_hackathon}
               onChange={this.handleInputChange}
             />
+            <label className="form-check-label" htmlFor="interest_hackathon">
+              Hosting a Hackathon
+            </label>
           </li>
           <li>
-            <label htmlFor="interest_sponsorship">Event Sponsorship</label>
             <input
-              className="form-check"
+              className="form-check-input"
               name="interest_sponsorship"
               id="interest_sponsorship"
               type="checkbox"
               value={this.state.interest_sponsorship}
               onChange={this.handleInputChange}
             />
+            <label className="form-check-label" htmlFor="interest_sponsorship">
+              Event Sponsorship
+            </label>
           </li>
           <li>
-            <label htmlFor="interest_other">Other</label>
             <input
-              className="form-check"
+              className="form-check-input"
               name="interest_other"
               id="interest_other"
               type="checkbox"
               value={this.state.interest_other}
               onChange={this.handleInputChange}
             />
+            <label className="form-check-label" htmlFor="interest_other">
+              Other
+            </label>
           </li>
         </ul>
       </div>
