@@ -13,7 +13,6 @@ class CivictechprojectsViewsTestCase(TestCase):
         a lowercase username in order to be looked up  '''
     def setUp(self):
         
-        # TODO: Find replacement for AutoFixture (See #572)
         self.client = Client()
         self.test_user = Contributor.objects.create(
              email_verified=True,
@@ -21,13 +20,6 @@ class CivictechprojectsViewsTestCase(TestCase):
              first_name='Test',
              last_name='User',
         )
-        #
-        # self.projectFixture = AutoFixture(Project, field_values = {
-        #     'project_creator': self.user,
-        #     'project_name': self.user.full_name,
-        #     'is_searchable': True,
-        #     'deleted': False,
-        # }).create(1)[0]
 
     def test_project_create(self):
 
