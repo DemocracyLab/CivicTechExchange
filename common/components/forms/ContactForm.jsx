@@ -181,6 +181,9 @@ class ContactForm extends React.Component<Props, State> {
             <div className="ContactForm-group">
               <div className="form-group">
                 <label htmlFor="message">Message:</label>
+                <div className="character-count">
+                  {(this.state.message || "").length} / 3000
+                </div>
                 <textarea
                   required
                   className="form-control"
@@ -188,6 +191,7 @@ class ContactForm extends React.Component<Props, State> {
                   id="message"
                   placeholder="Type your message here"
                   rows="8"
+                  maxLength="3000"
                   value={this.state.message}
                   onChange={this.handleInputChange}
                 />
