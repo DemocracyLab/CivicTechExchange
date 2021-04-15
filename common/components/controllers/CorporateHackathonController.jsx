@@ -254,7 +254,7 @@ class CorporateHackathonController extends React.PureComponent {
     return (
       <React.Fragment>
         <div className="corporate-sponsorship-why col-12">
-          <h3>Why Partner With Us?</h3>
+          <h1>Why Partner With Us?</h1>
           <div className="row">
             <div className="col-sm-12 col-lg-4">
               <div className="corporate-sponsorship-card">
@@ -307,7 +307,7 @@ class CorporateHackathonController extends React.PureComponent {
           </h2>
           <div className="corporate-sponsorship-stat-container">
             <div className="corporate-sponsorship-stat">
-              <h4>$1 Million+</h4>
+              <h4>$1&nbsp;Million+</h4>
               <p>Public Value Created</p>
             </div>
             <div className="corporate-sponsorship-stat">
@@ -345,7 +345,7 @@ class CorporateHackathonController extends React.PureComponent {
           </Button>
         </div>
         <div className="corporate-sponsorship-saying col-12">
-          <h3>What People Are Saying</h3>
+          <h1>What People Are Saying</h1>
           <div className="carousel-testimonial-root">
             <TestimonialCarousel
               category="hackathon-highlights"
@@ -354,7 +354,7 @@ class CorporateHackathonController extends React.PureComponent {
           </div>
         </div>
         <div className="corporate-sponsorship-impact col-12">
-          <h3>Impact Stories</h3>
+          <h1>Impact Stories</h1>
           <div className="carousel-blog-root">
             <BlogCarousel tag="hackathon-highlights" interval={600000} />
           </div>

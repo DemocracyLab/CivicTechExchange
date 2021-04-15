@@ -79,7 +79,7 @@
   }
 }
 .corporate-root .carousel-link {
-  @extend .size-h2
+  @extend .size-h2;
 }
 
 // edge-to-edge class schema, temporary for now: https://gist.github.com/JayHoltslander/e464ac3ac8f3814999a9
@@ -92,12 +92,11 @@
   padding-top: 0;
   padding-bottom: 0;
   .row {
-  margin-left: 0;
-  margin-right: 0;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 //end edge-to-edge
-
 
 // quick and dirty top and bottom image sizing
 // TODO: save me from this terrible CSS
@@ -105,7 +104,7 @@
   height: 101px;
 }
 .corporate-top-image {
-  height: 300px
+  height: 300px;
 }
 @include media-breakpoint-up(md) {
   .corporate-top-image {
@@ -167,20 +166,21 @@
     border: 1px solid $color-text-dark;
     border-bottom: 1px solid $color-orange;
   }
-  .corporate-sponsorship-saying a, .corporate-hackathon-stories a {
+  .corporate-sponsorship-saying a,
+  .corporate-hackathon-stories a {
     color: #2caae2;
     &:hover {
       color: #2388b4;
     }
   }
 }
-  .corporate-sources-citation a {
-    color: $color-text-dark;
-    text-decoration: underline;
-  }
-  .corporate-sources-citation a:hover {
-    color: $color-text-dark;
-  }
+.corporate-sources-citation a {
+  color: $color-text-dark;
+  text-decoration: underline;
+}
+.corporate-sources-citation a:hover {
+  color: $color-text-dark;
+}
 
 .corporate-hr-line {
   display: none;
@@ -209,7 +209,8 @@
 .corporate-bottom-image {
   background-position: center;
 }
-.corporate-top-image, .corporate-bottom-image {
+.corporate-top-image,
+.corporate-bottom-image {
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -238,7 +239,6 @@
   );
 }
 
-
 .corporate-section {
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -262,7 +262,24 @@
     padding: 30px 0;
   }
 }
-
+.corporate-sponsorship-stat-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.corporate-sponsorship-stat {
+  flex: 1 1 26%;
+  margin: 0 20px;
+  text-justify: center;
+  h4 {
+    @extend .size-h1;
+    color: $color-orange;
+  }
+  h4,
+  p {
+    text-align: center;
+  }
+}
 
 @include media-breakpoint-up(lg) {
   .corporate-cta-button {
@@ -301,6 +318,13 @@
     flex-shrink: 0;
     padding-left: 20px;
     align-self: center;
-
+  }
+  .corporate-sponsorship-stat-container {
+    flex-wrap: nowrap;
+    max-width: 80%;
+    margin: 0 auto;
+  }
+  .corporate-sponsorship-stat {
+    flex-basis: 20%;
   }
 }
