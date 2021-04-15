@@ -78,6 +78,9 @@
     }
   }
 }
+.corporate-root .carousel-link {
+  @extend .size-h2
+}
 
 // edge-to-edge class schema, temporary for now: https://gist.github.com/JayHoltslander/e464ac3ac8f3814999a9
 // TODO: update splash screen component to accept gradient overlays, heights based on image
@@ -163,6 +166,12 @@
     background: $color-orange;
     border: 1px solid $color-text-dark;
     border-bottom: 1px solid $color-orange;
+  }
+  .corporate-sponsorship-saying a, .corporate-hackathon-stories a {
+    color: #2caae2;
+    &:hover {
+      color: #2388b4;
+    }
   }
 }
   .corporate-sources-citation a {
@@ -283,5 +292,15 @@
   }
   .corporate-root .ContactForm-group {
     flex-basis: 45%;
+  }
+  .corporate-top-flex {
+    display: flex;
+    flex: row nowrap;
+  }
+  .corporate-top-flex-button {
+    flex-shrink: 0;
+    padding-left: 20px;
+    align-self: center;
+
   }
 }

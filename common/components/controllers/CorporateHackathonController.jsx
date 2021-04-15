@@ -12,6 +12,9 @@ import BlogCarousel from "../../components/common/carousel/BlogCarousel.jsx";
 import ContactForm from "../../components/forms/ContactForm.jsx";
 import JumpAnchor from "../common/JumpAnchor.jsx";
 import _ from "lodash";
+import IconCircle1 from "../svg/corporatehackathon/corp1circle.svg";
+import IconCircle2 from "../svg/corporatehackathon/corp2circle.svg";
+import IconCircle3 from "../svg/corporatehackathon/corp3circle.svg";
 
 // !!! TODO: this import is for testing only! don't let it into prod.
 import Testimonials from "../../components/componentsBySection/Landing/HomepageTestimonials.jsx";
@@ -80,30 +83,37 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         </div>
         <div className="row">
           <div className="corporate-top col-12 corporate-section">
-            <p>
-              DemocracyLab's success depends on creating value for our corporate
-              partners:
-            </p>
-            <ul>
-              <li>
-                Our custom employee engagement events build a culture of purpose
-                and spur innovation.
-              </li>
-              <li>
-                Sponsorship of our public hackathons differentiates your brand
-                and amplifies the impact of our diverse community.
-              </li>
-            </ul>
-            <p>
-              We make it easy and fun for your company to do well by doing good.
-            </p>
-            <Button
-              variant="cta"
-              href="#contact"
-              className="corporate-cta-button"
-            >
-              Partner With Us
-            </Button>
+            <div className="corporate-top-flex">
+              <div className="corporate-top-flex-section">
+                <p>
+                  DemocracyLab's success depends on creating value for our
+                  corporate partners:
+                </p>
+                <ul>
+                  <li>
+                    Our custom employee engagement events build a culture of
+                    purpose and spur innovation.
+                  </li>
+                  <li>
+                    Sponsorship of our public hackathons differentiates your
+                    brand and amplifies the impact of our diverse community.
+                  </li>
+                </ul>
+                <p>
+                  We make it easy and fun for your company to do well by doing
+                  good.
+                </p>
+              </div>
+              <div className="corporate-top-flex-button">
+                <Button
+                  variant="cta"
+                  href="#contact"
+                  className="corporate-cta-button"
+                >
+                  Partner With Us
+                </Button>
+              </div>
+            </div>
             <h2>Learn more about opportunities below.</h2>
           </div>
         </div>
@@ -196,25 +206,36 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         </div>
         <div className="corporate-hackathon-howitworks corporate-section col-12">
           <h1>How it Works</h1>
-          <img src={cdn.image("recruit-icon.png")} alt="Recruit" />
-          <h2>Recruit</h2>
-          <p>
-            We find tech-for-good projects that are a good fit for your team and
-            help you motivate your employees to participate.
-          </p>
-          <img src={cdn.image("define-icon.png")} alt="Define" />
-          <h2>Define</h2>
-          <p>
-            We work with projects to define a narrow scope of work that will
-            help them fulfill their mission.
-          </p>
-          <img src={cdn.image("hack-icon.png")} alt="Hack" />
-          <h2>Hack</h2>
-          <p>
-            Your employees collaborate with project leaders to create innovative
-            tech-for-good solutions.
-          </p>
-
+          <div class="corporate-how-flex-container">
+            <div className="corporate-how-image-container">
+ <IconCircle1 />
+ <IconCircle2 />
+ <IconCircle3 />
+            </div>
+            <div className="corporate-how-text-container">
+              <div className="corporate-how-text">
+                <h2>Recruit</h2>
+                <p>
+                  We find tech-for-good projects that are a good fit for your
+                  team and help you motivate your employees to participate.
+                </p>
+              </div>
+              <div className="corporate-how-text">
+                <h2>Define</h2>
+                <p>
+                  We work with projects to define a narrow scope of work that
+                  will help them fulfill their mission.
+                </p>
+              </div>
+              <div className="corporate-how-text">
+                <h2>Hack</h2>
+                <p>
+                  Your employees collaborate with project leaders to create
+                  innovative tech-for-good solutions.
+                </p>
+              </div>
+            </div>
+          </div>
           <hr className="corporate-hr-line"></hr>
 
           <p>
@@ -250,7 +271,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             <a className="size-h2" href={window.BLOG_URL} target="_blank">
               blog
             </a>
-            , or other events that are coming up <a className="size-h2" href="/events">here</a>.
+            , or other events that are coming up{" "}
+            <a className="size-h2" href="/events">
+              here
+            </a>
+            .
           </p>
         </div>
       </React.Fragment>
