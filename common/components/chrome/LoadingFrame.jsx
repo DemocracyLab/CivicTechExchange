@@ -7,6 +7,7 @@ type Props = {|
   height: string,
 |};
 
+// Placeholder frame with spinner
 class LoadingFrame extends React.PureComponent<Props> {
   constructor(props: Props): void {
     super(props);

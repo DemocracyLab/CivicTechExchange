@@ -6,7 +6,6 @@ import url from "../utils/url.js";
 import cdn from "../utils/cdn.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
-import ghostApiHelper, { GhostPost } from "../utils/ghostApi.js";
 import TestimonialCarousel from "../../components/common/carousel/TestimonialCarousel.jsx";
 import BlogCarousel from "../../components/common/carousel/BlogCarousel.jsx";
 import ContactForm from "../../components/forms/ContactForm.jsx";
@@ -16,35 +15,9 @@ import IconCircle1 from "../svg/corporatehackathon/corp1circle.svg";
 import IconCircle2 from "../svg/corporatehackathon/corp2circle.svg";
 import IconCircle3 from "../svg/corporatehackathon/corp3circle.svg";
 
-type State = {|
-  partnerPosts: $ReadOnlyArray<GhostPost>,
-  hackathonPosts: $ReadOnlyArray<GhostPost>,
-|};
-
-class CorporateHackathonController extends React.PureComponent<{||}, State> {
+class CorporateHackathonController extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { partnerPosts: [], hackathonPosts: [] };
-  }
-
-  componentDidMount() {
-    ghostApiHelper &&
-      ghostApiHelper.browse(
-        "partner-highlights",
-        this.loadPartnerPosts.bind(this)
-      );
-    ghostApiHelper &&
-      ghostApiHelper.browse(
-        "hackathon-highlights",
-        this.loadHackathonPosts.bind(this)
-      );
-  }
-  //TODO: make this one function which takes args
-  loadPartnerPosts(ghostPosts: $ReadOnlyArray<GhostPost>) {
-    this.setState({ partnerPosts: ghostPosts });
-  }
-  loadHackathonPosts(ghostPosts: $ReadOnlyArray<GhostPost>) {
-    this.setState({ hackathonPosts: ghostPosts });
   }
 
   render(): $React$Node {
@@ -259,12 +232,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-hackathon-stories corporate-section col-12">
           <h1>Impact Stories</h1>
           <div className="carousel-blog-root">
-            {!_.isEmpty(this.state.hackathonPosts) && (
-              <BlogCarousel
-                items={this.state.hackathonPosts}
-                interval={600000}
-              />
-            )}
+            <BlogCarousel tag="partner-highlights" interval={600000} />
           </div>
           <p className="size-h2">
             Read about other previous events in our{" "}
@@ -388,9 +356,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-sponsorship-impact col-12">
           <h3>Impact Stories</h3>
           <div className="carousel-blog-root">
-            {!_.isEmpty(this.state.partnerPosts) && (
-              <BlogCarousel items={this.state.partnerPosts} interval={600000} />
-            )}
+            <BlogCarousel tag="hackathon-highlights" interval={600000} />
           </div>
           <p>
             Read about other previous events in our{" "}
