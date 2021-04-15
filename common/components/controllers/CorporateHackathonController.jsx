@@ -206,11 +206,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         </div>
         <div className="corporate-hackathon-howitworks corporate-section col-12">
           <h1>How it Works</h1>
-          <div class="corporate-how-flex-container">
+          <div className="corporate-how-flex-container">
             <div className="corporate-how-image-container">
- <IconCircle1 />
- <IconCircle2 />
- <IconCircle3 />
+              <IconCircle1 />
+              <IconCircle2 />
+              <IconCircle3 />
             </div>
             <div className="corporate-how-text-container">
               <div className="corporate-how-text">
