@@ -16,9 +16,6 @@ import IconCircle1 from "../svg/corporatehackathon/corp1circle.svg";
 import IconCircle2 from "../svg/corporatehackathon/corp2circle.svg";
 import IconCircle3 from "../svg/corporatehackathon/corp3circle.svg";
 
-// !!! TODO: this import is for testing only! don't let it into prod.
-import Testimonials from "../../components/componentsBySection/Landing/HomepageTestimonials.jsx";
-
 type State = {|
   partnerPosts: $ReadOnlyArray<GhostPost>,
   hackathonPosts: $ReadOnlyArray<GhostPost>,
@@ -253,7 +250,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-hackathon-saying corporate-section col-12">
           <h1>What People Are Saying</h1>
           <div className="carousel-testimonial-root">
-            <TestimonialCarousel items={Testimonials} interval={600000} />
+            <TestimonialCarousel
+              category="partner-highlights"
+              interval={600000}
+            />
           </div>
         </div>
         <div className="corporate-hackathon-stories corporate-section col-12">
@@ -379,7 +379,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-sponsorship-saying col-12">
           <h3>What People Are Saying</h3>
           <div className="carousel-testimonial-root">
-            <TestimonialCarousel items={Testimonials} interval={600000} />
+            <TestimonialCarousel
+              category="hackathon-highlights"
+              interval={600000}
+            />
           </div>
         </div>
         <div className="corporate-sponsorship-impact col-12">

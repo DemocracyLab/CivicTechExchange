@@ -16,7 +16,8 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
+    ProjectRelationship, Testimonial
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from common.caching.cache import Cache
@@ -1280,3 +1281,11 @@ def redirect_v1_urls(request):
     section_id_match = re.findall(r'&id=([\w-]+)', clean_url)
     section_id = section_id_match[0] if len(section_id_match) > 0 else ''
     return redirect(section_url(section_name, {'id': section_id}))
+
+
+def get_testimonials(request, category=None):
+    testimonials = Testimonial.objects.filter(active=True)
+    if category:
+        testimonials = testimonials.filter(categories__name__in=[category])
+
+    return JsonResponse(list(map(lambda t: t.to_json(), testimonials.order_by('-priority'))), safe=False)
