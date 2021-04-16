@@ -15,9 +15,16 @@ import IconCircle1 from "../svg/corporatehackathon/corp1circle.svg";
 import IconCircle2 from "../svg/corporatehackathon/corp2circle.svg";
 import IconCircle3 from "../svg/corporatehackathon/corp3circle.svg";
 
-class CorporateHackathonController extends React.PureComponent {
+type State = {|
+  defaultTab: string,
+|};
+
+class CorporateHackathonController extends React.PureComponent<{||}, State> {
   constructor(props) {
     super(props);
+    this.state = {
+      defaultTab: url.argument("tab") || "hackathon",
+    };
   }
 
   render(): $React$Node {
@@ -95,7 +102,10 @@ class CorporateHackathonController extends React.PureComponent {
     return (
       <React.Fragment>
         <div className="corporate-tab-section">
-          <Tabs defaultActiveKey="tab-hackathon" id="corporate-tabs">
+          <Tabs
+            defaultActiveKey={"tab-" + this.state.defaultTab}
+            id="corporate-tabs"
+          >
             <Tab eventKey="tab-hackathon" title="Host a Hackathon">
               {this._renderHackathonTab()}
             </Tab>
@@ -223,13 +233,13 @@ class CorporateHackathonController extends React.PureComponent {
             outcomes, and impact.
           </p>
           <div className="corporate-how-after">
-          <Button
-            variant="cta"
-            href="#contact"
-            className="corporate-cta-button"
-          >
-            Learn More
-          </Button>
+            <Button
+              variant="cta"
+              href="#contact"
+              className="corporate-cta-button"
+            >
+              Learn More
+            </Button>
           </div>
         </div>
         <div className="corporate-hackathon-saying corporate-section col-12">
