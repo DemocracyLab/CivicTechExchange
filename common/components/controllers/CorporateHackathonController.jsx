@@ -14,16 +14,26 @@ import _ from "lodash";
 import IconCircle1 from "../svg/corporatehackathon/corp1circle.svg";
 import IconCircle2 from "../svg/corporatehackathon/corp2circle.svg";
 import IconCircle3 from "../svg/corporatehackathon/corp3circle.svg";
+import type { Dictionary } from "../types/Generics.jsx";
 
 type State = {|
   defaultTab: string,
 |};
 
+const tabOptions: Dictionary<string> = {
+  hackathon: "tab-hackathon",
+  sponsorship: "tab-sponsorship",
+};
+
 class CorporateHackathonController extends React.PureComponent<{||}, State> {
   constructor(props) {
     super(props);
+    const tabArg: string = url.argument("tab");
     this.state = {
-      defaultTab: url.argument("tab") || "hackathon",
+      defaultTab:
+        tabArg && tabOptions[tabArg]
+          ? tabOptions[tabArg]
+          : tabOptions.hackathon,
     };
   }
 
@@ -102,14 +112,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-tab-section">
-          <Tabs
-            defaultActiveKey={"tab-" + this.state.defaultTab}
-            id="corporate-tabs"
-          >
-            <Tab eventKey="tab-hackathon" title="Host a Hackathon">
+          <Tabs defaultActiveKey={this.state.defaultTab} id="corporate-tabs">
+            <Tab eventKey={tabOptions.hackathon} title="Host a Hackathon">
               {this._renderHackathonTab()}
             </Tab>
-            <Tab eventKey="tab-sponsorship" title="Sponsorship">
+            <Tab eventKey={tabOptions.sponsorship} title="Sponsorship">
               {this._renderSponsorshipTab()}
             </Tab>
           </Tabs>
