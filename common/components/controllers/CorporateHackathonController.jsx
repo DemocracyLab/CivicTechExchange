@@ -177,18 +177,23 @@ class CorporateHackathonController extends React.PureComponent {
         <div className="corporate-hackathon-howitworks corporate-section col-12">
           <h1>How it Works</h1>
           <div className="corporate-how-flex-container">
-            <div className="corporate-how-image-container">
-              <IconCircle1 />
-              <IconCircle2 />
-              <IconCircle3 />
+            <div className="corporate-how-flex-block">
+              <div className="corporate-how-image-container">
+                <IconCircle3 />
+              </div>
+              <div className="corporate-how-text-container">
+                <div className="corporate-how-text">
+                  <h2>Recruit</h2>
+                  <p>
+                    We find tech-for-good projects that are a good fit for your
+                    team and help you motivate your employees to participate.
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="corporate-how-text-container">
-              <div className="corporate-how-text">
-                <h2>Recruit</h2>
-                <p>
-                  We find tech-for-good projects that are a good fit for your
-                  team and help you motivate your employees to participate.
-                </p>
+            <div className="corporate-how-flex-block">
+              <div className="corporate-how-image-container">
+                <IconCircle3 />
               </div>
               <div className="corporate-how-text">
                 <h2>Define</h2>
@@ -196,6 +201,11 @@ class CorporateHackathonController extends React.PureComponent {
                   We work with projects to define a narrow scope of work that
                   will help them fulfill their mission.
                 </p>
+              </div>
+            </div>
+            <div className="corporate-how-flex-block">
+              <div className="corporate-how-image-container">
+                <IconCircle3 />
               </div>
               <div className="corporate-how-text">
                 <h2>Hack</h2>
@@ -208,14 +218,14 @@ class CorporateHackathonController extends React.PureComponent {
           </div>
           <hr className="corporate-hr-line"></hr>
 
-          <p>
+          <p className="corporate-how-after">
             After the event, DemocracyLab reports on the resulting engagement,
             outcomes, and impact.
           </p>
           <Button
             variant="cta"
             href="#contact"
-            className="corporate-cta-button"
+            className="corporate-cta-button corporate-how-after"
           >
             Learn More
           </Button>
@@ -301,30 +311,32 @@ class CorporateHackathonController extends React.PureComponent {
               </div>
             </div>
           </div>
-          <h2>
-            Public hackathons are an opportunity to contribute with great
-            visibility.
-          </h2>
-          <div className="corporate-sponsorship-stat-container">
-            <div className="corporate-sponsorship-stat">
-              <h4>$1&nbsp;Million+</h4>
-              <p>Public Value Created</p>
-            </div>
-            <div className="corporate-sponsorship-stat">
-              <h4>1500+</h4>
-              <p>Volunteers</p>
-            </div>
-            <div className="corporate-sponsorship-stat">
-              <h4>100</h4>
-              <p>Avg Event Attendees</p>
-            </div>
-            <div className="corporate-sponsorship-stat">
-              <h4>250+</h4>
-              <p>Project Teams</p>
+          <div className="corporate-section col-12">
+            <h2>
+              Public hackathons are an opportunity to contribute with great
+              visibility.
+            </h2>
+            <div className="corporate-sponsorship-stat-container">
+              <div className="corporate-sponsorship-stat">
+                <h4>$1&nbsp;Million+</h4>
+                <p>Public Value Created</p>
+              </div>
+              <div className="corporate-sponsorship-stat">
+                <h4>1500+</h4>
+                <p>Volunteers</p>
+              </div>
+              <div className="corporate-sponsorship-stat">
+                <h4>100</h4>
+                <p>Avg Event Attendees</p>
+              </div>
+              <div className="corporate-sponsorship-stat">
+                <h4>250+</h4>
+                <p>Project Teams</p>
+              </div>
             </div>
           </div>
         </div>
-        <div className="corporate-sponsorship-how">
+        <div className="corporate-sponsorship-how corporate-section">
           <h1>How it Works</h1>
           <p>image</p>
           <h2>
@@ -344,7 +356,7 @@ class CorporateHackathonController extends React.PureComponent {
             Learn More
           </Button>
         </div>
-        <div className="corporate-sponsorship-saying col-12">
+        <div className="corporate-sponsorship-saying corporate-section col-12">
           <h1>What People Are Saying</h1>
           <div className="carousel-testimonial-root">
             <TestimonialCarousel
@@ -353,7 +365,7 @@ class CorporateHackathonController extends React.PureComponent {
             />
           </div>
         </div>
-        <div className="corporate-sponsorship-impact col-12">
+        <div className="corporate-sponsorship-impact corporate-section col-12">
           <h1>Impact Stories</h1>
           <div className="carousel-blog-root">
             <BlogCarousel tag="hackathon-highlights" interval={600000} />

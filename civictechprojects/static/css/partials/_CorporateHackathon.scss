@@ -239,7 +239,9 @@
   );
 }
 
-.corporate-section {
+.corporate-section,
+.corporate-hackathon-whyhost h1,
+.corporate-sponsorship-why h1 {
   padding-top: 3rem;
   padding-bottom: 3rem;
 }
@@ -279,6 +281,24 @@
   p {
     text-align: center;
   }
+}
+.corporate-how-flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2rem 0;
+}
+.corporate-how-flex-block {
+  display: flex;
+  flex-direction: row;
+  margin: 0 0 15px 0;
+}
+.corporate-how-image-container {
+  margin: auto 0;
+}
+.corporate-how-text {
+  margin: 0 0 0 15px;
 }
 
 @include media-breakpoint-up(lg) {
@@ -327,4 +347,26 @@
   .corporate-sponsorship-stat {
     flex-basis: 20%;
   }
+  .corporate-how-flex-container {
+    flex-direction: row;
+    align-items: flex-start;
+    margin: 3rem 0;
+  }
+  .corporate-how-flex-block {
+    flex-direction: column;
+    margin: 0 15px;
+    text-align: center;
+  }
+  .corporate-how-text {
+    margin: 0;
+    p {
+      margin-top: 1rem;
+      text-align: left;
+    }
+  }
+  .corporate-how-after {
+    padding: 1rem 0;
+    text-align: center;
+  }
+  
 }
