@@ -1,5 +1,30 @@
 [
   {
+    "name": "Colleen Aubrey",
+    "avatar_url": "https://d1agxr2dqkgkuy.cloudfront.net/img/Colleen%20Aubrey.png",
+    "title": "Vice President, Performance Advertising, Amazon",
+    "text":
+    "At Amazon, we are continually looking for ways to achieve more with less, and work hard to raise the bar for customer experience.  DemocracyLab provided us with an impactful way to use our skills to help non-profits achieve more, and contribute to improving the experience of their customers.  It was time well spent - fun, impactful, important.",
+    "categories": "partner-highlights",
+    "source": ""
+  },
+  {
+    "name": "Tom Carmony",
+    "avatar_url": "https://d1agxr2dqkgkuy.cloudfront.net/img/Tom%20Carmony.png",
+    "title": "Senior UX Designer, Textio",
+    "text": "These sorts of internal hackathons-for-good are a great way for teams to make a meaningful positive impact for nonprofits",
+    "categories": "partner-highlights",
+    "source": ""
+  },
+  {
+    "name": "Dave Barnett",
+    "avatar_url": "https://d1agxr2dqkgkuy.cloudfront.net/img/Dave%20Barnett.png",
+    "title": "Program Manager, Microsoft",
+    "text": "Microsoft's mission is to empower every person and every organization on the planet to achieve more.  Providing impactful volunteering opportunities is an impportant part of our strategy to make this a reality for our purpose-driven employees.  We support DemocracyLab because their platform and programs provide a fun and impactful way for anyone with time and talent to follow their personal passions and make a difference in the world.",
+    "categories": "hackathon-highlights",
+    "source": ""
+  },
+  {
     "name": "Maxx Silver",
     "avatar_url": "https://d1agxr2dqkgkuy.cloudfront.net/img/Maxx%20Silver.png",
     "title": "Operations Systems Analyst, FareStart",

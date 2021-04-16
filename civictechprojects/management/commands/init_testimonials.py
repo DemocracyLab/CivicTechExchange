@@ -1,5 +1,6 @@
 import json
 import os
+from common.helpers.dictionaries import keys_omit
 from django.core.management.base import BaseCommand
 
 
@@ -7,15 +8,18 @@ def upsert_testimonial(testimonial_json, priority):
     from civictechprojects.models import Testimonial
     testimonial = Testimonial.objects.filter(name=testimonial_json['name']).first()
     if not testimonial:
-        testimonial = Testimonial.objects.create(**testimonial_json)
+        creation_data = keys_omit(testimonial_json, ['categories'])
+        testimonial = Testimonial.objects.create(**creation_data)
+        testimonial.save()
     else:
         testimonial.avatar_url = testimonial_json['avatar_url']
         testimonial.title = testimonial_json['title']
         testimonial.text = testimonial_json['text']
         testimonial.source = testimonial_json['source']
-        categories = testimonial_json['categories'] if 'categories' in testimonial_json else None
-        if categories:
-            testimonial.categories.set(*(categories.strip().split(',')))
+
+    categories = testimonial_json['categories'] if 'categories' in testimonial_json else None
+    if categories:
+        testimonial.categories.set(*(categories.strip().split(',')))
 
     testimonial.priority = testimonial_json['priority'] if 'priority' in testimonial_json else priority
     testimonial.save()
