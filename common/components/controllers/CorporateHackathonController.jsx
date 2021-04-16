@@ -222,13 +222,15 @@ class CorporateHackathonController extends React.PureComponent {
             After the event, DemocracyLab reports on the resulting engagement,
             outcomes, and impact.
           </p>
+          <div className="corporate-how-after">
           <Button
             variant="cta"
             href="#contact"
-            className="corporate-cta-button corporate-how-after"
+            className="corporate-cta-button"
           >
             Learn More
           </Button>
+          </div>
         </div>
         <div className="corporate-hackathon-saying corporate-section col-12">
           <h1>What People Are Saying</h1>
