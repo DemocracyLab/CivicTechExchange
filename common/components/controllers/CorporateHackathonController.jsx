@@ -331,7 +331,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </div>
           </div>
           <div className="corporate-section col-12">
-            <h2>
+            <h2 className="corporate-sponsorship-stat-title">
               Public hackathons are an opportunity to contribute with great
               visibility.
             </h2>
@@ -355,18 +355,26 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </div>
           </div>
         </div>
-        <div className="corporate-sponsorship-how corporate-section">
+        <div className="corporate-sponsorship-how col-12 corporate-section">
           <h1>How it Works</h1>
-          <p>image</p>
-          <h2>
-            Our public tech-for-good hackathons are the pulse of our community
-          </h2>
-          <p>
-            Six times a year, the DemocracyLab community convenes to move the
-            needle on projects and build connections around the world. Your
-            support will increase our capacity, amplify impact, and innovate
-            your brand.
-          </p>
+          <div className="corporate-sponsorship-how-flex">
+            <div className="corporate-sponsorship-how-image">
+              <img src={cdn.image("corporate-hiw.png")} alt="Sponsorship image" />
+            </div>
+            <div className="corporate-sponsorship-how-text">
+              <h2>
+                Our public tech-for-good hackathons are the pulse of our
+                community
+              </h2>
+              <p>
+                Six times a year, the DemocracyLab community convenes to move
+                the needle on projects and build connections around the world.
+                Your support will increase our capacity, amplify impact, and
+                innovate your brand.
+              </p>
+            </div>
+          </div>
+          <div className="corporate-sponsorship-how-button">
           <Button
             variant="cta"
             href="#contact"
@@ -374,6 +382,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           >
             Learn More
           </Button>
+          </div>
         </div>
         <div className="corporate-sponsorship-saying corporate-section col-12">
           <h1>What People Are Saying</h1>
@@ -394,7 +403,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             <a className="size-h2" href={window.BLOG_URL} target="_blank">
               blog
             </a>
-            , or other events that are coming up <a className="size-h2" href="/events">here</a>.
+            , or other events that are coming up{" "}
+            <a className="size-h2" href="/events">
+              here
+            </a>
+            .
           </p>
         </div>
       </React.Fragment>

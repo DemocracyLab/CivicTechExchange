@@ -172,9 +172,9 @@
     &:hover {
       color: #2388b4;
     }
-    .carousel-blog-root {
-      margin-bottom: 2rem;
-    }
+  }
+  .carousel-blog-root {
+    margin-bottom: 2rem;
   }
   .corporate-top {
     padding-top: 2rem;
@@ -260,7 +260,8 @@
 .corporate-sponsorship-saying h1,
 .corporate-hackathon-saying h1,
 .corporate-sponsorship-impact h1,
-.corporate-hackathon-stories h1 {
+.corporate-hackathon-stories h1,
+.corporate-sponsorship-how h1 {
   padding-bottom: 3rem;
 }
 .corporate-top-flex-button {
@@ -320,10 +321,28 @@
 .corporate-how-text {
   margin: 0 0 0 15px;
 }
+.corporate-sponsorship-how-flex {
+  display: flex;
+  flex-direction: column;
+}
+.corporate-sponsorship-how-image {
+  align-self: center;
+  img {
+    max-width: 100%;
+  }
+}
+.corporate-sponsorship-how-text {
+  margin: 2rem 0;
+  h2 {
+    margin-bottom: 1rem;
+  }
+}
 
 @include media-breakpoint-up(lg) {
   .corporate-cta-button {
     display: initial;
+    padding-left: 30px;
+    padding-right: 30px;
   }
   .corporate-hackathon-card,
   .corporate-sponsorship-card {
@@ -393,5 +412,25 @@
   .corporate-how-after {
     padding: 1rem 0;
     text-align: center;
+  }
+  .corporate-sponsorship-how-flex {
+    flex-direction: row;
+  }
+  .corporate-sponsorship-stat-title {
+    text-align: center;
+  }
+  .corporate-sponsorship-how-image {
+    flex-shrink: 0;
+    margin-right: 2rem;
+    img {
+      width: 420px;
+    }
+  }
+  .corporate-sponsorship-how-text {
+    margin-left: 2rem;
+  }
+  .corporate-sponsorship-how-button {
+    text-align: center;
+    margin-top: 3rem;
   }
 }
