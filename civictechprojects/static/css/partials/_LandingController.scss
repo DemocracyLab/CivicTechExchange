@@ -74,11 +74,6 @@
   margin-right: auto;
 }
 
-.LandingController-testimonial-container {
-  padding: 20px 0;
-  background: $color-background-light; /* on mobile the whole div is used as a "card" so background appropriately) */
-}
-
 .LandingController-pathflows-item {
   flex-basis: 26%;
 }
@@ -97,66 +92,8 @@
   padding: 20px;
   text-align: center;
 }
-
 .LandingController-testimonial-container {
-  text-align: center;
-  h2 {
-    margin-bottom: 1rem;
-  }
-  h3 {
-    font-size: 18px;
-  }
-  h4 {
-    font-size: 18px;
-  }
-  .carousel-spacer {
-    display: inline-block;
-    width: 50px;
-    height: 1px;
-    border-bottom: 1px solid $color-text-dark;
-    margin: 20px 0 10px 0;
-  }
-  .carousel-item-left {
-    /* centers the avatar on mobile */
-    display: flex;
-    justify-content: center;
-  }
-  .carousel-item-content {
-    padding: 1rem;
-    width: 80%; /* give space for the arrows on left and right */
-    margin: auto;
-  }
-
-  .carousel-item p {
-    padding: 10px 0 20px 0;
-    text-align: left;
-  }
-  .carousel-inner {
-    margin-bottom: 20px; /* because the indicators are absolutely positioned in the div, this effectively pushes them down a bit */
-  }
-
-  .carousel-indicators li {
-    background-color: $color-text-grey;
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-  }
-  .carousel-indicators .active {
-    background-color: $color-text-dark;
-  }
-}
-
-.LandingController-testimonial-container .carousel-avatar {
-  height: 200px;
-  width: 200px;
-  border-radius: 50%;
-  background-repeat: no-repeat; //centers image inside avatar
-  background-size: cover;
-  background-position: center;
-  img {
-    min-height: 100%;
-    min-width: 100%;
-  }
+  margin-bottom: 20px;
 }
 
 .LandingController-partnersinaction {
@@ -209,28 +146,8 @@
 }
 
 @include media-breakpoint-up(lg) {
-  /* these rules call out Testimonial cards on screens big enough to not just use the whole div */
-  .LandingController-testimonial-container {
-    background: $color-background-default;
-    text-align: left;
-    .carousel-item-content {
-      display: flex;
-      flex-flow: row nowrap;
-      align-items: center;
-      min-height: 375px; /* this value MUST be at least the height of the tallest content item we have for desktop view of Testimonial cards. Round up 5-10px for browser differences just in case. */
-    }
-    .carousel-avatar {
-      margin: 0 1rem;
-    }
-  }
-  .LandingController-partnersinaction-logo {
+   .LandingController-partnersinaction-logo {
     margin: 5px 20px; /* to get the correct number per row we add margin at lg and above */
-  }
-
-  .LandingController-testimonial-container .carousel-item-content {
-    background: $color-background-light;
-    border: 1px solid $color-grey-frame-border;
-    border-radius: 5px;
   }
   .RecentProjects-cards {
     flex-wrap: nowrap;

@@ -16,7 +16,8 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
+    ProjectRelationship, Testimonial
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from common.caching.cache import Cache
@@ -393,6 +394,10 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
 
     if hasattr(settings, 'HERE_CONFIG'):
         context['HERE_CONFIG'] = settings.HERE_CONFIG
+
+    if hasattr(settings, 'GHOST_URL'):
+        context['GHOST_URL'] = settings.GHOST_URL
+        context['GHOST_CONTENT_API_KEY'] = settings.GHOST_CONTENT_API_KEY
 
     if request.user.is_authenticated:
         contributor = Contributor.objects.get(id=request.user.id)
@@ -1230,13 +1235,14 @@ def contact_democracylab(request):
     )
 
     if r.json()['success']:
-        # Successfuly validated, send email
+        # Successfully validated, send email
         first_name = body['fname']
         last_name = body['lname']
         email_addr = body['emailaddr']
         message = body['message']
-        company_name = body['company_name'] if 'message' in body else None
-        contact_democracylab_email(first_name, last_name, email_addr, message, company_name)
+        company_name = body['company_name'] if 'company_name' in body else None
+        interest_flags = list(filter(lambda key: body[key] and isinstance(body[key], bool), body.keys()))
+        contact_democracylab_email(first_name, last_name, email_addr, message, company_name, interest_flags)
         return HttpResponse(status=200)
 
     # Error while verifying the captcha, do not send the email
@@ -1275,3 +1281,11 @@ def redirect_v1_urls(request):
     section_id_match = re.findall(r'&id=([\w-]+)', clean_url)
     section_id = section_id_match[0] if len(section_id_match) > 0 else ''
     return redirect(section_url(section_name, {'id': section_id}))
+
+
+def get_testimonials(request, category=None):
+    testimonials = Testimonial.objects.filter(active=True)
+    if category:
+        testimonials = testimonials.filter(categories__name__in=[category])
+
+    return JsonResponse(list(map(lambda t: t.to_json(), testimonials.order_by('-priority'))), safe=False)
