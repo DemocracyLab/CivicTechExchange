@@ -235,13 +235,13 @@ class ContactForm extends React.Component<Props, State> {
           <li>
             <input
               className="form-check-input"
-              name="interest_sponsorship"
-              id="interest_sponsorship"
+              name="interest_sponsor"
+              id="interest_sponsor"
               type="checkbox"
-              value={this.state.interest_sponsorship}
+              value={this.state.interest_sponsor}
               onChange={this.handleInputChange}
             />
-            <label className="form-check-label" htmlFor="interest_sponsorship">
+            <label className="form-check-label" htmlFor="interest_sponsor">
               Event Sponsorship
             </label>
           </li>
