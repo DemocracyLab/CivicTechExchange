@@ -3,6 +3,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import url from "../utils/url.js";
+import Section from "../enums/Section.js";
 import cdn from "../utils/cdn.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
@@ -269,7 +270,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               blog
             </a>
             , or other events that are coming up{" "}
-            <a className="size-h2" href="/events">
+            <a className="size-h2" href={url.section(Section.FindEvents)}>
               here
             </a>
             .
@@ -359,7 +360,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <h1>How it Works</h1>
           <div className="corporate-sponsorship-how-flex">
             <div className="corporate-sponsorship-how-image">
-              <img src={cdn.image("corporate-hiw.png")} alt="Sponsorship image" />
+              <img
+                src={cdn.image("corporate-hiw.png")}
+                alt="Sponsorship image"
+              />
             </div>
             <div className="corporate-sponsorship-how-text">
               <h2>
@@ -375,13 +379,13 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </div>
           </div>
           <div className="corporate-sponsorship-how-button">
-          <Button
-            variant="cta"
-            href="#contact"
-            className="corporate-cta-button"
-          >
-            Learn More
-          </Button>
+            <Button
+              variant="cta"
+              href="#contact"
+              className="corporate-cta-button"
+            >
+              Learn More
+            </Button>
           </div>
         </div>
         <div className="corporate-sponsorship-saying corporate-section col-12">
