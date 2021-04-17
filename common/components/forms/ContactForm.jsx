@@ -7,6 +7,7 @@ import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 
 type Props = {|
   showCompany: boolean,
+  showInterests: boolean,
   onSubmit: () => void,
 |};
 
