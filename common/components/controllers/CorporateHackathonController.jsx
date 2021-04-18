@@ -197,7 +197,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="corporate-how-flex-container">
             <div className="corporate-how-flex-block">
               <div className="corporate-how-image-container">
-                <IconCircle3 />
+                <IconCircle1 />
               </div>
               <div className="corporate-how-text-container">
                 <div className="corporate-how-text">
@@ -211,7 +211,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </div>
             <div className="corporate-how-flex-block">
               <div className="corporate-how-image-container">
-                <IconCircle3 />
+                <IconCircle2 />
               </div>
               <div className="corporate-how-text">
                 <h2>Define</h2>
