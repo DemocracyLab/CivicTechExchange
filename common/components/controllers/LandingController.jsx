@@ -192,7 +192,7 @@ class LandingController extends React.PureComponent<{||}> {
           </p>
           <Button
             variant="outline-dark"
-            href={url.section(Section.PartnerWithUs)}
+            href={url.section(Section.CorporateEvent)}
           >
             Learn More
           </Button>
