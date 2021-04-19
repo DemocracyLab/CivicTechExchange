@@ -8,6 +8,7 @@ import Sponsors, { SponsorMetadata } from "../utils/Sponsors.js";
 import NavigationStore from "../stores/NavigationStore.js";
 import _ from "lodash";
 import Button from "react-bootstrap/Button";
+import { CorporatePageTabs } from "../controllers/CorporateHackathonController.jsx";
 
 const sectionsToShowFooter: $ReadOnlyArray<string> = [
   Section.FindProjects,
@@ -50,7 +51,9 @@ class MainFooter extends React.Component<{||}> {
               <h3>And Our Corporate Partners</h3>
               <Button
                 variant="primary"
-                href={url.section(Section.PartnerWithUs)}
+                href={url.section(Section.CorporateEvent, {
+                  tab: CorporatePageTabs.Sponsorship,
+                })}
                 className="MainFooter-pws-button"
               >
                 Partner With Us
