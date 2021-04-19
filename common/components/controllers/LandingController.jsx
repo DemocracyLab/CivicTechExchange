@@ -67,6 +67,13 @@ class LandingController extends React.PureComponent<{||}> {
         >
           Create A Project
         </Button>
+        <Button
+          variant="primary"
+          className="SplashScreen-create-project-btn"
+          href={url.section(Section.CorporateEvent)}
+        >
+          For Companies
+        </Button>
       </SplashScreen>
     );
   }
