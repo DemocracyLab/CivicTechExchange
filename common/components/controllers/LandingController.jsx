@@ -70,7 +70,7 @@ class LandingController extends React.PureComponent<{||}> {
         <Button
           variant="primary"
           className="SplashScreen-create-project-btn LandingController-fixed-width-button"
-          href={url.section(Section.CorporateEvent)}
+          href={url.section(Section.Companies)}
         >
           For Companies
         </Button>
@@ -190,10 +190,7 @@ class LandingController extends React.PureComponent<{||}> {
             Let us help your company, non-profit or group strengthen your
             culture and make an impact!
           </p>
-          <Button
-            variant="outline-dark"
-            href={url.section(Section.CorporateEvent)}
-          >
+          <Button variant="outline-dark" href={url.section(Section.Companies)}>
             Learn More
           </Button>
         </div>

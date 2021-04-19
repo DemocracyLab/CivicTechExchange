@@ -130,7 +130,7 @@ class MainHeader extends React.Component<{||}, State> {
               {this._renderNavDropdownItem(Section.CreateGroup, "Create Group")}
             </NavDropdown>
             {this._renderEventNavItems()}
-            {this._renderNavLink(Section.CorporateEvent, "Companies")}
+            {this._renderNavLink(Section.Companies, "Companies")}
             <NavDropdown title="About" id="nav-about">
               {this._renderNavDropdownItem(Section.AboutUs, "About Us")}
               {this._renderNavDropdownItem(Section.ContactUs, "Contact Us")}

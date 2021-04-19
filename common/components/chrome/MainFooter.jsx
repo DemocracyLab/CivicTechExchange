@@ -51,7 +51,7 @@ class MainFooter extends React.Component<{||}> {
               <h3>And Our Corporate Partners</h3>
               <Button
                 variant="primary"
-                href={url.section(Section.CorporateEvent, {
+                href={url.section(Section.Companies, {
                   tab: CorporatePageTabs.Sponsorship,
                 })}
                 className="MainFooter-pws-button"

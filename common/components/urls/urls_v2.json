@@ -6,7 +6,7 @@
   {"name": "CreateProject", "pattern": "projects/create/(?P<id>[\\w\\-]*)"},
   {"name": "AboutProject", "pattern": "projects/(?P<id>[\\w\\-]+)"},
   {"name": "FindProjects", "pattern": "projects"},
-  {"name": "CorporateEvent", "pattern": "events/corporate"},
+  {"name": "Companies", "pattern": "companies"},
   {"name": "CreateEvent", "pattern": "events/create/(?P<id>[\\w\\-]*)"},
   {"name": "LiveEvent", "pattern": "events/(?P<id>[\\w\\-]+)/live"},
   {"name": "AboutEvent", "pattern": "events/(?P<id>[\\w\\-]+)"},

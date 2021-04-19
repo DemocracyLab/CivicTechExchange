@@ -118,7 +118,7 @@ preload_urls = [
     {'section': FrontEndSection.MyEvents.value, 'handler': my_events_preload},
     {'section': FrontEndSection.Donate.value, 'handler': donate_preload},
     {'section': FrontEndSection.AboutGroup.value, 'handler': about_group_preload},
-    {'section': FrontEndSection.CorporateEvent.value, 'handler': corporate_event_preload}
+    {'section': FrontEndSection.Companies.value, 'handler': corporate_event_preload}
 ]
 
 
