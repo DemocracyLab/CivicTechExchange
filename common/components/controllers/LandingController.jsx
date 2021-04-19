@@ -45,7 +45,7 @@ class LandingController extends React.PureComponent<{||}> {
   _renderTopSplash(): React$Node {
     const header: string = "Make Tech.  Do Good.";
     const text: string =
-      "We connect skilled volunteers and tech-for-good projects";
+      "We connect tech-for-good projects with skilled volunteers and socially responsible companies.";
 
     return (
       <SplashScreen
