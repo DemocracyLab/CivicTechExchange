@@ -18,7 +18,6 @@ const Section = {
   EditProfile: "EditProfile",
   SignedUp: "SignedUp",
   EmailVerified: "EmailVerified",
-  PartnerWithUs: "PartnerWithUs",
   Donate: "Donate",
   ThankYou: "ThankYou",
   Press: "Press",
