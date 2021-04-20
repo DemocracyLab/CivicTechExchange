@@ -1,7 +1,6 @@
 .LogInController-root {
   background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
-  font-weight: 300;
   width: 90%;
   max-width: 800px;
   margin: 76px auto;
@@ -83,6 +82,12 @@
   span {
     padding-right: 15px;
   }
+}
+
+.LogInController-socialIcon i {
+  cursor: pointer;
+  width: 55px;
+  color: $color-text-grey;
 }
 
 .LogInController-socialIcon svg {

@@ -6,9 +6,13 @@ import FacebookSVG from "../../svg/facebook.svg";
 import GithubSVG from "../../svg/github.svg";
 import GoogleSVG from "../../svg/google.svg";
 import LinkedInSVG from "../../svg/linkedin.svg";
+import type { Dictionary } from "../../types/Generics.jsx";
+import url from "../../utils/url.js";
+import Section from "../../enums/Section.js";
+import GlyphStyles, { Glyph, GlyphSizes } from "../../utils/glyphs.js";
 import _ from "lodash";
 
-const socialAppVisibility: { [key: string]: boolean } = !_.isEmpty(
+const socialAppVisibility: Dictionary<boolean> = !_.isEmpty(
   window.SOCIAL_APPS_VISIBILITY
 )
   ? JSON.parse(_.unescape(window.SOCIAL_APPS_VISIBILITY))
@@ -42,18 +46,42 @@ const socialSignInLinkDisplayConfigMap: {
   },
 };
 
+type Props = {|
+  hideApps: $ReadOnlyArray<string>,
+  showEmail: boolean,
+|};
+
 type State = {|
   visibleApps: $ReadOnlyArray<string>,
 |};
 
-class SocialMediaSignupSection extends React.Component<{||}, State> {
-  constructor(): void {
+class SocialMediaSignupSection extends React.Component<Props, State> {
+  constructor(props: Props): void {
     super();
+
     this.state = {
-      visibleApps: CurrentUser.isStaff()
-        ? _.keys(socialAppVisibility)
-        : _.keys(_.pickBy(socialAppVisibility, v => v === true)),
+      visibleApps: this.getVisibleApps(props),
     };
+  }
+
+  componentWillReceiveProps(nextProps: Props): void {
+    this.setState({
+      visibleApps: this.getVisibleApps(nextProps),
+    });
+  }
+
+  getVisibleApps(props: Props): $ReadOnlyArray<string> {
+    const shownApps: Dictionary<boolean> = _.clone(socialAppVisibility);
+
+    if (props.hideApps) {
+      props.hideApps.forEach(app => {
+        shownApps[app] = false;
+      });
+    }
+
+    return CurrentUser.isStaff()
+      ? _.keys(shownApps)
+      : _.keys(_.pickBy(shownApps, v => v === true));
   }
 
   render(): ?React$Node {
@@ -66,8 +94,22 @@ class SocialMediaSignupSection extends React.Component<{||}, State> {
     return (
       <React.Fragment>
         <h5 className="text-center">OR</h5>
+        {this.props.showEmail && this._renderEmailSignup()}
         {this._renderSocialLogins()}
       </React.Fragment>
+    );
+  }
+
+  _renderEmailSignup(): React$Node {
+    return (
+      <div className="LogInController-socialLink">
+        <a href={url.section(Section.SignUp)} key="email">
+          <span className="LogInController-socialIcon">
+            <i className={Glyph(GlyphStyles.EnvelopeSolid, GlyphSizes.X3)} />
+          </span>
+          <span>Continue with Email</span>
+        </a>
+      </div>
     );
   }
 

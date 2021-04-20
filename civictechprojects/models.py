@@ -998,3 +998,29 @@ class VolunteerRelation(Archived):
         return VolunteerRelation.objects.filter(project_id=project.id, is_approved=active, deleted=not active)
 
 
+class TaggedCategory(TaggedItemBase):
+    content_object = models.ForeignKey('Testimonial', on_delete=models.CASCADE)
+
+
+class Testimonial(models.Model):
+    name = models.CharField(max_length=100)
+    avatar_url = models.CharField(max_length=2083, blank=True)
+    title = models.CharField(max_length=100, blank=True)
+    text = models.CharField(max_length=2000)
+    source = models.CharField(max_length=2000, blank=True)
+    categories = TaggableManager(blank=True, through=TaggedCategory)
+    categories.remote_field.related_name = 'category_testimonials'
+    priority = models.IntegerField(default=0)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+    def to_json(self):
+        return {
+            'name': self.name,
+            'avatar_url': self.avatar_url,
+            'title': self.title,
+            'text': self.text,
+            'source': self.source
+        }

@@ -61,6 +61,7 @@ class MainFooter extends React.Component<{||}> {
               {this._renderSponsors("Sustaining")}
               {this._renderSponsors("Advancing")}
               {this._renderSponsors("Supporting")}
+              {this._renderSponsors("In-kind Support")}
             </div>
           </div>
         </React.Fragment>

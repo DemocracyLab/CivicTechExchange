@@ -35,6 +35,7 @@ export const GlyphStyles: { [key: string]: string } = {
   Eye: "fas fa-eye", // https://fontawesome.com/icons/eye?style=solid
   LoadingSpinner: "fas fa-spinner fa-spin", // https://fontawesome.com/icons/spinner?style=solid
   Envelope: "far fa-envelope", // https://fontawesome.com/icons/envelope?style=regular
+  EnvelopeSolid: "fas fa-envelope", // https://fontawesome.com/icons/envelope?style=solid
   CreativeCommons: "fab fa-creative-commons", //https://fontawesome.com/icons/creative-commons?style=brands
   CreativeCommonsBy: "fab fa-creative-commons-by", // https://fontawesome.com/icons/creative-commons-by?style=brands
   Calendar: "far fa-calendar", // https://fontawesome.com/icons/calendar?style=regular

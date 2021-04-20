@@ -294,7 +294,11 @@ class MainHeader extends React.Component<{||}, State> {
     this._handleHeightChange(this.mainHeaderRef.current.clientHeight);
   }
 
-  _handleHeightChange(height) {
+  _handleHeightChange(height: number) {
+    UniversalDispatcher.dispatch({
+      type: "SET_HEADER_HEIGHT",
+      headerHeight: height,
+    });
     this.props.onMainHeaderHeightChange(height);
   }
 
