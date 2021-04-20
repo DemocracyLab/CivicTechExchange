@@ -36,7 +36,7 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
     notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
-from common.helpers.front_end import section_url, get_page_section, get_clean_url
+from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
 from django.views.decorators.cache import cache_page
 import requests
 
@@ -343,6 +343,12 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
     if clean_url != page_url:
         print('Redirecting {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url))
         return redirect(clean_url)
+
+    section_name = get_page_section(clean_url)
+    deprecated_redirect_url = redirect_from_deprecated_url(section_name)
+    if deprecated_redirect_url:
+        print('Redirecting deprecated url {name}: {url}'.format(name=section_name, url=clean_url))
+        return redirect(deprecated_redirect_url)
 
     template = loader.get_template('new_index.html')
     context = {
@@ -1275,9 +1281,13 @@ def redirect_v1_urls(request):
     page_url = request.get_full_path()
     print(page_url)
     clean_url = get_clean_url(page_url)
-    print('Redirecting v1 url: ' + clean_url)
     section_match = re.findall(r'/index/\?section=(\w+)', clean_url)
     section_name = section_match[0] if len(section_match) > 0 else FrontEndSection.Home
+    deprecated_redirect_url = redirect_from_deprecated_url(section_name)
+    if deprecated_redirect_url:
+        print('Redirecting deprecated url {name}: {url}'.format(name=section_name, url=clean_url))
+        return redirect(deprecated_redirect_url)
+    print('Redirecting v1 url: ' + clean_url)
     section_id_match = re.findall(r'&id=([\w-]+)', clean_url)
     section_id = section_id_match[0] if len(section_id_match) > 0 else ''
     return redirect(section_url(section_name, {'id': section_id}))

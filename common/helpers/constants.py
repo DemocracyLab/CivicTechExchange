@@ -22,7 +22,6 @@ class FrontEndSection(Enum):
     SignedUp = 'SignedUp'
     AboutUs = 'AboutUs'
     FindProjects = 'FindProjects'
-    PartnerWithUs = 'PartnerWithUs'
     Donate = 'Donate'
     Press = 'Press'
     ContactUs = 'ContactUs'
@@ -45,3 +44,13 @@ class FrontEndSection(Enum):
     MyEvents = 'MyEvents'
     Companies = 'Companies'
     AddUserDetails = 'AddUserDetails'
+
+    # deprecated
+    CorporateHackathon = 'CorporateHackathon'
+    PartnerWithUs = 'PartnerWithUs'
+
+
+deprecated_page_redirects = {
+    'CorporateEvent': FrontEndSection.Companies.value,
+    'PartnerWithUs': FrontEndSection.Companies.value
+}
