@@ -1,6 +1,7 @@
 import re
 from django.conf import settings
 from html import unescape
+from .constants import deprecated_page_redirects
 from common.helpers.dictionaries import keys_omit
 
 
@@ -53,3 +54,8 @@ def get_page_path_parameters(url, page_section_generator=None):
 def get_clean_url(url):
     clean_url = unescape(url)
     return clean_url
+
+
+def redirect_from_deprecated_url(section_name):
+    if section_name in deprecated_page_redirects:
+        return section_url(deprecated_page_redirects[section_name])

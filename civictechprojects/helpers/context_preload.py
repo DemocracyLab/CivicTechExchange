@@ -55,10 +55,10 @@ def about_group_preload(context, request):
     return context
 
 
-def corporate_event_preload(context, request):
+def companies_preload(context, request):
     context = default_preload(context, request)
-    context['title'] = 'DemocracyLab | Corporate Hackathons'
-    context['description'] = 'Host a hackathon with DemocracyLab!'
+    context['title'] = 'DemocracyLab | Corporate Engagement'
+    context['description'] = 'Do well by doing good! Engage employees at custom events to build culture and spark innovation. Differentiate your brand by sponsoring our public hackathons.'
     return context
 
 
@@ -118,7 +118,7 @@ preload_urls = [
     {'section': FrontEndSection.MyEvents.value, 'handler': my_events_preload},
     {'section': FrontEndSection.Donate.value, 'handler': donate_preload},
     {'section': FrontEndSection.AboutGroup.value, 'handler': about_group_preload},
-    {'section': FrontEndSection.CorporateEvent.value, 'handler': corporate_event_preload}
+    {'section': FrontEndSection.Companies.value, 'handler': companies_preload}
 ]
 
 

@@ -130,6 +130,7 @@ class MainHeader extends React.Component<{||}, State> {
               {this._renderNavDropdownItem(Section.CreateGroup, "Create Group")}
             </NavDropdown>
             {this._renderEventNavItems()}
+            {this._renderNavLink(Section.Companies, "Companies")}
             <NavDropdown title="About" id="nav-about">
               {this._renderNavDropdownItem(Section.AboutUs, "About Us")}
               {this._renderNavDropdownItem(Section.ContactUs, "Contact Us")}
@@ -178,9 +179,6 @@ class MainHeader extends React.Component<{||}, State> {
         </NavDropdown.Item>
       );
     }
-    eventLinks.push(
-      this._renderNavDropdownItem(Section.CorporateEvent, "Corporate Events")
-    );
     return !_.isEmpty(eventLinks) ? (
       <NavDropdown title="Events" id="nav-events">
         {eventLinks}

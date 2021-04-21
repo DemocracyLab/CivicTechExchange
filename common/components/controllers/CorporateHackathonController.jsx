@@ -21,6 +21,11 @@ type State = {|
   defaultTab: string,
 |};
 
+export const CorporatePageTabs: Dictionary<string> = {
+  Hackathon: "hackathon",
+  Sponsorship: "sponsorship",
+};
+
 const tabOptions: Dictionary<string> = {
   hackathon: "tab-hackathon",
   sponsorship: "tab-sponsorship",
