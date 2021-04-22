@@ -133,7 +133,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   _renderTopSection(project) {
     return (
       <div className="Profile-top-section-content">
-        <div className="AboutProject-top-logo">
+        <div className="Profile-top-logo">
           <img
             src={
               project &&
@@ -142,7 +142,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             }
           />
         </div>
-        <div className="AboutProject-top-details">
+        <div className="Profile-top-details">
           <h1>{project && project.project_name}</h1>
           <h3>
             {project &&
@@ -171,7 +171,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           />
         </div>
 
-        <div className="AboutProject-top-interactions">
+        <div className="Profile-top-interactions">
           <ApproveGroupsSection project={this.props.project} />
 
           <ProjectVolunteerModal
@@ -221,8 +221,8 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 </div>
               </React.Fragment>
             )}
-            
-            <div className="AboutProject-skilltech-container pt-4"> 
+
+            <div className="AboutProject-skilltech-container pt-4">
               {project && !_.isEmpty(project.project_positions) && (
                 <div className="AboutProject-skills">
                   <h4>Skills Needed</h4>
@@ -301,7 +301,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       <div className="Profile-secondary-container">
         {project && !_.isEmpty(project.project_links) && (
           <React.Fragment>
-            <div className="AboutProject-links AboutProject-secondary-section">
+            <div className="Profile-links AboutProject-secondary-section">
               <h4>Links</h4>
               {this._renderLinks()}
             </div>
@@ -369,7 +369,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   _renderContactAndVolunteerButtons(): React$Node {
     return (
-      <div className="AboutProject-owner">
+      <div className="Profile-owner">
         <ContactProjectButton project={this.state.project} />
         <ContactVolunteersButton project={this.state.project} />
         <InviteProjectToGroupButton project={this.state.project} />

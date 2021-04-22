@@ -21,9 +21,7 @@ class GroupDetails extends React.PureComponent<Props> {
         {this.props.groupLocation && (
           <div className="AboutProject-icon-row">
             <i className={Glyph(GlyphStyles.MapMarker, GlyphSizes.LG)} />
-            <p className="AboutProject-icon-text">
-              {this.props.groupLocation}
-            </p>
+            <p className="AboutProject-icon-text">{this.props.groupLocation}</p>
           </div>
         )}
         {this.props.groupUrl && (

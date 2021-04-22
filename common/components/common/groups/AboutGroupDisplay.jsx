@@ -97,14 +97,14 @@ class AboutGroupDisplay extends React.Component<Props, State> {
   _renderTopSection(group): React$Node {
     return (
       <div className="Profile-top-section-content">
-        <div className="AboutProject-top-logo">
+        <div className="Profile-top-logo">
           <img
             src={
               group && group.group_thumbnail && group.group_thumbnail.publicUrl
             }
           />
         </div>
-        <div className="AboutProject-top-details">
+        <div className="Profile-top-details">
           <h1>{group && group.group_name}</h1>
           <p>{group && group.group_short_description}</p>
 
@@ -116,7 +116,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
             }
           />
         </div>
-        <div className="AboutProject-top-interactions">
+        <div className="Profile-top-interactions">
           {!this.props.viewOnly && this._renderContactAndVolunteerButtons()}
         </div>
       </div>
@@ -156,7 +156,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
       <div className="Profile-secondary-container">
         {group && !_.isEmpty(group.group_links) && (
           <React.Fragment>
-            <div className="AboutProject-links AboutProject-secondary-section">
+            <div className="Profile-links AboutGroup-secondary-section">
               <h4>Links</h4>
               {this._renderLinks()}
             </div>
@@ -168,7 +168,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
 
   _renderContactAndVolunteerButtons(): React$Node {
     return (
-      <div className="AboutProject-owner">
+      <div className="Profile-owner">
         <ContactGroupButton group={this.state.group} />
       </div>
     );
