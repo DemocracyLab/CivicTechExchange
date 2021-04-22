@@ -58,15 +58,11 @@
   }
 }
 
-//TODO: make sure lg is the right breakpoint for switching layouts
 @include media-breakpoint-up(lg) {
   .Profile-top-section-content {
     margin: 15px 0;
     padding: 15px;
     flex-wrap: nowrap;
-  }
-  .Profile-primary-section {
-    width: 100%; // don't shrink section if content is narrow in one tab vs another
   }
   .Profile-primary-container {
     .nav-tabs {
@@ -74,17 +70,26 @@
       justify-content: space-around;
     }
   }
-  // fixed width at this viewport ensures layout consistency, but we need to widen at successive viewports
+  // fixed width sections prevent long URL overflow issue on group page project cards
+  .Profile-primary-container {
+    width: 590px;
+  }
   .Profile-secondary-section {
     width: 340px;
   }
 }
 @include media-breakpoint-up(xl) {
+  .Profile-primary-container {
+    width: 730px;
+  }
     .Profile-secondary-section {
       width: 380px;
     }
 }
 @include media-breakpoint-up(xxl) {
+  .Profile-primary-container {
+    width: 942px;
+  }
   .Profile-secondary-section {
     width: 420px;
   }
