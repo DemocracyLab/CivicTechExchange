@@ -7,6 +7,7 @@ import url from "../utils/url.js";
 import prerender from "../utils/prerender.js";
 import GroupAPIUtils, { GroupDetailsAPIData } from "../utils/GroupAPIUtils.js";
 import AboutGroupDisplay from "../common/groups/AboutGroupDisplay.jsx";
+import LoadingFrame from "../chrome/LoadingFrame.jsx";
 
 type State = {|
   group: ?GroupDetailsAPIData,
@@ -49,7 +50,7 @@ class AboutGroupController extends React.PureComponent<{||}, State> {
   }
 
   render(): $React$Node {
-    return this.state.group ? this._renderDetails() : this._renderLoadMessage();
+    return this.state.group ? this._renderDetails() : this._renderLoading();
   }
 
   _renderDetails(): React$Node {
@@ -74,7 +75,17 @@ class AboutGroupController extends React.PureComponent<{||}, State> {
     );
   }
 
-  _renderLoadMessage(): React$Node {
+  _renderLoading(): React$Node {
+    return this.state.statusCode
+      ? this_.renderLoadErrorMessage()
+      : this._renderLoadingSpinner();
+  }
+
+  _renderLoadingSpinner(): React$Node {
+    return <LoadingFrame height="90vh" />;
+  }
+
+  _renderLoadErrorMessage(): React$Node {
     return (
       <React.Fragment>
         <div>{this.state.loadStatusMsg}</div>

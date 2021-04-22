@@ -11,6 +11,7 @@ import AboutProjectDisplay from "../common/projects/AboutProjectDisplay.jsx";
 import { APIError } from "../utils/api.js";
 import url from "../utils/url.js";
 import prerender from "../utils/prerender.js";
+import LoadingFrame from "../chrome/LoadingFrame.jsx";
 
 type State = {|
   project: ?ProjectDetailsAPIData,
@@ -54,9 +55,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   render(): $React$Node {
-    return this.state.project
-      ? this._renderDetails()
-      : this._renderLoadMessage();
+    return this.state.project ? this._renderDetails() : this._renderLoading();
   }
 
   _renderDetails(): React$Node {
@@ -66,14 +65,23 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       </React.Fragment>
     );
   }
+  _renderLoading(): React$Node {
+    return this.state.statusCode
+      ? this._renderLoadErrorMessage()
+      : this._renderLoadingSpinner();
+  }
 
-  _renderLoadMessage(): React$Node {
+  _renderLoadErrorMessage(): React$Node {
     return (
       <React.Fragment>
         {this._renderStatusCodeHeader()}
         <div>{this.state.loadStatusMsg}</div>
       </React.Fragment>
     );
+  }
+
+  _renderLoadingSpinner(): React$Node {
+    return <LoadingFrame height="90vh" />;
   }
 
   _renderStatusCodeHeader(): React$Node {
