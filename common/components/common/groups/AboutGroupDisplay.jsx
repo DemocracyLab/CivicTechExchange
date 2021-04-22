@@ -130,7 +130,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
       <div className="Profile-primary-container">
         <div className="Profile-tab tab-content">
           <h3>Group Description</h3>
-          {group.group_description}
+          <div className="AboutGroup-description">{group.group_description}</div>
           <div className="AboutGroup-issue-areas pt-4">
             {!_.isEmpty(this.state.issueAreas) && (
               <React.Fragment>
