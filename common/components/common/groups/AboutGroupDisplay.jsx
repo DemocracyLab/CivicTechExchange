@@ -128,7 +128,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
     return (
       <div className="Profile-primary-container">
         <div className="Profile-tab tab-content">
-          <h3>Group Description - PLACEHOLDER TITLE</h3>
+          <h3>Group Description</h3>
           {group.group_description}
           <div className="AboutGroup-issue-areas pt-4">
             {!_.isEmpty(this.state.issueAreas) && (
