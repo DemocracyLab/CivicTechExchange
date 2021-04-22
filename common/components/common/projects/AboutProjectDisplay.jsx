@@ -31,6 +31,7 @@ import type { MyGroupData } from "../../stores/MyGroupsStore.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
+import LoadingFrame from "../../chrome/LoadingFrame.jsx";
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
@@ -101,7 +102,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     return this.state.project ? (
       this._renderPageLayout()
     ) : (
-      <div>{this.state.loadStatusMsg}</div>
+      <LoadingFrame height={200} />
     );
   }
   // TODO: Remove Headers component and get them from the backend
@@ -227,7 +228,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 <div className="AboutProject-skills">
                   <h4>Skills Needed</h4>
                   {project.project_positions.map(position => (
-                    <span className="Profile-pill">
+                    <span className="Profile-pill" key={position.roleTag.tag_name}>
                       {position.roleTag.display_name}
                     </span>
                   ))}
@@ -238,7 +239,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 <div className="AboutProject-technologies">
                   <h4>Technologies Used</h4>
                   {project.project_technologies.map(tech => (
-                    <span className="Profile-pill">{tech.display_name}</span>
+                    <span className="Profile-pill" key={tech.tag_name}>{tech.display_name}</span>
                   ))}
                 </div>
               )}

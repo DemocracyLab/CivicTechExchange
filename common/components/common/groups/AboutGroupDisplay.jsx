@@ -22,6 +22,7 @@ import { Container } from "flux/utils";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import { Dictionary } from "../../types/Generics.jsx";
 import TagCategory from "../tags/TagCategory.jsx";
+import LoadingFrame from "../../chrome/LoadingFrame.jsx";
 
 type Props = {|
   group: ?GroupDetailsAPIData,
@@ -68,7 +69,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
     return this.state.group ? (
       this._renderPageLayout()
     ) : (
-      <div>{this.state.loadStatusMsg}</div>
+      <LoadingFrame height={600} />
     );
   }
 
@@ -136,7 +137,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
                 <h4>Issue Areas</h4>
                 {this.state.issueAreas &&
                   this.state.issueAreas.map((issue: TagDefinition) => (
-                    <span className="Profile-pill">{issue.display_name}</span>
+                    <span className="Profile-pill" key={issue.tag_name}>{issue.display_name}</span>
                   ))}
               </React.Fragment>
             )}
