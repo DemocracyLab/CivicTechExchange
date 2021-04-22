@@ -1,313 +1,460 @@
 // @flow
 
 import React from "react";
-import Headers from "../common/Headers.jsx";
-import ContactUsModal from "../forms/ContactUsModal.jsx";
-import prerender from "../utils/prerender.js";
-import url from "../utils/url.js";
 import Button from "react-bootstrap/Button";
-import Section from "../enums/Section";
-import Ch1Icon from "../svg/corporatehackathon/one.svg";
-import Ch2Icon from "../svg/corporatehackathon/two.svg";
-import Ch3Icon from "../svg/corporatehackathon/three.svg";
+import url from "../utils/url.js";
+import Section from "../enums/Section.js";
 import cdn from "../utils/cdn.js";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
+import TestimonialCarousel from "../../components/common/carousel/TestimonialCarousel.jsx";
+import BlogCarousel from "../../components/common/carousel/BlogCarousel.jsx";
+import ContactForm from "../../components/forms/ContactForm.jsx";
+import JumpAnchor from "../common/JumpAnchor.jsx";
+import _ from "lodash";
+import IconCircle1 from "../svg/corporatehackathon/corp1circle.svg";
+import IconCircle2 from "../svg/corporatehackathon/corp2circle.svg";
+import IconCircle3 from "../svg/corporatehackathon/corp3circle.svg";
+import type { Dictionary } from "../types/Generics.jsx";
 
 type State = {|
-  showContactModal: boolean,
+  defaultTab: string,
 |};
+
+export const CorporatePageTabs: Dictionary<string> = {
+  Hackathon: "hackathon",
+  Sponsorship: "sponsorship",
+};
+
+const tabOptions: Dictionary<string> = {
+  hackathon: "tab-hackathon",
+  sponsorship: "tab-sponsorship",
+};
 
 class CorporateHackathonController extends React.PureComponent<{||}, State> {
   constructor(props) {
     super(props);
+    const tabArg: string = url.argument("tab");
     this.state = {
-      showContactModal: false,
+      defaultTab:
+        tabArg && tabOptions[tabArg]
+          ? tabOptions[tabArg]
+          : tabOptions.hackathon,
     };
-  }
-
-  componentDidMount() {
-    prerender.ready();
-  }
-  //TODO: Get headers from the back end, see PR #446 for example of the change
-  _renderHeader(): React$Node {
-    const title: string = "DemocracyLab | Corporate Hackathons";
-    const description: string = "Host a hackathon with DemocracyLab!";
-
-    return <Headers title={title} description={description} />;
-  }
-
-  onSubmit(): void {
-    this.setState({ showContactModal: false });
   }
 
   render(): $React$Node {
     return (
       <React.Fragment>
-        <ContactUsModal
-          showModal={this.state.showContactModal}
-          onSubmit={this.onSubmit.bind(this)}
-        />
-        {this._renderHeader()}
-        <div className="corporate-hackathon-root">
-          {this._hostWithUs()}
-          <div className="container">
-            <div className="row">
-              {this._howItWorks()}
-              {this._whyEngage()}
-              {this._strengthenTeam()}
-              {this._hackathonSponsorships()}
+        <div className="corporate-root container">
+          {this._renderTop()}
+          <div className="row">{this._renderTabs()}</div>
+          <div className="row">{this._renderContact()}</div>
+          {this._renderBottomImage()}
+        </div>
+      </React.Fragment>
+    );
+  }
+
+  _renderTop(): React$Node {
+    return (
+      <React.Fragment>
+        <div className="corporate-edge">
+          <div className="row">
+            <div
+              className="col-12 corporate-top-image"
+              style={{
+                backgroundImage:
+                  "url(" + cdn.image("corporate_header.jpg") + ")",
+              }}
+            >
+              <div className="corporate-top-overlay">
+                <h1>Together we can advance technology for the public good.</h1>
+              </div>
             </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="corporate-top col-12 corporate-section">
+            <div className="corporate-top-flex">
+              <div className="corporate-top-flex-section">
+                <p>
+                  DemocracyLab's success depends on creating value for our
+                  corporate partners:
+                </p>
+                <ul>
+                  <li>
+                    Our custom employee engagement events build a culture of
+                    purpose and spur innovation.
+                  </li>
+                  <li>
+                    Sponsorship of our public hackathons differentiates your
+                    brand and amplifies the impact of our diverse community.
+                  </li>
+                </ul>
+                <p>
+                  We make it easy and fun for your company to do well by doing
+                  good.
+                </p>
+              </div>
+              <div className="corporate-top-flex-button">
+                <Button
+                  variant="cta"
+                  href="#contact"
+                  className="corporate-cta-button"
+                >
+                  Partner With Us
+                </Button>
+              </div>
+            </div>
+            <h2>Learn more about opportunities below.</h2>
           </div>
         </div>
       </React.Fragment>
     );
   }
 
-  _hostWithUs(): $React$Node {
+  _renderTabs(): React$Node {
     return (
-      <div className="corporate-hackathon-hostwithus hero-wide ch-divider">
-        <div className="hero-wide-content">
-          <div className="hero-wide-flex-content">
-            <div className="corporate-hackathon-hostwithus-left">
-              <h1>Host a hackathon with us!</h1>
-              <p className="corporate-hackathon-hostwithus-left-text">
-                Create a unique employee engagement experience and deliver
-                instant-impact tech projects.
-              </p>
-              <Button
-                className="corporate-hackathon-hostwithus-left-button"
-                variant="primary"
-                onClick={() => this.setState({ showContactModal: true })}
-              >
-                Get Started
-              </Button>
-              {this._publicHackathonResults("d-lg-none d-xl-block")}
+      <React.Fragment>
+        <div className="corporate-tab-section">
+          <Tabs defaultActiveKey={this.state.defaultTab} id="corporate-tabs">
+            <Tab eventKey={tabOptions.hackathon} title="Host a Hackathon">
+              {this._renderHackathonTab()}
+            </Tab>
+            <Tab eventKey={tabOptions.sponsorship} title="Sponsorship">
+              {this._renderSponsorshipTab()}
+            </Tab>
+          </Tabs>
+        </div>
+      </React.Fragment>
+    );
+  }
+
+  _renderHackathonTab(): $React$Node {
+    return (
+      <React.Fragment>
+        <div className="corporate-hackathon-whyhost col-12">
+          <h1>Why Host a Hackathon?</h1>
+          <div className="row">
+            <div className="col-sm-12 col-lg-4">
+              <div className="corporate-hackathon-card">
+                <h2>Cultivate Culture</h2>
+                <p>
+                  Our events allow your employees to take risks, try bold new
+                  strategies, and share their knowledge in a low-pressure
+                  environment, all while contributing to the public good.
+                </p>
+                <p>
+                  73% of DemocracyLab’s corporate hackathon participants
+                  reported an increase in enthusiasm for working at their
+                  company.
+                </p>
+              </div>
             </div>
-            <div className="corporate-hackathon-hostwithus-right">
-              <div className="corporate-hackathon-hostwithus-header">
-                <picture>
-                  <source
-                    media="(max-width: 991px)"
-                    srcSet={cdn.image("mobile-header-withbg.png")}
-                  />
-                  <source
-                    media="(min-width: 992px)"
-                    srcSet={cdn.image("header-withbg-img.png")}
-                  />
-                  <img
-                    src={cdn.image("header-withbg-img.png")}
-                    alt="Header Image"
-                  />
-                </picture>
+            <div className="col-sm-12 col-lg-4">
+              <div className="corporate-hackathon-card">
+                <h2>Drive Performance</h2>
+                <p>
+                  91% of respondents (executives and employees) who said their
+                  company had a strong sense of purpose also said their company
+                  had a history of strong financial performance.
+                </p>
+                <p>
+                  75% of DemocracyLab’s corporate hackathon participants
+                  reported increased belief that they could make a positive
+                  impact in the world.
+                </p>
+              </div>
+            </div>
+            <div className="col-sm-12 col-lg-4">
+              <div className="corporate-hackathon-card">
+                <h2>Amplify Impact</h2>
+                <p>
+                  Systematic change requires a shift in power. That means that a
+                  top-down approach to social innovation won’t produce the
+                  equitable outcomes society needs.
+                </p>
+                <p>
+                  DemocracyLab serves projects from social impact startups,
+                  nonprofits and governments. We help your employees use their
+                  most valuable skills to address society’s toughest problems.
+                </p>
               </div>
             </div>
           </div>
-          {this._publicHackathonResults("d-none d-lg-block d-xl-none")}
+          <p className="corporate-sources-citation overline">
+            Sources:
+            <br />
+            DemocracyLab post-event surveys <br />
+            Deloitte{" "}
+            <a
+              className="overline"
+              href="https://www2.deloitte.com/us/en/pages/about-deloitte/articles/culture-of-purpose.html"
+              target="_blank"
+            >
+              "Culture of Purpose"
+            </a>
+          </p>
         </div>
-      </div>
-    );
-  }
-
-  _publicHackathonResults(classes): $React$Node {
-    return (
-      <div className={classes}>
-        <h2>Public Hackathon Results</h2>
-        <div className="corporate-hackathon-hostwithus-results">
-          <div className="corporate-hackathon-hostwithus-results-item">
-            <h3>
-              $1 <span className="text-nowrap">million +</span>
-            </h3>
-            <p>Public Value Created</p>
-          </div>
-          <div className="corporate-hackathon-hostwithus-results-item">
-            <h3>1200</h3>
-            <p>Volunteers</p>
-          </div>
-          <div className="corporate-hackathon-hostwithus-results-item">
-            <h3>100+</h3>
-            <p>Projects</p>
-          </div>
-          <div className="corporate-hackathon-hostwithus-results-item">
-            <h3>100</h3>
-            <p>Average Attendees/Event</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  _howItWorks(): $React$Node {
-    return (
-      <div className="corporate-hackathon-howitworks col-12 ch-divider">
-        <h2>How It Works</h2>
-        <p>
-          As soon as you have signed up for a hackathon, the DemocracyLab team
-          gets right to work on finding non-profits in need of tech volunteers.
-          You can focus on team building; we’ll get everything set up with your
-          specific goals in mind. There are just a few things we need from you!
-        </p>
-        <div className="corporate-hackathon-howitworks-container">
-          <div className="corporate-hackathon-howitworks-item">
-            <img src={cdn.image("recruit-icon.png")} alt="Recruit" />
-            <div>
-              <Ch1Icon />
-              <h4>Recruit</h4>
+        <div className="corporate-hackathon-howitworks corporate-section col-12">
+          <h1>How it Works</h1>
+          <div className="corporate-how-flex-container">
+            <div className="corporate-how-flex-block">
+              <div className="corporate-how-image-container">
+                <IconCircle1 />
+              </div>
+              <div className="corporate-how-text-container">
+                <div className="corporate-how-text">
+                  <h2>Recruit</h2>
+                  <p>
+                    We find tech-for-good projects that are a good fit for your
+                    team and help you motivate your employees to participate.
+                  </p>
+                </div>
+              </div>
             </div>
-            <p>
-              Encourage your employees to sign up for the hackathon! We’ll find
-              non-profits with needs that are a good fit for your team.
-            </p>
-          </div>
-          <div className="corporate-hackathon-howitworks-item">
-            <img src={cdn.image("define-icon.png")} alt="Define" />
-            <div>
-              <Ch2Icon />
-              <h4>Define</h4>
-            </div>
-            <p>
-              We’ll work with the non-profits to identify achievable,
-              instant-impact projects that are ready for your team, then connect
-              you with the non-profit team to define the scope.
-            </p>
-          </div>
-          <div className="corporate-hackathon-howitworks-item">
-            <img src={cdn.image("hack-icon.png")} alt="Hack" />
-            <div>
-              <Ch3Icon />
-              <h4>Hack!</h4>
-            </div>
-            <p>
-              On the day of the hackathon, your team of product, design, and
-              development volunteers will collaborate and create civic tech!
-              We’ll take care of everything else.
-            </p>
-          </div>
-        </div>
-        <p>
-          Once the hackathon is finished, you’re all done! Your team can get
-          back to work and enjoy renewed enthusiasm and deeper engagement.
-          DemocracyLab will survey both volunteers and project owners to provide
-          you a clear summary of the outcomes and impacts of the event.
-        </p>
-      </div>
-    );
-  }
-
-  _whyEngage(): $React$Node {
-    const whyStyle = {
-      backgroundImage: "url(" + cdn.image("checkmark-icon.png") + ")",
-    };
-    return (
-      <div className="corporate-hackathon-whyengage col-12">
-        <div className="corporate-hackathon-whyengage-container">
-          <div className="corporate-hackathon-whyengage-left">
-            <h2>Why Engage?</h2>
-            <ul>
-              <li style={whyStyle}>
-                <h3>Build company culture</h3>
+            <div className="corporate-how-flex-block">
+              <div className="corporate-how-image-container">
+                <IconCircle2 />
+              </div>
+              <div className="corporate-how-text">
+                <h2>Define</h2>
                 <p>
-                  Hackathons cultivate an open, agile company culture centered
-                  on innovation, flexibility, and idea sharing, even between
-                  positions and unrelated departments.
+                  We work with projects to define a narrow scope of work that
+                  will help them fulfill their mission.
                 </p>
-              </li>
-              <li style={whyStyle}>
-                <h3>Nurture innovation</h3>
+              </div>
+            </div>
+            <div className="corporate-how-flex-block">
+              <div className="corporate-how-image-container">
+                <IconCircle3 />
+              </div>
+              <div className="corporate-how-text">
+                <h2>Hack</h2>
                 <p>
-                  Corporate hackathons allow employees the opportunity to take
-                  risks, try bold new strategies, and share their knowledge and
-                  experience with others in a low-pressure environment.
+                  Your employees collaborate with project leaders to create
+                  innovative tech-for-good solutions.
                 </p>
-              </li>
-              <li style={whyStyle}>
-                <h3>Create positive public relations</h3>
-                <p>
-                  Companies that participate in hackathons show themselves to be
-                  drivers of change in their industry and community, to both
-                  their employees and the public.
-                </p>
-              </li>
-            </ul>
-            <div className="corporate-hackathon-whyengage-source">
-              Source: “
-              <a
-                href="https://link.springer.com/chapter/10.1007/978-3-030-35333-9_27"
-                target="_blank"
-                rel="nofollow noopener"
-              >
-                On the Benefits of Corporate Hackathons for Software Ecosystems
-                - A Systemic Mapping Study
-              </a>
-              ”
+              </div>
             </div>
           </div>
-          <div className="corporate-hackathon-whyengage-right">
-            <div className="corporate-hackathon-whyengage-image">
-              <picture>
-                <source
-                  media="(max-width: 991px)"
-                  srcSet={cdn.image("mobile-why-engage-withbg.png")}
-                />
-                <source
-                  media="(min-width: 992px)"
-                  srcSet={cdn.image("why-engage-withbg-img.png")}
-                />
-                <img src={cdn.image("why-engage-img.png")} alt="Header Image" />
-              </picture>
-            </div>
+          <hr className="corporate-hr-line"></hr>
+
+          <p className="corporate-how-after">
+            After the event, DemocracyLab reports on the resulting engagement,
+            outcomes, and impact.
+          </p>
+          <div className="corporate-how-after">
+            <Button
+              variant="cta"
+              href="#contact"
+              className="corporate-cta-button"
+            >
+              Learn More
+            </Button>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  _strengthenTeam(): $React$Node {
-    return (
-      <div className="corporate-hackathon-strengthen col-12">
-        <h2>
-          Strengthen your team while supporting the acceleration of social
-          change.
-        </h2>
-        <Button
-          variant="light"
-          onClick={() => this.setState({ showContactModal: true })}
-        >
-          Get Started
-        </Button>
-      </div>
-    );
-  }
-
-  _hackathonSponsorships(): $React$Node {
-    return (
-      <div className="corporate-hackathon-sponsorships col-12">
-        <h2>Public Hackathon Sponsorships: Another Way To Engage</h2>
-        <div className="corporate-hackathon-sponsorships-container">
-          <div className="corporate-hackathon-sponsorships-image">
-            <img
-              src={cdn.image("event-sponsorship-img.png")}
-              alt="Event Sponsorships"
+        <div className="corporate-hackathon-saying corporate-section col-12">
+          <h1>What People Are Saying</h1>
+          <div className="carousel-testimonial-root">
+            <TestimonialCarousel
+              category="partner-highlights"
+              interval={600000}
             />
           </div>
-          <div className="corporate-hackathon-sponsorships-text">
-            <h3>Event Sponsorship</h3>
-            <h4>Starting at $500 per event</h4>
-            <p>
-              Not ready to host? Sponsor one of our public hackathons! Your
-              sponsorship will help us drive innovation, support non-profits and
-              civic tech organizations, and promote your brand before, during,
-              and after the event!
-            </p>
-            <div className="corporate-hackathon-sponsorships-button">
-              <Button
-                variant="primary"
-                href={url.section(Section.PartnerWithUs)}
-              >
-                Learn More
-              </Button>
+        </div>
+        <div className="corporate-hackathon-stories corporate-section col-12">
+          <h1>Impact Stories</h1>
+          <div className="carousel-blog-root">
+            <BlogCarousel tag="partner-highlights" interval={600000} />
+          </div>
+          <p className="size-h2">
+            Read about other previous events in our{" "}
+            <a className="size-h2" href={window.BLOG_URL} target="_blank">
+              blog
+            </a>
+            , or other events that are coming up{" "}
+            <a className="size-h2" href={url.section(Section.FindEvents)}>
+              here
+            </a>
+            .
+          </p>
+        </div>
+      </React.Fragment>
+    );
+  }
+
+  _renderSponsorshipTab(): React$Node {
+    return (
+      <React.Fragment>
+        <div className="corporate-sponsorship-why col-12">
+          <h1>Why Partner With Us?</h1>
+          <div className="row">
+            <div className="col-sm-12 col-lg-4">
+              <div className="corporate-sponsorship-card">
+                <h2>Impact</h2>
+                <p>
+                  Your investment will support hundreds of tech-for-good
+                  projects that use DemocracyLab’s platform to attract the
+                  skilled volunteers they need to launch their products and
+                  prove their concepts.
+                </p>
+                <p>
+                  DemocracyLab will use your investment to support our public
+                  events, scale our operations, and accelerate our growth.
+                </p>
+              </div>
+            </div>
+            <div className="col-sm-12 col-lg-4">
+              <div className="corporate-sponsorship-card">
+                <h2>Differentiation</h2>
+                <p>
+                  DemocracyLab’s unique product and positioning make sponsorship
+                  a bold way to demonstrate your company’s commitment to social
+                  responsibility.
+                </p>
+                <p>
+                  Our community of volunteers is tomorrow’s diverse, dynamic,
+                  and purpose-driven workforce. Sponsorship lets them know your
+                  company helped create the opportunities they are enjoying.
+                </p>
+              </div>
+            </div>
+            <div className="col-sm-12 col-lg-4">
+              <div className="corporate-sponsorship-card">
+                <h2>Value</h2>
+                <p>
+                  For a fraction of the cost of a typical corporate event, your
+                  company can become part of the accelerating tech-for-good
+                  movement.
+                </p>
+                <p>
+                  Today's sponsorship pricing is a bargain. Buy low and enjoy a
+                  significant return on your company's investment!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="corporate-section col-12">
+            <h2 className="corporate-sponsorship-stat-title">
+              Public hackathons are an opportunity to contribute with great
+              visibility.
+            </h2>
+            <div className="corporate-sponsorship-stat-container">
+              <div className="corporate-sponsorship-stat">
+                <h4>$1&nbsp;Million+</h4>
+                <p>Public Value Created</p>
+              </div>
+              <div className="corporate-sponsorship-stat">
+                <h4>1500+</h4>
+                <p>Volunteers</p>
+              </div>
+              <div className="corporate-sponsorship-stat">
+                <h4>100</h4>
+                <p>Avg Event Attendees</p>
+              </div>
+              <div className="corporate-sponsorship-stat">
+                <h4>250+</h4>
+                <p>Project Teams</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        <div className="corporate-sponsorship-how col-12 corporate-section">
+          <h1>How it Works</h1>
+          <div className="corporate-sponsorship-how-flex">
+            <div className="corporate-sponsorship-how-image">
+              <img
+                src={cdn.image("corporate-hiw.png")}
+                alt="Sponsorship image"
+              />
+            </div>
+            <div className="corporate-sponsorship-how-text">
+              <h2>
+                Our public tech-for-good hackathons are the pulse of our
+                community
+              </h2>
+              <p>
+                Six times a year, the DemocracyLab community convenes to move
+                the needle on projects and build connections around the world.
+                Your support will increase our capacity, amplify impact, and
+                innovate your brand.
+              </p>
+            </div>
+          </div>
+          <div className="corporate-sponsorship-how-button">
+            <Button
+              variant="cta"
+              href="#contact"
+              className="corporate-cta-button"
+            >
+              Learn More
+            </Button>
+          </div>
+        </div>
+        <div className="corporate-sponsorship-saying corporate-section col-12">
+          <h1>What People Are Saying</h1>
+          <div className="carousel-testimonial-root">
+            <TestimonialCarousel
+              category="hackathon-highlights"
+              interval={600000}
+            />
+          </div>
+        </div>
+        <div className="corporate-sponsorship-impact corporate-section col-12">
+          <h1>Impact Stories</h1>
+          <div className="carousel-blog-root">
+            <BlogCarousel tag="hackathon-highlights" interval={600000} />
+          </div>
+          <p className="size-h2">
+            Read about other previous events in our{" "}
+            <a className="size-h2" href={window.BLOG_URL} target="_blank">
+              blog
+            </a>
+            , or other events that are coming up{" "}
+            <a className="size-h2" href="/events">
+              here
+            </a>
+            .
+          </p>
+        </div>
+      </React.Fragment>
+    );
+  }
+  _renderContact(): React$Node {
+    return (
+      <React.Fragment>
+        <div className="corporate-section corporate-contact col-12">
+          <JumpAnchor id="contact" />
+          <h1>Take The First Step!</h1>
+          <h2>
+            To receive more information about becoming a corporate partner,
+            complete and submit the form below.
+          </h2>
+          <ContactForm showInterests={true} />
+        </div>
+      </React.Fragment>
+    );
+  }
+
+  _renderBottomImage(): React$Node {
+    return (
+      <React.Fragment>
+        <div className="corporate-edge">
+          <div className="row">
+            <div
+              className="corporate-bottom-image col-12"
+              style={{
+                backgroundImage:
+                  "url(" + cdn.image("corporate_footer.jpg") + ")",
+              }}
+            >
+              <div className="corporate-bottom-overlay"></div>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
     );
   }
 }

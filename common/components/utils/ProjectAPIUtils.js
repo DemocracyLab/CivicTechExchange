@@ -125,6 +125,14 @@ export type TeamAPIData = {|
   +project: ProjectDetailsAPIData,
 |};
 
+export type Testimonial = {|
+  +name: string,
+  +avatar_url: string,
+  +title: string,
+  +text: string,
+  +source: string,
+|};
+
 class ProjectAPIUtils {
   static projectFromAPIData(apiData: ProjectAPIData): ProjectData {
     return {
@@ -256,6 +264,24 @@ class ProjectAPIUtils {
       })
       .catch(err => {
         console.log("Error fetching team details. Error: " + err);
+      });
+  }
+
+  //fetch DemocracyLab testimonials
+  static fetchTestimonials(
+    category: ?string,
+    callback: ($ReadOnlyArray<Testimonial>) => void
+  ): void {
+    const url: string = "/api/testimonials/" + (category || "");
+    fetch(url)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        callback(data);
+      })
+      .catch(err => {
+        console.log("Error fetching testimonial details. Error: " + err);
       });
   }
 

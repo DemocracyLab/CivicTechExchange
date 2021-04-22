@@ -324,7 +324,15 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'PRIVACY_POLICY_URL': {
         'error': True,
         'message': 'Privacy Policy url required'
-    }
+    },
+    'GHOST_URL': {
+        'error': False,
+        'message': 'Ghost url needed to display blog posts on site'
+    },
+    'GHOST_CONTENT_API_KEY': {
+        'error': False,
+        'message': 'Ghost content api key needed to display blog posts on site'
+    },
 }
 
 CSRF_COOKIE_SECURE = not DEBUG
@@ -338,7 +346,7 @@ CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", 'fonts.googleapis.com', '*.fontawe
 CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", '*.facebook.net/', '*.heapanalytics.com/', '*.google.com/', '*.gstatic.com', '*.googletagmanager.com', '*.google-analytics.com', '*.googleadservices.com', '*.doubleclick.net', '*.newrelic.com', '*.nr-data.net', '*.hotjar.com')
 CSP_CONNECT_SRC = ("'self'", S3_BUCKET_URL, '*.qiqochat.com', 'qiqocableeu.herokuapp.com', '*.google-analytics.com', '*.nr-data.net', '*.hereapi.com', '*.hotjar.com')
 CSP_FONT_SRC = ("'self'", 'fonts.googleapis.com', 'fonts.gstatic.com', 'use.fontawesome.com')
-CSP_IMG_SRC = ("'self'", "data:", "blob:", "'unsafe-eval'", '*.cloudfront.net', '*.s3.amazonaws.com', '*.facebook.net/', '*.facebook.com/', 'heapanalytics.com/', "*.google.com", '*.google-analytics.com', '*.googletagmanager.com', '*.paypal.com', '*.paypalobjects.com', '*.githubusercontent.com')
+CSP_IMG_SRC = ("'self'", "data:", "blob:", "'unsafe-eval'", '*.cloudfront.net', '*.amazonaws.com', '*.facebook.net/', '*.facebook.com/', 'heapanalytics.com/', "*.google.com", '*.google-analytics.com', '*.googletagmanager.com', '*.paypal.com', '*.paypalobjects.com', '*.githubusercontent.com')
 CSP_FRAME_ANCESTORS = os.environ.get('CSP_FRAME_ANCESTORS', None)
 if CSP_FRAME_ANCESTORS is not None:
     CSP_FRAME_ANCESTORS = ast.literal_eval(CSP_FRAME_ANCESTORS)
@@ -453,3 +461,9 @@ GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH', '')
 PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
+
+GHOST_URL = os.environ.get('GHOST_URL', '')
+GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '')
+
+if GHOST_URL:
+    CSP_CONNECT_SRC = CSP_CONNECT_SRC + (GHOST_URL,)

@@ -16,7 +16,8 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
+    ProjectRelationship, Testimonial
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from common.caching.cache import Cache
@@ -35,7 +36,7 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
     notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
-from common.helpers.front_end import section_url, get_page_section, get_clean_url
+from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
 from django.views.decorators.cache import cache_page
 import requests
 
@@ -343,6 +344,12 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         print('Redirecting {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url))
         return redirect(clean_url)
 
+    section_name = get_page_section(clean_url)
+    deprecated_redirect_url = redirect_from_deprecated_url(section_name)
+    if deprecated_redirect_url:
+        print('Redirecting deprecated url {name}: {url}'.format(name=section_name, url=clean_url))
+        return redirect(deprecated_redirect_url)
+
     template = loader.get_template('new_index.html')
     context = {
         'DLAB_PROJECT_ID': settings.DLAB_PROJECT_ID or '',
@@ -393,6 +400,10 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
 
     if hasattr(settings, 'HERE_CONFIG'):
         context['HERE_CONFIG'] = settings.HERE_CONFIG
+
+    if hasattr(settings, 'GHOST_URL'):
+        context['GHOST_URL'] = settings.GHOST_URL
+        context['GHOST_CONTENT_API_KEY'] = settings.GHOST_CONTENT_API_KEY
 
     if request.user.is_authenticated:
         contributor = Contributor.objects.get(id=request.user.id)
@@ -1230,13 +1241,14 @@ def contact_democracylab(request):
     )
 
     if r.json()['success']:
-        # Successfuly validated, send email
+        # Successfully validated, send email
         first_name = body['fname']
         last_name = body['lname']
         email_addr = body['emailaddr']
         message = body['message']
-        company_name = body['company_name'] if 'message' in body else None
-        contact_democracylab_email(first_name, last_name, email_addr, message, company_name)
+        company_name = body['company_name'] if 'company_name' in body else None
+        interest_flags = list(filter(lambda key: body[key] and isinstance(body[key], bool), body.keys()))
+        contact_democracylab_email(first_name, last_name, email_addr, message, company_name, interest_flags)
         return HttpResponse(status=200)
 
     # Error while verifying the captcha, do not send the email
@@ -1269,9 +1281,21 @@ def redirect_v1_urls(request):
     page_url = request.get_full_path()
     print(page_url)
     clean_url = get_clean_url(page_url)
-    print('Redirecting v1 url: ' + clean_url)
     section_match = re.findall(r'/index/\?section=(\w+)', clean_url)
     section_name = section_match[0] if len(section_match) > 0 else FrontEndSection.Home
+    deprecated_redirect_url = redirect_from_deprecated_url(section_name)
+    if deprecated_redirect_url:
+        print('Redirecting deprecated url {name}: {url}'.format(name=section_name, url=clean_url))
+        return redirect(deprecated_redirect_url)
+    print('Redirecting v1 url: ' + clean_url)
     section_id_match = re.findall(r'&id=([\w-]+)', clean_url)
     section_id = section_id_match[0] if len(section_id_match) > 0 else ''
     return redirect(section_url(section_name, {'id': section_id}))
+
+
+def get_testimonials(request, category=None):
+    testimonials = Testimonial.objects.filter(active=True)
+    if category:
+        testimonials = testimonials.filter(categories__name__in=[category])
+
+    return JsonResponse(list(map(lambda t: t.to_json(), testimonials.order_by('-priority'))), safe=False)

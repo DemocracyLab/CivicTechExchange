@@ -7,6 +7,7 @@ import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 
 type Props = {|
   showCompany: boolean,
+  showInterests: boolean,
   onSubmit: () => void,
 |};
 
@@ -17,7 +18,9 @@ type FormFields = {|
   lname: string,
   emailaddr: string,
   message: string,
-  company_name: string,
+  interest_sponsor: boolean,
+  interest_hackathon: boolean,
+  interest_other: boolean,
   reCaptchaValue: string,
 |};
 
@@ -35,7 +38,9 @@ class ContactForm extends React.Component<Props, State> {
       lname: "",
       emailaddr: "",
       message: "",
-      company_name: "",
+      interest_sponsor: false,
+      interest_hackathon: false,
+      interest_other: false,
       sendStatusMessage: null,
       sendStatusClass: null,
       isSending: false,
@@ -58,9 +63,11 @@ class ContactForm extends React.Component<Props, State> {
         fname: this.state.fname,
         lname: this.state.lname,
         emailaddr: this.state.emailaddr,
-        company_name: this.state.company_name,
         message: this.state.message,
         reCaptchaValue: this.state.reCaptchaValue,
+        interest_sponsor: this.state.interest_sponsor,
+        interest_hackathon: this.state.interest_hackathon,
+        interest_other: this.state.interest_other,
       },
       response => this.showSuccess(),
       response => this.showFailure()
@@ -129,88 +136,130 @@ class ContactForm extends React.Component<Props, State> {
           </div>
         ) : null}
         <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            {this.props.showCompany && this._renderCompanyField()}
-            <label htmlFor="fname">First name:</label>
-            <input
-              required
-              className="form-control"
-              name="fname"
-              id="fname"
-              type="text"
-              placeholder="Your first name"
-              value={this.state.fname}
-              onChange={this.handleInputChange}
-            />
+          <div className="ContactForm-container">
+            <div className="ContactForm-group">
+              <div className="form-group">
+                <label htmlFor="fname">First name:</label>
+                <input
+                  required
+                  className="form-control"
+                  name="fname"
+                  id="fname"
+                  type="text"
+                  placeholder="Your first name"
+                  value={this.state.fname}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="lname">Last name:</label>
+                <input
+                  required
+                  className="form-control"
+                  name="lname"
+                  id="lname"
+                  type="text"
+                  placeholder="Your last name"
+                  value={this.state.lname}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="emailaddr">Your email address:</label>
+                <input
+                  required
+                  className="form-control"
+                  name="emailaddr"
+                  type="email"
+                  id="emailaddr"
+                  placeholder="name@example.com"
+                  value={this.state.emailaddr}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              {this.props.showInterests && this._renderInterestFields()}
+            </div>
+            <div className="ContactForm-group">
+              <div className="form-group">
+                <label htmlFor="message">Message:</label>
+                <div className="character-count">
+                  {(this.state.message || "").length} / 3000
+                </div>
+                <textarea
+                  required
+                  className="form-control"
+                  name="message"
+                  id="message"
+                  placeholder="Type your message here"
+                  rows="8"
+                  maxLength="3000"
+                  value={this.state.message}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              <p>Before sending your message, please complete this captcha.</p>
+              <ReCAPTCHA
+                sitekey={window.GR_SITEKEY}
+                onChange={this.reCaptchaOnChange}
+              />
+              <input
+                type="submit"
+                className="btn btn-primary ContactForm-submit-btn"
+                value={this.state.isSending ? "Sending" : "Send message"}
+                disabled={!this.state.reCaptchaValue || this.state.isSending}
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="lname">Last name:</label>
-            <input
-              required
-              className="form-control"
-              name="lname"
-              id="lname"
-              type="text"
-              placeholder="Your last name"
-              value={this.state.lname}
-              onChange={this.handleInputChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="emailaddr">Your email address:</label>
-            <input
-              required
-              className="form-control"
-              name="emailaddr"
-              type="email"
-              id="emailaddr"
-              placeholder="name@example.com"
-              value={this.state.emailaddr}
-              onChange={this.handleInputChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="message">Message:</label>
-            <textarea
-              required
-              className="form-control"
-              name="message"
-              id="message"
-              placeholder="Type your message here"
-              rows="8"
-              value={this.state.message}
-              onChange={this.handleInputChange}
-            />
-          </div>
-          <p>Before sending your message, please complete this captcha.</p>
-          <ReCAPTCHA
-            sitekey={window.GR_SITEKEY}
-            onChange={this.reCaptchaOnChange}
-          />
-          <input
-            type="submit"
-            className="btn btn-primary ContactForm-submit-btn"
-            value={this.state.isSending ? "Sending" : "Send message"}
-            disabled={!this.state.reCaptchaValue || this.state.isSending}
-          />
         </form>
       </React.Fragment>
     );
   }
 
-  _renderCompanyField(): ?React$Node {
+  _renderInterestFields(): ?React$Node {
     return (
       <div className="form-group">
-        <label htmlFor="company_name">Company (Optional):</label>
-        <input
-          className="form-control"
-          name="company_name"
-          id="company_name"
-          type="text"
-          placeholder="Your company name"
-          value={this.state.company_name}
-          onChange={this.handleInputChange}
-        />
+        <h4>Areas of Interest</h4>
+        <ul className="ContactForm-list">
+          <li>
+            <input
+              className="form-check-input"
+              name="interest_hackathon"
+              id="interest_hackathon"
+              type="checkbox"
+              value={this.state.interest_hackathon}
+              onChange={this.handleInputChange}
+            />
+            <label className="form-check-label" htmlFor="interest_hackathon">
+              Hosting a Hackathon
+            </label>
+          </li>
+          <li>
+            <input
+              className="form-check-input"
+              name="interest_sponsor"
+              id="interest_sponsor"
+              type="checkbox"
+              value={this.state.interest_sponsor}
+              onChange={this.handleInputChange}
+            />
+            <label className="form-check-label" htmlFor="interest_sponsor">
+              Event Sponsorship
+            </label>
+          </li>
+          <li>
+            <input
+              className="form-check-input"
+              name="interest_other"
+              id="interest_other"
+              type="checkbox"
+              value={this.state.interest_other}
+              onChange={this.handleInputChange}
+            />
+            <label className="form-check-label" htmlFor="interest_other">
+              Other
+            </label>
+          </li>
+        </ul>
       </div>
     );
   }
