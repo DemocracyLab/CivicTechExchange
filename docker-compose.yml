@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   db:
-    image: postgis/postgis
+    image: postgis/postgis:latest
     env_file:
       - ./.env
     ports:
@@ -10,7 +10,7 @@ services:
     env_file:
       - ./.env
     volumes:
-      - demolab:/var/lib/postgresql/data/
+      - demolab:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
