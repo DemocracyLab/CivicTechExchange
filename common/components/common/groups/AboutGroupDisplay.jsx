@@ -22,7 +22,6 @@ import { Container } from "flux/utils";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import { Dictionary } from "../../types/Generics.jsx";
 import TagCategory from "../tags/TagCategory.jsx";
-import LoadingFrame from "../../chrome/LoadingFrame.jsx";
 
 type Props = {|
   group: ?GroupDetailsAPIData,

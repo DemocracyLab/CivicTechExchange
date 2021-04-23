@@ -31,7 +31,6 @@ import type { MyGroupData } from "../../stores/MyGroupsStore.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
-import LoadingFrame from "../../chrome/LoadingFrame.jsx";
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
