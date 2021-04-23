@@ -2,7 +2,10 @@
 
 import React from "react";
 import VolunteerCard from "./VolunteerCard.jsx";
-import { VolunteerDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
+import {
+  APIResponse,
+  VolunteerDetailsAPIData,
+} from "../../utils/ProjectAPIUtils.js";
 import NotificationModal from "../notification/NotificationModal.jsx";
 import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
 import ContactModal from "../projects/ContactModal.jsx";
@@ -131,6 +134,12 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     }
   }
 
+  closeModal(modalVariable: string) {
+    const stateChange = {};
+    stateChange[modalVariable] = false;
+    this.setState(stateChange);
+  }
+
   openPromotionModal(volunteer: VolunteerDetailsAPIData): void {
     this.setState({
       showPromotionModal: true,
@@ -176,7 +185,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
       const params: RejectVolunteerParams = {
         rejection_message: rejectionMessage,
       };
-      ProjectAPIUtils.post(
+      return ProjectAPIUtils.post(
         "/volunteer/reject/" +
           this.state.volunteerToActUpon.application_id +
           "/",
@@ -241,7 +250,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
       const params: DismissVolunteerParams = {
         dismissal_message: dismissalMessage,
       };
-      ProjectAPIUtils.post(
+      return ProjectAPIUtils.post(
         "/volunteer/dismiss/" +
           this.state.volunteerToActUpon.application_id +
           "/",
@@ -282,7 +291,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
       const params: DemoteVolunteerParams = {
         demotion_message: demotionMessage,
       };
-      ProjectAPIUtils.post(
+      return ProjectAPIUtils.post(
         "/volunteer/demote/" +
           this.state.volunteerToActUpon.application_id +
           "/",
@@ -344,9 +353,14 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           headerText="Reject Application"
           messagePrompt="State the reasons you wish to reject this applicant"
           confirmButtonText="Confirm"
+          confirmProcessingButtonText="Confirming"
           maxCharacterCount={3000}
           requireMessage={true}
           onConfirm={this.closeRejectModal.bind(this)}
+          onConfirmOperationComplete={this.closeModal.bind(
+            this,
+            "showRejectModal"
+          )}
         />
 
         <FeedbackModal
@@ -354,9 +368,14 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           headerText="Dismiss Volunteer"
           messagePrompt="State the reasons you wish to dismiss this volunteer"
           confirmButtonText="Confirm"
+          confirmProcessingButtonText="Confirming"
           maxCharacterCount={3000}
           requireMessage={true}
           onConfirm={this.closeDismissModal.bind(this)}
+          onConfirmOperationComplete={this.closeModal.bind(
+            this,
+            "showDismissModal"
+          )}
         />
 
         <FeedbackModal
@@ -364,9 +383,14 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           headerText="Demote Co-Owner"
           messagePrompt="State the reasons for demoting this co-owner"
           confirmButtonText="Confirm"
+          confirmProcessingButtonText="Confirming"
           maxCharacterCount={3000}
           requireMessage={true}
           onConfirm={this.closeDemotionModal.bind(this)}
+          onConfirmOperationComplete={this.closeModal.bind(
+            this,
+            "showDemotionModal"
+          )}
         />
 
         <ContactModal

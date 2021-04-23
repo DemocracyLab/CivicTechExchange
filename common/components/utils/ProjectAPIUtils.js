@@ -288,9 +288,9 @@ class ProjectAPIUtils {
   static post(
     url: string,
     body: {||},
-    successCallback: APIResponse => void,
-    errCallback: APIError => void
-  ) {
+    successCallback: ?(APIResponse) => void,
+    errCallback: ?(APIError) => void
+  ): Promise<APIResponse> {
     const doError = response =>
       errCallback &&
       errCallback({
@@ -298,7 +298,7 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response),
       });
 
-    fetch(
+    let promise: Promise<APIResponse> = fetch(
       new Request(url, {
         method: "POST",
         body: JSON.stringify(body),
@@ -308,13 +308,21 @@ class ProjectAPIUtils {
           "Content-Type": "application/json",
         },
       })
-    )
-      .then(response =>
+    );
+
+    if (successCallback) {
+      promise = promise.then(response =>
         ProjectAPIUtils.isSuccessResponse(response)
           ? successCallback()
           : doError(response)
-      )
-      .catch(response => doError(response));
+      );
+    }
+
+    if (errCallback) {
+      promise = promise.catch(response => doError(response));
+    }
+
+    return promise;
   }
 
   static isSuccessResponse(response: APIResponse): boolean {

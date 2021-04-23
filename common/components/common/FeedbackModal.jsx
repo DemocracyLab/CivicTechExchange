@@ -3,6 +3,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import ModalWrapper from "./ModalWrapper.jsx";
 
 type Props = {|
   showModal: boolean,
@@ -10,12 +11,15 @@ type Props = {|
   requireMessage: boolean,
   messagePrompt: string,
   confirmButtonText: string,
+  confirmProcessingButtonText: string,
   maxCharacterCount: number,
-  onConfirm: (boolean, string) => void,
+  onConfirm: string => Promise<any>,
+  onConfirmOperationComplete: ?() => void,
 |};
 type State = {|
   showModal: boolean,
   feedbackText: string,
+  isProcessing: boolean,
 |};
 
 /**
@@ -27,6 +31,7 @@ class FeedbackModal extends React.PureComponent<Props, State> {
     this.state = {
       showModal: false,
       feedbackText: "",
+      isProcessing: false,
     };
   }
 
@@ -40,53 +45,57 @@ class FeedbackModal extends React.PureComponent<Props, State> {
   }
 
   confirm(confirmation: boolean): void {
-    this.props.onConfirm(confirmation, this.state.feedbackText);
     if (confirmation) {
-      this.setState({ feedbackText: "" });
+      this.setState({ isProcessing: true });
+      const confirmAction: Promise<any> = this.props
+        .onConfirm(confirmation, this.state.feedbackText)
+        .then(() => {
+          this.setState({ feedbackText: "", isProcessing: false });
+        });
+      if (this.props.onConfirmOperationComplete) {
+        confirmAction.then(this.props.onConfirmOperationComplete);
+      }
+    } else {
+      this.setState(
+        { feedbackText: "", isProcessing: false },
+        this.props.onConfirmOperationComplete()
+      );
     }
   }
 
   render(): React$Node {
     return (
-      <div>
-        <Modal
-          show={this.state.showModal}
-          onHide={this.confirm.bind(this, false)}
+      <React.Fragment>
+        <ModalWrapper
+          headerText={this.props.headerText}
+          showModal={this.state.showModal}
+          submitText={
+            this.state.isProcessing
+              ? this.props.confirmProcessingButtonText
+              : this.props.confirmButtonText
+          }
+          cancelText="Cancel"
+          submitEnabled={
+            !this.state.isProcessing &&
+            (!this.props.requireMessage || this.state.feedbackText)
+          }
+          onClickCancel={this.confirm.bind(this, false)}
+          onClickSubmit={this.confirm.bind(this, true)}
         >
-          <Modal.Header closeButton>
-            <Modal.Title>{this.props.headerText}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {this.props.messagePrompt}
-            <div className="character-count">
-              {(this.state.feedbackText || "").length} /{" "}
-              {this.props.maxCharacterCount}
-            </div>
-            <textarea
-              className="form-control"
-              rows="4"
-              maxLength={this.props.maxCharacterCount}
-              value={this.state.feedbackText}
-              onChange={this.onTextChange.bind(this)}
-            ></textarea>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="outline-secondary"
-              onClick={this.confirm.bind(this, false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="primary"
-              disabled={this.props.requireMessage && !this.state.feedbackText}
-              onClick={this.confirm.bind(this, true)}
-            >
-              {this.props.confirmButtonText}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
+          {this.props.messagePrompt}
+          <div className="character-count">
+            {(this.state.feedbackText || "").length} /{" "}
+            {this.props.maxCharacterCount}
+          </div>
+          <textarea
+            className="form-control"
+            rows="4"
+            maxLength={this.props.maxCharacterCount}
+            value={this.state.feedbackText}
+            onChange={this.onTextChange.bind(this)}
+          ></textarea>
+        </ModalWrapper>
+      </React.Fragment>
     );
   }
 }
