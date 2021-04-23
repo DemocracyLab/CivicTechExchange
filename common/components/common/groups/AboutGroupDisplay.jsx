@@ -65,15 +65,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
     return _.reverse(_.sortBy(presentTags, "num_times"));
   }
 
-  render(): $React$Node {
-    return this.state.group ? (
-      this._renderPageLayout()
-    ) : (
-      <LoadingFrame height={600} />
-    );
-  }
-
-  _renderPageLayout(): React$Node {
+  render(): React$Node {
     const group: GroupDetailsAPIData = this.state.group;
     return (
       <div className="container Profile-root">

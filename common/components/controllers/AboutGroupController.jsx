@@ -1,7 +1,6 @@
 // @flow
 
 import React from "react";
-import Headers from "../common/Headers.jsx";
 import { APIError } from "../utils/api.js";
 import url from "../utils/url.js";
 import prerender from "../utils/prerender.js";
@@ -56,22 +55,8 @@ class AboutGroupController extends React.PureComponent<{||}, State> {
   _renderDetails(): React$Node {
     return (
       <React.Fragment>
-        {this._renderGroupHeader(this.state.group)}
         <AboutGroupDisplay group={this.state.group} viewOnly={false} />
       </React.Fragment>
-    );
-  }
-
-  _renderGroupHeader(group: GroupDetailsAPIData): React$Node {
-    const title: string = group.group_name + " | DemocracyLab";
-    const description: string = group.group_short_description;
-
-    return (
-      <Headers
-        title={title}
-        description={description}
-        thumbnailUrl={group.group_thumbnail && group.group_thumbnail.publicUrl}
-      />
     );
   }
 

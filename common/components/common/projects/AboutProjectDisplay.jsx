@@ -97,18 +97,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       this.setState({ showJoinModal: false });
     }
   }
-
-  render(): $React$Node {
-    return this.state.project ? (
-      this._renderPageLayout()
-    ) : (
-      <LoadingFrame height={200} />
-    );
-  }
-  // TODO: Remove Headers component and get them from the backend
   // TODO: See if there's a more elegant way to construct this than passing the project prop repeatedly
 
-  _renderPageLayout(): React$Node {
+  render(): React$Node {
     const project = this.state.project;
     return (
       <div className="container Profile-root">
