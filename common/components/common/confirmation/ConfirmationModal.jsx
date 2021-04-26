@@ -61,6 +61,7 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
         showModal={this.state.showModal}
         headerText="Confirm"
         cancelText="No"
+        cancelEnabled={!this.state.isProcessing}
         submitText={this.state.isProcessing ? "" : "Yes"}
         submitEnabled={!this.state.isProcessing}
         onClickCancel={this.confirm.bind(this, false)}

@@ -75,6 +75,7 @@ class FeedbackModal extends React.PureComponent<Props, State> {
               : this.props.confirmButtonText
           }
           cancelText="Cancel"
+          cancelEnabled={!this.state.isProcessing}
           submitEnabled={
             !this.state.isProcessing &&
             (!this.props.requireMessage || this.state.feedbackText)

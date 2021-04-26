@@ -4,11 +4,11 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Glyph, GlyphSizes, GlyphStyles } from "../utils/glyphs";
-// TODO: Disable cancel during processing
 type Props = {|
   showModal: boolean,
   headerText: string,
   cancelText: ?string,
+  cancelEnabled: boolean,
   submitText: ?string,
   submitEnabled: boolean,
   onClickCancel: () => void,
@@ -48,7 +48,11 @@ class ModalWrapper extends React.PureComponent<Props, State> {
 
   _renderCancelButton(): React$Node {
     return (
-      <Button variant="outline-secondary" onClick={this.props.onClickCancel}>
+      <Button
+        variant="outline-secondary"
+        onClick={this.props.onClickCancel}
+        disabled={!this.props.cancelEnabled}
+      >
         {this.props.cancelText || "Cancel"}
       </Button>
     );
