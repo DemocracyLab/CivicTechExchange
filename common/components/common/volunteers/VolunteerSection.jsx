@@ -108,7 +108,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
 
   closeApproveModal(approved: boolean): void {
     if (approved) {
-      ProjectAPIUtils.post(
+      return ProjectAPIUtils.post(
         "/volunteer/approve/" +
           this.state.volunteerToActUpon.application_id +
           "/",
@@ -149,7 +149,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
 
   closePromotionModal(promoted: boolean): void {
     if (promoted) {
-      ProjectAPIUtils.post(
+      return ProjectAPIUtils.post(
         "/volunteer/promote/" +
           this.state.volunteerToActUpon.application_id +
           "/",
@@ -340,12 +340,20 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           showModal={this.state.showApproveModal}
           message="Do you want to approve this Volunteer joining the project?"
           onSelection={this.closeApproveModal.bind(this)}
+          onConfirmOperationComplete={this.closeModal.bind(
+            this,
+            "showApproveModal"
+          )}
         />
 
         <ConfirmationModal
           showModal={this.state.showPromotionModal}
           message="Do you want to promote this Volunteer to Project Co-Owner?"
           onSelection={this.closePromotionModal.bind(this)}
+          onConfirmOperationComplete={this.closeModal.bind(
+            this,
+            "showPromotionModal"
+          )}
         />
 
         <FeedbackModal
@@ -356,7 +364,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           confirmProcessingButtonText="Confirming"
           maxCharacterCount={3000}
           requireMessage={true}
-          onConfirm={this.closeRejectModal.bind(this)}
+          onSelection={this.closeRejectModal.bind(this)}
           onConfirmOperationComplete={this.closeModal.bind(
             this,
             "showRejectModal"
@@ -371,7 +379,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           confirmProcessingButtonText="Confirming"
           maxCharacterCount={3000}
           requireMessage={true}
-          onConfirm={this.closeDismissModal.bind(this)}
+          onSelection={this.closeDismissModal.bind(this)}
           onConfirmOperationComplete={this.closeModal.bind(
             this,
             "showDismissModal"
@@ -386,7 +394,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
           confirmProcessingButtonText="Confirming"
           maxCharacterCount={3000}
           requireMessage={true}
-          onConfirm={this.closeDemotionModal.bind(this)}
+          onSelection={this.closeDemotionModal.bind(this)}
           onConfirmOperationComplete={this.closeModal.bind(
             this,
             "showDemotionModal"

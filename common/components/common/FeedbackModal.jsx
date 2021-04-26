@@ -13,7 +13,7 @@ type Props = {|
   confirmButtonText: string,
   confirmProcessingButtonText: string,
   maxCharacterCount: number,
-  onConfirm: string => Promise<any>,
+  onSelection: (boolean, string) => Promise<any>,
   onConfirmOperationComplete: ?() => void,
 |};
 type State = {|
@@ -48,7 +48,7 @@ class FeedbackModal extends React.PureComponent<Props, State> {
     if (confirmation) {
       this.setState({ isProcessing: true });
       const confirmAction: Promise<any> = this.props
-        .onConfirm(confirmation, this.state.feedbackText)
+        .onSelection(confirmation, this.state.feedbackText)
         .then(() => {
           this.setState({ feedbackText: "", isProcessing: false });
         });

@@ -4,7 +4,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Glyph, GlyphSizes, GlyphStyles } from "../utils/glyphs";
-
+// TODO: Disable cancel during processing
 type Props = {|
   showModal: boolean,
   headerText: string,

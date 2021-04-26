@@ -3,14 +3,17 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import ModalWrapper from "../ModalWrapper.jsx";
 
 type Props = {|
   showModal: boolean,
   message: string,
-  onSelection: boolean => void,
+  onSelection: boolean => Promise<any>,
+  onConfirmOperationComplete: ?() => void,
 |};
 type State = {|
   showModal: boolean,
+  isProcessing: boolean,
 |};
 
 /**
@@ -21,6 +24,7 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
     super(props);
     this.state = {
       showModal: false,
+      isProcessing: false,
     };
   }
 
@@ -29,33 +33,41 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
   }
 
   confirm(confirmation: boolean): void {
-    this.props.onSelection(confirmation);
+    if (confirmation) {
+      this.setState({ isProcessing: true });
+      const confirmAction: Promise<any> = this.props
+        .onSelection(confirmation)
+        .then(() => {
+          this.setState({ isProcessing: false });
+        });
+      if (this.props.onConfirmOperationComplete) {
+        confirmAction.then(this.props.onConfirmOperationComplete);
+      }
+    } else {
+      if (this.props.onConfirmOperationComplete) {
+        this.setState(
+          { isProcessing: false },
+          this.props.onConfirmOperationComplete
+        );
+      } else {
+        this.setState({ isProcessing: false });
+      }
+    }
   }
 
   render(): React$Node {
     return (
-      <div>
-        <Modal
-          show={this.state.showModal}
-          onHide={this.confirm.bind(this, false)}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Confirm</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{this.props.message}</Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="outline-secondary"
-              onClick={this.confirm.bind(this, false)}
-            >
-              No
-            </Button>
-            <Button variant="primary" onClick={this.confirm.bind(this, true)}>
-              Yes
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
+      <ModalWrapper
+        showModal={this.state.showModal}
+        headerText="Confirm"
+        cancelText="No"
+        submitText={this.state.isProcessing ? "" : "Yes"}
+        submitEnabled={!this.state.isProcessing}
+        onClickCancel={this.confirm.bind(this, false)}
+        onClickSubmit={this.confirm.bind(this, true)}
+      >
+        {this.props.message}
+      </ModalWrapper>
     );
   }
 }
