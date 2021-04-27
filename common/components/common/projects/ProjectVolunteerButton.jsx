@@ -127,9 +127,15 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
                 headerText="Leave Project"
                 messagePrompt="State the reasons you wish to leave this project (Optional)"
                 confirmButtonText="Confirm"
+                confirmProcessingButtonText="Confirming"
                 maxCharacterCount={3000}
                 requireMessage={false}
                 onConfirm={this.confirmLeaveProject.bind(this)}
+                onConfirmOperationComplete={() =>
+                  this.setState({
+                    showLeaveProjectModal: false,
+                  })
+                }
               />
             </div>
           );
