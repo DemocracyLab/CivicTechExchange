@@ -20,7 +20,11 @@ import GroupBy from "../../utils/groupBy.js";
 import BioModal from "./BioModal.jsx";
 import Sort from "../../utils/sort.js";
 import array from "../../utils/array.js";
-import type { Dictionary } from "../../types/Generics.jsx";
+import type {
+  Dictionary,
+  Transform,
+  PartitionSet,
+} from "../../types/Generics.jsx";
 
 type Props = {|
   teamResponse: TeamAPIData,
@@ -125,7 +129,8 @@ class TeamSections extends React.PureComponent<Props, State> {
             pv.user,
             pv.roleTag.display_name,
             pv.roleTag.tag_name,
-            roleNameOverride
+            roleNameOverride,
+            pv.isTeamLeader
           );
         }
       );
@@ -214,11 +219,27 @@ class TeamSections extends React.PureComponent<Props, State> {
       const team: $ReadOnlyArray<BioPersonData> = this.state.project_volunteers[
         sectionConfig.sectionRoleCategory
       ];
-      const sortedTeam: $ReadOnlyArray<BioPersonData> = Sort.byNamedEntries(
-        team,
-        sectionConfig.topRoles,
-        (p: BioPersonData) => p.title_tag
+
+      const sortFunc: Transform<$ReadOnlyArray<BioPersonData>> = (
+        team: $ReadOnlyArray<BioPersonData>
+      ) =>
+        Sort.byNamedEntries(
+          team,
+          sectionConfig.topRoles,
+          (p: BioPersonData) => p.title_tag
+        );
+
+      // Divide the team into leads and not, sort both groups by position title, and then recombine for final sorted order
+      const leadsAndRestOfTeam: PartitionSet<
+        $ReadOnlyArray<BioPersonData>
+      > = _.partition(team, (p: BioPersonData) => p.isTeamLeader);
+      const leads: $ReadOnlyArray<BioPersonData> = sortFunc(
+        leadsAndRestOfTeam[0]
       );
+      const rest: $ReadOnlyArray<BioPersonData> = sortFunc(
+        leadsAndRestOfTeam[1]
+      );
+      const sortedTeam: $ReadOnlyArray<BioPersonData> = leads.concat(rest);
 
       return (
         <React.Fragment>

@@ -14,13 +14,15 @@ export type BioPersonData = {|
   user_thumbnail: ?string,
   bio_text: ?string,
   profile_id: ?number,
+  isTeamLeader: boolean,
 |};
 
 export function VolunteerUserDataToBioPersonData(
   v: VolunteerUserData,
   title: string,
   title_tag: ?string,
-  nameOverrides: ?Dictionary<string>
+  nameOverrides: ?Dictionary<string>,
+  isTeamLeader: boolean
 ): BioPersonData {
   const _title: string =
     nameOverrides && title_tag in nameOverrides
@@ -34,6 +36,7 @@ export function VolunteerUserDataToBioPersonData(
     user_thumbnail: v.user_thumbnail && v.user_thumbnail.publicUrl,
     bio_text: v.about_me,
     profile_id: v.id,
+    isTeamLeader: isTeamLeader,
   };
 }
 
