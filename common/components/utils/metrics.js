@@ -3,6 +3,7 @@ import { TagDefinition } from "./ProjectAPIUtils.js";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import Async from "./async.js";
 import { SectionType } from "../enums/Section.js";
+import type { Dictionary } from "../types/Generics.jsx";
 import _ from "lodash";
 
 const tagCategoryEventMapping: { [key: string]: string } = _.fromPairs([
@@ -13,13 +14,18 @@ const tagCategoryEventMapping: { [key: string]: string } = _.fromPairs([
   [TagCategory.PROJECT_STAGE, "addProjectStageTag"],
 ]);
 
+type HeapInterface = {|
+  track: (eventName: string, properties: ?Dictionary<string | number>) => void,
+|};
+
+// TODO: Wait for window.heap to populate if it doesn't immediately
+const heap: HeapInterface = window.heap;
+
 function _logEvent(
   eventName: string,
   parameters: ?{ [key: string]: string }
 ): void {
-  Async.onEvent("fbLoaded", () => {
-    FB.AppEvents.logEvent(eventName, null, parameters);
-  });
+  heap.track(eventName, parameters);
 }
 
 class metrics {
