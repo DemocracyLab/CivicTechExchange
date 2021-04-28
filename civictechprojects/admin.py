@@ -35,7 +35,7 @@ class UserAlertAdmin(admin.ModelAdmin):
     list_display = tuple(user_alert_text_fields)
     search_fields = user_alert_text_fields
 
-volunteer_relation_filter_fields = ('is_approved', 'is_co_owner', 'projected_end_date', 'application_date', 'approved_date', 'last_reminder_date', 'reminder_count', 're_enrolled_last_date', 're_enroll_last_reminder_date', 're_enroll_reminder_count')
+volunteer_relation_filter_fields = ('is_approved', 'is_co_owner', 'is_team_leader', 'projected_end_date', 'application_date', 'approved_date', 'last_reminder_date', 'reminder_count', 're_enrolled_last_date', 're_enroll_last_reminder_date', 're_enroll_reminder_count')
 class VolunteerRelationAdmin(admin.ModelAdmin):
     list_display = ('volunteer', 'project', 'application_text') + volunteer_relation_filter_fields
     search_fields = ['volunteer__email', 'project__project_name', 'application_text']

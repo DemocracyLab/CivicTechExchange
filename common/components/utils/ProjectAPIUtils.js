@@ -85,6 +85,7 @@ export type VolunteerDetailsAPIData = {|
   +roleTag: TagDefinition,
   +isApproved: boolean,
   +isCoOwner: boolean,
+  +isTeamLeader: boolean,
   +isUpForRenewal: boolean,
 |};
 

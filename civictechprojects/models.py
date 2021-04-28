@@ -937,6 +937,7 @@ class VolunteerRelation(Archived):
     application_text = models.CharField(max_length=10000, blank=True)
     is_approved = models.BooleanField(default=False)
     is_co_owner = models.BooleanField(default=False)
+    is_team_leader = models.BooleanField(default=False)
     projected_end_date = models.DateTimeField(auto_now=False, null=True, blank=True)
     application_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
     approved_date = models.DateTimeField(auto_now=False, null=True, blank=True)
@@ -961,6 +962,7 @@ class VolunteerRelation(Archived):
             'roleTag': Tag.hydrate_to_json(volunteer.id, self.role.all().values())[0],
             'isApproved': self.is_approved,
             'isCoOwner': self.is_co_owner,
+            'isTeamLeader': self.is_team_leader,
             'isUpForRenewal': self.is_up_for_renewal(),
             'projectedEndDate': self.projected_end_date.__str__()
         }
