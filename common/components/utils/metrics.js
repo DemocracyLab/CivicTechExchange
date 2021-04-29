@@ -14,18 +14,19 @@ const tagCategoryEventMapping: { [key: string]: string } = _.fromPairs([
   [TagCategory.PROJECT_STAGE, "addProjectStageTag"],
 ]);
 
+type MetricsParameters = Dictionary<string | number>;
+
 type HeapInterface = {|
-  track: (eventName: string, properties: ?Dictionary<string | number>) => void,
+  track: (eventName: string, properties: ?MetricsParameters) => void,
 |};
 
 // TODO: Wait for window.heap to populate if it doesn't immediately
 const heap: HeapInterface = window.heap;
 
-function _logEvent(
-  eventName: string,
-  parameters: ?{ [key: string]: string }
-): void {
-  heap.track(eventName, parameters);
+function _logEvent(eventName: string, parameters: ?MetricsParameters): void {
+  Async.onEvent("heapLoaded", () => {
+    heap.track(eventName, parameters);
+  });
 }
 
 class metrics {
