@@ -31,26 +31,6 @@
       // Stop prerender.io from caching page until it loads
       window.prerenderReady = false;
     </script>
-    <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '137258853647008',
-          cookie     : true,
-          xfbml      : true,
-          version    : 'v2.10',
-        });
-        FB.AppEvents.logPageView();
-        window.democracyLabEvents = {'fbLoaded': true};
-        window.dispatchEvent(new Event('fbLoaded'));
-      };
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "https://connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-    </script>
     <script type="text/javascript">
       window.DLAB_GLOBAL_CONTEXT =
         '{{userID}}'
