@@ -20,12 +20,9 @@ type HeapInterface = {|
   track: (eventName: string, properties: ?MetricsParameters) => void,
 |};
 
-// TODO: Wait for window.heap to populate if it doesn't immediately
-const heap: HeapInterface = window.heap;
-
 function _logEvent(eventName: string, parameters: ?MetricsParameters): void {
   Async.onEvent("heapLoaded", () => {
-    heap.track(eventName, parameters);
+    window.heap.track(eventName, parameters);
   });
 }
 
