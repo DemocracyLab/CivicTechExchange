@@ -21,9 +21,11 @@ type HeapInterface = {|
 |};
 
 function _logEvent(eventName: string, parameters: ?MetricsParameters): void {
-  Async.onEvent("heapLoaded", () => {
-    window.heap.track(eventName, parameters);
-  });
+  if (window.HEAP_ANALYTICS_ID) {
+    Async.onEvent("heapLoaded", () => {
+      window.heap.track(eventName, parameters);
+    });
+  }
 }
 
 class metrics {
