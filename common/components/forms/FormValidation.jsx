@@ -9,6 +9,8 @@ export type Validator<T> = {|
 |};
 
 type Props<T> = {|
+
+  
   +validations: $ReadOnlyArray<Validator<T>>,
   +onValidationCheck: boolean => void,
   formState: any,

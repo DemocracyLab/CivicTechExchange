@@ -366,7 +366,7 @@ class GroupSearchStore extends ReduceStore<State> {
     const state: State = this.getState();
     return state.groupsData && state.groupsData.allTags;
   }
-
+  
   getSelectedTags(inProgressState: ?State): List<TagDefinition> {
     const state: State = inProgressState || this.getState();
     if (state.groupsData && state.groupsData.allTags && state.tags) {
