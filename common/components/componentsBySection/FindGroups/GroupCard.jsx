@@ -15,8 +15,8 @@ import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
 type Props = {|
   group: GroupTileAPIData,
   tagDictionary: Dictionary < TagDefinition >,
-      maxTextLength: number,
-        maxIssuesCount: number,
+  maxTextLength: number,
+  maxIssuesCount: number,
 |};
 //fontawesome fixed width class
 const glyphFixedWidth = " fa-fw";

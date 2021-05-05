@@ -154,7 +154,7 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
           ></textarea>
         </div>
 
-        {!this.props.project && (formIsValid
+        {!this.props.project && (
           <div>
             <CheckBox
               id="didCheckTerms"
