@@ -85,7 +85,6 @@ class GroupCard extends React.PureComponent<Props> {
   _renderIssueAreas(): React$Node {
     return (
       <div className="ProjectCard-skills">
-
         {this._generateIssueList()}
       </div>
     );
