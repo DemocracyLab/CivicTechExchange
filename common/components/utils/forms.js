@@ -40,7 +40,7 @@ class formHelper {
       _onFormUpdate(this, formValues);
     };
 
-    const onFormChange = function() {readyForSubmit
+    const onFormChange = function() {
       _onFormUpdate(this, _getFormValues(this));
     };
 
