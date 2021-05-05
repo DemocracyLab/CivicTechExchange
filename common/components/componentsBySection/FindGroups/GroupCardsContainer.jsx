@@ -119,7 +119,7 @@ class GroupCardsContainer extends React.Component<Props, State> {
 
     const nextPage =
       this.state.current_page + 1 <= this.state.group_pages
-        ? this.state.current_page + 1   
+        ? this.state.current_page + 1
         : this.state.current_page;
 
     this.setState({ current_page: nextPage }, function() {

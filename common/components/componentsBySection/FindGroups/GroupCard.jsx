@@ -14,7 +14,7 @@ import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
 
 type Props = {|
   group: GroupTileAPIData,
-    tagDictionary: Dictionary < TagDefinition >,
+  tagDictionary: Dictionary < TagDefinition >,
       maxTextLength: number,
         maxIssuesCount: number,
 |};
@@ -115,6 +115,7 @@ class GroupCard extends React.PureComponent<Props> {
       );
     }
     else {
+      return(null);
     }
   }
   _renderSubInfo(): React$Node {
