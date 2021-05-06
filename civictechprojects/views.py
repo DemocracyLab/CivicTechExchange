@@ -368,7 +368,8 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         'BLOG_URL': settings.BLOG_URL,
         'EVENT_URL': settings.EVENT_URL,
         'PRIVACY_POLICY_URL': settings.PRIVACY_POLICY_URL,
-        'DONATE_PAGE_BLURB': settings.DONATE_PAGE_BLURB
+        'DONATE_PAGE_BLURB': settings.DONATE_PAGE_BLURB,
+        'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
@@ -390,10 +391,6 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         google_tag_context = {'GOOGLE_TAGS_ID': settings.GOOGLE_TAGS_ID}
         context['googleTagsHeadScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_head.txt', google_tag_context)
         context['googleTagsBodyScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_body.txt', google_tag_context)
-
-    if settings.HEAP_ANALYTICS_ID:
-        heap_tag_context = {'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID}
-        context['headAnalyticsHeadScript'] = loader.render_to_string('scripts/heap_analytics_snippet_head.txt', heap_tag_context)
 
     if hasattr(settings, 'SOCIAL_APPS_VISIBILITY'):
         context['SOCIAL_APPS_VISIBILITY'] = json.dumps(settings.SOCIAL_APPS_VISIBILITY)
