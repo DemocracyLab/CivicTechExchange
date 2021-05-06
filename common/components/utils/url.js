@@ -67,7 +67,7 @@ type SectionUrlArguments = {|
 |};
 
 const urlOverrides: Dictionary<string> =
-  window.URL_OVERRIDES && JSON.parse(_.unescape(window.URL_OVERRIDES));
+  (window.URL_OVERRIDES && JSON.parse(_.unescape(window.URL_OVERRIDES))) || {};
 
 class urlHelper {
   static navigateToSection(section: string): void {
