@@ -369,7 +369,8 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         'EVENT_URL': settings.EVENT_URL,
         'PRIVACY_POLICY_URL': settings.PRIVACY_POLICY_URL,
         'DONATE_PAGE_BLURB': settings.DONATE_PAGE_BLURB,
-        'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID
+        'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID,
+        'URL_OVERRIDES': settings.URL_OVERRIDES
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',

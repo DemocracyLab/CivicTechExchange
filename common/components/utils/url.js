@@ -66,6 +66,9 @@ type SectionUrlArguments = {|
   args: Dictionary<string>,
 |};
 
+const urlOverrides: Dictionary<string> =
+  window.URL_OVERRIDES && JSON.parse(_.unescape(window.URL_OVERRIDES));
+
 class urlHelper {
   static navigateToSection(section: string): void {
     UniversalDispatcher.dispatch({
@@ -287,6 +290,10 @@ class urlHelper {
     // Remove url snippet
     let _url: string = url || window.location.href;
     return _url.replace("#_=_", "");
+  }
+
+  static getUrlOverrides(section: string): ?Dictionary<string> {
+    return urlOverrides[section];
   }
 
   // TODO: Use this for every method

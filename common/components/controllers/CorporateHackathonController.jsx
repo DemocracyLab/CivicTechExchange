@@ -19,6 +19,8 @@ import type { Dictionary } from "../types/Generics.jsx";
 
 type State = {|
   defaultTab: string,
+  learnMoreHackathonUrl: string,
+  learnMoreSponsorshipUrl: string,
 |};
 
 export const CorporatePageTabs: Dictionary<string> = {
@@ -35,11 +37,21 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   constructor(props) {
     super(props);
     const tabArg: string = url.argument("tab");
+    const pageUrlOverrides: Dictionary<string> = url.getUrlOverrides(
+      Section.Companies
+    );
+    const defaultLearnMoreUrl: string = "#contact";
     this.state = {
       defaultTab:
         tabArg && tabOptions[tabArg]
           ? tabOptions[tabArg]
           : tabOptions.hackathon,
+      learnMoreHackathonUrl:
+        (pageUrlOverrides && pageUrlOverrides["learnMoreHackathonUrl"]) ||
+        defaultLearnMoreUrl,
+      learnMoreSponsorshipUrl:
+        (pageUrlOverrides && pageUrlOverrides["learnMoreSponsorshipUrl"]) ||
+        defaultLearnMoreUrl,
     };
   }
 
@@ -248,7 +260,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="corporate-how-after">
             <Button
               variant="cta"
-              href="#contact"
+              href={this.state.learnMoreHackathonUrl}
               className="corporate-cta-button"
             >
               Learn More
@@ -386,7 +398,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="corporate-sponsorship-how-button">
             <Button
               variant="cta"
-              href="#contact"
+              href={this.state.learnMoreSponsorshipUrl}
               className="corporate-cta-button"
             >
               Learn More

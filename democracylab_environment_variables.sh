@@ -137,3 +137,5 @@ export QIQO_API_KEY=democracylab
 #Add CSP variable examples
 export CSP_FRAME_SRC='["qiqochat.com", "*.qiqochat.com", "*.google.com", "democracylab.org", "democracy-lab-prod-mirror.herokuapp.com", "democracy-lab-dev.herokuapp.com", "democracy-lab-staging.herokuapp.com"]'
 export CSP_FRAME_ANCESTORS='["qiqochat.com", "*.qiqochat.com", "*.google.com", "democracylab.org", "democracy-lab-prod-mirror.herokuapp.com", "democracy-lab-dev.herokuapp.com", "democracy-lab-staging.herokuapp.com"]'
+
+export URL_OVERRIDES='{"Companies": {"learnMoreHackathonUrl": "https://d1agxr2dqkgkuy.cloudfront.net/documents/2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf", "learnMoreSponsorshipUrl": "https://d1agxr2dqkgkuy.cloudfront.net/documents/2021+DemocracyLab+Sponsorship+Prospectus.pdf"}}'
