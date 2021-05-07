@@ -110,7 +110,7 @@ class GroupCard extends React.PureComponent<Props> {
               <li key={i}>{issueName}</li>
             ))}
           </ul>
-        <React.Fragment>
+        </React.Fragment>
       );
     }
     else {
