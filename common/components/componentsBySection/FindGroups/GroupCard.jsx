@@ -103,18 +103,18 @@ class GroupCard extends React.PureComponent<Props> {
       issueNames = Truncate.arrayT(issueNames, this.props.maxIssuesCount);
 
       return (
-        <div>
-          {<h3>Issues</h3>}
+        <React.Fragment>
+          <h3>Issues</h3>
           <ul>
             {issueNames.map((issueName: string, i: number) => (
               <li key={i}>{issueName}</li>
             ))}
           </ul>
-        </div>
+        <React.Fragment>
       );
     }
     else {
-      return(null);
+      return null;
     }
   }
   _renderSubInfo(): React$Node {
