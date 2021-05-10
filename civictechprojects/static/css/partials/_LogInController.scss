@@ -26,18 +26,15 @@
   background-color: $color-green;
   border: none;
   border-radius: 5px;
-  color: $color-text-light;
+  color: $color-text-dark;
   cursor: pointer;
   font-size: 19px;
   height: 42px;
   width: auto;
   float: right;
 }
-
-.LogInController-signInButton:disabled {
-  background-color: $color-grey-disabled;
-  cursor: no-drop;
-  float: right;
+.LogInController-signInButton:hover, .LogInController-signInButton:active {
+  background-color: $color-green-dark;
 }
 
 .LogInController-bottomSection {
