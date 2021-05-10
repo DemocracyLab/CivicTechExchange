@@ -1,5 +1,8 @@
-//create an XXL viewport (grid breakpoint and container)
+// this file is for overriding bootstrap variable declarations ($var-name) ONLY
+// overriding style rules outside that scope should go into global.scss
 
+
+//create an XXL viewport (grid breakpoint and container)
 $grid-breakpoints: (
   // Extra small screen / phone
     xs: 0,
@@ -47,3 +50,4 @@ $enable-caret: false;
 
 // change carousel control colors for our theme, not default near-white
 $carousel-control-color: #c4c4c4;
+

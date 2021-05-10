@@ -1,87 +1,3 @@
-// BEGIN OVERRIDES
-// these pieces will likely be replaced wholesale upon refactors
-
-// font overrides (remove this when we make them globally changed, hopefully apr-2021
-.corporate-root {
-  line-height: 1.618;
-  font-size: 15px;
-  //then specifically, to fit some edge cases
-  p,
-  div,
-  span,
-  li,
-  a {
-    line-height: 1.618;
-  }
-  h1,
-  .size-h1 {
-    font-size: 27px;
-  }
-  h2,
-  .size-h2 {
-    font-size: 21px;
-  }
-  h3,
-  .size-h3 {
-    font-size: 17px;
-  }
-  h4,
-  .size-h4 {
-    font-size: 15px;
-    font-weight: 600;
-  }
-  p,
-  div,
-  span,
-  li,
-  a {
-    font-size: 15px;
-  }
-  .overline {
-    font-size: 13px;
-  }
-}
-@include media-breakpoint-up(md) {
-  .corporate-root {
-    font-size: 16px;
-    line-height: 1.618;
-    p,
-    div,
-    span,
-    li,
-    a {
-      line-height: 1.5;
-    }
-    h1,
-    .size-h1 {
-      font-size: 39px;
-    }
-    h2,
-    .size-h2 {
-      font-size: 23px;
-    }
-    h3,
-    .size-h3 {
-      font-size: 19px;
-    }
-    h4,
-    .size-h4 {
-      font-size: 16px;
-      font-weight: 500;
-    }
-    p,
-    div,
-    span,
-    li,
-    a {
-      font-size: 16px;
-    }
-  }
-}
-.corporate-root .carousel-link {
-  @extend .size-h2;
-}
-
 // edge-to-edge class schema, temporary for now: https://gist.github.com/JayHoltslander/e464ac3ac8f3814999a9
 // TODO: update splash screen component to accept gradient overlays, heights based on image
 .container > .corporate-edge {
@@ -175,6 +91,9 @@
   }
   .carousel-blog-root {
     margin-bottom: 2rem;
+  }
+  .carousel-link {
+    @extend .h2;
   }
   .corporate-top {
     padding-top: 2rem;
@@ -295,7 +214,7 @@
   margin: 0 20px;
   text-justify: center;
   h4 {
-    @extend .size-h1;
+    @extend .h1;
     color: $color-orange;
   }
   h4,
@@ -359,6 +278,7 @@
       padding: 15px;
     }
   }
+      
   .corporate-root {
     .ContactForm-container {
       display: flex;

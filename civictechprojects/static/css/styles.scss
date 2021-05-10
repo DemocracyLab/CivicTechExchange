@@ -33,6 +33,9 @@
 @import "vendor/react-datepicker/_react-datepicker";
 @import "vendor/react-image-crop/ReactCrop";
 
+// import DemocracyLab global style rules before components
+@import "partials/Global";
+
 //import DemocracyLab component partials
 @import "partials/AboutGroupDisplay";
 @import "partials/AboutUs";
@@ -72,7 +75,6 @@
 @import "partials/AlertHeader";
 @import "partials/SignedUpController";
 @import "partials/DonateController";
-@import "partials/Global";
 @import "partials/ThankYouController";
 @import "partials/Press";
 @import "partials/SocialFooter";

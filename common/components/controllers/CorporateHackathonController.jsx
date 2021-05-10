@@ -271,13 +271,13 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="carousel-blog-root">
             <BlogCarousel tag="partner-highlights" interval={600000} />
           </div>
-          <p className="size-h2">
+          <p className="h2">
             Read about other previous events in our{" "}
-            <a className="size-h2" href={window.BLOG_URL} target="_blank">
+            <a className="h2" href={window.BLOG_URL} target="_blank">
               blog
             </a>
             , or other events that are coming up{" "}
-            <a className="size-h2" href={url.section(Section.FindEvents)}>
+            <a className="h2" href={url.section(Section.FindEvents)}>
               here
             </a>
             .
@@ -411,13 +411,13 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="carousel-blog-root">
             <BlogCarousel tag="hackathon-highlights" interval={600000} />
           </div>
-          <p className="size-h2">
+          <p className="h2">
             Read about other previous events in our{" "}
-            <a className="size-h2" href={window.BLOG_URL} target="_blank">
+            <a className="h2" href={window.BLOG_URL} target="_blank">
               blog
             </a>
             , or other events that are coming up{" "}
-            <a className="size-h2" href="/events">
+            <a className="h2" href="/events">
               here
             </a>
             .

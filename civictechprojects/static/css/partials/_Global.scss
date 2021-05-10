@@ -108,3 +108,97 @@ input[type="submit"]:disabled {
   left: 0.5em;
   margin-right: -21%;
 }
+
+// ======================== design system rules ========================
+// font declarations (May 2021)
+// mobile font declarations
+html,
+body {
+  line-height: 1.618;
+}
+html {
+  font-size: 16px; // so rem calculations stay the same
+}
+body {
+  font-size: 15px; // base font size for mobile
+}
+h1,
+.h1 {
+  font-size: 27px;
+}
+h2,
+.h2 {
+  font-size: 21px;
+}
+h3,
+.h3 {
+  font-size: 17px;
+}
+h4,
+.h4 {
+  font-size: 15px;
+  font-weight: 600; // semibold
+}
+h1,
+h2,
+h3,
+h4,
+.h1,
+.h2,
+.h3,
+.h4 {
+  font-weight: 500; // medium
+}
+.overline {
+  font-size: 13px;
+}
+
+// .btn {
+// font-size: 15px;
+// font-weight: 600; // semibold
+// }
+
+//desktop declarations
+@include media-breakpoint-up(lg) {
+  html,
+  body {
+    line-height: 1.5;
+  }
+  body {
+    font-size: 16px;
+  }
+  h1,
+  .h1 {
+    font-size: 39px;
+  }
+  h2,
+  .h2 {
+    font-size: 23px;
+  }
+  h3,
+  .h3 {
+    font-size: 19px;
+  }
+  h4,
+  .h4 {
+    font-size: 16px;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  .h1,
+  .h2,
+  .h3,
+  .h4 {
+    font-weight: 500; // medium
+  }
+  .overline {
+    font-size: 13px;
+  }
+
+  // .btn {
+  // font-size: 16px;
+  // font-weight: 600;
+  // }
+}
