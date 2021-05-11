@@ -150,7 +150,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     return (
       <div className="row about-us-ps">
         <hr />
-        <div className="about-us-show-md-up col-12 col-md-6 about-us-ps-image">
+        <div className="d-none d-md-block col-12 col-md-6 about-us-ps-image">
           <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)}></img>
         </div>
         <div className="col-12 col-md-6">
@@ -161,7 +161,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
               in the world.
             </p>
           </div>
-          <div className="about-us-show-sm-down col-12 col-md-6 about-us-ps-image">
+          <div className="d-md-none col-12 col-md-6 about-us-ps-image">
             <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)}></img>
           </div>
           <div className="about-us-ps-solution">
