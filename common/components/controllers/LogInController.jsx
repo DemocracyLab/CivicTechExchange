@@ -123,7 +123,7 @@ class LogInController extends React.Component<Props, State> {
                 </a>
               </span>
               <Button
-                variant="primary"
+                variant="login"
                 className="LogInController-signInButton"
                 type="submit"
                 onClick={handleSubmit}
