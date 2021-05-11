@@ -86,7 +86,8 @@
     "node-fetch": "^2.6.1",
     "node-forge": "^0.10.0",
     "yargs-parser": "^5.0.0-security.0",
-    "ssri": "^6.0.2"
+    "ssri": "^6.0.2",
+    "url-parse": "^1.5.1"
   },
   "jest": {
     "automock": false,
