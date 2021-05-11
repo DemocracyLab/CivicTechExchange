@@ -87,7 +87,8 @@
     "node-forge": "^0.10.0",
     "yargs-parser": "^5.0.0-security.0",
     "ssri": "^6.0.2",
-    "url-parse": "^1.5.1"
+    "url-parse": "^1.5.1",
+    "ua-parser-js": "^0.7.28"
   },
   "jest": {
     "automock": false,
