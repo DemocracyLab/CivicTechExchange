@@ -19,23 +19,13 @@
 .LogInController-greeting {
   margin-bottom: 27px;
   min-width: 200px;
+  text-transform: uppercase;
 }
 
 .LogInController-signInButton {
-  background-color: $color-green;
-  border: none;
-  border-radius: 5px;
-  color: $color-text-light;
-  cursor: pointer;
   font-size: 19px;
   height: 42px;
   width: auto;
-  float: right;
-}
-
-.LogInController-signInButton:disabled {
-  background-color: $color-grey-disabled;
-  cursor: no-drop;
   float: right;
 }
 
