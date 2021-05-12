@@ -32,3 +32,21 @@
 .create-form-project-example {
   padding-left: 0.5rem;
 }
+
+// quick fix to create's preview view having nested containers (thus, nested gutters)
+// TODO: fix this properly so preview is 100% accurate, removing these rules
+@include media-breakpoint-up(lg) {
+  .create-form .Profile-primary-container {
+    width: 550px;
+  }
+}
+@include media-breakpoint-up(xl) {
+  .create-form .Profile-primary-container {
+    width: 690px;
+  }
+}
+@include media-breakpoint-up(xxl) {
+  .create-form .Profile-primary-container {
+    width: 902px;
+  }
+}

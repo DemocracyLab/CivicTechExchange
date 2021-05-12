@@ -85,7 +85,6 @@ class GroupCard extends React.PureComponent<Props> {
   _renderIssueAreas(): React$Node {
     return (
       <div className="ProjectCard-skills">
-        <h3>Issues</h3>
         {this._generateIssueList()}
       </div>
     );
@@ -95,18 +94,28 @@ class GroupCard extends React.PureComponent<Props> {
     let issueNames: $ReadOnlyArray<string> = Sort.byCountDictionary(
       this.props.group.group_issue_areas
     );
-    issueNames = issueNames.map(
-      (issueName: string) => this.props.tagDictionary[issueName].display_name
-    );
-    issueNames = Truncate.arrayT(issueNames, this.props.maxIssuesCount);
 
-    return (
-      <ul>
-        {issueNames.map((issueName: string, i: number) => (
-          <li key={i}>{issueName}</li>
-        ))}
-      </ul>
-    );
+    if (!_.isEmpty(issueNames)) {
+
+      issueNames = issueNames.map(
+        (issueName: string) => this.props.tagDictionary[issueName].display_name
+      );
+      issueNames = Truncate.arrayT(issueNames, this.props.maxIssuesCount);
+
+      return (
+        <React.Fragment>
+          <h3>Issues</h3>
+          <ul>
+            {issueNames.map((issueName: string, i: number) => (
+              <li key={i}>{issueName}</li>
+            ))}
+          </ul>
+        </React.Fragment>
+      );
+    }
+    else {
+      return null;
+    }
   }
   _renderSubInfo(): React$Node {
     const group: GroupTileAPIData = this.props.group;
