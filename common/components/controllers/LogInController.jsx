@@ -54,7 +54,7 @@ class LogInController extends React.Component<Props, State> {
     return (
       <div className="LogInController-root">
         <div className="LogInController-greeting">
-          <h4>Welcome back. Log into your account</h4>
+          <h4 className="text-uppercase">Welcome back. Log into your account</h4>
         </div>
 
         <Form
