@@ -1,7 +1,6 @@
 // this file is for overriding bootstrap variable declarations ($var-name) ONLY
 // overriding style rules outside that scope should go into global.scss
 
-
 //create an XXL viewport (grid breakpoint and container)
 $grid-breakpoints: (
   // Extra small screen / phone
@@ -28,7 +27,7 @@ $container-max-widths: (
     xl: 1140px,
   // 12 col @ 95px/ea inc. gutters
     xxl: 1392px,
-  // 12 col @ 116px/ea inc. gutters
+  // 12 col @ 116px/ea inc. gutters,
 );
 
 //define our font stack
@@ -43,7 +42,7 @@ $theme-colors: (
   "danger": #e4100e,
   "info": #107fb0,
   "cta": #b1d3fb,
-  "login": #86c232
+  "login": #86c232,
 );
 
 //disables dropdown caret by default
@@ -52,3 +51,11 @@ $enable-caret: false;
 // change carousel control colors for our theme, not default near-white
 $carousel-control-color: #c4c4c4;
 
+// declare design system header values
+// these values are for **mobile** and are overwritten via mediaquery for desktop in global.scss
+// TODO: determine if there's a better solution for this than SASS maps, see: https://stackoverflow.com/a/56894640 and implement if needed
+$font-size-base: 1rem; // Assumes the browser default, typically `16px`
+$h1-font-size: $font-size-base * 1.6875; // 27px
+$h2-font-size: $font-size-base * 1.3125; // 21px
+$h3-font-size: $font-size-base * 1.0625; // 21px
+$h4-font-size: $font-size-base * 0.9375; // 15px
