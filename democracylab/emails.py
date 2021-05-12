@@ -424,7 +424,7 @@ def send_email(email_msg, email_acct=None):
         email_msg.subject = test_email_subject
         email_msg.body = test_email_body
         email_msg.to = [settings.ADMIN_EMAIL]
-        email_msg.cc = ["thisIsADummyEmailAddress",]
+        email_msg.cc = []
         if settings.EMAIL_SUPPORT_ACCT:
             email_msg.connection = settings.EMAIL_SUPPORT_ACCT['connection']
     email_msg.send()
