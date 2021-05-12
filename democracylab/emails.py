@@ -419,7 +419,7 @@ def send_email(email_msg, email_acct=None):
             environment=settings.PROTOCOL_DOMAIN,
             to_line=email_msg.to,
             reply_to=email_msg.reply_to,
-            body=email_msg.body
+            body=email_msg.body,
             cc=email_msg.cc
         )
         email_msg.subject = test_email_subject
