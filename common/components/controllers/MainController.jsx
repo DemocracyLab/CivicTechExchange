@@ -7,6 +7,7 @@ import React from "react";
 import MainFooter from "../chrome/MainFooter.jsx";
 import SocialFooter from "../chrome/SocialFooter.jsx";
 import url from "../../components/utils/url.js";
+import { loadHeap } from "../utils/heapApi.js";
 
 type State = {|
   headerHeight: number,

@@ -130,7 +130,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
                 confirmProcessingButtonText="Confirming"
                 maxCharacterCount={3000}
                 requireMessage={false}
-                onConfirm={this.confirmLeaveProject.bind(this)}
+                onSelection={this.confirmLeaveProject.bind(this)}
                 onConfirmOperationComplete={() =>
                   this.setState({
                     showLeaveProjectModal: false,

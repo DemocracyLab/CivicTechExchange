@@ -248,7 +248,9 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="corporate-how-after">
             <Button
               variant="cta"
-              href="#contact"
+              href={cdn.document(
+                "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
+              )}
               className="corporate-cta-button"
             >
               Learn More
@@ -386,7 +388,9 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="corporate-sponsorship-how-button">
             <Button
               variant="cta"
-              href="#contact"
+              href={cdn.document(
+                "2021+DemocracyLab+Sponsorship+Prospectus.pdf"
+              )}
               className="corporate-cta-button"
             >
               Learn More
