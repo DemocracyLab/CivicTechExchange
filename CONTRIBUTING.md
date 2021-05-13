@@ -24,7 +24,7 @@ Our [Slack](https://join.slack.com/t/democracylab-org/shared_invite/enQtMjY3OTQ1
    git checkout <feature branch>
    git merge master
    ```
-3. Resolve any merge conflicts if they exist, then test to make sure your feature branch still works correctly. Please make sure your PR includes the `bundle.js` file (it's required for deployment) and then `git push origin <feature branch>`
+3. Resolve any merge conflicts if they exist, test to make sure your feature branch still works correctly, and then `git push origin <feature branch>`
 4. On Github, create a pull request from your feature branch. Make sure to summarize your changes you made, and if there's anything specific you want reviewed or tested, note that in the PR.
 5. Post in Slack (in `#developers`) that your PR is ready for review! All pull requests must be reviewed and approved prior to merging. If any changes are requested, those will be made through the Github review system.
 6. When approved, your branch will be merged into master and you're done! Thanks for contributing! :)
