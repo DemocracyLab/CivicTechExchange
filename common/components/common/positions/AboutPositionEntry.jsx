@@ -86,7 +86,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
 
   _renderHeader(): ?React$Node {
     const headerText: string = tagOptionDisplay(this.props.position.roleTag);
-    return <h3 className="form-group subheader">{headerText}</h3>;
+    return <h3 className="form-group">{headerText}</h3>;
   }
 }
 
