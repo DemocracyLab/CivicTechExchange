@@ -5,6 +5,9 @@
 .RecentProjects-button {
   text-align: center;
 }
+.RecentProjects-title h2 {
+  margin-bottom: 1rem;
+}
 .RecentProjects-button {
   padding: 10px 0 0 0; /* push button away from cards a bit */
 }
@@ -94,6 +97,9 @@
 }
 .LandingController-testimonial-container {
   margin-bottom: 20px;
+  h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
 }
 
 .LandingController-partnersinaction {
@@ -101,7 +107,7 @@
   background-color: $color-background-light;
 }
 .LandingController-partnersinaction h2 {
-  margin-bottom: 20px;
+  margin: 1rem 0 1.5rem 0;
 }
 .LandingController-partnersinaction-logo img {
   width: 150px;

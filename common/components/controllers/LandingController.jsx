@@ -169,7 +169,7 @@ class LandingController extends React.PureComponent<{||}> {
   _renderTestimonials() {
     return (
       <div className="LandingController-testimonial-container carousel-testimonial-root ">
-        <h2 className="text-center">Testimonials</h2>
+        <h2 className="text-center h1">Testimonials</h2>
         <TestimonialCarousel interval={15000} />
       </div>
     );

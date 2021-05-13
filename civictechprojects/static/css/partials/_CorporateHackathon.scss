@@ -55,6 +55,7 @@
 // corporate page (hackathons and sponsorships)
 .corporate-root {
   // nav and some others in here for specificity
+  // nav acts as section headers but is difficult to @extend h2, so fonts set specifically here
   .nav {
     justify-content: space-evenly;
   }
