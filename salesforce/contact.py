@@ -1,4 +1,4 @@
-from client import SalesforceClient
+from .client import SalesforceClient
 import json
 import requests
 import threading

@@ -28,7 +28,7 @@ class SalesforceClient:
             raise Exception("This class is a singleton - use getInstance()")
         else:
             SalesforceClient.__instance = self
-            self.initialize_session(self)
+            self.initialize_session()
 
     """ Session provides Authorization header for all requests """
     def initialize_session(self):
