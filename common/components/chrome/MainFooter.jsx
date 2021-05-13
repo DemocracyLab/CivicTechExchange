@@ -41,14 +41,14 @@ class MainFooter extends React.Component<{||}> {
           <div className="MainFooter-border"></div>
           <div className="MainFooter-footer container">
             <div className="MainFooter-item col-12 text-center">
-              <h3>Made Possible With Generous Support From</h3>
+              <h2>Made Possible With Generous Support From</h2>
               <img
                 src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png"
                 alt="Bill and Melinda Gates Foundation logo"
               ></img>
             </div>
             <div className="MainFooter-item col-12 text-center">
-              <h3>And Our Corporate Partners</h3>
+              <h2>And Our Corporate Partners</h2>
               <Button
                 variant="primary"
                 href={url.section(Section.Companies, {
@@ -78,9 +78,9 @@ class MainFooter extends React.Component<{||}> {
     if (!_.isEmpty(sdata)) {
       return (
         <React.Fragment>
-          <h3 className="MainFooter-sponsor-header text-center side-lines">
+          <h2 className="MainFooter-sponsor-header text-center side-lines">
             {category}
-          </h3>
+          </h2>
           <div className="MainFooter-sponsor-wrapper">
             {sdata.map((sponsor: SponsorMetadata, i: number) => {
               return (
