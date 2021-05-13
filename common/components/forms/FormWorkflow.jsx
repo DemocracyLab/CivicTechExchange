@@ -23,6 +23,7 @@ export type FormWorkflowStepConfig<T> = {|
 
 type Props<T> = {|
   steps: $ReadOnlyArray<FormWorkflowStepConfig>,
+  startStep: number,
   formFields: T,
   isLoading: boolean,
 |};
@@ -49,7 +50,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
     super(props);
     this.formRef = React.createRef();
     this.state = {
-      currentStep: 0,
+      currentStep: props.startStep ? props.startStep - 1 : 0,
       formIsValid: false,
       fieldsUpdated: false,
       savedEmblemVisible: false,
@@ -64,6 +65,15 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
     this.onSubmit = _.debounce(this.onSubmit.bind(this), 1000, {
       leading: true,
     });
+  }
+
+  componentWillReceiveProps(nextProps: Props): void {
+    if (!_.isNil(nextProps.startStep)) {
+      const newStep: number = nextProps.startStep - 1;
+      if (newStep !== this.state.currentStep) {
+        this.navigateToStep(newStep);
+      }
+    }
   }
 
   navigateToStep(step: number): void {

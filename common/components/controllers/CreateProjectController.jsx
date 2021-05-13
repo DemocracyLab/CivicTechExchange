@@ -27,6 +27,7 @@ type State = {|
   projectId: ?number,
   project: ?ProjectDetailsAPIData,
   steps: $ReadOnlyArray<FormWorkflowStepConfig>,
+  startStep: ?number,
 |};
 
 /**
@@ -41,6 +42,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     this.onFinalSubmitSuccess = this.onFinalSubmitSuccess.bind(this);
     this.state = {
       projectId: projectId,
+      startStep: 0,
       steps: [
         {
           header: "Let's get started!",
@@ -120,6 +122,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
       this.setState({
         project: project,
         projectIsLoading: false,
+        startStep: url.argument("step") || 1,
       });
     }
   }
@@ -178,6 +181,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
               {CurrentUser.isEmailVerified() ? (
                 <FormWorkflow
                   steps={this.state.steps}
+                  startStep={this.state.startStep}
                   isLoading={this.state.projectId && !this.state.project}
                   formFields={this.state.project}
                 />
