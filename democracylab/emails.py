@@ -415,7 +415,7 @@ def send_email(email_msg, email_acct=None):
         email_msg.connection = email_acct['connection'] if email_acct is not None else settings.EMAIL_SUPPORT_ACCT['connection']
     else:
         test_email_subject = 'TEST EMAIL: ' + email_msg.subject
-        test_email_body = '<!--\n Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\n -->\nCC: {cc}\n{body}'.format(
+        test_email_body = '<!--\n Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\nCC: {cc}\n-->\n{body}'.format(
             environment=settings.PROTOCOL_DOMAIN,
             to_line=email_msg.to,
             reply_to=email_msg.reply_to,
