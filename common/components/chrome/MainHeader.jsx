@@ -215,7 +215,7 @@ class MainHeader extends React.Component<{||}, State> {
       classes += " MainHeader-active";
     }
     return (
-      <Nav.Link className={classes} href={url.section(section)}>
+      <Nav.Link className={classes} href={url.section(section)} key={section}>
         {text}
       </Nav.Link>
     );
@@ -225,7 +225,7 @@ class MainHeader extends React.Component<{||}, State> {
       classes += " MainHeader-active";
     }
     return (
-      <NavDropdown.Item className={classes} href={url.section(section)}>
+      <NavDropdown.Item className={classes} href={url.section(section)} key={section}>
         {text}
       </NavDropdown.Item>
     );
