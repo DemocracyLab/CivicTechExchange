@@ -63,6 +63,11 @@ class PositionList extends React.PureComponent<Props, State> {
     this.openModal(position);
   }
 
+  toggleVisibility(position: PositionInfo): void {
+    position.isHidden = !position.isHidden;
+    this.setState({ position: position }, this.updatePositionsField);
+  }
+
   savePosition(position: PositionInfo): void {
     if (!this.state.existingPosition) {
       this.state.positions.push(position);
@@ -180,6 +185,11 @@ class PositionList extends React.PureComponent<Props, State> {
           className={GlyphStyles.Edit}
           aria-hidden="true"
           onClick={this.editPosition.bind(this, position)}
+        ></i>
+        <i
+          className={GlyphStyles.Eye + (position.isHidden ? " dim" : "")}
+          aria-hidden="true"
+          onClick={this.toggleVisibility.bind(this, position)}
         ></i>
         <i
           className={GlyphStyles.Delete}

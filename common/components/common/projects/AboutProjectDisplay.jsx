@@ -421,6 +421,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       project &&
       project.project_positions &&
       _.chain(project.project_positions)
+        .filter(position => !position.isHidden)
         .sortBy(["orderNumber", "id"])
         .value()
         .map((position, i) => {
