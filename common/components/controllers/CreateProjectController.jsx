@@ -159,6 +159,10 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
   }
 
   onFinalSubmitSuccess(project: ProjectDetailsAPIData): void {
+    this.setState({
+      project: project,
+      projectId: project.project_id,
+    });
     metrics.logProjectCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
     window.location.href = url.section(Section.MyProjects, {

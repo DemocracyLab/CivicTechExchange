@@ -218,7 +218,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 <div className="AboutProject-skills">
                   <h4>Skills Needed</h4>
                   {project.project_positions.map(position => (
-                    <span className="Profile-pill" key={position.roleTag.tag_name}>
+                    <span
+                      className="Profile-pill"
+                      key={position.roleTag.tag_name}
+                    >
                       {position.roleTag.display_name}
                     </span>
                   ))}
@@ -229,7 +232,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 <div className="AboutProject-technologies">
                   <h4>Technologies Used</h4>
                   {project.project_technologies.map(tech => (
-                    <span className="Profile-pill" key={tech.tag_name}>{tech.display_name}</span>
+                    <span className="Profile-pill" key={tech.tag_name}>
+                      {tech.display_name}
+                    </span>
                   ))}
                 </div>
               )}
@@ -416,7 +421,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       project &&
       project.project_positions &&
       _.chain(project.project_positions)
-        .sortBy(["roleTag.subcategory", "roleTag.display_name"])
+        .sortBy(["orderNumber", "id"])
         .value()
         .map((position, i) => {
           return (
