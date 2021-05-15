@@ -45,7 +45,10 @@ class PositionList extends React.PureComponent<Props, State> {
   }
 
   savePositionOrdering(positions: $ReadOnlyArray<PositionInfo>): void {
-    this.setState({ positions: positions });
+    for (let i = 0; i < positions.length; ++i) {
+      positions[i].orderNumber = i;
+    }
+    this.setState({ positions: positions }, this.updatePositionsField);
   }
 
   createNewPosition(): void {
@@ -63,6 +66,7 @@ class PositionList extends React.PureComponent<Props, State> {
   savePosition(position: PositionInfo): void {
     if (!this.state.existingPosition) {
       this.state.positions.push(position);
+      this.savePositionOrdering(this.state.positions);
     } else {
       _.assign(this.state.existingPosition, position);
     }
@@ -73,7 +77,10 @@ class PositionList extends React.PureComponent<Props, State> {
   }
 
   updatePositionsField(): void {
-    this.refs.hiddenFormField.value = JSON.stringify(this.state.positions);
+    if (this.refs && this.refs.hiddenFormField && this.state.positions) {
+      const fieldValue: string = JSON.stringify(this.state.positions);
+      this.refs.hiddenFormField.value = fieldValue;
+    }
   }
 
   openModal(position: ?PositionInfo): void {
