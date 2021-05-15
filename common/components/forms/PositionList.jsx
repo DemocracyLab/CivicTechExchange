@@ -2,6 +2,7 @@
 
 import React from "react";
 import Button from "react-bootstrap/Button";
+import { ReactSortable } from "react-sortablejs";
 
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import { PositionInfo } from "./PositionInfo.jsx";
@@ -41,6 +42,10 @@ class PositionList extends React.PureComponent<Props, State> {
       this.setState({ positions: nextProps.positions || [] });
       this.updatePositionsField();
     }
+  }
+
+  savePositionOrdering(positions: $ReadOnlyArray<PositionInfo>): void {
+    this.setState({ positions: positions });
   }
 
   createNewPosition(): void {
@@ -85,6 +90,7 @@ class PositionList extends React.PureComponent<Props, State> {
     });
   }
 
+  // TODO: Fix deleted positions popping back on the page as we proceed to next page
   confirmDelete(confirmed: boolean): void {
     if (confirmed) {
       this.state.positions.splice(this.state.positionToDelete, 1);
@@ -134,35 +140,47 @@ class PositionList extends React.PureComponent<Props, State> {
   }
 
   _renderPositions(): Array<React$Node> {
-    return this.state.positions.map((position, i) => {
-      const positionDisplay =
-        position.roleTag.subcategory + ":" + position.roleTag.display_name;
-      return (
-        <div key={i}>
-          {position.descriptionUrl ? (
-            <a
-              href={position.descriptionUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {positionDisplay}
-            </a>
-          ) : (
-            <span>{positionDisplay}</span>
-          )}
-          <i
-            className={GlyphStyles.Edit}
-            aria-hidden="true"
-            onClick={this.editPosition.bind(this, position)}
-          ></i>
-          <i
-            className={GlyphStyles.Delete}
-            aria-hidden="true"
-            onClick={this.askForDeleteConfirmation.bind(this, i)}
-          ></i>
-        </div>
-      );
-    });
+    return (
+      <ReactSortable
+        list={this.state.positions}
+        setList={this.savePositionOrdering.bind(this)}
+      >
+        {this.state.positions.map((position: PositionInfo, i: number) =>
+          this._renderPosition(position, i)
+        )}
+      </ReactSortable>
+    );
+  }
+
+  _renderPosition(position: PositionInfo, i: number): React$Node {
+    const positionDisplay =
+      position.roleTag.subcategory + ":" + position.roleTag.display_name;
+    const id: string = position.id || positionDisplay;
+    return (
+      <div key={id}>
+        {position.descriptionUrl ? (
+          <a
+            href={position.descriptionUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {positionDisplay}
+          </a>
+        ) : (
+          <span>{positionDisplay}</span>
+        )}
+        <i
+          className={GlyphStyles.Edit}
+          aria-hidden="true"
+          onClick={this.editPosition.bind(this, position)}
+        ></i>
+        <i
+          className={GlyphStyles.Delete}
+          aria-hidden="true"
+          onClick={this.askForDeleteConfirmation.bind(this, i)}
+        ></i>
+      </div>
+    );
   }
 }
 
