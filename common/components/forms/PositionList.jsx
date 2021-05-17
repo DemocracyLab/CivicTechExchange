@@ -170,33 +170,37 @@ class PositionList extends React.PureComponent<Props, State> {
     const id: string = position.id || positionDisplay;
     return (
       <div className="PositionList-entry" key={id}>
-        <i className={GlyphStyles.Grip} aria-hidden="true"></i>
-        {position.descriptionUrl ? (
-          <a
-            href={position.descriptionUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {positionDisplay}
-          </a>
-        ) : (
-          <span>{positionDisplay}</span>
-        )}
-        <i
-          className={GlyphStyles.Edit}
-          aria-hidden="true"
-          onClick={this.editPosition.bind(this, position)}
-        ></i>
-        <i
-          className={GlyphStyles.Eye + (position.isHidden ? " dim" : "")}
-          aria-hidden="true"
-          onClick={this.toggleVisibility.bind(this, position)}
-        ></i>
-        <i
-          className={GlyphStyles.Delete}
-          aria-hidden="true"
-          onClick={this.askForDeleteConfirmation.bind(this, i)}
-        ></i>
+        <div className="left-side">
+          <i className={GlyphStyles.Grip + " grip"} aria-hidden="true"></i>
+          {position.descriptionUrl ? (
+            <a
+              href={position.descriptionUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {positionDisplay}
+            </a>
+          ) : (
+            <span>{positionDisplay}</span>
+          )}
+        </div>
+        <div className="right-side">
+          <i
+            className={GlyphStyles.Edit}
+            aria-hidden="true"
+            onClick={this.editPosition.bind(this, position)}
+          ></i>
+          <i
+            className={GlyphStyles.Eye + (position.isHidden ? " dim" : "")}
+            aria-hidden="true"
+            onClick={this.toggleVisibility.bind(this, position)}
+          ></i>
+          <i
+            className={GlyphStyles.Delete}
+            aria-hidden="true"
+            onClick={this.askForDeleteConfirmation.bind(this, i)}
+          ></i>
+        </div>
       </div>
     );
   }
