@@ -41,6 +41,7 @@ export const GlyphStyles: { [key: string]: string } = {
   Calendar: "far fa-calendar", // https://fontawesome.com/icons/calendar?style=regular
   Users: "fas fa-users", // https://fontawesome.com/icons/users?style=solid
   PDF: "far fa-file-pdf", // https://fontawesome.com/icons/file-pdf?style=regular
+  Grip: "fas fa-grip-vertical", // https://fontawesome.com/icons/grip-vertical?style=solid
 };
 
 export const GlyphSizes: { [key: string]: string } = {

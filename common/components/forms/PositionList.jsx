@@ -170,6 +170,7 @@ class PositionList extends React.PureComponent<Props, State> {
     const id: string = position.id || positionDisplay;
     return (
       <div key={id}>
+        <i className={GlyphStyles.Grip} aria-hidden="true"></i>
         {position.descriptionUrl ? (
           <a
             href={position.descriptionUrl}
