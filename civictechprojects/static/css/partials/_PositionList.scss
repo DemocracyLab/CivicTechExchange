@@ -11,6 +11,9 @@
   i {
     cursor: pointer;
   }
+  i:hover {
+    color:$color-orange;
+  }
 }
 
 i.dim {
@@ -20,6 +23,9 @@ i.dim {
 i.grip {
   color:$color-grey-disabled;
   padding-right: 5px;
+}
+i.grip:hover {
+  color:$color-grey-disabled;
 }
 
 .right-side {
