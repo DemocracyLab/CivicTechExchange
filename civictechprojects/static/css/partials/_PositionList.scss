@@ -6,6 +6,11 @@
   max-width: 600px;
   display: flex;
   justify-content: space-between;
+  cursor: grab;
+
+  i {
+    cursor: pointer;
+  }
 }
 
 i.dim {
