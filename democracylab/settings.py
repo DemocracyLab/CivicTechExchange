@@ -451,3 +451,12 @@ GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH', '')
 PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
+
+# Ghost blog configs
+DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
+
+GHOST_URL = os.environ.get('GHOST_URL', '')
+GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '')
+
+if GHOST_URL:
+    CSP_CONNECT_SRC = CSP_CONNECT_SRC + (GHOST_URL,)
