@@ -166,23 +166,13 @@ class PositionList extends React.PureComponent<Props, State> {
 
   _renderPosition(position: PositionInfo, i: number): React$Node {
     const positionDisplay =
-      position.roleTag.subcategory + ":" + position.roleTag.display_name;
+      position.roleTag.subcategory + ": " + position.roleTag.display_name;
     const id: string = position.id || positionDisplay;
     return (
       <div className="PositionList-entry" key={id}>
         <div className="left-side">
           <i className={GlyphStyles.Grip + " grip"} aria-hidden="true"></i>
-          {position.descriptionUrl ? (
-            <a
-              href={position.descriptionUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {positionDisplay}
-            </a>
-          ) : (
-            <span>{positionDisplay}</span>
-          )}
+          <span>{positionDisplay}</span>
         </div>
         <div className="right-side">
           <i
