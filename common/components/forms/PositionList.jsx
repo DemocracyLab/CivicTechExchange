@@ -169,7 +169,7 @@ class PositionList extends React.PureComponent<Props, State> {
       position.roleTag.subcategory + ":" + position.roleTag.display_name;
     const id: string = position.id || positionDisplay;
     return (
-      <div key={id}>
+      <div className="PositionList-entry" key={id}>
         <i className={GlyphStyles.Grip} aria-hidden="true"></i>
         {position.descriptionUrl ? (
           <a
