@@ -7,7 +7,7 @@ import { ReactSortable } from "react-sortablejs";
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import { PositionInfo } from "./PositionInfo.jsx";
 import PositionEntryModal from "./PositionEntryModal.jsx";
-import GlyphStyles from "../utils/glyphs.js";
+import { Glyph, GlyphStyles, GlyphSizes } from "../utils/glyphs.js";
 import _ from "lodash";
 
 type Props = {|
@@ -171,22 +171,29 @@ class PositionList extends React.PureComponent<Props, State> {
     return (
       <div className="PositionList-entry" key={id}>
         <div className="left-side">
-          <i className={GlyphStyles.Grip + " grip"} aria-hidden="true"></i>
+          <i
+            className={Glyph(GlyphStyles.Grip, GlyphSizes.LG + " grip")}
+            aria-hidden="true"
+          ></i>
           <span>{positionDisplay}</span>
         </div>
         <div className="right-side">
           <i
-            className={GlyphStyles.Edit}
+            className={Glyph(GlyphStyles.Edit, GlyphSizes.LG)}
             aria-hidden="true"
             onClick={this.editPosition.bind(this, position)}
           ></i>
           <i
-            className={GlyphStyles.Eye + (position.isHidden ? " dim" : "")}
+            className={Glyph(
+              GlyphStyles.Eye,
+              GlyphSizes.LG,
+              position.isHidden ? " dim" : ""
+            )}
             aria-hidden="true"
             onClick={this.toggleVisibility.bind(this, position)}
           ></i>
           <i
-            className={GlyphStyles.Delete}
+            className={Glyph(GlyphStyles.Delete, GlyphSizes.LG)}
             aria-hidden="true"
             onClick={this.askForDeleteConfirmation.bind(this, i)}
           ></i>

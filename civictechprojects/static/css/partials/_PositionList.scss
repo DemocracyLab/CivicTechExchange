@@ -13,9 +13,12 @@ i.dim {
 }
 
 i.grip {
+  color:$color-grey-disabled;
   padding-right: 5px;
 }
 
 .right-side {
-  pull: right;
+  display: flex;
+  justify-content: space-between;
+  width: 80px;
 }
