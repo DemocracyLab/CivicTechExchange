@@ -156,6 +156,9 @@ class PositionList extends React.PureComponent<Props, State> {
       <ReactSortable
         list={this.state.positions}
         setList={this.savePositionOrdering.bind(this)}
+        animation={200}
+        delayOnTouchStart={true}
+        delay={2}
       >
         {this.state.positions.map((position: PositionInfo, i: number) =>
           this._renderPosition(position, i)
