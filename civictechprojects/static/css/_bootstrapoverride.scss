@@ -53,7 +53,8 @@ $carousel-control-color: #c4c4c4;
 
 // declare design system header values
 // these values are for **mobile** and are overwritten via mediaquery for desktop in global.scss
-// TODO: determine if there's a better solution for this than SASS maps, see: https://stackoverflow.com/a/56894640 and implement if needed
+// TODO: determine if we need to recompute these at breakpoints with SASS maps, see: https://stackoverflow.com/a/56894640 and implement if needed
+
 $font-size-base: 1rem; // Assumes the browser default, typically `16px`
 $h1-font-size: $font-size-base * 1.6875; // 27px
 $h2-font-size: $font-size-base * 1.3125; // 21px

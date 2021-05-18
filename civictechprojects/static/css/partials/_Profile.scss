@@ -87,7 +87,7 @@
     border: 1px solid $color-grey-frame-border;
     border-radius: 5px;
     a {
-      font-size: 18px;
+      font-size: 17px; // match mobile h3
     }
     a.nav-item.nav-link {
       color: $color-text-dark;
@@ -148,6 +148,9 @@
     .nav-tabs {
       display: flex;
       justify-content: space-around;
+      a {
+        font-size: 19px; // match desktop H3
+      }
     }
   }
   // fixed width sections prevent long URL overflow issue on group page project cards
