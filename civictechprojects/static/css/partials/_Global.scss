@@ -122,20 +122,25 @@ html {
 body {
   font-size: 15px; // base font size for mobile
 }
+// declaring .h1-h4 classes to overwrite Bootstrap, but we should only ever use the semantic headline/subtitle class names.
 h1,
-.h1 {
+.h1,
+.headline1 {
   font-size: 27px;
 }
 h2,
-.h2 {
+.h2,
+.headline2 {
   font-size: 21px;
 }
 h3,
-.h3 {
+.h3,
+.subtitle1 {
   font-size: 17px;
 }
 h4,
-.h4 {
+.h4,
+.subtitle2 {
   font-size: 15px;
   font-weight: 600; // semibold
 }
