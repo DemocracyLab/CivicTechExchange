@@ -33,3 +33,13 @@ i.grip:hover {
   justify-content: space-between;
   width: 80px;
 }
+
+.orderInstructions {
+  padding: 20px 0;
+  p {
+    margin-bottom: 0px;
+  }
+  p.dragRoleInstructions {
+    font-style: italic;
+  }
+}

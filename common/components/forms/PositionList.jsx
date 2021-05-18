@@ -133,6 +133,11 @@ class PositionList extends React.PureComponent<Props, State> {
           <i className={GlyphStyles.Add} aria-hidden="true"></i>
         </Button>
 
+        <div className="orderInstructions">
+          <p>Volunteer roles will be listed in the order shown below.</p>
+          <p className="dragRoleInstructions">Drag each role to rearrange.</p>
+        </div>
+
         {this._renderPositions()}
 
         <PositionEntryModal
@@ -166,7 +171,7 @@ class PositionList extends React.PureComponent<Props, State> {
       </ReactSortable>
     );
   }
-
+  // TODO: Make this into separate component
   _renderPosition(position: PositionInfo, i: number): React$Node {
     const positionDisplay =
       position.roleTag.subcategory + ": " + position.roleTag.display_name;
