@@ -1,0 +1,71 @@
+[1mdiff --git a/common/components/componentsBySection/FindGroups/GroupCard.jsx b/common/components/componentsBySection/FindGroups/GroupCard.jsx[m
+[1mindex 7431372a..915eb9d6 100644[m
+[1m--- a/common/components/componentsBySection/FindGroups/GroupCard.jsx[m
+[1m+++ b/common/components/componentsBySection/FindGroups/GroupCard.jsx[m
+[36m@@ -85,7 +85,6 @@[m [mclass GroupCard extends React.PureComponent<Props> {[m
+   _renderIssueAreas(): React$Node {[m
+     return ([m
+       <div className="ProjectCard-skills">[m
+[31m-        <h3>Issues</h3>[m
+         {this._generateIssueList()}[m
+       </div>[m
+     );[m
+[36m@@ -95,18 +94,28 @@[m [mclass GroupCard extends React.PureComponent<Props> {[m
+     let issueNames: $ReadOnlyArray<string> = Sort.byCountDictionary([m
+       this.props.group.group_issue_areas[m
+     );[m
+[31m-    issueNames = issueNames.map([m
+[31m-      (issueName: string) => this.props.tagDictionary[issueName].display_name[m
+[31m-    );[m
+[31m-    issueNames = Truncate.arrayT(issueNames, this.props.maxIssuesCount);[m
+ [m
+[31m-    return ([m
+[31m-      <ul>[m
+[31m-        {issueNames.map((issueName: string, i: number) => ([m
+[31m-          <li key={i}>{issueName}</li>[m
+[31m-        ))}[m
+[31m-      </ul>[m
+[31m-    );[m
+[32m+[m[32m    if (!_.isEmpty(issueNames)) {[m
+[32m+[m
+[32m+[m[32m      issueNames = issueNames.map([m
+[32m+[m[32m        (issueName: string) => this.props.tagDictionary[issueName].display_name[m
+[32m+[m[32m      );[m
+[32m+[m[32m      issueNames = Truncate.arrayT(issueNames, this.props.maxIssuesCount);[m
+[32m+[m
+[32m+[m[32m      return ([m
+[32m+[m[32m        <React.Fragment>[m
+[32m+[m[32m          <h3>Issues</h3>[m
+[32m+[m[32m          <ul>[m
+[32m+[m[32m            {issueNames.map((issueName: string, i: number) => ([m
+[32m+[m[32m              <li key={i}>{issueName}</li>[m
+[32m+[m[32m            ))}[m
+[32m+[m[32m          </ul>[m
+[32m+[m[32m        </React.Fragment>[m
+[32m+[m[32m      );[m
+[32m+[m[32m    }[m
+[32m+[m[32m    else {[m
+[32m+[m[32m      return null;[m
+[32m+[m[32m    }[m
+   }[m
+   _renderSubInfo(): React$Node {[m
+     const group: GroupTileAPIData = this.props.group;[m
+[1mdiff --git a/common/components/controllers/EditProfileController.jsx b/common/components/controllers/EditProfileController.jsx[m
+[1mindex 51c74b4e..efb1f886 100644[m
+[1m--- a/common/components/controllers/EditProfileController.jsx[m
+[1m+++ b/common/components/controllers/EditProfileController.jsx[m
+[36m@@ -68,6 +68,14 @@[m [mclass EditProfileController extends React.PureComponent<{||}, State> {[m
+       user_files: [],[m
+     };[m
+     const validations: $ReadOnlyArray<Validator<FormFields>> = [[m
+[32m+[m[32m      {[m
+[32m+[m[32m        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["first_name"]),[m
+[32m+[m[32m        errorMessage: "Please enter First Name",[m
+[32m+[m[32m      },[m
+[32m+[m[32m      {[m
+[32m+[m[32m        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["last_name"]),[m
+[32m+[m[32m        errorMessage: "Please enter Last Name",[m
+[32m+[m[32m      },[m
+       {[m
+         checkFunc: (formFields: FormFields) =>[m
+           urlHelper.isEmptyStringOrValidUrl(formFields["link_linkedin"]),[m

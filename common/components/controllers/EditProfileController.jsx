@@ -69,6 +69,14 @@ class EditProfileController extends React.PureComponent<{||}, State> {
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
+        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["first_name"]),
+        errorMessage: "Please enter First Name",
+      },
+      {
+        checkFunc: (formFields: FormFields) => !_.isEmpty(formFields["last_name"]),
+        errorMessage: "Please enter Last Name",
+      },
+      {
         checkFunc: (formFields: FormFields) =>
           urlHelper.isEmptyStringOrValidUrl(formFields["link_linkedin"]),
         errorMessage: "Please enter a valid LinkedIn URL.",
