@@ -55,6 +55,7 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
     }
   }
 
+  // TODO: Fix bug when we open this modal multiple times
   render(): React$Node {
     return (
       <ModalWrapper

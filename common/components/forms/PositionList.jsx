@@ -7,7 +7,8 @@ import { ReactSortable } from "react-sortablejs";
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import { PositionInfo } from "./PositionInfo.jsx";
 import PositionEntryModal from "./PositionEntryModal.jsx";
-import { Glyph, GlyphStyles, GlyphSizes } from "../utils/glyphs.js";
+import { GlyphStyles } from "../utils/glyphs.js";
+import PositionListEntry from "./PositionListEntry.jsx";
 import _ from "lodash";
 
 type Props = {|
@@ -165,48 +166,15 @@ class PositionList extends React.PureComponent<Props, State> {
         delayOnTouchStart={true}
         delay={2}
       >
-        {this.state.positions.map((position: PositionInfo, i: number) =>
-          this._renderPosition(position, i)
-        )}
+        {this.state.positions.map((position: PositionInfo, i: number) => (
+          <PositionListEntry
+            position={position}
+            onClickEditPosition={this.editPosition.bind(this, position)}
+            onClickToggleVisibility={this.toggleVisibility.bind(this, position)}
+            onClickDelete={this.askForDeleteConfirmation.bind(this, i)}
+          />
+        ))}
       </ReactSortable>
-    );
-  }
-  // TODO: Make this into separate component
-  _renderPosition(position: PositionInfo, i: number): React$Node {
-    const positionDisplay =
-      position.roleTag.subcategory + ": " + position.roleTag.display_name;
-    const id: string = position.id || positionDisplay;
-    return (
-      <div className="PositionList-entry" key={id}>
-        <div className="left-side">
-          <i
-            className={Glyph(GlyphStyles.Grip, GlyphSizes.LG + " grip")}
-            aria-hidden="true"
-          ></i>
-          <span>{positionDisplay}</span>
-        </div>
-        <div className="right-side">
-          <i
-            className={Glyph(GlyphStyles.Edit, GlyphSizes.LG)}
-            aria-hidden="true"
-            onClick={this.editPosition.bind(this, position)}
-          ></i>
-          <i
-            className={Glyph(
-              GlyphStyles.Eye,
-              GlyphSizes.LG,
-              position.isHidden ? " dim" : ""
-            )}
-            aria-hidden="true"
-            onClick={this.toggleVisibility.bind(this, position)}
-          ></i>
-          <i
-            className={Glyph(GlyphStyles.Delete, GlyphSizes.LG)}
-            aria-hidden="true"
-            onClick={this.askForDeleteConfirmation.bind(this, i)}
-          ></i>
-        </div>
-      </div>
     );
   }
 }
