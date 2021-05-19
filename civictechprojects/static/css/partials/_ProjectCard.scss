@@ -37,7 +37,7 @@
 .ProjectCard-subinfo ul {
   color: $color-text-grey;
   list-style-type: none;
-  font-size: 14px;
+  font-size: 14px; //TODO: standardize with font schema
   word-break: break-all; //break long items to stay in container
   padding: 0;
 }
