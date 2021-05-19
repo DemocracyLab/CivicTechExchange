@@ -10,17 +10,14 @@ type Props = {|
   onClickToggleVisibility: () => void,
   onClickDelete: () => void,
 |};
-type State = {||};
 
 /**
  * Project positions list item
  */
-class PositionListEntry extends React.PureComponent<Props, State> {
+class PositionListEntry extends React.PureComponent<Props> {
   constructor(props: Props): void {
     super(props);
   }
-
-  componentWillReceiveProps(nextProps: Props): void {}
 
   render(): React$Node {
     const position: PositionInfo = this.props.position;
