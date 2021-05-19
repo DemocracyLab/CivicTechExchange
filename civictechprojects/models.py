@@ -333,7 +333,7 @@ class Group(Archived):
             issue_area_counts = count_occurrences(all_issue_area_names)
             return issue_area_counts
         else:
-            return all_issue_area_names
+            return list(set(all_issue_area_names))
 
     def get_group_project_relationships(self, approved_only=True):
         project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
