@@ -16,6 +16,7 @@ import IconCircle1 from "../svg/corporatehackathon/corp1circle.svg";
 import IconCircle2 from "../svg/corporatehackathon/corp2circle.svg";
 import IconCircle3 from "../svg/corporatehackathon/corp3circle.svg";
 import type { Dictionary } from "../types/Generics.jsx";
+import { Glyph, GlyphStyles, GlyphSizes } from "../utils/glyphs.js";
 
 type State = {|
   defaultTab: string,
@@ -245,16 +246,15 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             After the event, DemocracyLab reports on the resulting engagement,
             outcomes, and impact.
           </p>
-          <div className="corporate-how-after">
-            <Button
-              variant="cta"
+          <div className="corporate-how-after corporate-learn-link">
+            <a 
               href={cdn.document(
                 "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
               )}
-              className="corporate-cta-button"
             >
               Learn More
-            </Button>
+              <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+            </a>
           </div>
         </div>
         <div className="corporate-hackathon-saying corporate-section col-12">
@@ -385,16 +385,16 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </p>
             </div>
           </div>
-          <div className="corporate-sponsorship-how-button">
-            <Button
-              variant="cta"
+          <div className="corporate-sponsorship-how-button corporate-learn-link">
+            <a 
               href={cdn.document(
                 "2021+DemocracyLab+Sponsorship+Prospectus.pdf"
               )}
-              className="corporate-cta-button"
             >
               Learn More
-            </Button>
+              <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+
+            </a>
           </div>
         </div>
         <div className="corporate-sponsorship-saying corporate-section col-12">
