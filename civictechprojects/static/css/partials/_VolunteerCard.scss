@@ -26,15 +26,10 @@
 
 div.VolunteerCard-dropdownButton {
   display: inline;
-  font-size: 24px;
   float: right;
 }
 .VolunteerCard-dropdownButton .btn-link {
   color: $color-text-grey;
-}
-.VolunteerCard-dropdownButton li > a {
-  font-size: 18px;
-  line-height: 1.75;
 }
 .VolunteerCard-root a.dropdown-item {
   /* overrides orange link text for the project owner's manage team member dropdown menu */

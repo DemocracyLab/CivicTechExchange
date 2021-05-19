@@ -55,7 +55,7 @@
 // corporate page (hackathons and sponsorships)
 .corporate-root {
   // nav and some others in here for specificity
-  // nav acts as section headers but is difficult to @extend h2, so fonts set specifically here
+  // nav acts as section headers but is difficult to @extend h2, so fonts set specifically here to match headline2
   .nav {
     justify-content: space-evenly;
   }
@@ -67,7 +67,7 @@
     text-align: center;
     flex-basis: calc(50% - 20px);
     color: $color-text-dark;
-    font-size: 21px;
+    font-size: 21px; // match .headline2 size (but not weight)
   }
   .nav-link,
   .nav-link:hover {
@@ -270,7 +270,7 @@
     min-height: 100%; // equal height cards when displayed in a row
   }
   .nav-tabs a {
-    font-size: 23px;
+    font-size: 23px; // match .headline2 size (but not weight)
   }
   .corporate-hr-line {
     display: block;
