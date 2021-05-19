@@ -56,7 +56,7 @@ $carousel-control-color: #c4c4c4;
 // TODO: determine if we need to recompute these at breakpoints with SASS maps, see: https://stackoverflow.com/a/56894640 and implement if needed
 
 $font-size-base: 1rem; // Assumes the browser default, typically `16px`
-$h1-font-size: $font-size-base * 1.6875; // 27px
-$h2-font-size: $font-size-base * 1.3125; // 21px
-$h3-font-size: $font-size-base * 1.0625; // 21px
-$h4-font-size: $font-size-base * 0.9375; // 15px
+$h1-font-size: $font-size-base * 1.6875; // 27px, headline1
+$h2-font-size: $font-size-base * 1.3125; // 21px, headline2
+$h3-font-size: $font-size-base * 1.0625; // 17px, subtitle1
+$h4-font-size: $font-size-base * 0.9375; // 15px, subtitle2
