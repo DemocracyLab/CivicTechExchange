@@ -5,9 +5,9 @@ import type { SectionType } from "../enums/Section.js";
 import { Container } from "flux/utils";
 import cdn from "../utils/cdn.js";
 import CurrentUser from "../utils/CurrentUser.js";
-import NavigationLinks, { NavigationLink } from "../utils/NavigationLinks.js";
+import NavigationLinks, { NavigationLink } from "../utils/NavigationLinks.js"; //TODO: Remove?
 import NavigationStore from "../stores/NavigationStore.js";
-import SectionLink from "./SectionLink.jsx";
+import SectionLink from "./SectionLink.jsx"; //TODO: Remove?
 import React from "react";
 import Section from "../enums/Section.js";
 import url from "../utils/url.js";
