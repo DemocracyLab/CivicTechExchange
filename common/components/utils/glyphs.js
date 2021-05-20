@@ -33,6 +33,7 @@ export const GlyphStyles: { [key: string]: string } = {
   EllipsisV: "fas fa-ellipsis-v", // https://fontawesome.com/icons/ellipsis-v?style=solid
   Pushpin: "fas fa-thumbtack", // https://fontawesome.com/icons/thumbtack?style=solid
   Eye: "fas fa-eye", // https://fontawesome.com/icons/eye?style=solid
+  EyeSlash: "fas fa-eye-slash", // https://fontawesome.com/icons/eye-slash?style=solid
   LoadingSpinner: "fas fa-spinner fa-spin", // https://fontawesome.com/icons/spinner?style=solid
   Envelope: "far fa-envelope", // https://fontawesome.com/icons/envelope?style=regular
   EnvelopeSolid: "fas fa-envelope", // https://fontawesome.com/icons/envelope?style=solid
