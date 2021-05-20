@@ -39,6 +39,7 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
         .onSelection(confirmation)
         .then(() => {
           this.setState({ isProcessing: false });
+          this.forceUpdate();
         });
       if (this.props.onConfirmOperationComplete) {
         confirmAction.then(this.props.onConfirmOperationComplete);

@@ -6,6 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import ConfirmationModal from "../../common/confirmation/ConfirmationModal.jsx";
 import formHelper from "../../utils/forms.js";
+import promiseHelper from "../../utils/promise.js";
 import _ from "lodash";
 
 export type ContactModalFields = {|
@@ -62,11 +63,13 @@ class ContactModal extends React.PureComponent<Props, State> {
     this.setState({ showConfirmationModal: true });
   }
 
-  receiveSendConfirmation(confirmation: boolean): void {
-    if (confirmation) {
-      this.handleSubmit();
-    }
-    this.setState({ showConfirmationModal: false });
+  receiveSendConfirmation(confirmation: boolean): Promise {
+    return promiseHelper.promisify(() => {
+      if (confirmation) {
+        this.handleSubmit();
+      }
+      this.setState({ showConfirmationModal: false });
+    });
   }
 
   handleSubmit() {
