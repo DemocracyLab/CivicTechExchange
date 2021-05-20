@@ -9,6 +9,7 @@ import { PositionInfo } from "./PositionInfo.jsx";
 import PositionEntryModal from "./PositionEntryModal.jsx";
 import { GlyphStyles } from "../utils/glyphs.js";
 import PositionListEntry from "./PositionListEntry.jsx";
+import promiseHelper from "../utils/promise.js";
 import _ from "lodash";
 
 type Props = {|
@@ -105,15 +106,20 @@ class PositionList extends React.PureComponent<Props, State> {
 
   // TODO: Fix deleted positions popping back on the page as we proceed to next page
   confirmDelete(confirmed: boolean): void {
-    if (confirmed) {
-      this.state.positions.splice(this.state.positionToDelete, 1);
-      this.updatePositionsField();
-    }
-    this.setState({
-      showDeleteModal: false,
-      positionToDelete: null,
+    return promiseHelper.promisify(() => {
+      if (confirmed) {
+        const positions = this.state.positions.splice(
+          this.state.positionToDelete,
+          1
+        );
+        this.setState({ positions: positions }, this.updatePositionsField);
+      }
+      this.setState({
+        showDeleteModal: false,
+        positionToDelete: null,
+      });
+      this.props.onChange && this.props.onChange();
     });
-    this.props.onChange && this.props.onChange();
   }
 
   render(): React$Node {
