@@ -24,8 +24,9 @@ class PositionListEntry extends React.PureComponent<Props> {
     const positionDisplay: string =
       position.roleTag.subcategory + ": " + position.roleTag.display_name;
     const id: string = position.id || positionDisplay;
+    const dimClass: string = position.isHidden ? " dim" : "";
     return (
-      <div className="PositionList-entry" key={id}>
+      <div className={"PositionList-entry" + dimClass} key={id}>
         <div className="left-side">
           <i
             className={Glyph(GlyphStyles.Grip, GlyphSizes.LG + " grip")}
@@ -40,11 +41,7 @@ class PositionListEntry extends React.PureComponent<Props> {
             onClick={this.props.onClickEditPosition}
           ></i>
           <i
-            className={Glyph(
-              GlyphStyles.Eye,
-              GlyphSizes.LG,
-              position.isHidden ? " dim" : ""
-            )}
+            className={Glyph(GlyphStyles.Eye, GlyphSizes.LG)}
             aria-hidden="true"
             onClick={this.props.onClickToggleVisibility}
           ></i>
