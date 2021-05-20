@@ -40,7 +40,7 @@ class PositionList extends React.PureComponent<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Props): void {
-    if (nextProps.positions) {
+    if (nextProps.positions !== this.state.positions) {
       this.setState({ positions: nextProps.positions || [] });
       this.updatePositionsField();
     }
@@ -107,17 +107,16 @@ class PositionList extends React.PureComponent<Props, State> {
   // TODO: Fix deleted positions popping back on the page as we proceed to next page
   confirmDelete(confirmed: boolean): void {
     return promiseHelper.promisify(() => {
-      if (confirmed) {
-        const positions = this.state.positions.splice(
-          this.state.positionToDelete,
-          1
-        );
-        this.setState({ positions: positions }, this.updatePositionsField);
-      }
-      this.setState({
+      const state: State = {
         showDeleteModal: false,
         positionToDelete: null,
-      });
+      };
+      if (confirmed) {
+        const newPositions = this.state.positions.slice();
+        newPositions.splice(this.state.positionToDelete, 1);
+        state.positions = newPositions;
+      }
+      this.setState(state, this.updatePositionsField);
       this.props.onChange && this.props.onChange();
     });
   }
