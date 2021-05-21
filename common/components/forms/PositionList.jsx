@@ -58,7 +58,7 @@ class PositionList extends React.PureComponent<Props, State> {
     ) {
       this.setState({
         positions: nextProps.positions || [],
-        positionsInitialized: !_.isEmpty(positions),
+        positionsInitialized: !_.isEmpty(nextProps.positions),
       });
       this.updatePositionsField();
     }
