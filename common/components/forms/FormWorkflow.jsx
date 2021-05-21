@@ -68,7 +68,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
   }
 
   componentWillReceiveProps(nextProps: Props): void {
-    if (!_.isNil(nextProps.startStep)) {
+    if (nextProps.startStep && !this.state.currentStep) {
       const newStep: number = nextProps.startStep - 1;
       if (newStep !== this.state.currentStep) {
         this.navigateToStep(newStep);
