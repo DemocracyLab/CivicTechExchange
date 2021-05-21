@@ -80,6 +80,11 @@
 .about-us-volunteer-logo {
   display: none;
 }
+.about-us-volunteer-buttons {
+  a:first-of-type {
+    margin-right: 8px;
+  }
+}
 .about-us-annualreport {
   background: $color-orange;
   h3,

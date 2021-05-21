@@ -11,6 +11,7 @@ import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import TeamSections from "../componentsBySection/AboutUs/TeamSections.jsx";
 import { Glyph, GlyphStyles, GlyphSizes, GlyphWidth } from "../utils/glyphs.js";
+import Button from "react-bootstrap/Button";
 
 type State = {|
   teamResponse: TeamAPIData,
@@ -206,20 +207,20 @@ class AboutUsController extends React.PureComponent<{||}, State> {
               headquartered in Seattle, WA.
             </p>
             <div className="about-us-volunteer-buttons">
-              <a
+              <Button
                 href={url.section(Section.AboutProject, {
                   id: this.state.projectId,
                 })}
-                className="SubHeader-donate-btn-container"
+                variant="outline-primary"
               >
-                <button className="SubHeader-donate-btn">Join Us</button>
-              </a>
-              <a
+                Join Us
+              </Button>
+              <Button
                 href={url.section(Section.Donate)}
-                className="SubHeader-donate-btn-container"
+                variant="outline-secondary"
               >
-                <button className="SubHeader-log-btns">Donate</button>
-              </a>
+                Donate
+              </Button>
             </div>
           </div>
         </div>
