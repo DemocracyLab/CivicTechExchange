@@ -21,9 +21,10 @@ type Props = {|
 type State = {|
   showAddEditModal: boolean,
   showDeleteModal: boolean,
+  showHideModal: boolean,
   existingPosition: ?NewPositionInfo,
   selectedPosition: ?NewPositionInfo,
-  positionToDelete: number,
+  positionToActUpon: ?NewPositionInfo,
   positions: Array<NewPositionInfo>,
 |};
 
@@ -40,8 +41,9 @@ class PositionList extends React.PureComponent<Props, State> {
       selectedPosition: null,
       showAddEditModal: false,
       showDeleteModal: false,
+      showHideModal: false,
       existingPosition: null,
-      positionToDelete: null,
+      positionToActUpon: null,
     };
   }
 
@@ -75,12 +77,17 @@ class PositionList extends React.PureComponent<Props, State> {
   }
 
   toggleVisibility(position: NewPositionInfo): void {
-    position.isHidden = !position.isHidden;
-    this.setState({ position: position }, this.updatePositionsField);
+    if (!position.isHidden) {
+      this.setState({ showHideModal: true, positionToActUpon: position });
+    } else {
+      position.isHidden = false;
+      this.savePositionOrdering(this.state.positions.slice());
+    }
   }
 
   savePosition(position: NewPositionInfo): void {
     if (!this.state.existingPosition) {
+      // We need a temporary id for keying, until such time as the position is saved
       position.tempId = _.random(Number.MAX_VALUE);
       this.state.positions.push(position);
       this.savePositionOrdering(this.state.positions);
@@ -107,9 +114,9 @@ class PositionList extends React.PureComponent<Props, State> {
     });
   }
 
-  askForDeleteConfirmation(positionToDelete: number): void {
+  askForDeleteConfirmation(positionToDelete: NewPositionInfo): void {
     this.setState({
-      positionToDelete: positionToDelete,
+      positionToActUpon: positionToDelete,
       showDeleteModal: true,
     });
   }
@@ -119,12 +126,30 @@ class PositionList extends React.PureComponent<Props, State> {
     return promiseHelper.promisify(() => {
       const state: State = {
         showDeleteModal: false,
-        positionToDelete: null,
+        positionToActUpon: null,
       };
       if (confirmed) {
-        const newPositions = this.state.positions.slice();
-        newPositions.splice(this.state.positionToDelete, 1);
-        state.positions = newPositions;
+        state.positions = this.state.positions.slice();
+        _.remove(state.positions, (p: NewPositionInfo) =>
+          this.state.positionToActUpon.tempId
+            ? p.tempId === this.state.positionToActUpon.tempId
+            : p.id === this.state.positionToActUpon.id
+        );
+      }
+      this.setState(state, this.updatePositionsField);
+      this.props.onChange && this.props.onChange();
+    });
+  }
+
+  confirmHide(confirmed: boolean): void {
+    return promiseHelper.promisify(() => {
+      const state: State = {
+        showHideModal: false,
+        positionToActUpon: null,
+      };
+      if (confirmed) {
+        this.state.positionToActUpon.isHidden = true;
+        state.positions = this.state.positions.slice();
       }
       this.setState(state, this.updatePositionsField);
       this.props.onChange && this.props.onChange();
@@ -176,6 +201,12 @@ class PositionList extends React.PureComponent<Props, State> {
           message="Do you want to delete this position?"
           onSelection={this.confirmDelete.bind(this)}
         />
+
+        <ConfirmationModal
+          showModal={this.state.showHideModal}
+          message="Do you want to hide this position?"
+          onSelection={this.confirmHide.bind(this)}
+        />
       </div>
     );
   }
@@ -206,7 +237,7 @@ class PositionList extends React.PureComponent<Props, State> {
                 this,
                 position
               )}
-              onClickDelete={this.askForDeleteConfirmation.bind(this, i)}
+              onClickDelete={this.askForDeleteConfirmation.bind(this, position)}
             />
           );
         })}
