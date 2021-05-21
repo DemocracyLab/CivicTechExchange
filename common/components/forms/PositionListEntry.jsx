@@ -1,32 +1,61 @@
 // @flow
 
 import React from "react";
-import { PositionInfo } from "./PositionInfo.jsx";
 import { Glyph, GlyphStyles, GlyphSizes } from "../utils/glyphs.js";
+import type { NewPositionInfo } from "./PositionList.jsx";
 
 type Props = {|
-  position: PositionInfo,
+  position: NewPositionInfo,
+  selected: boolean,
   onClickEditPosition: () => void,
   onClickToggleVisibility: () => void,
   onClickDelete: () => void,
 |};
 
+type State = {|
+  visualStateClass: string,
+|};
+
+const VisualStateClasses: Dictionary<string> = {
+  Grabbed: " grabbed",
+  Dim: " dim",
+  Normal: "",
+};
+
 /**
  * Project positions list item
  */
-class PositionListEntry extends React.PureComponent<Props> {
+class PositionListEntry extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
+    this.state = {
+      visualStateClass: this.getVisualState(props),
+    };
+  }
+
+  componentWillReceiveProps(nextProps: Props): void {
+    this.setState({ visualStateClass: this.getVisualState(nextProps) });
+  }
+
+  getVisualState(props: Props): string {
+    const _props: Props = props || this.props;
+    if (_props.selected) {
+      return VisualStateClasses.Grabbed;
+    } else if (_props.position.isHidden) {
+      return VisualStateClasses.Dim;
+    } else {
+      return VisualStateClasses.Normal;
+    }
   }
 
   render(): React$Node {
-    const position: PositionInfo = this.props.position;
+    const position: NewPositionInfo = this.props.position;
     const positionDisplay: string =
       position.roleTag.subcategory + ": " + position.roleTag.display_name;
-    const id: string = position.id || positionDisplay;
+    const id: string = position.id || position.tempId;
     return (
       <div
-        className={"PositionList-entry" + (position.isHidden ? " dim" : "")}
+        className={"PositionList-entry" + this.state.visualStateClass}
         key={id}
       >
         <div className="left-side">

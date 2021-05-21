@@ -12,6 +12,8 @@ import PositionListEntry from "./PositionListEntry.jsx";
 import promiseHelper from "../utils/promise.js";
 import _ from "lodash";
 
+export type NewPositionInfo = PositionInfo & {| tempId: ?number |};
+
 type Props = {|
   positions: $ReadOnlyArray<PositionInfo>,
   elementid: string,
@@ -19,10 +21,13 @@ type Props = {|
 type State = {|
   showAddEditModal: boolean,
   showDeleteModal: boolean,
-  existingPosition: PositionInfo,
+  existingPosition: ?NewPositionInfo,
+  selectedPosition: ?NewPositionInfo,
   positionToDelete: number,
-  positions: Array<PositionInfo>,
+  positions: Array<NewPositionInfo>,
 |};
+
+type OnChooseEvent = Event & {| oldIndex: number |};
 
 /**
  * Lists project positions and provides add/edit functionality for them
@@ -32,6 +37,7 @@ class PositionList extends React.PureComponent<Props, State> {
     super(props);
     this.state = {
       positions: this.props.positions || [],
+      selectedPosition: null,
       showAddEditModal: false,
       showDeleteModal: false,
       existingPosition: null,
@@ -46,11 +52,14 @@ class PositionList extends React.PureComponent<Props, State> {
     }
   }
 
-  savePositionOrdering(positions: $ReadOnlyArray<PositionInfo>): void {
+  savePositionOrdering(positions: $ReadOnlyArray<NewPositionInfo>): void {
     for (let i = 0; i < positions.length; ++i) {
       positions[i].orderNumber = i;
     }
-    this.setState({ positions: positions }, this.updatePositionsField);
+    this.setState(
+      { positions: positions, selectedPosition: this.state.selectedPosition },
+      this.updatePositionsField
+    );
   }
 
   createNewPosition(): void {
@@ -61,17 +70,18 @@ class PositionList extends React.PureComponent<Props, State> {
     this.setState({ showAddEditModal: false });
   }
 
-  editPosition(position: PositionInfo): void {
+  editPosition(position: NewPositionInfo): void {
     this.openModal(position);
   }
 
-  toggleVisibility(position: PositionInfo): void {
+  toggleVisibility(position: NewPositionInfo): void {
     position.isHidden = !position.isHidden;
     this.setState({ position: position }, this.updatePositionsField);
   }
 
-  savePosition(position: PositionInfo): void {
+  savePosition(position: NewPositionInfo): void {
     if (!this.state.existingPosition) {
+      position.tempId = _.random(Number.MAX_VALUE);
       this.state.positions.push(position);
       this.savePositionOrdering(this.state.positions);
     } else {
@@ -90,7 +100,7 @@ class PositionList extends React.PureComponent<Props, State> {
     }
   }
 
-  openModal(position: ?PositionInfo): void {
+  openModal(position: ?NewPositionInfo): void {
     this.setState({
       showAddEditModal: true,
       existingPosition: position,
@@ -119,6 +129,14 @@ class PositionList extends React.PureComponent<Props, State> {
       this.setState(state, this.updatePositionsField);
       this.props.onChange && this.props.onChange();
     });
+  }
+
+  onChoose(evt: OnChooseEvent): void {
+    this.setState({ selectedPosition: this.state.positions[evt.oldIndex] });
+  }
+
+  onUnchoose(evt: OnChooseEvent): void {
+    this.setState({ selectedPosition: null });
   }
 
   render(): React$Node {
@@ -167,18 +185,31 @@ class PositionList extends React.PureComponent<Props, State> {
       <ReactSortable
         list={this.state.positions}
         setList={this.savePositionOrdering.bind(this)}
+        onChoose={this.onChoose.bind(this)}
+        onUnchoose={this.onUnchoose.bind(this)}
         animation={200}
         delayOnTouchStart={true}
         delay={2}
       >
-        {this.state.positions.map((position: PositionInfo, i: number) => (
-          <PositionListEntry
-            position={position}
-            onClickEditPosition={this.editPosition.bind(this, position)}
-            onClickToggleVisibility={this.toggleVisibility.bind(this, position)}
-            onClickDelete={this.askForDeleteConfirmation.bind(this, i)}
-          />
-        ))}
+        {this.state.positions.map((position: NewPositionInfo, i: number) => {
+          const selected: boolean =
+            this.state.selectedPosition &&
+            (position.tempId
+              ? position.tempId === this.state.selectedPosition.tempId
+              : position.id === this.state.selectedPosition.id);
+          return (
+            <PositionListEntry
+              position={position}
+              selected={selected}
+              onClickEditPosition={this.editPosition.bind(this, position)}
+              onClickToggleVisibility={this.toggleVisibility.bind(
+                this,
+                position
+              )}
+              onClickDelete={this.askForDeleteConfirmation.bind(this, i)}
+            />
+          );
+        })}
       </ReactSortable>
     );
   }

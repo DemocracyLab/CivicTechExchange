@@ -21,6 +21,11 @@
   color:$color-grey-disabled;
 }
 
+.PositionList-entry.grabbed {
+  cursor: grabbing;
+  background-color: $color-text-grey;
+}
+
 i.grip {
   color:$color-grey-disabled;
   padding-right: 5px;
