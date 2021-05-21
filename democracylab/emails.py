@@ -201,7 +201,7 @@ def send_to_project_volunteer(volunteer_relation, subject, template):
         subject=subject,
         from_email=settings.EMAIL_VOLUNTEER_ACCT['from_name'],
         to=[volunteer_relation.volunteer.email],
-        cc=co_owner_emails,
+        cc=[co_owner_emails, volunteer_relation.project.project_creator.email],
         reply_to=[volunteer_relation.project.project_creator.email] + co_owner_emails,
     )
     email_msg = template.render(email_msg)
