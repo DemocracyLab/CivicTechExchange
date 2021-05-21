@@ -19,6 +19,7 @@ type Props = {|
   elementid: string,
 |};
 type State = {|
+  positionsInitialized: boolean,
   showAddEditModal: boolean,
   showDeleteModal: boolean,
   showHideModal: boolean,
@@ -36,8 +37,11 @@ type OnChooseEvent = Event & {| oldIndex: number |};
 class PositionList extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
+    const positions: $ReadOnlyArray<NewPositionInfo> =
+      this.props.positions || [];
     this.state = {
-      positions: this.props.positions || [],
+      positions: positions,
+      positionsInitialized: !_.isEmpty(positions),
       selectedPosition: null,
       showAddEditModal: false,
       showDeleteModal: false,
@@ -48,8 +52,14 @@ class PositionList extends React.PureComponent<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Props): void {
-    if (nextProps.positions !== this.state.positions) {
-      this.setState({ positions: nextProps.positions || [] });
+    if (
+      !this.state.positionsInitialized &&
+      nextProps.positions !== this.state.positions
+    ) {
+      this.setState({
+        positions: nextProps.positions || [],
+        positionsInitialized: !_.isEmpty(positions),
+      });
       this.updatePositionsField();
     }
   }
