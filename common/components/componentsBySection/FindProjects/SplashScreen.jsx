@@ -30,6 +30,7 @@ const heroImages: $ReadOnlyArray<string> = [
   HeroImage.TopLanding,
   "CodeForGood_072719_MSReactor-074.jpg",
   HeroImage.FindEvents,
+  "CodeForGood_072719_MSReactor-003.jpg",
 ];
 
 class SplashScreen extends React.PureComponent<Props> {

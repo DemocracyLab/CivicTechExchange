@@ -54,32 +54,25 @@ class AboutUserController extends React.PureComponent<{||}, State> {
         <div className="AboutProjectController-root">
           <div className="container">
             <div className="row background-light about-user-section">
-              <div className="col">
+              <div className="col-12">
                 <Avatar user={user} size={50} />
-                <h1 className="about-user-name">
-                  {user && user.first_name + " " + user.last_name}
-                </h1>
+                <h1>{user && user.first_name + " " + user.last_name}</h1>
               </div>
             </div>
 
             {user && !_.isEmpty(user.user_technologies) ? (
               <div className="row about-user-section">
-                <div className="col">
-                  <h2 className="subheader">TECHNOLOGIES</h2>
-                  <div className="Text-section">
-                    {this._renderTechnologies()}
-                  </div>
+                <div className="col-12">
+                  <h2 className="text-uppercase">Technologies</h2>
+                  <div>{this._renderTechnologies()}</div>
                 </div>
               </div>
             ) : null}
 
             <div className="row about-user-section">
-              <div className="col">
-                <h2 className="subheader">ABOUT ME</h2>
-                <div
-                  className="Text-section"
-                  style={{ whiteSpace: "pre-wrap" }}
-                >
+              <div className="col-12">
+                <h2 className="text-uppercase">About Me</h2>
+                <div style={{ whiteSpace: "pre-wrap" }}>
                   {user && user.about_me}
                 </div>
               </div>
@@ -87,9 +80,9 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
             {user && !_.isEmpty(user.user_links) ? (
               <div className="row about-user-section">
-                <div className="col">
-                  <h2 className="subheader">LINKS</h2>
-                  <div className="Text-section">{this._renderLinks()}</div>
+                <div className="col-12">
+                  <h2 className="text-uppercase">Links</h2>
+                  <div>{this._renderLinks()}</div>
                 </div>
               </div>
             ) : null}
@@ -97,8 +90,8 @@ class AboutUserController extends React.PureComponent<{||}, State> {
             {user && !_.isEmpty(user.user_files) ? (
               <div className="row about-user-section">
                 <div className="col">
-                  <h2 className="subheader">FILES</h2>
-                  <div className="Text-section">{this._renderFiles()}</div>
+                  <h2 className="text-uppercase">Files</h2>
+                  <div>{this._renderFiles()}</div>
                 </div>
               </div>
             ) : null}
