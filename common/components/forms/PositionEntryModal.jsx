@@ -74,6 +74,7 @@ class PositionEntryModal extends React.PureComponent<Props, State> {
         roleTag: null,
         description: "",
         descriptionUrl: "",
+        isHidden: false,
       },
       formFields: formFields,
       formIsValid: formIsValid,
@@ -136,6 +137,7 @@ class PositionEntryModal extends React.PureComponent<Props, State> {
           roleTag: this.state.formFields.role_tag[0],
           description: this.state.formFields.description,
           descriptionUrl: urlInput,
+          isHidden: false,
         },
       },
       () => {

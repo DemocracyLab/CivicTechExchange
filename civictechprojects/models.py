@@ -117,7 +117,7 @@ class Project(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_project=self.id)
-        positions = ProjectPosition.objects.filter(position_project=self.id)
+        positions = ProjectPosition.objects.filter(position_project=self.id).order_by('order_number')
         volunteers = VolunteerRelation.objects.filter(project=self.id)
         group_relationships = ProjectRelationship.objects.filter(relationship_project=self).exclude(relationship_group=None)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
@@ -700,13 +700,17 @@ class ProjectPosition(models.Model):
     position_role = TaggableManager(blank=False, through=TaggedPositionRole)
     position_description = models.CharField(max_length=3000, blank=True)
     description_url = models.CharField(max_length=2083, default='')
+    order_number = models.PositiveIntegerField(default=0)
+    is_hidden = models.BooleanField(default=False)
 
     def to_json(self):
         return {
             'id': self.id,
             'description': self.position_description,
             'descriptionUrl': self.description_url,
-            'roleTag': Tag.hydrate_to_json(self.id, self.position_role.all().values())[0]
+            'roleTag': Tag.hydrate_to_json(self.id, self.position_role.all().values())[0],
+            'orderNumber': self.order_number,
+            'isHidden': self.is_hidden
         }
 
     @staticmethod
@@ -715,6 +719,8 @@ class ProjectPosition(models.Model):
         position.position_project = project
         position.position_description = position_json['description']
         position.description_url = position_json['descriptionUrl']
+        position.order_number = position_json['orderNumber']
+        position.is_hidden = position_json['isHidden']
         position.save()
 
         position.position_role.add(position_json['roleTag']['tag_name'])
@@ -725,6 +731,8 @@ class ProjectPosition(models.Model):
     def update_from_json(position, position_json):
         position.position_description = position_json['description']
         position.description_url = position_json['descriptionUrl']
+        position.order_number = position_json['orderNumber']
+        position.is_hidden = position_json['isHidden']
         new_role = position_json['roleTag']['tag_name']
         Tag.merge_tags_field(position.position_role, new_role)
         position.save()
