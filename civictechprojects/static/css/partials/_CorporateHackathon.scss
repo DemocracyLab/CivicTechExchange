@@ -84,7 +84,8 @@
     border-bottom: 1px solid $color-orange;
   }
   .corporate-hackathon-stories a,
-  .corporate-sponsorship-impact a {
+  .corporate-sponsorship-impact a,
+  .corporate-learn-link a {
     color: #2caae2;
     &:hover {
       color: #2388b4;
@@ -112,6 +113,17 @@
 .corporate-hr-line {
   display: none;
   width: 45%;
+}
+.corporate-learn-link {
+  width: 100%;
+  text-align: center;
+  a,
+  i {
+    font-size: 21px; // match headline2 font size
+  }
+  i {
+    padding-left: 8px;
+  }
 }
 .corporate-top,
 .corporate-hackathon-saying,
@@ -275,6 +287,12 @@
   .corporate-hr-line {
     display: block;
   }
+  .corporate-learn-link {
+    a,
+    i {
+      font-size: 23px; // match headline2 font size
+    }
+  }
   .corporate-top-overlay {
     h1 {
       padding: 15px;
@@ -305,6 +323,8 @@
     padding-left: 20px;
     align-self: center;
     margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
   }
   .corporate-sponsorship-stat-container {
     flex-wrap: nowrap;
