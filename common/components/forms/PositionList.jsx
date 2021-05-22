@@ -99,7 +99,7 @@ class PositionList extends React.PureComponent<Props, State> {
     if (!this.state.existingPosition) {
       // We need a temporary id for keying, until such time as the position is saved
       position.tempId = _.random(Number.MAX_VALUE);
-      this.state.positions.push(position);
+      this.state.positions.unshift(position);
       this.savePositionOrdering(this.state.positions);
     } else {
       _.assign(this.state.existingPosition, position);
