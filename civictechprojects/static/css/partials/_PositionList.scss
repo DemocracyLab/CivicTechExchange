@@ -1,0 +1,57 @@
+.PositionList-entry {
+  background-color: $color-background-light;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+  padding: 5px;
+  margin: 15px;
+  max-width: 600px;
+  min-height: 48px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  cursor: grab;
+
+  i {
+    cursor: pointer;
+    margin: auto 0;
+  }
+  i:hover {
+    color:$color-orange;
+  }
+}
+
+.PositionList-entry.dim {
+  color:$color-grey-disabled;
+}
+
+.PositionList-entry.grabbed {
+  cursor: grabbing;
+  background-color: $color-grey-medium;
+}
+
+i.grip {
+  color:$color-grey-disabled;
+  padding-right: 5px;
+}
+i.grip:hover {
+  color:$color-grey-disabled;
+}
+
+.left-side i {
+  padding-right: 8px;
+}
+
+.right-side {
+  display: flex;
+  justify-content: space-between;
+  width: 80px;
+}
+
+.orderInstructions {
+  padding: 20px 0;
+  p {
+    margin-bottom: 0px;
+  }
+  p.dragRoleInstructions {
+    font-style: italic;
+  }
+}
