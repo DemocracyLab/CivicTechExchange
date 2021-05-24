@@ -3,12 +3,18 @@ from django.contrib import admin
 from .models import Project, Group, Event, ProjectRelationship, UserAlert, VolunteerRelation, ProjectCommit, \
     NameRecord, ProjectFile, Testimonial
 
+from civictechprojects.caching.cache import ProjectCache
+
 project_text_fields = ['project_name', 'project_description', 'project_description_solution', 'project_description_actions', 'project_short_description', 'project_location', 'project_country', 'project_state', 'project_city', 'project_url']
 project_filter_fields = ('project_date_created', 'project_date_modified', 'is_searchable', 'is_created')
 class ProjectAdmin(admin.ModelAdmin):
     list_display =  tuple(project_text_fields) + ('project_creator',) + project_filter_fields
     search_fields = project_text_fields + ['project_creator__email']
     list_filter = project_filter_fields
+    def save_model(self, request, obj, form, change):
+        if change:
+            obj.recache(recache_linked=False)
+        super().save_model(request, obj, form, change)
 
 project_relationship_filter_fields = ('project_initiated', 'is_approved')
 class ProjectRelationshipAdmin(admin.ModelAdmin):
@@ -22,6 +28,10 @@ class GroupAdmin(admin.ModelAdmin):
     list_display = tuple(group_text_fields) + ('group_creator',) + group_filter_fields
     search_fields = group_text_fields + ['group_creator__email']
     list_filter = group_filter_fields
+    def save_model(self, request, obj, form, change):
+        if change:
+            obj.recache(recache_linked=False)
+        super().save_model(request, obj, form, change)
 
 event_text_fields = ['event_name', 'event_agenda', 'event_description','event_location', 'event_rsvp_url', 'event_live_id', 'event_short_description']
 event_filter_fields = ('event_date_created', 'event_date_end', 'event_date_modified', 'event_date_start', 'is_searchable', 'is_created')
@@ -29,6 +39,10 @@ class EventAdmin(admin.ModelAdmin):
     list_display = tuple(event_text_fields) + ('event_creator',) + event_filter_fields
     search_fields = event_text_fields + ['event_creator__email']
     list_filter = event_filter_fields
+    def save_model(self, request, obj, form, change):
+        if change:
+            obj.recache(recache_linked=False)
+        super().save_model(request, obj, form, change)
 
 user_alert_text_fields = ['email', 'filters', 'country', 'postal_code']
 class UserAlertAdmin(admin.ModelAdmin):
