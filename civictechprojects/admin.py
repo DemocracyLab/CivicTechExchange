@@ -3,8 +3,6 @@ from django.contrib import admin
 from .models import Project, Group, Event, ProjectRelationship, UserAlert, VolunteerRelation, ProjectCommit, \
     NameRecord, ProjectFile, Testimonial
 
-from civictechprojects.caching.cache import ProjectCache
-
 project_text_fields = ['project_name', 'project_description', 'project_description_solution', 'project_description_actions', 'project_short_description', 'project_location', 'project_country', 'project_state', 'project_city', 'project_url']
 project_filter_fields = ('project_date_created', 'project_date_modified', 'is_searchable', 'is_created')
 class ProjectAdmin(admin.ModelAdmin):
