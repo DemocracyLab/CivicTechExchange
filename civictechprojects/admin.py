@@ -30,7 +30,7 @@ class GroupAdmin(admin.ModelAdmin):
     list_filter = group_filter_fields
     def save_model(self, request, obj, form, change):
         if change:
-            obj.recache(recache_linked=False)
+            obj.recache()
         super().save_model(request, obj, form, change)
 
 event_text_fields = ['event_name', 'event_agenda', 'event_description','event_location', 'event_rsvp_url', 'event_live_id', 'event_short_description']
@@ -41,7 +41,7 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = event_filter_fields
     def save_model(self, request, obj, form, change):
         if change:
-            obj.recache(recache_linked=False)
+            obj.recache()
         super().save_model(request, obj, form, change)
 
 user_alert_text_fields = ['email', 'filters', 'country', 'postal_code']
