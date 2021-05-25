@@ -338,6 +338,13 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         account = SocialAccount.objects.filter(user=request.user).first()
         return redirect(section_url(FrontEndSection.AddUserDetails, {'provider': account.provider}))
 
+    # Valid project URL path with invalid arguments should show page with canonical url
+    page_url = request.get_full_path()
+    if (page_url.find('?') != -1):
+        clean_url = page_url[:page_url.find('?')]
+        print('Redirecting {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url))
+        return redirect(clean_url)
+
     page_url = request.get_full_path()
     clean_url = get_clean_url(page_url)
     if clean_url != page_url:
