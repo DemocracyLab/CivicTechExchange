@@ -11,7 +11,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_filter = project_filter_fields
     def save_model(self, request, obj, form, change):
         if change:
-            obj.recache(recache_linked=False)
+            obj.recache(recache_linked=True)
         super().save_model(request, obj, form, change)
 
 project_relationship_filter_fields = ('project_initiated', 'is_approved')
@@ -29,6 +29,7 @@ class GroupAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if change:
             obj.recache()
+            obj.update_linked_items()
         super().save_model(request, obj, form, change)
 
 event_text_fields = ['event_name', 'event_agenda', 'event_description','event_location', 'event_rsvp_url', 'event_live_id', 'event_short_description']
@@ -40,6 +41,7 @@ class EventAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if change:
             obj.recache()
+            obj.update_linked_items()
         super().save_model(request, obj, form, change)
 
 user_alert_text_fields = ['email', 'filters', 'country', 'postal_code']
