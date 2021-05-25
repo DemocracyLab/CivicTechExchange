@@ -7,6 +7,7 @@ import FormValidation from "../forms/FormValidation.jsx";
 import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
 import url from "../utils/url.js";
 import _ from "lodash";
+import Button from "react-bootstrap/Button";
 
 type State = {|
   service: string,
@@ -82,13 +83,14 @@ class AddSignUpDetails extends React.Component<{||}, State> {
               formState={this.state}
             />
 
-            <button
+            <Button
+            variant="login"
               className="LogInController-signInButton"
               disabled={!this.state.isValid}
               type="submit"
             >
               Create Account
-            </button>
+            </Button>
           </form>
           <div className="SignUpController-socialSection">
             <SocialMediaSignupSection

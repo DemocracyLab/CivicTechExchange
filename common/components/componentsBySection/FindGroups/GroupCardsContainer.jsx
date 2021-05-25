@@ -62,9 +62,9 @@ class GroupCardsContainer extends React.Component<Props, State> {
         ) : null}
         <div className="row">
           {!_.isEmpty(this.state.groups) && (
-            <h2 className="ProjectCardContainer-header">
+            <h3 className="ProjectCardContainer-header">
               {this._renderCardHeaderText()}
-            </h2>
+            </h3>
           )}
           {this._renderCards()}
         </div>

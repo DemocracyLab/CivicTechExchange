@@ -41,6 +41,9 @@
 
 // adds a dropdown caret for nav menus, since Bootstrap's is disabled globally
 .MainHeader-nav-container {
+  .dropdown-item {
+    font-size: 15px; // match body text size
+  }
   .dropdown-toggle.nav-link {
     padding-right: 10px;
   }
@@ -137,6 +140,11 @@
   }
   #nav-pagenav-container {
     padding: 0;
+  }
+  .MainHeader-nav-container {
+    .dropdown-item {
+      font-size: 16px; // match body text size
+    }
   }
 }
 

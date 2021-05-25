@@ -113,6 +113,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'csp.middleware.CSPMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
+    'debreach.middleware.RandomCommentMiddleware',
 ]
 
 ROOT_URLCONF = 'democracylab.urls'

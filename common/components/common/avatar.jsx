@@ -14,7 +14,7 @@ class Avatar extends React.PureComponent<Props> {
     const user = this.props.user;
     return user.user_thumbnail ? (
       <img
-        className="upload_img upload_img_bdr VolunteerCard-img"
+        className="VolunteerCard-img"
         src={user.user_thumbnail.publicUrl}
       />
     ) : (

@@ -1,35 +1,15 @@
 .SignedUpController-root {
-  font-weight: 300;
-  width: 450px;
-  max-width: 800px;
-  margin: 168px auto;
+  min-height: 400px;
 }
-
-.SignedUpController-greeting {
-  margin-bottom: 27px;
-  min-width: 380px;
-  padding-left: 100px;
-}
-
 .SignedUpController-logo {
-  width: 450px;
-  padding-left: 170px;
-  padding-bottom: 20px;
-  float: left;
+  margin: 32px 0;
+}
+.SignedUpController-greeting {
+  margin: 0 0 32px 0;
 }
 
 .SignedUpController-logo img {
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  display: inline-block;
-}
-
-@include media-breakpoint-up(md) {
-  // This is where width of the screen > 768 px
-  .SignedUpController-logo {
-    width: 70px;
-    padding-left: 10px;
-    padding-bottom: 0px;
-  }
 }
