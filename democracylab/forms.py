@@ -7,7 +7,7 @@ from civictechprojects.models import ProjectLink, ProjectFile, FileCategory
 from common.helpers.form_helpers import read_form_field_string
 from common.helpers.qiqo_chat import SubscribeUserToQiqoChat
 from common.models.tags import Tag
-from salesforce import Salesforce
+from salesforce import contact
 
 class DemocracyLabUserCreationForm(UserCreationForm):
     class Meta:
@@ -60,7 +60,7 @@ class DemocracyLabUserCreationForm(UserCreationForm):
             user.update_linked_items()
 
         SubscribeUserToQiqoChat(user)
-        Salesforce.contact.upsert_contact(user)
+        contact.upsert(user)
 
 
 class DemocracyLabUserAddDetailsForm(forms.Form):

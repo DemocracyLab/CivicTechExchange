@@ -4,7 +4,6 @@ from democracylab import settings
 
 
 class SalesforceClient:
-    __instance = None
     __session = None
     endpoint = f'{settings.SALESFORCE_ENDPOINT}/services/data/v{settings.SALESFORCE_API_VERSION}'
     token_endpoint = f'{settings.SALESFORCE_LOGIN_URL}{settings.SALESFORCE_TOKEN_SUFFIX}'
@@ -15,29 +14,20 @@ class SalesforceClient:
     redirect_uri = settings.SALESFORCE_REDIRECT_URI
     client_id = settings.SALESFORCE_CLIENT_ID
     owner_id = settings.SALESFORCE_OWNER_ID
-
-    @staticmethod
-    def get_instance():
-        """ Static access method """
-        if SalesforceClient.__instance is None:
-            SalesforceClient()
-        return SalesforceClient.__instance
+    bearer_token = f'Bearer {settings.SALESFORCE_ACCESS_TOKEN}'
 
     def __init__(self):
-        if SalesforceClient.__instance is not None:
-            raise Exception("This class is a singleton - use getInstance()")
-        else:
-            SalesforceClient.__instance = self
-            self.initialize_session()
+        self.initialize_session()
 
     """ Session provides Authorization header for all requests """
     def initialize_session(self):
-        bearer_token = f'Bearer {settings.SALESFORCE_ACCESS_TOKEN}'
-        __session = requests.Session()
-        __session.headers = {'Content-Type': 'application/json', 'Authorization': bearer_token}
+        self.__session = requests.Session()
+        self.__session.headers = {'Content-Type': 'application/json', 'Authorization': self.bearer_token}
 
     def send(self, prepped_request):
         response = self.__session.send(prepped_request)
+        print('ok')
+        return response
 
     def authorize(self):
         r = requests.post(

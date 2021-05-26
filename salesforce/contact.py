@@ -3,10 +3,12 @@ import json
 import requests
 import threading
 
-client = SalesforceClient.get_instance()
+client = SalesforceClient()
 
 
-def upsert_contact(contributor: object):
+def upsert(contributor: object):
+    from common.models import Tag
+    # technologies = Tag.hydrate_to_json(contributor.pk, list(contributor.user_technologies.all().values()))
     data = {
         "ownerid": client.owner_id,
         "platform_id__c": contributor.pk,
@@ -16,8 +18,9 @@ def upsert_contact(contributor: object):
         "phone": contributor.phone_primary,
         "mailingpostalcode": contributor.postal_code,
         "mailingcountry": contributor.country,
-        "technologies__c": contributor.user_technologies,
-        "npo02__membershipjoindate__c": contributor.date_joined,
+        "description": contributor.about_me,
+        "technologies__c": Tag.hydrate_to_json(contributor.pk, list(contributor.user_technologies.all().values())),
+        "npo02__membershipjoindate__c": contributor.date_joined.strftime('%m/%d/%Y %H:%M:%S'),
         "description": contributor.about_me
     }
     req = requests.Request(
@@ -25,10 +28,10 @@ def upsert_contact(contributor: object):
         url=client.contact_endpoint,
         data=json.dumps(data),
     )
-    thread = threading.Thread(target=run, request=req)
+    thread = threading.Thread(target=run, args=(req,))
     thread.daemon = True
     thread.start()
 
 
 def run(request):
-    client.send(request)
+    SalesforceClient().send(request)
