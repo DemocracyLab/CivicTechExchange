@@ -342,10 +342,8 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
     # Valid project URL path with invalid arguments should show page with canonical url
     url_args = request.GET.urlencode()
     clean_url_args = clean_invalid_args(url_args)
-    if url_args != "" and clean_url_args != url_args:
-        clean_url_valid_args = request.path
-        if clean_url_args != "":
-            clean_url_valid_args += '?' + clean_url_args
+    if url_args != "" and clean_url_args != '?' + url_args:
+        clean_url_valid_args = request.path + clean_url_args
         print('Redirecting {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url_valid_args))
         return redirect(clean_url_valid_args)
 

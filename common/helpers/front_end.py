@@ -51,21 +51,27 @@ def get_page_path_parameters(url, page_section_generator=None):
     return match.groupdict()
 
 def clean_invalid_args(url_args):
+    """Filter out invalid query string arguments from old url system
+        Extract args dictionary
+        Remove id and section from dictionary
+        Reconstruct url from dictionary using args_dict_to_string
+
+    Args:
+        url_args(str) : URL query string arguments
+    
+    Returns:
+        str: clean URL query string arguments
+    """
     # Sanity check
     if url_args == "":
         return url_args
     from urllib import parse as urlparse
     # The format of url_args_dict is {'a': ['1'], 'b': ['2']}
     url_args_dict = urlparse.parse_qs(url_args, keep_blank_values=0, strict_parsing=0)
-    new_url_args = ""
-    for key, value in url_args_dict.items():
-        if key == 'section' or key == 'Section':
-            continue
-        if key == 'id' or key == 'Id':
-            continue
-        new_url_args += key + '=' + value[0] + '&'
-
-    return new_url_args[:-1] if new_url_args != "" else new_url_args
+    url_args_dict.pop('section', None)
+    url_args_dict.pop('id', None)
+    url_args_dict = {key : value[0] for key, value in url_args_dict.items()}
+    return args_dict_to_string(url_args_dict)
 
 def get_clean_url(url):
     clean_url = unescape(url)
