@@ -318,6 +318,14 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
         'error': False,
         'message': 'Mailchimp API key needed to subscribe users to mailing list'
     },
+    'GHOST_URL': {
+        'error': False,
+        'message': 'Ghost url needed to display blog posts on site'
+    },
+    'GHOST_CONTENT_API_KEY': {
+        'error': False,
+        'message': 'Ghost content api key needed to display blog posts on site'
+    },
     'PRIVACY_POLICY_URL': {
         'error': True,
         'message': 'Privacy Policy url required'
