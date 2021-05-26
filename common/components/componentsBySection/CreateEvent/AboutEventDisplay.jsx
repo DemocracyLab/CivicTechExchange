@@ -63,7 +63,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                 CurrentUser.isStaff()) &&
               this._renderEditButton()}
             <div className="AboutEvent-title-date">
-              {startDate.format(DateFormat.MONTH_DATE_YEAR)}
+              <h4>{startDate.format(DateFormat.MONTH_DATE_YEAR)}</h4>
             </div>
             <h1>{event.event_name}</h1>
             <p>{event.event_short_description}</p>

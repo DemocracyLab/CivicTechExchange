@@ -1,19 +1,7 @@
-.about-us-root h1,
-.about-us-root h2,
-.about-us-root h3 {
-  font-weight: bold;
-}
 .about-us-mission .SplashScreen-content,
 .about-us-vision .SplashScreen-content {
   margin: auto 0;
   text-align: left;
-  h1,
-  h2 {
-    font-size: 48px;
-  }
-  p {
-    font-size: 18px;
-  }
 }
 
 .about-us-mission,
@@ -42,21 +30,11 @@
 .about-us-content {
   padding: 2rem 0 2rem 1rem;
 }
-.about-us-content h1,
-.about-us-content h2 {
-  font-size: 48px;
-}
-.about-us-content p {
-  font-size: 18px;
-}
-
 .about-us-values {
   padding-top: 22px;
   background-color: $color-background-light;
 }
 .about-us-values h2 {
-  font-size: 36px;
-  line-height: 1.2;
   margin-bottom: 25px;
 }
 .about-us-values-image {
@@ -95,16 +73,17 @@
 }
 .about-us-values-text h3 {
   color: $color-orange;
-  font-size: 24px;
-}
-.about-us-values-text p {
-  font-size: 16px;
 }
 .about-us-volunteer h2 {
   margin-bottom: 1rem;
 }
 .about-us-volunteer-logo {
   display: none;
+}
+.about-us-volunteer-buttons {
+  a:first-of-type {
+    margin-right: 8px;
+  }
 }
 .about-us-annualreport {
   background: $color-orange;
@@ -146,9 +125,7 @@
   text-align: center;
   padding: 0 5px;
 }
-.about-us-team-card p {
-  font-size: 18px;
-}
+
 .about-us-team-avatar,
 .about-us-team-avatar-default svg {
   border-radius: 50%;
@@ -181,11 +158,6 @@
   height: 150px;
   width: 150px;
 }
-
-.about-us-team h4 {
-  font-size: 24px;
-  font-weight: bold;
-}
 .about-us-team hr {
   width: 75%;
   margin: 0 auto 30px auto;
@@ -215,15 +187,6 @@
 .about-us-board-container .about-us-team-card-title div:nth-of-type(1) {
   font-style: italic;
 }
-
-/* this is a gross hack to handle content reflow, take it back to design later */
-.about-us-show-md-up {
-  display: none;
-}
-.about-us-show-sm-down {
-  display: block;
-}
-/* end gross position hack */
 
 .about-us-ps h2 {
   color: $color-orange;
@@ -265,10 +228,7 @@
   .about-us-volunteer {
     background: $color-background-light;
   }
-  .about-us-volunteer-disclaimer {
-    color: $color-text-grey;
-  }
-  .about-us-volunteer-logo {
+   .about-us-volunteer-logo {
     display: block;
     width: 100%;
     max-width: 266px;
