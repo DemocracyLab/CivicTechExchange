@@ -50,6 +50,22 @@ def get_page_path_parameters(url, page_section_generator=None):
     match = page_section_generator['regex'].search(url)
     return match.groupdict()
 
+def clean_invalid_args(url_args):
+    # Sanity check
+    if url_args == "":
+        return url_args
+    from urllib import parse as urlparse
+    # The format of url_args_dict is {'a': ['1'], 'b': ['2']}
+    url_args_dict = urlparse.parse_qs(url_args, keep_blank_values=0, strict_parsing=0)
+    new_url_args = ""
+    for key, value in url_args_dict.items():
+        if key == 'section' or key == 'Section':
+            continue
+        if key == 'id' or key == 'Id':
+            continue
+        new_url_args += key + '=' + value[0] + '&'
+
+    return new_url_args[:-1] if new_url_args != "" else new_url_args
 
 def get_clean_url(url):
     clean_url = unescape(url)
