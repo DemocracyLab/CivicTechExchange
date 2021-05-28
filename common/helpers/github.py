@@ -21,15 +21,16 @@ def fetch_github_info(github_url):
         return None
 
 
-def get_repo_endpoint_from_owner_repo_name(owner_repo_name, start_date=None):
+def get_repo_endpoint_from_owner_repo_name(owner_repo_name, start_date=None, branch=None):
     if len(owner_repo_name) > 1:
-        url_base = '{github}/repos/{owner}/{repo}/commits'.format(github=github_api_endpoint,
-                                                                  owner=owner_repo_name[0],
-                                                                  repo=owner_repo_name[1])
+        url_base = '{github}/repos/{owner}/{repo}/commits?sha={branch}'.format(github=github_api_endpoint,
+                                                                               owner=owner_repo_name[0],
+                                                                               repo=owner_repo_name[1],
+                                                                               branch=branch)
         if start_date is not None:
-            return url_base + '?since=' + datetime_to_string(start_date, DateTimeFormats.UTC_DATETIME)
-        else:
-            return url_base
+            url_base += '&since=' + datetime_to_string(start_date, DateTimeFormats.UTC_DATETIME)
+
+        return url_base
 
 
 def get_owner_repo_name_from_public_url(public_repo_url):
@@ -38,6 +39,18 @@ def get_owner_repo_name_from_public_url(public_repo_url):
     path_parts = urlparse.urlparse(cleaned_url)
     if hasattr(path_parts, 'path'):
         return path_parts.path.split('/')[1:3]
+
+
+def get_branch_name_from_public_url(public_repo_url):
+    cleaned_url = public_repo_url.strip().rstrip('/')
+    path_parts = urlparse.urlparse(cleaned_url)
+    if hasattr(path_parts, 'path'):
+        pos = path_parts.path.find("/tree/")
+        if pos == -1:
+            return "master"
+        else:
+            return path_parts.path[pos+6:]
+
 
 
 # If the provided repo name is a user or organization, query github to get all of their repos
