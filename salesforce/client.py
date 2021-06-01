@@ -1,18 +1,19 @@
 import os
 import requests
 from democracylab import settings
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 
 class SalesforceClient:
     __session = None
     endpoint = f'{settings.SALESFORCE_ENDPOINT}/services/data/v{settings.SALESFORCE_API_VERSION}'
     token_endpoint = f'{settings.SALESFORCE_LOGIN_URL}{settings.SALESFORCE_TOKEN_SUFFIX}'
-    contact_endpoint = f'{endpoint}/sobjects/contact'
-    campaign_endpoint = f'{endpoint}/sobjects/campaign'
-    job_endpoint = f'{endpoint}/sobjects/gw_volunteers__volunteer_job__c'
-    hours_endpoint = f'{endpoint}/sobjects/gw_volunteers__volunteer_hours__c'
+    contact_endpoint = f'{endpoint}/sobjects/contact/platform_id__c/'
+    campaign_endpoint = f'{endpoint}/sobjects/campaign/platform_id__c/'
+    job_endpoint = f'{endpoint}/sobjects/gw_volunteers__volunteer_job__c/platform_id__c/'
+    hours_endpoint = f'{endpoint}/sobjects/gw_volunteers__volunteer_hours__c/platform_id__c/'
     redirect_uri = settings.SALESFORCE_REDIRECT_URI
-    client_id = settings.SALESFORCE_CLIENT_ID
     owner_id = settings.SALESFORCE_OWNER_ID
     bearer_token = f'Bearer {settings.SALESFORCE_ACCESS_TOKEN}'
 
@@ -20,22 +21,58 @@ class SalesforceClient:
         self.initialize_session()
 
     """ Session provides Authorization header for all requests """
+    """ Default timeout to avoid hung threads """
     def initialize_session(self):
         self.__session = requests.Session()
         self.__session.headers = {'Content-Type': 'application/json', 'Authorization': self.bearer_token}
+        adapter = TimeoutHTTPAdapter(max_retries=retry_strategy)
+        self.__session.mount("https://", adapter)
+        self.__session.mount("http://", adapter)
 
-    def send(self, prepped_request):
+    def send(self, req):
+        """ The PreparedRequest has settings merged from the Request instance and those of the Session """
+        prepped_request = self.__session.prepare_request(req)
         response = self.__session.send(prepped_request)
-        print('ok')
+        if response.status_code == requests.codes.unauthorized:
+            auth = authorize()
+            if auth.status_code == requests.codes.ok:
+                response = self.__session.send(prepped_request)
         return response
 
-    def authorize(self):
-        r = requests.post(
-            f'{settings.SALESFORCE_LOGIN_URL}{settings.SALESFORCE_TOKEN_SUFFIX}',
-            data={
-                'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                'assertion': settings.SALESFORCE_JWT
-            },
-            headers={'content-type': 'application/x-www-form-urlencoded'}
-        )
-        os.environ['SALESFORCE_ACCESS_TOKEN'] = r.json()['access_token']
+
+def authorize():
+    res = requests.post(
+        f'{settings.SALESFORCE_LOGIN_URL}{settings.SALESFORCE_TOKEN_SUFFIX}',
+        data={
+            'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+            'assertion': settings.SALESFORCE_JWT
+        },
+        headers={'content-type': 'application/x-www-form-urlencoded'}
+    )
+    if res.status_code == requests.codes.ok:
+        print(res.json()['access_token'])
+        os.environ['SALESFORCE_ACCESS_TOKEN'] = res.json()['access_token']
+    return res
+
+
+DEFAULT_TIMEOUT = 6.1  # seconds
+retry_strategy = Retry(
+    total=2,
+    status_forcelist=[429, 500, 502, 503, 504],
+    method_whitelist=["HEAD", "POST", "GET", "OPTIONS"]
+)
+
+
+class TimeoutHTTPAdapter(HTTPAdapter):
+    def __init__(self, *args, **kwargs):
+        self.timeout = DEFAULT_TIMEOUT
+        if "timeout" in kwargs:
+            self.timeout = kwargs["timeout"]
+            del kwargs["timeout"]
+        super().__init__(*args, **kwargs)
+
+    def send(self, request, **kwargs):
+        timeout = kwargs.get("timeout")
+        if timeout is None:
+            kwargs["timeout"] = self.timeout
+        return super().send(request, **kwargs)

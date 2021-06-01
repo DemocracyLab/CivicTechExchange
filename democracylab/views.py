@@ -15,6 +15,7 @@ from .forms import DemocracyLabUserCreationForm, DemocracyLabUserAddDetailsForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
 from .tokens import email_verify_token_generator
 from oauth2 import registry
+from salesforce import contact as salesforce_contact
 
 
 def login_view(request, provider=None):
@@ -62,6 +63,7 @@ def signup(request):
             )
             contributor.set_password(raw_password)
             contributor.save()
+            salesforce_contact.save(contributor)
             user = authenticate(username=contributor.username, password=raw_password)
             login(request, user)
             send_verification_email(contributor)
