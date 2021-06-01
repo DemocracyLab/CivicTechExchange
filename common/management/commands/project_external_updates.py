@@ -75,7 +75,8 @@ def update_if_commit_after_project_updated_time(project, latest_commit_date_stri
 def add_commits_to_database(project, commits_to_ingest):
     from civictechprojects.models import ProjectCommit
     for commit_info in commits_to_ingest:
-        ProjectCommit.create(project, commit_info[0], commit_info[2], commit_info[1])
+        branch = commit_info[2] if commit_info[2] is not None else 'master'
+        ProjectCommit.create(project, commit_info[0], branch, commit_info[1])
     project.recache()
 
 
