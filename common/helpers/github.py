@@ -24,8 +24,8 @@ def fetch_github_info(github_url):
 def get_repo_endpoint_from_owner_repo_name(owner_repo_name, start_date=None, branch=None):
     if len(owner_repo_name) > 1:
         url_base = '{github}/repos/{owner}/{repo}/commits'.format(github=github_api_endpoint,
-                                                                               owner=owner_repo_name[0],
-                                                                               repo=owner_repo_name[1])
+                                                                  owner=owner_repo_name[0],
+                                                                  repo=owner_repo_name[1])
         params = {}
         if branch is not None:
             params['sha'] = branch
