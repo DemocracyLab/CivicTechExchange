@@ -36,7 +36,7 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
     notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
-from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
+from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url, clean_invalid_args
 from django.views.decorators.cache import cache_page
 import requests
 
@@ -337,6 +337,15 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         from allauth.socialaccount.models import SocialAccount
         account = SocialAccount.objects.filter(user=request.user).first()
         return redirect(section_url(FrontEndSection.AddUserDetails, {'provider': account.provider}))
+
+    page_url = request.get_full_path()
+    # Valid project URL path with invalid arguments should show page with canonical url
+    url_args = request.GET.urlencode()
+    clean_url_args = clean_invalid_args(url_args)
+    if url_args != "" and clean_url_args != '?' + url_args:
+        clean_url_valid_args = request.path + clean_url_args
+        print('Redirecting {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url_valid_args))
+        return redirect(clean_url_valid_args)
 
     page_url = request.get_full_path()
     clean_url = get_clean_url(page_url)
