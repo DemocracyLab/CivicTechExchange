@@ -22,7 +22,7 @@ type Props = {|
   forceShow: boolean,
 |};
 
-class MainFooter extends React.Component<{||}, Props> {
+class MainFooter extends React.Component<Props> {
   constructor(props: Props): void {
     super(props);
   }
