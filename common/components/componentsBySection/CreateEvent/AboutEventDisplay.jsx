@@ -12,6 +12,7 @@ import Section from "../../enums/Section";
 import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
 import _ from "lodash";
+import MainFooter from "../../chrome/MainFooter.jsx"
 
 type Props = {|
   event: ?EventData,
@@ -118,6 +119,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         {!_.isEmpty(event.event_legacy_organization) && (
           <ProfileProjectSearch viewOnly={this.props.viewOnly} />
         )}
+        <MainFooter key="main_footer" forceShow={event.show_headers}/>
       </div>
     );
   }
