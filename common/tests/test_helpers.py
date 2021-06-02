@@ -48,10 +48,16 @@ class FrontEndHelperTests(TestCase):
 
     def test_clean_invalid_args(self):
         expected = ['', '?embedded=1', '?sortField=-project_date_modified&issues=education']
+        self.assertEqual(expected[0], clean_invalid_args('id=486'))
+        self.assertEqual(expected[0], clean_invalid_args('section=AboutProject'))
         self.assertEqual(expected[0], clean_invalid_args('section=AboutProject&id=486'))
         self.assertEqual(expected[1], clean_invalid_args('embedded=1'))
         self.assertEqual(expected[2], clean_invalid_args('sortField=-project_date_modified&issues=education'))
-
+        self.assertEqual(expected[2], clean_invalid_args('id=678&sortField=-project_date_modified&issues=education'))
+        self.assertEqual(expected[2], clean_invalid_args('section=AboutGroup&sortField=-project_date_modified&issues=education'))
+        self.assertEqual(expected[2], clean_invalid_args('sortField=-project_date_modified&id=678&issues=education'))
+        self.assertEqual(expected[2], clean_invalid_args('sortField=-project_date_modified&section=AboutProject&issues=education'))
+        
     def test_get_page_section(self):
         expected = 'AboutEvent'
         self.assertEqual(expected, get_page_section('/events/test-slug'))
