@@ -17,6 +17,14 @@ class stringHelper {
   static contains(str: string, substrings: $ReadOnlyArray<string>): void {
     return _.some(substrings, (substring: string) => str.includes(substring));
   }
+
+  /**
+   *
+   * @returns {string} Random alphanumeric string
+   */
+  static randomAlphanumeric(): string {
+    return Math.random().toString(36);
+  }
 }
 
 export default stringHelper;

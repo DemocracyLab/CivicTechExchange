@@ -3,6 +3,8 @@ import _ from "lodash";
 
 // For dictionary of items of a single type
 export type Dictionary<T> = { [key: string]: T };
+// A key-value pair in array format
+export type KeyValuePair<T> = [string, T];
 // For the partitioning of arrays into two sets of elements
 export type PartitionSet<T> = [$ReadOnlyArray<T>, $ReadOnlyArray<T>];
 // For transformation operations that don't change the underlying type, like sorting

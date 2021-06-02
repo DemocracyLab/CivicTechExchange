@@ -2,16 +2,17 @@
 
 import React from "react";
 import DjangoCSRFToken from "django-react-csrftoken";
-import type { ProjectDetailsAPIData } from "../../../components/utils/ProjectAPIUtils.js";
-import type { LinkInfo } from "../../forms/LinkInfo.jsx";
+import type { ProjectDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
+import { LinkVisibility, LinkInfo } from "../../forms/LinkInfo.jsx";
 import type { FileInfo } from "../../common/FileInfo.jsx";
-import LinkList from "../../forms/LinkList.jsx";
+import LinkList, { NewLinkInfo } from "../../forms/LinkList.jsx";
 import FileUploadList from "../../forms/FileUploadList.jsx";
 import formHelper, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
 import FormValidation from "../../forms/FormValidation.jsx";
 import type { Validator } from "../../forms/FormValidation.jsx";
 import { OnReadySubmitFunc } from "./ProjectFormCommon.jsx";
 import { DefaultLinkDisplayConfigurations } from "../../constants/LinkConstants.js";
+import HiddenFormFields from "../../forms/HiddenFormFields.jsx";
 import url from "../../utils/url.js";
 import _ from "lodash";
 
@@ -29,7 +30,14 @@ type Props = {|
   readyForSubmit: OnReadySubmitFunc,
 |} & FormPropsBase<FormFields>;
 
-type State = FormStateBase<FormFields>;
+type State = {| linkDict: Dictionary<LinkInfo> |} & FormStateBase<FormFields>;
+
+const resourceLinks: $ReadOnlyArray<string> = [
+  "link_coderepo",
+  "link_messaging",
+  "link_projmanage",
+  "link_filerepo",
+];
 
 /**
  * Encapsulates form for Project Resources section
@@ -46,6 +54,7 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
       link_projmanage: "",
       link_filerepo: "",
     };
+    // TODO: Validate every field
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
         checkFunc: (formFields: FormFields) =>
@@ -76,6 +85,7 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
       formFields: formFields,
       formIsValid: formIsValid,
       validations: validations,
+      linkDict: this.generateLinkDict(props),
     };
     //this will set formFields.project_links and formFields.links_*
     this.filterSpecificLinks(_.cloneDeep(project.project_links));
@@ -85,6 +95,33 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     this.form.doValidation.bind(this)();
+  }
+
+  generateLinkKey(link: NewLinkInfo): string {
+    if (_.includes(resourceLinks, link.linkName)) {
+      return link.linkName;
+    } else {
+      const id: string = link.tempId || link.id;
+      return link.linkName + id;
+    }
+  }
+
+  generateLinkDict(props: Props): Dictionary<LinkInfo> {
+    const linkDict: Dictionary<LinkInfo> = _.mapKeys(
+      props.project.project_links,
+      this.generateLinkKey
+    );
+    resourceLinks.forEach((linkType: string) => {
+      if (!(linkType in linkDict)) {
+        linkDict[linkType] = {
+          linkName: linkType,
+          visibility: LinkVisibility.PUBLIC,
+          linkUrl: "",
+        };
+      }
+    });
+
+    return linkDict;
   }
 
   onValidationCheck(formIsValid: boolean): void {
@@ -102,29 +139,11 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
         this.state.formFields.project_url
       );
     }
-    // create input array
-    let eLinks = [
-      "link_coderepo",
-      "link_messaging",
-      "link_filerepo",
-      "link_projmanage",
-    ].map(name => ({ linkName: name, linkUrl: this.state.formFields[name] }));
-    //create output array
-    let eLinksArray = [];
-    //create objects for project_links array, skipping empty fields
-    eLinks.forEach(function(item) {
-      if (!_.isEmpty(item.linkUrl)) {
-        item.linkUrl = url.appendHttpIfMissingProtocol(item.linkUrl);
-        eLinksArray.push({
-          linkName: item.linkName,
-          linkUrl: item.linkUrl,
-          visibility: "PUBLIC",
-        });
-      }
-    });
-    //combine arrays prior to sending to backend
+    // TODO: Do we need this?
     let formFields = this.state.formFields;
-    formFields.project_links = formFields.project_links.concat(eLinksArray);
+    formFields.project_links = _.values(this.state.linkDict).filter(
+      (link: LinkInfo) => !_.isEmpty(link.linkUrl)
+    );
     this.setState({ formFields: formFields }, submitFunc);
     this.forceUpdate();
   }
@@ -148,78 +167,45 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
     this.forceUpdate();
   }
 
+  onAddLink(link: NewLinkInfo): void {
+    const key: string = this.generateLinkKey(link);
+    const linkDict: Dictionary<NewLinkInfo> = _.clone(this.state.linkDict);
+    linkDict[key] = link;
+    this.setState({ linkDict: linkDict });
+  }
+
+  onChangeLink(
+    linkKey: string,
+    input: SyntheticInputEvent<HTMLInputElement>
+  ): void {
+    this.state.linkDict[linkKey].linkUrl = input.target.value;
+    this.form.onInput.call(this, linkKey, input);
+    // this.forceUpdate();
+  }
+
   render(): React$Node {
     return (
       <div className="EditProjectForm-root">
         <DjangoCSRFToken />
 
-        <div className="form-group">
-          <label htmlFor="link_coderepo">
-            Code Repository <span className="label-hint">(e.g. Github)</span>
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="link_coderepo"
-            name="link_coderepo"
-            maxLength="2075"
-            value={this.state.formFields.link_coderepo}
-            onChange={this.form.onInput.bind(this, "link_coderepo")}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="link_messaging">
-            Messaging <span className="label-hint">(e.g. Slack)</span>
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="link_messaging"
-            name="link_messaging"
-            maxLength="2075"
-            value={this.state.formFields.link_messaging}
-            onChange={this.form.onInput.bind(this, "link_messaging")}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="link_projmanage">
-            Project Management <span className="label-hint">(e.g. Trello)</span>
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="link_projmanage"
-            name="link_projmanage"
-            maxLength="2075"
-            value={this.state.formFields.link_projmanage}
-            onChange={this.form.onInput.bind(this, "link_projmanage")}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="link_filerepo">
-            File Repository{" "}
-            <span className="label-hint">(e.g. Google Drive)</span>
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="link_filerepo"
-            name="link_filerepo"
-            maxLength="2075"
-            value={this.state.formFields.link_filerepo}
-            onChange={this.form.onInput.bind(this, "link_filerepo")}
-          />
-        </div>
+        <HiddenFormFields
+          sourceDict={{
+            project_links: JSON.stringify(
+              this.state.formFields.project_links || []
+            ),
+          }}
+        />
 
         <div className="form-group">
           <LinkList
-            elementid="project_links"
-            title="Project Links"
+            elementid="resource_links"
+            title="Project Resources"
+            subheader="Paste the links to your internal collaboration tools"
             links={this.state.formFields.project_links}
-            onChange={this.form.onFormChange.bind(this)}
+            linkDict={this.state.linkDict}
+            linkOrdering={resourceLinks}
+            onAddLink={this.onAddLink.bind(this)}
+            onChangeLink={this.onChangeLink.bind(this)}
           />
         </div>
 
