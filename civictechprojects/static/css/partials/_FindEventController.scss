@@ -28,15 +28,10 @@
   border-top: none;
 }
 
-.FindEventsController-topsplash h1 {
-  font-size: 4rem;
-}
 .EventCard-root h2 {
-  font-size: 22px;
   margin: 22px 0 12px 0;
 }
 .EventCard-root h4 {
-  font-size: 16px;
   margin-bottom: 16px;
   color: $color-text-grey;
 }
@@ -46,18 +41,12 @@
 }
 .EventCard-dateheader {
   margin-top: 2rem;
-  font-size: 24px;
-  font-weight: 500;
 }
 .EventCard-info {
   display: flex;
   flex-direction: column;
 }
-.EventCard-info li {
-  font-size: 18px;
-}
 .EventCard-info li i {
-  font-size: 13px; /* ratio determined, should be standardized */
   margin-right: 5px;
 }
 .EventCard-root a {
@@ -101,7 +90,6 @@
 .EventCard-info ul {
   color: $color-text-grey;
   list-style-type: none;
-  font-size: 0.875rem;
   padding: 0;
 }
 .EventCard-info li {
@@ -111,9 +99,6 @@
 .EventCard-time {
   grid-column: 1;
   grid-row: 3;
-  h2 {
-    font-weight: 400;
-  }
 }
 
 @include media-breakpoint-up(md) {

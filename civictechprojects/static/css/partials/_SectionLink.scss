@@ -1,7 +1,6 @@
 .SectionLink-root {
   cursor: pointer;
   display: inline-block;
-  font-size: 15px;
   font-weight: bold;
   margin: 5px 8px 0px 8px;
   padding-bottom: 0px;
@@ -18,7 +17,6 @@
 .SectionLink-root h3 {
   border-bottom: 3px solid transparent;
   color: $color-text-grey;
-  font-size: 1rem;
   padding-bottom: 14px;
   margin: 0px 5px;
   transition: 300ms;

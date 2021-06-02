@@ -26,7 +26,7 @@
     "flux": "^4.0.0",
     "form-serialize": "^0.7.2",
     "immutable": "^3.8.2",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^0.9.0",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
@@ -87,7 +87,12 @@
     "serialize-javascript": "^3.1.0",
     "node-fetch": "^2.6.1",
     "node-forge": "^0.10.0",
-    "yargs-parser": "^5.0.0-security.0"
+    "yargs-parser": "^5.0.1",
+    "ssri": "^6.0.2",
+    "url-parse": "^1.5.1",
+    "ua-parser-js": "^0.7.28",
+    "hosted-git-info": "^2.8.9",
+    "elliptic": "^6.5.4"
   },
   "jest": {
     "automock": false,
