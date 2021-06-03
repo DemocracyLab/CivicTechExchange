@@ -21,13 +21,16 @@ class HiddenFormFields extends React.Component<Props> {
   constructor(props: Props): void {
     super(props);
   }
-  // TODO: fix for location
+
   render(): React$Node {
     const nameValues: $ReadOnlyArray<KeyValuePair<string>> = this.props
       .sourceDict
       ? _.entries(this.props.sourceDict)
-      : _.keys(this.props.fields).map(fieldName =>
-          this.props.fields[fieldName](this.props.sourceObject)
+      : _.entries(
+          _.keys(this.props.fields).map(fieldName => [
+            fieldName,
+            this.props.fields[fieldName](this.props.sourceObject),
+          ])
         );
 
     return (
