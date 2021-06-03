@@ -24,7 +24,7 @@ class GroupAdmin(admin.ModelAdmin):
     list_filter = group_filter_fields
 
 event_text_fields = ['event_name', 'event_agenda', 'event_description','event_location', 'event_rsvp_url', 'event_live_id', 'event_short_description']
-event_filter_fields = ('event_date_created', 'event_date_end', 'event_date_modified', 'event_date_start', 'is_searchable', 'is_created')
+event_filter_fields = ('event_date_created', 'event_date_end', 'event_date_modified', 'event_date_start', 'is_searchable', 'is_created', 'show_headers')
 class EventAdmin(admin.ModelAdmin):
     list_display = tuple(event_text_fields) + ('event_creator',) + event_filter_fields
     search_fields = event_text_fields + ['event_creator__email']

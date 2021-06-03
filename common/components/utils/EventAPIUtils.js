@@ -23,6 +23,7 @@ export type EventData = {|
   event_legacy_organization: $ReadOnlyArray<TagDefinition>,
   event_slug: string,
   is_private: boolean,
+  show_headers: boolean,
 |};
 
 export type EventTileAPIData = {|
