@@ -249,6 +249,7 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
             subheader="Paste the links to your internal collaboration tools"
             linkDict={this.state.resourceLinkDict}
             linkOrdering={resourceLinks}
+            addLinkText="Add a new link"
             onAddLink={this.onAddLink.bind(this)}
             onChangeLink={this.onChangeLink.bind(this)}
           />
@@ -262,6 +263,7 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
             linkNamePrefix="social_"
             linkDict={this.state.socialLinkDict}
             linkOrdering={socialLinks}
+            addLinkText="Add a social link"
             onAddLink={this.onAddLink.bind(this)}
             onChangeLink={this.onChangeLink.bind(this)}
           />

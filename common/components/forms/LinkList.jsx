@@ -1,11 +1,9 @@
 // @flow
 
 import React from "react";
-import Button from "react-bootstrap/Button";
-
 import LinkEntryModal from "./LinkEntryModal.jsx";
 import type { LinkInfo } from "./LinkInfo.jsx";
-import GlyphStyles from "../utils/glyphs.js";
+import GlyphStyles, { Glyph, GlyphSizes } from "../utils/glyphs.js";
 import type { Dictionary, KeyValuePair } from "../types/Generics.jsx";
 import Sort from "../utils/sort.js";
 import stringHelper from "../utils/string.js";
@@ -20,6 +18,7 @@ type Props = {|
   title: string,
   subheader: string,
   linkNamePrefix: ?string,
+  addLinkText: ?string,
   onAddLink: NewLinkInfo => void,
   onChangeLink: (string, SyntheticInputEvent<HTMLInputElement>) => void,
 |};
@@ -132,7 +131,7 @@ class LinkList extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     return (
-      <div>
+      <div className="LinkList">
         <input
           type="hidden"
           ref="hiddenFormField"
@@ -145,13 +144,13 @@ class LinkList extends React.PureComponent<Props, State> {
 
         {this._renderLinks()}
 
-        <Button
-          variant="primary"
-          size="sm"
-          onClick={this.createNewLink.bind(this)}
-        >
-          <i className={GlyphStyles.Add} aria-hidden="true"></i>
-        </Button>
+        <span className="add-link" onClick={this.createNewLink.bind(this)}>
+          <i
+            className={Glyph(GlyphStyles.Add, GlyphSizes.SM)}
+            aria-hidden="true"
+          ></i>
+          {this.props.addLinkText}
+        </span>
 
         <LinkEntryModal
           showModal={this.state.showAddEditModal}
