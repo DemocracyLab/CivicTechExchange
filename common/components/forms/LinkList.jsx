@@ -140,8 +140,11 @@ class LinkList extends React.PureComponent<Props, State> {
           name={this.props.elementid}
         />
 
-        <label>{this.props.title || "Links"} &nbsp;</label>
-        {this.props.subheader && <p>{this.props.subheader}</p>}
+        <h3>{this.props.title || "Links"}</h3>
+        <p>{this.props.subheader}</p>
+
+        {this._renderLinks()}
+
         <Button
           variant="primary"
           size="sm"
@@ -149,8 +152,6 @@ class LinkList extends React.PureComponent<Props, State> {
         >
           <i className={GlyphStyles.Add} aria-hidden="true"></i>
         </Button>
-
-        {this._renderLinks()}
 
         <LinkEntryModal
           showModal={this.state.showAddEditModal}
