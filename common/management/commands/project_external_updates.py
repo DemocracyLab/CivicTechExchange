@@ -24,11 +24,7 @@ class Command(BaseCommand):
 
 def get_project_github_links():
     from civictechprojects.models import ProjectLink
-    repo_links = ProjectLink.objects.filter(link_name='link_coderepo', link_url__icontains='github.com/')\
-        .exclude(link_project__isnull=True)
-    branch_links = ProjectLink.objects.filter(link_url__icontains='github.com/').filter(link_url__icontains='/tree/')\
-        .exclude(link_name='link_coderepo', link_project__isnull=True)
-    return repo_links.union(branch_links)
+    return ProjectLink.objects.filter(link_url__icontains='github.com/').exclude(link_project__isnull=True)
 
 
 def handle_project_github_updates(project_github_link):
@@ -76,7 +72,9 @@ def add_commits_to_database(project, commits_to_ingest):
     from civictechprojects.models import ProjectCommit
     for commit_info in commits_to_ingest:
         branch = commit_info[2] if commit_info[2] is not None else 'master'
-        ProjectCommit.create(project, commit_info[0], branch, commit_info[1])
+        display_name = commit_info[0]
+        commit = commit_info[1]
+        ProjectCommit.create(project, display_name, branch, commit)
     project.recache()
 
 
