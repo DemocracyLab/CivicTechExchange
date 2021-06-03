@@ -35,6 +35,7 @@ const linkCaptions: Dictionary<string> = {
   link_messaging: "Communication (e.g. Slack)",
   link_projmanage: "Project Management (e.g. Trello)",
   link_filerepo: "File Repository (e.g. Google Drive)",
+  link_design: "Design Files (e.g. Figma)",
   social_twitter: "Twitter",
   social_facebook: "Facebook",
   social_linkedin: "LinkedIn",

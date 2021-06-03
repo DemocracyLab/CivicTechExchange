@@ -48,6 +48,7 @@ const resourceLinks: $ReadOnlyArray<string> = [
   "link_messaging",
   "link_projmanage",
   "link_filerepo",
+  "link_design",
 ];
 
 const socialLinks: $ReadOnlyArray<string> = [
