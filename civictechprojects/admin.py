@@ -10,9 +10,10 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = project_text_fields + ['project_creator__email']
     list_filter = project_filter_fields
     def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
         if change:
             obj.recache(recache_linked=True)
-        super().save_model(request, obj, form, change)
+        
 
 project_relationship_filter_fields = ('project_initiated', 'is_approved')
 class ProjectRelationshipAdmin(admin.ModelAdmin):
