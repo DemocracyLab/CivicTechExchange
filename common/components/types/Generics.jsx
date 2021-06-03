@@ -10,20 +10,21 @@ export type PartitionSet<T> = [$ReadOnlyArray<T>, $ReadOnlyArray<T>];
 // For transformation operations that don't change the underlying type, like sorting
 export type Transform<T> = T => T;
 
-// TODO: Add unit test
+// TODO: Add unit tests!
 /**
  * Creates dictionary of objects
  *
  * entries: Objects in dictionary
  * entryKeyFunc(optional): Function that generates string key for object.  If omitted, uses lodash's toString method by default
  */
-export function createDictionary<T>(
+export function createDictionary<T, V>(
   entries: $ReadOnlyArray<T>,
-  entryKeyFunc: T => string
+  entryKeyFunc: ?(T) => string,
+  entryValueFunc: ?(T) => V
 ): Dictionary<T> {
   const entryPairs: $ReadOnlyArray<string | T> = entries.map((entry: T) => [
     entryKeyFunc ? entryKeyFunc(entry) : _.toString(entry),
-    entry,
+    entryValueFunc ? entryValueFunc(entry) : entry,
   ]);
   return _.fromPairs(entryPairs);
 }

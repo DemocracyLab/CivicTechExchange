@@ -3,9 +3,15 @@
 import React from "react";
 import DjangoCSRFToken from "django-react-csrftoken";
 import type { ProjectDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
-import { LinkVisibility, LinkInfo } from "../../forms/LinkInfo.jsx";
+import { LinkInfo } from "../../forms/LinkInfo.jsx";
+import Visibility from "../../common/Visibility.jsx";
 import type { FileInfo } from "../../common/FileInfo.jsx";
 import LinkList, { NewLinkInfo } from "../../forms/LinkList.jsx";
+import {
+  createDictionary,
+  Dictionary,
+  PartitionSet,
+} from "../../types/Generics.jsx";
 import FileUploadList from "../../forms/FileUploadList.jsx";
 import formHelper, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
 import FormValidation from "../../forms/FormValidation.jsx";
@@ -14,6 +20,7 @@ import { OnReadySubmitFunc } from "./ProjectFormCommon.jsx";
 import { DefaultLinkDisplayConfigurations } from "../../constants/LinkConstants.js";
 import HiddenFormFields from "../../forms/HiddenFormFields.jsx";
 import url from "../../utils/url.js";
+import stringHelper from "../../utils/string.js";
 import _ from "lodash";
 
 type FormFields = {|
@@ -30,7 +37,11 @@ type Props = {|
   readyForSubmit: OnReadySubmitFunc,
 |} & FormPropsBase<FormFields>;
 
-type State = {| linkDict: Dictionary<LinkInfo> |} & FormStateBase<FormFields>;
+type State = {|
+  linkDict: Dictionary<NewLinkInfo>,
+  resourceLinkDict: Dictionary<NewLinkInfo>,
+  socialLinkDict: Dictionary<NewLinkInfo>,
+|} & FormStateBase<FormFields>;
 
 const resourceLinks: $ReadOnlyArray<string> = [
   "link_coderepo",
@@ -38,6 +49,17 @@ const resourceLinks: $ReadOnlyArray<string> = [
   "link_projmanage",
   "link_filerepo",
 ];
+
+const socialLinks: $ReadOnlyArray<string> = [
+  "social_twitter",
+  "social_facebook",
+  "social_linkedin",
+];
+
+const allPresetLinks: $ReadOnlyArray<string> = _.concat(
+  resourceLinks,
+  socialLinks
+);
 
 /**
  * Encapsulates form for Project Resources section
@@ -81,12 +103,14 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
       formFields,
       validations
     );
-    this.state = {
-      formFields: formFields,
-      formIsValid: formIsValid,
-      validations: validations,
-      linkDict: this.generateLinkDict(props),
-    };
+    this.state = Object.assign(
+      {
+        formFields: formFields,
+        formIsValid: formIsValid,
+        validations: validations,
+      },
+      this.generateLinkDicts(props)
+    );
     //this will set formFields.project_links and formFields.links_*
     this.filterSpecificLinks(_.cloneDeep(project.project_links));
     this.form = formHelper.setup();
@@ -97,8 +121,18 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
     this.form.doValidation.bind(this)();
   }
 
+  generateBlankLink(linkName: string): NewLinkInfo {
+    const link: NewLinkInfo = {
+      tempId: stringHelper.randomAlphanumeric(),
+      linkName: linkName,
+      linkUrl: "",
+      visibility: Visibility.PUBLIC,
+    };
+    return link;
+  }
+
   generateLinkKey(link: NewLinkInfo): string {
-    if (_.includes(resourceLinks, link.linkName)) {
+    if (_.includes(allPresetLinks, link.linkName)) {
       return link.linkName;
     } else {
       const id: string = link.tempId || link.id;
@@ -106,22 +140,34 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
     }
   }
 
-  generateLinkDict(props: Props): Dictionary<LinkInfo> {
-    const linkDict: Dictionary<LinkInfo> = _.mapKeys(
-      props.project.project_links,
-      this.generateLinkKey
+  generateLinkDicts(props: Props): State {
+    // Generate blank links for presets
+    let linkDict: Dictionary<NewLinkInfo> = createDictionary(
+      allPresetLinks,
+      (key: string) => key,
+      (key: string) => this.generateBlankLink(key)
     );
-    resourceLinks.forEach((linkType: string) => {
-      if (!(linkType in linkDict)) {
-        linkDict[linkType] = {
-          linkName: linkType,
-          visibility: LinkVisibility.PUBLIC,
-          linkUrl: "",
-        };
-      }
-    });
+    // Merge in existing links
+    linkDict = Object.assign(
+      linkDict,
+      _.mapKeys(props.project.project_links, this.generateLinkKey)
+    );
+    return this.updateLinkDicts(linkDict);
+  }
 
-    return linkDict;
+  updateLinkDicts(linkDict: Dictionary<NewLinkInfo>): State {
+    // Split keys into resource and social links
+    const allKeys: $ReadOnlyArray<string> = _.keys(linkDict);
+    const socialResourceLinks: PartitionSet<string> = _.partition(
+      allKeys,
+      (key: string) => _.startsWith(key, "social_")
+    );
+
+    return {
+      linkDict: linkDict,
+      socialLinkDict: _.pick(linkDict, socialResourceLinks[0]),
+      resourceLinkDict: _.pick(linkDict, socialResourceLinks[1]),
+    };
   }
 
   onValidationCheck(formIsValid: boolean): void {
@@ -171,7 +217,7 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
     const key: string = this.generateLinkKey(link);
     const linkDict: Dictionary<NewLinkInfo> = _.clone(this.state.linkDict);
     linkDict[key] = link;
-    this.setState({ linkDict: linkDict });
+    this.setState(this.updateLinkDicts(linkDict));
   }
 
   onChangeLink(
@@ -201,9 +247,21 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
             elementid="resource_links"
             title="Project Resources"
             subheader="Paste the links to your internal collaboration tools"
-            links={this.state.formFields.project_links}
-            linkDict={this.state.linkDict}
+            linkDict={this.state.resourceLinkDict}
             linkOrdering={resourceLinks}
+            onAddLink={this.onAddLink.bind(this)}
+            onChangeLink={this.onChangeLink.bind(this)}
+          />
+        </div>
+
+        <div className="form-group">
+          <LinkList
+            elementid="social_links"
+            title="Social Media"
+            subheader="Paste the links to your social media profiles"
+            linkNamePrefix="social_"
+            linkDict={this.state.socialLinkDict}
+            linkOrdering={socialLinks}
             onAddLink={this.onAddLink.bind(this)}
             onChangeLink={this.onChangeLink.bind(this)}
           />

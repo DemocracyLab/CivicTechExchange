@@ -6,7 +6,3 @@ export type LinkInfo = {|
   linkName: string,
   visibility: string,
 |};
-
-export const LinkVisibility: Dictionary<string> = {
-  PUBLIC: "PUBLIC",
-};

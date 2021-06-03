@@ -19,6 +19,7 @@ type Props = {|
   linkOrdering: $ReadOnlyArray<string>,
   title: string,
   subheader: string,
+  linkNamePrefix: ?string,
   onAddLink: NewLinkInfo => void,
   onChangeLink: (string, SyntheticInputEvent<HTMLInputElement>) => void,
 |};
@@ -35,6 +36,9 @@ const linkCaptions: Dictionary<string> = {
   link_messaging: "Communication (e.g. Slack)",
   link_projmanage: "Project Management (e.g. Trello)",
   link_filerepo: "File Repository (e.g. Google Drive)",
+  social_twitter: "Twitter",
+  social_facebook: "Facebook",
+  social_linkedin: "LinkedIn",
 };
 
 /**
@@ -96,6 +100,9 @@ class LinkList extends React.PureComponent<Props, State> {
     if (!this.state.existingLink) {
       const newLinkData: NewLinkInfo = linkData;
       newLinkData.tempId = stringHelper.randomAlphanumeric();
+      if (this.props.linkNamePrefix) {
+        linkData.linkName = this.props.linkNamePrefix + linkData.linkName;
+      }
       this.props.onAddLink(newLinkData);
     } else {
       _.assign(this.state.existingLink, linkData);
@@ -111,6 +118,16 @@ class LinkList extends React.PureComponent<Props, State> {
 
   editLinkUrl(linkKey: string, value: string): void {
     this.props.onChangeLink(linkKey, value);
+  }
+
+  getLinkHeader(link: NewLinkInfo): string {
+    if (link.linkName in linkCaptions) {
+      return linkCaptions[link.linkName];
+    } else {
+      return this.props.linkNamePrefix
+        ? stringHelper.trimStartString(link.linkName, this.props.linkNamePrefix)
+        : link.linkName;
+    }
   }
 
   render(): React$Node {
@@ -148,8 +165,7 @@ class LinkList extends React.PureComponent<Props, State> {
   _renderLinks(): Array<React$Node> {
     return this.state.linkKeyOrdering.map((linkKey: string, i) => {
       const link: NewLinkInfo = this.props.linkDict[linkKey];
-      const header: string =
-        linkKey in linkCaptions ? linkCaptions[linkKey] : link.linkName;
+      const header: string = this.getLinkHeader(link);
       return (
         <div key={i} className="form-group">
           <label htmlFor={linkKey}>{header}</label>
