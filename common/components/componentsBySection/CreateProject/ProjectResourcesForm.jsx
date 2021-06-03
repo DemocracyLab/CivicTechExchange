@@ -242,7 +242,7 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
           }}
         />
 
-        <div className="form-group">
+        <div className="form-group create-form-block">
           <LinkList
             elementid="resource_links"
             title="Project Resources"
@@ -254,7 +254,7 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group create-form-block">
           <LinkList
             elementid="social_links"
             title="Social Media"
@@ -267,7 +267,7 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group create-form-block">
           <FileUploadList
             elementid="project_files"
             title="Project Files"

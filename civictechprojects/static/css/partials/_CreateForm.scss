@@ -1,5 +1,12 @@
 /* create event, create group flows */
 
+.create-form-block {
+  background-color: $color-background-light;
+  box-shadow: -5px 5px 10px 1px rgba(0, 0, 0, 0.15);
+  padding: 20px 10px;
+  margin-bottom: 40px;
+}
+
 .create-selected-projects {
   margin-bottom: 1.25rem;
 }
