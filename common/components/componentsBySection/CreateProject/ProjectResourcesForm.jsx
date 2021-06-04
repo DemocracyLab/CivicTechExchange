@@ -281,6 +281,7 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
           <FileUploadList
             elementid="project_files"
             title="Project Files"
+            subheader="Add the files or documents"
             files={this.state.formFields.project_files}
             onChange={this.form.onFormChange.bind(this)}
           />

@@ -92,6 +92,7 @@ class LinkList extends React.PureComponent<Props, State> {
     this.setState({ showAddEditModal: false });
   }
 
+  // TODO: Remove unneeded
   editLink(linkData: LinkInfo): void {
     this.state.existingLink = linkData;
     this.openModal();
@@ -144,7 +145,7 @@ class LinkList extends React.PureComponent<Props, State> {
         <h3>{this.props.title || "Links"}</h3>
         <p>{this.props.subheader}</p>
 
-        {this._renderLinks()}
+        <div className="form-offset">{this._renderLinks()}</div>
 
         <span className="add-link" onClick={this.createNewLink.bind(this)}>
           <i
