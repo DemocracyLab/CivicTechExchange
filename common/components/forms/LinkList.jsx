@@ -145,15 +145,17 @@ class LinkList extends React.PureComponent<Props, State> {
         <h3>{this.props.title || "Links"}</h3>
         <p>{this.props.subheader}</p>
 
-        <div className="form-offset">{this._renderLinks()}</div>
+        <div className="form-offset">
+          {this._renderLinks()}
 
-        <span className="add-link" onClick={this.createNewLink.bind(this)}>
-          <i
-            className={Glyph(GlyphStyles.Add, GlyphSizes.SM)}
-            aria-hidden="true"
-          ></i>
-          {this.props.addLinkText}
-        </span>
+          <span className="add-link" onClick={this.createNewLink.bind(this)}>
+            <i
+              className={Glyph(GlyphStyles.Add, GlyphSizes.SM)}
+              aria-hidden="true"
+            ></i>
+            {this.props.addLinkText}
+          </span>
+        </div>
 
         <LinkEntryModal
           showModal={this.state.showAddEditModal}
