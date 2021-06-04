@@ -17,7 +17,10 @@ import formHelper, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
 import FormValidation from "../../forms/FormValidation.jsx";
 import type { Validator } from "../../forms/FormValidation.jsx";
 import { OnReadySubmitFunc } from "./ProjectFormCommon.jsx";
-import { DefaultLinkDisplayConfigurations } from "../../constants/LinkConstants.js";
+import {
+  DefaultLinkDisplayConfigurations,
+  LinkTypes,
+} from "../../constants/LinkConstants.js";
 import HiddenFormFields from "../../forms/HiddenFormFields.jsx";
 import url from "../../utils/url.js";
 import stringHelper from "../../utils/string.js";
@@ -44,17 +47,17 @@ type State = {|
 |} & FormStateBase<FormFields>;
 
 const resourceLinks: $ReadOnlyArray<string> = [
-  "link_coderepo",
-  "link_messaging",
-  "link_projmanage",
-  "link_filerepo",
-  "link_design",
+  LinkTypes.CODE_REPOSITORY,
+  LinkTypes.MESSAGING,
+  LinkTypes.PROJECT_MANAGEMENT,
+  LinkTypes.FILE_REPOSITORY,
+  LinkTypes.DESIGN,
 ];
 
 const socialLinks: $ReadOnlyArray<string> = [
-  "social_twitter",
-  "social_facebook",
-  "social_linkedin",
+  LinkTypes.TWITTER,
+  LinkTypes.FACEBOOK,
+  LinkTypes.LINKED_IN,
 ];
 
 const allPresetLinks: $ReadOnlyArray<string> = _.concat(
@@ -161,7 +164,8 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
     const allKeys: $ReadOnlyArray<string> = _.keys(linkDict);
     const socialResourceLinks: PartitionSet<string> = _.partition(
       allKeys,
-      (key: string) => _.startsWith(key, "social_")
+      (key: string) =>
+        _.startsWith(key, "social_") || key === LinkTypes.LINKED_IN
     );
 
     return {

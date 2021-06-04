@@ -7,6 +7,7 @@ import GlyphStyles, { Glyph, GlyphSizes } from "../utils/glyphs.js";
 import type { Dictionary, KeyValuePair } from "../types/Generics.jsx";
 import Sort from "../utils/sort.js";
 import stringHelper from "../utils/string.js";
+import { LinkTypes } from "../constants/LinkConstants.js";
 import _ from "lodash";
 
 export type NewLinkInfo = {| tempId: ?string |} & LinkInfo;
@@ -30,16 +31,16 @@ type State = {|
   linkKeyOrdering: ?Array<string>,
 |};
 
-const linkCaptions: Dictionary<string> = {
-  link_coderepo: "Code Repository (e.g. Github",
-  link_messaging: "Communication (e.g. Slack)",
-  link_projmanage: "Project Management (e.g. Trello)",
-  link_filerepo: "File Repository (e.g. Google Drive)",
-  link_design: "Design Files (e.g. Figma)",
-  social_twitter: "Twitter",
-  social_facebook: "Facebook",
-  social_linkedin: "LinkedIn",
-};
+const linkCaptions: Dictionary<string> = _.fromPairs([
+  [LinkTypes.CODE_REPOSITORY, "Code Repository (e.g. Github"],
+  [LinkTypes.MESSAGING, "Communication (e.g. Slack)"],
+  [LinkTypes.PROJECT_MANAGEMENT, "Project Management (e.g. Trello)"],
+  [LinkTypes.FILE_REPOSITORY, "File Repository (e.g. Google Drive)"],
+  [LinkTypes.DESIGN, "Design Files (e.g. Figma)"],
+  [LinkTypes.TWITTER, "Twitter"],
+  [LinkTypes.FACEBOOK, "Facebook"],
+  [LinkTypes.LINKED_IN, "LinkedIn"],
+]);
 
 /**
  * Lists hyperlinks and provides add/edit functionality for them
