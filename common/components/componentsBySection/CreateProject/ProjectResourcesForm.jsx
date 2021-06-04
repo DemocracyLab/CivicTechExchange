@@ -195,6 +195,9 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
     formFields.project_links = _.values(this.state.linkDict).filter(
       (link: LinkInfo) => !_.isEmpty(link.linkUrl)
     );
+    formFields.project_links.forEach((link: NewLinkInfo) => {
+      link.linkUrl = url.appendHttpIfMissingProtocol(link.linkUrl);
+    });
     this.setState({ formFields: formFields }, submitFunc);
     this.forceUpdate();
   }
