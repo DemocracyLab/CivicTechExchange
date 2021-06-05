@@ -10,6 +10,7 @@ import {
 import { Glyph, GlyphSizes } from "../../utils/glyphs.js";
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js";
+import stringHelper from "../../utils/string";
 
 const textLength: number = 20;
 
@@ -130,7 +131,7 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
         : urlHelper.beautify(link.linkUrl);
     } else {
       topText = link.linkName
-        ? link.linkName
+        ? stringHelper.trimStartString(link.linkName, "social_")
         : urlHelper.beautify(link.linkUrl);
     }
 
