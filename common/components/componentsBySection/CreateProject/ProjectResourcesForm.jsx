@@ -6,7 +6,7 @@ import type { ProjectDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
 import { LinkInfo } from "../../forms/LinkInfo.jsx";
 import Visibility from "../../common/Visibility.jsx";
 import type { FileInfo } from "../../common/FileInfo.jsx";
-import LinkList, { NewLinkInfo } from "../../forms/LinkList.jsx";
+import LinkList, { linkCaptions, NewLinkInfo } from "../../forms/LinkList.jsx";
 import {
   createDictionary,
   Dictionary,
@@ -29,11 +29,7 @@ import _ from "lodash";
 type FormFields = {|
   project_links: Array<LinkInfo>,
   project_files: Array<FileInfo>,
-  link_coderepo: ?string,
-  link_messaging: ?string,
-  link_projmanage: ?string,
-  link_filerepo: ?string,
-|};
+|} & Dictionary<string>;
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
@@ -44,6 +40,7 @@ type State = {|
   linkDict: Dictionary<NewLinkInfo>,
   resourceLinkDict: Dictionary<NewLinkInfo>,
   socialLinkDict: Dictionary<NewLinkInfo>,
+  validations: $ReadOnlyArray<Validator>,
 |} & FormStateBase<FormFields>;
 
 const resourceLinks: $ReadOnlyArray<string> = [
@@ -75,45 +72,18 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
     const formFields: FormFields = {
       project_links: project ? project.project_links : [],
       project_files: project ? project.project_files : [],
-      link_coderepo: "",
-      link_messaging: "",
-      link_projmanage: "",
-      link_filerepo: "",
     };
-    // TODO: Validate every field
-    const validations: $ReadOnlyArray<Validator<FormFields>> = [
-      {
-        checkFunc: (formFields: FormFields) =>
-          url.isEmptyStringOrValidUrl(formFields["link_coderepo"]),
-        errorMessage: "Please enter valid URL for code repository website.",
-      },
-      {
-        checkFunc: (formFields: FormFields) =>
-          url.isEmptyStringOrValidUrl(formFields["link_messaging"]),
-        errorMessage: "Please enter valid URL for messaging website.",
-      },
-      {
-        checkFunc: (formFields: FormFields) =>
-          url.isEmptyStringOrValidUrl(formFields["link_projmanage"]),
-        errorMessage: "Please enter valid URL for project management website.",
-      },
-      {
-        checkFunc: (formFields: FormFields) =>
-          url.isEmptyStringOrValidUrl(formFields["link_filerepo"]),
-        errorMessage: "Please enter valid URL for file repository website.",
-      },
-    ];
+    const linkDictsState: state = this.generateLinkDicts(props, formFields);
     const formIsValid: boolean = FormValidation.isValid(
       formFields,
-      validations
+      linkDictsState.validations
     );
     this.state = Object.assign(
       {
         formFields: formFields,
         formIsValid: formIsValid,
-        validations: validations,
       },
-      this.generateLinkDicts(props)
+      linkDictsState
     );
     //this will set formFields.project_links and formFields.links_*
     this.filterSpecificLinks(_.cloneDeep(project.project_links));
@@ -144,7 +114,7 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
     }
   }
 
-  generateLinkDicts(props: Props): State {
+  generateLinkDicts(props: Props, formFields: FormFields): State {
     // Generate blank links for presets
     let linkDict: Dictionary<NewLinkInfo> = createDictionary(
       allPresetLinks,
@@ -156,10 +126,13 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
       linkDict,
       _.mapKeys(props.project.project_links, this.generateLinkKey)
     );
-    return this.updateLinkDicts(linkDict);
+    return this.updateLinkDicts(formFields, linkDict);
   }
 
-  updateLinkDicts(linkDict: Dictionary<NewLinkInfo>): State {
+  updateLinkDicts(
+    formFields: FormFields,
+    linkDict: Dictionary<NewLinkInfo>
+  ): State {
     // Split keys into resource and social links
     const allKeys: $ReadOnlyArray<string> = _.keys(linkDict);
     const socialResourceLinks: PartitionSet<string> = _.partition(
@@ -167,11 +140,30 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
       (key: string) =>
         _.startsWith(key, "social_") || key === LinkTypes.LINKED_IN
     );
+    const validations: $ReadOnlyArray<Validator<FormFields>> = allKeys.map(
+      (key: string) => {
+        const fieldName: string =
+          key in linkCaptions ? linkCaptions[key] : linkDict[key].linkName;
+        return {
+          checkFunc: (formFields: FormFields) =>
+            url.isEmptyStringOrValidUrl(formFields[key]),
+          errorMessage: "Please enter valid URL for " + fieldName,
+        };
+      }
+    );
+
+    const formIsValid: boolean = FormValidation.isValid(
+      formFields,
+      validations
+    );
 
     return {
       linkDict: linkDict,
       socialLinkDict: _.pick(linkDict, socialResourceLinks[0]),
       resourceLinkDict: _.pick(linkDict, socialResourceLinks[1]),
+      formFields: formFields,
+      formIsValid: formIsValid,
+      validations: validations,
     };
   }
 
@@ -182,7 +174,6 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
     }
   }
 
-  // TODO: Put common code used between EditProjectsForm in a common place
   onSubmit(submitFunc: Function): void {
     //Sanitize project url if necessary
     if (this.state.formFields.project_url) {
@@ -225,7 +216,8 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
     const key: string = this.generateLinkKey(link);
     const linkDict: Dictionary<NewLinkInfo> = _.clone(this.state.linkDict);
     linkDict[key] = link;
-    this.setState(this.updateLinkDicts(linkDict));
+    const state: state = this.updateLinkDicts(this.state.formFields, linkDict);
+    this.setState(state);
   }
 
   onChangeLink(
@@ -234,7 +226,6 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
   ): void {
     this.state.linkDict[linkKey].linkUrl = input.target.value;
     this.form.onInput.call(this, linkKey, input);
-    // this.forceUpdate();
   }
 
   render(): React$Node {

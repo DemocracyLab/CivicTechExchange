@@ -31,7 +31,7 @@ type State = {|
   linkKeyOrdering: ?Array<string>,
 |};
 
-const linkCaptions: Dictionary<string> = _.fromPairs([
+export const linkCaptions: Dictionary<string> = _.fromPairs([
   [LinkTypes.CODE_REPOSITORY, "Code Repository (e.g. Github"],
   [LinkTypes.MESSAGING, "Communication (e.g. Slack)"],
   [LinkTypes.PROJECT_MANAGEMENT, "Project Management (e.g. Trello)"],
