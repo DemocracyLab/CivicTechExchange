@@ -175,13 +175,6 @@ class ProjectResourcesForm extends React.PureComponent<Props, State> {
   }
 
   onSubmit(submitFunc: Function): void {
-    //Sanitize project url if necessary
-    if (this.state.formFields.project_url) {
-      this.state.formFields.project_url = url.appendHttpIfMissingProtocol(
-        this.state.formFields.project_url
-      );
-    }
-    // TODO: Do we need this?
     let formFields = this.state.formFields;
     formFields.project_links = _.values(this.state.linkDict).filter(
       (link: LinkInfo) => !_.isEmpty(link.linkUrl)
