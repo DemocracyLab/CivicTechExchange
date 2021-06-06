@@ -381,6 +381,7 @@ class Event(Archived):
     is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
+    show_headers = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.event_name)
@@ -419,7 +420,8 @@ class Event(Archived):
             'event_short_description': self.event_short_description,
             'event_legacy_organization': Tag.hydrate_to_json(self.id, list(self.event_legacy_organization.all().values())),
             'event_slug': self.event_slug,
-            'is_private': self.is_private
+            'is_private': self.is_private,
+            'show_headers': self.show_headers
         }
 
         if len(thumbnail_files) > 0:

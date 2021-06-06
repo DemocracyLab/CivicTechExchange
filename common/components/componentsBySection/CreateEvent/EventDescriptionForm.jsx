@@ -22,6 +22,7 @@ type FormFields = {|
   event_legacy_organization: ?$ReadOnlyArray<TagDefinition>,
   event_slug: ?string,
   is_private: ?boolean,
+  show_headers: ?boolean,
 |};
 
 type Props = {|
@@ -51,6 +52,7 @@ class ProjectDescriptionForm extends React.PureComponent<Props, State> {
         event_legacy_organization: event ? event.event_legacy_organization : "",
         event_slug: event ? event.event_slug : "",
         is_private: event ? event.is_private : false,
+        show_headers: event ? event.show_headers : false,
       },
       validations: [
         {
@@ -172,6 +174,15 @@ class ProjectDescriptionForm extends React.PureComponent<Props, State> {
             onCheck={this.form.onSelection.bind(this, "is_private")}
           />
           <span> Private Event</span>
+        </div>
+
+        <div>
+          <CheckBox
+            id="show_headers"
+            value={this.state.formFields.show_headers}
+            onCheck={this.form.onSelection.bind(this, "show_headers")}
+          />
+          <span> Show Sponsor Footer</span>
         </div>
 
         <div className="form-group">
