@@ -400,9 +400,6 @@ LOGGING = {
 
 # If you're using prerender.io (the default backend):
 SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '')
-SEO_JS_BACKEND = "common.helpers.caching.DebugPrerenderIO"
-SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
-SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
 SEO_JS_ENABLED = os.environ.get('SEO_JS_ENABLED', False) == 'True'
 
 # TODO: Put in environment variable
