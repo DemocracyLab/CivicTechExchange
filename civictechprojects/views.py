@@ -36,7 +36,8 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
     notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
-from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url, clean_invalid_args
+from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
+from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector
 from django.views.decorators.cache import cache_page
 import requests
 
@@ -330,6 +331,7 @@ def approve_event(request, event_id):
 @xframe_options_exempt
 def index(request, id='Unused but needed for routing purposes; do not remove!'):
     page = get_page_section(request.get_full_path())
+    # TODO: Add to redirectors.py
     # Redirect to AddUserDetails page if First/Last name hasn't been entered yet
     if page not in [FrontEndSection.AddUserDetails.value, FrontEndSection.SignUp.value] \
             and request.user.is_authenticated and \
@@ -338,21 +340,18 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         account = SocialAccount.objects.filter(user=request.user).first()
         return redirect(section_url(FrontEndSection.AddUserDetails, {'provider': account.provider}))
 
-    page_url = request.get_full_path()
-    # Valid project URL path with invalid arguments should show page with canonical url
-    url_args = request.GET.urlencode()
-    clean_url_args = clean_invalid_args(url_args)
-    if url_args != "" and clean_url_args != '?' + url_args:
-        clean_url_valid_args = request.path + clean_url_args
-        print('Redirecting {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url_valid_args))
-        return redirect(clean_url_valid_args)
+    redirect_result = redirect_by([InvalidArgumentsRedirector], request.get_full_path())
+    if redirect_result is not None:
+        return redirect(redirect_result)
 
+    # TODO: Add to redirectors.py
     page_url = request.get_full_path()
     clean_url = get_clean_url(page_url)
     if clean_url != page_url:
-        print('Redirecting {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url))
+        print('Redirecting unclean {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url))
         return redirect(clean_url)
 
+    # TODO: Add to redirectors.py
     section_name = get_page_section(clean_url)
     deprecated_redirect_url = redirect_from_deprecated_url(section_name)
     if deprecated_redirect_url:
