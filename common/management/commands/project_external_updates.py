@@ -61,6 +61,7 @@ def update_if_commit_after_project_updated_time(project, latest_commit_date_stri
     if project_updated_time < latest_commit_time:
         print('Updating project {id} to latest timestamp: {time}'.format(id=project.id, time=latest_commit_date_string))
         project.update_timestamp(latest_commit_time)
+        project.recache()
     else:
         print('Did not update project {id} because last commit at {commit_time} before project updated time {project_update}'.format(
             id=project.id,
