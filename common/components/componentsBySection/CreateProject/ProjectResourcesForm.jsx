@@ -31,6 +31,7 @@ type Props = {|
 
 type State = {|
   errorMessages: $ReadOnlyArray<string>,
+  onSubmit: OnReadySubmitFunc,
 |} & FormStateBase<FormFields>;
 
 const resourceLinks: $ReadOnlyArray<string> = [
