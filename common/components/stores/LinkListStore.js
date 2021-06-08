@@ -6,11 +6,22 @@ import UniversalDispatcher from "./UniversalDispatcher.js";
 import type { LinkInfo } from "../forms/LinkInfo.jsx";
 import type { Dictionary } from "../types/Generics.jsx";
 import Visibility from "../common/Visibility.jsx";
-import { createDictionary, PartitionSet } from "../types/Generics.jsx";
-import { linkCaptions } from "../forms/LinkList.jsx";
+import { createDictionary } from "../types/Generics.jsx";
 import url from "../utils/url.js";
 import stringHelper from "../utils/string.js";
+import { LinkTypes } from "../constants/LinkConstants.js";
 import _ from "lodash";
+
+export const linkCaptions: Dictionary<string> = _.fromPairs([
+  [LinkTypes.CODE_REPOSITORY, "Code Repository (e.g. Github"],
+  [LinkTypes.MESSAGING, "Communication (e.g. Slack)"],
+  [LinkTypes.PROJECT_MANAGEMENT, "Project Management (e.g. Trello)"],
+  [LinkTypes.FILE_REPOSITORY, "File Repository (e.g. Google Drive)"],
+  [LinkTypes.DESIGN, "Design Files (e.g. Figma)"],
+  [LinkTypes.TWITTER, "Twitter"],
+  [LinkTypes.FACEBOOK, "Facebook"],
+  [LinkTypes.LINKED_IN, "LinkedIn"],
+]);
 
 export type NewLinkInfo = {| tempId: ?string |} & LinkInfo;
 
@@ -108,7 +119,7 @@ class LinkListStore extends ReduceStore<State> {
     };
     const errorMsg: NewLinkInfo => string = (link: NewLinkInfo) => {
       const linkName: string =
-        link.linkName in state.presetLinks
+        link.linkName in linkCaptions
           ? linkCaptions[link.linkName]
           : stringHelper.trimStartString(link.linkName, ["link_", "social_"]);
       return "Please enter valid URL for " + linkName;
