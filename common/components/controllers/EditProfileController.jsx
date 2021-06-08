@@ -257,15 +257,6 @@ class EditProfileController extends React.Component<{||}, State> {
               </div>
 
               <div className="form-group">
-                <FileUploadList
-                  elementid="user_resume_file"
-                  title="Upload Resume"
-                  singleFileOnly={true}
-                  files={this.state.formFields.user_resume_file}
-                />
-              </div>
-
-              <div className="form-group">
                 <label>Technologies Used</label>
                 <TagSelector
                   elementId="user_technologies"
@@ -314,10 +305,19 @@ class EditProfileController extends React.Component<{||}, State> {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group create-form-block">
+                <FileUploadList
+                  elementid="user_resume_file"
+                  title="Upload Resume"
+                  singleFileOnly={true}
+                  files={this.state.formFields.user_resume_file}
+                />
+              </div>
+
+              <div className="form-group create-form-block">
                 <FileUploadList
                   elementid="user_files"
-                  title="Files"
+                  title="Other Files"
                   files={this.state.formFields.user_files}
                 />
               </div>
