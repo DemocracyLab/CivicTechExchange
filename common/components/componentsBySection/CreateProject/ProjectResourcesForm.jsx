@@ -85,7 +85,11 @@ class ProjectResourcesForm extends React.Component<Props, State> {
   }
 
   static calculateState(prevState: State, props: Props): State {
-    let state: State = _.clone(prevState) || { formFields: {} };
+    let state: State = _.clone(prevState) || {
+      formFields: {
+        project_files: props.project ? props.project.project_files : [],
+      },
+    };
     state.formFields.project_links = LinkListStore.getLinkList();
     state.errorMessages = LinkListStore.getLinkErrors();
     state.formIsValid = _.isEmpty(state.errorMessages);
