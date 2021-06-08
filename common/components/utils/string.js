@@ -22,12 +22,22 @@ class stringHelper {
   /**
    *
    * @param str                 string to trim
-   * @param startSubstring      Substring to trim from start of string
-   * @returns {string}          String with substring at beginning removed
+   * @param startSubstring      Substring or list of substrings to trim from start of string
+   * @returns {string}          String with substrings at beginning removed
    */
-  static trimStartString(str: string, startSubstring: string): string {
-    const startPattern: RegExp = new RegExp("^" + startSubstring);
-    return str.replace(startPattern, "");
+  static trimStartString(
+    str: string,
+    startSubstring: string | $ReadOnlyArray<string>
+  ): string {
+    const startSubstrings: $ReadOnlyArray<string> = _.isArray(startSubstring)
+      ? startSubstring
+      : [startSubstring];
+    let _str: string = str;
+    startSubstrings.forEach((subString: string) => {
+      const startPattern: RegExp = new RegExp("^" + subString);
+      _str = _str.replace(startPattern, "");
+    });
+    return _str;
   }
 
   /**
