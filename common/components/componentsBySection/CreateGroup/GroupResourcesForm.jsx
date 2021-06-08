@@ -120,7 +120,6 @@ class GroupResourcesForm extends React.Component<Props, State> {
             title="Group Resources"
             subheader="Paste the links to your internal collaboration tools"
             linkNamePrefixExclude={["social_", LinkTypes.LINKED_IN]}
-            linkDict={this.state.resourceLinkDict}
             linkOrdering={resourceLinks}
             addLinkText="Add a new link"
           />

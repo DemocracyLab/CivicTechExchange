@@ -137,7 +137,6 @@ class ProjectResourcesForm extends React.Component<Props, State> {
             title="Project Resources"
             subheader="Paste the links to your internal collaboration tools"
             linkNamePrefixExclude={["social_", LinkTypes.LINKED_IN]}
-            linkDict={this.state.resourceLinkDict}
             linkOrdering={resourceLinks}
             addLinkText="Add a new link"
           />
@@ -149,7 +148,6 @@ class ProjectResourcesForm extends React.Component<Props, State> {
             title="Social Media"
             subheader="Paste the links to your social media profiles"
             linkNamePrefix="social_"
-            linkDict={this.state.socialLinkDict}
             linkOrdering={socialLinks}
             addLinkText="Add a social link"
           />
