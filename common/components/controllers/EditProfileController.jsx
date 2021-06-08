@@ -307,7 +307,6 @@ class EditProfileController extends React.Component<{||}, State> {
 
               <div className="form-group create-form-block">
                 <LinkList
-                  elementid="resource_links"
                   title="Links"
                   subheader=""
                   linkOrdering={[LinkTypes.LINKED_IN]}

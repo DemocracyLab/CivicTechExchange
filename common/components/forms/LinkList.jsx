@@ -18,7 +18,6 @@ import {
 import _ from "lodash";
 
 type Props = {|
-  elementid: string,
   linkOrdering: $ReadOnlyArray<string>,
   title: string,
   subheader: string,
@@ -39,6 +38,7 @@ type State = {|
 
 /**
  * Lists hyperlinks and provides add/edit functionality for them
+ * NOTE: This control should be paired with HiddenFormFields component when used in a form
  */
 class LinkList extends React.Component<Props, State> {
   constructor(props: Props): void {
@@ -151,13 +151,6 @@ class LinkList extends React.Component<Props, State> {
   render(): React$Node {
     return (
       <div className="LinkList">
-        <input
-          type="hidden"
-          ref="hiddenFormField"
-          id={this.props.elementid}
-          name={this.props.elementid}
-        />
-
         <h3>{this.props.title || "Links"}</h3>
         <p>{this.props.subheader}</p>
 

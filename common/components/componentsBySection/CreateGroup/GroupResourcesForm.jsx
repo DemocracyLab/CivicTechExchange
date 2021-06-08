@@ -116,7 +116,6 @@ class GroupResourcesForm extends React.Component<Props, State> {
 
         <div className="form-group create-form-block">
           <LinkList
-            elementid="resource_links"
             title="Group Resources"
             subheader="Paste the links to your internal collaboration tools"
             linkNamePrefixExclude={["social_", LinkTypes.LINKED_IN]}

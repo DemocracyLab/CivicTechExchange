@@ -133,7 +133,6 @@ class ProjectResourcesForm extends React.Component<Props, State> {
 
         <div className="form-group create-form-block">
           <LinkList
-            elementid="resource_links"
             title="Project Resources"
             subheader="Paste the links to your internal collaboration tools"
             linkNamePrefixExclude={["social_", LinkTypes.LINKED_IN]}
@@ -144,7 +143,6 @@ class ProjectResourcesForm extends React.Component<Props, State> {
 
         <div className="form-group create-form-block">
           <LinkList
-            elementid="social_links"
             title="Social Media"
             subheader="Paste the links to your social media profiles"
             linkNamePrefix="social_"
