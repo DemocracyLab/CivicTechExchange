@@ -403,26 +403,7 @@ SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
 SEO_JS_ENABLED = os.environ.get('SEO_JS_ENABLED', False) == 'True'
 
 # TODO: Put in environment variable
-SEO_JS_USER_AGENTS = (
-    # These first three should be disabled, since they support escaped fragments, and
-    # and leaving them enabled will penalize a website as "cloaked".
-    "Googlebot",
-    "Yahoo",
-    "bingbot",
-
-    "Ask Jeeves",
-    "baiduspider",
-    "facebookexternalhit",
-    "twitterbot",
-    "rogerbot",
-    "linkedinbot",
-    "embedly",
-    "quoralink preview'",
-    "showyoubot",
-    "outbrain",
-    "pinterest",
-    "developersgoogle.com/+/web/snippet",
-)
+SEO_JS_USER_AGENTS = os.getenv("SEO_JS_USER_AGENTS").split(" ")
 
 DISALLOW_CRAWLING = os.environ.get('DISALLOW_CRAWLING', False) == 'True'
 
