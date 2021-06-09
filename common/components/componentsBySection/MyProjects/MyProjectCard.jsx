@@ -90,9 +90,9 @@ class MyProjectCard extends React.PureComponent<Props, State> {
     else if (!this.state.isOwner && !this.props.project.isApproved) {
       status = "Pending";
     }
+
     else {
       status = "Active";
-
     }
 
     return (
