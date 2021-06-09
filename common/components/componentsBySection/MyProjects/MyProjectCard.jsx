@@ -61,49 +61,39 @@ class MyProjectCard extends React.PureComponent<Props, State> {
   }
 
   _renderProjectStatus(): React$Node {
-    /*
-    const header: string = this.state.isOwner
-      ? "Project Status"
-      : "Volunteer Status";
-    const status: string = this.state.isOwner
-      ? this.props.project.isApproved
-        ? "Published"
-        : "Unpublished"
-      : !this.props.project.isApproved
-      ? "Awaiting Approval"
-      : this.props.project.isUpForRenewal
-      ? "Expires on " + moment(this.props.project.projectedEndDate).format("l")
-      : "Active";
-      */
-     let header = ""
-    if(this.state.isOwner){
-      header ="Project Status";
+
+    let header = ""
+
+    if (this.state.isOwner) {
+      header = "Project Status";
     }
-    else{
+
+    else {
       header = "Volunteer Status";
     }
-      let status ="";
 
-    if(this.state.isOwner)
-    {
-      if( this.props.project.isApproved){
-        status= "Published";
+    let status = "";
+
+    if (this.state.isOwner) {
+      if (this.props.project.isApproved) {
+        status = "Published";
       }
-      else{
+      else {
         status = "Unpublished";
       }
     }
-    else if(!this.props.project.isApproved)
-    {
-      status="Awaiting Approval";
-    }
-    else if(this.props.project.isUpForRenewal){
-      status ="Expires on " + moment(this.props.project.projectedEndDate).format("l");
-    }
-    else{
-      status="Active";
+
+    else if (this.props.project.isUpForRenewal) {
+      status = "Expires on " + moment(this.props.project.projectedEndDate).format("l");
     }
 
+    else if (!this.state.isOwner && !this.props.project.isApproved) {
+      status = "Pending";
+    }
+    else {
+      status = "Active";
+
+    }
 
     return (
       <React.Fragment>
