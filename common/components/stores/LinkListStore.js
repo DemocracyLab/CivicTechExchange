@@ -13,7 +13,7 @@ import { LinkTypes } from "../constants/LinkConstants.js";
 import _ from "lodash";
 
 export const linkCaptions: Dictionary<string> = _.fromPairs([
-  [LinkTypes.CODE_REPOSITORY, "Code Repository (e.g. Github"],
+  [LinkTypes.CODE_REPOSITORY, "Code Repository (e.g. Github)"],
   [LinkTypes.MESSAGING, "Communication (e.g. Slack)"],
   [LinkTypes.PROJECT_MANAGEMENT, "Project Management (e.g. Trello)"],
   [LinkTypes.FILE_REPOSITORY, "File Repository (e.g. Google Drive)"],
