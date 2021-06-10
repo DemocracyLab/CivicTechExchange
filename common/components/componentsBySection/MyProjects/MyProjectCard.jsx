@@ -61,22 +61,24 @@ class MyProjectCard extends React.PureComponent<Props, State> {
   }
 
   _renderProjectStatus(): React$Node {
-
-    const header: string = this.state.isOwner ? "Project Status"  :  "Volunteer Status";
+    const header: string = this.state.isOwner
+      ? "Project Status"
+      : "Volunteer Status";
 
     let status = "";
 
     if (this.state.isOwner) {
       if (this.props.project.isApproved) {
         status = "Published";
-      }else {
+      } else {
         status = "Unpublished";
       }
-    }else if (this.props.project.isUpForRenewal) {
-      status = "Expires on " + moment(this.props.project.projectedEndDate).format("l");
-    }else if (!this.state.isOwner && !this.props.project.isApproved) {
+    } else if (this.props.project.isUpForRenewal) {
+      status =
+        "Expires on " + moment(this.props.project.projectedEndDate).format("l");
+    } else if (!this.state.isOwner && !this.props.project.isApproved) {
       status = "Pending";
-    }else {
+    } else {
       status = "Active";
     }
 
