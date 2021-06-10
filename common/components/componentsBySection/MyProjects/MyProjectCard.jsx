@@ -64,15 +64,24 @@ class MyProjectCard extends React.PureComponent<Props, State> {
     const header: string = this.state.isOwner
       ? "Project Status"
       : "Volunteer Status";
-    const status: string = this.state.isOwner
-      ? this.props.project.isApproved
-        ? "Published"
-        : "Unpublished"
-      : !this.props.project.isApproved
-      ? "Awaiting Approval"
-      : this.props.project.isUpForRenewal
-      ? "Expires on " + moment(this.props.project.projectedEndDate).format("l")
-      : "Active";
+
+    let status = "";
+
+    if (this.state.isOwner) {
+      if (this.props.project.isApproved) {
+        status = "Published";
+      } else {
+        status = "Unpublished";
+      }
+    } else if (this.props.project.isUpForRenewal) {
+      status =
+        "Expires on " + moment(this.props.project.projectedEndDate).format("l");
+    } else if (!this.state.isOwner && !this.props.project.isApproved) {
+      status = "Pending";
+    } else {
+      status = "Active";
+    }
+
     return (
       <React.Fragment>
         <tr className="MyProjectCard-header">{header}</tr>

@@ -982,7 +982,7 @@ class VolunteerRelation(Archived):
     def hydrate_project_volunteer_info(self):
         volunteer_json = self.to_json()
         project_json = self.project.hydrate_to_list_json()
-        return merge_dicts(volunteer_json, project_json)
+        return merge_dicts(project_json, volunteer_json)
 
     def is_up_for_renewal(self, now=None):
         now = now or timezone.now()
