@@ -47,6 +47,7 @@ type State = {|
   formFields: FormFields,
   formIsValid: boolean,
   validations: $ReadOnlyArray<Validator>,
+  linkErrors: $ReadOnlyArray<string>,
 |};
 
 /**
@@ -112,8 +113,8 @@ class EditProfileController extends React.Component<{||}, State> {
       formFields: {},
     };
     state.formFields.user_links = LinkListStore.getLinkList();
-    state.errorMessages = LinkListStore.getLinkErrors();
-    state.formIsValid = _.isEmpty(state.errorMessages);
+    state.linkErrors = LinkListStore.getLinkErrors();
+    state.formIsValid = _.isEmpty(state.linkErrors);
     return state;
   }
 
