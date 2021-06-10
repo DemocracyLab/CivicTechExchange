@@ -1,14 +1,21 @@
 import re
 from django.conf import settings
 from html import unescape
+from urllib import parse as urlparse
 from .constants import deprecated_page_redirects
 from common.helpers.dictionaries import keys_omit
 
 
-def args_dict_to_string(args_dict):
+def args_dict_to_query_string(args_dict, urlencode=False):
+    '''
+    Takes argument dictionary and converts into query string
+    :param args_dict:   Dictionary of url arguments
+    :param urlencode:   Whether to url encode the dictionary values
+    :return:            Query string result
+    '''
     def arg_string(idx, key, value):
         prefix = '?' if idx == 0 else '&'
-        return '{prefix}{key}={value}'.format(prefix=prefix, key=key, value=value)
+        return '{prefix}{key}={value}'.format(prefix=prefix, key=key, value=urlparse.quote(value) if urlencode else value)
     return "".join(map(lambda ikv: arg_string(idx=ikv[0], key=ikv[1][0], value=ikv[1][1]), enumerate(args_dict.items())))
 
 
@@ -26,7 +33,7 @@ def section_path(section, args_dict=None):
         id_arg = {'id': args_dict['id']}
         args_dict = keys_omit(args_dict, ['id'])
     section_path_url = '/' + url_generators[section_string]['generator'].format(**id_arg)
-    section_path_url += args_dict_to_string(args_dict)
+    section_path_url += args_dict_to_query_string(args_dict)
     return section_path_url
 
 
@@ -50,6 +57,7 @@ def get_page_path_parameters(url, page_section_generator=None):
     match = page_section_generator['regex'].search(url)
     return match.groupdict()
 
+
 def clean_invalid_args(url_args):
     """Filter out invalid query string arguments from old url system
         Extract args dictionary
@@ -70,8 +78,9 @@ def clean_invalid_args(url_args):
     url_args_dict = urlparse.parse_qs(url_args, keep_blank_values=0, strict_parsing=0)
     url_args_dict.pop('section', None)
     url_args_dict.pop('id', None)
-    url_args_dict = {key : value[0] for key, value in url_args_dict.items()}
-    return args_dict_to_string(url_args_dict)
+    url_args_dict = {key: value[0] for key, value in url_args_dict.items()}
+    return args_dict_to_query_string(url_args_dict, urlencode=True)
+
 
 def get_clean_url(url):
     clean_url = unescape(url)

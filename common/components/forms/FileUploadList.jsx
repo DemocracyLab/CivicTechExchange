@@ -7,13 +7,14 @@ import Visibility from "../common/Visibility.jsx";
 import FileUploadButton from "../common/upload/FileUploadButton.jsx";
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import { deleteFromS3 } from "../utils/s3.js";
+import GlyphStyles from "../utils/glyphs.js";
 import _ from "lodash";
-import GlyphStyles from "../utils/glyphs";
 
 type Props = {|
   files: Array<FileInfo>,
   elementid: string,
   title: ?string,
+  subheader: ?string,
   singleFileOnly: ?boolean,
 |};
 type State = {|
@@ -99,9 +100,12 @@ class FileUploadList extends React.PureComponent<Props, State> {
           name={this.props.elementid}
         />
 
-        {this._renderUploadButton()}
-
-        {this._renderFiles()}
+        <h3>{this.props.title || "Files"}</h3>
+        <p>{this.props.subheader}</p>
+        <div className="form-offset">
+          {this._renderUploadButton()}
+          {this._renderFiles()}
+        </div>
 
         <ConfirmationModal
           showModal={this.state.showDeleteModal}
@@ -123,7 +127,6 @@ class FileUploadList extends React.PureComponent<Props, State> {
     ) : (
       <FileUploadButton
         acceptedFileTypes="*"
-        buttonText={this.props.title || "Files"}
         iconClass={GlyphStyles.Add}
         onFileUpload={this.handleFileSelection.bind(this)}
       />
