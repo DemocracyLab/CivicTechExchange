@@ -43,6 +43,7 @@ export const GlyphStyles: { [key: string]: string } = {
   Users: "fas fa-users", // https://fontawesome.com/icons/users?style=solid
   PDF: "far fa-file-pdf", // https://fontawesome.com/icons/file-pdf?style=regular
   Grip: "fas fa-grip-vertical", // https://fontawesome.com/icons/grip-vertical?style=solid
+  Palette: "fas fa-palette", // https://fontawesome.com/v5.15/icons/palette?style=solid
 };
 
 export const GlyphSizes: { [key: string]: string } = {

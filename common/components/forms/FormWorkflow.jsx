@@ -200,7 +200,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
           onSelection={this.confirmDiscardChanges.bind(this)}
         />
 
-        <div className="create-form white-bg container-fluid">
+        <div className="create-form grey-bg container-fluid">
           <div className="bounded-content">
             <h1>{currentStep.header}</h1>
             <h2>{currentStep.subHeader}</h2>
@@ -234,7 +234,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
           />
         </div>
 
-        <div className="create-form white-bg container-fluid">
+        <div className="create-form grey-bg container-fluid">
           <div className="create-form-buttonrow">
             <Button
               variant="outline-secondary"
