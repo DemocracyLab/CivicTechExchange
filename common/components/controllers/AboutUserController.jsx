@@ -51,52 +51,59 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     const user: UserAPIData = this.state.user;
     return (
       <React.Fragment>
-        <div className="AboutProjectController-root">
-          <div className="container">
-            <div className="row background-light about-user-section">
-              <div className="col-12">
-                <Avatar user={user} size={50} />
-                <h1>{user && user.first_name + " " + user.last_name}</h1>
-              </div>
+        <div className="AboutUser-root">
+          <div className="row background-light about-user-section">
+            <div className="col-12 col-lg-3">
+              <Avatar user={user} size={50} />
+              <h1>{user && user.first_name + " " + user.last_name}</h1>
             </div>
-
-            {user && !_.isEmpty(user.user_technologies) ? (
-              <div className="row about-user-section">
-                <div className="col-12">
-                  <h2 className="text-uppercase">Technologies</h2>
-                  <div>{this._renderTechnologies()}</div>
-                </div>
-              </div>
-            ) : null}
-
-            <div className="row about-user-section">
-              <div className="col-12">
-                <h2 className="text-uppercase">About Me</h2>
-                <div style={{ whiteSpace: "pre-wrap" }}>
-                  {user && user.about_me}
-                </div>
-              </div>
+            <div className="col-12 col-lg-9">
+              {this._renderRightColumn(user)}
             </div>
-
-            {user && !_.isEmpty(user.user_links) ? (
-              <div className="row about-user-section">
-                <div className="col-12">
-                  <h2 className="text-uppercase">Links</h2>
-                  <div>{this._renderLinks()}</div>
-                </div>
-              </div>
-            ) : null}
-
-            {user && !_.isEmpty(user.user_files) ? (
-              <div className="row about-user-section">
-                <div className="col">
-                  <h2 className="text-uppercase">Files</h2>
-                  <div>{this._renderFiles()}</div>
-                </div>
-              </div>
-            ) : null}
           </div>
         </div>
+      </React.Fragment>
+    );
+  }
+
+  _renderRightColumn(user: UserAPIData): $ReadOnlyArray<React$Node> {
+    return (
+      <React.Fragment>
+        {user && !_.isEmpty(user.user_technologies) ? (
+          <div className="row about-user-section">
+            <div className="col-12">
+              <h2 className="text-uppercase">Technologies</h2>
+              <div>{this._renderTechnologies()}</div>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="row about-user-section">
+          <div className="col-12">
+            <h2 className="text-uppercase">About Me</h2>
+            <div style={{ whiteSpace: "pre-wrap" }}>
+              {user && user.about_me}
+            </div>
+          </div>
+        </div>
+
+        {user && !_.isEmpty(user.user_links) ? (
+          <div className="row about-user-section">
+            <div className="col-12">
+              <h2 className="text-uppercase">Links</h2>
+              <div>{this._renderLinks()}</div>
+            </div>
+          </div>
+        ) : null}
+
+        {user && !_.isEmpty(user.user_files) ? (
+          <div className="row about-user-section">
+            <div className="col">
+              <h2 className="text-uppercase">Files</h2>
+              <div>{this._renderFiles()}</div>
+            </div>
+          </div>
+        ) : null}
       </React.Fragment>
     );
   }
