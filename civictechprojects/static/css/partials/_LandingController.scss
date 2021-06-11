@@ -5,6 +5,9 @@
 .RecentProjects-button {
   text-align: center;
 }
+.RecentProjects-title h2 {
+  margin-bottom: 1rem;
+}
 .RecentProjects-button {
   padding: 10px 0 0 0; /* push button away from cards a bit */
 }
@@ -46,22 +49,11 @@
   margin-left: auto;
   margin-right: auto;
 }
-.LandingController-root .SplashScreen-content h1 {
-  font-size: 2rem; /* at small display sizes 3rem is too big for a single word to fit */
-}
 .LandingController-topsplash .SplashScreen-content h1 {
-  font-size: 4rem;
   margin-bottom: 0;
-}
-.LandingController-topsplash p {
-  font-size: 24px;
 }
 .LandingController-midsplash h1 {
   padding-top: 20px;
-}
-.LandingController-midsplash p,
-.PartnerSection p {
-  font-size: 18px;
 }
 .LandingController-midsplash p {
   max-width: 500px;
@@ -94,6 +86,9 @@
 }
 .LandingController-testimonial-container {
   margin-bottom: 20px;
+  h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
 }
 
 .LandingController-partnersinaction {
@@ -101,7 +96,7 @@
   background-color: $color-background-light;
 }
 .LandingController-partnersinaction h2 {
-  margin-bottom: 20px;
+  margin: 1rem 0 1.5rem 0;
 }
 .LandingController-partnersinaction-logo img {
   width: 150px;
@@ -139,9 +134,6 @@
       flex-basis: 45%;
       min-width: 45%;
     }
-  }
-  .LandingController-root .SplashScreen-content h1 {
-    font-size: 3rem;
   }
 }
 

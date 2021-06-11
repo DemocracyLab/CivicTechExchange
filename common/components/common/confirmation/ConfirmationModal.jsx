@@ -33,28 +33,19 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
   }
 
   confirm(confirmation: boolean): void {
-    if (confirmation) {
-      this.setState({ isProcessing: true });
-      const confirmAction: Promise<any> = this.props
-        .onSelection(confirmation)
-        .then(() => {
-          this.setState({ isProcessing: false });
-        });
-      if (this.props.onConfirmOperationComplete) {
-        confirmAction.then(this.props.onConfirmOperationComplete);
-      }
-    } else {
-      if (this.props.onConfirmOperationComplete) {
-        this.setState(
-          { isProcessing: false },
-          this.props.onConfirmOperationComplete
-        );
-      } else {
+    this.setState({ isProcessing: true });
+    const confirmAction: Promise<any> = this.props
+      .onSelection(confirmation)
+      .then(() => {
         this.setState({ isProcessing: false });
-      }
+        this.forceUpdate();
+      });
+    if (this.props.onConfirmOperationComplete) {
+      confirmAction.then(this.props.onConfirmOperationComplete);
     }
   }
 
+  // TODO: Fix bug when we open this modal multiple times
   render(): React$Node {
     return (
       <ModalWrapper

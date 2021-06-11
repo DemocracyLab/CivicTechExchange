@@ -27,6 +27,7 @@ type State = {|
   projectId: ?number,
   project: ?ProjectDetailsAPIData,
   steps: $ReadOnlyArray<FormWorkflowStepConfig>,
+  startStep: ?number,
 |};
 
 /**
@@ -41,6 +42,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     this.onFinalSubmitSuccess = this.onFinalSubmitSuccess.bind(this);
     this.state = {
       projectId: projectId,
+      startStep: 0,
       steps: [
         {
           header: "Let's get started!",
@@ -66,7 +68,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
         {
           header: "What resources would you like to share?",
           subHeader:
-            "Let volunteers know how they can engage with your project",
+            "At DemocracyLab, we're all about transparency.  Share your project's internal collaboration resources and social media to help volunteers understand your goals and processes.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: ProjectResourcesForm,
@@ -120,6 +122,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
       this.setState({
         project: project,
         projectIsLoading: false,
+        startStep: url.argument("step") || 1,
       });
     }
   }
@@ -156,6 +159,10 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
   }
 
   onFinalSubmitSuccess(project: ProjectDetailsAPIData): void {
+    this.setState({
+      project: project,
+      projectId: project.project_id,
+    });
     metrics.logProjectCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
     window.location.href = url.section(Section.MyProjects, {
@@ -178,6 +185,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
               {CurrentUser.isEmailVerified() ? (
                 <FormWorkflow
                   steps={this.state.steps}
+                  startStep={this.state.startStep}
                   isLoading={this.state.projectId && !this.state.project}
                   formFields={this.state.project}
                 />

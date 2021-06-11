@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from common.helpers.db import bulk_delete
 from common.helpers.github import fetch_github_info, get_owner_repo_name_from_public_url, \
-    get_repo_endpoint_from_owner_repo_name, get_repo_names_from_owner_repo_name
+    get_repo_endpoint_from_owner_repo_name, get_repo_names_from_owner_repo_name, get_branch_name_from_public_url
 from common.helpers.date_helpers import datetime_field_to_datetime
 from django.conf import settings
 import pytz
@@ -24,8 +24,7 @@ class Command(BaseCommand):
 
 def get_project_github_links():
     from civictechprojects.models import ProjectLink
-    return ProjectLink.objects.filter(link_name='link_coderepo', link_url__icontains='github.com/')\
-        .exclude(link_project__isnull=True)
+    return ProjectLink.objects.filter(link_url__icontains='github.com/').exclude(link_project__isnull=True)
 
 
 def handle_project_github_updates(project_github_link):
@@ -33,16 +32,16 @@ def handle_project_github_updates(project_github_link):
     print('Handling updates for project {id} github link: {url}'.format(id=project.id, url=project_github_link.link_url))
     last_updated_time = datetime_field_to_datetime(get_project_latest_commit_date(project_github_link.link_project))
     owner_repo_name = get_owner_repo_name_from_public_url(project_github_link.link_url)
-
+    branch_name = get_branch_name_from_public_url(project_github_link.link_url)
     repo_names = get_repo_names_from_owner_repo_name(owner_repo_name)
     raw_commits = []
     for repo_name in repo_names:
-        repo_url = get_repo_endpoint_from_owner_repo_name(repo_name, last_updated_time)
-        print('Ingesting: ' + repo_url)
+        repo_url = get_repo_endpoint_from_owner_repo_name(repo_name, last_updated_time, branch_name)
+        print('Ingesting: ' + repo_url) 
         repo_info = fetch_github_info(repo_url)
         if repo_info is not None and len(repo_info) > 0:
             repo_display_name = repo_name[0] + '/' + repo_name[1]
-            raw_commits = raw_commits + list(map(lambda commit: [repo_display_name, commit], repo_info))
+            raw_commits = raw_commits + list(map(lambda commit: [repo_display_name, commit, branch_name], repo_info))
 
     if len(raw_commits) > 0:
         # Take the most recent top X commits
@@ -62,6 +61,7 @@ def update_if_commit_after_project_updated_time(project, latest_commit_date_stri
     if project_updated_time < latest_commit_time:
         print('Updating project {id} to latest timestamp: {time}'.format(id=project.id, time=latest_commit_date_string))
         project.update_timestamp(latest_commit_time)
+        project.recache()
     else:
         print('Did not update project {id} because last commit at {commit_time} before project updated time {project_update}'.format(
             id=project.id,
@@ -72,7 +72,10 @@ def update_if_commit_after_project_updated_time(project, latest_commit_date_stri
 def add_commits_to_database(project, commits_to_ingest):
     from civictechprojects.models import ProjectCommit
     for commit_info in commits_to_ingest:
-        ProjectCommit.create(project, commit_info[0], 'master', commit_info[1])
+        branch = commit_info[2] if commit_info[2] is not None else 'master'
+        display_name = commit_info[0]
+        commit = commit_info[1]
+        ProjectCommit.create(project, display_name, branch, commit)
     project.recache()
 
 
