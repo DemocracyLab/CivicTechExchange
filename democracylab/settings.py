@@ -110,6 +110,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'csp.middleware.CSPMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
+    'debreach.middleware.RandomCommentMiddleware',
 ]
 
 ROOT_URLCONF = 'democracylab.urls'
@@ -146,10 +148,10 @@ HOSTNAME = os.environ.get('HOSTNAME', '127.0.0.1')
 DATABASES = ast.literal_eval(DL_DATABASE) if DL_DATABASE else {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'p0stgres!',
-        'HOST': HOSTNAME,
+        'NAME': os.getenv("POSTGRES_DB"),
+        'USER': os.getenv("POSTGRES_USER"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+        'HOST': os.getenv("POSTGRES_HOST"),
         'PORT': '5432',
     }
 }
@@ -318,10 +320,6 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
         'error': False,
         'message': 'Mailchimp API key needed to subscribe users to mailing list'
     },
-    'PRIVACY_POLICY_URL': {
-        'error': True,
-        'message': 'Privacy Policy url required'
-    },
     'GHOST_URL': {
         'error': False,
         'message': 'Ghost url needed to display blog posts on site'
@@ -330,6 +328,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
         'error': False,
         'message': 'Ghost content api key needed to display blog posts on site'
     },
+    'PRIVACY_POLICY_URL': {
+        'error': True,
+        'message': 'Privacy Policy url required'
+    }
 }
 
 CSRF_COOKIE_SECURE = not DEBUG
@@ -340,10 +342,11 @@ if not DEBUG:
 
 CSP_DEFAULT_SRC = ("'none'",)
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", 'fonts.googleapis.com', '*.fontawesome.com')
-CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", '*.facebook.net/', '*.heapanalytics.com/', '*.google.com/', '*.gstatic.com', '*.googletagmanager.com', '*.google-analytics.com', '*.googleadservices.com', '*.doubleclick.net', '*.newrelic.com', '*.nr-data.net', '*.hotjar.com')
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", '*.heapanalytics.com/', '*.google.com/', '*.gstatic.com', '*.googletagmanager.com', '*.google-analytics.com', '*.googleadservices.com', '*.doubleclick.net', '*.newrelic.com', '*.nr-data.net', '*.hotjar.com')
 CSP_CONNECT_SRC = ("'self'", S3_BUCKET_URL, '*.qiqochat.com', 'qiqocableeu.herokuapp.com', '*.google-analytics.com', '*.nr-data.net', '*.hereapi.com', '*.hotjar.com')
 CSP_FONT_SRC = ("'self'", 'fonts.googleapis.com', 'fonts.gstatic.com', 'use.fontawesome.com')
-CSP_IMG_SRC = ("'self'", "data:", "blob:", "'unsafe-eval'", '*.cloudfront.net', '*.amazonaws.com', '*.facebook.net/', '*.facebook.com/', 'heapanalytics.com/', "*.google.com", '*.google-analytics.com', '*.googletagmanager.com', '*.paypal.com', '*.paypalobjects.com', '*.githubusercontent.com')
+CSP_IMG_SRC = ("'self'", "data:", "blob:", "'unsafe-eval'", '*.cloudfront.net', '*.amazonaws.com', 'heapanalytics.com/', "*.google.com", '*.google-analytics.com', '*.googletagmanager.com', '*.paypal.com', '*.paypalobjects.com', '*.githubusercontent.com')
+
 CSP_FRAME_ANCESTORS = os.environ.get('CSP_FRAME_ANCESTORS', None)
 if CSP_FRAME_ANCESTORS is not None:
     CSP_FRAME_ANCESTORS = ast.literal_eval(CSP_FRAME_ANCESTORS)
@@ -403,7 +406,26 @@ SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
 SEO_JS_ENABLED = os.environ.get('SEO_JS_ENABLED', False) == 'True'
 
 # TODO: Put in environment variable
-SEO_JS_USER_AGENTS = os.getenv("SEO_JS_USER_AGENTS").split(" ")
+SEO_JS_USER_AGENTS = (
+    # These first three should be disabled, since they support escaped fragments, and
+    # and leaving them enabled will penalize a website as "cloaked".
+    "Googlebot",
+    "Yahoo",
+    "bingbot",
+
+    "Ask Jeeves",
+    "baiduspider",
+    "facebookexternalhit",
+    "twitterbot",
+    "rogerbot",
+    "linkedinbot",
+    "embedly",
+    "quoralink preview'",
+    "showyoubot",
+    "outbrain",
+    "pinterest",
+    "developersgoogle.com/+/web/snippet",
+)
 
 DISALLOW_CRAWLING = os.environ.get('DISALLOW_CRAWLING', False) == 'True'
 
@@ -438,6 +460,9 @@ GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH', '')
 
 PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 
+DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
+
+# Ghost blog configs
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
 
 GHOST_URL = os.environ.get('GHOST_URL', '')
