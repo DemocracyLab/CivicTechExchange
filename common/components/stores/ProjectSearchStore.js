@@ -476,6 +476,13 @@ class ProjectSearchStore extends ReduceStore<State> {
       return List();
     }
   }
+
+  getQueryString(): string {
+    const state: State = this.getState();
+    return urls.constructWithQueryString(
+      `projects`, Object.assign({}, state.findProjectsArgs)
+    );
+  }
 }
 
 export default new ProjectSearchStore();
