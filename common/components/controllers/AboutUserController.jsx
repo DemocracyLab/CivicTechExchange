@@ -53,11 +53,11 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       <React.Fragment>
         <div className="AboutUser-root">
           <div className="row background-light about-user-section">
-            <div className="col-12 col-lg-3">
-              <Avatar user={user} size={50} />
+            <div className="col-12 col-lg-2">
+              <Avatar user={user} imgClass="Profile-img" size={200} />
               <h1>{user && user.first_name + " " + user.last_name}</h1>
             </div>
-            <div className="col-12 col-lg-9">
+            <div className="col-12 col-lg-10">
               {this._renderRightColumn(user)}
             </div>
           </div>

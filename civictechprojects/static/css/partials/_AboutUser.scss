@@ -1,3 +1,14 @@
+.AboutUser-root .VolunteerCard-img, .AboutUser-root .person-icon-container {
+  width: 100%;
+  text-align: center;
+  background-color: $color-background-light;
+}
+
+.Profile-img {
+  max-width: 100%;
+}
+
+//TODO: Still need these?
 .about-user-section {
   margin-bottom: 1.5rem;
 }
