@@ -344,7 +344,7 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
     if redirect_result is not None:
         return redirect(redirect_result)
 
-    redirect_result = redirect_by([DirtyUrlsRedirector], request.get_full_path())
+    redirect_result = redirect_by([InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector], request.get_full_path())
     if redirect_result is not None:
         return redirect(redirect_result)
 
