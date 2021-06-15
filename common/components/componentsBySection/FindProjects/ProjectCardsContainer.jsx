@@ -42,7 +42,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   static calculateState(prevState: State): State {
     prerender.ready(!ProjectSearchStore.getProjectsLoading());
     const count = ProjectSearchStore.getNumberOfProjects();
-    if ( typeof count === 'number' ) {
+    if ( _.isNumber(count) ) {
       metrics.logProjectSearchResults(count, ProjectSearchStore.getQueryString())
     }
     return {
