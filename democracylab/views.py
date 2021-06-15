@@ -187,7 +187,7 @@ def send_verification_email_request(request):
     if not user.email_verified:
         send_verification_email(user)
         if request.method == 'GET':
-            return redirect(section_url(FrontEndSection.SignedUp, {'email': user.email}))
+            return redirect(section_url(FrontEndSection.SignedUp))
         else:
             return HttpResponse(status=200)
     else:
