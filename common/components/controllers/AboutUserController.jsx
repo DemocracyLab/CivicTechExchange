@@ -1,6 +1,7 @@
 // @flow
 
 import React from "react";
+import _ from "lodash";
 import TagsDisplay from "../common/tags/TagsDisplay.jsx";
 import { DefaultLinkDisplayConfigurations } from "../constants/LinkConstants.js";
 import { FileCategoryNames } from "../constants/FileConstants.js";
@@ -9,9 +10,9 @@ import UserAPIUtils from "../utils/UserAPIUtils.js";
 import { FileInfo } from "../common/FileInfo.jsx";
 import { LinkInfo } from "../forms/LinkInfo.jsx";
 import Avatar from "../common/avatar.jsx";
-import _ from "lodash";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import url from "../utils/url.js";
+import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 
 type State = {|
   user: ?UserAPIData,
@@ -54,8 +55,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
         <div className="AboutUser-root">
           <div className="row background-light about-user-section">
             <div className="col-12 col-lg-2">
-              <Avatar user={user} imgClass="Profile-img" size={200} />
-              <h1>{user && user.first_name + " " + user.last_name}</h1>
+              {this._renderLeftColumn(user)}
             </div>
             <div className="col-12 col-lg-10">
               {this._renderRightColumn(user)}
@@ -66,7 +66,24 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     );
   }
 
-  _renderRightColumn(user: UserAPIData): $ReadOnlyArray<React$Node> {
+  _renderLeftColumn(user: UserAPIData): React$Node {
+    return (
+      <React.Fragment>
+        <Avatar user={user} imgClass="Profile-img" size={200} />
+        <h1>{user && user.first_name + " " + user.last_name}</h1>
+        {!_.isEmpty(user.user_links) ? (
+          <div className="row about-user-section">
+            <div className="col-12">
+              <h3>Links</h3>
+              <div>{this._renderLinks(user)}</div>
+            </div>
+          </div>
+        ) : null}
+      </React.Fragment>
+    );
+  }
+
+  _renderRightColumn(user: UserAPIData): React$Node {
     return (
       <React.Fragment>
         {user && !_.isEmpty(user.user_technologies) ? (
@@ -86,15 +103,6 @@ class AboutUserController extends React.PureComponent<{||}, State> {
             </div>
           </div>
         </div>
-
-        {user && !_.isEmpty(user.user_links) ? (
-          <div className="row about-user-section">
-            <div className="col-12">
-              <h2 className="text-uppercase">Links</h2>
-              <div>{this._renderLinks()}</div>
-            </div>
-          </div>
-        ) : null}
 
         {user && !_.isEmpty(user.user_files) ? (
           <div className="row about-user-section">
@@ -118,18 +126,11 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     );
   }
 
-  _renderLinks(): ?Array<React$Node> {
-    const user: UserAPIData = this.state.user;
+  _renderLinks(user: UserAPIData): ?Array<React$Node> {
     return (
       user &&
       user.user_links &&
-      user.user_links.map((link, i) => (
-        <div key={i}>
-          <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">
-            {this._legibleLinkName(link)}
-          </a>
-        </div>
-      ))
+      user.user_links.map((link, i) => <IconLinkDisplay key={i} link={link} />)
     );
   }
 
