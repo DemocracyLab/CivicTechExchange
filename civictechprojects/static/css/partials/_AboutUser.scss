@@ -1,3 +1,9 @@
+.AboutUser-root .left-column {
+  border-right: solid;
+  border-width: 1px;
+  border-color: $color-disabled-border;
+}
+
 .AboutUser-root .VolunteerCard-img, .AboutUser-root .person-icon-container {
   width: 100%;
   text-align: center;

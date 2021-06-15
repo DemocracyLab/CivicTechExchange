@@ -54,7 +54,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       <React.Fragment>
         <div className="AboutUser-root">
           <div className="row background-light about-user-section">
-            <div className="col-12 col-lg-2">
+            <div className="col-12 col-lg-2 left-column">
               {this._renderLeftColumn(user)}
             </div>
             <div className="col-12 col-lg-10">
