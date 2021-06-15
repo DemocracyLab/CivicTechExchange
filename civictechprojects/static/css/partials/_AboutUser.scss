@@ -10,6 +10,15 @@
   background-color: $color-background-light;
 }
 
+.AboutUser-root .person-icon-container {
+  height: 250px;
+
+  svg {
+    width: 200px;
+    height: 200px;
+  }
+}
+
 .Profile-img {
   max-width: 100%;
 }

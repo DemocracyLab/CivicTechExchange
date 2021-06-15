@@ -47,7 +47,7 @@ class VolunteerCard extends React.PureComponent<Props> {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Avatar user={volunteer} size={50} />
+          <Avatar user={volunteer} />
         </a>
         <a
           className="VolunteerCard-volunteerName"

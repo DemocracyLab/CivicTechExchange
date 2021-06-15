@@ -17,10 +17,9 @@ describe("common", () => {
   test("avatar renders icon by default", () => {
     let user = _.clone(mockAPI.user);
     user.user_thumbnail = null;
-    const component = renderer.create(<Avatar user={user} size={60} />);
+    const component = renderer.create(<Avatar user={user} />);
     let tree = component.toJSON();
     tree = JSON.stringify(tree);
     expect(tree).toMatch("PersonIcon");
-    expect(tree).toMatch('"style":{"fontSize":60}');
   });
 });
