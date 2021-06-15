@@ -340,15 +340,7 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         account = SocialAccount.objects.filter(user=request.user).first()
         return redirect(section_url(FrontEndSection.AddUserDetails, {'provider': account.provider}))
 
-    redirect_result = redirect_by([InvalidArgumentsRedirector], request.get_full_path())
-    if redirect_result is not None:
-        return redirect(redirect_result)
-
     redirect_result = redirect_by([InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector], request.get_full_path())
-    if redirect_result is not None:
-        return redirect(redirect_result)
-
-    redirect_result = redirect_by([DeprecatedUrlsRedirector], request.get_full_path())
     if redirect_result is not None:
         return redirect(redirect_result)
 
