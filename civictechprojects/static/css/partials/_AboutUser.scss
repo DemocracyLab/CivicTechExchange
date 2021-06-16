@@ -23,6 +23,17 @@
   max-width: 100%;
 }
 
+.right-column {
+  padding: 60px 20px;
+}
+
+.bio-text {
+  background-color: $color-background-default;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 5px 10px;
+}
+
 //TODO: Still need these?
 .about-user-section {
   margin-bottom: 1.5rem;

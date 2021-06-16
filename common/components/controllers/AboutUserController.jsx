@@ -57,7 +57,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
             <div className="col-12 col-lg-2 left-column">
               {this._renderLeftColumn(user)}
             </div>
-            <div className="col-12 col-lg-10">
+            <div className="col-12 col-lg-10 right-column">
               {this._renderRightColumn(user)}
             </div>
           </div>
@@ -86,6 +86,8 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderRightColumn(user: UserAPIData): React$Node {
     return (
       <React.Fragment>
+        {user.about_me && this._renderAboutMe(user)}
+
         {user && !_.isEmpty(user.user_technologies) ? (
           <div className="row about-user-section">
             <div className="col-12">
@@ -94,15 +96,6 @@ class AboutUserController extends React.PureComponent<{||}, State> {
             </div>
           </div>
         ) : null}
-
-        <div className="row about-user-section">
-          <div className="col-12">
-            <h2 className="text-uppercase">About Me</h2>
-            <div style={{ whiteSpace: "pre-wrap" }}>
-              {user && user.about_me}
-            </div>
-          </div>
-        </div>
 
         {user && !_.isEmpty(user.user_files) ? (
           <div className="row about-user-section">
@@ -113,6 +106,20 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           </div>
         ) : null}
       </React.Fragment>
+    );
+  }
+
+  _renderAboutMe(user: UserAPIData): React$Node {
+    return (
+      <div className="row about-user-section">
+        <div className="col-12">
+          <h2>About Me</h2>
+          <h3>Bio</h3>
+          <div className="bio-text" style={{ whiteSpace: "pre-wrap" }}>
+            {user.about_me}
+          </div>
+        </div>
+      </div>
     );
   }
 
