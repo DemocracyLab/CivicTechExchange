@@ -123,7 +123,8 @@ class EventCreationForm(ModelForm):
                 event_date_start=parse_front_end_datetime(form.data.get('event_date_start')),
                 event_date_end=parse_front_end_datetime(form.data.get('event_date_end')),
                 is_created=False,
-                is_searchable=False
+                is_searchable=False,
+                show_headers=False
             )
 
         if not is_co_owner_or_staff(request.user, event):
@@ -146,6 +147,7 @@ class EventCreationForm(ModelForm):
 
         fields_changed |= read_form_field_boolean(event, form, 'is_searchable')
         fields_changed |= read_form_field_boolean(event, form, 'is_created')
+        fields_changed |= read_form_field_boolean(event, form, 'show_headers')
         project_fields_changed |= read_form_field_boolean(event, form, 'is_private')
 
         slug = form.data.get('event_slug')

@@ -11,6 +11,7 @@ import Headers from "../common/Headers.jsx";
 import PseudoLink from "../chrome/PseudoLink.jsx";
 import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
 import TermsModal, { TermsTypes } from "../common/confirmation/TermsModal.jsx";
+import Button from "react-bootstrap/Button";
 
 type Props = {|
   +errors: { +[key: string]: $ReadOnlyArray<string> },
@@ -203,14 +204,15 @@ class SignUpController extends React.Component<Props, State> {
               formState={this.state}
             />
 
-            <button
+            <Button
+            variant="login"
               className="LogInController-signInButton"
               disabled={!this.state.isValid}
               type="submit"
               onClick={() => metrics.logSignupAttempt()}
             >
               Create Account
-            </button>
+            </Button>
           </form>
           <div className="SignUpController-socialSection">
             <SocialMediaSignupSection />

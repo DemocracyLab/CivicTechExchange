@@ -48,7 +48,6 @@ class ProjectPositionsForm extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
-    PositionList;
     return (
       <div className="EditProjectForm-root">
         <DjangoCSRFToken />

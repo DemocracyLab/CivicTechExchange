@@ -37,6 +37,7 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
+from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector
 from django.views.decorators.cache import cache_page
 import requests
 
@@ -330,6 +331,7 @@ def approve_event(request, event_id):
 @xframe_options_exempt
 def index(request, id='Unused but needed for routing purposes; do not remove!'):
     page = get_page_section(request.get_full_path())
+    # TODO: Add to redirectors.py
     # Redirect to AddUserDetails page if First/Last name hasn't been entered yet
     if page not in [FrontEndSection.AddUserDetails.value, FrontEndSection.SignUp.value] \
             and request.user.is_authenticated and \
@@ -338,12 +340,18 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         account = SocialAccount.objects.filter(user=request.user).first()
         return redirect(section_url(FrontEndSection.AddUserDetails, {'provider': account.provider}))
 
+    redirect_result = redirect_by([InvalidArgumentsRedirector], request.get_full_path())
+    if redirect_result is not None:
+        return redirect(redirect_result)
+
+    # TODO: Add to redirectors.py
     page_url = request.get_full_path()
     clean_url = get_clean_url(page_url)
     if clean_url != page_url:
-        print('Redirecting {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url))
+        print('Redirecting unclean {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url))
         return redirect(clean_url)
 
+    # TODO: Add to redirectors.py
     section_name = get_page_section(clean_url)
     deprecated_redirect_url = redirect_from_deprecated_url(section_name)
     if deprecated_redirect_url:

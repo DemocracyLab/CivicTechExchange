@@ -5,9 +5,9 @@ import type { SectionType } from "../enums/Section.js";
 import { Container } from "flux/utils";
 import cdn from "../utils/cdn.js";
 import CurrentUser from "../utils/CurrentUser.js";
-import NavigationLinks, { NavigationLink } from "../utils/NavigationLinks.js";
+import NavigationLinks, { NavigationLink } from "../utils/NavigationLinks.js"; //TODO: Remove?
 import NavigationStore from "../stores/NavigationStore.js";
-import SectionLink from "./SectionLink.jsx";
+import SectionLink from "./SectionLink.jsx"; //TODO: Remove?
 import React from "react";
 import Section from "../enums/Section.js";
 import url from "../utils/url.js";
@@ -215,7 +215,7 @@ class MainHeader extends React.Component<{||}, State> {
       classes += " MainHeader-active";
     }
     return (
-      <Nav.Link className={classes} href={url.section(section)}>
+      <Nav.Link className={classes} href={url.section(section)} key={section}>
         {text}
       </Nav.Link>
     );
@@ -225,7 +225,7 @@ class MainHeader extends React.Component<{||}, State> {
       classes += " MainHeader-active";
     }
     return (
-      <NavDropdown.Item className={classes} href={url.section(section)}>
+      <NavDropdown.Item className={classes} href={url.section(section)} key={section}>
         {text}
       </NavDropdown.Item>
     );

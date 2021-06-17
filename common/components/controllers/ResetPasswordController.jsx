@@ -2,6 +2,7 @@
 
 import DjangoCSRFToken from "django-react-csrftoken";
 import React from "react";
+import Button from "react-bootstrap/Button";
 
 type State = {|
   email: string,
@@ -33,13 +34,14 @@ class ResetPasswordController extends React.Component<{||}, State> {
               type="text"
             />
           </div>
-          <button
+          <Button
+          variant="login"
             className="LogInController-signInButton"
             disabled={!this.state.email}
             type="submit"
           >
             Submit
-          </button>
+          </Button>
         </form>
       </div>
     );

@@ -23,6 +23,7 @@ export type FormWorkflowStepConfig<T> = {|
 
 type Props<T> = {|
   steps: $ReadOnlyArray<FormWorkflowStepConfig>,
+  startStep: number,
   formFields: T,
   isLoading: boolean,
 |};
@@ -49,7 +50,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
     super(props);
     this.formRef = React.createRef();
     this.state = {
-      currentStep: 0,
+      currentStep: props.startStep ? props.startStep - 1 : 0,
       formIsValid: false,
       fieldsUpdated: false,
       savedEmblemVisible: false,
@@ -64,6 +65,15 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
     this.onSubmit = _.debounce(this.onSubmit.bind(this), 1000, {
       leading: true,
     });
+  }
+
+  componentWillReceiveProps(nextProps: Props): void {
+    if (nextProps.startStep && !this.state.currentStep) {
+      const newStep: number = nextProps.startStep - 1;
+      if (newStep !== this.state.currentStep) {
+        this.navigateToStep(newStep);
+      }
+    }
   }
 
   navigateToStep(step: number): void {
@@ -190,7 +200,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
           onSelection={this.confirmDiscardChanges.bind(this)}
         />
 
-        <div className="create-form white-bg container-fluid">
+        <div className="create-form grey-bg container-fluid">
           <div className="bounded-content">
             <h1>{currentStep.header}</h1>
             <h2>{currentStep.subHeader}</h2>
@@ -224,7 +234,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
           />
         </div>
 
-        <div className="create-form white-bg container-fluid">
+        <div className="create-form grey-bg container-fluid">
           <div className="create-form-buttonrow">
             <Button
               variant="outline-secondary"

@@ -12,6 +12,7 @@ type Props<T> = {|
   +validations: $ReadOnlyArray<Validator<T>>,
   +onValidationCheck: boolean => void,
   formState: any,
+  errorMessages: $ReadOnlyArray<string>,
 |};
 type State = {|
   errorMessages: $ReadOnlyArray<string>,
@@ -30,18 +31,24 @@ class FormValidation<T> extends React.PureComponent<Props<T>, State> {
 
   componentWillReceiveProps(nextProps: Props<T>): void {
     if (nextProps.formState && nextProps.validations) {
-      const failedValidations = FormValidation.getValidationErrors(
-        nextProps.formState,
-        nextProps.validations
-      );
-      const validationSuccess = _.isEmpty(failedValidations);
-      this.setState({
-        errorMessages: failedValidations.map(
-          validation => validation.errorMessage
-        ),
-      });
+      let errorMessages: Array<string> = this.props.errorMessages || [];
+      let validationSuccess = _.isEmpty(errorMessages);
+      if (nextProps.validations) {
+        const failedValidations = FormValidation.getValidationErrors(
+          nextProps.formState,
+          nextProps.validations
+        );
+        validationSuccess = validationSuccess && _.isEmpty(failedValidations);
+        errorMessages = _.concat(
+          errorMessages,
+          failedValidations.map(validation => validation.errorMessage)
+        );
+      }
+      this.setState({ errorMessages: errorMessages });
       nextProps.onValidationCheck &&
         nextProps.onValidationCheck(validationSuccess);
+    } else {
+      this.setState({ errorMessages: nextProps.errorMessages });
     }
   }
 
