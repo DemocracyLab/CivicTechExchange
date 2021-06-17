@@ -88,14 +88,9 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       <React.Fragment>
         {user.about_me && this._renderAboutMe(user)}
 
-        {user && !_.isEmpty(user.user_technologies) ? (
-          <div className="row about-user-section">
-            <div className="col-12">
-              <h2 className="text-uppercase">Technologies</h2>
-              <div>{this._renderTechnologies()}</div>
-            </div>
-          </div>
-        ) : null}
+        {user && !_.isEmpty(user.user_technologies)
+          ? this._renderAreasOfInterest(user)
+          : null}
 
         {user && !_.isEmpty(user.user_files) ? (
           <div className="row about-user-section">
@@ -123,13 +118,16 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     );
   }
 
-  _renderTechnologies(): ?Array<React$Node> {
-    const user: UserAPIData = this.state.user;
+  _renderAreasOfInterest(user: UserAPIData): React$Node {
     return (
-      user &&
-      user.user_technologies && (
-        <TagsDisplay tags={user && user.user_technologies} />
-      )
+      <div className="row about-user-section">
+        <div className="col-12">
+          <h2>Areas of Interest and Notifications</h2>
+          <hr />
+          <h3>Technologies Used</h3>
+          <TagsDisplay tags={user && user.user_technologies} />
+        </div>
+      </div>
     );
   }
 
