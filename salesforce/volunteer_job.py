@@ -3,4 +3,6 @@ import json
 import requests
 import threading
 
+""" Corresponds to the ProjectPosition model """
+
 client = SalesforceClient.get_instance()

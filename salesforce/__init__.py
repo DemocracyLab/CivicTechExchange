@@ -1,5 +1,5 @@
 class Salesforce(object):
-    from .contact import save
-    #from .campaign import upsert_campaign,
-    #from .volunteer_job import upsert_job
-    #from .volunteer_hours import upsert_hours
+    from .contact import save, delete
+    #from .campaign import save, delete,
+    #from .volunteer_job import save, delete
+    #from .volunteer_hours import save, delete

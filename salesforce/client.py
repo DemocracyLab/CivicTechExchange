@@ -9,13 +9,13 @@ class SalesforceClient:
     __session = None
     endpoint = f'{settings.SALESFORCE_ENDPOINT}/services/data/v{settings.SALESFORCE_API_VERSION}'
     token_endpoint = f'{settings.SALESFORCE_LOGIN_URL}{settings.SALESFORCE_TOKEN_SUFFIX}'
-    contact_endpoint = f'{endpoint}/sobjects/contact/platform_id__c/'
-    campaign_endpoint = f'{endpoint}/sobjects/campaign/platform_id__c/'
-    job_endpoint = f'{endpoint}/sobjects/gw_volunteers__volunteer_job__c/platform_id__c/'
-    hours_endpoint = f'{endpoint}/sobjects/gw_volunteers__volunteer_hours__c/platform_id__c/'
+    contact_endpoint = f'{endpoint}/sobjects/contact'
+    campaign_endpoint = f'{endpoint}/sobjects/campaign'
+    job_endpoint = f'{endpoint}/sobjects/gw_volunteers__volunteer_job__c'
+    hours_endpoint = f'{endpoint}/sobjects/gw_volunteers__volunteer_hours__c'
     redirect_uri = settings.SALESFORCE_REDIRECT_URI
     owner_id = settings.SALESFORCE_OWNER_ID
-    bearer_token = f'Bearer {settings.SALESFORCE_ACCESS_TOKEN}'
+    bearer_token = f'Bearer {os.environ.get("SALESFORCE_ACCESS_TOKEN")}'
 
     def __init__(self):
         self.initialize_session()
@@ -30,29 +30,33 @@ class SalesforceClient:
         self.__session.mount("http://", adapter)
 
     def send(self, req):
-        """ The PreparedRequest has settings merged from the Request instance and those of the Session """
-        prepped_request = self.__session.prepare_request(req)
-        response = self.__session.send(prepped_request)
-        if response.status_code == requests.codes.unauthorized:
-            auth = authorize()
-            if auth.status_code == requests.codes.ok:
-                response = self.__session.send(prepped_request)
-        return response
+        if settings.SALESFORCE_CONNECTED:
+            """ The PreparedRequest has settings merged from the Request instance and those of the Session """
+            prepped_request = self.__session.prepare_request(req)
+            response = self.__session.send(prepped_request)
+            if response.status_code == requests.codes.unauthorized:
+                auth = self.authorize()
+                if auth.status_code == requests.codes.ok:
+                    prepped_request.headers['Authorization'] = self.bearer_token
+                    response = self.__session.send(prepped_request)
+            return response
+        else:
+            return requests.codes.ok
 
-
-def authorize():
-    res = requests.post(
-        f'{settings.SALESFORCE_LOGIN_URL}{settings.SALESFORCE_TOKEN_SUFFIX}',
-        data={
-            'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            'assertion': settings.SALESFORCE_JWT
-        },
-        headers={'content-type': 'application/x-www-form-urlencoded'}
-    )
-    if res.status_code == requests.codes.ok:
-        print(res.json()['access_token'])
-        os.environ['SALESFORCE_ACCESS_TOKEN'] = res.json()['access_token']
-    return res
+    def authorize(self):
+        res = requests.post(
+            f'{settings.SALESFORCE_LOGIN_URL}{settings.SALESFORCE_TOKEN_SUFFIX}',
+            data={
+                'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+                'assertion': settings.SALESFORCE_JWT
+            },
+            headers={'content-type': 'application/x-www-form-urlencoded'}
+        )
+        if res.status_code == requests.codes.ok:
+            os.environ['SALESFORCE_ACCESS_TOKEN'] = res.json()['access_token']
+            self.bearer_token = f"Bearer {res.json()['access_token']}"
+            self.__session.headers['Authorization'] = self.bearer_token
+        return res
 
 
 DEFAULT_TIMEOUT = 6.1  # seconds

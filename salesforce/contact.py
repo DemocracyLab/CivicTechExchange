@@ -6,9 +6,12 @@ import threading
 client = SalesforceClient()
 
 
+def run(request):
+    response = SalesforceClient().send(request)
+
+
 def save(contributor: object):
-    from common.models import Tag
-    technologies = Tag.hydrate_to_json(contributor.pk, list(contributor.user_technologies.all().values()))
+    tags = list(contributor.user_technologies.all().values())
     data = {
         "firstname": contributor.first_name,
         "lastname": contributor.last_name,
@@ -17,11 +20,12 @@ def save(contributor: object):
         "mailingpostalcode": contributor.postal_code,
         "mailingcountry": contributor.country,
         "npo02__membershipjoindate__c": contributor.date_joined.strftime('%Y-%m-%d'),
-        "description": contributor.about_me
+        "description": contributor.about_me,
+        "technologies__c": ",".join([tag.get('name') for tag in tags])
     }
     req = requests.Request(
         method="PATCH",
-        url=f'{client.contact_endpoint}{contributor.id}',
+        url=f'{client.contact_endpoint}/platform_id__c/{contributor.id}',
         data=json.dumps(data),
     )
     thread = threading.Thread(target=run, args=(req,))
@@ -29,5 +33,5 @@ def save(contributor: object):
     thread.start()
 
 
-def run(request):
-    response = SalesforceClient().send(request)
+def delete():
+    pass
