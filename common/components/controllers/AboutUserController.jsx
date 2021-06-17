@@ -1,18 +1,19 @@
 // @flow
 
 import React from "react";
+import Button from "react-bootstrap/Button";
 import _ from "lodash";
 import TagsDisplay from "../common/tags/TagsDisplay.jsx";
-import { DefaultLinkDisplayConfigurations } from "../constants/LinkConstants.js";
 import { FileCategoryNames } from "../constants/FileConstants.js";
 import { UserAPIData } from "../utils/UserAPIUtils.js";
 import UserAPIUtils from "../utils/UserAPIUtils.js";
 import { FileInfo } from "../common/FileInfo.jsx";
-import { LinkInfo } from "../forms/LinkInfo.jsx";
 import Avatar from "../common/avatar.jsx";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import url from "../utils/url.js";
 import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
+import Section from "../enums/Section.js";
+import CurrentUser from "../utils/CurrentUser.js";
 
 type State = {|
   user: ?UserAPIData,
@@ -67,8 +68,11 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   }
 
   _renderLeftColumn(user: UserAPIData): React$Node {
+    const showEdit: boolean =
+      CurrentUser.isLoggedIn() && CurrentUser.userID() === user.id;
     return (
       <React.Fragment>
+        {showEdit && this._renderEditUserButton()}
         <div className="about-user-section">
           <Avatar user={user} imgClass="Profile-img" />
         </div>
@@ -158,11 +162,19 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     );
   }
 
-  _legibleLinkName(link: LinkInfo) {
-    //replaces specific link Names for readability
-    return link.linkName in DefaultLinkDisplayConfigurations
-      ? DefaultLinkDisplayConfigurations[link.linkName].sourceTypeDisplayName
-      : link.linkName || link.linkUrl;
+  _renderEditUserButton(): React$Node {
+    return (
+      <div className="about-user-section">
+        <Button
+          variant="primary"
+          className="AboutProject-button"
+          type="button"
+          href={url.section(Section.EditProfile)}
+        >
+          Edit Profile
+        </Button>
+      </div>
+    );
   }
 
   _legibleFileName(input: FileInfo) {
