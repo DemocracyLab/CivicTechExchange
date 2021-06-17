@@ -130,7 +130,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     return (
       <div className="row about-user-section">
         <div className="col-12">
-          <h2>Areas of Interest and Notifications</h2>
+          <h2>Areas of Interest</h2>
           <hr />
           <h3>Technologies Used</h3>
           <TagsDisplay tags={user && user.user_technologies} />
