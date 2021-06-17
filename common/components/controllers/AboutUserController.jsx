@@ -69,7 +69,9 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderLeftColumn(user: UserAPIData): React$Node {
     return (
       <React.Fragment>
-        <Avatar user={user} imgClass="Profile-img" />
+        <div className="about-user-section">
+          <Avatar user={user} imgClass="Profile-img" />
+        </div>
         <div className="about-user-section">
           <h3>{user && user.first_name + " " + user.last_name}</h3>
         </div>
