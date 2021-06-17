@@ -70,7 +70,9 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <Avatar user={user} imgClass="Profile-img" />
-        <h1>{user && user.first_name + " " + user.last_name}</h1>
+        <div className="about-user-section">
+          <h3>{user && user.first_name + " " + user.last_name}</h3>
+        </div>
         {!_.isEmpty(user.user_links) ? (
           <div className="row about-user-section">
             <div className="col-12">

@@ -2,6 +2,10 @@
   border-right: solid;
   border-width: 1px;
   border-color: $color-disabled-border;
+
+  .about-user-section {
+    padding-left: 20px;
+  }
 }
 
 .AboutUser-root .VolunteerCard-img, .AboutUser-root .person-icon-container {
@@ -34,9 +38,8 @@
   padding: 5px 10px;
 }
 
-//TODO: Still need these?
 .about-user-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 50px;
 }
 .about-user-section:last-of-type {
   margin-bottom: 2rem;
@@ -47,7 +50,4 @@
   &:hover {
     text-decoration: underline;
   }
-}
-.about-user-name {
-  padding-top: 0.25rem;
 }
