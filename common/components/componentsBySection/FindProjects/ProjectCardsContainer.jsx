@@ -15,6 +15,7 @@ import LoadingMessage from "../../chrome/LoadingMessage.jsx";
 import prerender from "../../utils/prerender.js";
 import type { LocationRadius } from "../../stores/ProjectSearchStore.js";
 import ProjectSearchBar from "./ProjectSearchBar.jsx";
+import metrics from "../../utils/metrics.js"
 
 type Props = {|
   showSearchControls: ?boolean,
@@ -40,11 +41,14 @@ class ProjectCardsContainer extends React.Component<Props, State> {
 
   static calculateState(prevState: State): State {
     prerender.ready(!ProjectSearchStore.getProjectsLoading());
-
+    const count = ProjectSearchStore.getNumberOfProjects();
+    if ( _.isNumber(count) ) {
+      metrics.logProjectSearchResults(count, ProjectSearchStore.getQueryString())
+    }
     return {
       projects: ProjectSearchStore.getProjects(),
       project_pages: ProjectSearchStore.getProjectPages(),
-      project_count: ProjectSearchStore.getNumberOfProjects(),
+      project_count: count,
       current_page: ProjectSearchStore.getCurrentPage(),
       projects_loading: ProjectSearchStore.getProjectsLoading(),
       keyword: ProjectSearchStore.getKeyword() || "",

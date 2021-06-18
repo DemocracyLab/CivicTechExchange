@@ -1,5 +1,5 @@
 from urllib.parse import urlparse
-from common.helpers.front_end import clean_invalid_args
+from common.helpers.front_end import clean_invalid_args, get_clean_url, get_page_section, redirect_from_deprecated_url
 
 
 class RedirectorInterface:
@@ -28,6 +28,25 @@ class InvalidArgumentsRedirector(RedirectorInterface):
             print('Redirecting invalid arguments in {old_url} to {new_url}'.format(old_url=full_path, new_url=clean_url_valid_args))
             return clean_url_valid_args
 
+# Redirects away from dirty urls
+class DirtyUrlsRedirector(RedirectorInterface):
+    @staticmethod
+    def redirect_to(full_path):
+        clean_url = get_clean_url(full_path)
+        if clean_url != full_path:
+            print('Redirecting unclean {old_url} to {new_url}'.format(old_url=full_path, new_url=clean_url))
+            return clean_url
+
+# Redirects away from deprecated urls
+class DeprecatedUrlsRedirector(RedirectorInterface):
+    @staticmethod
+    def redirect_to(full_path):
+        clean_url = get_clean_url(full_path)
+        section_name = get_page_section(clean_url)
+        deprecated_redirect_url = redirect_from_deprecated_url(section_name)
+        if deprecated_redirect_url:
+            print('Redirecting deprecated url {name}: {url}'.format(name=section_name, url=clean_url))
+            return deprecated_redirect_url
 
 def redirect_by(redirectors, full_path):
     for redirector in redirectors:
