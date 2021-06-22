@@ -56,8 +56,7 @@ INSTALLED_APPS = [
     'oauth2.providers.github',
     'oauth2.providers.google',
     'oauth2.providers.linkedin',
-    'oauth2.providers.facebook',
-    'django_seo_js'
+    'oauth2.providers.facebook'
 ]
 
 SITE_ID = 1
