@@ -10,7 +10,6 @@ import Truncate from "../utils/truncate.js";
 import AboutProjectDisplay from "../common/projects/AboutProjectDisplay.jsx";
 import { APIError } from "../utils/api.js";
 import url from "../utils/url.js";
-import prerender from "../utils/prerender.js";
 import LoadingFrame from "../chrome/LoadingFrame.jsx";
 
 type State = {|
@@ -41,9 +40,8 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   loadProjectDetails(project: ProjectDetailsAPIData) {
     this.setState(
       {
-        project: project,
-      },
-      prerender.ready
+        project: project
+      }
     );
   }
 
@@ -90,7 +88,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
         <React.Fragment>
           <Helmet>
             <meta
-              name="prerender-status-code"
               content={this.state.statusCode}
             />
           </Helmet>

@@ -100,8 +100,8 @@ AUTHENTICATION_BACKENDS = (
 
 # TODO: Use     'django_seo_js.middleware.UserAgentMiddleware',
 MIDDLEWARE = [
-    'common.helpers.caching.DebugUserAgentMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django_seo_js.middleware.UserAgentMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -215,7 +215,7 @@ EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('E
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
-ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 CONTACT_EMAIL = os.environ['CONTACT_EMAIL']
 FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
 
