@@ -1,4 +1,7 @@
-.FindProjectsController-root .IntroText {
-  padding-top: 1rem;
-  font-weight: bold;
+//note: "in general, vertical padding between elements is 24px"
+
+
+.FindProjectsController-top {
+  padding: 24px 0;
+  background: $color-background-light;
 }

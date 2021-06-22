@@ -1,22 +1,24 @@
 .ProjectSearchBar-root {
   border: solid 1px $color-grey-frame-border;
   border-radius: 5px;
-  height: 38px; /* 38 + 1px top and bottom border = 40 */
+  height: 40px; 
+  box-sizing: border-box;
   width: 100%;
   display: flex;
 }
-
-.ProjectSearchBar-root > i {
-  margin-left: 10px;
-  margin-top: 10px;
-  flex-grow: 0;
-}
-
 .ProjectSearchBar-input {
   border: 0;
   outline-width: 0;
-  margin-left: 10px;
   height: 100%;
   flex-grow: 1;
   background: inherit;
+}
+
+.ProjectSearchBar-submit {
+  min-width: 48px;
+}
+@include media-breakpoint-up(lg) {
+  .ProjectSearchBar-submit {
+    min-width: 64px;
+  }
 }

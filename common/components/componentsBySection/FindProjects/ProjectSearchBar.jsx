@@ -7,6 +7,7 @@ import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import GlyphStyles from "../../utils/glyphs.js";
 import metrics from "../../utils/metrics.js";
 import React, { SyntheticEvent } from "react";
+import Button from "react-bootstrap/Button";
 
 type Props = {|
   placeholder: string,
@@ -30,16 +31,22 @@ class ProjectSearchBar extends React.Component<{||}, Props, State> {
   render(): React$Node {
     return (
       <div className="ProjectSearchBar-root">
-        <i className={GlyphStyles.Search}></i>
         <input
           className="ProjectSearchBar-input"
           onChange={e => this.setState({ keyword: e.target.value })}
           onKeyPress={this._handleKeyPress.bind(this)}
           placeholder={
-            this.props.placeholder || "Search tech-for-good projects"
+            this.props.placeholder || " Search tech-for-good projects"
           }
           value={this.state.keyword}
         />
+        <Button
+          variant="primary"
+          className="ProjectSearchBar-submit"
+          onClick={this._onSubmitKeyword()}
+        >
+          <i className={GlyphStyles.Search}></i>
+        </Button>
       </div>
     );
   }

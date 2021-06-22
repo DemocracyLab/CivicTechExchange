@@ -2,8 +2,8 @@
 
 import ProjectSearchDispatcher from "../stores/ProjectSearchDispatcher.js";
 import TagDispatcher from "../stores/TagDispatcher.js";
-import ProjectCardsContainer from "../componentsBySection/FindProjects/ProjectCardsContainer.jsx";
-import ProjectFilterContainer from "../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx";
+import FindProjectCardsContainer from "../componentsBySection/FindProjects/FindProjectCardsContainer.jsx";
+import ProjectSearchFilterContainer from "../componentsBySection/FindProjects/ProjectSearchFilterContainer.jsx";
 import { FindProjectsArgs } from "../stores/ProjectSearchStore.js";
 import Headers from "../common/Headers.jsx";
 import urls from "../utils/url.js";
@@ -53,9 +53,14 @@ class FindProjectsController extends React.PureComponent {
           description="Optimizing the connection between skilled volunteers and tech-for-good projects"
         />
         <div className="FindProjectsController-root container">
+          <div className="row FindProjectsController-top">
+            <div className="col-12 FindProjectsController-title">
+              <h1>Find Projects</h1>
+            </div>
+            <ProjectSearchFilterContainer />
+          </div>
           <div className="row">
-            <ProjectFilterContainer />
-            <ProjectCardsContainer showSearchControls={true} />
+            <FindProjectCardsContainer rowMaximum={3} />
           </div>
         </div>
       </React.Fragment>
