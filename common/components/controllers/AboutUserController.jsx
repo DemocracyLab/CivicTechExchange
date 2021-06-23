@@ -53,12 +53,12 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     const user: UserAPIData = this.state.user;
     return (
       <React.Fragment>
-        <div className="AboutUser-root">
+        <div className="AboutUser-root container">
           <div className="row background-light about-user-section">
-            <div className="col-12 col-lg-2 left-column">
+            <div className="col-12 col-lg-4 col-xxl-3 left-column">
               {this._renderLeftColumn(user)}
             </div>
-            <div className="col-12 col-lg-10 right-column">
+            <div className="col-12 col-lg-8 col-xxl-9 right-column">
               {this._renderRightColumn(user)}
             </div>
           </div>
