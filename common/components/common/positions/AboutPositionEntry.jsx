@@ -69,6 +69,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
         </Button>
       );
     } else if (!CurrentUser.isLoggedIn()) {
+      /*
       applyButton = (
         <Button
           variant="primary"
@@ -78,7 +79,8 @@ class AboutPositionEntry extends React.PureComponent<Props> {
         >
           Apply Now
         </Button>
-      );
+      );*/
+      return <div>{this._renderLinkToSignInButton()}</div>;
     }
 
     return <div className="apply-position-button">{applyButton}</div>;
@@ -87,6 +89,21 @@ class AboutPositionEntry extends React.PureComponent<Props> {
   _renderHeader(): ?React$Node {
     const headerText: string = tagOptionDisplay(this.props.position.roleTag);
     return <h3 className="form-group">{headerText}</h3>;
+  }
+
+  _renderLinkToSignInButton(): React$Node {
+    return (
+      <Button
+        variant="primary"
+        className="AboutProject-button"
+        type="button"
+        disabled={this.state.buttonDisabled}
+        title={this.state.buttonTitle}
+        href={url.section(Section.LogIn, url.getPreviousPageArg())}
+      >
+        Sign in to Apply
+      </Button>
+    );
   }
 }
 
