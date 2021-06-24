@@ -80,7 +80,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           <h3>{user && user.first_name + " " + user.last_name}</h3>
         </div>
         {!_.isEmpty(user.user_links) ? (
-          <div className="row about-user-section">
+          <div className="about-user-section">
             <div className="col-12">
               <h3>Links</h3>
               <div>{this._renderLinks(user)}</div>
@@ -101,7 +101,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           : null}
 
         {user && !_.isEmpty(user.user_files) ? (
-          <div className="row about-user-section">
+          <div className="about-user-section">
             <div className="col">
               <h2 className="text-uppercase">Files</h2>
               <div>{this._renderFiles()}</div>
@@ -114,7 +114,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
   _renderAboutMe(user: UserAPIData): React$Node {
     return (
-      <div className="row about-user-section">
+      <div className="about-user-section">
         <div className="col-12">
           <h2>About Me</h2>
           <h3>Bio</h3>
@@ -128,7 +128,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
   _renderAreasOfInterest(user: UserAPIData): React$Node {
     return (
-      <div className="row about-user-section">
+      <div className="about-user-section">
         <div className="col-12">
           <h2>Areas of Interest</h2>
           <hr />
