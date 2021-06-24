@@ -145,7 +145,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       user &&
       user.user_files &&
       user.user_files.map((file, i) => (
-        <div className="about-user-files" key={i}>
+        <div key={i}>
           <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">
             {this._legibleFileName(file)}
           </a>
