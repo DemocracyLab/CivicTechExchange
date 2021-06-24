@@ -40,6 +40,7 @@
   border-right: 1px solid $color-grey-medium;
   border-bottom-right-radius: 5px;
   border-bottom: 1px solid $color-grey-medium;
+  overflow: hidden; // has to be set here and in <p>
   p {
     overflow: hidden;
     white-space: nowrap;

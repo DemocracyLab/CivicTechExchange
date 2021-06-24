@@ -151,7 +151,6 @@
     }
   }
   // fixed width sections prevent long URL overflow issue on group page project cards
-  // TODO: see if https://css-tricks.com/flexbox-truncated-text/ fixes this instead (min-width: 0;)
   .Profile-primary-container {
     width: 590px;
   }
