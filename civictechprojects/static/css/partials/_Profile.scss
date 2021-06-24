@@ -112,9 +112,6 @@
     word-break: break-word;
   }
 }
-.Profile-links .IconLink-right {
-  width: 196px; // fixes issue at 320px
-}
 
 
 @include media-breakpoint-up(lg) {
@@ -154,21 +151,14 @@
     }
   }
   // fixed width sections prevent long URL overflow issue on group page project cards
+  // TODO: see if https://css-tricks.com/flexbox-truncated-text/ fixes this instead (min-width: 0;)
   .Profile-primary-container {
     width: 590px;
   }
   .Profile-secondary-section {
     width: 340px;
   }
-  .Profile-links {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 
-    h4 {
-      min-width: 260px;
-    }
-  }
 }
 @include media-breakpoint-up(xl) {
   .Profile-primary-container {

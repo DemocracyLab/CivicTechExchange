@@ -3,6 +3,15 @@
   padding-bottom: 20px;
 }
 
+.IconLink-root a {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: nowrap;
+  max-width: 360px; // set this to whatever "never-exceed" value we want, esp. useful for tablets
+  min-width: 0; // see https://css-tricks.com/flexbox-truncated-text/
+}
+
+
 .IconLink-root p {
   margin: 0;
 }
@@ -14,7 +23,6 @@
 }
 
 .IconLink-left {
-  float: left;
   width: 60px;
   height: 64px;
   padding: 15px;
@@ -24,8 +32,7 @@
 }
 
 .IconLink-right {
-  float: right;
-  width: 170px;
+  width: 100%; // makes it "take up all remaining space"
   height: 64px;
   line-height: 23px;
   border-top: 1px solid $color-grey-medium;
@@ -33,10 +40,11 @@
   border-right: 1px solid $color-grey-medium;
   border-bottom-right-radius: 5px;
   border-bottom: 1px solid $color-grey-medium;
-  display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 
 .IconLink-topText {
