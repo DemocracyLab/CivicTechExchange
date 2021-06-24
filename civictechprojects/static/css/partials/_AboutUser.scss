@@ -50,15 +50,10 @@
 .about-user-section:last-of-type {
   margin-bottom: 0px;
 }
-.about-user-section a {
+.about-user-files a {
   color: $color-orange;
   text-decoration: none;
   &:hover {
     text-decoration: underline;
   }
-}
-
-.about-user-section .AboutProject-button {
-  color: $color-text-dark;
-  margin-bottom: 0px;
 }
