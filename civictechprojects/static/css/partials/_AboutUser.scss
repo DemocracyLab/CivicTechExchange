@@ -1,12 +1,13 @@
-.AboutUser-root .left-column {
-  border-right: solid;
-  border-width: 1px;
-  border-color: $color-disabled-border;
-
-  .about-user-section {
-    padding-left: 10px;
-    padding-right: 10px;
+@include media-breakpoint-up(lg) {
+  .AboutUser-root .left-column {
+    border-right: solid;
+    border-width: 1px;
+    border-color: $color-disabled-border;
   }
+}
+.about-user-section {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .AboutUser-root .VolunteerCard-img, .AboutUser-root .person-icon-container {
