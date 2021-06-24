@@ -81,10 +81,8 @@ class AboutUserController extends React.PureComponent<{||}, State> {
         </div>
         {!_.isEmpty(user.user_links) ? (
           <div className="about-user-section">
-            <div className="col-12">
-              <h3>Links</h3>
-              <div>{this._renderLinks(user)}</div>
-            </div>
+            <h3>Links</h3>
+            <div>{this._renderLinks(user)}</div>
           </div>
         ) : null}
       </React.Fragment>
@@ -102,10 +100,8 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
         {user && !_.isEmpty(user.user_files) ? (
           <div className="about-user-section">
-            <div className="col">
-              <h2 className="text-uppercase">Files</h2>
-              <div>{this._renderFiles()}</div>
-            </div>
+            <h2 className="text-uppercase">Files</h2>
+            <div>{this._renderFiles()}</div>
           </div>
         ) : null}
       </React.Fragment>
@@ -115,12 +111,10 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderAboutMe(user: UserAPIData): React$Node {
     return (
       <div className="about-user-section">
-        <div className="col-12">
-          <h2>About Me</h2>
-          <h3>Bio</h3>
-          <div className="bio-text" style={{ whiteSpace: "pre-wrap" }}>
-            {user.about_me}
-          </div>
+        <h2>About Me</h2>
+        <h3>Bio</h3>
+        <div className="bio-text" style={{ whiteSpace: "pre-wrap" }}>
+          {user.about_me}
         </div>
       </div>
     );
@@ -129,12 +123,10 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderAreasOfInterest(user: UserAPIData): React$Node {
     return (
       <div className="about-user-section">
-        <div className="col-12">
-          <h2>Areas of Interest</h2>
-          <hr />
-          <h3>Technologies Used</h3>
-          <TagsDisplay tags={user && user.user_technologies} />
-        </div>
+        <h2>Areas of Interest</h2>
+        <hr />
+        <h3>Technologies Used</h3>
+        <TagsDisplay tags={user && user.user_technologies} />
       </div>
     );
   }
