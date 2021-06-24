@@ -25,7 +25,7 @@
 
 .IconLink-right {
   float: right;
-  width: 200px;
+  width: 170px;
   height: 64px;
   line-height: 23px;
   border-top: 1px solid $color-grey-medium;
@@ -33,6 +33,10 @@
   border-right: 1px solid $color-grey-medium;
   border-bottom-right-radius: 5px;
   border-bottom: 1px solid $color-grey-medium;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .IconLink-topText {
