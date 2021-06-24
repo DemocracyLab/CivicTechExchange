@@ -7,7 +7,6 @@
   display: flex;
   flex-basis: 100%;
   flex-wrap: nowrap;
-  max-width: 360px; // set this to whatever "never-exceed" value we want, esp. useful for tablets
   min-width: 0; // see https://css-tricks.com/flexbox-truncated-text/
 }
 
