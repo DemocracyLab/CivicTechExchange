@@ -1,16 +1,56 @@
-.about-user-section {
-  margin-bottom: 1.5rem;
-}
-.about-user-section:last-of-type {
-  margin-bottom: 2rem;
-}
-.about-user-section a {
-  color: $color-orange;
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
+@include media-breakpoint-up(lg) {
+  .AboutUser-root .left-column {
+    border-right: solid;
+    border-width: 1px;
+    border-color: $color-disabled-border;
   }
 }
-.about-user-name {
-  padding-top: 0.25rem;
+.about-user-section {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.AboutUser-root .VolunteerCard-img, .AboutUser-root .person-icon-container {
+  width: 100%;
+  text-align: center;
+  background-color: $color-background-light;
+}
+
+.AboutUser-root .person-icon-container {
+  height: 250px;
+
+  svg {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+.Profile-img {
+  max-width: 100%;
+  border-radius: 50%;
+}
+
+.right-column h2 {
+  margin-bottom: 40px;
+}
+
+.bio-text {
+  background-color: $color-background-default;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 5px 10px;
+}
+
+.about-user-section {
+  margin-bottom: 50px;
+}
+.about-user-section:last-of-type {
+  margin-bottom: 0px;
+}
+
+.AboutUser-root .left-column {
+  padding-top: 15px;
+}
+.AboutUser-root .right-column {
+  padding-bottom: 15px;
 }
