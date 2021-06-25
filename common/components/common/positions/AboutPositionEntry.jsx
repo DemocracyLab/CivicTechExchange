@@ -30,8 +30,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
       <div className="Position-entry">
         <div className="Position-header">
           {this._renderHeader()}
-          {/*showApplyButton && */
-          this._renderApplyButton()}
+          {this._renderApplyButton(showApplyButton)}
         </div>
         {this.props.position.descriptionUrl && (
           <div className="Position-description-link">
@@ -56,9 +55,9 @@ class AboutPositionEntry extends React.PureComponent<Props> {
     );
   }
 
-  _renderApplyButton(): ?React$Node {
+  _renderApplyButton(showApplyButton): ?React$Node {
     let applyButton;
-    if (CurrentUser.canVolunteerForProject(this.props.project)) {
+    if (CurrentUser.canVolunteerForProject(this.props.project) && showApplyButton) {
       applyButton = (
         <Button
           variant="primary"
