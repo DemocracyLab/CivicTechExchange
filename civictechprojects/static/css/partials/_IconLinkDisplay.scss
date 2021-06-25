@@ -8,8 +8,8 @@
   flex-basis: 100%;
   flex-wrap: nowrap;
   min-width: 0; // see https://css-tricks.com/flexbox-truncated-text/
+  text-decoration: none; // we decorate sub-elements to control what does it
 }
-
 
 .IconLink-root p {
   margin: 0;
@@ -46,9 +46,12 @@
     text-overflow: ellipsis;
   }
 }
+.IconLink-right:hover, .IconLink-right:active {
+  text-decoration: underline;
+}
+
 
 .IconLink-topText {
-  color: $color-text-dark;
   font-weight: 600;
   padding-top: 10px;
   padding-left: 8px;
