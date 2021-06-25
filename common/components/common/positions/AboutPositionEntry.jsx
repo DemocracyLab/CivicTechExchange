@@ -30,7 +30,8 @@ class AboutPositionEntry extends React.PureComponent<Props> {
       <div className="Position-entry">
         <div className="Position-header">
           {this._renderHeader()}
-          {showApplyButton && this._renderApplyButton()}
+          {/*showApplyButton && */
+          this._renderApplyButton()}
         </div>
         {this.props.position.descriptionUrl && (
           <div className="Position-description-link">
@@ -68,19 +69,20 @@ class AboutPositionEntry extends React.PureComponent<Props> {
           Apply Now
         </Button>
       );
-    } else if (!CurrentUser.isLoggedIn()) {
-      /*
+    }
+    if (!CurrentUser.isLoggedIn()) {
       applyButton = (
         <Button
           variant="primary"
+          className="AboutProject-button"
           type="button"
-          title="Apply to this position"
+          disabled={false}
+          title="Sign in to Apply"
           href={url.section(Section.LogIn, url.getPreviousPageArg())}
         >
-          Apply Now
+          Sign in to Apply
         </Button>
-      );*/
-      return <div>{this._renderLinkToSignInButton()}</div>;
+      );
     }
 
     return <div className="apply-position-button">{applyButton}</div>;
@@ -89,21 +91,6 @@ class AboutPositionEntry extends React.PureComponent<Props> {
   _renderHeader(): ?React$Node {
     const headerText: string = tagOptionDisplay(this.props.position.roleTag);
     return <h3 className="form-group">{headerText}</h3>;
-  }
-
-  _renderLinkToSignInButton(): React$Node {
-    return (
-      <Button
-        variant="primary"
-        className="AboutProject-button"
-        type="button"
-        disabled={this.state.buttonDisabled}
-        title={this.state.buttonTitle}
-        href={url.section(Section.LogIn, url.getPreviousPageArg())}
-      >
-        Sign in to Apply
-      </Button>
-    );
   }
 }
 

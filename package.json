@@ -20,6 +20,7 @@
   "dependencies": {
     "@tryghost/content-api": "^1.5.2",
     "bluebird": "^3.5.2",
+    "caniuse-lite": "^1.0.30001239",
     "css-loader": "^3.4.2",
     "django-react-csrftoken": "^1.0.4",
     "flow-bin": "^0.75.0",
