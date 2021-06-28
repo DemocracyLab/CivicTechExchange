@@ -1,11 +1,12 @@
 # Find first occurrence of an item in a collection that satisfies the condition
-def find_first(collection, condition):
+def find_first(collection: list, condition):
     for item in collection:
         if condition(item):
             return item
     return None
 
 
+# Format JSON in tablular format
 def flatten(nested_collection):
     flat_list = []
     for collection in nested_collection:
@@ -14,7 +15,8 @@ def flatten(nested_collection):
     return flat_list
 
 
-def count_occurrences(collection):
+# Count how many times a value repeats in the data
+def count_occurrences(collection: list):
     count_dict = {}
     for item in collection:
         if item not in count_dict:
@@ -24,7 +26,8 @@ def count_occurrences(collection):
     return count_dict
 
 
-def distinct(list_a, list_b, key_func):
+# Find a distinct value from an object
+def distinct(list_a: list, list_b: list, key_func):
     """
     Take two lists of arbitrary objects and get the union of distinct objects between the two
     :param list_a: First object list
@@ -34,4 +37,5 @@ def distinct(list_a, list_b, key_func):
     """
     lists_dict = {key_func(item): item for item in list_a}
     lists_dict.update({key_func(item): item for item in list_b})
+
     return lists_dict.values()
