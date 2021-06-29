@@ -30,7 +30,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
       <div className="Position-entry">
         <div className="Position-header">
           {this._renderHeader()}
-          {this._renderApplyButton(showApplyButton: boolean)}
+          {this._renderApplyButton((showApplyButton: boolean))}
         </div>
         {this.props.position.descriptionUrl && (
           <div className="Position-description-link">
