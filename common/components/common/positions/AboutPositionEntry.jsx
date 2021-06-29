@@ -55,9 +55,12 @@ class AboutPositionEntry extends React.PureComponent<Props> {
     );
   }
 
-  _renderApplyButton(showApplyButton): ?React$Node {
+  _renderApplyButton(showApplyButton: boolean): ?React$Node {
     let applyButton;
-    if (CurrentUser.canVolunteerForProject(this.props.project) && showApplyButton) {
+    if (
+      CurrentUser.canVolunteerForProject(this.props.project) &&
+      showApplyButton
+    ) {
       applyButton = (
         <Button
           variant="primary"
@@ -69,7 +72,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
         </Button>
       );
     }
-    if (!CurrentUser.isLoggedIn()) {
+    else if (!CurrentUser.isLoggedIn()) {
       applyButton = (
         <Button
           variant="primary"
