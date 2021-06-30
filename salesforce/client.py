@@ -15,7 +15,6 @@ class SalesforceClient:
     hours_endpoint = f'{endpoint}/sobjects/gw_volunteers__volunteer_hours__c'
     redirect_uri = settings.SALESFORCE_REDIRECT_URI
     owner_id = settings.SALESFORCE_OWNER_ID
-    bearer_token = f'Bearer {os.environ.get("SALESFORCE_ACCESS_TOKEN")}'
 
     def __init__(self):
         self.initialize_session()
@@ -24,6 +23,7 @@ class SalesforceClient:
     """ Default timeout to avoid hung threads """
     def initialize_session(self):
         self.__session = requests.Session()
+        self.bearer_token = f'Bearer {os.environ.get("SALESFORCE_ACCESS_TOKEN")}'
         self.__session.headers = {'Content-Type': 'application/json', 'Authorization': self.bearer_token}
         adapter = TimeoutHTTPAdapter(max_retries=retry_strategy)
         self.__session.mount("https://", adapter)
