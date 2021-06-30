@@ -2,7 +2,7 @@
 
 import ProjectSearchDispatcher from "../stores/ProjectSearchDispatcher.js";
 import TagDispatcher from "../stores/TagDispatcher.js";
-import FindProjectCardsContainer from "../componentsBySection/FindProjects/FindProjectCardsContainer.jsx";
+import ProjectCardsContainer from "../componentsBySection/FindProjects/ProjectCardsContainer.jsx";
 import ProjectSearchFilterContainer from "../componentsBySection/FindProjects/ProjectSearchFilterContainer.jsx";
 import { FindProjectsArgs } from "../stores/ProjectSearchStore.js";
 import Headers from "../common/Headers.jsx";
@@ -60,7 +60,7 @@ class FindProjectsController extends React.PureComponent {
             <ProjectSearchFilterContainer />
           </div>
           <div className="row">
-            <FindProjectCardsContainer rowMaximum={3} />
+            <ProjectCardsContainer rowMaximum={3} />
           </div>
         </div>
       </React.Fragment>

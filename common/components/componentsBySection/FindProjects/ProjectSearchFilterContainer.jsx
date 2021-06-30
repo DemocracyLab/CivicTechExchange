@@ -1,31 +1,26 @@
 // @flow
 import React from "react";
-import ProjectSearchBar from "./ProjectSearchBar.jsx";
 import ProjectSearchSort from "./ProjectSearchSort.jsx";
-
+import ProjectFilterContainer from "./Filters/ProjectFilterContainer.jsx";
+import ProjectTagContainer from "./ProjectTagContainer.jsx";
+//this component is the "top section" of our find project page, containing the Search, Filter, and Selected Filters components
 class ProjectSearchFilterContainer<T> extends React.PureComponent<
   Props<T>,
   State
 > {
   render(): React$Node {
     return (
-      <div className="ProjectSearchFilterContainer-root col-12">
-        <div className="d-none d-lg-block">
-          <ProjectSearchSort />{" "}
-          {/* this may need to be reworked, it's close but not quite */}
+      <React.Fragment>
+        <div className="col-12">
+          <ProjectSearchSort />
         </div>
-        <div className="d-block d-lg-none">
-          <ProjectSearchBar />{" "}
-          {/*investigate intention of search-as-you-type behavior when calling this directly */}
+        <div className="col-12">
+          <ProjectFilterContainer />
         </div>
-
-        <p>
-          filter bar component goes here: Issue Areas, Skills Needed,
-          Technologies Used, Project Stage, Organization, Location
-        </p>
-
-        <p>selected filter bar conditionally renders here</p>
-      </div>
+        <div className="col-12">
+          <ProjectTagContainer />
+        </div>
+      </React.Fragment>
     );
   }
 }

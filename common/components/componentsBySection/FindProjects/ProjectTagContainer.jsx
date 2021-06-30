@@ -10,6 +10,7 @@ import React from "react";
 import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
 import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
 import { getLocationDisplayString } from "../../common/location/LocationInfo.js";
+import ResetSearchButton from "./ResetSearchButton.jsx";
 
 type PillConfig = {|
   label: string,
@@ -91,6 +92,7 @@ class ProjectTagContainer extends React.Component<{||}, State> {
             />
           );
         })}
+        <ResetSearchButton />
       </div>
     );
   }

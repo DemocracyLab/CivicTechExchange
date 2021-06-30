@@ -1,6 +1,3 @@
-//TODO: Note that this component started as a copy of ProjectCardsContainer, modified for the June 2021 Find Projects update
-//Decide if we should merge this into PCC instead of a parallel component prior to merge w/ master
-
 // @flow
 
 import _ from "lodash";
