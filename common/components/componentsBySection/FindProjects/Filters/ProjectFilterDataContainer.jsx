@@ -1,4 +1,4 @@
-// TODO: Depricated; Replace with <ProjectFilterContainer /> and delete this. 
+// TODO: deprecated; Replace with <ProjectFilterContainer /> and delete this. 
 
 // @flow
 
