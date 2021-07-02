@@ -172,6 +172,15 @@ def user_edit(request, user_id):
     return redirect(section_url(FrontEndSection.Profile, {'id': user_id}))
 
 
+def user_edit_details(request, user_id):
+    # TODO: Will this work with ajax body instead of form?
+    print('Editing user details')
+    from pprint import pprint
+    pprint(request.body)
+    user = DemocracyLabUserCreationForm.edit_user(request, user_id)
+    return JsonResponse(user.hydrate_to_json())
+
+
 def user_details(request, user_id):
     user = Contributor.objects.get(id=user_id)
     return JsonResponse(user.hydrate_to_json())

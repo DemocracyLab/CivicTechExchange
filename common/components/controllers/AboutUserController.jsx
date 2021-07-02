@@ -14,9 +14,12 @@ import url from "../utils/url.js";
 import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 import Section from "../enums/Section.js";
 import CurrentUser from "../utils/CurrentUser.js";
+import { Glyph, GlyphSizes, GlyphStyles } from "../utils/glyphs.js";
+import EditUserNameModal from "../componentsBySection/AboutUser/EditUserNameModal.jsx";
 
 type State = {|
   user: ?UserAPIData,
+  showEditNameModal: boolean,
 |};
 
 class AboutUserController extends React.PureComponent<{||}, State> {
@@ -25,6 +28,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
     this.state = {
       user: null,
+      showEditNameModal: false,
     };
   }
 
@@ -49,10 +53,23 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     );
   }
 
+  onClickEdit(showEditModalState: string) {
+    const state: State = {};
+    state[showEditModalState] = true;
+    this.setState(state);
+  }
+
+  onSaveUserChanges(showEditModalState: string, user: UserAPIData) {
+    const state: State = { user: user };
+    state[showEditModalState] = false;
+    this.setState(state);
+  }
+
   _renderDetails(): React$Node {
     const user: UserAPIData = this.state.user;
     return (
       <React.Fragment>
+        {user && this._renderEditUserModals()}
         <div className="AboutUser-root container">
           <div className="row background-light about-user-section">
             <div className="col-12 col-lg-4 col-xxl-3 left-column">
@@ -76,6 +93,11 @@ class AboutUserController extends React.PureComponent<{||}, State> {
         <div className="about-user-section">
           <Avatar user={user} imgClass="Profile-img" />
         </div>
+        <i
+          className={Glyph(GlyphStyles.Edit, GlyphSizes.LG)}
+          aria-hidden="true"
+          onClick={this.onClickEdit.bind(this, "showEditNameModal")}
+        ></i>
         <div className="about-user-section">
           <h3>{user && user.first_name + " " + user.last_name}</h3>
         </div>
@@ -165,6 +187,18 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           Edit Profile
         </Button>
       </div>
+    );
+  }
+
+  _renderEditUserModals(): React$Node {
+    return (
+      <React.Fragment>
+        <EditUserNameModal
+          showModal={this.state.showEditNameModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditNameModal")}
+        />
+      </React.Fragment>
     );
   }
 

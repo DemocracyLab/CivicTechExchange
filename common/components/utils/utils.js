@@ -13,6 +13,7 @@ class utils {
     return escapeEl.textContent;
   }
 
+  // Use singular or plural form of word depending on if there are 1 of the item it references
   static pluralize(singular: string, plural: string, count: number): string {
     return count === 1 ? singular : plural;
   }

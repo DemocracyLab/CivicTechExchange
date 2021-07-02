@@ -4,6 +4,14 @@ from common.models.tags import Tag
 from common.helpers.date_helpers import parse_front_end_datetime
 from distutils.util import strtobool
 from django.contrib.gis.geos import Point
+from django.forms import ModelForm
+
+
+def _read_form_field(form, field_name):
+    if isinstance(form, ModelForm) and field_name in form.data:
+        return form.data.get(field_name)
+    elif field_name in form:
+        return form[field_name]
 
 
 def read_form_field_string(model, form, field_name, transformation=None):
@@ -15,8 +23,8 @@ def read_form_field_string(model, form, field_name, transformation=None):
     :return: True if changes to model string field were made
     """
     field_changed = False
-    if field_name in form.data:
-        form_field_content = form.data.get(field_name)
+    form_field_content = _read_form_field(form, field_name)
+    if form_field_content is not None:
         if transformation is not None:
             form_field_content = transformation(form_field_content)
         field_changed = getattr(model, field_name) != form_field_content
@@ -52,17 +60,17 @@ def read_form_field_tags(model, form, field_name):
     :param field_name: Name of field shared by model and form
     :return: True if changes to model tag field were made
     """
-    if field_name in form.data:
-        return Tag.merge_tags_field(getattr(model, field_name), form.data.get(field_name))
+    form_tags = _read_form_field(form, field_name)
+    if form_tags:
+        return Tag.merge_tags_field(getattr(model, field_name), form_tags)
     return False
 
 
 def read_form_fields_point(model, form, point_field_name, lat_field_name, long_field_name):
-    if lat_field_name in form.data and long_field_name in form.data:
-        lat = form.data.get(lat_field_name)
-        long = form.data.get(long_field_name)
-        if len(lat) > 0 and len(long) > 0:
-            setattr(model, point_field_name, Point(float(long), float(lat)))
+    lat = _read_form_field(form, lat_field_name)
+    long = _read_form_field(form, long_field_name)
+    if len(lat) > 0 and len(long) > 0:
+        setattr(model, point_field_name, Point(float(long), float(lat)))
 
 
 def merge_json_changes(model_class, model, form, field_name):
@@ -74,11 +82,11 @@ def merge_json_changes(model_class, model, form, field_name):
     :param field_name: field name in model and form
     :return: True if there were changes
     """
-    if field_name in form.data:
-        json_text = form.data.get(field_name)
-        if len(json_text) > 0:
-            json_object = json.loads(json_text)
-            model_class.merge_changes(model, json_object)
+    json_text = _read_form_field(form, field_name)
+
+    if json_text and len(json_text) > 0:
+        json_object = json.loads(json_text)
+        model_class.merge_changes(model, json_object)
         # TODO: Actually check if the json content changed
         return True
     return False
@@ -95,11 +103,10 @@ def merge_single_file(model, form, file_category, field_name):
     """
     from civictechprojects.models import ProjectFile
     field_changed = False
-    if field_name in form.data:
-        file_content = form.data.get(field_name)
-        if file_content and len(file_content) > 0:
-            file_json = json.loads(file_content)
-            field_changed = ProjectFile.replace_single_file(model, file_category, file_json)
+    file_content = _read_form_field(form, field_name)
+    if file_content and len(file_content) > 0:
+        file_json = json.loads(file_content)
+        field_changed = ProjectFile.replace_single_file(model, file_category, file_json)
     return field_changed
 
 
@@ -119,14 +126,17 @@ def is_creator(user, entity):
     else:
         return user.username == entity.event_creator.username
 
+
 def is_co_owner(user, project):
     from civictechprojects.models import VolunteerRelation
     volunteer_relations = VolunteerRelation.objects.filter(project_id=project.id, volunteer_id=user.id)
     co_owner_relationship = find_first(volunteer_relations, lambda volunteer_relation: volunteer_relation.is_co_owner)
     return co_owner_relationship is not None
 
+
 def is_co_owner_or_owner(user, project):
     return is_creator(user, project) or is_co_owner(user, project)
+
 
 def is_co_owner_or_staff(user, project):
     if user is not None:
