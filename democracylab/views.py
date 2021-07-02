@@ -24,7 +24,10 @@ def login_view(request, provider=None):
         email = request.POST['username']
         password = request.POST['password']
         prev_page = request.POST['prevPage']
-        prev_page_args = ast.literal_eval(request.POST['prevPageArgs'])
+        prev_page_args = {}
+        if 'prevPageArgs' in request.POST and len(request.POST['prevPageArgs']) > 0:
+            prev_page_args_string = request.POST['prevPageArgs'].strip('\'\"').replace('\\', '')
+            prev_page_args = json.loads(prev_page_args_string)
         user = authenticate(username=email.lower(), password=password)
         if user is not None and user.is_authenticated:
             login(request, user)
@@ -32,7 +35,7 @@ def login_view(request, provider=None):
             return redirect(redirect_url)
         else:
             messages.error(request, 'Incorrect Email or Password')
-            return redirect(section_url(FrontEndSection.LogIn, {'prev': prev_page}))
+            return redirect(section_url(FrontEndSection.LogIn, {'prev': prev_page, 'prevPageArgs': prev_page_args_string}))
 
     if provider in provider_ids:
         return redirect(f'{provider}_login')

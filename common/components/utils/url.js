@@ -75,6 +75,7 @@ class urlHelper {
     });
   }
 
+  // TODO: Do we still need to remove id from args?
   /**
    *
    * @param section             Section to link to
@@ -143,14 +144,22 @@ class urlHelper {
       : urlHelper.section(Section.LogIn, { prev: section });
   }
 
+  // TODO: Unit tests!!
   // Get url for logging in then returning to the previous page
   static logInThenReturn(returnUrl: ?string): string {
     let _url: string = returnUrl || window.location.href;
-    const prevPageArgs: Dictionary<string> = Object.assign(
-      urlHelper.arguments(_url),
-      urlHelper.getPreviousPageArg(_url)
-    );
-    return urlHelper.section(Section.LogIn, prevPageArgs, true);
+    const sectionArgs: SectionUrlArguments = urlHelper.getSectionArgs(_url);
+    if ("prev" in sectionArgs.args) {
+      return _url;
+    } else {
+      let _args: Dictionary<string> = {
+        prev: sectionArgs.section,
+      };
+      if (!_.isEmpty(sectionArgs.args)) {
+        _args.prevPageArgs = JSON.stringify(sectionArgs.args);
+      }
+      return urlHelper.section(Section.LogIn, _args, true);
+    }
   }
 
   // Construct a url with properly-formatted query string for the given arguments
