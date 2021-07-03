@@ -75,7 +75,6 @@ class urlHelper {
     });
   }
 
-  // TODO: Do we still need to remove id from args?
   /**
    *
    * @param section             Section to link to

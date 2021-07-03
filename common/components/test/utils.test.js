@@ -108,7 +108,7 @@ describe("utils", () => {
     expect(urlHelper.isEmptyStringOrValidUrl("")).toEqual(true);
   });
 
-  test("logInThenReturn produces correct redirection url", () => {
+  test("logInThenReturn produces correct redirection urls", () => {
     const expectedWithArguments =
       '/login?prev=AboutProject&prevPageArgs={"id":"1"}';
     expect(urlHelper.logInThenReturn("/projects/1")).toEqual(
@@ -117,6 +117,10 @@ describe("utils", () => {
 
     const expectedNoArguments = "/login?prev=FindProjects";
     expect(urlHelper.logInThenReturn("/projects/")).toEqual(
+      expectedNoArguments
+    );
+
+    expect(urlHelper.logInThenReturn(expectedNoArguments)).toEqual(
       expectedNoArguments
     );
   });
