@@ -247,15 +247,6 @@ class urlHelper {
     return newUrl;
   }
 
-  static getPreviousPageArg(url: ?string): Dictionary<string> {
-    const _url: string = urlHelper._urlOrCurrentUrl(url);
-    // If prev arg already exists, use that
-    const existingPreviousPageArg: string = urlHelper.argument("prev");
-    return existingPreviousPageArg
-      ? { prev: existingPreviousPageArg }
-      : { prev: urlHelper.getSection(_url) };
-  }
-
   static appendHttpIfMissingProtocol(url: string): string {
     // TODO: Find a library that can handle this so we don't have to maintain regexes
     if (!regex.protocol.test(url)) {
