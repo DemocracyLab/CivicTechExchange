@@ -144,7 +144,6 @@ class urlHelper {
       : urlHelper.section(Section.LogIn, { prev: section });
   }
 
-  // TODO: Unit tests!!
   // Get url for logging in then returning to the previous page
   static logInThenReturn(returnUrl: ?string): string {
     let _url: string = returnUrl || window.location.href;
