@@ -6,6 +6,7 @@ from .models import Contributor
 from civictechprojects.models import ProjectLink, ProjectFile, FileCategory
 from common.helpers.form_helpers import read_form_field_string, read_form_field_tags, merge_json_changes, merge_single_file
 from common.helpers.qiqo_chat import SubscribeUserToQiqoChat
+from common.helpers.request_helpers import is_ajax
 
 
 class DemocracyLabUserCreationForm(UserCreationForm):
@@ -25,7 +26,7 @@ class DemocracyLabUserCreationForm(UserCreationForm):
 
         project_fields_changed = False
         form = None
-        if request.body and len(request.body) > 0:
+        if is_ajax(request):
             form = json.loads(request.body)
         else:
             form = DemocracyLabUserCreationForm(request.POST)
@@ -40,7 +41,7 @@ class DemocracyLabUserCreationForm(UserCreationForm):
         user.save()
 
         merge_json_changes(ProjectLink, user, form, 'user_links')
-        merge_json_changes(ProjectLink, user, form, 'user_files')
+        merge_json_changes(ProjectFile, user, form, 'user_files')
         merge_single_file(user, form, FileCategory.THUMBNAIL, 'user_thumbnail_location')
         merge_single_file(user, form, FileCategory.RESUME, 'user_resume_file')
 

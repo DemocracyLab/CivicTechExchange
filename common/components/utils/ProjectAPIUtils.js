@@ -303,6 +303,7 @@ class ProjectAPIUtils {
       {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
       },
       additionalHeaders
     );
