@@ -180,7 +180,7 @@ class AlertHeader extends React.Component<Props, State> {
     const key: string = _.keys(AlertMessages).find(key => url.argument(key));
     const message: string = AlertMessages[key].replace(
       "{value}",
-      decodeURI(url.argument(key))
+      decodeURIComponent(url.argument(key))
     );
     return <div className="AlertHeader-text">{message}</div>;
   }
