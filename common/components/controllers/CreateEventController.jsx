@@ -123,7 +123,7 @@ class CreateEventController extends React.PureComponent<{||}, State> {
   onFinalSubmitSuccess(event: EventData): void {
     window.location.href = url.section(Section.AboutEvent, {
       id: event.event_id,
-      eventAwaitingApproval: encodeURIComponent(event.event_name),
+      eventAwaitingApproval: url.encodeNameForUrlPassing(event.event_name),
     });
   }
 

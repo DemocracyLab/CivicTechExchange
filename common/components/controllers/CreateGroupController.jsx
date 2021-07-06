@@ -130,7 +130,7 @@ class CreateGroupController extends React.PureComponent<{||}, State> {
     // metrics.logGroupCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
     window.location.href = url.section(Section.MyGroups, {
-      GroupAwaitingApproval: encodeURIComponent(group.group_name),
+      groupAwaitingApproval: url.encodeNameForUrlPassing(group.group_name),
     });
   }
 

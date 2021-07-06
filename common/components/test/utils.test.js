@@ -80,6 +80,10 @@ describe("utils", () => {
     const args = urlHelper.arguments("/projects?issues=test-issue&page=1");
     expect(args["issues"]).toEqual("test-issue");
     expect(args["page"]).toEqual("1");
+
+    expect(urlHelper.encodeNameForUrlPassing("!@#$%^&*()1234567890 project name").toEqual("%21%40%23%24%25%5E%26%2A%28%291234567890%20project%20name"));
+    expect(urlHelper.decodeNameFromUrlPassing("%21%40%23%24%25%5E%26%2A%28%291234567890%20project%20name").toEqual("!@#$%^&*()1234567890 project name"));
+
   });
 
   test("isValidUrl validates URL correctly", () => {
