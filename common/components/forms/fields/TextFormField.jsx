@@ -58,6 +58,7 @@ class TextFormField extends React.Component<Props, State> {
           placeholder={this.props.placeholder}
           value={this.state.value}
           onChange={this.onChange.bind(this)}
+          isInvalid={this.state.errorFeedback}
         />
         <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
         <Form.Control.Feedback type="invalid">

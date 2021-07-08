@@ -6,6 +6,7 @@ import EditUserModal from "./EditUserModal.jsx";
 import TextFormField from "../../forms/fields/TextFormField.jsx";
 import type { Validator } from "../../forms/FormValidation.jsx";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
+import type { FormFieldValidator } from "../../utils/validation.js";
 import _ from "lodash";
 
 type Props = {|
@@ -33,13 +34,15 @@ class EditUserNameModal extends React.PureComponent<Props, State> {
       first_name: user.first_name,
       last_name: user.last_name,
     };
-    const validators: $ReadOnlyArray<Validator<FormFields>> = [
+    const validators: $ReadOnlyArray<FormFieldValidator<FormFields>> = [
       {
+        fieldName: "first_name",
         checkFunc: (formFields: FormFields) =>
           !_.isEmpty(formFields.first_name),
         errorMessage: "Please enter First Name",
       },
       {
+        fieldName: "last_name",
         checkFunc: (formFields: FormFields) => !_.isEmpty(formFields.last_name),
         errorMessage: "Please enter Last Name",
       },

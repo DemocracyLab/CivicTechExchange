@@ -77,6 +77,10 @@ class FormFieldsStore extends ReduceStore<State> {
   getFormFieldError(key: string): ?string {
     return this.getState().formFieldErrors[key];
   }
+
+  fieldsAreValid(): boolean {
+    return _.isEmpty(this.getState().formFieldErrors);
+  }
 }
 
 export default new FormFieldsStore();

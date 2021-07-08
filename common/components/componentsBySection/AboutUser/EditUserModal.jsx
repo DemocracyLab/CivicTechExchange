@@ -7,6 +7,8 @@ import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import { createDictionary, Dictionary } from "../../types/Generics.jsx";
 import FormFieldsStore from "../../stores/FormFieldsStore.js";
 import htmlDocument from "../../utils/htmlDocument.js";
+import { Container } from "flux/utils";
+import _ from "lodash";
 
 type Props = {|
   showModal: boolean,
@@ -17,18 +19,30 @@ type Props = {|
 type State = {|
   showModal: boolean,
   isProcessing: boolean,
+  isValid: boolean,
 |};
 
 /**
  * Modal for editing user profile fields
  */
-class EditUserModal extends React.PureComponent<Props, State> {
+class EditUserModal extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
       showModal: false,
       isProcessing: false,
+      isValid: true,
     };
+  }
+
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [FormFieldsStore];
+  }
+
+  static calculateState(prevState: State, props: Props): State {
+    let state: State = _.clone(prevState) || {};
+    state.isValid = FormFieldsStore.fieldsAreValid();
+    return state;
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -69,6 +83,8 @@ class EditUserModal extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
+    const submitEnabled: boolean =
+      !this.state.isProcessing && this.state.isValid;
     return (
       <ModalWrapper
         showModal={this.state.showModal}
@@ -76,7 +92,7 @@ class EditUserModal extends React.PureComponent<Props, State> {
         cancelText="No"
         cancelEnabled={!this.state.isProcessing}
         submitText={this.state.isProcessing ? "" : "Save"}
-        submitEnabled={!this.state.isProcessing}
+        submitEnabled={submitEnabled}
         onClickCancel={this.close.bind(this)}
         onClickSubmit={this.confirm.bind(this)}
       >
@@ -86,4 +102,4 @@ class EditUserModal extends React.PureComponent<Props, State> {
   }
 }
 
-export default EditUserModal;
+export default Container.create(EditUserModal, { withProps: true });

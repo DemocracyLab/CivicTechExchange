@@ -17,7 +17,7 @@ class validationHelper {
   ): Dictionary<string> {
     const failingValidations: $ReadOnlyArray<
       FormFieldValidator<T>
-    > = validations.map(
+    > = validations.filter(
       (validation: FormFieldValidator<T>) => !validation.checkFunc(formFields)
     );
 
