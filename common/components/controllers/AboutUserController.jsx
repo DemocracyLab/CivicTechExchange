@@ -93,13 +93,16 @@ class AboutUserController extends React.PureComponent<{||}, State> {
         <div className="about-user-section">
           <Avatar user={user} imgClass="Profile-img" />
         </div>
-        <i
-          className={Glyph(GlyphStyles.Edit, GlyphSizes.LG)}
-          aria-hidden="true"
-          onClick={this.onClickEdit.bind(this, "showEditNameModal")}
-        ></i>
-        <div className="about-user-section">
+
+        <div className="about-user-section side-by-side">
           <h3>{user && user.first_name + " " + user.last_name}</h3>
+          <span>
+            <i
+              className={Glyph(GlyphStyles.Edit, GlyphSizes.LG)}
+              aria-hidden="true"
+              onClick={this.onClickEdit.bind(this, "showEditNameModal")}
+            ></i>
+          </span>
         </div>
         {!_.isEmpty(user.user_links) ? (
           <div className="about-user-section">
