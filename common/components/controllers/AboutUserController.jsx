@@ -19,6 +19,7 @@ import EditUserNameModal from "../componentsBySection/AboutUser/EditUserNameModa
 
 type State = {|
   user: ?UserAPIData,
+  isUserOrAdmin: boolean,
   showEditNameModal: boolean,
 |};
 
@@ -28,6 +29,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
     this.state = {
       user: null,
+      isUserOrAdmin: false,
       showEditNameModal: false,
     };
   }
@@ -42,6 +44,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   loadUserDetails(user: UserAPIData) {
     this.setState({
       user: user,
+      isUserOrAdmin: CurrentUser.userID() === user.id || CurrentUser.isStaff(),
     });
   }
 
@@ -96,13 +99,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
         <div className="about-user-section side-by-side">
           <h3>{user && user.first_name + " " + user.last_name}</h3>
-          <span>
-            <i
-              className={Glyph(GlyphStyles.Edit, GlyphSizes.LG)}
-              aria-hidden="true"
-              onClick={this.onClickEdit.bind(this, "showEditNameModal")}
-            ></i>
-          </span>
+          {this._renderEditControl()}
         </div>
         {!_.isEmpty(user.user_links) ? (
           <div className="about-user-section">
@@ -202,6 +199,18 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           onEditClose={this.onSaveUserChanges.bind(this, "showEditNameModal")}
         />
       </React.Fragment>
+    );
+  }
+
+  _renderEditControl(): ?React$Node {
+    return (
+      this.state.isUserOrAdmin && (
+        <i
+          className={Glyph(GlyphStyles.Edit, GlyphSizes.LG)}
+          aria-hidden="true"
+          onClick={this.onClickEdit.bind(this, "showEditNameModal")}
+        ></i>
+      )
     );
   }
 
