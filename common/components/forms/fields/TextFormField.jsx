@@ -62,13 +62,15 @@ class TextFormField extends React.Component<Props, State> {
     // TODO: is name field required?
     return (
       <React.Fragment>
-        {this.props.showCount && (
-          <div className="character-count">
-            {(this.state.value || "").length} / {this.props.maxLength}
-          </div>
-        )}
         <Form.Group controlId={this.props.id}>
-          <Form.Label>{this.props.label}</Form.Label>
+          <span className="side-by-side">
+            <Form.Label>{this.props.label}</Form.Label>
+            {this.props.showCount && (
+              <div className="character-count">
+                {(this.state.value || "").length} / {this.props.maxLength}
+              </div>
+            )}
+          </span>
           <Form.Control
             required={this.props.required}
             as={this.state.elementType}
