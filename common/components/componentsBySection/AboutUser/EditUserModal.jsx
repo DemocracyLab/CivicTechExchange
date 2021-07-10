@@ -14,6 +14,7 @@ type Props = {|
   showModal: boolean,
   user: UserAPIData,
   fields: $ReadOnlyArray<string>,
+  fieldGetters: ?Dictionary<(any) => string>,
   onEditClose: UserAPIData => void,
 |};
 type State = {|
@@ -66,11 +67,19 @@ class EditUserModal extends React.Component<Props, State> {
   }
 
   confirm(): void {
+    const getFieldValue: string => string = (fieldName: string) => {
+      if (this.props.fieldGetters && this.props.fieldGetters[fieldName]) {
+        return this.props.fieldGetters[fieldName]();
+      } else {
+        return FormFieldsStore.getFormFieldValue(fieldName);
+      }
+    };
+
     this.setState({ isProcessing: true });
     const body: Dictionary<any> = createDictionary(
       this.props.fields,
       (fieldName: string) => fieldName,
-      (fieldName: string) => FormFieldsStore.getFormFieldValue(fieldName)
+      getFieldValue
     );
     const cookies: Dictionary<string> = htmlDocument.cookies();
     ProjectAPIUtils.post(

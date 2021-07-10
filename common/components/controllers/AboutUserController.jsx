@@ -17,12 +17,14 @@ import CurrentUser from "../utils/CurrentUser.js";
 import { Glyph, GlyphSizes, GlyphStyles } from "../utils/glyphs.js";
 import EditUserNameModal from "../componentsBySection/AboutUser/EditUserNameModal.jsx";
 import EditUserBioModal from "../componentsBySection/AboutUser/EditUserBioModal.jsx";
+import EditUserLinksModal from "../componentsBySection/AboutUser/EditUserLinksModal.jsx";
 
 type State = {|
   user: ?UserAPIData,
   isUserOrAdmin: boolean,
   showEditNameModal: boolean,
   showEditBioModal: boolean,
+  showEditLinksModal: boolean,
 |};
 
 class AboutUserController extends React.PureComponent<{||}, State> {
@@ -34,6 +36,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       isUserOrAdmin: false,
       showEditNameModal: false,
       showEditBioModal: false,
+      showEditLinksModal: false,
     };
   }
 
@@ -106,7 +109,10 @@ class AboutUserController extends React.PureComponent<{||}, State> {
         </div>
         {!_.isEmpty(user.user_links) ? (
           <div className="about-user-section">
-            <h3>Links</h3>
+            <span className="side-by-side">
+              <h3>Links</h3>
+              {this._renderEditControl("showEditLinksModal")}
+            </span>
             <div>{this._renderLinks(user)}</div>
           </div>
         ) : null}
@@ -208,6 +214,11 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           showModal={this.state.showEditBioModal}
           user={this.state.user}
           onEditClose={this.onSaveUserChanges.bind(this, "showEditBioModal")}
+        />
+        <EditUserLinksModal
+          showModal={this.state.showEditLinksModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditLinksModal")}
         />
       </React.Fragment>
     );
