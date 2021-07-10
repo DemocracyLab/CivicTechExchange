@@ -16,11 +16,13 @@ import Section from "../enums/Section.js";
 import CurrentUser from "../utils/CurrentUser.js";
 import { Glyph, GlyphSizes, GlyphStyles } from "../utils/glyphs.js";
 import EditUserNameModal from "../componentsBySection/AboutUser/EditUserNameModal.jsx";
+import EditUserBioModal from "../componentsBySection/AboutUser/EditUserBioModal.jsx";
 
 type State = {|
   user: ?UserAPIData,
   isUserOrAdmin: boolean,
   showEditNameModal: boolean,
+  showEditBioModal: boolean,
 |};
 
 class AboutUserController extends React.PureComponent<{||}, State> {
@@ -31,6 +33,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       user: null,
       isUserOrAdmin: false,
       showEditNameModal: false,
+      showEditBioModal: false,
     };
   }
 
@@ -99,7 +102,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
         <div className="about-user-section side-by-side">
           <h3>{user && user.first_name + " " + user.last_name}</h3>
-          {this._renderEditControl()}
+          {this._renderEditControl("showEditNameModal")}
         </div>
         {!_.isEmpty(user.user_links) ? (
           <div className="about-user-section">
@@ -133,7 +136,10 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderAboutMe(user: UserAPIData): React$Node {
     return (
       <div className="about-user-section">
-        <h2>About Me</h2>
+        <div className="side-by-side">
+          <h2>About Me</h2>
+          {this._renderEditControl("showEditBioModal")}
+        </div>
         <h3>Bio</h3>
         <div className="bio-text" style={{ whiteSpace: "pre-wrap" }}>
           {user.about_me}
@@ -198,17 +204,22 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           user={this.state.user}
           onEditClose={this.onSaveUserChanges.bind(this, "showEditNameModal")}
         />
+        <EditUserBioModal
+          showModal={this.state.showEditBioModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditBioModal")}
+        />
       </React.Fragment>
     );
   }
 
-  _renderEditControl(): ?React$Node {
+  _renderEditControl(modalShowVariable: string): ?React$Node {
     return (
       this.state.isUserOrAdmin && (
         <i
           className={Glyph(GlyphStyles.Edit, GlyphSizes.LG)}
           aria-hidden="true"
-          onClick={this.onClickEdit.bind(this, "showEditNameModal")}
+          onClick={this.onClickEdit.bind(this, modalShowVariable)}
         ></i>
       )
     );

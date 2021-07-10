@@ -10,7 +10,7 @@ import _ from "lodash";
 type SetFormFieldsActionType = {
   type: "SET_FORM_FIELDS",
   formFieldValues: Dictionary<any>,
-  validators: $ReadOnlyArray<FormFieldValidator<any>>,
+  validators: ?$ReadOnlyArray<FormFieldValidator<any>>,
 };
 
 type UpdateFormFieldActionType<T> = {
@@ -54,20 +54,21 @@ class FormFieldsStore extends ReduceStore<State> {
   setFormFields(state: State, action: SetFormFieldsActionType): State {
     state.validators = action.validators;
     state.formFieldValues = action.formFieldValues;
-    state.formFieldErrors = validationHelper.getErrors(
-      state.validators,
-      state.formFieldValues
-    );
+    state = this.processErrors(state);
     return state;
   }
 
   updateFormField(state: State, action: UpdateFormFieldActionType): State {
     state.formFieldValues[action.fieldName] = action.fieldValue;
-    state.formFieldErrors = validationHelper.getErrors(
-      state.validators,
-      state.formFieldValues
-    );
+    state = this.processErrors(state);
     return _.clone(state);
+  }
+
+  processErrors(state: State): State {
+    state.formFieldErrors = !_.isEmpty(state.validators)
+      ? validationHelper.getErrors(state.validators, state.formFieldValues)
+      : {};
+    return state;
   }
 
   getFormFieldValue(key: string): any {
