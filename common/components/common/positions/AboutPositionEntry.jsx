@@ -79,7 +79,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
           type="button"
           disabled={false}
           title="Sign in to Apply"
-          href={url.section(Section.LogIn, url.getPreviousPageArg())}
+          href={url.logInThenReturn()}
         >
           Sign in to Apply
         </Button>

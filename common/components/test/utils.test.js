@@ -123,6 +123,23 @@ describe("utils", () => {
     expect(urlHelper.isEmptyStringOrValidUrl("")).toEqual(true);
   });
 
+  test("logInThenReturn produces correct redirection urls", () => {
+    const expectedWithArguments =
+      '/login?prev=AboutProject&prevPageArgs={"id":"1"}';
+    expect(urlHelper.logInThenReturn("/projects/1")).toEqual(
+      expectedWithArguments
+    );
+
+    const expectedNoArguments = "/login?prev=FindProjects";
+    expect(urlHelper.logInThenReturn("/projects/")).toEqual(
+      expectedNoArguments
+    );
+
+    expect(urlHelper.logInThenReturn(expectedNoArguments)).toEqual(
+      expectedNoArguments
+    );
+  });
+
   test("groupBy.andTransform", () => {
     const testData = [
       { a: 1, b: 2, type: "a" },
