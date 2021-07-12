@@ -153,6 +153,7 @@ describe("utils", () => {
         sectionRoleCategory: "Design",
       },
     ];
+    
     let test = array.join(testObjects, ",");
 
     let testArray: Array<T> = [];
