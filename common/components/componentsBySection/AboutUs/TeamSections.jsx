@@ -11,7 +11,7 @@ import type {
   TeamAPIData,
   VolunteerDetailsAPIData,
 } from "../../utils/ProjectAPIUtils.js";
-import BioThumbnail from "./BioThumbnail.jsx";
+import BioThumbnail from "./BioThumbnail.jsx"; testArray.push(<hr />);
 import {
   VolunteerDetailsAPIDataEqualsBioPersonData,
   VolunteerUserDataToBioPersonData,

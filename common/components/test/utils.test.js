@@ -7,6 +7,7 @@ import window from "./__mocks__/window";
 import NavigationStore from "../stores/NavigationStore.js";
 import renderer from "react-test-renderer";
 import GroupBy from "../utils/groupBy.js";
+import array from "../utils/array.js";
 
 describe("utils", () => {
   test("async.doWhenReady", () => {
@@ -119,5 +120,37 @@ describe("utils", () => {
       i => ({ result: i.a + i.b })
     );
     expect(result).toMatchObject({ a: [{ result: 3 }], b: [{ result: 4 }] });
+  });
+
+  test("array test", () => {
+    type testObject = {|
+      title: string,
+      sectionRoleCategory: string,
+    |};
+
+    const testObjects: $ReadOnlyArray<testObject> = [
+      {
+        title: "Development",
+        sectionRoleCategory: "Software Development",
+      },
+      {
+        title: "Design",
+        sectionRoleCategory: "Design",
+      },
+    ];
+    let test = array.join(testObjects, ",");
+
+    let testArray: Array<T> = [];
+    testArray.push({
+      title: "Development",
+      sectionRoleCategory: "Software Development",
+    });
+    testArray.push(",");
+    testArray.push({
+      title: "Design",
+      sectionRoleCategory: "Design",
+    });
+
+    expect(test).toEqual(testArray);
   });
 });
