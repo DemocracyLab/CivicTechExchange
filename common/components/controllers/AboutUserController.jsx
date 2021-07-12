@@ -1,17 +1,19 @@
 // @flow
 
 import React from "react";
+import Button from "react-bootstrap/Button";
+import _ from "lodash";
 import TagsDisplay from "../common/tags/TagsDisplay.jsx";
-import { DefaultLinkDisplayConfigurations } from "../constants/LinkConstants.js";
 import { FileCategoryNames } from "../constants/FileConstants.js";
 import { UserAPIData } from "../utils/UserAPIUtils.js";
 import UserAPIUtils from "../utils/UserAPIUtils.js";
 import { FileInfo } from "../common/FileInfo.jsx";
-import { LinkInfo } from "../forms/LinkInfo.jsx";
 import Avatar from "../common/avatar.jsx";
-import _ from "lodash";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import url from "../utils/url.js";
+import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
+import Section from "../enums/Section.js";
+import CurrentUser from "../utils/CurrentUser.js";
 
 type State = {|
   user: ?UserAPIData,
@@ -51,78 +53,89 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     const user: UserAPIData = this.state.user;
     return (
       <React.Fragment>
-        <div className="AboutProjectController-root">
-          <div className="container">
-            <div className="row background-light about-user-section">
-              <div className="col-12">
-                <Avatar user={user} size={50} />
-                <h1>{user && user.first_name + " " + user.last_name}</h1>
-              </div>
+        <div className="AboutUser-root container">
+          <div className="row background-light about-user-section">
+            <div className="col-12 col-lg-4 col-xxl-3 left-column">
+              {this._renderLeftColumn(user)}
             </div>
-
-            {user && !_.isEmpty(user.user_technologies) ? (
-              <div className="row about-user-section">
-                <div className="col-12">
-                  <h2 className="text-uppercase">Technologies</h2>
-                  <div>{this._renderTechnologies()}</div>
-                </div>
-              </div>
-            ) : null}
-
-            <div className="row about-user-section">
-              <div className="col-12">
-                <h2 className="text-uppercase">About Me</h2>
-                <div style={{ whiteSpace: "pre-wrap" }}>
-                  {user && user.about_me}
-                </div>
-              </div>
+            <div className="col-12 col-lg-8 col-xxl-9 right-column">
+              {this._renderRightColumn(user)}
             </div>
-
-            {user && !_.isEmpty(user.user_links) ? (
-              <div className="row about-user-section">
-                <div className="col-12">
-                  <h2 className="text-uppercase">Links</h2>
-                  <div>{this._renderLinks()}</div>
-                </div>
-              </div>
-            ) : null}
-
-            {user && !_.isEmpty(user.user_files) ? (
-              <div className="row about-user-section">
-                <div className="col">
-                  <h2 className="text-uppercase">Files</h2>
-                  <div>{this._renderFiles()}</div>
-                </div>
-              </div>
-            ) : null}
           </div>
         </div>
       </React.Fragment>
     );
   }
 
-  _renderTechnologies(): ?Array<React$Node> {
-    const user: UserAPIData = this.state.user;
+  _renderLeftColumn(user: UserAPIData): React$Node {
+    const showEdit: boolean =
+      CurrentUser.isLoggedIn() && CurrentUser.userID() === user.id;
     return (
-      user &&
-      user.user_technologies && (
-        <TagsDisplay tags={user && user.user_technologies} />
-      )
+      <React.Fragment>
+        {showEdit && this._renderEditUserButton()}
+        <div className="about-user-section">
+          <Avatar user={user} imgClass="Profile-img" />
+        </div>
+        <div className="about-user-section">
+          <h3>{user && user.first_name + " " + user.last_name}</h3>
+        </div>
+        {!_.isEmpty(user.user_links) ? (
+          <div className="about-user-section">
+            <h3>Links</h3>
+            <div>{this._renderLinks(user)}</div>
+          </div>
+        ) : null}
+      </React.Fragment>
     );
   }
 
-  _renderLinks(): ?Array<React$Node> {
-    const user: UserAPIData = this.state.user;
+  _renderRightColumn(user: UserAPIData): React$Node {
+    return (
+      <React.Fragment>
+        {user.about_me && this._renderAboutMe(user)}
+
+        {user && !_.isEmpty(user.user_technologies)
+          ? this._renderAreasOfInterest(user)
+          : null}
+
+        {user && !_.isEmpty(user.user_files) ? (
+          <div className="about-user-section">
+            <h2 className="text-uppercase">Files</h2>
+            <div>{this._renderFiles()}</div>
+          </div>
+        ) : null}
+      </React.Fragment>
+    );
+  }
+
+  _renderAboutMe(user: UserAPIData): React$Node {
+    return (
+      <div className="about-user-section">
+        <h2>About Me</h2>
+        <h3>Bio</h3>
+        <div className="bio-text" style={{ whiteSpace: "pre-wrap" }}>
+          {user.about_me}
+        </div>
+      </div>
+    );
+  }
+
+  _renderAreasOfInterest(user: UserAPIData): React$Node {
+    return (
+      <div className="about-user-section">
+        <h2>Areas of Interest</h2>
+        <hr />
+        <h3>Technologies Used</h3>
+        <TagsDisplay tags={user && user.user_technologies} />
+      </div>
+    );
+  }
+
+  _renderLinks(user: UserAPIData): ?Array<React$Node> {
     return (
       user &&
       user.user_links &&
-      user.user_links.map((link, i) => (
-        <div key={i}>
-          <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">
-            {this._legibleLinkName(link)}
-          </a>
-        </div>
-      ))
+      user.user_links.map((link, i) => <IconLinkDisplay key={i} link={link} />)
     );
   }
 
@@ -141,11 +154,18 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     );
   }
 
-  _legibleLinkName(link: LinkInfo) {
-    //replaces specific link Names for readability
-    return link.linkName in DefaultLinkDisplayConfigurations
-      ? DefaultLinkDisplayConfigurations[link.linkName].sourceTypeDisplayName
-      : link.linkName || link.linkUrl;
+  _renderEditUserButton(): React$Node {
+    return (
+      <div className="about-user-section">
+        <Button
+          variant="primary"
+          type="button"
+          href={url.section(Section.EditProfile)}
+        >
+          Edit Profile
+        </Button>
+      </div>
+    );
   }
 
   _legibleFileName(input: FileInfo) {

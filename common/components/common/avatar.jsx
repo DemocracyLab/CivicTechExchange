@@ -6,7 +6,7 @@ import type { UserAPIData } from "../../utils/UserAPIUtils";
 
 type Props = {|
   +user: UserAPIData,
-  +size: number,
+  +imgClass: string,
 |};
 
 class Avatar extends React.PureComponent<Props> {
@@ -14,12 +14,12 @@ class Avatar extends React.PureComponent<Props> {
     const user = this.props.user;
     return user.user_thumbnail ? (
       <img
-        className="VolunteerCard-img"
+        className={this.props.imgClass || "VolunteerCard-img"}
         src={user.user_thumbnail.publicUrl}
       />
     ) : (
       <span className="person-icon-container">
-        <Person className="PersonIcon" style={{ fontSize: this.props.size }} />
+        <Person className="PersonIcon" />
       </span>
     );
   }
