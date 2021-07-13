@@ -42,7 +42,7 @@ class DemocracyLabUserCreationForm(UserCreationForm):
 
         merge_json_changes(ProjectLink, user, form, 'user_links')
         merge_json_changes(ProjectFile, user, form, 'user_files')
-        merge_single_file(user, form, FileCategory.THUMBNAIL, 'user_thumbnail_location')
+        merge_single_file(user, form, FileCategory.THUMBNAIL, 'user_thumbnail')
         merge_single_file(user, form, FileCategory.RESUME, 'user_resume_file')
 
         if project_fields_changed:

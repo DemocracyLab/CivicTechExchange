@@ -19,6 +19,7 @@ import EditUserNameModal from "../componentsBySection/AboutUser/EditUserNameModa
 import EditUserBioModal from "../componentsBySection/AboutUser/EditUserBioModal.jsx";
 import EditUserLinksModal from "../componentsBySection/AboutUser/EditUserLinksModal.jsx";
 import EditUserFilesModal from "../componentsBySection/AboutUser/EditUserFilesModal.jsx";
+import EditUserThumbnailModal from "../componentsBySection/AboutUser/EditUserThumbnailModal.jsx";
 
 type State = {|
   user: ?UserAPIData,
@@ -27,6 +28,7 @@ type State = {|
   showEditBioModal: boolean,
   showEditLinksModal: boolean,
   showEditFilesModal: boolean,
+  showEditThumbnailModal: boolean,
 |};
 
 class AboutUserController extends React.PureComponent<{||}, State> {
@@ -40,6 +42,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       showEditBioModal: false,
       showEditLinksModal: false,
       showEditFilesModal: false,
+      showEditThumbnailModal: false,
     };
   }
 
@@ -102,8 +105,9 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         {showEdit && this._renderEditUserButton()}
-        <div className="about-user-section">
+        <div className="about-user-section side-by-side">
           <Avatar user={user} imgClass="Profile-img" />
+          {this._renderEditControl("showEditThumbnailModal")}
         </div>
 
         <div className="about-user-section side-by-side">
@@ -230,6 +234,19 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           showModal={this.state.showEditFilesModal}
           user={this.state.user}
           onEditClose={this.onSaveUserChanges.bind(this, "showEditFilesModal")}
+        />
+        <EditUserFilesModal
+          showModal={this.state.showEditFilesModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditFilesModal")}
+        />
+        <EditUserThumbnailModal
+          showModal={this.state.showEditThumbnailModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(
+            this,
+            "showEditThumbnailModal"
+          )}
         />
       </React.Fragment>
     );

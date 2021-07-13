@@ -72,7 +72,8 @@ class FormFieldsStore extends ReduceStore<State> {
   }
 
   getFormFieldValue(key: string): any {
-    return this.getState().formFieldValues[key];
+    const state: State = this.getState();
+    return state.formFieldValues && state.formFieldValues[key];
   }
 
   getFormFieldError(key: string): ?string {
