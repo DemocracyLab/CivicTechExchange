@@ -18,6 +18,7 @@ import { Glyph, GlyphSizes, GlyphStyles } from "../utils/glyphs.js";
 import EditUserNameModal from "../componentsBySection/AboutUser/EditUserNameModal.jsx";
 import EditUserBioModal from "../componentsBySection/AboutUser/EditUserBioModal.jsx";
 import EditUserLinksModal from "../componentsBySection/AboutUser/EditUserLinksModal.jsx";
+import EditUserFilesModal from "../componentsBySection/AboutUser/EditUserFilesModal.jsx";
 
 type State = {|
   user: ?UserAPIData,
@@ -25,6 +26,7 @@ type State = {|
   showEditNameModal: boolean,
   showEditBioModal: boolean,
   showEditLinksModal: boolean,
+  showEditFilesModal: boolean,
 |};
 
 class AboutUserController extends React.PureComponent<{||}, State> {
@@ -37,6 +39,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       showEditNameModal: false,
       showEditBioModal: false,
       showEditLinksModal: false,
+      showEditFilesModal: false,
     };
   }
 
@@ -131,7 +134,10 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
         {user && !_.isEmpty(user.user_files) ? (
           <div className="about-user-section">
-            <h2 className="text-uppercase">Files</h2>
+            <span className="side-by-side">
+              <h2 className="text-uppercase">Files</h2>
+              {this._renderEditControl("showEditFilesModal")}
+            </span>
             <div>{this._renderFiles()}</div>
           </div>
         ) : null}
@@ -219,6 +225,11 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           showModal={this.state.showEditLinksModal}
           user={this.state.user}
           onEditClose={this.onSaveUserChanges.bind(this, "showEditLinksModal")}
+        />
+        <EditUserFilesModal
+          showModal={this.state.showEditFilesModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditFilesModal")}
         />
       </React.Fragment>
     );

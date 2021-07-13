@@ -25,7 +25,7 @@ import LinkListStore, { NewLinkInfo } from "../stores/LinkListStore.js";
 import HiddenFormFields from "../forms/HiddenFormFields.jsx";
 import _ from "lodash";
 
-const UserFileTypes = {
+export const UserFileTypes = {
   RESUME: "RESUME",
 };
 

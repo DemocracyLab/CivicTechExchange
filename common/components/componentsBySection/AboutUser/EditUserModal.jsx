@@ -71,7 +71,8 @@ class EditUserModal extends React.Component<Props, State> {
       if (this.props.fieldGetters && this.props.fieldGetters[fieldName]) {
         return this.props.fieldGetters[fieldName]();
       } else {
-        return FormFieldsStore.getFormFieldValue(fieldName);
+        let value: any = FormFieldsStore.getFormFieldValue(fieldName);
+        return _.isObject(value) ? JSON.stringify(value) : value;
       }
     };
 
