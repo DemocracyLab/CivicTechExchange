@@ -1297,7 +1297,8 @@ def change_group_owner(request, group_id, user_id):
         return HttpResponse(status=401)
 
     group = Group.objects.get(id=group_id)
-    group.group_creator = user_id
+    owner = Contributor.objects.get(id=user_id)
+    group.group_creator = owner
     group.save(update_fields=['group_creator'])
 
     return HttpResponse(status=200)
@@ -1320,7 +1321,8 @@ def change_event_owner(request, event_id, user_id):
         return HttpResponse(status=401)
 
     event = Event.objects.get(id=event_id)
-    event.event_creator = user_id
+    owner = Contributor.objects.get(id=user_id)
+    event.event_creator = owner
     event.save(update_fields=['event_creator'])
 
     return HttpResponse(status=200)
