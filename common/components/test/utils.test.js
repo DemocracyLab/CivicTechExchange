@@ -7,8 +7,8 @@ import window from "./__mocks__/window";
 import NavigationStore from "../stores/NavigationStore.js";
 import renderer from "react-test-renderer";
 import GroupBy from "../utils/groupBy.js";
-import utils from "../utils/utils.js";
 import array from "../utils/array.js";
+import utils from "../utils/utils.js";
 
 describe("utils", () => {
   test("async.doWhenReady", () => {
@@ -163,6 +163,13 @@ describe("utils", () => {
     expect(result).toMatchObject({ a: [{ result: 3 }], b: [{ result: 4 }] });
   });
 
+  test("array test", () => {
+    const testArray: $ReadOnlyArray<string> = ["test1", "test2"];
+    let test = array.join(testArray, ",");
+    let testShouldEqual: Array<string> = ["test1", ",", "test2"];
+    expect(test).toEqual(testShouldEqual);
+  });  
+
   test("utils.navigateToTopOfPage", () => {
     global.scrollTo = jest.fn();
     utils.navigateToTopOfPage();
@@ -187,11 +194,4 @@ describe("utils", () => {
     word = utils.pluralize("apple", "apples", 5);
     expect(word).toEqual("apples");
   }); 
-  
-  test("array test", () => {
-    const testArray: $ReadOnlyArray<string> = ["test1", "test2"];
-    let test = array.join(testArray, ",");
-    let testShouldEqual: Array<string> = ["test1", ",", "test2"];
-    expect(test).toEqual(testShouldEqual);
-  });
 });
