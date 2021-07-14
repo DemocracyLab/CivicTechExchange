@@ -43,6 +43,28 @@ class UserAPIUtils {
       );
   }
 
+  static fetchAllUserNames(
+    callback: $ReadOnlyArray<UserAPIData> => void,
+    errCallback: APIError => void
+  ): void {
+    fetch(new Request("/api/users/"))
+      .then(response => {
+        if (!response.ok) {
+          throw Error();
+        }
+        return response.json();
+      })
+      .then(userDetails => callback(userDetails))
+      .catch(
+        response =>
+          errCallback &&
+          errCallback({
+            errorCode: response.status,
+            errorMessage: JSON.stringify(response),
+          })
+      );
+  }
+
   // TODO: Refactor generic code into separate file
   static post(
     url: string,

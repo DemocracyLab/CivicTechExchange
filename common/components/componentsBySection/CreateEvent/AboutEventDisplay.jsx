@@ -13,6 +13,7 @@ import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
 import _ from "lodash";
 import MainFooter from "../../chrome/MainFooter.jsx"
+import ChangeOwnerButton from "../../common/owners/ChangeOwnerButton.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -63,7 +64,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
               {!this.props.viewOnly &&
                 (CurrentUser.userID() === this.state.event.event_creator ||
                   CurrentUser.isStaff()) &&
-                this._renderEditButton()}
+                this._renderEditButton() &&
+                this._renderChangeOwnerButton()}
               <div className="AboutEvent-title-date">
                 <h4>{startDate.format(DateFormat.MONTH_DATE_YEAR)}</h4>
               </div>
@@ -166,6 +168,10 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         Edit Event
       </Button>
     );
+  }
+
+  _renderChangeOwnerButton(): ?React$Node {
+    return <ChangeOwnerButton event={this.state.event} />
   }
 
   _renderRSVPButton(): ?$React$Node {

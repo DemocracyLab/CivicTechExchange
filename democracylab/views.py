@@ -176,6 +176,9 @@ def user_details(request, user_id):
     user = Contributor.objects.get(id=user_id)
     return JsonResponse(user.hydrate_to_json())
 
+def list_users(request):
+    user_result = list(map(lambda user: user.hydrate_to_json(), Contributor.objects.all()))
+    return JsonResponse(user_result, safe=False)
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt

@@ -10,6 +10,7 @@ import ContactProjectButton from "./ContactProjectButton.jsx";
 import ContactVolunteersButton from "./ContactVolunteersButton.jsx";
 import ProjectVolunteerButton from "./ProjectVolunteerButton.jsx";
 import ProjectVolunteerModal from "./ProjectVolunteerModal.jsx";
+import ChangeOwnerButton from "../owners/ChangeOwnerButton.jsx";
 import ProjectCommitCard from "./ProjectCommitCard.jsx";
 import AboutPositionEntry from "../positions/AboutPositionEntry.jsx";
 import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
@@ -369,6 +370,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
         <ContactProjectButton project={this.state.project} />
         <ContactVolunteersButton project={this.state.project} />
         <InviteProjectToGroupButton project={this.state.project} />
+        <ChangeOwnerButton project={this.state.project} />
         <ProjectVolunteerButton
           project={this.state.project}
           onVolunteerClick={this.handleShowVolunteerModal.bind(this)}

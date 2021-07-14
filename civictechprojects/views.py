@@ -1290,3 +1290,37 @@ def get_testimonials(request, category=None):
         testimonials = testimonials.filter(categories__name__in=[category])
 
     return JsonResponse(list(map(lambda t: t.to_json(), testimonials.order_by('-priority'))), safe=False)
+
+@csrf_exempt
+def change_group_owner(request, group_id, user_id):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    group = Group.objects.get(id=group_id)
+    group.group_creator = user_id
+    group.save(update_fields=['group_creator'])
+
+    return HttpResponse(status=200)
+
+@csrf_exempt
+def change_project_owner(request, project_id, user_id):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    project = Project.objects.get(id=project_id)
+    owner = Contributor.objects.get(id=user_id)
+    project.project_creator = owner
+    project.save(update_fields=['project_creator'])
+
+    return HttpResponse(status=200)
+
+@csrf_exempt
+def change_event_owner(request, event_id, user_id):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    event = Event.objects.get(id=event_id)
+    event.event_creator = user_id
+    event.save(update_fields=['event_creator'])
+
+    return HttpResponse(status=200)

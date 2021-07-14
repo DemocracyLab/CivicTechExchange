@@ -97,6 +97,9 @@ urlpatterns = [
     url(r'^volunteer/conclude/(?P<application_id>[0-9]+)/$', views.conclude_volunteering_with_project, name='conclude_volunteering_with_project'),
     url(r'^alert/create/$', views.add_alert, name='add_alert'),
     url(r'^api/testimonials/(?P<category>[-\w]*)', views.get_testimonials, name='get_testimonials'),
+    url(r'^api/change_group_owner/(?P<group_id>[0-9]+)/(?P<user_id>[0-9]+)/$', views.change_group_owner, name='change_group_owner'),
+    url(r'^api/change_project_owner/(?P<project_id>[0-9]+)/(?P<user_id>[0-9]+)/$', views.change_project_owner, name='change_project_owner'),
+    url(r'^api/change_event_owner/(?P<event_id>[0-9]+)/(?P<user_id>[0-9]+)/$', views.change_event_owner, name='change_event_owner'),
 
 ]
 

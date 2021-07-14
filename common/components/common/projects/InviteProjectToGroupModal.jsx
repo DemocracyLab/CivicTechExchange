@@ -157,14 +157,14 @@ class InviteProjectToGroupModal extends React.PureComponent<Props, State> {
 
   _renderGroupSelectionDropdown(): React$Node {
     const groups: $ReadOnlyArray<MyGroupData> = this.props.groups;
-    // TODO: Remove clear X
     return (
       <Selector
         options={groups}
-        selected={groups[0]}
+        selected={this.state.selectedGroup}
         valueStringGenerator={(group: MyGroupData) => group.group_id}
         labelGenerator={(group: MyGroupData) => group.group_name}
         onSelection={this.handleGroupSelection.bind(this)}
+        isClearable={false}
       />
     );
   }

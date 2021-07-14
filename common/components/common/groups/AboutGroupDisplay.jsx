@@ -22,6 +22,7 @@ import { Container } from "flux/utils";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import { Dictionary } from "../../types/Generics.jsx";
 import TagCategory from "../tags/TagCategory.jsx";
+import ChangeOwnerButton from "../owners/ChangeOwnerButton.jsx";
 
 type Props = {|
   group: ?GroupDetailsAPIData,
@@ -162,6 +163,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
     return (
       <div className="Profile-owner">
         <ContactGroupButton group={this.state.group} />
+        <ChangeOwnerButton group={this.state.group} />
       </div>
     );
   }
