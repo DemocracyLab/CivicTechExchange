@@ -7,7 +7,7 @@ import window from "./__mocks__/window";
 import NavigationStore from "../stores/NavigationStore.js";
 import renderer from "react-test-renderer";
 import GroupBy from "../utils/groupBy.js";
-import array from "../utils/array.js"
+import array from "../utils/array.js";
 
 describe("utils", () => {
   test("async.doWhenReady", () => {
