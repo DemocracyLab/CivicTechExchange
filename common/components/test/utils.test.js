@@ -152,4 +152,11 @@ describe("utils", () => {
     );
     expect(result).toMatchObject({ a: [{ result: 3 }], b: [{ result: 4 }] });
   });
+
+  test("array test", () => {
+    const testArray: $ReadOnlyArray<string> = ["test1", "test2"];
+    let test = array.join(testArray, ",");
+    let testShouldEqual: Array<string> = ["test1", ",", "test2"];
+    expect(test).toEqual(testShouldEqual);
+  });
 });
