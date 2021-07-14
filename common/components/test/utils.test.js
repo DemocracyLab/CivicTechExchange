@@ -44,19 +44,27 @@ describe("utils", () => {
     expect(sorted.map(obj => obj.id)).toEqual([3, 1, 0, 2]);
 
     const group_issue_areas = {
-      "no" : 2,    
-      "en" : 4,
-      "ed" : 1,
-      "tr" : 3, 
+      no: 2,
+      en: 4,
+      ed: 1,
+      tr: 3,
     };
-    const sorted_by_count_descending1 = Sort.byCountDictionary(group_issue_areas);
-    expect(sorted_by_count_descending1).toEqual(['en', 'tr', 'no', 'ed']);
-    
-    const sorted_by_count_descending2 = Sort.byCountDictionary(group_issue_areas, false);
+    const sorted_by_count_descending1 = Sort.byCountDictionary(
+      group_issue_areas
+    );
+    expect(sorted_by_count_descending1).toEqual(["en", "tr", "no", "ed"]);
+
+    const sorted_by_count_descending2 = Sort.byCountDictionary(
+      group_issue_areas,
+      false
+    );
     expect(sorted_by_count_descending2).toEqual(sorted_by_count_descending1);
-    
-    const sorted_by_count_ascending = Sort.byCountDictionary(group_issue_areas, true);
-    expect(sorted_by_count_ascending).toEqual(['ed', 'no', 'tr', 'en']);
+
+    const sorted_by_count_ascending = Sort.byCountDictionary(
+      group_issue_areas,
+      true
+    );
+    expect(sorted_by_count_ascending).toEqual(["ed", "no", "tr", "en"]);
   });
 
   test("truncate", () => {
