@@ -15,6 +15,7 @@ import RenderFilterCategory from "./RenderFilterCategory.jsx";
 import metrics from "../../../utils/metrics";
 import _ from "lodash";
 import { List } from "immutable";
+import Nav from "react-bootstrap/Nav";
 
 /**
  * @category: Tag category to pull from
@@ -89,10 +90,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     //should render a number of <RenderFilterCategory> child components
 
     return (
-      <div>
-        {this.state.sortedTags ? this._renderFilterCategories() : null}
-        <LocationSearchSection />
-      </div>
+      <div>{this.state.sortedTags ? this._renderFilterCategories() : null}</div>
     );
   }
 
@@ -142,8 +140,12 @@ class ProjectFilterContainer extends React.Component<Props, State> {
         selectOption={this._selectOption}
       />
     ));
+    // LocationSearchSection here so it's in the right parent div for layout
     return (
-      <div className="ProjectFilterDataContainer-root">{displayFilters}</div>
+      <Nav justify variant="pills"  className="ProjectFilterContainer-root">
+        {displayFilters}
+        <LocationSearchSection />
+      </Nav>
     );
   }
 
