@@ -117,7 +117,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           <h3>{user && user.first_name + " " + user.last_name}</h3>
           {this._renderEditControl("showEditNameModal")}
         </div>
-        {!_.isEmpty(user.user_links) ? (
+        {!_.isEmpty(user.user_links) || this.state.isUserOrAdmin ? (
           <div className="about-user-section">
             <span className="side-by-side">
               <h3>Links</h3>
@@ -133,14 +133,15 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderRightColumn(user: UserAPIData): React$Node {
     return (
       <React.Fragment>
-        {user.about_me && this._renderAboutMe(user)}
+        {(user.about_me || this.state.isUserOrAdmin) &&
+          this._renderAboutMe(user)}
 
         {user &&
         (!_.isEmpty(user.user_technologies) || this.state.isUserOrAdmin)
           ? this._renderAreasOfInterest(user)
           : null}
 
-        {user && !_.isEmpty(user.user_files) ? (
+        {!_.isEmpty(user.user_files) || this.state.isUserOrAdmin ? (
           <div className="about-user-section">
             <span className="side-by-side">
               <h2 className="text-uppercase">Files</h2>
