@@ -20,6 +20,7 @@ import EditUserBioModal from "../componentsBySection/AboutUser/EditUserBioModal.
 import EditUserLinksModal from "../componentsBySection/AboutUser/EditUserLinksModal.jsx";
 import EditUserFilesModal from "../componentsBySection/AboutUser/EditUserFilesModal.jsx";
 import EditUserThumbnailModal from "../componentsBySection/AboutUser/EditUserThumbnailModal.jsx";
+import EditUserTagsModal from "../componentsBySection/AboutUser/EditUserTagsModal.jsx";
 
 type State = {|
   user: ?UserAPIData,
@@ -29,6 +30,7 @@ type State = {|
   showEditLinksModal: boolean,
   showEditFilesModal: boolean,
   showEditThumbnailModal: boolean,
+  showEditTagsModal: boolean,
 |};
 
 class AboutUserController extends React.PureComponent<{||}, State> {
@@ -43,6 +45,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       showEditLinksModal: false,
       showEditFilesModal: false,
       showEditThumbnailModal: false,
+      showEditTagsModal: false,
     };
   }
 
@@ -132,7 +135,8 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       <React.Fragment>
         {user.about_me && this._renderAboutMe(user)}
 
-        {user && !_.isEmpty(user.user_technologies)
+        {user &&
+        (!_.isEmpty(user.user_technologies) || this.state.isUserOrAdmin)
           ? this._renderAreasOfInterest(user)
           : null}
 
@@ -167,7 +171,10 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderAreasOfInterest(user: UserAPIData): React$Node {
     return (
       <div className="about-user-section">
-        <h2>Areas of Interest</h2>
+        <span className="side-by-side">
+          <h2>Areas of Interest</h2>
+          {this._renderEditControl("showEditTagsModal")}
+        </span>
         <hr />
         <h3>Technologies Used</h3>
         <TagsDisplay tags={user && user.user_technologies} />
@@ -247,6 +254,11 @@ class AboutUserController extends React.PureComponent<{||}, State> {
             this,
             "showEditThumbnailModal"
           )}
+        />
+        <EditUserTagsModal
+          showModal={this.state.showEditTagsModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditTagsModal")}
         />
       </React.Fragment>
     );

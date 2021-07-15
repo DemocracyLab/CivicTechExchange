@@ -7,6 +7,11 @@ from django.contrib.gis.geos import Point
 from django.forms import ModelForm
 
 
+# TODO: Unit tests
+def is_json_string(string):
+    return string.startswith(('[', '{'))
+
+
 def _read_form_field(form, field_name):
     if isinstance(form, ModelForm) and field_name in form.data:
         return form.data.get(field_name)
@@ -62,6 +67,11 @@ def read_form_field_tags(model, form, field_name):
     """
     form_tags = _read_form_field(form, field_name)
     if form_tags:
+        if is_json_string(form_tags):
+            # Convert full tag data to comma-delimited slugs string
+            form_tags_json = json.loads(form_tags)
+            form_tag_slugs = list(map(lambda tag: tag['tag_name'], form_tags_json))
+            form_tags = ','.join(form_tag_slugs)
         return Tag.merge_tags_field(getattr(model, field_name), form_tags)
     return False
 
