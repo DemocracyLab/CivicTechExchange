@@ -2,10 +2,15 @@
 
 import React from "react";
 
+type State = {|
+  videoUrl: string,
+|};
+
 // Shows embedded video
-class VideoController extends React.PureComponent {
+class VideoController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
+    this.state = { videoUrl: window.YOUTUBE_VIDEO_URL };
   }
 
   render(): React$Node {
@@ -14,7 +19,7 @@ class VideoController extends React.PureComponent {
         <iframe
           width="560"
           height="315"
-          src="https://www.youtube.com/embed/nvIUWtx-nmo"
+          src={this.state.videoUrl}
           title="YouTube video player"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
