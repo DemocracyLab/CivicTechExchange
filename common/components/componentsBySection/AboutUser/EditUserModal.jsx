@@ -99,7 +99,7 @@ class EditUserModal extends React.Component<Props, State> {
       <ModalWrapper
         showModal={this.state.showModal}
         headerText="Edit Profile"
-        cancelText="No"
+        cancelText="Cancel"
         cancelEnabled={!this.state.isProcessing}
         submitText={this.state.isProcessing ? "" : "Save"}
         submitEnabled={submitEnabled}
