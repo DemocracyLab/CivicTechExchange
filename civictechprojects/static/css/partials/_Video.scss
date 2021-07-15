@@ -3,6 +3,7 @@
   overflow: hidden;
   width: 95%;
   margin: 0 auto;
+  max-height: calc(100vh - 160px);
 }
 
 .youtube-video-container::after {
