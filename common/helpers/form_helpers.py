@@ -117,7 +117,7 @@ def merge_single_file(model, form, file_category, field_name):
     if file_content and len(file_content) > 0:
         file_json = json.loads(file_content)
         if isinstance(file_json, list):
-            file_json = file_json[0]
+            file_json = file_json[0] if len(file_json) > 0 else []
         field_changed = ProjectFile.replace_single_file(model, file_category, file_json)
     return field_changed
 
