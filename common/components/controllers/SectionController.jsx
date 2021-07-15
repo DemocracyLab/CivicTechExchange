@@ -38,6 +38,7 @@ import FindEventsController from "./FindEventsController.jsx";
 import CoroporateHackathonController from "./CorporateHackathonController.jsx";
 import MyEventsController from "./MyEventsController.jsx";
 import AddSignUpDetails from "./AddSignUpDetails.jsx";
+import VideoController from "./VideoController.jsx";
 
 type State = {|
   section: SectionType,
@@ -128,6 +129,8 @@ class SectionController extends React.Component<{||}, State> {
         return <ErrorController />;
       case Section.AddUserDetails:
         return <AddSignUpDetails />;
+      case Section.Video:
+        return <VideoController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>;
     }
