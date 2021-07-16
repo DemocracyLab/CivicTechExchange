@@ -81,12 +81,14 @@ class EditUserNameModal extends React.PureComponent<Props, State> {
           label="First Name (Required)"
           type={TextFormFieldType.SingleLine}
           required={true}
+          maxLength={30}
         />
         <TextFormField
           id="last_name"
           label="Last Name (Required)"
           type={TextFormFieldType.SingleLine}
           required={true}
+          maxLength={30}
         />
       </EditUserModal>
     );
