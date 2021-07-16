@@ -185,10 +185,6 @@ describe("utils", () => {
   test("utils.pluralize", () => {
     let word = utils.pluralize("apple", "apples", 1);
     expect(word).toEqual("apple");
-    word = utils.pluralize("apple", "apples", '1');
-    expect(word).toEqual("apples");
-    word = utils.pluralize("apple", "apples", [1]);
-    expect(word).toEqual("apples");
     word = utils.pluralize("apple", "apples", 0);
     expect(word).toEqual("apples");
     word = utils.pluralize("apple", "apples", 5);
