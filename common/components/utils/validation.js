@@ -10,7 +10,6 @@ export type FormFieldValidator<T> = {|
 |};
 
 class validationHelper {
-  // TODO: Unit test
   static getErrors<T>(
     validations: $ReadOnlyArray<FormFieldValidator<T>>,
     formFields: T
@@ -24,11 +23,10 @@ class validationHelper {
     return createDictionary(
       failingValidations,
       (v: FormFieldValidator<T>) => v.fieldName,
-      this.getErrorMessage
+      (v: FormFieldValidator<T>) => this.getErrorMessage(v, formFields)
     );
   }
 
-  // TODO: Unit test
   static getErrorMessage<T>(
     validation: FormFieldValidator<T>,
     formFields: T
