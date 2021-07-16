@@ -129,7 +129,7 @@ class SectionController extends React.Component<{||}, State> {
         return <ErrorController />;
       case Section.AddUserDetails:
         return <AddSignUpDetails />;
-      case Section.Video:
+      case Section.VideoOverview:
         return <VideoController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>;

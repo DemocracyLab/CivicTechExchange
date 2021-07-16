@@ -30,6 +30,6 @@
   {"name": "ThankYou", "pattern": "donate/thankyou"},
   {"name": "Donate", "pattern": "donate"},
   {"name": "ContactUs", "pattern": "contact"},
-  {"name": "Video", "pattern": "video"},
+  {"name": "VideoOverview", "pattern": "videos/overview"},
   {"name": "Error", "pattern": "error"}
 ]
