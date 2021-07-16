@@ -8,6 +8,7 @@ import NavigationStore from "../stores/NavigationStore.js";
 import renderer from "react-test-renderer";
 import GroupBy from "../utils/groupBy.js";
 import array from "../utils/array.js";
+import utils from "../utils/utils.js";
 
 describe("utils", () => {
   test("async.doWhenReady", () => {
@@ -173,5 +174,26 @@ describe("utils", () => {
     let test = array.join(testArray, ",");
     let testShouldEqual: Array<string> = ["test1", ",", "test2"];
     expect(test).toEqual(testShouldEqual);
-  });
+  });  
+
+  test("utils.navigateToTopOfPage", () => {
+    global.scrollTo = jest.fn();
+    utils.navigateToTopOfPage();
+    expect(global.scrollTo).toBeCalledWith(0, 0);
+  }); 
+
+  test("utils.unescapeHtml", () => {
+    const rawStringHtmlContent = "&lt;p&gt;Function unescapeHtml&#x27;s test on &lt;a href=&#x27;fake url&#x27;&gt;something&lt;/a&gt;something&lt;/p&gt;";
+    const tranformedStringHtmlContent = utils.unescapeHtml(rawStringHtmlContent);
+    expect(tranformedStringHtmlContent).toEqual("<p>Function unescapeHtml's test on <a href='fake url'>something</a>something</p>");
+  }); 
+
+  test("utils.pluralize", () => {
+    let word = utils.pluralize("apple", "apples", 1);
+    expect(word).toEqual("apple");
+    word = utils.pluralize("apple", "apples", 0);
+    expect(word).toEqual("apples");
+    word = utils.pluralize("apple", "apples", 5);
+    expect(word).toEqual("apples");
+  }); 
 });
