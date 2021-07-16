@@ -37,9 +37,11 @@ type State = {|
 
 const AlertMessages: Dictionary<string> = {
   projectAwaitingApproval:
-    'Your project "{value}" is awaiting approval.  Expect a decision in the next business day.',
+    'Your project "${value}" is awaiting approval.  Expect a decision in the next business day.',
   eventAwaitingApproval:
-    'Your event "{value}" is awaiting approval.  Expect a decision in the next business day.',
+    'Your event "${value}" is awaiting approval.  Expect a decision in the next business day.',
+  groupAwaitingApproval:
+    'Your group "${value}" is awaiting approval.  Expect a decision in the next business day.',
 };
 
 class AlertHeader extends React.Component<Props, State> {
@@ -178,10 +180,9 @@ class AlertHeader extends React.Component<Props, State> {
 
   _renderTriggeredAlert(): React$Node {
     const key: string = _.keys(AlertMessages).find(key => url.argument(key));
-    const message: string = AlertMessages[key].replace(
-      "{value}",
-      decodeURI(url.argument(key))
-    );
+    const message: string = url.decodeNameFromUrlPassing(AlertMessages[key].replace(
+       "{value}", url.argument(key)
+     ));
     return <div className="AlertHeader-text">{message}</div>;
   }
 

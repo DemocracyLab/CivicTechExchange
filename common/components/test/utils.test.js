@@ -104,6 +104,12 @@ describe("utils", () => {
     const args = urlHelper.arguments("/projects?issues=test-issue&page=1");
     expect(args["issues"]).toEqual("test-issue");
     expect(args["page"]).toEqual("1");
+
+    let name = urlHelper.encodeNameForUrlPassing("!@#$%^&*()1234567890 project name");
+    expect(name).toEqual("!%40%23%24%25%5E%26*()1234567890%20project%20name");
+    name = urlHelper.decodeNameFromUrlPassing("%21%40%23%24%25%5E%26%2A%28%291234567890%20project%20name");
+    expect(name).toEqual("!@#$%^&*()1234567890 project name");
+
   });
 
   test("isValidUrl validates URL correctly", () => {
