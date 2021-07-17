@@ -7,7 +7,6 @@ from django.contrib.gis.geos import Point
 from django.forms import ModelForm
 
 
-# TODO: Unit tests
 def is_json_string(string):
     return string.startswith(('[', '{'))
 

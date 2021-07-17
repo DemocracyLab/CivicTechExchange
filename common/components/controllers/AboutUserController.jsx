@@ -103,11 +103,8 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   }
 
   _renderLeftColumn(user: UserAPIData): React$Node {
-    const showEdit: boolean =
-      CurrentUser.isLoggedIn() && CurrentUser.userID() === user.id;
     return (
       <React.Fragment>
-        {showEdit && this._renderEditUserButton()}
         <div className="about-user-section side-by-side">
           <Avatar user={user} imgClass="Profile-img" />
           {this._renderEditControl("showEditThumbnailModal")}
@@ -203,20 +200,6 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           </a>
         </div>
       ))
-    );
-  }
-
-  _renderEditUserButton(): React$Node {
-    return (
-      <div className="about-user-section">
-        <Button
-          variant="primary"
-          type="button"
-          href={url.section(Section.EditProfile)}
-        >
-          Edit Profile
-        </Button>
-      </div>
     );
   }
 
