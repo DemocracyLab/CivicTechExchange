@@ -173,7 +173,6 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           <h2>Areas of Interest</h2>
           {this._renderEditControl("showEditTagsModal")}
         </span>
-        <hr />
         <h3>Technologies Used</h3>
         <TagsDisplay tags={user && user.user_technologies} />
       </div>
