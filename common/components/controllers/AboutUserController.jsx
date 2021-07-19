@@ -141,7 +141,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
         {!_.isEmpty(user.user_files) || this.state.isUserOrAdmin ? (
           <div className="about-user-section">
             <span className="side-by-side">
-              <h2 className="text-uppercase">Files</h2>
+              <h2>Files</h2>
               {this._renderEditControl("showEditFilesModal")}
             </span>
             <div>{this._renderFiles()}</div>
