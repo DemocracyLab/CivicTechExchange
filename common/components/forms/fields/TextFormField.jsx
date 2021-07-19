@@ -63,7 +63,7 @@ class TextFormField extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <Form.Group controlId={this.props.id}>
-          <span className="side-by-side">
+          <span className="d-flex justify-content-between">
             <Form.Label>{this.props.label}</Form.Label>
             {this.props.showCount && (
               <div className="character-count">

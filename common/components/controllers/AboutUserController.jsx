@@ -105,18 +105,18 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderLeftColumn(user: UserAPIData): React$Node {
     return (
       <React.Fragment>
-        <div className="about-user-section side-by-side">
+        <div className="about-user-section d-flex justify-content-between">
           <Avatar user={user} imgClass="Profile-img" />
           {this._renderEditControl("showEditThumbnailModal")}
         </div>
 
-        <div className="about-user-section side-by-side">
+        <div className="about-user-section d-flex justify-content-between">
           <h3>{user && user.first_name + " " + user.last_name}</h3>
           {this._renderEditControl("showEditNameModal")}
         </div>
         {!_.isEmpty(user.user_links) || this.state.isUserOrAdmin ? (
           <div className="about-user-section">
-            <span className="side-by-side">
+            <span className="d-flex justify-content-between">
               <h3>Links</h3>
               {this._renderEditControl("showEditLinksModal")}
             </span>
@@ -140,7 +140,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
         {!_.isEmpty(user.user_files) || this.state.isUserOrAdmin ? (
           <div className="about-user-section">
-            <span className="side-by-side">
+            <span className="d-flex justify-content-between">
               <h2>Files</h2>
               {this._renderEditControl("showEditFilesModal")}
             </span>
@@ -154,7 +154,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderAboutMe(user: UserAPIData): React$Node {
     return (
       <div className="about-user-section">
-        <div className="side-by-side">
+        <div className="d-flex justify-content-between">
           <h2>About Me</h2>
           {this._renderEditControl("showEditBioModal")}
         </div>
@@ -169,7 +169,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderAreasOfInterest(user: UserAPIData): React$Node {
     return (
       <div className="about-user-section">
-        <span className="side-by-side">
+        <span className="d-flex justify-content-between">
           <h2>Areas of Interest</h2>
           {this._renderEditControl("showEditTagsModal")}
         </span>
