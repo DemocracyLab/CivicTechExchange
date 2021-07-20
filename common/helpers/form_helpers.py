@@ -78,7 +78,7 @@ def read_form_field_tags(model, form, field_name):
 def read_form_fields_point(model, form, point_field_name, lat_field_name, long_field_name):
     lat = _read_form_field(form, lat_field_name)
     long = _read_form_field(form, long_field_name)
-    if len(lat) > 0 and len(long) > 0:
+    if lat and len(lat) > 0 and long and len(long) > 0:
         setattr(model, point_field_name, Point(float(long), float(lat)))
 
 
