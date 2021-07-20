@@ -9,6 +9,7 @@ import { LinkTypes } from "../../constants/LinkConstants";
 import LinkList from "../../forms/LinkList.jsx";
 import LinkListStore, { NewLinkInfo } from "../../stores/LinkListStore.js";
 import url from "../../utils/url.js";
+import FormValidation from "../../forms/FormValidation.jsx";
 import _ from "lodash";
 
 type Props = {|
@@ -19,6 +20,7 @@ type Props = {|
 type State = {|
   showModal: boolean,
   linkList: any,
+  linkErrors: $ReadOnlyArray<string>,
 |};
 
 /**
@@ -41,6 +43,7 @@ class EditUserBioModal extends React.Component<Props, State> {
   static calculateState(prevState: State): State {
     let state: State = _.clone(prevState) || {};
     state.linkList = LinkListStore.getLinkList();
+    state.linkErrors = LinkListStore.getLinkErrors();
     return state;
   }
 
@@ -72,6 +75,7 @@ class EditUserBioModal extends React.Component<Props, State> {
         fields={["user_links"]}
         fieldGetters={{ user_links: () => this._serializeLinks() }}
         onEditClose={this.props.onEditClose}
+        isInvalid={!_.isEmpty(this.state.linkErrors)}
       >
         <div className="create-form-block">
           <LinkList
@@ -80,6 +84,7 @@ class EditUserBioModal extends React.Component<Props, State> {
             linkOrdering={[LinkTypes.LINKED_IN]}
             addLinkText="Add a new link"
           />
+          <FormValidation errorMessages={this.state.linkErrors} />
         </div>
       </EditUserModal>
     );

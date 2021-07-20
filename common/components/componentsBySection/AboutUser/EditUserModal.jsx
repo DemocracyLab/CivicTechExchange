@@ -16,6 +16,7 @@ type Props = {|
   fields: $ReadOnlyArray<string>,
   fieldGetters: ?Dictionary<(any) => string>,
   onEditClose: UserAPIData => void,
+  isInvalid: ?boolean,
 |};
 type State = {|
   showModal: boolean,
@@ -32,7 +33,7 @@ class EditUserModal extends React.Component<Props, State> {
     this.state = {
       showModal: false,
       isProcessing: false,
-      isValid: true,
+      isValid: !props.isInvalid,
     };
   }
 
@@ -42,7 +43,7 @@ class EditUserModal extends React.Component<Props, State> {
 
   static calculateState(prevState: State, props: Props): State {
     let state: State = _.clone(prevState) || {};
-    state.isValid = FormFieldsStore.fieldsAreValid();
+    state.isValid = !props.isInvalid && FormFieldsStore.fieldsAreValid();
     return state;
   }
 
