@@ -135,8 +135,8 @@ class FileUploadList extends React.PureComponent<Props, State> {
 
   _renderFiles(): Array<React$Node> {
     return this.state.files.map((file, i) => (
-      <div key={i}>
-        <a style={{maxWidth: '35%', display: 'inline-block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}} href={file.publicUrl} target="_blank" rel="noopener noreferrer">
+      <div className="FileUploadList-item" key={i}>
+        <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">
           {file.fileName}
         </a>
         <i
