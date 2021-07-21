@@ -1,0 +1,14 @@
+.FileUploadList-item {
+	display:flex;
+	align-items:center;
+	a {
+		max-width: calc(100% - 40px);
+		display: inline-block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	i {
+		margin-left: 1rem;
+	}
+}
