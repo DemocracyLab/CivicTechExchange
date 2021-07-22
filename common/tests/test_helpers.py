@@ -9,12 +9,12 @@ from civictechprojects.sitemaps import SitemapPages
 
 
 class CommonHelperTests(TestCase):
-    def test_prerender_urls(self):
+    def test_is_sitemap_urls(self):
         urls = SitemapPages()
         for url in urls:
             self.assertTrue(is_sitemap_url(url), 'Should be able to prerender ' + url)
 
-    def test_do_not_prerender_urls(self):
+    def test_is_not_sitemap_urls(self):
         urls = [
             '/projects/signup/',
             section_url(FrontEndSection.FindProjects, {'sortField': 'project_name'})
