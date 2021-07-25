@@ -54,3 +54,15 @@
 .AboutUser-root .right-column {
   padding-bottom: 15px;
 }
+
+.AboutUser-file-list {
+  display: flex;
+  align-items: center;
+  a {
+    max-width: calc(100%);
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
