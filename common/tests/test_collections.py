@@ -50,4 +50,4 @@ class CollectionsTests(TestCase):
             'is_searchable': 1, 
             'is_created': 1
         }
-        self.assertEqual(count_occurrences(data), expected_results)
+        self.assertEqual(count_occurrences(data['fields']), expected_results)
