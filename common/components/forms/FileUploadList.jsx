@@ -160,7 +160,7 @@ class FileUploadList extends React.Component<Props, State> {
 
   _renderFiles(): Array<React$Node> {
     return this.state.files.map((file, i) => (
-      <div key={i}>
+      <div className="FileUploadList-item" key={i}>
         <a href={file.publicUrl} target="_blank" rel="noopener noreferrer">
           {file.fileName}
         </a>
