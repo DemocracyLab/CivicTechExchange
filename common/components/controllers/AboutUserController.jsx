@@ -154,11 +154,11 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderAboutMe(user: UserAPIData): React$Node {
     return (
       <div className="about-user-section">
+        <h2>About Me</h2>
         <div className="d-flex justify-content-between">
-          <h2>About Me</h2>
+          <h3>Bio</h3>
           {this._renderEditControl("showEditBioModal")}
         </div>
-        <h3>Bio</h3>
         <div className="bio-text" style={{ whiteSpace: "pre-wrap" }}>
           {user.about_me}
         </div>
@@ -169,11 +169,11 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderAreasOfInterest(user: UserAPIData): React$Node {
     return (
       <div className="about-user-section">
+        <h2>Areas of Interest</h2>
         <span className="d-flex justify-content-between">
-          <h2>Areas of Interest</h2>
+          <h3>Technologies Used</h3>
           {this._renderEditControl("showEditTagsModal")}
         </span>
-        <h3>Technologies Used</h3>
         <TagsDisplay tags={user && user.user_technologies} />
       </div>
     );
