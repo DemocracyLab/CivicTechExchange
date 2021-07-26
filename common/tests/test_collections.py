@@ -19,7 +19,6 @@ class CollectionsTests(TestCase):
                 "project_country": "US",
                 "project_state": "WA",
                 "project_city": "Seattle",
-                "project_city": "Seattle",
                 "project_name": "EcoAct",
                 "project_url": "",
                 "project_date_created": "2020-03-13T20:47:00.867Z",
