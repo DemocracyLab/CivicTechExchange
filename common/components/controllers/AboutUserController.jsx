@@ -106,7 +106,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="about-user-section d-flex justify-content-between">
-          <Avatar user={user} imgClass="Profile-img" />
+          <Avatar user={user} imgClass="AboutUser-profile-img" />
           {this._renderEditControl("showEditThumbnailModal")}
         </div>
 

@@ -25,9 +25,10 @@
   }
 }
 
-.Profile-img {
+.AboutUser-profile-img {
   max-width: 100%;
   border-radius: 50%;
+  min-width: 0; // fixes flex issue
 }
 
 .right-column h2 {
