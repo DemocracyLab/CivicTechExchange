@@ -39,7 +39,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
         <table className="MyProjectCard-table">
           <tbody>
             <tr>
-              <td className="MyProjectCard-column">
+              <td className="MyProjectCard-column-ProjectName">
                 <tr className="MyProjectCard-header">Project Name</tr>
                 <tr className="MyProjectCard-projectName">
                   {this.props.project.project_name}

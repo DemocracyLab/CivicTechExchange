@@ -26,13 +26,11 @@
   margin: 5px;
 }
 
-@media screen and (max-width: 340px) {
-  .MyProjectCard-column {
+@media screen and (max-width: 370px) {
+  .MyProjectCard-column-ProjectName {
     max-width: 40px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
- 
+  } 
 }
