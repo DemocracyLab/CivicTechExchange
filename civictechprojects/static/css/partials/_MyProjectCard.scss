@@ -25,3 +25,14 @@
 .MyProjectCard-button {
   margin: 5px;
 }
+
+@media screen and (max-width: 340px) {
+  .MyProjectCard-column {
+    max-width: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+ 
+}
