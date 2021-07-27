@@ -166,7 +166,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     metrics.logProjectCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
     window.location.href = url.section(Section.MyProjects, {
-      projectAwaitingApproval: project.project_name,
+      projectAwaitingApproval: url.encodeNameForUrlPassing(project.project_name),
     });
   }
 

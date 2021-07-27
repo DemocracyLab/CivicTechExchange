@@ -291,6 +291,14 @@ class urlHelper {
   static _urlOrCurrentUrl(url: ?string): string {
     return url || window.location.href;
   }
+
+  static encodeNameForUrlPassing(name: string): string {
+    return encodeURIComponent(name);
+  }
+
+  static decodeNameFromUrlPassing(name: string): string {
+    return decodeURIComponent(name);
+  }
 }
 
 export default urlHelper;
