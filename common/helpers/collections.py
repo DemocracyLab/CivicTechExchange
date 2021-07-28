@@ -6,8 +6,8 @@ def find_first(collection: list, condition):
     return None
 
 
-# Format JSON in tablular format
-def flatten(nested_collection):
+# Convert an array of arrays into a single array
+def flatten(nested_collection: list):
     flat_list = []
     for collection in nested_collection:
         for item in collection:
