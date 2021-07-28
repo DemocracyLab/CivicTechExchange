@@ -27,8 +27,8 @@
 }
 
 @media screen and (max-width: 370px) {
-  .MyProjectCard-column-ProjectName {
-    max-width: 40px;
+  .MyProjectCard-column-ProjectName,.MyProjectCard-column-ProjectHeader,.MyProjectCard-column-ProjectStatus {
+    max-width: 70px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
