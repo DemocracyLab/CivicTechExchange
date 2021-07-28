@@ -14,9 +14,23 @@ import url from "../utils/url.js";
 import IconLinkDisplay from "../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 import Section from "../enums/Section.js";
 import CurrentUser from "../utils/CurrentUser.js";
+import { Glyph, GlyphSizes, GlyphStyles } from "../utils/glyphs.js";
+import EditUserNameModal from "../componentsBySection/AboutUser/EditUserNameModal.jsx";
+import EditUserBioModal from "../componentsBySection/AboutUser/EditUserBioModal.jsx";
+import EditUserLinksModal from "../componentsBySection/AboutUser/EditUserLinksModal.jsx";
+import EditUserFilesModal from "../componentsBySection/AboutUser/EditUserFilesModal.jsx";
+import EditUserThumbnailModal from "../componentsBySection/AboutUser/EditUserThumbnailModal.jsx";
+import EditUserTagsModal from "../componentsBySection/AboutUser/EditUserTagsModal.jsx";
 
 type State = {|
   user: ?UserAPIData,
+  isUserOrAdmin: boolean,
+  showEditNameModal: boolean,
+  showEditBioModal: boolean,
+  showEditLinksModal: boolean,
+  showEditFilesModal: boolean,
+  showEditThumbnailModal: boolean,
+  showEditTagsModal: boolean,
 |};
 
 class AboutUserController extends React.PureComponent<{||}, State> {
@@ -25,6 +39,13 @@ class AboutUserController extends React.PureComponent<{||}, State> {
 
     this.state = {
       user: null,
+      isUserOrAdmin: false,
+      showEditNameModal: false,
+      showEditBioModal: false,
+      showEditLinksModal: false,
+      showEditFilesModal: false,
+      showEditThumbnailModal: false,
+      showEditTagsModal: false,
     };
   }
 
@@ -38,6 +59,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   loadUserDetails(user: UserAPIData) {
     this.setState({
       user: user,
+      isUserOrAdmin: CurrentUser.userID() === user.id || CurrentUser.isStaff(),
     });
   }
 
@@ -49,10 +71,23 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     );
   }
 
+  onClickEdit(showEditModalState: string) {
+    const state: State = {};
+    state[showEditModalState] = true;
+    this.setState(state);
+  }
+
+  onSaveUserChanges(showEditModalState: string, user: UserAPIData) {
+    const state: State = { user: user };
+    state[showEditModalState] = false;
+    this.setState(state);
+  }
+
   _renderDetails(): React$Node {
     const user: UserAPIData = this.state.user;
     return (
       <React.Fragment>
+        {user && this._renderEditUserModals()}
         <div className="AboutUser-root container">
           <div className="row background-light about-user-section">
             <div className="col-12 col-lg-4 col-xxl-3 left-column">
@@ -68,20 +103,23 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   }
 
   _renderLeftColumn(user: UserAPIData): React$Node {
-    const showEdit: boolean =
-      CurrentUser.isLoggedIn() && CurrentUser.userID() === user.id;
     return (
       <React.Fragment>
-        {showEdit && this._renderEditUserButton()}
-        <div className="about-user-section">
-          <Avatar user={user} imgClass="Profile-img" />
+        <div className="about-user-section d-flex justify-content-between">
+          <Avatar user={user} imgClass="AboutUser-profile-img" />
+          {this._renderEditControl("showEditThumbnailModal")}
         </div>
-        <div className="about-user-section">
+
+        <div className="about-user-section d-flex justify-content-between">
           <h3>{user && user.first_name + " " + user.last_name}</h3>
+          {this._renderEditControl("showEditNameModal")}
         </div>
-        {!_.isEmpty(user.user_links) ? (
+        {!_.isEmpty(user.user_links) || this.state.isUserOrAdmin ? (
           <div className="about-user-section">
-            <h3>Links</h3>
+            <span className="d-flex justify-content-between">
+              <h3>Links</h3>
+              {this._renderEditControl("showEditLinksModal")}
+            </span>
             <div>{this._renderLinks(user)}</div>
           </div>
         ) : null}
@@ -92,15 +130,20 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderRightColumn(user: UserAPIData): React$Node {
     return (
       <React.Fragment>
-        {user.about_me && this._renderAboutMe(user)}
+        {(user.about_me || this.state.isUserOrAdmin) &&
+          this._renderAboutMe(user)}
 
-        {user && !_.isEmpty(user.user_technologies)
+        {user &&
+        (!_.isEmpty(user.user_technologies) || this.state.isUserOrAdmin)
           ? this._renderAreasOfInterest(user)
           : null}
 
-        {user && !_.isEmpty(user.user_files) ? (
+        {!_.isEmpty(user.user_files) || this.state.isUserOrAdmin ? (
           <div className="about-user-section">
-            <h2 className="text-uppercase">Files</h2>
+            <span className="d-flex justify-content-between">
+              <h2>Files</h2>
+              {this._renderEditControl("showEditFilesModal")}
+            </span>
             <div>{this._renderFiles()}</div>
           </div>
         ) : null}
@@ -112,7 +155,10 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     return (
       <div className="about-user-section">
         <h2>About Me</h2>
-        <h3>Bio</h3>
+        <div className="d-flex justify-content-between">
+          <h3>Bio</h3>
+          {this._renderEditControl("showEditBioModal")}
+        </div>
         <div className="bio-text" style={{ whiteSpace: "pre-wrap" }}>
           {user.about_me}
         </div>
@@ -124,8 +170,10 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     return (
       <div className="about-user-section">
         <h2>Areas of Interest</h2>
-        <hr />
-        <h3>Technologies Used</h3>
+        <span className="d-flex justify-content-between">
+          <h3>Technologies Used</h3>
+          {this._renderEditControl("showEditTagsModal")}
+        </span>
         <TagsDisplay tags={user && user.user_technologies} />
       </div>
     );
@@ -154,17 +202,60 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     );
   }
 
-  _renderEditUserButton(): React$Node {
+  _renderEditUserModals(): React$Node {
     return (
-      <div className="about-user-section">
-        <Button
-          variant="primary"
-          type="button"
-          href={url.section(Section.EditProfile)}
-        >
-          Edit Profile
-        </Button>
-      </div>
+      <React.Fragment>
+        <EditUserNameModal
+          showModal={this.state.showEditNameModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditNameModal")}
+        />
+        <EditUserBioModal
+          showModal={this.state.showEditBioModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditBioModal")}
+        />
+        <EditUserLinksModal
+          showModal={this.state.showEditLinksModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditLinksModal")}
+        />
+        <EditUserFilesModal
+          showModal={this.state.showEditFilesModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditFilesModal")}
+        />
+        <EditUserFilesModal
+          showModal={this.state.showEditFilesModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditFilesModal")}
+        />
+        <EditUserThumbnailModal
+          showModal={this.state.showEditThumbnailModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(
+            this,
+            "showEditThumbnailModal"
+          )}
+        />
+        <EditUserTagsModal
+          showModal={this.state.showEditTagsModal}
+          user={this.state.user}
+          onEditClose={this.onSaveUserChanges.bind(this, "showEditTagsModal")}
+        />
+      </React.Fragment>
+    );
+  }
+
+  _renderEditControl(modalShowVariable: string): ?React$Node {
+    return (
+      this.state.isUserOrAdmin && (
+        <i
+          className={Glyph(GlyphStyles.Edit, GlyphSizes.LG)}
+          aria-hidden="true"
+          onClick={this.onClickEdit.bind(this, modalShowVariable)}
+        ></i>
+      )
     );
   }
 
