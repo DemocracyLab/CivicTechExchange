@@ -6,6 +6,7 @@ class CollectionsTests(TestCase):
 
     def setUp(self):
 
+        # For count_occurrences()
         self.test_project = {
             "model": "civictechprojects.project",
             "pk": 28,
@@ -27,6 +28,9 @@ class CollectionsTests(TestCase):
                 "is_created": True,
             }
         }
+
+        # For the flatten() function
+        self.test_array = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
     # Test how many times different values occur
     def test_count_occurrences(self):
@@ -50,3 +54,9 @@ class CollectionsTests(TestCase):
             'is_created': 1
         }
         self.assertEqual(count_occurrences(data['fields']), expected_results)
+
+    def test_flatten(self):
+
+        data = self.test_array
+        expected_results = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        self.assertEqual(expected_results, flatten(data))
