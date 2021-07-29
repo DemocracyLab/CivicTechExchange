@@ -425,11 +425,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getCountryList(): $ReadOnlyArray<CountryData> {
     const projectData: FindProjectsData = this.getState().projectsData;
-    return (
-      projectData &&
+    let countryList = (projectData &&
       projectData.availableCountries &&
-      projectData.availableCountries.map(countryByCode)
-    );
+      projectData.availableCountries.map(countryByCode));
+    return countryList && _.sortBy(countryList, "displayName");
   }
 
   getLocation(): LocationRadius {

@@ -7,6 +7,7 @@ import type { MyGroupsActionType } from "./MyGroupsStore.js";
 import type { NavigationActionType } from "./NavigationStore.js";
 import type { OffsetActionType } from "./PageOffsetStore.js";
 import type { LinkListActionType } from "./LinkListStore.js";
+import type { FormFieldsActionType } from "./FormFieldsStore.js";
 import { Dispatcher } from "flux";
 
 type UniversalActionType =
@@ -14,7 +15,8 @@ type UniversalActionType =
   | MyGroupsActionType
   | NavigationActionType
   | OffsetActionType
-  | LinkListActionType;
+  | LinkListActionType
+  | FormFieldsActionType;
 
 const UniversalDispatcher: Dispatcher<UniversalActionType> = new Dispatcher();
 
