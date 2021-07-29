@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\civictechprojects",
+    "\\civictechprojects\\management",
+    "\\civictechprojects\\management\\commands"
+  ],
+  "SelectedNode": "\\civictechprojects\\management\\commands\\data_migration.py",
+  "PreviewInSolutionExplorer": false
+}
