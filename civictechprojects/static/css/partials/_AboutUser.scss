@@ -8,6 +8,7 @@
 .about-user-section {
   padding-left: 10px;
   padding-right: 10px;
+  overflow-wrap: anywhere;
 }
 
 .AboutUser-root .VolunteerCard-img, .AboutUser-root .person-icon-container {
@@ -25,9 +26,10 @@
   }
 }
 
-.Profile-img {
+.AboutUser-profile-img {
   max-width: 100%;
   border-radius: 50%;
+  min-width: 0; // fixes flex issue
 }
 
 .right-column h2 {
@@ -48,9 +50,19 @@
   margin-bottom: 0px;
 }
 
-.AboutUser-root .left-column {
+.AboutUser-root .left-column, .AboutUser-root .right-column {
   padding-top: 15px;
-}
-.AboutUser-root .right-column {
   padding-bottom: 15px;
+}
+
+.AboutUser-file-list {
+  display: flex;
+  align-items: center;
+  a {
+    max-width: calc(100%);
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
