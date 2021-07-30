@@ -78,10 +78,6 @@ class ChangeOwnerModal extends React.PureComponent<Props, State> {
   }
 
   askForSendConfirmation(): void {
-    /*metrics.logGroupInviteProjectSubmit(
-      this.state.selectedGroup.group_id,
-      this.props.projectId
-    );*/
     if (this.state.selectedUser) {
         this.setState({ showConfirmationModal: true });
     }
@@ -98,10 +94,6 @@ class ChangeOwnerModal extends React.PureComponent<Props, State> {
 
   handleSubmit() {
     this.setState({ isSending: true });
-    /*metrics.logGroupInviteProjectSubmitConfirm(
-      this.state.selectedGroup.group_id,
-      this.props.projectId
-    );*/
     let id;
     let url_prefix;
     if (this.props.group) {
