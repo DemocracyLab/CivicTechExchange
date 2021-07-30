@@ -36,10 +36,6 @@ class ChangeOwnerButton extends React.PureComponent<Props, State> {
   }
 
   handleShow() {
-    /*metrics.logGroupInviteProjectClick(
-      CurrentUser.userID(),
-      this.props.project.project_id
-    );*/
     this.setState({ showModal: true });
   }
 
