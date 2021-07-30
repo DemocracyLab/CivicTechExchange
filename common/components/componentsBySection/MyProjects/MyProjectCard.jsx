@@ -39,17 +39,17 @@ class MyProjectCard extends React.PureComponent<Props, State> {
         <table className="MyProjectCard-table">
           <tbody>
             <tr>
-              <td className="MyProjectCard-column-ProjectName">
+              <td className="MyProjectCard-column">
                 <tr className="MyProjectCard-header">Project Name</tr>
                 <tr className="MyProjectCard-projectName">
                   {this.props.project.project_name}
                 </tr>
               </td>
-              <td className="MyProjectCard-column-ProjectHeader">
+              <td className="MyProjectCard-column">
                 <tr className="MyProjectCard-header">Your Role</tr>
                 <tr>{this.state.isOwner ? "Project Lead" : "Volunteer"}</tr>
               </td>
-              <td className="MyProjectCard-column-ProjectStatus">
+              <td className="MyProjectCard-column">
                 {this._renderProjectStatus()}
               </td>
               <td className="MyProjectCard-column">{this._renderButtons()}</td>
