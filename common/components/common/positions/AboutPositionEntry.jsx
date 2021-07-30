@@ -30,7 +30,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
       <div className="Position-entry">
         <div className="Position-header">
           {this._renderHeader()}
-          {showApplyButton && this._renderApplyButton()}
+          {this._renderApplyButton(showApplyButton)}
         </div>
         {this.props.position.descriptionUrl && (
           <div className="Position-description-link">
@@ -55,9 +55,12 @@ class AboutPositionEntry extends React.PureComponent<Props> {
     );
   }
 
-  _renderApplyButton(): ?React$Node {
+  _renderApplyButton(showApplyButton: boolean): ?React$Node {
     let applyButton;
-    if (CurrentUser.canVolunteerForProject(this.props.project)) {
+    if (
+      showApplyButton &&
+      CurrentUser.canVolunteerForProject(this.props.project)
+    ) {
       applyButton = (
         <Button
           variant="primary"
@@ -72,11 +75,13 @@ class AboutPositionEntry extends React.PureComponent<Props> {
       applyButton = (
         <Button
           variant="primary"
+          className="AboutProject-button"
           type="button"
-          title="Apply to this position"
-          href={url.section(Section.LogIn, url.getPreviousPageArg())}
+          disabled={false}
+          title="Sign in to Apply"
+          href={url.logInThenReturn()}
         >
-          Apply Now
+          Sign in to Apply
         </Button>
       );
     }

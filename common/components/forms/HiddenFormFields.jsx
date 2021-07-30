@@ -26,12 +26,10 @@ class HiddenFormFields extends React.Component<Props> {
     const nameValues: $ReadOnlyArray<KeyValuePair<string>> = this.props
       .sourceDict
       ? _.entries(this.props.sourceDict)
-      : _.entries(
-          _.keys(this.props.fields).map(fieldName => [
-            fieldName,
-            this.props.fields[fieldName](this.props.sourceObject),
-          ])
-        );
+      : _.keys(this.props.fields).map(fieldName => [
+          fieldName,
+          this.props.fields[fieldName](this.props.sourceObject),
+        ]);
 
     return (
       <React.Fragment>

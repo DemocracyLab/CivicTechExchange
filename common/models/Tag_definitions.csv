@@ -192,7 +192,7 @@ hardware,Hardware,,Project Category,Project Subcategory,infrastructure
 journalism-action,Journalism Action,,Project Category,Project Subcategory,media
 media-analysis,Media and Social Media Analysis,,Project Category,Project Subcategory,media
 open-source,Open Source,,Software License,,
-propreitary,Propreitary,,Software License,Open Source License,open-source
+propreitary,Proprietary,,Software License,Open Source License,open-source
 mit,MIT,,Software License,Open Source License,open-source
 gpl2,GPL 2.0,,Software License,Open Source License,open-source
 apache,Apache,,Software License,Open Source License,open-source
@@ -283,7 +283,7 @@ other-nonprofit,Other Nonprofit,,Organization Type,,
 government-org,Government,,Organization Type,,
 fiscally-sponsored-organization,Fiscally Sponsored Organization (Formal Partnership with a 501(c)(3) Nonprofit),,Organization Type,,
 social-purpose-organization,Social Purpose Corporation (or B Corp),,Organization Type,,
-for-profit,"For Profit Company (Corporation, LLC, Partership, Sole Propreitorship, etc.)",,Organization Type,,
+for-profit,"For Profit Company (Corporation, LLC, Partnership, Sole Proprietorship, etc.)",,Organization Type,,
 informal,Informal (No Legal Entity Established),,Organization Type,,
 hacky-new-year-2019,Hacky New Year 2019,,Organization,,
 hacky-new-year-2020,Hacky New Year 2020,,Organization,,

@@ -4,6 +4,7 @@ from django.test import TestCase
 from common.helpers.caching import is_sitemap_url
 from common.helpers.constants import FrontEndSection
 from common.helpers.dictionaries import merge_dicts, keys_subset
+from common.helpers.form_helpers import is_json_string
 from common.helpers.front_end import section_path, section_url, get_page_section, get_clean_url, clean_invalid_args
 from civictechprojects.sitemaps import SitemapPages
 
@@ -75,3 +76,14 @@ class DictionaryHelperTests(TestCase):
     def test_keys_subset(self):
         dict_a = {'a': 1, 'b': 2, 'c': 3}
         self.assertEqual({'a': 1, 'c': 3}, keys_subset(dict_a, ['a', 'c']))
+
+
+class FormHelperTests(TestCase):
+    def test_is_json_string(self):
+        self.assertTrue(is_json_string('{a:1,b:2}'), 'Json should be json')
+        self.assertTrue(is_json_string('[{a:1},{b:2}]'), 'Json array should be json')
+        self.assertTrue(is_json_string('{}'), 'Empty angle brackets should be json')
+        self.assertTrue(is_json_string('[]'), 'Empty square brackets should be json')
+        self.assertFalse(is_json_string('blah'), 'Plain text should not be json')
+        self.assertFalse(is_json_string(''), 'Empty string should not be json')
+
