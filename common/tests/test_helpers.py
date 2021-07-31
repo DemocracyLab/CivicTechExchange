@@ -8,21 +8,6 @@ from common.helpers.front_end import section_path, section_url, get_page_section
 from civictechprojects.sitemaps import SitemapPages
 
 
-class CommonHelperTests(TestCase):
-    def test_is_sitemap_urls(self):
-        urls = SitemapPages()
-        for url in urls:
-            self.assertTrue(is_sitemap_url(url), 'Should be able to prerender ' + url)
-
-    def test_is_not_sitemap_urls(self):
-        urls = [
-            '/projects/signup/',
-            section_url(FrontEndSection.FindProjects, {'sortField': 'project_name'})
-        ]
-        for url in urls:
-            self.assertFalse(is_sitemap_url(url), 'Should not be able to prerender ' + url)
-
-
 class FrontEndHelperTests(TestCase):
     def test_section_path(self):
         expected = '/events/test-slug'
