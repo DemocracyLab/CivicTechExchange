@@ -3,6 +3,7 @@
 import React from "react";
 import _ from "lodash";
 import GlyphStyles from "../../../utils/glyphs.js";
+import Nav from "react-bootstrap/Nav";
 
 const categoryDisplayNames = {
   //TODO: move to global constants file
@@ -12,15 +13,6 @@ const categoryDisplayNames = {
 };
 
 //define CSS classes, keep it readable
-const classCategoryExpanded =
-  "ProjectFilterContainer-category ProjectFilterContainer-expanded";
-const classCategoryCollapsed =
-  "ProjectFilterContainer-category ProjectFilterContainer-collapsed";
-const classSubcategoryExpanded =
-  "ProjectFilterContainer-subcategory ProjectFilterContainer-expanded";
-const classSubcategoryCollapsed =
-  "ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed";
-
 class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
     super(props);
@@ -42,18 +34,6 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     }
     //set initial state once collector is populated
     this.state = collector || {};
-
-    this._handleChange = this._handleChange.bind(this);
-  }
-
-  //handle expand/collapse
-  _handleChange(name, event) {
-    event.preventDefault();
-    event.stopPropagation();
-    const value = this.state[name];
-    this.setState({
-      [name]: !value,
-    });
   }
 
   _displayName(input) {
@@ -75,83 +55,24 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
         }
         key={key}
       >
-        <div
-          className="ProjectFilterContainer-subcategory-header"
-          id={key}
-          onClick={e => this._handleChange(key, e)}
-        >
-          <span>{key}</span>
-          <span className="ProjectFilterContainer-showtext">
-            {this.state[key] ? (
-              <i className={GlyphStyles.ChevronUp}></i>
-            ) : (
-              <i className={GlyphStyles.ChevronDown}></i>
-            )}
-          </span>
-        </div>
+        <span>{key}</span>
         <div className="ProjectFilterContainer-content">
           {this._renderFilterList(groupedSubcats[key])}
         </div>
       </div>
     ));
     return (
-      <div
-        className={
-          this.state[categoryKey]
-            ? classCategoryExpanded
-            : classCategoryCollapsed
-        }
-        key={categoryKey}
-      >
-        <div
-          className="ProjectFilterContainer-category-header"
-          id={this.props.category}
-          onClick={e => this._handleChange(categoryKey, e)}
-        >
-          <span>{this._displayName(this.props.category)}</span>
-          <span className="ProjectFilterContainer-showtext">
-            {this.state[categoryKey] ? (
-              <i className={GlyphStyles.ChevronUp}></i>
-            ) : (
-              <i className={GlyphStyles.ChevronDown}></i>
-            )}
-          </span>
-        </div>
-        <div className="ProjectFilterContainer-content">
-          {displaySubcategories}
-        </div>
-      </div>
+      <Nav.Dropdown key={categoryKey} id={this.props.category}>
+        <span>{this._displayName(this.props.category)}</span>
+        {displaySubcategories}
+      </Nav.Dropdown>
     );
   }
   _renderNoSubcategories() {
     let categoryKey = this.props.category;
     //if a category has NO subcategories (hasSubcategories is false), render a single list
     return (
-      <div
-        className={
-          this.state[categoryKey]
-            ? classCategoryExpanded
-            : classCategoryCollapsed
-        }
-      >
-        <div
-          className="ProjectFilterContainer-category-header"
-          id={categoryKey}
-          onClick={e => this._handleChange(categoryKey, e)}
-        >
-          <span>{this._displayName(this.props.category)}</span>
-          <span className="ProjectFilterContainer-showtext">
-            {this.state[categoryKey] ? (
-              <i className={GlyphStyles.ChevronUp}></i>
-            ) : (
-              <i className={GlyphStyles.ChevronDown}></i>
-            )}
-          </span>
-        </div>
-        <div className="ProjectFilterContainer-content">
-          {this._renderFilterList(this.props.data)}
-        </div>
-      </div>
+      <Nav.Dropdown>{this._renderFilterList(this.props.data)}</Nav.Dropdown>
     );
   }
 
