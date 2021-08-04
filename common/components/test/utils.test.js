@@ -9,7 +9,6 @@ import renderer from "react-test-renderer";
 import GroupBy from "../utils/groupBy.js";
 import array from "../utils/array.js";
 import utils from "../utils/utils.js";
-import _ from "lodash";
 import Guard from "../utils/guard.js";
 
 describe("utils", () => {
