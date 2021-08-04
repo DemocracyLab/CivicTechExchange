@@ -14,6 +14,11 @@ class MaliciousRequestsMiddleware:
         else:
             raise MiddlewareNotUsed
 
+    @staticmethod
+    def log_filter_action(path, log_msg):
+        prefix = f'[MaliciousRequestsMiddleware] Filtering malicious url "{path}": '
+        print(f'{prefix}: {log_msg}')
+
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
@@ -21,7 +26,8 @@ class MaliciousRequestsMiddleware:
         path = request.get_full_path()
         for pattern in self.malicious_url_patterns:
             if pattern.search(path) is not None:
-                # TODO: Log
+                self.log_filter_action(path, f'Matched pattern "{pattern.pattern}"')
+                # TODO: Fix exception that triggers after this
                 return HttpResponseBadRequest
 
         response = self.get_response(request)
@@ -30,3 +36,4 @@ class MaliciousRequestsMiddleware:
         # the view is called.
 
         return response
+
