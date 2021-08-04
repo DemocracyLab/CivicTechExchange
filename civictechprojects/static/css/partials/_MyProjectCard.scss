@@ -25,3 +25,15 @@
 .MyProjectCard-button {
   margin: 5px;
 }
+
+.MyProjectCard-table td {
+  display: inline-block;
+  width: 100%;
+ }
+
+ @include media-breakpoint-up(sm) {
+  .MyProjectCard-table td {
+    display: table-cell;
+    width: 250px;
+    }
+}
