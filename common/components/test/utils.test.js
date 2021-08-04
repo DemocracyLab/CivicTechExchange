@@ -200,9 +200,14 @@ describe("utils", () => {
   }); 
 
   test("guard.duplicateInput", () => {
-    _.debounce = jest.fn();
-    const testFunc = () => "test";
-    Guard.duplicateInput(testFunc);
-    expect(_.debounce).toBeCalledWith(testFunc, 1000, {leading: true});
+    const testFunc = jest.fn();
+    expect(testFunc).toHaveBeenCalledTimes(0);
+    const func = Guard.duplicateInput(testFunc);
+    func();
+    expect(testFunc).toHaveBeenCalledTimes(1);
+    for (let i = 0; i < 5; i++) {
+      func();
+    }
+    expect(testFunc).toHaveBeenCalledTimes(1);
   });
 });
