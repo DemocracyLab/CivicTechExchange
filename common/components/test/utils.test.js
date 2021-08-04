@@ -202,11 +202,14 @@ describe("utils", () => {
     const testFunc = jest.fn();
     expect(testFunc).toHaveBeenCalledTimes(0);
     const func = Guard.duplicateInput(testFunc);
-    func();
+    const retur = func();
     expect(testFunc).toHaveBeenCalledTimes(1);
     for (let i = 0; i < 5; i++) {
-      func();
+      expect(retur).toEqual(func());
     }
     expect(testFunc).toHaveBeenCalledTimes(1);
+    setTimeout(() => {
+      expect(testFunc).toHaveBeenCalledTimes(2);
+    }, 1000);
   });
 });
