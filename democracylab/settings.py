@@ -98,8 +98,8 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-# TODO: Use     'django_seo_js.middleware.UserAgentMiddleware',
 MIDDLEWARE = [
+    'common.helpers.malicious_requests.MaliciousRequestsMiddleware',
     'common.helpers.caching.DebugUserAgentMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
