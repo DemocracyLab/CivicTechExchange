@@ -1,7 +1,6 @@
 import re
 from django.conf import settings
-from django.core.exceptions import MiddlewareNotUsed
-from django.http import HttpResponseBadRequest
+from django.core.exceptions import MiddlewareNotUsed, SuspiciousOperation
 
 
 class MaliciousRequestsMiddleware:
@@ -28,7 +27,7 @@ class MaliciousRequestsMiddleware:
             if pattern.search(path) is not None:
                 self.log_filter_action(path, f'Matched pattern "{pattern.pattern}"')
                 # TODO: Fix exception that triggers after this
-                return HttpResponseBadRequest
+                raise SuspiciousOperation("Malicious url detected")
 
         response = self.get_response(request)
 
