@@ -53,6 +53,8 @@ type Props = {|
 
 type State = {|
   visibleApps: $ReadOnlyArray<string>,
+  prevPage: string,
+  prevPageArgs: Dictionary<string>,
 |};
 
 class SocialMediaSignupSection extends React.Component<Props, State> {
@@ -61,6 +63,8 @@ class SocialMediaSignupSection extends React.Component<Props, State> {
 
     this.state = {
       visibleApps: this.getVisibleApps(props),
+      prevPage: props.prevPage,
+      prevPageArgs: props.prevPageArgs,
     };
   }
 
@@ -124,12 +128,23 @@ class SocialMediaSignupSection extends React.Component<Props, State> {
             (config.iconClass ? " " + config.iconClass : "");
           return (
             <div className="LogInController-socialLink">
-              <a href={"/api/login/" + app} key={app}>
+             {this.state.prevPageArgs ? (
+
+              <a href={"/api/login/" + app + "?prevPage=" +this.state.prevPage + "&prevPageArgs=" + this.state.prevPageArgs} key={app}>
                 <span style={{ color: config.iconColor }} className={iconClass}>
                   {config.iconElement}
                 </span>
                 <span>Continue with {config.displayName}</span>
               </a>
+              ) : (
+              <a href={"/api/login/" + app  + "?prevPage=" + this.state.prevPage} key={app}>
+                <span style={{ color: config.iconColor }} className={iconClass}>
+                  {config.iconElement}
+                </span>
+                <span>Continue with {config.displayName}</span>
+              </a>
+              
+             )}
             </div>
           );
         })}
