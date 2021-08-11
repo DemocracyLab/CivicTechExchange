@@ -1,4 +1,3 @@
-import os
 import requests
 from democracylab import settings
 from requests.adapters import HTTPAdapter
@@ -7,6 +6,7 @@ from requests.packages.urllib3.util.retry import Retry
 
 class SalesforceClient:
     __session = None
+    access_token = ''
     endpoint = f'{settings.SALESFORCE_ENDPOINT}/services/data/v{settings.SALESFORCE_API_VERSION}'
     token_endpoint = f'{settings.SALESFORCE_LOGIN_URL}{settings.SALESFORCE_TOKEN_SUFFIX}'
     contact_endpoint = f'{endpoint}/sobjects/contact'
@@ -17,13 +17,13 @@ class SalesforceClient:
     owner_id = settings.SALESFORCE_OWNER_ID
 
     def __init__(self):
+        self.bearer_token = f'Bearer {SalesforceClient.access_token}'
         self.initialize_session()
 
     """ Session provides Authorization header for all requests """
     """ Default timeout to avoid hung threads """
     def initialize_session(self):
         self.__session = requests.Session()
-        self.bearer_token = f'Bearer {os.environ.get("SALESFORCE_ACCESS_TOKEN")}'
         self.__session.headers = {'Content-Type': 'application/json', 'Authorization': self.bearer_token}
         adapter = TimeoutHTTPAdapter(max_retries=retry_strategy)
         self.__session.mount("https://", adapter)
@@ -53,8 +53,8 @@ class SalesforceClient:
             headers={'content-type': 'application/x-www-form-urlencoded'}
         )
         if res.status_code == requests.codes.ok:
-            os.environ['SALESFORCE_ACCESS_TOKEN'] = res.json()['access_token']
-            self.bearer_token = f"Bearer {res.json()['access_token']}"
+            SalesforceClient.access_token = res.json()['access_token']
+            self.bearer_token = f"Bearer {SalesforceClient.access_token}"
             self.__session.headers['Authorization'] = self.bearer_token
         return res
 
