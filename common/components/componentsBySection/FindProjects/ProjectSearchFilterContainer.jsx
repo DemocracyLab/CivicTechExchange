@@ -12,7 +12,7 @@ class ProjectSearchFilterContainer<T> extends React.PureComponent<
     return (
       <React.Fragment>
         <div className="col-12">
-          <ProjectSearchSort />
+          {/* <ProjectSearchSort /> */}
         </div>
         <div className="col-12">
           <ProjectFilterContainer />

@@ -4,6 +4,7 @@ import React from "react";
 import _ from "lodash";
 import GlyphStyles from "../../../utils/glyphs.js";
 import Nav from "react-bootstrap/Nav";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const categoryDisplayNames = {
   //TODO: move to global constants file
@@ -62,17 +63,22 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
       </div>
     ));
     return (
-      <Nav.Dropdown key={categoryKey} id={this.props.category}>
-        <span>{this._displayName(this.props.category)}</span>
-        {displaySubcategories}
-      </Nav.Dropdown>
+      <Dropdown as={NavItem} key={categoryKey} id={this.props.category}>
+        <Dropdown.Toggle as={Nav.Link}>
+          {this._displayName(this.props.category)}
+        </Dropdown.Toggle>
+        <Dropdown.Menu>{displaySubcategories}</Dropdown.Menu>
+      </Dropdown>
     );
   }
   _renderNoSubcategories() {
     let categoryKey = this.props.category;
     //if a category has NO subcategories (hasSubcategories is false), render a single list
     return (
-      <Nav.Dropdown>{this._renderFilterList(this.props.data)}</Nav.Dropdown>
+      <Dropdown as={NavItem} key={categoryKey} id={this.props.category}>
+        <Dropdown.Toggle as={NavLink}>{categoryKey}</Dropdown.Toggle>
+        <Dropdown.Menu>{this._renderFilterList(this.props.data)}</Dropdown.Menu>
+      </Dropdown>
     );
   }
 
@@ -81,30 +87,30 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     let sortedTags = Object.values(data).map(tag => {
       const key: string = tag.category + "-" + tag.tag_name;
       return (
-        <li key={key} className="ProjectFilterContainer-list-item">
-          <input
-            type="checkbox"
-            id={key}
-            checked={this.props.checkEnabled(tag)}
-            onChange={() => this.props.selectOption(tag)}
-          ></input>
-          <label htmlFor={key}>
-            <span className="ProjectFilterContainer-list-item-name">
-              {tag.display_name}
-            </span>{" "}
-            <span className="ProjectFilterContainer-list-item-count">
-              {this.props.checkEnabled(tag) ? (
-                <i className={GlyphStyles.Check}></i>
-              ) : (
-                tag.num_times
-              )}
-            </span>
-          </label>
-        </li>
+        <Dropdown.Item key={key}>
+          <div className="checkbox">
+            <label>
+              <input
+                type="checkbox"
+                id={key}
+                checked={this.props.checkEnabled(tag)}
+                onChange={() => this.props.selectOption(tag)}
+              ></input>
+              {tag.display_name}{" "}
+              <span className="ProjectFilterContainer-list-item-count">
+                {this.props.checkEnabled(tag) ? (
+                  <i className={GlyphStyles.Check}></i>
+                ) : (
+                  tag.num_times
+                )}
+              </span>
+            </label>
+          </div>
+        </Dropdown.Item>
       );
     });
 
-    return <ul className="ProjectFilterContainer-filter-list">{sortedTags}</ul>;
+    return <React.Fragment>{sortedTags}</React.Fragment>;
   }
 
   render(): React$Node {
