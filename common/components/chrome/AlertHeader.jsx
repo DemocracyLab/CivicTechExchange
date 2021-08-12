@@ -37,11 +37,11 @@ type State = {|
 
 const AlertMessages: Dictionary<string> = {
   projectAwaitingApproval:
-    'Your project "${value}" is awaiting approval.  Expect a decision in the next business day.',
+    'Your project "{value}" is awaiting approval.  Expect a decision in the next business day.',
   eventAwaitingApproval:
-    'Your event "${value}" is awaiting approval.  Expect a decision in the next business day.',
+    'Your event "{value}" is awaiting approval.  Expect a decision in the next business day.',
   groupAwaitingApproval:
-    'Your group "${value}" is awaiting approval.  Expect a decision in the next business day.',
+    'Your group "{value}" is awaiting approval.  Expect a decision in the next business day.',
 };
 
 class AlertHeader extends React.Component<Props, State> {
