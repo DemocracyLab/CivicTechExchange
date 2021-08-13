@@ -35,11 +35,6 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       this.loadProjectDetails.bind(this),
       this.handleLoadProjectFailure.bind(this)
     );
-    ProjectAPIUtils.fetchProjectVolunteerList(
-      projectId,
-      this.loadProjectVolunteerList.bind(this),
-      this.handleLoadProjectVolunteersFailure.bind(this)
-    );
     metrics.logNavigateToProjectProfile(projectId);
   }
 
@@ -48,16 +43,25 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       {
         project: project,
       },
-      prerender.ready
+      () => {
+        ProjectAPIUtils.fetchProjectVolunteerList(
+          project.project_id,
+          this.loadProjectVolunteerList.bind(this),
+          this.handleLoadProjectVolunteersFailure.bind(this)
+        );
+      }
     );
   }
   
   loadProjectVolunteerList(volunteerList: $ReadOnlyArray<VolunteerDetailsAPIData>) {
     let project = { ...this.state.project };
     project['project_volunteers'] = volunteerList;
-    this.setState({
+    this.setState(
+      {
         project: project,
-    });
+      },
+      prerender.ready
+    );
   }
 
   handleLoadProjectFailure(error: APIError) {
