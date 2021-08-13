@@ -185,8 +185,10 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     if (this.state) {
       if (CurrentUser.isLoggedIn()) {
         return (
-          this.displayEditProjectButton(), 
-          this.displayContactProjectButton()
+          <React.Fragment>
+            {this.displayEditProjectButton()} 
+            {this.displayContactProjectButton()}
+          </React.Fragment>
         );
       } else {
         return <div>{this._renderLinkToSignInButton()}</div>;
