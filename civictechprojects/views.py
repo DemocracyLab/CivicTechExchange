@@ -284,7 +284,9 @@ def get_project(request, project_id):
 
     if project is not None:
         if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
-            return JsonResponse(project.hydrate_to_json(), safe=False)
+            hydrated_project = project.hydrate_to_json()
+            del hydrated_project['project_volunteers']
+            return JsonResponse(hydrated_project, safe=False)
         else:
             return HttpResponseForbidden()
     else:
@@ -780,6 +782,20 @@ def delete_uploaded_file(request, s3_key):
     else:
         # TODO: Log this
         return HttpResponse(status=401)
+
+def get_project_volunteers(request,project_id):
+    project = Project.objects.get(id=project_id)
+    if project is not None:
+        if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
+            data = {
+                'project_id' : project_id,
+                'project_volunteers': project.hydrate_to_json()['project_volunteers']
+            }
+            return JsonResponse(data, safe=False)
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
