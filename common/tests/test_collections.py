@@ -31,29 +31,21 @@ class CollectionsTests(TestCase):
 
         # For the flatten() function
         self.test_array = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        # For testing the count_occurrences() method
+        self.duplicates = [1, 2, 4, 4, 6, 5, 2, 8, 1, 6]
 
     # Test how many times different values occur
     def test_count_occurrences(self):
 
-        data = self.test_project
         expected_results = {
-            'project_creator': 1, 
-            'project_description': 1, 
-            'project_description_solution': 1, 
-            'project_description_actions': 1, 
-            'project_short_description': 1, 
-            'project_location': 1, 
-            'project_country': 1, 
-            'project_state': 1, 
-            'project_city': 1, 
-            'project_name': 1, 
-            'project_url': 1, 
-            'project_date_created': 1, 
-            'project_date_modified': 1, 
-            'is_searchable': 1, 
-            'is_created': 1
+            1: 2,
+            2: 2,
+            4: 2,
+            6: 2,
+            5: 1,
+            8: 1
         }
-        self.assertEqual(count_occurrences(data['fields']), expected_results)
+        self.assertEqual(count_occurrences(self.duplicates), expected_results)
 
     def test_flatten(self):
 
