@@ -238,7 +238,7 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
             firstname=user.first_name,
             lastname=user.last_name))\
         .paragraph('To contact this volunteer directly, you can reply to this email. To review their profile or approve their application, use the buttons below.')\
-        .button(url=project_profile_url, text='REVIEW VOLUNTEER')\
+        .button(url=project_profile_url, text='Review Applicant on Project Page')\
         .button(url=approve_url, text='APPROVE VOLUNTEER')
     send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
 
