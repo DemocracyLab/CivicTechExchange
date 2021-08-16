@@ -6,7 +6,7 @@ from requests.packages.urllib3.util.retry import Retry
 
 class SalesforceClient:
     __session = None
-    access_token = ''
+    bearer_token = ''
     endpoint = f'{settings.SALESFORCE_ENDPOINT}/services/data/v{settings.SALESFORCE_API_VERSION}'
     token_endpoint = f'{settings.SALESFORCE_LOGIN_URL}{settings.SALESFORCE_TOKEN_SUFFIX}'
     contact_endpoint = f'{endpoint}/sobjects/contact'
@@ -17,14 +17,13 @@ class SalesforceClient:
     owner_id = settings.SALESFORCE_OWNER_ID
 
     def __init__(self):
-        self.bearer_token = f'Bearer {SalesforceClient.access_token}'
         self.initialize_session()
 
     """ Session provides Authorization header for all requests """
     """ Default timeout to avoid hung threads """
     def initialize_session(self):
         self.__session = requests.Session()
-        self.__session.headers = {'Content-Type': 'application/json', 'Authorization': self.bearer_token}
+        self.__session.headers = {'Content-Type': 'application/json', 'Authorization': SalesforceClient.bearer_token}
         adapter = TimeoutHTTPAdapter(max_retries=retry_strategy)
         self.__session.mount("https://", adapter)
         self.__session.mount("http://", adapter)
@@ -37,7 +36,7 @@ class SalesforceClient:
             if response.status_code == requests.codes.unauthorized:
                 auth = self.authorize()
                 if auth.status_code == requests.codes.ok:
-                    prepped_request.headers['Authorization'] = self.bearer_token
+                    prepped_request.headers['Authorization'] = SalesforceClient.bearer_token
                     response = self.__session.send(prepped_request)
             return response
         else:
@@ -53,9 +52,7 @@ class SalesforceClient:
             headers={'content-type': 'application/x-www-form-urlencoded'}
         )
         if res.status_code == requests.codes.ok:
-            SalesforceClient.access_token = res.json()['access_token']
-            self.bearer_token = f"Bearer {SalesforceClient.access_token}"
-            self.__session.headers['Authorization'] = self.bearer_token
+            SalesforceClient.bearer_token = f"Bearer {res.json()['access_token']}"
         return res
 
 
