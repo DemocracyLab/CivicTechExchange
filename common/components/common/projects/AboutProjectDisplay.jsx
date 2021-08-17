@@ -216,7 +216,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             <div className="AboutProject-skilltech-container pt-4">
               {project && !_.isEmpty(project.project_positions) && (
                 <div className="AboutProject-skills">
-                  <h4>Skills Needed</h4>
+                  <h4>Roles Needed</h4>
                   {project.project_positions.map(position => (
                     <span
                       className="Profile-pill"
