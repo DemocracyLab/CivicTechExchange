@@ -98,8 +98,8 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-# TODO: Use     'django_seo_js.middleware.UserAgentMiddleware',
 MIDDLEWARE = [
+    'common.helpers.malicious_requests.MaliciousRequestsMiddleware',
     'common.helpers.caching.DebugUserAgentMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -481,3 +481,6 @@ GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '')
 
 if GHOST_URL:
     CSP_CONNECT_SRC = CSP_CONNECT_SRC + (GHOST_URL,)
+
+MALICIOUS_URL_PATTERNS = os.environ.get('MALICIOUS_URL_PATTERNS', None)
+MALICIOUS_FWD_PATTERNS = os.environ.get('MALICIOUS_FWD_PATTERNS', None)
