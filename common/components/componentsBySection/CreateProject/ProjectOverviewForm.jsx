@@ -19,6 +19,11 @@ import TermsModal, {
 import PseudoLink from "../../chrome/PseudoLink.jsx";
 import CheckBox from "../../common/selection/CheckBox.jsx";
 import _ from "lodash";
+import TextFormField, {
+  TextFormFieldType,
+} from "../../forms/fields/TextFormField.jsx";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
+import type { FormFieldValidator } from "../../utils/validation.js";
 
 type FormFields = {|
   project_name: ?string,
@@ -55,13 +60,16 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
       project_thumbnail: project ? project.project_thumbnail : "",
       didCheckTerms: !!project,
     };
-    const validations: $ReadOnlyArray<Validator<FormFields>> = [
+
+    const validations: $ReadOnlyArray<FormFieldValidator<FormFields>> = [
       {
+        fieldName: "project_name",
         checkFunc: (formFields: FormFields) =>
           !_.isEmpty(formFields["project_name"]),
         errorMessage: "Please enter Project Name",
       },
       {
+        fieldName: "project_short_description",
         checkFunc: (formFields: FormFields) =>
           !_.isEmpty(formFields["project_short_description"]),
         errorMessage: "Please enter Project Description",
@@ -71,6 +79,12 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
         errorMessage: "Agree to Terms of Use",
       },
     ];
+
+    UniversalDispatcher.dispatch({
+      type: "SET_FORM_FIELDS",
+      formFieldValues: formFields,
+      validators: validations,
+    });
 
     const formIsValid: boolean = FormValidation.isValid(
       formFields,
@@ -112,18 +126,13 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
           />
         </div>
 
-        <div className="form-group">
-          <label>Project Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="project_name"
-            name="project_name"
-            maxLength="60"
-            value={this.state.formFields.project_name}
-            onChange={this.form.onInput.bind(this, "project_name")}
-          />
-        </div>
+        <TextFormField
+          id="project_name"
+          label="Project Name"
+          type={TextFormFieldType.SingleLine}
+          required={true}
+          maxLength={60}
+        />
 
         <div className="form-group">
           <label>Issue Area</label>
@@ -136,23 +145,16 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
           />
         </div>
 
-        <div className="form-group">
-          <label>Short Description</label>
-          <div className="character-count">
-            {(this.state.formFields.project_short_description || "").length} /
-            140
-          </div>
-          <textarea
-            className="form-control"
-            id="project_short_description"
-            name="project_short_description"
-            placeholder="Give a one-sentence description of this project"
-            rows="2"
-            maxLength="140"
-            value={this.state.formFields.project_short_description}
-            onChange={this.form.onInput.bind(this, "project_short_description")}
-          ></textarea>
-        </div>
+        <TextFormField
+          id="project_short_description"
+          label="Short Description"
+          type={TextFormFieldType.MultiLine}
+          rows={2}
+          placeholder="Give a one-sentence description of this project"
+          required={true}
+          showCount={true}
+          maxLength={140}
+        />
 
         {!this.props.project && (
           <div>

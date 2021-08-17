@@ -59,7 +59,7 @@ class TextFormField extends React.Component<Props, State> {
   }
 
   render(): React$Node {
-    // TODO: is name field required?
+    // TODO: Add * to required fields
     return (
       <React.Fragment>
         <Form.Group controlId={this.props.id}>

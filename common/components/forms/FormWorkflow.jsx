@@ -8,6 +8,8 @@ import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import StepIndicatorBars from "../common/StepIndicatorBars.jsx";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import utils from "../utils/utils.js";
+import { Container } from "flux/utils";
+import FormFieldsStore from "../stores/FormFieldsStore.js";
 
 export type FormWorkflowStepConfig<T> = {|
   header: string,
@@ -45,7 +47,7 @@ type State<T> = {|
 /**
  * Encapsulates form for creating projects
  */
-class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
+class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
   constructor(props: Props): void {
     super(props);
     this.formRef = React.createRef();
@@ -65,6 +67,16 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
     this.onSubmit = _.debounce(this.onSubmit.bind(this), 1000, {
       leading: true,
     });
+  }
+
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [FormFieldsStore];
+  }
+
+  static calculateState(prevState: State, props: Props): State {
+    let state: State = _.clone(prevState) || {};
+    state.formIsValid = FormFieldsStore.fieldsAreValid();
+    return state;
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -288,4 +300,4 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
   }
 }
 
-export default FormWorkflow;
+export default Container.create(FormWorkflow, { withProps: true });
