@@ -39,8 +39,6 @@ from civictechprojects.helpers.context_preload import context_preload
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
 from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector
 from django.views.decorators.cache import cache_page
-from rest_framework.decorators import api_view, throttle_classes
-from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 import requests
 
 
@@ -331,8 +329,6 @@ def approve_event(request, event_id):
 
 @ensure_csrf_cookie
 @xframe_options_exempt
-@api_view()
-@throttle_classes([AnonRateThrottle, UserRateThrottle])
 def index(request, id='Unused but needed for routing purposes; do not remove!'):
     page = get_page_section(request.get_full_path())
     # TODO: Add to redirectors.py

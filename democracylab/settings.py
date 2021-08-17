@@ -184,8 +184,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-THROTTLE_RATE_ANONYMOUS = os.environ.get('THROTTLE_RATE_ANONYMOUS', '5/second')
-THROTTLE_RATE_AUTHENTICATED = os.environ.get('THROTTLE_RATE_AUTHENTICATED', '5/second')
+throttle_rate_anonymous = os.environ.get('THROTTLE_RATE_ANONYMOUS', '100/minute')
+throttle_rate_authenticated = os.environ.get('THROTTLE_RATE_AUTHENTICATED', '100/minute')
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
@@ -196,8 +196,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': THROTTLE_RATE_ANONYMOUS,
-        'user': THROTTLE_RATE_AUTHENTICATED
+        'anon': throttle_rate_anonymous,
+        'user': throttle_rate_authenticated
     }
 }
 
