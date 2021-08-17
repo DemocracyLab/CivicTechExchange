@@ -9,6 +9,7 @@ import renderer from "react-test-renderer";
 import GroupBy from "../utils/groupBy.js";
 import array from "../utils/array.js";
 import utils from "../utils/utils.js";
+import Guard from "../utils/guard.js";
 
 describe("utils", () => {
   test("async.doWhenReady", () => {
@@ -196,4 +197,19 @@ describe("utils", () => {
     word = utils.pluralize("apple", "apples", 5);
     expect(word).toEqual("apples");
   }); 
+
+  test("guard.duplicateInput", () => {
+    const testFunc = jest.fn();
+    expect(testFunc).toHaveBeenCalledTimes(0);
+    const func = Guard.duplicateInput(testFunc);
+    const retur = func();
+    expect(testFunc).toHaveBeenCalledTimes(1);
+    for (let i = 0; i < 5; i++) {
+      expect(retur).toEqual(func());
+    }
+    expect(testFunc).toHaveBeenCalledTimes(1);
+    setTimeout(() => {
+      expect(testFunc).toHaveBeenCalledTimes(2);
+    }, 1000);
+  });
 });

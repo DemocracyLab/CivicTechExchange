@@ -184,11 +184,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+THROTTLE_RATE_ANONYMOUS = os.environ.get('THROTTLE_RATE_ANONYMOUS', '5/second')
+THROTTLE_RATE_AUTHENTICATED = os.environ.get('THROTTLE_RATE_AUTHENTICATED', '5/second')
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.AllowAny',
     ],
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': THROTTLE_RATE_ANONYMOUS,
+        'user': THROTTLE_RATE_AUTHENTICATED
+    }
 }
 
 
