@@ -457,7 +457,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
       !_.isEmpty(pendingVolunteers)
       ? this._renderVolunteerSection(
           pendingVolunteers,
-          "Waiting for confirmation..."
+          "Review Volunteer Applicants"
         )
       : null;
   }
