@@ -50,13 +50,13 @@ class ProjectFilterContainer extends React.Component<Props, State> {
 
   static calculateState(prevState: State): State {
     return {
-      issueAreas: ProjectSearchStore.getSortedCategoryTags(
-        "Issue(s) Addressed"
-      ),
-      rolesNeeded: ProjectSearchStore.getSortedCategoryTags("Role"),
-      techUsed: ProjectSearchStore.getSortedCategoryTags("Technologies Used"),
-      projectStage: ProjectSearchStore.getSortedCategoryTags("Project Stage"),
-      orgType: ProjectSearchStore.getSortedCategoryTags("Organization Type"),
+      // issueAreas: ProjectSearchStore.getSortedCategoryTags(
+      //   "Issue(s) Addressed"
+      // ),
+      // rolesNeeded: ProjectSearchStore.getSortedCategoryTags("Role"),
+      // techUsed: ProjectSearchStore.getSortedCategoryTags("Technologies Used"),
+      // projectStage: ProjectSearchStore.getSortedCategoryTags("Project Stage"),
+      // orgType: ProjectSearchStore.getSortedCategoryTags("Organization Type"),
       selectedTags: _.mapKeys(
         ProjectSearchStore.getTags().toArray(),
         (tag: TagDefinition) => tag.tag_name
@@ -65,7 +65,12 @@ class ProjectFilterContainer extends React.Component<Props, State> {
   }
 
   render(): React$Node {
-    //should render a number of <RenderFilterCategory> child components
+    //should render a number of Flux view child components
+    console.log("TESTING: getSortedCategoryTags:")
+    console.log(ProjectSearchStore.getSortedCategoryTags("Role"));
+    console.log(ProjectSearchStore.getSortedCategoryTags("Technologies Used"));
+    console.log(ProjectSearchStore.getSortedCategoryTags("Project Stage"));
+    console.log(ProjectSearchStore.getSortedCategoryTags("Organization Type"));
 
     return (
       <Nav justify variant="pills" className="ProjectFilterContainer-root">
