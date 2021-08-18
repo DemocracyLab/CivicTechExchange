@@ -28,6 +28,7 @@ type State = {|
   value: string,
   errorFeedback: string,
   elementType: string,
+  touched: boolean,
 |};
 /**
  * Wrapper for text form field
@@ -45,6 +46,7 @@ class TextFormField extends React.Component<Props, State> {
     let state: State = _.clone(prevState) || {};
     state.value = FormFieldsStore.getFormFieldValue(props.id);
     state.errorFeedback = FormFieldsStore.getFormFieldError(props.id);
+    state.touched = FormFieldsStore.isFormFieldTouched(props.id);
     state.elementType =
       props.type === TextFormFieldType.MultiLine ? "textarea" : "input";
     return state;
@@ -55,6 +57,13 @@ class TextFormField extends React.Component<Props, State> {
       type: "UPDATE_FORM_FIELD",
       fieldName: this.props.id,
       fieldValue: event.target.value,
+    });
+  }
+
+  onBlur(event: SyntheticInputEvent<HTMLInputElement>): void {
+    UniversalDispatcher.dispatch({
+      type: "TOUCH_FORM_FIELD",
+      fieldName: this.props.id,
     });
   }
 
@@ -78,9 +87,11 @@ class TextFormField extends React.Component<Props, State> {
             placeholder={this.props.placeholder}
             value={this.state.value}
             onChange={this.onChange.bind(this)}
-            isInvalid={this.state.errorFeedback}
+            onBlur={this.onBlur.bind(this)}
+            isInvalid={this.state.touched && this.state.errorFeedback}
             rows={this.props.rows || 1}
             maxLength={this.props.maxLength}
+            tabIndex="0"
           />
           <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           <Form.Control.Feedback type="invalid">
