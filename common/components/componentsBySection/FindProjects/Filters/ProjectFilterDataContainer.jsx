@@ -26,7 +26,6 @@ type Props = {|
 
 type State = {|
   tags: ?$ReadOnlyArray<TagDefinition>,
-  filterCounts: ?{ [key: string]: number },
   selectedTags: ?{ [key: string]: boolean },
 |};
 
@@ -36,7 +35,6 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     this.state = {
       tags: null,
       selectedTags: null,
-      filterCounts: null,
     };
 
     this._checkEnabled = this._checkEnabled.bind(this);
@@ -89,10 +87,10 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     //should render a number of <RenderFilterCategory> child components
 
     return (
-      <div>
+      <React.Fragment>
         {this.state.sortedTags ? this._renderFilterCategories() : null}
         <LocationSearchSection />
-      </div>
+      </React.Fragment>
     );
   }
 
