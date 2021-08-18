@@ -211,6 +211,33 @@ class ProjectAPIUtils {
           })
       );
   }
+
+  // fetch project volunteers list
+  static fetchProjectVolunteerList(
+    id: number,
+    callback: VolunteerDetailsAPIData => void,
+    errCallback: APIError => void
+  ): void {
+    fetch(new Request("/api/project/" + id + "/volunteers/", { credentials: "include" }))
+      .then(response => {
+        if (!response.ok) {
+          throw Error();
+        }
+        return response.json();
+      })
+      .then(response => {
+        callback(response['project_volunteers']);
+      })
+      .catch(
+        response =>
+          errCallback &&
+          errCallback({
+            errorCode: response.status,
+            errorMessage: JSON.stringify(response),
+          })
+      );
+  }
+  
   // fetch specific category of tags
   static fetchTagsByCategory(
     tagCategory: string,
