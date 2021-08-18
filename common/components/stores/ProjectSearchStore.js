@@ -241,7 +241,6 @@ class ProjectSearchStore extends ReduceStore<State> {
           tagsByCategory: tagHelpers.getSortedTagsByCategory(allTags),
           availableCountries: availableCountries,
         });
-        console.log(JSON.stringify(state.projectsData.tagsByCategory));
         return state.set("projectsLoading", false);
       default:
         (action: empty);
