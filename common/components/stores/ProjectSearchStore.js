@@ -17,6 +17,7 @@ import urls from "../utils/url.js";
 import Section from "../enums/Section.js";
 import { CountryData, countryByCode } from "../constants/Countries.js";
 import { Dictionary } from "../types/Generics.jsx";
+import tagHelpers, { TagsByCategory } from "../utils/tags.js";
 import _ from "lodash";
 
 export type SearchSettings = {|
@@ -55,6 +56,7 @@ type FindProjectsData = {|
   +numPages: number,
   +numProjects: number,
   +tags: Dictionary<TagDefinition>,
+  +tagsByCategory: TagsByCategory,
 |};
 
 export type LocationRadius = {|
@@ -236,8 +238,10 @@ class ProjectSearchStore extends ReduceStore<State> {
           numPages: numPages,
           numProjects: numProjects,
           allTags: allTags,
+          tagsByCategory: tagHelpers.getSortedTagsByCategory(allTags),
           availableCountries: availableCountries,
         });
+        console.log(JSON.stringify(state.projectsData.tagsByCategory));
         return state.set("projectsLoading", false);
       default:
         (action: empty);
@@ -425,9 +429,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getCountryList(): $ReadOnlyArray<CountryData> {
     const projectData: FindProjectsData = this.getState().projectsData;
-    let countryList = (projectData &&
+    let countryList =
+      projectData &&
       projectData.availableCountries &&
-      projectData.availableCountries.map(countryByCode));
+      projectData.availableCountries.map(countryByCode);
     return countryList && _.sortBy(countryList, "displayName");
   }
 
@@ -476,9 +481,24 @@ class ProjectSearchStore extends ReduceStore<State> {
     }
   }
 
+  getSortedCategoryTags(
+    category: string,
+    subcategory: ?string
+  ): List<TagDefinition> {
+    const tagsByCategory: TagsByCategory = this.getState().projectsData
+      .tagsByCategory;
+    const tags: $ReadOnlyArray<TagDefinition> = subcategory
+      ? tagsByCategory[category][subcategory]
+      : tagsByCategory[category];
+    return List(tags);
+  }
+
   getQueryString(): string {
     const state: State = this.getState();
-    return urls.constructWithQueryString(`projects`, state.findProjectsArgs || {});
+    return urls.constructWithQueryString(
+      `projects`,
+      state.findProjectsArgs || {}
+    );
   }
 }
 
