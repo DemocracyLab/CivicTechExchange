@@ -83,17 +83,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   _renderStatusCodeHeader(): React$Node {
-    return (
-      this.state.statusCode && (
-        <React.Fragment>
-          <Helmet>
-            <meta
-              content={this.state.statusCode}
-            />
-          </Helmet>
-        </React.Fragment>
-      )
-    );
+    
   }
 }
 
