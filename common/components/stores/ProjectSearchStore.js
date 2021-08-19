@@ -487,9 +487,12 @@ class ProjectSearchStore extends ReduceStore<State> {
     const state: State = this.getState();
     if (state.projectsData && state.projectsData.tagsByCategory) {
       const tagsByCategory: TagsByCategory = state.projectsData.tagsByCategory;
-      const tags: $ReadOnlyArray<TagDefinition> = subcategory
+      let tags: $ReadOnlyArray<TagDefinition> = subcategory
         ? tagsByCategory[category][subcategory]
         : tagsByCategory[category];
+      if (!_.isArray(tags)) {
+        tags = _.toPairs(tags);
+      }
       return List(tags);
     } else {
       return List();
