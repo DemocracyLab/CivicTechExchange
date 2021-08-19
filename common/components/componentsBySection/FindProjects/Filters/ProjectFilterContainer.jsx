@@ -67,7 +67,6 @@ class ProjectFilterContainer extends React.Component<Props, State> {
   render(): React$Node {
     //should render a number of Flux view child components
 
-
     return (
       <Nav justify variant="pills" className="ProjectFilterContainer-root">
         {this._displayFilters()}
@@ -77,12 +76,18 @@ class ProjectFilterContainer extends React.Component<Props, State> {
   }
 
   _displayFilters(): React$Node {
-    console.log("TESTING getSortedCategoryTags below:")
-    console.log(ProjectSearchStore.getSortedCategoryTags("Role"));
-    console.log(ProjectSearchStore.getSortedCategoryTags("Technologies Used"));
-    console.log(ProjectSearchStore.getSortedCategoryTags("Project Stage"));
-    console.log(ProjectSearchStore.getSortedCategoryTags("Organization Type"));
-    
+    console.log("TESTING getSortedCategoryTags below:");
+    console.log(ProjectSearchStore.getSortedCategoryTags("Role").toArray());
+    console.log(
+      ProjectSearchStore.getSortedCategoryTags("Technologies Used").toArray()
+    );
+    console.log(
+      ProjectSearchStore.getSortedCategoryTags("Project Stage").toArray()
+    );
+    console.log(
+      ProjectSearchStore.getSortedCategoryTags("Organization Type").toArray()
+    );
+
     return (
       <div>
         Display Filters is rendering; eventually this should be a flux view
