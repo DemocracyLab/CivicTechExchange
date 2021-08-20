@@ -48,6 +48,10 @@ class ProjectCreationForm(ModelForm):
                 is_created=False
             )
 
+        # TODO: GET RID OF
+        from pprint import pprint
+        pprint(form.data)
+
         if not is_co_owner_or_staff(request.user, project):
             raise PermissionDenied()
 
@@ -85,7 +89,7 @@ class ProjectCreationForm(ModelForm):
         fields_changed |= merge_json_changes(ProjectFile, project, form, 'project_files')
         tags_changed |= merge_json_changes(ProjectPosition, project, form, 'project_positions')
 
-        fields_changed |= merge_single_file(project, form, FileCategory.THUMBNAIL, 'project_thumbnail_location')
+        fields_changed |= merge_single_file(project, form, FileCategory.THUMBNAIL, 'project_thumbnail')
 
         fields_changed |= tags_changed
 

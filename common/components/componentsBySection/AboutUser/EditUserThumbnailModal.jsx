@@ -10,6 +10,7 @@ import { Container } from "flux/utils";
 import type { FileUploadData } from "../../common/upload/FileUploadButton";
 import FormFieldsStore from "../../stores/FormFieldsStore";
 import Visibility from "../../common/Visibility.jsx";
+import ImageCropUploadFormElement from "../../forms/ImageCropUploadFormElement.jsx";
 import _ from "lodash";
 
 type Props = {|
@@ -64,15 +65,6 @@ class EditUserThumbnailModal extends React.Component<Props, State> {
     this.setState({ showModal: nextProps.showModal });
   }
 
-  onSaveThumbnail(fileData: FileUploadData): void {
-    fileData.visibility = Visibility.PUBLIC;
-    UniversalDispatcher.dispatch({
-      type: "UPDATE_FORM_FIELD",
-      fieldName: "user_thumbnail",
-      fieldValue: fileData,
-    });
-  }
-
   render(): React$Node {
     return (
       <EditUserModal
@@ -81,11 +73,10 @@ class EditUserThumbnailModal extends React.Component<Props, State> {
         fields={["user_thumbnail"]}
         onEditClose={this.props.onEditClose}
       >
-        <ImageCropUploadButton
-          currentImage={this.state.user_thumbnail}
+        <ImageCropUploadFormElement
+          form_id="user_thumbnail"
+          buttonText="Upload Your Picture"
           aspect={1 / 1}
-          buttonText={"Upload Your Picture"}
-          onFileUpload={this.onSaveThumbnail.bind(this)}
         />
       </EditUserModal>
     );

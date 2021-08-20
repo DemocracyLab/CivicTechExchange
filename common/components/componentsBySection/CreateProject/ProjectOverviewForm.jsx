@@ -119,10 +119,8 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
 
         <div className="form-group">
           <ImageCropUploadFormElement
-            form_id="project_thumbnail_location"
+            form_id="project_thumbnail"
             buttonText="Browse Photos On Computer"
-            currentImage={this.state.formFields.project_thumbnail}
-            onSelection={this.form.onSelection.bind(this, "project_thumbnail")}
           />
         </div>
 
