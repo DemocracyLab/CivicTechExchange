@@ -50,13 +50,19 @@ class ProjectFilterContainer extends React.Component<Props, State> {
 
   static calculateState(prevState: State): State {
     return {
-      // issueAreas: ProjectSearchStore.getSortedCategoryTags(
-      //   "Issue(s) Addressed"
-      // ),
-      // rolesNeeded: ProjectSearchStore.getSortedCategoryTags("Role"),
-      // techUsed: ProjectSearchStore.getSortedCategoryTags("Technologies Used"),
-      // projectStage: ProjectSearchStore.getSortedCategoryTags("Project Stage"),
-      // orgType: ProjectSearchStore.getSortedCategoryTags("Organization Type"),
+      issueAreas: ProjectSearchStore.getSortedCategoryTags(
+        "Issue(s) Addressed"
+      ).toArray(),
+      rolesNeeded: ProjectSearchStore.getSortedCategoryTags("Role").toArray(),
+      techUsed: ProjectSearchStore.getSortedCategoryTags(
+        "Technologies Used"
+      ).toArray(),
+      projectStage: ProjectSearchStore.getSortedCategoryTags(
+        "Project Stage"
+      ).toArray(),
+      orgType: ProjectSearchStore.getSortedCategoryTags(
+        "Organization Type"
+      ).toArray(),
       selectedTags: _.mapKeys(
         ProjectSearchStore.getTags().toArray(),
         (tag: TagDefinition) => tag.tag_name
@@ -70,7 +76,6 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     return (
       <Nav justify variant="pills" className="ProjectFilterContainer-root">
         {this._displayFilters()}
-        <LocationSearchSection />
       </Nav>
     );
   }
@@ -87,10 +92,35 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     console.log(
       ProjectSearchStore.getSortedCategoryTags("Organization Type").toArray()
     );
-
+//this render is more verbose than it 'needs to be' so it's more comprehensible what's going on and also allows easy reordering of categories
     return (
       <div>
-        Display Filters is rendering; eventually this should be a flux view
+        <RenderFilterCategory
+          cdata={this.state.rolesNeeded}
+          displayName={"Roles Needed"}
+          hasSubcategories={true}
+        />
+        <RenderFilterCategory
+          cdata={this.state.issueAreas}
+          displayName={"Issue Areas"}
+          hasSubcategories={false}
+        />
+        <LocationSearchSection />
+        <RenderFilterCategory
+          cdata={this.state.techUsed}
+          displayName={"Technologies Used"}
+          hasSubcategories={true}
+        />
+        <RenderFilterCategory
+          cdata={this.state.projectStage}
+          displayName={"Project Stage"}
+          hasSubcategories={false}
+        />
+        <RenderFilterCategory
+          cdata={this.state.orgType}
+          displayName={"Organization Type"}
+          hasSubcategories={false}
+        />
       </div>
     );
   }
