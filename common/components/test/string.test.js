@@ -1,6 +1,13 @@
 import stringHelper from "../utils/string.js";
 
 describe("stringHelper", () => {
+  test("isEmptyOrWhitespace", () => {
+    expect(stringHelper.isEmptyOrWhitespace(" ")).toEqual(true);
+    expect(stringHelper.isEmptyOrWhitespace("")).toEqual(true);
+    expect(stringHelper.isEmptyOrWhitespace(undefined)).toEqual(true);
+    expect(stringHelper.isEmptyOrWhitespace(" notwhitespace ")).toEqual(false);
+  });
+
   test("trimStartString", () => {
     const trimmed = stringHelper.trimStartString("prefix_suffix", "prefix_");
     expect(trimmed).toEqual("suffix");

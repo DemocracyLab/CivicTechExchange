@@ -24,6 +24,7 @@ import TextFormField, {
 } from "../../forms/fields/TextFormField.jsx";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import type { FormFieldValidator } from "../../utils/validation.js";
+import stringHelper from "../../utils/string.js";
 
 type FormFields = {|
   project_name: ?string,
@@ -65,13 +66,15 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
       {
         fieldName: "project_name",
         checkFunc: (formFields: FormFields) =>
-          !_.isEmpty(formFields["project_name"]),
+          !stringHelper.isEmptyOrWhitespace(formFields["project_name"]),
         errorMessage: "Please enter Project Name",
       },
       {
         fieldName: "project_short_description",
         checkFunc: (formFields: FormFields) =>
-          !_.isEmpty(formFields["project_short_description"]),
+          !stringHelper.isEmptyOrWhitespace(
+            formFields["project_short_description"]
+          ),
         errorMessage: "Please enter Project Description",
       },
       {

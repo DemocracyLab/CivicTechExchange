@@ -10,6 +10,7 @@ import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import utils from "../utils/utils.js";
 import { Container } from "flux/utils";
 import FormFieldsStore from "../stores/FormFieldsStore.js";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 
 export type FormWorkflowStepConfig<T> = {|
   header: string,
@@ -160,20 +161,29 @@ class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
 
   onSubmit(event: SyntheticEvent<HTMLFormElement>): void {
     event.preventDefault();
-    const currentStep: FormWorkflowStepConfig = this.props.steps[
-      this.state.currentStep
-    ];
-    this.setState({ isSubmitting: true });
-    const submitFunc: Function = () => {
-      currentStep.onSubmit(
-        event,
-        this.formRef,
-        this.onSubmitSuccess.bind(this, currentStep.onSubmitSuccess)
-      );
-    };
-    this.state.preSubmitProcessing
-      ? this.state.preSubmitProcessing(submitFunc)
-      : submitFunc();
+    if (!FormFieldsStore.fieldsAreValid()) {
+      UniversalDispatcher.dispatch({
+        type: "TOUCH_FORM_FIELD",
+        fieldValue: event.target.value,
+      });
+      this.setState({ clickedNext: true });
+      this.formRef.current.checkValidity();
+    } else {
+      const currentStep: FormWorkflowStepConfig = this.props.steps[
+        this.state.currentStep
+      ];
+      this.setState({ isSubmitting: true });
+      const submitFunc: Function = () => {
+        currentStep.onSubmit(
+          event,
+          this.formRef,
+          this.onSubmitSuccess.bind(this, currentStep.onSubmitSuccess)
+        );
+      };
+      this.state.preSubmitProcessing
+        ? this.state.preSubmitProcessing(submitFunc)
+        : submitFunc();
+    }
   }
 
   onSubmitSuccess(onStepSubmitSuccess: T => void, formFields: T) {
@@ -273,7 +283,10 @@ class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
             <button
               type="submit"
               className="btn btn-primary create-btn"
-              disabled={!this.state.formIsValid || this.state.isSubmitting}
+              disabled={
+                (!this.state.formIsValid && this.state.clickedNext) ||
+                this.state.isSubmitting
+              }
             >
               {this.state.isSubmitting ? (
                 <i

@@ -4,10 +4,10 @@ import _ from "lodash";
 // TODO: Update unit tests
 class stringHelper {
   /**
-   * @returns {boolean}   true if string is non-blank and consists of nothing but whitespace
+   * @returns {boolean}   true if string is null, empty string, or non-blank and consists of nothing but whitespace
    */
-  static isWhitespace(str: string): void {
-    return str.length > 0 && _.trim(str) === "";
+  static isEmptyOrWhitespace(str: string): void {
+    return _.isEmpty(str) || _.trim(str) === "";
   }
 
   /**

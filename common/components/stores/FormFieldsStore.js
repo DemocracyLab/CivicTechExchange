@@ -80,7 +80,14 @@ class FormFieldsStore extends ReduceStore<State> {
   }
 
   touchFormField(state: State, action: UpdateFormFieldActionType): State {
-    state.formFieldsTouched[action.fieldName] = true;
+    if (action.fieldName) {
+      state.formFieldsTouched[action.fieldName] = true;
+    } else {
+      // Touch all fields
+      _.keys(state.formFieldsTouched).forEach((key: string) => {
+        state.formFieldsTouched[key] = true;
+      });
+    }
     state = this.processErrors(state);
     return _.clone(state);
   }
