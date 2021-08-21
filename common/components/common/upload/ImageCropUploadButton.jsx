@@ -38,7 +38,8 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const previewImage =
-      this.state.croppedImageUrl || this.props.currentImage.publicUrl;
+      this.state.croppedImageUrl ||
+      (this.props.currentImage && this.props.currentImage.publicUrl);
     return (
       <div className="ImageCropUploadButton-root">
         {this.state.src && this.state.isCropping && (

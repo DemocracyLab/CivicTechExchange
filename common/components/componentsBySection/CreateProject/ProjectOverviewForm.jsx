@@ -78,6 +78,7 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
         errorMessage: "Please enter Project Description",
       },
       {
+        fieldName: "didCheckTerms",
         checkFunc: (formFields: FormFields) => formFields.didCheckTerms,
         errorMessage: "Agree to Terms of Use",
       },
@@ -163,15 +164,16 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
               id="didCheckTerms"
               value={this.state.formFields.didCheckTerms}
               onCheck={this.form.onSelection.bind(this, "didCheckTerms")}
-            />
-            <span>
-              {" "}
-              I have read and accepted the{" "}
-              <PseudoLink
-                text="Terms of Use"
-                onClick={e => this.setState({ termsOpen: true })}
-              />
-            </span>
+            >
+              <span>
+                {" "}
+                I have read and accepted the{" "}
+                <PseudoLink
+                  text="Terms of Use"
+                  onClick={e => this.setState({ termsOpen: true })}
+                />
+              </span>
+            </CheckBox>
           </div>
         )}
 
