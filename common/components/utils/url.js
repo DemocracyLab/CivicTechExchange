@@ -146,11 +146,18 @@ class urlHelper {
   // Get url for logging in then returning to the previous page
   static logInThenReturn(returnUrl: ?string): string {
     let _url: string = returnUrl || window.location.href;
-    const prevPageArgs: Dictionary<string> = Object.assign(
-      urlHelper.arguments(_url),
-      urlHelper.getPreviousPageArg(_url)
-    );
-    return urlHelper.section(Section.LogIn, prevPageArgs, true);
+    const sectionArgs: SectionUrlArguments = urlHelper.getSectionArgs(_url);
+    if ("prev" in sectionArgs.args) {
+      return _url;
+    } else {
+      let _args: Dictionary<string> = {
+        prev: sectionArgs.section,
+      };
+      if (!_.isEmpty(sectionArgs.args)) {
+        _args.prevPageArgs = JSON.stringify(sectionArgs.args);
+      }
+      return urlHelper.section(Section.LogIn, _args, true);
+    }
   }
 
   // Construct a url with properly-formatted query string for the given arguments
@@ -238,15 +245,6 @@ class urlHelper {
     return newUrl;
   }
 
-  static getPreviousPageArg(url: ?string): Dictionary<string> {
-    const _url: string = urlHelper._urlOrCurrentUrl(url);
-    // If prev arg already exists, use that
-    const existingPreviousPageArg: string = urlHelper.argument("prev");
-    return existingPreviousPageArg
-      ? { prev: existingPreviousPageArg }
-      : { prev: urlHelper.getSection(_url) };
-  }
-
   static appendHttpIfMissingProtocol(url: string): string {
     // TODO: Find a library that can handle this so we don't have to maintain regexes
     if (!regex.protocol.test(url)) {
@@ -292,6 +290,14 @@ class urlHelper {
   // TODO: Use this for every method
   static _urlOrCurrentUrl(url: ?string): string {
     return url || window.location.href;
+  }
+
+  static encodeNameForUrlPassing(name: string): string {
+    return encodeURIComponent(name);
+  }
+
+  static decodeNameFromUrlPassing(name: string): string {
+    return decodeURIComponent(name);
   }
 }
 

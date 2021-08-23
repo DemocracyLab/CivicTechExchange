@@ -132,5 +132,9 @@ export QIQO_API_KEY=democracylab
 # export QIQO_CIRCLE_UUID=nmitq
 
 #Add CSP variable examples
-export CSP_FRAME_SRC='["qiqochat.com", "*.qiqochat.com", "*.google.com", "democracylab.org", "democracy-lab-prod-mirror.herokuapp.com", "democracy-lab-dev.herokuapp.com", "democracy-lab-staging.herokuapp.com"]'
-export CSP_FRAME_ANCESTORS='["qiqochat.com", "*.qiqochat.com", "*.google.com", "democracylab.org", "democracy-lab-prod-mirror.herokuapp.com", "democracy-lab-dev.herokuapp.com", "democracy-lab-staging.herokuapp.com"]'
+export CSP_FRAME_SRC='["qiqochat.com", "*.qiqochat.com", "*.google.com", "*.youtube.com", "democracylab.org", "democracy-lab-prod-mirror.herokuapp.com", "democracy-lab-dev.herokuapp.com", "democracy-lab-staging.herokuapp.com"]'
+export CSP_FRAME_ANCESTORS='["qiqochat.com", "*.qiqochat.com", "*.google.com", "*.youtube.com", "democracylab.org", "democracy-lab-prod-mirror.herokuapp.com", "democracy-lab-dev.herokuapp.com", "democracy-lab-staging.herokuapp.com"]'
+
+# Max rate for anonymous or authenticated requests. Valid time periods include second, minute, hour or day
+export THROTTLE_RATE_ANONYMOUS=5/second
+export THROTTLE_RATE_AUTHENTICATED=5/second

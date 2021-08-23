@@ -50,7 +50,7 @@ class ModalWrapper extends React.PureComponent<Props, State> {
     return (
       <Button
         variant="outline-secondary"
-        onClick={this.props.onClickCancel}
+        onClick={() => this.props.onClickCancel()}
         disabled={!this.props.cancelEnabled}
       >
         {this.props.cancelText || "Cancel"}
@@ -69,7 +69,7 @@ class ModalWrapper extends React.PureComponent<Props, State> {
       <Button
         variant="primary"
         disabled={!this.props.submitEnabled}
-        onClick={this.props.onClickSubmit}
+        onClick={() => this.props.onClickSubmit()}
       >
         {buttonContent}
       </Button>

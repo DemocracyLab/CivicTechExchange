@@ -8,8 +8,8 @@ import {
   DefaultLinkDisplayConfigurations,
 } from "../../constants/LinkConstants.js";
 import { Glyph, GlyphSizes } from "../../utils/glyphs.js";
-import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js";
+import stringHelper from "../../utils/string.js";
 
 const textLength: number = 20;
 
@@ -22,7 +22,6 @@ type State = {|
   linkTypeDisplayConfig: ?LinkSourceDisplayConfig,
   glyphStyle: ?string,
   topText: ?string,
-  topTitle: ?string,
   bottomText: ?string,
 |};
 
@@ -60,8 +59,7 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
       siteDisplayConfig: siteDisplayConfig,
       linkTypeDisplayConfig: linkTypeDisplayConfig,
       glyphStyle: glyphStyle,
-      topText: Truncate.stringT(topText, textLength),
-      topTitle: topText.length > textLength ? topText : null,
+      topText: topText,
       bottomText: bottomText,
     };
   }
@@ -82,7 +80,7 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
               ></i>
             </div>
             <div className="IconLink-right">
-              <p className="IconLink-topText" title={this.state.topTitle}>
+              <p className="IconLink-topText" title={this.state.topText}>
                 {this.state.topText}
               </p>
               <p className="IconLink-bottomText">{this.state.bottomText}</p>
@@ -130,7 +128,7 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
         : urlHelper.beautify(link.linkUrl);
     } else {
       topText = link.linkName
-        ? link.linkName
+        ? stringHelper.trimStartString(link.linkName, "social_")
         : urlHelper.beautify(link.linkUrl);
     }
 

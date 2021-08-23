@@ -7,6 +7,9 @@ import window from "./__mocks__/window";
 import NavigationStore from "../stores/NavigationStore.js";
 import renderer from "react-test-renderer";
 import GroupBy from "../utils/groupBy.js";
+import array from "../utils/array.js";
+import utils from "../utils/utils.js";
+import Guard from "../utils/guard.js";
 
 describe("utils", () => {
   test("async.doWhenReady", () => {
@@ -42,6 +45,29 @@ describe("utils", () => {
     const sorted = Sort.byNamedEntries(collection, order, obj => obj.type);
 
     expect(sorted.map(obj => obj.id)).toEqual([3, 1, 0, 2]);
+
+    const group_issue_areas = {
+      no: 2,
+      en: 4,
+      ed: 1,
+      tr: 3,
+    };
+    const sorted_by_count_descending1 = Sort.byCountDictionary(
+      group_issue_areas
+    );
+    expect(sorted_by_count_descending1).toEqual(["en", "tr", "no", "ed"]);
+
+    const sorted_by_count_descending2 = Sort.byCountDictionary(
+      group_issue_areas,
+      false
+    );
+    expect(sorted_by_count_descending2).toEqual(sorted_by_count_descending1);
+
+    const sorted_by_count_ascending = Sort.byCountDictionary(
+      group_issue_areas,
+      true
+    );
+    expect(sorted_by_count_ascending).toEqual(["ed", "no", "tr", "en"]);
   });
 
   test("truncate", () => {
@@ -80,6 +106,12 @@ describe("utils", () => {
     const args = urlHelper.arguments("/projects?issues=test-issue&page=1");
     expect(args["issues"]).toEqual("test-issue");
     expect(args["page"]).toEqual("1");
+
+    let name = urlHelper.encodeNameForUrlPassing("!@#$%^&*()1234567890 project name");
+    expect(name).toEqual("!%40%23%24%25%5E%26*()1234567890%20project%20name");
+    name = urlHelper.decodeNameFromUrlPassing("%21%40%23%24%25%5E%26%2A%28%291234567890%20project%20name");
+    expect(name).toEqual("!@#$%^&*()1234567890 project name");
+
   });
 
   test("isValidUrl validates URL correctly", () => {
@@ -108,6 +140,23 @@ describe("utils", () => {
     expect(urlHelper.isEmptyStringOrValidUrl("")).toEqual(true);
   });
 
+  test("logInThenReturn produces correct redirection urls", () => {
+    const expectedWithArguments =
+      '/login?prev=AboutProject&prevPageArgs={"id":"1"}';
+    expect(urlHelper.logInThenReturn("/projects/1")).toEqual(
+      expectedWithArguments
+    );
+
+    const expectedNoArguments = "/login?prev=FindProjects";
+    expect(urlHelper.logInThenReturn("/projects/")).toEqual(
+      expectedNoArguments
+    );
+
+    expect(urlHelper.logInThenReturn(expectedNoArguments)).toEqual(
+      expectedNoArguments
+    );
+  });
+
   test("groupBy.andTransform", () => {
     const testData = [
       { a: 1, b: 2, type: "a" },
@@ -119,5 +168,48 @@ describe("utils", () => {
       i => ({ result: i.a + i.b })
     );
     expect(result).toMatchObject({ a: [{ result: 3 }], b: [{ result: 4 }] });
+  });
+
+  test("array test", () => {
+    const testArray: $ReadOnlyArray<string> = ["test1", "test2"];
+    let test = array.join(testArray, ",");
+    let testShouldEqual: Array<string> = ["test1", ",", "test2"];
+    expect(test).toEqual(testShouldEqual);
+  });  
+
+  test("utils.navigateToTopOfPage", () => {
+    global.scrollTo = jest.fn();
+    utils.navigateToTopOfPage();
+    expect(global.scrollTo).toBeCalledWith(0, 0);
+  }); 
+
+  test("utils.unescapeHtml", () => {
+    const rawStringHtmlContent = "&lt;p&gt;Function unescapeHtml&#x27;s test on &lt;a href=&#x27;fake url&#x27;&gt;something&lt;/a&gt;something&lt;/p&gt;";
+    const tranformedStringHtmlContent = utils.unescapeHtml(rawStringHtmlContent);
+    expect(tranformedStringHtmlContent).toEqual("<p>Function unescapeHtml's test on <a href='fake url'>something</a>something</p>");
+  }); 
+
+  test("utils.pluralize", () => {
+    let word = utils.pluralize("apple", "apples", 1);
+    expect(word).toEqual("apple");
+    word = utils.pluralize("apple", "apples", 0);
+    expect(word).toEqual("apples");
+    word = utils.pluralize("apple", "apples", 5);
+    expect(word).toEqual("apples");
+  }); 
+
+  test("guard.duplicateInput", () => {
+    const testFunc = jest.fn();
+    expect(testFunc).toHaveBeenCalledTimes(0);
+    const func = Guard.duplicateInput(testFunc);
+    const retur = func();
+    expect(testFunc).toHaveBeenCalledTimes(1);
+    for (let i = 0; i < 5; i++) {
+      expect(retur).toEqual(func());
+    }
+    expect(testFunc).toHaveBeenCalledTimes(1);
+    setTimeout(() => {
+      expect(testFunc).toHaveBeenCalledTimes(2);
+    }, 1000);
   });
 });

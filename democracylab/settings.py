@@ -98,6 +98,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE = [
+    'common.helpers.malicious_requests.MaliciousRequestsMiddleware',
+    'common.helpers.caching.DebugUserAgentMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -181,11 +183,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+THROTTLE_RATE_ANONYMOUS = os.environ.get('THROTTLE_RATE_ANONYMOUS', '5/second')
+THROTTLE_RATE_AUTHENTICATED = os.environ.get('THROTTLE_RATE_AUTHENTICATED', '5/second')
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.AllowAny',
     ],
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': THROTTLE_RATE_ANONYMOUS,
+        'user': THROTTLE_RATE_AUTHENTICATED
+    }
 }
 
 
@@ -430,11 +442,15 @@ PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
 
-# Ghost blog configs
-DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
+# Video Link
+YOUTUBE_VIDEO_URL = os.environ.get('YOUTUBE_VIDEO_URL', '')
 
+# Ghost blog configs
 GHOST_URL = os.environ.get('GHOST_URL', '')
 GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '')
 
 if GHOST_URL:
     CSP_CONNECT_SRC = CSP_CONNECT_SRC + (GHOST_URL,)
+
+MALICIOUS_URL_PATTERNS = os.environ.get('MALICIOUS_URL_PATTERNS', None)
+MALICIOUS_FWD_PATTERNS = os.environ.get('MALICIOUS_FWD_PATTERNS', None)

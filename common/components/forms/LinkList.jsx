@@ -1,127 +1,170 @@
 // @flow
 
 import React from "react";
-import Button from "react-bootstrap/Button";
-
+import { Container } from "flux/utils";
 import LinkEntryModal from "./LinkEntryModal.jsx";
-import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import type { LinkInfo } from "./LinkInfo.jsx";
-import { DefaultLinkDisplayConfigurations } from "../constants/LinkConstants.js";
-import GlyphStyles from "../utils/glyphs.js";
+import GlyphStyles, { Glyph, GlyphSizes } from "../utils/glyphs.js";
+import type { Dictionary, KeyValuePair } from "../types/Generics.jsx";
+import Sort from "../utils/sort.js";
+import stringHelper from "../utils/string.js";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
+import LinkListStore from "../stores/LinkListStore.js";
+import {
+  generateLinkKey,
+  NewLinkInfo,
+  linkCaptions,
+} from "../stores/LinkListStore.js";
 import _ from "lodash";
 
 type Props = {|
-  links: Array<LinkInfo>,
-  elementid: string,
-  title: ?string,
+  linkOrdering: $ReadOnlyArray<string>,
+  title: string,
+  subheader: string,
+  linkNamePrefix: ?string,
+  linkNamePrefixExclude: ?$ReadOnlyArray<string>,
+  addLinkText: ?string,
 |};
 type State = {|
   showAddEditModal: boolean,
   showDeleteModal: boolean,
   existingLink: LinkInfo,
   linkToDelete: LinkInfo,
-  links: Array<LinkInfo>,
+  linkDict: Dictionary<NewLinkInfo>,
+  linkOrdering: $ReadOnlyArray<string>,
+  linkKeyOrdering: ?Array<string>,
+  presetLinks: $ReadOnlyArray<string>,
 |};
 
 /**
  * Lists hyperlinks and provides add/edit functionality for them
+ * NOTE: This control should be paired with HiddenFormFields component when used in a form
  */
-class LinkList extends React.PureComponent<Props, State> {
+class LinkList extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
-      links: this.props.links || [],
       showAddEditModal: false,
       showDeleteModal: false,
       existingLink: null,
       linkToDelete: null,
+      linkOrdering: props.linkOrdering,
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    if (nextProps.links) {
-      this.setState({ links: nextProps.links || [] }, function() {
-        this.updateLinkField();
-      });
-    }
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [LinkListStore];
   }
 
-  createNewLink(): void {
-    this.state.existingLink = null;
-    this.openModal();
+  static calculateState(prevState: State, props: Props): State {
+    let state: State = _.clone(prevState) || {};
+    state.linkDict = LinkListStore.getLinkDictionary();
+    state.linkKeyOrdering = this.generateLinkOrdering(props, state);
+    state.presetLinks = LinkListStore.getPresetLinks();
+    return state;
+  }
+
+  static generateLinkOrdering(
+    props: ?Props,
+    state: State
+  ): ?$ReadOnlyArray<string> {
+    const includeLinkName: string => boolean = (linkName: string) => {
+      let exclude: boolean =
+        props.linkNamePrefixExclude &&
+        _.some(props.linkNamePrefixExclude, (prefix: string) =>
+          _.startsWith(linkName, prefix)
+        );
+      if (exclude) {
+        return false;
+      } else {
+        let include: boolean =
+          !props.linkNamePrefix || _.startsWith(linkName, props.linkNamePrefix);
+        return include || _.includes(props.linkOrdering, linkName);
+      }
+    };
+
+    const linkOrdering: $ReadOnlyArray<string> =
+      props.linkOrdering || state.linkOrdering;
+    let ordering: ?$ReadOnlyArray<string> = null;
+    if (state.linkDict) {
+      let keyValPairs: Array<KeyValuePair<LinkInfo>> = _.entries(
+        state.linkDict
+      ).filter((kvp: KeyValuePair<NewLinkInfo>) =>
+        includeLinkName(kvp[1].linkName)
+      );
+      ordering = Sort.byNamedEntries(
+        keyValPairs,
+        linkOrdering || [],
+        (kvp: KeyValuePair<LinkInfo>) => kvp[0]
+      ).map((kvp: KeyValuePair<LinkInfo>) => kvp[0]);
+    }
+    return ordering;
   }
 
   onModalCancel(): void {
     this.setState({ showAddEditModal: false });
   }
 
-  editLink(linkData: LinkInfo): void {
-    this.state.existingLink = linkData;
-    this.openModal();
-  }
-
   saveLink(linkData: LinkInfo): void {
     if (!this.state.existingLink) {
-      this.state.links.push(linkData);
+      linkData.tempId = stringHelper.randomAlphanumeric();
+      if (this.props.linkNamePrefix) {
+        linkData.linkName = this.props.linkNamePrefix + linkData.linkName;
+      }
+      const linkKey: string = generateLinkKey(this.state.presetLinks, linkData);
+      UniversalDispatcher.dispatch({
+        type: "UPDATE_LINK",
+        link: linkData,
+        linkKey: linkKey,
+      });
     } else {
       _.assign(this.state.existingLink, linkData);
     }
 
     this.setState({ showAddEditModal: false });
-    this.updateLinkField();
-    this.props.onChange && this.props.onChange();
   }
 
-  updateLinkField(): void {
-    this.refs.hiddenFormField.value = JSON.stringify(this.state.links);
+  openNewLinkModal(): void {
+    this.setState({ existingLink: null, showAddEditModal: true });
   }
 
-  openModal(): void {
-    this.setState({ showAddEditModal: true });
-  }
-
-  askForDeleteConfirmation(linkToDelete: LinkInfo): void {
-    this.setState({
-      linkToDelete: linkToDelete,
-      showDeleteModal: true,
+  editLinkUrl(linkKey: string, input: SyntheticEvent<HTMLInputElement>): void {
+    const link: NewLinkInfo = this.state.linkDict[linkKey];
+    link.linkUrl = input.target.value;
+    UniversalDispatcher.dispatch({
+      type: "UPDATE_LINK",
+      link: link,
+      linkKey: linkKey,
     });
   }
 
-  confirmDelete(confirmed: boolean): void {
-    if (confirmed) {
-      _.remove(
-        this.state.links,
-        link => link.linkUrl === this.state.linkToDelete.linkUrl
-      );
-      this.updateLinkField();
+  getLinkHeader(link: NewLinkInfo): string {
+    if (link.linkName in linkCaptions) {
+      return linkCaptions[link.linkName];
+    } else {
+      return this.props.linkNamePrefix
+        ? stringHelper.trimStartString(link.linkName, this.props.linkNamePrefix)
+        : link.linkName;
     }
-    this.setState({
-      showDeleteModal: false,
-      linkToDelete: null,
-    });
-    this.props.onChange && this.props.onChange();
   }
 
   render(): React$Node {
     return (
-      <div>
-        <input
-          type="hidden"
-          ref="hiddenFormField"
-          id={this.props.elementid}
-          name={this.props.elementid}
-        />
+      <div className="LinkList">
+        <h3>{this.props.title || "Links"}</h3>
+        <p>{this.props.subheader}</p>
 
-        <label>{this.props.title || "Links"} &nbsp;</label>
-        <Button
-          variant="primary"
-          size="sm"
-          onClick={this.createNewLink.bind(this)}
-        >
-          <i className={GlyphStyles.Add} aria-hidden="true"></i>
-        </Button>
+        <div className="form-offset">
+          {this._renderLinks()}
 
-        {this._renderLinks()}
+          <span className="add-link" onClick={this.openNewLinkModal.bind(this)}>
+            <i
+              className={Glyph(GlyphStyles.Add, GlyphSizes.SM)}
+              aria-hidden="true"
+            ></i>
+            {this.props.addLinkText}
+          </span>
+        </div>
 
         <LinkEntryModal
           showModal={this.state.showAddEditModal}
@@ -129,39 +172,32 @@ class LinkList extends React.PureComponent<Props, State> {
           onSaveLink={this.saveLink.bind(this)}
           onCancelLink={this.onModalCancel.bind(this)}
         />
-
-        <ConfirmationModal
-          showModal={this.state.showDeleteModal}
-          message="Do you want to delete this link?"
-          onSelection={this.confirmDelete.bind(this)}
-        />
       </div>
     );
   }
 
   _renderLinks(): Array<React$Node> {
-    return this.state.links
-      .filter(link => {
-        return !(link.linkName in DefaultLinkDisplayConfigurations);
-      })
-      .map((link, i) => (
-        <div key={i}>
-          <a href={link.linkUrl} target="_blank" rel="noopener noreferrer">
-            {link.linkName || link.linkUrl}
-          </a>
-          <i
-            className={GlyphStyles.Edit}
-            aria-hidden="true"
-            onClick={this.editLink.bind(this, link)}
-          ></i>
-          <i
-            className={GlyphStyles.Delete}
-            aria-hidden="true"
-            onClick={this.askForDeleteConfirmation.bind(this, link)}
-          ></i>
-        </div>
-      ));
+    if (!_.isEmpty(this.state.linkKeyOrdering)) {
+      return this.state.linkKeyOrdering.map((linkKey: string, i) => {
+        const link: NewLinkInfo = this.state.linkDict[linkKey];
+        const header: string = this.getLinkHeader(link);
+        return (
+          <div key={i} className="form-group">
+            <label htmlFor={linkKey}>{header}</label>
+            <input
+              type="text"
+              className="form-control"
+              id={linkKey}
+              name={linkKey}
+              maxLength="2075"
+              value={link.linkUrl}
+              onChange={this.editLinkUrl.bind(this, linkKey)}
+            />
+          </div>
+        );
+      });
+    }
   }
 }
 
-export default LinkList;
+export default Container.create(LinkList, { withProps: true });

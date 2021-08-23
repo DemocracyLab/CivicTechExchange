@@ -68,7 +68,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
         {
           header: "What resources would you like to share?",
           subHeader:
-            "Let volunteers know how they can engage with your project",
+            "At DemocracyLab, we're all about transparency.  Share your project's internal collaboration resources and social media to help volunteers understand your goals and processes.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: ProjectResourcesForm,
@@ -166,7 +166,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     metrics.logProjectCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
     window.location.href = url.section(Section.MyProjects, {
-      projectAwaitingApproval: project.project_name,
+      projectAwaitingApproval: url.encodeNameForUrlPassing(project.project_name),
     });
   }
 

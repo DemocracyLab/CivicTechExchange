@@ -381,6 +381,7 @@ class Event(Archived):
     is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
+    show_headers = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.event_name)
@@ -419,7 +420,8 @@ class Event(Archived):
             'event_short_description': self.event_short_description,
             'event_legacy_organization': Tag.hydrate_to_json(self.id, list(self.event_legacy_organization.all().values())),
             'event_slug': self.event_slug,
-            'is_private': self.is_private
+            'is_private': self.is_private,
+            'show_headers': self.show_headers
         }
 
         if len(thumbnail_files) > 0:
@@ -778,8 +780,8 @@ class ProjectFile(models.Model):
     file_group = models.ForeignKey(Group, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
     file_event = models.ForeignKey(Event, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
     file_visibility = models.CharField(max_length=50)
-    file_name = models.CharField(max_length=150)
-    file_key = models.CharField(max_length=200)
+    file_name = models.CharField(max_length=300)
+    file_key = models.CharField(max_length=400)
     file_url = models.CharField(max_length=2083)
     file_type = models.CharField(max_length=50)
     file_category = models.CharField(max_length=50)
@@ -980,7 +982,7 @@ class VolunteerRelation(Archived):
     def hydrate_project_volunteer_info(self):
         volunteer_json = self.to_json()
         project_json = self.project.hydrate_to_list_json()
-        return merge_dicts(volunteer_json, project_json)
+        return merge_dicts(project_json, volunteer_json)
 
     def is_up_for_renewal(self, now=None):
         now = now or timezone.now()

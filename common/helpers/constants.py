@@ -44,6 +44,7 @@ class FrontEndSection(Enum):
     MyEvents = 'MyEvents'
     Companies = 'Companies'
     AddUserDetails = 'AddUserDetails'
+    VideoOverview = 'VideoOverview'
 
     # deprecated
     CorporateHackathon = 'CorporateHackathon'

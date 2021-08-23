@@ -21,7 +21,7 @@ class ProjectOwnerCard extends React.PureComponent<Props> {
     return (
       <div className="VolunteerCard-root">
         <a className="VolunteerCard-volunteerName" href={ownerUrl}>
-          <Avatar user={owner} size={50} />
+          <Avatar user={owner} />
         </a>
         <a className="VolunteerCard-volunteerName" href={ownerUrl}>
           {owner && owner.first_name + " " + owner.last_name}

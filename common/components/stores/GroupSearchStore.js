@@ -328,11 +328,10 @@ class GroupSearchStore extends ReduceStore<State> {
 
   getCountryList(): $ReadOnlyArray<CountryData> {
     const groupsData: FindGroupsData = this.getState().groupsData;
-    return (
-      groupsData &&
+    let countryList = (groupsData &&
       groupsData.availableCountries &&
-      groupsData.availableCountries.map(countryByCode)
-    );
+      groupsData.availableCountries.map(countryByCode));
+    return countryList && _.sortBy(countryList, "displayName");
   }
 
   getLocation(): LocationRadius {

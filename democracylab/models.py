@@ -53,6 +53,7 @@ class Contributor(User):
         other_files = list(filter(lambda file: file.file_category != civictechprojects.models.FileCategory.THUMBNAIL.value, files))
 
         user = {
+            'id': self.id,
             'email': self.email,
             'first_name': self.first_name,
             'last_name': self.last_name,

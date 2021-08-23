@@ -18,9 +18,13 @@ const sectionsToShowFooter: $ReadOnlyArray<string> = [
   Section.Home,
 ];
 
-class MainFooter extends React.Component<{||}> {
-  constructor(): void {
-    super();
+type Props = {|
+  forceShow: boolean,
+|};
+
+class MainFooter extends React.Component<Props> {
+  constructor(props: Props): void {
+    super(props);
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -36,7 +40,7 @@ class MainFooter extends React.Component<{||}> {
   render(): ?React$Node {
     return (
       this.state.section &&
-      _.includes(sectionsToShowFooter, this.state.section) && (
+      (_.includes(sectionsToShowFooter, this.state.section) || this.props.forceShow == true) && (
         <React.Fragment>
           <div className="MainFooter-border"></div>
           <div className="MainFooter-footer container">

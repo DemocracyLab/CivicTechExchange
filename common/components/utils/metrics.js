@@ -255,6 +255,10 @@ class metrics {
   static logClickHeaderLink(url: string, userId: ?number): void {
     _logEvent("headerLinkClick", { url: url, userId: userId || 0 });
   }
+
+  static logProjectSearchResults(projectCount: number, queryString: string): void {
+    _logEvent("projectSearchResults", { projectCount: projectCount, queryString: queryString })
+  }
 }
 
 export default metrics;
