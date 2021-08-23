@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" style="height: 100%">
-{% load django_seo_js %}
+
   <head>
-    {% seo_js_head %}
+
     <meta charset="utf-8">
     <title>{{ title }}</title>
     <meta name="og:title" content="{{ title }}" />
@@ -27,10 +27,7 @@
   </head>
   <body>
     {{ googleTagsBodyScript }}
-    <script>
-      // Stop prerender.io from caching page until it loads
-      window.prerenderReady = false;
-    </script>
+
     <script type="text/javascript">
       window.DLAB_GLOBAL_CONTEXT =
         '{{userID}}'

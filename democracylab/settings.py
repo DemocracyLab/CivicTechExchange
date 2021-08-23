@@ -56,8 +56,7 @@ INSTALLED_APPS = [
     'oauth2.providers.github',
     'oauth2.providers.google',
     'oauth2.providers.linkedin',
-    'oauth2.providers.facebook',
-    'django_seo_js'
+    'oauth2.providers.facebook'
 ]
 
 SITE_ID = 1
@@ -100,7 +99,6 @@ AUTHENTICATION_BACKENDS = (
 
 MIDDLEWARE = [
     'common.helpers.malicious_requests.MaliciousRequestsMiddleware',
-    'common.helpers.caching.DebugUserAgentMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -225,7 +223,7 @@ EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('E
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
-ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 CONTACT_EMAIL = os.environ['CONTACT_EMAIL']
 FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
 
@@ -407,35 +405,6 @@ LOGGING = {
         },
     },
 }
-
-# If you're using prerender.io (the default backend):
-SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '')
-SEO_JS_BACKEND = "common.helpers.caching.DebugPrerenderIO"
-SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
-SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
-SEO_JS_ENABLED = os.environ.get('SEO_JS_ENABLED', False) == 'True'
-
-# TODO: Put in environment variable
-SEO_JS_USER_AGENTS = (
-    # These first three should be disabled, since they support escaped fragments, and
-    # and leaving them enabled will penalize a website as "cloaked".
-    "Googlebot",
-    "Yahoo",
-    "bingbot",
-
-    "Ask Jeeves",
-    "baiduspider",
-    "facebookexternalhit",
-    "twitterbot",
-    "rogerbot",
-    "linkedinbot",
-    "embedly",
-    "quoralink preview'",
-    "showyoubot",
-    "outbrain",
-    "pinterest",
-    "developersgoogle.com/+/web/snippet",
-)
 
 DISALLOW_CRAWLING = os.environ.get('DISALLOW_CRAWLING', False) == 'True'
 
