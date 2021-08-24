@@ -97,6 +97,21 @@ def my_events_preload(context, request):
     return context
 
 
+def videos_preload(context, request):
+    # TODO: Default to 'overview'
+    context = default_preload(context, request)
+    query_args = url_params(request)
+    video_id = query_args['id']
+    if video_id in settings.VIDEO_PAGES:
+        video_json = settings.VIDEO_PAGES[video_id]
+        print(video_json)
+        context['YOUTUBE_VIDEO_URL'] = video_json['video_url']
+        context['description'] = video_json['video_description']
+        if 'video_thumbnail' in video_json:
+            context['og_image'] = video_json['video_thumbnail']
+    return context
+
+
 def default_preload(context, request):
     context['title'] = 'DemocracyLab'
     context['description'] = 'Everyone has something to contribute to the technical solutions society needs. ' \
@@ -118,7 +133,8 @@ preload_urls = [
     {'section': FrontEndSection.MyEvents.value, 'handler': my_events_preload},
     {'section': FrontEndSection.Donate.value, 'handler': donate_preload},
     {'section': FrontEndSection.AboutGroup.value, 'handler': about_group_preload},
-    {'section': FrontEndSection.Companies.value, 'handler': companies_preload}
+    {'section': FrontEndSection.Companies.value, 'handler': companies_preload},
+    {'section': FrontEndSection.VideoOverview.value, 'handler': videos_preload}
 ]
 
 

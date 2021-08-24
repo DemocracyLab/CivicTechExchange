@@ -138,3 +138,5 @@ export CSP_FRAME_ANCESTORS='["qiqochat.com", "*.qiqochat.com", "*.google.com", "
 # Max rate for anonymous or authenticated requests. Valid time periods include second, minute, hour or day
 export THROTTLE_RATE_ANONYMOUS=5/second
 export THROTTLE_RATE_AUTHENTICATED=5/second
+
+# TODO: VIDEO_PAGES
