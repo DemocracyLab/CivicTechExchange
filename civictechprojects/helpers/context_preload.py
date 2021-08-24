@@ -98,17 +98,17 @@ def my_events_preload(context, request):
 
 
 def videos_preload(context, request):
-    # TODO: Default to 'overview'
     context = default_preload(context, request)
-    query_args = url_params(request)
-    video_id = query_args['id']
-    if video_id in settings.VIDEO_PAGES:
-        video_json = settings.VIDEO_PAGES[video_id]
+    if settings.VIDEO_PAGES:
+        query_args = url_params(request)
+        video_id = query_args['id']
+        video_json = settings.VIDEO_PAGES[video_id] if video_id in settings.VIDEO_PAGES else settings.VIDEO_PAGES['overview']
         print(video_json)
-        context['YOUTUBE_VIDEO_URL'] = video_json['video_url']
-        context['description'] = video_json['video_description']
-        if 'video_thumbnail' in video_json:
-            context['og_image'] = video_json['video_thumbnail']
+        if video_json:
+            context['YOUTUBE_VIDEO_URL'] = video_json['video_url']
+            context['description'] = video_json['video_description']
+            if 'video_thumbnail' in video_json:
+                context['og_image'] = video_json['video_thumbnail']
     return context
 
 
