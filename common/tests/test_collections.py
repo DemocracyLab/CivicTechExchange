@@ -1,4 +1,5 @@
 from django.test import TestCase
+from civictechprojects.models import VolunteerRelation
 from common.helpers.collections import find_first, flatten, count_occurrences, distinct
 
 
@@ -23,7 +24,6 @@ class CollectionsTests(TestCase):
             8: 1
         }
         self.assertEqual(count_occurrences(self.duplicates), expected_results)
-
 
     def test_flatten(self):
 
