@@ -441,7 +441,9 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-section corporate-contact col-12">
-          <JumpAnchor id="contact" />
+          <JumpAnchor 
+           id="contact"
+           headerHeight={this.props.headerHeight} />
           <h1>Take The First Step!</h1>
           <h2>
             To receive more information about becoming a corporate partner,

@@ -35,7 +35,7 @@ import AboutGroupController from "./AboutGroupController.jsx";
 import ErrorController from "./ErrorController.jsx";
 import FindGroupsController from "./FindGroupsController.jsx";
 import FindEventsController from "./FindEventsController.jsx";
-import CoroporateHackathonController from "./CorporateHackathonController.jsx";
+import CorporateHackathonController from "./CorporateHackathonController.jsx";
 import MyEventsController from "./MyEventsController.jsx";
 import AddSignUpDetails from "./AddSignUpDetails.jsx";
 import VideoController from "./VideoController.jsx";
@@ -124,7 +124,7 @@ class SectionController extends React.Component<{||}, State> {
       case Section.LiveEvent:
         return <LiveEventController />;
       case Section.Companies:
-        return <CoroporateHackathonController />;
+        return <CorporateHackathonController headerHeight={this.props.headerHeight}/>;
       case Section.Error:
         return <ErrorController />;
       case Section.AddUserDetails:
