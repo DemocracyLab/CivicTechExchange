@@ -106,7 +106,8 @@ def videos_preload(context, request):
         print(video_json)
         if video_json:
             context['YOUTUBE_VIDEO_URL'] = video_json['video_url']
-            context['description'] = video_json['video_description']
+            if 'video_description' in video_json:
+                context['description'] = video_json['video_description']
             if 'video_thumbnail' in video_json:
                 context['og_image'] = video_json['video_thumbnail']
     return context
