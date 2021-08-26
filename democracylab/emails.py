@@ -196,11 +196,12 @@ def send_to_group_owners(group, sender, subject, template):
 
 def send_to_project_volunteer(volunteer_relation, subject, template):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project.id)
-    co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
+    co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers)))) or []
     email_msg = EmailMessage(
         subject=subject,
         from_email=settings.EMAIL_VOLUNTEER_ACCT['from_name'],
         to=[volunteer_relation.volunteer.email],
+        cc=co_owner_emails + [volunteer_relation.project.project_creator.email],
         reply_to=[volunteer_relation.project.project_creator.email] + co_owner_emails,
     )
     email_msg = template.render(email_msg)
@@ -414,15 +415,17 @@ def send_email(email_msg, email_acct=None):
         email_msg.connection = email_acct['connection'] if email_acct is not None else settings.EMAIL_SUPPORT_ACCT['connection']
     else:
         test_email_subject = 'TEST EMAIL: ' + email_msg.subject
-        test_email_body = '<!--\n Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\n -->\n{body}'.format(
+        test_email_body = '<!--\n Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\nCC: {cc}\n-->\n{body}'.format(
             environment=settings.PROTOCOL_DOMAIN,
             to_line=email_msg.to,
             reply_to=email_msg.reply_to,
-            body=email_msg.body
+            body=email_msg.body,
+            cc=email_msg.cc
         )
         email_msg.subject = test_email_subject
         email_msg.body = test_email_body
         email_msg.to = [settings.ADMIN_EMAIL]
+        email_msg.cc = []
         if settings.EMAIL_SUPPORT_ACCT:
             email_msg.connection = settings.EMAIL_SUPPORT_ACCT['connection']
     email_msg.send()
