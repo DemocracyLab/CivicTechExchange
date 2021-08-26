@@ -37,7 +37,10 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
+from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector
 from django.views.decorators.cache import cache_page
+from rest_framework.decorators import api_view, throttle_classes
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 import requests
 
 
@@ -281,7 +284,9 @@ def get_project(request, project_id):
 
     if project is not None:
         if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
-            return JsonResponse(project.hydrate_to_json(), safe=False)
+            hydrated_project = project.hydrate_to_json()
+            del hydrated_project['project_volunteers']
+            return JsonResponse(hydrated_project, safe=False)
         else:
             return HttpResponseForbidden()
     else:
@@ -328,8 +333,11 @@ def approve_event(request, event_id):
 
 @ensure_csrf_cookie
 @xframe_options_exempt
+@api_view()
+@throttle_classes([AnonRateThrottle, UserRateThrottle])
 def index(request, id='Unused but needed for routing purposes; do not remove!'):
     page = get_page_section(request.get_full_path())
+    # TODO: Add to redirectors.py
     # Redirect to AddUserDetails page if First/Last name hasn't been entered yet
     if page not in [FrontEndSection.AddUserDetails.value, FrontEndSection.SignUp.value] \
             and request.user.is_authenticated and \
@@ -338,17 +346,9 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         account = SocialAccount.objects.filter(user=request.user).first()
         return redirect(section_url(FrontEndSection.AddUserDetails, {'provider': account.provider}))
 
-    page_url = request.get_full_path()
-    clean_url = get_clean_url(page_url)
-    if clean_url != page_url:
-        print('Redirecting {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url))
-        return redirect(clean_url)
-
-    section_name = get_page_section(clean_url)
-    deprecated_redirect_url = redirect_from_deprecated_url(section_name)
-    if deprecated_redirect_url:
-        print('Redirecting deprecated url {name}: {url}'.format(name=section_name, url=clean_url))
-        return redirect(deprecated_redirect_url)
+    redirect_result = redirect_by([InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector], request.get_full_path())
+    if redirect_result is not None:
+        return redirect(redirect_result)
 
     template = loader.get_template('new_index.html')
     context = {
@@ -369,6 +369,7 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         'EVENT_URL': settings.EVENT_URL,
         'PRIVACY_POLICY_URL': settings.PRIVACY_POLICY_URL,
         'DONATE_PAGE_BLURB': settings.DONATE_PAGE_BLURB,
+        'YOUTUBE_VIDEO_URL': settings.YOUTUBE_VIDEO_URL,
         'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID
     }
     if settings.HOTJAR_APPLICATION_ID:
@@ -781,6 +782,20 @@ def delete_uploaded_file(request, s3_key):
     else:
         # TODO: Log this
         return HttpResponse(status=401)
+
+def get_project_volunteers(request,project_id):
+    project = Project.objects.get(id=project_id)
+    if project is not None:
+        if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
+            data = {
+                'project_id' : project_id,
+                'project_volunteers': project.hydrate_to_json()['project_volunteers']
+            }
+            return JsonResponse(data, safe=False)
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it

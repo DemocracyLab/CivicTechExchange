@@ -72,7 +72,7 @@ def about_us_preload(context, request):
 def donate_preload(context, request):
     context = default_preload(context, request)
     context['title'] = 'Donate | DemocracyLab'
-    context['description'] = 'We too are a nonprofit, and your tax-deductible gift helps us connect good people with good causes.'
+    context['description'] = 'Your donation empowers people who use technology for public good by connecting tech-for-good projects to skilled volunteers and socially responsible companies.'
     return context
 
 

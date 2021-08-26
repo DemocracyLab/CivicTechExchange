@@ -1,12 +1,3 @@
-.form-body {
-  h1 {
-    font-size: 36px;
-  }
-  h2 {
-    font-size: 18px;
-  }
-}
-
 .create-form.white-bg {
   background-color: $color-background-light;
   padding: 20px;
@@ -32,6 +23,10 @@
 .create-form-project-example {
   padding-left: 0.5rem;
 }
+.create-btn {
+  min-width: 130px;
+}
+
 
 // quick fix to create's preview view having nested containers (thus, nested gutters)
 // TODO: fix this properly so preview is 100% accurate, removing these rules

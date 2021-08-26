@@ -2,6 +2,7 @@
 
 import DjangoCSRFToken from "django-react-csrftoken";
 import React from "react";
+import Button from "react-bootstrap/Button";
 import type { Validator } from "../forms/FormValidation.jsx";
 import FormValidation from "../forms/FormValidation.jsx";
 import url from "../utils/url.js";
@@ -100,13 +101,14 @@ class ChangePasswordController extends React.Component<{||}, State> {
             formState={this.state}
           />
 
-          <button
+          <Button
+            variant="login"
             className="LogInController-signInButton"
             disabled={!this.state.isValid}
             type="submit"
           >
             Change Password
-          </button>
+          </Button>
         </form>
       </div>
     );

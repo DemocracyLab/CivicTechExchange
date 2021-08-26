@@ -151,7 +151,7 @@ class LinkEntryModal extends React.PureComponent<Props, State> {
               type="text"
               className="form-control"
               id="link-name"
-              maxLength="200"
+              maxLength="190"
               value={this.state.formFields.project_link_name}
               onChange={this.form.onInput.bind(this, "project_link_name")}
             />

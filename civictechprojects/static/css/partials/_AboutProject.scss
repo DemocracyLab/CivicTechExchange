@@ -27,6 +27,8 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 16px;
   }
   .Text-section {
     margin-top: 1rem;
@@ -109,6 +111,12 @@
 }
 
 @include media-breakpoint-up(lg) {
+  .AboutProject-positions-available {
+    .Position-header {
+      flex-direction: row;
+      margin-bottom: 0;
+    }
+  }
   .AboutProject-skilltech-container {
     flex-direction: row;
   }

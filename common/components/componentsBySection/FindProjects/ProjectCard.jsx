@@ -79,7 +79,7 @@ class ProjectCard extends React.PureComponent<Props> {
   _renderSkillsNeeded(): React$Node {
     return (
       <div className="ProjectCard-skills">
-        <h3>Skills Needed</h3>
+        <h3>Roles Needed</h3>
         {this._generateSkillList(this.props.skillslen)}
       </div>
     );

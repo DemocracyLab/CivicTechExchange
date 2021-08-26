@@ -12,9 +12,6 @@
 }
 .press-root h1,
 .press-in-news h2 {
-  font-size: 28px;
-  font-weight: bold;
-  line-height: 1.2;
   margin: 0 0 1rem 0;
 }
 
@@ -23,7 +20,6 @@
 }
 
 .press-in-news a {
-  font-size: 20px;
   color: $color-orange;
   &:hover {
     color: $color-orange-dark;
@@ -59,9 +55,7 @@
   margin: 2rem 0;
 }
 .press-stats-data {
-  font-size: 28px;
   margin: 0;
-  line-height: 1.2;
   font-weight: bold;
 }
 .press-stats-label {
@@ -97,16 +91,8 @@
   .press-bounded-content {
     width: 960px;
   }
-  .press-root h1,
-  .press-in-news h2,
-  .press-stats-data {
-    font-size: 48px;
-  }
   .press-title {
     min-height: 568px;
-  }
-  .press-in-news a {
-    font-size: 24px;
   }
 }
 @include media-breakpoint-up(xl) {

@@ -10,7 +10,6 @@ import Truncate from "../utils/truncate.js";
 import AboutProjectDisplay from "../common/projects/AboutProjectDisplay.jsx";
 import { APIError } from "../utils/api.js";
 import url from "../utils/url.js";
-import prerender from "../utils/prerender.js";
 import LoadingFrame from "../chrome/LoadingFrame.jsx";
 
 type State = {|
@@ -43,13 +42,36 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
       {
         project: project,
       },
-      prerender.ready
+      () => {
+        ProjectAPIUtils.fetchProjectVolunteerList(
+          project.project_id,
+          this.loadProjectVolunteerList.bind(this),
+          this.handleLoadProjectVolunteersFailure.bind(this)
+        );
+      }
+    );
+  }
+  
+  loadProjectVolunteerList(volunteerList: $ReadOnlyArray<VolunteerDetailsAPIData>) {
+    let project = { ...this.state.project };
+    project['project_volunteers'] = volunteerList;
+    this.setState(
+      {
+        project: project,
+      }
     );
   }
 
   handleLoadProjectFailure(error: APIError) {
     this.setState({
       loadStatusMsg: "Could not load project",
+      statusCode: "404",
+    });
+  }
+  
+  handleLoadProjectVolunteersFailure(error: APIError) {
+    this.setState({
+      loadStatusMsg: "Could not load project volunteers",
       statusCode: "404",
     });
   }
@@ -85,18 +107,7 @@ class AboutProjectController extends React.PureComponent<{||}, State> {
   }
 
   _renderStatusCodeHeader(): React$Node {
-    return (
-      this.state.statusCode && (
-        <React.Fragment>
-          <Helmet>
-            <meta
-              name="prerender-status-code"
-              content={this.state.statusCode}
-            />
-          </Helmet>
-        </React.Fragment>
-      )
-    );
+    
   }
 }
 

@@ -13,6 +13,7 @@ import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import FeedbackModal from "../FeedbackModal.jsx";
 import metrics from "../../utils/metrics.js";
 import CurrentUser from "../../utils/CurrentUser.js";
+import promiseHelper from "../../utils/promise.js";
 import _ from "lodash";
 
 const CoOwnerHeading = "CO-OWNERS";
@@ -106,7 +107,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     });
   }
 
-  closeApproveModal(approved: boolean): void {
+  closeApproveModal(approved: boolean): Promise {
     if (approved) {
       return ProjectAPIUtils.post(
         "/volunteer/approve/" +
@@ -128,9 +129,11 @@ class VolunteerSection extends React.PureComponent<Props, State> {
         }
       );
     } else {
-      this.setState({
-        showApproveModal: false,
-      });
+      return promiseHelper.promisify(() =>
+        this.setState({
+          showApproveModal: false,
+        })
+      );
     }
   }
 
@@ -147,7 +150,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     });
   }
 
-  closePromotionModal(promoted: boolean): void {
+  closePromotionModal(promoted: boolean): Promise {
     if (promoted) {
       return ProjectAPIUtils.post(
         "/volunteer/promote/" +
@@ -167,9 +170,11 @@ class VolunteerSection extends React.PureComponent<Props, State> {
         }
       );
     } else {
-      this.setState({
-        showPromotionModal: false,
-      });
+      return promiseHelper.promisify(() =>
+        this.setState({
+          showPromotionModal: false,
+        })
+      );
     }
   }
 
@@ -452,7 +457,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
       !_.isEmpty(pendingVolunteers)
       ? this._renderVolunteerSection(
           pendingVolunteers,
-          "Waiting for confirmation..."
+          "Review Volunteer Applicants"
         )
       : null;
   }

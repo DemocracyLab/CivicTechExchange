@@ -30,14 +30,15 @@ class LogInController extends React.Component<Props, State> {
     let checkPrevPage: string = props.prevPage || args["prev"];
     const prevPage: string =
       checkPrevPage === Section.SignUp ? Section.Home : checkPrevPage;
-    const prevPageArgs: Dictionary<string> = _.omit(args, "prev");
     this.state = {
       username: "",
       password: "",
       validated: false,
       prevPage: prevPage,
-      prevPageArgs: prevPageArgs,
     };
+    if ("prevPageArgs" in args) {
+      this.state.prevPageArgs = decodeURIComponent(args["prevPageArgs"]);
+    }
   }
 
   render(): React$Node {
@@ -54,7 +55,9 @@ class LogInController extends React.Component<Props, State> {
     return (
       <div className="LogInController-root">
         <div className="LogInController-greeting">
-          <h4>Welcome back. Log into your account</h4>
+          <h4 className="text-uppercase">
+            Welcome back. Log into your account
+          </h4>
         </div>
 
         <Form
@@ -96,32 +99,14 @@ class LogInController extends React.Component<Props, State> {
           </Form.Group>
           <div className="LogInController-other-form-elements">
             <input name="prevPage" value={this.state.prevPage} type="hidden" />
-            <input
-              name="prevPageArgs"
-              value={JSON.stringify(this.state.prevPageArgs)}
-              type="hidden"
-            />
-            <div className="LogInController-bottomSection">
-              <a
-                href=""
-                className="LogInController-createAccount"
-                onClick={url.navigateToSection.bind(this, Section.SignUp)}
-              >
-                {" "}
-                Don't Have an Account?{" "}
-              </a>
-              <span
-                className="LogInController-forgotPassword"
-                onClick={url.navigateToSection.bind(
-                  this,
-                  Section.ResetPassword
-                )}
-              >
-                <a href="" className="LogInController-forgotPassword">
-                  {" "}
-                  Forgot Password?{" "}
-                </a>
-              </span>
+            {this.state.prevPageArgs && (
+              <input
+                name="prevPageArgs"
+                value={JSON.stringify(this.state.prevPageArgs)}
+                type="hidden"
+              />
+            )}
+            <div className="LogInController-actionsection">
               <Button
                 variant="login"
                 className="LogInController-signInButton"
@@ -129,6 +114,25 @@ class LogInController extends React.Component<Props, State> {
                 onClick={handleSubmit}
               >
                 Sign In
+              </Button>
+
+              <Button
+                variant="link"
+                className="LogInController-forgotPassword"
+                onClick={url.navigateToSection.bind(
+                  this,
+                  Section.ResetPassword
+                )}
+              >
+                Forgot Password?
+              </Button>
+
+              <Button
+                variant="link"
+                className="LogInController-createAccount"
+                onClick={url.navigateToSection.bind(this, Section.SignUp)}
+              >
+                Don't Have an Account?
               </Button>
             </div>
             <div className="LogInController-socialSection">

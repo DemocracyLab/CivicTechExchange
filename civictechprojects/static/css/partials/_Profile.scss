@@ -87,7 +87,7 @@
     border: 1px solid $color-grey-frame-border;
     border-radius: 5px;
     a {
-      font-size: 18px;
+      font-size: 17px; // match mobile h3
     }
     a.nav-item.nav-link {
       color: $color-text-dark;
@@ -111,9 +111,6 @@
     overflow-wrap: break-word;
     word-break: break-word;
   }
-}
-.Profile-links .IconLink-right {
-  width: 196px; // fixes issue at 320px
 }
 
 
@@ -148,6 +145,9 @@
     .nav-tabs {
       display: flex;
       justify-content: space-around;
+      a {
+        font-size: 19px; // match desktop H3
+      }
     }
   }
   // fixed width sections prevent long URL overflow issue on group page project cards
@@ -157,15 +157,7 @@
   .Profile-secondary-section {
     width: 340px;
   }
-  .Profile-links {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 
-    h4 {
-      min-width: 260px;
-    }
-  }
 }
 @include media-breakpoint-up(xl) {
   .Profile-primary-container {
@@ -181,73 +173,5 @@
   }
   .Profile-secondary-section {
     width: 420px;
-  }
-}
-
-// font selection stuff
-// test run for deploying this globally, at which point remove this whole block (because it's kinda messy)
-.Profile-root {
-  line-height: 1.618;
-  font-size: 15px;
-  //then specifically, to fit some edge cases
-  p,
-  div,
-  span,
-  li,
-  a {
-    line-height: 1.618;
-  }
-  h1 {
-    font-size: 27px;
-  }
-  h2 {
-    font-size: 21px;
-  }
-  h3 {
-    font-size: 17px;
-  }
-  h4 {
-    font-size: 15px;
-    font-weight: 600;
-  }
-  p,
-  div,
-  span,
-  li,
-  a {
-    font-size: 15px;
-  }
-}
-@include media-breakpoint-up(md) {
-  .Profile-root {
-    font-size: 16px;
-    line-height: 1.618;
-    p,
-    div,
-    span,
-    li,
-    a {
-      line-height: 1.5;
-    }
-    h1 {
-      font-size: 39px;
-    }
-    h2 {
-      font-size: 23px;
-    }
-    h3 {
-      font-size: 19px;
-    }
-    h4 {
-      font-size: 16px;
-      font-weight: 500;
-    }
-    p,
-    div,
-    span,
-    li,
-    a {
-      font-size: 16px;
-    }
   }
 }

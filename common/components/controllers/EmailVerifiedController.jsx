@@ -12,22 +12,26 @@ class EmailVerifiedController extends React.Component<{||}> {
 
   render(): React$Node {
     return (
-      <div className="EmailVerifiedController-root">
-        <div className="EmailVerifiedController-logo">
-          <img src={cdn.image(Images.DL_GLYPH)} />
-        </div>
-        <div className="EmailVerifiedController-greeting">
-          <h3>Your email has been verified</h3>
-          <p>
-            Get started by finding tech-for-good projects that match your skill
-            and interests.
-          </p>
-          <a
-            className="btn btn-primary"
-            href={url.section(Section.FindProjects)}
-          >
-            FIND PROJECTS
-          </a>
+      <div className="EmailVerifiedController-root container text-center">
+        <div className="row justify-content-center">
+          <div className="col-12 col-sm-10">
+            <div className="EmailVerifiedController-logo">
+              <img src={cdn.image(Images.DL_GLYPH)} />
+            </div>
+            <div className="EmailVerifiedController-greeting">
+              <h3>Your email has been verified</h3>
+              <p>
+                Get started by finding tech-for-good projects that match your
+                skill and interests.
+              </p>
+              <a
+                className="btn btn-primary"
+                href={url.section(Section.FindProjects)}
+              >
+                Find Projects
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     );
