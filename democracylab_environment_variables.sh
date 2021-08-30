@@ -138,3 +138,6 @@ export CSP_FRAME_ANCESTORS='["qiqochat.com", "*.qiqochat.com", "*.google.com", "
 # Max rate for anonymous or authenticated requests. Valid time periods include second, minute, hour or day
 export THROTTLE_RATE_ANONYMOUS=5/second
 export THROTTLE_RATE_AUTHENTICATED=5/second
+
+# Links and metadata for /videos/ page
+export VIDEO_PAGES='{"overview":{"video_url":"https://www.youtube.com/embed/nvIUWtx-nmo"}, "wgu-hack-for-the-future":{"video_url":"https://www.youtube.com/embed/4hujk4liEvw","video_thumbnail":"https://d1agxr2dqkgkuy.cloudfront.net/img/wgu_event_2021.jpeg","video_description":"Western Governors University sponsored this event to give community college students in Alaska, Colorado, Hawaii, Idaho, Montana, Oregon, Utah, Washington, and Wyoming an opportunity to hone their tech skills while contributing to tech-for-good projects."}}'

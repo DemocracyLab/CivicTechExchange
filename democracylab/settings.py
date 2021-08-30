@@ -442,7 +442,9 @@ PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
 
 # Video Link
-YOUTUBE_VIDEO_URL = os.environ.get('YOUTUBE_VIDEO_URL', '')
+VIDEO_PAGES = os.environ.get('VIDEO_PAGES', '')
+if VIDEO_PAGES is not None:
+    VIDEO_PAGES = ast.literal_eval(VIDEO_PAGES)
 
 # Ghost blog configs
 GHOST_URL = os.environ.get('GHOST_URL', '')
