@@ -61,7 +61,8 @@ export type ProjectAPIData = {|
   +project_state: string,
   +project_city: string,
   +project_name: string,
-  +project_thumbnail: FileInfo,
+  +project_thumbnail: ?FileInfo,
+  +project_thumbnail_video: ?LinkInfo,
   +project_date_modified: string,
   +project_url: string,
   +project_positions: $ReadOnlyArray<PositionInfo>,
@@ -218,7 +219,11 @@ class ProjectAPIUtils {
     callback: VolunteerDetailsAPIData => void,
     errCallback: APIError => void
   ): void {
-    fetch(new Request("/api/project/" + id + "/volunteers/", { credentials: "include" }))
+    fetch(
+      new Request("/api/project/" + id + "/volunteers/", {
+        credentials: "include",
+      })
+    )
       .then(response => {
         if (!response.ok) {
           throw Error();
@@ -226,7 +231,7 @@ class ProjectAPIUtils {
         return response.json();
       })
       .then(response => {
-        callback(response['project_volunteers']);
+        callback(response["project_volunteers"]);
       })
       .catch(
         response =>
@@ -237,7 +242,7 @@ class ProjectAPIUtils {
           })
       );
   }
-  
+
   // fetch specific category of tags
   static fetchTagsByCategory(
     tagCategory: string,

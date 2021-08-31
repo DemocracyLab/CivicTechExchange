@@ -36,6 +36,7 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
     notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
+from civictechprojects.helpers.projects.annotations import apply_project_annotations
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
 from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector
 from django.views.decorators.cache import cache_page
@@ -533,7 +534,7 @@ def projects_list(request):
             project_pages = 1
 
     tag_counts = get_tag_counts(category=None, event=event, group=group)
-    response = projects_with_meta_data(project_list_page, project_pages, project_count, tag_counts)
+    response = projects_with_meta_data(query_params, project_list_page, project_pages, project_count, tag_counts)
 
     return JsonResponse(response)
 
@@ -662,9 +663,10 @@ def project_countries():
     return unique_column_values(Project, 'project_country', lambda country: country and len(country) == 2)
 
 
-def projects_with_meta_data(projects, project_pages, project_count, tag_counts):
+def projects_with_meta_data(query_params, projects, project_pages, project_count, tag_counts):
+    projects_json = apply_project_annotations(query_params, [project.hydrate_to_tile_json() for project in projects])
     return {
-        'projects': [project.hydrate_to_tile_json() for project in projects],
+        'projects': projects_json,
         'availableCountries': project_countries(),
         'tags': tag_counts,
         'numPages': project_pages,
