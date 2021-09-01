@@ -10,27 +10,61 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
     super(props);
   }
-
+  //what I need is an item with the key name, and a sub-dropdown with all the values so something like dropdown, dropdownmenu (each item being a new dropdown dropright?)
   _renderWithSubcategories() {
+    console.log(this.props.cdata);
+    const cdata = this.props.cdata;
+    const mapped = cdata.map(([key], index) => (
+      <Dropdown.Item>
+        <Dropdown>
+          <Dropdown.Toggle variant="outline-secondary" id={key} as={Nav.Link}>
+            {key}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {cdata[index][1].forEach(el => (
+              <li>{el.display_name}</li>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+      </Dropdown.Item>
+    ));
     return (
-      <React.Fragment>
-        <p>
-          {this.props.displayName}/{this.props.hasSubcategories.toString()}
-        </p>
-      </React.Fragment>
-    )
+      <Dropdown as={Nav.Item}>
+        <Dropdown.Toggle
+          variant="outline-secondary"
+          id={this.props.displayName}
+          as={Nav.Link}
+        >
+          {this.props.displayName}
+        </Dropdown.Toggle>
+        <Dropdown.Menu>{mapped}</Dropdown.Menu>
+      </Dropdown>
+    );
   }
   _renderNoSubcategories() {
     const cdata = this.props.cdata;
-    const mapped = cdata.map(key => <li>{key.display_name}</li>);
-    return <ul>{mapped}</ul>
+    const mapped = cdata.map(key => (
+      <Dropdown.Item>{key.display_name}</Dropdown.Item>
+    ));
+    return (
+      <Dropdown>
+        <Dropdown.Toggle
+          variant="outline-secondary"
+          id={this.props.displayName}
+          as={Nav.Link}
+        >
+          {this.props.displayName}
+        </Dropdown.Toggle>
+        <Dropdown.Menu>{mapped}</Dropdown.Menu>
+      </Dropdown>
+    );
   }
 
   render(): React$Node {
     if (this.props.hasSubcategories) {
-      this._renderWithSubcategories();
+      return this._renderWithSubcategories();
     } else {
-      this._renderNoSubcategories();
+      return this._renderNoSubcategories();
     }
   }
 }

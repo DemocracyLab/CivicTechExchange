@@ -41,6 +41,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
       projectStage: {},
       orgType: {},
       selectedTags: {},
+      isReady: false,
     };
   }
 
@@ -67,6 +68,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
         ProjectSearchStore.getTags().toArray(),
         (tag: TagDefinition) => tag.tag_name
       ),
+      isReady: true,
     };
   }
 
@@ -74,27 +76,26 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     //should render a number of Flux view child components
 
     return (
-      <Nav justify variant="pills" className="ProjectFilterContainer-root">
-        {this._displayFilters()}
+      <Nav justify variant="pills" className="ProjectFilterContainer-root" expand={"lg"}>
+        {this.state.isReady ? this._displayFilters() : null}
       </Nav>
     );
   }
 
   _displayFilters(): React$Node {
-    console.log("TESTING getSortedCategoryTags below:");
-    console.log(ProjectSearchStore.getSortedCategoryTags("Role").toArray());
-    console.log(
-      ProjectSearchStore.getSortedCategoryTags("Technologies Used").toArray()
-    );
-    console.log(
-      ProjectSearchStore.getSortedCategoryTags("Project Stage").toArray()
-    );
-    console.log(
-      ProjectSearchStore.getSortedCategoryTags("Organization Type").toArray()
-    );
-//this render is more verbose than it 'needs to be' so it's more comprehensible what's going on and also allows easy reordering of categories
+    // console.log("TESTING getSortedCategoryTags below:");
+    // console.log(ProjectSearchStore.getSortedCategoryTags("Role").toArray());
+    // console.log(
+    //   ProjectSearchStore.getSortedCategoryTags("Technologies Used").toArray()
+    // );
+    // console.log(
+    //   ProjectSearchStore.getSortedCategoryTags("Project Stage").toArray()
+    // );
+    // console.log(
+    //   ProjectSearchStore.getSortedCategoryTags("Organization Type").toArray()
+    // );
     return (
-      <div>
+      <div className="ProjectFilterContainer-scrollcontainer">
         <RenderFilterCategory
           cdata={this.state.rolesNeeded}
           displayName={"Roles Needed"}
