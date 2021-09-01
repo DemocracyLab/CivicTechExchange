@@ -99,6 +99,7 @@ AUTHENTICATION_BACKENDS = (
 
 MIDDLEWARE = [
     'common.helpers.malicious_requests.MaliciousRequestsMiddleware',
+    'common.helpers.redirectors.RedirectMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
