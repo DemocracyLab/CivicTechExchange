@@ -339,6 +339,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'PRIVACY_POLICY_URL': {
         'error': True,
         'message': 'Privacy Policy url required'
+    },
+    'VIDEO_PAGES': {
+        'error': False,
+        'message': 'VIDEO_PAGES needed to show /videos/'
     }
 }
 
@@ -442,7 +446,7 @@ PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
 
 # Video Link
-VIDEO_PAGES = os.environ.get('VIDEO_PAGES', '')
+VIDEO_PAGES = os.environ.get('VIDEO_PAGES', None)
 if VIDEO_PAGES is not None:
     VIDEO_PAGES = ast.literal_eval(VIDEO_PAGES)
 
