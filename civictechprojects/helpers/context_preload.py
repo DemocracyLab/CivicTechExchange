@@ -4,6 +4,7 @@ from civictechprojects.models import Event
 from civictechprojects.caching.cache import ProjectCache, GroupCache
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
+from common.helpers.redirectors import RedirectTo
 from common.helpers.request_helpers import url_params
 
 
@@ -102,14 +103,17 @@ def videos_preload(context, request):
     if settings.VIDEO_PAGES:
         query_args = url_params(request)
         video_id = query_args['id']
-        video_json = settings.VIDEO_PAGES[video_id] if video_id in settings.VIDEO_PAGES else settings.VIDEO_PAGES['overview']
-        print(video_json)
-        if video_json:
+        if video_id in settings.VIDEO_PAGES:
+            video_json = settings.VIDEO_PAGES[video_id]
             context['YOUTUBE_VIDEO_URL'] = video_json['video_url']
             if 'video_description' in video_json:
                 context['description'] = video_json['video_description']
             if 'video_thumbnail' in video_json:
                 context['og_image'] = video_json['video_thumbnail']
+        else:
+            print('Redirecting invalid video id: ' + video_id)
+            raise RedirectTo(section_url(FrontEndSection.VideoOverview, {'id': 'overview'}))
+
     return context
 
 
