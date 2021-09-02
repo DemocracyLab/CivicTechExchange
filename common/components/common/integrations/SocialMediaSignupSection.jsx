@@ -49,6 +49,8 @@ const socialSignInLinkDisplayConfigMap: {
 type Props = {|
   hideApps: $ReadOnlyArray<string>,
   showEmail: boolean,
+  prevPage: string,
+  prevPageArgs: Dictionary<string>,
 |};
 
 type State = {|
@@ -126,25 +128,23 @@ class SocialMediaSignupSection extends React.Component<Props, State> {
           const iconClass: string =
             "LogInController-socialIcon" +
             (config.iconClass ? " " + config.iconClass : "");
+
+	  var url = "";
+          if (this.state.prevPageArgs) {
+           url = "/api/login/" + app + "?prevPage=" +this.state.prevPage + "&prevPageArgs=" +    this.state.prevPageArgs 
+          } else {
+             url = "/api/login/" + app  + "?prevPage=" + this.state.prevPage
+          }	
           return (
             <div className="LogInController-socialLink">
-             {this.state.prevPageArgs ? (
 
-              <a href={"/api/login/" + app + "?prevPage=" +this.state.prevPage + "&prevPageArgs=" + this.state.prevPageArgs} key={app}>
+              <a href= {url}>
                 <span style={{ color: config.iconColor }} className={iconClass}>
                   {config.iconElement}
                 </span>
                 <span>Continue with {config.displayName}</span>
               </a>
-              ) : (
-              <a href={"/api/login/" + app  + "?prevPage=" + this.state.prevPage} key={app}>
-                <span style={{ color: config.iconColor }} className={iconClass}>
-                  {config.iconElement}
-                </span>
-                <span>Continue with {config.displayName}</span>
-              </a>
-              
-             )}
+        
             </div>
           );
         })}

@@ -91,6 +91,6 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         owner = sociallogin.user.contributor
         user_avatar_url = sociallogin.account.get_provider().get_avatar_url(sociallogin)
         
-        if user_avatar_url:
-            file_json = copy_external_thumbnail_to_s3(user_avatar_url, sociallogin.account.provider, owner)
-            ProjectFile.replace_single_file(owner, FileCategory(file_json['file_category']), file_json)
+        #if user_avatar_url:
+            #file_json = copy_external_thumbnail_to_s3(user_avatar_url, #sociallogin.account.provider, owner)
+            #ProjectFile.replace_single_file(owner, #FileCategory(file_json['file_category']), file_json)
