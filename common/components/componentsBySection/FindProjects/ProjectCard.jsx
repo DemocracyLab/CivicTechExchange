@@ -40,9 +40,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
   }
 
   onHideShowVideo(): void {
-    this.setState({ showModal: false }, () =>
-      console.log("Set showModal to false!")
-    );
+    this.setState({ showModal: false });
     this.forceUpdate();
   }
 
@@ -95,9 +93,9 @@ class ProjectCard extends React.PureComponent<Props, State> {
   }
   _renderVideoContent(): React$Node {
     return (
-      <React.Fragment>
+      <div className="ProjectCard-play-button">
         <PlaySVG />
-      </React.Fragment>
+      </div>
     );
   }
   _renderTitleAndIssue(): React$Node {
