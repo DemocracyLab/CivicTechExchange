@@ -52,6 +52,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
             showModal={this.state.showModal}
             onClose={this.onHideShowVideo.bind(this)}
             videoUrl={this.props.project.video.linkUrl}
+            videoTitle={this.props.project.name}
           />
         )}
         <a

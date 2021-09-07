@@ -7,6 +7,7 @@ import VideoWrapper from "./VideoWrapper.jsx";
 type Props = {|
   showModal: boolean,
   videoUrl: string,
+  videoTitle: string,
   onClose: () => void,
 |};
 type State = {|
@@ -32,7 +33,7 @@ class VideoModal extends React.PureComponent<Props, State> {
     return (
       <ModalWrapper
         showModal={this.state.showModal}
-        headerText="Placeholder"
+        headerText={this.props.videoTitle}
         onClickCancel={this.props.onClose}
         hideButtons={true}
       >
