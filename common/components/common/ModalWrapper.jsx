@@ -13,6 +13,7 @@ type Props = {|
   submitEnabled: boolean,
   onClickCancel: () => void,
   onClickSubmit: () => void,
+  hideButtons: ?boolean,
 |};
 type State = {||};
 
@@ -37,10 +38,12 @@ class ModalWrapper extends React.PureComponent<Props, State> {
             <Modal.Title>{this.props.headerText}</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.props.children}</Modal.Body>
-          <Modal.Footer>
-            {this.props.onClickCancel && this._renderCancelButton()}
-            {this._renderSubmitButton()}
-          </Modal.Footer>
+          {!this.props.hideButtons && (
+            <Modal.Footer>
+              {this.props.onClickCancel && this._renderCancelButton()}
+              {this._renderSubmitButton()}
+            </Modal.Footer>
+          )}
         </Modal>
       </div>
     );

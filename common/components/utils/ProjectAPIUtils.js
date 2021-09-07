@@ -48,6 +48,7 @@ export type ProjectData = {|
   +thumbnail: FileInfo,
   +claimed: boolean,
   +date_modified: string,
+  +video: LinkInfo,
 |};
 
 export type ProjectAPIData = {|
@@ -165,6 +166,7 @@ class ProjectAPIUtils {
       positions: !_.isEmpty(apiData.project_positions)
         ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
         : ["Contact Project for Details"],
+      video: apiData.project_thumbnail_video,
     };
   }
 
