@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react";
-import ModalWrapper from "../ModalWrapper.jsx";
+import ModalWrapper, { ModalSizes } from "../ModalWrapper.jsx";
 import VideoWrapper from "./VideoWrapper.jsx";
 
 type Props = {|
@@ -36,6 +36,7 @@ class VideoModal extends React.PureComponent<Props, State> {
         headerText={this.props.videoTitle}
         onClickCancel={this.props.onClose}
         hideButtons={true}
+        size={ModalSizes.ExtraLarge}
       >
         <VideoWrapper videoUrl={this.props.videoUrl} />
       </ModalWrapper>
