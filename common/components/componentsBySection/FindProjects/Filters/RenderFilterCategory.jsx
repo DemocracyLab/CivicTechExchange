@@ -10,7 +10,11 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
     super(props);
   }
-  //what I need is an item with the key name, and a sub-dropdown with all the values so something like dropdown, dropdownmenu (each item being a new dropdown dropright?)
+  //what I need is an item with the key name, a list of subcategories, each item has a second list of filter items
+  // will probably need custom  dropdown handler but first get them rendering and get the checkbox function restored
+  // map inside a map? spread operator?
+  // access the list by using cdata[idx][1] -- cdata[idx][0] is subcat name
+  // TODO: verify if we need to keep/remove the as=nav stuff
   _renderWithSubcategories() {
     console.log(this.props.cdata);
     const cdata = this.props.cdata;
@@ -35,7 +39,9 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
           id={this.props.displayName}
           as={Nav.Link}
         >
-          {this.props.displayName}
+          {this.props.displayName}{" "}
+          <span className="RenderFilterCategory-activecount"></span>
+          <span className="RenderFilterCategory-arrow"></span>
         </Dropdown.Toggle>
         <Dropdown.Menu>{mapped}</Dropdown.Menu>
       </Dropdown>
@@ -53,7 +59,9 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
           id={this.props.displayName}
           as={Nav.Link}
         >
-          {this.props.displayName}
+          {this.props.displayName}{" "}
+          <span className="RenderFilterCategory-activecount"></span>
+          <span className="RenderFilterCategory-arrow"></span>
         </Dropdown.Toggle>
         <Dropdown.Menu>{mapped}</Dropdown.Menu>
       </Dropdown>

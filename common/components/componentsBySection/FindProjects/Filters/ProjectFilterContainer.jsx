@@ -74,9 +74,15 @@ class ProjectFilterContainer extends React.Component<Props, State> {
 
   render(): React$Node {
     //should render a number of Flux view child components
-
+    // TODO: verify if we need to keep this as a nav
+    // TODO: Test instead of render null before ready, render a LoadingFrame?
     return (
-      <Nav justify variant="pills" className="ProjectFilterContainer-root" expand={"lg"}>
+      <Nav
+        justify
+        variant="pills"
+        className="ProjectFilterContainer-root"
+        expand={"lg"}
+      >
         {this.state.isReady ? this._displayFilters() : null}
       </Nav>
     );
@@ -94,6 +100,8 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     // console.log(
     //   ProjectSearchStore.getSortedCategoryTags("Organization Type").toArray()
     // );
+
+    //TODO: layout, scroll arrows, etc -- see https://codepen.io/pbreen/pen/oNZpKqp for prototype
     return (
       <div className="ProjectFilterContainer-scrollcontainer">
         <RenderFilterCategory

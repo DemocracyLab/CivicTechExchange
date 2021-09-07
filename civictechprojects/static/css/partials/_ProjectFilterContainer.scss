@@ -1,4 +1,4 @@
-// TODO: Remove ProjectFilterDataContainer- classes, as that component name is deprecated. 
+// TODO: Remove ProjectFilterDataContainer- classes, as that component name is deprecated.
 // TODO: A great deal of this file needs to be removed...
 
 .ProjectFilterContainer-root {
@@ -142,8 +142,11 @@
   }
 }
 
-// NEW STUFF HERE 
+// NEW STUFF HERE
 .ProjectFilterContainer-scrollcontainer {
   display: flex;
-  overflow: hidden;
+  // will need to work out the container's overflow being hidden but the nav menus not
 }
+
+// .RenderFilterCategory-activecount will be the orange bg circle with number indicating active filters in that category
+// .RenderFilterCategory-arrow is for the downward facing chevron indicating dropdown; may not need the class
