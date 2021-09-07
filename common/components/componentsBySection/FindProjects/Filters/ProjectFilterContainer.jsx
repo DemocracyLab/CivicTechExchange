@@ -78,10 +78,9 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     // TODO: Test instead of render null before ready, render a LoadingFrame?
     return (
       <Nav
-        justify
-        variant="pills"
-        className="ProjectFilterContainer-root"
+        variant="pills outline-secondary"
         expand={"lg"}
+        className="ProjectFilterContainer-root"
       >
         {this.state.isReady ? this._displayFilters() : null}
       </Nav>
@@ -103,7 +102,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
 
     //TODO: layout, scroll arrows, etc -- see https://codepen.io/pbreen/pen/oNZpKqp for prototype
     return (
-      <div className="ProjectFilterContainer-scrollcontainer">
+      <React.Fragment>
         <RenderFilterCategory
           cdata={this.state.rolesNeeded}
           displayName={"Roles Needed"}
@@ -130,7 +129,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
           displayName={"Organization Type"}
           hasSubcategories={false}
         />
-      </div>
+      </React.Fragment>
     );
   }
 

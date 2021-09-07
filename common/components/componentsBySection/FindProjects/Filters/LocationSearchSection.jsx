@@ -16,6 +16,7 @@ import {
   DefaultCountry,
 } from "../../../constants/Countries.js";
 import GlyphStyles from "../../../utils/glyphs.js";
+import Dropdown from "react-bootstrap/Dropdown";
 
 type State = {|
   countryCode: string,
@@ -26,16 +27,6 @@ type State = {|
   searchRadius: number,
   locationExpanded: boolean,
 |};
-
-//define CSS classes as consts for toggling, same as RenderFilterCategory.jsx
-const classCategoryExpanded =
-  "ProjectFilterContainer-category ProjectFilterContainer-expanded";
-const classCategoryCollapsed =
-  "ProjectFilterContainer-category ProjectFilterContainer-collapsed";
-const classSubcategoryExpanded =
-  "ProjectFilterContainer-subcategory ProjectFilterContainer-expanded";
-const classSubcategoryCollapsed =
-  "ProjectFilterContainer-subcategory ProjectFilterContainer-collapsed";
 
 const DefaultSearchRadius: number = 50;
 
@@ -77,13 +68,6 @@ class LocationSearchSection extends React.Component<{||}, State> {
     }
 
     return state;
-  }
-
-  //handle expand/collapse
-  _handleExpand(event) {
-    this.setState(prevState => ({
-      locationExpanded: !prevState.locationExpanded,
-    }));
   }
 
   updateLocationState(
@@ -176,33 +160,19 @@ class LocationSearchSection extends React.Component<{||}, State> {
 
   render() {
     return (
-      <div className="LocationSearchContainer">
-        <div
-          className={
-            this.state.locationExpanded
-              ? classCategoryExpanded
-              : classCategoryCollapsed
-          }
+      <Dropdown>
+        <Dropdown.Toggle
+          variant="outline-secondary"
+          id="LocationSearchSection"
         >
-          <div
-            className="ProjectFilterContainer-category-header"
-            id="location-search-section"
-            onClick={e => this._handleExpand(e)}
-          >
-            <span>Location</span>
-            <span className="ProjectFilterContainer-showtext">
-              {this.state.locationExpanded ? (
-                <i className={GlyphStyles.ChevronUp}></i>
-              ) : (
-                <i className={GlyphStyles.ChevronDown}></i>
-              )}
-            </span>
-          </div>
-          <div className="ProjectFilterContainer-content LocationSearchContainer-content">
-            {this._renderSelector()}
-          </div>
-        </div>
-      </div>
+          Location
+          <span className="RenderFilterCategory-activecount"></span>
+          <span className="RenderFilterCategory-arrow">
+            <i className={GlyphStyles.ChevronDown}></i>
+          </span>
+        </Dropdown.Toggle>
+        <Dropdown.Menu>{this._renderSelector()}</Dropdown.Menu>
+      </Dropdown>
     );
   }
 }

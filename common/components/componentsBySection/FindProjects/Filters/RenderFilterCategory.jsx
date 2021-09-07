@@ -41,7 +41,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
         >
           {this.props.displayName}{" "}
           <span className="RenderFilterCategory-activecount"></span>
-          <span className="RenderFilterCategory-arrow"></span>
+          <span className="RenderFilterCategory-arrow"><i className={GlyphStyles.ChevronDown}></i></span>
         </Dropdown.Toggle>
         <Dropdown.Menu>{mapped}</Dropdown.Menu>
       </Dropdown>
@@ -61,7 +61,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
         >
           {this.props.displayName}{" "}
           <span className="RenderFilterCategory-activecount"></span>
-          <span className="RenderFilterCategory-arrow"></span>
+          <span className="RenderFilterCategory-arrow"><i className={GlyphStyles.ChevronDown}></i></span>
         </Dropdown.Toggle>
         <Dropdown.Menu>{mapped}</Dropdown.Menu>
       </Dropdown>
