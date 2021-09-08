@@ -7,7 +7,7 @@ import GithubSVG from "../../svg/github.svg";
 import GoogleSVG from "../../svg/google.svg";
 import LinkedInSVG from "../../svg/linkedin.svg";
 import type { Dictionary } from "../../types/Generics.jsx";
-import url from "../../utils/url.js";
+import urlHelper from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import GlyphStyles, { Glyph, GlyphSizes } from "../../utils/glyphs.js";
 import _ from "lodash";
@@ -109,7 +109,7 @@ class SocialMediaSignupSection extends React.Component<Props, State> {
   _renderEmailSignup(): React$Node {
     return (
       <div className="LogInController-socialLink">
-        <a href={url.section(Section.SignUp)} key="email">
+        <a href={urlHelper.section(Section.SignUp)} key="email">
           <span className="LogInController-socialIcon">
             <i className={Glyph(GlyphStyles.EnvelopeSolid, GlyphSizes.X3)} />
           </span>
@@ -129,21 +129,19 @@ class SocialMediaSignupSection extends React.Component<Props, State> {
             "LogInController-socialIcon" +
             (config.iconClass ? " " + config.iconClass : "");
 
-	  const args: Dictionary<string> = {prevPage: this.state.prevPage};
-	  if(this.state.prevPageArgs) {
-	    args["prevPageArgs"] = this.state.prevPageArgs;
-	  }
-	  const url: string =  "/api/login/" + app + urlHelper.argsString(args);
+          const args: Dictionary<string> = { prevPage: this.state.prevPage };
+          if (this.state.prevPageArgs) {
+            args["prevPageArgs"] = this.state.prevPageArgs;
+          }
+          const url: string = "/api/login/" + app + urlHelper.argsString(args);
           return (
             <div className="LogInController-socialLink">
-
-              <a href= {url}>
+              <a href={url}>
                 <span style={{ color: config.iconColor }} className={iconClass}>
                   {config.iconElement}
                 </span>
                 <span>Continue with {config.displayName}</span>
               </a>
-        
             </div>
           );
         })}
