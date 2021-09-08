@@ -129,12 +129,11 @@ class SocialMediaSignupSection extends React.Component<Props, State> {
             "LogInController-socialIcon" +
             (config.iconClass ? " " + config.iconClass : "");
 
-	  var url = "";
-          if (this.state.prevPageArgs) {
-           url = "/api/login/" + app + "?prevPage=" +this.state.prevPage + "&prevPageArgs=" +    this.state.prevPageArgs 
-          } else {
-             url = "/api/login/" + app  + "?prevPage=" + this.state.prevPage
-          }	
+	  const args: Dictionary<string> = {prevPage: this.state.prevPage};
+	  if(this.state.prevPageArgs) {
+	    args["prevPageArgs"] = this.state.prevPageArgs;
+	  }
+	  const url: string =  "/api/login/" + app + urlHelper.argsString(args);
           return (
             <div className="LogInController-socialLink">
 
