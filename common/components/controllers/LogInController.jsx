@@ -136,7 +136,7 @@ class LogInController extends React.Component<Props, State> {
               </Button>
             </div>
             <div className="LogInController-socialSection">
-              <SocialMediaSignupSection />
+              <SocialMediaSignupSection  prevPage={this.state.prevPage} prevPageArgs={this.state.prevPageArgs}/>
             </div>
           </div>
         </Form>

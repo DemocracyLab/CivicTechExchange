@@ -21,6 +21,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
@@ -62,6 +63,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 # Customize allauth.socialaccount
+ACCOUNT_ADAPTER = 'oauth2.adapter.MyAccountAdapter'
 SOCIALACCOUNT_ADAPTER = 'oauth2.adapter.SocialAccountAdapter'
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
@@ -99,6 +101,7 @@ AUTHENTICATION_BACKENDS = (
 
 MIDDLEWARE = [
     'common.helpers.malicious_requests.MaliciousRequestsMiddleware',
+    'common.helpers.redirectors.RedirectMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -339,6 +342,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'PRIVACY_POLICY_URL': {
         'error': True,
         'message': 'Privacy Policy url required'
+    },
+    'VIDEO_PAGES': {
+        'error': False,
+        'message': 'VIDEO_PAGES needed to show /videos/'
     }
 }
 
@@ -442,7 +449,7 @@ PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
 
 # Video Link
-VIDEO_PAGES = os.environ.get('VIDEO_PAGES', '')
+VIDEO_PAGES = os.environ.get('VIDEO_PAGES', None)
 if VIDEO_PAGES is not None:
     VIDEO_PAGES = ast.literal_eval(VIDEO_PAGES)
 
