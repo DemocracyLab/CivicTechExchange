@@ -1,9 +1,11 @@
 from django.conf import settings
+from urllib.parse import urljoin, urlparse
 from civictechprojects.models import Event
 from civictechprojects.caching.cache import ProjectCache, GroupCache
 from common.helpers.constants import FrontEndSection
+from common.helpers.front_end import section_url
+from common.helpers.redirectors import RedirectTo
 from common.helpers.request_helpers import url_params
-from democracylab.models import get_request_contributor
 
 
 def about_project_preload(context, request):
@@ -32,6 +34,8 @@ def about_event_preload(context, request):
         context['description'] = event_json['event_short_description']
         if 'event_thumbnail' in event_json:
             context['og_image'] = event_json['event_thumbnail']['publicUrl']
+        slug_or_id = event.event_slug or event.id
+        context['canonical_url'] = section_url(FrontEndSection.AboutEvent,  {'id': slug_or_id})
     else:
         print('Failed to preload event info, no cache entry found: ' + event_id)
     return context
@@ -52,6 +56,13 @@ def about_group_preload(context, request):
     return context
 
 
+def companies_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'DemocracyLab | Corporate Engagement'
+    context['description'] = 'Do well by doing good! Engage employees at custom events to build culture and spark innovation. Differentiate your brand by sponsoring our public hackathons.'
+    return context
+
+
 def about_us_preload(context, request):
     context = default_preload(context, request)
     context['title'] = 'DemocracyLab | About'
@@ -62,7 +73,7 @@ def about_us_preload(context, request):
 def donate_preload(context, request):
     context = default_preload(context, request)
     context['title'] = 'Donate | DemocracyLab'
-    context['description'] = 'We too are a nonprofit, and your tax-deductible gift helps us connect good people with good causes.'
+    context['description'] = 'Your donation empowers people who use technology for public good by connecting tech-for-good projects to skilled volunteers and socially responsible companies.'
     return context
 
 
@@ -87,12 +98,34 @@ def my_events_preload(context, request):
     return context
 
 
+def videos_preload(context, request):
+    context = default_preload(context, request)
+    if settings.VIDEO_PAGES:
+        query_args = url_params(request)
+        video_id = query_args['id']
+        if video_id in settings.VIDEO_PAGES:
+            video_json = settings.VIDEO_PAGES[video_id]
+            context['YOUTUBE_VIDEO_URL'] = video_json['video_url']
+            if 'video_description' in video_json:
+                context['description'] = video_json['video_description']
+            if 'video_thumbnail' in video_json:
+                context['og_image'] = video_json['video_thumbnail']
+        else:
+            print('Redirecting invalid video id: ' + video_id)
+            raise RedirectTo(section_url(FrontEndSection.VideoOverview, {'id': 'overview'}))
+
+    return context
+
+
 def default_preload(context, request):
     context['title'] = 'DemocracyLab'
     context['description'] = 'Everyone has something to contribute to the technical solutions society needs. ' \
                              'Volunteer today to connect with other professionals volunteering their time.'
     context['og_type'] = 'website'
     context['og_image'] = settings.STATIC_CDN_URL + '/img/Democracylab_is_a_global_volunteer_tech_for_good_nonprofit.png'
+    url = settings.PROTOCOL_DOMAIN + request.get_full_path()
+    # Remove parameters for canonical urls by default
+    context['canonical_url'] = urljoin(url, urlparse(url).path)
     return context
 
 
@@ -104,7 +137,9 @@ preload_urls = [
     {'section': FrontEndSection.CreateEvent.value, 'handler': create_event_preload},
     {'section': FrontEndSection.MyEvents.value, 'handler': my_events_preload},
     {'section': FrontEndSection.Donate.value, 'handler': donate_preload},
-    {'section': FrontEndSection.AboutGroup.value, 'handler': about_group_preload}
+    {'section': FrontEndSection.AboutGroup.value, 'handler': about_group_preload},
+    {'section': FrontEndSection.Companies.value, 'handler': companies_preload},
+    {'section': FrontEndSection.VideoOverview.value, 'handler': videos_preload}
 ]
 
 

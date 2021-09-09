@@ -117,7 +117,7 @@ class Project(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         links = ProjectLink.objects.filter(link_project=self.id)
-        positions = ProjectPosition.objects.filter(position_project=self.id)
+        positions = ProjectPosition.objects.filter(position_project=self.id).order_by('order_number')
         volunteers = VolunteerRelation.objects.filter(project=self.id)
         group_relationships = ProjectRelationship.objects.filter(relationship_project=self).exclude(relationship_group=None)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
@@ -333,7 +333,7 @@ class Group(Archived):
             issue_area_counts = count_occurrences(all_issue_area_names)
             return issue_area_counts
         else:
-            return all_issue_area_names
+            return list(set(all_issue_area_names))
 
     def get_group_project_relationships(self, approved_only=True):
         project_relationships = ProjectRelationship.objects.filter(relationship_group=self.id)
@@ -381,6 +381,7 @@ class Event(Archived):
     is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
+    show_headers = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.event_name)
@@ -419,7 +420,8 @@ class Event(Archived):
             'event_short_description': self.event_short_description,
             'event_legacy_organization': Tag.hydrate_to_json(self.id, list(self.event_legacy_organization.all().values())),
             'event_slug': self.event_slug,
-            'is_private': self.is_private
+            'is_private': self.is_private,
+            'show_headers': self.show_headers
         }
 
         if len(thumbnail_files) > 0:
@@ -700,13 +702,17 @@ class ProjectPosition(models.Model):
     position_role = TaggableManager(blank=False, through=TaggedPositionRole)
     position_description = models.CharField(max_length=3000, blank=True)
     description_url = models.CharField(max_length=2083, default='')
+    order_number = models.PositiveIntegerField(default=0)
+    is_hidden = models.BooleanField(default=False)
 
     def to_json(self):
         return {
             'id': self.id,
             'description': self.position_description,
             'descriptionUrl': self.description_url,
-            'roleTag': Tag.hydrate_to_json(self.id, self.position_role.all().values())[0]
+            'roleTag': Tag.hydrate_to_json(self.id, self.position_role.all().values())[0],
+            'orderNumber': self.order_number,
+            'isHidden': self.is_hidden
         }
 
     @staticmethod
@@ -715,6 +721,8 @@ class ProjectPosition(models.Model):
         position.position_project = project
         position.position_description = position_json['description']
         position.description_url = position_json['descriptionUrl']
+        position.order_number = position_json['orderNumber']
+        position.is_hidden = position_json['isHidden']
         position.save()
 
         position.position_role.add(position_json['roleTag']['tag_name'])
@@ -725,6 +733,8 @@ class ProjectPosition(models.Model):
     def update_from_json(position, position_json):
         position.position_description = position_json['description']
         position.description_url = position_json['descriptionUrl']
+        position.order_number = position_json['orderNumber']
+        position.is_hidden = position_json['isHidden']
         new_role = position_json['roleTag']['tag_name']
         Tag.merge_tags_field(position.position_role, new_role)
         position.save()
@@ -770,8 +780,8 @@ class ProjectFile(models.Model):
     file_group = models.ForeignKey(Group, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
     file_event = models.ForeignKey(Event, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
     file_visibility = models.CharField(max_length=50)
-    file_name = models.CharField(max_length=150)
-    file_key = models.CharField(max_length=200)
+    file_name = models.CharField(max_length=300)
+    file_key = models.CharField(max_length=400)
     file_url = models.CharField(max_length=2083)
     file_type = models.CharField(max_length=50)
     file_category = models.CharField(max_length=50)
@@ -937,6 +947,7 @@ class VolunteerRelation(Archived):
     application_text = models.CharField(max_length=10000, blank=True)
     is_approved = models.BooleanField(default=False)
     is_co_owner = models.BooleanField(default=False)
+    is_team_leader = models.BooleanField(default=False)
     projected_end_date = models.DateTimeField(auto_now=False, null=True, blank=True)
     application_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
     approved_date = models.DateTimeField(auto_now=False, null=True, blank=True)
@@ -961,6 +972,7 @@ class VolunteerRelation(Archived):
             'roleTag': Tag.hydrate_to_json(volunteer.id, self.role.all().values())[0],
             'isApproved': self.is_approved,
             'isCoOwner': self.is_co_owner,
+            'isTeamLeader': self.is_team_leader,
             'isUpForRenewal': self.is_up_for_renewal(),
             'projectedEndDate': self.projected_end_date.__str__()
         }
@@ -970,7 +982,7 @@ class VolunteerRelation(Archived):
     def hydrate_project_volunteer_info(self):
         volunteer_json = self.to_json()
         project_json = self.project.hydrate_to_list_json()
-        return merge_dicts(volunteer_json, project_json)
+        return merge_dicts(project_json, volunteer_json)
 
     def is_up_for_renewal(self, now=None):
         now = now or timezone.now()
@@ -998,3 +1010,29 @@ class VolunteerRelation(Archived):
         return VolunteerRelation.objects.filter(project_id=project.id, is_approved=active, deleted=not active)
 
 
+class TaggedCategory(TaggedItemBase):
+    content_object = models.ForeignKey('Testimonial', on_delete=models.CASCADE)
+
+
+class Testimonial(models.Model):
+    name = models.CharField(max_length=100)
+    avatar_url = models.CharField(max_length=2083, blank=True)
+    title = models.CharField(max_length=100, blank=True)
+    text = models.CharField(max_length=2000)
+    source = models.CharField(max_length=2000, blank=True)
+    categories = TaggableManager(blank=True, through=TaggedCategory)
+    categories.remote_field.related_name = 'category_testimonials'
+    priority = models.IntegerField(default=0)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+    def to_json(self):
+        return {
+            'name': self.name,
+            'avatar_url': self.avatar_url,
+            'title': self.title,
+            'text': self.text,
+            'source': self.source
+        }

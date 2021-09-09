@@ -81,6 +81,7 @@ urlpatterns = [
     url(r'', include(v1_urls)),
     url(r'^api/team$', views.team, name='team'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
+    url(r'api/project/(?P<project_id>[0-9]+)/volunteers/$',views.get_project_volunteers,name='get_project_volunteers'),
     url(r'^api/group/(?P<group_id>[0-9]+)/invite$', views.invite_project_to_group, name='invite_project_to_group'),
     url(r'^api/invite/(?P<invite_id>[0-9]+)/approve$', views.accept_group_invitation, name='accept_group_invitation'),
     url(r'^api/invite/(?P<invite_id>[0-9]+)/reject$', views.reject_group_invitation, name='reject_group_invitation'),
@@ -95,7 +96,8 @@ urlpatterns = [
     url(r'^volunteer/demote/(?P<application_id>[0-9]+)/$', views.demote_project_volunteer, name='demote_project_volunteer'),
     url(r'^volunteer/renew/(?P<application_id>[0-9]+)/$', views.renew_volunteering_with_project, name='renew_volunteering_with_project'),
     url(r'^volunteer/conclude/(?P<application_id>[0-9]+)/$', views.conclude_volunteering_with_project, name='conclude_volunteering_with_project'),
-    url(r'^alert/create/$', views.add_alert, name='add_alert')
+    url(r'^alert/create/$', views.add_alert, name='add_alert'),
+    url(r'^api/testimonials/(?P<category>[-\w]*)', views.get_testimonials, name='get_testimonials'),
 
 ]
 

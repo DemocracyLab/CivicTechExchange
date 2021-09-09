@@ -1,9 +1,8 @@
 // @flow
 
 import React from "react";
-import Button from "react-bootstrap/Button";
-
 import type { S3Data } from "./S3Data.jsx";
+import { Glyph, GlyphSizes } from "../../utils/glyphs.js";
 
 export type FileUploadData = {|
   key: string,
@@ -31,7 +30,7 @@ class FileUploadButton extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
-    if (this.props.iconClass && this.props.buttonText) {
+    if (this.props.iconClass) {
       return (
         <div>
           <input
@@ -42,14 +41,13 @@ class FileUploadButton extends React.PureComponent<Props, State> {
             onChange={this._handleFileSelection.bind(this)}
           />
 
-          <label>{this.props.buttonText} &nbsp;</label>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={this._handleClick.bind(this)}
-          >
-            <i className={this.props.iconClass} aria-hidden="true"></i>
-          </Button>
+          <span className="add-link" onClick={this._handleClick.bind(this)}>
+            <i
+              className={Glyph(this.props.iconClass, GlyphSizes.SM)}
+              aria-hidden="true"
+            ></i>
+            Upload a File
+          </span>
         </div>
       );
     } else if (this.props.buttonText) {

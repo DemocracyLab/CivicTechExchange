@@ -1,12 +1,11 @@
 // @flow
 
 import React from "react";
-import Headers from "../common/Headers.jsx";
 import { APIError } from "../utils/api.js";
 import url from "../utils/url.js";
-import prerender from "../utils/prerender.js";
 import GroupAPIUtils, { GroupDetailsAPIData } from "../utils/GroupAPIUtils.js";
 import AboutGroupDisplay from "../common/groups/AboutGroupDisplay.jsx";
+import LoadingFrame from "../chrome/LoadingFrame.jsx";
 
 type State = {|
   group: ?GroupDetailsAPIData,
@@ -37,7 +36,6 @@ class AboutGroupController extends React.PureComponent<{||}, State> {
       {
         group: group,
       },
-      prerender.ready
     );
   }
 
@@ -49,32 +47,28 @@ class AboutGroupController extends React.PureComponent<{||}, State> {
   }
 
   render(): $React$Node {
-    return this.state.group ? this._renderDetails() : this._renderLoadMessage();
+    return this.state.group ? this._renderDetails() : this._renderLoading();
   }
 
   _renderDetails(): React$Node {
     return (
       <React.Fragment>
-        {this._renderGroupHeader(this.state.group)}
         <AboutGroupDisplay group={this.state.group} viewOnly={false} />
       </React.Fragment>
     );
   }
 
-  _renderGroupHeader(group: GroupDetailsAPIData): React$Node {
-    const title: string = group.group_name + " | DemocracyLab";
-    const description: string = group.group_short_description;
-
-    return (
-      <Headers
-        title={title}
-        description={description}
-        thumbnailUrl={group.group_thumbnail && group.group_thumbnail.publicUrl}
-      />
-    );
+  _renderLoading(): React$Node {
+    return this.state.statusCode
+      ? this_.renderLoadErrorMessage()
+      : this._renderLoadingSpinner();
   }
 
-  _renderLoadMessage(): React$Node {
+  _renderLoadingSpinner(): React$Node {
+    return <LoadingFrame height="90vh" />;
+  }
+
+  _renderLoadErrorMessage(): React$Node {
     return (
       <React.Fragment>
         <div>{this.state.loadStatusMsg}</div>

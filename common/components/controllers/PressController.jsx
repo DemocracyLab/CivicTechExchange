@@ -5,7 +5,6 @@ import React from "react";
 import Headers from "../common/Headers.jsx";
 import cdn from "../utils/cdn.js";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
-import prerender from "../utils/prerender.js";
 
 //get press links
 const pressLinks = JSON.parse(_.unescape(window.PRESS_LINKS));
@@ -33,10 +32,6 @@ class PressController extends React.PureComponent<{||}, State> {
     this.state = {
       stats: null,
     };
-  }
-
-  componentDidMount() {
-    prerender.ready();
   }
 
   _renderHeader(): React$Node {

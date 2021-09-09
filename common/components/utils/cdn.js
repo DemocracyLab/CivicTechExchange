@@ -22,6 +22,10 @@ class cdn {
       backgroundImage: `url(${pathAndFile})`,
     };
   }
+
+  static document(fileName: string): string {
+    return window.STATIC_CDN_URL + "/documents/" + fileName;
+  }
 }
 
 export default cdn;

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Project, Group, Event, ProjectRelationship, UserAlert, VolunteerRelation, ProjectCommit, \
-    NameRecord, ProjectFile
+    NameRecord, ProjectFile, Testimonial, ProjectLink
 
 project_text_fields = ['project_name', 'project_description', 'project_description_solution', 'project_description_actions', 'project_short_description', 'project_location', 'project_country', 'project_state', 'project_city', 'project_url']
 project_filter_fields = ('project_date_created', 'project_date_modified', 'is_searchable', 'is_created')
@@ -9,6 +9,11 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display =  tuple(project_text_fields) + ('project_creator',) + project_filter_fields
     search_fields = project_text_fields + ['project_creator__email']
     list_filter = project_filter_fields
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if change:
+            obj.recache(recache_linked=True)
+        
 
 project_relationship_filter_fields = ('project_initiated', 'is_approved')
 class ProjectRelationshipAdmin(admin.ModelAdmin):
@@ -22,20 +27,31 @@ class GroupAdmin(admin.ModelAdmin):
     list_display = tuple(group_text_fields) + ('group_creator',) + group_filter_fields
     search_fields = group_text_fields + ['group_creator__email']
     list_filter = group_filter_fields
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if change:
+            obj.recache()
+            obj.update_linked_items()
 
 event_text_fields = ['event_name', 'event_agenda', 'event_description','event_location', 'event_rsvp_url', 'event_live_id', 'event_short_description']
-event_filter_fields = ('event_date_created', 'event_date_end', 'event_date_modified', 'event_date_start', 'is_searchable', 'is_created')
+event_filter_fields = ('event_date_created', 'event_date_end', 'event_date_modified', 'event_date_start', 'is_searchable', 'is_created', 'show_headers')
 class EventAdmin(admin.ModelAdmin):
     list_display = tuple(event_text_fields) + ('event_creator',) + event_filter_fields
     search_fields = event_text_fields + ['event_creator__email']
     list_filter = event_filter_fields
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if change:
+            obj.recache()
+            obj.update_linked_items()
+        
 
 user_alert_text_fields = ['email', 'filters', 'country', 'postal_code']
 class UserAlertAdmin(admin.ModelAdmin):
     list_display = tuple(user_alert_text_fields)
     search_fields = user_alert_text_fields
 
-volunteer_relation_filter_fields = ('is_approved', 'is_co_owner', 'projected_end_date', 'application_date', 'approved_date', 'last_reminder_date', 'reminder_count', 're_enrolled_last_date', 're_enroll_last_reminder_date', 're_enroll_reminder_count')
+volunteer_relation_filter_fields = ('is_approved', 'is_co_owner', 'is_team_leader', 'projected_end_date', 'application_date', 'approved_date', 'last_reminder_date', 'reminder_count', 're_enrolled_last_date', 're_enroll_last_reminder_date', 're_enroll_reminder_count')
 class VolunteerRelationAdmin(admin.ModelAdmin):
     list_display = ('volunteer', 'project', 'application_text') + volunteer_relation_filter_fields
     search_fields = ['volunteer__email', 'project__project_name', 'application_text']
@@ -58,6 +74,16 @@ class ProjectFileAdmin(admin.ModelAdmin):
     search_fields = ['file_user__email', 'file_project__project_name', 'file_group__group_name', 'file_event__event_name', 'file_key']
     list_filter = ('file_category', 'file_type',)
 
+testimonial_text_fields = ['name', 'title', 'priority', 'source', 'text', 'avatar_url']
+class TestimonialAdmin(admin.ModelAdmin):
+    list_display = tuple(testimonial_text_fields)
+    search_fields = testimonial_text_fields
+
+class ProjectLinkAdmin(admin.ModelAdmin):
+    list_display = ('link_name', 'link_url', 'link_user', 'link_project', 'link_group', 'link_event', 'link_visibility',)
+    search_fields = ['link_project__project_name', 'link_name']
+    list_filter = ('link_visibility',)
+
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectRelationship, ProjectRelationshipAdmin)
 admin.site.register(Group, GroupAdmin)
@@ -67,3 +93,5 @@ admin.site.register(VolunteerRelation, VolunteerRelationAdmin)
 admin.site.register(ProjectCommit, ProjectCommitAdmin)
 admin.site.register(NameRecord, NameRecordAdmin)
 admin.site.register(ProjectFile, ProjectFileAdmin)
+admin.site.register(Testimonial, TestimonialAdmin)
+admin.site.register(ProjectLink, ProjectLinkAdmin)

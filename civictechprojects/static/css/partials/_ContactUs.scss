@@ -1,5 +1,6 @@
 //this file contains both ContactUsController and ContactForm component styles
 .contact-us-root {
+  margin-top: 1rem;
   margin-bottom: 4rem;
 }
 
@@ -18,4 +19,11 @@
 
 .ContactForm-submit-btn {
   margin-top: 0.5rem;
+}
+.ContactForm-list {
+  list-style-type: none;
+  padding-left: 15px;
+  input {
+    display: inline-block;
+  }
 }

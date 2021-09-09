@@ -10,11 +10,10 @@ import {
 import type { MyGroupData } from "../stores/MyGroupsStore.js";
 import type { GroupTileAPIData } from "./GroupAPIUtils.js";
 import type { EventTileAPIData } from "./EventAPIUtils.js";
+import type { Dictionary } from "../types/Generics.jsx";
 import _ from "lodash";
 
-export type APIResponse = {|
-  +status: number,
-|};
+export type APIResponse = Response;
 
 export type APIError = {|
   +errorCode: number,
@@ -85,6 +84,7 @@ export type VolunteerDetailsAPIData = {|
   +roleTag: TagDefinition,
   +isApproved: boolean,
   +isCoOwner: boolean,
+  +isTeamLeader: boolean,
   +isUpForRenewal: boolean,
 |};
 
@@ -123,6 +123,14 @@ export type ProjectDetailsAPIData = {|
 export type TeamAPIData = {|
   +board_of_directors: string,
   +project: ProjectDetailsAPIData,
+|};
+
+export type Testimonial = {|
+  +name: string,
+  +avatar_url: string,
+  +title: string,
+  +text: string,
+  +source: string,
 |};
 
 class ProjectAPIUtils {
@@ -203,6 +211,33 @@ class ProjectAPIUtils {
           })
       );
   }
+
+  // fetch project volunteers list
+  static fetchProjectVolunteerList(
+    id: number,
+    callback: VolunteerDetailsAPIData => void,
+    errCallback: APIError => void
+  ): void {
+    fetch(new Request("/api/project/" + id + "/volunteers/", { credentials: "include" }))
+      .then(response => {
+        if (!response.ok) {
+          throw Error();
+        }
+        return response.json();
+      })
+      .then(response => {
+        callback(response['project_volunteers']);
+      })
+      .catch(
+        response =>
+          errCallback &&
+          errCallback({
+            errorCode: response.status,
+            errorMessage: JSON.stringify(response),
+          })
+      );
+  }
+  
   // fetch specific category of tags
   static fetchTagsByCategory(
     tagCategory: string,
@@ -259,12 +294,31 @@ class ProjectAPIUtils {
       });
   }
 
+  //fetch DemocracyLab testimonials
+  static fetchTestimonials(
+    category: ?string,
+    callback: ($ReadOnlyArray<Testimonial>) => void
+  ): void {
+    const url: string = "/api/testimonials/" + (category || "");
+    fetch(url)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        callback(data);
+      })
+      .catch(err => {
+        console.log("Error fetching testimonial details. Error: " + err);
+      });
+  }
+
   static post(
     url: string,
     body: {||},
-    successCallback: APIResponse => void,
-    errCallback: APIError => void
-  ) {
+    successCallback: ?(APIResponse) => void,
+    errCallback: ?(APIError) => void,
+    additionalHeaders: ?Dictionary<string>
+  ): Promise<APIResponse> {
     const doError = response =>
       errCallback &&
       errCallback({
@@ -272,23 +326,37 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response),
       });
 
-    fetch(
+    let headers: Dictionary<string> = Object.assign(
+      {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      additionalHeaders
+    );
+
+    let promise: Promise<APIResponse> = fetch(
       new Request(url, {
         method: "POST",
         body: JSON.stringify(body),
         credentials: "include",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
+        headers: headers,
       })
-    )
-      .then(response =>
+    );
+
+    if (successCallback) {
+      promise = promise.then(response =>
         ProjectAPIUtils.isSuccessResponse(response)
-          ? successCallback()
+          ? successCallback(response)
           : doError(response)
-      )
-      .catch(response => doError(response));
+      );
+    }
+
+    if (errCallback) {
+      promise = promise.catch(response => doError(response));
+    }
+
+    return promise;
   }
 
   static isSuccessResponse(response: APIResponse): boolean {

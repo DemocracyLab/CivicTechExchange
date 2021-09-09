@@ -5,4 +5,6 @@ export type PositionInfo = {|
   roleTag: TagDefinition,
   description: ?string,
   descriptionUrl: ?string,
+  orderNumber: number,
+  isHidden: boolean,
 |};

@@ -16,7 +16,8 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, ProjectRelationship
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
+    ProjectRelationship, Testimonial
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from common.caching.cache import Cache
@@ -35,8 +36,11 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
     notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
-from common.helpers.front_end import section_url, get_page_section, get_clean_url
+from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
+from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector
 from django.views.decorators.cache import cache_page
+from rest_framework.decorators import api_view, throttle_classes
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 import requests
 
 
@@ -280,7 +284,9 @@ def get_project(request, project_id):
 
     if project is not None:
         if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
-            return JsonResponse(project.hydrate_to_json(), safe=False)
+            hydrated_project = project.hydrate_to_json()
+            del hydrated_project['project_volunteers']
+            return JsonResponse(hydrated_project, safe=False)
         else:
             return HttpResponseForbidden()
     else:
@@ -327,12 +333,22 @@ def approve_event(request, event_id):
 
 @ensure_csrf_cookie
 @xframe_options_exempt
-def index(request, id=None):
-    page_url = request.get_full_path()
-    clean_url = get_clean_url(page_url)
-    if clean_url != page_url:
-        print('Redirecting {old_url} to {new_url}'.format(old_url=page_url, new_url=clean_url))
-        return redirect(clean_url)
+@api_view()
+@throttle_classes([AnonRateThrottle, UserRateThrottle])
+def index(request, id='Unused but needed for routing purposes; do not remove!'):
+    page = get_page_section(request.get_full_path())
+    # TODO: Add to redirectors.py
+    # Redirect to AddUserDetails page if First/Last name hasn't been entered yet
+    if page not in [FrontEndSection.AddUserDetails.value, FrontEndSection.SignUp.value] \
+            and request.user.is_authenticated and \
+            (not request.user.first_name or not request.user.last_name):
+        from allauth.socialaccount.models import SocialAccount
+        account = SocialAccount.objects.filter(user=request.user).first()
+        return redirect(section_url(FrontEndSection.AddUserDetails, {'provider': account.provider}))
+
+    redirect_result = redirect_by([InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector], request.get_full_path())
+    if redirect_result is not None:
+        return redirect(redirect_result)
 
     template = loader.get_template('new_index.html')
     context = {
@@ -352,14 +368,14 @@ def index(request, id=None):
         'BLOG_URL': settings.BLOG_URL,
         'EVENT_URL': settings.EVENT_URL,
         'PRIVACY_POLICY_URL': settings.PRIVACY_POLICY_URL,
-        'DONATE_PAGE_BLURB': settings.DONATE_PAGE_BLURB
+        'DONATE_PAGE_BLURB': settings.DONATE_PAGE_BLURB,
+        'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
                                                           {'HOTJAR_APPLICATION_ID': settings.HOTJAR_APPLICATION_ID})
 
     GOOGLE_CONVERSION_ID = None
-    page = get_page_section(request.get_full_path())
     context = context_preload(page, request, context)
     if page and settings.GOOGLE_CONVERSION_IDS and page in settings.GOOGLE_CONVERSION_IDS:
         GOOGLE_CONVERSION_ID = settings.GOOGLE_CONVERSION_IDS[page]
@@ -376,15 +392,15 @@ def index(request, id=None):
         context['googleTagsHeadScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_head.txt', google_tag_context)
         context['googleTagsBodyScript'] = loader.render_to_string('scripts/google_tag_manager_snippet_body.txt', google_tag_context)
 
-    if settings.HEAP_ANALYTICS_ID:
-        heap_tag_context = {'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID}
-        context['headAnalyticsHeadScript'] = loader.render_to_string('scripts/heap_analytics_snippet_head.txt', heap_tag_context)
-
     if hasattr(settings, 'SOCIAL_APPS_VISIBILITY'):
         context['SOCIAL_APPS_VISIBILITY'] = json.dumps(settings.SOCIAL_APPS_VISIBILITY)
 
     if hasattr(settings, 'HERE_CONFIG'):
         context['HERE_CONFIG'] = settings.HERE_CONFIG
+
+    if hasattr(settings, 'GHOST_URL'):
+        context['GHOST_URL'] = settings.GHOST_URL
+        context['GHOST_CONTENT_API_KEY'] = settings.GHOST_CONTENT_API_KEY
 
     if request.user.is_authenticated:
         contributor = Contributor.objects.get(id=request.user.id)
@@ -765,6 +781,20 @@ def delete_uploaded_file(request, s3_key):
     else:
         # TODO: Log this
         return HttpResponse(status=401)
+
+def get_project_volunteers(request,project_id):
+    project = Project.objects.get(id=project_id)
+    if project is not None:
+        if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
+            data = {
+                'project_id' : project_id,
+                'project_volunteers': project.hydrate_to_json()['project_volunteers']
+            }
+            return JsonResponse(data, safe=False)
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
@@ -1222,13 +1252,14 @@ def contact_democracylab(request):
     )
 
     if r.json()['success']:
-        # Successfuly validated, send email
+        # Successfully validated, send email
         first_name = body['fname']
         last_name = body['lname']
         email_addr = body['emailaddr']
         message = body['message']
-        company_name = body['company_name'] if 'message' in body else None
-        contact_democracylab_email(first_name, last_name, email_addr, message, company_name)
+        company_name = body['company_name'] if 'company_name' in body else None
+        interest_flags = list(filter(lambda key: body[key] and isinstance(body[key], bool), body.keys()))
+        contact_democracylab_email(first_name, last_name, email_addr, message, company_name, interest_flags)
         return HttpResponse(status=200)
 
     # Error while verifying the captcha, do not send the email
@@ -1261,9 +1292,21 @@ def redirect_v1_urls(request):
     page_url = request.get_full_path()
     print(page_url)
     clean_url = get_clean_url(page_url)
-    print('Redirecting v1 url: ' + clean_url)
     section_match = re.findall(r'/index/\?section=(\w+)', clean_url)
     section_name = section_match[0] if len(section_match) > 0 else FrontEndSection.Home
+    deprecated_redirect_url = redirect_from_deprecated_url(section_name)
+    if deprecated_redirect_url:
+        print('Redirecting deprecated url {name}: {url}'.format(name=section_name, url=clean_url))
+        return redirect(deprecated_redirect_url)
+    print('Redirecting v1 url: ' + clean_url)
     section_id_match = re.findall(r'&id=([\w-]+)', clean_url)
     section_id = section_id_match[0] if len(section_id_match) > 0 else ''
     return redirect(section_url(section_name, {'id': section_id}))
+
+
+def get_testimonials(request, category=None):
+    testimonials = Testimonial.objects.filter(active=True)
+    if category:
+        testimonials = testimonials.filter(categories__name__in=[category])
+
+    return JsonResponse(list(map(lambda t: t.to_json(), testimonials.order_by('-priority'))), safe=False)

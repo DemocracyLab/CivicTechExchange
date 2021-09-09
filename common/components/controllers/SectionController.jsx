@@ -21,7 +21,6 @@ import EditProfileController from "./EditProfileController.jsx";
 import AboutUserController from "./AboutUserController.jsx";
 import SignedUpController from "./SignedUpController.jsx";
 import EmailVerifiedController from "./EmailVerifiedController.jsx";
-import PartnerWithUsController from "./PartnerWithUsController.jsx";
 import FlashMessage from "../chrome/FlashMessage.jsx";
 import DonateController from "./DonateController.jsx";
 import ThankYouController from "./ThankYouController.jsx";
@@ -38,6 +37,8 @@ import FindGroupsController from "./FindGroupsController.jsx";
 import FindEventsController from "./FindEventsController.jsx";
 import CoroporateHackathonController from "./CorporateHackathonController.jsx";
 import MyEventsController from "./MyEventsController.jsx";
+import AddSignUpDetails from "./AddSignUpDetails.jsx";
+import VideoController from "./VideoController.jsx";
 
 type State = {|
   section: SectionType,
@@ -100,8 +101,6 @@ class SectionController extends React.Component<{||}, State> {
         return <SignedUpController />;
       case Section.EmailVerified:
         return <EmailVerifiedController />;
-      case Section.PartnerWithUs:
-        return <PartnerWithUsController />;
       case Section.Donate:
         return <DonateController />;
       case Section.ThankYou:
@@ -124,10 +123,14 @@ class SectionController extends React.Component<{||}, State> {
         return <AboutEventController />;
       case Section.LiveEvent:
         return <LiveEventController />;
-      case Section.CorporateEvent:
+      case Section.Companies:
         return <CoroporateHackathonController />;
       case Section.Error:
         return <ErrorController />;
+      case Section.AddUserDetails:
+        return <AddSignUpDetails />;
+      case Section.VideoOverview:
+        return <VideoController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>;
     }

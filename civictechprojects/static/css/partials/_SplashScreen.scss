@@ -21,10 +21,6 @@
   margin: auto 0 0 0;
 }
 
-.SplashScreen-content h1 {
-  font-size: 2rem;
-}
-
 .SplashScreen-section {
   padding: 15px 0;
 }
@@ -36,7 +32,6 @@
   background-color: $color-orange;
   border-radius: 5px;
   padding: 6px 12px;
-  margin-bottom: 10px;
   min-width: 80px;
 }
 
@@ -46,9 +41,12 @@
   background-color: transparent;
   border-radius: 5px;
   padding: 6px 12px;
-  margin: 0px 0px 10px 15px;
   cursor: pointer;
   min-width: 80px;
+}
+
+.SplashScreen-find-projects-btn, .SplashScreen-create-project-btn {
+  margin: 0px 8px 10px 8px;
 }
 
 .SplashScreen-mission {
@@ -60,7 +58,6 @@
 }
 .SplashScreen-mission p {
   margin: 0 auto;
-  font-weight: 500;
 }
 .SplashScreen-opacity-layer {
   background-blend-mode: multiply;

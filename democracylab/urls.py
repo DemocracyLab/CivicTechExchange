@@ -22,12 +22,14 @@ from . import views
 # Set custom error handler
 handler500 = handle500
 
+
 urlpatterns = [
     url(r'^accounts/', include('oauth2.providers.github.urls')),
     url(r'^accounts/', include('oauth2.providers.google.urls')),
     url(r'^accounts/', include('oauth2.providers.linkedin.urls')),
     url(r'^accounts/', include('oauth2.providers.facebook.urls')),
     url(r'^accounts/', include('allauth.urls')),
+    url(r'^api/signup/add/$', views.add_signup_details, name='add_signup_details'),
     url(r'^api/signup/$', views.signup, name='signup'),
     url(r'^api/login/$', views.login_view, name='login_view'),
     url(r'^api/login/(?P<provider>\w+)', views.login_view, name='login_view'),
@@ -52,8 +54,9 @@ urlpatterns = [
         views.send_verification_email_request,
         name="send_verification_email_request"
     ),
-    url(r'^api/user/(?P<user_id>[0-9]+)/$', views.user_details, name='user_details'),
+    url(r'^api/user/edit/(?P<user_id>[0-9]+)/details/$', views.user_edit_details, name='user_edit_details'),
     url(r'^api/user/edit/(?P<user_id>[0-9]+)/$', views.user_edit, name='user_edit'),
+    url(r'^api/user/(?P<user_id>[0-9]+)/$', views.user_details, name='user_details'),
     url(r'', include('civictechprojects.urls')),
     url(r'^platform$', RedirectView.as_view(url='http://connect.democracylab.org/platform/', permanent=False))
 ]
