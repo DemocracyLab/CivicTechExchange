@@ -41,7 +41,7 @@ def login_view(request, provider=None):
             return redirect(section_url(FrontEndSection.LogIn, back_args))
 
     if provider in provider_ids:
-        prev_page = request.GET['prevPage']
+        prev_page = request.GET['prevPage'] if 'prevPage' in request.GET else ''
         prev_page_args_string = None
         if 'prevPageArgs' in request.GET and len(request.GET['prevPageArgs']) > 0:
             prev_page_args_string = request.GET['prevPageArgs'].strip('\'\"').replace('\\', '')
