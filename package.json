@@ -41,6 +41,7 @@
     "react-helmet": "^5.2.0",
     "react-image-crop": "^8.3.0",
     "react-linkify": "^1.0.0-alpha",
+    "react-markdown": "^7.0.1",
     "react-moment": "^0.7.9",
     "react-select": "^2.4.2",
     "react-sortablejs": "^6.0.0",
