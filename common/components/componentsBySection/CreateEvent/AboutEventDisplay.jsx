@@ -1,7 +1,6 @@
 // @flow
 
 import React from "react";
-import Linkify from "react-linkify";
 import ReactMarkdown from "react-markdown";
 import type Moment from "moment";
 import datetime, { DateFormat } from "../../utils/datetime.js";
