@@ -1,38 +1,62 @@
 // @flow
 
-import cx from "../../utils/cx";
-import type { Project } from "../../stores/ProjectSearchStore.js";
+import PlaySVG from "../../svg/play-button.svg";
 import React from "react";
 import Section from "../../../components/enums/Section.js";
-import url from "../../utils/url.js";
 import Moment from "react-moment";
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js";
 import GlyphStyles from "../../utils/glyphs.js";
-import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils, { ProjectData } from "../../utils/ProjectAPIUtils.js";
+import VideoModal from "../../common/video/VideoModal.jsx";
 
-// TODO: Add props
 type Props = {|
-  +project: Project,
-  +textlen: number,
+  project: ProjectData,
+  textlen: number,
+|};
+
+type State = {|
+  showModal: boolean,
+  projectUrl: string,
 |};
 //fontawesome fixed width class
 const glyphFixedWidth = " fa-fw";
 
-class ProjectCard extends React.PureComponent<Props> {
-  // TODO: Remove unused prefix
-  _cx: cx;
-
-  constructor(): void {
+class ProjectCard extends React.PureComponent<Props, State> {
+  constructor(props: Props): void {
     super();
-    this._cx = new cx("ProjectCard-");
+    this.state = {
+      projectUrl: urlHelper.section(Section.AboutProject, {
+        id: props.project.id,
+      }),
+      showModal: false,
+    };
+  }
+
+  onClickShowVideo(event: SyntheticMouseEvent): void {
+    // Stop from navigating to project
+    event.preventDefault();
+    this.setState({ showModal: true });
+  }
+
+  onHideShowVideo(): void {
+    this.setState({ showModal: false });
+    this.forceUpdate();
   }
 
   render(): React$Node {
     return (
       <div className="ProjectCard-root">
+        {this.props.project.video && (
+          <VideoModal
+            showModal={this.state.showModal}
+            onClose={this.onHideShowVideo.bind(this)}
+            videoUrl={this.props.project.video.linkUrl}
+            videoTitle={this.props.project.name}
+          />
+        )}
         <a
-          href={url.section(Section.AboutProject, {
+          href={urlHelper.section(Section.AboutProject, {
             id: this.props.project.id,
           })}
           rel="noopener noreferrer"
@@ -48,14 +72,30 @@ class ProjectCard extends React.PureComponent<Props> {
   }
   _renderLogo(): React$Node {
     return (
-      <div className="ProjectCard-logo">
-        <img
-          src={
-            this.props.project && this.props.project.thumbnail
-              ? this.props.project.thumbnail.publicUrl
-              : "/static/images/projectlogo-default.png"
-          }
-        />
+      <div
+        className="ProjectCard-logo"
+        onClick={this.onClickShowVideo.bind(this)}
+      >
+        {this.props.project.video && this._renderVideoContent()}
+        {this._renderProjectThumbnail()}
+      </div>
+    );
+  }
+  _renderProjectThumbnail(): React$Node {
+    return (
+      <img
+        src={
+          this.props.project && this.props.project.thumbnail
+            ? this.props.project.thumbnail.publicUrl
+            : "/static/images/projectlogo-default.png"
+        }
+      />
+    );
+  }
+  _renderVideoContent(): React$Node {
+    return (
+      <div className="ProjectCard-play-button">
+        <PlaySVG />
       </div>
     );
   }

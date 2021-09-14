@@ -7,6 +7,7 @@ from common.helpers.front_end import section_url
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.adapter import DefaultAccountAdapter
 from django.dispatch import receiver
+from common.helpers.constants import FrontEndSection
 from common.helpers.error_handlers import ReportableError
 from common.helpers.s3 import copy_external_thumbnail_to_s3
 from civictechprojects.models import ProjectFile, FileCategory
@@ -29,11 +30,14 @@ class MissingOAuthFieldError(ReportableError):
 
 class MyAccountAdapter(DefaultAccountAdapter):
     def get_login_redirect_url(self, request):
-        prev_page = request.session['prev_page']
-        prev_page_args = request.session['prev_page_args']
-        del request.session['prev_page']
-        del request.session['prev_page_args']
-        redirect_url = '/' if prev_page.strip('/') == '' else section_url(prev_page, prev_page_args)
+        if 'prev_page' in request.session:
+            prev_page = request.session['prev_page']
+            prev_page_args = request.session['prev_page_args']
+            del request.session['prev_page']
+            del request.session['prev_page_args']
+            redirect_url = '/' if prev_page.strip('/') == '' else section_url(prev_page, prev_page_args)
+        else:
+            redirect_url = section_url(FrontEndSection.Home)
         return redirect_url
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
