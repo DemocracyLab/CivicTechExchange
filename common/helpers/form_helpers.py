@@ -65,7 +65,7 @@ def read_form_field_tags(model, form, field_name):
     :return: True if changes to model tag field were made
     """
     form_tags = _read_form_field(form, field_name)
-    if form_tags:
+    if form_tags is not None:
         if is_json_string(form_tags):
             # Convert full tag data to comma-delimited slugs string
             form_tags_json = json.loads(form_tags)
