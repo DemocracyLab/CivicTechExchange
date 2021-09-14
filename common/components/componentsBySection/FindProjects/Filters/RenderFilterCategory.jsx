@@ -41,7 +41,9 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
         >
           {this.props.displayName}{" "}
           <span className="RenderFilterCategory-activecount"></span>
-          <span className="RenderFilterCategory-arrow"><i className={GlyphStyles.ChevronDown}></i></span>
+          <span className="RenderFilterCategory-arrow">
+            <i className={GlyphStyles.ChevronDown}></i>
+          </span>
         </Dropdown.Toggle>
         <Dropdown.Menu>{mapped}</Dropdown.Menu>
       </Dropdown>
@@ -50,7 +52,24 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   _renderNoSubcategories() {
     const cdata = this.props.cdata;
     const mapped = cdata.map(key => (
-      <Dropdown.Item>{key.display_name}</Dropdown.Item>
+      <Dropdown.Item>
+        <input
+          type="checkbox"
+          id={key}
+          checked={this.props.checkEnabled(key)}
+          onChange={() => this.props.selectOption(key)}
+        ></input>
+        <label htmlFor={key}>
+          <span>{key.display_name}</span>
+          <span>
+            {this.props.checkEnabled(key) ? (
+              <i className={GlyphStyles.Check}></i>
+            ) : (
+              key.num_times
+            )}
+          </span>
+        </label>
+      </Dropdown.Item>
     ));
     return (
       <Dropdown>
@@ -61,7 +80,9 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
         >
           {this.props.displayName}{" "}
           <span className="RenderFilterCategory-activecount"></span>
-          <span className="RenderFilterCategory-arrow"><i className={GlyphStyles.ChevronDown}></i></span>
+          <span className="RenderFilterCategory-arrow">
+            <i className={GlyphStyles.ChevronDown}></i>
+          </span>
         </Dropdown.Toggle>
         <Dropdown.Menu>{mapped}</Dropdown.Menu>
       </Dropdown>

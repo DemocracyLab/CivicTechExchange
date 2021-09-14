@@ -17,6 +17,7 @@ import {
 } from "../../../constants/Countries.js";
 import GlyphStyles from "../../../utils/glyphs.js";
 import Dropdown from "react-bootstrap/Dropdown";
+import Nav from "react-bootstrap/Nav";
 
 type State = {|
   countryCode: string,
@@ -164,6 +165,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
         <Dropdown.Toggle
           variant="outline-secondary"
           id="LocationSearchSection"
+          as={Nav.Link}
         >
           Location
           <span className="RenderFilterCategory-activecount"></span>

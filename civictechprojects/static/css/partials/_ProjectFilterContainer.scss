@@ -7,3 +7,5 @@
 
 // .RenderFilterCategory-activecount will be the orange bg circle with number indicating active filters in that category
 // .RenderFilterCategory-arrow is for the downward facing chevron indicating dropdown; may not need the class
+
+//for mobile (at least) .dropdown-item { white-space: nowrap; } will have to be overridden and allow wrap

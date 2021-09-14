@@ -16,6 +16,7 @@ import metrics from "../../../utils/metrics";
 import _ from "lodash";
 import { List } from "immutable";
 import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
 
 /**
  * @category: Tag category to pull from
@@ -43,6 +44,8 @@ class ProjectFilterContainer extends React.Component<Props, State> {
       selectedTags: {},
       isReady: false,
     };
+    this._selectOption = this._selectOption.bind(this);
+    this._checkEnabled = this._checkEnabled.bind(this);
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -77,13 +80,22 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     // TODO: verify if we need to keep this as a nav
     // TODO: Test instead of render null before ready, render a LoadingFrame?
     return (
-      <Nav
-        variant="pills outline-secondary"
-        expand={"lg"}
-        className="ProjectFilterContainer-root"
+      <Navbar
+        expand="lg"
+        bg="navlight"
+        variant="light"
+        className="ProjectFilterContainer-root nav-pills pills-outline pills-rounded"
       >
-        {this.state.isReady ? this._displayFilters() : null}
-      </Nav>
+        <Navbar.Toggle aria-controls="ProjectFilterContainer-root" />
+        <Navbar.Collapse
+          id="ProjectFilterContainer-root"
+          className="flex-column"
+        >
+            <Nav className="ProjectFilterContainer-nav mr-auto">
+            {this.state.isReady ? this._displayFilters() : null}
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
     );
   }
 
@@ -100,41 +112,54 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     //   ProjectSearchStore.getSortedCategoryTags("Organization Type").toArray()
     // );
 
-    //TODO: layout, scroll arrows, etc -- see https://codepen.io/pbreen/pen/oNZpKqp for prototype
+    //TODO: mobile (OffCanvas possibly?), RFC needs subcat, filter functionality
+    //possible ref: https://bootstrap-menu.com/detail-offcanvas-mobile.html
+    // this is more verbose than it 'needs to be' and we may reduce this to a map later, but it's code readability vs length
     return (
-      <React.Fragment>
+      this.state.isReady ? (<React.Fragment>
         <RenderFilterCategory
           cdata={this.state.rolesNeeded}
           displayName={"Roles Needed"}
           hasSubcategories={true}
+          checkEnabled={this._checkEnabled}
+          selectOption={this._selectOption}
         />
         <RenderFilterCategory
           cdata={this.state.issueAreas}
           displayName={"Issue Areas"}
           hasSubcategories={false}
+          checkEnabled={this._checkEnabled}
+          selectOption={this._selectOption}
         />
         <LocationSearchSection />
         <RenderFilterCategory
           cdata={this.state.techUsed}
           displayName={"Technologies Used"}
           hasSubcategories={true}
+          checkEnabled={this._checkEnabled}
+          selectOption={this._selectOption}
         />
         <RenderFilterCategory
           cdata={this.state.projectStage}
           displayName={"Project Stage"}
           hasSubcategories={false}
+          checkEnabled={this._checkEnabled}
+          selectOption={this._selectOption}
         />
         <RenderFilterCategory
           cdata={this.state.orgType}
           displayName={"Organization Type"}
           hasSubcategories={false}
+          checkEnabled={this._checkEnabled}
+          selectOption={this._selectOption}
         />
-      </React.Fragment>
+      </React.Fragment>) : null
     );
   }
 
   _checkEnabled(tag: TagDefinition): boolean {
-    return !!this.state.selectedTags[tag.tag_name];
+    let selectedTags = this.state.selectedTags;
+    return !!selectedTags[tag.tag_name];
   }
 
   _selectOption(tag: TagDefinition): void {
