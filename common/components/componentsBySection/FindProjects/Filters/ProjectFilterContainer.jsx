@@ -115,6 +115,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     //TODO: mobile (OffCanvas possibly?), RFC needs subcat, filter functionality
     //possible ref: https://bootstrap-menu.com/detail-offcanvas-mobile.html
     // this is more verbose than it 'needs to be' and we may reduce this to a map later, but it's code readability vs length
+    //TODO: IsReady prop isn't working as I want -- these render empty and then refresh full rather than waiting for ready
     return (
       this.state.isReady ? (<React.Fragment>
         <RenderFilterCategory
