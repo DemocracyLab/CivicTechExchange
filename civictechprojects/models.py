@@ -829,10 +829,10 @@ class ProjectFile(models.Model):
         else:
             old_files = list(ProjectFile.objects.filter(file_user=owner.id, file_category=FileCategory.ETC.value)
                              .values())
-
+                             
         for file in added_files:
             ProjectFile.from_json(owner=owner, file_category=FileCategory.ETC, file_json=file).save()
-
+ 
         # Remove files that were deleted
         old_file_ids = set(map(lambda file: file['id'], old_files))
         updated_files = filter(lambda file: 'id' in file, files)
@@ -886,8 +886,12 @@ class ProjectFile(models.Model):
     @staticmethod
     def from_json(owner, file_category, file_json):
         file_name_parts = file_json['fileName'].split('.')
-        file_name = "".join(file_name_parts[:-1])
-        file_type = file_name_parts[-1]
+        file_name = "".join(file_name_parts[0])
+        # Filename without file type
+        if len(file_name_parts) == 1:
+            file_type = ""
+        else:
+            file_type = file_name_parts[-1]
 
         return ProjectFile.create(owner=owner,
                                   file_url=file_json['publicUrl'],
