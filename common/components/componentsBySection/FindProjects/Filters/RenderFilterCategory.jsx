@@ -18,8 +18,8 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     console.log(this.props.cdata);
     const cdata = this.props.cdata;
     const mapped = cdata.map(key => (
-      <React.Fragment>
-        <Dropdown.Item>
+      <React.Fragment key={"Fragment-" + key[0]}>
+        <Dropdown.Item key={key[0]}>
           <h4>{key[0]}</h4>
         </Dropdown.Item>
 
@@ -34,7 +34,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
             <label htmlFor={subkey.tag_name}>
               <span>{subkey.display_name}</span>
               <span>
-                {this.props.checkEnabled(key) ? (
+                {this.props.checkEnabled(subkey) ? (
                   <i className={GlyphStyles.Check}></i>
                 ) : (
                   subkey.num_times
@@ -65,7 +65,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   _renderNoSubcategories() {
     const cdata = this.props.cdata;
     const mapped = cdata.map(key => (
-      <Dropdown.Item>
+      <Dropdown.Item key={key.tag_name}>
         <input
           type="checkbox"
           id={key[0]}
