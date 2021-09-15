@@ -829,10 +829,10 @@ class ProjectFile(models.Model):
         else:
             old_files = list(ProjectFile.objects.filter(file_user=owner.id, file_category=FileCategory.ETC.value)
                              .values())
-                             
+
         for file in added_files:
             ProjectFile.from_json(owner=owner, file_category=FileCategory.ETC, file_json=file).save()
- 
+
         # Remove files that were deleted
         old_file_ids = set(map(lambda file: file['id'], old_files))
         updated_files = filter(lambda file: 'id' in file, files)
