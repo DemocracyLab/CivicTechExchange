@@ -121,7 +121,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
       <LoadingMessage message="Loading projects..." />
     ) : (
       this.state.projects.map((project, index) => (
-        <div className={colClasses}>
+        <div className={colClasses} key={"project-" + project.id}>
           <ProjectCard
             project={project}
             key={index}
