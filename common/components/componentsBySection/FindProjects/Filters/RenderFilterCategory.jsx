@@ -12,25 +12,38 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   }
   //what I need is an item with the key name, a list of subcategories, each item has a second list of filter items
   // will probably need custom  dropdown handler but first get them rendering and get the checkbox function restored
-  // map inside a map? spread operator?
-  // access the list by using cdata[idx][1] -- cdata[idx][0] is subcat name
+  // data structure is a lot of nested arrays, so the render is a bit of a mess
   // TODO: verify if we need to keep/remove the as=nav stuff
   _renderWithSubcategories() {
     console.log(this.props.cdata);
     const cdata = this.props.cdata;
-    const mapped = cdata.map(([key], index) => (
-      <Dropdown.Item>
-        <Dropdown>
-          <Dropdown.Toggle variant="outline-secondary" id={key} as={Nav.Link}>
-            {key}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {cdata[index][1].forEach(el => (
-              <li>{el.display_name}</li>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-      </Dropdown.Item>
+    const mapped = cdata.map(key => (
+      <React.Fragment>
+        <Dropdown.Item>
+          <h4>{key[0]}</h4>
+        </Dropdown.Item>
+
+        {key[1].map(subkey => (
+          <Dropdown.Item key={subkey.tag_name}>
+            <input
+              type="checkbox"
+              id={subkey.tag_name}
+              checked={this.props.checkEnabled(subkey)}
+              onChange={() => this.props.selectOption(subkey)}
+            ></input>
+            <label htmlFor={subkey.tag_name}>
+              <span>{subkey.display_name}</span>
+              <span>
+                {this.props.checkEnabled(key) ? (
+                  <i className={GlyphStyles.Check}></i>
+                ) : (
+                  subkey.num_times
+                )}
+              </span>
+            </label>
+          </Dropdown.Item>
+        ))}
+      </React.Fragment>
     ));
     return (
       <Dropdown as={Nav.Item}>
@@ -55,11 +68,11 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
       <Dropdown.Item>
         <input
           type="checkbox"
-          id={key}
+          id={key[0]}
           checked={this.props.checkEnabled(key)}
           onChange={() => this.props.selectOption(key)}
         ></input>
-        <label htmlFor={key}>
+        <label htmlFor={key[0]}>
           <span>{key.display_name}</span>
           <span>
             {this.props.checkEnabled(key) ? (
