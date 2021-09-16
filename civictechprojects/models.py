@@ -886,8 +886,12 @@ class ProjectFile(models.Model):
     @staticmethod
     def from_json(owner, file_category, file_json):
         file_name_parts = file_json['fileName'].split('.')
-        file_name = "".join(file_name_parts[:-1])
-        file_type = file_name_parts[-1]
+        file_name = "".join(file_name_parts[0])
+        # Filename without file type
+        if len(file_name_parts) == 1:
+            file_type = ""
+        else:
+            file_type = file_name_parts[-1]
 
         return ProjectFile.create(owner=owner,
                                   file_url=file_json['publicUrl'],
