@@ -1,0 +1,36 @@
+from common.helpers.dictionaries import merge_dicts
+
+
+def get_my_projects(contributor):
+    from civictechprojects.models import Project
+    owned_projects = Project.objects.filter(project_creator_id=contributor.id)
+    volunteering_projects = contributor.volunteer_relations.all()
+    response = {
+        'owned_projects': [project.hydrate_to_list_json() for project in owned_projects],
+        'volunteering_projects': volunteering_projects.exists() and list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), volunteering_projects))
+    }
+    return response
+
+
+def get_my_groups(contributor):
+    from civictechprojects.models import Group
+    owned_groups = Group.objects.filter(group_creator_id=contributor.id)
+    response = {'owned_groups': [group.hydrate_to_list_json() for group in owned_groups]}
+    return response
+
+
+def get_my_events(contributor):
+    from civictechprojects.models import Event
+    owned_events = Event.objects.filter(event_creator_id=contributor.id)
+    response = {
+        'owned_events': [event.hydrate_to_list_json() for event in owned_events]
+    }
+    if contributor.is_staff:
+        private_events = Event.objects.filter(is_private=True).exclude(event_creator_id=contributor.id)
+        response['private_events'] = [event.hydrate_to_list_json() for event in private_events]
+    return response
+
+
+def get_user_context(contributor):
+    # TODO: Use cache
+    return merge_dicts(get_my_projects(contributor), get_my_groups(contributor), get_my_events(contributor))
