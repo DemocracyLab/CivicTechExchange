@@ -1,7 +1,6 @@
 // @flow
 
 import React from "react";
-import { Container } from "flux/utils";
 import CurrentUser, { UserContext, MyGroupData } from "../utils/CurrentUser.js";
 import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 import MyGroupsCard from "../componentsBySection/MyGroups/MyGroupsCard.jsx";
@@ -9,7 +8,6 @@ import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
-import Headers from "../common/Headers.jsx";
 import _ from "lodash";
 
 type State = {|
@@ -67,13 +65,8 @@ class MyGroupsController extends React.PureComponent<{||}, State> {
     if (!CurrentUser.isLoggedIn) {
       return <LogInController prevPage={Section.MyGroups} />;
     }
-    // TODO: Move headers to backend
     return (
       <React.Fragment>
-        <Headers
-          title="My Groups | DemocracyLab"
-          description="My Groups page"
-        />
         <div className="MyProjectsController-root">
           <ConfirmationModal
             showModal={this.state.showConfirmDeleteModal}
