@@ -131,7 +131,6 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
   }
 
   render(): React$Node {
-    // TODO: Move header to backend
     return CurrentUser.isLoggedIn() ? (
       <React.Fragment>
         <div className="MyProjectsController-root">

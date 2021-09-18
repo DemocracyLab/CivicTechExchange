@@ -2,17 +2,13 @@
 
 import React from "react";
 import { Container } from "flux/utils";
-import CurrentUser from "../utils/CurrentUser.js";
+import CurrentUser, { UserContext, MyGroupData } from "../utils/CurrentUser.js";
 import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 import MyGroupsCard from "../componentsBySection/MyGroups/MyGroupsCard.jsx";
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
-import MyGroupsStore, {
-  MyGroupData,
-  MyGroupsAPIResponse,
-} from "../stores/MyGroupsStore.js";
 import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
-import Section from "../enums/Section";
+import Section from "../enums/Section.js";
 import Headers from "../common/Headers.jsx";
 import _ from "lodash";
 
@@ -21,23 +17,13 @@ type State = {|
   showConfirmDeleteModal: boolean,
 |};
 
-class MyGroupsController extends React.Component<{||}, State> {
+class MyGroupsController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
+    const userContext: UserContext = CurrentUser.userContext();
     this.state = {
-      ownedGroups: null,
+      ownedGroups: userContext.owned_groups,
       showConfirmDeleteModal: false,
-    };
-  }
-
-  static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [MyGroupsStore];
-  }
-
-  static calculateState(prevState: State): State {
-    const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
-    return {
-      ownedGroups: myGroups && myGroups.owned_groups,
     };
   }
 
@@ -81,7 +67,7 @@ class MyGroupsController extends React.Component<{||}, State> {
     if (!CurrentUser.isLoggedIn) {
       return <LogInController prevPage={Section.MyGroups} />;
     }
-
+    // TODO: Move headers to backend
     return (
       <React.Fragment>
         <Headers
@@ -123,4 +109,4 @@ class MyGroupsController extends React.Component<{||}, State> {
   }
 }
 
-export default Container.create(MyGroupsController);
+export default MyGroupsController;

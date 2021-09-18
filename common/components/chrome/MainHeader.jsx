@@ -9,7 +9,6 @@ import React from "react";
 import Section from "../enums/Section.js";
 import urlHelper from "../utils/url.js";
 import AlertHeader from "./AlertHeader.jsx";
-import MyGroupsStore, { MyGroupsAPIResponse } from "../stores/MyGroupsStore.js";
 import MyEventsStore, { MyEventsAPIResponse } from "../stores/MyEventsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import _ from "lodash";
@@ -30,16 +29,15 @@ type State = {|
 
 class MainHeader extends React.Component<{||}, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [NavigationStore, MyGroupsStore, MyEventsStore];
+    return [NavigationStore, MyEventsStore];
   }
 
   static calculateState(prevState: State): State {
-    const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
     const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
     return {
       showHeader: !urlHelper.argument("embedded"),
       showMyProjects: CurrentUser.hasProjects(),
-      showMyGroups: myGroups && !_.isEmpty(myGroups.owned_groups),
+      showMyGroups: CurrentUser.hasGroups(),
       showMyEvents:
         myEvents &&
         (!_.isEmpty(myEvents.owned_events) || CurrentUser.isStaff()),

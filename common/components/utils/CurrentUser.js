@@ -6,6 +6,7 @@ import type {
   VolunteerUserData,
 } from "./ProjectAPIUtils.js";
 import type { GroupDetailsAPIData } from "./GroupAPIUtils.js";
+import type { FileInfo } from "../common/FileInfo.jsx";
 
 export type MyProjectData = {|
   +project_id: number,
@@ -22,9 +23,23 @@ export type MyProjectData = {|
   +projectedEndDate: ?Date,
 |};
 
+// TODO: Rename isApproved to is_searchable
+export type MyGroupData = {|
+  +group_thumbnail: FileInfo,
+  +group_date_modified: Date,
+  +group_id: number,
+  +group_name: string,
+  +group_creator: number,
+  +project_relationship_id: Number,
+  +relationship_is_approved: boolean,
+  +isApproved: ?boolean,
+  +isCreated: ?boolean,
+|};
+
 export type UserContext = {|
   owned_projects: $ReadOnlyArray<MyProjectData>,
   volunteering_projects: $ReadOnlyArray<MyProjectData>,
+  owned_groups: $ReadOnlyArray<MyGroupData>,
 |};
 
 class CurrentUser {
@@ -121,6 +136,11 @@ class CurrentUser {
       (!_.isEmpty(userContext.owned_projects) ||
         !_.isEmpty(userContext.volunteering_projects))
     );
+  }
+
+  static hasGroups(): boolean {
+    const userContext: UserContext = CurrentUser.userContext();
+    return userContext && !_.isEmpty(userContext.owned_groups);
   }
 }
 

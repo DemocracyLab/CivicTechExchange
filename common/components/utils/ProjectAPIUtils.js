@@ -7,7 +7,7 @@ import {
   LocationInfo,
   getLocationDisplayString,
 } from "../common/location/LocationInfo.js";
-import type { MyGroupData } from "../stores/MyGroupsStore.js";
+import type { MyGroupData } from "./CurrentUser.js";
 import type { GroupTileAPIData } from "./GroupAPIUtils.js";
 import type { EventTileAPIData } from "./EventAPIUtils.js";
 import type { Dictionary } from "../types/Generics.jsx";
