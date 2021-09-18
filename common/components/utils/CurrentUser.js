@@ -4,7 +4,7 @@ import type {
   ProjectDetailsAPIData,
   TagDefinition,
   VolunteerUserData,
-} from "./ProjectAPIUtils";
+} from "./ProjectAPIUtils.js";
 import type { GroupDetailsAPIData } from "./GroupAPIUtils.js";
 
 export type MyProjectData = {|

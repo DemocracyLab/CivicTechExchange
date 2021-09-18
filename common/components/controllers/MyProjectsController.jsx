@@ -12,7 +12,6 @@ import url from "../utils/url.js";
 import Section from "../enums/Section";
 import React from "react";
 import _ from "lodash";
-import Headers from "../common/Headers.jsx";
 import type { UserContext } from "../utils/CurrentUser.js";
 
 type State = {|
@@ -135,10 +134,6 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
     // TODO: Move header to backend
     return CurrentUser.isLoggedIn() ? (
       <React.Fragment>
-        <Headers
-          title="My Projects | DemocracyLab"
-          description="My Projects page"
-        />
         <div className="MyProjectsController-root">
           <ConfirmationModal
             showModal={this.state.showConfirmDeleteModal}
