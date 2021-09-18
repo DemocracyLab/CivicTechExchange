@@ -7,6 +7,7 @@ import type {
 } from "./ProjectAPIUtils.js";
 import type { GroupDetailsAPIData } from "./GroupAPIUtils.js";
 import type { FileInfo } from "../common/FileInfo.jsx";
+import type { EventTileAPIData } from "./EventAPIUtils.js";
 
 export type MyProjectData = {|
   +project_id: number,
@@ -36,10 +37,17 @@ export type MyGroupData = {|
   +isCreated: ?boolean,
 |};
 
+export type MyEventData = {|
+  +event_creator: string,
+  +is_searchable: ?boolean,
+  +is_created: ?boolean,
+|} & EventTileAPIData;
+
 export type UserContext = {|
   owned_projects: $ReadOnlyArray<MyProjectData>,
   volunteering_projects: $ReadOnlyArray<MyProjectData>,
   owned_groups: $ReadOnlyArray<MyGroupData>,
+  owned_events: $ReadOnlyArray<MyEventData>,
 |};
 
 class CurrentUser {
@@ -141,6 +149,14 @@ class CurrentUser {
   static hasGroups(): boolean {
     const userContext: UserContext = CurrentUser.userContext();
     return userContext && !_.isEmpty(userContext.owned_groups);
+  }
+
+  static hasEvents(): boolean {
+    const userContext: UserContext = CurrentUser.userContext();
+    return (
+      CurrentUser.isStaff() ||
+      (userContext && !_.isEmpty(userContext.owned_groups))
+    );
   }
 }
 

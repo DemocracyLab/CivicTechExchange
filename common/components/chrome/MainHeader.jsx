@@ -29,18 +29,15 @@ type State = {|
 
 class MainHeader extends React.Component<{||}, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [NavigationStore, MyEventsStore];
+    return [NavigationStore];
   }
 
   static calculateState(prevState: State): State {
-    const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
     return {
       showHeader: !urlHelper.argument("embedded"),
       showMyProjects: CurrentUser.hasProjects(),
       showMyGroups: CurrentUser.hasGroups(),
-      showMyEvents:
-        myEvents &&
-        (!_.isEmpty(myEvents.owned_events) || CurrentUser.isStaff()),
+      showMyEvents: CurrentUser.hasEvents(),
       loginUrl: urlHelper.logInThenReturn(),
     };
   }

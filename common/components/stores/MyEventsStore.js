@@ -6,14 +6,7 @@ import UniversalDispatcher from "./UniversalDispatcher.js";
 import CurrentUser from "../utils/CurrentUser.js";
 import type { EventTileAPIData } from "../utils/EventAPIUtils.js";
 
-export type MyEventData = {|
-  +event_creator: string,
-  +is_searchable: ?boolean,
-  +is_created: ?boolean,
-|} & EventTileAPIData;
-
 export type MyEventsAPIResponse = {|
-  owned_events: $ReadOnlyArray<MyEventData>,
   private_events: ?$ReadOnlyArray<MyEventData>,
 |};
 

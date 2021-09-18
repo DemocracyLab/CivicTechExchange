@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Container } from "flux/utils";
-import CurrentUser from "../utils/CurrentUser.js";
+import CurrentUser, { UserContext } from "../utils/CurrentUser.js";
 import MyEventsStore, {
   MyEventData,
   MyEventsAPIResponse,
@@ -20,8 +20,9 @@ type State = {|
 class MyEventsController extends React.Component<{||}, State> {
   constructor(): void {
     super();
+    const userContext: UserContext = CurrentUser.userContext();
     this.state = {
-      ownedEvents: null,
+      ownedEvents: userContext.owned_events,
       privateEvents: null,
     };
   }
@@ -33,7 +34,6 @@ class MyEventsController extends React.Component<{||}, State> {
   static calculateState(prevState: State): State {
     const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
     return {
-      ownedEvents: myEvents && myEvents.owned_events,
       privateEvents: myEvents && myEvents.private_events,
     };
   }
@@ -44,7 +44,6 @@ class MyEventsController extends React.Component<{||}, State> {
     }
 
     return (
-      // TODO: Headers
       <React.Fragment>
         <div className="MyEventsController-root container">
           {this.renderEvents("Owned Events", this.state.ownedEvents)}
