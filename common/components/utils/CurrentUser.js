@@ -1,7 +1,31 @@
 // @flow
 import _ from "lodash";
-import type { ProjectDetailsAPIData } from "../utils/ProjectAPIUtils.js";
+import type {
+  ProjectDetailsAPIData,
+  TagDefinition,
+  VolunteerUserData,
+} from "./ProjectAPIUtils";
 import type { GroupDetailsAPIData } from "./GroupAPIUtils.js";
+
+export type MyProjectData = {|
+  +project_id: number,
+  +project_name: string,
+  +project_creator: number,
+  +application_id: ?number,
+  +user: ?VolunteerUserData,
+  +application_text: ?string,
+  +roleTag: ?TagDefinition,
+  +isApproved: ?boolean,
+  +isCreated: ?boolean,
+  +isCoOwner: ?boolean,
+  +isUpForRenewal: ?boolean,
+  +projectedEndDate: ?Date,
+|};
+
+export type UserContext = {|
+  owned_projects: $ReadOnlyArray<MyProjectData>,
+  volunteering_projects: $ReadOnlyArray<MyProjectData>,
+|};
 
 class CurrentUser {
   static userID(): ?number {
@@ -84,6 +108,19 @@ class CurrentUser {
 
   static isVolunteeringUpForRenewal(): boolean {
     return window.DLAB_GLOBAL_CONTEXT.volunteeringUpForRenewal;
+  }
+
+  static userContext(): UserContext {
+    return window.DLAB_GLOBAL_CONTEXT.userContext;
+  }
+
+  static hasProjects(): boolean {
+    const userContext: UserContext = CurrentUser.userContext();
+    return (
+      userContext &&
+      (!_.isEmpty(userContext.owned_projects) ||
+        !_.isEmpty(userContext.volunteering_projects))
+    );
   }
 }
 

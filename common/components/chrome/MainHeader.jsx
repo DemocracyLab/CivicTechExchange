@@ -9,9 +9,6 @@ import React from "react";
 import Section from "../enums/Section.js";
 import urlHelper from "../utils/url.js";
 import AlertHeader from "./AlertHeader.jsx";
-import MyProjectsStore, {
-  MyProjectsAPIResponse,
-} from "../stores/MyProjectsStore.js";
 import MyGroupsStore, { MyGroupsAPIResponse } from "../stores/MyGroupsStore.js";
 import MyEventsStore, { MyEventsAPIResponse } from "../stores/MyEventsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
@@ -33,19 +30,15 @@ type State = {|
 
 class MainHeader extends React.Component<{||}, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [NavigationStore, MyProjectsStore, MyGroupsStore, MyEventsStore];
+    return [NavigationStore, MyGroupsStore, MyEventsStore];
   }
 
   static calculateState(prevState: State): State {
-    const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
     const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
     const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
     return {
       showHeader: !urlHelper.argument("embedded"),
-      showMyProjects:
-        myProjects &&
-        (!_.isEmpty(myProjects.volunteering_projects) ||
-          !_.isEmpty(myProjects.owned_projects)),
+      showMyProjects: CurrentUser.hasProjects(),
       showMyGroups: myGroups && !_.isEmpty(myGroups.owned_groups),
       showMyEvents:
         myEvents &&

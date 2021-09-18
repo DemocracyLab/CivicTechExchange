@@ -40,7 +40,7 @@
           userImgUrl: '{{userImgUrl}}',
           isStaff: '{{isStaff}}' === "True" ? true : false,
           volunteeringUpForRenewal: '{{volunteeringUpForRenewal}}' === "True" ? true : false,
-          userContext: '{{userContext}}'
+          userContext: {{userContext|safe}}
         })
         : {};
 

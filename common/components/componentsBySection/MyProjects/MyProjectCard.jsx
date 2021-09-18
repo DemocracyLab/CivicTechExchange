@@ -4,9 +4,7 @@ import React from "react";
 import Section from "../../enums/Section.js";
 import url from "../../utils/url.js";
 import Button from "react-bootstrap/Button";
-
-import { MyProjectData } from "../../stores/MyProjectsStore.js";
-import CurrentUser from "../../utils/CurrentUser.js";
+import CurrentUser, { MyProjectData } from "../../utils/CurrentUser.js";
 import moment from "moment";
 
 //TODO: Update

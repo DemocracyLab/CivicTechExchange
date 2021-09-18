@@ -406,7 +406,7 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
 
     if request.user.is_authenticated:
         contributor = Contributor.objects.get(id=request.user.id)
-        context['userContext'] = get_user_context(contributor)
+        context['userContext'] = json.dumps(get_user_context(contributor))
         context['userID'] = request.user.id
         context['emailVerified'] = contributor.email_verified
         context['email'] = contributor.email
@@ -420,6 +420,8 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
                                                file_category=FileCategory.THUMBNAIL.value).first()
         if thumbnail:
             context['userImgUrl'] = thumbnail.file_url
+    else:
+        context['userContext'] = '{}'
 
     return HttpResponse(template.render(context, request))
 
