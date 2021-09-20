@@ -447,22 +447,6 @@ def add_alert(request):
         email=body['email'], filters=body['filters'], country=body['country'], postal_code=body['postal_code'])
     return HttpResponse(status=200)
 
-# TODO: Delete endpoints
-def my_projects(request):
-    contributor = get_request_contributor(request)
-    response = {}
-    if contributor is not None:
-        response = get_my_projects(contributor)
-    return JsonResponse(response)
-
-
-def my_groups(request):
-    contributor = get_request_contributor(request)
-    response = {}
-    if contributor is not None:
-        response = get_my_groups(contributor)
-    return JsonResponse(response)
-
 
 def my_events(request):
     contributor = get_request_contributor(request)
