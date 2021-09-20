@@ -1,3 +1,4 @@
+from civictechprojects.caching.cache import UserContextCache
 from common.helpers.dictionaries import merge_dicts
 
 
@@ -31,6 +32,13 @@ def get_my_events(contributor):
     return response
 
 
-def get_user_context(contributor):
-    # TODO: Use cache
+def _get_user_context(contributor):
     return merge_dicts(get_my_projects(contributor), get_my_groups(contributor), get_my_events(contributor))
+
+
+def get_user_context(user):
+    return UserContextCache.get(user) or UserContextCache.refresh(user, _get_user_context(user))
+
+
+def clear_user_context(user):
+    return UserContextCache.clear(user)

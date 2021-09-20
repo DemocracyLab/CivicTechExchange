@@ -120,3 +120,25 @@ class ProjectSearchTagsCacheManager:
 
 
 ProjectSearchTagsCache = ProjectSearchTagsCacheManager()
+
+
+class UserContextCacheManager:
+    _cache_key_prefix = 'user_'
+
+    def get(self, user):
+        return Cache.get(self._get_key(user))
+
+    def refresh(self, user, value):
+        print('Re-caching user context for user:' + str(user.id))
+        Cache.refresh(self._get_key(user), value, 300)
+        return value
+
+    def clear(self, user):
+        print('Clearing user context for user:' + str(user.id))
+        Cache.clear(self._get_key(user))
+
+    def _get_key(self, user):
+        return self._cache_key_prefix + str(user.id)
+
+
+UserContextCache = UserContextCacheManager()
