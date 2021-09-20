@@ -448,14 +448,6 @@ def add_alert(request):
     return HttpResponse(status=200)
 
 
-def my_events(request):
-    contributor = get_request_contributor(request)
-    response = {}
-    if contributor is not None:
-        response = get_my_events(contributor)
-    return JsonResponse(response)
-
-
 def projects_list(request):
     url_parts = request.GET.urlencode()
     query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)

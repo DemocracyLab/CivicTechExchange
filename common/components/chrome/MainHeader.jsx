@@ -9,7 +9,6 @@ import React from "react";
 import Section from "../enums/Section.js";
 import urlHelper from "../utils/url.js";
 import AlertHeader from "./AlertHeader.jsx";
-import MyEventsStore, { MyEventsAPIResponse } from "../stores/MyEventsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import _ from "lodash";
 import Navbar from "react-bootstrap/Navbar";

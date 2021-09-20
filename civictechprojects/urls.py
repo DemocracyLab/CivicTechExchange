@@ -66,7 +66,6 @@ urlpatterns = [
     url(r'^api/events', views.events_list),
     url(r'^api/limited_listings', views.limited_listings),
     url(r'^api/groups', views.groups_list),
-    url(r'^api/my_events', views.my_events),
     url(r'^api/tags/groups', views.group_tags_counts),
     url(r'^api/tags', views.tags),
     url(r'^admin/', admin.site.urls),

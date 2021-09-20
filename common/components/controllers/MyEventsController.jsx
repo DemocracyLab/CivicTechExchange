@@ -1,12 +1,7 @@
 // @flow
 
 import React from "react";
-import { Container } from "flux/utils";
-import CurrentUser, { UserContext } from "../utils/CurrentUser.js";
-import MyEventsStore, {
-  MyEventData,
-  MyEventsAPIResponse,
-} from "../stores/MyEventsStore.js";
+import CurrentUser, { UserContext, MyEventData } from "../utils/CurrentUser.js";
 import EventCardsListings from "../componentsBySection/FindEvents/EventCardsListings.jsx";
 import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
@@ -17,24 +12,13 @@ type State = {|
   privateEvents: ?Array<MyEventData>,
 |};
 
-class MyEventsController extends React.Component<{||}, State> {
+class MyEventsController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
     const userContext: UserContext = CurrentUser.userContext();
     this.state = {
       ownedEvents: userContext.owned_events,
-      privateEvents: null,
-    };
-  }
-
-  static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [MyEventsStore];
-  }
-
-  static calculateState(prevState: State): State {
-    const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
-    return {
-      privateEvents: myEvents && myEvents.private_events,
+      privateEvents: userContext.private_events,
     };
   }
 
@@ -73,4 +57,4 @@ class MyEventsController extends React.Component<{||}, State> {
   }
 }
 
-export default Container.create(MyEventsController);
+export default MyEventsController;
