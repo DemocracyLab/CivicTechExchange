@@ -39,6 +39,7 @@ from civictechprojects.helpers.context_preload import context_preload
 from civictechprojects.helpers.projects.annotations import apply_project_annotations
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
 from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector
+from common.helpers.user_helpers import get_my_projects, get_my_groups, get_my_events, get_user_context
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
@@ -405,6 +406,7 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
 
     if request.user.is_authenticated:
         contributor = Contributor.objects.get(id=request.user.id)
+        context['userContext'] = json.dumps(get_user_context(contributor))
         context['userID'] = request.user.id
         context['emailVerified'] = contributor.email_verified
         context['email'] = contributor.email
@@ -418,6 +420,8 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
                                                file_category=FileCategory.THUMBNAIL.value).first()
         if thumbnail:
             context['userImgUrl'] = thumbnail.file_url
+    else:
+        context['userContext'] = '{}'
 
     return HttpResponse(template.render(context, request))
 
@@ -442,44 +446,6 @@ def add_alert(request):
     UserAlert.create_or_update(
         email=body['email'], filters=body['filters'], country=body['country'], postal_code=body['postal_code'])
     return HttpResponse(status=200)
-
-
-def my_projects(request):
-    contributor = get_request_contributor(request)
-    response = {}
-    if contributor is not None:
-        owned_projects = Project.objects.filter(project_creator_id=contributor.id)
-        volunteering_projects = contributor.volunteer_relations.all()
-        response = {
-            'owned_projects': [project.hydrate_to_list_json() for project in owned_projects],
-            'volunteering_projects': volunteering_projects.exists() and list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), volunteering_projects))
-        }
-    return JsonResponse(response)
-
-
-def my_groups(request):
-    contributor = get_request_contributor(request)
-    response = {}
-    if contributor is not None:
-        owned_groups = Group.objects.filter(group_creator_id=contributor.id)
-        response = {
-            'owned_groups': [group.hydrate_to_list_json() for group in owned_groups],
-        }
-    return JsonResponse(response)
-
-
-def my_events(request):
-    contributor = get_request_contributor(request)
-    response = {}
-    if contributor is not None:
-        owned_events = Event.objects.filter(event_creator_id=contributor.id)
-        response = {
-            'owned_events': [event.hydrate_to_list_json() for event in owned_events]
-        }
-        if contributor.is_staff:
-            private_events = Event.objects.filter(is_private=True).exclude(event_creator_id=contributor.id)
-            response['private_events'] = [event.hydrate_to_list_json() for event in private_events]
-    return JsonResponse(response)
 
 
 def projects_list(request):

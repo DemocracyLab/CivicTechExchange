@@ -8,7 +8,7 @@ import Form from "react-bootstrap/Form";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import ConfirmationModal from "../../common/confirmation/ConfirmationModal.jsx";
 import Selector from "../selection/Selector.jsx";
-import type { MyGroupData } from "../../stores/MyGroupsStore.js";
+import type { MyGroupData } from "../../utils/CurrentUser.js";
 
 type Props = {|
   projectId: number,
