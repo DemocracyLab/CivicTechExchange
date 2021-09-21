@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react";
-import { ProjectData } from "../../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils, { ProjectData } from "../../utils/ProjectAPIUtils.js";
 import CurrentUser, { UserContext } from "../../utils/CurrentUser.js";
 import IconToggle from "../../chrome/IconToggle.jsx";
 import { GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
@@ -24,9 +24,23 @@ class FavoriteToggle extends React.PureComponent<Props, Stage> {
     };
   }
 
+  doToggle(event): void {
+    event.preventDefault();
+    const toggleOperation: string = this.state.favorited
+      ? "unfavorite"
+      : "favorite";
+    ProjectAPIUtils.post(
+      `/api/${toggleOperation}/project/${this.props.project.id}/`,
+      {},
+      response => {
+        this.setState({ favorited: !this.state.favorited });
+      }
+    );
+  }
+
   render(): React$Node {
     return (
-      <div className="favorite-toggle">
+      <div className="favorite-toggle" onClick={this.doToggle.bind(this)}>
         <IconToggle
           toggled={this.state.favorited}
           toggleOnIcon={GlyphStyles.HeartFilled}
