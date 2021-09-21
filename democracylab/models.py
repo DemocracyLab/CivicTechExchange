@@ -7,6 +7,8 @@ from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 import civictechprojects.models
+import requests
+
 
 
 class UserTaggedTechnologies(TaggedItemBase):
