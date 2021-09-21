@@ -911,6 +911,28 @@ class ProjectFile(models.Model):
         }
 
 
+class ProjectFavorite(models.Model):
+    link_project = models.ForeignKey(Project, related_name='favorites', on_delete=models.CASCADE)
+    link_user = models.ForeignKey(Contributor, related_name='favorites', on_delete=models.CASCADE)
+
+    @staticmethod
+    def create(user, project):
+        fav = ProjectFavorite.objects.create(link_project=project, link_user=user)
+        fav.save()
+        return fav
+
+    @staticmethod
+    def get_for_user(user):
+        return ProjectFavorite.objects.filter(link_user=user)
+
+    @staticmethod
+    def get_for_project(project, user=None):
+        if user is not None:
+            return ProjectFavorite.objects.filter(link_project=project, link_user=user)
+        else:
+            return ProjectFavorite.objects.filter(link_project=project)
+
+
 class FileCategory(Enum):
     THUMBNAIL = 'THUMBNAIL'
     THUMBNAIL_ERROR = 'THUMBNAIL_ERROR'

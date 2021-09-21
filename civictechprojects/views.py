@@ -17,7 +17,7 @@ import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
-    ProjectRelationship, Testimonial
+    ProjectRelationship, Testimonial, ProjectFavorite
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from common.caching.cache import Cache
@@ -1201,6 +1201,34 @@ def reject_group_invitation(request, invite_id):
     else:
         messages.add_message(request, messages.ERROR, 'You do not have permission to reject this group invitation.')
         return redirect(about_project_url)
+
+
+@csrf_exempt
+def project_favorite(request, project_id):
+    user = get_request_contributor(request)
+    project = Project.objects.get(id=project_id)
+    existing_fav = ProjectFavorite.get_for_project(project, user)
+    if existing_fav is not None:
+        print("Favoriting project:{project} by user:{user}".format(project=project.id, user=user.id))
+        ProjectFavorite.create(user, project)
+    else:
+        print("Favorite already exists for project:{project}, user:{user}".format(project=project.id, user=user.id))
+        return HttpResponse(status=400)
+    return HttpResponse(status=200)
+
+
+@csrf_exempt
+def project_unfavorite(request, project_id):
+    user = get_request_contributor(request)
+    project = Project.objects.get(id=project_id)
+    existing_fav = ProjectFavorite.get_for_project(project, user)
+    if existing_fav is not None:
+        print("Unfavoriting project:{project} by user:{user}".format(project=project.id, user=user.id))
+        existing_fav.delete()
+    else:
+        print("Can't Unfavorite project:{project} by user:{user}".format(project=project.id, user=user.id))
+        return HttpResponse(status=400)
+    return HttpResponse(status=200)
 
 
 #This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.
