@@ -9,6 +9,7 @@ import urlHelper from "../../utils/url.js";
 import GlyphStyles from "../../utils/glyphs.js";
 import ProjectAPIUtils, { ProjectData } from "../../utils/ProjectAPIUtils.js";
 import VideoModal from "../../common/video/VideoModal.jsx";
+import FavoriteToggle from "./FavoriteToggle.jsx";
 
 type Props = {|
   project: ProjectData,
@@ -137,8 +138,12 @@ class ProjectCard extends React.PureComponent<Props, State> {
   }
   _renderSubInfo(): React$Node {
     //only renders a list item for ones where we have data, otherwise skip
+
     return (
       <div className="ProjectCard-subinfo">
+        <div className="ProjectCard-favorite">
+          <FavoriteToggle project={this.props.project} />
+        </div>
         <ul>
           {this.props.project.location && (
             <li>

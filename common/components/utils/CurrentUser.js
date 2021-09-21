@@ -2,12 +2,14 @@
 import _ from "lodash";
 import type {
   ProjectDetailsAPIData,
+  ProjectData,
   TagDefinition,
   VolunteerUserData,
 } from "./ProjectAPIUtils.js";
 import type { GroupDetailsAPIData } from "./GroupAPIUtils.js";
 import type { FileInfo } from "../common/FileInfo.jsx";
 import type { EventTileAPIData } from "./EventAPIUtils.js";
+import type { Dictionary } from "../types/Generics.jsx";
 
 export type MyProjectData = {|
   +project_id: number,
@@ -48,6 +50,7 @@ export type UserContext = {|
   volunteering_projects: $ReadOnlyArray<MyProjectData>,
   owned_groups: $ReadOnlyArray<MyGroupData>,
   owned_events: $ReadOnlyArray<MyEventData>,
+  favorites: Dictionary<ProjectData>,
 |};
 
 class CurrentUser {
