@@ -1211,6 +1211,7 @@ def project_favorite(request, project_id):
     if existing_fav is not None:
         print("Favoriting project:{project} by user:{user}".format(project=project.id, user=user.id))
         ProjectFavorite.create(user, project)
+        user.purge_cache()
     else:
         print("Favorite already exists for project:{project}, user:{user}".format(project=project.id, user=user.id))
         return HttpResponse(status=400)
@@ -1225,6 +1226,7 @@ def project_unfavorite(request, project_id):
     if existing_fav is not None:
         print("Unfavoriting project:{project} by user:{user}".format(project=project.id, user=user.id))
         existing_fav.delete()
+        user.purge_cache()
     else:
         print("Can't Unfavorite project:{project} by user:{user}".format(project=project.id, user=user.id))
         return HttpResponse(status=400)
