@@ -33,5 +33,11 @@ def save(contributor: object):
     thread.start()
 
 
-def delete():
-    pass
+def delete(contributor: object):
+    req = requests.Request(
+        method="DELETE",
+        url=f'{client.contact_endpoint}/platform_id__c/{contributor.id}'
+    )
+    thread = threading.Thread(target=run, args=(req,))
+    thread.daemon = True
+    thread.start()
