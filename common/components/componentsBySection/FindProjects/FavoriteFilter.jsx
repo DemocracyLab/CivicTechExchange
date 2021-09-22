@@ -6,7 +6,7 @@ import IconToggle from "../../chrome/IconToggle.jsx";
 import { GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
-import metrics from "../../utils/metrics";
+import metrics from "../../utils/metrics.js";
 
 type State = {|
   favoritesOnly: boolean,
@@ -43,14 +43,14 @@ class FavoriteFilter extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="favorite-toggle" onClick={this.doToggle.bind(this)}>
+      <div className="favorite-filter" onClick={this.doToggle.bind(this)}>
+        Favorites
         <IconToggle
           toggled={this.state.favoritesOnly}
           toggleOnIcon={GlyphStyles.HeartFilled}
           toggleOffIcon={GlyphStyles.HeartEmpty}
           size={GlyphSizes.X2}
         />
-        Favorites
       </div>
     );
   }
