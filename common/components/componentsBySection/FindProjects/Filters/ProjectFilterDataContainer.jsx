@@ -2,17 +2,16 @@
 
 import React from "react";
 import { Container } from "flux/utils";
+import { List } from "immutable";
 import type { TagDefinition } from "../../../utils/ProjectAPIUtils.js";
-import LocationAutocomplete from "../../../common/location/LocationAutocomplete.jsx";
-import type { LocationInfo } from "../../../common/location/LocationInfo";
 import LocationSearchSection from "./LocationSearchSection.jsx";
-import ProjectAPIUtils from "../../../utils/ProjectAPIUtils.js";
 import ProjectSearchStore from "../../../stores/ProjectSearchStore.js";
 import ProjectSearchDispatcher from "../../../stores/ProjectSearchDispatcher.js";
 import RenderFilterCategory from "./RenderFilterCategory.jsx";
-import metrics from "../../../utils/metrics";
+import metrics from "../../../utils/metrics.js";
+import FavoriteFilter from "../FavoriteFilter.jsx";
+import CurrentUser from "../../../utils/CurrentUser.js";
 import _ from "lodash";
-import { List } from "immutable";
 
 /**
  * @category: Tag category to pull from
@@ -85,9 +84,12 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
 
   render(): React$Node {
     //should render a number of <RenderFilterCategory> child components
-
+    const showFavorites: boolean =
+      CurrentUser.isLoggedIn() &&
+      !_.isEmpty(CurrentUser.userContext().favorites);
     return (
       <div>
+        {showFavorites && <FavoriteFilter />}
         {this.state.sortedTags ? this._renderFilterCategories() : null}
         <LocationSearchSection />
       </div>

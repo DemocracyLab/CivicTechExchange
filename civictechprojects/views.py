@@ -472,7 +472,7 @@ def projects_list(request):
     project_list = apply_tag_filters(project_list, query_params, 'orgType', projects_by_org_types)
     project_list = apply_tag_filters(project_list, query_params, 'stage', projects_by_stage)
 
-    if 'favorites' in query_params:
+    if 'favoritesOnly' in query_params:
         user = get_request_contributor(request)
         project_list = project_list & ProjectFavorite.get_for_user(user)
 

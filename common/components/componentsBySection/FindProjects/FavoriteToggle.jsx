@@ -10,11 +10,11 @@ type Props = {|
   project: ProjectData,
 |};
 
-type Stage = {|
+type State = {|
   favorited: boolean,
 |};
 
-class FavoriteToggle extends React.PureComponent<Props, Stage> {
+class FavoriteToggle extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     const userContext: UserContext = CurrentUser.userContext();
