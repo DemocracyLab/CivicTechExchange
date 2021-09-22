@@ -34,8 +34,8 @@ def get_my_events(contributor):
 
 def get_user_favorites(contributor):
     from civictechprojects.models import ProjectFavorite
-    favs = ProjectFavorite.get_for_user(contributor)
-    return {fav.link_project.id: fav.link_project.hydrate_to_tile_json() for fav in favs}
+    fav_projects = ProjectFavorite.get_for_user(contributor)
+    return {project.id: project.hydrate_to_tile_json() for project in fav_projects}
 
 
 def _get_user_context(contributor):

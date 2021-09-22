@@ -923,7 +923,7 @@ class ProjectFavorite(models.Model):
 
     @staticmethod
     def get_for_user(user):
-        return ProjectFavorite.objects.filter(link_user=user)
+        return Project.objects.filter(favorites__link_user=user)
 
     @staticmethod
     def get_for_project(project, user=None):
