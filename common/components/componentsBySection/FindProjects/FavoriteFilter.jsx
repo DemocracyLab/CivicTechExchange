@@ -6,6 +6,7 @@ import IconToggle from "../../chrome/IconToggle.jsx";
 import { GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import metrics from "../../utils/metrics";
 
 type State = {|
   favoritesOnly: boolean,
@@ -32,11 +33,12 @@ class FavoriteFilter extends React.Component<{||}, State> {
   }
 
   doToggle(): void {
+    const newFavoritesOnly: boolean = !this.state.favoritesOnly;
     ProjectSearchDispatcher.dispatch({
       type: "SET_FAVORITES_ONLY",
-      favoritesOnly: !this.state.favoritesOnly,
+      favoritesOnly: newFavoritesOnly,
     });
-    // TODO: metrics
+    metrics.logFilterProjectsByFavorite(newFavoritesOnly);
   }
 
   render(): React$Node {
