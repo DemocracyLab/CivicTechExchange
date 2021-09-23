@@ -1,9 +1,32 @@
-
-.ProjectFilterContainer-root {
-  // this is the container component for the entire nav menu
-
+//TODO: refactor CSS to be less absurd, more reusable
+.ProjectFilterContainer-offcanvas.modal .modal-dialog {
+  width: 350px;
+  max-width: 80%;
+  height: 100%;
+  margin: 0;
+  transform: translate(0);
+  transition: transform 0.2s;
 }
 
+.ProjectFilterContainer-offcanvas.modal .modal-dialog .modal-content {
+  height: inherit;
+  border: 0;
+  border-radius: 0;
+}
+.ProjectFilterContainer-offcanvas.modal
+  .modal-dialog
+  .modal-content
+  .modal-body {
+  overflow-y: auto;
+}
+.ProjectFilterContainer-offcanvas.modal.fixed-left .modal-dialog {
+  margin-right: auto;
+  transform: translateX(-100%);
+}
+
+.ProjectFilterContainer-offcanvas.modal.show .modal-dialog {
+  transform: translateX(0);
+}
 
 // .RenderFilterCategory-activecount will be the orange bg circle with number indicating active filters in that category
 // .RenderFilterCategory-arrow is for the downward facing chevron indicating dropdown; may not need the class
