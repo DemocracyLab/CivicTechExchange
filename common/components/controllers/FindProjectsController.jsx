@@ -30,6 +30,7 @@ class FindProjectsController extends React.PureComponent {
       "role",
       "org",
       "stage",
+      "favoritesOnly",
     ]);
     if (!args.sortField) {
       args.sortField = "-project_date_modified";
