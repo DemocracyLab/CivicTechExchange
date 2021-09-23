@@ -104,6 +104,11 @@ class ProjectCard extends React.PureComponent<Props, State> {
   _renderTitleAndIssue(): React$Node {
     return (
       <div className="ProjectCard-title">
+        {CurrentUser.isLoggedIn() && (
+          <div className="ProjectCard-favorite">
+            <FavoriteToggle project={this.props.project} />
+          </div>
+        )}
         <h2>{this.props.project.name}</h2>
         <h4>{this.props.project.issueArea}</h4>
       </div>
@@ -141,11 +146,6 @@ class ProjectCard extends React.PureComponent<Props, State> {
     //only renders a list item for ones where we have data, otherwise skip
     return (
       <div className="ProjectCard-subinfo">
-        {CurrentUser.isLoggedIn() && (
-          <div className="ProjectCard-favorite">
-            <FavoriteToggle project={this.props.project} />
-          </div>
-        )}
         <ul>
           {this.props.project.location && (
             <li>
