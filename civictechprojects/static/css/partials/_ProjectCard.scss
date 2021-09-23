@@ -53,7 +53,6 @@
   margin-right: 0.375rem;
 }
 .ProjectCard-title {
-  position: relative;
   overflow-wrap: break-word; // prevent long project titles from breaking flow
   grid-column: 3 / 5;
   grid-row: 1 / 2;
@@ -101,9 +100,7 @@
 }
 
 .ProjectCard-favorite {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  padding-right: 5px;
-  padding-top: 5px;
+  float: right;
+  padding-top: 4px;
+  padding-right: 4px;
 }
