@@ -27,6 +27,18 @@ class ProjectTagContainer extends React.Component<{||}, State> {
 
   static calculateState(prevState: State): State {
     let pillConfigs: Array<PillConfig> = [];
+
+    if (ProjectSearchStore.getFavoritesOnly()) {
+      pillConfigs.push({
+        label: "Favorites Only",
+        closeAction: () =>
+          ProjectSearchDispatcher.dispatch({
+            type: "SET_FAVORITES_ONLY",
+            favoritesOnly: false,
+          }),
+      });
+    }
+
     pillConfigs = pillConfigs.concat(
       ProjectSearchStore.getTags()
         .toJS()
