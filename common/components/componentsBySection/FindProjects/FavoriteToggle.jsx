@@ -1,10 +1,13 @@
 // @flow
 
 import React from "react";
-import ProjectAPIUtils, { ProjectData } from "../../utils/ProjectAPIUtils.js";
+import { Container } from "flux/utils";
+import { ProjectData } from "../../utils/ProjectAPIUtils.js";
 import CurrentUser, { UserContext } from "../../utils/CurrentUser.js";
 import IconToggle from "../../chrome/IconToggle.jsx";
 import { GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
+import FavoritesStore from "../../stores/FavoritesStore.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 
 type Props = {|
   project: ProjectData,
@@ -14,7 +17,7 @@ type State = {|
   favorited: boolean,
 |};
 
-class FavoriteToggle extends React.PureComponent<Props, State> {
+class FavoriteToggle extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
     const userContext: UserContext = CurrentUser.userContext();
@@ -24,18 +27,25 @@ class FavoriteToggle extends React.PureComponent<Props, State> {
     };
   }
 
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [FavoritesStore];
+  }
+
+  static calculateState(prevState: State, props: Props): State {
+    const state: State = {
+      favorited: FavoritesStore.isFavoriteProject(props.project.id),
+    };
+
+    return state;
+  }
+
   doToggle(event): void {
     event.preventDefault();
-    const toggleOperation: string = this.state.favorited
-      ? "unfavorite"
-      : "favorite";
-    ProjectAPIUtils.post(
-      `/api/${toggleOperation}/project/${this.props.project.id}/`,
-      {},
-      response => {
-        this.setState({ favorited: !this.state.favorited });
-      }
-    );
+    UniversalDispatcher.dispatch({
+      type: "SET_FAVORITE",
+      projectId: this.props.project.id,
+      favorited: !this.state.favorited,
+    });
   }
 
   render(): React$Node {
@@ -52,4 +62,4 @@ class FavoriteToggle extends React.PureComponent<Props, State> {
   }
 }
 
-export default FavoriteToggle;
+export default Container.create(FavoriteToggle, { withProps: true });
