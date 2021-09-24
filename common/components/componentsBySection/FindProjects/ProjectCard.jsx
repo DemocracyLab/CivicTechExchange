@@ -1,6 +1,5 @@
 // @flow
 
-import cx from "../../utils/cx";
 import type { Project } from "../../stores/ProjectSearchStore.js";
 import React from "react";
 import Section from "../../../components/enums/Section.js";
@@ -21,11 +20,11 @@ const glyphFixedWidth = " fa-fw";
 
 class ProjectCard extends React.PureComponent<Props> {
   // TODO: Remove unused prefix
-  _cx: cx;
+  
 
   constructor(): void {
     super();
-    this._cx = new cx("ProjectCard-");
+    
   }
 
   render(): React$Node {
