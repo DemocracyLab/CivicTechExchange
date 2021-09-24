@@ -5,7 +5,7 @@ import { Record } from "immutable";
 import UniversalDispatcher from "./UniversalDispatcher.js";
 import type { Dictionary } from "../types/Generics.jsx";
 import ProjectAPIUtils, { ProjectData } from "../utils/ProjectAPIUtils.js";
-import CurrentUser from "../utils/CurrentUser.js";
+import CurrentUser, { UserContext } from "../utils/CurrentUser.js";
 
 export type FavoritesActionType = {
   type: "SET_FAVORITE" | "SET_FAVORITE_SUCCESS",
@@ -28,7 +28,10 @@ class FavoritesStore extends ReduceStore<State> {
   }
 
   getInitialState(): State {
-    return new State({ projectFavorites: CurrentUser.userContext().favorites });
+    const userContext: UserContext = CurrentUser.userContext();
+    return new State({
+      projectFavorites: (userContext && userContext.favorites) || {},
+    });
   }
 
   reduce(state: State, action: FavoritesActionType): State {
