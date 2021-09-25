@@ -3,7 +3,7 @@ import type { FluxReduceStore } from "flux/utils";
 import { Container } from "flux/utils";
 import React from "react";
 import Select from "react-select";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import ProjectSearchBar from "./ProjectSearchBar.jsx";
 import { SelectOption } from "../../types/SelectOption.jsx";
@@ -58,7 +58,7 @@ class ProjectSearchSort extends React.Component<Props, State> {
   }
 
   _onSubmitSortField(): void {
-    ProjectSearchDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: "SET_SORT",
       sortField: this.state.sortField,
     });

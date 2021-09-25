@@ -3,7 +3,7 @@ import type { FluxReduceStore } from "flux/utils";
 import { List } from "immutable";
 import { Container } from "flux/utils";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import type { LocationRadius } from "../../stores/ProjectSearchStore.js";
 import React from "react";
 import _ from "lodash";
@@ -58,7 +58,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
     );
   }
   _clearFilters(): void {
-    ProjectSearchDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: "CLEAR_FILTERS",
     });
   }

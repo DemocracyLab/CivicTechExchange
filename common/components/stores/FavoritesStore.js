@@ -72,6 +72,15 @@ class FavoritesStore extends ReduceStore<State> {
     });
   }
 
+  noFavorites(): boolean {
+    const projectFavorites: Dictionary<ProjectData> = this.getState()
+      .projectFavorites;
+    return (
+      _.isEmpty(projectFavorites) ||
+      _.every(_.values(projectFavorites), (fav: boolean) => !fav)
+    );
+  }
+
   isFavoriteProject(projectId: string): boolean {
     return !!this.getState().projectFavorites[projectId];
   }

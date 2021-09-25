@@ -5,7 +5,7 @@ import { Container } from "flux/utils";
 import IconToggle from "../../chrome/IconToggle.jsx";
 import { GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import metrics from "../../utils/metrics.js";
 
 type State = {|
@@ -34,7 +34,7 @@ class FavoriteFilter extends React.Component<{||}, State> {
 
   doToggle(): void {
     const newFavoritesOnly: boolean = !this.state.favoritesOnly;
-    ProjectSearchDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: "SET_FAVORITES_ONLY",
       favoritesOnly: newFavoritesOnly,
     });

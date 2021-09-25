@@ -3,7 +3,7 @@
 import type { Tag } from "./TagStore";
 
 import { ReduceStore } from "flux/utils";
-import ProjectSearchDispatcher from "./ProjectSearchDispatcher.js";
+import UniversalDispatcher from "./UniversalDispatcher.js";
 import { List, Record } from "immutable";
 import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 import type {
@@ -82,7 +82,7 @@ export function locationRadiusFromString(str: string): LocationRadius {
 
 export type ProjectSearchActionType =
   | {
-      type: "INIT",
+      type: "INIT_PROJECT_SEARCH",
       searchSettings: SearchSettings,
       findProjectsArgs: FindProjectsArgs,
     }
@@ -162,7 +162,7 @@ class State extends Record(DEFAULT_STATE) {
 
 class ProjectSearchStore extends ReduceStore<State> {
   constructor(): void {
-    super(ProjectSearchDispatcher);
+    super(UniversalDispatcher);
   }
 
   getInitialState(): State {
@@ -171,7 +171,7 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   reduce(state: State, action: ProjectSearchActionType): State {
     switch (action.type) {
-      case "INIT":
+      case "INIT_PROJECT_SEARCH":
         let initialState: State = new State();
         if (action.findProjectsArgs) {
           initialState = this._initializeFilters(
@@ -420,7 +420,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     fetch(new Request(url))
       .then(response => response.json())
       .then(getProjectsResponse =>
-        ProjectSearchDispatcher.dispatch({
+        UniversalDispatcher.dispatch({
           type: "SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
           projectsResponse: getProjectsResponse,
         })

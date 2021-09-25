@@ -10,11 +10,10 @@ import { Container } from "flux/utils";
 import { List } from "immutable";
 import ProjectCard from "./ProjectCard.jsx";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import LoadingMessage from "../../chrome/LoadingMessage.jsx";
 import type { LocationRadius } from "../../stores/ProjectSearchStore.js";
-import ProjectSearchBar from "./ProjectSearchBar.jsx";
-import metrics from "../../utils/metrics.js"
+import metrics from "../../utils/metrics.js";
 
 type Props = {|
   showSearchControls: ?boolean,
@@ -40,8 +39,11 @@ class ProjectCardsContainer extends React.Component<Props, State> {
 
   static calculateState(prevState: State): State {
     const count = ProjectSearchStore.getNumberOfProjects();
-    if ( _.isNumber(count) ) {
-      metrics.logProjectSearchResults(count, ProjectSearchStore.getQueryString())
+    if (_.isNumber(count)) {
+      metrics.logProjectSearchResults(
+        count,
+        ProjectSearchStore.getQueryString()
+      );
     }
     return {
       projects: ProjectSearchStore.getProjects(),
@@ -125,7 +127,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
         : this.state.current_page;
 
     this.setState({ current_page: nextPage }, function() {
-      ProjectSearchDispatcher.dispatch({
+      UniversalDispatcher.dispatch({
         type: "SET_PAGE",
         page: this.state.current_page,
       });

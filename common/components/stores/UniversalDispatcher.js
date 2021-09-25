@@ -8,13 +8,15 @@ import type { OffsetActionType } from "./PageOffsetStore.js";
 import type { LinkListActionType } from "./LinkListStore.js";
 import type { FormFieldsActionType } from "./FormFieldsStore.js";
 import type { FavoritesActionType } from "./FavoritesStore.js";
+import type { ProjectSearchActionType } from "./ProjectSearchStore.js";
 
 type UniversalActionType =
   | NavigationActionType
   | OffsetActionType
   | LinkListActionType
   | FormFieldsActionType
-  | FavoritesActionType;
+  | FavoritesActionType
+  | ProjectSearchActionType;
 
 const UniversalDispatcher: Dispatcher<UniversalActionType> = new Dispatcher();
 
