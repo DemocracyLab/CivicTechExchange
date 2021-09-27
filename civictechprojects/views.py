@@ -885,6 +885,7 @@ def volunteer_with_project(request, project_id):
         application_text=message)
     send_volunteer_application_email(volunteer_relation)
     project.recache()
+    user.purge_cache()
     return HttpResponse(status=200)
 
 
@@ -906,6 +907,7 @@ def renew_volunteering_with_project(request, application_id):
     volunteer_relation.re_enroll_reminder_count = 0
     volunteer_relation.re_enroll_last_reminder_date = None
     volunteer_relation.save()
+    volunteer_relation.volunteer.purge_cache()
 
     notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
@@ -927,8 +929,10 @@ def conclude_volunteering_with_project(request, application_id):
 
     body = json.loads(request.body)
     project = Project.objects.get(id=volunteer_relation.project.id)
+    user = volunteer_relation.volunteer
     volunteer_relation.delete()
     project.recache()
+    user.purge_cache()
 
     notify_project_owners_volunteer_concluded_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
@@ -952,6 +956,7 @@ def accept_project_volunteer(request, application_id):
         volunteer_relation.is_approved = True
         volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
+        volunteer_relation.volunteer.purge_cache()
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.project.recache()
         if request.method == 'GET':
@@ -974,6 +979,7 @@ def promote_project_volunteer(request, application_id):
         volunteer_relation.save()
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.project.recache()
+        volunteer_relation.volunteer.purge_cache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -996,8 +1002,10 @@ def reject_project_volunteer(request, application_id):
                                   template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
         project = Project.objects.get(id=volunteer_relation.project.id)
+        user = volunteer_relation.volunteer
         volunteer_relation.delete()
         project.recache()
+        user.purge_cache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -1021,8 +1029,10 @@ def dismiss_project_volunteer(request, application_id):
                                template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
         project = Project.objects.get(id=volunteer_relation.project.id)
+        user = volunteer_relation.volunteer
         volunteer_relation.delete()
         project.recache()
+        user.purge_cache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -1048,6 +1058,7 @@ def demote_project_volunteer(request, application_id):
                                subject=email_subject,
                                template=email_template)
         volunteer_relation.project.recache()
+        volunteer_relation.volunteer.purge_cache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -1078,9 +1089,11 @@ def leave_project(request, project_id):
                                subject=email_subject,
                                template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
+        user = volunteer_relation.volunteer
         volunteer_relation.delete()
         project = Project.objects.get(id=project_id)
         project.recache()
+        user.purge_cache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
