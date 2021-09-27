@@ -32,8 +32,16 @@ def get_my_events(contributor):
     return response
 
 
+def get_user_favorites(contributor):
+    from civictechprojects.models import ProjectFavorite
+    fav_projects = ProjectFavorite.get_for_user(contributor)
+    return {project.id: project.hydrate_to_tile_json() for project in fav_projects}
+
+
 def _get_user_context(contributor):
-    return merge_dicts(get_my_projects(contributor), get_my_groups(contributor), get_my_events(contributor))
+    user_context = merge_dicts(get_my_projects(contributor), get_my_groups(contributor), get_my_events(contributor))
+    user_context['favorites'] = get_user_favorites(contributor)
+    return user_context
 
 
 def get_user_context(user):

@@ -85,6 +85,10 @@ class metrics {
     _logEvent("sort_by_field", { sortField: sortField });
   }
 
+  static logFilterProjectsByFavorite(favoritesOnly: boolean): void {
+    _logEvent("project_filter_by_favorites", { favoritesOnly: favoritesOnly });
+  }
+
   static logGroupSearchChangeSortEvent(sortField: string): void {
     _logEvent("group_sort_by_field", { sortField: sortField });
   }
@@ -256,8 +260,14 @@ class metrics {
     _logEvent("headerLinkClick", { url: url, userId: userId || 0 });
   }
 
-  static logProjectSearchResults(projectCount: number, queryString: string): void {
-    _logEvent("projectSearchResults", { projectCount: projectCount, queryString: queryString })
+  static logProjectSearchResults(
+    projectCount: number,
+    queryString: string
+  ): void {
+    _logEvent("projectSearchResults", {
+      projectCount: projectCount,
+      queryString: queryString,
+    });
   }
 }
 

@@ -9,7 +9,7 @@ import CurrentUser from "../../utils/CurrentUser.js";
 import { EventData } from "../../utils/EventAPIUtils.js";
 import urlHelper from "../../utils/url.js";
 import Section from "../../enums/Section";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
 import _ from "lodash";
 import MainFooter from "../../chrome/MainFooter.jsx";
@@ -217,8 +217,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
   initProjectSearch() {
     const event: EventData = this.state.event;
     if (event && !_.isEmpty(event.event_legacy_organization)) {
-      ProjectSearchDispatcher.dispatch({
-        type: "INIT",
+      UniversalDispatcher.dispatch({
+        type: "INIT_PROJECT_SEARCH",
         findProjectsArgs: {
           event_id: event.event_id,
           sortField: "project_name",

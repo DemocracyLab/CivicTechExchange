@@ -8,6 +8,7 @@ $color-orange-light: #f7cf88; // footer button hover
 $color-green: #86c232; //confirm-role buttons
 $color-green-dark: #61892f; //tag selectors and selected tags
 $color-red: #eb5757; //reject button
+$color-favorite: #f32302; // Favorite heart color
 $color-text-light: #ffffff;
 $color-text-dark: #222629;
 $color-text-grey: #535a5f; //lightest we can go without brekaing accessibility
@@ -15,6 +16,7 @@ $color-grey-medium: #dddddd;
 $color-grey-disabled: #cecece; // any item in a disabled state
 $color-disabled-border: #a8a8a8; // for e.g. a disabled state button border
 $color-grey-frame-border: #6b6e70; // from design guide
+$color-grey-unselected: #585858; // unselected item color
 $color-cta: #b1d3fb; // call to action button blue, is deprecated, should be removed when companies page is updated to remove it
 
 //background colors

@@ -9,6 +9,8 @@ import urlHelper from "../../utils/url.js";
 import GlyphStyles from "../../utils/glyphs.js";
 import ProjectAPIUtils, { ProjectData } from "../../utils/ProjectAPIUtils.js";
 import VideoModal from "../../common/video/VideoModal.jsx";
+import FavoriteToggle from "./FavoriteToggle.jsx";
+import CurrentUser from "../../utils/CurrentUser";
 
 type Props = {|
   project: ProjectData,
@@ -102,6 +104,11 @@ class ProjectCard extends React.PureComponent<Props, State> {
   _renderTitleAndIssue(): React$Node {
     return (
       <div className="ProjectCard-title">
+        {CurrentUser.isLoggedIn() && (
+          <div className="ProjectCard-favorite">
+            <FavoriteToggle project={this.props.project} />
+          </div>
+        )}
         <h2>{this.props.project.name}</h2>
         <h4>{this.props.project.issueArea}</h4>
       </div>

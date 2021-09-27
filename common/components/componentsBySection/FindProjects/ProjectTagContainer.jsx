@@ -8,7 +8,7 @@ import ProjectSearchStore, {
 import CloseablePill from "./CloseablePill.jsx";
 import React from "react";
 import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import { getLocationDisplayString } from "../../common/location/LocationInfo.js";
 
 type PillConfig = {|
@@ -27,6 +27,18 @@ class ProjectTagContainer extends React.Component<{||}, State> {
 
   static calculateState(prevState: State): State {
     let pillConfigs: Array<PillConfig> = [];
+
+    if (ProjectSearchStore.getFavoritesOnly()) {
+      pillConfigs.push({
+        label: "Favorites Only",
+        closeAction: () =>
+          UniversalDispatcher.dispatch({
+            type: "SET_FAVORITES_ONLY",
+            favoritesOnly: false,
+          }),
+      });
+    }
+
     pillConfigs = pillConfigs.concat(
       ProjectSearchStore.getTags()
         .toJS()
@@ -34,7 +46,7 @@ class ProjectTagContainer extends React.Component<{||}, State> {
           return {
             label: tag.display_name,
             closeAction: () =>
-              ProjectSearchDispatcher.dispatch({
+              UniversalDispatcher.dispatch({
                 type: "REMOVE_TAG",
                 tag: tag,
               }),
@@ -47,7 +59,7 @@ class ProjectTagContainer extends React.Component<{||}, State> {
       pillConfigs.push({
         label: ProjectTagContainer.getLocationPillLabel(locationRadius),
         closeAction: () =>
-          ProjectSearchDispatcher.dispatch({
+          UniversalDispatcher.dispatch({
             type: "SET_LOCATION",
             locationRadius: null,
           }),
@@ -59,7 +71,7 @@ class ProjectTagContainer extends React.Component<{||}, State> {
       pillConfigs.push({
         label: "In: " + decodeURI(legacyLocation),
         closeAction: () =>
-          ProjectSearchDispatcher.dispatch({ type: "UNSET_LEGACY_LOCATION" }),
+          UniversalDispatcher.dispatch({ type: "UNSET_LEGACY_LOCATION" }),
       });
     }
 

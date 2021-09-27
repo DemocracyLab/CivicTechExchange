@@ -3,7 +3,7 @@
 import type { Tag } from "./TagStore";
 
 import { ReduceStore } from "flux/utils";
-import ProjectSearchDispatcher from "./ProjectSearchDispatcher.js";
+import UniversalDispatcher from "./UniversalDispatcher.js";
 import { List, Record } from "immutable";
 import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 import type {
@@ -39,6 +39,7 @@ export type FindProjectsArgs = {|
   url: string,
   event_id: number,
   group_id: number,
+  favoritesOnly: boolean,
 |};
 
 type FindProjectsResponse = {|
@@ -81,7 +82,7 @@ export function locationRadiusFromString(str: string): LocationRadius {
 
 export type ProjectSearchActionType =
   | {
-      type: "INIT",
+      type: "INIT_PROJECT_SEARCH",
       searchSettings: SearchSettings,
       findProjectsArgs: FindProjectsArgs,
     }
@@ -113,6 +114,10 @@ export type ProjectSearchActionType =
       page: number,
     }
   | {
+      type: "SET_FAVORITES_ONLY",
+      favoritesOnly: boolean,
+    }
+  | {
       type: "CLEAR_FILTERS",
     }
   | {
@@ -128,6 +133,7 @@ const DEFAULT_STATE = {
   location: "",
   locationRadius: null,
   page: 1,
+  favoritesOnly: false,
   tags: List(),
   projectsData: {},
   searchSettings: {
@@ -145,6 +151,7 @@ class State extends Record(DEFAULT_STATE) {
   location: string;
   locationRadius: LocationRadius;
   page: number;
+  favoritesOnly: boolean;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
   searchSettings: SearchSettings;
@@ -155,7 +162,7 @@ class State extends Record(DEFAULT_STATE) {
 
 class ProjectSearchStore extends ReduceStore<State> {
   constructor(): void {
-    super(ProjectSearchDispatcher);
+    super(UniversalDispatcher);
   }
 
   getInitialState(): State {
@@ -164,7 +171,7 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   reduce(state: State, action: ProjectSearchActionType): State {
     switch (action.type) {
-      case "INIT":
+      case "INIT_PROJECT_SEARCH":
         let initialState: State = new State();
         if (action.findProjectsArgs) {
           initialState = this._initializeFilters(
@@ -211,6 +218,10 @@ class ProjectSearchStore extends ReduceStore<State> {
       case "SET_PAGE":
         return this._loadProjects(
           this._setPageNumberInState(state, action.page)
+        );
+      case "SET_FAVORITES_ONLY":
+        return this._loadProjects(
+          this._addFavoritesOnlyToState(state, action.favoritesOnly)
         );
       case "CLEAR_FILTERS":
         return this._loadProjects(this._clearFilters(state));
@@ -274,6 +285,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           positions: state.positions,
           event_id: oldArgs.event_id,
           group_id: oldArgs.group_id,
+          favoritesOnly: state.favoritesOnly,
         },
         _.identity
       );
@@ -309,6 +321,10 @@ class ProjectSearchStore extends ReduceStore<State> {
       locationRadiusFromString(findProjectsArgs.locationRadius)
     );
     state = this._addLegacyLocationToState(state, findProjectsArgs.location);
+    state = this._addFavoritesOnlyToState(
+      state,
+      findProjectsArgs.favoritesOnly
+    );
 
     return state;
   }
@@ -357,6 +373,11 @@ class ProjectSearchStore extends ReduceStore<State> {
     return state;
   }
 
+  _addFavoritesOnlyToState(state: State, favoritesOnly: boolean): State {
+    state = state.set("filterApplied", true);
+    return state.set("favoritesOnly", favoritesOnly);
+  }
+
   _clearFilters(state: State): State {
     state = state.set("keyword", "");
     state = state.set("sortField", state.searchSettings.defaultSort);
@@ -364,6 +385,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = state.set("locationRadius", {});
     state = state.set("tags", List());
     state = state.set("page", 1);
+    state = state.set("favoritesOnly", false);
     state = state.set("filterApplied", false);
     state = state.set("projectsData", {});
     const findProjectsArgs: FindProjectsArgs = _.pick(state.findProjectsArgs, [
@@ -398,7 +420,7 @@ class ProjectSearchStore extends ReduceStore<State> {
     fetch(new Request(url))
       .then(response => response.json())
       .then(getProjectsResponse =>
-        ProjectSearchDispatcher.dispatch({
+        UniversalDispatcher.dispatch({
           type: "SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
           projectsResponse: getProjectsResponse,
         })
@@ -425,9 +447,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getCountryList(): $ReadOnlyArray<CountryData> {
     const projectData: FindProjectsData = this.getState().projectsData;
-    let countryList = (projectData &&
+    let countryList =
+      projectData &&
       projectData.availableCountries &&
-      projectData.availableCountries.map(countryByCode));
+      projectData.availableCountries.map(countryByCode);
     return countryList && _.sortBy(countryList, "displayName");
   }
 
@@ -451,6 +474,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getCurrentPage(): number {
     return this.getState().page;
+  }
+
+  getFavoritesOnly(): boolean {
+    return this.getState().favoritesOnly;
   }
 
   getNumberOfProjects(): number {
@@ -478,7 +505,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getQueryString(): string {
     const state: State = this.getState();
-    return urls.constructWithQueryString(`projects`, state.findProjectsArgs || {});
+    return urls.constructWithQueryString(
+      `projects`,
+      state.findProjectsArgs || {}
+    );
   }
 }
 
