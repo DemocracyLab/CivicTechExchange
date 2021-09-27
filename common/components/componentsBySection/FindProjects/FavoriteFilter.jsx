@@ -3,7 +3,7 @@
 import React from "react";
 import { Container } from "flux/utils";
 import IconToggle from "../../chrome/IconToggle.jsx";
-import { GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
+import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import metrics from "../../utils/metrics.js";
@@ -47,9 +47,8 @@ class FavoriteFilter extends React.Component<{||}, State> {
         Favorites
         <IconToggle
           toggled={this.state.favoritesOnly}
-          toggleOnIcon={GlyphStyles.HeartFilled}
-          toggleOffIcon={GlyphStyles.HeartEmpty}
-          size={GlyphSizes.X2}
+          toggleOnIconClass={Glyph(GlyphStyles.HeartFilled, " favorited")}
+          toggleOffIconClass={Glyph(GlyphStyles.HeartEmpty, " unfavorited")}
         />
       </div>
     );

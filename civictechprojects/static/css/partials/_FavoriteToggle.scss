@@ -1,5 +1,4 @@
 .favorite-toggle {
-  color: $color-favorite;
   height: 48px;
   width: 48px;
   display: flex;
@@ -9,4 +8,16 @@
   i {
     font-size: 24px;
   }
+}
+
+.favorited {
+  color: $color-favorite;
+}
+
+.unfavorited {
+  color: $color-grey-unselected;
+}
+
+.unfavorited:hover {
+  color: $color-favorite;
 }

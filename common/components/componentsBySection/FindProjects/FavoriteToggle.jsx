@@ -5,7 +5,7 @@ import { Container } from "flux/utils";
 import { ProjectData } from "../../utils/ProjectAPIUtils.js";
 import CurrentUser, { UserContext } from "../../utils/CurrentUser.js";
 import IconToggle from "../../chrome/IconToggle.jsx";
-import { GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
+import { GlyphStyles, GlyphSizes, Glyph } from "../../utils/glyphs.js";
 import FavoritesStore from "../../stores/FavoritesStore.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 
@@ -50,12 +50,11 @@ class FavoriteToggle extends React.Component<Props, State> {
 
   render(): React$Node {
     return (
-      <div className="favorite-toggle" onClick={this.doToggle.bind(this)}>
+      <div className={"favorite-toggle"} onClick={this.doToggle.bind(this)}>
         <IconToggle
           toggled={this.state.favorited}
-          toggleOnIcon={GlyphStyles.HeartFilled}
-          toggleOffIcon={GlyphStyles.HeartEmpty}
-          size={GlyphSizes.X2}
+          toggleOnIconClass={Glyph(GlyphStyles.HeartFilled, " favorited")}
+          toggleOffIconClass={Glyph(GlyphStyles.HeartEmpty, " unfavorited")}
         />
       </div>
     );
