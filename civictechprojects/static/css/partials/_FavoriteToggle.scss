@@ -18,6 +18,6 @@
   color: $color-grey-unselected;
 }
 
-.unfavorited:hover {
+.favorite-toggle:hover .unfavorited {
   color: $color-favorite;
 }
