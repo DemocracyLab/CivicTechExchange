@@ -168,6 +168,7 @@ def approve_group(request, group_id):
             ProjectSearchTagsCache.refresh(event=None, group=group)
             notify_group_owners_group_approved(group)
             messages.success(request, 'Group Approved')
+            user.purge_cache()
 
             return redirect(section_url(FrontEndSection.AboutGroup, {'id': str(group.id)}))
         else:
@@ -305,6 +306,7 @@ def approve_project(request, project_id):
             project.save()
             project.recache(recache_linked=True)
             ProjectSearchTagsCache.refresh()
+            user.purge_cache()
             SitemapPages.update()
             notify_project_owners_project_approved(project)
             messages.success(request, 'Project Approved')
@@ -325,6 +327,7 @@ def approve_event(request, event_id):
             event.save()
             notify_event_owners_event_approved(event)
             event.update_linked_items()
+            user.purge_cache()
             messages.success(request, 'Event Approved')
             return redirect(section_url(FrontEndSection.AboutEvent, {'id': str(event.id)}))
         else:
