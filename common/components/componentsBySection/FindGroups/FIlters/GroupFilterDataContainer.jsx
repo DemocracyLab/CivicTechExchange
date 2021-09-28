@@ -73,11 +73,12 @@ class GroupFilterDataContainer extends React.Component<Props, State> {
 
   render(): React$Node {
     //should render a number of <RenderFilterCategory> child components
-
+    //TODO: critical, this is broken
     return (
       <div>
-        {this.state.tagsByCategory ? this._renderFilterCategories() : null}
+        {/* {this.state.tagsByCategory ? this._renderFilterCategories() : null} */}
         <GroupLocationSearchSection />
+        {console.log("if you're seeing this, you need to fix GroupFilterDataContainer")}
       </div>
     );
   }

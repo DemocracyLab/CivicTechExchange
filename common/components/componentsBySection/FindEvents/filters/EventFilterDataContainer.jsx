@@ -73,11 +73,12 @@ class EventFilterDataContainer extends React.Component<Props, State> {
 
   render(): React$Node {
     //should render a number of <RenderFilterCategory> child components
-
+    //TODO: critical, this is broken, and must be updated
     return (
       <div>
-        {this.state.tagsByCategory ? this._renderFilterCategories() : null}
+        {/* {this.state.tagsByCategory ? this._renderFilterCategories() : null} */}
         <EventLocationSearchSection />
+        {console.log("if you're seeing this, you need to fix EventFilterDataContainer")}
       </div>
     );
   }
