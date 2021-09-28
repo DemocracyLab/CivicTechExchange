@@ -158,7 +158,7 @@ class CurrentUser {
     const userContext: UserContext = CurrentUser.userContext();
     return (
       CurrentUser.isStaff() ||
-      (userContext && !_.isEmpty(userContext.owned_groups))
+      (userContext && !_.isEmpty(userContext.owned_events))
     );
   }
 }
