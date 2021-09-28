@@ -25,7 +25,9 @@ class ProjectCreationForm(ModelForm):
 
         linked_groups = project.get_project_groups()
         linked_events = project.get_project_events()
+        project_creator = project.project_creator
         project.delete()
+        project_creator.purge_cache()
         # Refresh linked event tag counts
         for event in linked_events:
             ProjectSearchTagsCache.refresh(event=event, group=None)
@@ -101,6 +103,7 @@ class ProjectCreationForm(ModelForm):
         if fields_changed:
             # Only recache linked events if tags were changed
             project.recache(recache_linked=tags_changed)
+            project.project_creator.purge_cache()
 
         return project
 
@@ -183,6 +186,7 @@ class EventCreationForm(ModelForm):
 
         if fields_changed or project_fields_changed:
             event.recache()
+            event.event_creator.purge_cache()
         if project_fields_changed:
             change_projects = []
             if pre_change_projects:
@@ -204,7 +208,9 @@ class EventCreationForm(ModelForm):
         if not is_creator_or_staff(request.user, event):
             raise PermissionDenied()
 
+        user = event.event_creator
         event.delete()
+        user.purge_cache()
 
 
 class GroupCreationForm(ModelForm):
@@ -262,6 +268,7 @@ class GroupCreationForm(ModelForm):
             group.update_linked_items()
         if fields_changed:
             group.recache()
+            group.group_creator.purge_cache()
 
         if is_created_original != group.is_created:
             send_group_creation_notification(group)
@@ -275,4 +282,6 @@ class GroupCreationForm(ModelForm):
         if not is_creator_or_staff(request.user, group):
             raise PermissionDenied()
 
+        group_creator = group.group_creator
         group.delete()
+        group_creator.purge_cache()

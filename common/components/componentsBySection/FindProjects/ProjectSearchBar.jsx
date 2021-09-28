@@ -2,7 +2,7 @@
 
 import type { FluxReduceStore } from "flux/utils";
 import { Container } from "flux/utils";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import GlyphStyles from "../../utils/glyphs.js";
 import metrics from "../../utils/metrics.js";
@@ -58,7 +58,7 @@ class ProjectSearchBar extends React.Component<{||}, Props, State> {
   }
 
   _onSubmitKeyword(): void {
-    ProjectSearchDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: "SET_KEYWORD",
       keyword: this.state.keyword,
     });

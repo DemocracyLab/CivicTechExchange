@@ -17,14 +17,22 @@ class CacheWrapper:
         """
         return self._cache.get(key) or (generator_func and self._set_with_generator(key, generator_func))
 
-    def refresh(self, key, value=None):
+    def refresh(self, key, value=None, timeout=None):
         """
         Refresh the cached value for a given key, such as when the underlying data has changed
         :param key: Key of value to re-cache
         :param value: Value to cache
+        :param timeout Time in seconds to when the cache entry expires
         """
         _value = value or (self._cache_generators[key]() if key in self._cache_generators else None)
-        self._cache.set(key, _value, timeout=None)
+        self._cache.set(key, _value, timeout=timeout)
+
+    def clear(self, key):
+        """
+        Delete cache entry
+        :param key: Key of cache entry to delete
+        """
+        self._cache.delete(key)
 
     def _set_with_generator(self, key, generator_func):
         if generator_func is not None:

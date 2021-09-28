@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react";
-import Linkify from "react-linkify";
+import ReactMarkdown from "react-markdown";
 import type Moment from "moment";
 import datetime, { DateFormat } from "../../utils/datetime.js";
 import Button from "react-bootstrap/Button";
@@ -9,10 +9,10 @@ import CurrentUser from "../../utils/CurrentUser.js";
 import { EventData } from "../../utils/EventAPIUtils.js";
 import urlHelper from "../../utils/url.js";
 import Section from "../../enums/Section";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
 import _ from "lodash";
-import MainFooter from "../../chrome/MainFooter.jsx"
+import MainFooter from "../../chrome/MainFooter.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -109,19 +109,17 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
           <div className="AboutEvent-details row">
             <div className="col-12">
-              <Linkify>
-                <h3>Details</h3>
-                <p>{event.event_description}</p>
-                <h3>What We Will Do</h3>
-                <p>{event.event_agenda}</p>
-              </Linkify>
+              <h3>Details</h3>
+              <ReactMarkdown children={event.event_description} />
+              <h3>What We Will Do</h3>
+              <ReactMarkdown children={event.event_agenda} />
             </div>
           </div>
           {!_.isEmpty(event.event_legacy_organization) && (
             <ProfileProjectSearch viewOnly={this.props.viewOnly} />
           )}
         </div>
-        <MainFooter key="main_footer" forceShow={event.show_headers}/>
+        <MainFooter key="main_footer" forceShow={event.show_headers} />
       </React.Fragment>
     );
   }
@@ -219,8 +217,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
   initProjectSearch() {
     const event: EventData = this.state.event;
     if (event && !_.isEmpty(event.event_legacy_organization)) {
-      ProjectSearchDispatcher.dispatch({
-        type: "INIT",
+      UniversalDispatcher.dispatch({
+        type: "INIT_PROJECT_SEARCH",
         findProjectsArgs: {
           event_id: event.event_id,
           sortField: "project_name",

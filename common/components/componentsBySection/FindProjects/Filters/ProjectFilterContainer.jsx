@@ -1,7 +1,6 @@
 // component handles all project filtering data collection, organizing, and sending to RenderFilterCategory
 
 // @flow
-
 import React from "react";
 import { Container } from "flux/utils";
 import type { TagDefinition } from "../../../utils/ProjectAPIUtils.js";
@@ -10,16 +9,19 @@ import type { LocationInfo } from "../../../common/location/LocationInfo";
 import LocationSearchSection from "./LocationSearchSection.jsx";
 import ProjectAPIUtils from "../../../utils/ProjectAPIUtils.js";
 import ProjectSearchStore from "../../../stores/ProjectSearchStore.js";
-import ProjectSearchDispatcher from "../../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../../stores/UniversalDispatcher.js";
 import RenderFilterCategory from "./RenderFilterCategory.jsx";
+import ModalWrapper from "../../../common/ModalWrapper.jsx";
+import FavoriteFilter from "../FavoriteFilter.jsx";
+import FavoritesStore from "../../../stores/FavoritesStore.js";
+import CurrentUser from "../../../utils/CurrentUser.js";
 import metrics from "../../../utils/metrics";
-import _ from "lodash";
-import { List } from "immutable";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import ModalWrapper from "../../../common/ModalWrapper.jsx";
+import _ from "lodash";
+import { List } from "immutable";
 
 /**
  * @category: Tag category to pull from
@@ -106,7 +108,10 @@ class ProjectFilterContainer extends React.Component<Props, State> {
   }
 
   _displayFilters(): React$Node {
-    // this is more verbose than it 'needs to be' and we may reduce this to a map later, but it's code readability vs length
+    const showFavorites: boolean =
+      CurrentUser.isLoggedIn() && !FavoritesStore.noFavorites();
+    // this return is more verbose than it 'needs to be' and we may reduce this to a map later, but it's code readability vs length
+
     return (
       <React.Fragment>
         <RenderFilterCategory
@@ -145,6 +150,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
           checkEnabled={this._checkEnabled}
           selectOption={this._selectOption}
         />
+        {showFavorites && <FavoriteFilter />}
       </React.Fragment>
     );
   }
@@ -157,23 +163,23 @@ class ProjectFilterContainer extends React.Component<Props, State> {
         <Button variant="primary" onClick={() => this._handleModalClick()}>
           Filter Results
         </Button>
-          <Modal
-            className="ProjectFilterContainer-offcanvas fixed-left"
-            show={this.state.showOffCanvasFilters}
-            onHide={() => this._handleModalClick()}
-            aria-labelledby="ProjectFilterContainer-offcanvas-title"
-          >
-            <Modal.Header closeButton>
-              <Modal.Title id="ProjectFilterContainer-offcanvas-title">
-                Filter Results
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>{this._displayFilters()}</Modal.Body>
-            <Modal.Footer>
-              <Button variant="outline-primary">Button</Button>
-              <Button variant="outline-secondary">Button #2</Button>
-            </Modal.Footer>
-          </Modal>
+        <Modal
+          className="ProjectFilterContainer-offcanvas fixed-left"
+          show={this.state.showOffCanvasFilters}
+          onHide={() => this._handleModalClick()}
+          aria-labelledby="ProjectFilterContainer-offcanvas-title"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="ProjectFilterContainer-offcanvas-title">
+              Filter Results
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{this._displayFilters()}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-primary">Button</Button>
+            <Button variant="outline-secondary">Button #2</Button>
+          </Modal.Footer>
+        </Modal>
       </React.Fragment>
     );
   }
@@ -193,13 +199,13 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     var tagInState = _.has(this.state.selectedTags, tag.tag_name);
     //if tag is NOT currently in state, add it, otherwise remove
     if (!tagInState) {
-      ProjectSearchDispatcher.dispatch({
+      UniversalDispatcher.dispatch({
         type: "ADD_TAG",
         tag: tag.tag_name,
       });
       metrics.logSearchFilterByTagEvent(tag);
     } else {
-      ProjectSearchDispatcher.dispatch({
+      UniversalDispatcher.dispatch({
         type: "REMOVE_TAG",
         tag: tag,
       });

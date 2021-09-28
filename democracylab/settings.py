@@ -21,6 +21,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
@@ -56,13 +57,13 @@ INSTALLED_APPS = [
     'oauth2.providers.github',
     'oauth2.providers.google',
     'oauth2.providers.linkedin',
-    'oauth2.providers.facebook',
-    'django_seo_js'
+    'oauth2.providers.facebook'
 ]
 
 SITE_ID = 1
 
 # Customize allauth.socialaccount
+ACCOUNT_ADAPTER = 'oauth2.adapter.MyAccountAdapter'
 SOCIALACCOUNT_ADAPTER = 'oauth2.adapter.SocialAccountAdapter'
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
@@ -100,7 +101,7 @@ AUTHENTICATION_BACKENDS = (
 
 MIDDLEWARE = [
     'common.helpers.malicious_requests.MaliciousRequestsMiddleware',
-    'common.helpers.caching.DebugUserAgentMiddleware',
+    'common.helpers.redirectors.RedirectMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -225,7 +226,7 @@ EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('E
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
-ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 CONTACT_EMAIL = os.environ['CONTACT_EMAIL']
 FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
 
@@ -341,6 +342,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'PRIVACY_POLICY_URL': {
         'error': True,
         'message': 'Privacy Policy url required'
+    },
+    'VIDEO_PAGES': {
+        'error': False,
+        'message': 'VIDEO_PAGES needed to show /videos/'
     }
 }
 
@@ -408,35 +413,6 @@ LOGGING = {
     },
 }
 
-# If you're using prerender.io (the default backend):
-SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '')
-SEO_JS_BACKEND = "common.helpers.caching.DebugPrerenderIO"
-SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
-SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
-SEO_JS_ENABLED = os.environ.get('SEO_JS_ENABLED', False) == 'True'
-
-# TODO: Put in environment variable
-SEO_JS_USER_AGENTS = (
-    # These first three should be disabled, since they support escaped fragments, and
-    # and leaving them enabled will penalize a website as "cloaked".
-    "Googlebot",
-    "Yahoo",
-    "bingbot",
-
-    "Ask Jeeves",
-    "baiduspider",
-    "facebookexternalhit",
-    "twitterbot",
-    "rogerbot",
-    "linkedinbot",
-    "embedly",
-    "quoralink preview'",
-    "showyoubot",
-    "outbrain",
-    "pinterest",
-    "developersgoogle.com/+/web/snippet",
-)
-
 DISALLOW_CRAWLING = os.environ.get('DISALLOW_CRAWLING', False) == 'True'
 
 DL_PAGES_LAST_UPDATED_DATE = os.environ.get('DL_PAGES_LAST_UPDATED', '2019-12-05')
@@ -473,7 +449,9 @@ PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
 
 # Video Link
-YOUTUBE_VIDEO_URL = os.environ.get('YOUTUBE_VIDEO_URL', '')
+VIDEO_PAGES = os.environ.get('VIDEO_PAGES', None)
+if VIDEO_PAGES is not None:
+    VIDEO_PAGES = ast.literal_eval(VIDEO_PAGES)
 
 # Ghost blog configs
 GHOST_URL = os.environ.get('GHOST_URL', '')

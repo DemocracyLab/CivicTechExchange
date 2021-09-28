@@ -886,8 +886,12 @@ class ProjectFile(models.Model):
     @staticmethod
     def from_json(owner, file_category, file_json):
         file_name_parts = file_json['fileName'].split('.')
-        file_name = "".join(file_name_parts[:-1])
-        file_type = file_name_parts[-1]
+        file_name = "".join(file_name_parts[0])
+        # Filename without file type
+        if len(file_name_parts) == 1:
+            file_type = ""
+        else:
+            file_type = file_name_parts[-1]
 
         return ProjectFile.create(owner=owner,
                                   file_url=file_json['publicUrl'],
@@ -905,6 +909,28 @@ class ProjectFile(models.Model):
             'publicUrl': self.file_url,
             'visibility': self.file_visibility
         }
+
+
+class ProjectFavorite(models.Model):
+    link_project = models.ForeignKey(Project, related_name='favorites', on_delete=models.CASCADE)
+    link_user = models.ForeignKey(Contributor, related_name='favorites', on_delete=models.CASCADE)
+
+    @staticmethod
+    def create(user, project):
+        fav = ProjectFavorite.objects.create(link_project=project, link_user=user)
+        fav.save()
+        return fav
+
+    @staticmethod
+    def get_for_user(user):
+        return Project.objects.filter(favorites__link_user=user)
+
+    @staticmethod
+    def get_for_project(project, user=None):
+        if user is not None:
+            return ProjectFavorite.objects.filter(link_project=project, link_user=user)
+        else:
+            return ProjectFavorite.objects.filter(link_project=project)
 
 
 class FileCategory(Enum):

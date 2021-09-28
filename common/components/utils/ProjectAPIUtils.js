@@ -7,7 +7,7 @@ import {
   LocationInfo,
   getLocationDisplayString,
 } from "../common/location/LocationInfo.js";
-import type { MyGroupData } from "../stores/MyGroupsStore.js";
+import type { MyGroupData } from "./CurrentUser.js";
 import type { GroupTileAPIData } from "./GroupAPIUtils.js";
 import type { EventTileAPIData } from "./EventAPIUtils.js";
 import type { Dictionary } from "../types/Generics.jsx";
@@ -48,6 +48,7 @@ export type ProjectData = {|
   +thumbnail: FileInfo,
   +claimed: boolean,
   +date_modified: string,
+  +video: LinkInfo,
 |};
 
 export type ProjectAPIData = {|
@@ -61,7 +62,8 @@ export type ProjectAPIData = {|
   +project_state: string,
   +project_city: string,
   +project_name: string,
-  +project_thumbnail: FileInfo,
+  +project_thumbnail: ?FileInfo,
+  +project_thumbnail_video: ?LinkInfo,
   +project_date_modified: string,
   +project_url: string,
   +project_positions: $ReadOnlyArray<PositionInfo>,
@@ -164,6 +166,7 @@ class ProjectAPIUtils {
       positions: !_.isEmpty(apiData.project_positions)
         ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
         : ["Contact Project for Details"],
+      video: apiData.project_thumbnail_video,
     };
   }
 
@@ -218,7 +221,11 @@ class ProjectAPIUtils {
     callback: VolunteerDetailsAPIData => void,
     errCallback: APIError => void
   ): void {
-    fetch(new Request("/api/project/" + id + "/volunteers/", { credentials: "include" }))
+    fetch(
+      new Request("/api/project/" + id + "/volunteers/", {
+        credentials: "include",
+      })
+    )
       .then(response => {
         if (!response.ok) {
           throw Error();
@@ -226,7 +233,7 @@ class ProjectAPIUtils {
         return response.json();
       })
       .then(response => {
-        callback(response['project_volunteers']);
+        callback(response["project_volunteers"]);
       })
       .catch(
         response =>
@@ -237,7 +244,7 @@ class ProjectAPIUtils {
           })
       );
   }
-  
+
   // fetch specific category of tags
   static fetchTagsByCategory(
     tagCategory: string,

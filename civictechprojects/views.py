@@ -17,7 +17,7 @@ import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
-    ProjectRelationship, Testimonial
+    ProjectRelationship, Testimonial, ProjectFavorite
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from common.caching.cache import Cache
@@ -36,8 +36,10 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
     notify_group_owners_group_approved, notify_event_owners_event_approved
 from civictechprojects.helpers.context_preload import context_preload
+from civictechprojects.helpers.projects.annotations import apply_project_annotations
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
 from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector
+from common.helpers.user_helpers import get_my_projects, get_my_groups, get_my_events, get_user_context
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
@@ -369,7 +371,6 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         'EVENT_URL': settings.EVENT_URL,
         'PRIVACY_POLICY_URL': settings.PRIVACY_POLICY_URL,
         'DONATE_PAGE_BLURB': settings.DONATE_PAGE_BLURB,
-        'YOUTUBE_VIDEO_URL': settings.YOUTUBE_VIDEO_URL,
         'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID
     }
     if settings.HOTJAR_APPLICATION_ID:
@@ -405,6 +406,7 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
 
     if request.user.is_authenticated:
         contributor = Contributor.objects.get(id=request.user.id)
+        context['userContext'] = json.dumps(get_user_context(contributor))
         context['userID'] = request.user.id
         context['emailVerified'] = contributor.email_verified
         context['email'] = contributor.email
@@ -418,6 +420,8 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
                                                file_category=FileCategory.THUMBNAIL.value).first()
         if thumbnail:
             context['userImgUrl'] = thumbnail.file_url
+    else:
+        context['userContext'] = '{}'
 
     return HttpResponse(template.render(context, request))
 
@@ -444,44 +448,6 @@ def add_alert(request):
     return HttpResponse(status=200)
 
 
-def my_projects(request):
-    contributor = get_request_contributor(request)
-    response = {}
-    if contributor is not None:
-        owned_projects = Project.objects.filter(project_creator_id=contributor.id)
-        volunteering_projects = contributor.volunteer_relations.all()
-        response = {
-            'owned_projects': [project.hydrate_to_list_json() for project in owned_projects],
-            'volunteering_projects': volunteering_projects.exists() and list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), volunteering_projects))
-        }
-    return JsonResponse(response)
-
-
-def my_groups(request):
-    contributor = get_request_contributor(request)
-    response = {}
-    if contributor is not None:
-        owned_groups = Group.objects.filter(group_creator_id=contributor.id)
-        response = {
-            'owned_groups': [group.hydrate_to_list_json() for group in owned_groups],
-        }
-    return JsonResponse(response)
-
-
-def my_events(request):
-    contributor = get_request_contributor(request)
-    response = {}
-    if contributor is not None:
-        owned_events = Event.objects.filter(event_creator_id=contributor.id)
-        response = {
-            'owned_events': [event.hydrate_to_list_json() for event in owned_events]
-        }
-        if contributor.is_staff:
-            private_events = Event.objects.filter(is_private=True).exclude(event_creator_id=contributor.id)
-            response['private_events'] = [event.hydrate_to_list_json() for event in private_events]
-    return JsonResponse(response)
-
-
 def projects_list(request):
     url_parts = request.GET.urlencode()
     query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
@@ -499,42 +465,46 @@ def projects_list(request):
     else:
         project_list = Project.objects.filter(is_searchable=True)
 
-    if request.method == 'GET':
-        project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
-        project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
-        project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
-        project_list = apply_tag_filters(project_list, query_params, 'org', projects_by_orgs)
-        project_list = apply_tag_filters(project_list, query_params, 'orgType', projects_by_org_types)
-        project_list = apply_tag_filters(project_list, query_params, 'stage', projects_by_stage)
-        if 'keyword' in query_params:
-            project_list = project_list & projects_by_keyword(query_params['keyword'][0])
+    project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
+    project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
+    project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
+    project_list = apply_tag_filters(project_list, query_params, 'org', projects_by_orgs)
+    project_list = apply_tag_filters(project_list, query_params, 'orgType', projects_by_org_types)
+    project_list = apply_tag_filters(project_list, query_params, 'stage', projects_by_stage)
 
-        if 'locationRadius' in query_params:
-            project_list = projects_by_location(project_list, query_params['locationRadius'][0])
+    if 'favoritesOnly' in query_params:
+        user = get_request_contributor(request)
+        project_list = project_list & ProjectFavorite.get_for_user(user)
 
-        if 'location' in query_params:
-            project_list = projects_by_legacy_city(project_list, query_params['location'][0])
+    if 'keyword' in query_params:
+        project_list = project_list & projects_by_keyword(query_params['keyword'][0])
 
-        project_list = project_list.distinct()
+    if 'locationRadius' in query_params:
+        project_list = projects_by_location(project_list, query_params['locationRadius'][0])
 
-        if 'sortField' in query_params:
-            project_list = projects_by_sortField(project_list, query_params['sortField'][0])
-        else:
-            project_list = projects_by_sortField(project_list, '-project_date_modified')
+    if 'location' in query_params:
+        project_list = projects_by_legacy_city(project_list, query_params['location'][0])
 
-        project_count = len(project_list)
+    project_list = project_list.distinct()
 
-        project_paginator = Paginator(project_list, settings.PROJECTS_PER_PAGE)
+    if 'sortField' in query_params:
+        project_list = projects_by_sortField(project_list, query_params['sortField'][0])
+    else:
+        project_list = projects_by_sortField(project_list, '-project_date_modified')
 
-        if 'page' in query_params:
-            project_list_page = project_paginator.page(query_params['page'][0])
-            project_pages = project_paginator.num_pages
-        else:
-            project_list_page = project_list
-            project_pages = 1
+    project_count = len(project_list)
+
+    project_paginator = Paginator(project_list, settings.PROJECTS_PER_PAGE)
+
+    if 'page' in query_params:
+        project_list_page = project_paginator.page(query_params['page'][0])
+        project_pages = project_paginator.num_pages
+    else:
+        project_list_page = project_list
+        project_pages = 1
 
     tag_counts = get_tag_counts(category=None, event=event, group=group)
-    response = projects_with_meta_data(project_list_page, project_pages, project_count, tag_counts)
+    response = projects_with_meta_data(query_params, project_list_page, project_pages, project_count, tag_counts)
 
     return JsonResponse(response)
 
@@ -663,9 +633,10 @@ def project_countries():
     return unique_column_values(Project, 'project_country', lambda country: country and len(country) == 2)
 
 
-def projects_with_meta_data(projects, project_pages, project_count, tag_counts):
+def projects_with_meta_data(query_params, projects, project_pages, project_count, tag_counts):
+    projects_json = apply_project_annotations(query_params, [project.hydrate_to_tile_json() for project in projects])
     return {
-        'projects': [project.hydrate_to_tile_json() for project in projects],
+        'projects': projects_json,
         'availableCountries': project_countries(),
         'tags': tag_counts,
         'numPages': project_pages,
@@ -1234,6 +1205,36 @@ def reject_group_invitation(request, invite_id):
     else:
         messages.add_message(request, messages.ERROR, 'You do not have permission to reject this group invitation.')
         return redirect(about_project_url)
+
+
+@csrf_exempt
+def project_favorite(request, project_id):
+    user = get_request_contributor(request)
+    project = Project.objects.get(id=project_id)
+    existing_fav = ProjectFavorite.get_for_project(project, user)
+    if existing_fav is not None:
+        print("Favoriting project:{project} by user:{user}".format(project=project.id, user=user.id))
+        ProjectFavorite.create(user, project)
+        user.purge_cache()
+    else:
+        print("Favorite already exists for project:{project}, user:{user}".format(project=project.id, user=user.id))
+        return HttpResponse(status=400)
+    return HttpResponse(status=200)
+
+
+@csrf_exempt
+def project_unfavorite(request, project_id):
+    user = get_request_contributor(request)
+    project = Project.objects.get(id=project_id)
+    existing_fav = ProjectFavorite.get_for_project(project, user)
+    if existing_fav is not None:
+        print("Unfavoriting project:{project} by user:{user}".format(project=project.id, user=user.id))
+        existing_fav.delete()
+        user.purge_cache()
+    else:
+        print("Can't Unfavorite project:{project} by user:{user}".format(project=project.id, user=user.id))
+        return HttpResponse(status=400)
+    return HttpResponse(status=200)
 
 
 #This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.

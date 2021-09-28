@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react";
-import ProjectFilterDataContainer from "../../componentsBySection/FindProjects/Filters/ProjectFilterDataContainer.jsx";
+import ProjectFilterContainer from "../../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx";
 import ResetSearchButton from "../../componentsBySection/FindProjects/ResetSearchButton.jsx";
 import ProjectSearchBar from "../../componentsBySection/FindProjects/ProjectSearchBar.jsx";
 import ProjectCardsContainer from "../../componentsBySection/FindProjects/ProjectCardsContainer.jsx";
@@ -38,7 +38,7 @@ class ProfileProjectSearch extends React.PureComponent<Props> {
   _renderSearchControls(): ?$React$Node {
     const tagContainer: React$Node = <ProjectTagContainer />;
     const filterContainer: React$Node = (
-      <ProjectFilterDataContainer title="Filter by" />
+      <ProjectFilterContainer title="Filter by" />
     );
     return (
       <React.Fragment>

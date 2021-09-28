@@ -10,7 +10,6 @@ import GroupCard from "./GroupCard.jsx";
 import GroupSearchStore from "../../stores/GroupSearchStore.js";
 import GroupSearchDispatcher from "../../stores/GroupSearchDispatcher.js";
 import LoadingMessage from "../../chrome/LoadingMessage.jsx";
-import prerender from "../../utils/prerender.js";
 import type { LocationRadius } from "../../stores/ProjectSearchStore.js";
 import { Dictionary, createDictionary } from "../../types/Generics.jsx";
 import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";

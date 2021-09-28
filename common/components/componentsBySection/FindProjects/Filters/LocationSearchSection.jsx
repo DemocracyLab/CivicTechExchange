@@ -5,7 +5,7 @@ import { Container } from "flux/utils";
 import ProjectSearchStore, {
   LocationRadius,
 } from "../../../stores/ProjectSearchStore.js";
-import ProjectSearchDispatcher from "../../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../../stores/UniversalDispatcher.js";
 import LocationAutocomplete from "../../../common/location/LocationAutocomplete.jsx";
 import type { LocationInfo } from "../../../common/location/LocationInfo";
 import Selector from "../../../common/selection/Selector.jsx";
@@ -85,7 +85,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
       };
       if (!_.isEqual(locationRadius, this.state.locationRadius)) {
         this.setState({ locationInfo: locationInfo }, () => {
-          ProjectSearchDispatcher.dispatch({
+          UniversalDispatcher.dispatch({
             type: "SET_LOCATION",
             locationRadius: locationRadius,
           });
@@ -94,7 +94,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
     } else if (!_.isEmpty(this.state.locationRadius)) {
       // Case: Clearing location state filter after clearing Near box
       this.setState({ locationRadius: null }, () => {
-        ProjectSearchDispatcher.dispatch({
+        UniversalDispatcher.dispatch({
           type: "SET_LOCATION",
           locationRadius: null,
         });
