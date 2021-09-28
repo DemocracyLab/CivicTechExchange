@@ -21,6 +21,7 @@ type Props = {|
   onSelectProject: ?Function,
   selectableCards: ?boolean,
   alreadySelectedProjects: ?List<string>, // todo: proper state management
+  handleEmptyProject: ?Function
 |};
 
 type State = {|
@@ -30,6 +31,7 @@ type State = {|
   project_count: number,
   legacyLocation: string,
   location: LocationRadius,
+  error: boolean
 |};
 
 class ProjectCardsContainer extends React.Component<Props, State> {
@@ -55,6 +57,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
       tags: ProjectSearchStore.getTags() || [],
       legacyLocation: ProjectSearchStore.getLegacyLocation() || "",
       location: ProjectSearchStore.getLocation() || "",
+      error: ProjectSearchStore.getError()
     };
   }
 
@@ -100,6 +103,9 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   }
 
   _renderCards(): React$Node {
+    if(this.state.error || (this.state.projects && this.state.projects.size === 0) && this.props.handleEmptyProject){
+      this.props.handleEmptyProject();
+    }
     return !this.state.projects ? (
       <LoadingMessage message="Loading projects..." />
     ) : this.state.projects.size === 0 ? (

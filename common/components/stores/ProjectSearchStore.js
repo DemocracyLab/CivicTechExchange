@@ -40,6 +40,7 @@ export type FindProjectsArgs = {|
   event_id: number,
   group_id: number,
   favoritesOnly: boolean,
+  error: boolean
 |};
 
 type FindProjectsResponse = {|
@@ -105,6 +106,9 @@ export type ProjectSearchActionType =
   | {
       type: "UNSET_LEGACY_LOCATION",
     }
+ | {
+      type: "ERROR",
+    }
   | {
       type: "SET_LOCATION",
       locationRadius: ?LocationRadius,
@@ -143,6 +147,7 @@ const DEFAULT_STATE = {
   findProjectsArgs: {},
   filterApplied: false,
   projectsLoading: false,
+  error: false
 };
 
 class State extends Record(DEFAULT_STATE) {
@@ -158,6 +163,7 @@ class State extends Record(DEFAULT_STATE) {
   findProjectsArgs: FindProjectsArgs;
   filterApplied: boolean;
   projectsLoading: boolean;
+  error: boolean;
 }
 
 class ProjectSearchStore extends ReduceStore<State> {
@@ -191,6 +197,9 @@ class ProjectSearchStore extends ReduceStore<State> {
           }
         );
         return this._loadProjects(initialState, true);
+      case "ERROR":
+        state = state.set("error", true);
+        return state;
       case "ADD_TAG":
         state = state.set("filterApplied", true);
         return this._loadProjects(this._addTagToState(state, action.tag));
@@ -241,6 +250,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           "tags",
           state.tags.filter(tag => allTags[tag])
         );
+        state = state.set("error", false);
         let currentProjects = state.projectsData.projects || List();
         state = state.set("projectsData", {
           projects: currentProjects.concat(projects),
@@ -424,13 +434,22 @@ class ProjectSearchStore extends ReduceStore<State> {
           type: "SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
           projectsResponse: getProjectsResponse,
         })
-      );
+      ).catch(
+
+        error => {
+        UniversalDispatcher.dispatch({
+        type: "ERROR"
+      })});
     return state;
   }
 
   _getTagCategoryParams(state: State, category: string): ?string {
     const tags = this.getTags(state).filter(tag => tag.category === category);
     return tags.map(tag => tag.tag_name).join(",");
+  }
+
+  getError(): boolean {
+    return this.getState().error;
   }
 
   getKeyword(): string {

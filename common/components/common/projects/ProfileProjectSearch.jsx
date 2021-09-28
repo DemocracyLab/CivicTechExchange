@@ -14,14 +14,27 @@ type Props = {|
   wide: boolean,
 |};
 
-class ProfileProjectSearch extends React.PureComponent<Props> {
+type State = {|
+  hidden: boolean,
+|};
+
+class ProfileProjectSearch extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
+    this.state = {
+      hidden: true
+    };
+  }
+
+  handleEmptyProject(): void {
+    this.setState({
+      hidden: false
+    });
   }
 
   render(): ?$React$Node {
     return (
-      <React.Fragment>
+      this.state.hidden?<React.Fragment>
         {!this.props.viewOnly && this._renderSearchControls()}
         <div className="row">
           <ProjectCardsContainer
@@ -29,9 +42,10 @@ class ProfileProjectSearch extends React.PureComponent<Props> {
             staticHeaderText="Participating Projects"
             fullWidth={true}
             selectableCards={false}
+            handleEmptyProject={ this.handleEmptyProject.bind(this)}
           />
         </div>
-      </React.Fragment>
+      </React.Fragment>:null
     );
   }
 
