@@ -20,7 +20,6 @@ const Section = {
   EmailVerified: "EmailVerified",
   Donate: "Donate",
   ThankYou: "ThankYou",
-  Press: "Press",
   ContactUs: "ContactUs",
   CreateGroup: "CreateGroup",
   CreateEvent: "CreateEvent",

@@ -20,6 +20,8 @@ def args_dict_to_query_string(args_dict, urlencode=False):
 
 
 def section_url(section, args_dict=None):
+    if section == 'Blog':
+        return settings.BLOG_URL
     return settings.PROTOCOL_DOMAIN + section_path(section, args_dict)
 
 
