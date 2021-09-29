@@ -1,7 +1,6 @@
 .LogInController-root {
   background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
-  font-weight: 300;
   width: 90%;
   max-width: 800px;
   margin: 76px auto;
@@ -22,45 +21,21 @@
   min-width: 200px;
 }
 
-.LogInController-signInButton {
-  background-color: $color-green;
-  border: none;
-  border-radius: 5px;
-  color: $color-text-light;
-  cursor: pointer;
-  font-size: 19px;
-  height: 42px;
-  width: auto;
-  float: right;
-}
-
-.LogInController-signInButton:disabled {
-  background-color: $color-grey-disabled;
-  cursor: no-drop;
-  float: right;
-}
-
-.LogInController-bottomSection {
+.LogInController-actionsection {
   width: 100%;
-  height: 42px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
+.LogInController-createAccount,
 .LogInController-forgotPassword {
-  text-align: center;
-  float: left;
-  font-size: 14px;
-}
-
-.LogInController-createAccount {
-  text-align: center;
-  float: left;
-  font-size: 14px;
-  margin-right: 30px;
+  margin: 1rem 0 0 0;
 }
 
 .LogInController-socialSection {
   display: block;
-  margin-top: 15px;
+  margin-top: 24px;
   width: 100%;
 }
 
@@ -85,6 +60,12 @@
   }
 }
 
+.LogInController-socialIcon i {
+  cursor: pointer;
+  width: 55px;
+  color: $color-text-grey;
+}
+
 .LogInController-socialIcon svg {
   overflow: hidden;
   width: 55px;
@@ -94,4 +75,19 @@
 
 .LogInController-google svg {
   padding: 5px 0 4px 0;
+}
+
+@include media-breakpoint-up(md) {
+  .LogInController-actionsection {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  .LogInController-createAccount,
+  .LogInController-forgotPassword {
+    margin: 0;
+  }
+  .LogInController-signInButton {
+    min-width: 120px;
+  }
 }

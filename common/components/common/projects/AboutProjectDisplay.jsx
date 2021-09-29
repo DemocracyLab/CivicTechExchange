@@ -16,7 +16,7 @@ import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../volunteers/VolunteerSection.jsx";
 import IconLinkDisplay from "../../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 import type { PositionInfo } from "../../forms/PositionInfo.jsx";
-import CurrentUser from "../../utils/CurrentUser.js";
+import CurrentUser, { MyGroupData } from "../../utils/CurrentUser.js";
 import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
@@ -27,7 +27,6 @@ import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import EventCardsListings from "../../componentsBySection/FindEvents/EventCardsListings.jsx";
-import type { MyGroupData } from "../../stores/MyGroupsStore.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
@@ -96,18 +95,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       this.setState({ showJoinModal: false });
     }
   }
-
-  render(): $React$Node {
-    return this.state.project ? (
-      this._renderPageLayout()
-    ) : (
-      <div>{this.state.loadStatusMsg}</div>
-    );
-  }
-  // TODO: Remove Headers component and get them from the backend
   // TODO: See if there's a more elegant way to construct this than passing the project prop repeatedly
 
-  _renderPageLayout(): React$Node {
+  render(): React$Node {
     const project = this.state.project;
     return (
       <div className="container Profile-root">
@@ -119,7 +109,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
         </div>
         <div className="row flex-lg-nowrap">
           <div className="Profile-primary-section col-12 col-lg-auto flex-lg-shrink-1">
-            {this._renderMainSection(project)}
+            {this._renderPrimarySection(project)}
           </div>
 
           <div className="Profile-secondary-section col-12 col-lg-auto">
@@ -133,7 +123,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   _renderTopSection(project) {
     return (
       <div className="Profile-top-section-content">
-        <div className="AboutProject-top-logo">
+        <div className="Profile-top-logo">
           <img
             src={
               project &&
@@ -142,7 +132,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             }
           />
         </div>
-        <div className="AboutProject-top-details">
+        <div className="Profile-top-details">
           <h1>{project && project.project_name}</h1>
           <h3>
             {project &&
@@ -171,7 +161,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           />
         </div>
 
-        <div className="AboutProject-top-interactions">
+        <div className="Profile-top-interactions">
           <ApproveGroupsSection project={this.props.project} />
 
           <ProjectVolunteerModal
@@ -190,10 +180,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     );
   }
 
-  // tabbed main section content
-  _renderMainSection(project) {
+  // tabbed primary section content
+  _renderPrimarySection(project) {
     return (
-      <div className="Profile-main-container">
+      <div className="Profile-primary-container">
         <Tabs defaultActiveKey="proj-details" id="AboutProject-tabs">
           <Tab
             eventKey="proj-details"
@@ -221,13 +211,16 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 </div>
               </React.Fragment>
             )}
-            
-            <div className="AboutProject-skilltech-container pt-4"> 
+
+            <div className="AboutProject-skilltech-container pt-4">
               {project && !_.isEmpty(project.project_positions) && (
                 <div className="AboutProject-skills">
-                  <h4>Skills Needed</h4>
+                  <h4>Roles Needed</h4>
                   {project.project_positions.map(position => (
-                    <span className="Profile-pill">
+                    <span
+                      className="Profile-pill"
+                      key={position.roleTag.tag_name}
+                    >
                       {position.roleTag.display_name}
                     </span>
                   ))}
@@ -238,7 +231,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 <div className="AboutProject-technologies">
                   <h4>Technologies Used</h4>
                   {project.project_technologies.map(tech => (
-                    <span className="Profile-pill">{tech.display_name}</span>
+                    <span className="Profile-pill" key={tech.tag_name}>
+                      {tech.display_name}
+                    </span>
                   ))}
                 </div>
               )}
@@ -301,7 +296,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       <div className="Profile-secondary-container">
         {project && !_.isEmpty(project.project_links) && (
           <React.Fragment>
-            <div className="AboutProject-links AboutProject-secondary-section">
+            <div className="Profile-links AboutProject-secondary-section">
               <h4>Links</h4>
               {this._renderLinks()}
             </div>
@@ -369,7 +364,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   _renderContactAndVolunteerButtons(): React$Node {
     return (
-      <div className="AboutProject-owner">
+      <div className="Profile-owner">
         <ContactProjectButton project={this.state.project} />
         <ContactVolunteersButton project={this.state.project} />
         <InviteProjectToGroupButton project={this.state.project} />
@@ -425,7 +420,8 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       project &&
       project.project_positions &&
       _.chain(project.project_positions)
-        .sortBy(["roleTag.subcategory", "roleTag.display_name"])
+        .filter(position => !position.isHidden)
+        .sortBy(["orderNumber", "id"])
         .value()
         .map((position, i) => {
           return (

@@ -33,12 +33,14 @@
 @import "vendor/react-datepicker/_react-datepicker";
 @import "vendor/react-image-crop/ReactCrop";
 
+// import DemocracyLab global style rules before components
+@import "partials/Global";
+
 //import DemocracyLab component partials
 @import "partials/AboutGroupDisplay";
 @import "partials/AboutUs";
 @import "partials/AboutUser";
 @import "partials/BioModal";
-@import "partials/AlertSignupModal";
 @import "partials/FlashMessage";
 @import "partials/FindProjectsController";
 @import "partials/CollapsibleMenuItem";
@@ -46,7 +48,6 @@
 @import "partials/LandingController";
 @import "partials/MainHeader";
 @import "partials/MainFooter";
-@import "partials/project_signup"; // TODO: verify if we use any of these rules (Oct 2019)
 @import "partials/MyProjectCard";
 @import "partials/MyProjectsController";
 @import "partials/ProjectCard";
@@ -60,8 +61,6 @@
 @import "partials/ProjectTagContainer";
 @import "partials/ResetSearchButton";
 @import "partials/SectionLink";
-@import "partials/SubHeader";
-@import "partials/TagsDisplay";
 @import "partials/LogInController";
 @import "partials/VolunteerCard";
 @import "partials/CollapsibleText";
@@ -71,9 +70,7 @@
 @import "partials/IconLinkDisplay";
 @import "partials/AlertHeader";
 @import "partials/SignedUpController";
-@import "partials/PartnerWithUsController";
 @import "partials/DonateController";
-@import "partials/Global";
 @import "partials/ThankYouController";
 @import "partials/Press";
 @import "partials/SocialFooter";
@@ -95,3 +92,10 @@
 @import "partials/MyEvents";
 @import "partials/ProjectProfileSearch";
 @import "partials/Profile";
+@import "partials/Carousels";
+@import "partials/LoadingFrame";
+@import "partials/PositionList";
+@import "partials/LinkList";
+@import "partials/Video";
+@import "partials/FileUploadList";
+@import "partials/FavoriteToggle";

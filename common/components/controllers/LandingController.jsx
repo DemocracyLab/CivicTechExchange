@@ -5,7 +5,7 @@ import SplashScreen, {
   HeroImage,
 } from "../componentsBySection/FindProjects/SplashScreen.jsx";
 import RecentProjectsSection from "../componentsBySection/Landing/RecentProjectsSection.jsx";
-import TestimonialCarousel from "../componentsBySection/Landing/TestimonialCarousel.jsx";
+import TestimonialCarousel from "../common/carousel/TestimonialCarousel.jsx";
 import Partners from "../componentsBySection/Landing/Partners.jsx";
 import cdn from "../utils/cdn";
 import Button from "react-bootstrap/Button";
@@ -45,7 +45,7 @@ class LandingController extends React.PureComponent<{||}> {
   _renderTopSplash(): React$Node {
     const header: string = "Make Tech.  Do Good.";
     const text: string =
-      "We connect skilled volunteers and tech-for-good projects";
+      "We connect tech-for-good projects with skilled volunteers and socially responsible companies.";
 
     return (
       <SplashScreen
@@ -55,17 +55,24 @@ class LandingController extends React.PureComponent<{||}> {
       >
         <Button
           variant="primary"
-          className="SplashScreen-find-projects-btn"
+          className="SplashScreen-find-projects-btn LandingController-fixed-width-button"
           href={url.section(Section.FindProjects)}
         >
-          Find Projects
+          Explore Projects
         </Button>
         <Button
           variant="primary"
-          className="SplashScreen-create-project-btn"
+          className="SplashScreen-create-project-btn LandingController-fixed-width-button"
           href={url.sectionOrLogIn(Section.CreateProject)}
         >
           Create A Project
+        </Button>
+        <Button
+          variant="primary"
+          className="SplashScreen-create-project-btn LandingController-fixed-width-button"
+          href={url.section(Section.Companies)}
+        >
+          For Companies
         </Button>
       </SplashScreen>
     );
@@ -161,12 +168,9 @@ class LandingController extends React.PureComponent<{||}> {
 
   _renderTestimonials() {
     return (
-      <div className="LandingController-testimonial-container">
-        <h2 className="text-center">Testimonials</h2>
-        <TestimonialCarousel
-          className="LandingController-testimonial"
-          interval={15000}
-        />
+      <div className="LandingController-testimonial-container carousel-testimonial-root ">
+        <h2 className="text-center headline1">Testimonials</h2>
+        <TestimonialCarousel interval={15000} />
       </div>
     );
   }
@@ -186,10 +190,7 @@ class LandingController extends React.PureComponent<{||}> {
             Let us help your company, non-profit or group strengthen your
             culture and make an impact!
           </p>
-          <Button
-            variant="outline-dark"
-            href={url.section(Section.PartnerWithUs)}
-          >
+          <Button variant="outline-dark" href={url.section(Section.Companies)}>
             Learn More
           </Button>
         </div>

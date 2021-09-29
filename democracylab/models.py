@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from common.helpers.collections import distinct
 from common.helpers.random import generate_uuid
+from common.helpers.user_helpers import clear_user_context
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
@@ -24,6 +25,11 @@ class Contributor(User):
     uuid = models.CharField(max_length=32, blank=True, default=generate_uuid)
     qiqo_uuid = models.CharField(max_length=50, blank=True)
     qiqo_signup_time = models.DateTimeField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        existing_user = Contributor.objects.filter(email=self.email).exists()
+        if not existing_user or (self.first_name and self.last_name):
+            super(Contributor, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.id_full_name()
@@ -48,6 +54,7 @@ class Contributor(User):
         other_files = list(filter(lambda file: file.file_category != civictechprojects.models.FileCategory.THUMBNAIL.value, files))
 
         user = {
+            'id': self.id,
             'email': self.email,
             'first_name': self.first_name,
             'last_name': self.last_name,
@@ -80,6 +87,9 @@ class Contributor(User):
             user['user_thumbnail'] = thumbnail_files[0].to_json()
 
         return user
+
+    def purge_cache(self):
+        clear_user_context(self)
 
     def update_linked_items(self):
         # Recache owned projects

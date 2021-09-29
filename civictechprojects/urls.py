@@ -66,9 +66,6 @@ urlpatterns = [
     url(r'^api/events', views.events_list),
     url(r'^api/limited_listings', views.limited_listings),
     url(r'^api/groups', views.groups_list),
-    url(r'^api/my_projects', views.my_projects),
-    url(r'^api/my_events', views.my_events),
-    url(r'^api/my_groups', views.my_groups),
     url(r'^api/tags/groups', views.group_tags_counts),
     url(r'^api/tags', views.tags),
     url(r'^admin/', admin.site.urls),
@@ -81,9 +78,12 @@ urlpatterns = [
     url(r'', include(v1_urls)),
     url(r'^api/team$', views.team, name='team'),
     url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
+    url(r'api/project/(?P<project_id>[0-9]+)/volunteers/$',views.get_project_volunteers,name='get_project_volunteers'),
     url(r'^api/group/(?P<group_id>[0-9]+)/invite$', views.invite_project_to_group, name='invite_project_to_group'),
     url(r'^api/invite/(?P<invite_id>[0-9]+)/approve$', views.accept_group_invitation, name='accept_group_invitation'),
     url(r'^api/invite/(?P<invite_id>[0-9]+)/reject$', views.reject_group_invitation, name='reject_group_invitation'),
+    url(r'^api/favorite/project/(?P<project_id>[0-9]+)/$', views.project_favorite, name='project_favorite'),
+    url(r'^api/unfavorite/project/(?P<project_id>[0-9]+)/$', views.project_unfavorite, name='project_unfavorite'),
     url(r'^api/group/(?P<group_id>[0-9]+)/$', views.get_group, name='get_group'),
     url(r'^api/event/(?P<event_id>.*)/$', views.get_event, name='get_event'),
     url(r'^volunteer/(?P<project_id>[0-9]+)/$', views.volunteer_with_project, name='volunteer_with_project'),
@@ -95,7 +95,8 @@ urlpatterns = [
     url(r'^volunteer/demote/(?P<application_id>[0-9]+)/$', views.demote_project_volunteer, name='demote_project_volunteer'),
     url(r'^volunteer/renew/(?P<application_id>[0-9]+)/$', views.renew_volunteering_with_project, name='renew_volunteering_with_project'),
     url(r'^volunteer/conclude/(?P<application_id>[0-9]+)/$', views.conclude_volunteering_with_project, name='conclude_volunteering_with_project'),
-    url(r'^alert/create/$', views.add_alert, name='add_alert')
+    url(r'^alert/create/$', views.add_alert, name='add_alert'),
+    url(r'^api/testimonials/(?P<category>[-\w]*)', views.get_testimonials, name='get_testimonials'),
 
 ]
 

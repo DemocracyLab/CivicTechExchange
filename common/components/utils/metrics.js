@@ -3,6 +3,7 @@ import { TagDefinition } from "./ProjectAPIUtils.js";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import Async from "./async.js";
 import { SectionType } from "../enums/Section.js";
+import type { Dictionary } from "../types/Generics.jsx";
 import _ from "lodash";
 
 const tagCategoryEventMapping: { [key: string]: string } = _.fromPairs([
@@ -13,13 +14,18 @@ const tagCategoryEventMapping: { [key: string]: string } = _.fromPairs([
   [TagCategory.PROJECT_STAGE, "addProjectStageTag"],
 ]);
 
-function _logEvent(
-  eventName: string,
-  parameters: ?{ [key: string]: string }
-): void {
-  Async.onEvent("fbLoaded", () => {
-    FB.AppEvents.logEvent(eventName, null, parameters);
-  });
+type MetricsParameters = Dictionary<string | number>;
+
+type HeapInterface = {|
+  track: (eventName: string, properties: ?MetricsParameters) => void,
+|};
+
+function _logEvent(eventName: string, parameters: ?MetricsParameters): void {
+  if (window.HEAP_ANALYTICS_ID) {
+    Async.onEvent("heapLoaded", () => {
+      window.heap.track(eventName, parameters);
+    });
+  }
 }
 
 class metrics {
@@ -77,6 +83,10 @@ class metrics {
 
   static logSearchChangeSortEvent(sortField: string): void {
     _logEvent("sort_by_field", { sortField: sortField });
+  }
+
+  static logFilterProjectsByFavorite(favoritesOnly: boolean): void {
+    _logEvent("project_filter_by_favorites", { favoritesOnly: favoritesOnly });
   }
 
   static logGroupSearchChangeSortEvent(sortField: string): void {
@@ -248,6 +258,16 @@ class metrics {
 
   static logClickHeaderLink(url: string, userId: ?number): void {
     _logEvent("headerLinkClick", { url: url, userId: userId || 0 });
+  }
+
+  static logProjectSearchResults(
+    projectCount: number,
+    queryString: string
+  ): void {
+    _logEvent("projectSearchResults", {
+      projectCount: projectCount,
+      queryString: queryString,
+    });
   }
 }
 

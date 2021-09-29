@@ -68,6 +68,7 @@ const my_projects = {
       project_name: "2019 Launch",
       project_creator: 1,
       isApproved: true,
+      isCreated: true
     },
   ],
   volunteering_projects: [
@@ -87,6 +88,8 @@ const my_projects = {
         },
       },
       application_text: "Able to pitch in",
+      application_date: "2020-09-09 21:31:02.950044+00:00",
+      platform_date_joined: "2019-10-09 02:26:30+00:00",
       roleTag: {
         display_name: "Full Stack Developer",
         tag_name: "full-stack-developer",

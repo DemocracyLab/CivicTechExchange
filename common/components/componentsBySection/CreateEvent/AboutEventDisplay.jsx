@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react";
-import Linkify from "react-linkify";
+import ReactMarkdown from "react-markdown";
 import type Moment from "moment";
 import datetime, { DateFormat } from "../../utils/datetime.js";
 import Button from "react-bootstrap/Button";
@@ -9,9 +9,10 @@ import CurrentUser from "../../utils/CurrentUser.js";
 import { EventData } from "../../utils/EventAPIUtils.js";
 import urlHelper from "../../utils/url.js";
 import Section from "../../enums/Section";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
 import _ from "lodash";
+import MainFooter from "../../chrome/MainFooter.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -55,70 +56,71 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       endDate
     );
     return !event ? null : (
-      <div className="AboutEvent-root container">
-        <div className="AboutEvent-title row">
-          <div className="col-12 AboutEvent-header">
-            {!this.props.viewOnly &&
-              (CurrentUser.userID() === this.state.event.event_creator ||
-                CurrentUser.isStaff()) &&
-              this._renderEditButton()}
-            <div className="AboutEvent-title-date">
-              {startDate.format(DateFormat.MONTH_DATE_YEAR)}
-            </div>
-            <h1>{event.event_name}</h1>
-            <p>{event.event_short_description}</p>
-          </div>
-        </div>
-
-        <div className="AboutEvent-EventBanner row">
-          <div className="AboutEvent-info col-xs-12 col-lg-4">
-            <div className="AboutEvent-info-inner">
-              <h3>Info</h3>
-              {this.state.event.event_organizers_text && (
-                <React.Fragment>
-                  <h5 className="AboutEvent-info-header">Organizers</h5>
-                  <div className="AboutEvent-location">
-                    <p>{this.state.event.event_organizers_text}</p>
-                  </div>
-                </React.Fragment>
-              )}
-
-              {isSingleDayEvent
-                ? this._renderDateTimeSections(startDate, endDate)
-                : this._renderDatesSection(startDate, endDate)}
-
-              <h5 className="AboutEvent-info-header">Location</h5>
-              <div className="AboutEvent-location">
-                <p>{this.state.event.event_location}</p>
-              </div>
-
-              {this.state.event.event_rsvp_url && this._renderRSVPButton()}
+      <React.Fragment>
+        <div className="AboutEvent-root container">
+          <div className="AboutEvent-title row">
+            <div className="col-12 AboutEvent-header">
               {!this.props.viewOnly &&
-                event.event_live_id &&
-                this._renderJoinLiveEventButton()}
+                (CurrentUser.userID() === this.state.event.event_creator ||
+                  CurrentUser.isStaff()) &&
+                this._renderEditButton()}
+              <div className="AboutEvent-title-date">
+                <h4>{startDate.format(DateFormat.MONTH_DATE_YEAR)}</h4>
+              </div>
+              <h1>{event.event_name}</h1>
+              <p>{event.event_short_description}</p>
             </div>
           </div>
-          <div className="col-xs-12 col-lg-8 AboutEvent-splash">
-            <img
-              src={event.event_thumbnail && event.event_thumbnail.publicUrl}
-            />
-          </div>
-        </div>
 
-        <div className="AboutEvent-details row">
-          <div className="col-12">
-            <Linkify>
-              <h3>Details</h3>
-              <p>{event.event_description}</p>
-              <h3>What We Will Do</h3>
-              <p>{event.event_agenda}</p>
-            </Linkify>
+          <div className="AboutEvent-EventBanner row">
+            <div className="AboutEvent-info col-xs-12 col-lg-4">
+              <div className="AboutEvent-info-inner">
+                <h3>Info</h3>
+                {this.state.event.event_organizers_text && (
+                  <React.Fragment>
+                    <h5 className="AboutEvent-info-header">Organizers</h5>
+                    <div className="AboutEvent-location">
+                      <p>{this.state.event.event_organizers_text}</p>
+                    </div>
+                  </React.Fragment>
+                )}
+
+                {isSingleDayEvent
+                  ? this._renderDateTimeSections(startDate, endDate)
+                  : this._renderDatesSection(startDate, endDate)}
+
+                <h5 className="AboutEvent-info-header">Location</h5>
+                <div className="AboutEvent-location">
+                  <p>{this.state.event.event_location}</p>
+                </div>
+
+                {this.state.event.event_rsvp_url && this._renderRSVPButton()}
+                {!this.props.viewOnly &&
+                  event.event_live_id &&
+                  this._renderJoinLiveEventButton()}
+              </div>
+            </div>
+            <div className="col-xs-12 col-lg-8 AboutEvent-splash">
+              <img
+                src={event.event_thumbnail && event.event_thumbnail.publicUrl}
+              />
+            </div>
           </div>
+
+          <div className="AboutEvent-details row">
+            <div className="col-12">
+              <h3>Details</h3>
+              <ReactMarkdown children={event.event_description} />
+              <h3>What We Will Do</h3>
+              <ReactMarkdown children={event.event_agenda} />
+            </div>
+          </div>
+          {!_.isEmpty(event.event_legacy_organization) && (
+            <ProfileProjectSearch viewOnly={this.props.viewOnly} />
+          )}
         </div>
-        {!_.isEmpty(event.event_legacy_organization) && (
-          <ProfileProjectSearch viewOnly={this.props.viewOnly} />
-        )}
-      </div>
+        <MainFooter key="main_footer" forceShow={event.show_headers} />
+      </React.Fragment>
     );
   }
 
@@ -215,8 +217,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
   initProjectSearch() {
     const event: EventData = this.state.event;
     if (event && !_.isEmpty(event.event_legacy_organization)) {
-      ProjectSearchDispatcher.dispatch({
-        type: "INIT",
+      UniversalDispatcher.dispatch({
+        type: "INIT_PROJECT_SEARCH",
         findProjectsArgs: {
           event_id: event.event_id,
           sortField: "project_name",

@@ -2,16 +2,21 @@
 
 "use strict";
 
-import type { MyProjectsActionType } from "./MyProjectsStore.js";
-import type { MyGroupsActionType } from "./MyGroupsStore.js";
-import type { NavigationActionType } from "./NavigationStore.js";
-
 import { Dispatcher } from "flux";
+import type { NavigationActionType } from "./NavigationStore.js";
+import type { OffsetActionType } from "./PageOffsetStore.js";
+import type { LinkListActionType } from "./LinkListStore.js";
+import type { FormFieldsActionType } from "./FormFieldsStore.js";
+import type { FavoritesActionType } from "./FavoritesStore.js";
+import type { ProjectSearchActionType } from "./ProjectSearchStore.js";
 
 type UniversalActionType =
-  | MyProjectsActionType
-  | MyGroupsActionType
-  | NavigationActionType;
+  | NavigationActionType
+  | OffsetActionType
+  | LinkListActionType
+  | FormFieldsActionType
+  | FavoritesActionType
+  | ProjectSearchActionType;
 
 const UniversalDispatcher: Dispatcher<UniversalActionType> = new Dispatcher();
 

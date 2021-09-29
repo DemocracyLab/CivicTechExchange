@@ -52,14 +52,14 @@ class BioModal extends React.PureComponent<Props, State> {
               <div className="bio-modal-nametitle-container">
                 {this._renderBioName()}
                 {this.props.person.title.map((title, i) => (
-                  <h5 className="bio-modal-title" key={i}>
+                  <h4 className="bio-modal-title" key={i}>
                     {title}
-                  </h5>
+                  </h4>
                 ))}
               </div>
             </Modal.Header>
             <Modal.Body style={{ whiteSpace: "pre-wrap" }}>
-              <h5 className="bio-modal-about">About</h5>
+              <h4 className="bio-modal-about">About</h4>
               {this._renderBody()}
             </Modal.Body>
             <Modal.Footer>
@@ -94,7 +94,7 @@ class BioModal extends React.PureComponent<Props, State> {
 
   _renderBioName(): React$Node {
     return (
-      <h4 className="bio-modal-name">
+      <h3 className="bio-modal-name">
         {this.props.person.profile_id ? (
           <a
             href={url.section(Section.Profile, {
@@ -109,7 +109,7 @@ class BioModal extends React.PureComponent<Props, State> {
             {this.props.person.first_name} {this.props.person.last_name}
           </React.Fragment>
         )}
-      </h4>
+      </h3>
     );
   }
 

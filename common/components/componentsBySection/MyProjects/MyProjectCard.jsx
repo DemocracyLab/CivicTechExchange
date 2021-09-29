@@ -4,9 +4,7 @@ import React from "react";
 import Section from "../../enums/Section.js";
 import url from "../../utils/url.js";
 import Button from "react-bootstrap/Button";
-
-import { MyProjectData } from "../../stores/MyProjectsStore.js";
-import CurrentUser from "../../utils/CurrentUser.js";
+import CurrentUser, { MyProjectData } from "../../utils/CurrentUser.js";
 import moment from "moment";
 
 //TODO: Update
@@ -22,6 +20,20 @@ type Props = {|
 type State = {|
   +isOwner: boolean,
 |};
+
+export let getStatus = function (isOwner: boolean, project: MyProjectData):string {
+  let status = "";
+  if (isOwner) {
+    status = project.isApproved ? "Published" : "Unpublished";
+  } else {
+    if (project.isApproved) {
+      status = project.isUpForRenewal ? "Expires on " + moment(project.projectedEndDate).format("l") : "Active";
+    } else {
+      status = "Pending";
+    }
+  }
+  return status;
+}
 
 class MyProjectCard extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
@@ -50,7 +62,8 @@ class MyProjectCard extends React.PureComponent<Props, State> {
                 <tr>{this.state.isOwner ? "Project Lead" : "Volunteer"}</tr>
               </td>
               <td className="MyProjectCard-column">
-                {this._renderProjectStatus()}
+                <tr className="MyProjectCard-header">{this.state.isOwner ? "Project Status" : "Volunteer Status"}</tr>
+                <tr>{this._getStatus()}</tr>
               </td>
               <td className="MyProjectCard-column">{this._renderButtons()}</td>
             </tr>
@@ -60,25 +73,8 @@ class MyProjectCard extends React.PureComponent<Props, State> {
     );
   }
 
-  _renderProjectStatus(): React$Node {
-    const header: string = this.state.isOwner
-      ? "Project Status"
-      : "Volunteer Status";
-    const status: string = this.state.isOwner
-      ? this.props.project.isApproved
-        ? "Published"
-        : "Unpublished"
-      : !this.props.project.isApproved
-      ? "Awaiting Approval"
-      : this.props.project.isUpForRenewal
-      ? "Expires on " + moment(this.props.project.projectedEndDate).format("l")
-      : "Active";
-    return (
-      <React.Fragment>
-        <tr className="MyProjectCard-header">{header}</tr>
-        <tr>{status}</tr>
-      </React.Fragment>
-    );
+  _getStatus(): string {
+    return getStatus(this.state.isOwner, this.props.project);
   }
 
   _renderButtons(): ?Array<React$Node> {
@@ -86,6 +82,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
     // TODO: Reorder buttons according to re-engagement spec
     let buttons: ?Array<React$Node> = [
       <Button
+        key={"view"+id}
         className="MyProjectCard-button"
         href={url.section(Section.AboutProject, id)}
         variant="info"
@@ -97,6 +94,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
     if (this.state.isOwner) {
       buttons = buttons.concat([
         <Button
+          key={"edit"+id}
           className="MyProjectCard-button"
           href={url.section(Section.CreateProject, id)}
           variant="info"
@@ -104,6 +102,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
           Edit
         </Button>,
         <Button
+          key={"delete"+id}
           className="MyProjectCard-button"
           variant="danger"
           onClick={() => this.props.onProjectClickDelete(this.props.project)}
@@ -113,9 +112,10 @@ class MyProjectCard extends React.PureComponent<Props, State> {
       ]);
     }
 
-    if (this.props.project.isUpForRenewal && this.props.project.isApproved) {
+    if (this.props.project.isApproved && this.props.project.isUpForRenewal) {
       buttons = buttons.concat([
         <Button
+          key={"renew"+ id}
           className="MyProjectCard-button"
           variant="warning"
           onClick={() => this.props.onProjectClickRenew(this.props.project)}
@@ -123,6 +123,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
           Renew
         </Button>,
         <Button
+          key={"conclude"+id}
           className="MyProjectCard-button"
           variant="danger"
           onClick={() => this.props.onProjectClickConclude(this.props.project)}

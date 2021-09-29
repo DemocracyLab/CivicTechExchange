@@ -127,9 +127,15 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
                 headerText="Leave Project"
                 messagePrompt="State the reasons you wish to leave this project (Optional)"
                 confirmButtonText="Confirm"
+                confirmProcessingButtonText="Confirming"
                 maxCharacterCount={3000}
                 requireMessage={false}
-                onConfirm={this.confirmLeaveProject.bind(this)}
+                onSelection={this.confirmLeaveProject.bind(this)}
+                onConfirmOperationComplete={() =>
+                  this.setState({
+                    showLeaveProjectModal: false,
+                  })
+                }
               />
             </div>
           );
@@ -177,7 +183,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
-        href={url.section(Section.LogIn, url.getPreviousPageArg())}
+        href={url.logInThenReturn()}
       >
         Sign in to Volunteer
       </Button>

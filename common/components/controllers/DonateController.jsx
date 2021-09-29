@@ -15,10 +15,10 @@ type State = {|
 |};
 
 const DonationAmountOptions: $ReadOnlyArray<SelectOption> = [
+  { label: "$5", value: "5" },
   { label: "$10", value: "10" },
   { label: "$25", value: "25" },
   { label: "$50", value: "50" },
-  { label: "$75", value: "75" },
   { label: "$100", value: "100" },
   { label: "$250", value: "250" },
   { label: "$500", value: "500" },
@@ -26,16 +26,16 @@ const DonationAmountOptions: $ReadOnlyArray<SelectOption> = [
 ];
 
 const DonationMonthlyOptions: $ReadOnlyArray<SelectOption> = [
-  { label: "One-Time", value: false },
   { label: "Monthly", value: true },
+  { label: "One-Time", value: false },
 ];
 
 class DonateController extends React.Component<{||}, State> {
   constructor(): void {
     super();
     this.state = {
-      donateAmount: null,
-      donateMonthly: null,
+      donateAmount: 25,
+      donateMonthly: true,
     };
   }
 
@@ -70,6 +70,7 @@ class DonateController extends React.Component<{||}, State> {
                   <RadioButtons
                     variant="outline-dark"
                     options={DonationAmountOptions}
+                    defaultSelection={DonationAmountOptions[2]}
                     onSelection={this.handleFieldSelection.bind(
                       this,
                       "donateAmount"
