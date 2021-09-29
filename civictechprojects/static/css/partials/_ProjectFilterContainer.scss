@@ -28,7 +28,30 @@
   transform: translateX(0);
 }
 
+.ProjectFilterContainer-nav {
+  label {
+    margin-bottom: 0;
+    width: 100%;
+    display: flex;
+  }
+.dropdown-item {
+  width: 100%;
+  height: 48px; // clicktarget size
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  span {
+    padding: 0 4px;
+  }
+  span:last-of-type {
+    padding-right: 0;
+    margin-left: auto; // aligns number or check on right edge of menu
+  }
+}
+
+}
+
 // .RenderFilterCategory-activecount will be the orange bg circle with number indicating active filters in that category
 // .RenderFilterCategory-arrow is for the downward facing chevron indicating dropdown; may not need the class
 
-//for mobile (at least) .dropdown-item { white-space: nowrap; } will have to be overridden and allow wrap
+//for mobile (at least) .dropdown-item { white-space: nowrap; } will have to be overridden and allow wrap -- see Organization Type. Bounding menu width issues though.
