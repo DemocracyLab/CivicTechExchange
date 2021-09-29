@@ -14,6 +14,9 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   // will probably need custom  dropdown handler but first get them rendering and get the checkbox function restored
   // data structure is a lot of nested arrays, so the render is a bit of a mess
   // TODO: verify if we need to keep/remove the as=nav stuff
+  // TODO: menu should stay open on filter item click; may need to refactor this (check dropdown docs, might need to use MenuItem directly? --
+  // something like <Dropdown><Input fn><Dropdown.Menu> then mapped MenuItems instead of Dropdown.Items?
+
   _renderWithSubcategories() {
     console.log(this.props.cdata);
     const cdata = this.props.cdata;
@@ -24,7 +27,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
         </Dropdown.Item>
 
         {key[1].map(subkey => (
-          <Dropdown.Item key={subkey.tag_name}>
+          <Dropdown.Item eventKey={subkey.tag_name} as="button">
             <input
               type="checkbox"
               id={subkey.tag_name}
@@ -46,7 +49,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
       </React.Fragment>
     ));
     return (
-      <Dropdown as={Nav.Item}>
+      <Dropdown>
         <Dropdown.Toggle
           variant="outline-secondary"
           id={this.props.displayName}
@@ -65,7 +68,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   _renderNoSubcategories() {
     const cdata = this.props.cdata;
     const mapped = cdata.map(key => (
-      <Dropdown.Item key={key.tag_name}>
+      <Dropdown.Item eventKey={key.tag_name} as="button">
         <input
           type="checkbox"
           id={key[0]}
