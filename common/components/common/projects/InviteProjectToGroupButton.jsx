@@ -33,7 +33,7 @@ class InviteProjectToGroupButton extends React.PureComponent<Props, State> {
     const userContext: UserContext = CurrentUser.userContext();
     this.state = {
       projectGroups: props.project.project_groups,
-      ownedGroups: userContext.owned_groups,
+      ownedGroups: CurrentUser.isLoggedIn() && userContext.owned_groups,
       showModal: false,
     };
     this.handleShow = this.handleShow.bind(this);

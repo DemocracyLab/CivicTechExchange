@@ -26,7 +26,10 @@ class Command(BaseCommand):
                         # Don't send conclusion emails if volunteer wasn't approved
                         send_volunteer_conclude_email(volunteer_relation.volunteer, volunteer_relation.project.project_name)
                         notify_project_owners_volunteer_concluded_email(volunteer_relation)
+                    user = volunteer_relation.volunteer
                     volunteer_relation.delete()
+                    volunteer_relation.project.recache()
+                    user.purge_cache()
                 elif volunteer_relation.is_approved:
                     # Don't send reminders if volunteer isn't approved
                     email_template = get_reminder_template_if_time(now, volunteer_relation)
