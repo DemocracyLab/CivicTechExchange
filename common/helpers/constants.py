@@ -44,7 +44,6 @@ class FrontEndSection(Enum):
     Companies = 'Companies'
     AddUserDetails = 'AddUserDetails'
     VideoOverview = 'VideoOverview'
-    Blog = 'Blog'
 
     # deprecated
     CorporateHackathon = 'CorporateHackathon'
@@ -53,6 +52,5 @@ class FrontEndSection(Enum):
 
 deprecated_page_redirects = {
     'CorporateEvent': FrontEndSection.Companies.value,
-    'PartnerWithUs': FrontEndSection.Companies.value,
-    'Press': FrontEndSection.Blog.value
+    'PartnerWithUs': FrontEndSection.Companies.value
 }
