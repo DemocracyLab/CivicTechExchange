@@ -99,6 +99,7 @@ export type ProjectDetailsAPIData = {|
   +project_creator: number,
   +project_claimed: boolean,
   +project_approved: boolean,
+  +project_created: boolean,
   +project_url: string,
   +project_organization: $ReadOnlyArray<TagDefinition>,
   +project_organization_type: $ReadOnlyArray<TagDefinition>,
@@ -118,7 +119,6 @@ export type ProjectDetailsAPIData = {|
   +project_owners: $ReadOnlyArray<VolunteerUserData>,
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date,
-  +project_groups: $ReadOnlyArray<GroupTileAPIData>,
   +project_events: $ReadOnlyArray<EventTileAPIData>,
 |};
 
