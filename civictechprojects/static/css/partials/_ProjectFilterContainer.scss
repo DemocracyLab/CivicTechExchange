@@ -28,28 +28,39 @@
   transform: translateX(0);
 }
 
-.ProjectFilterContainer-nav, .ProjectFilterContainer-offcanvas {
+.ProjectFilterContainer-nav,
+.ProjectFilterContainer-offcanvas {
   label {
     margin-bottom: 0;
     width: 100%;
-    display: flex;
+    display: inline-flex;
   }
   .dropdown-item {
     width: 100%;
-    height: 48px; // clicktarget size
+    min-height: 48px; // clicktarget size, min value to allow long titles to expand
     display: flex;
     justify-content: space-between;
     align-items: center;
+    white-space: normal;
+    input[type="checkbox"] {
+      height: 16px;
+      width: 16px;
+    }
     span {
-      padding: 0 4px;
+      padding: 0 8px;
     }
     span:last-of-type {
       padding-right: 0;
-      margin-left: auto; // aligns number or check on right edge of menu
+      margin: auto 0 auto auto; // aligns number or checked icon
     }
   }
 }
 
+@include media-breakpoint-up(lg) {
+  .ProjectFilterContainer-nav .dropdown-item {
+    min-width: 20rem; // TODO: fine tune this value
+  };
+}
 // .RenderFilterCategory-activecount will be the orange bg circle with number indicating active filters in that category
 // .RenderFilterCategory-arrow is for the downward facing chevron indicating dropdown; may not need the class
 

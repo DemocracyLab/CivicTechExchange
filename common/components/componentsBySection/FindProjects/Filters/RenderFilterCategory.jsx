@@ -10,12 +10,10 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   constructor(props: Props): void {
     super(props);
   }
-  //what I need is an item with the key name, a list of subcategories, each item has a second list of filter items
-  // will probably need custom  dropdown handler but first get them rendering and get the checkbox function restored
-  // data structure is a lot of nested arrays, so the render is a bit of a mess
-  // TODO: verify if we need to keep/remove the as=nav stuff
-  // TODO: menu should stay open on filter item click; may need to refactor this (check dropdown docs, might need to use MenuItem directly? --
-  // something like <Dropdown><Input fn><Dropdown.Menu> then mapped MenuItems instead of Dropdown.Items?
+    // TODO: verify if we need to keep/remove the as=nav stuff (low priority)
+  // TODO: menu should stay open on filter item click; may need to refactor this - can't use AutoClose prop, that's BS5/RB2  (high)
+  // TODO: subcategory expand/collapse just like category expand/collapse, ie stays open until closed manually
+  
 
   _renderWithSubcategories() {
     console.log(this.props.cdata);
