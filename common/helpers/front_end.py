@@ -2,7 +2,7 @@ import re
 from django.conf import settings
 from html import unescape
 from urllib import parse as urlparse
-from .constants import deprecated_page_redirects
+from .constants import deprecated_page_redirects, FrontEndSection
 from common.helpers.dictionaries import keys_omit
 
 
@@ -88,5 +88,8 @@ def get_clean_url(url):
 
 
 def redirect_from_deprecated_url(section_name):
+    # Redirect deprecated Press section
+    if section_name == FrontEndSection.Press.value:
+        return settings.BLOG_URL
     if section_name in deprecated_page_redirects:
         return section_url(deprecated_page_redirects[section_name])

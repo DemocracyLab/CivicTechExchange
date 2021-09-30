@@ -16,7 +16,6 @@ class SectionSitemap(Sitemap):
         str(FrontEndSection.AboutUs.value),
         str(FrontEndSection.FindProjects.value),
         str(FrontEndSection.Donate.value),
-        str(FrontEndSection.Press.value),
         str(FrontEndSection.ContactUs.value),
         str(FrontEndSection.Companies.value)
     ]

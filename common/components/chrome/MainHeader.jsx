@@ -132,10 +132,6 @@ class MainHeader extends React.Component<{||}, State> {
                 urlHelper.section(Section.ContactUs),
                 "Contact Us"
               )}
-              {this._renderNavDropdownItem(
-                urlHelper.section(Section.Press),
-                "News"
-              )}
             </NavDropdown>
             {window.BLOG_URL ? (
               <Nav.Link href={window.BLOG_URL}>Blog</Nav.Link>
