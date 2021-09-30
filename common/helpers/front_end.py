@@ -88,6 +88,7 @@ def get_clean_url(url):
 
 
 def redirect_from_deprecated_url(section_name):
+    # Redirect deprecated Press section
     if section_name == FrontEndSection.Press.value:
         return settings.BLOG_URL
     if section_name in deprecated_page_redirects:
