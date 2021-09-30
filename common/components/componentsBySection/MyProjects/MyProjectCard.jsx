@@ -25,7 +25,6 @@ export let getStatus = function(
   isOwner: boolean,
   project: MyProjectData
 ): string {
-  // TODO: Update unit test
   let status = "";
   if (isOwner) {
     if (project.isApproved) {

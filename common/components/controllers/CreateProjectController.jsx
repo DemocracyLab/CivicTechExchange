@@ -82,9 +82,10 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
           formComponent: ProjectPositionsForm,
         },
         {
-          header: "Ready to publish your project?",
+          header: "Ready to submit your project?",
           subHeader:
-            "Please review your project's details and click \"PUBLISH\" below when you're ready.",
+            'Please review your project’s details and click "Submit" below when you’re ready.',
+          submitButtonText: "Submit",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onFinalSubmitSuccess,
           formComponent: ProjectPreviewForm,
@@ -119,6 +120,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     if (!CurrentUser.isCoOwnerOrOwner(project) && !CurrentUser.isStaff()) {
       // TODO: Handle someone other than owner
     } else {
+      // TODO: Change final step text if project is published
       this.setState({
         project: project,
         projectIsLoading: false,
@@ -166,7 +168,9 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     metrics.logProjectCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
     window.location.href = url.section(Section.MyProjects, {
-      projectAwaitingApproval: url.encodeNameForUrlPassing(project.project_name),
+      projectAwaitingApproval: url.encodeNameForUrlPassing(
+        project.project_name
+      ),
     });
   }
 
