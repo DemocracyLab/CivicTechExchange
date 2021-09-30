@@ -10,7 +10,7 @@ import type {
   ProjectData,
   TagDefinition,
   TagDefinitionCount,
-  ProjectAPIData,
+  ProjectAPIData
 } from "../utils/ProjectAPIUtils.js";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import urls from "../utils/url.js";
@@ -21,7 +21,7 @@ import _ from "lodash";
 
 export type SearchSettings = {|
   updateUrl: boolean,
-  defaultSort: string,
+  defaultSort: string
 |};
 
 export type FindProjectsArgs = {|
@@ -48,7 +48,7 @@ type FindProjectsResponse = {|
   +numPages: number,
   +numProjects: number,
   +tags: Dictionary<TagDefinition>,
-  +availableCountries: $ReadOnlyArray<string>,
+  +availableCountries: $ReadOnlyArray<string>
 |};
 
 type FindProjectsData = {|
@@ -56,13 +56,13 @@ type FindProjectsData = {|
   +availableCountries: $ReadOnlyArray<string>,
   +numPages: number,
   +numProjects: number,
-  +tags: Dictionary<TagDefinition>,
+  +tags: Dictionary<TagDefinition>
 |};
 
 export type LocationRadius = {|
   latitude: number,
   longitude: number,
-  radius: number,
+  radius: number
 |};
 
 export function locationRadiusToString(locationRadius: LocationRadius): string {
@@ -76,7 +76,7 @@ export function locationRadiusFromString(str: string): LocationRadius {
     parts.length > 2 && {
       latitude: parseFloat(parts[0]),
       longitude: parseFloat(parts[1]),
-      radius: parseInt(parts[2]),
+      radius: parseInt(parts[2])
     }
   );
 }
@@ -85,48 +85,48 @@ export type ProjectSearchActionType =
   | {
       type: "INIT_PROJECT_SEARCH",
       searchSettings: SearchSettings,
-      findProjectsArgs: FindProjectsArgs,
+      findProjectsArgs: FindProjectsArgs
     }
   | {
       type: "ADD_TAG",
-      tag: Tag,
+      tag: Tag
     }
   | {
       type: "REMOVE_TAG",
-      tag: Tag,
+      tag: Tag
     }
   | {
       type: "SET_KEYWORD",
-      keyword: string,
+      keyword: string
     }
   | {
       type: "SET_SORT",
-      sortField: string,
+      sortField: string
     }
   | {
-      type: "UNSET_LEGACY_LOCATION",
+      type: "UNSET_LEGACY_LOCATION"
     }
- | {
-      type: "ERROR",
+  | {
+      type: "ERROR"
     }
   | {
       type: "SET_LOCATION",
-      locationRadius: ?LocationRadius,
+      locationRadius: ?LocationRadius
     }
   | {
       type: "SET_PAGE",
-      page: number,
+      page: number
     }
   | {
       type: "SET_FAVORITES_ONLY",
-      favoritesOnly: boolean,
+      favoritesOnly: boolean
     }
   | {
-      type: "CLEAR_FILTERS",
+      type: "CLEAR_FILTERS"
     }
   | {
       type: "SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
-      projectsResponse: FindProjectsResponse,
+      projectsResponse: FindProjectsResponse
     };
 
 const defaultSort = "-project_date_modified";
@@ -142,7 +142,7 @@ const DEFAULT_STATE = {
   projectsData: {},
   searchSettings: {
     updateUrl: false,
-    defaultSort: defaultSort,
+    defaultSort: defaultSort
   },
   findProjectsArgs: {},
   filterApplied: false,
@@ -193,7 +193,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           "searchSettings",
           action.searchSettings || {
             updateUrl: false,
-            defaultSort: defaultSort,
+            defaultSort: defaultSort
           }
         );
         return this._loadProjects(initialState, true);
@@ -257,7 +257,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           numPages: numPages,
           numProjects: numProjects,
           allTags: allTags,
-          availableCountries: availableCountries,
+          availableCountries: availableCountries
         });
         return state.set("projectsLoading", false);
       default:
@@ -295,7 +295,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           positions: state.positions,
           event_id: oldArgs.event_id,
           group_id: oldArgs.group_id,
-          favoritesOnly: state.favoritesOnly,
+          favoritesOnly: state.favoritesOnly
         },
         _.identity
       );
@@ -400,13 +400,13 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = state.set("projectsData", {});
     const findProjectsArgs: FindProjectsArgs = _.pick(state.findProjectsArgs, [
       "event_id",
-      "group_id",
+      "group_id"
     ]);
     state = state.set(
       "findProjectsArgs",
       Object.assign(findProjectsArgs, {
         page: 1,
-        sortField: state.searchSettings.defaultSort,
+        sortField: state.searchSettings.defaultSort
       })
     );
     return state;
@@ -432,14 +432,14 @@ class ProjectSearchStore extends ReduceStore<State> {
       .then(getProjectsResponse =>
         UniversalDispatcher.dispatch({
           type: "SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
-          projectsResponse: getProjectsResponse,
+          projectsResponse: getProjectsResponse
         })
-      ).catch(
-
-        error => {
+      )
+      .catch(error => {
         UniversalDispatcher.dispatch({
-        type: "ERROR"
-      })});
+          type: "ERROR"
+        });
+      });
     return state;
   }
 

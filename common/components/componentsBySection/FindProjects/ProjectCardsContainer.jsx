@@ -103,7 +103,12 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   }
 
   _renderCards(): React$Node {
-    if(this.state.error || (this.state.projects && this.state.projects.size === 0) && this.props.handleEmptyProject){
+    if (
+      this.state.error ||
+      (this.state.projects &&
+        this.state.projects.size === 0 &&
+        this.props.handleEmptyProject)
+    ) {
       this.props.handleEmptyProject();
     }
     return !this.state.projects ? (
@@ -135,7 +140,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
     this.setState({ current_page: nextPage }, function() {
       UniversalDispatcher.dispatch({
         type: "SET_PAGE",
-        page: this.state.current_page,
+        page: this.state.current_page
       });
     });
   }
