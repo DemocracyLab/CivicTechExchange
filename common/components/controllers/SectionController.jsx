@@ -24,7 +24,6 @@ import EmailVerifiedController from "./EmailVerifiedController.jsx";
 import FlashMessage from "../chrome/FlashMessage.jsx";
 import DonateController from "./DonateController.jsx";
 import ThankYouController from "./ThankYouController.jsx";
-import PressController from "./PressController.jsx";
 import ContactUsController from "./ContactUsController.jsx";
 import CreateGroupController from "./CreateGroupController.jsx";
 import CreateEventController from "./CreateEventController.jsx";
@@ -105,8 +104,6 @@ class SectionController extends React.Component<{||}, State> {
         return <DonateController />;
       case Section.ThankYou:
         return <ThankYouController />;
-      case Section.Press:
-        return <PressController />;
       case Section.ContactUs:
         return <ContactUsController />;
       case Section.CreateGroup:
