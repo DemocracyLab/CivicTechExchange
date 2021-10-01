@@ -128,34 +128,40 @@ class LocationSearchSection extends React.Component<{||}, State> {
 
   _renderSelector(): React$Node {
     return (
-      <React.Fragment>
+      <Dropdown.Item className="LocationSearchSection-container">
         <label>Country(Required)</label>
-        <CountrySelector
-          countryCode={this.state.countryCode}
-          countryOptions={this.state.countryOptions}
-          countryCodeFormat={CountryCodeFormats.ISO_3}
-          onSelection={this.onCountrySelect.bind(this)}
-        />
+        <div className="LocationSearchSection-selector">
+          <CountrySelector
+            countryCode={this.state.countryCode}
+            countryOptions={this.state.countryOptions}
+            countryCodeFormat={CountryCodeFormats.ISO_3}
+            onSelection={this.onCountrySelect.bind(this)}
+          />
+        </div>
 
         <label>Near</label>
-        <LocationAutocomplete
-          countryCode={this.state.countryCode}
-          onSelect={this.onLocationSelect.bind(this)}
-          selected={this.state.locationInfo}
-        />
+        <div className="LocationSearchSection-selector">
+          <LocationAutocomplete
+            countryCode={this.state.countryCode}
+            onSelect={this.onLocationSelect.bind(this)}
+            selected={this.state.locationInfo}
+          />
+        </div>
 
         <label>Distance</label>
-        <Selector
-          id="radius"
-          isSearchable={false}
-          isClearable={false}
-          isMultiSelect={false}
-          options={[5, 10, 25, 50, 100, 200]}
-          labelGenerator={num => num + " Miles"}
-          selected={this.state.searchRadius || DefaultSearchRadius}
-          onSelection={this.onRadiusSelect.bind(this)}
-        />
-      </React.Fragment>
+        <div className="LocationSearchSection-selector">
+          <Selector
+            id="radius"
+            isSearchable={false}
+            isClearable={false}
+            isMultiSelect={false}
+            options={[5, 10, 25, 50, 100, 200]}
+            labelGenerator={num => num + " Miles"}
+            selected={this.state.searchRadius || DefaultSearchRadius}
+            onSelection={this.onRadiusSelect.bind(this)}
+          />
+        </div>
+      </Dropdown.Item>
     );
   }
 

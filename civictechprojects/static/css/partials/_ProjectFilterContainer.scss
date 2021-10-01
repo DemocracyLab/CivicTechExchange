@@ -1,4 +1,3 @@
-//TODO: refactor CSS to be less absurd, more reusable
 .ProjectFilterContainer-offcanvas.modal .modal-dialog {
   width: 350px;
   max-width: 80%;
@@ -52,6 +51,17 @@
     span:last-of-type {
       padding-right: 0;
       margin: auto 0 auto auto; // aligns number or checked icon
+    }
+  }
+  .LocationSearchSection-container {
+    display: flex;
+    flex-direction: column;
+    label {
+      margin: 8px 0;
+    }
+    .LocationSearchSection-selector {
+      width: 100%;
+      min-width: 100%;
     }
   }
 }
