@@ -91,6 +91,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
           bg="navlight"
           variant="light"
           className="ProjectFilterContainer-root"
+          // onSelect={() => this._handleNavSelect()}
         >
           <Navbar.Toggle aria-controls="ProjectFilterContainer-root" />
           <Navbar.Collapse
@@ -174,7 +175,26 @@ class ProjectFilterContainer extends React.Component<Props, State> {
               Filter Results
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>{this._displayFilters()}</Modal.Body>
+          <Modal.Body>
+          <Navbar
+          defaultExpand
+          collapseOnSelect={false}
+          bg="navlight"
+          variant="light"
+          className="ProjectFilterContainer-root ProjectFilterContainer-mobile-filters flex-column"
+          // onSelect={() => this._handleNavSelect()}
+        >
+          <Navbar.Toggle aria-controls="ProjectFilterContainer-offcanvas-root" />
+          <Navbar.Collapse
+            id="ProjectFilterContainer-offcanvas-root"
+            className="flex-column"
+          >
+            <Nav className="ProjectFilterContainer-nav mr-auto ">
+              {this._displayFilters()}
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        </Modal.Body>
           <Modal.Footer>
             <Button variant="outline-primary">Button</Button>
             <Button variant="outline-secondary">Button #2</Button>
@@ -188,6 +208,21 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     this.setState(prevState => ({
       showOffCanvasFilters: !prevState.showOffCanvasFilters,
     }));
+  }
+
+  _handleNavSelect() {
+    // https://react-bootstrap-v4.netlify.app/components/navbar/#navbar-api
+    //     A callback fired when a descendant of a child <Nav> is selected. Should be used to execute complex closing or other miscellaneous actions desired after selecting a descendant of <Nav>. Does nothing if no <Nav> or <Nav> descendants exist. The callback is called with an eventKey, which is a prop from the selected <Nav> descendant, and an event.
+    // function (
+    //  eventKey: mixed,
+    //  event?: SyntheticEvent
+    // )
+    // For basic closing behavior after all <Nav> descendant onSelect events in mobile viewports, try using collapseOnSelect.
+    // Note: If you are manually closing the navbar using this OnSelect prop, ensure that you are setting expanded to false and not toggling between true and false.
+
+    //what we want is  for the collapse prop NOT to close UNLESS the onClick event was on a 'done with filters' button or outside the dropdown entirely, if possible?
+    // but perhaps call an update function every click for things like counting num of active filters, etc?
+
   }
 
   _checkEnabled(tag: TagDefinition): boolean {

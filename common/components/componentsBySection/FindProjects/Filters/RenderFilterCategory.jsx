@@ -13,14 +13,14 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     // TODO: verify if we need to keep/remove the as=nav stuff (low priority)
   // TODO: menu should stay open on filter item click; may need to refactor this - can't use AutoClose prop, that's BS5/RB2  (high)
   // TODO: subcategory expand/collapse just like category expand/collapse, ie stays open until closed manually
-  
+  // TODO: Proper btn classing instead of this temporary use of secondary
 
   _renderWithSubcategories() {
     console.log(this.props.cdata);
     const cdata = this.props.cdata;
     const mapped = cdata.map(key => (
       <React.Fragment key={"Fragment-" + key[0]}>
-        <Dropdown.Item key={key[0]}>
+        <Dropdown.Item key={key[0]} >
           <h4>{key[0]}</h4>
         </Dropdown.Item>
 
@@ -49,7 +49,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     return (
       <Dropdown>
         <Dropdown.Toggle
-          variant="outline-secondary"
+          className="btn btn-outline-secondary"
           id={this.props.displayName}
           as={Nav.Link}
         >
@@ -88,7 +88,7 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     return (
       <Dropdown>
         <Dropdown.Toggle
-          variant="outline-secondary"
+          className="btn btn-outline-secondary"
           id={this.props.displayName}
           as={Nav.Link}
         >

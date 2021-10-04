@@ -43,7 +43,7 @@ class FavoriteFilter extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="favorite-filter" onClick={this.doToggle.bind(this)}>
+      <div className="favorite-filter btn btn-outline-secondary" onClick={this.doToggle.bind(this)}>
         Favorites
         <IconToggle
           toggled={this.state.favoritesOnly}

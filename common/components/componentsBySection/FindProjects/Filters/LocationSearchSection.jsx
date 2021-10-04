@@ -169,7 +169,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
     return (
       <Dropdown>
         <Dropdown.Toggle
-          variant="outline-secondary"
+          className="btn btn-outline-secondary"
           id="LocationSearchSection"
           as={Nav.Link}
         >
