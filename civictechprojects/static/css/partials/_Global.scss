@@ -220,6 +220,6 @@ a:active, .psuedo-link:active {
 a:visited {
   color: $color-link-visited;
 }
-a.btn:visited {
-  color: inherit; // buttons acting as links should not take visited color
+a.btn:visited, .btn:visited, button:visited {
+  color: inherit; // buttons acting as links should not take visited color -- we'll have to revisit this when buttons are implemented from DS
 }
