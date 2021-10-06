@@ -21,19 +21,28 @@ type State = {|
   +isOwner: boolean,
 |};
 
-export let getStatus = function (isOwner: boolean, project: MyProjectData):string {
+export let getStatus = function(
+  isOwner: boolean,
+  project: MyProjectData
+): string {
   let status = "";
   if (isOwner) {
-    status = project.isApproved ? "Published" : "Unpublished";
+    if (project.isApproved) {
+      status = "Published";
+    } else {
+      status = project.isCreated ? "Under Review" : "Unpublished";
+    }
   } else {
     if (project.isApproved) {
-      status = project.isUpForRenewal ? "Expires on " + moment(project.projectedEndDate).format("l") : "Active";
+      status = project.isUpForRenewal
+        ? "Expires on " + moment(project.projectedEndDate).format("l")
+        : "Active";
     } else {
       status = "Pending";
     }
   }
   return status;
-}
+};
 
 class MyProjectCard extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
@@ -62,7 +71,9 @@ class MyProjectCard extends React.PureComponent<Props, State> {
                 <tr>{this.state.isOwner ? "Project Lead" : "Volunteer"}</tr>
               </td>
               <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">{this.state.isOwner ? "Project Status" : "Volunteer Status"}</tr>
+                <tr className="MyProjectCard-header">
+                  {this.state.isOwner ? "Project Status" : "Volunteer Status"}
+                </tr>
                 <tr>{this._getStatus()}</tr>
               </td>
               <td className="MyProjectCard-column">{this._renderButtons()}</td>
@@ -82,7 +93,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
     // TODO: Reorder buttons according to re-engagement spec
     let buttons: ?Array<React$Node> = [
       <Button
-        key={"view"+id}
+        key={"view" + id}
         className="MyProjectCard-button"
         href={url.section(Section.AboutProject, id)}
         variant="info"
@@ -94,7 +105,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
     if (this.state.isOwner) {
       buttons = buttons.concat([
         <Button
-          key={"edit"+id}
+          key={"edit" + id}
           className="MyProjectCard-button"
           href={url.section(Section.CreateProject, id)}
           variant="info"
@@ -102,7 +113,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
           Edit
         </Button>,
         <Button
-          key={"delete"+id}
+          key={"delete" + id}
           className="MyProjectCard-button"
           variant="danger"
           onClick={() => this.props.onProjectClickDelete(this.props.project)}
@@ -115,7 +126,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
     if (this.props.project.isApproved && this.props.project.isUpForRenewal) {
       buttons = buttons.concat([
         <Button
-          key={"renew"+ id}
+          key={"renew" + id}
           className="MyProjectCard-button"
           variant="warning"
           onClick={() => this.props.onProjectClickRenew(this.props.project)}
@@ -123,7 +134,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
           Renew
         </Button>,
         <Button
-          key={"conclude"+id}
+          key={"conclude" + id}
           className="MyProjectCard-button"
           variant="danger"
           onClick={() => this.props.onProjectClickConclude(this.props.project)}

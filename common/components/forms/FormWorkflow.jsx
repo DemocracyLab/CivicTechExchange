@@ -12,6 +12,7 @@ import utils from "../utils/utils.js";
 export type FormWorkflowStepConfig<T> = {|
   header: string,
   subHeader: string,
+  submitButtonText: string,
   formComponent: React$Node,
   onSubmit: (
     SyntheticEvent<HTMLFormElement>,
@@ -217,8 +218,12 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
   }
 
   _renderForm(): React$Node {
-    const FormComponent: React$Node = this.props.steps[this.state.currentStep]
-      .formComponent;
+    const currentStep: FormWorkflowStepConfig = this.props.steps[
+      this.state.currentStep
+    ];
+    const FormComponent: React$Node = currentStep.formComponent;
+    const submitText: string =
+      currentStep.submitButtonText || (this.onLastStep() ? "PUBLISH" : "Next");
     return (
       <form
         onSubmit={this.onSubmit.bind(this)}
@@ -267,10 +272,8 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
                 <i
                   className={Glyph(GlyphStyles.LoadingSpinner, GlyphSizes.LG)}
                 ></i>
-              ) : this.onLastStep() ? (
-                "PUBLISH"
               ) : (
-                "Next"
+                submitText
               )}
             </button>
           </div>
