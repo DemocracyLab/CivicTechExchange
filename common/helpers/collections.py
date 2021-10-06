@@ -33,7 +33,7 @@ def distinct(list_a: list, list_b: list, key_func):
     :param list_a: First object list
     :param list_b: Second object list
     :param key_func: function for extracting unique key from objects
-    :return:
+    :return: The values of the two lists, minus duplicates.
     """
     lists_dict = {key_func(item): item for item in list_a}
     lists_dict.update({key_func(item): item for item in list_b})
