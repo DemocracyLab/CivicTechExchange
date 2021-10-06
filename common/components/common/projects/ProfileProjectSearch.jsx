@@ -11,16 +11,29 @@ import CollapsiblePreviewPanel from "../CollapsiblePreviewPanel.jsx";
 
 type Props = {|
   viewOnly: boolean,
-  wide: boolean,
+  wide: boolean
 |};
 
-class ProfileProjectSearch extends React.PureComponent<Props> {
+type State = {|
+  hidden: boolean
+|};
+
+class ProfileProjectSearch extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
+    this.state = {
+      hidden: true
+    };
+  }
+
+  handleEmptyProject(): void {
+    this.setState({
+      hidden: false
+    });
   }
 
   render(): ?$React$Node {
-    return (
+    return this.state.hidden ? (
       <React.Fragment>
         {!this.props.viewOnly && this._renderSearchControls()}
         <div className="row">
@@ -29,10 +42,11 @@ class ProfileProjectSearch extends React.PureComponent<Props> {
             staticHeaderText="Participating Projects"
             fullWidth={true}
             selectableCards={false}
+            handleEmptyProject={this.handleEmptyProject.bind(this)}
           />
         </div>
       </React.Fragment>
-    );
+    ) : null;
   }
 
   _renderSearchControls(): ?$React$Node {
@@ -44,7 +58,13 @@ class ProfileProjectSearch extends React.PureComponent<Props> {
       <React.Fragment>
         {" "}
         <div className="row justify-content-center ProjectProfileSearch-root">
-          <div className={ this.props.wide ? "col-12 col-md-10" : "col-12 col-md-10 col-lg-9 col-xl-8"}> 
+          <div
+            className={
+              this.props.wide
+                ? "col-12 col-md-10"
+                : "col-12 col-md-10 col-lg-9 col-xl-8"
+            }
+          >
             <h3 className="ProjectProfileSearch-sectiontitle pt-4">
               Search Participating Projects
             </h3>
