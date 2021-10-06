@@ -47,11 +47,6 @@ input[type="submit"]:disabled {
   border: $color-disabled-border;
 }
 
-//for on-page actions we want to appear as links
-.pseudo-link {
-  color: $color-orange;
-  text-decoration: underline;
-}
 
 //class-based toggle of background color
 .background-light {
@@ -210,4 +205,21 @@ h4,
   // font-size: 16px;
   // font-weight: 600;
   // }
+}
+
+// design system link colors are in _vars.scss and _bootstrapoverride, but we have some psuedoselectors here
+//for on-page actions we want to appear as links (e.g. js onclick events)
+// use pseudo-link as sparingly as possible - links should be links, doubly so since these won't respect :visited, etc
+.pseudo-link {
+  @extend a
+}
+a:active, .psuedo-link:active {
+  color: $color-link-active;
+  text-decoration: underline;
+}
+a:visited {
+  color: $color-link-visited;
+}
+a.btn:visited {
+  color: inherit; // buttons acting as links should not take visited color
 }
