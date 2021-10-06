@@ -6,7 +6,7 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-#TODO: Call out any missing required environment variables during startup
+# TODO: Call out any missing required environment variables during startup
 import os
 import ast
 import dj_database_url
@@ -68,11 +68,13 @@ SOCIALACCOUNT_ADAPTER = 'oauth2.adapter.SocialAccountAdapter'
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_AUTO_SIGNUP = True  # Bypass the signup form
-SOCIALACCOUNT_STORE_TOKENS = False  # Token table has foreign key on SocialApp table, which we're not using
+# Token table has foreign key on SocialApp table, which we're not using
+SOCIALACCOUNT_STORE_TOKENS = False
 SOCIAL_APPS_environ = os.environ.get('SOCIAL_APPS', None)
 if SOCIAL_APPS_environ is not None:
     SOCIAL_APPS = ast.literal_eval(SOCIAL_APPS_environ)
-    SOCIAL_APPS_VISIBILITY = {app: SOCIAL_APPS[app]["public"] for app in SOCIAL_APPS.keys()}
+    SOCIAL_APPS_VISIBILITY = {
+        app: SOCIAL_APPS[app]["public"] for app in SOCIAL_APPS.keys()}
 
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
@@ -87,8 +89,8 @@ SOCIALACCOUNT_PROVIDERS = {
     },
     'facebook': {
         'SCOPE': ['email', 'public_profile'],
-         'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-         'METHOD': 'oauth2'  # instead of 'js_sdk'
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'METHOD': 'oauth2'  # instead of 'js_sdk'
     },
 }
 
@@ -163,7 +165,7 @@ DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 LOGIN_REDIRECT_URL = '/'
 
-#Caching number of tag counts only for now - change this if other things are db-cached
+# Caching number of tag counts only for now - change this if other things are db-cached
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
@@ -186,7 +188,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 THROTTLE_RATE_ANONYMOUS = os.environ.get('THROTTLE_RATE_ANONYMOUS', '5/second')
-THROTTLE_RATE_AUTHENTICATED = os.environ.get('THROTTLE_RATE_AUTHENTICATED', '5/second')
+THROTTLE_RATE_AUTHENTICATED = os.environ.get(
+    'THROTTLE_RATE_AUTHENTICATED', '5/second')
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
@@ -219,8 +222,11 @@ def read_connection_config(config):
             ssl_certfile=None)
     }
 
-EMAIL_SUPPORT_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_SUPPORT_ACCT', 'None')))
-EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_VOLUNTEER_ACCT', 'None')))
+
+EMAIL_SUPPORT_ACCT = read_connection_config(
+    ast.literal_eval(os.environ.get('EMAIL_SUPPORT_ACCT', 'None')))
+EMAIL_VOLUNTEER_ACCT = read_connection_config(
+    ast.literal_eval(os.environ.get('EMAIL_VOLUNTEER_ACCT', 'None')))
 
 # Default log to console in the absence of any account configurations
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -228,15 +234,21 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 CONTACT_EMAIL = os.environ['CONTACT_EMAIL']
-FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
+FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get(
+    'FAKE_EMAILS', False) == 'True'
 
 MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY', None)
-MAILCHIMP_SUBSCRIBE_LIST_ID = os.environ.get('MAILCHIMP_SUBSCRIBE_LIST_ID', None)
+MAILCHIMP_SUBSCRIBE_LIST_ID = os.environ.get(
+    'MAILCHIMP_SUBSCRIBE_LIST_ID', None)
 
-APPLICATION_REMINDER_PERIODS = ast.literal_eval(os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
-VOLUNTEER_RENEW_REMINDER_PERIODS = ast.literal_eval(os.environ.get('VOLUNTEER_RENEW_REMINDER_PERIODS', 'None'))
-VOLUNTEER_REMINDER_OVERALL_PERIOD = VOLUNTEER_RENEW_REMINDER_PERIODS and timedelta(sum(VOLUNTEER_RENEW_REMINDER_PERIODS))
-VOLUNTEER_CONCLUDE_SURVEY_URL = os.environ.get('VOLUNTEER_CONCLUDE_SURVEY_URL', '')
+APPLICATION_REMINDER_PERIODS = ast.literal_eval(
+    os.environ.get('APPLICATION_REMINDER_PERIODS', 'None'))
+VOLUNTEER_RENEW_REMINDER_PERIODS = ast.literal_eval(
+    os.environ.get('VOLUNTEER_RENEW_REMINDER_PERIODS', 'None'))
+VOLUNTEER_REMINDER_OVERALL_PERIOD = VOLUNTEER_RENEW_REMINDER_PERIODS and timedelta(
+    sum(VOLUNTEER_RENEW_REMINDER_PERIODS))
+VOLUNTEER_CONCLUDE_SURVEY_URL = os.environ.get(
+    'VOLUNTEER_CONCLUDE_SURVEY_URL', '')
 
 
 DLAB_PROJECT_ID = os.environ.get('DLAB_PROJECT_ID', None)
@@ -248,8 +260,10 @@ SPONSORS_METADATA = os.environ.get('SPONSORS_METADATA', '')
 
 HEADER_ALERT = os.environ.get('HEADER_ALERT', '')
 
-PROJECT_DESCRIPTION_EXAMPLE_URL = os.environ.get('PROJECT_DESCRIPTION_EXAMPLE_URL', '')
-POSITION_DESCRIPTION_EXAMPLE_URL = os.environ.get('POSITION_DESCRIPTION_EXAMPLE_URL', '')
+PROJECT_DESCRIPTION_EXAMPLE_URL = os.environ.get(
+    'PROJECT_DESCRIPTION_EXAMPLE_URL', '')
+POSITION_DESCRIPTION_EXAMPLE_URL = os.environ.get(
+    'POSITION_DESCRIPTION_EXAMPLE_URL', '')
 
 PRESS_LINKS = os.environ.get('PRESS_LINKS', '')
 
@@ -261,9 +275,10 @@ HOTJAR_APPLICATION_ID = os.environ.get('HOTJAR_APPLICATION_ID', '')
 GOOGLE_PROPERTY_ID = os.environ.get('GOOGLE_PROPERTY_ID', '')
 GOOGLE_ADS_ID = os.environ.get('GOOGLE_ADS_ID', '')
 GOOGLE_TAGS_ID = os.environ.get('GOOGLE_TAGS_ID', '')
-GOOGLE_CONVERSION_IDS = ast.literal_eval(os.environ.get('GOOGLE_CONVERSION_IDS', 'None'))
+GOOGLE_CONVERSION_IDS = ast.literal_eval(
+    os.environ.get('GOOGLE_CONVERSION_IDS', 'None'))
 
-#Google ReCaptcha keys - site key is exposed to the front end, secret is not
+# Google ReCaptcha keys - site key is exposed to the front end, secret is not
 GR_SITEKEY = os.environ.get('GOOGLE_RECAPTCHA_SITE_KEY', '')
 GR_SECRETKEY = os.environ.get('GOOGLE_RECAPTCHA_SECRET_KEY', '')
 
@@ -356,11 +371,16 @@ if not DEBUG:
     SESSION_COOKIE_SAMESITE = 'None'
 
 CSP_DEFAULT_SRC = ("'none'",)
-CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", 'fonts.googleapis.com', '*.fontawesome.com')
-CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", '*.heapanalytics.com/', '*.google.com/', '*.gstatic.com', '*.googletagmanager.com', '*.google-analytics.com', '*.googleadservices.com', '*.doubleclick.net', '*.newrelic.com', '*.nr-data.net', '*.hotjar.com')
-CSP_CONNECT_SRC = ("'self'", S3_BUCKET_URL, '*.qiqochat.com', 'qiqocableeu.herokuapp.com', '*.google-analytics.com', '*.nr-data.net', '*.hereapi.com', '*.hotjar.com')
-CSP_FONT_SRC = ("'self'", 'fonts.googleapis.com', 'fonts.gstatic.com', 'use.fontawesome.com')
-CSP_IMG_SRC = ("'self'", "data:", "blob:", "'unsafe-eval'", '*.cloudfront.net', '*.amazonaws.com', 'heapanalytics.com/', "*.google.com", '*.google-analytics.com', '*.googletagmanager.com', '*.paypal.com', '*.paypalobjects.com', '*.githubusercontent.com')
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'",
+                 'fonts.googleapis.com', '*.fontawesome.com')
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'", '*.heapanalytics.com/', '*.google.com/', '*.gstatic.com', '*.googletagmanager.com',
+                  '*.google-analytics.com', '*.googleadservices.com', '*.doubleclick.net', '*.newrelic.com', '*.nr-data.net', '*.hotjar.com')
+CSP_CONNECT_SRC = ("'self'", S3_BUCKET_URL, '*.qiqochat.com', 'qiqocableeu.herokuapp.com',
+                   '*.google-analytics.com', '*.nr-data.net', '*.hereapi.com', '*.hotjar.com')
+CSP_FONT_SRC = ("'self'", 'fonts.googleapis.com',
+                'fonts.gstatic.com', 'use.fontawesome.com')
+CSP_IMG_SRC = ("'self'", "data:", "blob:", "'unsafe-eval'", '*.cloudfront.net', '*.amazonaws.com', 'heapanalytics.com/', "*.google.com",
+               '*.google-analytics.com', '*.googletagmanager.com', '*.paypal.com', '*.paypalobjects.com', '*.githubusercontent.com')
 
 CSP_FRAME_ANCESTORS = os.environ.get('CSP_FRAME_ANCESTORS', None)
 if CSP_FRAME_ANCESTORS is not None:
@@ -415,7 +435,8 @@ LOGGING = {
 
 DISALLOW_CRAWLING = os.environ.get('DISALLOW_CRAWLING', False) == 'True'
 
-DL_PAGES_LAST_UPDATED_DATE = os.environ.get('DL_PAGES_LAST_UPDATED', '2019-12-05')
+DL_PAGES_LAST_UPDATED_DATE = os.environ.get(
+    'DL_PAGES_LAST_UPDATED', '2019-12-05')
 SITE_LAST_UPDATED = parse(DL_PAGES_LAST_UPDATED_DATE)
 
 # https://docs.djangoproject.com/en/1.7/ref/settings/#silenced-system-checks
@@ -426,18 +447,22 @@ MAX_COMMITS_PER_PROJECT = int(os.environ.get('MAX_COMMITS_PER_PROJECT', 30))
 
 BOARD_OF_DIRECTORS = os.environ.get('BOARD_OF_DIRECTORS', '')
 
-FAVICON_PATH = os.environ.get('FAVICON_PATH', 'https://d1agxr2dqkgkuy.cloudfront.net/img/favicon.png')
+FAVICON_PATH = os.environ.get(
+    'FAVICON_PATH', 'https://d1agxr2dqkgkuy.cloudfront.net/img/favicon.png')
 
 TEST_IFRAME_URL = os.environ.get('TEST_IFRAME_URL', 'about:blank')
 
-QIQO_IFRAME_URL = os.environ.get('QIQO_IFRAME_URL', 'https://qiqochat.com/api/v1/iframe?&source[api_key]={api_key}&source_user_uuid={source_user_uuid}&qiqo_user_uuid={qiqo_user_uuid}&return_to="/breakout/2/HqWdBUwtmmzLsfPvyEXwmiRZw?embedded=true"')
-QIQO_USERS_ENDPOINT = os.environ.get('QIQO_USERS_ENDPOINT', 'https://api.qiqochat.com/api/v1/users')
+QIQO_IFRAME_URL = os.environ.get(
+    'QIQO_IFRAME_URL', 'https://qiqochat.com/api/v1/iframe?&source[api_key]={api_key}&source_user_uuid={source_user_uuid}&qiqo_user_uuid={qiqo_user_uuid}&return_to="/breakout/2/HqWdBUwtmmzLsfPvyEXwmiRZw?embedded=true"')
+QIQO_USERS_ENDPOINT = os.environ.get(
+    'QIQO_USERS_ENDPOINT', 'https://api.qiqochat.com/api/v1/users')
 QIQO_API_KEY = os.environ.get('QIQO_API_KEY', 'democracylab')
 QIQO_API_SECRET = os.environ.get('QIQO_API_SECRET', 'SECRET')
 QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
-QIQO_SIGNUP_TIMEOUT_SECONDS = int(os.environ.get('QIQO_SIGNUP_TIMEOUT_SECONDS', 5))
+QIQO_SIGNUP_TIMEOUT_SECONDS = int(
+    os.environ.get('QIQO_SIGNUP_TIMEOUT_SECONDS', 5))
 
-BLOG_URL = os.environ.get('BLOG_URL', '')
+BLOG_URL = os.environ.get('BLOG_URL', 'https://blog.democracylab.org/')
 
 EVENT_URL = os.environ.get('EVENT_URL', '')
 
@@ -454,8 +479,9 @@ if VIDEO_PAGES is not None:
     VIDEO_PAGES = ast.literal_eval(VIDEO_PAGES)
 
 # Ghost blog configs
-GHOST_URL = os.environ.get('GHOST_URL', '')
-GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '')
+GHOST_URL = os.environ.get('GHOST_URL', 'https://blog.democracylab.org/')
+GHOST_CONTENT_API_KEY = os.environ.get(
+    'GHOST_CONTENT_API_KEY', '52d832a0619aebf848c9264829')
 
 if GHOST_URL:
     CSP_CONNECT_SRC = CSP_CONNECT_SRC + (GHOST_URL,)
