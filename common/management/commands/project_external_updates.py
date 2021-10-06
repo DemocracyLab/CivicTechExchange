@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from common.helpers.db import bulk_delete
+from common.helpers.trello import get_board_actions
 from common.helpers.github import fetch_github_info, get_owner_repo_name_from_public_url, \
     get_repo_endpoint_from_owner_repo_name, get_repo_names_from_owner_repo_name, get_branch_name_from_public_url
 from common.helpers.date_helpers import datetime_field_to_datetime
@@ -9,7 +10,21 @@ import traceback
 
 
 class Command(BaseCommand):
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--trello',
+            action='store_true',
+            help='Pull trello data instead',
+        )
+
     def handle(self, *args, **options):
+        if options['trello']:
+            board_ids = []
+            # board_ids = ['afEMhseE', 'iWtQuVMz', 'Ttgwsv3v',
+            #              'wBg0qhss', 'Xz9EbZJ0', 'lRIPH9Yd']
+            get_new_trello_board_actions(board_ids)
+            return
         project_github_links = get_project_github_links()
         for github_link in project_github_links:
             try:
@@ -22,6 +37,21 @@ class Command(BaseCommand):
                 pass
 
 
+def get_new_trello_board_actions(board_ids):
+    """
+    Get actions across all boards
+    :param board_ids: list of trello board ids
+    """
+    # In the future we will need to pull valid board ids,
+    # fetch actions since last time actions were fetched,
+    # and store the actions
+    for board_id in board_ids:
+        actions = get_board_actions(board_id)
+        # print(len(actions_json['actions']))
+        print('Retrieved {num_actions} action(s) for board {board_id}'.format(
+            board_id=board_id, num_actions=len(actions)))
+
+
 def get_project_github_links():
     from civictechprojects.models import ProjectLink
     return ProjectLink.objects.filter(link_url__icontains='github.com/').exclude(link_project__isnull=True)
@@ -29,37 +59,47 @@ def get_project_github_links():
 
 def handle_project_github_updates(project_github_link):
     project = project_github_link.link_project
-    print('Handling updates for project {id} github link: {url}'.format(id=project.id, url=project_github_link.link_url))
-    last_updated_time = datetime_field_to_datetime(get_project_latest_commit_date(project_github_link.link_project))
-    owner_repo_name = get_owner_repo_name_from_public_url(project_github_link.link_url)
+    print('Handling updates for project {id} github link: {url}'.format(
+        id=project.id, url=project_github_link.link_url))
+    last_updated_time = datetime_field_to_datetime(
+        get_project_latest_commit_date(project_github_link.link_project))
+    owner_repo_name = get_owner_repo_name_from_public_url(
+        project_github_link.link_url)
     branch_name = get_branch_name_from_public_url(project_github_link.link_url)
     repo_names = get_repo_names_from_owner_repo_name(owner_repo_name)
     raw_commits = []
     for repo_name in repo_names:
-        repo_url = get_repo_endpoint_from_owner_repo_name(repo_name, last_updated_time, branch_name)
-        print('Ingesting: ' + repo_url) 
+        repo_url = get_repo_endpoint_from_owner_repo_name(
+            repo_name, last_updated_time, branch_name)
+        print('Ingesting: ' + repo_url)
         repo_info = fetch_github_info(repo_url)
         if repo_info is not None and len(repo_info) > 0:
             repo_display_name = repo_name[0] + '/' + repo_name[1]
-            raw_commits = raw_commits + list(map(lambda commit: [repo_display_name, commit, branch_name], repo_info))
+            raw_commits = raw_commits + \
+                list(
+                    map(lambda commit: [repo_display_name, commit, branch_name], repo_info))
 
     if len(raw_commits) > 0:
         # Take the most recent top X commits
-        raw_commits.sort(key=lambda commit: commit[1]['commit']['author']['date'], reverse=True)
+        raw_commits.sort(
+            key=lambda commit: commit[1]['commit']['author']['date'], reverse=True)
         raw_commits = raw_commits[:settings.MAX_COMMITS_PER_PROJECT]
         add_commits_to_database(project, raw_commits)
         latest_commit_date = raw_commits[0][1]['commit']['author']['date']
-        update_if_commit_after_project_updated_time(project, latest_commit_date)
+        update_if_commit_after_project_updated_time(
+            project, latest_commit_date)
         remove_old_commits(project)
 
 
 def update_if_commit_after_project_updated_time(project, latest_commit_date_string):
-    project_updated_time = datetime_field_to_datetime(project.project_date_modified)
+    project_updated_time = datetime_field_to_datetime(
+        project.project_date_modified)
     latest_commit_time = datetime_field_to_datetime(latest_commit_date_string)
     # Need to add timezone info to time from github
     latest_commit_time = pytz.timezone("UTC").localize(latest_commit_time)
     if project_updated_time < latest_commit_time:
-        print('Updating project {id} to latest timestamp: {time}'.format(id=project.id, time=latest_commit_date_string))
+        print('Updating project {id} to latest timestamp: {time}'.format(
+            id=project.id, time=latest_commit_date_string))
         project.update_timestamp(latest_commit_time)
         project.recache()
     else:
@@ -81,17 +121,20 @@ def add_commits_to_database(project, commits_to_ingest):
 
 def get_project_latest_commit_date(project):
     from civictechprojects.models import ProjectCommit
-    latest_commit = ProjectCommit.objects.filter(commit_project=project.id).order_by('-commit_date').first()
+    latest_commit = ProjectCommit.objects.filter(
+        commit_project=project.id).order_by('-commit_date').first()
     return latest_commit and latest_commit.commit_date
 
 
 def remove_old_commits(project):
     from civictechprojects.models import ProjectCommit
     # Get the number of commits to delete
-    commit_count = ProjectCommit.objects.filter(commit_project=project.id).count()
+    commit_count = ProjectCommit.objects.filter(
+        commit_project=project.id).count()
     # Delete them
     if commit_count > settings.MAX_COMMITS_PER_PROJECT:
-        print('Deleting {ct} commits from project {id}'.format(ct=commit_count - settings.MAX_COMMITS_PER_PROJECT, id=project.id))
+        print('Deleting {ct} commits from project {id}'.format(
+            ct=commit_count - settings.MAX_COMMITS_PER_PROJECT, id=project.id))
         commits_to_remove = ProjectCommit.objects.filter(commit_project=project.id)\
             .order_by('-commit_date')[settings.MAX_COMMITS_PER_PROJECT:]
         bulk_delete(ProjectCommit, commits_to_remove)
