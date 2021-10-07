@@ -1,6 +1,19 @@
 version: '3.7'
 
 services:
+
+  redis:
+    image: redis:4.0.6-alpine
+    ports:
+        - "6379:6379"
+    volumes:
+        - ./redis:/redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
   db:
     image: postgis/postgis
     env_file:
@@ -48,6 +61,18 @@ services:
       - ./webpack.dev.js:/code/webpack.dev.js
     depends_on:
       - create_table
+
+  worker:
+    build: .
+    depends_on:
+      - redis
+      - web
+    command: python manage.py rqworker default
+    env_file:
+      - .env
+    volumes:
+      - .:/code
+
   web:
     build: .
     env_file:
@@ -58,6 +83,8 @@ services:
     ports:
       - "8000:8000"
     depends_on:
+      redis:
+        condition: service_healthy
       db:
         condition: service_healthy
     volumes: 
@@ -70,5 +97,5 @@ services:
       - ./webpack.common.js:/code/webpack.common.js
       - ./webpack.dev.js:/code/webpack.dev.js
 
-volumes: 
+volumes:
   demolab:

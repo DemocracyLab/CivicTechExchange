@@ -12,7 +12,7 @@ from democracylab.models import Contributor
 from civictechprojects.models import VolunteerRelation
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
-
+from django_rq import job
 
 class EmailSection(Enum):
     Header = 'Header'
@@ -409,7 +409,7 @@ def send_group_project_invitation_email(project_relation):
         .button(url=project_url, text='View Your Groups')
     send_to_project_owners(project=project, sender=group.group_creator, subject=invite_header, template=email_template)
 
-
+@job
 def send_email(email_msg, email_acct=None):
     if not settings.FAKE_EMAILS:
         email_msg.connection = email_acct['connection'] if email_acct is not None else settings.EMAIL_SUPPORT_ACCT['connection']

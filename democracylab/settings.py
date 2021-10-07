@@ -14,6 +14,7 @@ from datetime import timedelta
 from dateutil.parser import parse
 from distutils.util import strtobool
 from django.core.mail.backends.smtp import EmailBackend
+import django_rq
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -57,8 +58,20 @@ INSTALLED_APPS = [
     'oauth2.providers.github',
     'oauth2.providers.google',
     'oauth2.providers.linkedin',
-    'oauth2.providers.facebook'
+    'oauth2.providers.facebook',
+    'django_rq'
 ]
+
+RQ_SHOW_ADMIN_LINK = False
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'redis',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 360,
+    }
+}
+
 
 SITE_ID = 1
 
