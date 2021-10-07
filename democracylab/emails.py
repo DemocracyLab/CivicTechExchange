@@ -75,12 +75,12 @@ class HtmlEmailTemplate:
     def render(self, email_msg, context=None):
         if self.hydrated_template is None:
             sections_text = ''.join(self.sections)
-            self.hydrated_template = Template(HtmlEmailTemplate.base_template.render({"content": sections_text}))
+            content_context = {'content': sections_text, 'use_signature': self.use_signature}
+            self.hydrated_template = Template(HtmlEmailTemplate.base_template.render(content_context))
         email_msg.content_subtype = "html"
         # For some reason xml markup characters in the template (<,>) get converted to entity codes (&lt; and &rt;)
         # We unescape to convert the markup characters back
         _context = context or {}
-        _context['use_signature'] = self.use_signature
         email_msg.body = unescape(self.hydrated_template.render(Context(_context)))
         return email_msg
 
@@ -325,11 +325,15 @@ def notify_project_owners_volunteer_concluded_email(volunteer_relation, comments
 
 
 def notify_project_owners_project_approved(project):
+    project_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
     email_template = HtmlEmailTemplate() \
-        .paragraph('Your project "{{project_name}}" has been approved. You can see it at {{project_url}}')
+        .header('Project Published!') \
+        .text_line('Hi {{first_name}},') \
+        .text_line('Great news!  Your project "{{project_name}}" has been published on DemocracyLab.') \
+        .button(url=project_url, text='View My Project')
     context = {
+        'first_name': project.project_creator.first_name,
         'project_name': project.project_name,
-        'project_url': section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
     }
     email_msg = EmailMessage(
         subject=project.project_name + " has been approved",
