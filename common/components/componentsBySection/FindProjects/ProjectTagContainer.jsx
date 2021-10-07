@@ -11,6 +11,7 @@ import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import { getLocationDisplayString } from "../../common/location/LocationInfo.js";
 import ResetSearchButton from "./ResetSearchButton.jsx";
+import type { Dictionary } from "../../types/Generics.jsx";
 
 type PillConfig = {|
   label: string,
@@ -40,20 +41,24 @@ class ProjectTagContainer extends React.Component<{||}, State> {
       });
     }
 
-    pillConfigs = pillConfigs.concat(
-      ProjectSearchStore.getTags()
-        .toJS()
-        .map((tag: TagDefinition) => {
-          return {
-            label: tag.display_name,
-            closeAction: () =>
-              UniversalDispatcher.dispatch({
-                type: "REMOVE_TAG",
-                tag: tag,
-              }),
-          };
-        })
-    );
+    const allTags: Dictionary<TagDefinition> = ProjectSearchStore.getAllTags();
+    if (allTags) {
+      const tags: $ReadOnlyArray<TagDefinition> = ProjectSearchStore.getTags().toArray();
+      if (tags) {
+        pillConfigs = pillConfigs.concat(
+          tags.map((tag: TagDefinition) => {
+            return {
+              label: tag.display_name,
+              closeAction: () =>
+                UniversalDispatcher.dispatch({
+                  type: "REMOVE_TAG",
+                  tag: tag,
+                }),
+            };
+          })
+        );
+      }
+    }
 
     const locationRadius: LocationRadius = ProjectSearchStore.getLocation();
     if (locationRadius && locationRadius.latitude && locationRadius.longitude) {

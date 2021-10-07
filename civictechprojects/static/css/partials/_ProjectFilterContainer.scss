@@ -75,3 +75,13 @@
 // .RenderFilterCategory-arrow is for the downward facing chevron indicating dropdown; may not need the class
 
 //for mobile (at least) .dropdown-item { white-space: nowrap; } will have to be overridden and allow wrap -- see Organization Type. Bounding menu width issues though.
+
+.RenderFilterPopout {
+  display: flex;
+  background-color: $color-background-light;
+}
+
+//TODO: Do we need this?
+.SubCategoryFrame {
+  font-weight: bold;
+}

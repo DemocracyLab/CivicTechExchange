@@ -136,7 +136,7 @@ const DEFAULT_STATE = {
   locationRadius: null,
   page: 1,
   favoritesOnly: false,
-  tags: List(),
+  tags: {},
   projectsData: {},
   searchSettings: {
     updateUrl: false,
@@ -155,7 +155,7 @@ class State extends Record(DEFAULT_STATE) {
   page: number;
   favoritesOnly: boolean;
   projectsData: FindProjectsData;
-  tags: $ReadOnlyArray<string>;
+  tags: Dictionary<boolean>;
   searchSettings: SearchSettings;
   findProjectsArgs: FindProjectsArgs;
   filterApplied: boolean;
@@ -197,10 +197,7 @@ class ProjectSearchStore extends ReduceStore<State> {
         state = state.set("filterApplied", true);
         return this._loadProjects(this._addTagToState(state, action.tag));
       case "REMOVE_TAG":
-        state = state.set(
-          "tags",
-          state.tags.filter(tag => tag !== action.tag.tag_name)
-        );
+        state = state.set("tags", _.omit(state.tags, action.tag.tag_name));
         state = state.set("filterApplied", true);
         return this._loadProjects(state);
       case "SET_KEYWORD":
@@ -239,10 +236,11 @@ class ProjectSearchStore extends ReduceStore<State> {
           (tag: TagDefinition) => tag.tag_name
         );
         // Remove all tag filters that don't match an existing tag name
-        state = state.set(
-          "tags",
-          state.tags.filter(tag => allTags[tag])
+        const tags = _.pick(
+          state.tags,
+          _.keys(state.tags).filter((tag: string) => tag in allTags)
         );
+        state = state.set("tags", tags);
         let currentProjects = state.projectsData.projects || List();
         state = state.set("projectsData", {
           projects: currentProjects.concat(projects),
@@ -342,9 +340,9 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 
   _addTagToState(state: State, tag: string): State {
-    const newTags: $ReadOnlyArray<string> = state.tags.concat(tag);
+    state.tags[tag] = true;
     state = state.set("filterApplied", true);
-    return state.set("tags", newTags);
+    return state.set("tags", _.clone(state.tags));
   }
 
   _addKeywordToState(state: State, keyword: string): State {
@@ -500,10 +498,17 @@ class ProjectSearchStore extends ReduceStore<State> {
   getTags(inProgressState: ?State): List<TagDefinition> {
     const state: State = inProgressState || this.getState();
     if (state.projectsData && state.projectsData.allTags && state.tags) {
-      return List(state.tags.map(tag => state.projectsData.allTags[tag]));
+      return List(
+        _.keys(state.tags).map(tag => state.projectsData.allTags[tag])
+      );
     } else {
       return List();
     }
+  }
+
+  isTagFilterApplied(tag: string) {
+    const state: State = this.getState();
+    return tag in state.tags;
   }
 
   getSortedCategoryTags(

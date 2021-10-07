@@ -5,9 +5,12 @@ import _ from "lodash";
 import GlyphStyles from "../../../utils/glyphs.js";
 import Dropdown from "react-bootstrap/Dropdown";
 import PopOut from "../../../common/PopOut.jsx";
+import FilterTagCheckbox from "./FilterTagCheckbox.jsx";
+import type { TagDefinition } from "../../../utils/ProjectAPIUtils.js";
+import type { TagsByCategory } from "../../../utils/tags.js";
 
 type Props = {|
-  cdata: object,
+  cdata: TagsByCategory,
   displayName: string,
   hasSubcategories: boolean,
   checkEnabled: Function,
@@ -16,6 +19,7 @@ type Props = {|
 
 type State = {|
   isOpen: boolean,
+  openSubCategory: string,
 |};
 
 class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
@@ -37,66 +41,53 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     this.setState({ isOpen: false });
   }
 
-  _renderContentWithSubcategories(props: Props, ref: forwardRef): React$Node {
-    console.log(this.props.cdata);
-    const cdata = this.props.cdata;
-    return (
-      <div ref={ref}>
-        {cdata.map(key => (
-          <React.Fragment key={"Fragment-" + key[0]}>
-            <Dropdown.Item key={key[0]}>
-              <h4>{key[0]}</h4>
-            </Dropdown.Item>
+  expandSubCategory(subcategory: string) {
+    this.setState({ openSubCategory: subcategory });
+  }
 
-            {key[1].map(subkey => (
-              <Dropdown.Item eventKey={subkey.tag_name} as="button">
-                <input
-                  type="checkbox"
-                  id={subkey.tag_name}
-                  checked={this.props.checkEnabled(subkey)}
-                  onChange={() => this.props.selectOption(subkey)}
-                ></input>
-                <label htmlFor={subkey.tag_name}>
-                  <span>{subkey.display_name}</span>
-                  <span>
-                    {this.props.checkEnabled(subkey) ? (
-                      <i className={GlyphStyles.Check}></i>
-                    ) : (
-                      subkey.num_times
-                    )}
-                  </span>
-                </label>
-              </Dropdown.Item>
-            ))}
-          </React.Fragment>
-        ))}
+  _renderSubcategories(props: Props, ref: forwardRef): React$Node {
+    const cdata: TagsByCategory = this.props.cdata;
+
+    return (
+      <div className="RenderFilterPopout" ref={ref}>
+        <div className="SubCategoryFrame">
+          {cdata.map(key => {
+            const subcategory: string = key[0];
+            return (
+              <React.Fragment key={"Fragment-" + subcategory}>
+                <Dropdown.Item
+                  key={subcategory}
+                  onClick={this.expandSubCategory.bind(this, subcategory)}
+                >
+                  <h4>{subcategory}</h4>
+                </Dropdown.Item>
+              </React.Fragment>
+            );
+          })}
+        </div>
+        {this.state.openSubCategory && this._renderFilters(props, ref)}
       </div>
     );
   }
-  _renderContentNoSubcategories(props: Props, ref: forwardRef): React$Node {
-    const cdata = this.props.cdata;
+  _renderFilters(props: Props, ref: forwardRef): React$Node {
+    let tags: $ReadOnlyArray<TagDefinition> = this.props.cdata;
+    if (this.state.openSubCategory && !_.isEmpty(this.props.cdata)) {
+      const subcategoryTags: [
+        string,
+        $ReadOnlyArray<TagDefinition>
+      ] = this.props.cdata.filter(
+        (subcategorySet: [string, $ReadOnlyArray<TagDefinition>]) =>
+          subcategorySet[0] === this.state.openSubCategory
+      );
+      tags = subcategoryTags[0][1];
+    }
     return (
-      <div ref={ref}>
-        {cdata.map(key => (
-          <Dropdown.Item eventKey={key.tag_name} as="button">
-            <input
-              type="checkbox"
-              id={key[0]}
-              checked={this.props.checkEnabled(key)}
-              onChange={() => this.props.selectOption(key)}
-            ></input>
-            <label htmlFor={key[0]}>
-              <span>{key.display_name}</span>
-              <span>
-                {this.props.checkEnabled(key) ? (
-                  <i className={GlyphStyles.Check}></i>
-                ) : (
-                  key.num_times
-                )}
-              </span>
-            </label>
-          </Dropdown.Item>
-        ))}
+      <div className="RenderFilterPopout" ref={ref}>
+        <div className="FilterSelectFrame">
+          {tags.map(tag => (
+            <FilterTagCheckbox tag={tag} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -104,8 +95,8 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   render(): React$Node {
     const frameContentFunc: forwardRef = (props, ref) => {
       return this.props.hasSubcategories
-        ? this._renderContentWithSubcategories(props, ref)
-        : this._renderContentNoSubcategories(props, ref);
+        ? this._renderSubcategories(props, ref)
+        : this._renderFilters(props, ref);
     };
 
     const sourceRef: forwardRef = React.createRef();
