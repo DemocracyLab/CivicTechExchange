@@ -1,5 +1,8 @@
 .MyProjectCard-root {
   color: inherit;
+  .btn-info, .btn-info:visited {
+    color: #fff; //temporary quickfix to inherit issues
+  }
 }
 
 .MyProjectCard-column {
