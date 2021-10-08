@@ -1,7 +1,8 @@
-//pattern for variable names: generic-to-specific.
-//when possible name variables after function
+// DemocracyLab Colors
+// SASS Variables for styling our brand and colors
+// do not declare these manually in CSS, always use the variable
 
-//colors
+//## colors (NOT design system implementation yet; all these may require review)
 $color-orange: #f79e02; // brand
 $color-orange-dark: #de8e01; // accent/button borders
 $color-orange-light: #f7cf88; // footer button hover
@@ -17,9 +18,16 @@ $color-grey-disabled: #cecece; // any item in a disabled state
 $color-disabled-border: #a8a8a8; // for e.g. a disabled state button border
 $color-grey-frame-border: #6b6e70; // from design guide
 $color-grey-unselected: #585858; // unselected item color
-$color-cta: #b1d3fb; // call to action button blue, is deprecated, should be removed when companies page is updated to remove it
+$color-cta: #b1d3fb; // deprecated -- TODO: remove when companies page is updated, remove bootstrapoverride variant cta also
 
-//background colors
+// ## link colors (design system "Secondary Colors - Blue Color Scheme - used for text links across dlab, implemented October 6, 2021)
+// note that these are also in _bootstrapoverride, overriding $link-color and $link-hover-color 
+$color-link: #0362cd; // primary link color, info color
+$color-link-hover: #024fa6; // use with underline
+$color-link-active: #02438c; // when something in a pressed state, also use underline
+$color-link-visited: #662d91; 
+
+// ## background colors
 $color-background-default: #f6f7f8; //site body
 $color-background-light: #ffffff; //individual components
 $color-background-dark: #222629; //nav bar, footer
@@ -28,6 +36,6 @@ $color-background-success: #a3ffa6; // success messages
 $color-background-error: #ffcfcf; //error messages
 $color-opacity-layer: #231f20; //  overlay opacity
 
-//Dimensions
+// ## Dimensions (outdated? Heights are not accurate. TODO: check if we use these
 $header-height: 50px; //Height of site header
 $footer-height: 50px; //Height of site footer

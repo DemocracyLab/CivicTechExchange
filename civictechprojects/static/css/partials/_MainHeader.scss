@@ -70,6 +70,9 @@
   .navbar-light .navbar-nav .nav-link:active {
     color: inherit;
   }
+  a:visited, .navbar-light .navbar-nav .nav-link:visited {
+    color: inherit;
+  }
   .navbar {
     padding: 0.25rem; //override entire navbar padding values, set our own later
   }

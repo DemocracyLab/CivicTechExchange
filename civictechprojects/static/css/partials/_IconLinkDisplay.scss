@@ -49,6 +49,12 @@
 .IconLink-root:hover p, .IconLink-root:active p {
   text-decoration: underline;
 }
+.IconLink-root:hover .IconLink-topText {
+  color: $color-link-hover;
+}
+.IconLink-root:active .IconLink-topText {
+  color: $color-link-active;
+}
 
 
 .IconLink-topText {
