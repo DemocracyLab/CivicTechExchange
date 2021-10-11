@@ -514,7 +514,7 @@ class ProjectSearchStore extends ReduceStore<State> {
   getSortedCategoryTags(
     category: string,
     subcategory: ?string
-  ): List<TagDefinition> {
+  ): List<TagDefinition> | List<[string, TagDefinition]> {
     const state: State = this.getState();
     if (state.projectsData && state.projectsData.tagsByCategory) {
       const tagsByCategory: TagsByCategory = state.projectsData.tagsByCategory;

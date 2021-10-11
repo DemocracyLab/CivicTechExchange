@@ -1,16 +1,17 @@
 // @flow
 
 import React, { forwardRef } from "react";
+import { Container } from "flux/utils";
 import _ from "lodash";
 import GlyphStyles from "../../../utils/glyphs.js";
 import Dropdown from "react-bootstrap/Dropdown";
 import PopOut from "../../../common/PopOut.jsx";
 import FilterTagCheckbox from "./FilterTagCheckbox.jsx";
 import type { TagDefinition } from "../../../utils/ProjectAPIUtils.js";
-import type { TagsByCategory } from "../../../utils/tags.js";
+import ProjectSearchStore from "../../../stores/ProjectSearchStore.js";
 
 type Props = {|
-  cdata: TagsByCategory,
+  category: string,
   displayName: string,
   hasSubcategories: boolean,
   checkEnabled: Function,
@@ -19,10 +20,11 @@ type Props = {|
 
 type State = {|
   isOpen: boolean,
+  tags: $ReadOnlyArray<[string, TagDefinition]> | $ReadOnlyArray<TagDefinition>,
   openSubCategory: string,
 |};
 
-class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
+class RenderFilterCategory<T> extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.targetRef = React.createRef();
@@ -33,6 +35,16 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   // TODO: subcategory expand/collapse just like category expand/collapse, ie stays open until closed manually
   // TODO: Proper btn classing instead of this temporary use of secondary
 
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [ProjectSearchStore];
+  }
+
+  static calculateState(prevState: State, props: Props): State {
+    return {
+      tags: ProjectSearchStore.getSortedCategoryTags(props.category).toArray(),
+    };
+  }
+
   toggleCategory() {
     this.setState({ isOpen: !this.state.isOpen });
   }
@@ -41,18 +53,17 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     this.setState({ isOpen: false });
   }
 
-  expandSubCategory(subcategory: string) {
+  expandSubCategory(subcategory: string, event) {
+    // event.preventDefault();
     this.setState({ openSubCategory: subcategory });
   }
 
   _renderSubcategories(props: Props, ref: forwardRef): React$Node {
-    const cdata: TagsByCategory = this.props.cdata;
-
     return (
       <div className="RenderFilterPopout" ref={ref}>
         <div className="SubCategoryFrame">
-          {cdata.map(key => {
-            const subcategory: string = key[0];
+          {this.state.tags.map((subcategorySet: [string, TagDefinition]) => {
+            const subcategory: string = subcategorySet[0];
             return (
               <React.Fragment key={"Fragment-" + subcategory}>
                 <Dropdown.Item
@@ -70,12 +81,12 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     );
   }
   _renderFilters(props: Props, ref: forwardRef): React$Node {
-    let tags: $ReadOnlyArray<TagDefinition> = this.props.cdata;
-    if (this.state.openSubCategory && !_.isEmpty(this.props.cdata)) {
+    let tags: $ReadOnlyArray<TagDefinition> = this.state.tags;
+    if (this.state.openSubCategory && !_.isEmpty(tags)) {
       const subcategoryTags: [
         string,
         $ReadOnlyArray<TagDefinition>
-      ] = this.props.cdata.filter(
+      ] = this.state.tags.filter(
         (subcategorySet: [string, $ReadOnlyArray<TagDefinition>]) =>
           subcategorySet[0] === this.state.openSubCategory
       );
@@ -105,10 +116,13 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
       <div
         className="btn btn-outline-secondary"
         id={this.props.displayName}
-        onClick={this.toggleCategory.bind(this)}
         ref={this.targetRef}
       >
-        <div className="DoWeNeedThis" ref={sourceRef}>
+        <div
+          className="DoWeNeedThis"
+          ref={sourceRef}
+          onClick={this.toggleCategory.bind(this)}
+        >
           {this.props.displayName}{" "}
           <span className="RenderFilterCategory-activecount"></span>
           <span className="RenderFilterCategory-arrow">
@@ -127,4 +141,4 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
   }
 }
 
-export default RenderFilterCategory;
+export default Container.create(RenderFilterCategory, { withProps: true });

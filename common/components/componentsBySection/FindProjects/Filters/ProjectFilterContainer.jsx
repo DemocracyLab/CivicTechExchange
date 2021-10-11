@@ -43,12 +43,6 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     super(props);
     this.state = {
       selectedTags: {},
-      issueAreas: {},
-      rolesNeeded: {},
-      techUsed: {},
-      projectStage: {},
-      orgType: {},
-      selectedTags: {},
       isReady: false,
       showOffCanvasFilters: false,
     };
@@ -62,19 +56,6 @@ class ProjectFilterContainer extends React.Component<Props, State> {
 
   static calculateState(prevState: State): State {
     return {
-      issueAreas: ProjectSearchStore.getSortedCategoryTags(
-        "Issue(s) Addressed"
-      ).toArray(),
-      rolesNeeded: ProjectSearchStore.getSortedCategoryTags("Role").toArray(),
-      techUsed: ProjectSearchStore.getSortedCategoryTags(
-        "Technologies Used"
-      ).toArray(),
-      projectStage: ProjectSearchStore.getSortedCategoryTags(
-        "Project Stage"
-      ).toArray(),
-      orgType: ProjectSearchStore.getSortedCategoryTags(
-        "Organization Type"
-      ).toArray(),
       selectedTags: _.mapKeys(
         ProjectSearchStore.getTags().toArray(),
         (tag: TagDefinition) => tag.tag_name
@@ -116,14 +97,14 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <RenderFilterCategory
-          cdata={this.state.rolesNeeded}
+          category="Role"
           displayName={"Roles Needed"}
           hasSubcategories={true}
           checkEnabled={this._checkEnabled}
           selectOption={this._selectOption}
         />
         <RenderFilterCategory
-          cdata={this.state.issueAreas}
+          category="Issue(s) Addressed"
           displayName={"Issue Areas"}
           hasSubcategories={false}
           checkEnabled={this._checkEnabled}
@@ -131,21 +112,21 @@ class ProjectFilterContainer extends React.Component<Props, State> {
         />
         <LocationSearchSection />
         <RenderFilterCategory
-          cdata={this.state.techUsed}
+          category="Technologies Used"
           displayName={"Technologies Used"}
           hasSubcategories={true}
           checkEnabled={this._checkEnabled}
           selectOption={this._selectOption}
         />
         <RenderFilterCategory
-          cdata={this.state.projectStage}
+          category="Project Stage"
           displayName={"Project Stage"}
           hasSubcategories={false}
           checkEnabled={this._checkEnabled}
           selectOption={this._selectOption}
         />
         <RenderFilterCategory
-          cdata={this.state.orgType}
+          category="Organization Type"
           displayName={"Organization Type"}
           hasSubcategories={false}
           checkEnabled={this._checkEnabled}
@@ -176,25 +157,25 @@ class ProjectFilterContainer extends React.Component<Props, State> {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <Navbar
-          defaultExpand
-          collapseOnSelect={false}
-          bg="navlight"
-          variant="light"
-          className="ProjectFilterContainer-root ProjectFilterContainer-mobile-filters flex-column"
-          // onSelect={() => this._handleNavSelect()}
-        >
-          <Navbar.Toggle aria-controls="ProjectFilterContainer-offcanvas-root" />
-          <Navbar.Collapse
-            id="ProjectFilterContainer-offcanvas-root"
-            className="flex-column"
-          >
-            <Nav className="ProjectFilterContainer-nav mr-auto ">
-              {this._displayFilters()}
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-        </Modal.Body>
+            <Navbar
+              defaultExpand
+              collapseOnSelect={false}
+              bg="navlight"
+              variant="light"
+              className="ProjectFilterContainer-root ProjectFilterContainer-mobile-filters flex-column"
+              // onSelect={() => this._handleNavSelect()}
+            >
+              <Navbar.Toggle aria-controls="ProjectFilterContainer-offcanvas-root" />
+              <Navbar.Collapse
+                id="ProjectFilterContainer-offcanvas-root"
+                className="flex-column"
+              >
+                <Nav className="ProjectFilterContainer-nav mr-auto ">
+                  {this._displayFilters()}
+                </Nav>
+              </Navbar.Collapse>
+            </Navbar>
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="outline-primary">Button</Button>
             <Button variant="outline-secondary">Button #2</Button>
@@ -219,10 +200,8 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     // )
     // For basic closing behavior after all <Nav> descendant onSelect events in mobile viewports, try using collapseOnSelect.
     // Note: If you are manually closing the navbar using this OnSelect prop, ensure that you are setting expanded to false and not toggling between true and false.
-
     //what we want is  for the collapse prop NOT to close UNLESS the onClick event was on a 'done with filters' button or outside the dropdown entirely, if possible?
     // but perhaps call an update function every click for things like counting num of active filters, etc?
-
   }
 
   _checkEnabled(tag: TagDefinition): boolean {
