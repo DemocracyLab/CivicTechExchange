@@ -53,8 +53,7 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
     this.setState({ isOpen: false });
   }
 
-  expandSubCategory(subcategory: string, event) {
-    // event.preventDefault();
+  expandSubCategory(subcategory: string) {
     this.setState({ openSubCategory: subcategory });
   }
 

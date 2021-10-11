@@ -39,8 +39,11 @@ class PopOut extends React.PureComponent<Props, State> {
     return state;
   }
 
+  onClickOut(): void {
+    this.props.onHide();
+  }
+
   render(): React$Node {
-    // TODO: Add background frame that closes popout
     const frameElement: React$Node = this.props.frameRef(
       this.props,
       this.frameRef
@@ -54,6 +57,11 @@ class PopOut extends React.PureComponent<Props, State> {
     }
     return (
       <React.Fragment>
+        <div
+          className="popout-clickout"
+          style={style}
+          onClick={this.onClickOut.bind(this)}
+        />
         <div className="popout-frame" style={style}>
           {frameElement}
         </div>
