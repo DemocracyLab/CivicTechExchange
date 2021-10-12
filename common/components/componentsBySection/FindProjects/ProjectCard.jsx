@@ -62,6 +62,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
             id: this.props.project.id,
           })}
           rel="noopener noreferrer"
+          className="link-exclude"
         >
           {this._renderLogo()}
           {this._renderSubInfo()}

@@ -248,6 +248,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </p>
           <div className="corporate-how-after corporate-learn-link">
             <a 
+            className="link-internal"
               href={cdn.document(
                 "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
               )}

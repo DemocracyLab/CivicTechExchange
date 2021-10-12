@@ -201,7 +201,7 @@ class LandingController extends React.PureComponent<{||}> {
   _renderPartnersInAction() {
     const partnerLogos = Partners.map(i => (
       <div key={i.name} className="LandingController-partnersinaction-logo">
-        <a href={i.link}>
+        <a href={i.link} className="link-exclude">
           <img src={i.logo} alt={i.name} />
         </a>
       </div>

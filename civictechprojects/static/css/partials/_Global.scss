@@ -47,7 +47,6 @@ input[type="submit"]:disabled {
   border: $color-disabled-border;
 }
 
-
 //class-based toggle of background color
 .background-light {
   background-color: $color-background-light;
@@ -211,15 +210,52 @@ h4,
 //for on-page actions we want to appear as links (e.g. js onclick events)
 // use pseudo-link as sparingly as possible - links should be links, doubly so since these won't respect :visited, etc
 .pseudo-link {
-  @extend a
+  @extend a;
 }
-a:active, .psuedo-link:active {
+a:active,
+.psuedo-link:active {
   color: $color-link-active;
   text-decoration: underline;
 }
 a:visited {
   color: $color-link-visited;
 }
-a.btn:visited, .btn:visited, button:visited {
+a.btn:visited,
+.btn:visited,
+button:visited {
   color: inherit; // buttons acting as links should not take visited color -- we'll have to revisit this when buttons are implemented from DS
+}
+
+// link iconography (external links have their own icon, internal links have a different icon, plus override classes for edge cases)
+// todo: move?
+// todo: fix CDN links showing as external
+// external link styling (default; excludes buttons, images)
+//only applies to sectionbody to avoid issues with header, footer
+.SectionBody {
+  a[href]:not(button):not(.btn):after,
+  a.link-external:after {
+    content: " (EXT)";
+  }
+
+  //internal link styling (overrides default)
+  a[href*="democracylab.org"]:after,
+  a[href*="localhost:8000"]:after,
+  a[href*="127.0.0.1"]:after,
+  a[href*="democracy-lab-dev.herokuapp.com"]:after,
+  a[href*="democracy-lab-prod-mirror.herokuapp.com"]:after,
+  a[href*="democracy-lab-staging.herokuapp.com"]:after,
+  a[href*="democracy-lab.herokuapp.com"]:after,
+  a.link-internal:after {
+    content: " (INT)" !important;
+  }
+
+  //exclude these special cases
+  // the *:after is to catch a weird interaction with child elements on, e.g., project cards. But test if we need it before deploy.
+  a[href^="/"]:after,
+  a[href^="#"]:after,
+  a[href^="mailto:"]:after,
+  a[href^="javascript:"]:after,
+  a.link-exclude:after {
+    content: none !important;
+  }
 }
