@@ -8,10 +8,10 @@
   flex-basis: 100%;
   flex-wrap: nowrap;
   min-width: 0; // see https://css-tricks.com/flexbox-truncated-text/
-  text-decoration: none; // we decorate sub-elements to control what does it
+  text-decoration: none; // we decorate sub-elements to control UI in hover/active/visited states
 }
 
-.IconLink-root p {
+.IconLink-root p, a {
   margin: 0;
 }
 
@@ -39,23 +39,40 @@
   border-right: 1px solid $color-grey-medium;
   border-bottom-right-radius: 5px;
   border-bottom: 1px solid $color-grey-medium;
-  overflow: hidden; // has to be set here and in <p>
-  p {
+  overflow: hidden; // has to be set here and in child text elements
+  p, a {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    display: block;
   }
 }
-.IconLink-root:hover p, .IconLink-root:active p {
-  text-decoration: underline;
+// hover/active text decoration (yes for text, no for icon)
+.IconLink-root:hover {
+  p,
+  a {
+    text-decoration: underline;
+  }
+  .IconLink-left i {
+    text-decoration: none;
+  }
 }
+.IconLink-root:active {
+  p,
+  a {
+    text-decoration: underline;
+  }
+  .IconLink-left i {
+    text-decoration: none;
+  }
+}
+// set visual states on link text when entire IconLink box is hover/active
 .IconLink-root:hover .IconLink-topText {
   color: $color-link-hover;
 }
 .IconLink-root:active .IconLink-topText {
   color: $color-link-active;
 }
-
 
 .IconLink-topText {
   font-weight: 600;

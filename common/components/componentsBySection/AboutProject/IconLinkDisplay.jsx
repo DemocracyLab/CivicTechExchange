@@ -72,6 +72,7 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
             href={this.props.link.linkUrl}
             target="_blank"
             rel="noopener noreferrer"
+            className="link-exclude"
           >
             <div className="IconLink-left">
               <i
@@ -80,9 +81,11 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
               ></i>
             </div>
             <div className="IconLink-right">
-              <p className="IconLink-topText" title={this.state.topText}>
+              <a className="IconLink-topText" title={this.state.topText}
+              href={this.props.link.linkUrl}
+              >
                 {this.state.topText}
-              </p>
+              </a>
               <p className="IconLink-bottomText">{this.state.bottomText}</p>
             </div>
           </a>

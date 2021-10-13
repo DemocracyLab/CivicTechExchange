@@ -239,22 +239,24 @@ button:visited {
 
   //internal link styling (overrides default)
   a[href*="democracylab.org"]:after,
+  //development environments
   a[href*="localhost:8000"]:after,
   a[href*="127.0.0.1"]:after,
   a[href*="democracy-lab-dev.herokuapp.com"]:after,
   a[href*="democracy-lab-prod-mirror.herokuapp.com"]:after,
   a[href*="democracy-lab-staging.herokuapp.com"]:after,
   a[href*="democracy-lab.herokuapp.com"]:after,
+  //override class name
   a.link-internal:after {
     content: " (INT)" !important;
   }
 
   //exclude these special cases
-  // the *:after is to catch a weird interaction with child elements on, e.g., project cards. But test if we need it before deploy.
   a[href^="/"]:after,
   a[href^="#"]:after,
   a[href^="mailto:"]:after,
   a[href^="javascript:"]:after,
+  //override class name
   a.link-exclude:after {
     content: none !important;
   }
