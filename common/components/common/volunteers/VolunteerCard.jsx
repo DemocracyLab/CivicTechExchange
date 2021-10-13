@@ -42,7 +42,7 @@ class VolunteerCard extends React.PureComponent<Props> {
     return (
       <div className="VolunteerCard-root">
         <a
-          className="VolunteerCard-volunteerName"
+          className="VolunteerCard-volunteerName link-exclude"
           href={volunteerUrl}
           target="_blank"
           rel="noopener noreferrer"

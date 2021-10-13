@@ -34,6 +34,7 @@ class GroupCard extends React.PureComponent<Props> {
             id: this.props.group.group_id,
           })}
           rel="noopener noreferrer"
+          className="link-exclude"
         >
           {this._renderLogo()}
           {this._renderSubInfo()}

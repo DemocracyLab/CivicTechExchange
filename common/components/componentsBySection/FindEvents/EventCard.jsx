@@ -27,6 +27,7 @@ class EventCard extends React.PureComponent<Props> {
         <a
           href={url.section(Section.AboutEvent, { id: eventId })}
           rel="noopener noreferrer"
+          className="link-exclude"
         >
           {this._renderEventLogo()}
           {this._renderEventInformation()}

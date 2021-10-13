@@ -233,12 +233,15 @@ button:visited {
 //only applies to sectionbody to avoid issues with header, footer
 .SectionBody {
   a[href]:not(button):not(.btn):after,
-  a.link-external:after {
+  a.link-external:after,
+  .link-external:after {
     content: " (EXT)";
   }
 
   //internal link styling (overrides default)
   a[href*="democracylab.org"]:after,
+  // relative links, this may be over the top
+  a[href^="/"]:not(button):not(.btn):not(.link-exclude):not(.link-external):after,
   //development environments
   a[href*="localhost:8000"]:after,
   a[href*="127.0.0.1"]:after,
@@ -246,18 +249,16 @@ button:visited {
   a[href*="democracy-lab-prod-mirror.herokuapp.com"]:after,
   a[href*="democracy-lab-staging.herokuapp.com"]:after,
   a[href*="democracy-lab.herokuapp.com"]:after,
-  //override class name
-  a.link-internal:after {
+  a.link-internal:after, .link-internal:after {
     content: " (INT)" !important;
   }
 
-  //exclude these special cases
-  a[href^="/"]:after,
+  //exclude these special cases (jumplinks, mailto, js event on click)
   a[href^="#"]:after,
   a[href^="mailto:"]:after,
   a[href^="javascript:"]:after,
-  //override class name
-  a.link-exclude:after {
+  a.link-exclude:after,
+  .link-exclude:after {
     content: none !important;
   }
 }
