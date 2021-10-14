@@ -14,6 +14,7 @@ type Props = {|
   category: string,
   displayName: string,
   hasSubcategories: boolean,
+  isMobileLayout: boolean,
 |};
 
 type State = {|
@@ -55,7 +56,7 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
     this.setState({ openSubCategory: subcategory });
   }
 
-  _renderSubcategories(props: Props, ref: forwardRef): React$Node {
+  _renderDesktopSubcategories(props: Props, ref: forwardRef): React$Node {
     return (
       <div className="RenderFilterPopout" ref={ref}>
         <div className="SubCategoryFrame">
@@ -77,6 +78,29 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
       </div>
     );
   }
+  _renderMobileSubcategories(props: Props, ref: forwardRef): React$Node {
+    return (
+      <div className="RenderFilterPopout" ref={ref}>
+        <div className="SubCategoryFrame">
+          {this.state.tags.map((subcategorySet: [string, TagDefinition]) => {
+            const subcategory: string = subcategorySet[0];
+            return (
+              <React.Fragment key={"Fragment-" + subcategory}>
+                <Dropdown.Item
+                  key={subcategory}
+                  onClick={this.expandSubCategory.bind(this, subcategory)}
+                >
+                  <h4>{subcategory}</h4>
+                </Dropdown.Item>
+                {this.state.openSubCategory === subcategory &&
+                  this._renderFilters(props, ref)}
+              </React.Fragment>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
   _renderFilters(props: Props, ref: forwardRef): React$Node {
     let tags: $ReadOnlyArray<TagDefinition> = this.state.tags;
     if (this.state.openSubCategory && !_.isEmpty(tags)) {
@@ -89,8 +113,9 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
       );
       tags = subcategoryTags[0][1];
     }
+    const refAttribute = ref ? { ref: ref } : {};
     return (
-      <div className="RenderFilterPopout" ref={ref}>
+      <div className="RenderFilterPopout" {...refAttribute}>
         <div className="FilterSelectFrame">
           {tags.map(tag => (
             <FilterTagCheckbox tag={tag} />
@@ -100,10 +125,10 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
     );
   }
 
-  render(): React$Node {
+  _renderDesktop(): React$Node {
     const frameContentFunc: forwardRef = (props, ref) => {
       return this.props.hasSubcategories
-        ? this._renderSubcategories(props, ref)
+        ? this._renderDesktopSubcategories(props, ref)
         : this._renderFilters(props, ref);
     };
 
@@ -135,6 +160,30 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
         />
       </div>
     );
+  }
+
+  _renderMobile(): React$Node {
+    return (
+      <React.Fragment>
+        <div className="DoWeNeedThis" onClick={this.toggleCategory.bind(this)}>
+          {this.props.displayName}{" "}
+          <span className="RenderFilterCategory-activecount"></span>
+          <span className="RenderFilterCategory-arrow">
+            <i className={GlyphStyles.ChevronDown}></i>
+          </span>
+        </div>
+        {this.state.isOpen &&
+          (this.props.hasSubcategories
+            ? this._renderMobileSubcategories()
+            : this._renderFilters())}
+      </React.Fragment>
+    );
+  }
+
+  render(): React$Node {
+    return this.props.isMobileLayout
+      ? this._renderMobile()
+      : this._renderDesktop();
   }
 }
 

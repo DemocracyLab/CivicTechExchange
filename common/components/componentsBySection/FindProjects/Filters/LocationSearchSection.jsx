@@ -17,7 +17,6 @@ import {
 } from "../../../constants/Countries.js";
 import GlyphStyles from "../../../utils/glyphs.js";
 import Dropdown from "react-bootstrap/Dropdown";
-import Nav from "react-bootstrap/Nav";
 import PopOut from "../../../common/popout/PopOut.jsx";
 
 type State = {|

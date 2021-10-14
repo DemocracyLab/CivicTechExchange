@@ -4,18 +4,12 @@
 import React from "react";
 import { Container } from "flux/utils";
 import type { TagDefinition } from "../../../utils/ProjectAPIUtils.js";
-import LocationAutocomplete from "../../../common/location/LocationAutocomplete.jsx";
-import type { LocationInfo } from "../../../common/location/LocationInfo";
 import LocationSearchSection from "./LocationSearchSection.jsx";
-import ProjectAPIUtils from "../../../utils/ProjectAPIUtils.js";
 import ProjectSearchStore from "../../../stores/ProjectSearchStore.js";
-import UniversalDispatcher from "../../../stores/UniversalDispatcher.js";
 import RenderFilterCategory from "./RenderFilterCategory.jsx";
-import ModalWrapper from "../../../common/ModalWrapper.jsx";
 import FavoriteFilter from "../FavoriteFilter.jsx";
 import FavoritesStore from "../../../stores/FavoritesStore.js";
 import CurrentUser from "../../../utils/CurrentUser.js";
-import metrics from "../../../utils/metrics";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Modal from "react-bootstrap/Modal";
@@ -69,7 +63,6 @@ class ProjectFilterContainer extends React.Component<Props, State> {
           bg="navlight"
           variant="light"
           className="ProjectFilterContainer-root"
-          // onSelect={() => this._handleNavSelect()}
         >
           <Navbar.Toggle aria-controls="ProjectFilterContainer-root" />
           <Navbar.Collapse
@@ -77,7 +70,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
             className="flex-column"
           >
             <Nav className="ProjectFilterContainer-nav mr-auto">
-              {this._displayFilters()}
+              {this._displayFilters(false)}
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -86,7 +79,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     ) : null;
   }
 
-  _displayFilters(): React$Node {
+  _displayFilters(isMobileLayout: boolean): React$Node {
     const showFavorites: boolean =
       CurrentUser.isLoggedIn() && !FavoritesStore.noFavorites();
     // this return is more verbose than it 'needs to be' and we may reduce this to a map later, but it's code readability vs length
@@ -97,27 +90,32 @@ class ProjectFilterContainer extends React.Component<Props, State> {
           category="Role"
           displayName={"Roles Needed"}
           hasSubcategories={true}
+          isMobileLayout={isMobileLayout}
         />
         <RenderFilterCategory
           category="Issue(s) Addressed"
           displayName={"Issue Areas"}
           hasSubcategories={false}
+          isMobileLayout={isMobileLayout}
         />
-        <LocationSearchSection />
+        <LocationSearchSection isMobileLayout={isMobileLayout} />
         <RenderFilterCategory
           category="Technologies Used"
           displayName={"Technologies Used"}
           hasSubcategories={true}
+          isMobileLayout={isMobileLayout}
         />
         <RenderFilterCategory
           category="Project Stage"
           displayName={"Project Stage"}
           hasSubcategories={false}
+          isMobileLayout={isMobileLayout}
         />
         <RenderFilterCategory
           category="Organization Type"
           displayName={"Organization Type"}
           hasSubcategories={false}
+          isMobileLayout={isMobileLayout}
         />
         {showFavorites && <FavoriteFilter />}
       </React.Fragment>
@@ -143,30 +141,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
               Filter Results
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <Navbar
-              defaultExpand
-              collapseOnSelect={false}
-              bg="navlight"
-              variant="light"
-              className="ProjectFilterContainer-root ProjectFilterContainer-mobile-filters flex-column"
-              // onSelect={() => this._handleNavSelect()}
-            >
-              <Navbar.Toggle aria-controls="ProjectFilterContainer-offcanvas-root" />
-              <Navbar.Collapse
-                id="ProjectFilterContainer-offcanvas-root"
-                className="flex-column"
-              >
-                <Nav className="ProjectFilterContainer-nav mr-auto ">
-                  {this._displayFilters()}
-                </Nav>
-              </Navbar.Collapse>
-            </Navbar>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="outline-primary">Button</Button>
-            <Button variant="outline-secondary">Button #2</Button>
-          </Modal.Footer>
+          <Modal.Body>{this._displayFilters(true)}</Modal.Body>
         </Modal>
       </React.Fragment>
     );
