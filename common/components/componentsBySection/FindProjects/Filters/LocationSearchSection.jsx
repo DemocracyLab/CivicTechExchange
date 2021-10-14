@@ -130,44 +130,40 @@ class LocationSearchSection extends React.Component<{||}, State> {
 
   _renderSelector(ref): React$Node {
     return (
-      <div className="RenderFilterPopout" ref={ref}>
-        <div className="SubCategoryFrame">
-          <Dropdown.Item className="LocationSearchSection-container">
-            <label>Country(Required)</label>
-            <div className="LocationSearchSection-selector">
-              <CountrySelector
-                countryCode={this.state.countryCode}
-                countryOptions={this.state.countryOptions}
-                countryCodeFormat={CountryCodeFormats.ISO_3}
-                onSelection={this.onCountrySelect.bind(this)}
-              />
-            </div>
-
-            <label>Near</label>
-            <div className="LocationSearchSection-selector">
-              <LocationAutocomplete
-                countryCode={this.state.countryCode}
-                onSelect={this.onLocationSelect.bind(this)}
-                selected={this.state.locationInfo}
-              />
-            </div>
-
-            <label>Distance</label>
-            <div className="LocationSearchSection-selector">
-              <Selector
-                id="radius"
-                isSearchable={false}
-                isClearable={false}
-                isMultiSelect={false}
-                options={[5, 10, 25, 50, 100, 200]}
-                labelGenerator={num => num + " Miles"}
-                selected={this.state.searchRadius || DefaultSearchRadius}
-                onSelection={this.onRadiusSelect.bind(this)}
-              />
-            </div>
-          </Dropdown.Item>
+      <Dropdown.Item className="LocationSearchSection-container">
+        <label>Country(Required)</label>
+        <div className="LocationSearchSection-selector">
+          <CountrySelector
+            countryCode={this.state.countryCode}
+            countryOptions={this.state.countryOptions}
+            countryCodeFormat={CountryCodeFormats.ISO_3}
+            onSelection={this.onCountrySelect.bind(this)}
+          />
         </div>
-      </div>
+
+        <label>Near</label>
+        <div className="LocationSearchSection-selector">
+          <LocationAutocomplete
+            countryCode={this.state.countryCode}
+            onSelect={this.onLocationSelect.bind(this)}
+            selected={this.state.locationInfo}
+          />
+        </div>
+
+        <label>Distance</label>
+        <div className="LocationSearchSection-selector">
+          <Selector
+            id="radius"
+            isSearchable={false}
+            isClearable={false}
+            isMultiSelect={false}
+            options={[5, 10, 25, 50, 100, 200]}
+            labelGenerator={num => num + " Miles"}
+            selected={this.state.searchRadius || DefaultSearchRadius}
+            onSelection={this.onRadiusSelect.bind(this)}
+          />
+        </div>
+      </Dropdown.Item>
     );
   }
 
@@ -179,9 +175,13 @@ class LocationSearchSection extends React.Component<{||}, State> {
     this.setState({ isOpen: false });
   }
 
-  render(): React$Node {
+  _renderDesktop(): React$Node {
     const frameContentFunc: forwardRef = (props, ref) => {
-      return this._renderSelector(ref);
+      return (
+        <div className="RenderFilterPopout" ref={ref}>
+          <div className="SubCategoryFrame">{this._renderSelector(ref)})</div>
+        </div>
+      );
     };
 
     const sourceRef: forwardRef = React.createRef();
@@ -211,6 +211,26 @@ class LocationSearchSection extends React.Component<{||}, State> {
         />
       </div>
     );
+  }
+
+  _renderMobile(): React$Node {
+    return (
+      <React.Fragment>
+        <div className="DoWeNeedThis" onClick={this.toggleCategory.bind(this)}>
+          Location <span className="RenderFilterCategory-activecount"></span>
+          <span className="RenderFilterCategory-arrow">
+            <i className={GlyphStyles.ChevronDown}></i>
+          </span>
+        </div>
+        {this.state.isOpen && this._renderSelector()}
+      </React.Fragment>
+    );
+  }
+
+  render(): React$Node {
+    return this.props.isMobileLayout
+      ? this._renderMobile()
+      : this._renderDesktop();
   }
 }
 
