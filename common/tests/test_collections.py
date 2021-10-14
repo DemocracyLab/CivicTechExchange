@@ -1,7 +1,5 @@
 from django.test import TestCase
-from civictechprojects.models import VolunteerRelation, Project
 from common.helpers.collections import find_first, flatten, count_occurrences, distinct
-from democracylab.models import Contributor
 
 
 class CollectionsTests(TestCase):
