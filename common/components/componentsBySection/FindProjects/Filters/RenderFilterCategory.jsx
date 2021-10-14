@@ -5,7 +5,7 @@ import { Container } from "flux/utils";
 import _ from "lodash";
 import GlyphStyles from "../../../utils/glyphs.js";
 import Dropdown from "react-bootstrap/Dropdown";
-import PopOut from "../../../common/PopOut.jsx";
+import PopOut from "../../../common/popout/PopOut.jsx";
 import FilterTagCheckbox from "./FilterTagCheckbox.jsx";
 import type { TagDefinition } from "../../../utils/ProjectAPIUtils.js";
 import ProjectSearchStore from "../../../stores/ProjectSearchStore.js";
@@ -14,8 +14,6 @@ type Props = {|
   category: string,
   displayName: string,
   hasSubcategories: boolean,
-  checkEnabled: Function,
-  selectOption: Function,
 |};
 
 type State = {|

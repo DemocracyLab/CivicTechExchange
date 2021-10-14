@@ -1,5 +1,5 @@
 // @flow
-import React from "react";
+import React, { forwardRef } from "react";
 import type { FluxReduceStore } from "flux/utils";
 import { Container } from "flux/utils";
 import ProjectSearchStore, {
@@ -18,8 +18,10 @@ import {
 import GlyphStyles from "../../../utils/glyphs.js";
 import Dropdown from "react-bootstrap/Dropdown";
 import Nav from "react-bootstrap/Nav";
+import PopOut from "../../../common/popout/PopOut.jsx";
 
 type State = {|
+  isOpen: boolean,
   countryCode: string,
   countryOptions: $ReadOnlyArray<CountryData>,
   locationRadius: LocationRadius,
@@ -38,6 +40,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
       searchRadius: DefaultSearchRadius,
       countryCode: DefaultCountry.ISO_3,
       locationExpanded: false,
+      isOpen: false,
     };
 
     this.updateLocationState = this.updateLocationState.bind(this);
@@ -126,61 +129,88 @@ class LocationSearchSection extends React.Component<{||}, State> {
     }
   }
 
-  _renderSelector(): React$Node {
+  _renderSelector(ref): React$Node {
     return (
-      <Dropdown.Item className="LocationSearchSection-container">
-        <label>Country(Required)</label>
-        <div className="LocationSearchSection-selector">
-          <CountrySelector
-            countryCode={this.state.countryCode}
-            countryOptions={this.state.countryOptions}
-            countryCodeFormat={CountryCodeFormats.ISO_3}
-            onSelection={this.onCountrySelect.bind(this)}
-          />
-        </div>
+      <div className="RenderFilterPopout" ref={ref}>
+        <div className="SubCategoryFrame">
+          <Dropdown.Item className="LocationSearchSection-container">
+            <label>Country(Required)</label>
+            <div className="LocationSearchSection-selector">
+              <CountrySelector
+                countryCode={this.state.countryCode}
+                countryOptions={this.state.countryOptions}
+                countryCodeFormat={CountryCodeFormats.ISO_3}
+                onSelection={this.onCountrySelect.bind(this)}
+              />
+            </div>
 
-        <label>Near</label>
-        <div className="LocationSearchSection-selector">
-          <LocationAutocomplete
-            countryCode={this.state.countryCode}
-            onSelect={this.onLocationSelect.bind(this)}
-            selected={this.state.locationInfo}
-          />
-        </div>
+            <label>Near</label>
+            <div className="LocationSearchSection-selector">
+              <LocationAutocomplete
+                countryCode={this.state.countryCode}
+                onSelect={this.onLocationSelect.bind(this)}
+                selected={this.state.locationInfo}
+              />
+            </div>
 
-        <label>Distance</label>
-        <div className="LocationSearchSection-selector">
-          <Selector
-            id="radius"
-            isSearchable={false}
-            isClearable={false}
-            isMultiSelect={false}
-            options={[5, 10, 25, 50, 100, 200]}
-            labelGenerator={num => num + " Miles"}
-            selected={this.state.searchRadius || DefaultSearchRadius}
-            onSelection={this.onRadiusSelect.bind(this)}
-          />
+            <label>Distance</label>
+            <div className="LocationSearchSection-selector">
+              <Selector
+                id="radius"
+                isSearchable={false}
+                isClearable={false}
+                isMultiSelect={false}
+                options={[5, 10, 25, 50, 100, 200]}
+                labelGenerator={num => num + " Miles"}
+                selected={this.state.searchRadius || DefaultSearchRadius}
+                onSelection={this.onRadiusSelect.bind(this)}
+              />
+            </div>
+          </Dropdown.Item>
         </div>
-      </Dropdown.Item>
+      </div>
     );
   }
 
-  render() {
+  toggleCategory() {
+    this.setState({ isOpen: !this.state.isOpen });
+  }
+
+  hideCategory() {
+    this.setState({ isOpen: false });
+  }
+
+  render(): React$Node {
+    const frameContentFunc: forwardRef = (props, ref) => {
+      return this._renderSelector(ref);
+    };
+
+    const sourceRef: forwardRef = React.createRef();
+
     return (
-      <Dropdown>
-        <Dropdown.Toggle
-          className="btn btn-outline-secondary"
-          id="LocationSearchSection"
-          as={Nav.Link}
+      <div
+        className="btn btn-outline-secondary"
+        id="Location"
+        ref={this.targetRef}
+      >
+        <div
+          className="DoWeNeedThis"
+          ref={sourceRef}
+          onClick={this.toggleCategory.bind(this)}
         >
-          Location
-          <span className="RenderFilterCategory-activecount"></span>
+          Location <span className="RenderFilterCategory-activecount"></span>
           <span className="RenderFilterCategory-arrow">
             <i className={GlyphStyles.ChevronDown}></i>
           </span>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>{this._renderSelector()}</Dropdown.Menu>
-      </Dropdown>
+        </div>
+        <PopOut
+          show={this.state.isOpen}
+          frameRef={frameContentFunc}
+          sourceRef={sourceRef}
+          direction={"bottom"}
+          onHide={this.hideCategory.bind(this)}
+        />
+      </div>
     );
   }
 }

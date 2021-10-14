@@ -1,7 +1,7 @@
 // @flow
 
 import React, { forwardRef } from "react";
-import type { Dictionary } from "../types/Generics.jsx";
+import type { Dictionary } from "../../types/Generics.jsx";
 
 type Props = {|
   show: boolean,

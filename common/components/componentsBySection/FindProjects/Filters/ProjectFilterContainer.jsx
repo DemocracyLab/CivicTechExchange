@@ -21,7 +21,6 @@ import Navbar from "react-bootstrap/Navbar";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import _ from "lodash";
-import { List } from "immutable";
 
 /**
  * @category: Tag category to pull from
@@ -46,8 +45,6 @@ class ProjectFilterContainer extends React.Component<Props, State> {
       isReady: false,
       showOffCanvasFilters: false,
     };
-    this._selectOption = this._selectOption.bind(this);
-    this._checkEnabled = this._checkEnabled.bind(this);
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -100,37 +97,27 @@ class ProjectFilterContainer extends React.Component<Props, State> {
           category="Role"
           displayName={"Roles Needed"}
           hasSubcategories={true}
-          checkEnabled={this._checkEnabled}
-          selectOption={this._selectOption}
         />
         <RenderFilterCategory
           category="Issue(s) Addressed"
           displayName={"Issue Areas"}
           hasSubcategories={false}
-          checkEnabled={this._checkEnabled}
-          selectOption={this._selectOption}
         />
         <LocationSearchSection />
         <RenderFilterCategory
           category="Technologies Used"
           displayName={"Technologies Used"}
           hasSubcategories={true}
-          checkEnabled={this._checkEnabled}
-          selectOption={this._selectOption}
         />
         <RenderFilterCategory
           category="Project Stage"
           displayName={"Project Stage"}
           hasSubcategories={false}
-          checkEnabled={this._checkEnabled}
-          selectOption={this._selectOption}
         />
         <RenderFilterCategory
           category="Organization Type"
           displayName={"Organization Type"}
           hasSubcategories={false}
-          checkEnabled={this._checkEnabled}
-          selectOption={this._selectOption}
         />
         {showFavorites && <FavoriteFilter />}
       </React.Fragment>
@@ -202,28 +189,6 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     // Note: If you are manually closing the navbar using this OnSelect prop, ensure that you are setting expanded to false and not toggling between true and false.
     //what we want is  for the collapse prop NOT to close UNLESS the onClick event was on a 'done with filters' button or outside the dropdown entirely, if possible?
     // but perhaps call an update function every click for things like counting num of active filters, etc?
-  }
-
-  _checkEnabled(tag: TagDefinition): boolean {
-    let selectedTags = this.state.selectedTags;
-    return !!selectedTags[tag.tag_name];
-  }
-
-  _selectOption(tag: TagDefinition): void {
-    var tagInState = _.has(this.state.selectedTags, tag.tag_name);
-    //if tag is NOT currently in state, add it, otherwise remove
-    if (!tagInState) {
-      UniversalDispatcher.dispatch({
-        type: "ADD_TAG",
-        tag: tag.tag_name,
-      });
-      metrics.logSearchFilterByTagEvent(tag);
-    } else {
-      UniversalDispatcher.dispatch({
-        type: "REMOVE_TAG",
-        tag: tag,
-      });
-    }
   }
 }
 
