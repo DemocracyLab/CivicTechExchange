@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.gis.db.models import PointField
 from enum import Enum
+from itertools import chain
 from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
@@ -121,6 +122,10 @@ class Project(Archived):
         volunteers = VolunteerRelation.objects.filter(project=self.id)
         group_relationships = ProjectRelationship.objects.filter(relationship_project=self).exclude(relationship_group=None)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
+        trello_actions = TrelloAction.objects.filter(
+            action_project=self.id).order_by('-action_date')[:20]
+        actions = sorted(chain(commits, trello_actions), reverse=True, key=lambda x: getattr(
+            x, 'commit_date', getattr(x, 'action_date', '')))
         project = {
             'project_id': self.id,
             'project_name': self.project_name,
@@ -145,6 +150,7 @@ class Project(Archived):
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links)),
             'project_commits': list(map(lambda commit: commit.to_json(), commits)),
+            'project_actions': list(map(lambda action: action.to_json(), actions)),
             'project_groups': list(map(lambda gr: gr.hydrate_to_list_json(), group_relationships)),
             'project_events': list(map(lambda er: er.hydrate_to_tile_json(), self.get_project_events())),
             'project_owners': [self.project_creator.hydrate_to_tile_json()],
@@ -608,6 +614,25 @@ class ProjectCommit(models.Model):
             'commit_title': self.commit_title,
             'branch_name': self.branch_name,
             'repo_name': self.repo_name
+        }
+
+
+class TrelloAction(models.Model):
+    action_project = models.ForeignKey(
+        Project, related_name='trello_actions', on_delete=models.CASCADE)
+    member_fullname = models.CharField(max_length=200)
+    member_id = models.CharField(max_length=2083)
+    board_id = models.CharField(max_length=2083)
+    action_type = models.CharField(max_length=2083)
+    action_date = models.DateTimeField(auto_now=False)
+
+    def to_json(self):
+        return {
+            'member_fullname': self.member_fullname,
+            'member_id': self.member_id,
+            'board_id': self.board_id,
+            'action_type': self.action_type,
+            'action_date': self.action_date,
         }
 
 
