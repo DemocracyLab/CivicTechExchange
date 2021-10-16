@@ -141,6 +141,14 @@ class ProjectFilterContainer extends React.Component<Props, State> {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>{this._displayFilters(true)}</Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="outline-secondary"
+              onClick={() => this._handleModalClick()}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
         </Modal>
       </React.Fragment>
     );
