@@ -29,10 +29,7 @@ type State = {|
   location: LocationRadius,
 |};
 
-
-
 class ProjectCardsContainer extends React.Component<Props, State> {
-
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [ProjectSearchStore];
   }
@@ -92,8 +89,17 @@ class ProjectCardsContainer extends React.Component<Props, State> {
 
   _contextualHelperMessage(): React$Node {
     //todo: no problems returns null, otherwise if project_count = 0 return based on filters only, keyword only, filters+keyword specific errors
-    if(this.state.project_count === 0) {
-      return <div><p> 0 projects found, this is the contextual helper message</p></div>
+    if (this.state.project_count === 0) {
+      // TODO: Target this specifically if favorited filter is set and user has no favorites
+      return (
+        <div>
+          <p>
+            {" "}
+            0 favorited projects found. Click project heart icon to mark project
+            as favorite.
+          </p>
+        </div>
+      );
     } else {
       return null;
     }
@@ -102,7 +108,9 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   _renderCards(): React$Node {
     //todo: clean this if/else selector up
     //todo: defaultProps value for rowMaximum, set to 3
-    const rowMaximum = _.isNumber(this.props.rowMaximum) ? this.props.rowMaximum : 3;
+    const rowMaximum = _.isNumber(this.props.rowMaximum)
+      ? this.props.rowMaximum
+      : 3;
     let colClasses = "";
     if (rowMaximum === 3) {
       colClasses = "col-sm-12 col-lg-6 col-xl-4";
@@ -111,8 +119,10 @@ class ProjectCardsContainer extends React.Component<Props, State> {
     } else if (rowMaximum === 1) {
       colClasses = "col-sm-12";
     } else {
-      colClasses = "col-sm-12 col-lg-6 col-xl-4"
-      console.log("Your rowMaximum prop is set to an unsupported value (supported values: 1-3), defaulting to 3")
+      colClasses = "col-sm-12 col-lg-6 col-xl-4";
+      console.log(
+        "Your rowMaximum prop is set to an unsupported value (supported values: 1-3), defaulting to 3"
+      );
     }
 
     return !this.state.projects ? (

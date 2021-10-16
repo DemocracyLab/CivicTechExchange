@@ -8,11 +8,15 @@ import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import metrics from "../../utils/metrics.js";
 
+type Props = {|
+  isMobileLayout: boolean,
+|};
+
 type State = {|
   favoritesOnly: boolean,
 |};
 
-class FavoriteFilter extends React.Component<{||}, State> {
+class FavoriteFilter extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
@@ -42,8 +46,11 @@ class FavoriteFilter extends React.Component<{||}, State> {
   }
 
   render(): React$Node {
+    const className: string = this.props.isMobileLayout
+      ? "favorite-filter"
+      : "favorite-filter btn btn-outline-secondary";
     return (
-      <div className="favorite-filter btn btn-outline-secondary" onClick={this.doToggle.bind(this)}>
+      <div className={className} onClick={this.doToggle.bind(this)}>
         Favorites
         <IconToggle
           toggled={this.state.favoritesOnly}

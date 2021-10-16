@@ -80,12 +80,12 @@ class ProjectFilterContainer extends React.Component<Props, State> {
   }
 
   _displayFilters(isMobileLayout: boolean): React$Node {
-    const showFavorites: boolean =
-      CurrentUser.isLoggedIn() && !FavoritesStore.noFavorites();
+    const showFavorites: boolean = CurrentUser.isLoggedIn();
     // this return is more verbose than it 'needs to be' and we may reduce this to a map later, but it's code readability vs length
 
     return (
       <React.Fragment>
+        {showFavorites && <FavoriteFilter isMobileLayout={isMobileLayout} />}
         <RenderFilterCategory
           category="Role"
           displayName={"Roles Needed"}
@@ -117,7 +117,6 @@ class ProjectFilterContainer extends React.Component<Props, State> {
           hasSubcategories={false}
           isMobileLayout={isMobileLayout}
         />
-        {showFavorites && <FavoriteFilter />}
       </React.Fragment>
     );
   }
