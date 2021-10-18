@@ -4,10 +4,11 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import { Glyph, GlyphStyles, GlyphSizes } from "../utils/glyphs.js";
 import _ from "lodash";
-import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
+import WarningModal from "../common/WarningModal.jsx";
 import StepIndicatorBars from "../common/StepIndicatorBars.jsx";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import utils from "../utils/utils.js";
+import promiseHelper from "../utils/promise.js";
 
 export type FormWorkflowStepConfig<T> = {|
   header: string,
@@ -135,16 +136,18 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
       : this.setState({ fieldsUpdated: true });
   }
 
-  confirmDiscardChanges(confirmDiscard: boolean): void {
-    let confirmState: State = this.state;
-    confirmState.showConfirmDiscardChanges = false;
-    if (confirmDiscard) {
-      confirmState.currentStep = this.state.navigateToStepUponDiscardConfirmation;
-      confirmState = this.resetPageState(confirmState);
-    }
+  confirmDiscardChanges(confirmDiscard: boolean): Promise<any> {
+    return promiseHelper.promisify(() => {
+      let confirmState: State = Object.assign({},this.state);
+      confirmState.showConfirmDiscardChanges = false;
+      if (confirmDiscard) {
+        confirmState.currentStep = this.state.navigateToStepUponDiscardConfirmation;
+        confirmState = this.resetPageState(confirmState);
+      }
 
-    this.setState(confirmState);
-    this.forceUpdate(utils.navigateToTopOfPage);
+      this.setState(confirmState);
+      this.forceUpdate(utils.navigateToTopOfPage);
+    });
   }
 
   onSubmit(event: SyntheticEvent<HTMLFormElement>): void {
@@ -195,9 +198,12 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
 
     return (
       <React.Fragment>
-        <ConfirmationModal
+        <WarningModal
           showModal={this.state.showConfirmDiscardChanges}
-          message="You have unsaved changes on this form. Do you want to discard these changes? (To save your changes press Next on the form.)"
+          headerText="Go Back?"
+          message="You have unsaved changes. If you go back, you will lose any information added to this step."
+          cancelText="Yes, Go Back"
+          submitText="No, Stay"
           onSelection={this.confirmDiscardChanges.bind(this)}
         />
 

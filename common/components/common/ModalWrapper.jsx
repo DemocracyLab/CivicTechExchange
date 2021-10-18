@@ -21,6 +21,7 @@ type Props = {|
   submitEnabled: boolean,
   onClickCancel: () => void,
   onClickSubmit: () => void,
+  onModalHide: ?()=> void,
   hideButtons: ?boolean,
   size: ?string,
 |};
@@ -42,7 +43,7 @@ class ModalWrapper extends React.PureComponent<Props, State> {
   render(): React$Node {
     const modalProps: Dictionary<string> = {
       show: this.props.showModal,
-      onHide: this.props.onClickCancel,
+      onHide: this.props.onModalHide || this.props.onClickCancel,
     };
     if (this.props.size) {
       modalProps.size = this.props.size;
