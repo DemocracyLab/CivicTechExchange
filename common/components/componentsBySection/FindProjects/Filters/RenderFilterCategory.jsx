@@ -53,7 +53,9 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
   }
 
   expandSubCategory(subcategory: string) {
-    this.setState({ openSubCategory: subcategory });
+    const openSubCategory: string =
+      this.state.openSubCategory === subcategory ? "" : subcategory;
+    this.setState({ openSubCategory: openSubCategory });
   }
 
   _renderDesktopSubcategories(props: Props, ref: forwardRef): React$Node {
