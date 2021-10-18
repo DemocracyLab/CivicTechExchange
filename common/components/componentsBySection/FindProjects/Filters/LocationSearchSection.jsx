@@ -185,6 +185,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
     };
 
     const sourceRef: forwardRef = React.createRef();
+    const className: string = this.state.isOpen ? "category-open" : "";
 
     return (
       <div
@@ -193,7 +194,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
         ref={this.targetRef}
       >
         <div
-          className="DoWeNeedThis"
+          className={className}
           ref={sourceRef}
           onClick={this.toggleCategory.bind(this)}
         >
@@ -214,9 +215,10 @@ class LocationSearchSection extends React.Component<{||}, State> {
   }
 
   _renderMobile(): React$Node {
+    const className: string = this.state.isOpen ? "category-open" : "";
     return (
       <React.Fragment>
-        <div className="DoWeNeedThis" onClick={this.toggleCategory.bind(this)}>
+        <div className={className} onClick={this.toggleCategory.bind(this)}>
           Location <span className="RenderFilterCategory-activecount"></span>
           <span className="RenderFilterCategory-arrow">
             <i className={GlyphStyles.ChevronDown}></i>

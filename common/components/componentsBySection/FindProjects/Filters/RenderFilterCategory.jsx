@@ -64,9 +64,14 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
         <div className="SubCategoryFrame">
           {this.state.tags.map((subcategorySet: [string, TagDefinition]) => {
             const subcategory: string = subcategorySet[0];
+            const className: string =
+              subcategory === this.state.openSubCategory
+                ? "subcategory-open"
+                : "";
             return (
               <React.Fragment key={"Fragment-" + subcategory}>
                 <Dropdown.Item
+                  className={className}
                   key={subcategory}
                   onClick={this.expandSubCategory.bind(this, subcategory)}
                 >
@@ -86,9 +91,14 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
         <div className="SubCategoryFrame">
           {this.state.tags.map((subcategorySet: [string, TagDefinition]) => {
             const subcategory: string = subcategorySet[0];
+            const className: string =
+              subcategory === this.state.openSubCategory
+                ? "subcategory-open"
+                : "";
             return (
               <React.Fragment key={"Fragment-" + subcategory}>
                 <Dropdown.Item
+                  className={className}
                   key={subcategory}
                   onClick={this.expandSubCategory.bind(this, subcategory)}
                 >
@@ -135,6 +145,7 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
     };
 
     const sourceRef: forwardRef = React.createRef();
+    const className: string = this.state.isOpen ? "category-open" : "";
 
     return (
       <div
@@ -143,7 +154,7 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
         ref={this.targetRef}
       >
         <div
-          className="DoWeNeedThis"
+          className={className}
           ref={sourceRef}
           onClick={this.toggleCategory.bind(this)}
         >
@@ -165,9 +176,10 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
   }
 
   _renderMobile(): React$Node {
+    const className: string = this.state.isOpen ? "category-open" : "";
     return (
       <React.Fragment>
-        <div className="DoWeNeedThis" onClick={this.toggleCategory.bind(this)}>
+        <div className={className} onClick={this.toggleCategory.bind(this)}>
           {this.props.displayName}{" "}
           <span className="RenderFilterCategory-activecount"></span>
           <span className="RenderFilterCategory-arrow">
