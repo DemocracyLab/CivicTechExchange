@@ -191,10 +191,15 @@ class ProjectAPIUtils {
 
   static fetchProjectDetails(
     id: number,
+    includeVolunteers: boolean,
     callback: ProjectDetailsAPIData => void,
     errCallback: APIError => void
   ): void {
-    fetch(new Request("/api/project/" + id + "/", { credentials: "include" }))
+    let url: string = "/api/project/" + id + "/";
+    if (includeVolunteers) {
+      url += "?includeVolunteers=1";
+    }
+    fetch(new Request(url, { credentials: "include" }))
       .then(response => {
         if (!response.ok) {
           throw Error();

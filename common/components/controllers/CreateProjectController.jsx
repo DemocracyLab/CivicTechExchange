@@ -99,6 +99,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     if (this.state.projectId) {
       ProjectAPIUtils.fetchProjectDetails(
         this.state.projectId,
+        true,
         this.loadProjectDetails.bind(this),
         this.handleLoadProjectError.bind(this)
       );
