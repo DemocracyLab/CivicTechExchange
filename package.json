@@ -95,7 +95,8 @@
     "elliptic": "^6.5.4",
     "tmpl": "^1.0.5",
     "path-parse": "^1.0.7",
-    "color-string": "^1.5.5"
+    "color-string": "^1.5.5",
+    "postcss": "^7.0.36"
   },
   "jest": {
     "automock": false,
