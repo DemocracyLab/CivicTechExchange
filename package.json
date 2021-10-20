@@ -96,7 +96,8 @@
     "tmpl": "^1.0.5",
     "path-parse": "^1.0.7",
     "color-string": "^1.5.5",
-    "postcss": "^7.0.36"
+    "postcss": "^7.0.36",
+    "ws": "^5.2.3"
   },
   "jest": {
     "automock": false,
