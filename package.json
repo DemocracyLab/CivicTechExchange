@@ -92,7 +92,8 @@
     "url-parse": "^1.5.1",
     "ua-parser-js": "^0.7.28",
     "hosted-git-info": "^2.8.9",
-    "elliptic": "^6.5.4"
+    "elliptic": "^6.5.4",
+    "tmpl": "^1.0.5"
   },
   "jest": {
     "automock": false,
