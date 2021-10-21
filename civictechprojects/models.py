@@ -607,6 +607,7 @@ class ProjectCommit(models.Model):
 
     def to_json(self):
         return {
+            'type': self.__class__.__name__,
             'user_name': self.user_name,
             'user_link': self.user_link,
             'user_avatar_link': self.user_avatar_link,
@@ -629,6 +630,7 @@ class TrelloAction(models.Model):
 
     def to_json(self):
         return {
+            'type': self.__class__.__name__,
             'member_fullname': self.member_fullname,
             'member_id': self.member_id,
             'board_id': self.board_id,
