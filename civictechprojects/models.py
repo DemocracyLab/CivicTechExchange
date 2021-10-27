@@ -131,6 +131,7 @@ class Project(Archived):
             'project_name': self.project_name,
             'project_creator': self.project_creator.id,
             'project_claimed': not self.project_creator.is_admin_contributor(),
+            'project_created': self.is_created,
             'project_approved': self.is_searchable,
             'project_description': self.project_description,
             'project_description_solution': self.project_description_solution,

@@ -287,8 +287,11 @@ def get_project(request, project_id):
 
     if project is not None:
         if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
+            url_parts = request.GET.urlencode()
+            query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
             hydrated_project = project.hydrate_to_json()
-            del hydrated_project['project_volunteers']
+            if 'includeVolunteers' not in query_params:
+                del hydrated_project['project_volunteers']
             return JsonResponse(hydrated_project, safe=False)
         else:
             return HttpResponseForbidden()

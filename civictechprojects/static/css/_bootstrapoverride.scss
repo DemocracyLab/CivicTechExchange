@@ -60,3 +60,8 @@ $h1-font-size: $font-size-base * 1.6875; // 27px, headline1
 $h2-font-size: $font-size-base * 1.3125; // 21px, headline2
 $h3-font-size: $font-size-base * 1.0625; // 17px, subtitle1
 $h4-font-size: $font-size-base * 0.9375; // 15px, subtitle2
+
+// design system link colors (October 6, 2021)
+// see _reboot.scss, ~line 182, for implementation
+$link-color: $color-link;
+$link-hover-color: $color-link-hover;
