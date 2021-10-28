@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options['trello']:
-            board_ids = []
+            board_ids = ['Ttgwsv3v']
             # board_ids = ['afEMhseE', 'iWtQuVMz', 'Ttgwsv3v',
             #              'wBg0qhss', 'Xz9EbZJ0', 'lRIPH9Yd']
             get_new_trello_board_actions(board_ids)
@@ -50,7 +50,34 @@ def get_new_trello_board_actions(board_ids):
         # print(len(actions_json['actions']))
         print('Retrieved {num_actions} action(s) for board {board_id}'.format(
             board_id=board_id, num_actions=len(actions)))
+        
+        #push the actions to the model
+        push_trello_actions_to_db(actions)
 
+def push_trello_actions_to_db(actions):
+    from civictechprojects.models import TrelloAction
+    for action in actions:
+        print(action)
+        member = action.get("memberCreator", {})
+        data = action.get("data", {})
+
+        member_id = member.get("id")
+        member_fullname = member.get("fullName")
+
+        board_id = data.get("board",{}).get("id")
+        action_type = action.get("type")
+        action_date = action.get("date")
+
+        id = action.get("id")
+
+        print(member_fullname)
+
+        TrelloAction.create(id, 
+                            member_fullname, 
+                            member_id, 
+                            board_id, 
+                            action_type, 
+                            action_date)
 
 def get_project_github_links():
     from civictechprojects.models import ProjectLink

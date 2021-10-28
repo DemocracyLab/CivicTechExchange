@@ -24,6 +24,8 @@ def fetch(rel_url, params={}):
     params['key'] = key
     params['token'] = token
 
+    print('trello url : {}'.format(url))
+
     response = requests.get(url, params=params)
 
     if response.status_code == 401:
@@ -47,7 +49,7 @@ def get_last_actions_time():
     Placeholder until we retrieve last created board action from DB
     :return: datetime string 
     """
-    last_hour_date_time = datetime.now() - timedelta(hours=2)
+    last_hour_date_time = datetime.now() - timedelta(hours=50000)
     return last_hour_date_time.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 

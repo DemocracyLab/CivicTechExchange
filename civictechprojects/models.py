@@ -626,6 +626,20 @@ class TrelloAction(models.Model):
     board_id = models.CharField(max_length=2083)
     action_type = models.CharField(max_length=2083)
     action_date = models.DateTimeField(auto_now=False)
+    id = models.CharField(max_length=2083, primary_key = True)
+
+    @staticmethod
+    def create(id, fullname, member_id, board_id, action_type, action_date):
+
+        trello_action = TrelloAction()
+        trello_action.member_fullname = fullname
+        trello_action.member_id = member_id
+        trello_action.board_id = board_id
+        trello_action.action_type = action_type
+        trello_action.action_date = action_date
+        trello_action.id = id
+
+        trello_action.save()
 
     def to_json(self):
         return {
