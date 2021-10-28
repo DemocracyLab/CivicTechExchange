@@ -607,6 +607,7 @@ class ProjectCommit(models.Model):
 
     def to_json(self):
         return {
+            'type': self.__class__.__name__,
             'user_name': self.user_name,
             'user_link': self.user_link,
             'user_avatar_link': self.user_avatar_link,
@@ -621,8 +622,9 @@ class ProjectCommit(models.Model):
 class TrelloAction(models.Model):
     action_project = models.ForeignKey(
         Project, related_name='trello_actions', on_delete=models.CASCADE)
+    member_id = models.CharField(max_length=2083)  # action creator
     member_fullname = models.CharField(max_length=200)
-    member_id = models.CharField(max_length=2083)
+    member_avatar_base_url = models.CharField(max_length=2083, blank=True)
     board_id = models.CharField(max_length=2083)
     action_type = models.CharField(max_length=2083)
     action_date = models.DateTimeField(auto_now=False)
@@ -641,15 +643,28 @@ class TrelloAction(models.Model):
 
         trello_action.save()
 
+    def get_avatar_url(self):
+        '''
+        Trello's API gives back avatar base urls (e.g. https://trello-members.s3.amazonaws.com/{id}/{hash}), but
+        a size and file extension need to be added to form a valid url
+        Currently, 30, 50, 170, & original are valid sizes
+        '''
+        avatar_size = 30
+        if self.member_avatar_base_url:
+            return '{base}/{size}.png'.format(base=self.member_avatar_base_url, size=avatar_size)
+        else:
+            return ''
+
     def to_json(self):
         return {
+            'type': self.__class__.__name__,
             'member_fullname': self.member_fullname,
             'member_id': self.member_id,
             'board_id': self.board_id,
             'action_type': self.action_type,
             'action_date': self.action_date,
+            'member_avatar_url': self.get_avatar_url()
         }
-
 
 class ProjectLink(models.Model):
     link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
