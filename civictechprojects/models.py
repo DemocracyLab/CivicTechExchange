@@ -631,9 +631,10 @@ class TrelloAction(models.Model):
     id = models.CharField(max_length=2083, primary_key = True)
 
     @staticmethod
-    def create(id, fullname, member_id, board_id, action_type, action_date):
+    def create(project, id, fullname, member_id, board_id, action_type, action_date):
 
         trello_action = TrelloAction()
+        trello_action.action_project = project
         trello_action.member_fullname = fullname
         trello_action.member_id = member_id
         trello_action.board_id = board_id

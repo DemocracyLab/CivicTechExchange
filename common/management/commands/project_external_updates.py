@@ -7,6 +7,7 @@ from common.helpers.date_helpers import datetime_field_to_datetime
 from django.conf import settings
 import pytz
 import traceback
+import re
 
 
 class Command(BaseCommand):
@@ -20,10 +21,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options['trello']:
-            board_ids = ['Ttgwsv3v']
-            # board_ids = ['afEMhseE', 'iWtQuVMz', 'Ttgwsv3v',
-            #              'wBg0qhss', 'Xz9EbZJ0', 'lRIPH9Yd']
-            get_new_trello_board_actions(board_ids)
+            #board_ids = ['Ttgwsv3v']
+            project_trello_links = get_project_trello_links()
+            for trello_link in project_trello_links:
+                try:
+                    if trello_link.link_project.is_searchable:
+                        get_new_trello_board_actions(trello_link)
+                except:
+                    # Keep processing if we run into errors with a particular update
+                    print('Error processing Trello Link: ' + trello_link.link_url)
+                    print(traceback.format_exc())
+                    pass
             return
         project_github_links = get_project_github_links()
         for github_link in project_github_links:
@@ -36,25 +44,44 @@ class Command(BaseCommand):
                 print(traceback.format_exc())
                 pass
 
+def get_trello_board_id_from_url(url):
+    board_id = None
+    if url is not None:
+        # it will be in the format http[s]://trello.com/b/boardid/....
+        token = url.split('/')
+        
+        #board id will be at 4th position
+        #TODO : Check the URL using regex 
+        if len(token) >= 5:
+            board_id = token[4]
+       
+    return board_id
 
-def get_new_trello_board_actions(board_ids):
+def get_new_trello_board_actions(trello_link):
     """
     Get actions across all boards
     :param board_ids: list of trello board ids
     """
-    # In the future we will need to pull valid board ids,
-    # fetch actions since last time actions were fetched,
-    # and store the actions
-    for board_id in board_ids:
+    project = trello_link.link_project
+    print('Handling updates for project {id} trello link: {url}'.format(
+        id=project.id, url=trello_link.link_url))
+
+    #get board id from url
+    board_id = get_trello_board_id_from_url(trello_link.link_url)
+    if board_id is not None:
         actions = get_board_actions(board_id)
+        
         # print(len(actions_json['actions']))
         print('Retrieved {num_actions} action(s) for board {board_id}'.format(
             board_id=board_id, num_actions=len(actions)))
         
         #push the actions to the model
-        push_trello_actions_to_db(actions)
+        push_trello_actions_to_db(project, actions)
+    else:
+        print('Unable to retrieve board id for trello url {}'.format(trello_link.link_url))
 
-def push_trello_actions_to_db(actions):
+
+def push_trello_actions_to_db(project, actions):
     from civictechprojects.models import TrelloAction
     for action in actions:
         print(action)
@@ -70,14 +97,17 @@ def push_trello_actions_to_db(actions):
 
         id = action.get("id")
 
-        print(member_fullname)
-
-        TrelloAction.create(id, 
+        TrelloAction.create(project, 
+                            id, 
                             member_fullname, 
                             member_id, 
                             board_id, 
                             action_type, 
                             action_date)
+
+def get_project_trello_links():
+    from civictechprojects.models import ProjectLink
+    return ProjectLink.objects.filter(link_name__icontains='link_projmanage').exclude(link_project__isnull=True)
 
 def get_project_github_links():
     from civictechprojects.models import ProjectLink
