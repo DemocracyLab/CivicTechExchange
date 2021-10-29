@@ -3,7 +3,7 @@ import type { FluxReduceStore } from "flux/utils";
 import { List } from "immutable";
 import { Container } from "flux/utils";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import type { LocationRadius } from "../../stores/ProjectSearchStore.js";
 import React from "react";
 import _ from "lodash";
@@ -15,6 +15,7 @@ type State = {|
   sortField: string,
   location: string,
   locationRadius: LocationRadius,
+  favoritesOnly: boolean,
 |};
 
 class ResetSearchButton extends React.Component<{||}, State> {
@@ -30,6 +31,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
       sortField: ProjectSearchStore.getSortField() || "",
       location: ProjectSearchStore.getLegacyLocation() || "",
       locationRadius: ProjectSearchStore.getLocation() || {},
+      favoritesOnly: ProjectSearchStore.getFavoritesOnly(),
     };
   }
 
@@ -44,7 +46,8 @@ class ResetSearchButton extends React.Component<{||}, State> {
               this.state.tags.size > 0 ||
               this.state.sortField !== this.state.defaultSort ||
               this.state.location ||
-              !_.isEmpty(this.state.locationRadius)
+              !_.isEmpty(this.state.locationRadius) ||
+              this.state.favoritesOnly
             )
           }
           onClick={this._clearFilters.bind(this)}
@@ -55,7 +58,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
     );
   }
   _clearFilters(): void {
-    ProjectSearchDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: "CLEAR_FILTERS",
     });
   }

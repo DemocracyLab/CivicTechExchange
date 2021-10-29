@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Project, Group, Event, ProjectRelationship, UserAlert, VolunteerRelation, ProjectCommit, \
-    NameRecord, ProjectFile, Testimonial, ProjectLink
+    NameRecord, ProjectFile, Testimonial, ProjectLink, ProjectFavorite
 
 project_text_fields = ['project_name', 'project_description', 'project_description_solution', 'project_description_actions', 'project_short_description', 'project_location', 'project_country', 'project_state', 'project_city', 'project_url']
 project_filter_fields = ('project_date_created', 'project_date_modified', 'is_searchable', 'is_created')
@@ -84,6 +84,11 @@ class ProjectLinkAdmin(admin.ModelAdmin):
     search_fields = ['link_project__project_name', 'link_name']
     list_filter = ('link_visibility',)
 
+class ProjectFavoriteAdmin(admin.ModelAdmin):
+    list_display = ('link_project', 'link_user')
+    search_fields = ['link_project__project_name', 'link_user__email']
+
+
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectRelationship, ProjectRelationshipAdmin)
 admin.site.register(Group, GroupAdmin)
@@ -95,3 +100,4 @@ admin.site.register(NameRecord, NameRecordAdmin)
 admin.site.register(ProjectFile, ProjectFileAdmin)
 admin.site.register(Testimonial, TestimonialAdmin)
 admin.site.register(ProjectLink, ProjectLinkAdmin)
+admin.site.register(ProjectFavorite, ProjectFavoriteAdmin)

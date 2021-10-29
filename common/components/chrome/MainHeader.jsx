@@ -1,22 +1,14 @@
 // @flow
 
 import type { FluxReduceStore } from "flux/utils";
-import type { SectionType } from "../enums/Section.js";
 import { Container } from "flux/utils";
 import cdn from "../utils/cdn.js";
 import CurrentUser from "../utils/CurrentUser.js";
-import NavigationLinks, { NavigationLink } from "../utils/NavigationLinks.js"; //TODO: Remove?
 import NavigationStore from "../stores/NavigationStore.js";
-import SectionLink from "./SectionLink.jsx"; //TODO: Remove?
 import React from "react";
 import Section from "../enums/Section.js";
-import url from "../utils/url.js";
+import urlHelper from "../utils/url.js";
 import AlertHeader from "./AlertHeader.jsx";
-import MyProjectsStore, {
-  MyProjectsAPIResponse,
-} from "../stores/MyProjectsStore.js";
-import MyGroupsStore, { MyGroupsAPIResponse } from "../stores/MyGroupsStore.js";
-import MyEventsStore, { MyEventsAPIResponse } from "../stores/MyEventsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import _ from "lodash";
 import Navbar from "react-bootstrap/Navbar";
@@ -25,7 +17,6 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import UserIcon from "../svg/user-circle-solid.svg";
-import { Dictionary } from "../types/Generics.jsx";
 
 type State = {|
   showMyProjects: boolean,
@@ -37,24 +28,16 @@ type State = {|
 
 class MainHeader extends React.Component<{||}, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [NavigationStore, MyProjectsStore, MyGroupsStore, MyEventsStore];
+    return [NavigationStore];
   }
 
   static calculateState(prevState: State): State {
-    const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
-    const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
-    const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
     return {
-      showHeader: !url.argument("embedded"),
-      showMyProjects:
-        myProjects &&
-        (!_.isEmpty(myProjects.volunteering_projects) ||
-          !_.isEmpty(myProjects.owned_projects)),
-      showMyGroups: myGroups && !_.isEmpty(myGroups.owned_groups),
-      showMyEvents:
-        myEvents &&
-        (!_.isEmpty(myEvents.owned_events) || CurrentUser.isStaff()),
-      loginUrl: url.logInThenReturn(),
+      showHeader: !urlHelper.argument("embedded"),
+      showMyProjects: CurrentUser.hasProjects(),
+      showMyGroups: CurrentUser.hasGroups(),
+      showMyEvents: CurrentUser.hasEvents(),
+      loginUrl: urlHelper.logInThenReturn(),
     };
   }
   // may need activeSection: NavigationStore.getSection() in calculateState, check that
@@ -93,7 +76,7 @@ class MainHeader extends React.Component<{||}, State> {
     return (
       <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
         <Navbar.Brand>
-          <a href={url.section(Section.Home)}>
+          <a href={urlHelper.section(Section.Home)}>
             <img src={cdn.image("dl_logo.png")} alt="DemocracyLab" />
           </a>
         </Navbar.Brand>
@@ -114,33 +97,47 @@ class MainHeader extends React.Component<{||}, State> {
               : this._renderLogInSection()}
           </Nav>
           <Nav className="MainHeader-pagenav mr-auto">
-            {this._renderNavLink(Section.Home, "Home")}
+            {this._renderNavLink(urlHelper.section(Section.Home), "Home")}
             <NavDropdown title="Projects" id="nav-projects">
               {this._renderNavDropdownItem(
-                Section.FindProjects,
+                urlHelper.section(Section.FindProjects),
                 "Find Projects"
               )}
               {this._renderNavDropdownItem(
-                Section.CreateProject,
+                urlHelper.section(Section.CreateProject),
                 "Create Project"
               )}
             </NavDropdown>
             <NavDropdown title="Groups" id="nav-group">
-              {this._renderNavDropdownItem(Section.FindGroups, "Find Groups")}
-              {this._renderNavDropdownItem(Section.CreateGroup, "Create Group")}
+              {this._renderNavDropdownItem(
+                urlHelper.section(Section.FindGroups),
+                "Find Groups"
+              )}
+              {this._renderNavDropdownItem(
+                urlHelper.section(Section.CreateGroup),
+                "Create Group"
+              )}
             </NavDropdown>
             {this._renderEventNavItems()}
-            {this._renderNavLink(Section.Companies, "Companies")}
+            {this._renderNavLink(
+              urlHelper.section(Section.Companies),
+              "Companies"
+            )}
             <NavDropdown title="About" id="nav-about">
-              {this._renderNavDropdownItem(Section.AboutUs, "About Us")}
-              {this._renderNavDropdownItem(Section.ContactUs, "Contact Us")}
-              {this._renderNavDropdownItem(Section.Press, "News")}
+              {this._renderNavDropdownItem(
+                urlHelper.section(Section.AboutUs),
+                "About Us"
+              )}
+              {this._renderNavDropdownItem(
+                urlHelper.section(Section.ContactUs),
+                "Contact Us"
+              )}
             </NavDropdown>
             {window.BLOG_URL ? (
               <Nav.Link href={window.BLOG_URL}>Blog</Nav.Link>
             ) : null}
             {this._renderNavLink(
-              Section.Donate,
+              urlHelper.section(Section.Donate),
               "Donate",
               "MainHeader-showmobile"
             )}
@@ -165,11 +162,17 @@ class MainHeader extends React.Component<{||}, State> {
   _renderEventNavItems(): ?React$Node {
     const eventLinks: Array<React$Node> = [];
     eventLinks.push(
-      this._renderNavDropdownItem(Section.FindEvents, "Find Events")
+      this._renderNavDropdownItem(
+        urlHelper.section(Section.FindEvents),
+        "Find Events"
+      )
     );
     if (CurrentUser.isStaff()) {
       eventLinks.push(
-        this._renderNavDropdownItem(Section.CreateEvent, "Create Event")
+        this._renderNavDropdownItem(
+          urlHelper.section(Section.CreateEvent),
+          "Create Event"
+        )
       );
     }
     if (window.EVENT_URL) {
@@ -193,7 +196,7 @@ class MainHeader extends React.Component<{||}, State> {
         <Button
           className="MainHeader-showdesktop MainHeader-donate-link"
           variant="link"
-          href={url.section(Section.Donate)}
+          href={urlHelper.section(Section.Donate)}
         >
           Donate
         </Button>
@@ -209,25 +212,34 @@ class MainHeader extends React.Component<{||}, State> {
   }
 
   //TODO: Refactor these to reduce duplication
-  //TODO: Allow multiple arguments for url.section to handle url.getPreviousPageArg() - options object?
-  _renderNavLink(section, text, classes = "") {
-    if (section === this.state.activeSection) {
-      classes += " MainHeader-active";
-    }
+  _renderNavLink(url: string, text: string, classes: string = "") {
+    const section: string = urlHelper.getSection(url);
+    const _classes: string = this._addHighlightClassIfApplicable(
+      section,
+      classes
+    );
     return (
-      <Nav.Link className={classes} href={url.section(section)} key={section}>
+      <Nav.Link className={_classes} href={url} key={section}>
         {text}
       </Nav.Link>
     );
   }
-  _renderNavDropdownItem(section, text, classes = "") {
-    if (section === this.state.activeSection) {
-      classes += " MainHeader-active";
-    }
+  _renderNavDropdownItem(url: string, text: string, classes: string = "") {
+    const section: string = urlHelper.getSection(url);
+    const _classes: string = this._addHighlightClassIfApplicable(
+      section,
+      classes
+    );
     return (
-      <NavDropdown.Item className={classes} href={url.section(section)} key={section}>
+      <NavDropdown.Item className={_classes} href={url} key={section}>
         {text}
       </NavDropdown.Item>
+    );
+  }
+  _addHighlightClassIfApplicable(section: Section, classes: string): string {
+    return (
+      classes +
+      (section === this.state.activeSection ? " MainHeader-active" : "")
     );
   }
 
@@ -243,7 +255,7 @@ class MainHeader extends React.Component<{||}, State> {
           <Button
             variant="outline-secondary"
             className="MainHeader-donatebutton"
-            href={url.section(Section.Donate)}
+            href={urlHelper.section(Section.Donate)}
           >
             Donate
           </Button>
@@ -255,12 +267,24 @@ class MainHeader extends React.Component<{||}, State> {
           </Dropdown.Toggle>
           <Dropdown.Menu>
             {showMyProjects &&
-              this._renderNavDropdownItem(Section.MyProjects, "My Projects")}
+              this._renderNavDropdownItem(
+                urlHelper.section(Section.MyProjects),
+                "My Projects"
+              )}
             {showMyGroups &&
-              this._renderNavDropdownItem(Section.MyGroups, "My Groups")}
+              this._renderNavDropdownItem(
+                urlHelper.section(Section.MyGroups),
+                "My Groups"
+              )}
             {showMyEvents &&
-              this._renderNavDropdownItem(Section.MyEvents, "My Events")}
-            {this._renderNavDropdownItem(Section.EditProfile, "Edit Profile")}
+              this._renderNavDropdownItem(
+                urlHelper.section(Section.MyEvents),
+                "My Events"
+              )}
+            {this._renderNavDropdownItem(
+              urlHelper.section(Section.Profile, { id: CurrentUser.userID() }),
+              "My Profile"
+            )}
             <Dropdown.Item href="/logout/">Log Out</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -270,10 +294,24 @@ class MainHeader extends React.Component<{||}, State> {
             {CurrentUser.lastName()}
           </Nav.Item>
           {showMyProjects &&
-            this._renderNavLink(Section.MyProjects, "My Projects")}
-          {showMyGroups && this._renderNavLink(Section.MyGroups, "My Groups")}
-          {showMyEvents && this._renderNavLink(Section.MyEvents, "My Events")}
-          {this._renderNavLink(Section.EditProfile, "Edit Profile")}
+            this._renderNavLink(
+              urlHelper.section(Section.MyProjects),
+              "My Projects"
+            )}
+          {showMyGroups &&
+            this._renderNavLink(
+              urlHelper.section(Section.MyGroups),
+              "My Groups"
+            )}
+          {showMyEvents &&
+            this._renderNavLink(
+              urlHelper.section(Section.MyEvents),
+              "My Events"
+            )}
+          {this._renderNavLink(
+            urlHelper.section(Section.Profile, { id: CurrentUser.userID() }),
+            "My Profile"
+          )}
           <Dropdown.Divider />
         </div>
       </React.Fragment>

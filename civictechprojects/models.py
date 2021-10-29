@@ -126,6 +126,7 @@ class Project(Archived):
             'project_name': self.project_name,
             'project_creator': self.project_creator.id,
             'project_claimed': not self.project_creator.is_admin_contributor(),
+            'project_created': self.is_created,
             'project_approved': self.is_searchable,
             'project_description': self.project_description,
             'project_description_solution': self.project_description_solution,
@@ -780,8 +781,8 @@ class ProjectFile(models.Model):
     file_group = models.ForeignKey(Group, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
     file_event = models.ForeignKey(Event, related_name='files', blank=True, null=True, on_delete=models.CASCADE)
     file_visibility = models.CharField(max_length=50)
-    file_name = models.CharField(max_length=150)
-    file_key = models.CharField(max_length=200)
+    file_name = models.CharField(max_length=300)
+    file_key = models.CharField(max_length=400)
     file_url = models.CharField(max_length=2083)
     file_type = models.CharField(max_length=50)
     file_category = models.CharField(max_length=50)
@@ -886,8 +887,12 @@ class ProjectFile(models.Model):
     @staticmethod
     def from_json(owner, file_category, file_json):
         file_name_parts = file_json['fileName'].split('.')
-        file_name = "".join(file_name_parts[:-1])
-        file_type = file_name_parts[-1]
+        file_name = "".join(file_name_parts[0])
+        # Filename without file type
+        if len(file_name_parts) == 1:
+            file_type = ""
+        else:
+            file_type = file_name_parts[-1]
 
         return ProjectFile.create(owner=owner,
                                   file_url=file_json['publicUrl'],
@@ -905,6 +910,28 @@ class ProjectFile(models.Model):
             'publicUrl': self.file_url,
             'visibility': self.file_visibility
         }
+
+
+class ProjectFavorite(models.Model):
+    link_project = models.ForeignKey(Project, related_name='favorites', on_delete=models.CASCADE)
+    link_user = models.ForeignKey(Contributor, related_name='favorites', on_delete=models.CASCADE)
+
+    @staticmethod
+    def create(user, project):
+        fav = ProjectFavorite.objects.create(link_project=project, link_user=user)
+        fav.save()
+        return fav
+
+    @staticmethod
+    def get_for_user(user):
+        return Project.objects.filter(favorites__link_user=user)
+
+    @staticmethod
+    def get_for_project(project, user=None):
+        if user is not None:
+            return ProjectFavorite.objects.filter(link_project=project, link_user=user)
+        else:
+            return ProjectFavorite.objects.filter(link_project=project)
 
 
 class FileCategory(Enum):

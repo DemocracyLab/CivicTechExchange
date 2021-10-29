@@ -1,6 +1,6 @@
 // @flow
 
-import ProjectSearchDispatcher from "../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import TagDispatcher from "../stores/TagDispatcher.js";
 import ProjectCardsContainer from "../componentsBySection/FindProjects/ProjectCardsContainer.jsx";
 import ProjectFilterContainer from "../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx";
@@ -30,12 +30,14 @@ class FindProjectsController extends React.PureComponent {
       "role",
       "org",
       "stage",
+      "favoritesOnly",
     ]);
     if (!args.sortField) {
       args.sortField = "-project_date_modified";
     }
-    ProjectSearchDispatcher.dispatch({
-      type: "INIT",
+
+    UniversalDispatcher.dispatch({
+      type: "INIT_PROJECT_SEARCH",
       findProjectsArgs: !_.isEmpty(args) ? args : null,
       searchSettings: {
         updateUrl: true,

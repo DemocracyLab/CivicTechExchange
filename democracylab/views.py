@@ -25,17 +25,30 @@ def login_view(request, provider=None):
         email = request.POST['username']
         password = request.POST['password']
         prev_page = request.POST['prevPage']
-        prev_page_args = ast.literal_eval(request.POST['prevPageArgs'])
+        prev_page_args_string = None
+        if 'prevPageArgs' in request.POST and len(request.POST['prevPageArgs']) > 0:
+            prev_page_args_string = request.POST['prevPageArgs'].strip('\'\"').replace('\\', '')
         user = authenticate(username=email.lower(), password=password)
         if user is not None and user.is_authenticated:
             login(request, user)
+            prev_page_args = json.loads(prev_page_args_string) if prev_page_args_string else None
             redirect_url = '/' if prev_page.strip('/') == '' else section_url(prev_page, prev_page_args)
             return redirect(redirect_url)
         else:
             messages.error(request, 'Incorrect Email or Password')
-            return redirect(section_url(FrontEndSection.LogIn, {'prev': prev_page}))
+            back_args = {'prev': prev_page}
+            if prev_page_args_string:
+                back_args['prevPageArgs'] = prev_page_args_string
+            return redirect(section_url(FrontEndSection.LogIn, back_args))
 
     if provider in provider_ids:
+        prev_page = request.GET['prevPage'] if 'prevPage' in request.GET else ''
+        prev_page_args_string = None
+        if 'prevPageArgs' in request.GET and len(request.GET['prevPageArgs']) > 0:
+            prev_page_args_string = request.GET['prevPageArgs'].strip('\'\"').replace('\\', '')
+        prev_page_args = json.loads(prev_page_args_string) if prev_page_args_string else None
+        request.session['prev_page'] = prev_page
+        request.session['prev_page_args'] = prev_page_args
         return redirect(f'{provider}_login')
 
     else:
@@ -174,6 +187,11 @@ def user_edit(request, user_id):
     return redirect(section_url(FrontEndSection.Profile, {'id': user_id}))
 
 
+def user_edit_details(request, user_id):
+    user = DemocracyLabUserCreationForm.edit_user(request, user_id)
+    return JsonResponse(user.hydrate_to_json())
+
+
 def user_details(request, user_id):
     user = Contributor.objects.get(id=user_id)
     return JsonResponse(user.hydrate_to_json())
@@ -189,7 +207,7 @@ def send_verification_email_request(request):
     if not user.email_verified:
         send_verification_email(user)
         if request.method == 'GET':
-            return redirect(section_url(FrontEndSection.SignedUp, {'email': user.email}))
+            return redirect(section_url(FrontEndSection.SignedUp))
         else:
             return HttpResponse(status=200)
     else:

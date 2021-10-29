@@ -16,7 +16,7 @@ import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../volunteers/VolunteerSection.jsx";
 import IconLinkDisplay from "../../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 import type { PositionInfo } from "../../forms/PositionInfo.jsx";
-import CurrentUser from "../../utils/CurrentUser.js";
+import CurrentUser, { MyGroupData } from "../../utils/CurrentUser.js";
 import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
@@ -27,7 +27,6 @@ import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import EventCardsListings from "../../componentsBySection/FindEvents/EventCardsListings.jsx";
-import type { MyGroupData } from "../../stores/MyGroupsStore.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
@@ -216,7 +215,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             <div className="AboutProject-skilltech-container pt-4">
               {project && !_.isEmpty(project.project_positions) && (
                 <div className="AboutProject-skills">
-                  <h4>Skills Needed</h4>
+                  <h4>Roles Needed</h4>
                   {project.project_positions.map(position => (
                     <span
                       className="Profile-pill"

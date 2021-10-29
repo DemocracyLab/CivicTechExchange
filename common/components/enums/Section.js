@@ -20,7 +20,6 @@ const Section = {
   EmailVerified: "EmailVerified",
   Donate: "Donate",
   ThankYou: "ThankYou",
-  Press: "Press",
   ContactUs: "ContactUs",
   CreateGroup: "CreateGroup",
   CreateEvent: "CreateEvent",
@@ -29,6 +28,7 @@ const Section = {
   Companies: "Companies",
   Error: "Error",
   AddUserDetails: "AddUserDetails",
+  VideoOverview: "VideoOverview",
 };
 
 export type SectionType = $Keys<typeof Section>;

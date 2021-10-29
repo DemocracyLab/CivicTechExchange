@@ -7,14 +7,13 @@ import {
   LocationInfo,
   getLocationDisplayString,
 } from "../common/location/LocationInfo.js";
-import type { MyGroupData } from "../stores/MyGroupsStore.js";
+import type { MyGroupData } from "./CurrentUser.js";
 import type { GroupTileAPIData } from "./GroupAPIUtils.js";
 import type { EventTileAPIData } from "./EventAPIUtils.js";
+import type { Dictionary } from "../types/Generics.jsx";
 import _ from "lodash";
 
-export type APIResponse = {|
-  +status: number,
-|};
+export type APIResponse = Response;
 
 export type APIError = {|
   +errorCode: number,
@@ -49,6 +48,7 @@ export type ProjectData = {|
   +thumbnail: FileInfo,
   +claimed: boolean,
   +date_modified: string,
+  +video: LinkInfo,
 |};
 
 export type ProjectAPIData = {|
@@ -62,7 +62,8 @@ export type ProjectAPIData = {|
   +project_state: string,
   +project_city: string,
   +project_name: string,
-  +project_thumbnail: FileInfo,
+  +project_thumbnail: ?FileInfo,
+  +project_thumbnail_video: ?LinkInfo,
   +project_date_modified: string,
   +project_url: string,
   +project_positions: $ReadOnlyArray<PositionInfo>,
@@ -98,6 +99,7 @@ export type ProjectDetailsAPIData = {|
   +project_creator: number,
   +project_claimed: boolean,
   +project_approved: boolean,
+  +project_created: boolean,
   +project_url: string,
   +project_organization: $ReadOnlyArray<TagDefinition>,
   +project_organization_type: $ReadOnlyArray<TagDefinition>,
@@ -117,7 +119,6 @@ export type ProjectDetailsAPIData = {|
   +project_owners: $ReadOnlyArray<VolunteerUserData>,
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date,
-  +project_groups: $ReadOnlyArray<GroupTileAPIData>,
   +project_events: $ReadOnlyArray<EventTileAPIData>,
 |};
 
@@ -165,6 +166,7 @@ class ProjectAPIUtils {
       positions: !_.isEmpty(apiData.project_positions)
         ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
         : ["Contact Project for Details"],
+      video: apiData.project_thumbnail_video,
     };
   }
 
@@ -189,10 +191,15 @@ class ProjectAPIUtils {
 
   static fetchProjectDetails(
     id: number,
+    includeVolunteers: boolean,
     callback: ProjectDetailsAPIData => void,
     errCallback: APIError => void
   ): void {
-    fetch(new Request("/api/project/" + id + "/", { credentials: "include" }))
+    let url: string = "/api/project/" + id + "/";
+    if (includeVolunteers) {
+      url += "?includeVolunteers=1";
+    }
+    fetch(new Request(url, { credentials: "include" }))
       .then(response => {
         if (!response.ok) {
           throw Error();
@@ -212,6 +219,37 @@ class ProjectAPIUtils {
           })
       );
   }
+
+  // fetch project volunteers list
+  static fetchProjectVolunteerList(
+    id: number,
+    callback: VolunteerDetailsAPIData => void,
+    errCallback: APIError => void
+  ): void {
+    fetch(
+      new Request("/api/project/" + id + "/volunteers/", {
+        credentials: "include",
+      })
+    )
+      .then(response => {
+        if (!response.ok) {
+          throw Error();
+        }
+        return response.json();
+      })
+      .then(response => {
+        callback(response["project_volunteers"]);
+      })
+      .catch(
+        response =>
+          errCallback &&
+          errCallback({
+            errorCode: response.status,
+            errorMessage: JSON.stringify(response),
+          })
+      );
+  }
+
   // fetch specific category of tags
   static fetchTagsByCategory(
     tagCategory: string,
@@ -290,7 +328,8 @@ class ProjectAPIUtils {
     url: string,
     body: {||},
     successCallback: ?(APIResponse) => void,
-    errCallback: ?(APIError) => void
+    errCallback: ?(APIError) => void,
+    additionalHeaders: ?Dictionary<string>
   ): Promise<APIResponse> {
     const doError = response =>
       errCallback &&
@@ -299,22 +338,28 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response),
       });
 
+    let headers: Dictionary<string> = Object.assign(
+      {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      additionalHeaders
+    );
+
     let promise: Promise<APIResponse> = fetch(
       new Request(url, {
         method: "POST",
         body: JSON.stringify(body),
         credentials: "include",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
+        headers: headers,
       })
     );
 
     if (successCallback) {
       promise = promise.then(response =>
         ProjectAPIUtils.isSuccessResponse(response)
-          ? successCallback()
+          ? successCallback(response)
           : doError(response)
       );
     }

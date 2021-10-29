@@ -25,7 +25,7 @@ import LinkListStore, { NewLinkInfo } from "../stores/LinkListStore.js";
 import HiddenFormFields from "../forms/HiddenFormFields.jsx";
 import _ from "lodash";
 
-const UserFileTypes = {
+export const UserFileTypes = {
   RESUME: "RESUME",
 };
 
@@ -208,7 +208,7 @@ class EditProfileController extends React.Component<{||}, State> {
 
               <div className="form-group">
                 <ImageCropUploadFormElement
-                  form_id="user_thumbnail_location"
+                  form_id="user_thumbnail"
                   buttonText="Upload Your Picture"
                   currentImage={this.state.formFields.user_thumbnail}
                   aspect={1 / 1}

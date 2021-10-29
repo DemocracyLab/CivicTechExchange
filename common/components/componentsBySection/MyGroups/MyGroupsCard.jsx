@@ -4,8 +4,7 @@ import React from "react";
 import Section from "../../enums/Section.js";
 import url from "../../utils/url.js";
 import { Button } from "react-bootstrap";
-import { MyGroupData } from "../../stores/MyGroupsStore.js";
-import CurrentUser from "../../utils/CurrentUser.js";
+import CurrentUser, { MyGroupData } from "../../utils/CurrentUser.js";
 
 type Props = {|
   +group: MyGroupData,

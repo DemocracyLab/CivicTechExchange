@@ -10,7 +10,6 @@ import Truncate from "../utils/truncate.js";
 import AboutProjectDisplay from "../common/projects/AboutProjectDisplay.jsx";
 import { APIError } from "../utils/api.js";
 import url from "../utils/url.js";
-import prerender from "../utils/prerender.js";
 import EventAPIUtils, { EventData } from "../utils/EventAPIUtils.js";
 import AboutEventDisplay from "../componentsBySection/CreateEvent/AboutEventDisplay.jsx";
 
@@ -43,7 +42,6 @@ class AboutEventController extends React.PureComponent<{||}, State> {
       {
         event: event,
       },
-      prerender.ready
     );
   }
 

@@ -183,7 +183,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
         type="button"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
-        href={url.section(Section.LogIn, url.getPreviousPageArg())}
+        href={url.logInThenReturn()}
       >
         Sign in to Volunteer
       </Button>

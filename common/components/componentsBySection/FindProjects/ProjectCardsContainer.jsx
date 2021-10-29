@@ -10,12 +10,10 @@ import { Container } from "flux/utils";
 import { List } from "immutable";
 import ProjectCard from "./ProjectCard.jsx";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import LoadingMessage from "../../chrome/LoadingMessage.jsx";
-import prerender from "../../utils/prerender.js";
 import type { LocationRadius } from "../../stores/ProjectSearchStore.js";
-import ProjectSearchBar from "./ProjectSearchBar.jsx";
-import metrics from "../../utils/metrics.js"
+import metrics from "../../utils/metrics.js";
 
 type Props = {|
   showSearchControls: ?boolean,
@@ -23,6 +21,7 @@ type Props = {|
   onSelectProject: ?Function,
   selectableCards: ?boolean,
   alreadySelectedProjects: ?List<string>, // todo: proper state management
+  handleEmptyProject: ?Function
 |};
 
 type State = {|
@@ -32,6 +31,7 @@ type State = {|
   project_count: number,
   legacyLocation: string,
   location: LocationRadius,
+  error: boolean
 |};
 
 class ProjectCardsContainer extends React.Component<Props, State> {
@@ -40,10 +40,12 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   }
 
   static calculateState(prevState: State): State {
-    prerender.ready(!ProjectSearchStore.getProjectsLoading());
     const count = ProjectSearchStore.getNumberOfProjects();
-    if ( _.isNumber(count) ) {
-      metrics.logProjectSearchResults(count, ProjectSearchStore.getQueryString())
+    if (_.isNumber(count)) {
+      metrics.logProjectSearchResults(
+        count,
+        ProjectSearchStore.getQueryString()
+      );
     }
     return {
       projects: ProjectSearchStore.getProjects(),
@@ -55,6 +57,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
       tags: ProjectSearchStore.getTags() || [],
       legacyLocation: ProjectSearchStore.getLegacyLocation() || "",
       location: ProjectSearchStore.getLocation() || "",
+      error: ProjectSearchStore.getError()
     };
   }
 
@@ -100,6 +103,14 @@ class ProjectCardsContainer extends React.Component<Props, State> {
   }
 
   _renderCards(): React$Node {
+    if (
+      this.state.error ||
+      (this.state.projects &&
+        this.state.projects.size === 0 &&
+        this.props.handleEmptyProject)
+    ) {
+      this.props.handleEmptyProject();
+    }
     return !this.state.projects ? (
       <LoadingMessage message="Loading projects..." />
     ) : this.state.projects.size === 0 ? (
@@ -127,9 +138,9 @@ class ProjectCardsContainer extends React.Component<Props, State> {
         : this.state.current_page;
 
     this.setState({ current_page: nextPage }, function() {
-      ProjectSearchDispatcher.dispatch({
+      UniversalDispatcher.dispatch({
         type: "SET_PAGE",
-        page: this.state.current_page,
+        page: this.state.current_page
       });
     });
   }

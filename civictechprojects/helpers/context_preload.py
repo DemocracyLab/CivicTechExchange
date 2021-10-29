@@ -4,6 +4,7 @@ from civictechprojects.models import Event
 from civictechprojects.caching.cache import ProjectCache, GroupCache
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
+from common.helpers.redirectors import RedirectTo
 from common.helpers.request_helpers import url_params
 
 
@@ -72,7 +73,7 @@ def about_us_preload(context, request):
 def donate_preload(context, request):
     context = default_preload(context, request)
     context['title'] = 'Donate | DemocracyLab'
-    context['description'] = 'We too are a nonprofit, and your tax-deductible gift helps us connect good people with good causes.'
+    context['description'] = 'Your donation empowers people who use technology for public good by connecting tech-for-good projects to skilled volunteers and socially responsible companies.'
     return context
 
 
@@ -90,10 +91,43 @@ def create_event_preload(context, request):
     return context
 
 
+def my_projects_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'My Projects | DemocracyLab'
+    context['description'] = 'My Projects page'
+    return context
+
+
+def my_groups_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'My Groups | DemocracyLab'
+    context['description'] = 'My Groups page'
+    return context
+
+
 def my_events_preload(context, request):
     context = default_preload(context, request)
     context['title'] = 'My Events | DemocracyLab'
     context['description'] = 'My Events page'
+    return context
+
+
+def videos_preload(context, request):
+    context = default_preload(context, request)
+    if settings.VIDEO_PAGES:
+        query_args = url_params(request)
+        video_id = query_args['id']
+        if video_id in settings.VIDEO_PAGES:
+            video_json = settings.VIDEO_PAGES[video_id]
+            context['YOUTUBE_VIDEO_URL'] = video_json['video_url']
+            if 'video_description' in video_json:
+                context['description'] = video_json['video_description']
+            if 'video_thumbnail' in video_json:
+                context['og_image'] = video_json['video_thumbnail']
+        else:
+            print('Redirecting invalid video id: ' + video_id)
+            raise RedirectTo(section_url(FrontEndSection.VideoOverview, {'id': 'overview'}))
+
     return context
 
 
@@ -115,10 +149,13 @@ preload_urls = [
     {'section': FrontEndSection.EditProfile.value, 'handler': edit_profile_preload},
     {'section': FrontEndSection.AboutUs.value, 'handler': about_us_preload},
     {'section': FrontEndSection.CreateEvent.value, 'handler': create_event_preload},
+    {'section': FrontEndSection.MyProjects.value, 'handler': my_projects_preload},
+    {'section': FrontEndSection.MyGroups.value, 'handler': my_groups_preload},
     {'section': FrontEndSection.MyEvents.value, 'handler': my_events_preload},
     {'section': FrontEndSection.Donate.value, 'handler': donate_preload},
     {'section': FrontEndSection.AboutGroup.value, 'handler': about_group_preload},
-    {'section': FrontEndSection.Companies.value, 'handler': companies_preload}
+    {'section': FrontEndSection.Companies.value, 'handler': companies_preload},
+    {'section': FrontEndSection.VideoOverview.value, 'handler': videos_preload}
 ]
 
 

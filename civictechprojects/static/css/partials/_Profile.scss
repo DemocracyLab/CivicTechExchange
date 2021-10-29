@@ -112,9 +112,6 @@
     word-break: break-word;
   }
 }
-.Profile-links .IconLink-right {
-  width: 196px; // fixes issue at 320px
-}
 
 
 @include media-breakpoint-up(lg) {
@@ -129,7 +126,6 @@
     flex-basis: auto;
     img {
       width: 100%;
-      max-height: unset;
     }
   }
   .Profile-top-details {
@@ -160,15 +156,7 @@
   .Profile-secondary-section {
     width: 340px;
   }
-  .Profile-links {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 
-    h4 {
-      min-width: 260px;
-    }
-  }
 }
 @include media-breakpoint-up(xl) {
   .Profile-primary-container {

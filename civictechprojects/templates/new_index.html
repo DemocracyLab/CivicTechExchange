@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" style="height: 100%">
-{% load django_seo_js %}
+
   <head>
-    {% seo_js_head %}
+
     <meta charset="utf-8">
     <title>{{ title }}</title>
     <meta name="og:title" content="{{ title }}" />
@@ -10,6 +10,7 @@
     <meta name="og:description" content="{{ description }}" />
     <meta name="og:type" content="{{ og_type }}" />
     <meta name="og:image" content="{{ og_image }}" />
+    <meta name="og:url" content="{{ canonical_url }}" />
     <meta name="image" property="og:image" content="{{ og_image }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/static/js/runtime.bundle.js" defer></script>
@@ -26,10 +27,7 @@
   </head>
   <body>
     {{ googleTagsBodyScript }}
-    <script>
-      // Stop prerender.io from caching page until it loads
-      window.prerenderReady = false;
-    </script>
+
     <script type="text/javascript">
       window.DLAB_GLOBAL_CONTEXT =
         '{{userID}}'
@@ -41,7 +39,8 @@
           lastName: '{{lastName}}',
           userImgUrl: '{{userImgUrl}}',
           isStaff: '{{isStaff}}' === "True" ? true : false,
-          volunteeringUpForRenewal: '{{volunteeringUpForRenewal}}' === "True" ? true : false
+          volunteeringUpForRenewal: '{{volunteeringUpForRenewal}}' === "True" ? true : false,
+          userContext: {{userContext|safe}}
         })
         : {};
 
@@ -62,6 +61,7 @@
       window.EVENT_URL = '{{EVENT_URL}}';
       window.PRIVACY_POLICY_URL = '{{PRIVACY_POLICY_URL}}';
       window.DONATE_PAGE_BLURB = '{{DONATE_PAGE_BLURB}}';
+      window.YOUTUBE_VIDEO_URL = '{{YOUTUBE_VIDEO_URL}}'
       window.GHOST_URL = '{{GHOST_URL}}';
       window.GHOST_CONTENT_API_KEY = '{{GHOST_CONTENT_API_KEY}}';
       window.HEAP_ANALYTICS_ID = '{{HEAP_ANALYTICS_ID}}'

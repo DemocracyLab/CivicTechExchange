@@ -17,7 +17,7 @@ import type {
   TagDefinitionCount,
 } from "../../utils/ProjectAPIUtils.js";
 import ProfileProjectSearch from "../projects/ProfileProjectSearch.jsx";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import { Container } from "flux/utils";
 import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
 import { Dictionary } from "../../types/Generics.jsx";
@@ -121,14 +121,18 @@ class AboutGroupDisplay extends React.Component<Props, State> {
       <div className="Profile-primary-container">
         <div className="Profile-tab tab-content">
           <h3>Group Description</h3>
-          <div className="AboutGroup-description">{group.group_description}</div>
+          <div className="AboutGroup-description">
+            {group.group_description}
+          </div>
           <div className="AboutGroup-issue-areas pt-4">
             {!_.isEmpty(this.state.issueAreas) && (
               <React.Fragment>
                 <h4>Issue Areas</h4>
                 {this.state.issueAreas &&
                   this.state.issueAreas.map((issue: TagDefinition) => (
-                    <span className="Profile-pill" key={issue.tag_name}>{issue.display_name}</span>
+                    <span className="Profile-pill" key={issue.tag_name}>
+                      {issue.display_name}
+                    </span>
                   ))}
               </React.Fragment>
             )}
@@ -186,8 +190,8 @@ class AboutGroupDisplay extends React.Component<Props, State> {
   initProjectSearch(state: State) {
     const group: GroupDetailsAPIData = state.group;
     if (group) {
-      ProjectSearchDispatcher.dispatch({
-        type: "INIT",
+      UniversalDispatcher.dispatch({
+        type: "INIT_PROJECT_SEARCH",
         findProjectsArgs: {
           group_id: group.group_id,
           sortField: "-project_date_modified",

@@ -1,5 +1,8 @@
 .MyProjectCard-root {
   color: inherit;
+  .btn-info, .btn-info:visited {
+    color: #fff; //temporary quickfix to inherit issues
+  }
 }
 
 .MyProjectCard-column {
@@ -8,6 +11,7 @@
 
 .MyProjectCard-header {
   color: $color-text-dark;
+  font-style: italic;
 }
 
 .MyProjectCard-projectName {
@@ -24,4 +28,16 @@
 
 .MyProjectCard-button {
   margin: 5px;
+}
+
+.MyProjectCard-table td {
+  display: inline-block;
+  width: 100%;
+ }
+
+ @include media-breakpoint-up(sm) {
+  .MyProjectCard-table td {
+    display: table-cell;
+    width: 250px;
+    }
 }

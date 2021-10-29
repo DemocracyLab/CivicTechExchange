@@ -21,6 +21,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
@@ -64,6 +65,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 # Customize allauth.socialaccount
+ACCOUNT_ADAPTER = 'oauth2.adapter.MyAccountAdapter'
 SOCIALACCOUNT_ADAPTER = 'oauth2.adapter.SocialAccountAdapter'
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
@@ -99,9 +101,9 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-# TODO: Use     'django_seo_js.middleware.UserAgentMiddleware',
 MIDDLEWARE = [
-    'common.helpers.caching.DebugUserAgentMiddleware',
+    'common.helpers.malicious_requests.MaliciousRequestsMiddleware',
+    'common.helpers.redirectors.RedirectMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -185,11 +187,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+THROTTLE_RATE_ANONYMOUS = os.environ.get('THROTTLE_RATE_ANONYMOUS', '5/second')
+THROTTLE_RATE_AUTHENTICATED = os.environ.get('THROTTLE_RATE_AUTHENTICATED', '5/second')
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.AllowAny',
     ],
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': THROTTLE_RATE_ANONYMOUS,
+        'user': THROTTLE_RATE_AUTHENTICATED
+    }
 }
 
 
@@ -216,7 +228,7 @@ EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('E
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
-ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 CONTACT_EMAIL = os.environ['CONTACT_EMAIL']
 FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
 
@@ -332,6 +344,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'PRIVACY_POLICY_URL': {
         'error': True,
         'message': 'Privacy Policy url required'
+    },
+    'VIDEO_PAGES': {
+        'error': False,
+        'message': 'VIDEO_PAGES needed to show /videos/'
     }
 }
 
@@ -399,35 +415,6 @@ LOGGING = {
     },
 }
 
-# If you're using prerender.io (the default backend):
-SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '')
-SEO_JS_BACKEND = "common.helpers.caching.DebugPrerenderIO"
-SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
-SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
-SEO_JS_ENABLED = os.environ.get('SEO_JS_ENABLED', False) == 'True'
-
-# TODO: Put in environment variable
-SEO_JS_USER_AGENTS = (
-    # These first three should be disabled, since they support escaped fragments, and
-    # and leaving them enabled will penalize a website as "cloaked".
-    "Googlebot",
-    "Yahoo",
-    "bingbot",
-
-    "Ask Jeeves",
-    "baiduspider",
-    "facebookexternalhit",
-    "twitterbot",
-    "rogerbot",
-    "linkedinbot",
-    "embedly",
-    "quoralink preview'",
-    "showyoubot",
-    "outbrain",
-    "pinterest",
-    "developersgoogle.com/+/web/snippet",
-)
-
 DISALLOW_CRAWLING = os.environ.get('DISALLOW_CRAWLING', False) == 'True'
 
 DL_PAGES_LAST_UPDATED_DATE = os.environ.get('DL_PAGES_LAST_UPDATED', '2019-12-05')
@@ -452,8 +439,8 @@ QIQO_API_SECRET = os.environ.get('QIQO_API_SECRET', 'SECRET')
 QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
 QIQO_SIGNUP_TIMEOUT_SECONDS = int(os.environ.get('QIQO_SIGNUP_TIMEOUT_SECONDS', 5))
 
-SALESFORCE_CONNECTED = True
-# Discovered breakage in v52.0, so beware moving away from v50.0
+SALESFORCE_CONNECTED = False
+# Discovered breakage in v52.0, so beware moving away from SALESFORCE_API_VERSION v50.0
 SALESFORCE_API_VERSION = os.environ.get('SALESFORCE_API_VERSION')
 SALESFORCE_ENDPOINT = os.environ.get('SALESFORCE_ENDPOINT')
 SALESFORCE_LOGIN_URL = os.environ.get('SALESFORCE_LOGIN_URL')
@@ -464,7 +451,7 @@ SALESFORCE_JWT = os.environ.get('SALESFORCE_JWT')
 # Mark's sf_id
 SALESFORCE_OWNER_ID = os.environ.get('SALESFORCE_OWNER_ID')
 
-BLOG_URL = os.environ.get('BLOG_URL', '')
+BLOG_URL = os.environ.get('BLOG_URL', 'https://blog.democracylab.org')
 
 EVENT_URL = os.environ.get('EVENT_URL', '')
 
@@ -475,11 +462,17 @@ PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
 
-# Ghost blog configs
-DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
+# Video Link
+VIDEO_PAGES = os.environ.get('VIDEO_PAGES', None)
+if VIDEO_PAGES is not None:
+    VIDEO_PAGES = ast.literal_eval(VIDEO_PAGES)
 
-GHOST_URL = os.environ.get('GHOST_URL', '')
-GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '')
+# Ghost blog configs
+GHOST_URL = os.environ.get('GHOST_URL', 'https://blog.democracylab.org')
+GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '52d832a0619aebf848c9264829')
 
 if GHOST_URL:
     CSP_CONNECT_SRC = CSP_CONNECT_SRC + (GHOST_URL,)
+
+MALICIOUS_URL_PATTERNS = os.environ.get('MALICIOUS_URL_PATTERNS', None)
+MALICIOUS_FWD_PATTERNS = os.environ.get('MALICIOUS_FWD_PATTERNS', None)

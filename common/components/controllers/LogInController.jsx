@@ -30,14 +30,15 @@ class LogInController extends React.Component<Props, State> {
     let checkPrevPage: string = props.prevPage || args["prev"];
     const prevPage: string =
       checkPrevPage === Section.SignUp ? Section.Home : checkPrevPage;
-    const prevPageArgs: Dictionary<string> = _.omit(args, "prev");
     this.state = {
       username: "",
       password: "",
       validated: false,
       prevPage: prevPage,
-      prevPageArgs: prevPageArgs,
     };
+    if ("prevPageArgs" in args) {
+      this.state.prevPageArgs = decodeURIComponent(args["prevPageArgs"]);
+    }
   }
 
   render(): React$Node {
@@ -98,11 +99,13 @@ class LogInController extends React.Component<Props, State> {
           </Form.Group>
           <div className="LogInController-other-form-elements">
             <input name="prevPage" value={this.state.prevPage} type="hidden" />
-            <input
-              name="prevPageArgs"
-              value={JSON.stringify(this.state.prevPageArgs)}
-              type="hidden"
-            />
+            {this.state.prevPageArgs && (
+              <input
+                name="prevPageArgs"
+                value={JSON.stringify(this.state.prevPageArgs)}
+                type="hidden"
+              />
+            )}
             <div className="LogInController-actionsection">
               <Button
                 variant="login"
@@ -133,7 +136,7 @@ class LogInController extends React.Component<Props, State> {
               </Button>
             </div>
             <div className="LogInController-socialSection">
-              <SocialMediaSignupSection />
+              <SocialMediaSignupSection  prevPage={this.state.prevPage} prevPageArgs={this.state.prevPageArgs}/>
             </div>
           </div>
         </Form>
