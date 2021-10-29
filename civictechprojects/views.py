@@ -1078,7 +1078,7 @@ def leave_project(request, project_id):
         message = body['departure_message']
         if len(message) > 0:
             email_template = HtmlEmailTemplate()\
-            .paragraph('{volunteer_name} is leaving {project_name} for the following reason:'.format(
+            .paragraph('{volunteer_name} is leaving {project_name} because:'.format(
                 volunteer_name=volunteer_relation.volunteer.full_name(),
                 project_name=volunteer_relation.project.project_name))\
             .paragraph('\"{message}\"'.format(message=message))
