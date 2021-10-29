@@ -51,7 +51,7 @@ def get_trello_board_id_from_url(url):
         token = url.split('/')
         
         #board id will be at 4th position
-        #TODO : Check the URL using regex 
+        #TODO : Check the URL using regex sample regex : http.://trello.com/b/(.*)[/]*.*
         if len(token) >= 5:
             board_id = token[4]
        
