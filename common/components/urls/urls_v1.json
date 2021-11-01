@@ -29,6 +29,5 @@
   {"name": "Donate", "pattern": "index/\\?section=Donate"},
   {"name": "ThankYou", "pattern": "index/\\?section=ThankYou"},
   {"name": "ContactUs", "pattern": "index/\\?section=ContactUs"},
-  {"name": "Error", "pattern": "index/\\?section=Error"},
-  {"name": "ApproveVolunteer", "pattern":"index/\\?section=ApproveVolunteer"}
+  {"name": "Error", "pattern": "index/\\?section=Error"}
 ]

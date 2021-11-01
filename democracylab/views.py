@@ -1,5 +1,5 @@
 from common.helpers.constants import FrontEndSection
-from common.helpers.front_end import section_url
+from common.helpers.front_end import args_dict_to_query_string, get_page_section, section_url
 from common.helpers.mailing_list import SubscribeToMailingList
 from common.helpers.qiqo_chat import SubscribeUserToQiqoChat
 from django.contrib.auth import login, logout, authenticate
@@ -31,7 +31,16 @@ def login_view(request, provider=None):
         if user is not None and user.is_authenticated:
             login(request, user)
             prev_page_args = json.loads(prev_page_args_string) if prev_page_args_string else None
-            redirect_url = '/' if prev_page.strip('/') == '' else section_url(prev_page, prev_page_args)
+            redirect_url = ''
+            if prev_page.strip('/') == '':
+                redirect_url = '/'
+            else:
+                if get_page_section(prev_page):
+                    redirect_url = section_url(prev_page,prev_page_args)
+                else:
+                    redirect_url = prev_page
+                    if prev_page_args:
+                        redirect_url+=args_dict_to_query_string(prev_page_args)
             return redirect(redirect_url)
         else:
             messages.error(request, 'Incorrect Email or Password')
