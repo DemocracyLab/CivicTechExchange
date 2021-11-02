@@ -629,9 +629,10 @@ class TrelloAction(models.Model):
     action_type = models.CharField(max_length=2083)
     action_date = models.DateTimeField(auto_now=False)
     id = models.CharField(max_length=2083, primary_key = True)
+    action_data = models.JSONField(null=True)
 
     @staticmethod
-    def create(project, id, fullname, member_id, board_id, action_type, action_date):
+    def create(project, id, fullname, member_id, board_id, action_type, action_date, action_data):
 
         trello_action = TrelloAction()
         trello_action.action_project = project
@@ -641,6 +642,7 @@ class TrelloAction(models.Model):
         trello_action.action_type = action_type
         trello_action.action_date = action_date
         trello_action.id = id
+        trello_action.action_data = action_data
 
         trello_action.save()
 

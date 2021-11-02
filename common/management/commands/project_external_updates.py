@@ -113,7 +113,8 @@ def push_trello_actions_to_db(project, actions):
                             member_id, 
                             board_id, 
                             action_type, 
-                            action_date)
+                            action_date,
+                            data)
 
 def get_trello_last_action_date(trello_link):
     from civictechprojects.models import TrelloAction
