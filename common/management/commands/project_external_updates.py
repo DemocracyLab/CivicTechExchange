@@ -7,7 +7,7 @@ from common.helpers.date_helpers import datetime_field_to_datetime
 from django.conf import settings
 import pytz
 import traceback
-import re
+from datetime import datetime, timedelta
 
 
 class Command(BaseCommand):
@@ -26,7 +26,18 @@ class Command(BaseCommand):
             for trello_link in project_trello_links:
                 try:
                     if trello_link.link_project.is_searchable:
-                        get_new_trello_board_actions(trello_link)
+
+                        #setting a date which is 30 days old
+                        last_activity_date = (datetime.now() - timedelta(hours=720)).strftime('%Y-%m-%dT%H:%M:%SZ')
+                        
+                        last_activity_trello_object = get_trello_last_action_date(trello_link)
+
+                        if len(last_activity_trello_object) > 0:
+                            last_activity_date = last_activity_trello_object[0].action_date
+                        
+                        print('last activity date : {}'.format(last_activity_date))
+                    
+                        get_new_trello_board_actions(trello_link, last_activity_date)
                 except:
                     # Keep processing if we run into errors with a particular update
                     print('Error processing Trello Link: ' + trello_link.link_url)
@@ -57,7 +68,7 @@ def get_trello_board_id_from_url(url):
        
     return board_id
 
-def get_new_trello_board_actions(trello_link):
+def get_new_trello_board_actions(trello_link, last_activity_date):
     """
     Get actions across all boards
     :param board_ids: list of trello board ids
@@ -69,7 +80,7 @@ def get_new_trello_board_actions(trello_link):
     #get board id from url
     board_id = get_trello_board_id_from_url(trello_link.link_url)
     if board_id is not None:
-        actions = get_board_actions(board_id)
+        actions = get_board_actions(board_id, last_activity_date)
         
         # print(len(actions_json['actions']))
         print('Retrieved {num_actions} action(s) for board {board_id}'.format(
@@ -84,7 +95,6 @@ def get_new_trello_board_actions(trello_link):
 def push_trello_actions_to_db(project, actions):
     from civictechprojects.models import TrelloAction
     for action in actions:
-        print(action)
         member = action.get("memberCreator", {})
         data = action.get("data", {})
 
@@ -104,6 +114,13 @@ def push_trello_actions_to_db(project, actions):
                             board_id, 
                             action_type, 
                             action_date)
+
+def get_trello_last_action_date(trello_link):
+    from civictechprojects.models import TrelloAction
+    project = trello_link.link_project
+
+    # - at the start of the order by indicates descending order
+    return TrelloAction.objects.filter(action_project=project).order_by('-action_date')[:1]
 
 def get_project_trello_links():
     from civictechprojects.models import ProjectLink

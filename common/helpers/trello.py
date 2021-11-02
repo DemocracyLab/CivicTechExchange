@@ -53,15 +53,16 @@ def get_last_actions_time():
     return last_hour_date_time.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 
-def get_board_actions(board_id):
+def get_board_actions(board_id, last_activity_date):
     """
     Get createCard and updateCard actions for a specified board_id
     :param board_id: Trello board id
     :return: actions list
     """
     rel_url = '/boards/{board_id}'.format(board_id=board_id)
+    print("retrieving data from date : {}".format(last_activity_date))
     try:
-        actions_json = fetch(rel_url, {'actions_since': get_last_actions_time(),
+        actions_json = fetch(rel_url, {'actions_since': last_activity_date,
                                        'actions': 'createCard,updateCard',
                                        'fields': 'actions',
                                        'board_action_memberCreator_fields': 'fullName',
