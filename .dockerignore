@@ -6,6 +6,7 @@
 !common/
 !democracylab/
 !oauth2/
+!salesforce/
 
 # Important run-time files.
 !manage.py
