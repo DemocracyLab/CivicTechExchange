@@ -3,6 +3,7 @@ from django.test import TestCase
 from unittest.mock import patch
 
 from common.helpers.trello import fetch
+from common.management.commands.project_external_updates import get_trello_board_id_from_url
 
 class MockResponse:
  
@@ -60,4 +61,20 @@ class TrelloHelperTests(TestCase):
             fetch(""),
             MockResponse().json()
         )
-        
+    
+
+class TrelloExternalUpdates(TestCase):
+
+    def test_get_trello_board_id_from_url_valid(self):
+        url = 'http://trello.com/b/boardid/'
+        self.assertEqual(
+            get_trello_board_id_from_url(url),
+            'boardid'
+        )
+    
+    def test_get_trello_board_id_from_url_invalid(self):
+        url = 'www.google.com'
+        self.assertEqual(
+            get_trello_board_id_from_url(url),
+            None
+        )

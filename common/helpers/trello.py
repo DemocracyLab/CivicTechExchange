@@ -44,15 +44,6 @@ def fetch(rel_url, params={}):
         return None
 
 
-def get_last_actions_time():
-    """
-    Placeholder until we retrieve last created board action from DB
-    :return: datetime string 
-    """
-    last_hour_date_time = datetime.now() - timedelta(hours=50000)
-    return last_hour_date_time.strftime('%Y-%m-%dT%H:%M:%SZ')
-
-
 def get_board_actions(board_id, last_activity_date):
     """
     Get createCard and updateCard actions for a specified board_id
