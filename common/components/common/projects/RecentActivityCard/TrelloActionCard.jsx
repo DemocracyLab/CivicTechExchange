@@ -4,7 +4,41 @@ import React from "react";
 
 import ActionAuthorLine from "./components/ActionAuthorLine.jsx";
 
+const TrelloActionType = {
+  CARD_CREATED: "CARD_CREATED",
+  CARD_MOVED_LIST: "CARD_MOVED_LIST",
+  CARD_MOVED_POS: "CARD_MOVED_POS",
+  CARD_COMMENT: "CARD_COMMENT",
+  GENERAL_UPDATE: "GENERAL_UPDATE",
+};
+
+type TrelloActionActionData = {
+  board?: {
+    shortLink: string,
+    name: string,
+  },
+  card?: {
+    name?: string,
+    shortLink?: string,
+  },
+  list?: {
+    name: string,
+  },
+  listAfter?: {
+    name: string,
+  },
+  listBefore?: {
+    name: string,
+  },
+  text?: string,
+  old?: {
+    pos?: number,
+    idList: string,
+  },
+};
+
 type TrelloAction = {
+  action_data: TrelloActionActionData,
   action_date: Date,
   action_type: string,
   board_id: string,
@@ -18,11 +52,91 @@ type Props = {
 };
 
 class TrelloActionCard extends React.PureComponent<Props> {
+  getBoardUrl(): string {
+    const { board } = this.props.action.action_data;
+    return board?.shortLink ? `http://trello.com/b/${board?.shortLink}` : "#";
+  }
+
+  getCardUrl(): string {
+    const { card } = this.props.action.action_data;
+    return card?.shortLink ? `http://trello.com/c/${card?.shortLink}` : "#";
+  }
+
+  getTrelloActionType(): string {
+    const { action_data, action_type } = this.props.action;
+    if (action_type === "createCard") {
+      return TrelloActionType.CARD_CREATED;
+    } else if (action_type === "commentCard") {
+      return TrelloActionType.CARD_COMMENT;
+    } else if (action_data?.old?.idList) {
+      return TrelloActionType.CARD_MOVED_LIST;
+    } else if (action_data?.old?.pos) {
+      return TrelloActionType.CARD_MOVED_POS;
+    }
+    return TrelloActionType.GENERAL_UPDATE;
+  }
+
+  getTrelloActionDisplayInfo(): React$Node {
+    const { action_data } = this.props.action;
+    switch (this.getTrelloActionType()) {
+      case TrelloActionType.CARD_CREATED:
+        return (
+          <p>
+            Created new card{" "}
+            <a target="_blank" href={this.getCardUrl()}>
+              {action_data?.card?.name}
+            </a>{" "}
+            in {action_data.list?.name}
+          </p>
+        );
+      case TrelloActionType.CARD_COMMENT:
+        return (
+          <>
+            <p>
+              Commented on{" "}
+              <a target="_blank" href={this.getCardUrl()}>
+                {action_data?.card?.name}
+              </a>{" "}
+            </p>
+            <p className="ProjectCommitCard-comment">{action_data?.text}</p>
+          </>
+        );
+      case TrelloActionType.CARD_MOVED_LIST:
+        return (
+          <p>
+            Moved{" "}
+            <a target="_blank" href={this.getCardUrl()}>
+              {action_data?.card?.name}
+            </a>{" "}
+            from {action_data.listBefore?.name} to {action_data.listAfter?.name}
+          </p>
+        );
+      case TrelloActionType.CARD_MOVED_POS:
+        return (
+          <p>
+            Moved{" "}
+            <a target="_blank" href={this.getCardUrl()}>
+              {action_data?.card?.name}
+            </a>{" "}
+            position within {action_data?.list?.name}
+          </p>
+        );
+      default:
+        return (
+          <p>
+            Updated{" "}
+            <a target="_blank" href={this.getCardUrl()}>
+              {action_data?.card?.name}
+            </a>{" "}
+            in {action_data.list?.name}
+          </p>
+        );
+    }
+  }
+
   render(): React$Node {
     const {
       action_date,
-      action_type,
-      board_id,
       member_fullname,
       member_avatar_url,
     } = this.props.action;
@@ -37,7 +151,7 @@ class TrelloActionCard extends React.PureComponent<Props> {
         />
         <div className="ProjectCommitCard-line">
           <div className="ProjectCommitCard-title">
-            {action_type} on Board #{board_id}
+            {this.getTrelloActionDisplayInfo()}
           </div>
         </div>
       </div>

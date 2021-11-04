@@ -666,6 +666,7 @@ class TrelloAction(models.Model):
             'board_id': self.board_id,
             'action_type': self.action_type,
             'action_date': self.action_date,
+            'action_data': self.action_data,
             'member_avatar_url': self.get_avatar_url()
         }
 
