@@ -4,6 +4,7 @@ import threading
 import civictechprojects.models
 from django.conf import settings
 from django.utils import timezone
+from common.helpers.user_helpers import is_user_blank_name
 
 
 def get_user_qiqo_iframe(contributor):
@@ -25,15 +26,17 @@ class SubscribeUserToQiqoChat(object):
         # Throttle user creation calls to qiqochat
         log_result = 'Subscribe attempt to qiqochat for {user} at {time}'\
             .format(time=timezone.now(), user=self.user.id_full_name())
-        if not self.user.qiqo_signup_time \
-                or (timezone.now() - self.user.qiqo_signup_time).total_seconds() > settings.QIQO_SIGNUP_TIMEOUT_SECONDS:
+        if self.user.qiqo_signup_time \
+                and (timezone.now() - self.user.qiqo_signup_time).total_seconds() <= settings.QIQO_SIGNUP_TIMEOUT_SECONDS:
+            log_result += ':Aborting, last request < {time}s ago'.format(time=settings.QIQO_SIGNUP_TIMEOUT_SECONDS)
+        elif is_user_blank_name(self.user):
+            log_result += ':Aborting, missing required user name'
+        else:
             self.user.qiqo_signup_time = timezone.now()
             self.user.save()
             thread = threading.Thread(target=self.run, args=())
             thread.daemon = True
             thread.start()
-        else:
-            log_result += ':Aborting, last request < {time}s ago'.format(time=settings.QIQO_SIGNUP_TIMEOUT_SECONDS)
         print(log_result)
 
     def print_error(self, err_msg):
