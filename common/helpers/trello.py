@@ -54,7 +54,7 @@ def get_board_actions(board_id, last_activity_date):
     print("retrieving data from date : {}".format(last_activity_date))
     try:
         actions_json = fetch(rel_url, {'actions_since': last_activity_date,
-                                       'actions': 'createCard,updateCard',
+                                       'actions': 'createCard,updateCard,commentCard',
                                        'fields': 'actions',
                                        'board_action_memberCreator_fields': 'fullName',
                                        'action_memberCreator_fields': 'fullName'})
