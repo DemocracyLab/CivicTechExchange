@@ -2,6 +2,7 @@
 
 import React from "react";
 import moment from "moment";
+import ActivityFeedDefaultAvatar from "../../../../svg/default-activity-feed-avatar.svg";
 
 type ActionAuthorLineCommitProps = {
   user_name: string,
@@ -9,7 +10,6 @@ type ActionAuthorLineCommitProps = {
   action_date: Date,
   action_string?: string,
 };
-
 export default class ActionAuthorLine extends React.PureComponent<ActionAuthorLineCommitProps> {
   render(): React$Node {
     const {
@@ -22,15 +22,16 @@ export default class ActionAuthorLine extends React.PureComponent<ActionAuthorLi
     return (
       <div className="ProjectCommitCard-line ProjectCommitCard-author-line">
         <div className="ProjectCommitCard-avatar">
-          <img
-            src={
-              user_avatar_link ||
-              `https://github.com/identicons/${user_name || "null"}.png`
-            }
-            alt={`${user_name} avatar`}
-            width="30"
-            height="30"
-          />
+          {user_avatar_link ? (
+            <img
+              src={user_avatar_link}
+              alt={`${user_name} avatar`}
+              width="30"
+              height="30"
+            />
+          ) : (
+            <ActivityFeedDefaultAvatar />
+          )}
         </div>
         <div className="ProjectCommitCard-user">{user_name || "unknown"}</div>
         <div className="ProjectCommitCard-date">
