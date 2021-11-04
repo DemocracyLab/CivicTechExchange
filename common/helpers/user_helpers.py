@@ -50,3 +50,6 @@ def get_user_context(user):
 
 def clear_user_context(user):
     return UserContextCache.clear(user)
+
+def is_user_blank_name(user):
+    return user.full_name() == None or user.full_name() == "" or user.full_name().isspace();
