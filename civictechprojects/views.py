@@ -420,7 +420,7 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
-        context['QIQO_IFRAME_URL'] = get_user_qiqo_iframe(contributor)
+        context['QIQO_IFRAME_URL'] = get_user_qiqo_iframe(contributor, request)
 
         thumbnail = ProjectFile.objects.filter(file_user=request.user.id,
                                                file_category=FileCategory.THUMBNAIL.value).first()
