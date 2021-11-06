@@ -436,6 +436,7 @@ QIQO_API_KEY = os.environ.get('QIQO_API_KEY', 'democracylab')
 QIQO_API_SECRET = os.environ.get('QIQO_API_SECRET', 'SECRET')
 QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
 QIQO_SIGNUP_TIMEOUT_SECONDS = int(os.environ.get('QIQO_SIGNUP_TIMEOUT_SECONDS', 5))
+QIQO_IMPERSONATION_ENABLED = os.environ.get('QIQO_IMPERSONATION_ENABLED', False) == 'True'
 
 BLOG_URL = os.environ.get('BLOG_URL', 'https://blog.democracylab.org')
 

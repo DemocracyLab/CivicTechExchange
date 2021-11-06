@@ -1,23 +1,34 @@
 import json
 import requests
 import threading
+from urllib import parse as urlparse
 import civictechprojects.models
 from django.conf import settings
 from django.utils import timezone
 from common.helpers.user_helpers import is_user_blank_name
 
 
-def get_user_qiqo_iframe(contributor):
+def get_user_qiqo_iframe(contributor, request):
     if not contributor.qiqo_uuid:
         SubscribeUserToQiqoChat(contributor)
         return settings.TEST_IFRAME_URL
+
+    source_user_uuid = contributor.uuid
+    qiqo_user_uuid = contributor.qiqo_uuid
+    if settings.QIQO_IMPERSONATION_ENABLED:
+        url_parts = request.GET.urlencode()
+        query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+        if 'uuid' in query_params:
+            source_user_uuid = query_params['uuid'][0]
+        if 'qiqo_uuid' in query_params:
+            qiqo_user_uuid = query_params['qiqo_uuid'][0]
 
     if not hasattr(settings, 'QIQO_IFRAME_URL'):
         return settings.TEST_IFRAME_URL
     else:
         return settings.QIQO_IFRAME_URL.format(api_key=settings.QIQO_API_KEY,
-                                      source_user_uuid=contributor.uuid,
-                                      qiqo_user_uuid=contributor.qiqo_uuid)
+                                      source_user_uuid=source_user_uuid,
+                                      qiqo_user_uuid=qiqo_user_uuid)
 
 
 class SubscribeUserToQiqoChat(object):
