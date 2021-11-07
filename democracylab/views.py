@@ -1,3 +1,4 @@
+from django.conf import settings
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import args_dict_to_query_string, get_page_section, section_url
 from common.helpers.mailing_list import SubscribeToMailingList
@@ -38,7 +39,7 @@ def login_view(request, provider=None):
                 if get_page_section(prev_page):
                     redirect_url = section_url(prev_page,prev_page_args)
                 else:
-                    redirect_url = prev_page
+                    redirect_url = settings.PROTOCOL_DOMAIN + prev_page
                     if prev_page_args:
                         redirect_url+=args_dict_to_query_string(prev_page_args)
             return redirect(redirect_url)
