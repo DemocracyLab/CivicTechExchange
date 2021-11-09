@@ -3,7 +3,7 @@
 import React, { forwardRef } from "react";
 import { Container } from "flux/utils";
 import _ from "lodash";
-import GlyphStyles from "../../../utils/glyphs.js";
+import { Glyph, GlyphStyles, GlyphSizes } from "../../../utils/glyphs.js";
 import Dropdown from "react-bootstrap/Dropdown";
 import PopOut from "../../../common/popout/PopOut.jsx";
 import FilterTagCheckbox from "./FilterTagCheckbox.jsx";
@@ -29,9 +29,7 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
     this.targetRef = React.createRef();
     this.state = { isOpen: false };
   }
-  // TODO: verify if we need to keep/remove the as=nav stuff (low priority)
-  // TODO: menu should stay open on filter item click; may need to refactor this - can't use AutoClose prop, that's BS5/RB2  (high)
-  // TODO: subcategory expand/collapse just like category expand/collapse, ie stays open until closed manually
+
   // TODO: Proper btn classing instead of this temporary use of secondary
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -60,14 +58,14 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
 
   _renderDesktopSubcategories(props: Props, ref: forwardRef): React$Node {
     return (
-      <div className="RenderFilterPopout" ref={ref}>
+      <div className="RenderFilterPopout filter-desktop" ref={ref}>
         <div className="SubCategoryFrame">
           {this.state.tags.map((subcategorySet: [string, TagDefinition]) => {
             const subcategory: string = subcategorySet[0];
             const className: string =
               subcategory === this.state.openSubCategory
                 ? "subcategory-open"
-                : "";
+                : "subcategory-closed";
             return (
               <React.Fragment key={"Fragment-" + subcategory}>
                 <Dropdown.Item
@@ -76,6 +74,9 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
                   onClick={this.expandSubCategory.bind(this, subcategory)}
                 >
                   <h4>{subcategory}</h4>
+                  <i
+                    className={Glyph(GlyphStyles.ChevronRight, GlyphSizes.X1)}
+                  ></i>
                 </Dropdown.Item>
               </React.Fragment>
             );
@@ -87,14 +88,14 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
   }
   _renderMobileSubcategories(props: Props, ref: forwardRef): React$Node {
     return (
-      <div className="RenderFilterPopout" ref={ref}>
+      <div className="RenderFilterPopout filter-mobile" ref={ref}>
         <div className="SubCategoryFrame">
           {this.state.tags.map((subcategorySet: [string, TagDefinition]) => {
             const subcategory: string = subcategorySet[0];
             const className: string =
               subcategory === this.state.openSubCategory
                 ? "subcategory-open"
-                : "";
+                : "subcategory-closed";
             return (
               <React.Fragment key={"Fragment-" + subcategory}>
                 <Dropdown.Item
@@ -145,7 +146,9 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
     };
 
     const sourceRef: forwardRef = React.createRef();
-    const className: string = this.state.isOpen ? "category-open" : "";
+    const className: string = this.state.isOpen
+      ? "category-open open"
+      : "category-closed";
 
     return (
       <div
@@ -176,7 +179,9 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
   }
 
   _renderMobile(): React$Node {
-    const className: string = this.state.isOpen ? "category-open" : "";
+    const className: string = this.state.isOpen
+      ? "category-open"
+      : "category-closed";
     return (
       <React.Fragment>
         <div className={className} onClick={this.toggleCategory.bind(this)}>

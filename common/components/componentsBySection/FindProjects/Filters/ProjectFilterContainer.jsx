@@ -62,7 +62,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
           expand="lg"
           bg="navlight"
           variant="light"
-          className="ProjectFilterContainer-root"
+          className="ProjectFilterContainer-root d-none d-lg-flex"
         >
           <Navbar.Toggle aria-controls="ProjectFilterContainer-root" />
           <Navbar.Collapse
@@ -126,7 +126,7 @@ class ProjectFilterContainer extends React.Component<Props, State> {
   _showOffCanvasFilters(): React$Node {
     return (
       <React.Fragment>
-        <Button variant="primary" onClick={() => this._handleModalClick()}>
+        <Button variant="primary" onClick={() => this._handleModalClick()} className="d-block d-lg-none">
           Filter Results
         </Button>
         <Modal

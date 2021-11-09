@@ -26,13 +26,19 @@
 .ProjectFilterContainer-offcanvas.modal.show .modal-dialog {
   transform: translateX(0);
 }
-
+.ProjectFilterContainer-offcanvas.modal-body {
+  min-height: 42px;
+}
+nav.ProjectFilterContainer-root {
+  display: none; // hide desktop nav @ mobile
+}
 .ProjectFilterContainer-nav,
 .ProjectFilterContainer-offcanvas {
   label {
     margin-bottom: 0;
     width: 100%;
     display: inline-flex;
+    text-align: left;
   }
   .dropdown-item {
     width: 100%;
@@ -67,6 +73,9 @@
 }
 
 @include media-breakpoint-up(lg) {
+  nav.ProjectFilterContainer-root {
+    display: flex;
+  }
   .ProjectFilterContainer-nav .dropdown-item {
     min-width: 20rem; // TODO: fine tune this value
   };
@@ -84,4 +93,7 @@
 //TODO: Do we need this?
 .SubCategoryFrame {
   font-weight: bold;
+  h4 {
+    margin-bottom: 0;
+  }
 }
