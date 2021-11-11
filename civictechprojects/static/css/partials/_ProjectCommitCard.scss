@@ -25,6 +25,11 @@
 
 .ProjectCommitCard-author-line {
   align-items: flex-end;
+  
+  .ProjectCommitCard-avatar {
+    width: 30px;
+  }
+  
 }
 
 .ProjectCommitCard-user {
