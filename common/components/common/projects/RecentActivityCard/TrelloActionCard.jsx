@@ -9,10 +9,14 @@ const TrelloActionType = {
   CARD_MOVED_LIST: "CARD_MOVED_LIST",
   CARD_MOVED_POS: "CARD_MOVED_POS",
   CARD_COMMENT: "CARD_COMMENT",
+  CARD_ATTACHMENT: "CARD_ATTACHMENT",
   GENERAL_UPDATE: "GENERAL_UPDATE",
 };
 
 type TrelloActionActionData = {
+  attachment?: {
+    previewUrl?: string,
+  },
   board?: {
     shortLink: string,
     name: string,
@@ -68,6 +72,8 @@ class TrelloActionCard extends React.PureComponent<Props> {
       return TrelloActionType.CARD_CREATED;
     } else if (action_type === "commentCard") {
       return TrelloActionType.CARD_COMMENT;
+    } else if (action_type === "addAttachmentToCard") {
+      return TrelloActionType.CARD_ATTACHMENT;
     } else if (action_data?.old?.idList) {
       return TrelloActionType.CARD_MOVED_LIST;
     } else if (action_data?.old?.pos) {
@@ -82,7 +88,7 @@ class TrelloActionCard extends React.PureComponent<Props> {
       case TrelloActionType.CARD_CREATED:
         return (
           <p>
-            Created new card{" "}
+            Created{" "}
             <a target="_blank" href={this.getCardUrl()}>
               {action_data?.card?.name}
             </a>{" "}
@@ -100,6 +106,25 @@ class TrelloActionCard extends React.PureComponent<Props> {
             </p>
             <p className="ProjectCommitCard-comment">{action_data?.text}</p>
           </>
+        );
+
+      case TrelloActionType.CARD_ATTACHMENT:
+        return (
+          <p>
+            Uploaded{" "}
+            {action_data?.attachment?.previewUrl ? (
+              <a target="_blank" href={action_data?.attachment?.previewUrl}>
+                an item
+              </a>
+            ) : (
+              "an item"
+            )}{" "}
+            to{" "}
+            <a target="_blank" href={this.getCardUrl()}>
+              {action_data?.card?.name}
+            </a>{" "}
+            in {action_data.list?.name}
+          </p>
         );
       case TrelloActionType.CARD_MOVED_LIST:
         return (
