@@ -825,11 +825,12 @@ def contact_project_volunteers(request, project_id):
         project=project.project_name,
         subject=subject)
     email_template = HtmlEmailTemplate(use_signature=False) \
+        .header('You have a new message from {projectname}'.format(projectname=project.project_name)) \
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,
         lastname=user.last_name)) \
-        .paragraph('To reply, email at {email}'.format(email=user.email))
+        .paragraph('To respond, you can reply to this email.')
     for volunteer in volunteers:
         # TODO: See if we can send emails in a batch
         # https://docs.djangoproject.com/en/2.2/topics/email/#topics-sending-multiple-emails
