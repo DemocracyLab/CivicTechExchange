@@ -247,10 +247,9 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
 volunteer_conclude_email_template = HtmlEmailTemplate() \
     .header("How has your experience been at {{project_name}}?") \
     .paragraph("Hi {{first_name}},") \
-    .paragraph("We're always looking for ways to improve the connection between volunteers and tech-for-good projects.  "
-               "We've developed this super-short survey and we'd love to hear from you.  It will take less than a minute "
-               "and will help us make DemocracyLab even better.") \
-    .button(url=settings.VOLUNTEER_CONCLUDE_SURVEY_URL, text='Take Our Survey')
+    .paragraph("We're always looking to improve the volunteer experience at DemocracyLab.") \
+    .paragraph("Could you take this super-short survey to help us learn more about your time with {{project_name}}?") \
+    .button(url=settings.VOLUNTEER_CONCLUDE_SURVEY_URL, text='Begin Survey')
 
 
 def send_volunteer_conclude_email(volunteer, project_name):

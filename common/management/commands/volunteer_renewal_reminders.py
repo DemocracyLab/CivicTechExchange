@@ -77,12 +77,12 @@ review_commitment_url = settings.PROTOCOL_DOMAIN + section_path(FrontEndSection.
 def get_first_email_template():
     return HtmlEmailTemplate() \
         .header("You're making a difference at {{project_name}}") \
-        .paragraph("We'd like to take this opportunity to thank you for your support since {{volunteer_start_date}}.  "
-                   "Your engagement with {{project_name}} is extremely important to us and is much appreciated.") \
-        .paragraph("That said, we know you’re busy and just wanted to take this time to remind you that your "
-                   "volunteer commitment with {{project_name}} will expire on {{project_end_date}}.") \
-        .paragraph("We hope that you’ll take this time to renew your volunteer commitment and remain a part of our community.") \
-        .button(url=review_commitment_url, text='REVIEW COMMITMENT')
+        .paragraph("Hi {{first_name}},") \
+        .paragraph("Thank you for your involvement with {{project_name}} since {{volunteer_start_date}}. "
+                   "We appreciate your contributions to this project!") \
+        .paragraph("Your current volunteer commitment ends on {{project_end_date}}.") \
+        .paragraph("However, we hope you'll consider extending your commitment and remaining a part of the DemocracyLab community.") \
+        .button(url=review_commitment_url, text="Review Volunteer Commitment")
 
 
 def get_second_email_template():
