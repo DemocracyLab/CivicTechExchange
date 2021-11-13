@@ -860,11 +860,12 @@ def contact_project_volunteer(request, application_id):
         project=project.project_name,
         subject=subject)
     email_template = HtmlEmailTemplate(use_signature=False) \
+        .header('You have a new message from {projectname}'.format(projectname=project.project_name)) \
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,
         lastname=user.last_name)) \
-        .paragraph('To reply, email at {email}'.format(email=user.email))
+        .paragraph('To respond, you can reply to this email.')
     send_to_project_volunteer(volunteer_relation, email_subject, email_template)
     return HttpResponse(status=200)
 
