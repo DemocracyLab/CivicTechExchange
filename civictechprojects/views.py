@@ -1128,11 +1128,13 @@ def contact_group_owner(request, group_id):
         lastname=user.last_name,
         group=group.group_name)
     email_template = HtmlEmailTemplate(use_signature=False) \
-        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
-        message=message,
+        .header('Your group has a new message.') \
+        .paragraph('{firstname} {lastname} has sent the following message to {group}:'.format(
         firstname=user.first_name,
-        lastname=user.last_name)) \
-        .paragraph('To contact this person, email them at {email}'.format(email=user.email))
+        lastname=user.last_name,
+        group=group.group_name)) \
+        .paragraph('\"\"{message}\"\"'.format(message=message)) \
+        .paragraph('To respond, you can reply to this email.')
     send_to_group_owners(group=group, sender=user, subject=email_subject, template=email_template)
     return HttpResponse(status=200)
 
