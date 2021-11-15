@@ -2,7 +2,7 @@ from .client import SalesforceClient
 import json
 import requests
 import threading
-
+''' Contributor model maps to Salesforce Contact object '''
 client = SalesforceClient()
 
 
