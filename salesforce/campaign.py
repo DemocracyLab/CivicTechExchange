@@ -28,7 +28,6 @@ def save(project: object):
                 "issue_area__c": ",".join([tag.get('name') for tag in issue_area_tags]),
                 "technologies__c": ",".join([tag.get('name') for tag in tech_tags]),
                 "stage__c": ",".join([tag.get('name') for tag in stage_tags]),
-                "technologies__c": ",".join([tag.get('name') for tag in tech_tags]),
                 "project_url__c": project.project_url,
                 "short_description__c": project.project_description,
                 "description_action__c": project.project_description_actions,
