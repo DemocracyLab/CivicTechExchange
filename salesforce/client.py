@@ -56,7 +56,7 @@ class SalesforceClient:
         return res
 
 
-DEFAULT_TIMEOUT = 6.1  # seconds
+DEFAULT_TIMEOUT = 30.1  # seconds
 retry_strategy = Retry(
     total=2,
     status_forcelist=[429, 500, 502, 503, 504],
