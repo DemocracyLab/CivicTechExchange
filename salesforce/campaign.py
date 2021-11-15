@@ -16,14 +16,13 @@ def save(project: object):
     issue_area_tags = list(project.project_issue_area.all().values())
     organization_tags = list(project.project_organization.all().values())
     data = {
-                "ownerid": project.project_creator.id,
+                "ownerid": client.owner_id,
                 "Project_Owner__r":
                 {
                     "platform_id__c": project.project_creator.id
                 },
                 "recordtypeid": "01246000000uOeRAAU",
                 "name": project.project_name,
-                "platform_id__c": project.id,
                 "type": "Informal (No Legal Entity Established)",
                 "startdate": project.project_date_created.strftime('%Y-%m-%d'),
                 "issue_area__c": ",".join([tag.get('name') for tag in issue_area_tags]),

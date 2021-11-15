@@ -13,6 +13,7 @@ def run(request):
 def save(contributor: object):
     tags = list(contributor.user_technologies.all().values())
     data = {
+        "ownerid": client.owner_id,
         "firstname": contributor.first_name,
         "lastname": contributor.last_name,
         "email": contributor.username,

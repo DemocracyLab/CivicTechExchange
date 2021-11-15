@@ -439,7 +439,7 @@ QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
 QIQO_SIGNUP_TIMEOUT_SECONDS = int(os.environ.get('QIQO_SIGNUP_TIMEOUT_SECONDS', 5))
 QIQO_IMPERSONATION_ENABLED = os.environ.get('QIQO_IMPERSONATION_ENABLED', False) == 'True'
 
-SALESFORCE_CONNECTED = False
+SALESFORCE_CONNECTED = True
 # Discovered breakage in v52.0, so beware moving away from SALESFORCE_API_VERSION v50.0
 SALESFORCE_API_VERSION = os.environ.get('SALESFORCE_API_VERSION')
 SALESFORCE_ENDPOINT = os.environ.get('SALESFORCE_ENDPOINT')
@@ -448,7 +448,7 @@ SALESFORCE_TOKEN_SUFFIX = os.environ.get('SALESFORCE_TOKEN_SUFFIX')
 SALESFORCE_ACCESS_TOKEN = os.environ.get('SALESFORCE_ACCESS_TOKEN')
 SALESFORCE_REDIRECT_URI = os.environ.get('SALESFORCE_REDIRECT_URI')
 SALESFORCE_JWT = os.environ.get('SALESFORCE_JWT')
-# Mark's sf_id
+# Mark's Salesforce *USER* id (not the Contact id)
 SALESFORCE_OWNER_ID = os.environ.get('SALESFORCE_OWNER_ID')
 
 BLOG_URL = os.environ.get('BLOG_URL', 'https://blog.democracylab.org')
