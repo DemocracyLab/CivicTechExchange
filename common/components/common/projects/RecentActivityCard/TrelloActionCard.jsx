@@ -1,6 +1,7 @@
 // @flow
 
 import React from "react";
+import ReactMarkdown from "react-markdown";
 
 import ActionAuthorLine from "./components/ActionAuthorLine.jsx";
 
@@ -110,7 +111,9 @@ class TrelloActionCard extends React.PureComponent<Props> {
                 {action_data?.card?.name}
               </a>{" "}
             </p>
-            <p className="ProjectCommitCard-comment">{action_data?.text}</p>
+            <p className="ProjectCommitCard-comment">
+              <ReactMarkdown children={action_data?.text} />
+            </p>
           </>
         );
       case TrelloActionType.CARD_ATTACHMENT:
@@ -163,8 +166,8 @@ class TrelloActionCard extends React.PureComponent<Props> {
       case TrelloActionType.CARD_CHECKLIST_ITEM_UPDATE:
         return (
           <p>
-            Marked "{action_data?.checkItem?.name}" {action_data?.checkItem?.state} in
-            checklist{" "}
+            Marked "{action_data?.checkItem?.name}"{" "}
+            {action_data?.checkItem?.state} in checklist{" "}
             <a target="_blank" href={this.getCardUrl()}>
               {action_data?.checklist?.name}
             </a>
