@@ -54,10 +54,10 @@ def get_board_actions(board_id, last_activity_date):
     print("retrieving data from date : {}".format(last_activity_date))
     try:
         actions_json = fetch(rel_url, {'actions_since': last_activity_date,
-                                       'actions': 'addAttachmentToCard,commentCard,createCard,updateCard',
+                                       'actions': 'addAttachmentToCard,addChecklistToCard,commentCard,createCard,updateCard,updateCheckItemStateOnCard',
                                        'fields': 'actions',
                                        'board_action_memberCreator_fields': 'fullName',
-                                       'action_memberCreator_fields': 'fullName'})
+                                       'action_memberCreator_fields': 'fullName,avatarUrl'})
         if actions_json is None:
             print('No results found, querying users')
             return []

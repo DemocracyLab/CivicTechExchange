@@ -21,7 +21,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options['trello']:
-            #board_ids = ['Ttgwsv3v']
             project_trello_links = get_project_trello_links()
             for trello_link in project_trello_links:
                 try:
@@ -100,6 +99,7 @@ def push_trello_actions_to_db(project, actions):
 
         member_id = member.get("id")
         member_fullname = member.get("fullName")
+        member_avatar_base_url = member.get("avatarUrl", "")
 
         board_id = data.get("board",{}).get("id")
         action_type = action.get("type")
@@ -110,7 +110,8 @@ def push_trello_actions_to_db(project, actions):
         TrelloAction.create(project, 
                             id, 
                             member_fullname, 
-                            member_id, 
+                            member_id,
+                            member_avatar_base_url,
                             board_id, 
                             action_type, 
                             action_date,

@@ -10,6 +10,8 @@ const TrelloActionType = {
   CARD_MOVED_POS: "CARD_MOVED_POS",
   CARD_COMMENT: "CARD_COMMENT",
   CARD_ATTACHMENT: "CARD_ATTACHMENT",
+  CARD_CHECKLIST_ADDED: "CARD_CHECKLIST_ADDED",
+  CARD_CHECKLIST_ITEM_UPDATE: "CARD_CHECKLIST_ITEM_UPDATE",
   GENERAL_UPDATE: "GENERAL_UPDATE",
 };
 
@@ -74,6 +76,10 @@ class TrelloActionCard extends React.PureComponent<Props> {
       return TrelloActionType.CARD_COMMENT;
     } else if (action_type === "addAttachmentToCard") {
       return TrelloActionType.CARD_ATTACHMENT;
+    } else if (action_type === "addChecklistToCard") {
+      return TrelloActionType.CARD_CHECKLIST_ADDED;
+    } else if (action_type === "updateCheckItemStateOnCard") {
+      return TrelloActionType.CARD_CHECKLIST_ITEM_UPDATE;
     } else if (action_data?.old?.idList) {
       return TrelloActionType.CARD_MOVED_LIST;
     } else if (action_data?.old?.pos) {
@@ -107,7 +113,6 @@ class TrelloActionCard extends React.PureComponent<Props> {
             <p className="ProjectCommitCard-comment">{action_data?.text}</p>
           </>
         );
-
       case TrelloActionType.CARD_ATTACHMENT:
         return (
           <p>
@@ -144,6 +149,25 @@ class TrelloActionCard extends React.PureComponent<Props> {
               {action_data?.card?.name}
             </a>{" "}
             position within {action_data?.list?.name}
+          </p>
+        );
+      case TrelloActionType.CARD_CHECKLIST_ADDED:
+        return (
+          <p>
+            Added checklist "{action_data?.checklist?.name}" to{" "}
+            <a target="_blank" href={this.getCardUrl()}>
+              {action_data?.card?.name}
+            </a>
+          </p>
+        );
+      case TrelloActionType.CARD_CHECKLIST_ITEM_UPDATE:
+        return (
+          <p>
+            Marked "{action_data?.checkItem?.name}" {action_data?.checkItem?.state} in
+            checklist{" "}
+            <a target="_blank" href={this.getCardUrl()}>
+              {action_data?.checklist?.name}
+            </a>
           </p>
         );
       default:

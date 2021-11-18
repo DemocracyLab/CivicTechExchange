@@ -632,12 +632,13 @@ class TrelloAction(models.Model):
     action_data = models.JSONField(null=True)
 
     @staticmethod
-    def create(project, id, fullname, member_id, board_id, action_type, action_date, action_data):
+    def create(project, id, fullname, member_id, member_avatar_base_url, board_id, action_type, action_date, action_data):
 
         trello_action = TrelloAction()
         trello_action.action_project = project
         trello_action.member_fullname = fullname
         trello_action.member_id = member_id
+        trello_action.member_avatar_base_url = member_avatar_base_url
         trello_action.board_id = board_id
         trello_action.action_type = action_type
         trello_action.action_date = action_date
