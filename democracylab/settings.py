@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'oauth2.providers.github',
     'oauth2.providers.google',
     'oauth2.providers.linkedin',
-    'oauth2.providers.facebook'
+    'oauth2.providers.facebook',
+    'django_rq',
 ]
 
 SITE_ID = 1
@@ -162,6 +163,15 @@ DATABASES['default'].update(db_from_env)
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 LOGIN_REDIRECT_URL = '/'
+
+REDIS_ENABLED = os.environ.get('REDIS_ENABLED', False) == 'True'
+
+RQ_QUEUES = {
+    'default': {
+        'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+        'DEFAULT_TIMEOUT': 500,
+    },
+}
 
 #Caching number of tag counts only for now - change this if other things are db-cached
 CACHES = {
