@@ -1,8 +1,9 @@
+from common.models import Tag
 from .client import SalesforceClient
 import json
 import requests
 import threading
-''' Project model maps to Salesforce Campaign object '''
+''' Project model maps to the Salesforce Campaign object '''
 client = SalesforceClient()
 
 
@@ -14,7 +15,6 @@ def save(project: object):
     stage_tags = list(project.project_stage.all().values())
     tech_tags = list(project.project_technologies.all().values())
     issue_area_tags = list(project.project_issue_area.all().values())
-    organization_tags = list(project.project_organization.all().values())
     data = {
                 "ownerid": client.owner_id,
                 "Project_Owner__r":
@@ -25,9 +25,9 @@ def save(project: object):
                 "name": project.project_name,
                 "type": "Informal (No Legal Entity Established)",
                 "startdate": project.project_date_created.strftime('%Y-%m-%d'),
-                "issue_area__c": ",".join([tag.get('name') for tag in issue_area_tags]),
-                "technologies__c": ",".join([tag.get('name') for tag in tech_tags]),
-                "stage__c": ",".join([tag.get('name') for tag in stage_tags]),
+                "issue_area__c": ",".join([Tag.get_by_name(tag.name).display_name for tag in issue_area_tags]),
+                "technologies__c": ",".join([Tag.get_by_name(tag.name).display_name for tag in tech_tags]),
+                "stage__c": ",".join([Tag.get_by_name(tag.name).display_name for tag in stage_tags]),
                 "project_url__c": project.project_url,
                 "short_description__c": project.project_description,
                 "description_action__c": project.project_description_actions,

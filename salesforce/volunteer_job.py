@@ -3,7 +3,7 @@ import json
 import requests
 import threading
 
-''' ProjectPosition model maps to Salesforce Volunteer Job object '''
+''' ProjectPosition model maps to the Salesforce Volunteer Job object '''
 client = SalesforceClient()
 
 
