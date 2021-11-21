@@ -51,6 +51,9 @@ def get_page_section(url):
     url_generator = get_page_section_generator(url)
     return url_generator and url_generator['section']
 
+def has_page_section(section_name):
+    from common.urls import url_generators
+    return section_name in url_generators
 
 def get_page_path_parameters(url, page_section_generator=None):
     page_section_generator = page_section_generator or get_page_section_generator(url)
