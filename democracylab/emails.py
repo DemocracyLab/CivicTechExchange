@@ -108,7 +108,9 @@ class EmailMessage:
         from django.core.mail import EmailMessage as _EmailMessage
         email_msg = _EmailMessage()
         for key in ['to', 'cc', 'reply_to', 'subject', 'from_email', 'body', 'content_subtype']:
-            setattr(email_msg, key, getattr(self, key))
+            attr = getattr(self, key, None)
+            if attr is not None:
+                setattr(email_msg, key, attr)
         email_msg.connection = (getattr(settings, email_acct.value))['connection']
         email_msg.send()
 
@@ -442,8 +444,10 @@ def send_group_project_invitation_email(project_relation):
 
 
 def _send_email(email_msg, email_acct=None):
+    _email_acct = email_acct or EmailAccount.EMAIL_SUPPORT_ACCT
+
     if not settings.FAKE_EMAILS:
-        email_msg.connection = EmailAccount.get_connection(email_acct or EmailAccount.EMAIL_SUPPORT_ACCT)['connection']
+        email_msg.connection = EmailAccount.get_connection(_email_acct)['connection']
     else:
         test_email_subject = 'TEST EMAIL: ' + email_msg.subject
         test_email_body = '<!--\n Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\nCC: {cc}\n-->\n{body}'.format(
@@ -459,7 +463,7 @@ def _send_email(email_msg, email_acct=None):
         email_msg.cc = []
         if settings.EMAIL_SUPPORT_ACCT:
             email_msg.connection = settings.EMAIL_SUPPORT_ACCT['connection']
-    email_msg.send(email_acct)
+    email_msg.send(_email_acct)
 
 
 def send_email(email_msg, email_acct=None):
