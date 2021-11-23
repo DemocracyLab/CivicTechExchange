@@ -653,7 +653,7 @@ class TrelloAction(models.Model):
         a size and file extension need to be added to form a valid url
         Currently, 30, 50, 170, & original are valid sizes
         '''
-        avatar_size = 30
+        avatar_size = 50
         if self.member_avatar_base_url:
             return '{base}/{size}.png'.format(base=self.member_avatar_base_url, size=avatar_size)
         else:

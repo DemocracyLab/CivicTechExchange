@@ -28,6 +28,13 @@ type TrelloActionActionData = {
     name?: string,
     shortLink?: string,
   },
+  checkItem?: {
+    name?: string,
+    state?: string,
+  },
+  checklist?: {
+    name?: string,
+  },
   list?: {
     name: string,
   },
@@ -199,7 +206,7 @@ class TrelloActionCard extends React.PureComponent<Props> {
           user_name={member_fullname}
           user_avatar_link={member_avatar_url}
           action_date={action_date}
-          action_string={"Perfomed a Trello action"}
+          action_string={"Performed a Trello action"}
         />
         <div className="ProjectCommitCard-line">
           <div className="ProjectCommitCard-title">
