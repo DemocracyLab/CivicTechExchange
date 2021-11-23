@@ -233,7 +233,7 @@ EMAIL_SUPPORT_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMA
 EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_VOLUNTEER_ACCT', 'None')))
 
 # Default log to console in the absence of any account configurations
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if EMAIL_SUPPORT_ACCT and EMAIL_VOLUNTEER_ACCT else 'django.core.mail.backends.console.EmailBackend'
 
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')

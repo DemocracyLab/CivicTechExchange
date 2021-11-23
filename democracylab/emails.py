@@ -111,7 +111,8 @@ class EmailMessage:
             attr = getattr(self, key, None)
             if attr is not None:
                 setattr(email_msg, key, attr)
-        email_msg.connection = (getattr(settings, email_acct.value))['connection']
+        if settings.EMAIL_SUPPORT_ACCT and settings.EMAIL_VOLUNTEER_ACCT:
+            email_msg.connection = (getattr(settings, email_acct.value))['connection']
         email_msg.send()
 
 
