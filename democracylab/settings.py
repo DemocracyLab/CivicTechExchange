@@ -436,8 +436,9 @@ QIQO_API_KEY = os.environ.get('QIQO_API_KEY', 'democracylab')
 QIQO_API_SECRET = os.environ.get('QIQO_API_SECRET', 'SECRET')
 QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
 QIQO_SIGNUP_TIMEOUT_SECONDS = int(os.environ.get('QIQO_SIGNUP_TIMEOUT_SECONDS', 5))
+QIQO_IMPERSONATION_ENABLED = os.environ.get('QIQO_IMPERSONATION_ENABLED', False) == 'True'
 
-BLOG_URL = os.environ.get('BLOG_URL', '')
+BLOG_URL = os.environ.get('BLOG_URL', 'https://blog.democracylab.org')
 
 EVENT_URL = os.environ.get('EVENT_URL', '')
 
@@ -454,8 +455,8 @@ if VIDEO_PAGES is not None:
     VIDEO_PAGES = ast.literal_eval(VIDEO_PAGES)
 
 # Ghost blog configs
-GHOST_URL = os.environ.get('GHOST_URL', '')
-GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '')
+GHOST_URL = os.environ.get('GHOST_URL', 'https://blog.democracylab.org')
+GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '52d832a0619aebf848c9264829')
 
 if GHOST_URL:
     CSP_CONNECT_SRC = CSP_CONNECT_SRC + (GHOST_URL,)

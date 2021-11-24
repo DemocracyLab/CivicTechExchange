@@ -1,7 +1,6 @@
 import re
 from django.conf import settings
 from django.test import TestCase
-from common.helpers.caching import is_sitemap_url
 from common.helpers.constants import FrontEndSection
 from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.form_helpers import is_json_string

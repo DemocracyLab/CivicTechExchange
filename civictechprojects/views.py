@@ -420,7 +420,7 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
-        context['QIQO_IFRAME_URL'] = get_user_qiqo_iframe(contributor)
+        context['QIQO_IFRAME_URL'] = get_user_qiqo_iframe(contributor, request)
 
         thumbnail = ProjectFile.objects.filter(file_user=request.user.id,
                                                file_category=FileCategory.THUMBNAIL.value).first()
@@ -825,11 +825,12 @@ def contact_project_volunteers(request, project_id):
         project=project.project_name,
         subject=subject)
     email_template = HtmlEmailTemplate(use_signature=False) \
+        .header('You have a new message from {projectname}'.format(projectname=project.project_name)) \
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,
         lastname=user.last_name)) \
-        .paragraph('To reply, email at {email}'.format(email=user.email))
+        .paragraph('To respond, you can reply to this email.')
     for volunteer in volunteers:
         # TODO: See if we can send emails in a batch
         # https://docs.djangoproject.com/en/2.2/topics/email/#topics-sending-multiple-emails
@@ -859,11 +860,12 @@ def contact_project_volunteer(request, application_id):
         project=project.project_name,
         subject=subject)
     email_template = HtmlEmailTemplate(use_signature=False) \
+        .header('You have a new message from {projectname}'.format(projectname=project.project_name)) \
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,
         lastname=user.last_name)) \
-        .paragraph('To reply, email at {email}'.format(email=user.email))
+        .paragraph('To respond, you can reply to this email.')
     send_to_project_volunteer(volunteer_relation, email_subject, email_template)
     return HttpResponse(status=200)
 
@@ -1078,7 +1080,7 @@ def leave_project(request, project_id):
         message = body['departure_message']
         if len(message) > 0:
             email_template = HtmlEmailTemplate()\
-            .paragraph('{volunteer_name} is leaving {project_name} for the following reason:'.format(
+            .paragraph('{volunteer_name} is leaving {project_name} because:'.format(
                 volunteer_name=volunteer_relation.volunteer.full_name(),
                 project_name=volunteer_relation.project.project_name))\
             .paragraph('\"{message}\"'.format(message=message))
@@ -1128,11 +1130,13 @@ def contact_group_owner(request, group_id):
         lastname=user.last_name,
         group=group.group_name)
     email_template = HtmlEmailTemplate(use_signature=False) \
-        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
-        message=message,
+        .header('Your group has a new message.') \
+        .paragraph('{firstname} {lastname} has sent the following message to {group}:'.format(
         firstname=user.first_name,
-        lastname=user.last_name)) \
-        .paragraph('To contact this person, email them at {email}'.format(email=user.email))
+        lastname=user.last_name,
+        group=group.group_name)) \
+        .paragraph('\"\"{message}\"\"'.format(message=message)) \
+        .paragraph('To respond, you can reply to this email.')
     send_to_group_owners(group=group, sender=user, subject=email_subject, template=email_template)
     return HttpResponse(status=200)
 
