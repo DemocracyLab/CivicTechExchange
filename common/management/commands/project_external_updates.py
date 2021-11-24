@@ -29,11 +29,14 @@ class Command(BaseCommand):
                         #setting a date which is 30 days old
                         last_activity_date = (datetime.now() - timedelta(hours=720)).strftime('%Y-%m-%dT%H:%M:%SZ')
                         
+                        '''
                         last_activity_trello_object = get_trello_last_action_date(trello_link)
 
                         if len(last_activity_trello_object) > 0:
                             last_activity_date = last_activity_trello_object[0].action_date
                         
+                        '''
+
                         print('last activity date : {}'.format(last_activity_date))
                     
                         get_new_trello_board_actions(trello_link, last_activity_date)
@@ -87,19 +90,27 @@ def get_new_trello_board_actions(trello_link, last_activity_date):
         
         #push the actions to the model
         push_trello_actions_to_db(project, actions)
+        latest_commit_date = datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+        update_if_commit_after_project_updated_time(
+            project, latest_commit_date)
     else:
         print('Unable to retrieve board id for trello url {}'.format(trello_link.link_url))
 
 
 def push_trello_actions_to_db(project, actions):
     from civictechprojects.models import TrelloAction
+
+    #before pushing trello actions make sure to delete the table for PII
+    if len(actions) > 0 : 
+        TrelloAction.objects.all().delete()
+
     for action in actions:
         member = action.get("memberCreator", {})
         data = action.get("data", {})
 
         member_id = member.get("id")
         member_fullname = member.get("fullName")
-        member_avatar_base_url = member.get("avatarUrl", "")
+        member_avatar_base_url = "" if member.get("avatarUrl", "") is None else member.get("avatarUrl", "")
 
         board_id = data.get("board",{}).get("id")
         action_type = action.get("type")
