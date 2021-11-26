@@ -102,7 +102,7 @@ def push_trello_actions_to_db(project, actions):
 
     #before pushing trello actions make sure to delete the table for PII
     if len(actions) > 0 : 
-        TrelloAction.objects.all().delete()
+        TrelloAction.objects.filter(action_project=project).delete()
 
     for action in actions:
         member = action.get("memberCreator", {})
