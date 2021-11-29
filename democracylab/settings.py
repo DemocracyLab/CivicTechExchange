@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'oauth2.providers.github',
     'oauth2.providers.google',
     'oauth2.providers.linkedin',
-    'oauth2.providers.facebook'
+    'oauth2.providers.facebook',
+    'django_rq',
 ]
 
 SITE_ID = 1
@@ -163,6 +164,15 @@ DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 LOGIN_REDIRECT_URL = '/'
 
+REDIS_ENABLED = os.environ.get('REDIS_ENABLED', False) == 'True'
+
+RQ_QUEUES = {
+    'default': {
+        'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+        'DEFAULT_TIMEOUT': 500,
+    },
+}
+
 #Caching number of tag counts only for now - change this if other things are db-cached
 CACHES = {
     'default': {
@@ -223,7 +233,7 @@ EMAIL_SUPPORT_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMA
 EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_VOLUNTEER_ACCT', 'None')))
 
 # Default log to console in the absence of any account configurations
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if EMAIL_SUPPORT_ACCT and EMAIL_VOLUNTEER_ACCT else 'django.core.mail.backends.console.EmailBackend'
 
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
