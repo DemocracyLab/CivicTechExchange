@@ -10,8 +10,6 @@ import RenderFilterCategory from "./RenderFilterCategory.jsx";
 import FavoriteFilter from "../FavoriteFilter.jsx";
 import FavoritesStore from "../../../stores/FavoritesStore.js";
 import CurrentUser from "../../../utils/CurrentUser.js";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import _ from "lodash";
@@ -54,26 +52,15 @@ class ProjectFilterContainer extends React.Component<Props, State> {
       isReady: true,
     };
   }
-
+  // parent div handles visibility on desktop/mobile, child div handles styling of dropdowns, may be able to reduce later
   render(): React$Node {
     return this.state.isReady ? (
       <React.Fragment>
-        <Navbar
-          expand="lg"
-          bg="navlight"
-          variant="light"
-          className="ProjectFilterContainer-root d-none d-lg-flex"
-        >
-          <Navbar.Toggle aria-controls="ProjectFilterContainer-root" />
-          <Navbar.Collapse
-            id="ProjectFilterContainer-root"
-            className="flex-column"
-          >
-            <Nav className="ProjectFilterContainer-nav mr-auto">
-              {this._displayFilters(false)}
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
+        <div className="ProjectFilterContainer-root d-none d-lg-flex">
+          <div className="ProjectFilterContainer-nav mr-auto">
+            {this._displayFilters(false)}
+          </div>
+        </div>
         {this._showOffCanvasFilters()}
       </React.Fragment>
     ) : null;
@@ -126,7 +113,11 @@ class ProjectFilterContainer extends React.Component<Props, State> {
   _showOffCanvasFilters(): React$Node {
     return (
       <React.Fragment>
-        <Button variant="primary" onClick={() => this._handleModalClick()} className="d-block d-lg-none">
+        <Button
+          variant="primary"
+          onClick={() => this._handleModalClick()}
+          className="d-block d-lg-none"
+        >
           Filter Results
         </Button>
         <Modal
@@ -158,19 +149,6 @@ class ProjectFilterContainer extends React.Component<Props, State> {
     this.setState(prevState => ({
       showOffCanvasFilters: !prevState.showOffCanvasFilters,
     }));
-  }
-
-  _handleNavSelect() {
-    // https://react-bootstrap-v4.netlify.app/components/navbar/#navbar-api
-    //     A callback fired when a descendant of a child <Nav> is selected. Should be used to execute complex closing or other miscellaneous actions desired after selecting a descendant of <Nav>. Does nothing if no <Nav> or <Nav> descendants exist. The callback is called with an eventKey, which is a prop from the selected <Nav> descendant, and an event.
-    // function (
-    //  eventKey: mixed,
-    //  event?: SyntheticEvent
-    // )
-    // For basic closing behavior after all <Nav> descendant onSelect events in mobile viewports, try using collapseOnSelect.
-    // Note: If you are manually closing the navbar using this OnSelect prop, ensure that you are setting expanded to false and not toggling between true and false.
-    //what we want is  for the collapse prop NOT to close UNLESS the onClick event was on a 'done with filters' button or outside the dropdown entirely, if possible?
-    // but perhaps call an update function every click for things like counting num of active filters, etc?
   }
 }
 
