@@ -87,13 +87,10 @@ def get_first_email_template():
 
 def get_second_email_template():
     return HtmlEmailTemplate() \
-        .header("You're essential to the success of {{project_name}}") \
+        .header("We appreciate your contributions to {{project_name}}") \
         .paragraph("{{first_name}},") \
-        .paragraph("We can't thank you enough for all the positive energy you're putting into our tech-for-good " 
-                   "community, we wouldn't be able to do this without your help!") \
-        .paragraph("We think you're a socially-conscious individual with a big heart and recognize that you're " 
-                   "essential to the success of {{project_name}}.  We hope that you continue adding value to our " 
-                   "community by taking this time to renew your volunteer commitment at {{project_name}}.") \
-        .button(url=review_commitment_url, text='RENEW TODAY')
+        .paragraph("You have been essential to the success of {{project_name}}. Your volunteer commitment is coming to a close, but we hope you'll consider staying on and renewing your volunteer engagement.") \
+        .paragraph("Thank you again for being a part of our tech-for-good community.") \
+        .button(url=review_commitment_url, text='Review Volunteer Commitment')
 
 volunteer_reminder_emails = [get_first_email_template(), get_second_email_template()]
