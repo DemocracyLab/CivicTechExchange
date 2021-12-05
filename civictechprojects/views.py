@@ -996,14 +996,19 @@ def promote_project_volunteer(request, application_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def reject_project_volunteer(request, application_id):
+    find_projects_page_url = section_url(FrontEndSection.FindProjects)
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['rejection_message']
         email_template = HtmlEmailTemplate()\
-        .paragraph('The project owner of {project_name} has declined your application for the following reason:'.format(project_name=volunteer_relation.project.project_name))\
-        .paragraph('\"{message}\"'.format(message=message))
-        email_subject = 'Your application to join {project_name}'.format(
+        .paragraph('Hi {first_name},'.format(first_name=volunteer_relation.volunteer.first_name))\
+        .paragraph('Thank you for your interest in volunteering with {project_name}.'.format(project_name=volunteer_relation.project.project_name))\
+        .paragraph('Unfortunately, the project owner did not select you as a volunteer for this project.')\
+        .paragraph('Message from the project owner: \"{message}\"'.format(message=message))\
+        .paragraph('We hope you\'ll consider other volunteer opportunities at DemocracyLab.')\
+        .button(url=find_projects_page_url, text='Explore More Projects')
+        email_subject = 'Your volunteer application to join {project_name}'.format(
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject=email_subject,

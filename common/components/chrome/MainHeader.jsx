@@ -77,7 +77,7 @@ class MainHeader extends React.Component<{||}, State> {
       <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
         <Navbar.Brand>
           <a href={urlHelper.section(Section.Home)}>
-            <img src={cdn.image("dl_logo.png")} alt="DemocracyLab" />
+            <img src={cdn.image("dl_logo.png")} alt="DemocracyLab - Home" />
           </a>
         </Navbar.Brand>
         {CurrentUser.isLoggedIn() ? null : (

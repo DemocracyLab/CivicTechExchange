@@ -6,7 +6,7 @@ from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_path
 from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datetime, datetime_to_string
 from democracylab.emails import send_email,_get_account_from_email, send_volunteer_conclude_email, HtmlEmailTemplate, \
-    notify_project_owners_volunteer_concluded_email
+    notify_project_owners_volunteer_concluded_email, EmailAccount
 
 
 class Command(BaseCommand):
@@ -50,7 +50,7 @@ def get_reminder_template_if_time(now, volunteer):
         days_to_next_reminder = reminder_interval_days[min(volunteer.re_enroll_reminder_count, len(reminder_interval_days) - 1)]
         return (days_to_next_reminder > 0) and (days_since_last_reminder >= days_to_next_reminder) and volunteer_reminder_emails[volunteer.re_enroll_reminder_count]
 
-
+# TODO: Update for redis queue changes
 def send_reminder_email(email_template, volunteer_relation):
     project = volunteer_relation.project
     volunteer = volunteer_relation.volunteer
@@ -63,12 +63,12 @@ def send_reminder_email(email_template, volunteer_relation):
 
     email_msg = EmailMessage(
         subject="You're making a difference at " + project.project_name,
-        from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
         to=[volunteer.email],
     )
 
     email_msg = email_template.render(email_msg, context)
-    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 
 review_commitment_url = settings.PROTOCOL_DOMAIN + section_path(FrontEndSection.MyProjects, {'from': 'renewal_notification_email'})
