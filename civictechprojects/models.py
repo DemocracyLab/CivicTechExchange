@@ -622,13 +622,13 @@ class ProjectCommit(models.Model):
 class TrelloAction(models.Model):
     action_project = models.ForeignKey(
         Project, related_name='trello_actions', on_delete=models.CASCADE)
-    member_id = models.CharField(max_length=2083)  # action creator
-    member_fullname = models.CharField(max_length=200)
+    member_id = models.CharField(max_length=256)  # action creator
+    member_fullname = models.CharField(max_length=1024)  # full name first middle and last
     member_avatar_base_url = models.CharField(max_length=2083, blank=True)
-    board_id = models.CharField(max_length=2083)
-    action_type = models.CharField(max_length=2083)
+    board_id = models.CharField(max_length=256)
+    action_type = models.CharField(max_length=1024)   #action types : https://developer.atlassian.com/cloud/trello/guides/rest-api/action-types/
     action_date = models.DateTimeField(auto_now=False)
-    id = models.CharField(max_length=2083, primary_key = True)
+    id = models.CharField(max_length=256, primary_key = True)
     action_data = models.JSONField(null=True)
 
     @staticmethod

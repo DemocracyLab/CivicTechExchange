@@ -24,7 +24,7 @@ def fetch(rel_url, params={}):
     params['key'] = key
     params['token'] = token
 
-    print('trello url : {}'.format(url))
+    print('trello url to fetch actions : {}'.format(url))
 
     response = requests.get(url, params=params)
 
@@ -39,8 +39,8 @@ def fetch(rel_url, params={}):
         else:
             return repo_info
     except:
-        print(response.status_code)
-        print('Invalid json: ' + url)
+        print('response code from trello api {}'.format(str(response.status_code)))
+        print('Invalid json for fetching trello actions from url : ' + url)
         return None
 
 
@@ -59,9 +59,10 @@ def get_board_actions(board_id, last_activity_date):
                                        'board_action_memberCreator_fields': 'fullName',
                                        'action_memberCreator_fields': 'fullName,avatarUrl'})
         if actions_json is None:
-            print('No results found, querying users')
+            print('No results found, querying users from trello board - {}'.format(board_id))
             return []
         else:
+            print("Retrieved actions from trello board successfully")
             return actions_json['actions']
     except UnauthorizedTrelloRequest:
         print('Could not retrieve actions from private board: {board_id}'.format(
