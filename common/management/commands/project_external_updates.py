@@ -22,24 +22,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if options['trello']:
             project_trello_links = get_project_trello_links()
+            #30 days ago
+            created_since_date = (
+                datetime.now() - timedelta(hours=720)).strftime('%Y-%m-%dT%H:%M:%SZ')
+            print('Found {count} Trello Links, pulling actions created since {since}'.format(
+                count=len(project_trello_links), since=created_since_date))
             for trello_link in project_trello_links:
                 try:
                     if trello_link.link_project.is_searchable:
-
-                        #setting a date which is 30 days old
-                        last_activity_date = (datetime.now() - timedelta(hours=720)).strftime('%Y-%m-%dT%H:%M:%SZ')
-                        
-                        '''
-                        last_activity_trello_object = get_trello_last_action_date(trello_link)
-
-                        if len(last_activity_trello_object) > 0:
-                            last_activity_date = last_activity_trello_object[0].action_date
-                        
-                        '''
-
-                        print('last activity date : {}'.format(last_activity_date))
-                    
-                        get_new_trello_board_actions(trello_link, last_activity_date)
+                        get_and_save_trello_board_actions(
+                            trello_link, created_since_date)
                 except:
                     # Keep processing if we run into errors with a particular update
                     print('Error processing Trello Link: ' + trello_link.link_url)
@@ -69,31 +61,31 @@ def get_trello_board_id_from_url(url):
        
     return board_id
 
-def get_new_trello_board_actions(trello_link, last_activity_date):
+
+def get_and_save_trello_board_actions(trello_link, created_since_date):
     """
     Get actions across all boards
     :param board_ids: list of trello board ids
     """
     project = trello_link.link_project
-    print('Handling updates for project {id} trello link: {url}'.format(
-        id=project.id, url=trello_link.link_url))
-
-    #get board id from url
     board_id = get_trello_board_id_from_url(trello_link.link_url)
     if board_id is not None:
-        actions = get_board_actions(board_id, last_activity_date)
-        
-        # print(len(actions_json['actions']))
+        print('Pulling actions for project {id}, Trello link: {url}'.format(
+            id=project.id, url=trello_link.link_url))
+
+        actions = get_board_actions(board_id, created_since_date)
+
         print('Retrieved {num_actions} action(s) for board {board_id}'.format(
             board_id=board_id, num_actions=len(actions)))
-        
+
         #push the actions to the model
         push_trello_actions_to_db(project, actions)
         latest_commit_date = datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
         update_if_commit_after_project_updated_time(
             project, latest_commit_date)
     else:
-        print('Unable to retrieve board id for trello url {}'.format(trello_link.link_url))
+        print('Unable to retrieve board id for trello url {}'.format(
+            trello_link.link_url))
 
 
 def push_trello_actions_to_db(project, actions):
@@ -127,16 +119,19 @@ def push_trello_actions_to_db(project, actions):
                             action_date,
                             data)
 
-def get_trello_last_action_date(trello_link):
-    from civictechprojects.models import TrelloAction
-    project = trello_link.link_project
-
-    # - at the start of the order by indicates descending order
-    return TrelloAction.objects.filter(action_project=project).order_by('-action_date')[:1]
 
 def get_project_trello_links():
+    """
+    Queries for Trello Board ProjectLinks. Selects one Trello link per project,
+    prioritizing links with 'link_projmanage' as the name.
+    """
     from civictechprojects.models import ProjectLink
-    return ProjectLink.objects.filter(link_name__icontains='link_projmanage').exclude(link_project__isnull=True)
+    return ProjectLink.objects.filter(link_url__icontains='trello.com/b')\
+        .exclude(link_project__isnull=True)\
+        .extra(select={'is_projmanage_link': "link_name = 'link_projmanage'"})\
+        .order_by('link_project_id', '-is_projmanage_link')\
+        .distinct('link_project_id')
+
 
 def get_project_github_links():
     from civictechprojects.models import ProjectLink

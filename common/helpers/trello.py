@@ -24,8 +24,6 @@ def fetch(rel_url, params={}):
     params['key'] = key
     params['token'] = token
 
-    print('trello url to fetch actions : {}'.format(url))
-
     response = requests.get(url, params=params)
 
     if response.status_code == 401:
@@ -44,16 +42,15 @@ def fetch(rel_url, params={}):
         return None
 
 
-def get_board_actions(board_id, last_activity_date):
+def get_board_actions(board_id, actions_since):
     """
     Get createCard and updateCard actions for a specified board_id
     :param board_id: Trello board id
     :return: actions list
     """
     rel_url = '/boards/{board_id}'.format(board_id=board_id)
-    print("retrieving data from date : {}".format(last_activity_date))
     try:
-        actions_json = fetch(rel_url, {'actions_since': last_activity_date,
+        actions_json = fetch(rel_url, {'actions_since': actions_since,
                                        'actions': 'addAttachmentToCard,addChecklistToCard,commentCard,createCard,updateCard,updateCheckItemStateOnCard',
                                        'fields': 'actions',
                                        'board_action_memberCreator_fields': 'fullName',
