@@ -133,7 +133,7 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return CurrentUser.isLoggedIn() ? (
       <React.Fragment>
-        <div className="MyProjectsController-root">
+        <div className="container MyProjectsController-root">
           <ConfirmationModal
             showModal={this.state.showConfirmDeleteModal}
             message="Are you sure you want to delete this project?"
