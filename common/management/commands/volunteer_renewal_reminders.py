@@ -89,7 +89,9 @@ def get_second_email_template():
     return HtmlEmailTemplate() \
         .header("We appreciate your contributions to {{project_name}}") \
         .paragraph("{{first_name}},") \
-        .paragraph("You have been essential to the success of {{project_name}}. Your volunteer commitment is coming to a close, but we hope you'll consider staying on and renewing your volunteer engagement.") \
+        .paragraph("You have been essential to the success of {{project_name}}."
+                   "Your volunteer commitment is coming to a close, "
+                   "but we hope you'll consider staying on and renewing your volunteer engagement.") \
         .paragraph("Thank you again for being a part of our tech-for-good community.") \
         .button(url=review_commitment_url, text='Review Volunteer Commitment')
 
