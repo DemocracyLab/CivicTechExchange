@@ -94,14 +94,6 @@
     padding-top: 2rem;
   }
 }
-.corporate-sources-citation a {
-  color: $color-text-dark;
-  text-decoration: underline;
-}
-.corporate-sources-citation a:hover {
-  color: $color-text-dark;
-}
-
 .corporate-hr-line {
   display: none;
   width: 45%;
@@ -245,6 +237,9 @@
 }
 .corporate-how-text {
   margin: 0 0 0 15px;
+  h2 {
+    font-weight: bold;
+  }
 }
 .corporate-sponsorship-how-flex {
   display: flex;
