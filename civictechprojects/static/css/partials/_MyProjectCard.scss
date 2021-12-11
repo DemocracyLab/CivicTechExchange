@@ -16,9 +16,6 @@
 
 .MyProjectCard-projectName {
   font-weight: bold;
-  &.text-overflow-break {
-    overflow-wrap: break-word;
-  }
 }
 
 .MyProjectCard-button {

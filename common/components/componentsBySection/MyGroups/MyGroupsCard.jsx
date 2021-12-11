@@ -28,7 +28,7 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
       <div className="row MyProjectCard-root">
         <div className="col-sm-4">
           <div className="MyProjectCard-header">Group Name</div>
-          <div className="MyProjectCard-projectName text-overflow-break">{this.props.group.group_name}</div>
+          <div className="MyProjectCard-projectName text-break">{this.props.group.group_name}</div>
         </div>
         <div className="col-sm-2">
           <div className="MyProjectCard-header">Your Role</div>
