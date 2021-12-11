@@ -150,7 +150,6 @@ class Project(Archived):
             'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links)),
-            'project_commits': list(map(lambda commit: commit.to_json(), commits)),
             'project_actions': list(map(lambda action: action.to_json(), actions)),
             'project_groups': list(map(lambda gr: gr.hydrate_to_list_json(), group_relationships)),
             'project_events': list(map(lambda er: er.hydrate_to_tile_json(), self.get_project_events())),
