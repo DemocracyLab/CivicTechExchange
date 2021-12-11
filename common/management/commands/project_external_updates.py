@@ -1,10 +1,11 @@
 from django.core.management.base import BaseCommand
+from django.db.models import Prefetch
+from django.conf import settings
 from common.helpers.db import bulk_delete
 from common.helpers.trello import get_board_actions
 from common.helpers.github import fetch_github_info, get_owner_repo_name_from_public_url, \
     get_repo_endpoint_from_owner_repo_name, get_repo_names_from_owner_repo_name, get_branch_name_from_public_url
 from common.helpers.date_helpers import datetime_field_to_datetime
-from django.conf import settings
 import pytz
 import traceback
 from datetime import datetime, timedelta
@@ -21,20 +22,19 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options['trello']:
-            project_trello_links = get_project_trello_links()
+            projects = get_projects_with_trello_links()
             #30 days ago
             created_since_date = (
                 datetime.now() - timedelta(hours=720)).strftime('%Y-%m-%dT%H:%M:%SZ')
-            print('Found {count} Trello Links, pulling actions created since {since}'.format(
-                count=len(project_trello_links), since=created_since_date))
-            for trello_link in project_trello_links:
+            print('Found {count} Projects w/ Trello Links, pulling actions created since {since}'.format(
+                count=len(projects), since=created_since_date))
+            for project in projects:
                 try:
-                    if trello_link.link_project.is_searchable:
-                        get_and_save_trello_board_actions(
-                            trello_link, created_since_date)
+                    if project.is_searchable:
+                        get_and_save_trello_actions(project, created_since_date)
                 except:
                     # Keep processing if we run into errors with a particular update
-                    print('Error processing Trello Link: ' + trello_link.link_url)
+                    print('Error processing Project: {id}'.format(id=project.id))
                     print(traceback.format_exc())
                     pass
             return
@@ -62,30 +62,37 @@ def get_trello_board_id_from_url(url):
     return board_id
 
 
-def get_and_save_trello_board_actions(trello_link, created_since_date):
+def get_and_save_trello_actions(project, created_since_date):
     """
-    Get actions across all boards
-    :param board_ids: list of trello board ids
+    Retrieves actions for each project board link & saves to the db
+    Expects that projects.trello_board_links is defined (see get_projects_with_trello_links)
+    :param project: project 
     """
-    project = trello_link.link_project
-    board_id = get_trello_board_id_from_url(trello_link.link_url)
-    if board_id is not None:
-        print('Pulling actions for project {id}, Trello link: {url}'.format(
-            id=project.id, url=trello_link.link_url))
-
-        actions = get_board_actions(board_id, created_since_date)
-
-        print('Retrieved {num_actions} action(s) for board {board_id}'.format(
-            board_id=board_id, num_actions=len(actions)))
-
-        #push the actions to the model
-        push_trello_actions_to_db(project, actions)
+    project_actions = []
+    for trello_link in project.trello_board_links:
+        board_id = get_trello_board_id_from_url(trello_link.link_url)
+        if board_id is not None:
+            print('Pulling actions for project {id}, Trello link: {url}'.format(
+                id=project.id, url=trello_link.link_url))
+            try:
+                board_actions = get_board_actions(board_id, created_since_date)
+                print('Retrieved {num_actions} action(s) for board {board_id}'.format(
+                    board_id=board_id, num_actions=len(board_actions)))
+                project_actions += board_actions
+            except:
+                # Keep processing if we run into errors with a particular update
+                print('Error processing board: {id}'.format(id=board_id))
+                print(traceback.format_exc())
+                continue
+        else:
+            print('Unable to retrieve board id for trello url {}'.format(
+                trello_link.link_url))
+    if project_actions:
+        push_trello_actions_to_db(project, project_actions)
         latest_commit_date = datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
         update_if_commit_after_project_updated_time(
             project, latest_commit_date)
-    else:
-        print('Unable to retrieve board id for trello url {}'.format(
-            trello_link.link_url))
+
 
 
 def push_trello_actions_to_db(project, actions):
@@ -120,17 +127,22 @@ def push_trello_actions_to_db(project, actions):
                             data)
 
 
-def get_project_trello_links():
+def get_projects_with_trello_links():
     """
-    Queries for Trello Board ProjectLinks. Selects one Trello link per project,
-    prioritizing links with 'link_projmanage' as the name.
+    Queries for Trello Board Projects w/ Trello Board Project Links.
+    Prefetches and filters the ProjectLinks relationship, available via the
+    trello_board_links attribute
     """
-    from civictechprojects.models import ProjectLink
-    return ProjectLink.objects.filter(link_url__icontains='trello.com/b')\
-        .exclude(link_project__isnull=True)\
-        .extra(select={'is_projmanage_link': "link_name = 'link_projmanage'"})\
-        .order_by('link_project_id', '-is_projmanage_link')\
-        .distinct('link_project_id')
+    from civictechprojects.models import Project, ProjectLink
+    return Project.objects\
+        .prefetch_related(
+            Prefetch(
+                'links',
+                queryset=ProjectLink.objects.filter(
+                    link_url__icontains='trello.com/b'),
+                to_attr='trello_board_links')
+        )\
+        .distinct()
 
 
 def get_project_github_links():

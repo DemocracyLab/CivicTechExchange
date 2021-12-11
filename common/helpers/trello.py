@@ -56,10 +56,9 @@ def get_board_actions(board_id, actions_since):
                                        'board_action_memberCreator_fields': 'fullName',
                                        'action_memberCreator_fields': 'fullName,avatarUrl'})
         if actions_json is None:
-            print('No results found, querying users from trello board - {}'.format(board_id))
+            print('No action results found, querying for trello board {}'.format(board_id))
             return []
         else:
-            print("Retrieved actions from trello board successfully")
             return actions_json['actions']
     except UnauthorizedTrelloRequest:
         print('Could not retrieve actions from private board: {board_id}'.format(
