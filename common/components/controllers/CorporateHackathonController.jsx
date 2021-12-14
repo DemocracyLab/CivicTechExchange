@@ -124,7 +124,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </Tab>
             <Tab
               eventKey={tabOptions.sponsorship}
-              title="Sponsor our platform & Public Events"
+              title="Sponsor Our Platform & Public Events"
             >
               {this._renderSponsorshipTab()}
             </Tab>
@@ -179,27 +179,32 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 </p>
               </div>
             </div>
+            <div className="col-12">
+              <p>
+                Learn more:{" "}
+                <a
+                  href={cdn.document(
+                    "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
+                  )}
+                >
+                  Corporate Tech-for-Good Hackathons PDF{" "}
+                  <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+                </a>
+              </p>
+              <Button variant="primary" href="#">
+                Get Started
+              </Button>
+            </div>
           </div>
-          <p>
-            Learn more:{" "}
-            <a
-              href={cdn.document(
-                "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
-              )}
-            >
-              Corporate Tech-for-Good Hackathons PDF{" "}
-              <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
-            </a>
-          </p>
-          <Button 
-          variant="primary"
-          href="#">Get Started
-          </Button>
+
           {/* this button jumps down to the contact form FOR the hackathon section, see issue #820 */}
         </div>
         <div className="corporate-hackathon-howitworks corporate-section col-12">
           <h1>How it works:</h1>
-          <h2>We do the heavy lifting. Your employees make an impact. Your organization thrives.</h2>
+          <h2>
+            We do the heavy lifting. Your employees make an impact. Your
+            organization thrives.
+          </h2>
           <div className="corporate-how-flex-container">
             <div className="corporate-how-flex-block">
               <div className="corporate-how-image-container">
@@ -233,7 +238,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               <div className="corporate-how-text">
                 <h2>3. Collaborate</h2>
                 <p>
-                 Together, we make a positive impact at your tech-for-good hackathon!
+                  Together, we make a positive impact at your tech-for-good
+                  hackathon!
                 </p>
               </div>
             </div>
@@ -287,140 +293,148 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-sponsorship-why col-12">
-          <h1>Why Partner With Us?</h1>
+          <h1>Why become a sponsor?</h1>
           <div className="row">
             <div className="col-sm-12 col-lg-4">
               <div className="corporate-sponsorship-card">
-                <h2>Impact</h2>
+                <h2>Make an impact.</h2>
+                <h3>
+                  Your support advances hundreds of tech-for-good projects,
+                  helps us grow, and improves our public events.
+                </h3>
                 <p>
-                  Your investment will support hundreds of tech-for-good
-                  projects that use DemocracyLab’s platform to attract the
-                  skilled volunteers they need to launch their products and
-                  prove their concepts.
-                </p>
-                <p>
-                  DemocracyLab will use your investment to support our public
-                  events, scale our operations, and accelerate our growth.
+                  Every $1,000 contributed enables 500 hours of skilled
+                  volunteer work, helping more projects make more of an impact.
                 </p>
               </div>
             </div>
             <div className="col-sm-12 col-lg-4">
               <div className="corporate-sponsorship-card">
-                <h2>Differentiation</h2>
+                <h2>Differentiate your company.</h2>
+                <h3>
+                  Supporting DemocracyLab shows your company’s commitment to
+                  social responsibility.
+                </h3>
                 <p>
-                  DemocracyLab’s unique product and positioning make sponsorship
-                  a bold way to demonstrate your company’s commitment to social
-                  responsibility.
-                </p>
-                <p>
-                  Our community of volunteers is tomorrow’s diverse, dynamic,
-                  and purpose-driven workforce. Sponsorship lets them know your
-                  company helped create the opportunities they are enjoying.
+                  79% of employees prefer to work at a socially responsible
+                  company. (Deloitte)
                 </p>
               </div>
             </div>
             <div className="col-sm-12 col-lg-4">
               <div className="corporate-sponsorship-card">
-                <h2>Value</h2>
+                <h2>Attract purpose-minded talent.</h2>
+
+                <h3>
+                  Connect with skilled tech volunteers who strive to make a
+                  difference.
+                </h3>
+
                 <p>
-                  For a fraction of the cost of a typical corporate event, your
-                  company can become part of the accelerating tech-for-good
-                  movement.
-                </p>
-                <p>
-                  Today's sponsorship pricing is a bargain. Buy low and enjoy a
-                  significant return on your company's investment!
+                  Position your company as an employer of choice for our diverse
+                  community of talented volunteers.
                 </p>
               </div>
             </div>
-          </div>
-          <div className="corporate-section col-12">
-            <h2 className="corporate-sponsorship-stat-title">
-              Public hackathons are an opportunity to contribute with great
-              visibility.
-            </h2>
-            <div className="corporate-sponsorship-stat-container">
-              <div className="corporate-sponsorship-stat">
-                <h4>$1&nbsp;Million+</h4>
-                <p>Public Value Created</p>
-              </div>
-              <div className="corporate-sponsorship-stat">
-                <h4>1500+</h4>
-                <p>Volunteers</p>
-              </div>
-              <div className="corporate-sponsorship-stat">
-                <h4>100</h4>
-                <p>Avg Event Attendees</p>
-              </div>
-              <div className="corporate-sponsorship-stat">
-                <h4>250+</h4>
-                <p>Project Teams</p>
-              </div>
+            <div className="col-12">
+              <p>
+                Learn more:{" "}
+                <a
+                  href={cdn.document(
+                    "2021+DemocracyLab+Sponsorship+Prospectus.pdf"
+                  )}
+                >
+                  Sponsor Prospectus PDF{" "}
+                  <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+                </a>
+              </p>
+              <Button variant="primary" href="#">
+                Get Started
+              </Button>
+              {/* This button jumps to contact form for Sponsorship tab, see #820 */}
             </div>
           </div>
         </div>
         <div className="corporate-sponsorship-how col-12 corporate-section">
-          <h1>How it Works</h1>
-          <div className="corporate-sponsorship-how-flex">
-            <div className="corporate-sponsorship-how-image">
-              <img
-                src={cdn.image("corporate-hiw.png")}
-                alt="Sponsorship image"
-              />
+          <h1>Our sponsors make a difference.</h1>
+
+          <h2>
+            Your support of DemocracyLab and our events extends your brand reach
+            and helps solve challenging problems through public interest
+            technology.
+          </h2>
+
+          <div className="corporate-sponsorship-stat-container">
+            <div className="corporate-sponsorship-stat">
+              <h4>$1&nbsp;Million+</h4>
+              <p>Public Value Created</p>
             </div>
-            <div className="corporate-sponsorship-how-text">
-              <h2>
-                Our public tech-for-good hackathons are the pulse of our
-                community
-              </h2>
-              <p>
-                Six times a year, the DemocracyLab community convenes to move
-                the needle on projects and build connections around the world.
-                Your support will increase our capacity, amplify impact, and
-                innovate your brand.
-              </p>
+            <div className="corporate-sponsorship-stat">
+              <h4>1500+</h4>
+              <p>Volunteers</p>
+            </div>
+            <div className="corporate-sponsorship-stat">
+              <h4>250+</h4>
+              <p>Project Teams</p>
             </div>
           </div>
+          <h3>
+            We offer flexible sponsorship levels so you can get involved at any
+            budget.
+          </h3>
+
+          <h4>
+            In addition to the benefits of each level, all DemocracyLab sponsors
+            receive:
+          </h4>
+
+          <ul>
+            <li>Exposure on the DemocracyLab website</li>
+
+            <li>Branding and involvement at our bimonthly hackathon events</li>
+
+            <li>Impactful, positive PR opportunities for your organization</li>
+          </ul>
+
           <div className="corporate-sponsorship-how-button corporate-learn-link">
+            Learn more about our sponsorship levels:{" "}
             <a
               href={cdn.document(
                 "2021+DemocracyLab+Sponsorship+Prospectus.pdf"
               )}
             >
-              Learn More
+              Sponsor Prospectus PDF
               <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
             </a>
           </div>
+          <div className="corporate-sponsorship-current">
+            <h4>Current DemocracyLab sponsors include:</h4>
+            <h1>TODO: Amazon, MS, WA DOC, WGU logos</h1>
+          </div>
         </div>
         <div className="corporate-sponsorship-saying corporate-section col-12">
-          <h1>What People Are Saying</h1>
+          <h1>What our partners are saying.</h1>
+          <h2>Feedback from partnering organizations.</h2>
+
           <div className="carousel-testimonial-root">
             <TestimonialCarousel
               category="hackathon-highlights"
               interval={600000}
             />
           </div>
+          <p>
+            Read about other previous events in our{" "}
+            <a href={window.BLOG_URL}>blog</a>, or other events that are coming
+            up <a href="/events">here</a>.
+          </p>
         </div>
+        {/* Contact Form goes here */}
+
         <div className="corporate-sponsorship-impact corporate-section col-12">
           <h1>Impact Stories</h1>
           <div className="carousel-blog-root">
             <BlogCarousel tag="hackathon-highlights" interval={600000} />
           </div>
-          <p className="headline2 font-weight-normal">
-            Read about other previous events in our{" "}
-            <a
-              className="headline2 font-weight-normal"
-              href={window.BLOG_URL}
-              target="_blank"
-            >
-              blog
-            </a>
-            , or other events that are coming up{" "}
-            <a className="headline2 font-weight-normal" href="/events">
-              here
-            </a>
-            .
-          </p>
         </div>
       </React.Fragment>
     );
