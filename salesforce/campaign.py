@@ -9,6 +9,7 @@ client = SalesforceClient()
 
 def run(request):
     response = SalesforceClient().send(request)
+    print(f'{response.status_code}: {response.text}')
 
 
 def save(project: object):
@@ -24,14 +25,15 @@ def save(project: object):
                 "recordtypeid": "01246000000uOeRAAU",
                 "name": project.project_name,
                 "type": "Informal (No Legal Entity Established)",
+                "isactive": project.is_searchable,
                 "startdate": project.project_date_created.strftime('%Y-%m-%d'),
                 "issue_area__c": ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in issue_area_tags]),
                 "technologies__c": ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in tech_tags]),
                 "stage__c": ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in stage_tags]),
                 "project_url__c": project.project_url,
-                "short_description__c": project.project_description,
                 "description_action__c": project.project_description_actions,
                 "description_solution__c": project.project_description_solution,
+                "short_description__c": project.project_short_description,
                 "description": project.project_description
             }
     req = requests.Request(
