@@ -10,7 +10,6 @@ import cdn from "../utils/cdn.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import TestimonialCarousel from "../../components/common/carousel/TestimonialCarousel.jsx";
-import BlogCarousel from "../../components/common/carousel/BlogCarousel.jsx";
 import ContactForm from "../../components/forms/ContactForm.jsx";
 import JumpAnchor from "../common/JumpAnchor.jsx";
 import _ from "lodash";
@@ -261,30 +260,6 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             />
           </div>
         </div>
-        <div className="corporate-hackathon-stories corporate-section col-12">
-          <h1>Impact Stories</h1>
-          <div className="carousel-blog-root">
-            <BlogCarousel tag="partner-highlights" interval={600000} />
-          </div>
-          <p className="headline2 font-weight-normal">
-            Read about other previous events in our{" "}
-            <a
-              className="headline2 font-weight-normal"
-              href={window.BLOG_URL}
-              target="_blank"
-            >
-              blog
-            </a>
-            , or other events that are coming up{" "}
-            <a
-              className="headline2 font-weight-normal"
-              href={url.section(Section.FindEvents)}
-            >
-              here
-            </a>
-            .
-          </p>
-        </div>
       </React.Fragment>
     );
   }
@@ -429,25 +404,33 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </p>
         </div>
         {/* Contact Form goes here */}
-
-        <div className="corporate-sponsorship-impact corporate-section col-12">
-          <h1>Impact Stories</h1>
-          <div className="carousel-blog-root">
-            <BlogCarousel tag="hackathon-highlights" interval={600000} />
-          </div>
+      </React.Fragment>
+    );
+  }
+  _renderContactHackathon(): React$Node {
+    return (
+      <React.Fragment>
+        <div className="corporate-section corporate-contact col-12">
+          <JumpAnchor id="contact-hackathon" />
+          <h1>Interested in hosting your own hackathon?</h1>
+          <h2>
+            Get in touch to discuss your next tech-for-good event.
+          </h2>
+          <ContactForm showInterests={true} />
+          <p>Not ready yet? Learn more: 
         </div>
       </React.Fragment>
     );
   }
-  _renderContact(): React$Node {
+
+  _renderContactSponsor(): React$Node {
     return (
       <React.Fragment>
         <div className="corporate-section corporate-contact col-12">
-          <JumpAnchor id="contact" />
-          <h1>Take The First Step!</h1>
+          <JumpAnchor id="contact-sponsor" />
+          <h1>Interested in becoming a sponsor?</h1>
           <h2>
-            To receive more information about becoming a corporate partner,
-            complete and submit the form below.
+            Get in touch to make an impact in the tech-for-good movement.
           </h2>
           <ContactForm showInterests={true} />
         </div>
