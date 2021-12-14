@@ -25,27 +25,21 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     return (
-      <div className="MyProjectCard-root">
-        <table className="MyProjectCard-table">
-          <tbody>
-            <tr>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">Group Name</tr>
-                <tr className="MyProjectCard-projectName">
-                  {this.props.group.group_name}
-                </tr>
-              </td>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">Your Role</tr>
-                <tr>{this.state.isOwner ? "Group Owner" : "Volunteer"}</tr>
-              </td>
-              <td className="MyProjectCard-column">
-                {this._renderGroupStatus()}
-              </td>
-              <td className="MyProjectCard-column">{this._renderButtons()}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="row MyProjectCard-root">
+        <div className="col-sm-4">
+          <div className="MyProjectCard-header">Group Name</div>
+          <div className="MyProjectCard-projectName text-break">{this.props.group.group_name}</div>
+        </div>
+        <div className="col-sm-2">
+          <div className="MyProjectCard-header">Your Role</div>
+          <div>{this.state.isOwner ? "Group Owner" : "Volunteer"}</div>
+        </div>
+        <div className="col-sm-3">
+          {this._renderGroupStatus()}
+        </div>
+        <div className="col-sm-3">
+          {this._renderButtons()}
+        </div>
       </div>
     );
   }
@@ -70,8 +64,8 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <tr className="MyProjectCard-header">{header}</tr>
-        <tr>{status}</tr>
+        <div className="MyProjectCard-header">{header}</div>
+        <div>{status}</div>
       </React.Fragment>
     );
   }
