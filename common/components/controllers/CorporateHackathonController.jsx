@@ -51,7 +51,6 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-root container">
           {this._renderTop()}
           <div className="row">{this._renderTabs()}</div>
-          <div className="row">{this._renderContact()}</div>
           {this._renderBottomImage()}
         </div>
       </React.Fragment>
@@ -243,14 +242,14 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </div>
             </div>
           </div>
-          <hr className="corporate-hr-line"></hr>
-
           <h3 className="corporate-how-after">
             After the event, DemocracyLab reports on the resulting engagement,
             outcomes, and impact.
           </h3>
-          <div className="corporate-how-after corporate-learn-link"></div>
         </div>
+
+        {this._renderContactHackathon()}
+
         <div className="corporate-hackathon-saying corporate-section col-12">
           <h1>What People Are Saying</h1>
           <div className="carousel-testimonial-root">
@@ -387,6 +386,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             <h1>TODO: Amazon, MS, WA DOC, WGU logos</h1>
           </div>
         </div>
+        {this._renderContactSponsor()}
+
         <div className="corporate-sponsorship-saying corporate-section col-12">
           <h1>What our partners are saying.</h1>
           <h2>Feedback from partnering organizations.</h2>
@@ -403,7 +404,6 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             up <a href="/events">here</a>.
           </p>
         </div>
-        {/* Contact Form goes here */}
       </React.Fragment>
     );
   }
@@ -413,11 +413,19 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-section corporate-contact col-12">
           <JumpAnchor id="contact-hackathon" />
           <h1>Interested in hosting your own hackathon?</h1>
-          <h2>
-            Get in touch to discuss your next tech-for-good event.
-          </h2>
+          <h2>Get in touch to discuss your next tech-for-good event.</h2>
           <ContactForm showInterests={true} />
-          <p>Not ready yet? Learn more: 
+          <p>
+            Not ready yet? Learn more:{" "}
+            <a
+              href={cdn.document(
+                "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
+              )}
+            >
+              Corporate Tech-for-Good Hackathons PDF{" "}
+              <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+            </a>
+          </p>
         </div>
       </React.Fragment>
     );
@@ -429,10 +437,19 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-section corporate-contact col-12">
           <JumpAnchor id="contact-sponsor" />
           <h1>Interested in becoming a sponsor?</h1>
-          <h2>
-            Get in touch to make an impact in the tech-for-good movement.
-          </h2>
+          <h2>Get in touch to make an impact in the tech-for-good movement.</h2>
           <ContactForm showInterests={true} />
+          <p>
+            Not ready yet? Learn more:{" "}
+            <a
+              href={cdn.document(
+                "2021+DemocracyLab+Sponsorship+Prospectus.pdf"
+              )}
+            >
+              Sponsor Prospectus PDF
+              <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+            </a>
+          </p>
         </div>
       </React.Fragment>
     );
