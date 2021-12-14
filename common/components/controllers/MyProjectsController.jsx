@@ -27,8 +27,8 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
     super();
     const userContext: UserContext = CurrentUser.userContext();
     this.state = {
-      ownedProjects: userContext.owned_projects,
-      volunteeringProjects: userContext.volunteering_projects,
+      ownedProjects: userContext?.owned_projects,
+      volunteeringProjects: userContext?.volunteering_projects,
       showConfirmDeleteModal: false,
       showRenewVolunteerModal: false,
       showConcludeVolunteerModal: false,
