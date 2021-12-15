@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.gis.db.models import PointField
 from enum import Enum
+from itertools import chain
 from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
@@ -121,6 +122,10 @@ class Project(Archived):
         volunteers = VolunteerRelation.objects.filter(project=self.id)
         group_relationships = ProjectRelationship.objects.filter(relationship_project=self).exclude(relationship_group=None)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
+        trello_actions = TrelloAction.objects.filter(
+            action_project=self.id).order_by('-action_date')[:20]
+        actions = sorted(chain(commits, trello_actions), reverse=True, key=lambda x: getattr(
+            x, 'commit_date', getattr(x, 'action_date', '')))
         project = {
             'project_id': self.id,
             'project_name': self.project_name,
@@ -145,7 +150,7 @@ class Project(Archived):
             'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links)),
-            'project_commits': list(map(lambda commit: commit.to_json(), commits)),
+            'project_actions': list(map(lambda action: action.to_json(), actions)),
             'project_groups': list(map(lambda gr: gr.hydrate_to_list_json(), group_relationships)),
             'project_events': list(map(lambda er: er.hydrate_to_tile_json(), self.get_project_events())),
             'project_owners': [self.project_creator.hydrate_to_tile_json()],
@@ -601,6 +606,7 @@ class ProjectCommit(models.Model):
 
     def to_json(self):
         return {
+            'type': self.__class__.__name__,
             'user_name': self.user_name,
             'user_link': self.user_link,
             'user_avatar_link': self.user_avatar_link,
@@ -611,6 +617,58 @@ class ProjectCommit(models.Model):
             'repo_name': self.repo_name
         }
 
+
+class TrelloAction(models.Model):
+    action_project = models.ForeignKey(
+        Project, related_name='trello_actions', on_delete=models.CASCADE)
+    member_id = models.CharField(max_length=256)  # action creator
+    member_fullname = models.CharField(max_length=1024)  # full name first middle and last
+    member_avatar_base_url = models.CharField(max_length=2083, blank=True)
+    board_id = models.CharField(max_length=256)
+    action_type = models.CharField(max_length=1024)   #action types : https://developer.atlassian.com/cloud/trello/guides/rest-api/action-types/
+    action_date = models.DateTimeField(auto_now=False)
+    id = models.CharField(max_length=256, primary_key = True)
+    action_data = models.JSONField(null=True)
+
+    @staticmethod
+    def create(project, id, fullname, member_id, member_avatar_base_url, board_id, action_type, action_date, action_data):
+
+        trello_action = TrelloAction()
+        trello_action.action_project = project
+        trello_action.member_fullname = fullname
+        trello_action.member_id = member_id
+        trello_action.member_avatar_base_url = member_avatar_base_url
+        trello_action.board_id = board_id
+        trello_action.action_type = action_type
+        trello_action.action_date = action_date
+        trello_action.id = id
+        trello_action.action_data = action_data
+
+        trello_action.save()
+
+    def get_avatar_url(self):
+        '''
+        Trello's API gives back avatar base urls (e.g. https://trello-members.s3.amazonaws.com/{id}/{hash}), but
+        a size and file extension need to be added to form a valid url
+        Currently, 30, 50, 170, & original are valid sizes
+        '''
+        avatar_size = 50
+        if self.member_avatar_base_url:
+            return '{base}/{size}.png'.format(base=self.member_avatar_base_url, size=avatar_size)
+        else:
+            return ''
+
+    def to_json(self):
+        return {
+            'type': self.__class__.__name__,
+            'member_fullname': self.member_fullname,
+            'member_id': self.member_id,
+            'board_id': self.board_id,
+            'action_type': self.action_type,
+            'action_date': self.action_date,
+            'action_data': self.action_data,
+            'member_avatar_url': self.get_avatar_url()
+        }
 
 class ProjectLink(models.Model):
     link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
