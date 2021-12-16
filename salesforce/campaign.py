@@ -14,6 +14,7 @@ def run(request):
 
 def save(project: object):
     stage_tags = list(project.project_stage.all().values())
+    org_type_tags = list(project.project_organization_type.all().values())
     tech_tags = list(project.project_technologies.all().values())
     issue_area_tags = list(project.project_issue_area.all().values())
     data = {
@@ -24,7 +25,7 @@ def save(project: object):
                 },
                 "recordtypeid": "01246000000uOeRAAU",
                 "name": project.project_name,
-                "type": "Informal (No Legal Entity Established)",
+                "type": ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in org_type_tags]),
                 "isactive": project.is_searchable,
                 "startdate": project.project_date_created.strftime('%Y-%m-%d'),
                 "issue_area__c": ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in issue_area_tags]),
