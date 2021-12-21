@@ -129,7 +129,7 @@ def push_trello_actions_to_db_and_get_latest(project, actions):
         action_date = action.action_date
         if action_date > last_update_time:
             last_update_time = action_date
-        return last_update_time
+    return last_update_time
 
 def get_projects_with_trello_links():
     """
