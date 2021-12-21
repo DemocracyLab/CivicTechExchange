@@ -646,6 +646,8 @@ class TrelloAction(models.Model):
 
         trello_action.save()
 
+        return TrelloAction.objects.get(id=id)
+
     def get_avatar_url(self):
         '''
         Trello's API gives back avatar base urls (e.g. https://trello-members.s3.amazonaws.com/{id}/{hash}), but
