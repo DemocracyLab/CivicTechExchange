@@ -197,7 +197,6 @@ class ContactForm extends React.Component<Props, State> {
                   onChange={this.handleInputChange}
                 />
               </div>
-              <p>Before sending your message, please complete this captcha.</p>
               <ReCAPTCHA
                 sitekey={window.GR_SITEKEY}
                 onChange={this.reCaptchaOnChange}
