@@ -187,8 +187,7 @@
   margin: 0 auto;
   max-width: 450px;
 }
-.corporate-hackathon-card,
-.corporate-sponsorship-card {
+.corporate-card {
   border: 1px solid $color-grey-frame-border;
   background: $color-background-light;
   margin-bottom: 30px;
@@ -286,15 +285,12 @@
       
   .corporate-root {
     .ContactForm-container {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      flex: 0 0 auto;
-      justify-content: space-around;
+      width: 100%;
+      margin: 0 auto;
+      max-width: 34rem;
+      background: $color-background-light;
     }
-    .ContactForm-group {
-      flex-basis: 45%;
-    }
+
     .corporate-top {
       padding-top: 3rem;
     }
