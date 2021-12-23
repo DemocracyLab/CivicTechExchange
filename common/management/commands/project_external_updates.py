@@ -88,19 +88,20 @@ def get_and_save_trello_actions(project, created_since_date):
             print('Unable to retrieve board id for trello url {}'.format(
                 trello_link.link_url))
     if project_actions:
-        push_trello_actions_to_db(project, project_actions)
-        latest_commit_date = datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+        latest_commit_date = push_trello_actions_to_db_and_get_latest(project, project_actions)
         update_if_commit_after_project_updated_time(
             project, latest_commit_date)
 
 
 
-def push_trello_actions_to_db(project, actions):
+def push_trello_actions_to_db_and_get_latest(project, actions):
     from civictechprojects.models import TrelloAction
 
     #before pushing trello actions make sure to delete the table for PII
-    if len(actions) > 0 : 
+    if len(actions) > 0 :
         TrelloAction.objects.filter(action_project=project).delete()
+
+    last_update_time = project.project_date_modified
 
     for action in actions:
         member = action.get("memberCreator", {})
@@ -116,16 +117,19 @@ def push_trello_actions_to_db(project, actions):
 
         id = action.get("id")
 
-        TrelloAction.create(project, 
-                            id, 
-                            member_fullname, 
-                            member_id,
-                            member_avatar_base_url,
-                            board_id, 
-                            action_type, 
-                            action_date,
-                            data)
-
+        action = TrelloAction.create(project,
+                                     id,
+                                     member_fullname,
+                                     member_id,
+                                     member_avatar_base_url,
+                                     board_id,
+                                     action_type,
+                                     action_date,
+                                     data)
+        action_date = action.action_date
+        if action_date > last_update_time:
+            last_update_time = action_date
+    return last_update_time
 
 def get_projects_with_trello_links():
     """
@@ -189,7 +193,8 @@ def update_if_commit_after_project_updated_time(project, latest_commit_date_stri
         project.project_date_modified)
     latest_commit_time = datetime_field_to_datetime(latest_commit_date_string)
     # Need to add timezone info to time from github
-    latest_commit_time = pytz.timezone("UTC").localize(latest_commit_time)
+    if latest_commit_time.tzinfo is None:
+        latest_commit_time = pytz.timezone("UTC").localize(latest_commit_time)
     if project_updated_time < latest_commit_time:
         print('Updating project {id} to latest timestamp: {time}'.format(
             id=project.id, time=latest_commit_date_string))
