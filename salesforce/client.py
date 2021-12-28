@@ -37,6 +37,8 @@ class SalesforceClient:
                 if auth.status_code == requests.codes.ok:
                     prepped_request.headers['Authorization'] = SalesforceClient.bearer_token
                     response = self.__session.send(prepped_request)
+
+            print(f'Salesforce returned {response.status_code}: {response.text}')
             return response
         else:
             return requests.codes.ok

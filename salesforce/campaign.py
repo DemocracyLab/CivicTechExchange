@@ -3,13 +3,12 @@ from .client import SalesforceClient
 import json
 import requests
 import threading
-''' Project model maps to the Salesforce Campaign object '''
+''' Project model maps to the Campaign object in Salesforce '''
 client = SalesforceClient()
 
 
 def run(request):
     response = SalesforceClient().send(request)
-    print(f'{response.status_code}: {response.text}')
 
 
 def save(project: object):
