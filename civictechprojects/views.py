@@ -825,11 +825,12 @@ def contact_project_volunteers(request, project_id):
         project=project.project_name,
         subject=subject)
     email_template = HtmlEmailTemplate(use_signature=False) \
+        .header('You have a new message from {projectname}'.format(projectname=project.project_name)) \
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,
         lastname=user.last_name)) \
-        .paragraph('To reply, email at {email}'.format(email=user.email))
+        .paragraph('To respond, you can reply to this email.')
     for volunteer in volunteers:
         # TODO: See if we can send emails in a batch
         # https://docs.djangoproject.com/en/2.2/topics/email/#topics-sending-multiple-emails
@@ -859,11 +860,12 @@ def contact_project_volunteer(request, application_id):
         project=project.project_name,
         subject=subject)
     email_template = HtmlEmailTemplate(use_signature=False) \
+        .header('You have a new message from {projectname}'.format(projectname=project.project_name)) \
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,
         lastname=user.last_name)) \
-        .paragraph('To reply, email at {email}'.format(email=user.email))
+        .paragraph('To respond, you can reply to this email.')
     send_to_project_volunteer(volunteer_relation, email_subject, email_template)
     return HttpResponse(status=200)
 
@@ -994,14 +996,19 @@ def promote_project_volunteer(request, application_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def reject_project_volunteer(request, application_id):
+    find_projects_page_url = section_url(FrontEndSection.FindProjects)
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['rejection_message']
         email_template = HtmlEmailTemplate()\
-        .paragraph('The project owner of {project_name} has declined your application for the following reason:'.format(project_name=volunteer_relation.project.project_name))\
-        .paragraph('\"{message}\"'.format(message=message))
-        email_subject = 'Your application to join {project_name}'.format(
+        .paragraph('Hi {first_name},'.format(first_name=volunteer_relation.volunteer.first_name))\
+        .paragraph('Thank you for your interest in volunteering with {project_name}.'.format(project_name=volunteer_relation.project.project_name))\
+        .paragraph('Unfortunately, the project owner did not select you as a volunteer for this project.')\
+        .paragraph('Message from the project owner: \"{message}\"'.format(message=message))\
+        .paragraph('We hope you\'ll consider other volunteer opportunities at DemocracyLab.')\
+        .button(url=find_projects_page_url, text='Explore More Projects')
+        email_subject = 'Your volunteer application to join {project_name}'.format(
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject=email_subject,
@@ -1128,11 +1135,13 @@ def contact_group_owner(request, group_id):
         lastname=user.last_name,
         group=group.group_name)
     email_template = HtmlEmailTemplate(use_signature=False) \
-        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
-        message=message,
+        .header('Your group has a new message.') \
+        .paragraph('{firstname} {lastname} has sent the following message to {group}:'.format(
         firstname=user.first_name,
-        lastname=user.last_name)) \
-        .paragraph('To contact this person, email them at {email}'.format(email=user.email))
+        lastname=user.last_name,
+        group=group.group_name)) \
+        .paragraph('\"\"{message}\"\"'.format(message=message)) \
+        .paragraph('To respond, you can reply to this email.')
     send_to_group_owners(group=group, sender=user, subject=email_subject, template=email_template)
     return HttpResponse(status=200)
 
