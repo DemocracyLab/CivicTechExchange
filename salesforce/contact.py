@@ -12,7 +12,6 @@ def run(request):
 
 
 def save(contributor: object):
-    tech_tags = list(contributor.user_technologies.all())
     data = {
         "ownerid": client.owner_id,
         "firstname": contributor.first_name,
@@ -23,8 +22,11 @@ def save(contributor: object):
         "mailingcountry": contributor.country,
         "npo02__membershipjoindate__c": contributor.date_joined.strftime('%Y-%m-%d'),
         "description": contributor.about_me,
-        "technologies__c": ",".join([Tag.get_by_name(tag.name).display_name for tag in tech_tags])
     }
+    tech_tags = list(contributor.user_technologies.all().values())
+    if tech_tags:
+        data['technologies__c'] = ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in tech_tags])
+
     req = requests.Request(
         method="PATCH",
         url=f'{client.contact_endpoint}/platform_id__c/{contributor.id}',
