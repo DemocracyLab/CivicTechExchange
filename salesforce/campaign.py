@@ -21,14 +21,15 @@ def save(project: object):
         "recordtypeid": "01246000000uOeRAAU",
         "name": project.project_name,
         "isactive": project.is_searchable,
-        "startdate": project.project_date_created.strftime('%Y-%m-%d'),
         "project_url__c": project.project_url,
         "description_action__c": project.project_description_actions,
         "description_solution__c": project.project_description_solution,
         "short_description__c": project.project_short_description,
         "description": project.project_description
     }
-    # TODO: Handle null startdate
+
+    if project.project_date_created:
+        data['startdate'] = project.project_date_created.strftime('%Y-%m-%d')
 
     issue_area_tags = list(project.project_issue_area.all().values())
     if issue_area_tags:
