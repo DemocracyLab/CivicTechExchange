@@ -1,3 +1,4 @@
+from common.helpers.collections import omit_falsy
 from common.models import Tag
 from .client import SalesforceClient
 import json
@@ -23,7 +24,7 @@ def save(contributor: object):
         "npo02__membershipjoindate__c": contributor.date_joined.strftime('%Y-%m-%d'),
         "description": contributor.about_me,
     }
-    tech_tags = list(contributor.user_technologies.all().values())
+    tech_tags = omit_falsy(list(contributor.user_technologies.all().values()))
     if tech_tags:
         data['technologies__c'] = ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in tech_tags])
 

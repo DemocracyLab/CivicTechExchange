@@ -1,3 +1,4 @@
+from common.helpers.collections import omit_falsy
 from common.models import Tag
 from .client import SalesforceClient
 import json
@@ -31,16 +32,16 @@ def save(project: object):
     if project.project_date_created:
         data['startdate'] = project.project_date_created.strftime('%Y-%m-%d')
 
-    issue_area_tags = list(project.project_issue_area.all().values())
+    issue_area_tags = omit_falsy(list(project.project_issue_area.all().values()))
     if issue_area_tags:
         data['issue_area__c'] = ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in issue_area_tags])
-    stage_tags = list(project.project_stage.all().values())
+    stage_tags = omit_falsy(list(project.project_stage.all().values()))
     if stage_tags:
         data['stage__c'] = ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in stage_tags])
-    org_type_tags = list(project.project_organization_type.all().values())
+    org_type_tags = omit_falsy(list(project.project_organization_type.all().values()))
     if org_type_tags:
         data['type'] = ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in org_type_tags])
-    tech_tags = list(project.project_technologies.all().values())
+    tech_tags = omit_falsy(list(project.project_technologies.all().values()))
     if tech_tags:
         data['technologies__c'] = ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in tech_tags])
     req = requests.Request(

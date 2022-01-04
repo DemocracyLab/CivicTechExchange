@@ -39,3 +39,11 @@ def distinct(list_a: list, list_b: list, key_func):
     lists_dict.update({key_func(item): item for item in list_b})
 
     return lists_dict.values()
+
+# TODO: Unit test
+def omit_falsy(collection: list):
+    """
+    Removes falsy entries from a list, returning None if no entries remaining
+    """
+    new_list = list(filter(lambda entry: entry, collection))
+    return new_list or None
