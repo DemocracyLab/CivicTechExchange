@@ -32,18 +32,18 @@ def save(project: object):
     if project.project_date_created:
         data['startdate'] = project.project_date_created.strftime('%Y-%m-%d')
 
-    issue_area_tags = omit_falsy(list(project.project_issue_area.all().values()))
+    issue_area_tags = Tag.tags_field_descriptions(project.project_issue_area)
     if issue_area_tags:
-        data['issue_area__c'] = ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in issue_area_tags])
-    stage_tags = omit_falsy(list(project.project_stage.all().values()))
+        data['issue_area__c'] = issue_area_tags
+    stage_tags = Tag.tags_field_descriptions(project.project_stage)
     if stage_tags:
-        data['stage__c'] = ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in stage_tags])
-    org_type_tags = omit_falsy(list(project.project_organization_type.all().values()))
+        data['stage__c'] = stage_tags
+    org_type_tags = Tag.tags_field_descriptions(project.project_organization_type)
     if org_type_tags:
-        data['type'] = ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in org_type_tags])
-    tech_tags = omit_falsy(list(project.project_technologies.all().values()))
+        data['type'] = org_type_tags
+    tech_tags = Tag.tags_field_descriptions(project.project_technologies)
     if tech_tags:
-        data['technologies__c'] = ",".join([Tag.get_by_name(tag.get('name')).display_name for tag in tech_tags])
+        data['technologies__c'] = tech_tags
     req = requests.Request(
         method="PATCH",
         url=f'{client.campaign_endpoint}/platform_id__c/{project.id}',
