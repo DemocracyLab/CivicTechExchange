@@ -12,7 +12,7 @@ class Command(BaseCommand):
             try:
                 salesforce_contact.save(contributor)
             except Exception:
-                print('Error merging user in Salesforce:', contributor.username)
+                print(f'Error merging user in Salesforce: ({contributor.id}) {contributor.username}')
                 print(traceback.format_exc())
 
         projects = Project.objects.filter(is_searchable__exact=True)
@@ -20,6 +20,6 @@ class Command(BaseCommand):
             try:
                 salesforce_campaign.save(project)
             except Exception:
-                print('Error merging project in Salesforce:', project.project_name)
+                print(f'Error merging project in Salesforce: ({project.id}) {project.project_name}')
                 print(traceback.format_exc())
 
