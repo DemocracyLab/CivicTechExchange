@@ -40,7 +40,7 @@ def distinct(list_a: list, list_b: list, key_func):
 
     return lists_dict.values()
 
-# TODO: Unit test
+
 def omit_falsy(collection: list):
     """
     Removes falsy entries from a list, returning None if no entries remaining
