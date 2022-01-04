@@ -22,10 +22,8 @@ def save(contributor: object):
         "mailingcountry": contributor.country,
         "npo02__membershipjoindate__c": contributor.date_joined.strftime('%Y-%m-%d'),
         "description": contributor.about_me,
+        'technologies__c': Tag.tags_field_descriptions(contributor.user_technologies)
     }
-    tech_tags = Tag.tags_field_descriptions(contributor.user_technologies)
-    if tech_tags:
-        data['technologies__c'] = tech_tags
 
     req = requests.Request(
         method="PATCH",

@@ -26,24 +26,16 @@ def save(project: object):
         "description_action__c": project.project_description_actions,
         "description_solution__c": project.project_description_solution,
         "short_description__c": project.project_short_description,
-        "description": project.project_description
+        "description": project.project_description,
+        "issue_area__c": Tag.tags_field_descriptions(project.project_issue_area),
+        "stage__c": Tag.tags_field_descriptions(project.project_stage),
+        "type": Tag.tags_field_descriptions(project.project_organization_type),
+        "technologies__c": Tag.tags_field_descriptions(project.project_technologies)
     }
 
     if project.project_date_created:
         data['startdate'] = project.project_date_created.strftime('%Y-%m-%d')
 
-    issue_area_tags = Tag.tags_field_descriptions(project.project_issue_area)
-    if issue_area_tags:
-        data['issue_area__c'] = issue_area_tags
-    stage_tags = Tag.tags_field_descriptions(project.project_stage)
-    if stage_tags:
-        data['stage__c'] = stage_tags
-    org_type_tags = Tag.tags_field_descriptions(project.project_organization_type)
-    if org_type_tags:
-        data['type'] = org_type_tags
-    tech_tags = Tag.tags_field_descriptions(project.project_technologies)
-    if tech_tags:
-        data['technologies__c'] = tech_tags
     req = requests.Request(
         method="PATCH",
         url=f'{client.campaign_endpoint}/platform_id__c/{project.id}',
