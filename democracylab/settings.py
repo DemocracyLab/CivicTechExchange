@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'oauth2.providers.linkedin',
     'oauth2.providers.facebook',
     'django_rq',
+    'salesforce'
 ]
 
 SITE_ID = 1
@@ -447,6 +448,16 @@ QIQO_API_SECRET = os.environ.get('QIQO_API_SECRET', 'SECRET')
 QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
 QIQO_SIGNUP_TIMEOUT_SECONDS = int(os.environ.get('QIQO_SIGNUP_TIMEOUT_SECONDS', 5))
 QIQO_IMPERSONATION_ENABLED = os.environ.get('QIQO_IMPERSONATION_ENABLED', False) == 'True'
+
+# Discovered breakage in v52.0, so beware moving away from SALESFORCE_API_VERSION v50.0
+SALESFORCE_API_VERSION = os.environ.get('SALESFORCE_API_VERSION', 50.0)
+SALESFORCE_ENDPOINT = os.environ.get('SALESFORCE_ENDPOINT', '')
+SALESFORCE_LOGIN_URL = os.environ.get('SALESFORCE_LOGIN_URL', '')
+SALESFORCE_TOKEN_SUFFIX = os.environ.get('SALESFORCE_TOKEN_SUFFIX', '')
+SALESFORCE_REDIRECT_URI = os.environ.get('SALESFORCE_REDIRECT_URI', '')
+SALESFORCE_JWT = os.environ.get('SALESFORCE_JWT', '')
+# Mark's Salesforce *USER* id (not the Contact id)
+SALESFORCE_OWNER_ID = os.environ.get('SALESFORCE_OWNER_ID', '')
 
 BLOG_URL = os.environ.get('BLOG_URL', 'https://blog.democracylab.org')
 
