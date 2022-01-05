@@ -61,11 +61,11 @@
   }
   .nav-tabs {
     background: $color-background-light;
-    border-bottom: 5px solid $color-orange;
+    border-bottom: 8px solid $color-orange;
   }
   .nav-tabs a {
     text-align: center;
-    flex-basis: calc(50% - 20px);
+    flex-basis: calc(50% - 24px); // 16px left, right, center spacing, 48/3. Probably could revise this.
     color: $color-text-dark;
     font-size: 21px; // match .headline2 size (but not weight)
   }
@@ -91,7 +91,7 @@
     font-weight: normal;
   }
   .corporate-top {
-    padding-top: 2rem;
+    padding-top: 24px;
   }
 }
 .corporate-hr-line {
@@ -117,10 +117,6 @@
 .corporate-contact,
 .corporate-bottom-image {
   background-color: $color-background-light;
-}
-
-.corporate-top-flex {
-  margin-bottom: 3rem;
 }
 .corporate-top-overlay,
 .corporate-bottom-overlay {
@@ -156,7 +152,7 @@
     color: #fff;
     max-width: 500px;
     margin-top: auto;
-    padding: 0 8px 8px 15px;
+    padding: 0 0 16px 16px;
   }
 }
 .corporate-bottom-overlay {
@@ -167,21 +163,6 @@
   );
 }
 
-//padding because we want background colors to have spacing too
-.corporate-section,
-.corporate-hackathon-whyhost h1,
-.corporate-sponsorship-why h1 {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
-.corporate-sponsorship-saying h1,
-.corporate-hackathon-saying h1,
-.corporate-sponsorship-how h1 {
-  padding-bottom: 3rem;
-}
-.corporate-top-flex-button {
-  margin-top: 2rem;
-}
 .corporate-cta-button {
   display: block;
   margin: 0 auto;
@@ -210,7 +191,7 @@
   text-justify: center;
   h4 {
     @extend .h1;
-    color: $color-orange;
+    color: $color-orange-text;
   }
   h4,
   p {
@@ -255,6 +236,19 @@
   }
 }
 
+//section spacing
+.corporate-top-flex-section {
+  ul {
+    margin: 0;
+  }
+  li {
+    margin: 0 0 40px 0;
+  }
+}
+.corporate-hackathon-whyhost, .corporate-sponsorship-why {
+  padding-top: 24px;
+}
+
 @include media-breakpoint-up(lg) {
   .corporate-cta-button {
     display: initial;
@@ -282,17 +276,13 @@
       padding: 15px;
     }
   }
-      
+
   .corporate-root {
     .ContactForm-container {
       width: 100%;
       margin: 0 auto;
       max-width: 34rem;
       background: $color-background-light;
-    }
-
-    .corporate-top {
-      padding-top: 3rem;
     }
   }
   .corporate-top-flex {
@@ -333,7 +323,6 @@
     }
   }
   .corporate-how-after {
-    padding: 1rem 0;
     text-align: center;
   }
   .corporate-sponsorship-how-flex {
@@ -354,6 +343,5 @@
   }
   .corporate-sponsorship-how-button {
     text-align: center;
-    margin-top: 3rem;
   }
 }

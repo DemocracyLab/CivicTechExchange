@@ -138,7 +138,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-hackathon-whyhost col-12">
           <h1>Benefits of hosting an in-house hackathon.</h1>
           <div className="row">
-              <div className="col-12 corporate-card">
+            <div className="col-12">
+              <div className="corporate-card">
                 <h2>Engage your team and give back to your community</h2>
                 <h3>
                   Strengthen employee enthusiasm, participate in meaningful
@@ -148,8 +149,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                   73% of our corporate hackathon participants reported an
                   increase in enthusiasm for working at their company.
                 </p>
-            </div>
-              <div className="col-12 corporate-card">
+              </div>
+              <div className="corporate-card">
                 <h2>Drive performance</h2>
                 <h3>
                   Spur innovation and turn your culture of purpose into
@@ -159,9 +160,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                   91% of executives and employees correlate a sense of purpose
                   with a history of strong financial performance. (Deloitte)
                 </p>
-          
-            </div>
-              <div className="col-12 corporate-card">
+              </div>
+              <div className="corporate-card">
                 <h2>Enjoy a significant return on investment</h2>
                 <h3>
                   Increased employee enthusiasm and engagement leads to lower
@@ -171,6 +171,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                   Highly engaged teams realize 59% less turnover and 21% greater
                   profitability. (Gallup)
                 </p>
+              </div>
             </div>
             <div className="col-12">
               <p>
@@ -264,41 +265,43 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-sponsorship-why col-12">
           <h1>Why become a sponsor?</h1>
           <div className="row">
-              <div className="col-12 corporate-card">
-                <h2>Make an impact.</h2>
-                <h3>
-                  Your support advances hundreds of tech-for-good projects,
-                  helps us grow, and improves our public events.
-                </h3>
-                <p>
-                  Every $1,000 contributed enables 500 hours of skilled
-                  volunteer work, helping more projects make more of an impact.
-                </p>
+            <div className="col-12">
+            <div className="corporate-card">
+              <h2>Make an impact.</h2>
+              <h3>
+                Your support advances hundreds of tech-for-good projects, helps
+                us grow, and improves our public events.
+              </h3>
+              <p>
+                Every $1,000 contributed enables 500 hours of skilled volunteer
+                work, helping more projects make more of an impact.
+              </p>
             </div>
-              <div className="col-12 corporate-card">
-                <h2>Differentiate your company.</h2>
-                <h3>
-                  Supporting DemocracyLab shows your company’s commitment to
-                  social responsibility.
-                </h3>
-                <p>
-                  79% of employees prefer to work at a socially responsible
-                  company. (Deloitte)
-                </p>
+            <div className="corporate-card">
+              <h2>Differentiate your company.</h2>
+              <h3>
+                Supporting DemocracyLab shows your company’s commitment to
+                social responsibility.
+              </h3>
+              <p>
+                79% of employees prefer to work at a socially responsible
+                company. (Deloitte)
+              </p>
             </div>
-              <div className="col-12 corporate-card">
-                <h2>Attract purpose-minded talent.</h2>
+            <div className="corporate-card">
+              <h2>Attract purpose-minded talent.</h2>
 
-                <h3>
-                  Connect with skilled tech volunteers who strive to make a
-                  difference.
-                </h3>
+              <h3>
+                Connect with skilled tech volunteers who strive to make a
+                difference.
+              </h3>
 
-                <p>
-                  Position your company as an employer of choice for our diverse
-                  community of talented volunteers.
-                </p>
-              </div>
+              <p>
+                Position your company as an employer of choice for our diverse
+                community of talented volunteers.
+              </p>
+            </div>
+            </div>
             <div className="col-12">
               <p>
                 Learn more:{" "}
