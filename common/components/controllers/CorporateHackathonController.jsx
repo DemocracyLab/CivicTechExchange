@@ -173,8 +173,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 </p>
               </div>
             </div>
-            <div className="col-12">
-              <p>
+            <div className="col-12 corporate-learn-more">
+              <h4>
                 Learn more:{" "}
                 <a
                   href={cdn.document(
@@ -184,8 +184,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                   Corporate Tech-for-Good Hackathons PDF{" "}
                   <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
                 </a>
-              </p>
-              <Button variant="primary" href="#">
+              </h4>
+              <Button variant="primary" href="#contact-hackathon" className="corporate-block-button">
                 Get Started
               </Button>
             </div>
@@ -302,8 +302,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </p>
             </div>
             </div>
-            <div className="col-12">
-              <p>
+            <div className="col-12 corporate-learn-more">
+              <h4>
                 Learn more:{" "}
                 <a
                   href={cdn.document(
@@ -313,7 +313,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                   Sponsor Prospectus PDF{" "}
                   <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
                 </a>
-              </p>
+              </h4>
               <Button variant="primary" href="#">
                 Get Started
               </Button>

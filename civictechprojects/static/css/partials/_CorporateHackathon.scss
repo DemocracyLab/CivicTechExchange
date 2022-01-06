@@ -65,7 +65,9 @@
   }
   .nav-tabs a {
     text-align: center;
-    flex-basis: calc(50% - 24px); // 16px left, right, center spacing, 48/3. Probably could revise this.
+    flex-basis: calc(
+      50% - 24px
+    ); // 16px left, right, center spacing, 48/3. Probably could revise this.
     color: $color-text-dark;
     font-size: 21px; // match .headline2 size (but not weight)
   }
@@ -171,8 +173,8 @@
 .corporate-card {
   border: 1px solid $color-grey-frame-border;
   background: $color-background-light;
-  margin-bottom: 30px;
-  padding: 15px;
+  margin-bottom: 16px;
+  padding: 16px;
 }
 
 .corporate-contact {
@@ -203,7 +205,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  margin: 2rem 0;
 }
 .corporate-how-flex-block {
   display: flex;
@@ -235,6 +236,9 @@
     margin-bottom: 1rem;
   }
 }
+.corporate-block-button {
+  display: block;
+}
 
 //section spacing
 .corporate-top-flex-section {
@@ -245,11 +249,28 @@
     margin: 0 0 40px 0;
   }
 }
-.corporate-hackathon-whyhost, .corporate-sponsorship-why {
+.corporate-hackathon-whyhost,
+.corporate-sponsorship-why,
+.corporate-hackathon-howitworks,
+.corporate-contact {
   padding-top: 24px;
+}
+.corporate-hackathon-howitworks,
+.corporate-contact {
+  padding-bottom: 40px;
+}
+.corporate-learn-more {
+  margin-top: 8px; // 8 + 16 from corporate-card above it = 24
+  margin-bottom: 32px;
+  h4 {
+    margin-bottom: 24px;
+  }
 }
 
 @include media-breakpoint-up(lg) {
+  .corporate-block-button {
+    display: inline-block;
+  }
   .corporate-cta-button {
     display: initial;
     padding-left: 30px;
@@ -308,7 +329,6 @@
   .corporate-how-flex-container {
     flex-direction: row;
     align-items: flex-start;
-    margin: 3rem 0;
   }
   .corporate-how-flex-block {
     flex-direction: column;
