@@ -111,13 +111,7 @@
     padding-left: 8px;
   }
 }
-.corporate-top,
-.corporate-hackathon-saying,
-.corporate-hackathon-saying .carousel-testimonial-root,
-.corporate-sponsorship-saying,
-.corporate-sponsorship-saying .carousel-testimonial-root,
-.corporate-contact,
-.corporate-bottom-image {
+.corporate-bg-light {
   background-color: $color-background-light;
 }
 .corporate-top-overlay,
@@ -179,7 +173,14 @@
 
 .corporate-contact {
   h2 {
-    padding: 30px 0;
+    margin-bottom: 32px;
+  }
+  .form-group {
+    margin-bottom: 24px;
+  }
+  .ContactForm-submit-btn {
+    display: block;
+    margin: 24px 0 40px 0;
   }
 }
 .corporate-sponsorship-stat-container {
@@ -252,11 +253,14 @@
 .corporate-hackathon-whyhost,
 .corporate-sponsorship-why,
 .corporate-hackathon-howitworks,
-.corporate-contact {
+.corporate-contact,
+.corporate-hackathon-saying,
+.carousel-testimonial-root {
   padding-top: 24px;
 }
 .corporate-hackathon-howitworks,
-.corporate-contact {
+.corporate-contact,
+.corporate-hackathon-saying {
   padding-bottom: 40px;
 }
 .corporate-learn-more {

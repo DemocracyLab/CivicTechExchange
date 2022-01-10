@@ -76,7 +76,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </div>
         </div>
         <div className="row">
-          <div className="corporate-top col-12 corporate-section">
+          <div className="corporate-top col-12 corporate-bg-light">
             <div className="corporate-top-flex">
               <div className="corporate-top-flex-section">
                 <h1>Partner with DemocracyLab to make a difference.</h1>
@@ -193,7 +193,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
 
           {/* this button jumps down to the contact form FOR the hackathon section, see issue #820 */}
         </div>
-        <div className="corporate-hackathon-howitworks corporate-section col-12">
+        <div className="corporate-hackathon-howitworks corporate-bg-light col-12">
           <h1>How it works:</h1>
           <h2>
             We do the heavy lifting. Your employees make an impact. Your
@@ -246,14 +246,16 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
 
         {this._renderContactHackathon()}
 
-        <div className="corporate-hackathon-saying corporate-section col-12">
-          <h1>What People Are Saying</h1>
+        <div className="corporate-hackathon-saying corporate-bg-light col-12">
+          <h1>What our partners are saying.</h1>
+          <h2>Feedback from our partners about their custom hackathon events.</h2>
           <div className="carousel-testimonial-root">
             <TestimonialCarousel
               category="partner-highlights"
               interval={600000}
             />
           </div>
+          <h1>Read about previous events in our <a href={window.BLOG_URL}>blog</a>.</h1>
         </div>
       </React.Fragment>
     );
@@ -314,14 +316,13 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                   <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
                 </a>
               </h4>
-              <Button variant="primary" href="#">
+              <Button variant="primary" href="#contact-sponsor">
                 Get Started
               </Button>
-              {/* This button jumps to contact form for Sponsorship tab, see #820 */}
             </div>
           </div>
         </div>
-        <div className="corporate-sponsorship-how col-12 corporate-section">
+        <div className="corporate-sponsorship-how col-12">
           <h1>Our sponsors make a difference.</h1>
 
           <h2>
@@ -380,7 +381,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         </div>
         {this._renderContactSponsor()}
 
-        <div className="corporate-sponsorship-saying corporate-section col-12">
+        <div className="corporate-sponsorship-saying col-12">
           <h1>What our partners are saying.</h1>
           <h2>Feedback from partnering organizations.</h2>
 
@@ -402,12 +403,12 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderContactHackathon(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-section corporate-contact col-12">
+        <div className="corporate-contact col-12">
           <JumpAnchor id="contact-hackathon" />
           <h1>Interested in hosting your own hackathon?</h1>
           <h2>Get in touch to discuss your next tech-for-good event.</h2>
           <ContactForm showInterests={true} />
-          <p>
+          <h4>
             Not ready yet? Learn more:{" "}
             <a
               href={cdn.document(
@@ -417,7 +418,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               Corporate Tech-for-Good Hackathons PDF{" "}
               <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
             </a>
-          </p>
+          </h4>
         </div>
       </React.Fragment>
     );
@@ -426,12 +427,12 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderContactSponsor(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-section corporate-contact col-12">
+        <div className="corporate-contact col-12">
           <JumpAnchor id="contact-sponsor" />
           <h1>Interested in becoming a sponsor?</h1>
           <h2>Get in touch to make an impact in the tech-for-good movement.</h2>
           <ContactForm showInterests={true} />
-          <p>
+          <h4>
             Not ready yet? Learn more:{" "}
             <a
               href={cdn.document(
@@ -441,7 +442,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               Sponsor Prospectus PDF
               <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
             </a>
-          </p>
+          </h4>
         </div>
       </React.Fragment>
     );
