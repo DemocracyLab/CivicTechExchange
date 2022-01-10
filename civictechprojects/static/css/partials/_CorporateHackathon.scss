@@ -263,12 +263,19 @@
 .corporate-hackathon-saying {
   padding-bottom: 40px;
 }
+
 .corporate-learn-more {
   margin-top: 8px; // 8 + 16 from corporate-card above it = 24
   margin-bottom: 32px;
   h4 {
     margin-bottom: 24px;
   }
+}
+.corporate-hackathon-saying p {
+  margin-top: 24px;
+}
+.corporate-sponsorship-how h2 {
+  margin-bottom: 1.5rem;
 }
 
 @include media-breakpoint-up(lg) {

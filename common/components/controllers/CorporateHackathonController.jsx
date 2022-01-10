@@ -185,7 +185,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                   <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
                 </a>
               </h4>
-              <Button variant="primary" href="#contact-hackathon" className="corporate-block-button">
+              <Button
+                variant="primary"
+                href="#contact-hackathon"
+                className="corporate-block-button"
+              >
                 Get Started
               </Button>
             </div>
@@ -248,14 +252,19 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
 
         <div className="corporate-hackathon-saying corporate-bg-light col-12">
           <h1>What our partners are saying.</h1>
-          <h2>Feedback from our partners about their custom hackathon events.</h2>
+          <h2>
+            Feedback from our partners about their custom hackathon events.
+          </h2>
           <div className="carousel-testimonial-root">
             <TestimonialCarousel
               category="partner-highlights"
               interval={600000}
             />
           </div>
-          <h1>Read about previous events in our <a href={window.BLOG_URL}>blog</a>.</h1>
+          <p className="headline2">
+            Read about previous events in our <a href={window.BLOG_URL}>blog</a>
+            .
+          </p>
         </div>
       </React.Fragment>
     );
@@ -268,41 +277,41 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <h1>Why become a sponsor?</h1>
           <div className="row">
             <div className="col-12">
-            <div className="corporate-card">
-              <h2>Make an impact.</h2>
-              <h3>
-                Your support advances hundreds of tech-for-good projects, helps
-                us grow, and improves our public events.
-              </h3>
-              <p>
-                Every $1,000 contributed enables 500 hours of skilled volunteer
-                work, helping more projects make more of an impact.
-              </p>
-            </div>
-            <div className="corporate-card">
-              <h2>Differentiate your company.</h2>
-              <h3>
-                Supporting DemocracyLab shows your company’s commitment to
-                social responsibility.
-              </h3>
-              <p>
-                79% of employees prefer to work at a socially responsible
-                company. (Deloitte)
-              </p>
-            </div>
-            <div className="corporate-card">
-              <h2>Attract purpose-minded talent.</h2>
+              <div className="corporate-card">
+                <h2>Make an impact.</h2>
+                <h3>
+                  Your support advances hundreds of tech-for-good projects,
+                  helps us grow, and improves our public events.
+                </h3>
+                <p>
+                  Every $1,000 contributed enables 500 hours of skilled
+                  volunteer work, helping more projects make more of an impact.
+                </p>
+              </div>
+              <div className="corporate-card">
+                <h2>Differentiate your company.</h2>
+                <h3>
+                  Supporting DemocracyLab shows your company’s commitment to
+                  social responsibility.
+                </h3>
+                <p>
+                  79% of employees prefer to work at a socially responsible
+                  company. (Deloitte)
+                </p>
+              </div>
+              <div className="corporate-card">
+                <h2>Attract purpose-minded talent.</h2>
 
-              <h3>
-                Connect with skilled tech volunteers who strive to make a
-                difference.
-              </h3>
+                <h3>
+                  Connect with skilled tech volunteers who strive to make a
+                  difference.
+                </h3>
 
-              <p>
-                Position your company as an employer of choice for our diverse
-                community of talented volunteers.
-              </p>
-            </div>
+                <p>
+                  Position your company as an employer of choice for our diverse
+                  community of talented volunteers.
+                </p>
+              </div>
             </div>
             <div className="col-12 corporate-learn-more">
               <h4>
@@ -316,7 +325,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                   <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
                 </a>
               </h4>
-              <Button variant="primary" href="#contact-sponsor">
+              <Button
+                variant="primary"
+                href="#contact-sponsor"
+                className="corporate-block-button"
+              >
                 Get Started
               </Button>
             </div>
@@ -391,7 +404,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               interval={600000}
             />
           </div>
-          <p>
+          <p className="headline2">
             Read about other previous events in our{" "}
             <a href={window.BLOG_URL}>blog</a>, or other events that are coming
             up <a href="/events">here</a>.
