@@ -263,7 +263,7 @@
     margin-bottom: 24px;
   }
 }
-.corporate-hackathon-saying p {
+.corporate-hackathon-saying p, .corporate-sponsorship-saying p  {
   margin-top: 24px;
 }
 .corporate-sponsorship-how {
@@ -309,8 +309,12 @@
   .corporate-root {
     .ContactForm-container {
       width: 100%;
-      margin: 0 auto;
+      margin: 0 auto 40px auto;
       max-width: 34rem;
+      background: $color-background-light;
+      padding: 24px 40px 40px 40px;
+    }
+    .carousel-testimonial-root {
       background: $color-background-light;
     }
   }
