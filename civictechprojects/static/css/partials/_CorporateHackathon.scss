@@ -52,7 +52,7 @@
 
 //begin regular CSS for the page
 
-// corporate page (hackathons and sponsorships)
+// Companies page (formerly Corporate Hackathon page, hence the classes)
 .corporate-root {
   // nav and some others in here for specificity
   // nav acts as section headers but is difficult to @extend h2, so fonts set specifically here to match headline2
@@ -99,17 +99,6 @@
 .corporate-hr-line {
   display: none;
   width: 45%;
-}
-.corporate-learn-link {
-  width: 100%;
-  text-align: center;
-  a,
-  i {
-    font-size: 21px; // match headline2 font size
-  }
-  i {
-    padding-left: 8px;
-  }
 }
 .corporate-bg-light {
   background-color: $color-background-light;
@@ -193,7 +182,7 @@
   margin: 0 20px;
   text-justify: center;
   h4 {
-    @extend .h1;
+    @extend .h2;
     color: $color-orange-text;
   }
   h4,
@@ -255,12 +244,15 @@
 .corporate-hackathon-howitworks,
 .corporate-contact,
 .corporate-hackathon-saying,
-.carousel-testimonial-root {
+.carousel-testimonial-root,
+.corporate-sponsorship-how,
+.corporate-sponsorship-saying {
   padding-top: 24px;
 }
 .corporate-hackathon-howitworks,
 .corporate-contact,
-.corporate-hackathon-saying {
+.corporate-hackathon-saying,
+.corporate-sponsorship-saying {
   padding-bottom: 40px;
 }
 
@@ -274,8 +266,19 @@
 .corporate-hackathon-saying p {
   margin-top: 24px;
 }
-.corporate-sponsorship-how h2 {
-  margin-bottom: 1.5rem;
+.corporate-sponsorship-how {
+  ul {
+    padding-inline-start: 16px;
+  }
+  li {
+    margin-bottom: 16px;
+  }
+  h2 {
+    margin-bottom: 1.5rem;
+  }
+  ul.corporate-sponsorship-learn {
+    list-style-type: none;
+  }
 }
 
 @include media-breakpoint-up(lg) {
@@ -296,12 +299,6 @@
   }
   .corporate-hr-line {
     display: block;
-  }
-  .corporate-learn-link {
-    a,
-    i {
-      font-size: 23px; // match headline2 font size
-    }
   }
   .corporate-top-overlay {
     h1 {

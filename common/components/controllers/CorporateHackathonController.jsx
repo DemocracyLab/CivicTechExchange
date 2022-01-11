@@ -136,7 +136,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-hackathon-whyhost col-12">
-          <h1>Benefits of hosting an in-house hackathon.</h1>
+          <h1 className="mb-3">Benefits of hosting an in-house hackathon.</h1>
           <div className="row">
             <div className="col-12">
               <div className="corporate-card">
@@ -274,7 +274,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-sponsorship-why col-12">
-          <h1>Why become a sponsor?</h1>
+          <h1 className="mb-3">Why become a sponsor?</h1>
           <div className="row">
             <div className="col-12">
               <div className="corporate-card">
@@ -335,7 +335,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </div>
           </div>
         </div>
-        <div className="corporate-sponsorship-how col-12">
+        <div className="corporate-sponsorship-how corporate-bg-light col-12">
           <h1>Our sponsors make a difference.</h1>
 
           <h2>
@@ -375,26 +375,29 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
 
             <li>Impactful, positive PR opportunities for your organization</li>
           </ul>
+          <ul className="corporate-sponsorship-learn">
+            <li>
+              {" "}
+              Learn more about our sponsorship levels:{" "}
+              <a
+                href={cdn.document(
+                  "2021+DemocracyLab+Sponsorship+Prospectus.pdf"
+                )}
+              >
+                Sponsor Prospectus PDF
+                <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+              </a>
+            </li>
+          </ul>
 
-          <div className="corporate-sponsorship-how-button corporate-learn-link">
-            Learn more about our sponsorship levels:{" "}
-            <a
-              href={cdn.document(
-                "2021+DemocracyLab+Sponsorship+Prospectus.pdf"
-              )}
-            >
-              Sponsor Prospectus PDF
-              <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
-            </a>
-          </div>
           <div className="corporate-sponsorship-current">
             <h4>Current DemocracyLab sponsors include:</h4>
-            <h1>TODO: Amazon, MS, WA DOC, WGU logos</h1>
+            <p>TODO: SPONSORS HERE</p>
           </div>
         </div>
         {this._renderContactSponsor()}
 
-        <div className="corporate-sponsorship-saying col-12">
+        <div className="corporate-sponsorship-saying corporate-bg-light col-12">
           <h1>What our partners are saying.</h1>
           <h2>Feedback from partnering organizations.</h2>
 
