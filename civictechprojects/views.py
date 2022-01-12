@@ -831,10 +831,17 @@ def contact_project_volunteers(request, project_id):
         firstname=user.first_name,
         lastname=user.last_name)) \
         .paragraph('To respond, you can reply to this email.')
+
+    # Send to project owner if co-owner initiated
+    if not is_creator(user, project):
+        volunteers = list(filter(lambda vr: vr.volunteer.id != user.id, volunteers))
+        send_to_project_owners(project, user, email_subject, email_template, include_co_owners=False)
+
     for volunteer in volunteers:
         # TODO: See if we can send emails in a batch
         # https://docs.djangoproject.com/en/2.2/topics/email/#topics-sending-multiple-emails
-        send_to_project_volunteer(volunteer, email_subject, email_template)
+        send_to_project_volunteer(volunteer, email_subject, email_template, cc_owners=False)
+
     return HttpResponse(status=200)
 
 
