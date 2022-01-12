@@ -213,7 +213,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                   <h2>1. Discover</h2>
                   <p>
                     We find tech-for-good projects that are a good fit for your
-                    team and help you motivate your employees to participate.
+                    team.
                   </p>
                 </div>
               </div>

@@ -158,6 +158,9 @@
   background: $color-background-light;
   margin-bottom: 16px;
   padding: 16px;
+  p {
+    margin-bottom: 0;
+  }
 }
 
 .corporate-contact {
@@ -200,6 +203,7 @@
   display: flex;
   flex-direction: row;
   margin: 0 0 15px 0;
+  width: 100%;
 }
 .corporate-how-image-container {
   margin: auto 0;
@@ -232,11 +236,12 @@
 
 //section spacing
 .corporate-top-flex-section {
+  margin-bottom: 16px;
   ul {
     margin: 0;
   }
   li {
-    margin: 0 0 40px 0;
+    margin: 0 0 24px 0;
   }
 }
 .corporate-hackathon-whyhost,
@@ -263,7 +268,8 @@
     margin-bottom: 24px;
   }
 }
-.corporate-hackathon-saying p, .corporate-sponsorship-saying p  {
+.corporate-hackathon-saying p,
+.corporate-sponsorship-saying p {
   margin-top: 24px;
 }
 .corporate-sponsorship-how {
@@ -283,7 +289,10 @@
 
 @include media-breakpoint-up(lg) {
   .corporate-block-button {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    max-width: 180px;
+    margin: 0 auto;
   }
   .corporate-cta-button {
     display: initial;
@@ -322,6 +331,9 @@
     display: flex;
     flex: row nowrap;
   }
+  .corporate-top-overlay h1 {
+    padding-bottom: 40px;
+  }
   .corporate-top-flex-button {
     flex-shrink: 0;
     padding-left: 20px;
@@ -341,11 +353,13 @@
   .corporate-how-flex-container {
     flex-direction: row;
     align-items: flex-start;
+    margin-bottom: 64px;
   }
   .corporate-how-flex-block {
     flex-direction: column;
     margin: 0 15px;
     text-align: center;
+    flex-basis: 33%;
   }
   .corporate-how-text {
     margin: 0;
@@ -375,5 +389,28 @@
   }
   .corporate-sponsorship-how-button {
     text-align: center;
+  }
+  .corporate-hackathon-whyhost,
+  .corporate-sponsorship-why,
+  .corporate-hackathon-howitworks,
+  .corporate-contact,
+  .corporate-hackathon-saying,
+  .carousel-testimonial-root,
+  .corporate-sponsorship-how,
+  .corporate-sponsorship-saying {
+    padding-top: 40px;
+  }
+  .corporate-hackathon-howitworks,
+  .corporate-contact,
+  .corporate-hackathon-saying,
+  .corporate-sponsorship-saying {
+    padding-bottom: 64px;
+  }
+  .corporate-hackathon-whyhost,
+  .corporate-sponsorship-why {
+    padding-bottom: 0;
+  }
+  .corporate-hackathon-saying p, .corporate-sponsorship-saying p {
+    margin-top: 40px;
   }
 }
