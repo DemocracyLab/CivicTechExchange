@@ -19,7 +19,10 @@ $color-grey-disabled: #cecece; // any item in a disabled state
 $color-disabled-border: #a8a8a8; // for e.g. a disabled state button border
 $color-grey-frame-border: #6b6e70; // from design guide
 $color-grey-unselected: #585858; // unselected item color
-$color-cta: #b1d3fb; // deprecated -- TODO: remove when companies page is updated, remove bootstrapoverride variant cta also
+
+// temporary holding zone for some DS colors
+$color-neutral-50: #bdbdbd;
+$color-border-weak: $color-neutral-50; // "Border color for small UI components"
 
 // ## link colors (design system "Secondary Colors - Blue Color Scheme - used for text links across dlab, implemented October 6, 2021)
 // note that these are also in _bootstrapoverride, overriding $link-color and $link-hover-color 
