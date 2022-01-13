@@ -158,7 +158,15 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 </h3>
                 <p>
                   91% of executives and employees correlate a sense of purpose
-                  with a history of strong financial performance. (Deloitte)
+                  with a history of strong financial performance. (
+                  <a
+                    href="https://www2.deloitte.com/us/en/pages/about-deloitte/articles/culture-of-purpose.html"
+                    rel="noopener noreferrer nofollow"
+                    target="_blank"
+                  >
+                    Deloitte
+                  </a>
+                  )
                 </p>
               </div>
               <div className="corporate-card">
@@ -169,7 +177,15 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 </h3>
                 <p>
                   Highly engaged teams realize 59% less turnover and 21% greater
-                  profitability. (Gallup)
+                  profitability. (
+                  <a
+                    href="https://www.gallup.com/workplace/236366/right-culture-not-employee-satisfaction.aspx"
+                    rel="noopener noreferrer nofollow"
+                    target="_blank"
+                  >
+                    Gallup
+                  </a>
+                  )
                 </p>
               </div>
             </div>
