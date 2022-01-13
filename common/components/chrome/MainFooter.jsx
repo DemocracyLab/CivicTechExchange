@@ -15,6 +15,7 @@ const sectionsToShowFooter: $ReadOnlyArray<string> = [
   Section.AboutProject,
   Section.AboutUs,
   Section.Home,
+  Section.Companies
 ];
 
 type Props = {|
