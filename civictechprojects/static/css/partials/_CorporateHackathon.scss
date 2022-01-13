@@ -285,6 +285,9 @@
   ul.corporate-sponsorship-learn {
     list-style-type: none;
   }
+  .corporate-sponsorship-learn i {
+    margin-left: 8px;
+  }
 }
 
 @include media-breakpoint-up(lg) {
@@ -410,7 +413,8 @@
   .corporate-sponsorship-why {
     padding-bottom: 0;
   }
-  .corporate-hackathon-saying p, .corporate-sponsorship-saying p {
+  .corporate-hackathon-saying p,
+  .corporate-sponsorship-saying p {
     margin-top: 40px;
   }
 }
