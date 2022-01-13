@@ -423,7 +423,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <JumpAnchor id="contact-hackathon" />
           <h1>Interested in hosting your own hackathon?</h1>
           <h2>Get in touch to discuss your next tech-for-good event.</h2>
-          <ContactForm showInterests={true} />
+          <ContactForm interest_hackathon={true} />
           <h4>
             Not ready yet? Learn more:{" "}
             <a
@@ -447,7 +447,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <JumpAnchor id="contact-sponsor" />
           <h1>Interested in becoming a sponsor?</h1>
           <h2>Get in touch to make an impact in the tech-for-good movement.</h2>
-          <ContactForm showInterests={true} />
+          <ContactForm interest_sponsor={true} />
           <h4>
             Not ready yet? Learn more:{" "}
             <a
