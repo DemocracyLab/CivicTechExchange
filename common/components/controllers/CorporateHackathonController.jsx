@@ -13,7 +13,7 @@ import TestimonialCarousel from "../../components/common/carousel/TestimonialCar
 import ContactForm from "../../components/forms/ContactForm.jsx";
 import JumpAnchor from "../common/JumpAnchor.jsx";
 import _ from "lodash";
-import IconCircle1 from "../svg/corporatehackathon/corp1circle.svg";
+import IconCircle1 from "../svg/corporatehackathon/magnifying.svg";
 import IconCircle2 from "../svg/corporatehackathon/corp2circle.svg";
 import IconCircle3 from "../svg/corporatehackathon/corp3circle.svg";
 import type { Dictionary } from "../types/Generics.jsx";
