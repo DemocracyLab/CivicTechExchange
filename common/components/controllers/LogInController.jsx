@@ -78,7 +78,7 @@ class LogInController extends React.Component<Props, State> {
               placeholder="Email"
               onChange={e => this.setState({ username: e.target.value })}
             />
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            
             <Form.Control.Feedback type="invalid">
               Please enter your email address.
             </Form.Control.Feedback>
@@ -92,7 +92,7 @@ class LogInController extends React.Component<Props, State> {
               placeholder="Password"
               onChange={e => this.setState({ password: e.target.value })}
             />
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            
             <Form.Control.Feedback type="invalid">
               Please enter your password.
             </Form.Control.Feedback>
