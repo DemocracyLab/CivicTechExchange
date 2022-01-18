@@ -1,13 +1,12 @@
 // @flow
 
-import React, { forwardRef } from "react";
+import React from "react";
 import type { Dictionary } from "../../types/Generics.jsx";
 
 type Props = {|
   show: boolean,
-  direction: string,
-  sourceRef: forwardRef,
-  frameRef: (props, ref) => forwardRef,
+  source: React$Node,
+  frame: React$Node,
   onHide: () => void,
 |};
 
@@ -19,6 +18,7 @@ type State = {|
 class PopOut extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
+    this.sourceRef = React.createRef();
     this.frameRef = React.createRef();
     this.state = this.generateFrameLocation();
   }
@@ -29,8 +29,8 @@ class PopOut extends React.PureComponent<Props, State> {
 
   generateFrameLocation(props: Props): State {
     let state: State = {};
-    if (props && props.sourceRef && props.sourceRef.current) {
-      const sourceRect: DOMRect = props.sourceRef.getBoundingClientRect();
+    if (props && props.source && this.sourceRef.getBoundingClientRect) {
+      const sourceRect: DOMRect = this.sourceRef.getBoundingClientRect();
       state = {
         popoverLeft: sourceRect.left,
         popoverTop: sourceRect.bottom,
@@ -44,10 +44,6 @@ class PopOut extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
-    const frameElement: React$Node = this.props.frameRef(
-      this.props,
-      this.frameRef
-    );
     const style: Dictionary<string> = {
       top: this.state.popoverTop,
       left: this.state.popoverLeft,
@@ -57,13 +53,14 @@ class PopOut extends React.PureComponent<Props, State> {
     }
     return (
       <React.Fragment>
+        <div ref={this.sourceRef}>{this.props.source}</div>
         <div
           className="popout-clickout"
           style={style}
           onClick={this.onClickOut.bind(this)}
         />
-        <div className="popout-frame" style={style}>
-          {frameElement}
+        <div className="popout-frame" style={style} ref={this.frameRef}>
+          {this.props.frame}
         </div>
       </React.Fragment>
     );

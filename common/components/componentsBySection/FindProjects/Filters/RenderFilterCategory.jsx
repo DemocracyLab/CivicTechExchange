@@ -1,6 +1,6 @@
 // @flow
 
-import React, { forwardRef } from "react";
+import React from "react";
 import { Container } from "flux/utils";
 import _ from "lodash";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../../utils/glyphs.js";
@@ -26,7 +26,6 @@ type State = {|
 class RenderFilterCategory<T> extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.targetRef = React.createRef();
     this.state = { isOpen: false };
   }
 
@@ -56,9 +55,9 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
     this.setState({ openSubCategory: openSubCategory });
   }
 
-  _renderDesktopSubcategories(props: Props, ref: forwardRef): React$Node {
+  _renderDesktopSubcategories(): React$Node {
     return (
-      <div className="RenderFilterPopout filter-desktop" ref={ref}>
+      <div className="RenderFilterPopout filter-desktop">
         <div className="SubCategoryFrame">
           {this.state.tags.map((subcategorySet: [string, TagDefinition]) => {
             const subcategory: string = subcategorySet[0];
@@ -82,13 +81,13 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
             );
           })}
         </div>
-        {this.state.openSubCategory && this._renderFilters(props, ref)}
+        {this.state.openSubCategory && this._renderFilters()}
       </div>
     );
   }
-  _renderMobileSubcategories(props: Props, ref: forwardRef): React$Node {
+  _renderMobileSubcategories(): React$Node {
     return (
-      <div className="RenderFilterPopout filter-mobile" ref={ref}>
+      <div className="RenderFilterPopout filter-mobile">
         <div className="SubCategoryFrame">
           {this.state.tags.map((subcategorySet: [string, TagDefinition]) => {
             const subcategory: string = subcategorySet[0];
@@ -106,7 +105,7 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
                   <h4>{subcategory}</h4>
                 </Dropdown.Item>
                 {this.state.openSubCategory === subcategory &&
-                  this._renderFilters(props, ref)}
+                  this._renderFilters()}
               </React.Fragment>
             );
           })}
@@ -114,7 +113,7 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
       </div>
     );
   }
-  _renderFilters(props: Props, ref: forwardRef): React$Node {
+  _renderFilters(): React$Node {
     let tags: $ReadOnlyArray<TagDefinition> = this.state.tags;
     if (this.state.openSubCategory && !_.isEmpty(tags)) {
       const subcategoryTags: [
@@ -126,9 +125,8 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
       );
       tags = subcategoryTags[0][1];
     }
-    const refAttribute = ref ? { ref: ref } : {};
     return (
-      <div className="RenderFilterPopout" {...refAttribute}>
+      <div className="RenderFilterPopout">
         <div className="FilterSelectFrame">
           {tags.map(tag => (
             <FilterTagCheckbox tag={tag} />
@@ -139,38 +137,30 @@ class RenderFilterCategory<T> extends React.Component<Props, State> {
   }
 
   _renderDesktop(): React$Node {
-    const frameContentFunc: forwardRef = (props, ref) => {
-      return this.props.hasSubcategories
-        ? this._renderDesktopSubcategories(props, ref)
-        : this._renderFilters(props, ref);
-    };
+    const frameContent: React$Node = this.props.hasSubcategories
+      ? this._renderDesktopSubcategories()
+      : this._renderFilters();
 
-    const sourceRef: forwardRef = React.createRef();
     const className: string = this.state.isOpen
       ? "category-open open"
       : "category-closed";
 
+    const toggleHeader: React$Node = (
+      <div className={className} onClick={this.toggleCategory.bind(this)}>
+        {this.props.displayName}{" "}
+        <span className="RenderFilterCategory-activecount"></span>
+        <span className="RenderFilterCategory-arrow">
+          <i className={GlyphStyles.ChevronDown}></i>
+        </span>
+      </div>
+    );
+
     return (
-      <div
-        className="btn btn-outline-secondary"
-        id={this.props.displayName}
-        ref={this.targetRef}
-      >
-        <div
-          className={className}
-          ref={sourceRef}
-          onClick={this.toggleCategory.bind(this)}
-        >
-          {this.props.displayName}{" "}
-          <span className="RenderFilterCategory-activecount"></span>
-          <span className="RenderFilterCategory-arrow">
-            <i className={GlyphStyles.ChevronDown}></i>
-          </span>
-        </div>
+      <div className="btn btn-outline-secondary" id={this.props.displayName}>
         <PopOut
           show={this.state.isOpen}
-          frameRef={frameContentFunc}
-          sourceRef={sourceRef}
+          frame={frameContent}
+          source={toggleHeader}
           direction={"bottom"}
           onHide={this.hideCategory.bind(this)}
         />

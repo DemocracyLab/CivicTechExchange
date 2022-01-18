@@ -1,5 +1,5 @@
 // @flow
-import React, { forwardRef } from "react";
+import React from "react";
 import type { FluxReduceStore } from "flux/utils";
 import { Container } from "flux/utils";
 import ProjectSearchStore, {
@@ -128,7 +128,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
     }
   }
 
-  _renderSelector(ref): React$Node {
+  _renderSelector(): React$Node {
     return (
       <Dropdown.Item className="LocationSearchSection-container">
         <label>Country(Required)</label>
@@ -176,37 +176,28 @@ class LocationSearchSection extends React.Component<{||}, State> {
   }
 
   _renderDesktop(): React$Node {
-    const frameContentFunc: forwardRef = (props, ref) => {
-      return (
-        <div className="RenderFilterPopout" ref={ref}>
-          <div className="SubCategoryFrame">{this._renderSelector(ref)})</div>
-        </div>
-      );
-    };
+    const frameContent: React$Node = (
+      <div className="RenderFilterPopout">
+        <div className="SubCategoryFrame">{this._renderSelector()})</div>
+      </div>
+    );
 
-    const sourceRef: forwardRef = React.createRef();
     const className: string = this.state.isOpen ? "category-open" : "";
+    const toggleHeader: React$Node = (
+      <div className={className} onClick={this.toggleCategory.bind(this)}>
+        Location <span className="RenderFilterCategory-activecount"></span>
+        <span className="RenderFilterCategory-arrow">
+          <i className={GlyphStyles.ChevronDown}></i>
+        </span>
+      </div>
+    );
 
     return (
-      <div
-        className="btn btn-outline-secondary"
-        id="Location"
-        ref={this.targetRef}
-      >
-        <div
-          className={className}
-          ref={sourceRef}
-          onClick={this.toggleCategory.bind(this)}
-        >
-          Location <span className="RenderFilterCategory-activecount"></span>
-          <span className="RenderFilterCategory-arrow">
-            <i className={GlyphStyles.ChevronDown}></i>
-          </span>
-        </div>
+      <div className="btn btn-outline-secondary" id="Location">
         <PopOut
           show={this.state.isOpen}
-          frameRef={frameContentFunc}
-          sourceRef={sourceRef}
+          frame={frameContent}
+          source={toggleHeader}
           direction={"bottom"}
           onHide={this.hideCategory.bind(this)}
         />
