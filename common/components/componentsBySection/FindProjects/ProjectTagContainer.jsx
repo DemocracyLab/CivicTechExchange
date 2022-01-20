@@ -1,40 +1,108 @@
 // @flow
 
-import type {FluxReduceStore} from 'flux/utils';
-// import type {Tag} from '../../stores/TagStore.js';
-import ResetSearchButton from './ResetSearchButton.jsx';
-import {List} from 'immutable'
-import {Container} from 'flux/utils';
-import ProjectSearchStore from '../../stores/ProjectSearchStore.js';
-import ProjectTag from './ProjectTag.jsx';
-import React from 'react';
-import type {TagDefinition} from "../../utils/ProjectAPIUtils.js";
+import type { FluxReduceStore } from "flux/utils";
+import { Container } from "flux/utils";
+import ProjectSearchStore, {
+  LocationRadius,
+} from "../../stores/ProjectSearchStore.js";
+import CloseablePill from "./CloseablePill.jsx";
+import React from "react";
+import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
+import { getLocationDisplayString } from "../../common/location/LocationInfo.js";
+
+type PillConfig = {|
+  label: string,
+  closeAction: () => void,
+|};
 
 type State = {|
-  tags: List<TagDefinition>
+  pillConfigs: $ReadOnlyArray<PillConfig>,
 |};
 
 class ProjectTagContainer extends React.Component<{||}, State> {
-
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [ProjectSearchStore];
   }
 
   static calculateState(prevState: State): State {
+    let pillConfigs: Array<PillConfig> = [];
+
+    if (ProjectSearchStore.getFavoritesOnly()) {
+      pillConfigs.push({
+        label: "Favorites Only",
+        closeAction: () =>
+          UniversalDispatcher.dispatch({
+            type: "SET_FAVORITES_ONLY",
+            favoritesOnly: false,
+          }),
+      });
+    }
+
+    pillConfigs = pillConfigs.concat(
+      ProjectSearchStore.getTags()
+        .toJS()
+        .map((tag: TagDefinition) => {
+          return {
+            label: tag.display_name,
+            closeAction: () =>
+              UniversalDispatcher.dispatch({
+                type: "REMOVE_TAG",
+                tag: tag,
+              }),
+          };
+        })
+    );
+
+    const locationRadius: LocationRadius = ProjectSearchStore.getLocation();
+    if (locationRadius && locationRadius.latitude && locationRadius.longitude) {
+      pillConfigs.push({
+        label: ProjectTagContainer.getLocationPillLabel(locationRadius),
+        closeAction: () =>
+          UniversalDispatcher.dispatch({
+            type: "SET_LOCATION",
+            locationRadius: null,
+          }),
+      });
+    }
+
+    const legacyLocation: string = ProjectSearchStore.getLegacyLocation();
+    if (legacyLocation) {
+      pillConfigs.push({
+        label: "In: " + decodeURI(legacyLocation),
+        closeAction: () =>
+          UniversalDispatcher.dispatch({ type: "UNSET_LEGACY_LOCATION" }),
+      });
+    }
+
     return {
-      tags: ProjectSearchStore.getTags() || []
+      pillConfigs: pillConfigs,
     };
+  }
+
+  static getLocationPillLabel(locationRadius: LocationRadius): string {
+    let label: string = "Near: ";
+    if (locationRadius.metadata) {
+      label += getLocationDisplayString(locationRadius.metadata);
+    } else {
+      label += locationRadius.latitude + "," + locationRadius.longitude;
+    }
+
+    return label;
   }
 
   render(): React$Node {
     return (
-      <div
-        className="ProjectTagContainer-root">
-        {
-          this.state.tags.map(
-            tag => <ProjectTag key={tag.tag_name} tag={tag}/>,
-          )
-        }
+      <div className="ProjectTagContainer-root">
+        {this.state.pillConfigs.map((pillConfig: PillConfig) => {
+          return (
+            <CloseablePill
+              key={pillConfig.label}
+              label={pillConfig.label}
+              closeAction={pillConfig.closeAction}
+            />
+          );
+        })}
       </div>
     );
   }

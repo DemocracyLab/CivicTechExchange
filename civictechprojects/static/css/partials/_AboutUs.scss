@@ -1,18 +1,11 @@
-.about-us-root h1, .about-us-root h2, .about-us-root h3 {
-  font-weight: bold;
-}
-.about-us-mission, .about-us-vision {
-  align-items: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
+.about-us-mission .SplashScreen-content,
+.about-us-vision .SplashScreen-content {
+  margin: auto 0;
+  text-align: left;
 }
 
-.about-us-mission, .about-us-vision {
+.about-us-mission,
+.about-us-vision {
   background-color: $color-text-grey;
   color: $color-text-light;
 }
@@ -37,27 +30,20 @@
 .about-us-content {
   padding: 2rem 0 2rem 1rem;
 }
-.about-us-content h1, .about-us-content h2 {
-  font-size: 48px;
-}
-.about-us-content p {
-  font-size: 18px;
-}
-
 .about-us-values {
   padding-top: 22px;
   background-color: $color-background-light;
 }
 .about-us-values h2 {
-  font-size: 36px;
-  line-height: 1.2;
   margin-bottom: 25px;
 }
 .about-us-values-image {
   margin-top: 25px;
   margin-bottom: 25px;
 }
-.about-us-team, .about-us-volunteer, .about-us-ps {
+.about-us-team,
+.about-us-volunteer,
+.about-us-ps {
   padding-top: 36px;
   padding-bottom: 36px;
 }
@@ -68,7 +54,8 @@
 .about-us-values-image {
   order: 1;
 }
-.about-us-values-image img, .about-us-ps-image img {
+.about-us-values-image img,
+.about-us-ps-image img {
   max-width: 100%;
 }
 .about-us-values-list {
@@ -86,17 +73,43 @@
 }
 .about-us-values-text h3 {
   color: $color-orange;
-  font-size: 24px;
-}
-.about-us-values-text p {
-  font-size: 16px;
 }
 .about-us-volunteer h2 {
   margin-bottom: 1rem;
 }
-
 .about-us-volunteer-logo {
   display: none;
+}
+.about-us-volunteer-buttons {
+  a:first-of-type {
+    margin-right: 8px;
+  }
+}
+.about-us-annualreport {
+  background: $color-orange;
+  h3,
+  p,
+  i,
+  a {
+    color: $color-text-light;
+  }
+  a {
+    text-decoration: underline;
+  }
+  a:hover {
+    color: $color-text-dark;
+  }
+  p {
+    margin-bottom: 0;
+  }
+}
+.about-us-annualreport-container {
+  display: flex;
+  align-items: center;
+}
+.about-us-annualreport-left,
+.about-us-annualreport-right {
+  padding: 2rem 1rem;
 }
 .about-us-team-card-container {
   display: flex;
@@ -112,10 +125,9 @@
   text-align: center;
   padding: 0 5px;
 }
-.about-us-team-card p {
-  font-size: 18px;
-}
-.about-us-team-avatar, .about-us-team-avatar-default svg {
+
+.about-us-team-avatar,
+.about-us-team-avatar-default svg {
   border-radius: 50%;
 }
 .about-us-team-card svg {
@@ -123,10 +135,11 @@
 }
 .about-us-team-card-name {
   font-weight: bold;
-  color: $color-orange;
-  margin-bottom: 0.5rem;
+  color: $color-link;
+  margin: 0.5rem 0;
 }
-.about-us-team-avatar, .about-us-team-avatar-default {
+.about-us-team-avatar,
+.about-us-team-avatar-default {
   margin: auto; //centers avatar inside card
   background-repeat: no-repeat; //centers image inside avatar
   background-size: cover;
@@ -136,15 +149,14 @@
   min-height: 100%;
   min-width: 100%;
 }
-
-.about-us-team-avatar, .about-us-team-avatar-default svg {
-  height: 150px;
-  width: 150px;
+.about-us-team-avatar-default svg {
+  padding-top: 20px; /* offsets the svg away from the border where it matters */
 }
 
-.about-us-team h4 {
-  font-size: 24px;
-  font-weight: bold;
+.about-us-team-avatar,
+.about-us-team-avatar-default svg {
+  height: 150px;
+  width: 150px;
 }
 .about-us-team hr {
   width: 75%;
@@ -170,20 +182,17 @@
   color: inherit;
   text-decoration: none;
 }
-
-/* this is a gross hack to handle content reflow, take it back to design later */
-.about-us-show-md-up {
-  display: none;
+/* selector to italicise Board Member titles; requires specific format in env key to work right. */
+/* TODO: refactor to handle this with classnames or similar, this is too fragile */
+.about-us-board-container .about-us-team-card-title div:nth-of-type(1) {
+  font-style: italic;
 }
-.about-us-show-sm-down {
-  display: block;
-}
-/* end gross position hack */
 
 .about-us-ps h2 {
   color: $color-orange;
 }
-.about-us-ps-problem, .about-us-ps-solution {
+.about-us-ps-problem,
+.about-us-ps-solution {
   margin: 20px 0;
 }
 
@@ -219,10 +228,7 @@
   .about-us-volunteer {
     background: $color-background-light;
   }
-  .about-us-volunteer-disclaimer {
-    color: $color-text-grey;
-  }
-  .about-us-volunteer-logo {
+   .about-us-volunteer-logo {
     display: block;
     width: 100%;
     max-width: 266px;
@@ -230,13 +236,13 @@
   .about-us-team-card {
     margin-bottom: 30px;
   }
-
 }
 @include media-breakpoint-up(md) {
   .about-us-content {
-    padding:  0 256px 0 64px /* check that this makes text break into two lines but not three */
+    padding: 0 256px 0 64px; /* check that this makes text break into two lines but not three */
   }
-  .about-us-team-avatar, .about-us-team-avatar-default svg {
+  .about-us-team-avatar,
+  .about-us-team-avatar-default svg {
     height: 200px;
     width: 200px;
   }
@@ -262,16 +268,29 @@
   .about-us-content {
     padding: 0 404px 0 84px; /*  rules to get linebreaks where the design wants them */
   }
-  .about-us-team-avatar, .about-us-team-avatar-default svg {
+  .about-us-team-avatar,
+  .about-us-team-avatar-default svg {
     height: 230px;
     width: 230px;
   }
   .about-us-team-card {
     margin-bottom: 50px;
   }
-  .about-us-values, .about-us-team, .about-us-volunteer {
+  .about-us-values,
+  .about-us-team,
+  .about-us-volunteer,
+  .about-us-annualreport {
     padding-left: 20px;
     padding-right: 20px;
+  }
+  /* awkward container align for the flex items inside this container */
+  .about-us-annualreport {
+    .about-us-annualreport-left {
+      padding-left: 0;
+    }
+    .about-us-annualreport-right {
+      padding-right: 0;
+    }
   }
 }
 @include media-breakpoint-up(xl) {
@@ -284,7 +303,11 @@
   .about-us-content {
     padding: 0 580px 0 168px;
   }
-  .about-us-values, .about-us-team, .about-us-volunteer, .about-us-ps {
+  .about-us-values,
+  .about-us-team,
+  .about-us-volunteer,
+  .about-us-ps,
+  .about-us-annualreport {
     padding-left: 153px; /* match 168px from Vision/Mission, subtract 30 */
     padding-right: 153px;
   }

@@ -8,17 +8,18 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100vh - #{$header-height} - #{$footer-height});
+}
+
+.SplashScreen-fill {
+  min-height: calc(
+    100vh - #{$header-height} - #{$footer-height}
+  ); /* use min-height to fix wide but short viewports */
 }
 
 .SplashScreen-content {
   text-align: center;
   padding: 0 10px;
   margin: auto 0 0 0;
-}
-
-.SplashScreen-content h1 {
-  font-size: 2rem;
 }
 
 .SplashScreen-section {
@@ -32,7 +33,6 @@
   background-color: $color-orange;
   border-radius: 5px;
   padding: 6px 12px;
-  margin-bottom: 10px;
   min-width: 80px;
 }
 
@@ -42,9 +42,12 @@
   background-color: transparent;
   border-radius: 5px;
   padding: 6px 12px;
-  margin: 0px 0px 10px 15px;
   cursor: pointer;
   min-width: 80px;
+}
+
+.SplashScreen-find-projects-btn, .SplashScreen-create-project-btn {
+  margin: 0px 8px 10px 8px;
 }
 
 .SplashScreen-mission {
@@ -56,16 +59,15 @@
 }
 .SplashScreen-mission p {
   margin: 0 auto;
-  font-weight: 500;
 }
 .SplashScreen-opacity-layer {
   background-blend-mode: multiply;
 }
 .SplashScreen-opacity50 {
-  background-color: rgba($color-opacity-layer, 0.5)
+  background-color: rgba($color-opacity-layer, 0.5);
 }
 .SplashScreen-opacity20 {
-  background-color: rgba($color-opacity-layer, 0.2)
+  background-color: rgba($color-opacity-layer, 0.2);
 }
 @include media-breakpoint-up(md) {
   .SplashScreen-mission p {

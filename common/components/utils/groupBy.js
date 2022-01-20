@@ -1,5 +1,5 @@
 // @flow
-import _ from 'lodash';
+import _ from "lodash";
 
 class GroupBy {
   /**
@@ -9,10 +9,14 @@ class GroupBy {
    * @param groupByFunc   Function that selects the property to group by
    * @param transformFunc Function that transforms objects
    */
-  static andTransform<Old,New>(arr: $ReadOnlyArray<Old>, groupByFunc: (Old) => string, transformFunc: (Old) => New ): { [key: string]: New } {
+  static andTransform<Old, New>(
+    arr: $ReadOnlyArray<Old>,
+    groupByFunc: Old => string,
+    transformFunc: Old => New
+  ): { [key: string]: New } {
     const groups: { [key: string]: Old } = _.groupBy(arr, groupByFunc);
     const transformedGroups: { [key: string]: New } = {};
-    for(let key in groups) {
+    for (let key in groups) {
       transformedGroups[key] = groups[key].map(transformFunc);
     }
     return transformedGroups;

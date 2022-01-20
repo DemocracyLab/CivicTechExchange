@@ -1,73 +1,85 @@
+import re
 from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.gis.geos import Point
+from django.contrib.gis.measure import D
 from django.template import loader
 from django.utils import timezone
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import ensure_csrf_cookie
 from time import time
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation
-from .helpers.projects import projects_tag_counts
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
+    ProjectRelationship, Testimonial, ProjectFavorite
+from .sitemaps import SitemapPages
+from .caching.cache import ProjectSearchTagsCache
+from common.caching.cache import Cache
+from common.helpers.collections import flatten, count_occurrences
+from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
-from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner
-from .forms import ProjectCreationForm
+from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff, is_creator
+from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm
+from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from common.helpers.constants import FrontEndSection
+from common.helpers.constants import FrontEndSection, TagCategory
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
-    notify_project_owners_project_approved, contact_democracylab_email
-from common.helpers.front_end import section_url, get_page_section
-from common.helpers.caching import update_cached_project_url
-from distutils.util import strtobool
+    notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
+    notify_group_owners_group_approved, notify_event_owners_event_approved
+from civictechprojects.helpers.context_preload import context_preload
+from civictechprojects.helpers.projects.annotations import apply_project_annotations
+from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
+from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector
+from common.helpers.user_helpers import get_my_projects, get_my_groups, get_my_events, get_user_context
 from django.views.decorators.cache import cache_page
+from rest_framework.decorators import api_view, throttle_classes
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 import requests
 
 
-# TODO: Set getCounts to default to false if it's not passed? Or some hardening against malformed API requests
-@cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
+def get_tag_counts(category=None, event=None, group=None):
+    queryset = get_tags_by_category(category) if category is not None else Tag.objects.all()
+    activetagdict = ProjectSearchTagsCache.get(event=event, group=group)
+    querydict = {tag.tag_name: tag for tag in queryset}
+    resultdict = {}
+
+    for slug in querydict.keys():
+        resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
+        resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
+    return list(resultdict.values())
+
+
 def tags(request):
     url_parts = request.GET.urlencode()
-    query_terms = urlparse.parse_qs(
-        url_parts, keep_blank_values=0, strict_parsing=0)
-    if 'category' in query_terms:
-        category = query_terms.get('category')[0]
-        queryset = get_tags_by_category(category)
-        countoption = bool(strtobool(query_terms.get('getCounts')[0]))
-        if countoption == True:
-            activetagdict = projects_tag_counts()
-            querydict = {tag.tag_name:tag for tag in queryset}
-            resultdict = {}
+    query_terms = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+    category = query_terms.get('category')[0] if 'category' in query_terms else None
+    queryset = get_tags_by_category(category) if category is not None else Tag.objects.all()
+    tags_result = list(map(lambda tag: Tag.hydrate_tag_model(tag), queryset))
+    return JsonResponse(tags_result, safe=False)
 
-            for slug in querydict.keys():
-                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-            tags = list(resultdict.values())
-        else:
-            tags = list(queryset.values())
-    else:
-        countoption = bool(strtobool(query_terms.get('getCounts')[0]))
-        if countoption == True:
-            queryset = Tag.objects.all()
-            activetagdict = projects_tag_counts()
-            querydict = {tag.tag_name:tag for tag in queryset}
-            resultdict = {}
 
-            for slug in querydict.keys():
-                resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-                resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-            tags = list(resultdict.values())
-        else:
-            queryset = Tag.objects.all()
-            tags = list(queryset.values())
-    return JsonResponse(tags, safe=False)
+@cache_page(1200) #cache duration in seconds, cache_page docs: https://docs.djangoproject.com/en/2.1/topics/cache/#the-per-view-cache
+def group_tags_counts(request):
+    # Get all groups
+    all_groups = Group.objects.all()
+    # Get Groups issue areas
+    group_issues = list(map(lambda group: group.get_project_issue_areas(with_counts=False), all_groups))
+    # Count up instances of tags
+    group_issues_counts = count_occurrences(flatten(group_issues))
+    issue_tags = {}
+    for issue_tag in group_issues_counts.keys():
+        issue_tags[issue_tag] = Tag.hydrate_tag_model(Tag.get_by_name(issue_tag))
+        issue_tags[issue_tag]['num_times'] = group_issues_counts[issue_tag]
+    return JsonResponse(list(issue_tags.values()), safe=False)
 
 
 def to_rows(items, width):
@@ -90,8 +102,8 @@ def to_tag_map(tags):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-def project_create(request):
-    if not request.user.is_authenticated():
+def group_create(request):
+    if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn))
 
     user = get_request_contributor(request)
@@ -99,17 +111,153 @@ def project_create(request):
         # TODO: Log this
         return HttpResponse(status=403)
 
-    project = ProjectCreationForm.create_project(request)
+    group = GroupCreationForm.create_or_edit_group(request, None)
+    return JsonResponse(group.hydrate_to_json())
+
+
+def group_edit(request, group_id):
+    if not request.user.is_authenticated:
+        return redirect('/signup')
+
+    group = None
+    try:
+        group = GroupCreationForm.create_or_edit_group(request, group_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+
+    if request.is_ajax():
+        return JsonResponse(group.hydrate_to_json())
+    else:
+        return redirect(section_url(FrontEndSection.AboutGroup, {'id': group_id}))
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def group_delete(request, group_id):
+    # if not logged in, send user to login page
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        GroupCreationForm.delete_group(request, group_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return HttpResponse(status=204)
+
+
+def get_group(request, group_id):
+    group = Group.objects.get(id=group_id)
+
+    if group is not None:
+        if group.is_searchable or is_creator_or_staff(get_request_contributor(request), group):
+            return JsonResponse(group.hydrate_to_json())
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
+
+def approve_group(request, group_id):
+    group = Group.objects.get(id=group_id)
+    user = get_request_contributor(request)
+
+    if group is not None:
+        if user.is_staff:
+            group.is_searchable = True
+            group.save()
+            # SitemapPages.update()
+            ProjectSearchTagsCache.refresh(event=None, group=group)
+            notify_group_owners_group_approved(group)
+            messages.success(request, 'Group Approved')
+            group.group_creator.purge_cache()
+
+            return redirect(section_url(FrontEndSection.AboutGroup, {'id': str(group.id)}))
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def event_create(request):
+    if not request.user.is_authenticated:
+        return redirect(section_url(FrontEndSection.LogIn))
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        # TODO: Log this
+        return HttpResponse(status=403)
+
+    event = None
+    try:
+        event = EventCreationForm.create_or_edit_event(request, None)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return JsonResponse(event.hydrate_to_json())
+
+
+def event_edit(request, event_id):
+    if not request.user.is_authenticated:
+        return redirect('/signup')
+
+    event = None
+    try:
+        event = EventCreationForm.create_or_edit_event(request, event_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+
+    if request.is_ajax():
+        return JsonResponse(event.hydrate_to_json())
+    else:
+        return redirect(section_url(FrontEndSection.AboutEvent, {'id': event_id}))
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def event_delete(request, event_id):
+    # if not logged in, send user to login page
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        EventCreationForm.delete_event(request, event_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+    return HttpResponse(status=204)
+
+
+def get_event(request, event_id):
+    try:
+        event = Event.get_by_id_or_slug(event_id)
+        if event_id.isnumeric() and event.is_private and not is_creator_or_staff(get_request_contributor(request), event):
+            # Don't let non-admins/non-owners load a private event by numeric id
+            raise PermissionDenied()
+    except PermissionDenied:
+        return HttpResponseForbidden()
+
+    return JsonResponse(event.hydrate_to_json()) if event else HttpResponse(status=404)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def project_create(request):
+    if not request.user.is_authenticated:
+        return redirect(section_url(FrontEndSection.LogIn))
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        # TODO: Log this
+        return HttpResponse(status=403)
+
+    project = ProjectCreationForm.create_or_edit_project(request, None)
     return JsonResponse(project.hydrate_to_json())
 
 
 def project_edit(request, project_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect('/signup')
 
-    project = None
     try:
-        project = ProjectCreationForm.edit_project(request, project_id)
+        project = ProjectCreationForm.create_or_edit_project(request, project_id)
         # TODO:
         # update_cached_project_url(project_id)
     except PermissionDenied:
@@ -118,14 +266,14 @@ def project_edit(request, project_id):
     if request.is_ajax():
         return JsonResponse(project.hydrate_to_json())
     else:
-        return redirect('/index/?section=AboutProject&id=' + project_id)
+        return redirect(section_url(FrontEndSection.AboutProject, {'id': project_id}))
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def project_delete(request, project_id):
     # if not logged in, send user to login page
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
     try:
         ProjectCreationForm.delete_project(request, project_id)
@@ -139,11 +287,17 @@ def get_project(request, project_id):
 
     if project is not None:
         if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
-            return JsonResponse(project.hydrate_to_json())
+            url_parts = request.GET.urlencode()
+            query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+            hydrated_project = project.hydrate_to_json()
+            if 'includeVolunteers' not in query_params:
+                del hydrated_project['project_volunteers']
+            return JsonResponse(hydrated_project, safe=False)
         else:
             return HttpResponseForbidden()
     else:
         return HttpResponse(status=404)
+
 
 def approve_project(request, project_id):
     project = Project.objects.get(id=project_id)
@@ -153,9 +307,32 @@ def approve_project(request, project_id):
         if user.is_staff:
             project.is_searchable = True
             project.save()
+            project.recache(recache_linked=True)
+            ProjectSearchTagsCache.refresh()
+            project.project_creator.purge_cache()
+            SitemapPages.update()
             notify_project_owners_project_approved(project)
             messages.success(request, 'Project Approved')
-            return redirect('/index/?section=AboutProject&id=' + str(project.id))
+            return redirect(section_url(FrontEndSection.AboutProject, {'id': project_id}))
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
+
+def approve_event(request, event_id):
+    event = Event.objects.get(id=event_id)
+    user = get_request_contributor(request)
+
+    if event is not None:
+        if user.is_staff:
+            event.is_searchable = True
+            event.save()
+            notify_event_owners_event_approved(event)
+            event.update_linked_items()
+            event.event_creator.purge_cache()
+            messages.success(request, 'Event Approved')
+            return redirect(section_url(FrontEndSection.AboutEvent, {'id': str(event.id)}))
         else:
             return HttpResponseForbidden()
     else:
@@ -163,7 +340,24 @@ def approve_project(request, project_id):
 
 
 @ensure_csrf_cookie
-def index(request):
+@xframe_options_exempt
+@api_view()
+@throttle_classes([AnonRateThrottle, UserRateThrottle])
+def index(request, id='Unused but needed for routing purposes; do not remove!'):
+    page = get_page_section(request.get_full_path())
+    # TODO: Add to redirectors.py
+    # Redirect to AddUserDetails page if First/Last name hasn't been entered yet
+    if page not in [FrontEndSection.AddUserDetails.value, FrontEndSection.SignUp.value] \
+            and request.user.is_authenticated and \
+            (not request.user.first_name or not request.user.last_name):
+        from allauth.socialaccount.models import SocialAccount
+        account = SocialAccount.objects.filter(user=request.user).first()
+        return redirect(section_url(FrontEndSection.AddUserDetails, {'provider': account.provider}))
+
+    redirect_result = redirect_by([InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector], request.get_full_path())
+    if redirect_result is not None:
+        return redirect(redirect_result)
+
     template = loader.get_template('new_index.html')
     context = {
         'DLAB_PROJECT_ID': settings.DLAB_PROJECT_ID or '',
@@ -178,14 +372,19 @@ def index(request):
         'PRESS_LINKS': settings.PRESS_LINKS,
         'organizationSnippet': loader.render_to_string('scripts/org_snippet.txt'),
         'GR_SITEKEY': settings.GR_SITEKEY,
-        'FAVICON_PATH': settings.FAVICON_PATH
+        'FAVICON_PATH': settings.FAVICON_PATH,
+        'BLOG_URL': settings.BLOG_URL,
+        'EVENT_URL': settings.EVENT_URL,
+        'PRIVACY_POLICY_URL': settings.PRIVACY_POLICY_URL,
+        'DONATE_PAGE_BLURB': settings.DONATE_PAGE_BLURB,
+        'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID
     }
     if settings.HOTJAR_APPLICATION_ID:
         context['hotjarScript'] = loader.render_to_string('scripts/hotjar_snippet.txt',
                                                           {'HOTJAR_APPLICATION_ID': settings.HOTJAR_APPLICATION_ID})
 
     GOOGLE_CONVERSION_ID = None
-    page = get_page_section(request.get_full_path())
+    context = context_preload(page, request, context)
     if page and settings.GOOGLE_CONVERSION_IDS and page in settings.GOOGLE_CONVERSION_IDS:
         GOOGLE_CONVERSION_ID = settings.GOOGLE_CONVERSION_IDS[page]
     if settings.GOOGLE_PROPERTY_ID:
@@ -204,8 +403,16 @@ def index(request):
     if hasattr(settings, 'SOCIAL_APPS_VISIBILITY'):
         context['SOCIAL_APPS_VISIBILITY'] = json.dumps(settings.SOCIAL_APPS_VISIBILITY)
 
-    if request.user.is_authenticated():
+    if hasattr(settings, 'HERE_CONFIG'):
+        context['HERE_CONFIG'] = settings.HERE_CONFIG
+
+    if hasattr(settings, 'GHOST_URL'):
+        context['GHOST_URL'] = settings.GHOST_URL
+        context['GHOST_CONTENT_API_KEY'] = settings.GHOST_CONTENT_API_KEY
+
+    if request.user.is_authenticated:
         contributor = Contributor.objects.get(id=request.user.id)
+        context['userContext'] = json.dumps(get_user_context(contributor))
         context['userID'] = request.user.id
         context['emailVerified'] = contributor.email_verified
         context['email'] = contributor.email
@@ -213,10 +420,14 @@ def index(request):
         context['lastName'] = contributor.last_name
         context['isStaff'] = contributor.is_staff
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
+        context['QIQO_IFRAME_URL'] = get_user_qiqo_iframe(contributor, request)
+
         thumbnail = ProjectFile.objects.filter(file_user=request.user.id,
                                                file_category=FileCategory.THUMBNAIL.value).first()
         if thumbnail:
             context['userImgUrl'] = thumbnail.file_url
+    else:
+        context['userContext'] = '{}'
 
     return HttpResponse(template.render(context, request))
 
@@ -243,57 +454,63 @@ def add_alert(request):
     return HttpResponse(status=200)
 
 
-def my_projects(request):
-    contributor = get_request_contributor(request)
-    response = {}
-    if contributor is not None:
-        owned_projects = Project.objects.filter(project_creator_id=contributor.id)
-        volunteering_projects = contributor.volunteer_relations.all()
-        response = {
-            'owned_projects': [project.hydrate_to_list_json() for project in owned_projects],
-            'volunteering_projects': volunteering_projects.exists() and list(map(lambda volunteer_relation: volunteer_relation.hydrate_project_volunteer_info(), volunteering_projects))
-        }
-    return JsonResponse(response)
-
-
 def projects_list(request):
-    project_list = Project.objects.filter(is_searchable=True)
-    if request.method == 'GET':
-        url_parts = request.GET.urlencode()
-        query_params = urlparse.parse_qs(
-            url_parts, keep_blank_values=0, strict_parsing=0)
-        project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
-        project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
-        project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
-        project_list = apply_tag_filters(project_list, query_params, 'org', projects_by_orgs)
-        project_list = apply_tag_filters(project_list, query_params, 'orgType', projects_by_org_types)
-        project_list = apply_tag_filters(project_list, query_params, 'stage', projects_by_stage)
-        if 'keyword' in query_params:
-            project_list = project_list & projects_by_keyword(query_params['keyword'][0])
+    url_parts = request.GET.urlencode()
+    query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+    event = None
+    group = None
 
-        if 'location' in query_params:
-            project_list = projects_by_location(project_list, query_params['location'][0])
+    if 'group_id' in query_params:
+        group_id = query_params['group_id'][0]
+        group = Group.objects.get(id=group_id)
+        project_list = group.get_group_projects(approved_only=True)
+    elif 'event_id' in query_params:
+        event_id = query_params['event_id'][0]
+        event = Event.get_by_id_or_slug(event_id)
+        project_list = event.get_linked_projects().filter(is_searchable=True)
+    else:
+        project_list = Project.objects.filter(is_searchable=True)
 
-        project_list = project_list.distinct()
+    project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
+    project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
+    project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
+    project_list = apply_tag_filters(project_list, query_params, 'org', projects_by_orgs)
+    project_list = apply_tag_filters(project_list, query_params, 'orgType', projects_by_org_types)
+    project_list = apply_tag_filters(project_list, query_params, 'stage', projects_by_stage)
 
-        if 'sortField' in query_params:
-            project_list = projects_by_sortField(project_list, query_params['sortField'][0])
-        else:
-            project_list = projects_by_sortField(project_list, '-project_date_modified')
+    if 'favoritesOnly' in query_params:
+        user = get_request_contributor(request)
+        project_list = project_list & ProjectFavorite.get_for_user(user)
 
-        project_count = len(project_list)
+    if 'keyword' in query_params:
+        project_list = project_list & projects_by_keyword(query_params['keyword'][0])
 
-        project_paginator = Paginator(project_list, settings.PROJECTS_PER_PAGE)
+    if 'locationRadius' in query_params:
+        project_list = projects_by_location(project_list, query_params['locationRadius'][0])
 
-        if 'page' in query_params:
-            project_list_page = project_paginator.page(query_params['page'][0])
-            project_pages = project_paginator.num_pages
-        else:
-            project_list_page = project_list
-            project_pages = 1
+    if 'location' in query_params:
+        project_list = projects_by_legacy_city(project_list, query_params['location'][0])
 
+    project_list = project_list.distinct()
 
-    response = projects_with_meta_data(project_list_page, project_pages, project_count)
+    if 'sortField' in query_params:
+        project_list = projects_by_sortField(project_list, query_params['sortField'][0])
+    else:
+        project_list = projects_by_sortField(project_list, '-project_date_modified')
+
+    project_count = len(project_list)
+
+    project_paginator = Paginator(project_list, settings.PROJECTS_PER_PAGE)
+
+    if 'page' in query_params:
+        project_list_page = project_paginator.page(query_params['page'][0])
+        project_pages = project_paginator.num_pages
+    else:
+        project_list_page = project_list
+        project_pages = 1
+
+    tag_counts = get_tag_counts(category=None, event=event, group=group)
+    response = projects_with_meta_data(query_params, project_list_page, project_pages, project_count, tag_counts)
 
     return JsonResponse(response)
 
@@ -306,10 +523,49 @@ def recent_projects_list(request):
         project_list = Project.objects.filter(is_searchable=True)
         # Filter out the DemocracyLab project
         if settings.DLAB_PROJECT_ID.isdigit():
-            project_list = Project.objects.exclude(id=int(settings.DLAB_PROJECT_ID))
+            project_list = project_list.exclude(id=int(settings.DLAB_PROJECT_ID))
         project_list = projects_by_sortField(project_list, '-project_date_modified')[:project_count]
         hydrated_project_list = list(project.hydrate_to_tile_json() for project in project_list)
         return JsonResponse({'projects': hydrated_project_list})
+
+
+def limited_listings(request):
+    """Summarizes current positions in a format specified by the LinkedIn "Limited Listings" feature."""
+
+    def cdata(str):
+        # Using CDATA tags (and escaping the close sequence) protects us from XSS attacks when
+        # displaying user provided string values.
+        return f"<![CDATA[{str.replace(']]>', ']]]]><![CDATA[>')}]]>"
+    
+    def position_to_job(position):
+        project = position.position_project
+        roleTag = Tag.get_by_name(position.position_role.first().slug)
+
+        return f"""
+        <job>
+            <company>{cdata(project.project_name)}</company>
+            <title>{cdata(roleTag.display_name)}</title>
+            <description>{cdata(position.position_description)}</description>
+            <partnerJobId>{cdata(str(position.id))}</partnerJobId>
+            <location>{cdata(", ".join([project.project_city, project.project_state]) if (project.project_city and project.project_state) else "")}</location>
+            <city>{cdata(project.project_city)}</city>
+            <state>{cdata(project.project_state)}</state>
+            <country>{cdata(project.project_country)}</country>
+            <applyUrl>{cdata(position.description_url or project.project_url)}</applyUrl>
+            <industryCodes><industryCode>{cdata("4")}</industryCode></industryCodes>
+        </job>
+        """
+
+    approved_projects = ProjectPosition.objects.filter(position_project__is_searchable=True)
+    xml_response = f"""<?xml version="1.0" encoding="UTF-8"?>
+    <source>
+        <lastBuildDate>{timezone.now().strftime('%a, %d %b %Y %H:%M:%S %Z')}</lastBuildDate> 
+        <publisherUrl>https://www.democracylab.org</publisherUrl>
+        <publisher>DemocracyLab</publisher>
+        {"".join(map(position_to_job, approved_projects))}
+    </source>"""
+
+    return HttpResponse(xml_response, content_type="application/xml")
 
 
 def apply_tag_filters(project_list, query_params, param_name, tag_filter):
@@ -328,19 +584,27 @@ def clean_nonexistent_tags(tags, tag_dict):
 
 
 def projects_by_keyword(keyword):
-    return Project.objects.filter(Q(project_name__icontains=keyword)
-                                  | Q(project_short_description__icontains=keyword)
-                                  | Q(project_description__icontains=keyword)
-                                  | Q(project_description_solution__icontains=keyword)
-                                  | Q(project_description_actions__icontains=keyword))
+    return Project.objects.filter(full_text__icontains=keyword)
 
 
+# TODO: Rename to something generic
 def projects_by_sortField(project_list, sortField):
     return project_list.order_by(sortField)
 
 
-def projects_by_location(project_list, location):
-    return project_list.filter(Q(project_location__icontains=location))
+def projects_by_location(project_list, param):
+    param_parts = param.split(',')
+    location = Point(float(param_parts[1]), float(param_parts[0]))
+    radius = float(param_parts[2])
+    project_list = project_list.filter(project_location_coords__distance_lte=(location, D(mi=radius)))
+    return project_list
+
+
+def projects_by_legacy_city(project_list, param):
+    param_parts = param.split(', ')
+    if len(param_parts) > 1:
+        project_list = project_list.filter(project_city=param_parts[0], project_state=param_parts[1])
+    return project_list
 
 
 def projects_by_issue_areas(tags):
@@ -371,22 +635,98 @@ def projects_by_roles(tags):
     return Project.objects.filter(positions__in=positions)
 
 
-def projects_with_meta_data(projects, project_pages, project_count):
+def project_countries():
+    return unique_column_values(Project, 'project_country', lambda country: country and len(country) == 2)
+
+
+def projects_with_meta_data(query_params, projects, project_pages, project_count, tag_counts):
+    projects_json = apply_project_annotations(query_params, [project.hydrate_to_tile_json() for project in projects])
     return {
-        'projects': [project.hydrate_to_tile_json() for project in projects],
-        'tags': list(Tag.objects.values()),
+        'projects': projects_json,
+        'availableCountries': project_countries(),
+        'tags': tag_counts,
         'numPages': project_pages,
         'numProjects': project_count
     }
 
 
-def available_tag_filters(projects, selected_tag_filters):
-    project_tags = projects_tag_counts(projects)
-    # Remove any filters that are already selected
-    for tag in selected_tag_filters:
-        if project_tags[tag]:
-            project_tags.pop(tag)
-    return project_tags
+# TODO: Move group search code into new file
+def groups_list(request):
+    url_parts = request.GET.urlencode()
+    query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+    group_list = Group.objects.filter(is_searchable=True)
+
+    if request.method == 'GET':
+        group_list = group_list & apply_tag_filters(group_list, query_params, 'issues', groups_by_issue_areas)
+        if 'keyword' in query_params:
+            group_list = group_list & groups_by_keyword(query_params['keyword'][0])
+
+        if 'locationRadius' in query_params:
+            group_list = groups_by_location(group_list, query_params['locationRadius'][0])
+
+        group_list = group_list.distinct()
+
+        if 'sortField' in query_params:
+            group_list = projects_by_sortField(group_list, query_params['sortField'][0])
+        else:
+            group_list = projects_by_sortField(group_list, 'group_name')
+
+        group_count = len(group_list)
+
+        group_paginator = Paginator(group_list, settings.PROJECTS_PER_PAGE)
+
+        if 'page' in query_params:
+            group_list_page = group_paginator.page(query_params['page'][0])
+            group_pages = group_paginator.num_pages
+        else:
+            group_list_page = group_list
+            group_pages = 1
+
+        response = groups_with_meta_data(group_list_page, group_pages, group_count)
+
+        return JsonResponse(response)
+
+
+def groups_by_keyword(keyword):
+    return Group.objects.filter(Q(group_name__icontains=keyword)
+                                | Q(group_short_description__icontains=keyword)
+                                | Q(group_description__icontains=keyword))
+
+
+def groups_by_location(group_list, param):
+    param_parts = param.split(',')
+    location = Point(float(param_parts[1]), float(param_parts[0]))
+    radius = float(param_parts[2])
+    group_list = group_list.filter(group_location_coords__distance_lte=(location, D(mi=radius)))
+    return group_list
+
+
+def groups_by_issue_areas(issues):
+    group_relationships = ProjectRelationship.objects.exclude(relationship_group=None)\
+        .filter(relationship_project__project_issue_area__name__in=issues)
+    relationship_ids = list(map(lambda pr: pr.relationship_group.id, group_relationships))
+
+    return Group.objects.filter(id__in=relationship_ids)
+
+
+def groups_with_meta_data(groups, group_pages, group_count):
+    return {
+        'groups': [group.hydrate_to_tile_json() for group in groups],
+        'availableCountries': group_countries(),
+        'tags': list(Tag.objects.filter(category=TagCategory.ISSUE_ADDRESSED.value).values()),
+        'numPages': group_pages,
+        'numGroups': group_count
+    }
+
+
+def group_countries():
+    return unique_column_values(Group, 'group_country', lambda country: country and len(country) == 2)
+
+
+def events_list(request):
+    events = Event.objects.filter(is_created=True, is_searchable=True, is_private=False)
+    return JsonResponse({'events': [event.hydrate_to_tile_json() for event in events]})
+
 
 def presign_project_thumbnail_upload(request):
     uploader = request.user.username
@@ -399,7 +739,7 @@ def presign_project_thumbnail_upload(request):
     return presign_s3_upload(
         raw_key=s3_key, file_name=file_name, file_type=file_type, acl="public-read")
 
-
+# TODO: Replace with is_co_owner_or_owner
 def volunteer_operation_is_authorized(request, volunteer_relation):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project)
     authorized_usernames = ([volunteer_relation.project.project_creator.username]
@@ -420,11 +760,25 @@ def delete_uploaded_file(request, s3_key):
         # TODO: Log this
         return HttpResponse(status=401)
 
+def get_project_volunteers(request,project_id):
+    project = Project.objects.get(id=project_id)
+    if project is not None:
+        if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
+            data = {
+                'project_id' : project_id,
+                'project_volunteers': project.hydrate_to_json()['project_volunteers']
+            }
+            return JsonResponse(data, safe=False)
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
+
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def contact_project_owner(request, project_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -452,7 +806,7 @@ def contact_project_owner(request, project_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def contact_project_volunteers(request, project_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -471,22 +825,30 @@ def contact_project_volunteers(request, project_id):
         project=project.project_name,
         subject=subject)
     email_template = HtmlEmailTemplate(use_signature=False) \
+        .header('You have a new message from {projectname}'.format(projectname=project.project_name)) \
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,
         lastname=user.last_name)) \
-        .paragraph('To reply, email at {email}'.format(email=user.email))
+        .paragraph('To respond, you can reply to this email.')
+
+    # Send to project owner if co-owner initiated
+    if not is_creator(user, project):
+        volunteers = list(filter(lambda vr: vr.volunteer.id != user.id, volunteers))
+        send_to_project_owners(project, user, email_subject, email_template, include_co_owners=False)
+
     for volunteer in volunteers:
         # TODO: See if we can send emails in a batch
         # https://docs.djangoproject.com/en/2.2/topics/email/#topics-sending-multiple-emails
-        send_to_project_volunteer(volunteer, email_subject, email_template)
+        send_to_project_volunteer(volunteer, email_subject, email_template, cc_owners=False)
+
     return HttpResponse(status=200)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def contact_project_volunteer(request, application_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -505,11 +867,12 @@ def contact_project_volunteer(request, application_id):
         project=project.project_name,
         subject=subject)
     email_template = HtmlEmailTemplate(use_signature=False) \
+        .header('You have a new message from {projectname}'.format(projectname=project.project_name)) \
         .paragraph('\"{message}\" - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,
         lastname=user.last_name)) \
-        .paragraph('To reply, email at {email}'.format(email=user.email))
+        .paragraph('To respond, you can reply to this email.')
     send_to_project_volunteer(volunteer_relation, email_subject, email_template)
     return HttpResponse(status=200)
 
@@ -517,7 +880,7 @@ def contact_project_volunteer(request, application_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def volunteer_with_project(request, project_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -536,13 +899,15 @@ def volunteer_with_project(request, project_id):
         role=role,
         application_text=message)
     send_volunteer_application_email(volunteer_relation)
+    project.recache()
+    user.purge_cache()
     return HttpResponse(status=200)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def renew_volunteering_with_project(request, application_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -557,6 +922,7 @@ def renew_volunteering_with_project(request, application_id):
     volunteer_relation.re_enroll_reminder_count = 0
     volunteer_relation.re_enroll_last_reminder_date = None
     volunteer_relation.save()
+    volunteer_relation.volunteer.purge_cache()
 
     notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
@@ -565,7 +931,7 @@ def renew_volunteering_with_project(request, application_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def conclude_volunteering_with_project(request, application_id):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
@@ -577,7 +943,11 @@ def conclude_volunteering_with_project(request, application_id):
     send_volunteer_conclude_email(user, volunteer_relation.project.project_name)
 
     body = json.loads(request.body)
+    project = Project.objects.get(id=volunteer_relation.project.id)
+    user = volunteer_relation.volunteer
     volunteer_relation.delete()
+    project.recache()
+    user.purge_cache()
 
     notify_project_owners_volunteer_concluded_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
@@ -587,7 +957,7 @@ def conclude_volunteering_with_project(request, application_id):
 @csrf_exempt
 def accept_project_volunteer(request, application_id):
     # Redirect to login if not logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
 
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
@@ -601,7 +971,9 @@ def accept_project_volunteer(request, application_id):
         volunteer_relation.is_approved = True
         volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
+        volunteer_relation.volunteer.purge_cache()
         update_project_timestamp(request, volunteer_relation.project)
+        volunteer_relation.project.recache()
         if request.method == 'GET':
             messages.add_message(request, messages.SUCCESS, volunteer_relation.volunteer.full_name() + ' has been approved as a volunteer.')
             return redirect(about_project_url)
@@ -621,6 +993,8 @@ def promote_project_volunteer(request, application_id):
         volunteer_relation.is_co_owner = True
         volunteer_relation.save()
         update_project_timestamp(request, volunteer_relation.project)
+        volunteer_relation.project.recache()
+        volunteer_relation.volunteer.purge_cache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -629,20 +1003,29 @@ def promote_project_volunteer(request, application_id):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def reject_project_volunteer(request, application_id):
+    find_projects_page_url = section_url(FrontEndSection.FindProjects)
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     if volunteer_operation_is_authorized(request, volunteer_relation):
         body = json.loads(request.body)
         message = body['rejection_message']
         email_template = HtmlEmailTemplate()\
-        .paragraph('The project owner of {project_name} has declined your application for the following reason:'.format(project_name=volunteer_relation.project.project_name))\
-        .paragraph('\"{message}\"'.format(message=message))
-        email_subject = 'Your application to join {project_name}'.format(
+        .paragraph('Hi {first_name},'.format(first_name=volunteer_relation.volunteer.first_name))\
+        .paragraph('Thank you for your interest in volunteering with {project_name}.'.format(project_name=volunteer_relation.project.project_name))\
+        .paragraph('Unfortunately, the project owner did not select you as a volunteer for this project.')\
+        .paragraph('Message from the project owner: \"{message}\"'.format(message=message))\
+        .paragraph('We hope you\'ll consider other volunteer opportunities at DemocracyLab.')\
+        .button(url=find_projects_page_url, text='Explore More Projects')
+        email_subject = 'Your volunteer application to join {project_name}'.format(
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject=email_subject,
                                   template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
+        project = Project.objects.get(id=volunteer_relation.project.id)
+        user = volunteer_relation.volunteer
         volunteer_relation.delete()
+        project.recache()
+        user.purge_cache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -665,7 +1048,11 @@ def dismiss_project_volunteer(request, application_id):
                                subject=email_subject,
                                template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
+        project = Project.objects.get(id=volunteer_relation.project.id)
+        user = volunteer_relation.volunteer
         volunteer_relation.delete()
+        project.recache()
+        user.purge_cache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -690,6 +1077,8 @@ def demote_project_volunteer(request, application_id):
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                subject=email_subject,
                                template=email_template)
+        volunteer_relation.project.recache()
+        volunteer_relation.volunteer.purge_cache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -703,7 +1092,7 @@ def leave_project(request, project_id):
         message = body['departure_message']
         if len(message) > 0:
             email_template = HtmlEmailTemplate()\
-            .paragraph('{volunteer_name} is leaving {project_name} for the following reason:'.format(
+            .paragraph('{volunteer_name} is leaving {project_name} because:'.format(
                 volunteer_name=volunteer_relation.volunteer.full_name(),
                 project_name=volunteer_relation.project.project_name))\
             .paragraph('\"{message}\"'.format(message=message))
@@ -720,7 +1109,11 @@ def leave_project(request, project_id):
                                subject=email_subject,
                                template=email_template)
         update_project_timestamp(request, volunteer_relation.project)
+        user = volunteer_relation.volunteer
         volunteer_relation.delete()
+        project = Project.objects.get(id=project_id)
+        project.recache()
+        user.purge_cache()
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -729,8 +1122,159 @@ def update_project_timestamp(request, project):
     if not request.user.is_staff:
         project.update_timestamp()
 
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def contact_group_owner(request, group_id):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    message = body['message']
+
+    group = Group.objects.get(id=group_id)
+    email_subject = '{firstname} {lastname} would like to connect with {group}'.format(
+        firstname=user.first_name,
+        lastname=user.last_name,
+        group=group.group_name)
+    email_template = HtmlEmailTemplate(use_signature=False) \
+        .header('Your group has a new message.') \
+        .paragraph('{firstname} {lastname} has sent the following message to {group}:'.format(
+        firstname=user.first_name,
+        lastname=user.last_name,
+        group=group.group_name)) \
+        .paragraph('\"\"{message}\"\"'.format(message=message)) \
+        .paragraph('To respond, you can reply to this email.')
+    send_to_group_owners(group=group, sender=user, subject=email_subject, template=email_template)
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def invite_project_to_group(request, group_id):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    group = Group.objects.get(id=group_id)
+    if not is_creator(user, group):
+        return HttpResponse(status=403)
+
+    body = json.loads(request.body)
+    project = Project.objects.get(id=body['projectId'])
+    message = body['message']
+    is_approved = is_co_owner_or_owner(user, project)
+    project_relation = ProjectRelationship.create(group, project, is_approved, message)
+    project_relation.save()
+    project_relation.relationship_project.recache()
+    project_relation.relationship_group.recache()
+    if not is_approved:
+        send_group_project_invitation_email(project_relation)
+    return HttpResponse(status=200)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def accept_group_invitation(request, invite_id):
+    # Redirect to login if not logged in
+    if not request.user.is_authenticated:
+        return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
+
+    project_relation = ProjectRelationship.objects.get(id=invite_id)
+    project = project_relation.relationship_project
+    about_project_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
+    if project_relation.is_approved:
+        messages.add_message(request, messages.ERROR, 'The project is already part of the group.')
+        return redirect(about_project_url)
+
+    user = get_request_contributor(request)
+    if is_co_owner_or_owner(user, project):
+        # Set approved flag
+        project_relation.is_approved = True
+        project_relation.save()
+        update_project_timestamp(request, project)
+        project_relation.relationship_project.recache()
+        project_relation.relationship_group.recache()
+        if request.method == 'GET':
+            messages.add_message(request, messages.SUCCESS, 'Your project is now part of the group ' + project_relation.relationship_group.group_name)
+            return redirect(about_project_url)
+        else:
+            return HttpResponse(status=200)
+    else:
+        messages.add_message(request, messages.ERROR, 'You do not have permission to accept this group invitation.')
+        return redirect(about_project_url)
+
+
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def reject_group_invitation(request, invite_id):
+    # Redirect to login if not logged in
+    if not request.user.is_authenticated:
+        return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
+
+    project_relation = ProjectRelationship.objects.get(id=invite_id)
+    project = project_relation.relationship_project
+    about_project_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
+    if project_relation.is_approved:
+        messages.add_message(request, messages.ERROR, 'The project is already part of the group.')
+        return redirect(about_project_url)
+
+    user = get_request_contributor(request)
+    if is_co_owner_or_owner(user, project):
+        project = Project.objects.get(id=project_relation.relationship_project.id)
+        project_relation.delete()
+        update_project_timestamp(request, project)
+        project.recache()
+        if request.method == 'GET':
+            # TODO: Add messaging of some kind to front end
+            return redirect(about_project_url)
+        else:
+            return HttpResponse(status=200)
+    else:
+        messages.add_message(request, messages.ERROR, 'You do not have permission to reject this group invitation.')
+        return redirect(about_project_url)
+
+
+@csrf_exempt
+def project_favorite(request, project_id):
+    user = get_request_contributor(request)
+    project = Project.objects.get(id=project_id)
+    existing_fav = ProjectFavorite.get_for_project(project, user)
+    if existing_fav is not None:
+        print("Favoriting project:{project} by user:{user}".format(project=project.id, user=user.id))
+        ProjectFavorite.create(user, project)
+        user.purge_cache()
+    else:
+        print("Favorite already exists for project:{project}, user:{user}".format(project=project.id, user=user.id))
+        return HttpResponse(status=400)
+    return HttpResponse(status=200)
+
+
+@csrf_exempt
+def project_unfavorite(request, project_id):
+    user = get_request_contributor(request)
+    project = Project.objects.get(id=project_id)
+    existing_fav = ProjectFavorite.get_for_project(project, user)
+    if existing_fav is not None:
+        print("Unfavoriting project:{project} by user:{user}".format(project=project.id, user=user.id))
+        existing_fav.delete()
+        user.purge_cache()
+    else:
+        print("Can't Unfavorite project:{project} by user:{user}".format(project=project.id, user=user.id))
+        return HttpResponse(status=400)
+    return HttpResponse(status=200)
+
+
 #This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.
 #TODO: Return text strings to be displayed on the front end so we know specifically what happened
+#TODO: Figure out why changing the endpoint to /api/contact/democracylab results in CSRF issues
 @csrf_exempt
 def contact_democracylab(request):
     #first prepare all the data from the request body
@@ -745,12 +1289,14 @@ def contact_democracylab(request):
     )
 
     if r.json()['success']:
-        # Successfuly validated, send email
-        fn = body['fname']
-        ln = body['lname']
-        em = body['emailaddr']
-        ms = body['message']
-        contact_democracylab_email(fn, ln, em ,ms)
+        # Successfully validated, send email
+        first_name = body['fname']
+        last_name = body['lname']
+        email_addr = body['emailaddr']
+        message = body['message']
+        company_name = body['company_name'] if 'company_name' in body else None
+        interest_flags = list(filter(lambda key: body[key] and isinstance(body[key], bool), body.keys()))
+        contact_democracylab_email(first_name, last_name, email_addr, message, company_name, interest_flags)
         return HttpResponse(status=200)
 
     # Error while verifying the captcha, do not send the email
@@ -777,3 +1323,27 @@ def team(request):
         response['project'] = project.hydrate_to_json()
 
     return JsonResponse(response)
+
+
+def redirect_v1_urls(request):
+    page_url = request.get_full_path()
+    print(page_url)
+    clean_url = get_clean_url(page_url)
+    section_match = re.findall(r'/index/\?section=(\w+)', clean_url)
+    section_name = section_match[0] if len(section_match) > 0 else FrontEndSection.Home
+    deprecated_redirect_url = redirect_from_deprecated_url(section_name)
+    if deprecated_redirect_url:
+        print('Redirecting deprecated url {name}: {url}'.format(name=section_name, url=clean_url))
+        return redirect(deprecated_redirect_url)
+    print('Redirecting v1 url: ' + clean_url)
+    section_id_match = re.findall(r'&id=([\w-]+)', clean_url)
+    section_id = section_id_match[0] if len(section_id_match) > 0 else ''
+    return redirect(section_url(section_name, {'id': section_id}))
+
+
+def get_testimonials(request, category=None):
+    testimonials = Testimonial.objects.filter(active=True)
+    if category:
+        testimonials = testimonials.filter(categories__name__in=[category])
+
+    return JsonResponse(list(map(lambda t: t.to_json(), testimonials.order_by('-priority'))), safe=False)

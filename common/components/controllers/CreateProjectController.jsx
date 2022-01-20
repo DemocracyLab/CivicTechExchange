@@ -12,24 +12,29 @@ import ProjectPreviewForm from "../componentsBySection/CreateProject/ProjectPrev
 import ProjectDescriptionForm from "../componentsBySection/CreateProject/ProjectDescriptionForm.jsx";
 import ProjectPositionsForm from "../componentsBySection/CreateProject/ProjectPositionsForm.jsx";
 import ProjectResourcesForm from "../componentsBySection/CreateProject/ProjectResourcesForm.jsx";
-import ProjectAPIUtils, {ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils, {
+  ProjectDetailsAPIData,
+} from "../utils/ProjectAPIUtils.js";
 import api from "../utils/api.js";
 import url from "../utils/url.js";
 import utils from "../utils/utils.js";
-import FormWorkflow, {FormWorkflowStepConfig} from "../forms/FormWorkflow.jsx";
+import FormWorkflow, {
+  FormWorkflowStepConfig,
+} from "../forms/FormWorkflow.jsx";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
-
+import _ from "lodash";
 
 type State = {|
   projectId: ?number,
   project: ?ProjectDetailsAPIData,
-  steps: $ReadOnlyArray<FormWorkflowStepConfig>
+  steps: $ReadOnlyArray<FormWorkflowStepConfig>,
+  startStep: ?number,
 |};
 
 /**
  * Encapsulates form for creating projects
  */
-class CreateProjectController extends React.PureComponent<{||},State> {
+class CreateProjectController extends React.PureComponent<{||}, State> {
   constructor(props: {||}): void {
     super(props);
     const projectId: number = url.argument("id");
@@ -38,102 +43,144 @@ class CreateProjectController extends React.PureComponent<{||},State> {
     this.onFinalSubmitSuccess = this.onFinalSubmitSuccess.bind(this);
     this.state = {
       projectId: projectId,
+      startStep: 0,
       steps: [
         {
           header: "Let's get started!",
           subHeader: "Tell us how you want to create a better world.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: ProjectOverviewForm
-        }, {
+          formComponent: ProjectOverviewForm,
+        },
+        {
           header: "Let others know what your project is about...",
           subHeader: "You can always change details about your project later.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: ProjectInfoForm
-        }, {
+          formComponent: ProjectInfoForm,
+        },
+        {
           header: "Let others know what your project is about...",
           subHeader: "You can always change details about your project later.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: ProjectDescriptionForm
-        }, {
+          formComponent: ProjectDescriptionForm,
+        },
+        {
           header: "What resources would you like to share?",
-          subHeader: "Let volunteers know how they can engage with your project",
+          subHeader:
+            "At DemocracyLab, we're all about transparency.  Share your project's internal collaboration resources and social media to help volunteers understand your goals and processes.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: ProjectResourcesForm
-        }, {
+          formComponent: ProjectResourcesForm,
+        },
+        {
           header: "What type of volunteers does your project need?",
-          subHeader: "You can always change the type of help your project needs later.",
+          subHeader:
+            "You can always change the type of help your project needs later.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,
-          formComponent: ProjectPositionsForm
-        }, {
-          header: "Ready to publish your project?",
-          subHeader: "Please review your project's details and click \"PUBLISH\" below when you're ready.",
+          formComponent: ProjectPositionsForm,
+        },
+        {
+          header: "Ready to submit your project?",
+          subHeader:
+            'Please review your project’s details and click "Submit" below when you’re ready.',
+          submitButtonText: "Submit",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onFinalSubmitSuccess,
-          formComponent: ProjectPreviewForm
-        }
-      ]
+          formComponent: ProjectPreviewForm,
+        },
+      ],
     };
   }
 
   componentDidMount(): void {
-    if(this.state.projectId) {
-      ProjectAPIUtils.fetchProjectDetails(this.state.projectId, this.loadProjectDetails.bind(this), this.handleLoadProjectError.bind(this));
+    if (this.state.projectId) {
+      ProjectAPIUtils.fetchProjectDetails(
+        this.state.projectId,
+        true,
+        this.loadProjectDetails.bind(this),
+        this.handleLoadProjectError.bind(this)
+      );
     }
-    if(CurrentUser.isLoggedIn() && CurrentUser.isEmailVerified()) {
+    if (CurrentUser.isLoggedIn() && CurrentUser.isEmailVerified()) {
       // Only fire event on initial page when the project is not yet created
-      if(!url.argument("id")) {
+      if (!url.argument("id")) {
         metrics.logProjectClickCreate(CurrentUser.userID());
       }
     }
   }
   updatePageUrl() {
-    if(this.state.projectId && !url.argument('id')) {
-      url.updateArgs({id: this.state.projectId});
+    if (this.state.projectId && !url.argument("id")) {
+      url.updateArgs({ id: this.state.projectId });
     }
     utils.navigateToTopOfPage();
   }
 
   loadProjectDetails(project: ProjectDetailsAPIData): void {
-    if(!CurrentUser.isOwner(project)) {
+    if (!CurrentUser.isCoOwnerOrOwner(project) && !CurrentUser.isStaff()) {
       // TODO: Handle someone other than owner
     } else {
+      if (project.project_created) {
+        const lastStep: FormWorkflowStepConfig = _.last(this.state.steps);
+        lastStep.header = "Ready to save your edits?";
+        lastStep.subHeader =
+          'When everything looks good, click "Update Project" below.';
+        lastStep.submitButtonText = "Update Project";
+      }
       this.setState({
         project: project,
-        projectIsLoading: false
+        projectIsLoading: false,
+        startStep: url.argument("step") || 1,
+        steps: _.clone(this.state.steps),
       });
     }
   }
 
   handleLoadProjectError(error: APIError): void {
     this.setState({
-      error: "Failed to load project information"
+      error: "Failed to load project information",
     });
   }
 
-  onSubmit(event: SyntheticEvent<HTMLFormElement>, formRef: HTMLFormElement, onSubmitSuccess: (ProjectDetailsAPIData, () => void) => void): void {
-    const formSubmitUrl: string = this.state.project && this.state.project.project_id
-      ? "/projects/edit/" + this.state.project.project_id + "/"
-      : "/projects/signup/";
-    api.postForm(formSubmitUrl, formRef, onSubmitSuccess, response => null /* TODO: Report error to user */);
+  onSubmit(
+    event: SyntheticEvent<HTMLFormElement>,
+    formRef: HTMLFormElement,
+    onSubmitSuccess: (ProjectDetailsAPIData, () => void) => void
+  ): void {
+    const formSubmitUrl: string =
+      this.state.project && this.state.project.project_id
+        ? "/api/projects/edit/" + this.state.project.project_id + "/"
+        : "/api/projects/create/";
+    api.postForm(
+      formSubmitUrl,
+      formRef,
+      onSubmitSuccess,
+      response => null /* TODO: Report error to user */
+    );
   }
 
   onNextPageSuccess(project: ProjectDetailsAPIData): void {
     this.setState({
       project: project,
-      projectId: project.project_id
+      projectId: project.project_id,
     });
     this.updatePageUrl();
   }
 
   onFinalSubmitSuccess(project: ProjectDetailsAPIData): void {
+    this.setState({
+      project: project,
+      projectId: project.project_id,
+    });
     metrics.logProjectCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
-    window.location.href = url.section(Section.MyProjects, {projectAwaitingApproval: project.project_name});
+    window.location.href = url.section(Section.MyProjects, {
+      projectAwaitingApproval: url.encodeNameForUrlPassing(
+        project.project_name
+      ),
+    });
   }
 
   render(): React$Node {
@@ -144,25 +191,26 @@ class CreateProjectController extends React.PureComponent<{||},State> {
           description="Create project page"
         />
         <div className="form-body">
-          {!CurrentUser.isLoggedIn()
-            ? <LogInController prevPage={Section.CreateProject}/>
-            : <React.Fragment>
-                {CurrentUser.isEmailVerified()
-                  ? (
-                    <FormWorkflow
-                      steps={this.state.steps}
-                      isLoading={this.state.projectId && !this.state.project}
-                      formFields={this.state.project}
-                    />
-                  )
-                  : <VerifyEmailBlurb/>}
-              </React.Fragment>
-          }
+          {!CurrentUser.isLoggedIn() ? (
+            <LogInController prevPage={Section.CreateProject} />
+          ) : (
+            <React.Fragment>
+              {CurrentUser.isEmailVerified() ? (
+                <FormWorkflow
+                  steps={this.state.steps}
+                  startStep={this.state.startStep}
+                  isLoading={this.state.projectId && !this.state.project}
+                  formFields={this.state.project}
+                />
+              ) : (
+                <VerifyEmailBlurb />
+              )}
+            </React.Fragment>
+          )}
         </div>
       </React.Fragment>
     );
   }
-
 }
 
 export default CreateProjectController;

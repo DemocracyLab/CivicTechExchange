@@ -1,33 +1,43 @@
 // @flow
 
-import type {FluxReduceStore} from 'flux/utils';
-import type {SectionType} from '../enums/Section.js';
+import type { FluxReduceStore } from "flux/utils";
+import type { SectionType } from "../enums/Section.js";
 
-import {Container} from 'flux/utils';
-import AboutProjectController from './AboutProjectController.jsx'
-import AboutUsController from './AboutUsController.jsx'
-import CreateProjectController from './CreateProjectController.jsx'
-import EditProjectController from './EditProjectController.jsx'
-import FindProjectsController  from './FindProjectsController.jsx'
-import LandingController from './LandingController.jsx'
-import MyProjectsController from './MyProjectsController.jsx'
-import NavigationStore from '../stores/NavigationStore.js'
-import React from 'react';
-import Section from '../enums/Section.js'
-import LogInController from './LogInController.jsx'
-import SignUpController from './SignUpController.jsx'
+import { Container } from "flux/utils";
+import AboutProjectController from "./AboutProjectController.jsx";
+import AboutUsController from "./AboutUsController.jsx";
+import CreateProjectController from "./CreateProjectController.jsx";
+import FindProjectsController from "./FindProjectsController.jsx";
+import LandingController from "./LandingController.jsx";
+import MyProjectsController from "./MyProjectsController.jsx";
+import NavigationStore from "../stores/NavigationStore.js";
+import React from "react";
+import Section from "../enums/Section.js";
+import LogInController from "./LogInController.jsx";
+import SignUpController from "./SignUpController.jsx";
 import ResetPasswordController from "./ResetPasswordController.jsx";
 import ChangePasswordController from "./ChangePasswordController.jsx";
 import EditProfileController from "./EditProfileController.jsx";
 import AboutUserController from "./AboutUserController.jsx";
 import SignedUpController from "./SignedUpController.jsx";
 import EmailVerifiedController from "./EmailVerifiedController.jsx";
-import PartnerWithUsController from "./PartnerWithUsController.jsx";
 import FlashMessage from "../chrome/FlashMessage.jsx";
 import DonateController from "./DonateController.jsx";
 import ThankYouController from "./ThankYouController.jsx";
-import PressController from './PressController.jsx';
-import ContactUsController from './ContactUsController.jsx';
+import ContactUsController from "./ContactUsController.jsx";
+import CreateGroupController from "./CreateGroupController.jsx";
+import CreateEventController from "./CreateEventController.jsx";
+import MyGroupsController from "./MyGroupsController.jsx";
+import LiveEventController from "./LiveEventController.jsx";
+import AboutEventController from "./AboutEventController.jsx";
+import AboutGroupController from "./AboutGroupController.jsx";
+import ErrorController from "./ErrorController.jsx";
+import FindGroupsController from "./FindGroupsController.jsx";
+import FindEventsController from "./FindEventsController.jsx";
+import CoroporateHackathonController from "./CorporateHackathonController.jsx";
+import MyEventsController from "./MyEventsController.jsx";
+import AddSignUpDetails from "./AddSignUpDetails.jsx";
+import VideoController from "./VideoController.jsx";
 
 type State = {|
   section: SectionType,
@@ -46,8 +56,11 @@ class SectionController extends React.Component<{||}, State> {
 
   render(): React$Node {
     return (
-      <div className="SectionBody" style={{ paddingTop: this.props.headerHeight }}>
-        <FlashMessage key='flash_message'/>
+      <div
+        className="SectionBody"
+        style={{ paddingTop: this.props.headerHeight }}
+      >
+        <FlashMessage key="flash_message" />
         {this._getController()}
       </div>
     );
@@ -61,10 +74,12 @@ class SectionController extends React.Component<{||}, State> {
         return <AboutUsController />;
       case Section.CreateProject:
         return <CreateProjectController />;
-      case Section.EditProject:
-        return <EditProjectController />;
       case Section.FindProjects:
         return <FindProjectsController />;
+      case Section.FindGroups:
+        return <FindGroupsController />;
+      case Section.FindEvents:
+        return <FindEventsController />;
       case Section.Home:
         return <LandingController />;
       case Section.MyProjects:
@@ -85,18 +100,36 @@ class SectionController extends React.Component<{||}, State> {
         return <SignedUpController />;
       case Section.EmailVerified:
         return <EmailVerifiedController />;
-      case Section.PartnerWithUs:
-        return <PartnerWithUsController />;
       case Section.Donate:
         return <DonateController />;
       case Section.ThankYou:
         return <ThankYouController />;
-      case Section.Press:
-        return <PressController />;
       case Section.ContactUs:
         return <ContactUsController />;
+      case Section.CreateGroup:
+        return <CreateGroupController />;
+      case Section.CreateEvent:
+        return <CreateEventController />;
+      case Section.AboutGroup:
+        return <AboutGroupController />;
+      case Section.MyGroups:
+        return <MyGroupsController />;
+      case Section.MyEvents:
+        return <MyEventsController />;
+      case Section.AboutEvent:
+        return <AboutEventController />;
+      case Section.LiveEvent:
+        return <LiveEventController />;
+      case Section.Companies:
+        return <CoroporateHackathonController />;
+      case Section.Error:
+        return <ErrorController />;
+      case Section.AddUserDetails:
+        return <AddSignUpDetails />;
+      case Section.VideoOverview:
+        return <VideoController />;
       default:
-        return <div>Section not yet implemented: {this.state.section}</div>
+        return <div>Section not yet implemented: {this.state.section}</div>;
     }
   }
 }

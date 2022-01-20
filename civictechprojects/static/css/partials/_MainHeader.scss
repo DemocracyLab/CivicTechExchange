@@ -1,76 +1,162 @@
 .MainHeader-root {
-  font-size: 12px;
-  height: 54px;
-}
-
-.MainHeader-logo {
-  cursor: pointer;
-  width: 200px;
-  height: 100%;
-}
-
-.MainHeader-profilePicture {
-  border-radius: 5px;
-  margin-right: 40px;
-  vertical-align: middle;
-  width: 40px;
-}
-
-.MainHeader-rightContent {
-  float: right;
-}
-
-.MainHeader-links {
-  display: none;
-  float: right;
-}
-
-.MainHeader-hamburger { 
-  display: block; 
-}
-
-.MainHeader-navDrawer {
-  margin-top: 25px;
-  width: 43.72vw;
-  min-width: 200px;
-}
-
-.MainHeader-drawerDiv {
-  margin-top: 30px;
-  margin-bottom: 30px;
-  margin-left: 25px;
-}
-
-
-.MainHeader-dropdownButton {
-  display: none;
-  cursor: pointer;
-  text-decoration: none;
-  color: $color-text-dark;
-}
-
-.MainHeader-name {
-  text-align: center;
-  margin-left: 25px;
-  margin-bottom: 25px;
-}
-
-.MainHeader {
-  position: fixed;
   z-index: 99;
   width: 100%;
+  position: fixed;
+}
+.MainHeader-showmobile {
+  display: block; // show by default, hide in media query
+}
+.MainHeader-showdesktop {
+  display: none; // hide by default, show in media query
+}
+.MainHeader-donate-link {
+  color: $color-text-dark;
+}
+.MainHeader-login-button {
+  margin-left: auto;
+  margin-right: 1rem;
+  color: $color-text-dark;
+}
+.MainHeader-useravatar {
+  height: 38px;
+  width: 38px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+.MainHeader-donatebutton {
+  height: 38px;
+  margin: auto 20px auto 0;
+}
+.MainHeader-active {
+  text-decoration: underline;
+  text-decoration-color: $color-orange;
+  text-underline-position: under;
+}
+#nav-pagenav-container {
+  padding-left: 12px;
+}
+.MainHeader-donate-loggedin-container {
+  margin: auto;
 }
 
-@include media-breakpoint-up(sm) {
-  .MainHeader-dropdownButton {
-    display: block;
+// adds a dropdown caret for nav menus, since Bootstrap's is disabled globally
+.MainHeader-nav-container {
+  .dropdown-item {
+    font-size: 15px; // match body text size
+  }
+  .dropdown-toggle.nav-link {
+    padding-right: 10px;
+  }
+  .dropdown-toggle.nav-link::after {
+    width: 1.125rem;
+    content: "";
+    background-image: url("data:image/svg+xml,%3Csvg aria-hidden='true' focusable='false' data-prefix='fas' data-icon='caret-down' class='svg-inline--fa fa-caret-down fa-w-10' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='currentColor' d='M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z'%3E%3C/path%3E%3C/svg%3E");
+    padding: 0 4px; // total padding determines width
+    margin-left: 5px;
+    background-repeat: no-repeat;
+    background-position: 0 50%; // center caret vertically
+  }
+}
+
+//  navbar overrides all go in here for specificity - in the future build a new theme instead of these overly specific selectors
+.MainHeader-nav-container {
+  a:hover,
+  a:focus,
+  .navbar-light .navbar-nav .nav-link:hover,
+  .navbar-light .navbar-nav .nav-link:focus {
+    color: $color-orange;
+  }
+  a:active,
+  .navbar-light .navbar-nav .nav-link:active {
+    color: inherit;
+  }
+  a:visited, .navbar-light .navbar-nav .nav-link:visited {
+    color: inherit;
+  }
+  .navbar {
+    padding: 0.25rem; //override entire navbar padding values, set our own later
+  }
+  .navbar-brand {
+    padding: 0 0.875rem 0 0;
+  }
+  .bg-navlight {
+    background: $color-background-light;
+  }
+  .navbar-nav .nav-link {
+    color: $color-text-dark;
+  }
+  /* button hover states shouldn't change in the nav */
+  /* yes, this is stubbornly refusing to use !important */
+  a.MainHeader-login-button.btn.btn-outline-primary:hover,
+  a.MainHeader-login-button.btn.btn-outline-primary:focus,
+  a.MainHeader-login-button.btn.btn-outline-primary:active {
+    color: inherit;
+  }
+  a.MainHeader-donatebutton:hover,
+  a.MainHeader-donatebutton:active {
+    color: white;
+  }
+  .dropdown-menu.show {
+    border: none;
+  }
+  /* these two rules should help landscape mode phones with a position: fixed nav, see: https://github.com/twbs/bootstrap/issues/23374 */
+  .navbar-collapse {
+    max-height: 65vh;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
-  .MainHeader-hamburger {
+  .collapsing {
+    overflow-y: hidden;
+    overflow-x: hidden;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .MainHeader-showmobile {
     display: none;
   }
-
-  .MainHeader-links {
+  .MainHeader-showdesktop {
     display: block;
+  }
+  .MainHeader-root .dropdown-menu.show {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+  }
+  .MainHeader-root {
+    .navbar-brand {
+      padding: 0 0.875rem;
+    }
+    /* clearing mobile-only rules on desktop  */
+    .navbar-collapse {
+      max-height: unset;
+      overflow-y: unset;
+      overflow-x: unset;
+    }
+    .collapsing {
+      overflow-y: unset;
+      overflow-x: unset;
+    }
+    .MainHeader-pagenav > a,
+    .MainHeader-pagenav > div {
+      margin: 0 0.5rem;
+    }
+  }
+  #nav-pagenav-container {
+    padding: 0;
+  }
+  .MainHeader-nav-container {
+    .dropdown-item {
+      font-size: 16px; // match body text size
+    }
+  }
+}
+
+/* specific layout fixes for narrow devices, e.g. iphone 5 so nav doesn't spill onto 2 lines */
+@media (max-width: 370px) {
+  .navbar-brand img {
+    width: 140px;
+  }
+  .MainHeader-root .navbar-brand {
+    padding-right: 0;
   }
 }

@@ -7,7 +7,8 @@
 .SocialFooter-root p {
   font-weight: 500;
 }
-.SocialFooter-root a, .SocialFooter-newsletter input[type=submit] {
+.SocialFooter-root a,
+.SocialFooter-newsletter input[type="submit"] {
   font-weight: 600;
 }
 .SocialFooter-cta a {
@@ -45,11 +46,11 @@
 .SocialFooter-box {
   margin-bottom: 1.5rem;
 }
-.SocialFooter-signupcontainer input[type=submit] {
+.SocialFooter-signupcontainer input[type="submit"] {
   display: block;
   margin: 0 auto;
 }
-.SocialFooter-signupcontainer input[type=email] {
+.SocialFooter-signupcontainer input[type="email"] {
   margin: 0 0 0.5rem 0;
 }
 
@@ -80,7 +81,7 @@
   .SocialFooter-newsletter {
     margin-left: auto;
   }
-  .SocialFooter-signupcontainer input[type=submit] {
+  .SocialFooter-signupcontainer input[type="submit"] {
     margin: 0;
   }
 }
@@ -99,10 +100,10 @@
   .SocialFooter-signupcontainer input {
     height: 2.25rem;
   }
-  .SocialFooter-signupcontainer input[type=submit] {
+  .SocialFooter-signupcontainer input[type="submit"] {
     display: inline-block;
   }
-  .SocialFooter-signupcontainer input[type=email] {
+  .SocialFooter-signupcontainer input[type="email"] {
     margin: 0 1rem 0.5rem 0;
   }
 }

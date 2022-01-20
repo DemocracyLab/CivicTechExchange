@@ -1,0 +1,128 @@
+.FindEventsController-topsplash .SplashScreen-content {
+  padding-bottom: 3rem;
+}
+
+.EventCardContainer-section-header {
+  margin-top: 1.25rem;
+}
+
+.EventCard-root {
+  background-color: $color-background-light;
+  border: 1px solid $color-grey-frame-border;
+  color: $color-text-dark;
+  width: 100%;
+}
+
+// only round corners for top edge of first, bottom edge of last item per day grouping
+.EventCard-root:first-of-type {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.EventCard-root:last-of-type {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+// avoid double border for days with multiple events (thus multiple cards)
+.EventCard-root:nth-of-type(n + 2) {
+  border-top: none;
+}
+
+.EventCard-root h2 {
+  margin: 22px 0 12px 0;
+}
+.EventCard-root h4 {
+  margin-bottom: 16px;
+  color: $color-text-grey;
+}
+.EventCard-dateheader,
+.EventCard-day-container {
+  width: 100%;
+}
+.EventCard-dateheader {
+  margin-top: 2rem;
+}
+.EventCard-info {
+  display: flex;
+  flex-direction: column;
+}
+.EventCard-info li i {
+  margin-right: 5px;
+}
+.EventCard-root a {
+  text-decoration: none;
+  color: $color-text-dark;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  height: 100%;
+}
+// margin-bottom because we don't have pagination, keeping cards off the edge of the footer
+.EventCards-card-container {
+  margin-bottom: 3rem;
+}
+.EventCard-info,
+.EventCard-time {
+  margin-left: 0.5rem;
+}
+
+.EventCard-logo {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+}
+.EventCard-url-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: auto;
+}
+.EventCard-logo img {
+  max-width: 98%;
+  display: block;
+  margin: 2px auto; /* handles rounded edges better to push it off the top a touch */
+}
+.EventCard-info {
+  grid-column: 1;
+  grid-row: 2;
+  overflow-wrap: break-word;
+}
+.EventCard-info ul {
+  color: $color-text-grey;
+  list-style-type: none;
+  padding: 0;
+}
+.EventCard-info li {
+  margin-top: 0.25rem;
+  display: block;
+}
+.EventCard-time {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+@include media-breakpoint-up(md) {
+  .EventCard-root a {
+    grid-template-columns: 37% 48% 15%;
+    grid-template-rows: 100%;
+  }
+  .EventCard-logo {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .EventCard-info {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .EventCard-info ul {
+    margin-top: auto;
+  }
+  .EventCard-time {
+    grid-column: 3;
+    grid-row: 1;
+    margin: 0 8px 0 auto;
+  }
+  .EventCard-logo img {
+    margin: auto;
+  }
+}

@@ -1,27 +1,35 @@
 .MyProjectCard-root {
   color: inherit;
-}
-
-.MyProjectCard-column {
-  width: 250px;
+  .btn-info, .btn-info:visited {
+    color: #fff; //temporary quickfix to inherit issues
+  }
+  background-color: $color-background-light;
+  border: solid 1px $color-grey-frame-border;
+  margin: 20px auto;
+  padding: 16px;
 }
 
 .MyProjectCard-header {
   color: $color-text-dark;
+  font-style: italic;
 }
 
 .MyProjectCard-projectName {
   font-weight: bold;
 }
 
-.MyProjectCard-table {
-  background-color: $color-background-light;
-  border: solid 1px $color-grey-frame-border;
-  margin: 20px auto;
-  padding: 16px;
-  width: 98%;
-}
-
 .MyProjectCard-button {
   margin: 5px;
+}
+
+.MyProjectCard-table td {
+  display: inline-block;
+  width: 100%;
+ }
+
+ @include media-breakpoint-up(sm) {
+  .MyProjectCard-table td {
+    display: table-cell;
+    width: 250px;
+    }
 }

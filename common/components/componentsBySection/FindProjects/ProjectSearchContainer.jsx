@@ -2,15 +2,15 @@
 
 // @flow
 
-import ProjectSearchSort from './ProjectSearchSort.jsx';
-import ResetSearchButton from './ResetSearchButton.jsx';
+import ProjectSearchSort from "./ProjectSearchSort.jsx";
+import ResetSearchButton from "./ResetSearchButton.jsx";
 import AlertSignupModal from "./AlertSignupModal.jsx";
 import metrics from "../../utils/metrics.js";
-import React from 'react';
+import React from "react";
 
 type State = {|
   showAlertSignupModal: boolean,
-  searchFilters: ?string
+  searchFilters: ?string,
 |};
 
 class ProjectSearchContainer extends React.PureComponent<{||}, State> {
@@ -18,20 +18,20 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
     super();
     this.state = {
       showAlertSignupModal: false,
-      searchFilters: ""
+      searchFilters: "",
     };
   }
 
   openAlertSignup() {
     this.setState({
       showAlertSignupModal: true,
-      searchFilters: document.location.search
+      searchFilters: document.location.search,
     });
     metrics.logUserAlertButtonClick();
   }
 
   handleCloseAlertSignup() {
-    this.setState({showAlertSignupModal: false});
+    this.setState({ showAlertSignupModal: false });
   }
 
   render(): React$Node {

@@ -22,16 +22,35 @@ class FrontEndSection(Enum):
     SignedUp = 'SignedUp'
     AboutUs = 'AboutUs'
     FindProjects = 'FindProjects'
-    PartnerWithUs = 'PartnerWithUs'
     Donate = 'Donate'
-    Press = 'Press'
     ContactUs = 'ContactUs'
     Home = "Home"
     CreateProject = 'CreateProject'
-    EditProject = 'EditProject'
     MyProjects = 'MyProjects'
     Profile = 'Profile'
     SignUp = 'SignUp'
     EditProfile = 'EditProfile'
     ThankYou = 'ThankYou'
     EmailVerified = 'EmailVerified'
+    Error = 'Error'
+    AboutGroup = 'AboutGroup'
+    FindGroups = 'FindGroups'
+    FindEvents = 'FindEvents'
+    CreateEvent = 'CreateEvent'
+    AboutEvent = 'AboutEvent'
+    CreateGroup = 'CreateGroup'
+    MyGroups = 'MyGroups'
+    MyEvents = 'MyEvents'
+    Companies = 'Companies'
+    AddUserDetails = 'AddUserDetails'
+    VideoOverview = 'VideoOverview'
+
+    # deprecated
+    CorporateHackathon = 'CorporateHackathon'
+    PartnerWithUs = 'PartnerWithUs'
+    Press = 'Press'
+
+deprecated_page_redirects = {
+    'CorporateEvent': FrontEndSection.Companies.value,
+    'PartnerWithUs': FrontEndSection.Companies.value
+}

@@ -1,0 +1,370 @@
+// edge-to-edge class schema, temporary for now: https://gist.github.com/JayHoltslander/e464ac3ac8f3814999a9
+// TODO: update splash screen component to accept gradient overlays, heights based on image
+.container > .corporate-edge {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.corporate-edge {
+  padding-top: 0;
+  padding-bottom: 0;
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+//end edge-to-edge
+
+// quick and dirty top and bottom image sizing
+// TODO: save me from this terrible CSS
+.corporate-bottom-image {
+  height: 101px;
+}
+.corporate-top-image {
+  height: 300px;
+}
+@include media-breakpoint-up(md) {
+  .corporate-top-image {
+    height: 400px;
+  }
+  .corporate-bottom-image {
+    height: 150px;
+  }
+}
+@include media-breakpoint-up(lg) {
+  .corporate-top-image {
+    height: 533px;
+  }
+  .corporate-bottom-image {
+    height: 252px;
+  }
+}
+@include media-breakpoint-up(xl) {
+  .corporate-top-image {
+    height: 630px;
+  }
+  .corporate-bottom-image {
+    height: 323px;
+  }
+}
+// end awful image sizing zone
+
+//END OVERRIDES
+
+//begin regular CSS for the page
+
+// corporate page (hackathons and sponsorships)
+.corporate-root {
+  // nav and some others in here for specificity
+  // nav acts as section headers but is difficult to @extend h2, so fonts set specifically here to match headline2
+  .nav {
+    justify-content: space-evenly;
+  }
+  .nav-tabs {
+    background: $color-background-light;
+    border-bottom: 5px solid $color-orange;
+  }
+  .nav-tabs a {
+    text-align: center;
+    flex-basis: calc(50% - 20px);
+    color: $color-text-dark;
+    font-size: 21px; // match .headline2 size (but not weight)
+  }
+  .nav-link,
+  .nav-link:hover {
+    border: 1px solid $color-text-dark;
+  }
+  .nav-link {
+    border-bottom: none;
+  }
+  .nav-link.active {
+    font-weight: bolder;
+    color: $color-text-dark;
+    background: $color-orange;
+    border: 1px solid $color-text-dark;
+    border-bottom: 1px solid $color-orange;
+  }
+  .carousel-blog-root {
+    margin-bottom: 2rem;
+  }
+  .carousel-link {
+    @extend .h2;
+    font-weight: normal;
+  }
+  .corporate-top {
+    padding-top: 2rem;
+  }
+}
+.corporate-sources-citation a {
+  color: $color-text-dark;
+  text-decoration: underline;
+}
+.corporate-sources-citation a:hover {
+  color: $color-text-dark;
+}
+
+.corporate-hr-line {
+  display: none;
+  width: 45%;
+}
+.corporate-learn-link {
+  width: 100%;
+  text-align: center;
+  a,
+  i {
+    font-size: 21px; // match headline2 font size
+  }
+  i {
+    padding-left: 8px;
+  }
+}
+.corporate-top,
+.corporate-hackathon-saying,
+.corporate-hackathon-saying .carousel-testimonial-root,
+.corporate-sponsorship-saying,
+.corporate-sponsorship-saying .carousel-testimonial-root,
+.corporate-contact,
+.corporate-bottom-image {
+  background-color: $color-background-light;
+}
+
+.corporate-top-flex {
+  margin-bottom: 3rem;
+}
+.corporate-top-overlay,
+.corporate-bottom-overlay {
+  background-blend-mode: multiply;
+  margin-left: -15px;
+  margin-right: -15px;
+  width: calc(100% + 30px);
+  height: 100%;
+}
+.corporate-top-image {
+  background-position-x: center;
+  background-position-y: top; // keep faces in view
+}
+.corporate-bottom-image {
+  background-position: center;
+}
+.corporate-top-image,
+.corporate-bottom-image {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.corporate-top-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.05) 27.79%,
+    rgba(0, 0, 0, 0.64) 64.62%,
+    rgba(0, 0, 0, 0.84) 100%
+  );
+
+  display: flex;
+  h1 {
+    color: #fff;
+    max-width: 500px;
+    margin-top: auto;
+    padding: 0 8px 8px 15px;
+  }
+}
+.corporate-bottom-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0) 45%
+  );
+}
+
+//padding because we want background colors to have spacing too
+.corporate-section,
+.corporate-hackathon-whyhost h1,
+.corporate-sponsorship-why h1 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+.corporate-sponsorship-saying h1,
+.corporate-hackathon-saying h1,
+.corporate-sponsorship-impact h1,
+.corporate-hackathon-stories h1,
+.corporate-sponsorship-how h1 {
+  padding-bottom: 3rem;
+}
+.corporate-top-flex-button {
+  margin-top: 2rem;
+}
+.corporate-cta-button {
+  display: block;
+  margin: 0 auto;
+  max-width: 450px;
+}
+.corporate-hackathon-card,
+.corporate-sponsorship-card {
+  border: 1px solid $color-grey-frame-border;
+  background: $color-background-light;
+  margin-bottom: 30px;
+  padding: 15px;
+}
+
+.corporate-contact {
+  h2 {
+    padding: 30px 0;
+  }
+}
+.corporate-sponsorship-stat-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.corporate-sponsorship-stat {
+  flex: 1 1 26%;
+  margin: 0 20px;
+  text-justify: center;
+  h4 {
+    @extend .h1;
+    color: $color-orange;
+  }
+  h4,
+  p {
+    text-align: center;
+  }
+}
+.corporate-how-flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2rem 0;
+}
+.corporate-how-flex-block {
+  display: flex;
+  flex-direction: row;
+  margin: 0 0 15px 0;
+}
+.corporate-how-image-container {
+  margin: auto 0;
+}
+.corporate-how-text {
+  margin: 0 0 0 15px;
+}
+.corporate-sponsorship-how-flex {
+  display: flex;
+  flex-direction: column;
+}
+.corporate-sponsorship-how-image {
+  align-self: center;
+  img {
+    max-width: 100%;
+  }
+}
+.corporate-sponsorship-how-text {
+  margin: 2rem 0;
+  h2 {
+    margin-bottom: 1rem;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .corporate-cta-button {
+    display: initial;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  .corporate-hackathon-card,
+  .corporate-sponsorship-card {
+    min-height: 100%; // equal height cards when displayed in a row
+  }
+  .nav-tabs a {
+    font-size: 23px; // match .headline2 size (but not weight)
+  }
+  .corporate-hr-line {
+    display: block;
+  }
+  .corporate-learn-link {
+    a,
+    i {
+      font-size: 23px; // match headline2 font size
+    }
+  }
+  .corporate-top-overlay {
+    h1 {
+      padding: 15px;
+    }
+  }
+      
+  .corporate-root {
+    .ContactForm-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      flex: 0 0 auto;
+      justify-content: space-around;
+    }
+    .ContactForm-group {
+      flex-basis: 45%;
+    }
+    .corporate-top {
+      padding-top: 3rem;
+    }
+  }
+  .corporate-top-flex {
+    display: flex;
+    flex: row nowrap;
+  }
+  .corporate-top-flex-button {
+    flex-shrink: 0;
+    padding-left: 20px;
+    align-self: center;
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .corporate-sponsorship-stat-container {
+    flex-wrap: nowrap;
+    max-width: 80%;
+    margin: 0 auto;
+  }
+  .corporate-sponsorship-stat {
+    flex-basis: 20%;
+  }
+  .corporate-how-flex-container {
+    flex-direction: row;
+    align-items: flex-start;
+    margin: 3rem 0;
+  }
+  .corporate-how-flex-block {
+    flex-direction: column;
+    margin: 0 15px;
+    text-align: center;
+  }
+  .corporate-how-text {
+    margin: 0;
+    p {
+      margin-top: 1rem;
+      text-align: left;
+    }
+  }
+  .corporate-how-after {
+    padding: 1rem 0;
+    text-align: center;
+  }
+  .corporate-sponsorship-how-flex {
+    flex-direction: row;
+  }
+  .corporate-sponsorship-stat-title {
+    text-align: center;
+  }
+  .corporate-sponsorship-how-image {
+    flex-shrink: 0;
+    margin-right: 2rem;
+    img {
+      width: 420px;
+    }
+  }
+  .corporate-sponsorship-how-text {
+    margin-left: 2rem;
+  }
+  .corporate-sponsorship-how-button {
+    text-align: center;
+    margin-top: 3rem;
+  }
+}

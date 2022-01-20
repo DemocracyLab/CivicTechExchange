@@ -1,5 +1,5 @@
 from django.db import models
-
+from common.helpers.collections import omit_falsy
 
 # Create your models here.
 class Tag(models.Model):
@@ -57,8 +57,14 @@ class Tag(models.Model):
 
     @staticmethod
     def merge_tags_field(tags_field, tag_entries):
+        """
+        Merge tag entries into a tag field
+        :param tags_field: model tag field
+        :param tag_entries: comma-separated string of tag slugs
+        :returns True if any changes were made
+        """
         tag_entries = tag_entries or ""
-        tag_entry_slugs = set(tag_entries.split(','))
+        tag_entry_slugs = set(tag_entries.split(',') if tag_entries else [])
         existing_tag_slugs = set(tags_field.slugs())
 
         tags_to_add = list(tag_entry_slugs - existing_tag_slugs)
@@ -70,3 +76,19 @@ class Tag(models.Model):
         for tag in tags_to_remove:
             if len(tag) > 0:
                 tags_field.remove(tag)
+        return len(tags_to_add) > 0 or len(tags_to_remove) > 0
+
+    @staticmethod
+    def tags_field_descriptions(tags_field):
+        """
+        :param tags_field: Tag field to pull tag display names from
+        :return: Comma-separated list of tag display names
+        """
+        valid_tags = omit_falsy(list(tags_field.all().values()))
+        tag_strings = []
+        if valid_tags:
+            for tag_data in valid_tags:
+                tag = Tag.get_by_name(tag_data['name'])
+                if tag:
+                    tag_strings.append(tag.display_name)
+        return ",".join(tag_strings)

@@ -13,27 +13,46 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.views.generic import TemplateView
+from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
-from .sitemaps import ProjectSitemap, SectionSitemap
+from common.helpers.error_handlers import handle500
+from common.urls import v1_urls, v2_urls
+from .sitemaps import ProjectSitemap, SectionSitemap, GroupSitemap, EventSitemap
 
 
 from . import views
+
+# Set custom error handler
+handler500 = handle500
+
 urlpatterns = [
 
     url(
         r'^sitemap\.xml$',
         sitemap,
-        {'sitemaps': {'projects': ProjectSitemap(), 'sections': SectionSitemap()}},
+        {'sitemaps': {
+            'sections': SectionSitemap(),
+            'projects': ProjectSitemap(),
+            'groups': GroupSitemap,
+            'event': EventSitemap}},
         name='django.contrib.sitemaps.views.sitemap'
     ),
     url(r'^robots\.txt$', views.robots, name='robots'),
     url(r'^googlebb20bcf8545e7046.html$', TemplateView.as_view(template_name="googlebb20bcf8545e7046.html")),
-    url(r'^projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
-    url(r'^projects/delete/(?P<project_id>[0-9]+)/$', views.project_delete, name='project_delete'),
-    url(r'^projects/signup/$', views.project_create, name='project_create'),
-    url(r'^projects/approve/(?P<project_id>[0-9]+)/$', views.approve_project, name='approve_project'),
+    url(r'^api/groups/create/$', views.group_create, name='group_create'),
+    url(r'^api/groups/approve/(?P<group_id>[0-9]+)/$', views.approve_group, name='approve_group'),
+    url(r'^api/groups/edit/(?P<group_id>[0-9]+)/$', views.group_edit, name='group_edit'),
+    url(r'^api/groups/delete/(?P<group_id>[0-9]+)/$', views.group_delete, name='group_delete'),
+    url(r'^api/events/create/$', views.event_create, name='event_create'),
+    url(r'^api/events/approve/(?P<event_id>[0-9]+)/$', views.approve_event, name='approve_event'),
+    url(r'^api/events/edit/(?P<event_id>[0-9]+)/$', views.event_edit, name='event_edit'),
+    url(r'^api/events/delete/(?P<event_id>[0-9]+)/$', views.event_delete, name='event_delete'),
+    url(r'^api/projects/edit/(?P<project_id>[0-9]+)/$', views.project_edit, name='project_edit'),
+    url(r'^api/projects/delete/(?P<project_id>[0-9]+)/$', views.project_delete, name='project_delete'),
+    url(r'^api/projects/create/$', views.project_create, name='project_create'),
+    url(r'^api/projects/approve/(?P<project_id>[0-9]+)/$', views.approve_project, name='approve_project'),
     url(
         r'^presign_s3/upload/project/thumbnail/$',
         views.presign_project_thumbnail_upload,
@@ -44,14 +63,29 @@ urlpatterns = [
     ),
     url(r'^api/projects/recent', views.recent_projects_list),
     url(r'^api/projects', views.projects_list),
-    url(r'^api/my_projects', views.my_projects),
+    url(r'^api/events', views.events_list),
+    url(r'^api/limited_listings', views.limited_listings),
+    url(r'^api/groups', views.groups_list),
+    url(r'^api/tags/groups', views.group_tags_counts),
     url(r'^api/tags', views.tags),
-    url(r'^index/$', views.index),
-    url(r'^api/team$', views.team, name='team'),
-    url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
+    url(r'^admin/', admin.site.urls),
+    url(r'^contact/democracylab$', views.contact_democracylab, name='contact_democracylab'),
     url(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner'),
     url(r'^contact/volunteers/(?P<project_id>[0-9]+)/$', views.contact_project_volunteers, name='contact_project_volunteers'),
     url(r'^contact/volunteer/(?P<application_id>[0-9]+)/$', views.contact_project_volunteer, name='contact_project_volunteer'),
+    url(r'^contact/group/(?P<group_id>[0-9]+)/$', views.contact_group_owner, name='contact_group_owner'),
+    url(r'', include(v2_urls)),
+    url(r'', include(v1_urls)),
+    url(r'^api/team$', views.team, name='team'),
+    url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
+    url(r'api/project/(?P<project_id>[0-9]+)/volunteers/$',views.get_project_volunteers,name='get_project_volunteers'),
+    url(r'^api/group/(?P<group_id>[0-9]+)/invite$', views.invite_project_to_group, name='invite_project_to_group'),
+    url(r'^api/invite/(?P<invite_id>[0-9]+)/approve$', views.accept_group_invitation, name='accept_group_invitation'),
+    url(r'^api/invite/(?P<invite_id>[0-9]+)/reject$', views.reject_group_invitation, name='reject_group_invitation'),
+    url(r'^api/favorite/project/(?P<project_id>[0-9]+)/$', views.project_favorite, name='project_favorite'),
+    url(r'^api/unfavorite/project/(?P<project_id>[0-9]+)/$', views.project_unfavorite, name='project_unfavorite'),
+    url(r'^api/group/(?P<group_id>[0-9]+)/$', views.get_group, name='get_group'),
+    url(r'^api/event/(?P<event_id>.*)/$', views.get_event, name='get_event'),
     url(r'^volunteer/(?P<project_id>[0-9]+)/$', views.volunteer_with_project, name='volunteer_with_project'),
     url(r'^volunteer/leave/(?P<project_id>[0-9]+)/$', views.leave_project, name='leave_project'),
     url(r'^volunteer/approve/(?P<application_id>[0-9]+)/$', views.accept_project_volunteer, name='accept_project_volunteer'),
@@ -62,7 +96,7 @@ urlpatterns = [
     url(r'^volunteer/renew/(?P<application_id>[0-9]+)/$', views.renew_volunteering_with_project, name='renew_volunteering_with_project'),
     url(r'^volunteer/conclude/(?P<application_id>[0-9]+)/$', views.conclude_volunteering_with_project, name='conclude_volunteering_with_project'),
     url(r'^alert/create/$', views.add_alert, name='add_alert'),
-    url(r'^contact/democracylab$', views.contact_democracylab, name='contact_democracylab')
+    url(r'^api/testimonials/(?P<category>[-\w]*)', views.get_testimonials, name='get_testimonials'),
 
 ]
 

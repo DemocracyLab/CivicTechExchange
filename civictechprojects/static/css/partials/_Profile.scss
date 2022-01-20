@@ -1,0 +1,176 @@
+// common elements for project/group/etc profile pages
+
+.Profile-root {
+  background: $color-background-light;
+}
+
+.Profile-top-section-content {
+  border: 1px solid $color-grey-frame-border;
+  border-radius: 5px;
+  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+.Profile-top-logo {
+  min-width: 35%; // no squeezing the image allowed
+  padding: 0.5rem;
+  border-radius: 5px;
+  img {
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 250px; // so very tall images don't ruin mobile
+  }
+  order: 1;
+  flex-basis: 35%;
+}
+// make buttons stay in column even if the section is wide enough to stack horizontally
+// on narrow mobile devices keep them constrained to a little less than 65% for visual spacing
+.Profile-owner,
+.Profile-top-interactions {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 60%;
+  margin-left: auto;
+  align-items: flex-end;
+}
+
+.Profile-top-details {
+  flex-basis: 100%;
+  order: 3;
+  padding: 15px 0 0 0;
+  max-width: 100%; // this and the break-words keep very long one word titles from breaking container
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.Profile-top-interactions {
+  flex-basis: 65%;
+  order: 2;
+  .AboutProject-button {
+    margin-top: 1rem;
+  }
+  .ApproveGroups-section {
+    margin-left: auto;
+  }
+  .ApproveGroups-row {
+    display: inline-flex;
+    align-items: flex-end;
+    flex-direction: column;
+    flex-wrap: wrap;
+    text-align: right;
+    border: 1px solid $color-grey-medium;
+    border-radius: 5px;
+    padding: 8px;
+    span {
+      margin: 8px 0;
+    }
+  }
+}
+
+.Profile-tab {
+  padding: 1rem;
+}
+.Profile-pill {
+  background: $color-grey-medium;
+  border-radius: 20px;
+  padding: 4px 10px 4px 10px;
+  margin: 4px;
+  display: inline-block; // so they wrap properly
+}
+//customize react-bootstrap Tabs component style
+//TODO: Clean up some of these very specific selectors, possibly with adding a class to the component <Tab>
+.Profile-primary-container {
+  margin: 15px 0;
+
+  //customize tab bar
+  .nav-tabs {
+    border: 1px solid $color-grey-frame-border;
+    border-radius: 5px;
+    a {
+      font-size: 17px; // match mobile h3
+    }
+    a.nav-item.nav-link {
+      color: $color-text-dark;
+    }
+    a.nav-item.nav-link:hover {
+      color: $color-orange;
+      border: none;
+    }
+    a.nav-item.nav-link.active,
+    a.nav-item.nav-link.active:hover,
+    a.nav-item.nav-link.active:focus {
+      border: none;
+      border-bottom: 3px solid $color-orange !important; //keep this visible even in hover/focus state
+    }
+  }
+  //border around tab content
+  .tab-content {
+    border: 1px solid $color-grey-frame-border;
+    border-radius: 5px;
+    margin-top: 1rem;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+}
+
+
+@include media-breakpoint-up(lg) {
+  .Profile-top-section-content {
+    margin: 15px 0;
+    padding: 15px;
+    flex-wrap: nowrap;
+  }
+  .Profile-top-logo {
+    min-width: 250px;
+    width: 250px;
+    flex-basis: auto;
+    img {
+      width: 100%;
+    }
+  }
+  .Profile-top-details {
+    max-width: initial;
+    flex-basis: auto;
+    order: 2;
+    padding: 0 30px;
+  }
+  .Profile-top-interactions {
+    flex-basis: auto;
+    order: 3;
+    flex-shrink: 0;
+  }
+
+  .Profile-primary-container {
+    .nav-tabs {
+      display: flex;
+      justify-content: space-around;
+      a {
+        font-size: 19px; // match desktop H3
+      }
+    }
+  }
+  // fixed width sections prevent long URL overflow issue on group page project cards
+  .Profile-primary-container {
+    width: 590px;
+  }
+  .Profile-secondary-section {
+    width: 340px;
+  }
+
+}
+@include media-breakpoint-up(xl) {
+  .Profile-primary-container {
+    width: 730px;
+  }
+  .Profile-secondary-section {
+    width: 380px;
+  }
+}
+@include media-breakpoint-up(xxl) {
+  .Profile-primary-container {
+    width: 942px;
+  }
+  .Profile-secondary-section {
+    width: 420px;
+  }
+}

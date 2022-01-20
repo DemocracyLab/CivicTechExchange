@@ -28,9 +28,12 @@ var/
 .installed.cfg
 *.egg
 *.js.map
+*.css.map
+main.styles.css
 
 # Files that are now built automatically during heroku deployment
 bundle.js
+*.bundle.js
 styles.css
 
 
@@ -43,6 +46,8 @@ styles.css
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+Pipfile
+Pipfile.lock
 
 # Unit test / coverage reports
 htmlcov/
@@ -82,9 +87,26 @@ ENV/
 # Heroku local environment variables
 .env
 
+# VS Code Files
+.vscode/
+
 # IntelliJ IDEA files
 *.iml
 .idea/
+
+# VisualStudio Code
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+
+# VisualStudioCode Patch
+# Ignore all local history of files
+.history
+.ionide
+
+# MacOS
+.DS_Store
 
 # Local database
 mydatabase
@@ -102,5 +124,10 @@ pyvenv.cfg
 # Don't check in package-lock, as it will conflict with yarn.lock and break the heroku build
 package-lock.json
 
+# Docker environment config
+docker_environment_init.sh
+
 .envrc
-tags
+
+# Exclude Makefiles
+Makefile

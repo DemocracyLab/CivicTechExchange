@@ -7,9 +7,12 @@
 
 .VolunteerCard-img {
   float: left;
-  border: none;
-  border-radius: 0px;
   margin-right: 10px;
+  object-fit: contain;
+  background-color: $color-grey-medium;
+  width: 80px;
+  height: 81px;
+  border: none;
 }
 
 .VolunteerCard-volunteerName {
@@ -17,21 +20,16 @@
   padding-top: 10px;
 }
 
-.VolunteerCard-volunteerRole  {
+.VolunteerCard-volunteerRole {
   font-weight: normal;
 }
 
 div.VolunteerCard-dropdownButton {
   display: inline;
-  font-size: 24px;
   float: right;
 }
 .VolunteerCard-dropdownButton .btn-link {
   color: $color-text-grey;
-}
-.VolunteerCard-dropdownButton li > a {
-  font-size: 18px;
-  line-height: 1.75;
 }
 .VolunteerCard-root a.dropdown-item {
   /* overrides orange link text for the project owner's manage team member dropdown menu */

@@ -1,16 +1,17 @@
 // @flow
 
-import SectionController from './SectionController.jsx';
-import MainHeader from '../chrome/MainHeader.jsx';
-import UniversalDispatcher from '../stores/UniversalDispatcher.js';
-import React from 'react';
+import SectionController from "./SectionController.jsx";
+import MainHeader from "../chrome/MainHeader.jsx";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
+import React from "react";
 import MainFooter from "../chrome/MainFooter.jsx";
 import SocialFooter from "../chrome/SocialFooter.jsx";
-import url from '../../components/utils/url.js'
+import url from "../../components/utils/url.js";
+import { loadHeap } from "../utils/heapApi.js";
 
 type State = {|
   headerHeight: number,
-  currentSection: ?string
+  currentSection: ?string,
 |};
 
 class MainController extends React.Component<{||}, State> {
@@ -19,7 +20,7 @@ class MainController extends React.Component<{||}, State> {
     window.addEventListener("popstate", this.loadPage.bind(this));
     this.state = {
       headerHeight: 0,
-      currentSection: null
+      currentSection: null,
     };
   }
 
@@ -28,30 +29,37 @@ class MainController extends React.Component<{||}, State> {
   }
 
   loadPage(): void {
-    const args = url.arguments(window.location.href);
-    if (args.section) {
+    const currentUrl: string = url.cleanDemocracyLabUrl();
+    const section: string = url.getSection(currentUrl);
+    if (section) {
       UniversalDispatcher.dispatch({
-        type: 'SET_SECTION',
-        section: args.section,
+        type: "SET_SECTION",
+        section: section,
         url: window.location.href,
-        fromUrl: true
+        fromUrl: true,
       });
-      this.setState({currentSection: args.section});
+      this.setState({ currentSection: section });
     }
   }
 
   _mainHeaderHeightChange(headerHeight) {
     this.setState({
-      headerHeight: headerHeight
+      headerHeight: headerHeight,
     });
   }
 
   render(): Array<React$Node> {
     return [
-      <MainHeader key='main_header' onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}/>,
-      <SectionController key='section_controller' headerHeight={this.state.headerHeight}/>,
-      <MainFooter key='main_footer'/>,
-      <SocialFooter key='social_footer'/>
+      <MainHeader
+        key="main_header"
+        onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}
+      />,
+      <SectionController
+        key="section_controller"
+        headerHeight={this.state.headerHeight}
+      />,
+      <MainFooter key="main_footer" />,
+      <SocialFooter key="social_footer" />,
     ];
   }
 }

@@ -1,42 +1,67 @@
-//create an XXL viewport (grid breakpoint and container)
+// this file is for overriding bootstrap variable declarations ($var-name) ONLY
+// overriding style rules outside that scope should go into global.scss
 
+//create an XXL viewport (grid breakpoint and container)
 $grid-breakpoints: (
   // Extra small screen / phone
-  xs: 0,
+    xs: 0,
   // Small screen / phone
-  sm: 576px,
+    sm: 576px,
   // Medium screen / tablet
-  md: 768px,
+    md: 768px,
   // Large screen / desktop
-  lg: 992px,
+    lg: 992px,
   // Extra large screen / wide desktop
-  xl: 1200px,
+    xl: 1200px,
   // DemocracyLab extra wide
-  xxl: 1440px
+    xxl: 1440px
 );
 
 $container-max-widths: (
   sm: 540px,
-  md: 720px,
-  lg: 960px,
-  xl: 1140px,
-  xxl: 1400px
+  // 12 col @ 45px/ea inc. gutters
+    md: 720px,
+  // 12 col @ 60px/ea inc. gutters
+    lg: 960px,
+  // 12 col @ 80px/ea inc. gutters
+    xl: 1140px,
+  // 12 col @ 95px/ea inc. gutters
+    xxl: 1392px,
+  // 12 col @ 116px/ea inc. gutters,
 );
 
 //define our font stack
-$font-family-sans-serif: 'Montserrat',-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$font-family-sans-serif: "Montserrat", -apple-system, BlinkMacSystemFont,
+  "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+  "Segoe UI Emoji", "Segoe UI Symbol" !default;
 
 //add DL colors to themes for button variants, etc
 $theme-colors: (
-  "primary": #f79e02, // use this for "action"
-  "success": #528305, // check for hover #395e00
-  "danger": #e4100e, // check for hover #b20000
-  "info": #107fb0 // check for hover #025d87
+  "primary": #f79e02,
+  "success": #528305,
+  "danger": #e4100e,
+  "info": #107fb0,
+  "cta": #b1d3fb,
+  "login": #86c232,
 );
-
 
 //disables dropdown caret by default
 $enable-caret: false;
 
 // change carousel control colors for our theme, not default near-white
 $carousel-control-color: #c4c4c4;
+
+// declare design system header values
+// these values are for **mobile** and are overwritten via mediaquery for desktop in global.scss
+// TODO: determine if we need to recompute these at breakpoints with SASS maps, see: https://stackoverflow.com/a/56894640 and implement if needed
+
+$font-size-base: 1rem; // Assumes the browser default, typically `16px`
+$h1-font-size: $font-size-base * 1.6875; // 27px, headline1
+$h2-font-size: $font-size-base * 1.3125; // 21px, headline2
+$h3-font-size: $font-size-base * 1.0625; // 17px, subtitle1
+$h4-font-size: $font-size-base * 0.9375; // 15px, subtitle2
+
+// design system link colors (October 6, 2021)
+// see _reboot.scss, ~line 182, for implementation
+$link-color: $color-link;
+$link-hover-color: $color-link-hover;

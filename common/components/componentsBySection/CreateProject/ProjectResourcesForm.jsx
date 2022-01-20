@@ -1,148 +1,174 @@
 // @flow
 
 import React from "react";
+import { Container } from "flux/utils";
 import DjangoCSRFToken from "django-react-csrftoken";
-import type {ProjectDetailsAPIData} from "../../../components/utils/ProjectAPIUtils.js";
-import type {LinkInfo} from "../../forms/LinkInfo.jsx";
-import type {FileInfo} from "../../common/FileInfo.jsx";
-import LinkList from "../../forms/LinkList.jsx";
+import type { ProjectDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
+import { LinkInfo } from "../../forms/LinkInfo.jsx";
+import type { FileInfo } from "../../common/FileInfo.jsx";
+import LinkList, { linkCaptions } from "../../forms/LinkList.jsx";
+import LinkListStore, { NewLinkInfo } from "../../stores/LinkListStore.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
+import { Dictionary } from "../../types/Generics.jsx";
 import FileUploadList from "../../forms/FileUploadList.jsx";
-import formHelper, {FormPropsBase, FormStateBase} from "../../utils/forms.js";
-import {OnReadySubmitFunc} from "./ProjectFormCommon.jsx";
-import {DefaultLinkDisplayConfigurations} from "../../constants/LinkConstants.js";
+import formHelper, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
+import FormValidation from "../../forms/FormValidation.jsx";
+import { OnReadySubmitFunc } from "./ProjectFormCommon.jsx";
+import { LinkTypes } from "../../constants/LinkConstants.js";
+import HiddenFormFields from "../../forms/HiddenFormFields.jsx";
 import url from "../../utils/url.js";
 import _ from "lodash";
-
 
 type FormFields = {|
   project_links: Array<LinkInfo>,
   project_files: Array<FileInfo>,
-  link_coderepo: ?string,
-  link_messaging: ?string,
-  link_projmanage: ?string,
-  link_filerepo: ?string
-|};
+|} & Dictionary<string>;
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
-  readyForSubmit: OnReadySubmitFunc
+  readyForSubmit: OnReadySubmitFunc,
 |} & FormPropsBase<FormFields>;
 
-type State = FormStateBase<FormFields>;
+type State = {|
+  errorMessages: $ReadOnlyArray<string>,
+  onSubmit: OnReadySubmitFunc,
+|} & FormStateBase<FormFields>;
+
+const resourceLinks: $ReadOnlyArray<string> = [
+  LinkTypes.CODE_REPOSITORY,
+  LinkTypes.MESSAGING,
+  LinkTypes.PROJECT_MANAGEMENT,
+  LinkTypes.FILE_REPOSITORY,
+  LinkTypes.DESIGN,
+];
+
+const socialLinks: $ReadOnlyArray<string> = [
+  LinkTypes.TWITTER,
+  LinkTypes.FACEBOOK,
+  LinkTypes.LINKED_IN,
+];
+
+const allPresetLinks: $ReadOnlyArray<string> = _.concat(
+  resourceLinks,
+  socialLinks
+);
 
 /**
  * Encapsulates form for Project Resources section
  */
-class ProjectResourcesForm extends React.PureComponent<Props,State> {
+class ProjectResourcesForm extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
     const project: ProjectDetailsAPIData = props.project;
-    this.state = {
-      formIsValid: false,
-      formFields: {
-        project_links: project ? project.project_links : [],
-        project_files: project ? project.project_files : [],
-        link_coderepo: project ? project.link_coderepo : "",
-        link_messaging: project ? project.link_messaging : "",
-        link_projmanage: project ? project.link_projmanage : "",
-        link_filerepo: project ? project.link_filerepo : ""
-      }
+    const formFields: FormFields = {
+      project_links: project ? project.project_links : [],
+      project_files: project ? project.project_files : [],
     };
-
-    //this will set formFields.project_links and formFields.links_*
-    this.filterSpecificLinks(_.cloneDeep(project.project_links));
+    this.state = {
+      formFields: formFields,
+      onSubmit: this.onSubmit.bind(this),
+    };
     this.form = formHelper.setup();
-    props.readyForSubmit(true, this.onSubmit.bind(this));
+    UniversalDispatcher.dispatch({
+      type: "SET_LINK_LIST",
+      links: project.project_links,
+      presetLinks: allPresetLinks,
+    });
+    props.readyForSubmit(true, this.state.onSubmit);
   }
 
-  // TODO: Put common code used between EditProjectsForm in a common place
-  onSubmit(submitFunc: Function): void {
-    //Sanitize project url if necessary
-    if(this.state.formFields.project_url) {
-      this.state.formFields.project_url = url.appendHttpIfMissingProtocol(this.state.formFields.project_url);
+  componentDidMount() {
+    this.form.doValidation.bind(this)();
+  }
+
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [LinkListStore];
+  }
+
+  static calculateState(prevState: State, props: Props): State {
+    let state: State = _.clone(prevState) || {
+      formFields: {
+        project_files: props.project ? props.project.project_files : [],
+      },
+    };
+    state.formFields.project_links = LinkListStore.getLinkList();
+    state.errorMessages = LinkListStore.getLinkErrors();
+    state.formIsValid = _.isEmpty(state.errorMessages);
+    props.readyForSubmit(state.formIsValid, state.onSubmit);
+    return state;
+  }
+
+  onValidationCheck(formIsValid: boolean): void {
+    if (formIsValid !== this.state.formIsValid) {
+      this.setState({ formIsValid });
+      this.props.readyForSubmit(formIsValid, this.onSubmit.bind(this));
     }
-    // create input array
-    let eLinks = ['link_coderepo','link_messaging','link_filerepo','link_projmanage'].map(name => ({linkName: name, linkUrl: this.state.formFields[name]}));
-    //create output array
-    let eLinksArray = [];
-    //create objects for project_links array, skipping empty fields
-    eLinks.forEach(function(item) {
-      if(!_.isEmpty(item.linkUrl)) {
-        item.linkUrl = url.appendHttpIfMissingProtocol(item.linkUrl);
-        eLinksArray.push({
-          linkName: item.linkName,
-          linkUrl: item.linkUrl,
-          visibility: "PUBLIC",
-        })
-      }
-    });
-    //combine arrays prior to sending to backend
-    let formFields = this.state.formFields;
-    formFields.project_links = formFields.project_links.concat(eLinksArray);
-    this.setState({ formFields: formFields}, submitFunc);
-    this.forceUpdate();
   }
 
-  filterSpecificLinks(array) {
-    //this function updates the entire state.formFields object at once
-    let specificLinks = _.remove(array, function(n) {
-      return n.linkName in DefaultLinkDisplayConfigurations;
+  onSubmit(submitFunc: Function): void {
+    let formFields = this.state.formFields;
+    let project_links: $ReadOnlyArray<NewLinkInfo> = LinkListStore.getLinkList();
+    formFields.project_links = project_links.filter(
+      (link: LinkInfo) => !_.isEmpty(link.linkUrl)
+    );
+    formFields.project_links.forEach((link: NewLinkInfo) => {
+      link.linkUrl = url.appendHttpIfMissingProtocol(link.linkUrl);
     });
-    //copy the formFields state to work with
-    let linkState = this.state.formFields;
-    //pull out the link_ item key:values and append to state copy
-    specificLinks.forEach(function(item) {
-      linkState[item.linkName] = item.linkUrl;
-    });
-    //add the other links to state copy
-    linkState['project_links'] = array;
-
-    //TODO: see if there's a way to do this without the forceUpdate - passing by reference problem?
-    this.setState({ formFields: linkState });
+    this.setState({ formFields: formFields }, submitFunc);
     this.forceUpdate();
   }
 
   render(): React$Node {
     return (
       <div className="EditProjectForm-root">
+        <DjangoCSRFToken />
 
-        <DjangoCSRFToken/>
+        <HiddenFormFields
+          sourceDict={{
+            project_links: JSON.stringify(
+              this.state.formFields.project_links || []
+            ),
+          }}
+        />
 
-        <div className="form-group">
-          <label htmlFor="link_coderepo">Code Repository <span className="label-hint">(e.g. Github)</span></label>
-          <input type="text" className="form-control" id="link_coderepo" name="link_coderepo" maxLength="2075"
-                 value={this.state.formFields.link_coderepo} onChange={this.form.onInput.bind(this, "link_coderepo")}/>
+        <div className="form-group create-form-block">
+          <LinkList
+            title="Project Resources"
+            subheader="Paste the links to your internal collaboration tools"
+            linkNamePrefixExclude={["social_", LinkTypes.LINKED_IN]}
+            linkOrdering={resourceLinks}
+            addLinkText="Add a new link"
+          />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="link_messaging">Messaging <span className="label-hint">(e.g. Slack)</span></label>
-          <input type="text" className="form-control" id="link_messaging" name="link_messaging" maxLength="2075"
-                 value={this.state.formFields.link_messaging} onChange={this.form.onInput.bind(this, "link_messaging")}/>
+        <div className="form-group create-form-block">
+          <LinkList
+            title="Social Media"
+            subheader="Paste the links to your social media profiles"
+            linkNamePrefix="social_"
+            linkOrdering={socialLinks}
+            addLinkText="Add a social link"
+          />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="link_projmanage">Project Management <span className="label-hint">(e.g. Trello)</span></label>
-          <input type="text" className="form-control" id="link_projmanage" name="link_projmanage" maxLength="2075"
-                 value={this.state.formFields.link_projmanage} onChange={this.form.onInput.bind(this, "link_projmanage")}/>
+        <div className="form-group create-form-block">
+          <FileUploadList
+            elementid="project_files"
+            title="Project Files"
+            subheader="Add files or documents"
+            files={this.state.formFields.project_files}
+            onChange={this.form.onFormChange.bind(this)}
+          />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="link_filerepo">File Repository <span className="label-hint">(e.g. Google Drive)</span></label>
-          <input type="text" className="form-control" id="link_filerepo" name="link_filerepo" maxLength="2075"
-                 value={this.state.formFields.link_filerepo} onChange={this.form.onInput.bind(this, "link_filerepo")}/>
-        </div>
-
-        <div className="form-group">
-          <LinkList elementid="project_links" title="Project Links" links={this.state.formFields.project_links}/>
-        </div>
-
-        <div className="form-group">
-          <FileUploadList elementid="project_files" title="Project Files" files={this.state.formFields.project_files}/>
-        </div>
-
+        <FormValidation
+          onValidationCheck={this.onValidationCheck.bind(this)}
+          formState={this.state.formFields}
+          errorMessages={this.state.errorMessages}
+        />
       </div>
     );
   }
 }
 
-export default ProjectResourcesForm;
+export default Container.create(ProjectResourcesForm, { withProps: true });

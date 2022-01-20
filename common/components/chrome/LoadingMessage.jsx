@@ -1,15 +1,15 @@
 // @flow
 
-import React from 'react';
-import {Glyph, GlyphStyles, GlyphSizes} from '../utils/glyphs.js';
+import React from "react";
+import { Glyph, GlyphStyles, GlyphSizes } from "../utils/glyphs.js";
 
 type Props = {|
-  message: string
+  message: string,
 |};
 
 class LoadingMessage extends React.PureComponent<Props> {
   constructor(props: Props): void {
-    super(props)
+    super(props);
   }
 
   render() {
@@ -18,8 +18,8 @@ class LoadingMessage extends React.PureComponent<Props> {
         <i className={Glyph(GlyphStyles.LoadingSpinner, GlyphSizes.X2)}></i>
         <p className="loading-message-text">{this.props.message}</p>
       </div>
-    )
+    );
   }
 }
 
-export default LoadingMessage
+export default LoadingMessage;

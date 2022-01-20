@@ -1,0 +1,35 @@
+/* create event, create group flows */
+
+.create-form-block {
+  background-color: $color-background-light;
+  box-shadow: -5px 5px 10px 1px rgba(0, 0, 0, 0.15);
+  padding: 20px 10px;
+  margin-bottom: 40px;
+
+  .add-link {
+    color: #0362cd;
+    cursor: pointer;
+
+    i {
+      padding-right: 10px;
+    }
+  }
+}
+
+.form-offset {
+  padding-left: 15px;
+}
+
+.create-selected-projects {
+  margin-bottom: 1.25rem;
+}
+.create-selected-project-name {
+  border-radius: 20px;
+  background-color: #f3a73c;
+  height: 40px;
+  padding: 10px 30px;
+  display: flex;
+  margin: 0 10px 10px 0;
+  justify-content: center;
+  align-items: center;
+}

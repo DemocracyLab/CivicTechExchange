@@ -8,31 +8,38 @@ body {
   background-color: $color-background-light;
   color: $color-text-dark;
 }
-.btn-footer a, .btn-footer a[type="button"] {
+.btn-footer a,
+.btn-footer a[type="button"] {
   color: $color-text-dark;
   text-decoration: none;
 }
-.btn-footer:hover, .btn-footer:active {
+.btn-footer:hover,
+.btn-footer:active {
   background-color: $color-orange-light;
   color: $color-text-dark;
   border-color: $color-orange-dark;
 }
-a.btn-footer:hover, a.btn-footer:active, a[type="button"].btn-footer:hover, a[type="button"].btn-footer:active  {
+a.btn-footer:hover,
+a.btn-footer:active,
+a[type="button"].btn-footer:hover,
+a[type="button"].btn-footer:active {
   text-decoration: none;
 }
 
 //Sets button states to be our specific values instead of default computed by Bootstrap
 //I don't think we're going to call these colors manually at any point so no vars here
-.btn-success:active, .btn-success:hover {
+.btn-success:active,
+.btn-success:hover {
   background-color: #395e00;
 }
-.btn-danger:active, .btn-danger:hover {
+.btn-danger:active,
+.btn-danger:hover {
   background-color: #b20000;
 }
-.btn-info:active, .btn-info:hover {
+.btn-info:active,
+.btn-info:hover {
   background-color: #025d87;
 }
-
 
 //Global override of disabled state input elements
 input[type="submit"]:disabled {
@@ -41,19 +48,15 @@ input[type="submit"]:disabled {
 }
 
 
-
-//for on-page actions we want to appear as links
-.pseudo-link {
-  color: $color-orange;
-  text-decoration: underline;
-}
-
 //class-based toggle of background color
 .background-light {
   background-color: $color-background-light;
 }
 
 // .bounded-content should be used inside a .container-fluid; letting us have full width background with .container width content */
+.bounded-content {
+  margin: auto;
+}
 @include media-breakpoint-up(sm) {
   .bounded-content {
     width: 540px;
@@ -77,7 +80,7 @@ input[type="submit"]:disabled {
 }
 @include media-breakpoint-up(xxl) {
   .bounded-content {
-    width: 1400px;
+    width: 1392px;
   }
 }
 
@@ -99,4 +102,124 @@ input[type="submit"]:disabled {
 .side-lines:after {
   left: 0.5em;
   margin-right: -21%;
+}
+
+// ======================== design system rules ========================
+// font declarations (May 2021)
+// mobile font declarations
+html,
+body {
+  line-height: 1.618;
+}
+html {
+  font-size: 16px; // so rem calculations stay the same
+}
+body {
+  font-size: 15px; // base font size for mobile
+}
+// declaring .h1-h4 classes to overwrite Bootstrap, but we should only ever use the semantic headline/subtitle class names.
+h1,
+.h1,
+.headline1 {
+  font-size: 27px;
+}
+h2,
+.h2,
+.headline2 {
+  font-size: 21px;
+}
+h3,
+.h3,
+.subtitle1 {
+  font-size: 17px;
+}
+h4,
+.h4,
+.subtitle2 {
+  font-size: 15px;
+  font-weight: 600; // semibold
+}
+h1,
+h2,
+h3,
+h4,
+.h1,
+.h2,
+.h3,
+.h4,
+.headline1,
+.headline2,
+.subtitle1,
+.subtitle2 {
+  font-weight: 500; // medium
+}
+.overline {
+  font-size: 13px;
+}
+
+// .btn {
+// font-size: 15px;
+// font-weight: 600; // semibold
+// }
+
+//desktop declarations
+@include media-breakpoint-up(lg) {
+  html,
+  body {
+    line-height: 1.5;
+  }
+  body {
+    font-size: 16px;
+  }
+  h1,
+  .h1 {
+    font-size: 39px;
+  }
+  h2,
+  .h2 {
+    font-size: 23px;
+  }
+  h3,
+  .h3 {
+    font-size: 19px;
+  }
+  h4,
+  .h4 {
+    font-size: 16px;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  .h1,
+  .h2,
+  .h3,
+  .h4 {
+    font-weight: 500; // medium
+  }
+  .overline {
+    font-size: 13px;
+  }
+
+  // .btn {
+  // font-size: 16px;
+  // font-weight: 600;
+  // }
+}
+
+// design system link colors are in _vars.scss and _bootstrapoverride, but we have some psuedoselectors here
+//for on-page actions we want to appear as links (e.g. js onclick events)
+// use pseudo-link as sparingly as possible - links should be links, doubly so since these won't respect :visited, etc
+.pseudo-link {
+  @extend a
+}
+a:active, .psuedo-link:active {
+  color: $color-link-active;
+  text-decoration: underline;
+}
+a:visited {
+  color: $color-link-visited;
+}
+a.btn:visited, .btn:visited, button:visited {
+  color: inherit; // buttons acting as links should not take visited color -- we'll have to revisit this when buttons are implemented from DS
 }

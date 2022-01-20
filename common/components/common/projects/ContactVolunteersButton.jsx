@@ -1,8 +1,8 @@
 // @flow
 
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import type {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
+import React from "react";
+import Button from "react-bootstrap/Button";
+import type { ProjectDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import ContactModal from "./ContactModal.jsx";
 import metrics from "../../utils/metrics";
@@ -10,11 +10,11 @@ import ProjectAPIUtils from "../../utils/ProjectAPIUtils";
 import _ from "lodash";
 
 type Props = {|
-  project: ?ProjectDetailsAPIData
+  project: ?ProjectDetailsAPIData,
 |};
 type State = {|
   project: ?ProjectDetailsAPIData,
-  showContactModal: boolean
+  showContactModal: boolean,
 |};
 
 /**
@@ -37,12 +37,13 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
   handleShow() {
     // TODO: Add metrics
     // metrics.logUserClickContactProjectOwner(CurrentUser.userID(), this.props.project.project_id);
-    this.setState({showContactModal: true});
+    this.setState({ showContactModal: true });
   }
 
   _handleSubmission(fields, closeModal): ?React$Node {
     // TODO: Get close modal working
-    ProjectAPIUtils.post("/contact/volunteers/" + this.props.project.project_id + "/",
+    ProjectAPIUtils.post(
+      "/contact/volunteers/" + this.props.project.project_id + "/",
       fields,
       closeModal, //Send function to close modal
       response => null /* TODO: Report error to user */
@@ -50,7 +51,7 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
   }
 
   handleClose() {
-    this.setState({showContactModal: false});
+    this.setState({ showContactModal: false });
   }
 
   _renderContactVolunteerButton(): React$Node {
@@ -73,7 +74,9 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
         {this._renderContactVolunteerButton()}
         <ContactModal
           headerText={"Send message to Project Volunteers"}
-          explanationText={"This email will be sent to all project volunteers. They can reply to your message via your registered email."}
+          explanationText={
+            "This email will be sent to all project volunteers. They can reply to your message via your registered email."
+          }
           showSubject={true}
           showModal={this.state.showContactModal}
           handleClose={this.handleClose}
@@ -83,13 +86,12 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
     );
   }
 
-
   render(): ?React$Node {
-    if (CurrentUser.isCoOwnerOrOwner(this.props.project) && !_.isEmpty(this.props.project.project_volunteers)) {
-      return (
-        <div>
-          {this.displayContactVolunteerButton()}
-        </div>)
+    if (
+      CurrentUser.isCoOwnerOrOwner(this.props.project) &&
+      !_.isEmpty(this.props.project.project_volunteers)
+    ) {
+      return <div>{this.displayContactVolunteerButton()}</div>;
     } else {
       return null;
     }

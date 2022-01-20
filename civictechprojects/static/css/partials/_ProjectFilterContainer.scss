@@ -11,19 +11,18 @@
 
 .ProjectFilterContainer-label {
   color: $color-text-dark;
-  font-size: 16px;
   margin-right: 50px;
   margin-top: 12px;
   width: 100%;
 }
 
-.ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
-  font-size: 16px;
+.ProjectFilterContainer-subcategory-header,
+.ProjectFilterContainer-category-header {
   font-weight: bold;
   padding: 12px 0;
-
 }
-.ProjectFilterContainer-subcategory-header, .ProjectFilterContainer-category-header {
+.ProjectFilterContainer-subcategory-header,
+.ProjectFilterContainer-category-header {
   display: flex;
   justify-content: space-between;
 }
@@ -33,8 +32,6 @@
   padding-inline-start: 0;
   -webkit-padding-start: 0;
 }
-
-
 
 .ProjectFilterContainer-filter-list li {
   color: $color-text-grey;
@@ -52,12 +49,12 @@
   padding: 12px 10px;
 }
 
-.ProjectFilterContainer-filter-list input[type=checkbox]:checked + label {
+.ProjectFilterContainer-filter-list input[type="checkbox"]:checked + label {
   background: $color-orange;
   color: $color-text-dark;
 }
 
-.ProjectFilterContainer-filter-list input[type=checkbox] {
+.ProjectFilterContainer-filter-list input[type="checkbox"] {
   display: none;
 }
 
@@ -85,7 +82,6 @@
   font-weight: normal;
 }
 
-
 /*if subcategory is expanded */
 .ProjectFilterContainer-subcategory.ProjectFilterContainer-expanded ul {
   border-left: 2px solid $color-grey-frame-border;
@@ -97,7 +93,6 @@
 }
 
 .ProjectFilterContainer-showtext {
-  font-size: 16px;
   font-weight: normal;
   margin-right: 4px;
 }
@@ -111,12 +106,49 @@
   border-bottom: 1px solid $color-grey-medium;
 }
 
-.ProjectFilterDataContainer-root {
+.ProjectFilterDataContainer-root,
+.LocationSearchContainer,
+.favorite-filter {
   margin: 0 15px;
+}
+.LocationSearchContainer-content {
+  margin: 0 0 15px 0;
+  padding: 12px 10px;
+}
+.LocationSearchContainer-content label {
+  padding-top: 24px;
+}
+.LocationSearchContainer-content label:first-of-type {
+  padding-top: 0;
+}
+//this is a lot of declarations but we have a lot of intermeshing elements which need cursor:pointer. TODO: See if we can clean this up.
+.ProjectFilterDataContainer-root {
+  span.ProjectFilterContainer-showtext,
+  .ProjectFilterContainer-category-header,
+  .ProjectFilterContainer-subcategory-header,
+  .ProjectFilterContainer-filter-list li,
+  .ProjectFilterContainer-list-item label {
+    cursor: pointer; // visual hint that the interactables are clickable
+  }
 }
 
 @include media-breakpoint-up(sm) {
-  .ProjectFilterDataContainer-root {
+  .ProjectFilterDataContainer-root,
+  .LocationSearchContainer,
+  .LocationSearchContainer-content,
+  .favorite-filter {
     margin: 0;
+  }
+}
+
+.favorite-filter {
+  font-weight: bold;
+  padding: 12px 5px;
+  display: flex;
+  align-items: center;
+
+  i {
+    font-size: 24px;
+    margin: 0 8px;
   }
 }

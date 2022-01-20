@@ -2,7 +2,7 @@
   margin: 0px 0px 0px 5px;
 }
 
-.Icon-container {
+.person-icon-container {
   height: 60px;
   width: 60px;
   margin: 0px 10px 0px 0px;
@@ -12,7 +12,9 @@
     border-radius: 50%;
     color: $color-text-light;
     background: $color-text-grey;
-    opacity: .5;
-    transition: 300ms;
+    opacity: 0.5;
+    height: 50px;
+    width: 50px;
+    padding-top: 5px;
   }
 }

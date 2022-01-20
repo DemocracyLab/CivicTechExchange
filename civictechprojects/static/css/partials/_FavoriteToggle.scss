@@ -1,0 +1,23 @@
+.favorite-toggle {
+  height: 48px;
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    font-size: 24px;
+  }
+}
+
+.favorited {
+  color: $color-favorite;
+}
+
+.unfavorited {
+  color: $color-text-dark;
+}
+
+.favorite-toggle:hover .unfavorited {
+  color: $color-favorite;
+}

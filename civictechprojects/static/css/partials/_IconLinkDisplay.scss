@@ -3,43 +3,61 @@
   padding-bottom: 20px;
 }
 
+.IconLink-root a {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: nowrap;
+  min-width: 0; // see https://css-tricks.com/flexbox-truncated-text/
+  text-decoration: none; // we decorate sub-elements to control what does it
+}
+
 .IconLink-root p {
-  margin: 0 0 0 0;
-  font-size: 16px;
+  margin: 0;
 }
 
 .IconLink-root i {
   color: $color-text-dark;
-  align-items:center;
+  align-items: center;
   display: block;
 }
 
 .IconLink-left {
-  float: left;
   width: 60px;
   height: 64px;
-  padding:15px;
-  border: 1px solid lightgray;
-  border-top-left-radius:5px;
+  padding: 15px;
+  border: 1px solid $color-grey-medium;
+  border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-
 }
 
 .IconLink-right {
-  float: right;
-  width: 200px;
-  height:64px;
+  width: 100%; // makes it "take up all remaining space"
+  height: 64px;
   line-height: 23px;
-  border-top: 1px solid lightgray;
+  border-top: 1px solid $color-grey-medium;
   border-top-right-radius: 5px;
-  border-right: 1px solid lightgray;
+  border-right: 1px solid $color-grey-medium;
   border-bottom-right-radius: 5px;
-  border-bottom: 1px solid lightgray;
-
+  border-bottom: 1px solid $color-grey-medium;
+  overflow: hidden; // has to be set here and in <p>
+  p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+.IconLink-root:hover p, .IconLink-root:active p {
+  text-decoration: underline;
+}
+.IconLink-root:hover .IconLink-topText {
+  color: $color-link-hover;
+}
+.IconLink-root:active .IconLink-topText {
+  color: $color-link-active;
 }
 
+
 .IconLink-topText {
-  color: $color-text-dark;
   font-weight: 600;
   padding-top: 10px;
   padding-left: 8px;
