@@ -13,9 +13,9 @@ import TestimonialCarousel from "../../components/common/carousel/TestimonialCar
 import ContactForm from "../../components/forms/ContactForm.jsx";
 import JumpAnchor from "../common/JumpAnchor.jsx";
 import _ from "lodash";
-import IconCircle1 from "../svg/corporatehackathon/magnifying.svg";
-import IconCircle2 from "../svg/corporatehackathon/corp2circle.svg";
-import IconCircle3 from "../svg/corporatehackathon/corp3circle.svg";
+import IconCircle1 from "../svg/corporatehackathon/Discover.svg";
+import IconCircle2 from "../svg/corporatehackathon/ConnectionCircle.svg";
+import IconCircle3 from "../svg/corporatehackathon/Code.svg";
 import type { Dictionary } from "../types/Generics.jsx";
 import { Glyph, GlyphStyles, GlyphSizes } from "../utils/glyphs.js";
 
