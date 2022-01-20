@@ -36,6 +36,18 @@
 }
 // end awful image sizing zone
 
+
+// temporary font color zone; this needs to be reworked with Design System color update
+// remove this when colors and color variables are updated 
+.corporate-root {
+  p, span, div, ul, li {
+    color: #222629;
+  }
+  h1, h2, h3, h4 {
+    color: #191919;
+  }
+}
+
 //END OVERRIDES
 
 //begin regular CSS for the page
