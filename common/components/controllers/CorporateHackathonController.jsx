@@ -51,7 +51,6 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-root container">
           {this._renderTop()}
           <div className="row">{this._renderTabs()}</div>
-          {this._renderBottomImage()}
         </div>
       </React.Fragment>
     );
@@ -475,26 +474,6 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
             </a>
           </h4>
-        </div>
-      </React.Fragment>
-    );
-  }
-
-  _renderBottomImage(): React$Node {
-    return (
-      <React.Fragment>
-        <div className="corporate-edge">
-          <div className="row">
-            <div
-              className="corporate-bottom-image col-12"
-              style={{
-                backgroundImage:
-                  "url(" + cdn.image("corporate_footer.jpg") + ")",
-              }}
-            >
-              <div className="corporate-bottom-overlay"></div>
-            </div>
-          </div>
         </div>
       </React.Fragment>
     );

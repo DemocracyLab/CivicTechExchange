@@ -16,9 +16,6 @@
 
 // quick and dirty top and bottom image sizing
 // TODO: save me from this terrible CSS
-.corporate-bottom-image {
-  height: 101px;
-}
 .corporate-top-image {
   height: 300px;
 }
@@ -26,24 +23,15 @@
   .corporate-top-image {
     height: 400px;
   }
-  .corporate-bottom-image {
-    height: 150px;
-  }
 }
 @include media-breakpoint-up(lg) {
   .corporate-top-image {
     height: 533px;
   }
-  .corporate-bottom-image {
-    height: 252px;
-  }
 }
 @include media-breakpoint-up(xl) {
   .corporate-top-image {
     height: 630px;
-  }
-  .corporate-bottom-image {
-    height: 323px;
   }
 }
 // end awful image sizing zone
@@ -103,8 +91,7 @@
 .corporate-bg-light {
   background-color: $color-background-light;
 }
-.corporate-top-overlay,
-.corporate-bottom-overlay {
+.corporate-top-overlay {
   background-blend-mode: multiply;
   margin-left: -15px;
   margin-right: -15px;
@@ -114,12 +101,6 @@
 .corporate-top-image {
   background-position-x: center;
   background-position-y: top; // keep faces in view
-}
-.corporate-bottom-image {
-  background-position: center;
-}
-.corporate-top-image,
-.corporate-bottom-image {
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -140,14 +121,6 @@
     padding: 0 0 16px 16px;
   }
 }
-.corporate-bottom-overlay {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 255, 255, 0) 45%
-  );
-}
-
 .corporate-cta-button {
   display: block;
   margin: 0 auto;
