@@ -16,8 +16,7 @@ class LiveEventController extends React.Component<{||}, State> {
     super();
 
     this.state = {
-      iframeUrl:
-        window.QIQO_IFRAME_URL + `&return_to="${window.location.href}"`,
+      iframeUrl: window.QIQO_IFRAME_URL,
     };
   }
 

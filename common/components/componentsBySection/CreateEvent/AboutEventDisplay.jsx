@@ -189,12 +189,11 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     let text: string = "";
     let url: string = "";
     if (CurrentUser.isLoggedIn()) {
-      //TODO: Handle un-verified users
       text = "Join Event";
-      //TODO: Incorporate live event id into Live Event page
-      url = urlHelper.section(Section.LiveEvent, {
+      const liveEventUrl: string = urlHelper.section(Section.LiveEvent, {
         id: this.props.event.event_live_id,
       });
+      url = window.QIQO_IFRAME_URL + `&return_to="${liveEventUrl}"`;
     } else {
       text = "Log In to Join Event";
       url = urlHelper.logInThenReturn();
