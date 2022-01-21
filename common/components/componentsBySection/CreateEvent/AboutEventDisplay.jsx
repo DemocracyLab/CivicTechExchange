@@ -193,7 +193,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       const liveEventUrl: string = urlHelper.section(Section.LiveEvent, {
         id: this.props.event.event_live_id,
       });
-      url = window.QIQO_IFRAME_URL + `&return_to="${liveEventUrl}"`;
+      url = _.unescape(window.QIQO_IFRAME_URL) + `&return_to="${liveEventUrl}"`;
     } else {
       text = "Log In to Join Event";
       url = urlHelper.logInThenReturn();
