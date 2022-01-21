@@ -190,9 +190,11 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     let url: string = "";
     if (CurrentUser.isLoggedIn()) {
       text = "Join Event";
-      const liveEventUrl: string = urlHelper.section(Section.LiveEvent, {
-        id: this.props.event.event_live_id,
-      });
+      const liveEventUrl: string =
+        urlHelper.hostname() +
+        urlHelper.section(Section.LiveEvent, {
+          id: this.props.event.event_live_id,
+        });
       url = _.unescape(window.QIQO_IFRAME_URL) + `&return_to="${liveEventUrl}"`;
     } else {
       text = "Log In to Join Event";
