@@ -17,7 +17,8 @@ class FindProjectsController extends React.PureComponent {
   }
 
   componentWillMount(): void {
-    let args: FindProjectsArgs = urls.arguments(document.location.search);
+    let searchDecoded = decodeURIComponent(document.location.search)
+    let args: FindProjectsArgs = urls.arguments(searchDecoded);
     args = _.pick(args, [
       "showSplash",
       "keyword",
