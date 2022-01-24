@@ -183,7 +183,7 @@
 }
 .corporate-sponsorship-stat {
   flex: 1 1 26%;
-  margin: 0 20px;
+  margin: 0 20px 20px 20px;
   text-justify: center;
   h4 {
     @extend .h2;
@@ -192,6 +192,7 @@
   h4,
   p {
     text-align: center;
+    margin-bottom: 0px;
   }
 }
 .corporate-how-flex-container {
@@ -399,6 +400,7 @@
   }
   .corporate-sponsorship-stat {
     flex-basis: 20%;
+    margin-bottom: 40px;
   }
   .corporate-how-flex-container {
     flex-direction: row;
@@ -410,6 +412,9 @@
     margin: 0 15px;
     text-align: center;
     flex-basis: 33%;
+  }
+  .corporate-how-image-container {
+    margin-bottom: 16px;
   }
   .corporate-how-text {
     margin: 0;
