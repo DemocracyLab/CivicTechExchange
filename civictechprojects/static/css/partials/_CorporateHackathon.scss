@@ -95,6 +95,11 @@
   .corporate-top {
     padding-top: 24px;
   }
+  // only used for FontAwesome glyphs
+  i { 
+    font-size: 20px;
+    margin-left: 4px;
+  }
 }
 .corporate-hr-line {
   display: none;
@@ -307,11 +312,7 @@
     padding-left: 30px;
     padding-right: 30px;
   }
-  .corporate-hackathon-card,
-  .corporate-sponsorship-card {
-    min-height: 100%; // equal height cards when displayed in a row
-  }
-  .nav-tabs a {
+   .nav-tabs a {
     font-size: 23px; // match .headline2 size (but not weight)
   }
   .corporate-sponsors-container {
@@ -430,5 +431,16 @@
   .corporate-hackathon-saying p,
   .corporate-sponsorship-saying p {
     margin-top: 40px;
+  }
+}
+@include media-breakpoint-up(xl) {
+  // switch cards back to row layout on large enough screens, for readability
+  .corporate-card-container {
+    display: flex;
+    flex-flow: row nowrap;
+    .corporate-card {
+      margin: 16px;
+      flex-basis: 33%;
+    }
   }
 }

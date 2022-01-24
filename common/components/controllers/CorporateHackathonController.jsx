@@ -137,7 +137,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-hackathon-whyhost col-12">
           <h1 className="mb-3">Benefits of hosting an in-house hackathon.</h1>
           <div className="row">
-            <div className="col-12">
+            <div className="col-12 corporate-card-container">
               <div className="corporate-card">
                 <h2>Engage your team and give back to your community</h2>
                 <h3>
@@ -291,7 +291,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-sponsorship-why col-12">
           <h1 className="mb-3">Why become a sponsor?</h1>
           <div className="row">
-            <div className="col-12">
+            <div className="col-12 corporate-card-container">
               <div className="corporate-card">
                 <h2>Make an impact.</h2>
                 <h3>
