@@ -22,7 +22,13 @@ $color-grey-unselected: #585858; // unselected item color
 
 // temporary holding zone for some DS colors
 $color-neutral-50: #bdbdbd;
+$color-neutral-90: #222629;
+$color-neutral-100: #191919;
 $color-border-weak: $color-neutral-50; // "Border color for small UI components"
+$color-text-strong: $color-neutral-90; // "Secondary text color for headers and subtitles"
+$color-text-strongest: $color-neutral-100; // "Primary text color for H1/H2. Text color for most UI Components."
+// end temporary holding zone 
+
 
 // ## link colors (design system "Secondary Colors - Blue Color Scheme - used for text links across dlab, implemented October 6, 2021)
 // note that these are also in _bootstrapoverride, overriding $link-color and $link-hover-color 

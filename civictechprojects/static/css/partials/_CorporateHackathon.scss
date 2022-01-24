@@ -41,10 +41,10 @@
 // remove this when colors and color variables are updated 
 .corporate-root {
   p, span, div, ul, li {
-    color: #222629;
+    color: $color-text-strong;
   }
   h1, h2, h3, h4 {
-    color: #191919;
+    color: $color-text-strongest;
   }
 }
 
