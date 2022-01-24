@@ -36,14 +36,20 @@
 }
 // end awful image sizing zone
 
-
 // temporary font color zone; this needs to be reworked with Design System color update
-// remove this when colors and color variables are updated 
+// remove this when colors and color variables are updated
 .corporate-root {
-  p, span, div, ul, li {
+  p,
+  span,
+  div,
+  ul,
+  li {
     color: $color-text-strong;
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     color: $color-text-strongest;
   }
 }
@@ -96,7 +102,7 @@
     padding-top: 24px;
   }
   // only used for FontAwesome glyphs
-  i { 
+  i {
     font-size: 20px;
     margin-left: 4px;
   }
@@ -148,11 +154,16 @@
   background: $color-background-light;
   margin-bottom: 16px;
   padding: 16px;
+  h2 {
+    margin-bottom: 12px;
+  }
   p {
     margin-bottom: 0;
   }
+  p:first-of-type {
+    margin-bottom: 8px;
+  }
 }
-
 .corporate-contact {
   h2 {
     margin-bottom: 32px;
@@ -192,7 +203,7 @@
 .corporate-how-flex-block {
   display: flex;
   flex-direction: row;
-  margin: 0 0 15px 0;
+  margin: 0 0 24px 0;
   width: 100%;
 }
 .corporate-how-image-container {
@@ -202,6 +213,17 @@
   margin: 0 0 0 15px;
   h2 {
     font-weight: bold;
+  }
+}
+.corporate-hackathon-howitworks {
+  h1 {
+    margin-bottom: 8px;
+  }
+  h2 {
+    margin-bottom: 32px;
+  }
+  h3 {
+    margin-bottom: 8px;
   }
 }
 .corporate-sponsors-container {
@@ -242,6 +264,12 @@
 .corporate-block-button {
   display: block;
 }
+.corporate-sponsorship-why,
+.corporate-hackathon-whyhost {
+  h1 {
+    margin-bottom: 16px;
+  }
+}
 
 //section spacing
 .corporate-top-flex-section {
@@ -278,9 +306,14 @@
     margin-bottom: 24px;
   }
 }
-.corporate-hackathon-saying p,
-.corporate-sponsorship-saying p {
-  margin-top: 24px;
+.corporate-hackathon-saying,
+.corporate-sponsorship-saying {
+  h1 {
+    margin-bottom: 16px;
+  }
+  p {
+    margin-top: 24px;
+  }
 }
 .corporate-sponsorship-how {
   ul {
@@ -312,7 +345,7 @@
     padding-left: 30px;
     padding-right: 30px;
   }
-   .nav-tabs a {
+  .nav-tabs a {
     font-size: 23px; // match .headline2 size (but not weight)
   }
   .corporate-sponsors-container {
@@ -329,8 +362,8 @@
       padding: 15px;
     }
   }
-  .corporate-hackathon-howitworks h2 {
-    margin-bottom: 40px;
+  .corporate-top-flex-section {
+    margin-bottom: 24px;
   }
   .corporate-root {
     .ContactForm-container {
@@ -441,6 +474,12 @@
     .corporate-card {
       margin: 16px;
       flex-basis: 33%;
+    }
+  }
+  .corporate-sponsorship-why,
+  .corporate-hackathon-whyhost {
+    h1 {
+      margin-bottom: 0; // provided by the cards now
     }
   }
 }

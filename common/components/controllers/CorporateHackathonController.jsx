@@ -135,15 +135,15 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-hackathon-whyhost col-12">
-          <h1 className="mb-3">Benefits of hosting an in-house hackathon.</h1>
+          <h1>Benefits of hosting an in-house hackathon.</h1>
           <div className="row">
             <div className="col-12 corporate-card-container">
               <div className="corporate-card">
                 <h2>Engage your team and give back to your community</h2>
-                <h3>
+                <p>
                   Strengthen employee enthusiasm, participate in meaningful
                   projects, and instill a sense of purpose.
-                </h3>
+                </p>
                 <p>
                   73% of our corporate hackathon participants reported an
                   increase in enthusiasm for working at their company.
@@ -151,10 +151,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </div>
               <div className="corporate-card">
                 <h2>Drive performance</h2>
-                <h3>
+                <p>
                   Spur innovation and turn your culture of purpose into
                   bottom-line results.
-                </h3>
+                </p>
                 <p>
                   91% of executives and employees correlate a sense of purpose
                   with a history of strong financial performance. (
@@ -170,10 +170,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </div>
               <div className="corporate-card">
                 <h2>Enjoy a significant return on investment</h2>
-                <h3>
+                <p>
                   Increased employee enthusiasm and engagement leads to lower
                   turnover rates and higher profitability.
-                </h3>
+                </p>
                 <p>
                   Highly engaged teams realize 59% less turnover and 21% greater
                   profitability. (
@@ -225,7 +225,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </div>
               <div className="corporate-how-text-container">
                 <div className="corporate-how-text">
-                  <h2>1. Discover</h2>
+                  <h3>1. Discover</h3>
                   <p>
                     We find tech-for-good projects that are a good fit for your
                     team.
@@ -238,7 +238,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 <IconCircle2 />
               </div>
               <div className="corporate-how-text">
-                <h2>2. Define</h2>
+                <h3>2. Define</h3>
                 <p>
                   We determine project scope to match your employees' strengths.
                 </p>
@@ -249,7 +249,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 <IconCircle3 />
               </div>
               <div className="corporate-how-text">
-                <h2>3. Collaborate</h2>
+                <h3>3. Collaborate</h3>
                 <p>
                   Together, we make a positive impact at your tech-for-good
                   hackathon!
@@ -276,7 +276,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               interval={600000}
             />
           </div>
-          <p className="headline2">
+          <p className="h3">
             Read about previous events in our <a href={window.BLOG_URL}>blog</a>
             .
           </p>
@@ -289,15 +289,15 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-sponsorship-why col-12">
-          <h1 className="mb-3">Why become a sponsor?</h1>
+          <h1>Why become a sponsor?</h1>
           <div className="row">
             <div className="col-12 corporate-card-container">
               <div className="corporate-card">
                 <h2>Make an impact.</h2>
-                <h3>
+                <p>
                   Your support advances hundreds of tech-for-good projects,
                   helps us grow, and improves our public events.
-                </h3>
+                </p>
                 <p>
                   Every $1,000 contributed enables 500 hours of skilled
                   volunteer work, helping more projects make more of an impact.
@@ -305,10 +305,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </div>
               <div className="corporate-card">
                 <h2>Differentiate your company.</h2>
-                <h3>
+                <p>
                   Supporting DemocracyLab shows your company’s commitment to
                   social responsibility.
-                </h3>
+                </p>
                 <p>
                   79% of employees prefer to work at a socially responsible
                   company. (Deloitte)
@@ -317,10 +317,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               <div className="corporate-card">
                 <h2>Attract purpose-minded talent.</h2>
 
-                <h3>
+                <p>
                   Connect with skilled tech volunteers who strive to make a
                   difference.
-                </h3>
+                </p>
 
                 <p>
                   Position your company as an employer of choice for our diverse
