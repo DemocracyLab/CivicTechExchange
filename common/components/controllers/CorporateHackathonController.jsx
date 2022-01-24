@@ -5,7 +5,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import url from "../utils/url.js";
-import Section from "../enums/Section.js";
+import Sponsors, { SponsorMetadata } from "../utils/Sponsors.js";
 import cdn from "../utils/cdn.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
@@ -407,7 +407,15 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
 
           <div className="corporate-sponsorship-current">
             <h4>Current DemocracyLab sponsors include:</h4>
-            <p>TODO: SPONSORS HERE</p>
+            <div className="corporate-sponsors-container">
+              <div className="corporate-sponsor-item">
+                <img
+                  src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png"
+                  alt="Bill and Melinda Gates Foundation logo"
+                ></img>
+              </div>
+              {this._renderCurrentSponsors()}
+            </div>
           </div>
         </div>
         {this._renderContactSponsor()}
@@ -477,6 +485,31 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         </div>
       </React.Fragment>
     );
+  }
+  _renderCurrentSponsors(): React$Node {
+    const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
+    let sdata = sponsors.filter(obj => obj.category !== "In-kind Support");
+
+    if (!_.isEmpty(sdata)) {
+      return (
+        <React.Fragment>
+          {sdata.map((sponsor: SponsorMetadata, i: number) => {
+            return (
+              <div key={i} className="corporate-sponsor-item">
+                <a
+                  href={sponsor.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="corporate-sponsor-item-link"
+                >
+                  <img src={sponsor.thumbnailUrl} />
+                </a>
+              </div>
+            );
+          })}
+        </React.Fragment>
+      );
+    }
   }
 }
 
