@@ -1,5 +1,5 @@
 from django.test import TestCase
-from common.helpers.collections import find_first, flatten, count_occurrences, distinct
+from common.helpers.collections import find_first, flatten, count_occurrences, distinct, omit_falsy
 
 
 class CollectionsTests(TestCase):
@@ -50,3 +50,6 @@ class CollectionsTests(TestCase):
 
         self.assertEqual(list(func_call), expected_vals)
 
+    def test_omit_falsy(self):
+        self.assertEqual(omit_falsy([0, False, None]), None)
+        self.assertEqual(omit_falsy([1, False, None]), [1])

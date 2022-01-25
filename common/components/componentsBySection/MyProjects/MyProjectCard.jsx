@@ -56,30 +56,22 @@ class MyProjectCard extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     return (
-      <div className="MyProjectCard-root">
-        <table className="MyProjectCard-table">
-          <tbody>
-            <tr>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">Project Name</tr>
-                <tr className="MyProjectCard-projectName">
-                  {this.props.project.project_name}
-                </tr>
-              </td>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">Your Role</tr>
-                <tr>{this.state.isOwner ? "Project Lead" : "Volunteer"}</tr>
-              </td>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">
-                  {this.state.isOwner ? "Project Status" : "Volunteer Status"}
-                </tr>
-                <tr>{this._getStatus()}</tr>
-              </td>
-              <td className="MyProjectCard-column">{this._renderButtons()}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="row MyProjectCard-root">
+        <div className="col-sm-4">
+          <div className="MyProjectCard-header">Project Name</div>
+          <div className="MyProjectCard-projectName text-break">{this.props.project.project_name}</div>
+        </div>
+        <div className="col-sm-2">
+          <div className="MyProjectCard-header">Your Role</div>
+          <div>{this.state.isOwner ? "Project Lead" : "Volunteer"}</div>
+        </div>
+        <div className="col-sm-3">
+          <div className="MyProjectCard-header">{this.state.isOwner ? "Project Status" : "Volunteer Status"}</div>
+          <div>{this._getStatus()}</div>
+        </div>
+        <div className="col-sm-3">
+          {this._renderButtons()}
+        </div>
       </div>
     );
   }

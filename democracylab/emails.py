@@ -201,9 +201,11 @@ def send_event_creation_notification(event):
     send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
 
 
-def send_to_project_owners(project, sender, subject, template):
+def send_to_project_owners(project, sender, subject, template, include_co_owners=True):
     project_volunteers = VolunteerRelation.objects.filter(project=project.id)
-    co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
+    co_owner_emails = []
+    if include_co_owners:
+        co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
     email_msg = EmailMessage(
         subject=subject,
         from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
@@ -225,14 +227,17 @@ def send_to_group_owners(group, sender, subject, template):
     send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 
-def send_to_project_volunteer(volunteer_relation, subject, template):
+def send_to_project_volunteer(volunteer_relation, subject, template, cc_owners=True):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project.id)
+    cc = []
     co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers)))) or []
+    if cc_owners:
+        cc = co_owner_emails + [volunteer_relation.project.project_creator.email]
     email_msg = EmailMessage(
         subject=subject,
         from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
         to=[volunteer_relation.volunteer.email],
-        cc=co_owner_emails + [volunteer_relation.project.project_creator.email],
+        cc=cc,
         reply_to=[volunteer_relation.project.project_creator.email] + co_owner_emails,
     )
     email_msg = template.render(email_msg)

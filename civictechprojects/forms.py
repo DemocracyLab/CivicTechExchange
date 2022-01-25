@@ -6,6 +6,7 @@ from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification, send_group_creation_notification, send_event_creation_notification
 from democracylab.models import get_request_contributor
 from .caching.cache import ProjectSearchTagsCache
+from salesforce import campaign as salesforce_campaign
 from common.helpers.date_helpers import parse_front_end_datetime
 from common.helpers.form_helpers import is_creator, is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, \
     read_form_field_boolean, merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, read_form_fields_point
@@ -82,6 +83,7 @@ class ProjectCreationForm(ModelForm):
             project.project_date_modified = timezone.now()
 
         project.save()
+        salesforce_campaign.save(project)
 
         fields_changed |= merge_json_changes(ProjectLink, project, form, 'project_links')
         fields_changed |= merge_json_changes(ProjectFile, project, form, 'project_files')

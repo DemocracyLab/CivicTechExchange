@@ -3,10 +3,10 @@
   .btn-info, .btn-info:visited {
     color: #fff; //temporary quickfix to inherit issues
   }
-}
-
-.MyProjectCard-column {
-  width: 250px;
+  background-color: $color-background-light;
+  border: solid 1px $color-grey-frame-border;
+  margin: 20px auto;
+  padding: 16px;
 }
 
 .MyProjectCard-header {
@@ -16,14 +16,6 @@
 
 .MyProjectCard-projectName {
   font-weight: bold;
-}
-
-.MyProjectCard-table {
-  background-color: $color-background-light;
-  border: solid 1px $color-grey-frame-border;
-  margin: 20px auto;
-  padding: 16px;
-  width: 98%;
 }
 
 .MyProjectCard-button {
