@@ -144,6 +144,9 @@
     padding: 0 0 16px 16px;
   }
 }
+.corporate-tab-section {
+  max-width: 100%; // fixes some viewport issues below 334px, could use 100vw if this doesn't work
+}
 .corporate-cta-button {
   display: block;
   margin: 0 auto;
