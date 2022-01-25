@@ -189,17 +189,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </div>
             </div>
             <div className="col-12 corporate-learn-more">
-              <h4>
-                Learn more:{" "}
-                <a
-                  href={cdn.document(
-                    "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
-                  )}
-                >
-                  Corporate Tech-for-Good Hackathons PDF{" "}
-                  <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
-                </a>
-              </h4>
+              <h4>Learn more: {this._renderHackathonProspectus()}</h4>
               <Button
                 variant="primary"
                 href="#contact-hackathon"
@@ -311,7 +301,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 </p>
                 <p>
                   79% of employees prefer to work at a socially responsible
-                  company. ({" "}
+                  company. (
                   <a
                     href="https://www2.deloitte.com/us/en/pages/about-deloitte/articles/culture-of-purpose.html"
                     rel="noopener noreferrer nofollow"
@@ -337,17 +327,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </div>
             </div>
             <div className="col-12 corporate-learn-more">
-              <h4>
-                Learn more:{" "}
-                <a
-                  href={cdn.document(
-                    "2021+DemocracyLab+Sponsorship+Prospectus.pdf"
-                  )}
-                >
-                  Sponsor Prospectus PDF{" "}
-                  <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
-                </a>
-              </h4>
+              <h4>Learn more: {this._renderSponsorProspectus()}</h4>
               <Button
                 variant="primary"
                 href="#contact-sponsor"
@@ -402,14 +382,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             <li>
               {" "}
               Learn more about our sponsorship levels:{" "}
-              <a
-                href={cdn.document(
-                  "2021+DemocracyLab+Sponsorship+Prospectus.pdf"
-                )}
-              >
-                Sponsor Prospectus PDF
-                <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
-              </a>
+              {this._renderSponsorProspectus()}
             </li>
           </ul>
 
@@ -456,18 +429,30 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <h2>Get in touch to discuss your next tech-for-good event.</h2>
           <ContactForm interest_hackathon={true} />
           <h4>
-            Not ready yet? Learn more:{" "}
-            <a
-              href={cdn.document(
-                "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
-              )}
-            >
-              Corporate Tech-for-Good Hackathons PDF{" "}
-              <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
-            </a>
+            Not ready yet? Learn more: {this._renderHackathonProspectus()}
           </h4>
         </div>
       </React.Fragment>
+    );
+  }
+  _renderHackathonProspectus(): React$Node {
+    return (
+      <a
+        href={cdn.document(
+          "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
+        )}
+      >
+        Corporate Tech-for-Good Hackathons PDF{" "}
+        <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+      </a>
+    );
+  }
+  _renderSponsorProspectus(): React$Node {
+    return (
+      <a href={cdn.document("2021+DemocracyLab+Sponsorship+Prospectus.pdf")}>
+        Sponsor Prospectus PDF{" "}
+        <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+      </a>
     );
   }
 
@@ -479,17 +464,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <h1>Interested in becoming a sponsor?</h1>
           <h2>Get in touch to make an impact in the tech-for-good movement.</h2>
           <ContactForm interest_sponsor={true} />
-          <h4>
-            Not ready yet? Learn more:{" "}
-            <a
-              href={cdn.document(
-                "2021+DemocracyLab+Sponsorship+Prospectus.pdf"
-              )}
-            >
-              Sponsor Prospectus PDF
-              <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
-            </a>
-          </h4>
+          <h4>Not ready yet? Learn more: {this._renderSponsorProspectus()}</h4>
         </div>
       </React.Fragment>
     );
