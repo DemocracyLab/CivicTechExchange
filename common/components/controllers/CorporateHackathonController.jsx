@@ -306,12 +306,20 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               <div className="corporate-card">
                 <h2>Differentiate your company.</h2>
                 <p>
-                  Supporting DemocracyLab shows your company’s commitment to
+                  Supporting DemocracyLab shows your company's commitment to
                   social responsibility.
                 </p>
                 <p>
                   79% of employees prefer to work at a socially responsible
-                  company. (Deloitte)
+                  company. ({" "}
+                  <a
+                    href="https://www2.deloitte.com/us/en/pages/about-deloitte/articles/culture-of-purpose.html"
+                    rel="noopener noreferrer nofollow"
+                    target="_blank"
+                  >
+                    Deloitte
+                  </a>
+                  )
                 </p>
               </div>
               <div className="corporate-card">
