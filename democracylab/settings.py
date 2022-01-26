@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'taggit',
     'allauth',
     'allauth.account',
@@ -108,6 +109,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -379,6 +381,10 @@ if CSP_FRAME_ANCESTORS is not None:
 CSP_FRAME_SRC = os.environ.get('CSP_FRAME_SRC', None)
 if CSP_FRAME_SRC is not None:
     CSP_FRAME_SRC = ast.literal_eval(CSP_FRAME_SRC)
+
+CORS_ALLOWED_ORIGIN_PATTERNS = os.environ.get('CORS_ALLOWED_ORIGIN_PATTERNS', None)
+if CORS_ALLOWED_ORIGIN_PATTERNS is not None:
+    CORS_ALLOWED_ORIGIN_REGEXES = ast.literal_eval(CORS_ALLOWED_ORIGIN_PATTERNS)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
