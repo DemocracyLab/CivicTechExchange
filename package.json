@@ -18,6 +18,7 @@
     "node": "14.15.x"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.2",
     "@tryghost/content-api": "^1.5.2",
     "bluebird": "^3.5.2",
     "css-loader": "^3.4.2",
@@ -42,6 +43,7 @@
     "react-image-crop": "^8.3.0",
     "react-markdown": "^7.0.1",
     "react-moment": "^0.7.9",
+    "react-popper": "^2.2.5",
     "react-select": "^2.4.2",
     "react-sortablejs": "^6.0.0",
     "repeating": "2.0.0",
