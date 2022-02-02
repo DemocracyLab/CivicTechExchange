@@ -3,14 +3,14 @@
 import type { Tag } from "./TagStore";
 
 import { ReduceStore } from "flux/utils";
-import ProjectSearchDispatcher from "./ProjectSearchDispatcher.js";
+import UniversalDispatcher from "./UniversalDispatcher.js";
 import { List, Record } from "immutable";
 import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 import type {
   ProjectData,
   TagDefinition,
   TagDefinitionCount,
-  ProjectAPIData,
+  ProjectAPIData
 } from "../utils/ProjectAPIUtils.js";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import urls from "../utils/url.js";
@@ -21,7 +21,7 @@ import _ from "lodash";
 
 export type SearchSettings = {|
   updateUrl: boolean,
-  defaultSort: string,
+  defaultSort: string
 |};
 
 export type FindProjectsArgs = {|
@@ -39,6 +39,8 @@ export type FindProjectsArgs = {|
   url: string,
   event_id: number,
   group_id: number,
+  favoritesOnly: boolean,
+  error: boolean
 |};
 
 type FindProjectsResponse = {|
@@ -46,7 +48,7 @@ type FindProjectsResponse = {|
   +numPages: number,
   +numProjects: number,
   +tags: Dictionary<TagDefinition>,
-  +availableCountries: $ReadOnlyArray<string>,
+  +availableCountries: $ReadOnlyArray<string>
 |};
 
 type FindProjectsData = {|
@@ -54,13 +56,13 @@ type FindProjectsData = {|
   +availableCountries: $ReadOnlyArray<string>,
   +numPages: number,
   +numProjects: number,
-  +tags: Dictionary<TagDefinition>,
+  +tags: Dictionary<TagDefinition>
 |};
 
 export type LocationRadius = {|
   latitude: number,
   longitude: number,
-  radius: number,
+  radius: number
 |};
 
 export function locationRadiusToString(locationRadius: LocationRadius): string {
@@ -74,50 +76,57 @@ export function locationRadiusFromString(str: string): LocationRadius {
     parts.length > 2 && {
       latitude: parseFloat(parts[0]),
       longitude: parseFloat(parts[1]),
-      radius: parseInt(parts[2]),
+      radius: parseInt(parts[2])
     }
   );
 }
 
 export type ProjectSearchActionType =
   | {
-      type: "INIT",
+      type: "INIT_PROJECT_SEARCH",
       searchSettings: SearchSettings,
-      findProjectsArgs: FindProjectsArgs,
+      findProjectsArgs: FindProjectsArgs
     }
   | {
       type: "ADD_TAG",
-      tag: Tag,
+      tag: Tag
     }
   | {
       type: "REMOVE_TAG",
-      tag: Tag,
+      tag: Tag
     }
   | {
       type: "SET_KEYWORD",
-      keyword: string,
+      keyword: string
     }
   | {
       type: "SET_SORT",
-      sortField: string,
+      sortField: string
     }
   | {
-      type: "UNSET_LEGACY_LOCATION",
+      type: "UNSET_LEGACY_LOCATION"
+    }
+  | {
+      type: "ERROR"
     }
   | {
       type: "SET_LOCATION",
-      locationRadius: ?LocationRadius,
+      locationRadius: ?LocationRadius
     }
   | {
       type: "SET_PAGE",
-      page: number,
+      page: number
     }
   | {
-      type: "CLEAR_FILTERS",
+      type: "SET_FAVORITES_ONLY",
+      favoritesOnly: boolean
+    }
+  | {
+      type: "CLEAR_FILTERS"
     }
   | {
       type: "SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
-      projectsResponse: FindProjectsResponse,
+      projectsResponse: FindProjectsResponse
     };
 
 const defaultSort = "-project_date_modified";
@@ -128,15 +137,17 @@ const DEFAULT_STATE = {
   location: "",
   locationRadius: null,
   page: 1,
+  favoritesOnly: false,
   tags: List(),
   projectsData: {},
   searchSettings: {
     updateUrl: false,
-    defaultSort: defaultSort,
+    defaultSort: defaultSort
   },
   findProjectsArgs: {},
   filterApplied: false,
   projectsLoading: false,
+  error: false
 };
 
 class State extends Record(DEFAULT_STATE) {
@@ -145,17 +156,19 @@ class State extends Record(DEFAULT_STATE) {
   location: string;
   locationRadius: LocationRadius;
   page: number;
+  favoritesOnly: boolean;
   projectsData: FindProjectsData;
   tags: $ReadOnlyArray<string>;
   searchSettings: SearchSettings;
   findProjectsArgs: FindProjectsArgs;
   filterApplied: boolean;
   projectsLoading: boolean;
+  error: boolean;
 }
 
 class ProjectSearchStore extends ReduceStore<State> {
   constructor(): void {
-    super(ProjectSearchDispatcher);
+    super(UniversalDispatcher);
   }
 
   getInitialState(): State {
@@ -164,7 +177,7 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   reduce(state: State, action: ProjectSearchActionType): State {
     switch (action.type) {
-      case "INIT":
+      case "INIT_PROJECT_SEARCH":
         let initialState: State = new State();
         if (action.findProjectsArgs) {
           initialState = this._initializeFilters(
@@ -180,10 +193,13 @@ class ProjectSearchStore extends ReduceStore<State> {
           "searchSettings",
           action.searchSettings || {
             updateUrl: false,
-            defaultSort: defaultSort,
+            defaultSort: defaultSort
           }
         );
         return this._loadProjects(initialState, true);
+      case "ERROR":
+        state = state.set("error", true);
+        return state;
       case "ADD_TAG":
         state = state.set("filterApplied", true);
         return this._loadProjects(this._addTagToState(state, action.tag));
@@ -212,6 +228,10 @@ class ProjectSearchStore extends ReduceStore<State> {
         return this._loadProjects(
           this._setPageNumberInState(state, action.page)
         );
+      case "SET_FAVORITES_ONLY":
+        return this._loadProjects(
+          this._addFavoritesOnlyToState(state, action.favoritesOnly)
+        );
       case "CLEAR_FILTERS":
         return this._loadProjects(this._clearFilters(state));
       case "SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE":
@@ -230,13 +250,14 @@ class ProjectSearchStore extends ReduceStore<State> {
           "tags",
           state.tags.filter(tag => allTags[tag])
         );
+        state = state.set("error", false);
         let currentProjects = state.projectsData.projects || List();
         state = state.set("projectsData", {
           projects: currentProjects.concat(projects),
           numPages: numPages,
           numProjects: numProjects,
           allTags: allTags,
-          availableCountries: availableCountries,
+          availableCountries: availableCountries
         });
         return state.set("projectsLoading", false);
       default:
@@ -274,6 +295,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           positions: state.positions,
           event_id: oldArgs.event_id,
           group_id: oldArgs.group_id,
+          favoritesOnly: state.favoritesOnly
         },
         _.identity
       );
@@ -309,6 +331,10 @@ class ProjectSearchStore extends ReduceStore<State> {
       locationRadiusFromString(findProjectsArgs.locationRadius)
     );
     state = this._addLegacyLocationToState(state, findProjectsArgs.location);
+    state = this._addFavoritesOnlyToState(
+      state,
+      findProjectsArgs.favoritesOnly
+    );
 
     return state;
   }
@@ -357,6 +383,11 @@ class ProjectSearchStore extends ReduceStore<State> {
     return state;
   }
 
+  _addFavoritesOnlyToState(state: State, favoritesOnly: boolean): State {
+    state = state.set("filterApplied", true);
+    return state.set("favoritesOnly", favoritesOnly);
+  }
+
   _clearFilters(state: State): State {
     state = state.set("keyword", "");
     state = state.set("sortField", state.searchSettings.defaultSort);
@@ -364,17 +395,18 @@ class ProjectSearchStore extends ReduceStore<State> {
     state = state.set("locationRadius", {});
     state = state.set("tags", List());
     state = state.set("page", 1);
+    state = state.set("favoritesOnly", false);
     state = state.set("filterApplied", false);
     state = state.set("projectsData", {});
     const findProjectsArgs: FindProjectsArgs = _.pick(state.findProjectsArgs, [
       "event_id",
-      "group_id",
+      "group_id"
     ]);
     state = state.set(
       "findProjectsArgs",
       Object.assign(findProjectsArgs, {
         page: 1,
-        sortField: state.searchSettings.defaultSort,
+        sortField: state.searchSettings.defaultSort
       })
     );
     return state;
@@ -398,17 +430,26 @@ class ProjectSearchStore extends ReduceStore<State> {
     fetch(new Request(url))
       .then(response => response.json())
       .then(getProjectsResponse =>
-        ProjectSearchDispatcher.dispatch({
+        UniversalDispatcher.dispatch({
           type: "SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE",
-          projectsResponse: getProjectsResponse,
+          projectsResponse: getProjectsResponse
         })
-      );
+      )
+      .catch(error => {
+        UniversalDispatcher.dispatch({
+          type: "ERROR"
+        });
+      });
     return state;
   }
 
   _getTagCategoryParams(state: State, category: string): ?string {
     const tags = this.getTags(state).filter(tag => tag.category === category);
     return tags.map(tag => tag.tag_name).join(",");
+  }
+
+  getError(): boolean {
+    return this.getState().error;
   }
 
   getKeyword(): string {
@@ -425,9 +466,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getCountryList(): $ReadOnlyArray<CountryData> {
     const projectData: FindProjectsData = this.getState().projectsData;
-    let countryList = (projectData &&
+    let countryList =
+      projectData &&
       projectData.availableCountries &&
-      projectData.availableCountries.map(countryByCode));
+      projectData.availableCountries.map(countryByCode);
     return countryList && _.sortBy(countryList, "displayName");
   }
 
@@ -451,6 +493,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getCurrentPage(): number {
     return this.getState().page;
+  }
+
+  getFavoritesOnly(): boolean {
+    return this.getState().favoritesOnly;
   }
 
   getNumberOfProjects(): number {
@@ -478,7 +524,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   getQueryString(): string {
     const state: State = this.getState();
-    return urls.constructWithQueryString(`projects`, state.findProjectsArgs || {});
+    return urls.constructWithQueryString(
+      `projects`,
+      state.findProjectsArgs || {}
+    );
   }
 }
 

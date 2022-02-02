@@ -107,7 +107,8 @@
 }
 
 .ProjectFilterDataContainer-root,
-.LocationSearchContainer {
+.LocationSearchContainer,
+.favorite-filter {
   margin: 0 15px;
 }
 .LocationSearchContainer-content {
@@ -134,7 +135,20 @@
 @include media-breakpoint-up(sm) {
   .ProjectFilterDataContainer-root,
   .LocationSearchContainer,
-  .LocationSearchContainer-content {
+  .LocationSearchContainer-content,
+  .favorite-filter {
     margin: 0;
+  }
+}
+
+.favorite-filter {
+  font-weight: bold;
+  padding: 12px 5px;
+  display: flex;
+  align-items: center;
+
+  i {
+    font-size: 24px;
+    margin: 0 8px;
   }
 }

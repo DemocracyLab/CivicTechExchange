@@ -1,5 +1,25 @@
+from django.shortcuts import redirect
 from urllib.parse import urlparse
 from common.helpers.front_end import clean_invalid_args, get_clean_url, get_page_section, redirect_from_deprecated_url
+
+
+class RedirectTo(Exception):
+    def __init__(self, url):
+        self.url = url
+
+
+class RedirectMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Nothing to do here, just using this middleware for redirect exception handling
+        return self.get_response(request)
+
+    @staticmethod
+    def process_exception(request, exception):
+        if isinstance(exception, RedirectTo):
+            return redirect(exception.url)
 
 
 class RedirectorInterface:

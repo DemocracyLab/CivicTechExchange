@@ -7,8 +7,9 @@ import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 
 type Props = {|
   showCompany: boolean,
-  showInterests: boolean,
   onSubmit: () => void,
+  interest_sponsor: boolean,
+  interest_hackathon: boolean,
 |};
 
 type State = FormFields & ControlVariables;
@@ -38,8 +39,8 @@ class ContactForm extends React.Component<Props, State> {
       lname: "",
       emailaddr: "",
       message: "",
-      interest_sponsor: false,
-      interest_hackathon: false,
+      interest_sponsor: this.props.interest_sponsor || false,
+      interest_hackathon: this.props.interest_hackathon || false,
       interest_other: false,
       sendStatusMessage: null,
       sendStatusClass: null,
@@ -177,7 +178,6 @@ class ContactForm extends React.Component<Props, State> {
                   onChange={this.handleInputChange}
                 />
               </div>
-              {this.props.showInterests && this._renderInterestFields()}
             </div>
             <div className="ContactForm-group">
               <div className="form-group">
@@ -197,7 +197,6 @@ class ContactForm extends React.Component<Props, State> {
                   onChange={this.handleInputChange}
                 />
               </div>
-              <p>Before sending your message, please complete this captcha.</p>
               <ReCAPTCHA
                 sitekey={window.GR_SITEKEY}
                 onChange={this.reCaptchaOnChange}
@@ -212,55 +211,6 @@ class ContactForm extends React.Component<Props, State> {
           </div>
         </form>
       </React.Fragment>
-    );
-  }
-
-  _renderInterestFields(): ?React$Node {
-    return (
-      <div className="form-group">
-        <h4>Areas of Interest</h4>
-        <ul className="ContactForm-list">
-          <li>
-            <input
-              className="form-check-input"
-              name="interest_hackathon"
-              id="interest_hackathon"
-              type="checkbox"
-              value={this.state.interest_hackathon}
-              onChange={this.handleInputChange}
-            />
-            <label className="form-check-label" htmlFor="interest_hackathon">
-              Hosting a Hackathon
-            </label>
-          </li>
-          <li>
-            <input
-              className="form-check-input"
-              name="interest_sponsor"
-              id="interest_sponsor"
-              type="checkbox"
-              value={this.state.interest_sponsor}
-              onChange={this.handleInputChange}
-            />
-            <label className="form-check-label" htmlFor="interest_sponsor">
-              Event Sponsorship
-            </label>
-          </li>
-          <li>
-            <input
-              className="form-check-input"
-              name="interest_other"
-              id="interest_other"
-              type="checkbox"
-              value={this.state.interest_other}
-              onChange={this.handleInputChange}
-            />
-            <label className="form-check-label" htmlFor="interest_other">
-              Other
-            </label>
-          </li>
-        </ul>
-      </div>
     );
   }
 }

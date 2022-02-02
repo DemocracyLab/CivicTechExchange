@@ -21,6 +21,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'taggit',
     'allauth',
     'allauth.account',
@@ -57,12 +59,14 @@ INSTALLED_APPS = [
     'oauth2.providers.google',
     'oauth2.providers.linkedin',
     'oauth2.providers.facebook',
-    'django_seo_js'
+    'django_rq',
+    'salesforce'
 ]
 
 SITE_ID = 1
 
 # Customize allauth.socialaccount
+ACCOUNT_ADAPTER = 'oauth2.adapter.MyAccountAdapter'
 SOCIALACCOUNT_ADAPTER = 'oauth2.adapter.SocialAccountAdapter'
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
@@ -100,11 +104,12 @@ AUTHENTICATION_BACKENDS = (
 
 MIDDLEWARE = [
     'common.helpers.malicious_requests.MaliciousRequestsMiddleware',
-    'common.helpers.caching.DebugUserAgentMiddleware',
+    'common.helpers.redirectors.RedirectMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -161,6 +166,15 @@ DATABASES['default'].update(db_from_env)
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 LOGIN_REDIRECT_URL = '/'
+
+REDIS_ENABLED = os.environ.get('REDIS_ENABLED', False) == 'True'
+
+RQ_QUEUES = {
+    'default': {
+        'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+        'DEFAULT_TIMEOUT': 500,
+    },
+}
 
 #Caching number of tag counts only for now - change this if other things are db-cached
 CACHES = {
@@ -222,10 +236,10 @@ EMAIL_SUPPORT_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMA
 EMAIL_VOLUNTEER_ACCT = read_connection_config(ast.literal_eval(os.environ.get('EMAIL_VOLUNTEER_ACCT', 'None')))
 
 # Default log to console in the absence of any account configurations
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if EMAIL_SUPPORT_ACCT and EMAIL_VOLUNTEER_ACCT else 'django.core.mail.backends.console.EmailBackend'
 
 PROTOCOL_DOMAIN = os.environ['PROTOCOL_DOMAIN']
-ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 CONTACT_EMAIL = os.environ['CONTACT_EMAIL']
 FAKE_EMAILS = not EMAIL_SUPPORT_ACCT or not EMAIL_VOLUNTEER_ACCT or os.environ.get('FAKE_EMAILS', False) == 'True'
 
@@ -341,6 +355,10 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
     'PRIVACY_POLICY_URL': {
         'error': True,
         'message': 'Privacy Policy url required'
+    },
+    'VIDEO_PAGES': {
+        'error': False,
+        'message': 'VIDEO_PAGES needed to show /videos/'
     }
 }
 
@@ -363,6 +381,10 @@ if CSP_FRAME_ANCESTORS is not None:
 CSP_FRAME_SRC = os.environ.get('CSP_FRAME_SRC', None)
 if CSP_FRAME_SRC is not None:
     CSP_FRAME_SRC = ast.literal_eval(CSP_FRAME_SRC)
+
+CORS_ALLOWED_ORIGIN_PATTERNS = os.environ.get('CORS_ALLOWED_ORIGIN_PATTERNS', None)
+if CORS_ALLOWED_ORIGIN_PATTERNS is not None:
+    CORS_ALLOWED_ORIGIN_REGEXES = ast.literal_eval(CORS_ALLOWED_ORIGIN_PATTERNS)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -408,35 +430,6 @@ LOGGING = {
     },
 }
 
-# If you're using prerender.io (the default backend):
-SEO_JS_PRERENDER_TOKEN = os.environ.get('SEO_JS_PRERENDER_TOKEN', '')
-SEO_JS_BACKEND = "common.helpers.caching.DebugPrerenderIO"
-SEO_JS_PRERENDER_URL = os.environ.get('SEO_JS_PRERENDER_URL', 'http://localhost:3000/')  # Note trailing slash.
-SEO_JS_PRERENDER_RECACHE_URL = SEO_JS_PRERENDER_URL + "recache"
-SEO_JS_ENABLED = os.environ.get('SEO_JS_ENABLED', False) == 'True'
-
-# TODO: Put in environment variable
-SEO_JS_USER_AGENTS = (
-    # These first three should be disabled, since they support escaped fragments, and
-    # and leaving them enabled will penalize a website as "cloaked".
-    "Googlebot",
-    "Yahoo",
-    "bingbot",
-
-    "Ask Jeeves",
-    "baiduspider",
-    "facebookexternalhit",
-    "twitterbot",
-    "rogerbot",
-    "linkedinbot",
-    "embedly",
-    "quoralink preview'",
-    "showyoubot",
-    "outbrain",
-    "pinterest",
-    "developersgoogle.com/+/web/snippet",
-)
-
 DISALLOW_CRAWLING = os.environ.get('DISALLOW_CRAWLING', False) == 'True'
 
 DL_PAGES_LAST_UPDATED_DATE = os.environ.get('DL_PAGES_LAST_UPDATED', '2019-12-05')
@@ -460,8 +453,19 @@ QIQO_API_KEY = os.environ.get('QIQO_API_KEY', 'democracylab')
 QIQO_API_SECRET = os.environ.get('QIQO_API_SECRET', 'SECRET')
 QIQO_CIRCLE_UUID = os.environ.get('QIQO_CIRCLE_UUID', 'nmitq')
 QIQO_SIGNUP_TIMEOUT_SECONDS = int(os.environ.get('QIQO_SIGNUP_TIMEOUT_SECONDS', 5))
+QIQO_IMPERSONATION_ENABLED = os.environ.get('QIQO_IMPERSONATION_ENABLED', False) == 'True'
 
-BLOG_URL = os.environ.get('BLOG_URL', '')
+# Discovered breakage in v52.0, so beware moving away from SALESFORCE_API_VERSION v50.0
+SALESFORCE_API_VERSION = os.environ.get('SALESFORCE_API_VERSION', 50.0)
+SALESFORCE_ENDPOINT = os.environ.get('SALESFORCE_ENDPOINT', '')
+SALESFORCE_LOGIN_URL = os.environ.get('SALESFORCE_LOGIN_URL', '')
+SALESFORCE_TOKEN_SUFFIX = os.environ.get('SALESFORCE_TOKEN_SUFFIX', '')
+SALESFORCE_REDIRECT_URI = os.environ.get('SALESFORCE_REDIRECT_URI', '')
+SALESFORCE_JWT = os.environ.get('SALESFORCE_JWT', '')
+# Mark's Salesforce *USER* id (not the Contact id)
+SALESFORCE_OWNER_ID = os.environ.get('SALESFORCE_OWNER_ID', '')
+
+BLOG_URL = os.environ.get('BLOG_URL', 'https://blog.democracylab.org')
 
 EVENT_URL = os.environ.get('EVENT_URL', '')
 
@@ -473,11 +477,13 @@ PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
 
 # Video Link
-YOUTUBE_VIDEO_URL = os.environ.get('YOUTUBE_VIDEO_URL', '')
+VIDEO_PAGES = os.environ.get('VIDEO_PAGES', None)
+if VIDEO_PAGES is not None:
+    VIDEO_PAGES = ast.literal_eval(VIDEO_PAGES)
 
 # Ghost blog configs
-GHOST_URL = os.environ.get('GHOST_URL', '')
-GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '')
+GHOST_URL = os.environ.get('GHOST_URL', 'https://blog.democracylab.org')
+GHOST_CONTENT_API_KEY = os.environ.get('GHOST_CONTENT_API_KEY', '52d832a0619aebf848c9264829')
 
 if GHOST_URL:
     CSP_CONNECT_SRC = CSP_CONNECT_SRC + (GHOST_URL,)

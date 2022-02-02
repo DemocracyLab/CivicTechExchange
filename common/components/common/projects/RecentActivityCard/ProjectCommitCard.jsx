@@ -1,7 +1,8 @@
 // @flow
 
 import React from "react";
-import moment from "moment";
+
+import ActionAuthorLine from "./components/ActionAuthorLine.jsx";
 
 type ProjectCommit = {|
   user_name: string,
@@ -33,23 +34,10 @@ class ProjectCommitCard extends React.PureComponent<Props> {
 
     return (
       <div className="ProjectCommitCard-container">
-        <div className="ProjectCommitCard-line ProjectCommitCard-author-line">
-          <div className="ProjectCommitCard-avatar">
-            <img
-              src={
-                user_avatar_link ||
-                `https://github.com/identicons/${user_name || "null"}.png`
-              }
-              alt={`${user_name} avatar`}
-              width="30"
-              height="30"
-            />
-          </div>
-          <div className="ProjectCommitCard-user">{user_name || "unknown"}</div>
-          <div className="ProjectCommitCard-date">
-            committed {moment(commit_date).fromNow()}
-          </div>
-        </div>
+        <ActionAuthorLine
+          user_name={user_name}
+          user_avatar_link={user_avatar_link}
+          action_date={commit_date} />
         <div className="ProjectCommitCard-line">
           <div className="ProjectCommitCard-commit-icon">
             <svg

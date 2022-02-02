@@ -14,7 +14,6 @@ const sectionsToShowFooter: $ReadOnlyArray<string> = [
   Section.FindProjects,
   Section.AboutProject,
   Section.AboutUs,
-  Section.Press,
   Section.Home,
 ];
 

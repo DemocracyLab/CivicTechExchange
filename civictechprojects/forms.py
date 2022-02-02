@@ -6,6 +6,7 @@ from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification, send_group_creation_notification, send_event_creation_notification
 from democracylab.models import get_request_contributor
 from .caching.cache import ProjectSearchTagsCache
+from salesforce import campaign as salesforce_campaign
 from common.helpers.date_helpers import parse_front_end_datetime
 from common.helpers.form_helpers import is_creator, is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, \
     read_form_field_boolean, merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, read_form_fields_point
@@ -25,7 +26,9 @@ class ProjectCreationForm(ModelForm):
 
         linked_groups = project.get_project_groups()
         linked_events = project.get_project_events()
+        project_creator = project.project_creator
         project.delete()
+        project_creator.purge_cache()
         # Refresh linked event tag counts
         for event in linked_events:
             ProjectSearchTagsCache.refresh(event=event, group=None)
@@ -84,6 +87,7 @@ class ProjectCreationForm(ModelForm):
             project.project_date_modified = timezone.now()
 
         project.save()
+        salesforce_campaign.save(project)
 
         fields_changed |= merge_json_changes(ProjectLink, project, form, 'project_links')
         fields_changed |= merge_json_changes(ProjectFile, project, form, 'project_files')
@@ -105,6 +109,7 @@ class ProjectCreationForm(ModelForm):
         if fields_changed:
             # Only recache linked events if tags were changed
             project.recache(recache_linked=tags_changed)
+            project.project_creator.purge_cache()
 
         return project
 
@@ -187,6 +192,7 @@ class EventCreationForm(ModelForm):
 
         if fields_changed or project_fields_changed:
             event.recache()
+            event.event_creator.purge_cache()
         if project_fields_changed:
             change_projects = []
             if pre_change_projects:
@@ -208,7 +214,9 @@ class EventCreationForm(ModelForm):
         if not is_creator_or_staff(request.user, event):
             raise PermissionDenied()
 
+        user = event.event_creator
         event.delete()
+        user.purge_cache()
 
 
 class GroupCreationForm(ModelForm):
@@ -266,6 +274,7 @@ class GroupCreationForm(ModelForm):
             group.update_linked_items()
         if fields_changed:
             group.recache()
+            group.group_creator.purge_cache()
 
         if is_created_original != group.is_created:
             send_group_creation_notification(group)
@@ -279,4 +288,6 @@ class GroupCreationForm(ModelForm):
         if not is_creator_or_staff(request.user, group):
             raise PermissionDenied()
 
+        group_creator = group.group_creator
         group.delete()
+        group_creator.purge_cache()

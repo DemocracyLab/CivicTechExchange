@@ -3,7 +3,6 @@
 import React from "react";
 import { APIError } from "../utils/api.js";
 import url from "../utils/url.js";
-import prerender from "../utils/prerender.js";
 import GroupAPIUtils, { GroupDetailsAPIData } from "../utils/GroupAPIUtils.js";
 import AboutGroupDisplay from "../common/groups/AboutGroupDisplay.jsx";
 import LoadingFrame from "../chrome/LoadingFrame.jsx";
@@ -37,7 +36,6 @@ class AboutGroupController extends React.PureComponent<{||}, State> {
       {
         group: group,
       },
-      prerender.ready
     );
   }
 

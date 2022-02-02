@@ -2,17 +2,17 @@
 
 import React from "react";
 import { Container } from "flux/utils";
-import type { TagDefinition } from "../../../utils/ProjectAPIUtils.js";
-import LocationAutocomplete from "../../../common/location/LocationAutocomplete.jsx";
-import type { LocationInfo } from "../../../common/location/LocationInfo";
-import LocationSearchSection from "./LocationSearchSection.jsx";
-import ProjectAPIUtils from "../../../utils/ProjectAPIUtils.js";
-import ProjectSearchStore from "../../../stores/ProjectSearchStore.js";
-import ProjectSearchDispatcher from "../../../stores/ProjectSearchDispatcher.js";
-import RenderFilterCategory from "./RenderFilterCategory.jsx";
-import metrics from "../../../utils/metrics";
-import _ from "lodash";
 import { List } from "immutable";
+import type { TagDefinition } from "../../../utils/ProjectAPIUtils.js";
+import LocationSearchSection from "./LocationSearchSection.jsx";
+import ProjectSearchStore from "../../../stores/ProjectSearchStore.js";
+import UniversalDispatcher from "../../../stores/UniversalDispatcher.js";
+import RenderFilterCategory from "./RenderFilterCategory.jsx";
+import metrics from "../../../utils/metrics.js";
+import FavoriteFilter from "../FavoriteFilter.jsx";
+import CurrentUser from "../../../utils/CurrentUser.js";
+import FavoritesStore from "../../../stores/FavoritesStore.js";
+import _ from "lodash";
 
 /**
  * @category: Tag category to pull from
@@ -36,13 +36,12 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
       selectedTags: null,
       filterCounts: null,
     };
-
     this._checkEnabled = this._checkEnabled.bind(this);
     this._selectOption = this._selectOption.bind(this);
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore];
+    return [ProjectSearchStore, FavoritesStore];
   }
 
   static calculateState(prevState: State): State {
@@ -85,9 +84,11 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
 
   render(): React$Node {
     //should render a number of <RenderFilterCategory> child components
-
+    const showFavorites: boolean =
+      CurrentUser.isLoggedIn() && !FavoritesStore.noFavorites();
     return (
       <div>
+        {showFavorites && <FavoriteFilter />}
         {this.state.sortedTags ? this._renderFilterCategories() : null}
         <LocationSearchSection />
       </div>
@@ -153,13 +154,13 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
     var tagInState = _.has(this.state.selectedTags, tag.tag_name);
     //if tag is NOT currently in state, add it, otherwise remove
     if (!tagInState) {
-      ProjectSearchDispatcher.dispatch({
+      UniversalDispatcher.dispatch({
         type: "ADD_TAG",
         tag: tag.tag_name,
       });
       metrics.logSearchFilterByTagEvent(tag);
     } else {
-      ProjectSearchDispatcher.dispatch({
+      UniversalDispatcher.dispatch({
         type: "REMOVE_TAG",
         tag: tag,
       });

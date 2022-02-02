@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from common.helpers.collections import distinct
 from common.helpers.random import generate_uuid
+from common.helpers.user_helpers import clear_user_context
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
@@ -86,6 +87,9 @@ class Contributor(User):
             user['user_thumbnail'] = thumbnail_files[0].to_json()
 
         return user
+
+    def purge_cache(self):
+        clear_user_context(self)
 
     def update_linked_items(self):
         # Recache owned projects

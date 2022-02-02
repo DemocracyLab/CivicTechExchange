@@ -4,13 +4,7 @@ import CurrentUser from "../utils/CurrentUser.js";
 import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 import MyProjectCard from "../componentsBySection/MyProjects/MyProjectCard.jsx";
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
-import MyProjectsStore, {
-  MyProjectData,
-  MyProjectsAPIResponse,
-} from "../stores/MyProjectsStore.js";
-import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import metrics from "../utils/metrics.js";
-import { Container } from "flux/utils";
 import ProjectVolunteerRenewModal from "../common/projects/ProjectVolunteerRenewModal.jsx";
 import ProjectVolunteerConcludeModal from "../common/projects/ProjectVolunteerConcludeModal.jsx";
 import LogInController from "./LogInController.jsx";
@@ -18,7 +12,7 @@ import url from "../utils/url.js";
 import Section from "../enums/Section";
 import React from "react";
 import _ from "lodash";
-import Headers from "../common/Headers.jsx";
+import type { UserContext } from "../utils/CurrentUser.js";
 
 type State = {|
   ownedProjects: ?Array<MyProjectData>,
@@ -28,35 +22,20 @@ type State = {|
   showConcludeVolunteerModal: boolean,
 |};
 
-class MyProjectsController extends React.Component<{||}, State> {
+class MyProjectsController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
+    const userContext: UserContext = CurrentUser.userContext();
     this.state = {
-      ownedProjects: null,
-      volunteeringProjects: null,
+      ownedProjects: userContext?.owned_projects,
+      volunteeringProjects: userContext?.volunteering_projects,
       showConfirmDeleteModal: false,
       showRenewVolunteerModal: false,
       showConcludeVolunteerModal: false,
     };
   }
 
-  static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [MyProjectsStore];
-  }
-
-  static calculateState(prevState: State): State {
-    const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
-    return {
-      ownedProjects: myProjects && myProjects.owned_projects,
-      volunteeringProjects: myProjects && myProjects.volunteering_projects,
-    };
-  }
-
   componentWillMount(): void {
-    setTimeout(function() {
-      // Run after dispatcher has finished
-      UniversalDispatcher.dispatch({ type: "INIT" });
-    }, 0);
     const args = url.arguments(window.location.href);
     if (
       "from" in args &&
@@ -154,11 +133,7 @@ class MyProjectsController extends React.Component<{||}, State> {
   render(): React$Node {
     return CurrentUser.isLoggedIn() ? (
       <React.Fragment>
-        <Headers
-          title="My Projects | DemocracyLab"
-          description="My Projects page"
-        />
-        <div className="MyProjectsController-root">
+        <div className="container MyProjectsController-root">
           <ConfirmationModal
             showModal={this.state.showConfirmDeleteModal}
             message="Are you sure you want to delete this project?"
@@ -221,4 +196,4 @@ class MyProjectsController extends React.Component<{||}, State> {
   }
 }
 
-export default Container.create(MyProjectsController);
+export default MyProjectsController;

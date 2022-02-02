@@ -22,6 +22,7 @@ import FormWorkflow, {
   FormWorkflowStepConfig,
 } from "../forms/FormWorkflow.jsx";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
+import _ from "lodash";
 
 type State = {|
   projectId: ?number,
@@ -82,9 +83,10 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
           formComponent: ProjectPositionsForm,
         },
         {
-          header: "Ready to publish your project?",
+          header: "Ready to submit your project?",
           subHeader:
-            "Please review your project's details and click \"PUBLISH\" below when you're ready.",
+            'Please review your project’s details and click "Submit" below when you’re ready.',
+          submitButtonText: "Submit",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onFinalSubmitSuccess,
           formComponent: ProjectPreviewForm,
@@ -97,6 +99,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     if (this.state.projectId) {
       ProjectAPIUtils.fetchProjectDetails(
         this.state.projectId,
+        true,
         this.loadProjectDetails.bind(this),
         this.handleLoadProjectError.bind(this)
       );
@@ -119,10 +122,18 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     if (!CurrentUser.isCoOwnerOrOwner(project) && !CurrentUser.isStaff()) {
       // TODO: Handle someone other than owner
     } else {
+      if (project.project_created) {
+        const lastStep: FormWorkflowStepConfig = _.last(this.state.steps);
+        lastStep.header = "Ready to save your edits?";
+        lastStep.subHeader =
+          'When everything looks good, click "Update Project" below.';
+        lastStep.submitButtonText = "Update Project";
+      }
       this.setState({
         project: project,
         projectIsLoading: false,
         startStep: url.argument("step") || 1,
+        steps: _.clone(this.state.steps),
       });
     }
   }
@@ -166,7 +177,9 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     metrics.logProjectCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
     window.location.href = url.section(Section.MyProjects, {
-      projectAwaitingApproval: url.encodeNameForUrlPassing(project.project_name),
+      projectAwaitingApproval: url.encodeNameForUrlPassing(
+        project.project_name
+      ),
     });
   }
 

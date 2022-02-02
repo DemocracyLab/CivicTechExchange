@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import EmailMessage
 from django.template import loader, Template, Context
 from django.utils import timezone
 from enum import Enum
 from html.parser import unescape
 from common.models.tags import Tag
 from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datetime, datetime_to_string
+from common.helpers.queue import enqueue
 from democracylab.tokens import email_verify_token_generator
 from democracylab.models import Contributor
 from civictechprojects.models import VolunteerRelation
@@ -75,14 +75,45 @@ class HtmlEmailTemplate:
     def render(self, email_msg, context=None):
         if self.hydrated_template is None:
             sections_text = ''.join(self.sections)
-            self.hydrated_template = Template(HtmlEmailTemplate.base_template.render({"content": sections_text}))
+            content_context = {'content': sections_text, 'use_signature': self.use_signature}
+            self.hydrated_template = Template(HtmlEmailTemplate.base_template.render(content_context))
         email_msg.content_subtype = "html"
         # For some reason xml markup characters in the template (<,>) get converted to entity codes (&lt; and &rt;)
         # We unescape to convert the markup characters back
         _context = context or {}
-        _context['use_signature'] = self.use_signature
         email_msg.body = unescape(self.hydrated_template.render(Context(_context)))
         return email_msg
+
+
+class EmailAccount(Enum):
+    EMAIL_SUPPORT_ACCT = 'EMAIL_SUPPORT_ACCT'
+    EMAIL_VOLUNTEER_ACCT = 'EMAIL_VOLUNTEER_ACCT'
+
+    @staticmethod
+    def get_connection(email_acct):
+        return getattr(settings, email_acct.value, None)
+
+
+# Serializable wrapper for django.core.mail.EmailMessage
+class EmailMessage:
+    def __init__(self, **kwargs):
+        self.to = kwargs.get('to')
+        self.cc = kwargs.get('cc')
+        self.reply_to = kwargs.get('reply_to')
+        self.subject = kwargs.get('subject')
+        self.from_email = kwargs.get('from_email')
+        self.body = kwargs.get('body')
+
+    def send(self, email_acct: EmailAccount):
+        from django.core.mail import EmailMessage as _EmailMessage
+        email_msg = _EmailMessage()
+        for key in ['to', 'cc', 'reply_to', 'subject', 'from_email', 'body', 'content_subtype']:
+            attr = getattr(self, key, None)
+            if attr is not None:
+                setattr(email_msg, key, attr)
+        if settings.EMAIL_SUPPORT_ACCT and settings.EMAIL_VOLUNTEER_ACCT:
+            email_msg.connection = (getattr(settings, email_acct.value))['connection']
+        email_msg.send()
 
 
 def send_verification_email(contributor):
@@ -94,14 +125,14 @@ def send_verification_email(contributor):
     email_template = HtmlEmailTemplate()\
         .header("Hi {{first_name}}, we're glad you're here.")\
         .paragraph('Please confirm your email address by clicking the button below.')\
-        .button(url=verification_url, text='VERIFY YOUR EMAIL')
+        .button(url=verification_url, text='Verify Your Email')
     email_msg = EmailMessage(
         subject='Welcome to DemocracyLab',
-        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
         to=[contributor.email]
     )
     email_msg = email_template.render(email_msg, {'first_name': user.first_name})
-    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
 
 
 def send_password_reset_email(contributor):
@@ -116,14 +147,14 @@ def send_password_reset_email(contributor):
     email_template = HtmlEmailTemplate()\
         .header("Hi {{first_name}}.")\
         .paragraph('Please click below to reset your password.')\
-        .button(url=reset_url, text='RESET PASSWORD')
+        .button(url=reset_url, text='Reset Password')
     email_msg = EmailMessage(
         subject='DemocracyLab Password Reset',
-        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
         to=[contributor.email]
     )
     email_msg = email_template.render(email_msg, {'first_name': user.first_name})
-    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
 
 
 def send_project_creation_notification(project):
@@ -138,14 +169,14 @@ def send_project_creation_notification(project):
             project_name=project.project_name,
             project_url=project_url
         )) \
-        .button(url=verification_url, text='APPROVE')
+        .button(url=verification_url, text='Approve')
     email_msg = EmailMessage(
         subject='New DemocracyLab Project: ' + project.project_name,
-        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
         to=[settings.ADMIN_EMAIL]
     )
     email_msg = email_template.render(email_msg)
-    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
 
 
 def send_event_creation_notification(event):
@@ -160,51 +191,57 @@ def send_event_creation_notification(event):
         event_name=event.event_name,
         event_url=event_url
     )) \
-        .button(url=verification_url, text='APPROVE')
+        .button(url=verification_url, text='Approve')
     email_msg = EmailMessage(
         subject='New DemocracyLab Event: ' + event.event_name,
-        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
         to=[settings.ADMIN_EMAIL]
     )
     email_msg = email_template.render(email_msg)
-    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
 
 
-def send_to_project_owners(project, sender, subject, template):
+def send_to_project_owners(project, sender, subject, template, include_co_owners=True):
     project_volunteers = VolunteerRelation.objects.filter(project=project.id)
-    co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
+    co_owner_emails = []
+    if include_co_owners:
+        co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
     email_msg = EmailMessage(
         subject=subject,
-        from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
         to=[project.project_creator.email] + co_owner_emails,
         reply_to=[sender.email]
     )
     email_msg = template.render(email_msg)
-    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 
 def send_to_group_owners(group, sender, subject, template):
     email_msg = EmailMessage(
         subject=subject,
-        from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
         to=[group.group_creator.email],
         reply_to=[sender.email]
     )
     email_msg = template.render(email_msg)
-    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 
-def send_to_project_volunteer(volunteer_relation, subject, template):
+def send_to_project_volunteer(volunteer_relation, subject, template, cc_owners=True):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project.id)
-    co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers))))
+    cc = []
+    co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers)))) or []
+    if cc_owners:
+        cc = co_owner_emails + [volunteer_relation.project.project_creator.email]
     email_msg = EmailMessage(
         subject=subject,
-        from_email=settings.EMAIL_VOLUNTEER_ACCT['from_name'],
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
         to=[volunteer_relation.volunteer.email],
+        cc=cc,
         reply_to=[volunteer_relation.project.project_creator.email] + co_owner_emails,
     )
     email_msg = template.render(email_msg)
-    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 
 def send_volunteer_application_email(volunteer_relation, is_reminder=False):
@@ -215,7 +252,7 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
     project_profile_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
     approve_url = settings.PROTOCOL_DOMAIN + '/volunteer/approve/' + str(volunteer_relation.id) + '/'
     email_subject = '{is_reminder}{firstname} {lastname} would like to volunteer with {project} as {role}'.format(
-        is_reminder='REMINDER: ' if is_reminder else '',
+        is_reminder='Reminder: ' if is_reminder else '',
         firstname=user.first_name,
         lastname=user.last_name,
         project=project.project_name,
@@ -238,18 +275,17 @@ def send_volunteer_application_email(volunteer_relation, is_reminder=False):
             firstname=user.first_name,
             lastname=user.last_name))\
         .paragraph('To contact this volunteer directly, you can reply to this email. To review their profile or approve their application, use the buttons below.')\
-        .button(url=project_profile_url, text='REVIEW VOLUNTEER')\
-        .button(url=approve_url, text='APPROVE VOLUNTEER')
+        .button(url=project_profile_url, text='Review Applicant on Project Page')\
+        .button(url=approve_url, text='Approve Volunteer')
     send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
 
 
 volunteer_conclude_email_template = HtmlEmailTemplate() \
     .header("How has your experience been at {{project_name}}?") \
     .paragraph("Hi {{first_name}},") \
-    .paragraph("We're always looking for ways to improve the connection between volunteers and tech-for-good projects.  "
-               "We've developed this super-short survey and we'd love to hear from you.  It will take less than a minute "
-               "and will help us make DemocracyLab even better.") \
-    .button(url=settings.VOLUNTEER_CONCLUDE_SURVEY_URL, text='TAKE OUR SURVEY')
+    .paragraph("We're always looking to improve the volunteer experience at DemocracyLab.") \
+    .paragraph("Could you take this super-short survey to help us learn more about your time with {{project_name}}?") \
+    .button(url=settings.VOLUNTEER_CONCLUDE_SURVEY_URL, text='Begin Survey')
 
 
 def send_volunteer_conclude_email(volunteer, project_name):
@@ -259,11 +295,11 @@ def send_volunteer_conclude_email(volunteer, project_name):
     }
     email_msg = EmailMessage(
         subject="Tell us about your experience with " + project_name,
-        from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
         to=[volunteer.email],
     )
     email_msg = volunteer_conclude_email_template.render(email_msg, context)
-    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 notify_volunteer_renewed_email_no_comment = HtmlEmailTemplate() \
     .paragraph("{{volunteer_name}} has renewed their volunteer commitment with {{project_name}} until {{projected_end_date}}.")
@@ -288,11 +324,11 @@ def notify_project_owners_volunteer_renewed_email(volunteer_relation, comments):
     }
     email_msg = EmailMessage(
         subject=volunteer_name + " has renewed their volunteer commitment with " + project_name,
-        from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
         to=_get_co_owner_emails(volunteer_relation.project)
     )
     email_msg = email_template.render(email_msg, context)
-    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 
 notify_volunteer_concluded_email_no_comment = HtmlEmailTemplate() \
@@ -316,27 +352,31 @@ def notify_project_owners_volunteer_concluded_email(volunteer_relation, comments
     }
     email_msg = EmailMessage(
         subject=volunteer_name + " has concluded their volunteer commitment with " + project_name,
-        from_email=_get_account_from_email(settings.EMAIL_VOLUNTEER_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
         to=_get_co_owner_emails(volunteer_relation.project)
     )
     email_msg = email_template.render(email_msg, context)
-    send_email(email_msg, settings.EMAIL_VOLUNTEER_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 
 def notify_project_owners_project_approved(project):
+    project_url = section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
     email_template = HtmlEmailTemplate() \
-        .paragraph('Your project "{{project_name}}" has been approved. You can see it at {{project_url}}')
+        .header('Project Published!') \
+        .text_line('Hi {{first_name}},') \
+        .text_line('Great news!  Your project "{{project_name}}" has been published on DemocracyLab.') \
+        .button(url=project_url, text='View My Project')
     context = {
+        'first_name': project.project_creator.first_name,
         'project_name': project.project_name,
-        'project_url': section_url(FrontEndSection.AboutProject, {'id': str(project.id)})
     }
     email_msg = EmailMessage(
         subject=project.project_name + " has been approved",
-        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
         to=_get_co_owner_emails(project)
     )
     email_msg = email_template.render(email_msg, context)
-    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
 
 
 def notify_event_owners_event_approved(event):
@@ -348,11 +388,11 @@ def notify_event_owners_event_approved(event):
     }
     email_msg = EmailMessage(
         subject=event.event_name + " has been approved",
-        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
         to=[event.event_creator.email]
     )
     email_msg = email_template.render(email_msg, context)
-    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
 
 
 def send_group_creation_notification(group):
@@ -367,14 +407,14 @@ def send_group_creation_notification(group):
         group_name=group.group_name,
         group_url=group_url
     )) \
-        .button(url=verification_url, text='APPROVE')
+        .button(url=verification_url, text='Approve')
     email_msg = EmailMessage(
         subject='New DemocracyLab Group: ' + group.group_name,
-        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
         to=[settings.ADMIN_EMAIL]
     )
     email_msg = email_template.render(email_msg)
-    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
 
 
 def notify_group_owners_group_approved(group):
@@ -386,11 +426,11 @@ def notify_group_owners_group_approved(group):
     }
     email_msg = EmailMessage(
         subject=group.group_name + " has been approved",
-        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
         to=[group.group_creator.email]
     )
     email_msg = email_template.render(email_msg, context)
-    send_email(email_msg, settings.EMAIL_SUPPORT_ACCT)
+    send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
 
 
 def send_group_project_invitation_email(project_relation):
@@ -405,35 +445,44 @@ def send_group_project_invitation_email(project_relation):
         .paragraph('{group_link} has invited you to collaborate and connect'.format(
             group_link=Html.a(href=group_url, text=group.group_name))) \
         .paragraph('\"{message}\"'.format(message=project_relation.introduction_text)) \
-        .button(url=project_url, text='VIEW YOUR GROUPS')
+        .button(url=project_url, text='View Your Groups')
     send_to_project_owners(project=project, sender=group.group_creator, subject=invite_header, template=email_template)
 
 
-def send_email(email_msg, email_acct=None):
+def _send_email(email_msg, email_acct=None):
+    _email_acct = email_acct or EmailAccount.EMAIL_SUPPORT_ACCT
+
     if not settings.FAKE_EMAILS:
-        email_msg.connection = email_acct['connection'] if email_acct is not None else settings.EMAIL_SUPPORT_ACCT['connection']
+        email_msg.connection = EmailAccount.get_connection(_email_acct)['connection']
     else:
         test_email_subject = 'TEST EMAIL: ' + email_msg.subject
-        test_email_body = '<!--\n Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\n -->\n{body}'.format(
+        test_email_body = '<!--\n Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\nCC: {cc}\n-->\n{body}'.format(
             environment=settings.PROTOCOL_DOMAIN,
             to_line=email_msg.to,
             reply_to=email_msg.reply_to,
-            body=email_msg.body
+            body=email_msg.body,
+            cc=email_msg.cc
         )
         email_msg.subject = test_email_subject
         email_msg.body = test_email_body
         email_msg.to = [settings.ADMIN_EMAIL]
+        email_msg.cc = []
         if settings.EMAIL_SUPPORT_ACCT:
             email_msg.connection = settings.EMAIL_SUPPORT_ACCT['connection']
-    email_msg.send()
+    email_msg.send(_email_acct)
+
+
+def send_email(email_msg, email_acct=None):
+    enqueue(_send_email, email_msg, email_acct)
 
 
 def _get_co_owner_emails(project):
     return list(map(lambda co_owner: co_owner.email, project.all_owners()))
 
 
-def _get_account_from_email(email_acct):
-    return email_acct['from_name'] if email_acct is not None else 'DemocracyLab'
+def _get_account_from_email(email_acct: EmailAccount):
+    email_connection = EmailAccount.get_connection(email_acct)
+    return email_connection['from_name'] if email_connection is not None else 'DemocracyLab'
 
 
 def contact_democracylab_email(first_name, last_name, email_address, body, company_name, interest_flags=None):
@@ -449,7 +498,7 @@ def contact_democracylab_email(first_name, last_name, email_address, body, compa
     email_msg = EmailMessage(
         subject=subject,
         body=body,
-        from_email=_get_account_from_email(settings.EMAIL_SUPPORT_ACCT),
+        from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
         to=[settings.CONTACT_EMAIL],
         reply_to=[email_address]
     )

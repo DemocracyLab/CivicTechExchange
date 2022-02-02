@@ -10,13 +10,14 @@ import ContactProjectButton from "./ContactProjectButton.jsx";
 import ContactVolunteersButton from "./ContactVolunteersButton.jsx";
 import ProjectVolunteerButton from "./ProjectVolunteerButton.jsx";
 import ProjectVolunteerModal from "./ProjectVolunteerModal.jsx";
-import ProjectCommitCard from "./ProjectCommitCard.jsx";
+import ProjectCommitCard from "./RecentActivityCard/ProjectCommitCard.jsx";
+import TrelloActionCard from "./RecentActivityCard/TrelloActionCard.jsx";
 import AboutPositionEntry from "../positions/AboutPositionEntry.jsx";
 import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../volunteers/VolunteerSection.jsx";
 import IconLinkDisplay from "../../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 import type { PositionInfo } from "../../forms/PositionInfo.jsx";
-import CurrentUser from "../../utils/CurrentUser.js";
+import CurrentUser, { MyGroupData } from "../../utils/CurrentUser.js";
 import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
@@ -27,7 +28,6 @@ import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import EventCardsListings from "../../componentsBySection/FindEvents/EventCardsListings.jsx";
-import type { MyGroupData } from "../../stores/MyGroupsStore.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
@@ -263,19 +263,27 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
             </Tab>
           )}
 
-          {project.project_commits && !_.isEmpty(project.project_commits) && (
+          {project.project_actions && !_.isEmpty(project.project_actions) && (
             <Tab
               eventKey="proj-activity"
               title="Recent Activity"
               className="Profile-tab AboutProject-tab-recent-activity"
             >
               <h3>Recent Activity</h3>
-              {project.project_commits
+              {project.project_actions
                 .slice(0, this.state.maxActivity)
-                .map(commit => (
-                  <ProjectCommitCard commit={commit} />
-                ))}
-              {project.project_commits.length > this.state.maxActivity && (
+                .map(action => {
+                  if (action.type === "ProjectCommit") {
+                    return <ProjectCommitCard commit={action} />;
+                  }
+                  else if (action.type === "TrelloAction"){
+                    return <TrelloActionCard action={action} />
+                  }
+                  else {
+                    // unknown action type
+                  }
+                })}
+              {project.project_actions.length > this.state.maxActivity && (
                 <div className="AboutProject-show-more-activity-container">
                   <Button
                     variant="primary"
