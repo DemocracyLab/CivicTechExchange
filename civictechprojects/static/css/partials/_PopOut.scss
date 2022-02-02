@@ -1,6 +1,10 @@
+.PopOut-container {
+  z-index: $zindex-popover;
+}
+
 .popout-frame {
   position: absolute;
-  z-index: 2;
+  z-index: $zindex-popover;
 }
 
 .popout-clickout {

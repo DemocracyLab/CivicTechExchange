@@ -27,6 +27,7 @@ const PopOut = (props: Props) => {
 
       {props.show && (
         <div
+          className="PopOut-container"
           ref={setPopperElement}
           style={styles.popper}
           {...attributes.popper}
