@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { usePopper } from "react-popper";
+import ClickOutFrame from "./ClickOutFrame.jsx";
 
 type Props = {|
   show: boolean,
@@ -24,14 +25,17 @@ const PopOut = (props: Props) => {
       </div>
 
       {props.show && (
-        <div
-          className="PopOut-container"
-          ref={setPopperElement}
-          style={styles.popper}
-          {...attributes.popper}
-        >
-          {props.frame}
-        </div>
+        <React.Fragment>
+          <ClickOutFrame onClickOut={props.onHide} />
+          <div
+            className="PopOut-container"
+            ref={setPopperElement}
+            style={styles.popper}
+            {...attributes.popper}
+          >
+            {props.frame}
+          </div>
+        </React.Fragment>
       )}
     </React.Fragment>
   );
