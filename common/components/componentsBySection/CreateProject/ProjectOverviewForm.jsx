@@ -182,12 +182,6 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
           showModal={this.state.termsOpen}
           onSelection={() => this.setState({ termsOpen: false })}
         />
-
-        <FormValidation
-          validations={this.state.validations}
-          onValidationCheck={this.onValidationCheck.bind(this)}
-          formState={this.state.formFields}
-        />
       </div>
     );
   }
