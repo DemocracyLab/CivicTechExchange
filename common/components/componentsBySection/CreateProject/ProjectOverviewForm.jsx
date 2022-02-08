@@ -102,13 +102,6 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
     props.readyForSubmit(formIsValid);
   }
 
-  onValidationCheck(formIsValid: boolean): void {
-    if (formIsValid !== this.state.formIsValid) {
-      this.setState({ formIsValid });
-      this.props.readyForSubmit(formIsValid);
-    }
-  }
-
   render(): React$Node {
     return (
       <div className="EditProjectForm-root">
@@ -133,9 +126,9 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
           <label>Issue Area</label>
           <TagSelector
             elementId="project_issue_area"
-            value={this.state.formFields.project_issue_area}
             category={TagCategory.ISSUES}
             allowMultiSelect={false}
+            useFormFieldsStore={true}
           />
         </div>
 
@@ -152,10 +145,7 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
 
         {!this.props.project && (
           <div>
-            <CheckBox
-              id="didCheckTerms"
-              value={this.state.formFields.didCheckTerms}
-            >
+            <CheckBox id="didCheckTerms">
               <span>
                 {" "}
                 I have read and accepted the{" "}
