@@ -7,18 +7,17 @@ import TagCategory from "../../common/tags/TagCategory.jsx";
 import TagSelector from "../../common/tags/TagSelector.jsx";
 import DjangoCSRFToken from "django-react-csrftoken";
 import FormValidation from "../../../components/forms/FormValidation.jsx";
-import type { Validator } from "../../../components/forms/FormValidation.jsx";
+import type { Validator } from "../../forms/FormValidation.jsx";
 import type {
   TagDefinition,
   ProjectDetailsAPIData,
-} from "../../../components/utils/ProjectAPIUtils.js";
-import formHelper, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
+} from "../../utils/ProjectAPIUtils.js";
+import { FormPropsBase, FormStateBase } from "../../utils/forms.js";
 import TermsModal, {
   TermsTypes,
 } from "../../common/confirmation/TermsModal.jsx";
 import PseudoLink from "../../chrome/PseudoLink.jsx";
 import CheckBox from "../../common/selection/CheckBox.jsx";
-import _ from "lodash";
 import TextFormField, {
   TextFormFieldType,
 } from "../../forms/fields/TextFormField.jsx";
@@ -101,12 +100,6 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
       termsOpen: false,
     };
     props.readyForSubmit(formIsValid);
-    this.form = formHelper.setup();
-  }
-
-  componentDidMount() {
-    // Initial validation check
-    this.form.doValidation.bind(this)();
   }
 
   onValidationCheck(formIsValid: boolean): void {
@@ -143,7 +136,6 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
             value={this.state.formFields.project_issue_area}
             category={TagCategory.ISSUES}
             allowMultiSelect={false}
-            onSelection={this.form.onSelection.bind(this, "project_issue_area")}
           />
         </div>
 
@@ -163,7 +155,6 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
             <CheckBox
               id="didCheckTerms"
               value={this.state.formFields.didCheckTerms}
-              onCheck={this.form.onSelection.bind(this, "didCheckTerms")}
             >
               <span>
                 {" "}
