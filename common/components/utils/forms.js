@@ -62,6 +62,11 @@ class formHelper {
       doValidation: doValidation,
     };
   }
+
+  // Append asterisk to label to indicate it is a required field
+  static appendRequired(label: string): string {
+    return label + " *";
+  }
 }
 
 export default formHelper;

@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import FormFieldsStore from "../../stores/FormFieldsStore.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import type { Dictionary } from "../../types/Generics.jsx";
+import formHelper from "../../utils/forms.js";
 import _ from "lodash";
 
 export const TextFormFieldType: Dictionary<string> = {
@@ -68,12 +69,14 @@ class TextFormField extends React.Component<Props, State> {
   }
 
   render(): React$Node {
-    // TODO: Add * to required fields
+    const label: string = this.props.required
+      ? formHelper.appendRequired(this.props.label)
+      : this.props.label;
     return (
       <React.Fragment>
         <Form.Group controlId={this.props.id}>
           <span className="d-flex justify-content-between">
-            <Form.Label>{this.props.label}</Form.Label>
+            <Form.Label>{label}</Form.Label>
             {this.props.showCount && (
               <div className="character-count">
                 {(this.state.value || "").length} / {this.props.maxLength}
