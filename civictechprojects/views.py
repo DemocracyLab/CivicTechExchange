@@ -800,7 +800,7 @@ def contact_project_owner(request, project_id):
             lastname=user.last_name,
             project= project.project_name))\
         .paragraph('\"{message}\"'.format(message=message))\
-        .paragraph('To respond, you can reply to this email)
+        .paragraph('To respond, you can reply to this email')
     send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
     return HttpResponse(status=200)
 
