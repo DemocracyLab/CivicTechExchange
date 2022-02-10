@@ -23,6 +23,7 @@ type Props = {|
   rows: ?number,
   maxLength: ?number,
   showCount: ?boolean,
+  exampleLink: ?string,
 |};
 
 type State = {|
@@ -72,11 +73,23 @@ class TextFormField extends React.Component<Props, State> {
     const label: string = this.props.required
       ? formHelper.appendRequired(this.props.label)
       : this.props.label;
+    const exampleLink: ?React$Node = this.props.exampleLink ? (
+      <a
+        className="label-hint"
+        target="_blank"
+        rel="noopener noreferrer"
+        href={this.props.exampleLink}
+      >
+        (Example)
+      </a>
+    ) : null;
     return (
       <React.Fragment>
         <Form.Group controlId={this.props.id}>
           <span className="d-flex justify-content-between">
-            <Form.Label>{label}</Form.Label>
+            <Form.Label>
+              {label} {exampleLink}
+            </Form.Label>
             {this.props.showCount && (
               <div className="character-count">
                 {(this.state.value || "").length} / {this.props.maxLength}
