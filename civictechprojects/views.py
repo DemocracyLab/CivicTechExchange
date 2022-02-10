@@ -789,16 +789,18 @@ def contact_project_owner(request, project_id):
     message = body['message']
 
     project = Project.objects.get(id=project_id)
-    email_subject = '{firstname} {lastname} would like to connect with {project}'.format(
+    email_subject = '{firstname} {lastname} sent a message to {project}'.format(
                     firstname=user.first_name,
                     lastname=user.last_name,
                     project=project.project_name)
     email_template = HtmlEmailTemplate(use_signature=False)\
-        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
-            message=message,
+        .subheader('Your project has a new message.')\
+        .paragraph('{firstname} {lastname} has sent the following message to {project}'.format(
             firstname=user.first_name,
-            lastname=user.last_name))\
-        .paragraph('To contact this person, email them at {email}'.format(email=user.email))
+            lastname=user.last_name,
+            project= project.project_name))\
+        .paragraph('\"{message}\"'.format(message=message))\
+        .paragraph('To respond, you can reply to this email: {email}'.format(email=user.email))
     send_to_project_owners(project=project, sender=user, subject=email_subject, template=email_template)
     return HttpResponse(status=200)
 
