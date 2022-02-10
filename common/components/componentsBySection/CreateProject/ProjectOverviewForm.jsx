@@ -95,8 +95,6 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
     );
     this.state = {
       formIsValid: formIsValid,
-      formFields: formFields,
-      validations: validations,
       termsOpen: false,
     };
     props.readyForSubmit(formIsValid);
