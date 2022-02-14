@@ -35,6 +35,18 @@ def save(contributor: object):
     thread.start()
 
 
+def set_title(user_id, title):
+    data = {"title": title}
+    req = requests.Request(
+        method="PATCH",
+        url=f'{client.contact_endpoint}/platform_id__c/{user_id}',
+        data=json.dumps(data),
+    )
+    thread = threading.Thread(target=run, args=(req,))
+    thread.daemon = True
+    thread.start()
+
+
 def delete(contributor: object):
     req = requests.Request(
         method="DELETE",
