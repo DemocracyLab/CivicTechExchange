@@ -91,7 +91,8 @@ class ProjectCreationForm(ModelForm):
             project.event_created_from = event
 
         project.save()
-        salesforce_campaign.save(project)
+        positions_changed = merge_json_changes(ProjectPosition, project, form, 'project_positions')
+        salesforce_campaign.save(project, positions_changed)
 
         fields_changed |= merge_json_changes(ProjectLink, project, form, 'project_links')
         fields_changed |= merge_json_changes(ProjectFile, project, form, 'project_files')
