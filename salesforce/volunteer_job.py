@@ -3,6 +3,7 @@ import json
 import requests
 import threading
 from common.models import Tag
+from civictechprojects.models import ProjectPosition
 
 ''' ProjectPosition model maps to the Volunteer Job object in Salesforce '''
 client = SalesforceClient()
@@ -12,7 +13,8 @@ def run(request):
     response = SalesforceClient().send(request)
 
 
-def save(project_position: object):
+@staticmethod
+def save(project_position: ProjectPosition):
     position_role = Tag.tags_field_descriptions(project_position.position_role)
     if position_role:
         """

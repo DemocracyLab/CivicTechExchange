@@ -1,4 +1,6 @@
-from common.helpers.collections import omit_falsy
+import datetime
+from civictechprojects.models import Project, ProjectPosition
+from . import volunteer_job
 from common.models import Tag
 from .client import SalesforceClient
 import json
@@ -12,7 +14,7 @@ def run(request):
     response = SalesforceClient().send(request)
 
 
-def save(project: object):
+def save(project: Project, update_postions = False):
     data = {
         "ownerid": client.owner_id,
         "Project_Owner__r":
@@ -33,17 +35,38 @@ def save(project: object):
         "technologies__c": Tag.tags_field_descriptions(project.project_technologies)
     }
 
-    if project.project_date_created:
-        data['startdate'] = project.project_date_created.strftime('%Y-%m-%d')
+    data['startdate'] = project.project_date_created.strftime('%Y-%m-%d') if project.project_date_created else datetime.date.strftime('%Y-%m-%d')
 
     req = requests.Request(
         method="PATCH",
         url=f'{client.campaign_endpoint}/platform_id__c/{project.id}',
         data=json.dumps(data)
     )
-    thread = threading.Thread(target=run, args=(req,))
-    thread.daemon = True
-    thread.start()
+    campaign_thread = threading.Thread(target=run, args=(req,))
+    campaign_thread.daemon = True
+    campaign_thread.start()
+
+    if update_postions:
+        campaign_thread.join()
+        for position in ProjectPosition.objects.filter(position_project=project.id):
+            volunteer_job.save(position)
+
+
+def update_position_request(position: ProjectPosition):
+    data = {
+        "GW_Volunteers__Campaign__r":
+        {
+            "platform_id__c": position.position_project.id
+        },
+        "name": position.position_role,
+        "gw_volunteers__description__c": position.position_description
+    }
+
+    return requests.Request(
+        method="PATCH",
+        url=f'{client.job_endpoint}/platform_id__c/{position.id}',
+        data=json.dumps(data)
+    )
 
 
 def delete(project: object):
