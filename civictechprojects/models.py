@@ -117,8 +117,8 @@ class Project(Archived):
         files = ProjectFile.objects.filter(file_project=self.id)
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
-        links = ProjectLink.objects.filter(link_project=self.id)
-        positions = ProjectPosition.objects.filter(position_project=self.id).order_by('order_number')
+        links = ProjectLink.objects.filter(link_project=self.id, link_event=None)
+        positions = ProjectPosition.objects.filter(position_project=self.id, position_event=None).order_by('order_number')
         volunteers = VolunteerRelation.objects.filter(project=self.id)
         group_relationships = ProjectRelationship.objects.filter(relationship_project=self).exclude(relationship_group=None)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
@@ -491,6 +491,42 @@ class Event(Archived):
         ProjectSearchTagsCache.refresh(event=self)
 
 
+class EventProject(Archived):
+    event = models.ForeignKey(Event, related_name='event_projects', on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name='project_events', on_delete=models.CASCADE)
+    creator = models.ForeignKey(Contributor, related_name='created_event_projects', on_delete=models.CASCADE)
+    goal = models.CharField(max_length=2000, blank=True)
+    scope = models.CharField(max_length=2000, blank=True)
+    schedule = models.CharField(max_length=2000, blank=True)
+    onboarding_notes = models.CharField(max_length=2000, blank=True)
+
+    def __str__(self):
+        return '{id}: {event} - {project}'.format(
+            id=self.id, event=self.event.event_name, project=self.project.project_name)
+
+    @staticmethod
+    def create(creator, event, project):
+        ep = EventProject(creator=creator, event=event, project=project)
+
+        # Copy links and positions from project
+        project_links = ProjectLink.objects.filter(link_project=project.id).all()
+        for link in project_links:
+            # Copy project link and add reference to event
+            link.pk = None
+            link.link_event = event
+            link.save()
+
+        project_positions = ProjectPosition.objects.filter(position_project=project.id).order_by('order_number').all()
+        for pos in project_positions:
+            # Copy position and add reference to event
+            position_role_name = pos.position_role.all()[0].name
+            pos.pk = None
+            pos.position_event = event
+            pos.save()
+            pos.position_role.add(position_role_name)
+        return ep
+
+
 class NameRecord(models.Model):
     event = models.ForeignKey(Event, related_name='old_slugs', blank=True, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True)
@@ -760,6 +796,7 @@ class TaggedPositionRole(TaggedItemBase):
 
 class ProjectPosition(models.Model):
     position_project = models.ForeignKey(Project, related_name='positions', on_delete=models.CASCADE)
+    position_event = models.ForeignKey(Event, related_name='positions', blank=True, null=True, on_delete=models.CASCADE)
     position_role = TaggableManager(blank=False, through=TaggedPositionRole)
     position_description = models.CharField(max_length=3000, blank=True)
     description_url = models.CharField(max_length=2083, default='')
