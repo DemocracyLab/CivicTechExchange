@@ -52,23 +52,6 @@ def save(project: Project, update_postions = False):
             volunteer_job.save(position)
 
 
-def update_position_request(position: ProjectPosition):
-    data = {
-        "GW_Volunteers__Campaign__r":
-        {
-            "platform_id__c": position.position_project.id
-        },
-        "name": position.position_role,
-        "gw_volunteers__description__c": position.position_description
-    }
-
-    return requests.Request(
-        method="PATCH",
-        url=f'{client.job_endpoint}/platform_id__c/{position.id}',
-        data=json.dumps(data)
-    )
-
-
 def delete(project: object):
     req = requests.Request(
         method="DELETE",
