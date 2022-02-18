@@ -86,6 +86,7 @@ urlpatterns = [
     url(r'^api/unfavorite/project/(?P<project_id>[0-9]+)/$', views.project_unfavorite, name='project_unfavorite'),
     url(r'^api/group/(?P<group_id>[0-9]+)/$', views.get_group, name='get_group'),
     url(r'^api/event/(?P<event_id>.*)/$', views.get_event, name='get_event'),
+    url(r'^api/event_project/(?P<event_project_id>.*)/$', views.get_event_project, name='get_event_project'),
     url(r'^volunteer/(?P<project_id>[0-9]+)/$', views.volunteer_with_project, name='volunteer_with_project'),
     url(r'^volunteer/leave/(?P<project_id>[0-9]+)/$', views.leave_project, name='leave_project'),
     url(r'^volunteer/approve/(?P<application_id>[0-9]+)/$', views.accept_project_volunteer, name='accept_project_volunteer'),

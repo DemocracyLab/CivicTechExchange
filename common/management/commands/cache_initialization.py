@@ -14,6 +14,12 @@ def cache_events():
     for event in events_to_cache:
         event.recache()
 
+def cache_event_projects():
+    from civictechprojects.models import EventProject
+    events_projects_to_cache = EventProject.objects.filter(deleted=False)
+    for event_project in events_projects_to_cache:
+        event_project.recache()
+
 
 def cache_groups():
     from civictechprojects.models import Group
@@ -32,5 +38,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         cache_projects()
         cache_events()
+        cache_event_projects()
         cache_groups()
         cache_tags()

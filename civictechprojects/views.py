@@ -17,7 +17,7 @@ import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
-    ProjectRelationship, Testimonial, ProjectFavorite
+    ProjectRelationship, Testimonial, ProjectFavorite, EventProject
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from common.caching.cache import Cache
@@ -235,6 +235,15 @@ def get_event(request, event_id):
         return HttpResponseForbidden()
 
     return JsonResponse(event.hydrate_to_json()) if event else HttpResponse(status=404)
+
+
+def get_event_project(request, event_project_id):
+    try:
+        event_project = EventProject.objects.get(id=event_project_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+
+    return JsonResponse(event_project.hydrate_to_json()) if event_project else HttpResponse(status=404)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it

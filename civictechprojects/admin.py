@@ -98,11 +98,10 @@ class EventProjectAdmin(admin.ModelAdmin):
     list_display = event_project_filter_fields + ('creator',) + tuple(event_project_text_fields)
     search_fields = event_project_text_fields + ['creator__email', 'event__event_name', 'project__project_name']
     list_filter = event_project_filter_fields
-    # TODO: Uncomment when recache is implemented
-    # def save_model(self, request, obj, form, change):
-    #     super().save_model(request, obj, form, change)
-    #     if change:
-    #         obj.recache(recache_linked=True)
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if change:
+            obj.recache()
 
 
 admin.site.register(Project, ProjectAdmin)

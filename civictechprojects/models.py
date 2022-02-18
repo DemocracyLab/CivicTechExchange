@@ -9,7 +9,8 @@ from democracylab.models import Contributor
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
-from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache
+from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache, \
+    EventProjectCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts, keys_subset
 from common.helpers.collections import flatten, count_occurrences
@@ -504,6 +505,34 @@ class EventProject(Archived):
         return '{id}: {event} - {project}'.format(
             id=self.id, event=self.event.event_name, project=self.project.project_name)
 
+    def hydrate_to_json(self):
+        return EventProjectCache.get(self) or EventProjectCache.refresh(self, self._hydrate_to_json())
+
+    def _hydrate_to_json(self):
+        links = ProjectLink.objects.filter(link_project=self.project, link_event=self.event)
+        files = ProjectFile.objects.filter(file_event=self.event.id, file_project=self.project.id)
+        positions = ProjectPosition.objects.filter(position_project=self.project, position_event=self.event).order_by('order_number')
+        event_json = keys_subset(self.event.hydrate_to_json(), ['event_id', 'event_name', 'event_slug', 'event_thumbnail',
+                                                                'event_date_end', 'event_date_start', 'event_location'])
+        project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
+                                                                    'project_short_description', 'project_description',
+                                                                    'project_description_solution', 'project_technologies'])
+
+        event_project_json = merge_dicts(event_json, project_json, {
+            'event_project_id': self.id,
+            'event_project_goal': self.goal,
+            'event_project_agenda': self.schedule,
+            'event_project_scope': self.scope,
+            'event_project_onboarding_notes': self.onboarding_notes,
+            'event_project_creator': self.creator.id,
+            'event_project_positions': list(map(lambda position: position.to_json(), positions)),
+            'event_project_files': list(map(lambda file: file.to_json(), files)),
+            'event_project_links': list(map(lambda link: link.to_json(), links)),
+            'event_project_owners': [self.creator.hydrate_to_tile_json()],
+        })
+
+        return event_project_json
+
     @staticmethod
     def create(creator, event, project):
         ep = EventProject(creator=creator, event=event, project=project)
@@ -525,6 +554,10 @@ class EventProject(Archived):
             pos.save()
             pos.position_role.add(position_role_name)
         return ep
+
+    def recache(self):
+        hydrated_project = self._hydrate_to_json()
+        EventProjectCache.refresh(self, hydrated_project)
 
 
 class NameRecord(models.Model):

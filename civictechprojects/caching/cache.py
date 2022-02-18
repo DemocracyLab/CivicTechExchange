@@ -42,6 +42,26 @@ class EventCacheManager:
 EventCache = EventCacheManager()
 
 
+class EventProjectCacheManager:
+    _cache_key_prefix = 'eventproject_'
+
+    def get(self, event_project):
+        return Cache.get(self._get_key(event_project))
+
+    def refresh(self, event_project, value):
+        print('Re-caching event project' + str(event_project))
+        Cache.refresh(self._get_key(event_project), value)
+        return value
+
+    def _get_key(self, event_project):
+        from civictechprojects.models import EventProject
+        event_id = str(event_project.id) if isinstance(event_project, EventProject) else event_project
+        return self._cache_key_prefix + event_id
+
+
+EventProjectCache = EventProjectCacheManager()
+
+
 class GroupCacheManager:
     _cache_key_prefix = 'group_'
 
