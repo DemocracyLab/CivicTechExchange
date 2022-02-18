@@ -13,41 +13,25 @@ def run(request):
     response = SalesforceClient().send(request)
 
 
-@staticmethod
 def save(project_position: ProjectPosition):
     position_role = Tag.tags_field_descriptions(project_position.position_role)
+    # Skip if the role tag is blank
     if position_role:
-        """
-            POST to the composite endpoint.
-            Skip if the role tag is blank
-        """
         data = {
-            "allOrNone": "true",
-            "compositeRequest": [
+            "GW_Volunteers__Campaign__r":
                 {
-                    "method": "GET",
-                    "referenceId": "MyCampaign",
-                    "url": f'{client.campaign_endpoint}/platform_id__c/{project_position.position_project.id}'
+                    "platform_id__c": project_position.position_project.id
                 },
-                {
-                    "method": "POST",
-                    "referenceId": "ThisJob",
-                    "url": client.job_endpoint,
-                    "body": {
-                        "platform_id__c": project_position.id,
-                        "name": position_role,
-                        "GW_Volunteers__Campaign__c": "@{MyCampaign.Id}",
-                        "gw_volunteers__description__c": project_position.position_description
-                    }
-                }
-            ]
+            "name": position_role,
+            "gw_volunteers__description__c": project_position.position_description
         }
 
         req = requests.Request(
-            method="POST",
-            url=f'{client.endpoint}/composite',
+            method="PATCH",
+            url=f'{client.job_endpoint}/platform_id__c/{project_position.id}',
             data=json.dumps(data)
         )
         thread = threading.Thread(target=run, args=(req,))
         thread.daemon = True
         thread.start()
+
