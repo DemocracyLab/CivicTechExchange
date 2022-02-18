@@ -8,6 +8,7 @@
   {"name": "FindProjects", "pattern": "projects"},
   {"name": "Companies", "pattern": "companies"},
   {"name": "CorporateEvent", "pattern": "events/corporate", "deprecated": true},
+  {"name": "AboutEventProject", "pattern": "events/project/(?P<id>[\\w\\-]+)"},
   {"name": "CreateEvent", "pattern": "events/create/(?P<id>[\\w\\-]*)"},
   {"name": "LiveEvent", "pattern": "events/(?P<id>[\\w\\-]+)/live"},
   {"name": "AboutEvent", "pattern": "events/(?P<id>[\\w\\-]+)"},

@@ -518,6 +518,7 @@ class EventProject(Archived):
                                                                     'project_short_description', 'project_description',
                                                                     'project_description_solution', 'project_technologies'])
 
+        # TODO: Include owner thumbnail and RSVP-ed people
         event_project_json = merge_dicts(event_json, project_json, {
             'event_project_id': self.id,
             'event_project_goal': self.goal,
@@ -528,7 +529,6 @@ class EventProject(Archived):
             'event_project_positions': list(map(lambda position: position.to_json(), positions)),
             'event_project_files': list(map(lambda file: file.to_json(), files)),
             'event_project_links': list(map(lambda link: link.to_json(), links)),
-            'event_project_owners': [self.creator.hydrate_to_tile_json()],
         })
 
         return event_project_json

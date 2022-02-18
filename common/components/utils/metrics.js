@@ -65,6 +65,12 @@ class metrics {
     _logEvent("navigateToProjectProfile", { projectId: projectId });
   }
 
+  static logNavigateToEventProjectProfile(eventProjectId: string): void {
+    _logEvent("navigateToEventProjectProfile", {
+      eventProjectId: eventProjectId,
+    });
+  }
+
   static logSearchFilterByTagEvent(tag: TagDefinition): void {
     _logEvent(tagCategoryEventMapping[tag.category], { tagName: tag.tag_name });
   }
