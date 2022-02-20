@@ -15,9 +15,10 @@ class LiveEventController extends React.Component<{||}, State> {
   constructor(): void {
     super();
 
-    const returnTo: string = window.location.href;
+    // TODO: Put qiqochat endpoint in environment variable
+    const qiqoEventId: string = urlHelper.argument("id");
     this.state = {
-      iframeUrl: window.QIQO_IFRAME_URL + `&return_to="${returnTo}"`,
+      iframeUrl: `https://qiqochat.com/breakout/0/${qiqoEventId}?embedded=true`,
     };
   }
 
