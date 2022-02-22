@@ -95,6 +95,15 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
         <div className="Profile-top-details">
           <h1>{eventProject && eventProject.project_name}</h1>
         </div>
+        <div className="AboutProjectEvent-top-iconrow">
+          <ul>
+            <li>event date</li>
+            <li>event start time</li>
+            <li>event location</li>
+            <li>project profile link</li>
+            <li>event link</li>
+          </ul>
+        </div>
       </div>
     );
   }
@@ -107,54 +116,38 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
     return (
       <div className="Profile-primary-container">
-        <div>
-          <h3 className="pt-4">About</h3>
+        <div className="tab-content AboutProjectEvent-primary-container">
+          <h3>About</h3>
           <p>{eventProject?.project_short_description}</p>
-        </div>
 
-        <div>
-          <h3 className="pt-4">Problem</h3>
+          <h3>Problem</h3>
           <p>{eventProject?.project_description}</p>
-        </div>
 
-        <div>
-          <h3 className="pt-4">Solution</h3>
+          <h3>Solution</h3>
           <p>{eventProject?.project_description_solution}</p>
-        </div>
 
-        <div>
-          <h3 className="pt-4">Hackathon Goal</h3>
+          <h3>Hackathon Goal</h3>
           {eventProject?.event_project_goal ? (
             <p>{eventProject.event_project_goal}</p>
           ) : (
             comingSoonMsg
           )}
-        </div>
 
-        <div>
-          <h3 className="pt-4">Planned Scope</h3>
+          <h3>Planned Scope</h3>
           {eventProject?.event_project_scope ? (
             <p>{eventProject.event_project_scope}</p>
           ) : (
             comingSoonMsg
           )}
-        </div>
-
-        <div>
-          <h3 className="pt-4">Additional Notes</h3>
+          <h3>Additional Notes</h3>
           {eventProject?.event_project_onboarding_notes ? (
             <p>{eventProject.event_project_onboarding_notes}</p>
           ) : (
             comingSoonMsg
           )}
-        </div>
-
-        {/*TODO: Schedule?*/}
-
-        <div className="AboutProject-skilltech-container pt-4">
           {eventProject && !_.isEmpty(eventProject.project_technologies) && (
             <div className="AboutProject-technologies">
-              <h4>Technologies Used</h4>
+              <h3>Technologies Used</h3>
               {eventProject.project_technologies.map(tech => (
                 <span className="Profile-pill" key={tech.tag_name}>
                   {tech.display_name}
@@ -162,14 +155,16 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
               ))}
             </div>
           )}
-        </div>
 
-        {eventProject && !_.isEmpty(eventProject.event_project_positions) && (
-          <div className="AboutProject-positions-available pt-4">
-            <h3>Roles Needed</h3>
-            {this._renderPositions()}
-          </div>
-        )}
+          {/*TODO: Schedule?*/}
+
+          {eventProject && !_.isEmpty(eventProject.event_project_positions) && (
+            <div className="AboutProject-positions-available pt-4">
+              <h3>Roles Needed</h3>
+              {this._renderPositions()}
+            </div>
+          )}
+        </div>
       </div>
     );
   }
