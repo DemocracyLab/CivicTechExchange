@@ -963,7 +963,7 @@ def accept_project_volunteer(request, application_id):
         # Set approved flag
         volunteer_relation.is_approved = True
         volunteer_relation.approved_date = timezone.now()
-        volunteer_relation.save()
+        volunteer_relation.approve()
         volunteer_relation.volunteer.purge_cache()
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.project.recache()
