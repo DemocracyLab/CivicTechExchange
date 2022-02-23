@@ -35,7 +35,7 @@ def save(project: Project, update_postions = False):
         "technologies__c": Tag.tags_field_descriptions(project.project_technologies)
     }
 
-    data['startdate'] = project.project_date_created.strftime('%Y-%m-%d') if project.project_date_created else datetime.date.strftime('%Y-%m-%d')
+    data['startdate'] = project.project_date_created.strftime('%Y-%m-%d') if project.project_date_created else project.project_date_modified.strftime('%Y-%m-%d')
 
     req = requests.Request(
         method="PATCH",

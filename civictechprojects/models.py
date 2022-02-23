@@ -15,8 +15,12 @@ from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.collections import flatten, count_occurrences
+<<<<<<< HEAD
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
+=======
+from salesforce import volunteer_hours as salesforce_volunteer
+>>>>>>> f732eaea (latest)
 
 # Without the following classes, the following error occurs:
 #
@@ -1279,6 +1283,10 @@ class VolunteerRelation(Archived):
         return self.is_approved and (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
 
 
+    def approve(self):
+        self.save()
+        salesforce_volunteer.save()
+
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
         relation = VolunteerRelation()
@@ -1288,7 +1296,6 @@ class VolunteerRelation(Archived):
         relation.application_text = application_text
         relation.is_co_owner = False
         relation.save()
-
         relation.role.add(role)
         return relation
 

@@ -25,13 +25,20 @@ class Command(BaseCommand):
                 print(traceback.format_exc())
         """
 
+        for volunteer in VolunteerRelation.objects.filter(is_approved__exact=True).order_by('volunteer_id').distinct('volunteer_id'):
+            try:
+                salesforce_contact.set_title(volunteer.volunteer_id, 'Project Volunteer')
+            except Exception:
+                print(f'Error setting title for user {volunteer.volunteer_id} in Salesforce ("Project Volunteer")')
+                print(traceback.format_exc())
+
         # Include historical, non-searchable projects:
         projects = Project.objects.raw(f'select * from civictechprojects_project where is_created and not deleted and not is_searchable and lower(project_name) not like "%test%" and id not in (90,155,156,169,170,229,279,352,427,510,648,653,660,778,784,832,878,893,902,903)')
         for project in projects:
             try:
                 salesforce_campaign.save(project)
             except Exception:
-                print(f'Error merging project in Salesforce: ({project.id}) {project.project_name}')
+                print(f'Error merging project in Salesforce: ({project.project.id}) {project.project_name}')
                 print(traceback.format_exc())
 
         # project_positions - Salesforce will return errors where it finds no corresponding campaign
@@ -44,24 +51,24 @@ class Command(BaseCommand):
 
 
         # Set labels for project volunteers:
-        for volunteer_id in VolunteerRelation.objects.raw('select distinct volunteer_id from civictechprojects_volunteerrelation where is_approved'):
+        for volunteer in VolunteerRelation.objects.filter(is_approved__exact=True).order_by('volunteer_id').distinct('volunteer_id'):
             try:
-                salesforce_contact.set_title(volunteer_id, 'Project Volunteer')
+                salesforce_contact.set_title(volunteer.volunteer_id, 'Project Volunteer')
             except Exception:
-                print(f'Error setting title for user {volunteer_id} in Salesforce ("Project Volunteer")')
+                print(f'Error setting title for user {volunteer.volunteer_id} in Salesforce ("Project Volunteer")')
                 print(traceback.format_exc())
 
-        for volunteer_id in VolunteerRelation.objects.raw('select distinct volunteer_id from civictechprojects_volunteerrelation where is_approved and is_co_owner'):
+        for volunteer in VolunteerRelation.objects.filter(is_approved__exact=True).filter(is_co_owner__exact=True).order_by('volunteer_id').distinct('volunteer_id'):
             try:
-                salesforce_contact.set_title(volunteer_id, 'Project Owner')
+                salesforce_contact.set_title(volunteer.volunteer_id, 'Project Owner')
             except Exception:
-                print(f'Error setting title for user {volunteer_id} in Salesforce ("Project Owner")')
+                print(f'Error setting title for user {volunteer.volunteer_id} in Salesforce ("Project Owner")')
                 print(traceback.format_exc())
 
-        for project_creator_id in Project.objects.raw('select distinct project_creator_id from civictechprojects_project where is_created'):
+        for project in Project.objects.filter(is_created__exact=True).order_by('project_creator_id').distinct('project_creator_id'):
             try:
-                salesforce_contact.set_title(project_creator_id, 'Project Owner')
+                salesforce_contact.set_title(project.project_creator_id, 'Project Owner')
             except Exception:
-                print(f'Error setting title for user {project_creator_id} in Salesforce ("Project Owner")')
+                print(f'Error setting title for user {project.project_creator_id} in Salesforce ("Project Owner")')
                 print(traceback.format_exc())
 

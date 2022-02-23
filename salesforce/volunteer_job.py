@@ -16,7 +16,7 @@ def run(request):
 def save(project_position: ProjectPosition):
     position_role = Tag.tags_field_descriptions(project_position.position_role)
     # Skip if the role tag is blank
-    if position_role:
+    if position_role != '':
         data = {
             "GW_Volunteers__Campaign__r":
                 {

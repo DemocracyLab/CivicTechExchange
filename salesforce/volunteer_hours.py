@@ -4,4 +4,34 @@ import requests
 import threading
 
 ''' VolunteerRelation model maps to the Volunteer Hours object in Salesforce '''
-client = SalesforceClient.get_instance()
+client = SalesforceClient()
+
+
+def run(request):
+    response = SalesforceClient().send(request)
+
+
+def save(volunteer):
+    data = {
+        "GW_Volunteers__Contact__r":
+        {
+            "platform_id__c": volunteer.volunteer_id
+        },
+        "GW_Volunteers__Campaign__c":
+        {
+            "platform_id__c": volunteer.project_id
+        },
+        "GW_Volunteers__Status__c": "Accepted",
+        "GW_Volunteers__Start_Date__c": volunteer.approved_date
+    }
+
+    req = requests.Request(
+        method="PATCH",
+        url=f'{client.hours_endpoint}/platform_id__c/{volunteer.id}',
+        data=json.dumps(data)
+    )
+    thread = threading.Thread(target=run, args=(req,))
+    thread.daemon = True
+    thread.start()
+
+
