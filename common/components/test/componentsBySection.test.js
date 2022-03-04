@@ -1,8 +1,7 @@
-import _ from "lodash";
 import React from "react";
 import renderer from "react-test-renderer";
 import moment from "moment";
-import window from "./__mocks__/window";
+import window from "./__mocks__/window"; // Keep this even though it's not referenced in this file
 import mockAPI from "./__mocks__/mockAPI";
 import { MyProjectData } from "../utils/CurrentUser.js";
 import MyProjectCard, {
@@ -18,11 +17,10 @@ const myprojectcardRenderedOutput = function(
     <MyProjectCard key={project.project_name} project={project} />
   );
   let tree = component.toTree();
-  let buttons = tree.rendered.rendered[0].rendered[0].rendered[0].rendered[3].rendered.map(
-    button => {
-      return button.rendered[0];
-    }
-  );
+  let buttonCell = tree.rendered.rendered[3];
+  let buttons = buttonCell.rendered.map(button => {
+    return button.rendered[0];
+  });
   return [status, buttons];
 };
 
