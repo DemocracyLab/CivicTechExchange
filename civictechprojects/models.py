@@ -516,9 +516,10 @@ class EventProject(Archived):
                                                                 'event_date_end', 'event_date_start', 'event_location'])
         project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
                                                                     'project_short_description', 'project_description',
-                                                                    'project_description_solution', 'project_technologies'])
+                                                                    'project_description_solution', 'project_technologies',
+                                                                    'project_owners', 'project_volunteers'])
 
-        # TODO: Include owner thumbnail and RSVP-ed people
+        # TODO: Export RSVP-ed volunteers
         event_project_json = merge_dicts(event_json, project_json, {
             'event_project_id': self.id,
             'event_project_goal': self.goal,
