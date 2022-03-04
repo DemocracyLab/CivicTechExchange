@@ -20,6 +20,24 @@ class stringHelper {
   }
 
   /**
+   * @param str         string to search in
+   * @param startStrings  strings to search for
+   * @returns {boolean} true if string started with any of the start strings
+   */
+  static startsWithAny(
+    str: string,
+    startStrings: $ReadOnlyArray<string>
+  ): void {
+    return (
+      !_.isEmpty(startStrings) &&
+      _.some(
+        startStrings,
+        (startString: string) => str && str.startsWith(startString)
+      )
+    );
+  }
+
+  /**
    *
    * @param str                 string to trim
    * @param startSubstring      Substring or list of substrings to trim from start of string

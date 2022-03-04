@@ -37,6 +37,7 @@ class EditUserBioModal extends React.Component<Props, State> {
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    // TODO: Use form field store instead
     return [LinkListStore];
   }
 

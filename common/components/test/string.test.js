@@ -18,4 +18,14 @@ describe("stringHelper", () => {
     );
     expect(trimmedFromSubstrings).toEqual("suffix");
   });
+
+  test("startsWithAny", () => {
+    let substringList = ["aa", "bb"];
+    expect(stringHelper.startsWithAny("bb", substringList)).toEqual(true);
+    expect(stringHelper.startsWithAny("aa", substringList)).toEqual(true);
+
+    expect(stringHelper.startsWithAny("ab", substringList)).toEqual(false);
+    expect(stringHelper.startsWithAny("", substringList)).toEqual(false);
+    expect(stringHelper.startsWithAny(undefined, substringList)).toEqual(false);
+  });
 });

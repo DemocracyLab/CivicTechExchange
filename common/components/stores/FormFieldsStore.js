@@ -9,7 +9,7 @@ import _ from "lodash";
 import { createDictionary } from "../types/Generics.jsx";
 
 type SetFormFieldsActionType = {
-  type: "SET_FORM_FIELDS",
+  type: "SET_FORM_FIELDS" | "ADD_FORM_FIELDS",
   formFieldValues: Dictionary<any>,
   validators: ?$ReadOnlyArray<FormFieldValidator<any>>,
 };
@@ -52,6 +52,8 @@ class FormFieldsStore extends ReduceStore<State> {
     switch (action.type) {
       case "SET_FORM_FIELDS":
         return this.setFormFields(state, action);
+      case "ADD_FORM_FIELDS":
+        return this.addFormFields(state, action);
       case "UPDATE_FORM_FIELD":
         return this.updateFormField(state, action);
       case "TOUCH_FORM_FIELD":
@@ -68,6 +70,25 @@ class FormFieldsStore extends ReduceStore<State> {
       _.keys(action.formFieldValues),
       fieldName => fieldName,
       fieldName => false
+    );
+    state = this.processErrors(state);
+    return state;
+  }
+
+  addFormFields(state: State, action: SetFormFieldsActionType): State {
+    state = _.clone(state);
+    state.validators = state.validators.concat(action.validators);
+    state.formFieldValues = _.assign(
+      state.formFieldValues,
+      action.formFieldValues
+    );
+    state.formFieldsTouched = _.assign(
+      state.formFieldsTouched,
+      createDictionary(
+        _.keys(action.formFieldValues),
+        fieldName => fieldName,
+        fieldName => false
+      )
     );
     state = this.processErrors(state);
     return state;
@@ -97,6 +118,11 @@ class FormFieldsStore extends ReduceStore<State> {
       ? validationHelper.getErrors(state.validators, state.formFieldValues)
       : {};
     return state;
+  }
+
+  getFormFieldValues(): Dictionary<any> {
+    const state: State = this.getState();
+    return state.formFieldValues;
   }
 
   getFormFieldValue(key: string): any {

@@ -50,6 +50,7 @@ type State = {|
   linkErrors: $ReadOnlyArray<string>,
 |};
 
+// TODO: Deprecate
 /**
  * Encapsulates form for editing projects
  */

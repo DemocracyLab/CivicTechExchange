@@ -12,6 +12,9 @@ import stringHelper from "../utils/string.js";
 import { LinkTypes } from "../constants/LinkConstants.js";
 import _ from "lodash";
 
+// TODO: Remove file if not needed
+
+// TODO: Move into LinkList
 export const linkCaptions: Dictionary<string> = _.fromPairs([
   [LinkTypes.CODE_REPOSITORY, "Code Repository (e.g. Github)"],
   [LinkTypes.MESSAGING, "Communication (e.g. Slack)"],

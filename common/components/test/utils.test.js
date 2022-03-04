@@ -46,6 +46,11 @@ describe("utils", () => {
 
     expect(sorted.map(obj => obj.id)).toEqual([3, 1, 0, 2]);
 
+    const collectionTypes = collection.map(obj => obj.type);
+    const sortedStrings = Sort.byNamedEntries(collectionTypes, order);
+
+    expect(sortedStrings).toEqual(["favorite", "special", "thing", "thing"]);
+
     const group_issue_areas = {
       no: 2,
       en: 4,
@@ -107,11 +112,14 @@ describe("utils", () => {
     expect(args["issues"]).toEqual("test-issue");
     expect(args["page"]).toEqual("1");
 
-    let name = urlHelper.encodeNameForUrlPassing("!@#$%^&*()1234567890 project name");
+    let name = urlHelper.encodeNameForUrlPassing(
+      "!@#$%^&*()1234567890 project name"
+    );
     expect(name).toEqual("!%40%23%24%25%5E%26*()1234567890%20project%20name");
-    name = urlHelper.decodeNameFromUrlPassing("%21%40%23%24%25%5E%26%2A%28%291234567890%20project%20name");
+    name = urlHelper.decodeNameFromUrlPassing(
+      "%21%40%23%24%25%5E%26%2A%28%291234567890%20project%20name"
+    );
     expect(name).toEqual("!@#$%^&*()1234567890 project name");
-
   });
 
   test("isValidUrl validates URL correctly", () => {
@@ -175,19 +183,24 @@ describe("utils", () => {
     let test = array.join(testArray, ",");
     let testShouldEqual: Array<string> = ["test1", ",", "test2"];
     expect(test).toEqual(testShouldEqual);
-  });  
+  });
 
   test("utils.navigateToTopOfPage", () => {
     global.scrollTo = jest.fn();
     utils.navigateToTopOfPage();
     expect(global.scrollTo).toBeCalledWith(0, 0);
-  }); 
+  });
 
   test("utils.unescapeHtml", () => {
-    const rawStringHtmlContent = "&lt;p&gt;Function unescapeHtml&#x27;s test on &lt;a href=&#x27;fake url&#x27;&gt;something&lt;/a&gt;something&lt;/p&gt;";
-    const tranformedStringHtmlContent = utils.unescapeHtml(rawStringHtmlContent);
-    expect(tranformedStringHtmlContent).toEqual("<p>Function unescapeHtml's test on <a href='fake url'>something</a>something</p>");
-  }); 
+    const rawStringHtmlContent =
+      "&lt;p&gt;Function unescapeHtml&#x27;s test on &lt;a href=&#x27;fake url&#x27;&gt;something&lt;/a&gt;something&lt;/p&gt;";
+    const tranformedStringHtmlContent = utils.unescapeHtml(
+      rawStringHtmlContent
+    );
+    expect(tranformedStringHtmlContent).toEqual(
+      "<p>Function unescapeHtml's test on <a href='fake url'>something</a>something</p>"
+    );
+  });
 
   test("utils.pluralize", () => {
     let word = utils.pluralize("apple", "apples", 1);
@@ -196,7 +209,7 @@ describe("utils", () => {
     expect(word).toEqual("apples");
     word = utils.pluralize("apple", "apples", 5);
     expect(word).toEqual("apples");
-  }); 
+  });
 
   test("guard.duplicateInput", () => {
     const testFunc = jest.fn();

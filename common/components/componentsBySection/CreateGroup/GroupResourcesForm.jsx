@@ -66,6 +66,7 @@ class GroupResourcesForm extends React.Component<Props, State> {
     this.form.doValidation.bind(this)();
   }
 
+  // TODO: Use FormFieldsStore
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
     return [LinkListStore];
   }
