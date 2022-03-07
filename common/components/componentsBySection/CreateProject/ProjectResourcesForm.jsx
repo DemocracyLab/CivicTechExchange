@@ -15,9 +15,8 @@ import { Dictionary } from "../../types/Generics.jsx";
 import FileUploadList from "../../forms/FileUploadList.jsx";
 import { FormPropsBase, FormStateBase } from "../../utils/forms.js";
 import { OnReadySubmitFunc } from "./ProjectFormCommon.jsx";
-import { isLinkFieldName, LinkTypes } from "../../constants/LinkConstants.js";
+import { LinkTypes } from "../../constants/LinkConstants.js";
 import HiddenFormFields from "../../forms/HiddenFormFields.jsx";
-import url from "../../utils/url.js";
 import _ from "lodash";
 import FormFieldsStore from "../../stores/FormFieldsStore.js";
 
@@ -33,7 +32,6 @@ type Props = {|
 
 type State = {|
   errorMessages: $ReadOnlyArray<string>,
-  onSubmit: OnReadySubmitFunc,
   formFields: Dictionary<any>,
 |} & FormStateBase<FormFields>;
 
@@ -64,7 +62,6 @@ class ProjectResourcesForm extends React.Component<Props, State> {
     };
     this.state = {
       formFields: formFields,
-      onSubmit: this.onSubmit.bind(this),
     };
 
     UniversalDispatcher.dispatch({
@@ -82,10 +79,6 @@ class ProjectResourcesForm extends React.Component<Props, State> {
     let state: State = _.clone(prevState) || {};
     state.formFields = _.clone(FormFieldsStore.getFormFieldValues());
     return state;
-  }
-
-  onSubmit(submitFunc: Function): void {
-    // TODO: Figure out if we really need this function to make the workflow work
   }
 
   render(): React$Node {
@@ -131,16 +124,14 @@ class ProjectResourcesForm extends React.Component<Props, State> {
           />
         </div>
 
-        {/*TODO: Implement FormFieldsStore support for FileUploadList */}
-        {/*<div className="form-group create-form-block">*/}
-        {/*  <FileUploadList*/}
-        {/*    elementid="project_files"*/}
-        {/*    title="Project Files"*/}
-        {/*    subheader="Add files or documents"*/}
-        {/*    files={this.state.formFields.project_files}*/}
-        {/*    onChange={this.form.onFormChange.bind(this)}*/}
-        {/*  />*/}
-        {/*</div>*/}
+        <div className="form-group create-form-block">
+          <FileUploadList
+            elementid="project_files"
+            title="Project Files"
+            subheader="Add files or documents"
+            files={this.state.formFields.project_files}
+          />
+        </div>
       </div>
     );
   }
