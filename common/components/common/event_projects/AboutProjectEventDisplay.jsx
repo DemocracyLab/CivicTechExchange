@@ -223,23 +223,27 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       eventProject.project_volunteers,
       "roleTag.subcategory"
     );
-    const sortedVolunteers = Object.entries(groupedVolunteers).sort()
-
-   
+    const sortedVolunteers = Object.entries(groupedVolunteers).sort();
     // may not need all these consts; test what happens when project_volunteers is null/empty
-    // group volunteers by subcategory, then render rolename - number - list of volunteer cards
+
+    // end result: group and count volunteers by subcategory, then render VolunteerSection for each subcategory
+    // one-item ULs used to give the impression
     return (
       <React.Fragment>
-        <h4>Team</h4>
+        <h3>Team</h3>
         <ProjectOwnersSection owners={eventProject.project_owners} />
-        <h4>Total RSVP: ({numVolunteers})</h4>
+        <h3>Total RSVP: ({numVolunteers})</h3>
         {!_.isEmpty(sortedVolunteers) &&
           sortedVolunteers.map(([key, value]) => {
             return (
               <React.Fragment key={key}>
-                <h4>
-                  {key} ({value.length})
-                </h4>
+                <ul>
+                  <li>
+                    <h4>
+                      {key} ({value.length})
+                    </h4>
+                  </li>
+                </ul>
                 <VolunteerSection
                   volunteers={value}
                   renderOnlyPending={false}
