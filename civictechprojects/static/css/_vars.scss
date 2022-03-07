@@ -21,9 +21,11 @@ $color-grey-frame-border: #6b6e70; // from design guide
 $color-grey-unselected: #585858; // unselected item color
 
 // temporary holding zone for some DS colors
+$color-blue-10: #e6effa;
 $color-neutral-50: #bdbdbd;
 $color-neutral-90: #222629;
 $color-neutral-100: #191919;
+$color-feedback-background-info-weakest: $color-blue-10; // "Background color for informational messages"
 $color-border-weak: $color-neutral-50; // "Border color for small UI components"
 $color-text-strong: $color-neutral-90; // "Secondary text color for headers and subtitles"
 $color-text-strongest: $color-neutral-100; // "Primary text color for H1/H2. Text color for most UI Components."

@@ -65,7 +65,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     return (
       <div className="container Profile-root">
         <div className="row">
-          <div className="Profile-top-section col-12">
+          <div className="AboutProjectEvent-top-section col-12">
             {this._renderTopSection(eventProject)}
           </div>
         </div>
@@ -84,20 +84,29 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
   _renderTopSection(eventProject: EventProjectAPIDetails): React$Node {
     return (
-      <div className="Profile-top-section-content">
-        <div className="Profile-top-logo">
-          <img
-            src={
-              eventProject &&
-              eventProject.project_thumbnail &&
-              eventProject.project_thumbnail.publicUrl
-            }
-          />
+      <div className="AboutProjectEvent-top-content">
+        <div className="AboutProjectEvent-event-logo">
+          {eventProject?.event_thumbnail.publicUrl ? (
+            <img
+              src={eventProject.event_thumbnail_publicUrl}
+              alt="Event Logo"
+            ></img>
+          ) : null}
         </div>
-        <div className="Profile-top-details">
+        <div className="AboutProjectEvent-top-names">
           <h1>{eventProject && eventProject.project_name}</h1>
+          <h3>{eventProject && eventProject.event_name}</h3>
+        </div>
+        <div className="AboutProjectEvent-project-logo">
+          {eventProject.project_thumbnail.publicUrl ? (
+            <img
+              src={eventProject.project_thumbnail.publicUrl}
+              alt="Project Logo"
+            />
+          ) : null}
         </div>
         <div className="AboutProjectEvent-top-iconrow">
+          <p>PLACEHOLDER: list of event info fields</p>
           <ul>
             <li>event date</li>
             <li>event start time</li>
@@ -105,6 +114,9 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             <li>project profile link</li>
             <li>event link</li>
           </ul>
+        </div>
+        <div className="AboutProjectEvent-button">
+          <p>PLACEHOLDER: Sign Up/Cancel Button</p>
         </div>
       </div>
     );
@@ -227,7 +239,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     // may not need all these consts; test what happens when project_volunteers is null/empty
 
     // end result: group and count volunteers by subcategory, then render VolunteerSection for each subcategory
-    // one-item ULs used to give the impression
+    // TODO: Do we need the additional props used on AboutProject for VolunteerSection?
     return (
       <React.Fragment>
         <h3>Team</h3>
