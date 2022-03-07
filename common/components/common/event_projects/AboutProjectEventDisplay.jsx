@@ -9,6 +9,8 @@ import Sort from "../../utils/sort.js";
 import { LinkTypes } from "../../constants/LinkConstants.js";
 import url from "../../utils/url.js";
 import type { EventProjectAPIDetails } from "../../utils/EventProjectAPIUtils.js";
+import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
+import VolunteerSection from "../volunteers/VolunteerSection.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -180,7 +182,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             </div>
           </React.Fragment>
         )}
-
         {eventProject && !_.isEmpty(eventProject.event_project_files) && (
           <React.Fragment>
             <div className="AboutProject-files AboutProject-secondary-section">
@@ -189,8 +190,13 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             </div>
           </React.Fragment>
         )}
-
-        <div className="AboutProject-staff AboutProject-secondary-section"></div>
+        {eventProject && !_.isEmpty(eventProject.project_owners) && (
+          <React.Fragment>
+            <div className="AboutProject-staff AboutProject-secondary-section">
+              {this._renderTeam()}
+            </div>
+          </React.Fragment>
+        )}
       </div>
     );
   }
@@ -207,6 +213,41 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           </a>
         </div>
       ))
+    );
+  }
+
+  _renderTeam(): React$Node {
+    const eventProject: EventProjectAPIDetails = this.state.eventProject;
+    const numVolunteers = eventProject["project_volunteers"].length || 0;
+    const groupedVolunteers = _.groupBy(
+      eventProject.project_volunteers,
+      "roleTag.subcategory"
+    );
+    const sortedVolunteers = Object.entries(groupedVolunteers).sort()
+
+   
+    // may not need all these consts; test what happens when project_volunteers is null/empty
+    // group volunteers by subcategory, then render rolename - number - list of volunteer cards
+    return (
+      <React.Fragment>
+        <h4>Team</h4>
+        <ProjectOwnersSection owners={eventProject.project_owners} />
+        <h4>Total RSVP: ({numVolunteers})</h4>
+        {!_.isEmpty(sortedVolunteers) &&
+          sortedVolunteers.map(([key, value]) => {
+            return (
+              <React.Fragment key={key}>
+                <h4>
+                  {key} ({value.length})
+                </h4>
+                <VolunteerSection
+                  volunteers={value}
+                  renderOnlyPending={false}
+                />
+              </React.Fragment>
+            );
+          })}
+      </React.Fragment>
     );
   }
 
