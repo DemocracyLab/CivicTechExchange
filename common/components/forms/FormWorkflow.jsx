@@ -79,6 +79,7 @@ class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
   static calculateState(prevState: State, props: Props): State {
     let state: State = _.clone(prevState) || {};
     state.formIsValid = FormFieldsStore.fieldsAreValid();
+    state.fieldsUpdated = FormFieldsStore.areFormFieldsChanged();
     return state;
   }
 
@@ -118,6 +119,7 @@ class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
     });
   }
 
+  // TODO: Still necessary?
   onValidationCheck(formIsValid: boolean, preSubmitProcessing: Function): void {
     if (formIsValid !== this.state.formIsValid) {
       this.setState({ formIsValid });
@@ -128,6 +130,7 @@ class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
     }
   }
 
+  // TODO: Still necessary?
   onFormUpdate(formFields: {||}): void {
     !this.state.initialFormFields
       ? this.setState(
@@ -143,10 +146,9 @@ class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
         );
   }
 
+  // TODO: Still necessary?
   setFieldsUpdated(): void {
-    _.isEqual(this.state.initialFormFields, this.state.currentFormFields)
-      ? this.setState({ fieldsUpdated: false })
-      : this.setState({ fieldsUpdated: true });
+    this.setState({ fieldsUpdated: FormFieldsStore.areFormFieldsChanged() });
   }
 
   confirmDiscardChanges(confirmDiscard: boolean): Promise<any> {

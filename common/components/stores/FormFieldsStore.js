@@ -32,6 +32,7 @@ export type FormFieldsActionType =
 
 class State extends Record({}) {
   validators: $ReadOnlyArray<FormFieldValidator<any>>;
+  originalFormFieldValues: Dictionary<any>;
   formFieldValues: Dictionary<any>;
   formFieldErrors: Dictionary<string>;
   formFieldsTouched: Dictionary<boolean>;
@@ -65,7 +66,8 @@ class FormFieldsStore extends ReduceStore<State> {
 
   setFormFields(state: State, action: SetFormFieldsActionType): State {
     state.validators = action.validators;
-    state.formFieldValues = action.formFieldValues;
+    state.originalFormFieldValues = action.formFieldValues;
+    state.formFieldValues = _.clone(action.formFieldValues);
     state.formFieldsTouched = createDictionary(
       _.keys(action.formFieldValues),
       fieldName => fieldName,
@@ -78,6 +80,10 @@ class FormFieldsStore extends ReduceStore<State> {
   addFormFields(state: State, action: SetFormFieldsActionType): State {
     state = _.clone(state);
     state.validators = state.validators.concat(action.validators);
+    state.originalFormFieldValues = _.assign(
+      state.originalFormFieldValues,
+      action.formFieldValues
+    );
     state.formFieldValues = _.assign(
       state.formFieldValues,
       action.formFieldValues
@@ -133,6 +139,11 @@ class FormFieldsStore extends ReduceStore<State> {
   isFormFieldTouched(key: string): boolean {
     const state: State = this.getState();
     return state.formFieldsTouched && state.formFieldsTouched[key];
+  }
+
+  areFormFieldsChanged(): boolean {
+    const state: State = this.getState();
+    return !_.isEqual(state.originalFormFieldValues, state.formFieldValues);
   }
 
   getFormFieldError(key: string): ?string {
