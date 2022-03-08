@@ -8,9 +8,14 @@ import type { PositionInfo } from "../../forms/PositionInfo.jsx";
 import Sort from "../../utils/sort.js";
 import { LinkTypes } from "../../constants/LinkConstants.js";
 import url from "../../utils/url.js";
+import Section from "../../enums/Section.js";
 import type { EventProjectAPIDetails } from "../../utils/EventProjectAPIUtils.js";
 import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../volunteers/VolunteerSection.jsx";
+import type Moment from "moment";
+import datetime, { DateFormat } from "../../utils/datetime.js";
+import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
+import Button from "react-bootstrap/Button";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -88,7 +93,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
         <div className="AboutProjectEvent-event-logo">
           {eventProject?.event_thumbnail.publicUrl ? (
             <img
-              src={eventProject.event_thumbnail_publicUrl}
+              src={eventProject.event_thumbnail.publicUrl}
               alt="Event Logo"
             ></img>
           ) : null}
@@ -97,7 +102,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <h1>{eventProject && eventProject.project_name}</h1>
           <h3>{eventProject && eventProject.event_name}</h3>
         </div>
-        <div className="AboutProjectEvent-project-logo">
+        <div className="AboutProjectEvent-project-logo p-3">
           {eventProject.project_thumbnail.publicUrl ? (
             <img
               src={eventProject.project_thumbnail.publicUrl}
@@ -105,18 +110,11 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             />
           ) : null}
         </div>
-        <div className="AboutProjectEvent-top-iconrow">
-          <p>PLACEHOLDER: list of event info fields</p>
-          <ul>
-            <li>event date</li>
-            <li>event start time</li>
-            <li>event location</li>
-            <li>project profile link</li>
-            <li>event link</li>
-          </ul>
+        <div className="AboutProjectEvent-top-iconrow p-3">
+          {this._renderIconList()}
         </div>
-        <div className="AboutProjectEvent-button">
-          <p>PLACEHOLDER: Sign Up/Cancel Button</p>
+        <div className="AboutProjectEvent-top-button p-3">
+          <Button variant="primary">PH: Sign up</Button>
         </div>
       </div>
     );
@@ -263,6 +261,59 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
               </React.Fragment>
             );
           })}
+      </React.Fragment>
+    );
+  }
+
+  _renderIconList(): React$Node {
+    const eventProject: EventProjectAPIDetails = this.state.eventProject;
+
+    const startDate: Moment = datetime.parse(eventProject.event_date_start);
+
+    return (
+      <React.Fragment>
+        <div className="AboutProject-icon-row">
+          <i className={Glyph(GlyphStyles.Calendar, GlyphSizes.LG)} />
+          <p className="AboutProject-icon-text">
+            {startDate.format(DateFormat.MONTH_DATE_YEAR)}
+          </p>
+        </div>
+        <div className="AboutProject-icon-row">
+          <i className={Glyph(GlyphStyles.Clock, GlyphSizes.LG)} />
+          <p className="AboutProject-icon-text">
+            {startDate.format(DateFormat.TIME_TIMEZONE)}
+          </p>
+        </div>
+        <div className="AboutProject-icon-row">
+          <i className={Glyph(GlyphStyles.MapMarker, GlyphSizes.LG)} />
+          <p className="AboutProject-icon-text">
+            {eventProject.event_location}
+          </p>
+        </div>
+        <div className="AboutProject-icon-row">
+          <i className={Glyph(GlyphStyles.Folder, GlyphSizes.LG)} />
+          <p className="AboutProject-icon-text">
+            <a
+              href={url.section(Section.AboutProject, {
+                id: eventProject.project_id,
+              })}
+            >
+              Project Profile
+            </a>{" "}
+          </p>
+        </div>
+        <div className="AboutProject-icon-row">
+          <i className={Glyph(GlyphStyles.CalendarSolid, GlyphSizes.LG)} />
+          <p className="AboutProject-icon-text">
+            <a
+              href={url.section(Section.AboutEvent, {
+                id: eventProject.event_id,
+              })}
+            >
+              Hackathon Home Page
+            </a>
+          </p>
+        </div>
       </React.Fragment>
     );
   }

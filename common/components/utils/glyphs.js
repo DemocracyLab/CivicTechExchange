@@ -40,6 +40,7 @@ export const GlyphStyles: { [key: string]: string } = {
   CreativeCommons: "fab fa-creative-commons", //https://fontawesome.com/icons/creative-commons?style=brands
   CreativeCommonsBy: "fab fa-creative-commons-by", // https://fontawesome.com/icons/creative-commons-by?style=brands
   Calendar: "far fa-calendar", // https://fontawesome.com/icons/calendar?style=regular
+  CalendarSolid: "fas fa-calendar", // https://fontawesome.com/icons/calendar?style=solid
   Users: "fas fa-users", // https://fontawesome.com/icons/users?style=solid
   PDF: "far fa-file-pdf", // https://fontawesome.com/icons/file-pdf?style=regular
   Grip: "fas fa-grip-vertical", // https://fontawesome.com/icons/grip-vertical?style=solid
