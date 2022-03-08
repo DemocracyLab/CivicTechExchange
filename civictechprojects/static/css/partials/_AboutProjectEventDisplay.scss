@@ -17,6 +17,8 @@
     object-fit: contain; // don't crop by default
     object-position: center top; // if we do crop, it keeps the top of the image visible
     max-width: 100%;
+    display: flex;
+    margin: 0 auto; // center in container horizontally
   }
 }
 .AboutProjectEvent-project-logo img {
@@ -30,5 +32,11 @@
 .AboutProjectEvent-top-button {
   button {
     width: 100%; // on mobile full width, unset for desktop
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .AboutProjectEvent-top-button button {
+    width: initial;
   }
 }
