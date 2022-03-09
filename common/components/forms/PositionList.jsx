@@ -103,17 +103,18 @@ class PositionList extends React.Component<Props, State> {
   }
 
   savePosition(position: NewPositionInfo): void {
+    const positions: Array<NewPositionInfo> = this.state.positions || [];
     if (!this.state.existingPosition) {
       // We need a temporary id for keying, until such time as the position is saved
       position.tempId = _.random(Number.MAX_VALUE);
-      this.state.positions.unshift(position);
-      this.savePositionOrdering(this.state.positions);
+      positions.unshift(position);
+      this.savePositionOrdering(positions);
     } else {
       Object.assign(this.state.existingPosition, position);
     }
 
     this.setState(
-      Object.assign(this.updatePositionsField(this.state.positions), {
+      Object.assign(this.updatePositionsField(positions), {
         showAddEditModal: false,
       })
     );
