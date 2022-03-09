@@ -92,7 +92,7 @@ class ProjectResourcesForm extends React.Component<Props, State> {
               this.state.formFields &&
               JSON.stringify(
                 compileLinkFormFields(
-                  this.state.formFields.project_link,
+                  this.state.formFields.project_links,
                   _.omit(this.state.formFields, [
                     "project_files",
                     "project_links",
