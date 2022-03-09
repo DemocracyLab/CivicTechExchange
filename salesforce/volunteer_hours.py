@@ -11,7 +11,7 @@ def run(request):
     response = SalesforceClient().send(request)
 
 
-def save(volunteer):
+def save(volunteer, position_id):
     data = {
         "GW_Volunteers__Contact__r":
         {
@@ -20,6 +20,10 @@ def save(volunteer):
         "GW_Volunteers__Campaign__c":
         {
             "platform_id__c": volunteer.project_id
+        },
+        "GW_Volunteers__Volunteer_Job__r":
+        {
+            "platform_id__c": position_id
         },
         "GW_Volunteers__Status__c": "Accepted",
         "GW_Volunteers__Start_Date__c": volunteer.approved_date
