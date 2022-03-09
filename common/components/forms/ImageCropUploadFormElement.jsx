@@ -74,6 +74,7 @@ class ImageCropUploadFormElement extends React.Component<Props, State> {
           buttonText={this.props.buttonText || "Upload Image"}
           onFileUpload={this._handleFileSelection.bind(this)}
         />
+        {/*TODO: Use HiddenFormField component*/}
         <input
           type="hidden"
           ref="hiddenFormField"

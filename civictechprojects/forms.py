@@ -242,6 +242,10 @@ class GroupCreationForm(ModelForm):
         if not is_co_owner_or_staff(request.user, group):
             raise PermissionDenied()
 
+        # TODO: GET RID OF
+        from pprint import pprint
+        pprint(form.data)
+
         is_created_original = group.is_created
         read_form_field_boolean(group, form, 'is_created')
 
