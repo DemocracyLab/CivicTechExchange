@@ -1077,8 +1077,10 @@ class VolunteerRelation(Archived):
         return (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
 
     def approve(self):
+        role = f"'{self.role.names().first()}'"
+        position_id = ProjectPosition.objects.filter(position_project=self.project_id).filter(position_role__name__exact=role).first().id
         self.save()
-        salesforce_volunteer.save()
+        salesforce_volunteer.save(self, position_id)
 
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
