@@ -42,6 +42,7 @@ type State = {|
   presetLinks: $ReadOnlyArray<string>,
 |};
 
+// TODO: Unit test
 /**
  * Update old links from form fields
  * @param oldLinks  Links to be updated
@@ -52,8 +53,14 @@ export function compileLinkFormFields(
   oldLinks: $ReadOnlyArray<LinkInfo>,
   linkFields: Dictionary<string>
 ): $ReadOnlyArray<NewLinkInfo> {
-  const linkDict: Dictionary<NewLinkInfo> = !_.isEmpty(oldLinks)
-    ? createDictionary(oldLinks, (link: LinkInfo) => link.linkName)
+  // Remove blank links
+  let linkDict: Dictionary<NewLinkInfo> = !_.isEmpty(oldLinks)
+    ? createDictionary(
+        oldLinks.filter(
+          (link: LinkInfo) => !_.isEmpty(linkFields[link.linkName])
+        ),
+        (link: LinkInfo) => link.linkName
+      )
     : {};
 
   // Merge new links into old links
