@@ -169,8 +169,7 @@ class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
     event.preventDefault();
     if (!FormFieldsStore.fieldsAreValid()) {
       UniversalDispatcher.dispatch({
-        type: "TOUCH_FORM_FIELD",
-        fieldValue: event.target.value,
+        type: "ATTEMPT_SUBMIT",
       });
       this.setState({ clickedNext: true });
       this.formRef.current.checkValidity();

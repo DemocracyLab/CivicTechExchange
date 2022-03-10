@@ -8,6 +8,7 @@ import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import type { Dictionary } from "../../types/Generics.jsx";
 import formHelper from "../../utils/forms.js";
 import _ from "lodash";
+import InlineFormError from "../InlineFormError.jsx";
 
 export const TextFormFieldType: Dictionary<string> = {
   SingleLine: "SingleLine",
@@ -97,7 +98,7 @@ class TextFormField extends React.Component<Props, State> {
             )}
           </span>
           <Form.Control
-            required={this.props.required}
+            required={false}
             as={this.state.elementType}
             name={this.props.id}
             placeholder={this.props.placeholder}
@@ -109,10 +110,7 @@ class TextFormField extends React.Component<Props, State> {
             maxLength={this.props.maxLength}
             tabIndex="0"
           />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            {this.state.errorFeedback}
-          </Form.Control.Feedback>
+          <InlineFormError id={this.props.id} />
         </Form.Group>
       </React.Fragment>
     );

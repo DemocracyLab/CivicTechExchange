@@ -8,6 +8,9 @@ import validationHelper, { FormFieldValidator } from "../utils/validation.js";
 import _ from "lodash";
 import { createDictionary } from "../types/Generics.jsx";
 
+// TODO: Document this!
+// TODO: Unit test
+
 type SetFormFieldsActionType = {
   type: "SET_FORM_FIELDS" | "ADD_FORM_FIELDS",
   formFieldValues: Dictionary<any>,
@@ -20,9 +23,18 @@ type UpdateFormFieldActionType<T> = {
   fieldValue: T,
 };
 
+type UpdateFormFieldsActionType<T> = {
+  type: "UPDATE_FORM_FIELDS",
+  formFieldValues: Dictionary<any>,
+};
+
 type TouchFormFieldActionType = {
   type: "TOUCH_FORM_FIELD",
   fieldName: ?string,
+};
+
+type AttemptSubmitActionType = {
+  type: "ATTEMPT_SUBMIT",
 };
 
 export type FormFieldsActionType =
@@ -36,6 +48,7 @@ class State extends Record({}) {
   formFieldValues: Dictionary<any>;
   formFieldErrors: Dictionary<string>;
   formFieldsTouched: Dictionary<boolean>;
+  submitAttempted: boolean;
 }
 
 // Store for broadcasting the header height to any components that need to factor it in
@@ -57,14 +70,19 @@ class FormFieldsStore extends ReduceStore<State> {
         return this.addFormFields(state, action);
       case "UPDATE_FORM_FIELD":
         return this.updateFormField(state, action);
+      case "UPDATE_FORM_FIELDS":
+        return this.updateFormFields(state, action);
       case "TOUCH_FORM_FIELD":
         return this.touchFormField(state, action);
+      case "ATTEMPT_SUBMIT":
+        return this.attemptSubmit(state, action);
       default:
         return state;
     }
   }
 
   setFormFields(state: State, action: SetFormFieldsActionType): State {
+    state.submitAttempted = false;
     state.validators = action.validators;
     state.originalFormFieldValues = action.formFieldValues;
     state.formFieldValues = _.clone(action.formFieldValues);
@@ -102,11 +120,29 @@ class FormFieldsStore extends ReduceStore<State> {
 
   updateFormField(state: State, action: UpdateFormFieldActionType): State {
     state.formFieldValues[action.fieldName] = action.fieldValue;
+    state.formFieldsTouched[action.fieldName] = true;
     state = this.processErrors(state);
     return _.clone(state);
   }
 
-  touchFormField(state: State, action: UpdateFormFieldActionType): State {
+  updateFormFields(state: State, action: UpdateFormFieldsActionType): State {
+    _.keys(action.formFieldValues).forEach((formFieldId: string) => {
+      state.formFieldsTouched[formFieldId] = true;
+    });
+    state.formFieldValues = _.assign(
+      state.formFieldValues,
+      action.formFieldValues
+    );
+    state = this.processErrors(state);
+    return _.clone(state);
+  }
+
+  attemptSubmit(state: State, action: AttemptSubmitActionType): State {
+    state.submitAttempted = true;
+    return _.clone(state);
+  }
+
+  touchFormField(state: State, action: TouchFormFieldActionType): State {
     if (action.fieldName) {
       state.formFieldsTouched[action.fieldName] = true;
     } else {
@@ -144,6 +180,10 @@ class FormFieldsStore extends ReduceStore<State> {
   areFormFieldsChanged(): boolean {
     const state: State = this.getState();
     return !_.isEqual(state.originalFormFieldValues, state.formFieldValues);
+  }
+
+  wasSubmitAttempted(): boolean {
+    return this.getState().submitAttempted;
   }
 
   getFormFieldError(key: string): ?string {
