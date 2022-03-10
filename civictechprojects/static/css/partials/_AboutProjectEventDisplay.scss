@@ -4,6 +4,9 @@
   h3 {
     padding-top: 12px;
   }
+  .apply-position-button, .apply-position-button a {
+    width: 100%;
+  }
 }
 .AboutProjectEvent-top-content {
   border: 1px solid $color-grey-frame-border;
@@ -38,8 +41,13 @@
 }
 
 @include media-breakpoint-up(lg) {
+  .AboutProjectEvent-primary-container {
+    .apply-position-button, .apply-position-button a {
+      width: unset;
+    }
+  }
   .AboutProjectEvent-top-button button {
-    width: initial;
+    width: unset;
   }
   .AboutProjectEvent-top-names {
     display: flex;
