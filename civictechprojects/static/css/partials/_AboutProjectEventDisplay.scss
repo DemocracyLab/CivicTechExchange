@@ -60,9 +60,9 @@
     }
   }
   .AboutProjectEvent-desktop-row {
-    margin: 16px;
+    margin: 24px 16px 16px 16px;
     display: grid;
-    gap: 32px; // minimum space between items
+    gap: 64px; // minimum space between items
     grid-template-columns: 1fr 2fr 1fr;
     .AboutProjectEvent-top-button {
       margin-left: auto;
