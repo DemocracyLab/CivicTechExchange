@@ -6,12 +6,12 @@ import { Container } from "flux/utils";
 import FormFieldsStore from "../../stores/FormFieldsStore.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import _ from "lodash";
+import HiddenFormFields from "../../forms/HiddenFormFields.jsx";
+import InlineFormError from "../../forms/InlineFormError.jsx";
 
 type Props = {|
   id: string,
   label: ?string,
-  value: boolean,
-  onCheck: boolean => void,
 |};
 
 type State = {|
@@ -23,7 +23,7 @@ type State = {|
 // Checkbox wrapper that harmonizes with django's form handling
 class CheckBox extends React.Component<Props, State> {
   constructor(props: Props): void {
-    super();
+    super(props);
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -45,41 +45,29 @@ class CheckBox extends React.Component<Props, State> {
       fieldName: this.props.id,
       fieldValue: checkValue,
     });
-    if (!this.state.touched) {
-      UniversalDispatcher.dispatch({
-        type: "TOUCH_FORM_FIELD",
-        fieldName: this.props.id,
-      });
-    } // TODO: Get rid of?
-    this.props.onCheck && this.props.onCheck(checkValue);
   }
 
   render(): ?React$Node {
     return (
       <React.Fragment>
-        <input
-          type="hidden"
-          id={this.props.id}
-          name={this.props.id}
-          value={this.props.value ? "on" : "off"}
+        <HiddenFormFields
+          sourceDict={_.fromPairs([
+            [this.props.id, this.state.value ? "on" : "off"],
+          ])}
         />
         <Form.Check
           type="checkbox"
           id={this.props.id}
           onChange={this._onCheck.bind(this)}
-          checked={this.props.value}
-          value={this.props.value}
         >
           <Form.Check.Input
-            type="checkbox"
             isInvalid={this.state.touched && this.state.errorFeedback}
+            checked={!!this.state.value}
             onChange={this._onCheck.bind(this)}
           />
           {this._renderLabelContent()}
-          <Form.Control.Feedback type="invalid">
-            {this.state.errorFeedback}
-          </Form.Control.Feedback>
         </Form.Check>
+        <InlineFormError id={this.props.id} />
       </React.Fragment>
     );
   }

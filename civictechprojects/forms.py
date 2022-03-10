@@ -136,6 +136,10 @@ class EventCreationForm(ModelForm):
                 show_headers=False
             )
 
+        # TODO: GET RID OF
+        from pprint import pprint
+        pprint(form.data)
+
         if not is_co_owner_or_staff(request.user, event):
             raise PermissionDenied()
 
