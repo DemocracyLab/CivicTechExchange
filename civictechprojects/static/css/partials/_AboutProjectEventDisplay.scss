@@ -59,5 +59,23 @@
       max-width: 100%;
     }
   }
+  .AboutProjectEvent-desktop-row {
+    margin: 16px;
+    display: grid;
+    gap: 32px; // minimum space between items
+    grid-template-columns: 1fr 2fr 1fr;
+    .AboutProjectEvent-top-button {
+      margin-left: auto;
+    }
+ 
+  }
+  .AboutProjectEvent-project-logo img {
+    max-height: 200px; // scale up slightly on laptop-size display
+  }
+  @include media-breakpoint-up(xl) {
+    .AboutProjectEvent-project-logo img {
+      max-height: 250px; // scale up more on desktop-size display
+    }
+  }
   
 }

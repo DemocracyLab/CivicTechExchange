@@ -112,19 +112,21 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             ) : null}
           </div>
         </div>
-        <div className="AboutProjectEvent-project-logo p-3">
-          {eventProject.project_thumbnail.publicUrl ? (
-            <img
-              src={eventProject.project_thumbnail.publicUrl}
-              alt="Project Logo"
-            />
-          ) : null}
-        </div>
-        <div className="AboutProjectEvent-top-iconrow p-3">
-          {this._renderIconList()}
-        </div>
-        <div className="AboutProjectEvent-top-button p-3">
-          <Button variant="primary">PH: Sign up</Button>
+        <div className="AboutProjectEvent-desktop-row">
+          <div className="AboutProjectEvent-project-logo p-3 p-lg-0">
+            {eventProject.project_thumbnail.publicUrl ? (
+              <img
+                src={eventProject.project_thumbnail.publicUrl}
+                alt="Project Logo"
+              />
+            ) : null}
+          </div>
+          <div className="AboutProjectEvent-top-iconrow p-3 p-lg-0">
+            {this._renderIconList()}
+          </div>
+          <div className="AboutProjectEvent-top-button p-3 p-lg-0">
+            <Button variant="primary">PH: Sign up</Button>
+          </div>
         </div>
       </div>
     );
