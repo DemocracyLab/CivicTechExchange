@@ -27,7 +27,7 @@
 .AboutProjectEvent-top-names {
   width: 100%;
   background: $color-feedback-background-info-weakest;
-  padding: 32px 16px;
+  padding: 64px 16px; // fixed height approximately 3x text height; could do this dynamically with grid if we need a future enhancement
 }
 .AboutProjectEvent-top-button {
   button {
