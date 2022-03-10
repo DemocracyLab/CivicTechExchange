@@ -90,7 +90,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   _renderTopSection(eventProject: EventProjectAPIDetails): React$Node {
     return (
       <div className="AboutProjectEvent-top-content">
-        <div className="AboutProjectEvent-event-logo">
+        <div className="AboutProjectEvent-event-logo d-lg-none">
           {eventProject?.event_thumbnail.publicUrl ? (
             <img
               src={eventProject.event_thumbnail.publicUrl}
@@ -99,8 +99,18 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           ) : null}
         </div>
         <div className="AboutProjectEvent-top-names">
-          <h1>{eventProject && eventProject.project_name}</h1>
-          <h3>{eventProject && eventProject.event_name}</h3>
+          <div className="AboutProjectEvent-top-names-text">
+            <h1>{eventProject && eventProject.project_name}</h1>
+            <h3>{eventProject && eventProject.event_name}</h3>
+          </div>
+          <div className="AboutProjectEvent-event-logo-desktop d-none d-lg-block">
+            {eventProject?.event_thumbnail.publicUrl ? (
+              <img
+                src={eventProject.event_thumbnail.publicUrl}
+                alt="Event Logo"
+              ></img>
+            ) : null}
+          </div>
         </div>
         <div className="AboutProjectEvent-project-logo p-3">
           {eventProject.project_thumbnail.publicUrl ? (

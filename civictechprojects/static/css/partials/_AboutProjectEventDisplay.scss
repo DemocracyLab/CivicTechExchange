@@ -27,7 +27,9 @@
 .AboutProjectEvent-top-names {
   width: 100%;
   background: $color-feedback-background-info-weakest;
-  padding: 64px 16px; // fixed height approximately 3x text height; could do this dynamically with grid if we need a future enhancement
+  .AboutProjectEvent-top-names-text {
+    padding: 64px 16px; // fixed height approximately 3x text height; could do this dynamically with grid if we need a future enhancement
+  }
 }
 .AboutProjectEvent-top-button {
   button {
@@ -39,4 +41,23 @@
   .AboutProjectEvent-top-button button {
     width: initial;
   }
+  .AboutProjectEvent-top-names {
+    display: flex;
+    flex-direction: row;
+    flex-basis: 60%;
+    .AboutProjectEvent-top-names-text {
+      padding: 0 0 0 16px;
+      align-self: center;
+
+    }
+  }
+  .AboutProjectEvent-event-logo-desktop {
+    flex-basis: 30%;
+    flex-shrink: 1;
+    margin-left: auto;
+    img {
+      max-width: 100%;
+    }
+  }
+  
 }
