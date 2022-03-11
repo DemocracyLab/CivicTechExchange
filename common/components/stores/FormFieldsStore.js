@@ -45,7 +45,9 @@ type AttemptSubmitActionType = {
 export type FormFieldsActionType =
   | SetFormFieldsActionType
   | UpdateFormFieldActionType
-  | TouchFormFieldActionType;
+  | UpdateFormFieldsActionType
+  | TouchFormFieldActionType
+  | AttemptSubmitActionType;
 
 class State extends Record({}) {
   validators: $ReadOnlyArray<FormFieldValidator<any>>;
