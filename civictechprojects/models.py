@@ -456,7 +456,7 @@ class Event(Archived):
     def get_by_id_or_slug(slug):
         event = None
         if slug is not None:
-            _slug = slug.strip().lower()
+            _slug = str(slug).strip().lower()
             if _slug.isnumeric():
                 event = Event.objects.get(id=_slug)
             elif len(_slug) > 0:
