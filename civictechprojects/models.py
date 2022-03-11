@@ -1073,7 +1073,8 @@ class VolunteerRelation(Archived):
 
     def is_up_for_renewal(self, now=None):
         now = now or timezone.now()
-        return (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
+        return self.is_approved and (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
+
 
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):

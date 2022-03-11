@@ -123,9 +123,9 @@ def send_verification_email(contributor):
     verification_url = settings.PROTOCOL_DOMAIN + '/verify_user/' + str(contributor.id) + '/' + verification_token
     # Send email with token
     email_template = HtmlEmailTemplate()\
-        .header("Hi {{first_name}}, we're glad you're here.")\
+        .header("Hi {{first_name}}, Welcome to DemocracyLab!")\
         .paragraph('Please confirm your email address by clicking the button below.')\
-        .button(url=verification_url, text='Verify Your Email')
+        .button(url=verification_url, text='Confirm Email Address')
     email_msg = EmailMessage(
         subject='Welcome to DemocracyLab',
         from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
@@ -419,7 +419,9 @@ def send_group_creation_notification(group):
 
 def notify_group_owners_group_approved(group):
     email_template = HtmlEmailTemplate() \
-        .paragraph('Your group "{{group_name}}" has been approved. You can see it at {{group_url}}')
+        .header('Congratulations! "{{group_name}}" has been approved.') \
+        .paragraph('Your group "{{group_name}}" has been approved.') \
+        .button(url='group_url', text='Go to Group Profile Page')
     context = {
         'group_name': group.group_name,
         'group_url': section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
