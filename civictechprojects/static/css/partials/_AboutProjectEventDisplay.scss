@@ -4,6 +4,10 @@
     border: none; // remove border from general Profile-top section just for this page since it has different containers
     border-radius: initial;
     gap: 16px;
+    margin-top: 16px;
+  }
+  .Profile-top-logo {
+    padding: 0;
   }
   .Profile-top-details {
     order: 2;
@@ -70,7 +74,7 @@
     flex-basis: 65%;
     gap: 64px;
     .AboutProjectEvent-top-names-text {
-      padding: 0 0 0 16px;
+      padding: 16px 0 16px 16px;
       align-self: center;
     }
   }
