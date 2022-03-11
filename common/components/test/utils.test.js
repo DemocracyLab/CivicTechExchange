@@ -41,15 +41,21 @@ describe("utils", () => {
       { id: 2, type: "thing", name: "straw" },
       { id: 3, type: "favorite", name: "crystal" },
     ];
+    // Test byNamedEntries with selector
     const order = ["favorite", "special"];
     const sorted = Sort.byNamedEntries(collection, order, obj => obj.type);
 
     expect(sorted.map(obj => obj.id)).toEqual([3, 1, 0, 2]);
 
+    // Test byNamedEntries without selector
     const collectionTypes = collection.map(obj => obj.type);
     const sortedStrings = Sort.byNamedEntries(collectionTypes, order);
 
     expect(sortedStrings).toEqual(["favorite", "special", "thing", "thing"]);
+
+    // Test byNamedEntries without sorting
+    const unSortedStrings = Sort.byNamedEntries(collectionTypes, []);
+    expect(unSortedStrings).toEqual(["thing", "special", "thing", "favorite"]);
 
     const group_issue_areas = {
       no: 2,

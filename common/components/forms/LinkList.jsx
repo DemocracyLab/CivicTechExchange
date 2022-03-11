@@ -144,10 +144,9 @@ class LinkList extends React.Component<Props, State> {
 
   static generateLinkDict(props: Props): Dictionary<NewLinkInfo> {
     const _links: $ReadOnlyArray<NewLinkInfo> = props.links;
-    let linkDict: Dictionary<NewLinkInfo> = createDictionary(
-      _links,
-      (link: LinkInfo) => link.linkName
-    );
+    let linkDict: Dictionary<NewLinkInfo> = !_.isEmpty(_links)
+      ? createDictionary(_links, (link: LinkInfo) => link.linkName)
+      : {};
     // Generate missing presetLinks
     const blankPresetLinkNames: Array<string> = props.linkOrdering.filter(
       (linkName: string) => !linkDict[linkName]
