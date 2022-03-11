@@ -17,10 +17,6 @@ def save(volunteer, position_id):
         {
             "platform_id__c": volunteer.volunteer_id
         },
-        "GW_Volunteers__Campaign__c":
-        {
-            "platform_id__c": volunteer.project_id
-        },
         "GW_Volunteers__Volunteer_Job__r":
         {
             "platform_id__c": position_id
