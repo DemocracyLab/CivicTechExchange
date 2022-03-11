@@ -535,6 +535,12 @@ class EventProject(Archived):
         return event_project_json
 
     @staticmethod
+    def get(event_id, project_id):
+        event = Event.get_by_id_or_slug(event_id)
+        project = Project.objects.get(id=project_id)
+        return EventProject.objects.filter(event=event, project=project).first()
+
+    @staticmethod
     def create(creator, event, project):
         ep = EventProject(creator=creator, event=event, project=project)
 
