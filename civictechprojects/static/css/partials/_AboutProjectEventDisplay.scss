@@ -1,11 +1,20 @@
 // for Section.AboutProjectEventDisplay, child of Profile.scss rules, uses a lot of AboutProject components and rules too
-.AboutProjectEvent-primary-container {
-  padding: 16px;
-  h3 {
-    padding-top: 12px;
+.AboutProjectEvent-top-section {
+  .Profile-top-section-content {
+    border: none; // remove border from general Profile-top section just for this page since it has different containers
+    border-radius: initial;
+    gap: 16px;
   }
-  .apply-position-button, .apply-position-button a {
-    width: 100%;
+  .Profile-top-details {
+    order: 2;
+  }
+  .Profile-top-interactions {
+    order: 3;
+    flex-basis: 100%;
+    button,
+    a {
+      width: 100%;
+    }
   }
 }
 .AboutProjectEvent-top-content {
@@ -31,59 +40,53 @@
   width: 100%;
   background: $color-feedback-background-info-weakest;
   .AboutProjectEvent-top-names-text {
-    padding: 64px 16px; // fixed height approximately 3x text height; could do this dynamically with grid if we need a future enhancement
+    padding: 48px 16px; // make sure long or short titles still have enough space
   }
 }
-.AboutProjectEvent-top-button {
-  button {
-    width: 100%; // on mobile full width, unset for desktop
+.AboutProjectEvent-primary-container {
+  padding: 16px;
+  h3 {
+    padding-top: 12px;
+  }
+  .apply-position-button,
+  .apply-position-button a {
+    width: 100%;
   }
 }
 
 @include media-breakpoint-up(lg) {
-  .AboutProjectEvent-primary-container {
-    .apply-position-button, .apply-position-button a {
-      width: unset;
+  .AboutProjectEvent-top-section {
+    .Profile-top-interactions {
+      flex-basis: unset;
+      button,
+      a {
+        width: unset;
+      }
     }
-  }
-  .AboutProjectEvent-top-button button {
-    width: unset;
   }
   .AboutProjectEvent-top-names {
     display: flex;
     flex-direction: row;
-    flex-basis: 60%;
+    flex-basis: 65%;
+    gap: 64px;
     .AboutProjectEvent-top-names-text {
       padding: 0 0 0 16px;
       align-self: center;
-
     }
   }
   .AboutProjectEvent-event-logo-desktop {
-    flex-basis: 30%;
+    flex-basis: 35%;
     flex-shrink: 1;
     margin-left: auto;
     img {
       max-width: 100%;
+      object-fit: contain;
     }
   }
-  .AboutProjectEvent-desktop-row {
-    margin: 24px 16px 16px 16px;
-    display: grid;
-    gap: 64px; // minimum space between items
-    grid-template-columns: 1fr 2fr 1fr;
-    .AboutProjectEvent-top-button {
-      margin-left: auto;
-    }
- 
-  }
-  .AboutProjectEvent-project-logo img {
-    max-height: 200px; // scale up slightly on laptop-size display
-  }
-  @include media-breakpoint-up(xl) {
-    .AboutProjectEvent-project-logo img {
-      max-height: 250px; // scale up more on desktop-size display
+  .AboutProjectEvent-primary-container {
+    .apply-position-button,
+    .apply-position-button a {
+      width: unset;
     }
   }
-  
 }

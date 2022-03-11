@@ -70,7 +70,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     return (
       <div className="container Profile-root">
         <div className="row">
-          <div className="AboutProjectEvent-top-section col-12">
+          <div className="AboutProjectEvent-top-section  col-12">
             {this._renderTopSection(eventProject)}
           </div>
         </div>
@@ -103,7 +103,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             <h1>{eventProject && eventProject.project_name}</h1>
             <h3>{eventProject && eventProject.event_name}</h3>
           </div>
-          <div className="AboutProjectEvent-event-logo-desktop d-none d-lg-block">
+          <div className="AboutProjectEvent-event-logo-desktop d-none d-lg-flex">
             {eventProject?.event_thumbnail.publicUrl ? (
               <img
                 src={eventProject.event_thumbnail.publicUrl}
@@ -112,8 +112,8 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             ) : null}
           </div>
         </div>
-        <div className="AboutProjectEvent-desktop-row">
-          <div className="AboutProjectEvent-project-logo p-3 p-lg-0">
+        <div className="Profile-top-section-content">
+          <div className="Profile-top-logo">
             {eventProject.project_thumbnail.publicUrl ? (
               <img
                 src={eventProject.project_thumbnail.publicUrl}
@@ -121,10 +121,10 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
               />
             ) : null}
           </div>
-          <div className="AboutProjectEvent-top-iconrow p-3 p-lg-0">
+          <div className="Profile-top-details">
             {this._renderIconList()}
           </div>
-          <div className="AboutProjectEvent-top-button p-3 p-lg-0">
+          <div className="Profile-top-interactions">
             <Button variant="primary">PH: Sign up</Button>
           </div>
         </div>
