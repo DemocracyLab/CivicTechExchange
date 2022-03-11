@@ -8,31 +8,36 @@ import validationHelper, { FormFieldValidator } from "../utils/validation.js";
 import _ from "lodash";
 import { createDictionary } from "../types/Generics.jsx";
 
-// TODO: Document this!
 // TODO: Unit test
 
+// SET_FORM_FIELDS: Set up fields for form
+// ADD_FORM_FIELDS: Add fields to already set up form
 type SetFormFieldsActionType = {
   type: "SET_FORM_FIELDS" | "ADD_FORM_FIELDS",
   formFieldValues: Dictionary<any>,
   validators: ?$ReadOnlyArray<FormFieldValidator<any>>,
 };
 
+// UPDATE_FORM_FIELD: Update single form field
 type UpdateFormFieldActionType<T> = {
   type: "UPDATE_FORM_FIELD",
   fieldName: string,
   fieldValue: T,
 };
 
+// UPDATE_FORM_FIELDS: Update multiple form fields
 type UpdateFormFieldsActionType<T> = {
   type: "UPDATE_FORM_FIELDS",
   formFieldValues: Dictionary<any>,
 };
 
+// TOUCH_FORM_FIELD: Touch form field without changing the value
 type TouchFormFieldActionType = {
   type: "TOUCH_FORM_FIELD",
   fieldName: ?string,
 };
 
+// ATTEMPT_SUBMIT: Flag attempt to submit the form
 type AttemptSubmitActionType = {
   type: "ATTEMPT_SUBMIT",
 };
@@ -51,7 +56,7 @@ class State extends Record({}) {
   submitAttempted: boolean;
 }
 
-// Store for broadcasting the header height to any components that need to factor it in
+// Store for managing form field values, and providing helper methods for form workflows
 class FormFieldsStore extends ReduceStore<State> {
   constructor(): void {
     super(UniversalDispatcher);
@@ -162,34 +167,58 @@ class FormFieldsStore extends ReduceStore<State> {
     return state;
   }
 
+  /**
+   * @returns All form fields and their values
+   */
   getFormFieldValues(): Dictionary<any> {
     const state: State = this.getState();
     return state.formFieldValues;
   }
 
+  /**
+   * @param key   Form field id
+   * @returns {*} Form field current value
+   */
   getFormFieldValue(key: string): any {
     const state: State = this.getState();
     return state.formFieldValues && state.formFieldValues[key];
   }
 
+  /**
+   * @param key Form field id
+   * @returns {boolean} Whether form field has been touched
+   */
   isFormFieldTouched(key: string): boolean {
     const state: State = this.getState();
     return state.formFieldsTouched && state.formFieldsTouched[key];
   }
 
+  /**
+   * @returns {boolean} Whether any form fields have been changed from their initial values
+   */
   areFormFieldsChanged(): boolean {
     const state: State = this.getState();
     return !_.isEqual(state.originalFormFieldValues, state.formFieldValues);
   }
 
+  /**
+   * @returns {boolean} Whether a submit operation was attempted (but didn't necessarily succeed)
+   */
   wasSubmitAttempted(): boolean {
     return this.getState().submitAttempted;
   }
 
+  /**
+   * @param key Form field id
+   * @returns {string}  Any error in the form field's current value
+   */
   getFormFieldError(key: string): ?string {
     return this.getState().formFieldErrors[key];
   }
 
+  /**
+   * @returns {boolean} Whether all current form field values are valid
+   */
   fieldsAreValid(): boolean {
     return _.isEmpty(this.getState().formFieldErrors);
   }
