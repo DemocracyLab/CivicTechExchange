@@ -6,7 +6,10 @@ import { UserAPIData } from "../../utils/UserAPIUtils.js";
 import EditUserModal from "./EditUserModal.jsx";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import { LinkTypes } from "../../constants/LinkConstants";
-import LinkList, { NewLinkInfo, compileLinkFormFields } from "../../forms/LinkList.jsx";
+import LinkList, {
+  NewLinkInfo,
+  compileLinkFormFields,
+} from "../../forms/LinkList.jsx";
 import _ from "lodash";
 import FormFieldsStore from "../../stores/FormFieldsStore.js";
 

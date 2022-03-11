@@ -51,10 +51,6 @@ class ProjectCreationForm(ModelForm):
                 is_created=False
             )
 
-        # TODO: GET RID OF
-        from pprint import pprint
-        pprint(form.data)
-
         if not is_co_owner_or_staff(request.user, project):
             raise PermissionDenied()
 
@@ -135,10 +131,6 @@ class EventCreationForm(ModelForm):
                 is_searchable=False,
                 show_headers=False
             )
-
-        # TODO: GET RID OF
-        from pprint import pprint
-        pprint(form.data)
 
         if not is_co_owner_or_staff(request.user, event):
             raise PermissionDenied()
@@ -245,10 +237,6 @@ class GroupCreationForm(ModelForm):
 
         if not is_co_owner_or_staff(request.user, group):
             raise PermissionDenied()
-
-        # TODO: GET RID OF
-        from pprint import pprint
-        pprint(form.data)
 
         is_created_original = group.is_created
         read_form_field_boolean(group, form, 'is_created')
