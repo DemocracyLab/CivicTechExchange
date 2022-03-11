@@ -42,7 +42,7 @@ function importUrls(urls_vx): Dictionary<UrlPattern> {
   };
 
   const fromPythonRegex: string => RegExp = (pattern: string) => {
-    const newPattern: string = pattern.replace("?P", "?");
+    const newPattern: string = pattern.replaceAll("?P", "?");
     return new RegExp(newPattern);
   };
 
@@ -205,7 +205,7 @@ class urlHelper {
     );
     if (urlPattern) {
       const matches = urlPattern.regex.exec(url);
-      const args = _.size(matches) > 1 ? { id: matches[1] } : {};
+      const args = matches.groups || {};
       processedUrlPattern = {
         url: url,
         args: args,

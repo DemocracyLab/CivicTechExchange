@@ -25,19 +25,21 @@ class AboutEventProjectController extends React.PureComponent<{||}, State> {
   }
 
   componentDidMount() {
-    const eventProjectId: string = url.argument("id");
+    const eventId: string = url.argument("event_id");
+    const projectId: string = url.argument("project_id");
     EventProjectAPIUtils.fetchEventProjectDetails(
-      eventProjectId,
+      eventId,
+      projectId,
       this.loadEventProjectDetails.bind(this),
       this.handleLoadProjectFailure.bind(this)
     );
-    metrics.logNavigateToEventProjectProfile(eventProjectId);
   }
 
   loadEventProjectDetails(eventProject: EventProjectAPIDetails) {
     this.setState({
       eventProject: eventProject,
     });
+    metrics.logNavigateToEventProjectProfile(eventProject.event_project_id);
   }
 
   handleLoadProjectFailure(error: APIError) {

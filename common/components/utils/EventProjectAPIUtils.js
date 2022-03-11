@@ -34,12 +34,15 @@ export type EventProjectAPIDetails = {|
 
 export default class EventProjectAPIUtils {
   static fetchEventProjectDetails(
-    id: number,
+    eventId: number,
+    projectId: number,
     callback: EventProjectAPIDetails => void,
     errCallback: APIError => void
   ): void {
     fetch(
-      new Request("/api/event_project/" + id + "/", { credentials: "include" })
+      new Request(`/api/event/${eventId}/project/${projectId}/`, {
+        credentials: "include",
+      })
     )
       .then(response => {
         if (!response.ok) {

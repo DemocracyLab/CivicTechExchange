@@ -237,9 +237,9 @@ def get_event(request, event_id):
     return JsonResponse(event.hydrate_to_json()) if event else HttpResponse(status=404)
 
 
-def get_event_project(request, event_project_id):
+def get_event_project(request, event_id, project_id):
     try:
-        event_project = EventProject.objects.get(id=event_project_id)
+        event_project = EventProject.get(event_id, project_id)
     except PermissionDenied:
         return HttpResponseForbidden()
 
@@ -352,7 +352,9 @@ def approve_event(request, event_id):
 @xframe_options_exempt
 @api_view()
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
-def index(request, id='Unused but needed for routing purposes; do not remove!'):
+def index(*args, **kwargs):
+    request = args[0]
+    # id = kwargs['id'] // Uncomment if this is ever needed
     page = get_page_section(request.get_full_path())
     # TODO: Add to redirectors.py
     # Redirect to AddUserDetails page if First/Last name hasn't been entered yet
