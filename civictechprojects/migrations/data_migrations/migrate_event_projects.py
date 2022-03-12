@@ -1,10 +1,5 @@
 from civictechprojects.models import Event, EventProject
-import os
-import psutil
-
-
-def log_memory_usage():
-    print('Memory Usage: {useInMb} MB'.format(useInMb=psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2))
+from democracylab.logging import log_memory_usage
 
 
 def migrate_event_projects(*args):
