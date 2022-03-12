@@ -1,10 +1,17 @@
 from civictechprojects.models import Event, EventProject
+import os
+import psutil
+
+
+def log_memory_usage():
+    print('Memory Usage: {useInMb} MB'.format(useInMb=psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2))
 
 
 def migrate_event_projects(*args):
     events = Event.objects.all()
     for event in events:
         print('Migrating projects for event: ' + event.__str__())
+        log_memory_usage()
         # Get list of projects for event
         event_projects = event.get_linked_projects()
         if event_projects:
@@ -13,6 +20,7 @@ def migrate_event_projects(*args):
                 event_project = EventProject.get(event.id, project.id)
                 if not event_project:
                     print('Migrating project: ' + project.__str__())
+                    log_memory_usage()
                     # Create Event Project from Project
                     event_project = EventProject.create(project.project_creator, event, project)
                     event_project.save()
