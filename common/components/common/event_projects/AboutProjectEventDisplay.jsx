@@ -91,7 +91,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     return (
       <div className="AboutProjectEvent-top-content">
         <div className="AboutProjectEvent-event-logo d-lg-none">
-          {eventProject?.event_thumbnail.publicUrl ? (
+          {eventProject?.event_thumbnail?.publicUrl ? (
             <img
               src={eventProject.event_thumbnail.publicUrl}
               alt="Event Logo"
@@ -104,7 +104,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             <h3>{eventProject && eventProject.event_name}</h3>
           </div>
           <div className="AboutProjectEvent-event-logo-desktop d-none d-lg-flex">
-            {eventProject?.event_thumbnail.publicUrl ? (
+            {eventProject?.event_thumbnail?.publicUrl ? (
               <img
                 src={eventProject.event_thumbnail.publicUrl}
                 alt="Event Logo"
@@ -121,9 +121,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
               />
             ) : null}
           </div>
-          <div className="Profile-top-details">
-            {this._renderIconList()}
-          </div>
+          <div className="Profile-top-details">{this._renderIconList()}</div>
           <div className="Profile-top-interactions">
             <Button variant="primary">PH: Sign up</Button>
           </div>
