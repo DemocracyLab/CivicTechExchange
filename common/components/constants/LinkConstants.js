@@ -3,6 +3,7 @@
 import GlyphStyles from "../utils/glyphs.js";
 import type { Dictionary, KeyValuePair } from "../types/Generics.jsx";
 import _ from "lodash";
+import stringHelper from "../utils/string.js";
 
 export type LinkSourceDisplayConfig = {|
   +sourceUrlPattern: ?RegExp,
@@ -53,6 +54,8 @@ export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConf
     iconClass: GlyphStyles.LinkedIn,
   },
 ];
+
+export const LinkTypePrefixes: $ReadOnlyArray<string> = ["link_", "social_"];
 
 export const LinkTypes: Dictionary<string> = {
   CODE_REPOSITORY: "link_coderepo",
@@ -132,3 +135,7 @@ export const DefaultLinkDisplayConfigurations: KeyValuePair<LinkSourceDisplayCon
     ],
   ]
 );
+
+export const isLinkFieldName: string => boolean = (str: string) => {
+  return stringHelper.startsWithAny(str, LinkTypePrefixes);
+};

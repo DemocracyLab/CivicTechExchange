@@ -1,15 +1,20 @@
 // @flow
 
 import React from "react";
+import DjangoCSRFToken from "django-react-csrftoken";
+import _ from "lodash";
 import type { FileInfo } from "../../common/FileInfo.jsx";
 import DateRangeSelectors from "../../common/datetime/DateRangeSelectors.jsx";
 import ImageCropUploadFormElement from "../../../components/forms/ImageCropUploadFormElement.jsx";
-import DjangoCSRFToken from "django-react-csrftoken";
-import FormValidation from "../../../components/forms/FormValidation.jsx";
-import type { Validator } from "../../../components/forms/FormValidation.jsx";
-import type { EventDetailsAPIData } from "../../../components/utils/EventAPIUtils.js";
-import form, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
-import _ from "lodash";
+import FormValidation, {
+  Validator,
+} from "../../../components/forms/FormValidation.jsx";
+import type { EventData } from "../../utils/EventAPIUtils.js";
+import { FormPropsBase, FormStateBase } from "../../utils/forms.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
+import TextFormField, {
+  TextFormFieldType,
+} from "../../forms/fields/TextFormField.jsx";
 
 type FormFields = {|
   event_name: ?string,
@@ -22,7 +27,7 @@ type FormFields = {|
 |};
 
 type Props = {|
-  event: ?EventDetailsAPIData,
+  event: ?EventData,
   readyForSubmit: () => () => boolean,
 |} & FormPropsBase<FormFields>;
 
@@ -37,9 +42,7 @@ type State = {|
 class EventOverviewForm extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
-    const event: EventDetailsAPIData = props.project;
-    // TODO: Add location
-    // TODO: Add event_rsvp_url
+    const event: EventData = props.project;
     const formFields: FormFields = {
       event_name: event ? event.event_name : "",
       event_organizers_text: event ? event.event_organizers_text : "",
@@ -52,34 +55,46 @@ class EventOverviewForm extends React.PureComponent<Props, State> {
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
+        fieldName: "event_name",
         checkFunc: (formFields: FormFields) =>
           !_.isEmpty(formFields["event_name"]),
         errorMessage: "Please enter Event Name",
       },
       {
+        fieldName: "event_short_description",
         checkFunc: (formFields: FormFields) =>
           !_.isEmpty(formFields["event_short_description"]),
         errorMessage: "Please enter Event Description",
       },
       {
+        fieldName: "event_location",
         checkFunc: (formFields: FormFields) =>
           !_.isEmpty(formFields["event_location"]),
         errorMessage: "Please enter Event Location",
       },
       {
-        checkFunc: (formFields: FormFields) => !!formFields["event_date_start"],
-        errorMessage: "Please enter Start Date",
-      },
-      {
-        checkFunc: (formFields: FormFields) => !!formFields["event_date_end"],
-        errorMessage: "Please enter End Date",
-      },
-      {
+        fieldName: "event_date_start",
         checkFunc: (formFields: FormFields) =>
           formFields["event_date_end"] > formFields["event_date_start"],
         errorMessage: "End Date should come after Start Date",
       },
+      {
+        fieldName: "event_date_start",
+        checkFunc: (formFields: FormFields) => !!formFields["event_date_start"],
+        errorMessage: "Please enter Start Date",
+      },
+      {
+        fieldName: "event_date_end",
+        checkFunc: (formFields: FormFields) => !!formFields["event_date_end"],
+        errorMessage: "Please enter End Date",
+      },
     ];
+
+    UniversalDispatcher.dispatch({
+      type: "SET_FORM_FIELDS",
+      formFieldValues: formFields,
+      validators: validations,
+    });
 
     const formIsValid: boolean = FormValidation.isValid(
       formFields,
@@ -87,23 +102,8 @@ class EventOverviewForm extends React.PureComponent<Props, State> {
     );
     this.state = {
       formIsValid: formIsValid,
-      formFields: formFields,
-      validations: validations,
     };
     props.readyForSubmit(formIsValid);
-    this.form = form.setup();
-  }
-
-  componentDidMount() {
-    // Initial validation check
-    this.form.doValidation.bind(this)();
-  }
-
-  onValidationCheck(formIsValid: boolean): void {
-    if (formIsValid !== this.state.formIsValid) {
-      this.setState({ formIsValid });
-      this.props.readyForSubmit(formIsValid);
-    }
   }
 
   render(): React$Node {
@@ -113,10 +113,8 @@ class EventOverviewForm extends React.PureComponent<Props, State> {
 
         <div className="form-group">
           <ImageCropUploadFormElement
-            form_id="event_thumbnail_location"
+            form_id="event_thumbnail"
             buttonText="Upload Event Image"
-            currentImage={this.state.formFields.event_thumbnail}
-            onSelection={this.form.onSelection.bind(this, "event_thumbnail")}
           />
           <p>
             <em>
@@ -126,94 +124,56 @@ class EventOverviewForm extends React.PureComponent<Props, State> {
           </p>
         </div>
 
-        <div className="form-group">
-          <label>Event Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="event_name"
-            name="event_name"
-            maxLength="60"
-            value={this.state.formFields.event_name}
-            onChange={this.form.onInput.bind(this, "event_name")}
-          />
-        </div>
+        <TextFormField
+          id="event_name"
+          label="Event Name"
+          type={TextFormFieldType.SingleLine}
+          required={true}
+          maxLength={60}
+        />
 
-        <div className="form-group">
-          <label>Event Organizers</label>
-          <input
-            type="text"
-            className="form-control"
-            id="event_organizers_text"
-            name="event_organizers_text"
-            maxLength="200"
-            value={this.state.formFields.event_organizers_text}
-            onChange={this.form.onInput.bind(this, "event_organizers_text")}
-          />
-        </div>
+        <TextFormField
+          id="event_organizers_text"
+          label="Event Organizers"
+          type={TextFormFieldType.SingleLine}
+          required={false}
+          maxLength={200}
+        />
 
-        <div className="form-group">
-          <label>Location</label>
-          <div className="character-count">
-            {(this.state.formFields.event_location || "").length} / 200
-          </div>
-          <textarea
-            className="form-control"
-            id="event_location"
-            name="event_location"
-            placeholder="Location for this Event"
-            rows="3"
-            maxLength="200"
-            value={this.state.formFields.event_location}
-            onChange={this.form.onInput.bind(this, "event_location")}
-          ></textarea>
-        </div>
+        <TextFormField
+          id="event_location"
+          label="Location"
+          type={TextFormFieldType.MultiLine}
+          rows={3}
+          placeholder="Location for this Event"
+          required={true}
+          showCount={true}
+          maxLength={200}
+        />
 
         <DateRangeSelectors
-          dateTimeStart={this.state.formFields.event_date_start}
-          dateTimeEnd={this.state.formFields.event_date_end}
-          onChangeTimeStart={this.form.onSelection.bind(
-            this,
-            "event_date_start"
-          )}
-          onChangeTimeEnd={this.form.onSelection.bind(this, "event_date_end")}
+          dateTimeStart={this.state?.formFields?.event_date_start}
+          dateTimeEnd={this.state?.formFields?.event_date_end}
           formIds={["event_date_start", "event_date_end"]}
         />
 
-        <div className="form-group">
-          <label htmlFor="event_rsvp_url">Eventbrite Link</label>
-          <input
-            type="text"
-            className="form-control"
-            id="event_rsvp_url"
-            name="event_rsvp_url"
-            maxLength="2075"
-            value={this.state.formFields.event_rsvp_url}
-            onChange={this.form.onInput.bind(this, "event_rsvp_url")}
-          />
-        </div>
+        <TextFormField
+          id="event_rsvp_url"
+          label="Eventbrite Link"
+          type={TextFormFieldType.SingleLine}
+          required={false}
+          maxLength={2075}
+        />
 
-        <div className="form-group">
-          <label>Short Description</label>
-          <div className="character-count">
-            {(this.state.formFields.event_short_description || "").length} / 140
-          </div>
-          <textarea
-            className="form-control"
-            id="event_short_description"
-            name="event_short_description"
-            placeholder="Give a one-sentence description of this Event"
-            rows="2"
-            maxLength="140"
-            value={this.state.formFields.event_short_description}
-            onChange={this.form.onInput.bind(this, "event_short_description")}
-          ></textarea>
-        </div>
-
-        <FormValidation
-          validations={this.state.validations}
-          onValidationCheck={this.onValidationCheck.bind(this)}
-          formState={this.state.formFields}
+        <TextFormField
+          id="event_short_description"
+          label="Short Description"
+          type={TextFormFieldType.MultiLine}
+          rows={2}
+          placeholder="Give a one-sentence description of this Event"
+          required={true}
+          showCount={true}
+          maxLength={140}
         />
       </div>
     );

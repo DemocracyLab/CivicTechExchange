@@ -17,7 +17,6 @@ import LogInController from "./LogInController.jsx";
 import SignUpController from "./SignUpController.jsx";
 import ResetPasswordController from "./ResetPasswordController.jsx";
 import ChangePasswordController from "./ChangePasswordController.jsx";
-import EditProfileController from "./EditProfileController.jsx";
 import AboutUserController from "./AboutUserController.jsx";
 import SignedUpController from "./SignedUpController.jsx";
 import EmailVerifiedController from "./EmailVerifiedController.jsx";
@@ -94,7 +93,6 @@ class SectionController extends React.Component<{||}, State> {
       case Section.ChangePassword:
         return <ChangePasswordController />;
       case Section.EditProfile:
-        return <EditProfileController />;
       case Section.Profile:
         return <AboutUserController />;
       case Section.SignedUp:

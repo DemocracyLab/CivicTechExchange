@@ -3,18 +3,18 @@
 import React from "react";
 import { Container } from "flux/utils";
 import DjangoCSRFToken from "django-react-csrftoken";
-import type { ProjectDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
 import { LinkInfo } from "../../forms/LinkInfo.jsx";
-import LinkList, { linkCaptions } from "../../forms/LinkList.jsx";
-import LinkListStore, { NewLinkInfo } from "../../stores/LinkListStore.js";
+import LinkList, {
+  compileLinkFormFields,
+  linkCaptions,
+} from "../../forms/LinkList.jsx";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import { Dictionary } from "../../types/Generics.jsx";
-import formHelper, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
-import FormValidation from "../../forms/FormValidation.jsx";
+import { FormPropsBase, FormStateBase } from "../../utils/forms.js";
+import FormFieldsStore from "../../stores/FormFieldsStore.js";
 import { OnReadySubmitFunc } from "./GroupFormCommon.jsx";
 import { LinkTypes } from "../../constants/LinkConstants.js";
 import HiddenFormFields from "../../forms/HiddenFormFields.jsx";
-import url from "../../utils/url.js";
 import type { GroupDetailsAPIData } from "../../utils/GroupAPIUtils.js";
 import _ from "lodash";
 
@@ -23,7 +23,7 @@ type FormFields = {|
 |} & Dictionary<string>;
 
 type Props = {|
-  project: ?ProjectDetailsAPIData,
+  project: ?GroupDetailsAPIData,
   readyForSubmit: OnReadySubmitFunc,
 |} & FormPropsBase<FormFields>;
 
@@ -51,54 +51,23 @@ class GroupResourcesForm extends React.Component<Props, State> {
     };
     this.state = {
       formFields: formFields,
-      onSubmit: this.onSubmit.bind(this),
     };
-    this.form = formHelper.setup();
-    UniversalDispatcher.dispatch({
-      type: "SET_LINK_LIST",
-      links: group.group_links,
-      presetLinks: resourceLinks,
-    });
-    props.readyForSubmit(true, this.state.onSubmit);
-  }
 
-  componentDidMount() {
-    this.form.doValidation.bind(this)();
+    UniversalDispatcher.dispatch({
+      type: "SET_FORM_FIELDS",
+      formFieldValues: formFields,
+      validators: [],
+    });
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [LinkListStore];
+    return [FormFieldsStore];
   }
 
   static calculateState(prevState: State, props: Props): State {
-    let state: State = _.clone(prevState) || {
-      formFields: {},
-    };
-    state.formFields.group_links = LinkListStore.getLinkList();
-    state.errorMessages = LinkListStore.getLinkErrors();
-    state.formIsValid = _.isEmpty(state.errorMessages);
-    props.readyForSubmit(state.formIsValid, state.onSubmit);
+    let state: State = _.clone(prevState) || {};
+    state.formFields = _.clone(FormFieldsStore.getFormFieldValues());
     return state;
-  }
-
-  onValidationCheck(formIsValid: boolean): void {
-    if (formIsValid !== this.state.formIsValid) {
-      this.setState({ formIsValid });
-      this.props.readyForSubmit(formIsValid, this.onSubmit.bind(this));
-    }
-  }
-
-  onSubmit(submitFunc: Function): void {
-    let formFields = this.state.formFields;
-    let group_links: $ReadOnlyArray<NewLinkInfo> = LinkListStore.getLinkList();
-    formFields.group_links = group_links.filter(
-      (link: LinkInfo) => !_.isEmpty(link.linkUrl)
-    );
-    formFields.group_links.forEach((link: NewLinkInfo) => {
-      link.linkUrl = url.appendHttpIfMissingProtocol(link.linkUrl);
-    });
-    this.setState({ formFields: formFields }, submitFunc);
-    this.forceUpdate();
   }
 
   render(): React$Node {
@@ -108,9 +77,14 @@ class GroupResourcesForm extends React.Component<Props, State> {
 
         <HiddenFormFields
           sourceDict={{
-            group_links: JSON.stringify(
-              this.state.formFields.group_links || []
-            ),
+            group_links:
+              this.state.formFields &&
+              JSON.stringify(
+                compileLinkFormFields(
+                  this.state.formFields.group_links,
+                  _.omit(this.state.formFields, ["group_links"])
+                ) || []
+              ),
           }}
         />
 
@@ -121,14 +95,9 @@ class GroupResourcesForm extends React.Component<Props, State> {
             linkNamePrefixExclude={["social_", LinkTypes.LINKED_IN]}
             linkOrdering={resourceLinks}
             addLinkText="Add a new link"
+            links={this.state.formFields.group_links}
           />
         </div>
-
-        <FormValidation
-          onValidationCheck={this.onValidationCheck.bind(this)}
-          formState={this.state.formFields}
-          errorMessages={this.state.errorMessages}
-        />
       </div>
     );
   }

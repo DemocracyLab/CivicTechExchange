@@ -12,10 +12,10 @@ class Sort {
   static byNamedEntries<T>(
     arr: $ReadOnlyArray<T>,
     names: $ReadOnlyArray<string>,
-    nameSelector: T => string
+    nameSelector: ?(T) => string
   ): Array<T> {
     // Index entries by name
-    let entriesByName = _.mapKeys(arr, nameSelector);
+    let entriesByName = _.mapKeys(arr, nameSelector || (val => val));
     let namedEntries = [];
     let remainingEntries = _.clone(arr);
     names.forEach(name => {
