@@ -133,7 +133,7 @@ class ProjectSearchTagsCacheManager:
                 organization += project.project_organization.slugs()
                 organization_type += project.project_organization_type.slugs()
 
-                project_positions = ProjectPosition.objects.filter(position_project=project.id)
+                project_positions = project.get_project_positions()
                 positions += map(lambda position: position.position_role.slugs()[0], project_positions)
 
             return merge_dicts(Counter(issues), Counter(technologies), Counter(stage), Counter(organization), Counter(organization_type), Counter(positions))

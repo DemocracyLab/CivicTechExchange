@@ -15,6 +15,7 @@ class ProjectAnnotation:
 class EventVideosProjectAnnotation(ProjectAnnotation):
     @staticmethod
     def _get_event_videos(event_id):
+        # TODO: Read from EventProject
         from civictechprojects.models import ProjectLink
         video_links = ProjectLink.objects.filter(link_event=event_id)
         video_links = {video_link.link_project.id: video_link.to_json() for video_link in video_links}

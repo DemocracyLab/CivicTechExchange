@@ -116,11 +116,11 @@ class Project(Archived):
         return ProjectCache.get(self) or ProjectCache.refresh(self, self._hydrate_to_json())
 
     def _hydrate_to_json(self):
-        files = ProjectFile.objects.filter(file_project=self.id)
+        files = self.get_project_files()
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
-        links = ProjectLink.objects.filter(link_project=self.id, link_event=None)
-        positions = ProjectPosition.objects.filter(position_project=self.id, position_event=None).order_by('order_number')
+        links = self.get_project_links()
+        positions = self.get_project_positions()
         volunteers = VolunteerRelation.objects.filter(project=self.id)
         group_relationships = ProjectRelationship.objects.filter(relationship_project=self).exclude(relationship_group=None)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
@@ -193,6 +193,15 @@ class Project(Archived):
         }
 
         return project
+
+    def get_project_links(self):
+        return ProjectLink.objects.filter(link_project=self, link_event=None, link_group=None, link_user=None)
+
+    def get_project_positions(self):
+        return ProjectPosition.objects.filter(position_project=self, position_event=None).order_by('order_number')
+
+    def get_project_files(self):
+        return ProjectFile.objects.filter(file_project=self, file_user=None, file_group=None, file_event=None)
 
     def get_project_events(self):
         slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
@@ -274,10 +283,10 @@ class Group(Archived):
         return GroupCache.get(self) or GroupCache.refresh(self, self._hydrate_to_json())
 
     def _hydrate_to_json(self):
-        files = ProjectFile.objects.filter(file_group=self.id)
+        files = self.get_group_files()
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
-        links = ProjectLink.objects.filter(link_group=self.id)
+        links = self.get_group_links()
         projects = self.get_group_project_relationships(approved_only=True)
 
         group = {
@@ -315,7 +324,7 @@ class Group(Archived):
         return keys_subset(self.hydrate_to_json(), keys)
     
     def hydrate_to_list_json(self):
-        files = ProjectFile.objects.filter(file_group=self.id)
+        files = self.get_group_files()
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
 
         group = {
@@ -331,6 +340,12 @@ class Group(Archived):
             group['group_thumbnail'] = thumbnail_files[0].to_json()
 
         return group
+
+    def get_group_links(self):
+        return ProjectLink.objects.filter(link_group=self, link_project=None, link_event=None, link_user=None)
+
+    def get_group_files(self):
+        return ProjectFile.objects.filter(file_group=self, file_project=None, file_user=None, file_event=None)
 
     def get_project_issue_areas(self, with_counts, project_relationships=None):
         if project_relationships is None:
@@ -406,7 +421,7 @@ class Event(Archived):
         return EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
 
     def _hydrate_to_json(self):
-        files = ProjectFile.objects.filter(file_event=self.id)
+        files = self.get_event_files()
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
 
@@ -453,6 +468,9 @@ class Event(Archived):
 
         return event
 
+    def get_event_files(self):
+        return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
+
     @staticmethod
     def get_by_id_or_slug(slug):
         event = None
@@ -471,6 +489,9 @@ class Event(Archived):
         project_list = Project.objects.filter(id__in=project_ids)
 
         return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
+
+    def get_event_files(self):
+        return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
     def get_linked_projects(self):
         # Get projects by legacy organization
@@ -510,9 +531,9 @@ class EventProject(Archived):
         return EventProjectCache.get(self) or EventProjectCache.refresh(self, self._hydrate_to_json())
 
     def _hydrate_to_json(self):
-        links = ProjectLink.objects.filter(link_project=self.project, link_event=self.event)
-        files = ProjectFile.objects.filter(file_event=self.event.id, file_project=self.project.id)
-        positions = ProjectPosition.objects.filter(position_project=self.project, position_event=self.event).order_by('order_number')
+        links = self.get_event_project_links()
+        files = self.get_event_project_files()
+        positions = self.get_event_project_positions()
         event_json = keys_subset(self.event.hydrate_to_json(), ['event_id', 'event_name', 'event_slug', 'event_thumbnail',
                                                                 'event_date_end', 'event_date_start', 'event_location'])
         project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
@@ -535,6 +556,15 @@ class EventProject(Archived):
 
         return event_project_json
 
+    def get_event_project_links(self):
+        return ProjectLink.objects.filter(link_project=self.project, link_event=self.event, link_group=None, link_user=None)
+
+    def get_event_project_files(self):
+        return ProjectFile.objects.filter(file_project=self.project, file_event=self.event, file_user=None, file_group=None)
+
+    def get_event_project_positions(self):
+        return ProjectPosition.objects.filter(position_project=self.project, position_event=self.event).order_by('order_number')
+
     @staticmethod
     def get(event_id, project_id):
         event = Event.get_by_id_or_slug(event_id)
@@ -550,7 +580,7 @@ class EventProject(Archived):
         print('Copying links from project')
         log_memory_usage()
         # Copy links and positions from project
-        project_links = ProjectLink.objects.filter(link_project=project.id).all()
+        project_links = project.get_project_links()
         for link in project_links:
             print('Copying link: ' + link.link_url)
             log_memory_usage()
@@ -561,7 +591,7 @@ class EventProject(Archived):
 
         print('Copying positions from project')
         log_memory_usage()
-        project_positions = ProjectPosition.objects.filter(position_project=project.id).order_by('order_number').all()
+        project_positions = project.get_project_positions()
         for pos in project_positions:
             # Copy position and add reference to event
             position_role_name = pos.position_role.all()[0].name
@@ -807,11 +837,13 @@ class ProjectLink(models.Model):
     @staticmethod
     def remove_links_not_in_list(owner, links):
         if type(owner) is Project:
-            existing_links = ProjectLink.objects.filter(link_project=owner.id)
+            existing_links = owner.get_project_links()
         elif type(owner) is Group:
-            existing_links = ProjectLink.objects.filter(link_group=owner.id)
+            existing_links = owner.get_group_links()
+        elif type(owner) is EventProject:
+            existing_links = owner.get_event_project_links()
         else:
-            existing_links = ProjectLink.objects.filter(link_user=owner.id)
+            existing_links = owner.get_user_links()
 
         existing_link_ids = set(map(lambda link: link.id, existing_links))
         updated_link_ids = set(map(lambda link: link['id'], links))
@@ -904,7 +936,7 @@ class ProjectPosition(models.Model):
         added_positions = list(filter(lambda position: 'id' not in position, positions))
         updated_positions = list(filter(lambda position: 'id' in position, positions))
         updated_positions_ids = set(map(lambda position: position['id'], updated_positions))
-        existing_positions = ProjectPosition.objects.filter(position_project=project.id)
+        existing_positions = project.get_project_positions()
         existing_positions_ids = set(map(lambda position: position.id, existing_positions))
         existing_projects_by_id = {position.id: position for position in existing_positions}
 
@@ -967,16 +999,18 @@ class ProjectFile(models.Model):
         added_files = filter(lambda file: 'id' not in file, files)
 
         if type(owner) is Project:
-            old_files = list(ProjectFile.objects.filter(file_project=owner.id, file_category=FileCategory.ETC.value)
-                             .values())
+            old_files = list(owner.get_project_files().filter(file_category=FileCategory.ETC.value).values())
         elif type(owner) is Group:
-            old_files = list(ProjectFile.objects.filter(file_group=owner.id, file_category=FileCategory.ETC.value)
+            old_files = list(owner.get_group_files().filter(file_category=FileCategory.ETC.value)
                              .values())
         elif type(owner) is Event:
-            old_files = list(ProjectFile.objects.filter(file_event=owner.id, file_category=FileCategory.ETC.value)
+            old_files = list(owner.get_event_files().filter(file_category=FileCategory.ETC.value.value)
+                             .values())
+        elif type(owner) is EventProject:
+            old_files = list(owner.get_event_project_files().filter(file_category=FileCategory.ETC.value.value)
                              .values())
         else:
-            old_files = list(ProjectFile.objects.filter(file_user=owner.id, file_category=FileCategory.ETC.value)
+            old_files = list(owner.get_user_files().filter(file_category=FileCategory.ETC.value)
                              .values())
 
         for file in added_files:
@@ -1001,13 +1035,15 @@ class ProjectFile(models.Model):
         """
         new_file_category = new_file_category or file_category
         if type(owner) is Project:
-            existing_file = ProjectFile.objects.filter(file_project=owner.id, file_category=file_category.value).first()
+            existing_file = owner.get_project_files().filter(file_category=file_category.value).first()
         elif type(owner) is Group:
-            existing_file = ProjectFile.objects.filter(file_group=owner.id, file_category=file_category.value).first()
+            existing_file = owner.get_group_files().filter(file_category=file_category.value).first()
         elif type(owner) is Event:
-            existing_file = ProjectFile.objects.filter(file_event=owner.id, file_category=file_category.value).first()
+            existing_file = owner.get_event_files().filter(file_category=file_category.value).first()
+        elif type(owner) is EventProject:
+            existing_file = owner.get_event_project_files().filter(file_category=file_category.value).first()
         else:
-            existing_file = ProjectFile.objects.filter(file_user=owner.id, file_category=file_category.value).first()
+            existing_file = owner.get_user_files().filter(file_category=file_category.value).first()
 
         is_empty_field = is_json_field_empty(file_json)
         file_changed = False
@@ -1030,7 +1066,10 @@ class ProjectFile(models.Model):
         return file_changed
 
     def get_owner(self):
-        return self.file_project or self.file_group or self.file_event or self.file_user
+        if self.file_project and self.file_event:
+            return EventProject.get(self.file_event.id, self.file_project.id)
+        else:
+            return self.file_project or self.file_group or self.file_event or self.file_user
 
     @staticmethod
     def from_json(owner, file_category, file_json):

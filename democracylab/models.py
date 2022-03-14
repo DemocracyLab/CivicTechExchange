@@ -49,8 +49,8 @@ class Contributor(User):
         return bool(volunteer_relations_up_for_renewal)
 
     def hydrate_to_json(self):
-        links = civictechprojects.models.ProjectLink.objects.filter(link_user=self.id)
-        files = civictechprojects.models.ProjectFile.objects.filter(file_user=self.id)
+        links = self.get_user_links()
+        files = self.get_user_files()
         other_files = list(filter(lambda file: file.file_category != civictechprojects.models.FileCategory.THUMBNAIL.value, files))
 
         user = {
@@ -73,7 +73,7 @@ class Contributor(User):
         return user
 
     def hydrate_to_tile_json(self):
-        files = civictechprojects.models.ProjectFile.objects.filter(file_user=self.id)
+        files = self.get_user_files()
 
         user = {
             'id': self.id,
@@ -87,6 +87,12 @@ class Contributor(User):
             user['user_thumbnail'] = thumbnail_files[0].to_json()
 
         return user
+
+    def get_user_links(self):
+        return civictechprojects.models.ProjectLink.objects.filter(link_user=self, link_project=None, link_event=None, link_group=None)
+
+    def get_user_files(self):
+        return civictechprojects.models.ProjectFile.objects.filter(file_user=self, file_project=None, file_group=None, file_event=None)
 
     def purge_cache(self):
         clear_user_context(self)

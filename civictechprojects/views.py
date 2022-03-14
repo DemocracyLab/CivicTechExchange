@@ -433,6 +433,7 @@ def index(*args, **kwargs):
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
         context['QIQO_IFRAME_URL'] = get_user_qiqo_iframe(contributor, request)
 
+        # TODO: Get thumbnail from cached user
         thumbnail = ProjectFile.objects.filter(file_user=request.user.id,
                                                file_category=FileCategory.THUMBNAIL.value).first()
         if thumbnail:
@@ -567,7 +568,8 @@ def limited_listings(request):
         </job>
         """
 
-    approved_projects = ProjectPosition.objects.filter(position_project__is_searchable=True)
+    approved_projects = ProjectPosition.objects.filter(position_project__is_searchable=True)\
+        .exclude(position_event__isnull=False)
     xml_response = f"""<?xml version="1.0" encoding="UTF-8"?>
     <source>
         <lastBuildDate>{timezone.now().strftime('%a, %d %b %Y %H:%M:%S %Z')}</lastBuildDate> 
@@ -640,7 +642,8 @@ def projects_by_stage(tags):
 
 def projects_by_roles(tags):
     # Get roles by tags
-    positions = ProjectPosition.objects.filter(position_role__name__in=tags).select_related('position_project')
+    positions = ProjectPosition.objects.filter(position_role__name__in=tags)\
+        .exclude(position_event__isnull=False).select_related('position_project')
 
     # Get the list of projects linked to those roles
     return Project.objects.filter(positions__in=positions)
