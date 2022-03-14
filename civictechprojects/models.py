@@ -6,7 +6,6 @@ from django.contrib.gis.db.models import PointField
 from enum import Enum
 from itertools import chain
 from democracylab.models import Contributor
-from democracylab.logging import log_memory_usage
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
@@ -573,30 +572,20 @@ class EventProject(Archived):
 
     @staticmethod
     def create(creator, event, project):
-        print('Creating event project')
-        log_memory_usage()
         ep = EventProject(creator=creator, event=event, project=project)
 
-        print('Copying links from project')
-        log_memory_usage()
         # Copy links and positions from project
         project_links = project.get_project_links()
         for link in project_links:
-            print('Copying link: ' + link.link_url)
-            log_memory_usage()
             # Copy project link and add reference to event
             link.pk = None
             link.link_event = event
             link.save()
 
-        print('Copying positions from project')
-        log_memory_usage()
         project_positions = project.get_project_positions()
         for pos in project_positions:
             # Copy position and add reference to event
             position_role_name = pos.position_role.all()[0].name
-            print('Copying position: ' + position_role_name)
-            log_memory_usage()
             pos.pk = None
             pos.position_event = event
             pos.save()
