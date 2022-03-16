@@ -26,7 +26,7 @@ from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff, is_creator
-from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm
+from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm, EventProjectCreationForm
 from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
@@ -244,6 +244,14 @@ def get_event_project(request, event_id, project_id):
         return HttpResponseForbidden()
 
     return JsonResponse(event_project.hydrate_to_json()) if event_project else HttpResponse(status=404)
+
+
+def event_project_edit(request, event_id, project_id):
+    if not request.user.is_authenticated:
+        return redirect(section_url(FrontEndSection.LogIn))
+
+    event_project = EventProjectCreationForm.create_or_edit_event_project(request, event_id, project_id)
+    return JsonResponse(event_project.hydrate_to_json())
 
 
 # TODO: Pass csrf token in ajax call so we can check for it

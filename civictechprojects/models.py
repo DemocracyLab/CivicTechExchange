@@ -538,7 +538,7 @@ class EventProject(Archived):
         project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
                                                                     'project_short_description', 'project_description',
                                                                     'project_description_solution', 'project_technologies',
-                                                                    'project_owners', 'project_volunteers'])
+                                                                    'project_owners', 'project_volunteers', 'project_creator'])
 
         # TODO: Export RSVP-ed volunteers
         event_project_json = merge_dicts(event_json, project_json, {

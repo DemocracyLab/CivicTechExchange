@@ -33,6 +33,7 @@ function importUrls(urls_vx): Dictionary<UrlPattern> {
     return "/" + pattern.replace(regex.regexControlChars, "");
   };
 
+  // TODO: Need to support parameters other than 'id'
   const idPlaceholderRegex: RegExp = new RegExp("\\(.+\\)");
   const generateTemplateFunc: string => TemplateFunc = (pattern: string) => {
     const scrubbed: string = sanitizePattern(pattern);
@@ -87,7 +88,11 @@ class urlHelper {
     args: ?Object,
     includeIdInArgs: boolean
   ): string {
-    let sectionUrl = urls[section].templateFunc(args);
+    let sectionUrl: string = urlHelper._sectionSpecialCases(section, args);
+    if (!_.isEmpty(sectionUrl)) {
+      return sectionUrl;
+    }
+    sectionUrl = urls[section].templateFunc(args);
     if (args) {
       const _args = includeIdInArgs ? args : _.omit(args, "id");
       sectionUrl += _.reduce(
@@ -100,6 +105,18 @@ class urlHelper {
       );
     }
     return sectionUrl;
+  }
+
+  static _sectionSpecialCases(section: string, args: ?Object): string {
+    // TODO: Fix the url template generators to handle these
+    switch (section) {
+      case Section.CreateEventProject:
+        return `/events/${args["event_id"]}/projects/create/${args[
+          "project_id"
+        ] || ""}`;
+      case Section.AboutEventProject:
+        return `/events/${args["event_id"]}/projects/${args["project_id"]}`;
+    }
   }
 
   // Determine if we are on a given section

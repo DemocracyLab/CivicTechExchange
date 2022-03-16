@@ -3,15 +3,18 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import type Moment from "moment";
-import datetime, { DateFormat } from "../../utils/datetime.js";
+import _ from "lodash";
 import Button from "react-bootstrap/Button";
-import CurrentUser from "../../utils/CurrentUser.js";
+import datetime, { DateFormat } from "../../utils/datetime.js";
+import CurrentUser, {
+  MyProjectData,
+  UserContext,
+} from "../../utils/CurrentUser.js";
 import { EventData } from "../../utils/EventAPIUtils.js";
 import urlHelper from "../../utils/url.js";
-import Section from "../../enums/Section";
+import Section from "../../enums/Section.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
-import _ from "lodash";
 import MainFooter from "../../chrome/MainFooter.jsx";
 
 type Props = {|
@@ -21,13 +24,16 @@ type Props = {|
 
 type State = {|
   event: ?EventData,
+  owned_projects: $ReadOnlyArray<MyProjectData>,
 |};
 
 class AboutEventDisplay extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
+    const userContext: UserContext = CurrentUser?.userContext();
     this.state = {
       event: props.event,
+      owned_projects: userContext?.owned_projects,
     };
 
     if (this.state.event) {
@@ -98,6 +104,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                 {!this.props.viewOnly &&
                   event.event_live_id &&
                   this._renderJoinLiveEventButton()}
+                {this._renderRSVPAsProjectOwnerButton()}
               </div>
             </div>
             <div className="col-xs-12 col-lg-8 AboutEvent-splash">
@@ -182,6 +189,27 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       >
         {text}
       </Button>
+    );
+  }
+
+  _renderRSVPAsProjectOwnerButton(): ?$React$Node {
+    // TODO: Don't show when a user has rsvp-ed all their projects with this event
+    const show: boolean =
+      !this.props.viewOnly && !_.isEmpty(this.state.owned_projects);
+    const url: string = urlHelper.section(Section.CreateEventProject, {
+      event_id: this.state.event.event_id,
+    });
+    return (
+      show && (
+        <Button
+          variant="primary"
+          className="AboutEvent-rsvp-btn"
+          type="button"
+          href={url}
+        >
+          RSVP as Project Leader
+        </Button>
+      )
     );
   }
 

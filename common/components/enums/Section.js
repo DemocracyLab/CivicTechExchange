@@ -30,6 +30,7 @@ const Section = {
   AddUserDetails: "AddUserDetails",
   VideoOverview: "VideoOverview",
   AboutEventProject: "AboutEventProject",
+  CreateEventProject: "CreateEventProject",
 };
 
 export type SectionType = $Keys<typeof Section>;

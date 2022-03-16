@@ -40,7 +40,7 @@ export default class EventProjectAPIUtils {
     errCallback: APIError => void
   ): void {
     fetch(
-      new Request(`/api/event/${eventId}/project/${projectId}/`, {
+      new Request(`/api/event/${eventId}/projects/${projectId}/`, {
         credentials: "include",
       })
     )
