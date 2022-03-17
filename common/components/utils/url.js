@@ -109,6 +109,7 @@ class urlHelper {
 
   static _sectionSpecialCases(section: string, args: ?Object): string {
     // TODO: Fix the url template generators to handle these
+    // TODO: Fix bug where calling section with an argument other than an id argument
     switch (section) {
       case Section.CreateEventProject:
         return `/events/${args["event_id"]}/projects/create/${args[

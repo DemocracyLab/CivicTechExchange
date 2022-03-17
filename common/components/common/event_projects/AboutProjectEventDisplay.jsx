@@ -114,7 +114,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
         </div>
         <div className="Profile-top-section-content">
           <div className="Profile-top-logo">
-            {eventProject.project_thumbnail.publicUrl ? (
+            {eventProject?.project_thumbnail?.publicUrl ? (
               <img
                 src={eventProject.project_thumbnail.publicUrl}
                 alt="Project Logo"
@@ -146,8 +146,12 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <h3>Problem</h3>
           <p>{eventProject?.project_description}</p>
 
-          <h3>Solution</h3>
-          <p>{eventProject?.project_description_solution}</p>
+          {eventProject?.project_description_solution && (
+            <React.Fragment>
+              <h3>Solution</h3>
+              <p>{eventProject.project_description_solution}</p>
+            </React.Fragment>
+          )}
 
           <h3>Hackathon Goal</h3>
           {eventProject?.event_project_goal ? (

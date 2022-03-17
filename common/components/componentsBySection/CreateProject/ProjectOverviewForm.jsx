@@ -24,6 +24,8 @@ import TextFormField, {
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import type { FormFieldValidator } from "../../utils/validation.js";
 import stringHelper from "../../utils/string.js";
+import HiddenFormFields from "../../forms/HiddenFormFields.jsx";
+import urlHelper from "../../utils/url.js";
 
 type FormFields = {|
   project_name: ?string,
@@ -40,6 +42,7 @@ type Props = {|
 
 type State = {|
   termsOpen: boolean,
+  fromEventId: ?string,
   formIsValid: boolean,
   validations: $ReadOnlyArray<Validator>,
 |} & FormStateBase<FormFields>;
@@ -94,6 +97,7 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
       validations
     );
     this.state = {
+      fromEventId: urlHelper.argument("fromEventId"),
       formIsValid: formIsValid,
       termsOpen: false,
     };
@@ -104,6 +108,12 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
     return (
       <div className="EditProjectForm-root">
         <DjangoCSRFToken />
+
+        {this.state.fromEventId && (
+          <HiddenFormFields
+            sourceDict={{ from_event_id: this.state.fromEventId }}
+          />
+        )}
 
         <div className="form-group">
           <ImageCropUploadFormElement

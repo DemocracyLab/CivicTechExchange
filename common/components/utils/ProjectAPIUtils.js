@@ -123,6 +123,7 @@ export type ProjectDetailsAPIData = {|
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date,
   +project_events: $ReadOnlyArray<EventTileAPIData>,
+  +event_created_from: ?number,
 |};
 
 export type TeamAPIData = {|

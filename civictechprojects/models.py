@@ -93,6 +93,7 @@ class Project(Archived):
     project_date_modified = models.DateTimeField(auto_now_add=True, null=True)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
+    event_created_from = models.ForeignKey('Event', related_name='created_projects', blank=True, null=True, on_delete=models.SET_NULL)
     _full_text_capacity = 200000
     full_text = models.CharField(max_length=_full_text_capacity, blank=True)
 
@@ -156,7 +157,7 @@ class Project(Archived):
             'project_events': list(map(lambda er: er.hydrate_to_tile_json(), self.get_project_events())),
             'project_owners': [self.project_creator.hydrate_to_tile_json()],
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
-            'project_date_modified': self.project_date_modified.__str__()
+            'project_date_modified': self.project_date_modified.__str__(),
         }
 
         if self.project_location_coords is not None and not self.project_location_coords.empty:
@@ -165,6 +166,9 @@ class Project(Archived):
 
         if len(thumbnail_files) > 0:
             project['project_thumbnail'] = thumbnail_files[0].to_json()
+
+        if self.event_created_from:
+            project['event_created_from'] = self.event_created_from.id
 
         return project
 

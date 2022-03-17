@@ -16,6 +16,8 @@ import Section from "../../enums/Section.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
 import MainFooter from "../../chrome/MainFooter.jsx";
+import PromptNavigationModal from "../../common/PromptNavigationModal.jsx";
+import type { Dictionary } from "../../types/Generics.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -25,6 +27,7 @@ type Props = {|
 type State = {|
   event: ?EventData,
   owned_projects: $ReadOnlyArray<MyProjectData>,
+  showPromptCreateProjectModal: boolean,
 |};
 
 class AboutEventDisplay extends React.PureComponent<Props, State> {
@@ -34,6 +37,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     this.state = {
       event: props.event,
       owned_projects: userContext?.owned_projects,
+      showPromptCreateProjectModal: false,
     };
 
     if (this.state.event) {
@@ -194,22 +198,63 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   _renderRSVPAsProjectOwnerButton(): ?$React$Node {
     // TODO: Don't show when a user has rsvp-ed all their projects with this event
-    const show: boolean =
-      !this.props.viewOnly && !_.isEmpty(this.state.owned_projects);
-    const url: string = urlHelper.section(Section.CreateEventProject, {
-      event_id: this.state.event.event_id,
-    });
+    // const show: boolean =
+    //   !this.props.viewOnly && !_.isEmpty(this.state.owned_projects);
+    const url: string = CurrentUser.isLoggedIn()
+      ? urlHelper.section(Section.CreateEventProject, {
+          event_id: this.state.event.event_id,
+        })
+      : urlHelper.logInThenReturn();
+
+    let buttonConfig: Dictionary<any> = {};
+    if (CurrentUser.isLoggedIn()) {
+      if (!_.isEmpty(this.state.owned_projects)) {
+        // Go to create event project page if user has projects
+        buttonConfig = {
+          url: urlHelper.section(Section.CreateEventProject, {
+            event_id: this.state.event.event_id,
+          }),
+        };
+      } else {
+        // If no projects, open create project prompt
+        buttonConfig = {
+          onClick: () => this.setState({ showPromptCreateProjectModal: true }),
+        };
+      }
+    } else {
+      // If not logged in, go to login page
+      buttonConfig = { url: urlHelper.logInThenReturn() };
+    }
+
     return (
-      show && (
+      <React.Fragment>
+        <PromptNavigationModal
+          showModal={this.state.showPromptCreateProjectModal}
+          submitUrl={
+            urlHelper.section(Section.CreateProject) +
+            "?fromEventId=" +
+            this.state.event.event_id
+          }
+          headerText="Create a Project on DemocracyLab.org?"
+          cancelText="Cancel"
+          submitText="Create Project"
+          onCancel={() =>
+            this.setState({ showPromptCreateProjectModal: false })
+          }
+        >
+          You must create a project on DemocracyLab.org to join the hackathon as
+          a project leader.
+        </PromptNavigationModal>
+
         <Button
+          {...buttonConfig}
           variant="primary"
           className="AboutEvent-rsvp-btn"
           type="button"
-          href={url}
         >
           RSVP as Project Leader
         </Button>
-      )
+      </React.Fragment>
     );
   }
 
