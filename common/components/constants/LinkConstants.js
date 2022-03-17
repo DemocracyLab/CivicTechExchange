@@ -64,6 +64,7 @@ export const LinkTypes: Dictionary<string> = {
   PROJECT_MANAGEMENT: "link_projmanage",
   LINKED_IN: "link_linkedin",
   DESIGN: "link_design",
+  VIDEO: "link_video",
   TWITTER: "social_twitter",
   FACEBOOK: "social_facebook",
 };

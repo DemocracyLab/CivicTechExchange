@@ -304,16 +304,18 @@ class EventProjectCreationForm(ModelForm):
             raise PermissionDenied()
 
         event_project = EventProject.get(event_id, project_id)
+        fields_changed = False
         recache_linked = False
         if not event_project:
             user = get_request_contributor(request)
             event_project = EventProject.create(user, event, project)
+            fields_changed = True
             recache_linked = True
 
-        read_form_field_string(event_project, form, 'goal')
-        read_form_field_string(event_project, form, 'scope')
-        read_form_field_string(event_project, form, 'schedule')
-        read_form_field_string(event_project, form, 'onboarding_notes')
+        fields_changed |= read_form_field_string(event_project, form, 'goal')
+        fields_changed |= read_form_field_string(event_project, form, 'scope')
+        fields_changed |= read_form_field_string(event_project, form, 'schedule')
+        fields_changed |= read_form_field_string(event_project, form, 'onboarding_notes')
 
         # TODO: Add to model
         # if not request.user.is_staff:
@@ -321,14 +323,15 @@ class EventProjectCreationForm(ModelForm):
 
         event_project.save()
 
-        # fields_changed |= merge_json_changes(ProjectLink, event_project, form, 'event_project_links')
-        # fields_changed |= merge_json_changes(ProjectFile, event_project, form, 'event_project_files')
-        # fields_changed |= merge_json_changes(ProjectPosition, event_project, form, 'event_project_positions')
+        fields_changed |= merge_json_changes(ProjectLink, event_project, form, 'event_project_links')
+        fields_changed |= merge_json_changes(ProjectPosition, event_project, form, 'event_project_positions')
 
-        if recache_linked:
+        if fields_changed:
             # Only recache linked projects/event on initial creation
-            project.recache(recache_linked=False)
+            event_project.recache()
             event.recache()
-            project.project_creator.purge_cache()
+            if recache_linked:
+                project.recache(recache_linked=False)
+                project.project_creator.purge_cache()
 
         return event_project

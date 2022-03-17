@@ -3,7 +3,9 @@
 import React from "react";
 import { Container } from "flux/utils";
 import _ from "lodash";
-import CurrentUser from "../../components/utils/CurrentUser.js";
+import CurrentUser, {
+  MyProjectData,
+} from "../../components/utils/CurrentUser.js";
 import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
@@ -13,15 +15,14 @@ import utils from "../utils/utils.js";
 import FormWorkflow, {
   FormWorkflowStepConfig,
 } from "../forms/FormWorkflow.jsx";
-import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 import EventProjectAPIUtils, {
   EventProjectAPIDetails,
 } from "../utils/EventProjectAPIUtils.js";
 import CreateEventProjectSelect from "../componentsBySection/CreateEventProject/CreateEventProjectSelect.jsx";
 import CreateEventProjectScope from "../componentsBySection/CreateEventProject/CreateEventProjectScope.jsx";
 import FormFieldsStore from "../stores/FormFieldsStore.js";
-import type { Dictionary } from "../types/Generics.jsx";
-import type { MyProjectData } from "../../components/utils/CurrentUser.js";
+import EventProjectResourcesForm from "../componentsBySection/CreateEventProject/EventProjectResourcesForm.jsx";
+import EventProjectPositionsForm from "../componentsBySection/CreateEventProject/EventProjectPositionsForm.jsx";
 
 type State = {|
   projectId: ?string,
@@ -66,31 +67,25 @@ class CreateEventProjectController extends React.Component<{||}, State> {
           onSubmitSuccess: this.onNextPageSuccess,
           formComponent: CreateEventProjectScope,
         },
-        // {
-        //   header: "What type of volunteers does your hackathon team need?",
-        //   subHeader: "You can always change the type of help your team needs later. "  +
-        //       "Any changes below will not impact the details of your long-term project profile.",
-        //   onSubmit: this.onSubmit,
-        //   onSubmitSuccess: this.onNextPageSuccess,
-        //   formComponent: ProjectDescriptionForm,
-        // },
-        // {
-        //   header: "What resources would you like to share?",
-        //   subHeader:
-        //     "At DemocracyLab, we're all about transparency.  Share your project's internal collaboration resources and social media to help volunteers understand your goals and processes.",
-        //   onSubmit: this.onSubmit,
-        //   onSubmitSuccess: this.onNextPageSuccess,
-        //   formComponent: ProjectResourcesForm,
-        // },
-        // {
-        //   header: "What type of volunteers does your project need?",
-        //   subHeader:
-        //     "You can always change the type of help your project needs later.",
-        //   submitButtonText: "Submit",
-        //   onSubmit: this.onSubmit,
-        //   onSubmitSuccess: this.onFinalSubmitSuccess,
-        //   formComponent: ProjectPositionsForm,
-        // },
+        {
+          header: "What resources would you like to share?",
+          subHeader:
+            "Share your internal resources to help volunteers understand the goals and processes" +
+            "Any changes below will not impact the details of your long-term project profile.",
+          onSubmit: this.onSubmit,
+          onSubmitSuccess: this.onNextPageSuccess,
+          formComponent: EventProjectResourcesForm,
+        },
+        {
+          header: "What type of volunteers does your hackathon team need?",
+          subHeader:
+            "You can always change the type of help your team needs later. " +
+            "Any changes below will not impact the details of your long-term project profile.",
+          submitButtonText: "Submit",
+          onSubmit: this.onSubmit,
+          onSubmitSuccess: this.onFinalSubmitSuccess,
+          formComponent: EventProjectPositionsForm,
+        },
       ],
     };
   }
@@ -102,7 +97,9 @@ class CreateEventProjectController extends React.Component<{||}, State> {
   static calculateState(prevState: State, props: Props): State {
     let state: State = _.clone(prevState) || {};
     const project: MyProjectData = FormFieldsStore.getFormFieldValue("project");
-    state.projectId = project?.project_id;
+    if (project) {
+      state.projectId = project?.project_id;
+    }
     return state;
   }
 

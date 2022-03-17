@@ -532,7 +532,7 @@ class EventProject(Archived):
     def _hydrate_to_json(self):
         links = self.get_event_project_links()
         files = self.get_event_project_files()
-        positions = self.get_event_project_positions()
+        positions = self.get_project_positions()
         event_json = keys_subset(self.event.hydrate_to_json(), ['event_id', 'event_name', 'event_slug', 'event_thumbnail',
                                                                 'event_date_end', 'event_date_start', 'event_location'])
         project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
@@ -561,7 +561,7 @@ class EventProject(Archived):
     def get_event_project_files(self):
         return ProjectFile.objects.filter(file_project=self.project, file_event=self.event, file_user=None, file_group=None)
 
-    def get_event_project_positions(self):
+    def get_project_positions(self):
         return ProjectPosition.objects.filter(position_project=self.project, position_event=self.event).order_by('order_number')
 
     @staticmethod
@@ -799,6 +799,9 @@ class ProjectLink(models.Model):
             link.link_project = owner
         elif type(owner) is Group:
             link.link_group = owner
+        elif type(owner) is EventProject:
+            link.link_project = owner.project
+            link.link_event = owner.event
         else:
             link.link_user = owner
 
@@ -886,9 +889,13 @@ class ProjectPosition(models.Model):
         }
 
     @staticmethod
-    def create_from_json(project, position_json):
+    def create_from_json(owner, position_json):
         position = ProjectPosition()
-        position.position_project = project
+        if type(owner) is Project:
+            position.position_project = owner
+        if type(owner) is EventProject:
+            position.position_event = owner.event
+            position.position_project = owner.project
         position.position_description = position_json['description']
         position.description_url = position_json['descriptionUrl']
         position.order_number = position_json['orderNumber']
@@ -915,24 +922,24 @@ class ProjectPosition(models.Model):
         position.delete()
 
     @staticmethod
-    def merge_changes(project, positions):
+    def merge_changes(owner, positions):
         """
-        Merge project position changes
-        :param project: Project with position changes
+        Merge project/EventProject position changes
+        :param owner: Project or EventProject with position changes
         :param positions: Position changes
         :return: True if there were position changes
         """
         added_positions = list(filter(lambda position: 'id' not in position, positions))
         updated_positions = list(filter(lambda position: 'id' in position, positions))
         updated_positions_ids = set(map(lambda position: position['id'], updated_positions))
-        existing_positions = project.get_project_positions()
+        existing_positions = owner.get_project_positions()
         existing_positions_ids = set(map(lambda position: position.id, existing_positions))
         existing_projects_by_id = {position.id: position for position in existing_positions}
 
         deleted_position_ids = list(existing_positions_ids - updated_positions_ids)
 
         for added_position in added_positions:
-            ProjectPosition.create_from_json(project, added_position)
+            ProjectPosition.create_from_json(owner, added_position)
 
         for updated_position_json in updated_positions:
             ProjectPosition.update_from_json(existing_projects_by_id[updated_position_json['id']], updated_position_json)

@@ -123,6 +123,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           </div>
           <div className="Profile-top-details">{this._renderIconList()}</div>
           <div className="Profile-top-interactions">
+            {/*TODO: Edit Event Project*/}
             <Button variant="primary">PH: Sign up</Button>
           </div>
         </div>

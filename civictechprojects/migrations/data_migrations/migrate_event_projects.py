@@ -2,6 +2,7 @@ from civictechprojects.models import Event, EventProject
 
 
 def migrate_event_projects(*args):
+    # TODO: Migrate existing video events to link_video
     events = Event.objects.all()
     for event in events:
         print('Migrating projects for event: ' + event.__str__())
