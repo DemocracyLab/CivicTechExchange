@@ -1,3 +1,6 @@
+from common.helpers.constants import FrontEndSection
+from common.helpers.front_end import section_url
+
 class ProjectAnnotation:
     class Meta:
         abstract = True
@@ -14,20 +17,23 @@ class ProjectAnnotation:
 
 class EventVideosProjectAnnotation(ProjectAnnotation):
     @staticmethod
-    def _get_event_videos(event_id):
+    def _get_event_video(event_id, project_id):
         # TODO: Read from EventProject
         from civictechprojects.models import ProjectLink
-        video_links = ProjectLink.objects.filter(link_event=event_id)
-        video_links = {video_link.link_project.id: video_link.to_json() for video_link in video_links}
-        return video_links
+        video_link = ProjectLink.objects.filter(link_event=event_id, link_project=project_id, link_name='link_video').first()
+        if video_link:
+            return video_link.to_json()
 
     def annotate(self, query_params, json_list):
         if 'event_id' in query_params:
-            event_videos = self._get_event_videos(query_params['event_id'][0])
+            event_id = query_params['event_id'][0]
             for project_json in json_list:
                 project_id = project_json['project_id']
-                if project_id in event_videos:
-                    project_json['project_thumbnail_video'] = event_videos[project_id]
+                project_json['card_url'] = section_url(FrontEndSection.AboutEventProject,
+                                                       {'event_id': event_id, 'project_id': project_id})
+                event_video = self._get_event_video(event_id, project_id)
+                if event_video:
+                    project_json['project_thumbnail_video'] = event_video
         return json_list
 
 
