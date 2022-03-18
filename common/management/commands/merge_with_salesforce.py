@@ -26,8 +26,9 @@ class Command(BaseCommand):
         for volunteer in VolunteerRelation.objects.filter(is_approved__exact=True).order_by('volunteer_id').distinct('volunteer_id'):
             try:
                 salesforce_contact.set_title(volunteer.volunteer_id, 'Project Volunteer')
+                volunteer.save_to_salesforce()
             except Exception:
-                print(f'Error setting title for user {volunteer.volunteer_id} in Salesforce ("Project Volunteer")')
+                print(f'Error merging volunteer (user {volunteer.volunteer_id}) in Salesforce')
                 print(traceback.format_exc())
 
         # Include historical, non-searchable projects:
