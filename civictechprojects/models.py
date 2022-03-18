@@ -497,11 +497,7 @@ class Event(Archived):
         return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
     def get_linked_projects(self):
-        # Get projects by legacy organization
-        projects = None
-        legacy_org_slugs = self.event_legacy_organization.slugs()
-        if legacy_org_slugs and len(legacy_org_slugs) > 0:
-            projects = Project.objects.filter(project_organization__name__in=legacy_org_slugs)
+        projects = Project.objects.filter(project_events__event=self)
         return projects
 
     def update_linked_items(self):
