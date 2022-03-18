@@ -2,6 +2,7 @@
 
 import React from "react";
 import _ from "lodash";
+import type Moment from "moment";
 import Button from "react-bootstrap/Button";
 import AboutPositionEntry from "../positions/AboutPositionEntry.jsx";
 import IconLinkDisplay from "../../componentsBySection/AboutProject/IconLinkDisplay.jsx";
@@ -13,11 +14,13 @@ import Section from "../../enums/Section.js";
 import type { EventProjectAPIDetails } from "../../utils/EventProjectAPIUtils.js";
 import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
 import VolunteerSection from "../volunteers/VolunteerSection.jsx";
-import type Moment from "moment";
 import datetime, { DateFormat } from "../../utils/datetime.js";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import urlHelper from "../../utils/url.js";
 import CurrentUser from "../../utils/CurrentUser.js";
+import PlaySVG from "../../svg/play-button.svg";
+import VideoModal from "../video/VideoModal.jsx";
+import type { LinkInfo } from "../../forms/LinkInfo.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -31,17 +34,25 @@ type State = {|
   positionToJoin: ?PositionInfo,
   showPositionModal: boolean,
   shownPosition: ?PositionInfo,
+  showVideoModal: boolean,
+  videoLink: ?LinkInfo,
 |};
 
 class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
+    const videoLink: ?LinkInfo =
+      !_.isEmpty(props.eventProject?.event_project_links) &&
+      props.eventProject?.event_project_links.find(
+        (link: LinkInfo) => link.linkName === LinkTypes.VIDEO
+      );
     this.state = {
       eventProject: props.eventProject,
       viewOnly: props.viewOnly,
       showContactModal: false,
       showPositionModal: false,
       shownPosition: null,
+      videoLink: videoLink,
     };
   }
 
@@ -90,6 +101,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   }
 
   _renderTopSection(eventProject: EventProjectAPIDetails): React$Node {
+    const showVideo: boolean = !_.isEmpty(this.state.videoLink);
     const showEdit: boolean =
       CurrentUser.isOwner(eventProject) || CurrentUser.isStaff();
     const editUrl: string =
@@ -114,21 +126,45 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             <h3>{eventProject && eventProject.event_name}</h3>
           </div>
           <div className="AboutProjectEvent-event-logo-desktop d-none d-lg-flex">
-            {eventProject?.event_thumbnail?.publicUrl ? (
-              <img
-                src={eventProject.event_thumbnail.publicUrl}
-                alt="Event Logo"
-              ></img>
-            ) : null}
+            <div className="ProjectCard-logo">
+              {eventProject?.event_thumbnail?.publicUrl ? (
+                <img
+                  src={eventProject.event_thumbnail.publicUrl}
+                  alt="Event Logo"
+                ></img>
+              ) : null}
+            </div>
           </div>
         </div>
         <div className="Profile-top-section-content">
-          <div className="Profile-top-logo">
+          {showVideo && (
+            <VideoModal
+              showModal={this.state.showVideoModal}
+              onClose={() => {
+                this.setState({ showVideoModal: false });
+              }}
+              videoUrl={this.state.videoLink.linkUrl}
+              videoTitle={eventProject.project_name}
+            />
+          )}
+          <div
+            className="Profile-top-logo"
+            onClick={() => {
+              showVideo && this.setState({ showVideoModal: true });
+            }}
+          >
             {eventProject?.project_thumbnail?.publicUrl ? (
-              <img
-                src={eventProject.project_thumbnail.publicUrl}
-                alt="Project Logo"
-              />
+              <div>
+                {showVideo && (
+                  <div className="ProjectCard-play-button">
+                    <PlaySVG />
+                  </div>
+                )}
+                <img
+                  src={eventProject.project_thumbnail.publicUrl}
+                  alt="Project Logo"
+                />
+              </div>
             ) : null}
           </div>
           <div className="Profile-top-details">{this._renderIconList()}</div>
