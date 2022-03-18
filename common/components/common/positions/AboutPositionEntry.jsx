@@ -14,6 +14,7 @@ type Props = {|
   +project: ProjectDetailsAPIData,
   +position: PositionInfo,
   +onClickApply: PositionInfo => void,
+  +hideSignInToApply: ?boolean,
 |};
 
 class AboutPositionEntry extends React.PureComponent<Props> {
@@ -69,7 +70,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
           Apply Now
         </Button>
       );
-    } else if (!CurrentUser.isLoggedIn()) {
+    } else if (!this.props.hideSignInToApply && !CurrentUser.isLoggedIn()) {
       applyButton = (
         <Button
           variant="primary"

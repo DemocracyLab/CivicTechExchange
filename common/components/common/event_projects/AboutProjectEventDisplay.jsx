@@ -63,20 +63,20 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     });
   }
 
-  handleShowVolunteerModal(position: ?PositionInfo) {
-    this.setState({
-      showJoinModal: true,
-      positionToJoin: position,
-    });
-  }
+  // handleShowVolunteerModal(position: ?PositionInfo) {
+  //   this.setState({
+  //     showJoinModal: true,
+  //     positionToJoin: position,
+  //   });
+  // }
 
-  confirmJoinProject(confirmJoin: boolean) {
-    if (confirmJoin) {
-      window.location.reload(true);
-    } else {
-      this.setState({ showJoinModal: false });
-    }
-  }
+  // confirmJoinProject(confirmJoin: boolean) {
+  //   if (confirmJoin) {
+  //     window.location.reload(true);
+  //   } else {
+  //     this.setState({ showJoinModal: false });
+  //   }
+  // }
 
   render(): React$Node {
     const eventProject = this.state.eventProject;
@@ -415,7 +415,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
   _renderPositions(): ?Array<React$Node> {
     const eventProject: EventProjectAPIDetails = this.state.eventProject;
-    const canApply: boolean = false; // TODO: Implement
     return (
       eventProject &&
       eventProject.event_project_positions &&
@@ -429,11 +428,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
               key={i}
               project={eventProject}
               position={position}
-              onClickApply={
-                canApply
-                  ? this.handleShowVolunteerModal.bind(this, position)
-                  : null
-              }
+              hideSignInToApply={true}
             />
           );
         })
