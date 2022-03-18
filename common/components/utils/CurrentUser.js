@@ -91,7 +91,9 @@ class CurrentUser {
     return this.userID() === group.group_creator;
   }
 
-  static isOwner(project: ProjectDetailsAPIData): boolean {
+  static isOwner(
+    project: ProjectDetailsAPIData | EventProjectAPIDetails
+  ): boolean {
     return this.userID() === project.project_creator;
   }
 

@@ -2,6 +2,7 @@
 
 import React from "react";
 import _ from "lodash";
+import Button from "react-bootstrap/Button";
 import AboutPositionEntry from "../positions/AboutPositionEntry.jsx";
 import IconLinkDisplay from "../../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 import type { PositionInfo } from "../../forms/PositionInfo.jsx";
@@ -15,7 +16,8 @@ import VolunteerSection from "../volunteers/VolunteerSection.jsx";
 import type Moment from "moment";
 import datetime, { DateFormat } from "../../utils/datetime.js";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
-import Button from "react-bootstrap/Button";
+import urlHelper from "../../utils/url.js";
+import CurrentUser from "../../utils/CurrentUser.js";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -88,6 +90,14 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   }
 
   _renderTopSection(eventProject: EventProjectAPIDetails): React$Node {
+    const showEdit: boolean =
+      CurrentUser.isOwner(eventProject) || CurrentUser.isStaff();
+    const editUrl: string =
+      urlHelper.section(Section.CreateEventProject, {
+        event_id: eventProject.event_id,
+        project_id: eventProject.project_id,
+      }) + "?step=2";
+
     return (
       <div className="AboutProjectEvent-top-content">
         <div className="AboutProjectEvent-event-logo d-lg-none">
@@ -123,8 +133,11 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           </div>
           <div className="Profile-top-details">{this._renderIconList()}</div>
           <div className="Profile-top-interactions">
-            {/*TODO: Edit Event Project*/}
-            <Button variant="primary">PH: Sign up</Button>
+            {showEdit && (
+              <Button variant="primary" href={editUrl}>
+                Edit
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -166,6 +179,15 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           ) : (
             comingSoonMsg
           )}
+
+          {/*TODO: Show newlines*/}
+          <h3>Schedule</h3>
+          {eventProject?.event_project_agenda ? (
+            <p>{eventProject.event_project_agenda}</p>
+          ) : (
+            comingSoonMsg
+          )}
+
           <h3>Additional Notes</h3>
           {eventProject?.event_project_onboarding_notes ? (
             <p>{eventProject.event_project_onboarding_notes}</p>
@@ -182,8 +204,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
               ))}
             </div>
           )}
-
-          {/*TODO: Schedule?*/}
 
           {eventProject && !_.isEmpty(eventProject.event_project_positions) && (
             <div className="AboutProject-positions-available pt-4">
@@ -226,6 +246,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     );
   }
 
+  // TODO: Remove if we're not using files
   _renderFiles(): ?Array<React$Node> {
     const eventProject: EventProjectAPIDetails = this.state.eventProject;
     return (
