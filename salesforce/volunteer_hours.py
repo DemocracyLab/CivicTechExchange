@@ -3,12 +3,16 @@ import json
 import requests
 import threading
 
-''' VolunteerRelation model maps to the Volunteer Hours object in Salesforce '''
+'''
+ VolunteerRelation model maps to the Volunteer Hours object in Salesforce 
+ Created in Salesforce when a volunteer is approved via the web site
+'''
 client = SalesforceClient()
 
 
 def run(request):
     response = SalesforceClient().send(request)
+    # print(response.status_code,  response.text)
 
 
 def save(volunteer, position_id):
@@ -22,7 +26,8 @@ def save(volunteer, position_id):
             "platform_id__c": position_id
         },
         "GW_Volunteers__Status__c": "Accepted",
-        "GW_Volunteers__Start_Date__c": volunteer.approved_date
+        "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime("%Y-%m-%d"),
+        "GW_Volunteers__End_Date__c": volunteer.projected_end_date.strftime("%Y-%m-%d")
     }
 
     req = requests.Request(
