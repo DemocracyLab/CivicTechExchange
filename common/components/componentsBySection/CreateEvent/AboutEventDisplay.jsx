@@ -203,7 +203,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       if (!_.isEmpty(this.state.owned_projects)) {
         // Go to create event project page if user has projects
         buttonConfig = {
-          url: urlHelper.section(Section.CreateEventProject, {
+          href: urlHelper.section(Section.CreateEventProject, {
             event_id: this.state.event.event_id,
           }),
         };
@@ -215,7 +215,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       }
     } else {
       // If not logged in, go to login page
-      buttonConfig = { url: urlHelper.logInThenReturn() };
+      buttonConfig = { href: urlHelper.logInThenReturn() };
     }
 
     return (
