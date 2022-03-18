@@ -1076,7 +1076,7 @@ class VolunteerRelation(Archived):
         now = now or timezone.now()
         return (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
 
-    def approve(self):
+    def save_to_salesforce(self):
         role = f"'{self.role.names().first()}'"
         positions = ProjectPosition.objects.raw(f'SELECT civictechprojects_projectposition.id FROM \
             civictechprojects_projectposition INNER JOIN civictechprojects_taggedpositionrole ON \
@@ -1085,8 +1085,7 @@ class VolunteerRelation(Archived):
             position_project_id = {self.project_id} AND taggit_tag.name = {role}')
         for position in positions:
             position_id = position.id
-        self.save()
-        salesforce_volunteer.save(self, position_id)
+        salesforce_volunteer.create(self, position_id)
 
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
