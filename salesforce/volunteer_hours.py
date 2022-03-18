@@ -15,7 +15,18 @@ def run(request):
     # print(response.status_code,  response.text)
 
 
-def save(volunteer, position_id):
+def send_volunteer_data(volunteer_id, data):
+    req = requests.Request(
+        method="PATCH",
+        url=f'{client.hours_endpoint}/platform_id__c/{volunteer_id}',
+        data=json.dumps(data)
+    )
+    thread = threading.Thread(target=run, args=(req,))
+    thread.daemon = True
+    thread.start()
+
+
+def create(volunteer, position_id):
     data = {
         "GW_Volunteers__Contact__r":
         {
@@ -29,14 +40,4 @@ def save(volunteer, position_id):
         "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime("%Y-%m-%d"),
         "GW_Volunteers__End_Date__c": volunteer.projected_end_date.strftime("%Y-%m-%d")
     }
-
-    req = requests.Request(
-        method="PATCH",
-        url=f'{client.hours_endpoint}/platform_id__c/{volunteer.id}',
-        data=json.dumps(data)
-    )
-    thread = threading.Thread(target=run, args=(req,))
-    thread.daemon = True
-    thread.start()
-
-
+    send_volunteer_data(volunteer.id, data)
