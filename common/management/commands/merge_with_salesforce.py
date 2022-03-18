@@ -7,7 +7,6 @@ import traceback
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        """
         contributors = Contributor.objects.filter(is_active__exact=True)
         for contributor in contributors:
             try:
@@ -23,7 +22,6 @@ class Command(BaseCommand):
             except Exception:
                 print(f'Error merging project in Salesforce: ({project.id}) {project.project_name}')
                 print(traceback.format_exc())
-        """
 
         for volunteer in VolunteerRelation.objects.filter(is_approved__exact=True).order_by('volunteer_id').distinct('volunteer_id'):
             try:
@@ -56,13 +54,6 @@ class Command(BaseCommand):
                 salesforce_contact.set_title(volunteer.volunteer_id, 'Project Volunteer')
             except Exception:
                 print(f'Error setting title for user {volunteer.volunteer_id} in Salesforce ("Project Volunteer")')
-                print(traceback.format_exc())
-
-        for volunteer in VolunteerRelation.objects.filter(is_approved__exact=True).filter(is_co_owner__exact=True).order_by('volunteer_id').distinct('volunteer_id'):
-            try:
-                salesforce_contact.set_title(volunteer.volunteer_id, 'Project Owner')
-            except Exception:
-                print(f'Error setting title for user {volunteer.volunteer_id} in Salesforce ("Project Owner")')
                 print(traceback.format_exc())
 
         for project in Project.objects.filter(is_created__exact=True).order_by('project_creator_id').distinct('project_creator_id'):
