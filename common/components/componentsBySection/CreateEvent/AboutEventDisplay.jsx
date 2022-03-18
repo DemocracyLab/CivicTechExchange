@@ -190,6 +190,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         className="AboutEvent-rsvp-btn"
         type="button"
         href={url}
+        target="_blank"
       >
         {text}
       </Button>
