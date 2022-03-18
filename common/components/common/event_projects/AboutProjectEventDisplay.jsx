@@ -314,25 +314,27 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       <React.Fragment>
         <h3>Team</h3>
         <ProjectOwnersSection owners={eventProject.project_owners} />
-        <h3>Total RSVP: ({numVolunteers})</h3>
-        {!_.isEmpty(sortedVolunteers) &&
-          sortedVolunteers.map(([key, value]) => {
-            return (
-              <React.Fragment key={key}>
-                <ul>
-                  <li>
-                    <h4>
-                      {key} ({value.length})
-                    </h4>
-                  </li>
-                </ul>
-                <VolunteerSection
-                  volunteers={value}
-                  renderOnlyPending={false}
-                />
-              </React.Fragment>
-            );
-          })}
+
+        {/*TODO: Uncomment when we have volunteers RSVP-ing*/}
+        {/*<h3>Total RSVP: ({numVolunteers})</h3>*/}
+        {/*{!_.isEmpty(sortedVolunteers) &&*/}
+        {/*  sortedVolunteers.map(([key, value]) => {*/}
+        {/*    return (*/}
+        {/*      <React.Fragment key={key}>*/}
+        {/*        <ul>*/}
+        {/*          <li>*/}
+        {/*            <h4>*/}
+        {/*              {key} ({value.length})*/}
+        {/*            </h4>*/}
+        {/*          </li>*/}
+        {/*        </ul>*/}
+        {/*        <VolunteerSection*/}
+        {/*          volunteers={value}*/}
+        {/*          renderOnlyPending={false}*/}
+        {/*        />*/}
+        {/*      </React.Fragment>*/}
+        {/*    );*/}
+        {/*  })}*/}
       </React.Fragment>
     );
   }
