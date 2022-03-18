@@ -20,6 +20,8 @@ export const GlyphStyles: { [key: string]: string } = {
   Medium: "fab fa-medium", // https://fontawesome.com/icons/medium?style=brands
   Messaging: "far fa-comment-alt", // https://fontawesome.com/icons/comment-alt?style=regular
   GoogleDrive: "fab fa-google-drive", // https://fontawesome.com/icons/google-drive?style=brands
+  YouTube: "fab fa-youtube", // https://fontawesome.com/icons/youtube?style=brands&s=brands
+  Video: "fas fa-video", // https://fontawesome.com/icons/video?s=solid
   Folder: "far fa-folder", // https://fontawesome.com/icons/folder?style=regular
   Tasks: "fas fa-tasks", // https://fontawesome.com/icons/tasks?style=solid
   Meetup: "fab fa-meetup", // https://fontawesome.com/icons/meetup?style=brands

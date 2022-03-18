@@ -53,6 +53,11 @@ export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConf
     sourceDisplayName: "LinkedIn",
     iconClass: GlyphStyles.LinkedIn,
   },
+  {
+    sourceUrlPattern: new RegExp("youtube.com", "i"),
+    sourceDisplayName: "YouTube",
+    iconClass: GlyphStyles.YouTube,
+  },
 ];
 
 export const LinkTypePrefixes: $ReadOnlyArray<string> = ["link_", "social_"];
@@ -125,6 +130,13 @@ export const DefaultLinkDisplayConfigurations: KeyValuePair<LinkSourceDisplayCon
       {
         sourceTypeDisplayName: "Facebook",
         iconClass: GlyphStyles.FacebookSquare,
+      },
+    ],
+    [
+      LinkTypes.VIDEO,
+      {
+        sourceTypeDisplayName: "Video",
+        iconClass: GlyphStyles.Video,
       },
     ],
     [
