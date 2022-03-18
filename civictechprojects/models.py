@@ -207,8 +207,8 @@ class Project(Archived):
         return ProjectFile.objects.filter(file_project=self, file_user=None, file_group=None, file_event=None)
 
     def get_project_events(self):
-        slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
-        return Event.objects.filter(event_legacy_organization__name__in=slugs, is_private=False, is_searchable=True)
+        event_projects = EventProject.objects.filter(project=self).select_related('event')
+        return list(map(lambda ep: ep.event, event_projects))
 
     def get_project_groups(self):
         project_relationships = ProjectRelationship.objects.filter(relationship_project=self.id)

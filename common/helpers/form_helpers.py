@@ -11,7 +11,7 @@ def is_json_string(string):
     return string.startswith(('[', '{'))
 
 
-def _read_form_field(form, field_name):
+def read_form_field(form, field_name):
     if isinstance(form, ModelForm) and field_name in form.data:
         return form.data.get(field_name)
     elif field_name in form:
@@ -27,7 +27,7 @@ def read_form_field_string(model, form, field_name, transformation=None):
     :return: True if changes to model string field were made
     """
     field_changed = False
-    form_field_content = _read_form_field(form, field_name)
+    form_field_content = read_form_field(form, field_name)
     if form_field_content is not None:
         if transformation is not None:
             form_field_content = transformation(form_field_content)
@@ -64,7 +64,7 @@ def read_form_field_tags(model, form, field_name):
     :param field_name: Name of field shared by model and form
     :return: True if changes to model tag field were made
     """
-    form_tags = _read_form_field(form, field_name)
+    form_tags = read_form_field(form, field_name)
     if form_tags is not None:
         if is_json_string(form_tags):
             # Convert full tag data to comma-delimited slugs string
@@ -76,8 +76,8 @@ def read_form_field_tags(model, form, field_name):
 
 
 def read_form_fields_point(model, form, point_field_name, lat_field_name, long_field_name):
-    lat = _read_form_field(form, lat_field_name)
-    long = _read_form_field(form, long_field_name)
+    lat = read_form_field(form, lat_field_name)
+    long = read_form_field(form, long_field_name)
     if lat and len(lat) > 0 and long and len(long) > 0:
         setattr(model, point_field_name, Point(float(long), float(lat)))
 
@@ -91,7 +91,7 @@ def merge_json_changes(model_class, model, form, field_name):
     :param field_name: field name in model and form
     :return: True if there were changes
     """
-    json_text = _read_form_field(form, field_name)
+    json_text = read_form_field(form, field_name)
 
     if json_text and len(json_text) > 0:
         json_object = json.loads(json_text)
@@ -112,7 +112,7 @@ def merge_single_file(model, form, file_category, field_name):
     """
     from civictechprojects.models import ProjectFile
     field_changed = False
-    file_content = _read_form_field(form, field_name)
+    file_content = read_form_field(form, field_name)
     if file_content and len(file_content) > 0:
         file_json = json.loads(file_content)
         if isinstance(file_json, list):

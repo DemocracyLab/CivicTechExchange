@@ -10,7 +10,7 @@ from salesforce import campaign as salesforce_campaign
 from common.helpers.date_helpers import parse_front_end_datetime
 from common.helpers.form_helpers import is_creator, is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, \
     read_form_field_boolean, merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, \
-    read_form_fields_point, _read_form_field
+    read_form_fields_point, read_form_field
 
 
 class ProjectCreationForm(ModelForm):
@@ -83,7 +83,7 @@ class ProjectCreationForm(ModelForm):
         if not request.user.is_staff:
             project.project_date_modified = timezone.now()
 
-        from_event_id = _read_form_field(form, 'from_event_id')
+        from_event_id = read_form_field(form, 'from_event_id')
         if from_event_id:
             event = Event.objects.get(id=from_event_id)
             project.event_created_from = event

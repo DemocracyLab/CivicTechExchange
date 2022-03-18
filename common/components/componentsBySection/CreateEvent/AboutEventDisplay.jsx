@@ -198,14 +198,6 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   _renderRSVPAsProjectOwnerButton(): ?$React$Node {
     // TODO: Don't show when a user has rsvp-ed all their projects with this event
-    // const show: boolean =
-    //   !this.props.viewOnly && !_.isEmpty(this.state.owned_projects);
-    const url: string = CurrentUser.isLoggedIn()
-      ? urlHelper.section(Section.CreateEventProject, {
-          event_id: this.state.event.event_id,
-        })
-      : urlHelper.logInThenReturn();
-
     let buttonConfig: Dictionary<any> = {};
     if (CurrentUser.isLoggedIn()) {
       if (!_.isEmpty(this.state.owned_projects)) {
@@ -247,10 +239,10 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         </PromptNavigationModal>
 
         <Button
-          {...buttonConfig}
           variant="primary"
           className="AboutEvent-rsvp-btn"
           type="button"
+          {...buttonConfig}
         >
           RSVP as Project Leader
         </Button>
