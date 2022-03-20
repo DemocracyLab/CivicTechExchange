@@ -31,6 +31,7 @@ type Props = {|
 
 type State = {|
   owned_projects: $ReadOnlyArray<MyProjectData>,
+  isAlreadySelected: boolean,
   formIsValid: boolean,
   validations: $ReadOnlyArray<Validator>,
 |} & FormStateBase<FormFields>;
@@ -79,6 +80,7 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
       formFields: formFields,
       formIsValid: formIsValid,
       owned_projects: owned_projects,
+      isAlreadySelected: !!formFields.project_id,
     };
     props.readyForSubmit(formIsValid);
   }
@@ -114,6 +116,7 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
             isSearchable={true}
             isClearable={false}
             isMultiSelect={false}
+            isDisabled={this.state.isAlreadySelected}
             options={this.state.owned_projects}
             labelGenerator={(project: MyProjectData) => project.project_name}
             valueStringGenerator={(project: MyProjectData) =>

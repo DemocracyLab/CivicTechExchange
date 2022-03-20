@@ -22,6 +22,7 @@ type SelectorFlags = {|
   isSearchable: boolean,
   isClearable: boolean,
   isMultiSelect: boolean,
+  isDisabled: ?boolean,
 |};
 
 const defaultFlags: SelectorFlags = {
@@ -162,6 +163,7 @@ class Selector<T> extends React.Component<SelectorProps<T>, State<T>> {
           this.props.isMultiSelect,
           defaultFlags.isMultiSelect
         )}
+        isDisabled={this.props.isDisabled}
       />
     );
   }
