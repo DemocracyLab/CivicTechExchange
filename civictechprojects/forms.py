@@ -3,7 +3,8 @@ from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group, NameRecord, EventProject
 from .sitemaps import SitemapPages
-from democracylab.emails import send_project_creation_notification, send_group_creation_notification, send_event_creation_notification
+from democracylab.emails import send_project_creation_notification, send_group_creation_notification, \
+    send_event_creation_notification, notify_project_owners_event_rsvp
 from democracylab.models import get_request_contributor
 from .caching.cache import ProjectSearchTagsCache
 from salesforce import campaign as salesforce_campaign
@@ -315,6 +316,7 @@ class EventProjectCreationForm(ModelForm):
         if not event_project:
             user = get_request_contributor(request)
             event_project = EventProject.create(user, event, project)
+            notify_project_owners_event_rsvp(event_project)
             fields_changed = True
             recache_linked = True
 

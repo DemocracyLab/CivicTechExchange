@@ -14,6 +14,8 @@ from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts, keys_subset
 from common.helpers.collections import flatten, count_occurrences
+from common.helpers.constants import FrontEndSection
+from common.helpers.front_end import section_url
 
 # Without the following classes, the following error occurs:
 #
@@ -563,6 +565,10 @@ class EventProject(Archived):
 
     def get_project_positions(self):
         return ProjectPosition.objects.filter(position_project=self.project, position_event=self.event).order_by('order_number')
+
+    def get_url(self):
+        return section_url(FrontEndSection.AboutEventProject,
+                           {'event_id': self.event.id, 'project_id': self.project.id})
 
     @staticmethod
     def get(event_id, project_id):

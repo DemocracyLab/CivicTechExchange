@@ -70,7 +70,7 @@ class CreateEventProjectController extends React.Component<{||}, State> {
         {
           header: "What resources would you like to share?",
           subHeader:
-            "Share your internal resources to help volunteers understand the goals and processes" +
+            "Share your internal resources to help volunteers understand the goals and processes. " +
             "Any changes below will not impact the details of your long-term project profile.",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onNextPageSuccess,

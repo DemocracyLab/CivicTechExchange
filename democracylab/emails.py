@@ -9,7 +9,7 @@ from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datet
 from common.helpers.queue import enqueue
 from democracylab.tokens import email_verify_token_generator
 from democracylab.models import Contributor
-from civictechprojects.models import VolunteerRelation
+from civictechprojects.models import VolunteerRelation, EventProject
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 
@@ -374,6 +374,27 @@ def notify_project_owners_project_approved(project):
         subject=project.project_name + " has been approved",
         from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
         to=_get_co_owner_emails(project)
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
+
+
+def notify_project_owners_event_rsvp(event_project: EventProject):
+    email_template = HtmlEmailTemplate() \
+        .header('Thanks for signing up for {{event_name}}') \
+        .text_line('Hi {{first_name}}, you’re leading a project for {{project_name}} at {{event_name}}') \
+        .text_line(datetime_to_string(event_project.event.event_date_start, DateTimeFormats.SCHEDULED_DATE_TIME)) \
+        .button(url=event_project.get_url(), text='Join Event') \
+        .text_line('Let’s build something great together.')
+    context = {
+        'first_name': event_project.project.project_creator.first_name,
+        'project_name': event_project.project.project_name,
+        'event_name': event_project.event.event_name
+    }
+    email_msg = EmailMessage(
+        subject='Confirmed: RSVP for ' + event_project.event.event_name,
+        from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
+        to=_get_co_owner_emails(event_project.project)
     )
     email_msg = email_template.render(email_msg, context)
     send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
