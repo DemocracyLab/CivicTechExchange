@@ -799,6 +799,7 @@ class ProjectPosition(models.Model):
         new_role = position_json['roleTag']['tag_name']
         Tag.merge_tags_field(position.position_role, new_role)
         position.save()
+        return position
 
     @staticmethod
     def delete_position(position):
@@ -827,10 +828,12 @@ class ProjectPosition(models.Model):
             salesforce_job.save(new_position)
 
         for updated_position_json in updated_positions:
-            ProjectPosition.update_from_json(existing_projects_by_id[updated_position_json['id']], updated_position_json)
+            updated_position = ProjectPosition.update_from_json(existing_projects_by_id[updated_position_json['id']], updated_position_json)
+            salesforce_job.save(updated_position)
 
         for deleted_position_id in deleted_position_ids:
             ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
+            salesforce_job.delete(deleted_position_id)
 
         return len(added_positions) > 0 or len(updated_positions) > 0 or len(deleted_position_ids) > 0
 

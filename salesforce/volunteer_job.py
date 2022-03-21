@@ -35,5 +35,27 @@ def save(project_position):
         thread.start()
 
 
-def delete(project_position):
-    pass
+def delete(position_id):
+    data = {
+        "allOrNone": True,
+        "compositeRequest": [
+            {
+                "method": "GET",
+                "referenceId": "DeletedJob",
+                "url": f'/services/data/v{{version}}/sobjects/GW_Volunteers__Volunteer_Job__c/platform_id__c/{position_id}'
+            },
+            {
+                "method": "DELETE",
+                "referenceId": "deleteRef",
+                "url": "/services/data/v{{version}}/sobjects/GW_Volunteers__Volunteer_Job__c/@{DeletedJob.Id}"
+            }
+        ]
+    }
+    req = requests.Request(
+        method="POST",
+        url=client.composite_endpoint,
+        data=json.dumps(data)
+    )
+    thread = threading.Thread(target=run, args=(req,))
+    thread.daemon = True
+    thread.start()
