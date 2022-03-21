@@ -8,7 +8,7 @@ from democracylab.emails import send_project_creation_notification, send_group_c
     send_event_creation_notification, notify_project_owners_event_rsvp
 from democracylab.models import get_request_contributor
 from .caching.cache import ProjectSearchTagsCache
-from salesforce import campaign as salesforce_campaign
+from salesforce import campaign as salesforce_campaign, volunteer_job
 from common.helpers.date_helpers import parse_front_end_datetime
 from common.helpers.form_helpers import is_creator, is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, \
     read_form_field_boolean, merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, \
@@ -92,7 +92,10 @@ class ProjectCreationForm(ModelForm):
 
         project.save()
         positions_changed = merge_json_changes(ProjectPosition, project, form, 'project_positions')
-        salesforce_campaign.save(project, positions_changed)
+        salesforce_campaign.save(project)
+        if positions_changed:
+            for position in ProjectPosition.objects.filter(position_project=project.id):
+                volunteer_job.save(position)
 
         fields_changed |= merge_json_changes(ProjectLink, project, form, 'project_links')
         fields_changed |= merge_json_changes(ProjectFile, project, form, 'project_files')
