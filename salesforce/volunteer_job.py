@@ -11,6 +11,7 @@ client = SalesforceClient()
 
 def run(request):
     response = SalesforceClient().send(request)
+    print(response.status_code, response.text)
 
 
 def save(project_position: ProjectPosition):
@@ -25,7 +26,6 @@ def save(project_position: ProjectPosition):
             "name": position_role,
             "gw_volunteers__description__c": project_position.position_description
         }
-
         req = requests.Request(
             method="PATCH",
             url=f'{client.job_endpoint}/platform_id__c/{project_position.id}',
@@ -35,3 +35,6 @@ def save(project_position: ProjectPosition):
         thread.daemon = True
         thread.start()
 
+
+def delete(project_position: ProjectPosition):
+    pass
