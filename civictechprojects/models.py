@@ -13,7 +13,7 @@ from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts, keys_subset
 from common.helpers.collections import flatten, count_occurrences
-from salesforce import volunteer_hours as salesforce_volunteer
+from salesforce import volunteer_hours as salesforce_volunteer, volunteer_job as salesforce_job
 
 # Without the following classes, the following error occurs:
 #
@@ -786,9 +786,7 @@ class ProjectPosition(models.Model):
         position.order_number = position_json['orderNumber']
         position.is_hidden = position_json['isHidden']
         position.save()
-
         position.position_role.add(position_json['roleTag']['tag_name'])
-
         return position
 
     @staticmethod
@@ -824,7 +822,8 @@ class ProjectPosition(models.Model):
         deleted_position_ids = list(existing_positions_ids - updated_positions_ids)
 
         for added_position in added_positions:
-            ProjectPosition.create_from_json(project, added_position)
+            new_position = ProjectPosition.create_from_json(project, added_position)
+            salesforce_job.save(new_position)
 
         for updated_position_json in updated_positions:
             ProjectPosition.update_from_json(existing_projects_by_id[updated_position_json['id']], updated_position_json)
