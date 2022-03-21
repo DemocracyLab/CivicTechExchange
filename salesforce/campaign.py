@@ -41,9 +41,9 @@ def save(project: Project):
         url=f'{client.campaign_endpoint}/platform_id__c/{project.id}',
         data=json.dumps(data)
     )
-    campaign_thread = threading.Thread(target=run, args=(req,))
-    campaign_thread.daemon = True
-    campaign_thread.start()
+    thread = threading.Thread(target=run, args=(req,))
+    thread.daemon = True
+    thread.start()
 
 
 def delete(project: object):
