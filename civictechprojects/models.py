@@ -12,6 +12,7 @@ from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache, \
     EventProjectCache
+from civictechprojects.helpers.tagged_position_role import get_project_position_id
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.collections import flatten, count_occurrences
@@ -1280,20 +1281,8 @@ class VolunteerRelation(Archived):
         return self.is_approved and (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
 
 
-    def get_project_position_id(self):
-        role = f"'{self.role.names().first()}'"
-        position_id = None
-        positions = ProjectPosition.objects.raw(f'SELECT civictechprojects_projectposition.id FROM \
-            civictechprojects_projectposition INNER JOIN civictechprojects_taggedpositionrole ON \
-            (civictechprojects_projectposition.id = civictechprojects_taggedpositionrole.content_object_id) INNER JOIN \
-            taggit_tag ON (civictechprojects_taggedpositionrole.tag_id = taggit_tag.id) WHERE \
-            position_project_id = {self.project_id} AND taggit_tag.name = {role}')
-        for position in positions:
-            position_id = position.id
-        return position_id
-
     def save_to_salesforce(self):
-        salesforce_volunteer.create(self, self.get_project_position_id())
+        salesforce_volunteer.create(self, get_project_position_id(self))
 
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
