@@ -109,10 +109,8 @@ class ProjectCreationForm(ModelForm):
             if legacy_org_changed:
                 project.update_linked_items()
 
-        # TODO: Refresh EventProject if project name changed
         if fields_changed:
-            # Only recache linked events if tags were changed
-            project.recache(recache_linked=tags_changed)
+            project.recache(recache_linked=True)
             project.project_creator.purge_cache()
 
         return project

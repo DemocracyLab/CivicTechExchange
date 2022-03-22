@@ -208,8 +208,11 @@ class Project(Archived):
     def get_project_files(self):
         return ProjectFile.objects.filter(file_project=self, file_user=None, file_group=None, file_event=None)
 
+    def get_project_event_projects(self):
+        return EventProject.objects.filter(project=self)
+
     def get_project_events(self):
-        event_projects = EventProject.objects.filter(project=self).select_related('event')
+        event_projects = self.get_project_event_projects().select_related('event')
         return list(map(lambda ep: ep.event, event_projects))
 
     def get_project_groups(self):
@@ -231,9 +234,10 @@ class Project(Archived):
     def update_linked_items(self):
         # Recache events, but only if project is searchable
         if self.is_searchable:
-            owned_events = self.get_project_events()
-            for event in owned_events:
-                event.recache()
+            owned_event_projects = self.get_project_event_projects()
+            for ep in owned_event_projects:
+                ep.recache()
+                ep.event.recache()
 
     def generate_full_text(self):
         base_json = self.hydrate_to_json()
