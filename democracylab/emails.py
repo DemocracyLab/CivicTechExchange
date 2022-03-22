@@ -439,13 +439,13 @@ def send_group_creation_notification(group):
 
 
 def notify_group_owners_group_approved(group):
+    group_url = section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
     email_template = HtmlEmailTemplate() \
         .header('Congratulations! "{{group_name}}" has been approved.') \
         .paragraph('Your group "{{group_name}}" has been approved.') \
-        .button(url='group_url', text='Go to Group Profile Page')
+        .button(url=group_url, text='Go to Group Profile Page')
     context = {
         'group_name': group.group_name,
-        'group_url': section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
     }
     email_msg = EmailMessage(
         subject=group.group_name + " has been approved",
