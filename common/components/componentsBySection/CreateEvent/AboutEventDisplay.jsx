@@ -28,16 +28,24 @@ type State = {|
   event: ?EventData,
   owned_projects: $ReadOnlyArray<MyProjectData>,
   showPromptCreateProjectModal: boolean,
+  startDate: Moment,
+  endDate: Moment,
+  isPastEvent: boolean,
 |};
 
 class AboutEventDisplay extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
     const userContext: UserContext = CurrentUser?.userContext();
+    const startDate: Moment = datetime.parse(props.event.event_date_start);
+    const endDate: Moment = datetime.parse(props.event.event_date_end);
     this.state = {
       event: props.event,
       owned_projects: userContext?.owned_projects,
       showPromptCreateProjectModal: false,
+      startDate: startDate,
+      endDate: endDate,
+      isPastEvent: endDate < datetime.now(),
     };
 
     if (this.state.event) {
@@ -58,8 +66,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   render(): ?$React$Node {
     const event: EventData = this.state.event;
-    const startDate: Moment = datetime.parse(event.event_date_start);
-    const endDate: Moment = datetime.parse(event.event_date_end);
+    const startDate: Moment = this.state.startDate;
+    const endDate: Moment = this.state.endDate;
     const isSingleDayEvent: boolean = datetime.isOnSame(
       "day",
       startDate,
@@ -108,7 +116,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                 {!this.props.viewOnly &&
                   event.event_live_id &&
                   this._renderJoinLiveEventButton()}
-                {this._renderRSVPAsProjectOwnerButton()}
+                {!this.state.isPastEvent &&
+                  this._renderRSVPAsProjectOwnerButton()}
               </div>
             </div>
             <div className="col-xs-12 col-lg-8 AboutEvent-splash">
