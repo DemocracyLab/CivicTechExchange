@@ -116,7 +116,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                 {!this.props.viewOnly &&
                   event.event_live_id &&
                   this._renderJoinLiveEventButton()}
-                {!this.state.isPastEvent &&
+                {!this.props.viewOnly &&
+                  !this.state.isPastEvent &&
                   this._renderRSVPAsProjectOwnerButton()}
               </div>
             </div>
