@@ -270,7 +270,7 @@ class GroupCreationForm(ModelForm):
         fields_changed |= merge_json_changes(ProjectLink, group, form, 'group_links')
         fields_changed |= merge_json_changes(ProjectFile, group, form, 'group_files')
 
-        project_fields_changed |= merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
+        project_fields_changed |= merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail')
 
         fields_changed |=  project_fields_changed
 
