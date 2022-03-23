@@ -6,7 +6,6 @@ import EditUserModal from "./EditUserModal.jsx";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import FileUploadList from "../../forms/FileUploadList.jsx";
 import { FileInfo } from "../../common/FileInfo.jsx";
-import { UserFileTypes } from "../../controllers/EditProfileController.jsx";
 
 type Props = {|
   showModal: boolean,
@@ -20,6 +19,10 @@ type State = {|
 type FormFields = {|
   user_files: string,
 |};
+
+const UserFileTypes = {
+  RESUME: "RESUME",
+};
 
 /**
  * Modal for editing user files

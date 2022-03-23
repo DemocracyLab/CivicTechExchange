@@ -8,6 +8,9 @@ import WarningModal from "../common/WarningModal.jsx";
 import StepIndicatorBars from "../common/StepIndicatorBars.jsx";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import utils from "../utils/utils.js";
+import { Container } from "flux/utils";
+import FormFieldsStore from "../stores/FormFieldsStore.js";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import promiseHelper from "../utils/promise.js";
 
 export type FormWorkflowStepConfig<T> = {|
@@ -47,7 +50,7 @@ type State<T> = {|
 /**
  * Encapsulates form for creating projects
  */
-class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
+class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
   constructor(props: Props): void {
     super(props);
     this.formRef = React.createRef();
@@ -67,6 +70,17 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
     this.onSubmit = _.debounce(this.onSubmit.bind(this), 1000, {
       leading: true,
     });
+  }
+
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [FormFieldsStore];
+  }
+
+  static calculateState(prevState: State, props: Props): State {
+    let state: State = _.clone(prevState) || {};
+    state.formIsValid = FormFieldsStore.fieldsAreValid();
+    state.fieldsUpdated = FormFieldsStore.areFormFieldsChanged();
+    return state;
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -105,6 +119,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
     });
   }
 
+  // TODO: Still necessary?
   onValidationCheck(formIsValid: boolean, preSubmitProcessing: Function): void {
     if (formIsValid !== this.state.formIsValid) {
       this.setState({ formIsValid });
@@ -115,6 +130,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
     }
   }
 
+  // TODO: Still necessary?
   onFormUpdate(formFields: {||}): void {
     !this.state.initialFormFields
       ? this.setState(
@@ -130,15 +146,14 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
         );
   }
 
+  // TODO: Still necessary?
   setFieldsUpdated(): void {
-    _.isEqual(this.state.initialFormFields, this.state.currentFormFields)
-      ? this.setState({ fieldsUpdated: false })
-      : this.setState({ fieldsUpdated: true });
+    this.setState({ fieldsUpdated: FormFieldsStore.areFormFieldsChanged() });
   }
 
   confirmDiscardChanges(confirmDiscard: boolean): Promise<any> {
     return promiseHelper.promisify(() => {
-      let confirmState: State = Object.assign({},this.state);
+      let confirmState: State = Object.assign({}, this.state);
       confirmState.showConfirmDiscardChanges = false;
       if (confirmDiscard) {
         confirmState.currentStep = this.state.navigateToStepUponDiscardConfirmation;
@@ -152,20 +167,28 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
 
   onSubmit(event: SyntheticEvent<HTMLFormElement>): void {
     event.preventDefault();
-    const currentStep: FormWorkflowStepConfig = this.props.steps[
-      this.state.currentStep
-    ];
-    this.setState({ isSubmitting: true });
-    const submitFunc: Function = () => {
-      currentStep.onSubmit(
-        event,
-        this.formRef,
-        this.onSubmitSuccess.bind(this, currentStep.onSubmitSuccess)
-      );
-    };
-    this.state.preSubmitProcessing
-      ? this.state.preSubmitProcessing(submitFunc)
-      : submitFunc();
+    if (!FormFieldsStore.fieldsAreValid()) {
+      UniversalDispatcher.dispatch({
+        type: "ATTEMPT_SUBMIT",
+      });
+      this.setState({ clickedNext: true });
+      this.formRef.current.checkValidity();
+    } else {
+      const currentStep: FormWorkflowStepConfig = this.props.steps[
+        this.state.currentStep
+      ];
+      this.setState({ isSubmitting: true });
+      const submitFunc: Function = () => {
+        currentStep.onSubmit(
+          event,
+          this.formRef,
+          this.onSubmitSuccess.bind(this, currentStep.onSubmitSuccess)
+        );
+      };
+      this.state.preSubmitProcessing
+        ? this.state.preSubmitProcessing(submitFunc)
+        : submitFunc();
+    }
   }
 
   onSubmitSuccess(onStepSubmitSuccess: T => void, formFields: T) {
@@ -272,7 +295,10 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
             <button
               type="submit"
               className="btn btn-primary create-btn"
-              disabled={!this.state.formIsValid || this.state.isSubmitting}
+              disabled={
+                (!this.state.formIsValid && this.state.clickedNext) ||
+                this.state.isSubmitting
+              }
             >
               {this.state.isSubmitting ? (
                 <i
@@ -297,4 +323,4 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
   }
 }
 
-export default FormWorkflow;
+export default Container.create(FormWorkflow, { withProps: true });

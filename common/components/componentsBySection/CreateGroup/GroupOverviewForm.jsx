@@ -5,24 +5,21 @@ import type { FileInfo } from "../../common/FileInfo.jsx";
 import ImageCropUploadFormElement from "../../../components/forms/ImageCropUploadFormElement.jsx";
 import DjangoCSRFToken from "django-react-csrftoken";
 import FormValidation from "../../../components/forms/FormValidation.jsx";
-import type { Validator } from "../../../components/forms/FormValidation.jsx";
-import type { GroupDetailsAPIData } from "../../../components/utils/GroupAPIUtils.js";
+import type { Validator } from "../../forms/FormValidation.jsx";
+import type { GroupDetailsAPIData } from "../../utils/GroupAPIUtils.js";
 import form, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
-import { CountrySelector } from "../../common/selection/CountrySelector.jsx";
-import {
-  CountryData,
-  CountryCodeFormats,
-  countryByCode,
-} from "../../constants/Countries.js";
-import {
-  LocationAutocompleteForm,
-  LocationFormInputsByEntity,
-} from "../../forms/LocationAutocompleteForm.jsx";
+import { CountryData, countryByCode } from "../../constants/Countries.js";
+import { LocationFormInputsByEntity } from "../../forms/LocationAutocompleteForm.jsx";
 import {
   LocationInfo,
   getLocationInfoFromGroup,
 } from "../../common/location/LocationInfo.js";
 import _ from "lodash";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
+import TextFormField, {
+  TextFormFieldType,
+} from "../../forms/fields/TextFormField.jsx";
+import CountryLocationFormFields from "../../forms/fields/CountryLocationFormFields.jsx";
 
 type FormFields = {|
   group_name: ?string,
@@ -40,7 +37,6 @@ type Props = {|
 
 type State = {|
   formIsValid: boolean,
-  validations: $ReadOnlyArray<Validator>,
 |} & FormStateBase<FormFields>;
 
 /**
@@ -60,21 +56,30 @@ class GroupOverviewForm extends React.PureComponent<Props, State> {
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
+        fieldName: "group_name",
         checkFunc: (formFields: FormFields) =>
           !_.isEmpty(formFields["group_name"]),
         errorMessage: "Please enter Group Name",
       },
       {
+        fieldName: "group_short_description",
         checkFunc: (formFields: FormFields) =>
           !_.isEmpty(formFields["group_short_description"]),
         errorMessage: "Please enter a one-sentence description",
       },
       {
+        fieldName: "group_description",
         checkFunc: (formFields: FormFields) =>
           !_.isEmpty(formFields["group_description"]),
         errorMessage: "Please enter Group Description",
       },
     ];
+
+    UniversalDispatcher.dispatch({
+      type: "SET_FORM_FIELDS",
+      formFieldValues: formFields,
+      validators: validations,
+    });
 
     const formIsValid: boolean = FormValidation.isValid(
       formFields,
@@ -82,23 +87,8 @@ class GroupOverviewForm extends React.PureComponent<Props, State> {
     );
     this.state = {
       formIsValid: formIsValid,
-      formFields: formFields,
-      validations: validations,
     };
     props.readyForSubmit(formIsValid);
-    this.form = form.setup();
-  }
-
-  componentDidMount() {
-    // Initial validation check
-    this.form.doValidation.bind(this)();
-  }
-
-  onValidationCheck(formIsValid: boolean): void {
-    if (formIsValid !== this.state.formIsValid) {
-      this.setState({ formIsValid });
-      this.props.readyForSubmit(formIsValid);
-    }
   }
 
   render(): React$Node {
@@ -108,87 +98,45 @@ class GroupOverviewForm extends React.PureComponent<Props, State> {
 
         <div className="form-group">
           <ImageCropUploadFormElement
-            form_id="group_thumbnail_location"
+            form_id="group_thumbnail"
             buttonText="Upload Group Image"
-            currentImage={this.state.formFields.group_thumbnail}
-            onSelection={this.form.onSelection.bind(this, "group_thumbnail")}
           />
         </div>
 
-        <div className="form-group">
-          <label>Group Name</label>
-          <input
-            id="group_name"
-            name="group_name"
-            placeholder="Group Name"
-            type="text"
-            maxLength="60"
-            className="form-control"
-            value={this.state.formFields.group_name}
-            onChange={this.form.onInput.bind(this, "group_name")}
-          />
-        </div>
+        <TextFormField
+          id="group_name"
+          label="Group Name"
+          type={TextFormFieldType.SingleLine}
+          required={true}
+          maxLength={60}
+        />
 
-        <div className="form-group">
-          <label>Country</label>
-          <CountrySelector
-            id="group_country"
-            countryCode={
-              this.state.formFields.group_country &&
-              this.state.formFields.group_country.ISO_2
-            }
-            countryCodeFormat={CountryCodeFormats.ISO_2}
-            onSelection={this.form.onSelection.bind(this, "group_country")}
-          />
-        </div>
-        <div className="form-group">
-          <label>Location</label>
-          <LocationAutocompleteForm
-            country={this.state.formFields.group_country}
-            onSelect={this.form.onSelection.bind(this, "group_location")}
-            location={this.state.formFields.group_location}
-            formInputs={LocationFormInputsByEntity.Groups}
-          />
-        </div>
+        <CountryLocationFormFields
+          countryFieldId="group_country"
+          locationFieldId="group_location"
+          locationFormInputs={LocationFormInputsByEntity.Groups}
+        />
 
-        <div className="form-group">
-          <label>Short Description</label>
-          <div className="character-count">
-            {(this.state.formFields.group_short_description || "").length} / 140
-          </div>
-          <input
-            id="group_short_description"
-            name="group_short_description"
-            placeholder="Group Description"
-            type="text"
-            maxLength="140"
-            className="form-control"
-            value={this.state.formFields.group_short_description}
-            onChange={this.form.onInput.bind(this, "group_short_description")}
-          />
-        </div>
+        <TextFormField
+          id="group_short_description"
+          label="Short Description"
+          type={TextFormFieldType.MultiLine}
+          rows={2}
+          placeholder="Group Description"
+          required={true}
+          showCount={true}
+          maxLength={140}
+        />
 
-        <div className="form-group">
-          <label>Description</label>
-          <div className="character-count">
-            {(this.state.formFields.group_description || "").length} / 3000
-          </div>
-          <textarea
-            id="group_description"
-            name="group_description"
-            placeholder="Briefly describe your group..."
-            rows="4"
-            maxLength="3000"
-            className="form-control"
-            value={this.state.formFields.group_description}
-            onChange={this.form.onInput.bind(this, "group_description")}
-          ></textarea>
-        </div>
-
-        <FormValidation
-          validations={this.state.validations}
-          onValidationCheck={this.onValidationCheck.bind(this)}
-          formState={this.state.formFields}
+        <TextFormField
+          id="group_description"
+          label="Description"
+          type={TextFormFieldType.MultiLine}
+          rows={4}
+          placeholder="Briefly describe your group..."
+          required={true}
+          showCount={true}
+          maxLength={3000}
         />
       </div>
     );
