@@ -18,6 +18,10 @@
     "node": "14.15.x"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.1.1",
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.1.18",
     "@tryghost/content-api": "^1.5.2",
     "bluebird": "^3.5.2",
     "css-loader": "^3.4.2",

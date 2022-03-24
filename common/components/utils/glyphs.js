@@ -1,5 +1,6 @@
 // @flow
 
+
 export const GlyphStyles: { [key: string]: string } = {
   Close: "fas fa-times", // https://fontawesome.com/icons/times?style=solid
   Delete: "far fa-trash-alt", // https://fontawesome.com/icons/trash-alt?style=regular
@@ -46,6 +47,7 @@ export const GlyphStyles: { [key: string]: string } = {
   Palette: "fas fa-palette", // https://fontawesome.com/v5.15/icons/palette?style=solid
   HeartEmpty: "far fa-heart", // https://fontawesome.com/v6.0/icons/heart?s=regular
   HeartFilled: "fas fa-heart", // https://fontawesome.com/v6.0/icons/heart?s=solid
+  Figma: "fab fa-figma", // https://fontawesome.com/icons/figma?s=brands
 };
 
 export const GlyphSizes: { [key: string]: string } = {

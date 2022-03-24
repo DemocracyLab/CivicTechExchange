@@ -52,6 +52,11 @@ export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConf
     sourceDisplayName: "LinkedIn",
     iconClass: GlyphStyles.LinkedIn,
   },
+  {
+    sourceUrlPattern: new RegExp("Figma.com", "i"),
+    sourceDisplayName: "Figma",
+    iconClass: GlyphStyles.Figma,
+  },
 ];
 
 export const LinkTypes: Dictionary<string> = {
@@ -121,6 +126,13 @@ export const DefaultLinkDisplayConfigurations: KeyValuePair<LinkSourceDisplayCon
       {
         sourceTypeDisplayName: "Facebook",
         iconClass: GlyphStyles.FacebookSquare,
+      },
+    ],
+    [
+      LinkTypes.FIGMA,
+      {
+        sourceTypeDisplayName: "Figma",
+        iconClass: GlyphStyles.Figma,
       },
     ],
     [
