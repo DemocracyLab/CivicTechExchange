@@ -1,6 +1,4 @@
 // @flow
-
-
 export const GlyphStyles: { [key: string]: string } = {
   Close: "fas fa-times", // https://fontawesome.com/icons/times?style=solid
   Delete: "far fa-trash-alt", // https://fontawesome.com/icons/trash-alt?style=regular
