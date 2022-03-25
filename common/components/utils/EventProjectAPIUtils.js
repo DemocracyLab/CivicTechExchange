@@ -4,6 +4,8 @@ import type { FileInfo } from "../common/FileInfo.jsx";
 import type { TagDefinition } from "./ProjectAPIUtils.js";
 import type { LinkInfo } from "../forms/LinkInfo.jsx";
 import { PositionInfo } from "../forms/PositionInfo.jsx";
+import { APIError, APIResponse } from "./ProjectAPIUtils.js";
+import apiHelper from "./api.js";
 
 export type EventProjectAPIDetails = {|
   event_project_id: string,
@@ -62,5 +64,14 @@ export default class EventProjectAPIUtils {
             errorMessage: JSON.stringify(response),
           })
       );
+  }
+
+  static rsvpForEvent(
+    eventId: number,
+    successCallback: ?(APIResponse) => void,
+    errCallback: ?(APIError) => void
+  ): void {
+    const url: string = `/api/event/${eventId}/rsvp/`;
+    return apiHelper.post(url, {}, successCallback, errCallback);
   }
 }

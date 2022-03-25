@@ -46,12 +46,22 @@ export type MyEventData = {|
   +is_created: ?boolean,
 |} & EventTileAPIData;
 
+export type MyRSVPData = {|
+  +event_id: number,
+  +application_id: ?number,
+  +user: ?VolunteerUserData,
+  +application_text: ?string,
+  +roleTag: ?TagDefinition,
+  +rsvp_date: ?Date,
+|};
+
 export type UserContext = {|
   owned_projects: $ReadOnlyArray<MyProjectData>,
   volunteering_projects: $ReadOnlyArray<MyProjectData>,
   owned_groups: $ReadOnlyArray<MyGroupData>,
   owned_events: $ReadOnlyArray<MyEventData>,
   favorites: Dictionary<ProjectData>,
+  rsvp_events: Dictionary<MyRSVPData>,
 |};
 
 class CurrentUser {

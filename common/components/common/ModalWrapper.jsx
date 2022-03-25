@@ -8,6 +8,7 @@ import type { Dictionary } from "../types/Generics.jsx";
 
 export const ModalSizes = {
   Small: "sm",
+  Medium: "",
   Large: "lg",
   ExtraLarge: "xl",
 };
@@ -21,7 +22,7 @@ type Props = {|
   submitEnabled: boolean,
   onClickCancel: () => void,
   onClickSubmit: () => void,
-  onModalHide: ?()=> void,
+  onModalHide: ?() => void,
   hideButtons: ?boolean,
   size: ?string,
 |};

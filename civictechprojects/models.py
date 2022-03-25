@@ -1231,6 +1231,63 @@ class VolunteerRelation(Archived):
         return VolunteerRelation.objects.filter(project_id=project.id, is_approved=active, deleted=not active)
 
 
+class TaggedRSVPVolunteerRole(TaggedItemBase):
+    content_object = models.ForeignKey('RSVPVolunteerRelation', on_delete=models.CASCADE)
+
+
+class RSVPVolunteerRelation(Archived):
+    event = models.ForeignKey(Event, related_name='rsvp_volunteers', on_delete=models.CASCADE)
+    volunteer = models.ForeignKey(Contributor, related_name='rsvp_events', on_delete=models.CASCADE)
+    event_project = models.ForeignKey(EventProject, related_name='rsvp_volunteers', blank=True, null=True, on_delete=models.CASCADE)
+    role = TaggableManager(blank=True, through=TaggedRSVPVolunteerRole)
+    role.remote_field.related_name = "rsvp_roles"
+    application_text = models.CharField(max_length=10000, blank=True)
+    rsvp_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+
+    def delete(self):
+        self.volunteer.purge_cache()
+        super().delete()
+
+    def __str__(self):
+        return 'Event: {event}, User: {user}'.format(event=str(self.event.event_name), user=str(self.volunteer.email))
+
+    def to_json(self):
+        volunteer = self.volunteer
+        volunteer_json = {
+            'application_id': self.id,
+            'event_id': self.event.id,
+            'user': volunteer.hydrate_to_tile_json(),
+            'application_text': self.application_text,
+            'rsvp_date': self.rsvp_date.__str__(),
+            'roleTag': Tag.hydrate_to_json(volunteer.id, list(self.role.all().values())),
+        }
+
+        return volunteer_json
+
+    def hydrate_project_volunteer_info(self):
+        volunteer_json = self.to_json()
+        project_json = self.project.hydrate_to_list_json()
+        return merge_dicts(project_json, volunteer_json)
+
+    def is_up_for_renewal(self, now=None):
+        now = now or timezone.now()
+        return self.is_approved and (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
+
+    @staticmethod
+    def create(event: Event, volunteer: Contributor):
+        relation = RSVPVolunteerRelation()
+        relation.event = event
+        relation.volunteer = volunteer
+        relation.save()
+
+        # relation.role.add(role)
+        return relation
+
+    @staticmethod
+    def get_for_user(user):
+        return RSVPVolunteerRelation.objects.filter(volunteer=user.id)
+
+
 class TaggedCategory(TaggedItemBase):
     content_object = models.ForeignKey('Testimonial', on_delete=models.CASCADE)
 

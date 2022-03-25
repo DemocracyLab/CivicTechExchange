@@ -38,9 +38,16 @@ def get_user_favorites(contributor):
     return {project.id: project.hydrate_to_tile_json() for project in fav_projects}
 
 
+def get_rsvp_events(contributor):
+    from civictechprojects.models import RSVPVolunteerRelation
+    rsvp_events = RSVPVolunteerRelation.get_for_user(contributor)
+    return {event.id: event.to_json() for event in rsvp_events}
+
+
 def _get_user_context(contributor):
     user_context = merge_dicts(get_my_projects(contributor), get_my_groups(contributor), get_my_events(contributor))
     user_context['favorites'] = get_user_favorites(contributor)
+    user_context['rsvp_events'] = get_rsvp_events(contributor)
     return user_context
 
 

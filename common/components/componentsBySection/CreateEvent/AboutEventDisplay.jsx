@@ -8,6 +8,7 @@ import Button from "react-bootstrap/Button";
 import datetime, { DateFormat } from "../../utils/datetime.js";
 import CurrentUser, {
   MyProjectData,
+  MyRSVPData,
   UserContext,
 } from "../../utils/CurrentUser.js";
 import { EventData } from "../../utils/EventAPIUtils.js";
@@ -18,6 +19,9 @@ import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx
 import MainFooter from "../../chrome/MainFooter.jsx";
 import PromptNavigationModal from "../../common/PromptNavigationModal.jsx";
 import type { Dictionary } from "../../types/Generics.jsx";
+import NotificationModal from "../../common/notification/NotificationModal.jsx";
+import EventProjectAPIUtils from "../../utils/EventProjectAPIUtils.js";
+import { ModalSizes } from "../../common/ModalWrapper.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -27,7 +31,10 @@ type Props = {|
 type State = {|
   event: ?EventData,
   owned_projects: $ReadOnlyArray<MyProjectData>,
+  participating_projects: ?$ReadOnlyArray<MyProjectData>,
+  isVolunteerRSVPed: boolean,
   showPromptCreateProjectModal: boolean,
+  showPostRSVPModal: boolean,
   startDate: Moment,
   endDate: Moment,
   isPastEvent: boolean,
@@ -39,10 +46,22 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     const userContext: UserContext = CurrentUser?.userContext();
     const startDate: Moment = datetime.parse(props.event.event_date_start);
     const endDate: Moment = datetime.parse(props.event.event_date_end);
+    const participating_projects: ?$ReadOnlyArray<MyProjectData> =
+      !_.isEmpty(userContext?.owned_projects) &&
+      userContext.owned_projects.filter((project: MyProjectData) =>
+        CurrentUser.isOwner(project)
+      );
+    const isVolunteerRSVPed: boolean = _.some(
+      userContext?.rsvp_events,
+      (rsvp: MyRSVPData) => rsvp.event_id === props.event.event_id
+    );
     this.state = {
       event: props.event,
       owned_projects: userContext?.owned_projects,
+      participating_projects: participating_projects,
+      isVolunteerRSVPed: isVolunteerRSVPed,
       showPromptCreateProjectModal: false,
+      showPostRSVPModal: false,
       startDate: startDate,
       endDate: endDate,
       isPastEvent: endDate < datetime.now(),
@@ -116,6 +135,10 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                 {!this.props.viewOnly &&
                   event.event_live_id &&
                   this._renderJoinLiveEventButton()}
+                {!this.props.viewOnly &&
+                  !this.state.isPastEvent &&
+                  !this.state.isVolunteerRSVPed &&
+                  this._renderRSVPAsVolunteerButton()}
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
                   this._renderRSVPAsProjectOwnerButton()}
@@ -204,6 +227,52 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       >
         {text}
       </Button>
+    );
+  }
+
+  _renderRSVPAsVolunteerButton(): ?$React$Node {
+    // TODO: Add spinner while RSVP call is in progress
+    let buttonConfig: Dictionary<any> = {};
+    if (CurrentUser.isLoggedIn()) {
+      buttonConfig = {
+        onClick: () => {
+          EventProjectAPIUtils.rsvpForEvent(
+            this.props.event.event_id,
+            response => {
+              this.setState({
+                showPostRSVPModal: true,
+              });
+            }
+          );
+        },
+      };
+    } else {
+      // If not logged in, go to login page
+      buttonConfig = { href: urlHelper.logInThenReturn() };
+    }
+
+    return (
+      <React.Fragment>
+        <NotificationModal
+          showModal={this.state.showPostRSVPModal}
+          size={ModalSizes.Medium}
+          message="Your next step is to select a project.  If you don't see a project you like, please come back closer to the hackathon."
+          buttonText="Ok"
+          headerText="Thank you for RSVPing!"
+          onClickButton={() =>
+            this.setState({ showPostRSVPModal: false, isVolunteerRSVPed: true })
+          }
+        />
+
+        <Button
+          variant="primary"
+          className="AboutEvent-rsvp-btn"
+          type="button"
+          {...buttonConfig}
+        >
+          RSVP as Project Volunteer
+        </Button>
+      </React.Fragment>
     );
   }
 

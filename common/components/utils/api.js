@@ -1,5 +1,7 @@
 // @flow
 import serialize from "form-serialize";
+import { Dictionary } from "../types/Generics.jsx";
+import htmlDocument from "./htmlDocument.js";
 
 export type APIResponse = {|
   +status: number,
@@ -19,10 +21,11 @@ class apiHelper {
   ) {
     // TODO: Replace ProjectAPIUtils.post() and UserAPIUtils.post() with this method
     const bodyJson: string = JSON.stringify(body);
-
+    const cookies: Dictionary<string> = htmlDocument.cookies();
     const headers = {
       Accept: "application/json, text/plain, */*",
       "Content-Type": "application/json",
+      "X-CSRFToken": cookies["csrftoken"],
     };
     apiHelper._request(
       url,
@@ -60,8 +63,16 @@ class apiHelper {
     );
   }
 
-  static isSuccessResponse(response: APIResponse): boolean {
+  static isSuccessResponse(response: Response): boolean {
     return response.status < 400;
+  }
+
+  static isJsonResponse(response: Response): boolean {
+    const headerKeys: $ReadOnlyArray<string> = [...response.headers.values()];
+    return (
+      headerKeys.find((key: string) => key === "content-type") &&
+      response.headers.get("content-type") === "application/json"
+    );
   }
 
   static _request(
@@ -86,16 +97,20 @@ class apiHelper {
     );
 
     fetch(new Request(url, _requestOptions))
-      .then(response => {
+      .then((response: Response) => {
         if (!response.ok) {
           throw Error();
         }
-        return response.statusText !== "No Content" ? response.json() : {};
+
+        const isJson: boolean = apiHelper.isJsonResponse(response);
+        return isJson ? response.json() : response.text();
       })
-      .then(
-        responsePayload => successCallback && successCallback(responsePayload)
-      )
-      .catch(response => doError(response));
+      .then(responsePayload => {
+        successCallback && successCallback(responsePayload);
+      })
+      .catch(response => {
+        return doError(response);
+      });
   }
 }
 
