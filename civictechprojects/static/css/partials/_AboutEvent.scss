@@ -27,14 +27,11 @@
   margin: 1rem auto;
   max-width: 280px;
 }
+button.AboutEvent-rsvp-btn {
+  width: 100%;
+}
 .AboutEvent-edit-btn {
   float: right;
-}
-.AboutEvent-rsvp-btn,
-.AboutEvent-join-btn {
-  display: block;
-  margin: 1rem auto;
-  max-width: 280px;
 }
 .AboutEvent-details h3 {
   margin-top: 2rem; /* acts as section spacing */
