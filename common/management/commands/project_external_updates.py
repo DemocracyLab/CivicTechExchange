@@ -151,7 +151,7 @@ def get_projects_with_trello_links():
 
 def get_project_github_links():
     from civictechprojects.models import ProjectLink
-    return ProjectLink.objects.filter(link_url__icontains='github.com/').exclude(link_project__isnull=True, link_event__isnull=False)
+    return ProjectLink.objects.filter(link_project__isnull=False, link_event__isnull=True, link_group__isnull=True, link_url__icontains='github.com/')
 
 
 def handle_project_github_updates(project_github_link):
