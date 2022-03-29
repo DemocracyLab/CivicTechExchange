@@ -23,7 +23,8 @@ import NotificationModal from "../../common/notification/NotificationModal.jsx";
 import EventProjectAPIUtils from "../../utils/EventProjectAPIUtils.js";
 import { ModalSizes } from "../../common/ModalWrapper.jsx";
 import ConfirmationModal from "../../common/confirmation/ConfirmationModal.jsx";
-import promiseHelper from "../../utils/promise";
+import promiseHelper from "../../utils/promise.js";
+import Toast from "../../common/notification/Toast.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -38,6 +39,8 @@ type State = {|
   showPromptCreateProjectModal: boolean,
   showPostRSVPModal: boolean,
   showCancelRSVPConfirmModal: boolean,
+  showPostRSVPToast: boolean,
+  showPostCancelRSVPToast: boolean,
   startDate: Moment,
   endDate: Moment,
   isPastEvent: boolean,
@@ -69,6 +72,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       startDate: startDate,
       endDate: endDate,
       isPastEvent: endDate < datetime.now(),
+      showPostRSVPToast: false,
+      showPostCancelRSVPToast: false,
     };
 
     if (this.state.event) {
@@ -98,6 +103,23 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     );
     return !event ? null : (
       <React.Fragment>
+        {/*TODO: Verify we want these toasts*/}
+        <Toast
+          show={this.state.showPostRSVPToast}
+          onClose={() => this.setState({ showPostRSVPToast: false })}
+          timeoutMilliseconds={4000}
+        >
+          You have RSVP-ed successfully to the event.
+        </Toast>
+
+        <Toast
+          show={this.state.showPostCancelRSVPToast}
+          onClose={() => this.setState({ showPostCancelRSVPToast: false })}
+          timeoutMilliseconds={4000}
+        >
+          You have canceled your RSVP to the event.
+        </Toast>
+
         <div className="AboutEvent-root container">
           <div className="AboutEvent-title row">
             <div className="col-12 AboutEvent-header">
@@ -269,7 +291,11 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           buttonText="Ok"
           headerText="Thank you for RSVPing!"
           onClickButton={() =>
-            this.setState({ showPostRSVPModal: false, isVolunteerRSVPed: true })
+            this.setState({
+              showPostRSVPModal: false,
+              showPostRSVPToast: true,
+              isVolunteerRSVPed: true,
+            })
           }
         />
 
@@ -314,6 +340,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                 response => {
                   this.setState({
                     showCancelRSVPConfirmModal: false,
+                    showPostCancelRSVPToast: true,
                     isVolunteerRSVPed: false,
                   });
                 }
