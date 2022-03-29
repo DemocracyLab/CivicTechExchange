@@ -255,7 +255,6 @@ def event_project_edit(request, event_id, project_id):
 
 
 def rsvp_for_event(request, event_id):
-    print('We get to rsvp_for_event')
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
@@ -265,6 +264,24 @@ def rsvp_for_event(request, event_id):
 
     event = Event.get_by_id_or_slug(event_id)
     RSVPVolunteerRelation.create(event, user)
+
+    # send_volunteer_application_email(volunteer_relation)
+    user.purge_cache()
+    return HttpResponse(status=200)
+
+
+def cancel_rsvp_for_event(request, event_id):
+    print('We get to cancel_rsvp_for_event.  TODO: REMOVE!!')
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    event = Event.get_by_id_or_slug(event_id)
+    rsvp = RSVPVolunteerRelation.get_for_event_volunteer(event, user)
+    rsvp.delete()
 
     # send_volunteer_application_email(volunteer_relation)
     user.purge_cache()

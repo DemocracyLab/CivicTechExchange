@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^api/event/(?P<event_id>.*)/projects/(?P<project_id>.*)/create/$', views.event_project_edit, name='event_project_edit'),
     url(r'^api/event/(?P<event_id>.*)/projects/(?P<project_id>.*)/rsvp/$', views.rsvp_for_event_project, name='rsvp_for_event_project'),
     url(r'^api/event/(?P<event_id>.*)/projects/(?P<project_id>.*)/$', views.get_event_project, name='get_event_project'),
+    url(r'^api/event/(?P<event_id>.*)/rsvp/cancel/$', views.cancel_rsvp_for_event, name='cancel_rsvp_for_event'),
     url(r'^api/event/(?P<event_id>.*)/rsvp/$', views.rsvp_for_event, name='rsvp_for_event'),
     url(r'^api/events/create/$', views.event_create, name='event_create'),
     url(r'^api/events/approve/(?P<event_id>[0-9]+)/$', views.approve_event, name='approve_event'),

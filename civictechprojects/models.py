@@ -1269,9 +1269,15 @@ class RSVPVolunteerRelation(Archived):
         project_json = self.project.hydrate_to_list_json()
         return merge_dicts(project_json, volunteer_json)
 
-    def is_up_for_renewal(self, now=None):
-        now = now or timezone.now()
-        return self.is_approved and (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
+    @staticmethod
+    def create(event: Event, volunteer: Contributor):
+        relation = RSVPVolunteerRelation()
+        relation.event = event
+        relation.volunteer = volunteer
+        relation.save()
+
+        # relation.role.add(role)
+        return relation
 
     @staticmethod
     def create(event: Event, volunteer: Contributor):
@@ -1284,8 +1290,12 @@ class RSVPVolunteerRelation(Archived):
         return relation
 
     @staticmethod
-    def get_for_user(user):
-        return RSVPVolunteerRelation.objects.filter(volunteer=user.id)
+    def get_for_event_volunteer(event: Event, volunteer: Contributor):
+        return RSVPVolunteerRelation.objects.filter(event=event.id, volunteer=volunteer.id).first()
+
+    @staticmethod
+    def get_for_volunteer(volunteer: Contributor):
+        return RSVPVolunteerRelation.objects.filter(volunteer=volunteer.id)
 
 
 class TaggedCategory(TaggedItemBase):

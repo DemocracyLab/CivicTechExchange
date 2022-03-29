@@ -22,6 +22,8 @@ import type { Dictionary } from "../../types/Generics.jsx";
 import NotificationModal from "../../common/notification/NotificationModal.jsx";
 import EventProjectAPIUtils from "../../utils/EventProjectAPIUtils.js";
 import { ModalSizes } from "../../common/ModalWrapper.jsx";
+import ConfirmationModal from "../../common/confirmation/ConfirmationModal.jsx";
+import promiseHelper from "../../utils/promise";
 
 type Props = {|
   event: ?EventData,
@@ -35,6 +37,7 @@ type State = {|
   isVolunteerRSVPed: boolean,
   showPromptCreateProjectModal: boolean,
   showPostRSVPModal: boolean,
+  showCancelRSVPConfirmModal: boolean,
   startDate: Moment,
   endDate: Moment,
   isPastEvent: boolean,
@@ -62,6 +65,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       isVolunteerRSVPed: isVolunteerRSVPed,
       showPromptCreateProjectModal: false,
       showPostRSVPModal: false,
+      showCancelRSVPConfirmModal: false,
       startDate: startDate,
       endDate: endDate,
       isPastEvent: endDate < datetime.now(),
@@ -141,6 +145,11 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                   this._renderRSVPAsVolunteerButton()}
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
+                  this.state.isVolunteerRSVPed &&
+                  this._renderCancelVolunteerRSVPButton()}
+                {!this.props.viewOnly &&
+                  !this.state.isPastEvent &&
+                  !this.state.isVolunteerRSVPed &&
                   this._renderRSVPAsProjectOwnerButton()}
               </div>
             </div>
@@ -271,6 +280,61 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           {...buttonConfig}
         >
           RSVP as Project Volunteer
+        </Button>
+      </React.Fragment>
+    );
+  }
+
+  _renderCancelVolunteerRSVPButton(): ?$React$Node {
+    // TODO: Add spinner while cancel call is in progress
+    let buttonConfig: Dictionary<any> = {};
+    if (CurrentUser.isLoggedIn()) {
+      buttonConfig = {
+        onClick: () =>
+          this.setState({
+            showCancelRSVPConfirmModal: true,
+          }),
+      };
+    } else {
+      // If not logged in, go to login page
+      buttonConfig = { href: urlHelper.logInThenReturn() };
+    }
+
+    return (
+      <React.Fragment>
+        <ConfirmationModal
+          showModal={this.state.showCancelRSVPConfirmModal}
+          headerText="Cancel Your RSVP?"
+          message="If you cancel your RSVP, you will be removed from the the hackathon.  Do you want to continue?"
+          reverseCancelConfirm={true}
+          onSelection={(canceled: boolean) => {
+            if (canceled) {
+              return EventProjectAPIUtils.rsvpEventCancel(
+                this.props.event.event_id,
+                response => {
+                  this.setState({
+                    showCancelRSVPConfirmModal: false,
+                    isVolunteerRSVPed: false,
+                  });
+                }
+              );
+            } else {
+              return promiseHelper.promisify(() =>
+                this.setState({
+                  showCancelRSVPConfirmModal: false,
+                })
+              );
+            }
+          }}
+        />
+
+        <Button
+          variant="primary"
+          className="AboutEvent-rsvp-btn"
+          type="button"
+          {...buttonConfig}
+        >
+          Cancel RSVP
         </Button>
       </React.Fragment>
     );

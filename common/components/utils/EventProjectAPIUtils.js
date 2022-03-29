@@ -74,4 +74,13 @@ export default class EventProjectAPIUtils {
     const url: string = `/api/event/${eventId}/rsvp/`;
     return apiHelper.post(url, {}, successCallback, errCallback);
   }
+
+  static rsvpEventCancel(
+    eventId: number,
+    successCallback: ?(APIResponse) => void,
+    errCallback: ?(APIError) => void
+  ): void {
+    const url: string = `/api/event/${eventId}/rsvp/cancel/`;
+    return apiHelper.post(url, {}, successCallback, errCallback);
+  }
 }
