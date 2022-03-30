@@ -27,6 +27,7 @@ import EventProjectRSVPModal from "./EventProjectRSVPModal.jsx";
 import type { Dictionary } from "../../types/Generics.jsx";
 import { VolunteerRSVPDetailsAPIData } from "../../utils/EventProjectAPIUtils.js";
 import RSVPVolunteerCard from "./RSVPVolunteerCard.jsx";
+import Toast from "../notification/Toast.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -39,6 +40,7 @@ type State = {|
   showJoinModal: boolean,
   positionToJoin: ?PositionInfo,
   showPositionModal: boolean,
+  showRSVPedToast: boolean,
   shownPosition: ?PositionInfo,
   showVideoModal: boolean,
   videoLink: ?LinkInfo,
@@ -73,6 +75,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       eventProject: props.eventProject,
       viewOnly: props.viewOnly,
       showContactModal: false,
+      showRSVPedToast: false,
       showPositionModal: false,
       shownPosition: null,
       videoLink: videoLink,
@@ -103,6 +106,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     let state: State = { showJoinModal: false };
     if (confirmJoin) {
       state.eventProject = eventProject;
+      state.showRSVPedToast = true;
     }
     this.setState(state);
   }
@@ -230,6 +234,13 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
+        <Toast
+          show={this.state.showRSVPedToast}
+          onClose={() => this.setState({ showRSVPedToast: false })}
+        >
+          You have joined the team. Thanks for signing up for the hackathon!
+        </Toast>
+
         <EventProjectRSVPModal
           eventProject={this.state.eventProject}
           positionToJoin={this.state.positionToJoin}
