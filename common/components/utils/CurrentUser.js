@@ -48,6 +48,7 @@ export type MyEventData = {|
 
 export type MyRSVPData = {|
   +event_id: number,
+  +project_id: ?number,
   +application_id: ?number,
   +user: ?VolunteerUserData,
   +application_text: ?string,

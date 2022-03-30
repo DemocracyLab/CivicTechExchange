@@ -271,7 +271,6 @@ def rsvp_for_event(request, event_id):
 
 
 def cancel_rsvp_for_event(request, event_id):
-    print('We get to cancel_rsvp_for_event.  TODO: REMOVE!!')
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
@@ -289,8 +288,30 @@ def cancel_rsvp_for_event(request, event_id):
 
 
 def rsvp_for_event_project(request, event_id, project_id):
-    # TODO
-    pass
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    event = Event.get_by_id_or_slug(event_id)
+    event_project = EventProject.get(event_id, project_id)
+    rsvp = RSVPVolunteerRelation.get_for_event_volunteer(event, user)
+    if rsvp is None:
+        rsvp = RSVPVolunteerRelation.create(event, user)
+
+    body = json.loads(request.body)
+    from pprint import pprint
+    pprint(body)
+    rsvp.event_project = event_project
+    rsvp.application_text = body['applicationText']
+    rsvp.save()
+    rsvp.role.add(body['roleTag'])
+
+    # send_volunteer_application_email(volunteer_relation)
+    user.purge_cache()
+    return HttpResponse(status=200)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it

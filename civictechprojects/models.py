@@ -539,12 +539,13 @@ class EventProject(Archived):
         links = self.get_event_project_links()
         files = self.get_event_project_files()
         positions = self.get_project_positions()
+        rsvps = self.get_event_project_volunteers()
         event_json = keys_subset(self.event.hydrate_to_json(), ['event_id', 'event_name', 'event_slug', 'event_thumbnail',
                                                                 'event_date_end', 'event_date_start', 'event_location'])
         project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
                                                                     'project_short_description', 'project_description',
                                                                     'project_description_solution', 'project_technologies',
-                                                                    'project_owners', 'project_volunteers', 'project_creator'])
+                                                                    'project_owners', 'project_creator'])
 
         # TODO: Export RSVP-ed volunteers
         event_project_json = merge_dicts(event_json, project_json, {
@@ -555,6 +556,7 @@ class EventProject(Archived):
             'event_project_onboarding_notes': self.onboarding_notes,
             'event_project_creator': self.creator.id,
             'event_project_positions': list(map(lambda position: position.to_json(), positions)),
+            'event_project_volunteers': list(map(lambda rsvp: rsvp.to_json(), rsvps)),
             'event_project_files': list(map(lambda file: file.to_json(), files)),
             'event_project_links': list(map(lambda link: link.to_json(), links)),
         })
@@ -569,6 +571,9 @@ class EventProject(Archived):
 
     def get_project_positions(self):
         return ProjectPosition.objects.filter(position_project=self.project, position_event=self.event).order_by('order_number')
+
+    def get_event_project_volunteers(self):
+        return RSVPVolunteerRelation.objects.filter(event_project=self)
 
     def get_url(self):
         return section_url(FrontEndSection.AboutEventProject,
@@ -1261,6 +1266,9 @@ class RSVPVolunteerRelation(Archived):
             'rsvp_date': self.rsvp_date.__str__(),
             'roleTag': Tag.hydrate_to_json(volunteer.id, list(self.role.all().values())),
         }
+
+        if self.event_project is not None:
+            volunteer_json['project_id'] = self.event_project.project.id
 
         return volunteer_json
 
