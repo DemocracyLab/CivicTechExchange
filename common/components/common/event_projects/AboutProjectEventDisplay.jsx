@@ -96,17 +96,19 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   //   });
   // }
 
-  confirmJoinProject(confirmJoin: boolean) {
+  confirmJoinProject(
+    eventProject: EventProjectAPIDetails,
+    confirmJoin: boolean
+  ) {
+    let state: State = { showJoinModal: false };
     if (confirmJoin) {
-      // TODO: Update list and show toast instead of reloading whole page
-      window.location.reload(true);
-    } else {
-      this.setState({ showJoinModal: false });
+      state.eventProject = eventProject;
     }
+    this.setState(state);
   }
 
   render(): React$Node {
-    const eventProject = this.state.eventProject;
+    const eventProject: EventProjectAPIDetails = this.state.eventProject;
     return (
       <div className="container Profile-root">
         <div className="row">
@@ -229,9 +231,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     return (
       <React.Fragment>
         <EventProjectRSVPModal
-          eventId={eventProject.event_id}
-          projectId={eventProject.project_id}
-          positions={eventProject.event_project_positions}
+          eventProject={this.state.eventProject}
           positionToJoin={this.state.positionToJoin}
           showModal={this.state.showJoinModal}
           handleClose={this.confirmJoinProject.bind(this)}
@@ -394,11 +394,11 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             const roleType: string = key;
             const volunteers: $ReadOnlyArray<VolunteerRSVPDetailsAPIData> = value;
             return (
-              <React.Fragment key={key}>
+              <React.Fragment key={roleType}>
                 <ul>
                   <li>
                     <h4>
-                      {key} ({value.length})
+                      {roleType} ({volunteers.length})
                     </h4>
                   </li>
                 </ul>

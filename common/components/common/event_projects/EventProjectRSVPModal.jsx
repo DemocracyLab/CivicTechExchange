@@ -14,15 +14,16 @@ import TagSelector, { tagOptionDisplay } from "../tags/TagSelector.jsx";
 import { TagDefinition } from "../../utils/ProjectAPIUtils.js";
 import { SelectOption } from "../../types/SelectOption.jsx";
 import type { PositionInfo } from "../../forms/PositionInfo.jsx";
-import EventProjectAPIUtils from "../../utils/EventProjectAPIUtils.js";
+import EventProjectAPIUtils, {
+  EventProjectAPIDetails,
+} from "../../utils/EventProjectAPIUtils.js";
 
 type Props = {|
-  eventId: number,
-  projectId: number,
+  eventProject: EventProjectAPIDetails,
   positions: $ReadOnlyArray<PositionInfo>,
   positionToJoin: ?PositionInfo,
   showModal: boolean,
-  handleClose: () => void,
+  handleClose: (boolean, EventProjectAPIDetails) => void,
 |};
 type State = {|
   showModal: boolean,
@@ -32,7 +33,6 @@ type State = {|
   initialPositionSelection: ?SelectOption,
   existingPositionOption: ?SelectOption,
   roleTag: ?TagDefinition,
-  showConfirmationModal: boolean,
 |};
 
 const OtherRoleOption: SelectOption = { label: "Other", value: "Other" };
@@ -50,11 +50,9 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
       message: "",
       positionToJoin: null,
       roleTag: null,
-      showConfirmationModal: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.askForSendConfirmation = this.askForSendConfirmation.bind(this);
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
     this._fieldsFilled = this._fieldsFilled.bind(this);
   }
@@ -64,7 +62,7 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
     const positionOptions: $ReadOnlyArray<SelectOption> = [
       noPositionOption,
     ].concat(
-      nextProps.positions
+      nextProps.eventProject.event_project_positions
         .map((position: PositionInfo) => ({
           value: position.roleTag.tag_name,
           label: tagOptionDisplay(position.roleTag),
@@ -101,19 +99,12 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
     this.forceUpdate();
   }
 
-  askForSendConfirmation(): void {
-    metrics.logVolunteerClickVolunteerSubmit(
-      CurrentUser.userID(),
-      this.props.projectId
-    );
-    this.setState({ showConfirmationModal: true });
-  }
-
   receiveSendConfirmation(confirmation: boolean): void {
     if (confirmation) {
       this.handleSubmit();
+    } else {
+      this.closeModal(this.props.eventProject, false);
     }
-    this.setState({ showConfirmationModal: false });
   }
 
   handleExistingPositionSelection(positionOption: SelectOption): void {
@@ -129,35 +120,33 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
     //   this.props.projectId
     // );
     EventProjectAPIUtils.rsvpForEventProject(
-      this.props.eventId,
-      this.props.projectId,
+      this.props.eventProject.event_id,
+      this.props.eventProject.project_id,
       this.state.message,
       this._selectedTag(),
-      response => this.closeModal(true),
+      response => this.closeModal(response, true),
       response => null /* TODO: Report error to user */
     );
   }
 
-  closeModal(submitted: boolean) {
+  closeModal(response: string, submitted: boolean) {
+    const eventProject: EventProjectAPIDetails = JSON.parse(response);
     this.setState({
       isSending: false,
       existingPositionOption: null,
     });
-    this.props.handleClose(submitted);
+    this.props.handleClose(eventProject, submitted);
   }
 
   render(): React$Node {
     // TODO: Use ModalWrapper
+    const positions: $ReadOnlyArray<PositionInfo> =
+      this.props.eventProject?.event_project_positions || [];
     return (
       <React.Fragment>
-        <ConfirmationModal
-          showModal={this.state.showConfirmationModal}
-          message="Do you want to apply to this project?"
-          onSelection={this.receiveSendConfirmation}
-        />
         <Modal
           show={this.state.showModal}
-          onHide={this.closeModal.bind(this, false)}
+          onHide={this.closeModal.bind(this, this.props.eventProject, false)}
         >
           <Modal.Header closeButton>
             <Modal.Title>Volunteer Application</Modal.Title>
@@ -165,10 +154,10 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
           <Modal.Body>
             <Form>
               <Form.Group>
-                {!_.isEmpty(this.props.positions)
+                {!_.isEmpty(positions)
                   ? this._renderExistingPositionDropdown()
                   : null}
-                {_.isEmpty(this.props.positions) ||
+                {_.isEmpty(positions) ||
                 (this.state.existingPositionOption &&
                   this.state.existingPositionOption.value ===
                     OtherRoleOption.value)
@@ -193,14 +182,18 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
           <Modal.Footer>
             <Button
               variant="outline-secondary"
-              onClick={this.closeModal.bind(this, false)}
+              onClick={this.closeModal.bind(
+                this,
+                this.props.eventProject,
+                false
+              )}
             >
               {"Cancel"}
             </Button>
             <Button
               variant="primary"
               disabled={this.state.isSending || !this._fieldsFilled()}
-              onClick={this.askForSendConfirmation}
+              onClick={this.receiveSendConfirmation}
             >
               {this.state.isSending ? "Sending" : "Send"}
             </Button>

@@ -610,6 +610,7 @@ class EventProject(Archived):
     def recache(self):
         hydrated_project = self._hydrate_to_json()
         EventProjectCache.refresh(self, hydrated_project)
+        return hydrated_project
 
 
 class NameRecord(models.Model):

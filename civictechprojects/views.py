@@ -302,16 +302,15 @@ def rsvp_for_event_project(request, event_id, project_id):
         rsvp = RSVPVolunteerRelation.create(event, user)
 
     body = json.loads(request.body)
-    from pprint import pprint
-    pprint(body)
     rsvp.event_project = event_project
     rsvp.application_text = body['applicationText']
     rsvp.save()
     rsvp.role.add(body['roleTag'])
 
+
     # send_volunteer_application_email(volunteer_relation)
     user.purge_cache()
-    return HttpResponse(status=200)
+    return JsonResponse(event_project.recache())
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
