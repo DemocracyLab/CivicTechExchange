@@ -113,4 +113,14 @@ export default class EventProjectAPIUtils {
       errCallback
     );
   }
+
+  static cancelEventProject(
+    eventId: number,
+    projectId: number,
+    successCallback: ?(APIResponse) => void,
+    errCallback: ?(APIError) => void
+  ): void {
+    const url: string = `/api/event/${eventId}/projects/${projectId}/cancel/`;
+    return apiHelper.post(url, {}, successCallback, errCallback);
+  }
 }

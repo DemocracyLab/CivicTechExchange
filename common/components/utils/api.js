@@ -18,7 +18,7 @@ class apiHelper {
     body: {||},
     successCallback: APIResponse => void,
     errCallback: APIError => void
-  ) {
+  ): Promise {
     // TODO: Replace ProjectAPIUtils.post() and UserAPIUtils.post() with this method
     const bodyJson: string = JSON.stringify(body);
     const cookies: Dictionary<string> = htmlDocument.cookies();
@@ -27,7 +27,7 @@ class apiHelper {
       "Content-Type": "application/json",
       "X-CSRFToken": cookies["csrftoken"],
     };
-    apiHelper._request(
+    return apiHelper._request(
       url,
       "POST",
       bodyJson,
@@ -83,7 +83,7 @@ class apiHelper {
     successCallback: ({||}) => void,
     errCallback: APIError => void,
     requestOptions: object
-  ): void {
+  ): Promise {
     const doError = response =>
       errCallback &&
       errCallback({
@@ -96,7 +96,7 @@ class apiHelper {
       requestOptions
     );
 
-    fetch(new Request(url, _requestOptions))
+    return fetch(new Request(url, _requestOptions))
       .then((response: Response) => {
         if (!response.ok) {
           throw Error();

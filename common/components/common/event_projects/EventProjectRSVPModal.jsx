@@ -7,8 +7,6 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import metrics from "../../utils/metrics.js";
-import CurrentUser from "../../utils/CurrentUser.js";
-import ConfirmationModal from "../../common/confirmation/ConfirmationModal.jsx";
 import TagCategory from "../tags/TagCategory.jsx";
 import TagSelector, { tagOptionDisplay } from "../tags/TagSelector.jsx";
 import { TagDefinition } from "../../utils/ProjectAPIUtils.js";
@@ -17,6 +15,7 @@ import type { PositionInfo } from "../../forms/PositionInfo.jsx";
 import EventProjectAPIUtils, {
   EventProjectAPIDetails,
 } from "../../utils/EventProjectAPIUtils.js";
+import type { APIResponse } from "../../utils/api.js";
 
 type Props = {|
   eventProject: EventProjectAPIDetails,
@@ -124,13 +123,14 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
       this.props.eventProject.project_id,
       this.state.message,
       this._selectedTag(),
-      response => this.closeModal(response, true),
+      (response: APIResponse) => {
+        this.closeModal(JSON.parse(response), true);
+      },
       response => null /* TODO: Report error to user */
     );
   }
 
-  closeModal(response: string, submitted: boolean) {
-    const eventProject: EventProjectAPIDetails = JSON.parse(response);
+  closeModal(eventProject: EventProjectAPIDetails, submitted: boolean) {
     this.setState({
       isSending: false,
       existingPositionOption: null,

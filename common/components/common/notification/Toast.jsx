@@ -5,6 +5,7 @@ import ReactToast from "react-bootstrap/Toast";
 
 type Props = {|
   timeoutMilliseconds: number,
+  header: ?string,
   show: boolean,
   onClose: () => void,
 |};
@@ -41,9 +42,33 @@ class Toast extends React.PureComponent<Props, State> {
             right: 0,
           }}
         >
-          <ReactToast.Body>{this.props.children}</ReactToast.Body>
+          {this.props.header
+            ? this._renderMessageWithHeaderBody()
+            : this._renderSingleMessageBody()}
         </ReactToast>
       )
+    );
+  }
+
+  _renderSingleMessageBody(): React$Node {
+    return (
+      <React.Fragment>
+        <ReactToast.Header />
+        <ReactToast.Body>
+          <strong>{this.props.children}</strong>
+        </ReactToast.Body>
+      </React.Fragment>
+    );
+  }
+
+  _renderMessageWithHeaderBody(): React$Node {
+    return (
+      <React.Fragment>
+        <ReactToast.Header>
+          <strong>{this.props.header}</strong>
+        </ReactToast.Header>
+        <ReactToast.Body>{this.props.children}</ReactToast.Body>
+      </React.Fragment>
     );
   }
 }

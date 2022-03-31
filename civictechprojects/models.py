@@ -579,6 +579,9 @@ class EventProject(Archived):
         return section_url(FrontEndSection.AboutEventProject,
                            {'event_id': self.event.id, 'project_id': self.project.id})
 
+    def is_owner(self, user: Contributor):
+        return user.id == self.project.id
+
     @staticmethod
     def get(event_id, project_id):
         event = Event.get_by_id_or_slug(event_id)

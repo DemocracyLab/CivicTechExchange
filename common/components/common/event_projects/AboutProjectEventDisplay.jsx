@@ -25,9 +25,14 @@ import VideoModal from "../video/VideoModal.jsx";
 import type { LinkInfo } from "../../forms/LinkInfo.jsx";
 import EventProjectRSVPModal from "./EventProjectRSVPModal.jsx";
 import type { Dictionary } from "../../types/Generics.jsx";
-import { VolunteerRSVPDetailsAPIData } from "../../utils/EventProjectAPIUtils.js";
+import EventProjectAPIUtils, {
+  VolunteerRSVPDetailsAPIData,
+} from "../../utils/EventProjectAPIUtils.js";
 import RSVPVolunteerCard from "./RSVPVolunteerCard.jsx";
 import Toast from "../notification/Toast.jsx";
+import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
+import { APIResponse } from "../../utils/ProjectAPIUtils.js";
+import promiseHelper from "../../utils/promise.js";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -41,6 +46,8 @@ type State = {|
   positionToJoin: ?PositionInfo,
   showPositionModal: boolean,
   showRSVPedToast: boolean,
+  showCancelRSVPModal: boolean,
+  showPostCancelRSVPToast: boolean,
   shownPosition: ?PositionInfo,
   showVideoModal: boolean,
   videoLink: ?LinkInfo,
@@ -76,6 +83,8 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       viewOnly: props.viewOnly,
       showContactModal: false,
       showRSVPedToast: false,
+      showCancelRSVPModal: false,
+      showPostCancelRSVPToast: false,
       showPositionModal: false,
       shownPosition: null,
       videoLink: videoLink,
@@ -107,6 +116,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     if (confirmJoin) {
       state.eventProject = eventProject;
       state.showRSVPedToast = true;
+      state.isRSVPedForThisEventProject = true;
     }
     this.setState(state);
   }
@@ -208,6 +218,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
               </Button>
             )}
             {this._renderJoinButton(eventProject)}
+            {this._renderLeaveButton(eventProject)}
           </div>
         </div>
       </div>
@@ -257,6 +268,70 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           >
             Sign up
           </Button>
+        )}
+      </React.Fragment>
+    );
+  }
+
+  _renderLeaveButton(eventProject: EventProjectAPIDetails): React$Node {
+    const cancelRSVP: boolean => Promise<any> = (confirm: boolean) => {
+      if (confirm) {
+        const confirmCancel = (response: APIResponse) => {
+          return promiseHelper.promisify(() => {
+            const eventProject: EventProjectAPIDetails = JSON.parse(response);
+            this.setState({
+              eventProject: eventProject,
+              showCancelRSVPModal: false,
+              showPostCancelRSVPToast: true,
+              isRSVPedForThisEventProject: false,
+            });
+          });
+        };
+        return EventProjectAPIUtils.cancelEventProject(
+          eventProject.event_id,
+          eventProject.project_id,
+          confirmCancel
+        );
+      } else {
+        return promiseHelper.promisify(() =>
+          this.setState({
+            showCancelRSVPModal: false,
+          })
+        );
+      }
+    };
+
+    return (
+      <React.Fragment>
+        <Toast
+          header="You Have Left This Hackathon Project"
+          show={this.state.showPostCancelRSVPToast}
+          onClose={() => this.setState({ showPostCancelRSVPToast: false })}
+          timeoutMilliseconds={4000}
+        >
+          You may sign up for a different project, or join a project on the day
+          of the hackathon.
+        </Toast>
+
+        {this.state.isRSVPedForThisEventProject && (
+          <React.Fragment>
+            <ConfirmationModal
+              showModal={this.state.showCancelRSVPModal}
+              message="You will be removed from this hackathon project.  Do you want to continue?"
+              headerText="Leave this Hackathon Project?"
+              onSelection={cancelRSVP}
+              reverseCancelConfirm={true}
+            />
+
+            <Button
+              variant="primary"
+              className="AboutEvent-rsvp-btn"
+              type="button"
+              onClick={() => this.setState({ showCancelRSVPModal: true })}
+            >
+              Leave Project
+            </Button>
+          </React.Fragment>
         )}
       </React.Fragment>
     );
