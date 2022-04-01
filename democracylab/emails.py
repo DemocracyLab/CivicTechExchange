@@ -493,6 +493,22 @@ def notify_rsvped_volunteer(event: Event, volunteer: Contributor):
     send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 
+def notify_rsvp_cancellation(event: Event, volunteer: Contributor):
+    events_url = section_url(FrontEndSection.FindEvents)
+    email_template = HtmlEmailTemplate() \
+        .paragraph("We're sorry you won't make it.") \
+        .paragraph('You can re-join the event, or other DemocracyLab events at any time.') \
+        .button(url=events_url, text='Browse other events')
+    context = {}
+    email_msg = EmailMessage(
+        subject="You've canceled your RSVP for " + event.event_name,
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
+        to=[volunteer.email]
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
+
+
 def _send_email(email_msg, email_acct=None):
     _email_acct = email_acct or EmailAccount.EMAIL_SUPPORT_ACCT
 
