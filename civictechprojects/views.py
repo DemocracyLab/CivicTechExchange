@@ -35,7 +35,7 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
     notify_group_owners_group_approved, notify_event_owners_event_approved, notify_rsvped_volunteer, notify_rsvp_cancellation, \
-    notify_rsvp_for_project_owner
+    notify_rsvp_for_project_owner, notify_rsvp_cancellation_for_project_owner
 from civictechprojects.helpers.context_preload import context_preload
 from civictechprojects.helpers.projects.annotations import apply_project_annotations
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
@@ -333,7 +333,7 @@ def cancel_rsvp_for_event_project(request, event_id, project_id):
         return HttpResponse(status=200)
     elif rsvp is not None:
         # If rsvp-ed, delete rsvp
-        print('delete event project rsvp')
+        notify_rsvp_cancellation_for_project_owner(rsvp)
         rsvp.delete()
         user.purge_cache()
         return JsonResponse(event_project.recache())

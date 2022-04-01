@@ -527,6 +527,21 @@ def notify_rsvp_for_project_owner(rsvp: RSVPVolunteerRelation):
     send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 
+def notify_rsvp_cancellation_for_project_owner(rsvp: RSVPVolunteerRelation):
+    email_template = HtmlEmailTemplate() \
+        .paragraph("Unfortunately, a volunteer has left your hackathon project. " +
+                   "But there's still plenty of time for volunteers to sign up, even on the day of the hackathon.") \
+        .button(url=rsvp.event_project.get_url(), text='View Team')
+    context = {}
+    email_msg = EmailMessage(
+        subject='A volunteer has left your hackathon project',
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
+        to=[rsvp.event_project.project.project_creator.email]
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
+
+
 def _send_email(email_msg, email_acct=None):
     _email_acct = email_acct or EmailAccount.EMAIL_SUPPORT_ACCT
 
