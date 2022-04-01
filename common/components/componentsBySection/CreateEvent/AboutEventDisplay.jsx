@@ -287,7 +287,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         <NotificationModal
           showModal={this.state.showPostRSVPModal}
           size={ModalSizes.Medium}
-          message="Your next step is to select a project.  If you don't see a project you like, please come back closer to the hackathon."
+          message="Your next step is to select a project.  If you don't see a project you like, please check back closer to the hackathon."
           buttonText="Ok"
           headerText="Thank you for RSVPing!"
           onClickButton={() =>
@@ -331,7 +331,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         <ConfirmationModal
           showModal={this.state.showCancelRSVPConfirmModal}
           headerText="Cancel Your RSVP?"
-          message="If you cancel your RSVP, you will be removed from the the hackathon.  Do you want to continue?"
+          message="If you cancel your RSVP, you will be removed from the hackathon.  Do you want to continue?"
           reverseCancelConfirm={true}
           onSelection={(canceled: boolean) => {
             if (canceled) {
