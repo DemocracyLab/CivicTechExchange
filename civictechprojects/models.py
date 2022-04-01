@@ -580,7 +580,7 @@ class EventProject(Archived):
 
     def get_url(self):
         return section_url(FrontEndSection.AboutEventProject,
-                           {'event_id': self.event.id, 'project_id': self.project.id})
+                           {'event_id': self.event.event_slug or self.event.id, 'project_id': self.project.id})
 
     def is_owner(self, user: Contributor):
         return user.id == self.project.id

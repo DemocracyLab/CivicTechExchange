@@ -9,7 +9,7 @@ from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datet
 from common.helpers.queue import enqueue
 from democracylab.tokens import email_verify_token_generator
 from democracylab.models import Contributor
-from civictechprojects.models import VolunteerRelation, EventProject, Event
+from civictechprojects.models import VolunteerRelation, EventProject, Event, RSVPVolunteerRelation
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 
@@ -504,6 +504,39 @@ def notify_rsvp_cancellation(event: Event, volunteer: Contributor):
         subject="You've canceled your RSVP for " + event.event_name,
         from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
         to=[volunteer.email]
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
+
+
+def notify_rsvp_for_project_owner(rsvp: RSVPVolunteerRelation):
+    role = Tag.get_by_name(rsvp.role.first())
+    email_template = HtmlEmailTemplate() \
+        .paragraph("Congratulations!  A volunteer ({{role}}) has signed up for your hackathon project.  " +
+                   "Your team is growing.") \
+        .button(url=rsvp.event_project.get_url(), text='View Team')
+    context = {
+        'role': role.display_name,
+    }
+    email_msg = EmailMessage(
+        subject='A volunteer has signed up for your hackathon project',
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
+        to=[rsvp.event_project.project.project_creator.email]
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
+
+
+def notify_rsvp_cancellation_for_project_owner(rsvp: RSVPVolunteerRelation):
+    email_template = HtmlEmailTemplate() \
+        .paragraph("Unfortunately, a volunteer has left your hackathon project. " +
+                   "But there's still plenty of time for volunteers to sign up, even on the day of the hackathon.") \
+        .button(url=rsvp.event_project.get_url(), text='View Team')
+    context = {}
+    email_msg = EmailMessage(
+        subject='A volunteer has left your hackathon project',
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
+        to=[rsvp.event_project.project.project_creator.email]
     )
     email_msg = email_template.render(email_msg, context)
     send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
