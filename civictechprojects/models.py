@@ -480,6 +480,9 @@ class Event(Archived):
     def get_event_files(self):
         return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
+    def get_url(self):
+        return section_url(FrontEndSection.AboutEvent, {'id': self.event_slug or self.id})
+
     @staticmethod
     def get_by_id_or_slug(slug):
         event = None

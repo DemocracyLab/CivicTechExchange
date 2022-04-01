@@ -9,7 +9,7 @@ from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datet
 from common.helpers.queue import enqueue
 from democracylab.tokens import email_verify_token_generator
 from democracylab.models import Contributor
-from civictechprojects.models import VolunteerRelation, EventProject
+from civictechprojects.models import VolunteerRelation, EventProject, Event
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 
@@ -470,6 +470,27 @@ def send_group_project_invitation_email(project_relation):
         .paragraph('\"{message}\"'.format(message=project_relation.introduction_text)) \
         .button(url=project_url, text='View Your Groups')
     send_to_project_owners(project=project, sender=group.group_creator, subject=invite_header, template=email_template)
+
+
+def notify_rsvped_volunteer(event: Event, volunteer: Contributor):
+    email_template = HtmlEmailTemplate() \
+        .header('Hi {{first_name}}, thanks for signing up for {{event_name}}') \
+        .paragraph(datetime_to_string(event.event_date_start, DateTimeFormats.SCHEDULED_DATE_TIME)) \
+        .paragraph("We're excited to build something great together.  Please join one of the participating " +
+                   "projects, or check the event page, for more projects closer to the hackathon.  " +
+                   "You can also select a project on the day of the hackathon.") \
+        .button(url=event.get_url(), text='Event Details')
+    context = {
+        'first_name': volunteer.first_name,
+        'event_name': event.event_name
+    }
+    email_msg = EmailMessage(
+        subject='Confirmed: RSVP for ' + event.event_name,
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
+        to=[volunteer.email]
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 
 def _send_email(email_msg, email_acct=None):
