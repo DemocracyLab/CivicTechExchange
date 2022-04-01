@@ -5,6 +5,7 @@ import ReactToast from "react-bootstrap/Toast";
 import { Container } from "flux/utils";
 import type { FluxReduceStore } from "flux/utils";
 import PageOffsetStore from "../../stores/PageOffsetStore.js";
+import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 
 type Props = {|
   timeoutMilliseconds: number,
@@ -39,7 +40,7 @@ class Toast extends React.Component<Props, State> {
   }
 
   render(): React$Node {
-    const offsetVal = this.state.headerHeight + 20
+    const offsetVal = this.state.headerHeight + 20;
     // TODO: Add styling for success message according to designs
     // TODO: pass autohide via prop rather than forcing it to always-on here
     const style = {
@@ -69,7 +70,11 @@ class Toast extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <ReactToast.Header className="d-none" />
-        <ReactToast.Body className="toast-no-header-body">
+        <ReactToast.Body className="toast-no-header-body toast-body">
+          <i
+            className={Glyph(GlyphStyles.CircleCheck, GlyphSizes.LG)}
+            aria-hidden="true"
+          ></i>
           <strong>{this.props.children}</strong>
           <button
             type="button"
@@ -89,9 +94,15 @@ class Toast extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <ReactToast.Header>
+          <i
+            className={Glyph(GlyphStyles.CircleCheck, GlyphSizes.LG)}
+            aria-hidden="true"
+          ></i>
           <strong>{this.props.header}</strong>
         </ReactToast.Header>
-        <ReactToast.Body>{this.props.children}</ReactToast.Body>
+        <ReactToast.Body className="toast-body toast-with-header-body">
+          {this.props.children}
+        </ReactToast.Body>
       </React.Fragment>
     );
   }
