@@ -34,7 +34,8 @@ from common.helpers.constants import FrontEndSection, TagCategory
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
-    notify_group_owners_group_approved, notify_event_owners_event_approved, notify_rsvped_volunteer, notify_rsvp_cancellation
+    notify_group_owners_group_approved, notify_event_owners_event_approved, notify_rsvped_volunteer, notify_rsvp_cancellation, \
+    notify_rsvp_for_project_owner
 from civictechprojects.helpers.context_preload import context_preload
 from civictechprojects.helpers.projects.annotations import apply_project_annotations
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
@@ -308,6 +309,7 @@ def rsvp_for_event_project(request, event_id, project_id):
     rsvp.role.add(body['roleTag'])
 
     # send_volunteer_application_email(volunteer_relation)
+    notify_rsvp_for_project_owner(rsvp)
     user.purge_cache()
     return JsonResponse(event_project.recache())
 
