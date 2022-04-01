@@ -246,10 +246,11 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     return (
       <React.Fragment>
         <Toast
+          header=""
           show={this.state.showRSVPedToast}
           onClose={() => this.setState({ showRSVPedToast: false })}
         >
-          You have joined the team. Thanks for signing up for the hackathon!
+          <p>You have joined the team. Thanks for signing up for the hackathon!</p>
         </Toast>
 
         <EventProjectRSVPModal
@@ -307,10 +308,9 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           header="You Have Left This Hackathon Project"
           show={this.state.showPostCancelRSVPToast}
           onClose={() => this.setState({ showPostCancelRSVPToast: false })}
-          timeoutMilliseconds={4000}
         >
-          You may sign up for a different project, or join a project on the day
-          of the hackathon.
+          <p>You may sign up for a different project, or join a project on the day
+          of the hackathon.</p>
         </Toast>
 
         {this.state.isRSVPedForThisEventProject && (

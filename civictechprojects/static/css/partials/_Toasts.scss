@@ -1,0 +1,26 @@
+//dlab toast overrides (take the default Bootstrap styling and do what we want instead)
+//TODO: make the background-color declaration "success only" and/or make bg color selectable by prop
+.toast {
+    z-index: 101; // nav & header is z-index 99, so this ensures toasts won't hide behind it
+    background-color: $color-feedback-background-success-weakest;
+    p {
+        margin-bottom: 0;
+    }
+}
+.toast-header {
+    color: inherit;
+    background-color: inherit;
+    border-bottom: none;
+    justify-content: space-between; //makes sure header text (if present) and "x" button are positioned
+    button {
+        width: initial !important; // prevent page-level button rules from altering this
+    }
+}
+.toast-no-header-body {
+    display: flex;
+    justify-content: space-between; // makes sure single-message content and "x" button are positioned
+    button {
+        width: initial !important; // prevent page-level button rules from altering this
+    }
+}
+
