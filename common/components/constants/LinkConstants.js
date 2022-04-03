@@ -28,6 +28,11 @@ export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConf
     iconClass: GlyphStyles.Slack,
   },
   {
+    sourceUrlPattern: new RegExp("figma.com", "i"),
+    sourceDisplayName: "Figma",
+    iconClass: GlyphStyles.Figma,
+  },
+  {
     sourceUrlPattern: new RegExp("trello.com", "i"),
     sourceDisplayName: "Trello",
     iconClass: GlyphStyles.Trello,
@@ -68,6 +73,7 @@ export const LinkTypes: Dictionary<string> = {
   DESIGN: "link_design",
   TWITTER: "social_twitter",
   FACEBOOK: "social_facebook",
+  Figma: "link_facebook",
 };
 
 export const DefaultLinkDisplayConfigurations: KeyValuePair<LinkSourceDisplayConfig> = _.fromPairs(
