@@ -53,6 +53,7 @@ type State = {|
   videoLink: ?LinkInfo,
   isRSVPedForThisEventProject: boolean,
   isRSVPedForOtherEventProject: boolean,
+  isProjectOwner: boolean,
 |};
 
 class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
@@ -60,6 +61,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     super();
     const userContext: UserContext = CurrentUser?.userContext();
     const rsvp_events: Dictionary<MyRSVPData> = userContext?.rsvp_events || {};
+    const isProjectOwner: boolean = CurrentUser.isOwner(props.eventProject);
     const isRSVPedForThisEventProject: boolean = _.some(
       rsvp_events,
       (rsvp: MyRSVPData) =>
@@ -90,7 +92,9 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       videoLink: videoLink,
       isRSVPedForThisEventProject: isRSVPedForThisEventProject,
       isRSVPedForOtherEventProject: isRSVPedForOtherEventProject,
+      isProjectOwner: isProjectOwner,
     };
+    this.cancelRSVP = this.cancelRSVP.bind(this, props.eventProject);
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -219,6 +223,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             )}
             {this._renderJoinButton(eventProject)}
             {this._renderLeaveButton(eventProject)}
+            {this._renderCancelRSVPButton(eventProject)}
           </div>
         </div>
       </div>
@@ -229,6 +234,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     let buttonConfig: Dictionary<any> = {};
     if (CurrentUser.isLoggedIn()) {
       if (
+        !this.state.isProjectOwner &&
         !this.state.isRSVPedForOtherEventProject &&
         !this.state.isRSVPedForThisEventProject
       ) {
@@ -276,34 +282,32 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     );
   }
 
-  _renderLeaveButton(eventProject: EventProjectAPIDetails): React$Node {
-    const cancelRSVP: boolean => Promise<any> = (confirm: boolean) => {
-      if (confirm) {
-        const confirmCancel = (response: APIResponse) => {
-          return promiseHelper.promisify(() => {
-            const eventProject: EventProjectAPIDetails = JSON.parse(response);
-            this.setState({
-              eventProject: eventProject,
-              showCancelRSVPModal: false,
-              showPostCancelRSVPToast: true,
-              isRSVPedForThisEventProject: false,
-            });
-          });
-        };
-        return EventProjectAPIUtils.cancelEventProject(
-          eventProject.event_id,
-          eventProject.project_id,
-          confirmCancel
-        );
-      } else {
-        return promiseHelper.promisify(() =>
-          this.setState({
-            showCancelRSVPModal: false,
-          })
-        );
-      }
-    };
+  cancelRSVP(
+    eventProject: EventProjectAPIDetails,
+    confirm: boolean
+  ): Promise<any> {
+    if (confirm) {
+      const confirmCancel = (response: APIResponse) => {
+        // TODO: Show toast on Event page saying that event project was canceled
+        window.location.href = url.section(Section.AboutEvent, {
+          id: eventProject.event_slug || eventProject.event_id,
+        });
+      };
+      return EventProjectAPIUtils.cancelEventProject(
+        eventProject.event_id,
+        eventProject.project_id,
+        confirmCancel
+      );
+    } else {
+      return promiseHelper.promisify(() =>
+        this.setState({
+          showCancelRSVPModal: false,
+        })
+      );
+    }
+  }
 
+  _renderLeaveButton(eventProject: EventProjectAPIDetails): React$Node {
     return (
       <React.Fragment>
         <Toast
@@ -324,7 +328,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
               showModal={this.state.showCancelRSVPModal}
               message="You will be removed from this hackathon project.  Do you want to continue?"
               headerText="Leave this Hackathon Project?"
-              onSelection={cancelRSVP}
+              onSelection={this.cancelRSVP}
               reverseCancelConfirm={true}
             />
 
@@ -339,6 +343,31 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           </React.Fragment>
         )}
       </React.Fragment>
+    );
+  }
+
+  _renderCancelRSVPButton(eventProject: EventProjectAPIDetails): React$Node {
+    return (
+      this.state.isProjectOwner && (
+        <React.Fragment>
+          <ConfirmationModal
+            showModal={this.state.showCancelRSVPModal}
+            message="If you cancel your RSVP, you will be removed from the hackathon.  Do you want to continue?"
+            headerText="Cancel Your RSVP?"
+            onSelection={this.cancelRSVP}
+            reverseCancelConfirm={true}
+          />
+
+          <Button
+            variant="primary"
+            className="AboutEvent-rsvp-btn"
+            type="button"
+            onClick={() => this.setState({ showCancelRSVPModal: true })}
+          >
+            Cancel RSVP
+          </Button>
+        </React.Fragment>
+      )
     );
   }
 

@@ -327,8 +327,10 @@ def cancel_rsvp_for_event_project(request, event_id, project_id):
     rsvp = RSVPVolunteerRelation.get_for_event_volunteer(event, user)
     if event_project.is_owner(user):
         # If event project owner, delete event project
-        print('TODO: delete event project')
-        # event_project.delete()
+        project = event_project.project
+        event_project.delete()
+        event.recache()
+        project.recache()
         user.purge_cache()
         return HttpResponse(status=200)
     elif rsvp is not None:

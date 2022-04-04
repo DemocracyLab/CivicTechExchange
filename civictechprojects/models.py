@@ -506,6 +506,7 @@ class Event(Archived):
         return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
     def get_linked_projects(self):
+        # TODO: Don't show deleted event projects
         projects = Project.objects.filter(project_events__event=self)
         return projects
 
@@ -566,6 +567,20 @@ class EventProject(Archived):
 
         return event_project_json
 
+    def delete(self):
+        print('Deleting Event Project: {ep}'.format(ep=self.__str__()))
+        for link in self.get_event_project_links():
+            print('Deleting link: ' + link.__str__())
+            link.delete()
+        for position in self.get_project_positions():
+            print('Deleting position: ' + position.__str__())
+            position.delete()
+        for rsvp in self.get_event_project_volunteers():
+            print('Deleting rsvp: ' + rsvp.__str__())
+            rsvp.delete()
+
+        super().delete()
+
     def get_event_project_links(self):
         return ProjectLink.objects.filter(link_project=self.project, link_event=self.event, link_group=None, link_user=None)
 
@@ -583,7 +598,7 @@ class EventProject(Archived):
                            {'event_id': self.event.event_slug or self.event.id, 'project_id': self.project.id})
 
     def is_owner(self, user: Contributor):
-        return user.id == self.project.id
+        return user.id == self.project.project_creator.id
 
     @staticmethod
     def get(event_id, project_id):
@@ -809,6 +824,9 @@ class ProjectLink(models.Model):
     link_url = models.CharField(max_length=2083)
     link_visibility = models.CharField(max_length=50)
 
+    def __str__(self):
+        return '{id}: {name} - {url}'.format(id=self.id, name=self.link_name, url=self.link_url)
+
     @staticmethod
     def create(owner, url, name, visibility):
         # TODO: Validate input
@@ -899,6 +917,13 @@ class ProjectPosition(models.Model):
     description_url = models.CharField(max_length=2083, default='')
     order_number = models.PositiveIntegerField(default=0)
     is_hidden = models.BooleanField(default=False)
+
+    def __str__(self):
+        entity = ''
+        entity += self.position_event.__str__() + ', ' if self.position_event else ''
+        entity += self.position_project.__str__() if self.position_project else ''
+        role = self.position_role.all().values()[0]['name']
+        return '{id}: {entity} - {role}'.format(id=self.id, entity=entity, role=role)
 
     def to_json(self):
         return {
