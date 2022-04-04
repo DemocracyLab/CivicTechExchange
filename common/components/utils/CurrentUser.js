@@ -127,25 +127,55 @@ class CurrentUser {
     return CurrentUser.isOwner(entity) || CurrentUser.isCoOwner(entity);
   }
 
-  static canVolunteerForProject(project: ProjectDetailsAPIData): boolean {
-    return (
-      project.project_claimed &&
-      CurrentUser.isLoggedIn() &&
-      CurrentUser.isEmailVerified() &&
-      !CurrentUser._getVolunteerStatus(project) &&
-      !CurrentUser.isOwner(project)
-    );
+  static _isEventProject(
+    entity: ProjectDetailsAPIData | EventProjectAPIDetails
+  ) {
+    return "event_project_id" in entity;
+  }
+
+  static canVolunteerFor(
+    entity: ProjectDetailsAPIData | EventProjectAPIDetails
+  ): boolean {
+    if (CurrentUser._isEventProject(entity)) {
+      const eventProject: EventProjectAPIDetails = entity;
+      return (
+        CurrentUser.isLoggedIn() &&
+        CurrentUser.isEmailVerified() &&
+        !CurrentUser._getVolunteerStatus(eventProject) &&
+        !CurrentUser.isOwner(eventProject)
+      );
+    } else {
+      const project: ProjectDetailsAPIData = entity;
+      return (
+        project.project_claimed &&
+        CurrentUser.isLoggedIn() &&
+        CurrentUser.isEmailVerified() &&
+        !CurrentUser._getVolunteerStatus(project) &&
+        !CurrentUser.isOwner(project)
+      );
+    }
   }
 
   static _getVolunteerStatus(
-    project: ProjectDetailsAPIData
+    entity: ProjectDetailsAPIData | EventProjectAPIDetails
   ): ?VolunteerDetailsAPIData {
-    return (
-      project.project_volunteers &&
-      project.project_volunteers.find(
-        volunteer => volunteer.user.id === CurrentUser.userID()
-      )
-    );
+    if (CurrentUser._isEventProject(entity)) {
+      const eventProject: EventProjectAPIDetails = entity;
+      return (
+        eventProject.event_project_volunteers &&
+        eventProject.event_project_volunteers.find(
+          volunteer => volunteer.user.id === CurrentUser.userID()
+        )
+      );
+    } else {
+      const project: ProjectDetailsAPIData = entity;
+      return (
+        project.project_volunteers &&
+        project.project_volunteers.find(
+          volunteer => volunteer.user.id === CurrentUser.userID()
+        )
+      );
+    }
   }
 
   static isVolunteeringUpForRenewal(): boolean {

@@ -576,7 +576,6 @@ def projects_list(request):
     elif 'event_id' in query_params:
         event_id = query_params['event_id'][0]
         event = Event.get_by_id_or_slug(event_id)
-        # project_list = event.get_linked_projects().filter(is_searchable=True)
         project_list = event.get_linked_projects()
     else:
         project_list = Project.objects.filter(is_searchable=True)

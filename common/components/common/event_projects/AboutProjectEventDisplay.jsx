@@ -44,7 +44,6 @@ type State = {|
   viewOnly: boolean,
   showJoinModal: boolean,
   positionToJoin: ?PositionInfo,
-  showPositionModal: boolean,
   showRSVPedToast: boolean,
   showCancelRSVPModal: boolean,
   showPostCancelRSVPToast: boolean,
@@ -87,7 +86,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       showRSVPedToast: false,
       showCancelRSVPModal: false,
       showPostCancelRSVPToast: false,
-      showPositionModal: false,
+      showJoinModal: false,
       shownPosition: null,
       videoLink: videoLink,
       isRSVPedForThisEventProject: isRSVPedForThisEventProject,
@@ -95,6 +94,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       isProjectOwner: isProjectOwner,
     };
     this.cancelRSVP = this.cancelRSVP.bind(this, props.eventProject);
+    this.handleShowVolunteerModal = this.handleShowVolunteerModal.bind(this);
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -104,13 +104,12 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     });
   }
 
-  // TODO: Get position buttons working
-  // handleShowVolunteerModal(position: ?PositionInfo) {
-  //   this.setState({
-  //     showJoinModal: true,
-  //     positionToJoin: position,
-  //   });
-  // }
+  handleShowVolunteerModal(position: ?PositionInfo) {
+    this.setState({
+      showJoinModal: true,
+      positionToJoin: position,
+    });
+  }
 
   confirmJoinProject(
     eventProject: EventProjectAPIDetails,
@@ -621,6 +620,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
               key={i}
               project={eventProject}
               position={position}
+              onClickApply={this.handleShowVolunteerModal}
               hideSignInToApply={true}
             />
           );
