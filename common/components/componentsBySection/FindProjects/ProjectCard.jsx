@@ -2,15 +2,20 @@
 
 import PlaySVG from "../../svg/play-button.svg";
 import React from "react";
+import Button from "react-bootstrap/Button";
 import Section from "../../../components/enums/Section.js";
 import Moment from "react-moment";
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js";
 import GlyphStyles from "../../utils/glyphs.js";
-import ProjectAPIUtils, { ProjectData } from "../../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils, {
+  ProjectData,
+  CardOperation,
+} from "../../utils/ProjectAPIUtils.js";
 import VideoModal from "../../common/video/VideoModal.jsx";
 import FavoriteToggle from "./FavoriteToggle.jsx";
-import CurrentUser from "../../utils/CurrentUser";
+import CurrentUser from "../../utils/CurrentUser.js";
+import type { Dictionary } from "../../types/Generics.jsx";
 
 type Props = {|
   project: ProjectData,
@@ -128,6 +133,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
       <div className="ProjectCard-skills">
         <h3>Roles Needed</h3>
         {this._generateSkillList(this.props.skillslen)}
+        {this._renderCardOperation()}
       </div>
     );
   }
@@ -168,6 +174,32 @@ class ProjectCard extends React.PureComponent<Props, State> {
         </ul>
       </div>
     );
+  }
+
+  _renderCardOperation(): ?React$Node {
+    const cardOperation: CardOperation = this.props.project.cardOperation;
+    if (cardOperation) {
+      let buttonConfig: Dictionary<any> = {};
+      if (cardOperation.operation) {
+        buttonConfig = {
+          onClick: () => cardOperation.operation(),
+        };
+      } else {
+        buttonConfig = { href: cardOperation.url };
+      }
+      return (
+        <React.Fragment>
+          <Button
+            variant="primary"
+            className="ProjectCard-rsvp-btn"
+            type="button"
+            {...buttonConfig}
+          >
+            {cardOperation.name}
+          </Button>
+        </React.Fragment>
+      );
+    }
   }
 }
 

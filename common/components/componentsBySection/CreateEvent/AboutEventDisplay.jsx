@@ -25,6 +25,10 @@ import { ModalSizes } from "../../common/ModalWrapper.jsx";
 import ConfirmationModal from "../../common/confirmation/ConfirmationModal.jsx";
 import promiseHelper from "../../utils/promise.js";
 import Toast from "../../common/notification/Toast.jsx";
+import type {
+  CardOperation,
+  ProjectData,
+} from "../../utils/ProjectAPIUtils.js";
 
 type Props = {|
   event: ?EventData,
@@ -450,6 +454,20 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     );
   }
 
+  _cardOperationGenerator(project: ProjectData): ?CardOperation {
+    // TODO: Show signup modal on click
+    const isVolunteering: boolean = this.state.participating_projects.find(
+      (myProject: MyProjectData) => myProject.project_id == project.id
+    );
+    if (!isVolunteering) {
+      return {
+        name: "Sign Up",
+        url: project.cardUrl,
+      };
+    }
+    // TODO: Leave Project
+  }
+
   initProjectSearch() {
     const event: EventData = this.state.event;
     if (event && !_.isEmpty(event.event_legacy_organization)) {
@@ -462,6 +480,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         searchSettings: {
           updateUrl: false,
           defaultSort: "project_name",
+          cardOperationGenerator: this._cardOperationGenerator.bind(this),
         },
       });
     }
