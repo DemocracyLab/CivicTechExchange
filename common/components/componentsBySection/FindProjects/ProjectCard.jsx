@@ -73,6 +73,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
           {this._renderTitleAndIssue()}
           {this._renderProjectDescription()}
           {this._renderSkillsNeeded()}
+          {this._renderCardOperation()}
         </a>
       </div>
     );
@@ -133,7 +134,6 @@ class ProjectCard extends React.PureComponent<Props, State> {
       <div className="ProjectCard-skills">
         <h3>Roles Needed</h3>
         {this._generateSkillList(this.props.skillslen)}
-        {this._renderCardOperation()}
       </div>
     );
   }
@@ -188,7 +188,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
         buttonConfig = { href: cardOperation.url };
       }
       return (
-        <React.Fragment>
+        <div className="ProjectCard-operation">
           <Button
             variant="primary"
             className="ProjectCard-rsvp-btn"
@@ -197,7 +197,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
           >
             {cardOperation.name}
           </Button>
-        </React.Fragment>
+        </div>
       );
     }
   }
