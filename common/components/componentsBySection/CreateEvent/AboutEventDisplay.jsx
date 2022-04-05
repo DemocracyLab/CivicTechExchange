@@ -39,6 +39,7 @@ type State = {|
   event: ?EventData,
   owned_projects: $ReadOnlyArray<MyProjectData>,
   participating_projects: ?$ReadOnlyArray<MyProjectData>,
+  volunteering_projects: ?$ReadOnlyArray<MyProjectData>,
   isVolunteerRSVPed: boolean,
   showPromptCreateProjectModal: boolean,
   showPostRSVPModal: boolean,
@@ -61,15 +62,15 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       userContext.owned_projects.filter((project: MyProjectData) =>
         CurrentUser.isOwner(project)
       );
-    const isVolunteerRSVPed: boolean = _.some(
-      userContext?.rsvp_events,
+    const volunteering_projects: ?$ReadOnlyArray<MyProjectData> = userContext?.rsvp_events?.filter(
       (rsvp: MyRSVPData) => rsvp.event_id === props.event.event_id
     );
     this.state = {
       event: props.event,
       owned_projects: userContext?.owned_projects,
       participating_projects: participating_projects,
-      isVolunteerRSVPed: isVolunteerRSVPed,
+      volunteering_projects: volunteering_projects,
+      isVolunteerRSVPed: !_.isEmpty(participating_projects),
       showPromptCreateProjectModal: false,
       showPostRSVPModal: false,
       showCancelRSVPConfirmModal: false,
@@ -456,10 +457,12 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   _cardOperationGenerator(project: ProjectData): ?CardOperation {
     // TODO: Show signup modal on click
-    const isVolunteering: boolean = this.state.participating_projects.find(
-      (myProject: MyProjectData) => myProject.project_id == project.id
-    );
-    if (!isVolunteering) {
+    const isVolunteering: boolean =
+      !_.isEmpty(this.state.volunteering_projects) &&
+      this.state.volunteering_projects.find(
+        (myProject: MyProjectData) => myProject.project_id == project.id
+      );
+    if (CurrentUser.isLoggedIn() && !isVolunteering) {
       return {
         name: "Sign Up",
         url: project.cardUrl,

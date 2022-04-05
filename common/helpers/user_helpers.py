@@ -41,7 +41,8 @@ def get_user_favorites(contributor):
 def get_rsvp_events(contributor):
     from civictechprojects.models import RSVPVolunteerRelation
     rsvp_events = RSVPVolunteerRelation.get_for_volunteer(contributor)
-    return {event.id: event.to_json() for event in rsvp_events}
+    list_rsvps = list(map(lambda rsvp: rsvp.to_json(), rsvp_events))
+    return list_rsvps
 
 
 def _get_user_context(contributor):
