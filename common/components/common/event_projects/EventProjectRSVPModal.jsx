@@ -44,10 +44,10 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
-      showModal: false,
+      showModal: props.showModal,
       isSending: false,
       message: "",
-      positionToJoin: null,
+      positionToJoin: props.positionToJoin,
       roleTag: null,
     };
     this.handleChange = this.handleChange.bind(this);

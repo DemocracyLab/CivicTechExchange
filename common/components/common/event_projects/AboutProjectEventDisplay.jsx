@@ -71,6 +71,8 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       props.eventProject?.event_project_links.find(
         (link: LinkInfo) => link.linkName === LinkTypes.VIDEO
       );
+    const showJoinModal =
+      window.location.href.includes("signUp") && !isRSVPedForThisEventProject;
     this.state = {
       eventProject: props.eventProject,
       viewOnly: props.viewOnly,
@@ -78,7 +80,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       showRSVPedToast: false,
       showCancelRSVPModal: false,
       showPostCancelRSVPToast: false,
-      showJoinModal: false,
+      showJoinModal: showJoinModal,
       shownPosition: null,
       videoLink: videoLink,
       isRSVPedForThisEventProject: isRSVPedForThisEventProject,

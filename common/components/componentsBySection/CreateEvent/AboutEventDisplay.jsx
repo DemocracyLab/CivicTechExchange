@@ -477,7 +477,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     } else if (CurrentUser.isLoggedIn() && !isVolunteering) {
       return {
         name: "Sign Up",
-        url: project.cardUrl,
+        url: project.cardUrl + "?signUp=1",
       };
     }
   }
