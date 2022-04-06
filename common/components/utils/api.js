@@ -37,10 +37,10 @@ class apiHelper {
     );
   }
 
-  static postForm(
+  static postForm<T>(
     url: string,
     formNode: React.Ref,
-    successCallback: APIResponse => void,
+    successCallback: APIResponse => T,
     errCallback: APIError => void
   ) {
     const serializedForm = serialize(formNode.current, {

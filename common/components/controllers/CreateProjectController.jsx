@@ -24,6 +24,7 @@ import FormWorkflow, {
 } from "../forms/FormWorkflow.jsx";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 import type { Dictionary } from "../types/Generics.jsx";
+import type { APIResponse } from "../utils/api.js";
 
 type State = {|
   projectId: ?number,
@@ -148,7 +149,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
   onSubmit(
     event: SyntheticEvent<HTMLFormElement>,
     formRef: HTMLFormElement,
-    onSubmitSuccess: (ProjectDetailsAPIData, () => void) => void
+    onSubmitSuccess: ProjectDetailsAPIData => void
   ): void {
     const formSubmitUrl: string =
       this.state.project && this.state.project.project_id
@@ -157,17 +158,19 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     api.postForm(
       formSubmitUrl,
       formRef,
-      onSubmitSuccess,
+      (response: APIResponse) => onSubmitSuccess(JSON.parse(response)),
       response => null /* TODO: Report error to user */
     );
   }
 
   onNextPageSuccess(project: ProjectDetailsAPIData): void {
-    this.setState({
-      project: project,
-      projectId: project.project_id,
-    });
-    this.updatePageUrl();
+    this.setState(
+      {
+        project: project,
+        projectId: project.project_id,
+      },
+      this.updatePageUrl.bind(this)
+    );
   }
 
   onFinalSubmitSuccess(project: ProjectDetailsAPIData): void {
