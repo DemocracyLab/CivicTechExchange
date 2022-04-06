@@ -190,7 +190,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
       return (
         <div className="ProjectCard-operation">
           <Button
-            variant="primary"
+            variant={cardOperation.buttonVariant || "primary"}
             className="ProjectCard-rsvp-btn"
             type="button"
             {...buttonConfig}

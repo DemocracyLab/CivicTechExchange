@@ -36,6 +36,7 @@ export type TagDefinitionCount = {|
 
 export type CardOperation = {|
   name: string,
+  buttonVariant: ?string,
   url: ?string,
   operation: ?() => null,
 |};

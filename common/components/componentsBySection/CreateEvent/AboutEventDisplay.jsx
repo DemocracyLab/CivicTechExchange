@@ -462,13 +462,24 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       this.state.volunteering_projects.find(
         (myProject: MyProjectData) => myProject.project_id == project.id
       );
-    if (CurrentUser.isLoggedIn() && !isVolunteering) {
+
+    const isOwner: boolean =
+      !_.isEmpty(this.state.owned_projects) &&
+      this.state.owned_projects.find(
+        (myProject: MyProjectData) => myProject.project_id == project.id
+      );
+    if (isVolunteering || isOwner) {
+      return {
+        name: "View Details",
+        buttonVariant: "outline-secondary",
+        url: project.cardUrl,
+      };
+    } else if (CurrentUser.isLoggedIn() && !isVolunteering) {
       return {
         name: "Sign Up",
         url: project.cardUrl,
       };
     }
-    // TODO: Leave Project
   }
 
   initProjectSearch() {
