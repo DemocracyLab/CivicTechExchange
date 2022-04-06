@@ -506,7 +506,7 @@ class Event(Archived):
         return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
     def get_linked_projects(self):
-        projects = Project.objects.filter(project_events__event=self, project_events__deleted=False)
+        projects = Project.objects.filter(project_events__event=self, project_events__deleted=False, is_searchable=True)
         return projects
 
     def update_linked_items(self):
