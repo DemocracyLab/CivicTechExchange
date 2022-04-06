@@ -70,7 +70,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       owned_projects: userContext?.owned_projects,
       participating_projects: participating_projects,
       volunteering_projects: volunteering_projects,
-      isVolunteerRSVPed: !_.isEmpty(participating_projects),
+      isVolunteerRSVPed: !_.isEmpty(volunteering_projects),
       showPromptCreateProjectModal: false,
       showPostRSVPModal: false,
       showCancelRSVPConfirmModal: false,
