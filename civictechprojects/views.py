@@ -338,6 +338,7 @@ def cancel_rsvp_for_event_project(request, event_id, project_id):
         # If rsvp-ed, delete rsvp
         notify_rsvp_cancellation_for_project_owner(rsvp)
         rsvp.delete()
+        rsvp.event_project.recache()
         user.purge_cache()
         return JsonResponse(event_project.recache())
     else:

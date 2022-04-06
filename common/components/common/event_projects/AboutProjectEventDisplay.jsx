@@ -51,7 +51,6 @@ type State = {|
   showVideoModal: boolean,
   videoLink: ?LinkInfo,
   isRSVPedForThisEventProject: boolean,
-  isRSVPedForOtherEventProject: boolean,
   isProjectOwner: boolean,
 |};
 
@@ -67,13 +66,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
         rsvp.event_id === props.eventProject.event_id &&
         rsvp.project_id === props.eventProject.project_id
     );
-    const isRSVPedForOtherEventProject: boolean =
-      !isRSVPedForThisEventProject &&
-      _.some(
-        rsvp_events,
-        (rsvp: MyRSVPData) =>
-          rsvp.event_id === props.eventProject.event_id && !!rsvp.project_id
-      );
     const videoLink: ?LinkInfo =
       !_.isEmpty(props.eventProject?.event_project_links) &&
       props.eventProject?.event_project_links.find(
@@ -90,7 +82,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       shownPosition: null,
       videoLink: videoLink,
       isRSVPedForThisEventProject: isRSVPedForThisEventProject,
-      isRSVPedForOtherEventProject: isRSVPedForOtherEventProject,
       isProjectOwner: isProjectOwner,
     };
     this.cancelRSVP = this.cancelRSVP.bind(this, props.eventProject);
@@ -234,7 +225,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     if (CurrentUser.isLoggedIn()) {
       if (
         !this.state.isProjectOwner &&
-        !this.state.isRSVPedForOtherEventProject &&
         !this.state.isRSVPedForThisEventProject
       ) {
         buttonConfig = {
@@ -261,7 +251,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
         </Toast>
 
         <EventProjectRSVPModal
-          eventProject={this.state.eventProject}
+          eventProject={eventProject}
           positionToJoin={this.state.positionToJoin}
           showModal={this.state.showJoinModal}
           handleClose={this.confirmJoinProject.bind(this)}
