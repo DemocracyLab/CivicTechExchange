@@ -112,6 +112,41 @@ class apiHelper {
         return doError(response);
       });
   }
+
+  // TODO: Deprecate this so we only have a single _request
+  static _legacyRequest(
+    url: string,
+    method: string,
+    body: {||},
+    headers: { [key: string]: string },
+    successCallback: ({||}) => void,
+    errCallback: APIError => void,
+    requestOptions: object
+  ): void {
+    const doError = response =>
+      errCallback &&
+      errCallback({
+        errorCode: response.status,
+        errorMessage: JSON.stringify(response),
+      });
+
+    const _requestOptions = Object.assign(
+      { method: method, body: body, credentials: "include", headers: headers },
+      requestOptions
+    );
+
+    fetch(new Request(url, _requestOptions))
+      .then(response => {
+        if (!response.ok) {
+          throw Error();
+        }
+        return response.statusText !== "No Content" ? response.json() : {};
+      })
+      .then(
+        responsePayload => successCallback && successCallback(responsePayload)
+      )
+      .catch(response => doError(response));
+  }
 }
 
 export default apiHelper;
