@@ -43,13 +43,16 @@ const OtherRoleOption: SelectOption = { label: "Other", value: "Other" };
 class EventProjectRSVPModal extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.state = {
-      showModal: props.showModal,
-      isSending: false,
-      message: "",
-      positionToJoin: props.positionToJoin,
-      roleTag: null,
-    };
+
+    this.state = Object.assign(
+      {
+        isSending: false,
+        message: "",
+        positionToJoin: props.positionToJoin,
+        roleTag: null,
+      },
+      this.initStateFromProps(props)
+    );
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
@@ -57,6 +60,11 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Props): void {
+    this.setState(this.initStateFromProps(nextProps));
+    this.forceUpdate();
+  }
+
+  initStateFromProps(nextProps: Props): State {
     const noPositionOption: SelectOption = { value: "", label: "---" };
     const positionOptions: $ReadOnlyArray<SelectOption> = [
       noPositionOption,
@@ -84,8 +92,8 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
     } else {
       state.existingPositionOption = noPositionOption;
     }
-    this.setState(state);
-    this.forceUpdate();
+
+    return state;
   }
 
   handleChange(event: SyntheticInputEvent<HTMLInputElement>): void {
