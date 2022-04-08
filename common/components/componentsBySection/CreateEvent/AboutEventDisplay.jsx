@@ -40,6 +40,7 @@ type State = {|
   owned_projects: $ReadOnlyArray<MyProjectData>,
   participating_projects: ?$ReadOnlyArray<MyProjectData>,
   volunteering_projects: ?$ReadOnlyArray<MyProjectData>,
+  isProjectOwnerRSVPed: boolean,
   isVolunteerRSVPed: boolean,
   isVolunteerRSVPedForEventOnly: boolean,
   showPromptCreateProjectModal: boolean,
@@ -63,6 +64,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       userContext.owned_projects.filter((project: MyProjectData) =>
         CurrentUser.isOwner(project)
       );
+    const isProjectOwnerRSVPed: boolean = !_.isEmpty(participating_projects);
     const volunteering_projects: ?$ReadOnlyArray<MyProjectData> = userContext?.rsvp_events?.filter(
       (rsvp: MyRSVPData) => rsvp.event_id === props.event.event_id
     );
@@ -75,6 +77,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       owned_projects: userContext?.owned_projects,
       participating_projects: participating_projects,
       volunteering_projects: volunteering_projects,
+      isProjectOwnerRSVPed: isProjectOwnerRSVPed,
       isVolunteerRSVPed: !_.isEmpty(volunteering_projects),
       isVolunteerRSVPedForEventOnly: isVolunteerRSVPedForEventOnly,
       showPromptCreateProjectModal: false,
@@ -175,6 +178,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
                   !this.state.isVolunteerRSVPed &&
+                  !this.state.isProjectOwnerRSVPed &&
                   this._renderRSVPAsVolunteerButton()}
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
