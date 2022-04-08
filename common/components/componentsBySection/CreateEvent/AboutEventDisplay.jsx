@@ -41,6 +41,7 @@ type State = {|
   participating_projects: ?$ReadOnlyArray<MyProjectData>,
   volunteering_projects: ?$ReadOnlyArray<MyProjectData>,
   isVolunteerRSVPed: boolean,
+  isVolunteerRSVPedForEventOnly: boolean,
   showPromptCreateProjectModal: boolean,
   showPostRSVPModal: boolean,
   showCancelRSVPConfirmModal: boolean,
@@ -65,12 +66,17 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     const volunteering_projects: ?$ReadOnlyArray<MyProjectData> = userContext?.rsvp_events?.filter(
       (rsvp: MyRSVPData) => rsvp.event_id === props.event.event_id
     );
+    const isVolunteerRSVPedForEventOnly: boolean =
+      !_.isEmpty(volunteering_projects) &&
+      volunteering_projects.length == 1 &&
+      !volunteering_projects[0].project_id;
     this.state = {
       event: props.event,
       owned_projects: userContext?.owned_projects,
       participating_projects: participating_projects,
       volunteering_projects: volunteering_projects,
       isVolunteerRSVPed: !_.isEmpty(volunteering_projects),
+      isVolunteerRSVPedForEventOnly: isVolunteerRSVPedForEventOnly,
       showPromptCreateProjectModal: false,
       showPostRSVPModal: false,
       showCancelRSVPConfirmModal: false,
@@ -172,7 +178,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                   this._renderRSVPAsVolunteerButton()}
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
-                  this.state.isVolunteerRSVPed &&
+                  this.state.isVolunteerRSVPedForEventOnly &&
                   this._renderCancelVolunteerRSVPButton()}
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
@@ -300,6 +306,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
               showPostRSVPModal: false,
               showPostRSVPToast: true,
               isVolunteerRSVPed: true,
+              isVolunteerRSVPedForEventOnly: true,
             })
           }
         />
@@ -347,6 +354,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                     showCancelRSVPConfirmModal: false,
                     showPostCancelRSVPToast: true,
                     isVolunteerRSVPed: false,
+                    isVolunteerRSVPedForEventOnly: false,
                   });
                 }
               );
