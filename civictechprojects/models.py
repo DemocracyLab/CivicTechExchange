@@ -1333,6 +1333,10 @@ class RSVPVolunteerRelation(Archived):
         return RSVPVolunteerRelation.objects.filter(event=event.id, volunteer=volunteer.id).first()
 
     @staticmethod
+    def get_for_event_project(event_project: EventProject, volunteer: Contributor):
+        return RSVPVolunteerRelation.objects.filter(event_project=event_project.id, volunteer=volunteer.id).first()
+
+    @staticmethod
     def get_for_volunteer(volunteer: Contributor):
         return RSVPVolunteerRelation.objects.filter(volunteer=volunteer.id)
 

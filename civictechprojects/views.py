@@ -298,19 +298,20 @@ def rsvp_for_event_project(request, event_id, project_id):
 
     event = Event.get_by_id_or_slug(event_id)
     event_project = EventProject.get(event_id, project_id)
-    rsvp = RSVPVolunteerRelation.get_for_event_volunteer(event, user)
+
+    # If rsvp already created, do nothing
+    rsvp = RSVPVolunteerRelation.get_for_event_project(event_project, user)
     if rsvp is None:
         rsvp = RSVPVolunteerRelation.create(event, user)
+        body = json.loads(request.body)
+        rsvp.event_project = event_project
+        rsvp.application_text = body['applicationText']
+        rsvp.save()
+        rsvp.role.add(body['roleTag'])
 
-    body = json.loads(request.body)
-    rsvp.event_project = event_project
-    rsvp.application_text = body['applicationText']
-    rsvp.save()
-    rsvp.role.add(body['roleTag'])
+        notify_rsvp_for_project_owner(rsvp)
+        user.purge_cache()
 
-    # send_volunteer_application_email(volunteer_relation)
-    notify_rsvp_for_project_owner(rsvp)
-    user.purge_cache()
     return JsonResponse(event_project.recache())
 
 
@@ -324,7 +325,7 @@ def cancel_rsvp_for_event_project(request, event_id, project_id):
 
     event = Event.get_by_id_or_slug(event_id)
     event_project = EventProject.get(event_id, project_id)
-    rsvp = RSVPVolunteerRelation.get_for_event_volunteer(event, user)
+    rsvp = RSVPVolunteerRelation.get_for_event_project(event_project, user)
     if event_project.is_owner(user):
         # If event project owner, delete event project
         project = event_project.project
