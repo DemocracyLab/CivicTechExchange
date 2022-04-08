@@ -7,6 +7,7 @@ import _ from "lodash";
 import Button from "react-bootstrap/Button";
 import datetime, { DateFormat } from "../../utils/datetime.js";
 import CurrentUser, {
+  MyEventProjectData,
   MyProjectData,
   MyRSVPData,
   UserContext,
@@ -38,7 +39,6 @@ type Props = {|
 type State = {|
   event: ?EventData,
   owned_projects: $ReadOnlyArray<MyProjectData>,
-  participating_projects: ?$ReadOnlyArray<MyProjectData>,
   volunteering_projects: ?$ReadOnlyArray<MyProjectData>,
   isProjectOwnerRSVPed: boolean,
   isVolunteerRSVPed: boolean,
@@ -59,12 +59,9 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     const userContext: UserContext = CurrentUser?.userContext();
     const startDate: Moment = datetime.parse(props.event.event_date_start);
     const endDate: Moment = datetime.parse(props.event.event_date_end);
-    const participating_projects: ?$ReadOnlyArray<MyProjectData> =
-      !_.isEmpty(userContext?.owned_projects) &&
-      userContext.owned_projects.filter((project: MyProjectData) =>
-        CurrentUser.isOwner(project)
-      );
-    const isProjectOwnerRSVPed: boolean = !_.isEmpty(participating_projects);
+    const isProjectOwnerRSVPed: boolean = !_.isEmpty(
+      userContext?.event_projects
+    );
     const volunteering_projects: ?$ReadOnlyArray<MyProjectData> = userContext?.rsvp_events?.filter(
       (rsvp: MyRSVPData) => rsvp.event_id === props.event.event_id
     );
@@ -75,7 +72,6 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     this.state = {
       event: props.event,
       owned_projects: userContext?.owned_projects,
-      participating_projects: participating_projects,
       volunteering_projects: volunteering_projects,
       isProjectOwnerRSVPed: isProjectOwnerRSVPed,
       isVolunteerRSVPed: !_.isEmpty(volunteering_projects),

@@ -566,6 +566,10 @@ class EventProject(Archived):
 
         return event_project_json
 
+    def hydrate_to_list_json(self):
+        return keys_subset(self.hydrate_to_json(), ['event_project_id', 'event_id', 'event_name', 'event_slug',
+                                                    'project_id', 'project_name'])
+
     def delete(self):
         print('Deleting Event Project: {ep}'.format(ep=self.__str__()))
         for link in self.get_event_project_links():
@@ -604,6 +608,10 @@ class EventProject(Archived):
         event = Event.get_by_id_or_slug(event_id)
         project = Project.objects.get(id=project_id)
         return EventProject.objects.filter(event=event, project=project).first()
+
+    @staticmethod
+    def get_owned(user: Contributor):
+        return EventProject.objects.filter(project__project_creator=user)
 
     @staticmethod
     def create(creator, event, project):
