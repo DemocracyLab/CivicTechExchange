@@ -14,6 +14,7 @@ type Props = {|
   +project: ProjectDetailsAPIData,
   +position: PositionInfo,
   +onClickApply: PositionInfo => void,
+  +hideSignInToApply: ?boolean,
 |};
 
 class AboutPositionEntry extends React.PureComponent<Props> {
@@ -28,10 +29,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
 
     return (
       <div className="Position-entry">
-        <div className="Position-header">
-          {this._renderHeader()}
-          {this._renderApplyButton(showApplyButton)}
-        </div>
+        {this._renderHeader()}
         {this.props.position.descriptionUrl && (
           <div className="Position-description-link">
             <a
@@ -51,6 +49,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
             maxLines={3}
           />
         </div>
+        {this._renderApplyButton(showApplyButton)}
       </div>
     );
   }
@@ -71,7 +70,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
           Apply Now
         </Button>
       );
-    } else if (!CurrentUser.isLoggedIn()) {
+    } else if (!this.props.hideSignInToApply && !CurrentUser.isLoggedIn()) {
       applyButton = (
         <Button
           variant="primary"

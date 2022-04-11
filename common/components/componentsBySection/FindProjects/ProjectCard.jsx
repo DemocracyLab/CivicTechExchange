@@ -47,6 +47,11 @@ class ProjectCard extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
+    const url: string =
+      this.props.project.cardUrl ||
+      urlHelper.section(Section.AboutProject, {
+        id: this.props.project.id,
+      });
     return (
       <div className="ProjectCard-root">
         {this.props.project.video && (
@@ -57,12 +62,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
             videoTitle={this.props.project.name}
           />
         )}
-        <a
-          href={urlHelper.section(Section.AboutProject, {
-            id: this.props.project.id,
-          })}
-          rel="noopener noreferrer"
-        >
+        <a href={url} rel="noopener noreferrer">
           {this._renderLogo()}
           {this._renderSubInfo()}
           {this._renderTitleAndIssue()}

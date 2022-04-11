@@ -27,6 +27,7 @@ export const linkCaptions: Dictionary<string> = _.fromPairs([
   [LinkTypes.TWITTER, "Twitter"],
   [LinkTypes.FACEBOOK, "Facebook"],
   [LinkTypes.LINKED_IN, "LinkedIn"],
+  [LinkTypes.VIDEO, "YouTube link"],
 ]);
 
 export type NewLinkInfo = {| tempId: ?string |} & LinkInfo;
@@ -302,13 +303,18 @@ class LinkList extends React.Component<Props, State> {
         <div className="form-offset">
           {this._renderLinks()}
 
-          <span className="add-link" onClick={this.openNewLinkModal.bind(this)}>
-            <i
-              className={Glyph(GlyphStyles.Add, GlyphSizes.SM)}
-              aria-hidden="true"
-            ></i>
-            {this.props.addLinkText}
-          </span>
+          {!_.isEmpty(this.props.addLinkText) && (
+            <span
+              className="add-link"
+              onClick={this.openNewLinkModal.bind(this)}
+            >
+              <i
+                className={Glyph(GlyphStyles.Add, GlyphSizes.SM)}
+                aria-hidden="true"
+              ></i>
+              {this.props.addLinkText}
+            </span>
+          )}
         </div>
 
         <LinkEntryModal

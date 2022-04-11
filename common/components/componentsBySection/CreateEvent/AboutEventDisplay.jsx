@@ -3,16 +3,21 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import type Moment from "moment";
-import datetime, { DateFormat } from "../../utils/datetime.js";
+import _ from "lodash";
 import Button from "react-bootstrap/Button";
-import CurrentUser from "../../utils/CurrentUser.js";
+import datetime, { DateFormat } from "../../utils/datetime.js";
+import CurrentUser, {
+  MyProjectData,
+  UserContext,
+} from "../../utils/CurrentUser.js";
 import { EventData } from "../../utils/EventAPIUtils.js";
 import urlHelper from "../../utils/url.js";
-import Section from "../../enums/Section";
+import Section from "../../enums/Section.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
-import _ from "lodash";
 import MainFooter from "../../chrome/MainFooter.jsx";
+import PromptNavigationModal from "../../common/PromptNavigationModal.jsx";
+import type { Dictionary } from "../../types/Generics.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -21,13 +26,26 @@ type Props = {|
 
 type State = {|
   event: ?EventData,
+  owned_projects: $ReadOnlyArray<MyProjectData>,
+  showPromptCreateProjectModal: boolean,
+  startDate: Moment,
+  endDate: Moment,
+  isPastEvent: boolean,
 |};
 
 class AboutEventDisplay extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
+    const userContext: UserContext = CurrentUser?.userContext();
+    const startDate: Moment = datetime.parse(props.event.event_date_start);
+    const endDate: Moment = datetime.parse(props.event.event_date_end);
     this.state = {
       event: props.event,
+      owned_projects: userContext?.owned_projects,
+      showPromptCreateProjectModal: false,
+      startDate: startDate,
+      endDate: endDate,
+      isPastEvent: endDate < datetime.now(),
     };
 
     if (this.state.event) {
@@ -48,8 +66,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   render(): ?$React$Node {
     const event: EventData = this.state.event;
-    const startDate: Moment = datetime.parse(event.event_date_start);
-    const endDate: Moment = datetime.parse(event.event_date_end);
+    const startDate: Moment = this.state.startDate;
+    const endDate: Moment = this.state.endDate;
     const isSingleDayEvent: boolean = datetime.isOnSame(
       "day",
       startDate,
@@ -98,6 +116,9 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                 {!this.props.viewOnly &&
                   event.event_live_id &&
                   this._renderJoinLiveEventButton()}
+                {!this.props.viewOnly &&
+                  !this.state.isPastEvent &&
+                  this._renderRSVPAsProjectOwnerButton()}
               </div>
             </div>
             <div className="col-xs-12 col-lg-8 AboutEvent-splash">
@@ -179,9 +200,64 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         className="AboutEvent-rsvp-btn"
         type="button"
         href={url}
+        target="_blank"
       >
         {text}
       </Button>
+    );
+  }
+
+  _renderRSVPAsProjectOwnerButton(): ?$React$Node {
+    // TODO: Don't show when a user has rsvp-ed all their projects with this event
+    let buttonConfig: Dictionary<any> = {};
+    if (CurrentUser.isLoggedIn()) {
+      if (!_.isEmpty(this.state.owned_projects)) {
+        // Go to create event project page if user has projects
+        buttonConfig = {
+          href: urlHelper.section(Section.CreateEventProject, {
+            event_id: this.state.event.event_id,
+          }),
+        };
+      } else {
+        // If no projects, open create project prompt
+        buttonConfig = {
+          onClick: () => this.setState({ showPromptCreateProjectModal: true }),
+        };
+      }
+    } else {
+      // If not logged in, go to login page
+      buttonConfig = { href: urlHelper.logInThenReturn() };
+    }
+
+    return (
+      <React.Fragment>
+        <PromptNavigationModal
+          showModal={this.state.showPromptCreateProjectModal}
+          submitUrl={
+            urlHelper.section(Section.CreateProject) +
+            "?fromEventId=" +
+            this.state.event.event_id
+          }
+          headerText="Create a Project on DemocracyLab.org?"
+          cancelText="Cancel"
+          submitText="Create Project"
+          onCancel={() =>
+            this.setState({ showPromptCreateProjectModal: false })
+          }
+        >
+          You must create a project on DemocracyLab.org to join the hackathon as
+          a project leader.
+        </PromptNavigationModal>
+
+        <Button
+          variant="primary"
+          className="AboutEvent-rsvp-btn"
+          type="button"
+          {...buttonConfig}
+        >
+          RSVP as Project Leader
+        </Button>
+      </React.Fragment>
     );
   }
 

@@ -45,6 +45,8 @@ urlpatterns = [
     url(r'^api/groups/approve/(?P<group_id>[0-9]+)/$', views.approve_group, name='approve_group'),
     url(r'^api/groups/edit/(?P<group_id>[0-9]+)/$', views.group_edit, name='group_edit'),
     url(r'^api/groups/delete/(?P<group_id>[0-9]+)/$', views.group_delete, name='group_delete'),
+    url(r'^api/event/(?P<event_id>.*)/projects/(?P<project_id>.*)/create/$', views.event_project_edit, name='event_project_edit'),
+    url(r'^api/event/(?P<event_id>.*)/projects/(?P<project_id>.*)/$', views.get_event_project, name='get_event_project'),
     url(r'^api/events/create/$', views.event_create, name='event_create'),
     url(r'^api/events/approve/(?P<event_id>[0-9]+)/$', views.approve_event, name='approve_event'),
     url(r'^api/events/edit/(?P<event_id>[0-9]+)/$', views.event_edit, name='event_edit'),
@@ -99,4 +101,5 @@ urlpatterns = [
     url(r'^api/testimonials/(?P<category>[-\w]*)', views.get_testimonials, name='get_testimonials'),
 
 ]
+
 

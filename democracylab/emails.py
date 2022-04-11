@@ -9,7 +9,7 @@ from common.helpers.date_helpers import DateTimeFormats, datetime_field_to_datet
 from common.helpers.queue import enqueue
 from democracylab.tokens import email_verify_token_generator
 from democracylab.models import Contributor
-from civictechprojects.models import VolunteerRelation
+from civictechprojects.models import VolunteerRelation, EventProject
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 
@@ -379,6 +379,27 @@ def notify_project_owners_project_approved(project):
     send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
 
 
+def notify_project_owners_event_rsvp(event_project: EventProject):
+    email_template = HtmlEmailTemplate() \
+        .header('Thanks for signing up for {{event_name}}') \
+        .text_line('Hi {{first_name}}, you’re leading a project for {{project_name}} at {{event_name}}') \
+        .text_line(datetime_to_string(event_project.event.event_date_start, DateTimeFormats.SCHEDULED_DATE_TIME)) \
+        .button(url=event_project.get_url(), text='Join Event') \
+        .text_line('Let’s build something great together.')
+    context = {
+        'first_name': event_project.project.project_creator.first_name,
+        'project_name': event_project.project.project_name,
+        'event_name': event_project.event.event_name
+    }
+    email_msg = EmailMessage(
+        subject='Confirmed: RSVP for ' + event_project.event.event_name,
+        from_email=_get_account_from_email(EmailAccount.EMAIL_SUPPORT_ACCT),
+        to=_get_co_owner_emails(event_project.project)
+    )
+    email_msg = email_template.render(email_msg, context)
+    send_email(email_msg, EmailAccount.EMAIL_SUPPORT_ACCT)
+
+
 def notify_event_owners_event_approved(event):
     email_template = HtmlEmailTemplate() \
         .paragraph('Your event "{{event_name}}" has been approved. You can see it at {{event_url}}')
@@ -418,13 +439,13 @@ def send_group_creation_notification(group):
 
 
 def notify_group_owners_group_approved(group):
+    group_url = section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
     email_template = HtmlEmailTemplate() \
         .header('Congratulations! "{{group_name}}" has been approved.') \
         .paragraph('Your group "{{group_name}}" has been approved.') \
-        .button(url='group_url', text='Go to Group Profile Page')
+        .button(url=group_url, text='Go to Group Profile Page')
     context = {
         'group_name': group.group_name,
-        'group_url': section_url(FrontEndSection.AboutGroup, {'id': str(group.id)})
     }
     email_msg = EmailMessage(
         subject=group.group_name + " has been approved",

@@ -17,7 +17,7 @@ import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
-    ProjectRelationship, Testimonial, ProjectFavorite
+    ProjectRelationship, Testimonial, ProjectFavorite, EventProject
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from common.caching.cache import Cache
@@ -26,7 +26,7 @@ from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff, is_creator
-from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm
+from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm, EventProjectCreationForm
 from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
@@ -237,6 +237,23 @@ def get_event(request, event_id):
     return JsonResponse(event.hydrate_to_json()) if event else HttpResponse(status=404)
 
 
+def get_event_project(request, event_id, project_id):
+    try:
+        event_project = EventProject.get(event_id, project_id)
+    except PermissionDenied:
+        return HttpResponseForbidden()
+
+    return JsonResponse(event_project.hydrate_to_json()) if event_project else HttpResponse(status=404)
+
+
+def event_project_edit(request, event_id, project_id):
+    if not request.user.is_authenticated:
+        return redirect(section_url(FrontEndSection.LogIn))
+
+    event_project = EventProjectCreationForm.create_or_edit_event_project(request, event_id, project_id)
+    return JsonResponse(event_project.hydrate_to_json())
+
+
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def project_create(request):
@@ -343,7 +360,9 @@ def approve_event(request, event_id):
 @xframe_options_exempt
 @api_view()
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
-def index(request, id='Unused but needed for routing purposes; do not remove!'):
+def index(*args, **kwargs):
+    request = args[0]
+    # id = kwargs['id'] // Uncomment if this is ever needed
     page = get_page_section(request.get_full_path())
     # TODO: Add to redirectors.py
     # Redirect to AddUserDetails page if First/Last name hasn't been entered yet
@@ -422,6 +441,7 @@ def index(request, id='Unused but needed for routing purposes; do not remove!'):
         context['volunteeringUpForRenewal'] = contributor.is_up_for_volunteering_renewal()
         context['QIQO_IFRAME_URL'] = get_user_qiqo_iframe(contributor, request)
 
+        # TODO: Get thumbnail from cached user
         thumbnail = ProjectFile.objects.filter(file_user=request.user.id,
                                                file_category=FileCategory.THUMBNAIL.value).first()
         if thumbnail:
@@ -467,7 +487,8 @@ def projects_list(request):
     elif 'event_id' in query_params:
         event_id = query_params['event_id'][0]
         event = Event.get_by_id_or_slug(event_id)
-        project_list = event.get_linked_projects().filter(is_searchable=True)
+        # project_list = event.get_linked_projects().filter(is_searchable=True)
+        project_list = event.get_linked_projects()
     else:
         project_list = Project.objects.filter(is_searchable=True)
 
@@ -556,7 +577,8 @@ def limited_listings(request):
         </job>
         """
 
-    approved_projects = ProjectPosition.objects.filter(position_project__is_searchable=True)
+    approved_projects = ProjectPosition.objects.filter(position_project__is_searchable=True)\
+        .exclude(position_event__isnull=False)
     xml_response = f"""<?xml version="1.0" encoding="UTF-8"?>
     <source>
         <lastBuildDate>{timezone.now().strftime('%a, %d %b %Y %H:%M:%S %Z')}</lastBuildDate> 
@@ -629,7 +651,8 @@ def projects_by_stage(tags):
 
 def projects_by_roles(tags):
     # Get roles by tags
-    positions = ProjectPosition.objects.filter(position_role__name__in=tags).select_related('position_project')
+    positions = ProjectPosition.objects.filter(position_role__name__in=tags)\
+        .exclude(position_event__isnull=False).select_related('position_project')
 
     # Get the list of projects linked to those roles
     return Project.objects.filter(positions__in=positions)

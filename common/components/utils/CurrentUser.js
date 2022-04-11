@@ -10,6 +10,7 @@ import type { GroupDetailsAPIData } from "./GroupAPIUtils.js";
 import type { FileInfo } from "../common/FileInfo.jsx";
 import type { EventTileAPIData } from "./EventAPIUtils.js";
 import type { Dictionary } from "../types/Generics.jsx";
+import type { EventProjectAPIDetails } from "./EventProjectAPIUtils.js";
 
 export type MyProjectData = {|
   +project_id: number,
@@ -90,7 +91,9 @@ class CurrentUser {
     return this.userID() === group.group_creator;
   }
 
-  static isOwner(project: ProjectDetailsAPIData): boolean {
+  static isOwner(
+    project: ProjectDetailsAPIData | EventProjectAPIDetails
+  ): boolean {
     return this.userID() === project.project_creator;
   }
 
@@ -107,8 +110,10 @@ class CurrentUser {
     );
   }
 
-  static isCoOwnerOrOwner(project: ProjectDetailsAPIData): boolean {
-    return CurrentUser.isOwner(project) || CurrentUser.isCoOwner(project);
+  static isCoOwnerOrOwner(
+    entity: ProjectDetailsAPIData | EventProjectAPIDetails
+  ): boolean {
+    return CurrentUser.isOwner(entity) || CurrentUser.isCoOwner(entity);
   }
 
   static canVolunteerForProject(project: ProjectDetailsAPIData): boolean {

@@ -82,6 +82,7 @@ class SubscribeUserToQiqoChat(object):
         if self.user.about_me:
             data['user']['about_me'] = self.user.about_me
 
+        # TODO: Get thumbnail from cached user
         thumbnail_files = list(civictechprojects.models.ProjectFile.objects.filter(file_user=self.user.id, file_category=civictechprojects.models.FileCategory.THUMBNAIL.value))
         if len(thumbnail_files) > 0:
             data['user']['photo_url'] = thumbnail_files[0].file_url

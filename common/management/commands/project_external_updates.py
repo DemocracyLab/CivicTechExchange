@@ -143,7 +143,7 @@ def get_projects_with_trello_links():
             Prefetch(
                 'links',
                 queryset=ProjectLink.objects.filter(
-                    link_url__icontains='trello.com/b'),
+                    link_url__icontains='trello.com/b', link_event__isnull=True),
                 to_attr='trello_board_links')
         )\
         .distinct()
@@ -151,7 +151,7 @@ def get_projects_with_trello_links():
 
 def get_project_github_links():
     from civictechprojects.models import ProjectLink
-    return ProjectLink.objects.filter(link_url__icontains='github.com/').exclude(link_project__isnull=True)
+    return ProjectLink.objects.filter(link_url__icontains='github.com/').exclude(link_project__isnull=True, link_event__isnull=False)
 
 
 def handle_project_github_updates(project_github_link):

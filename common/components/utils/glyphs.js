@@ -20,6 +20,8 @@ export const GlyphStyles: { [key: string]: string } = {
   Medium: "fab fa-medium", // https://fontawesome.com/icons/medium?style=brands
   Messaging: "far fa-comment-alt", // https://fontawesome.com/icons/comment-alt?style=regular
   GoogleDrive: "fab fa-google-drive", // https://fontawesome.com/icons/google-drive?style=brands
+  YouTube: "fab fa-youtube", // https://fontawesome.com/icons/youtube?style=brands&s=brands
+  Video: "fas fa-video", // https://fontawesome.com/icons/video?s=solid
   Folder: "far fa-folder", // https://fontawesome.com/icons/folder?style=regular
   Tasks: "fas fa-tasks", // https://fontawesome.com/icons/tasks?style=solid
   Meetup: "fab fa-meetup", // https://fontawesome.com/icons/meetup?style=brands
@@ -40,6 +42,7 @@ export const GlyphStyles: { [key: string]: string } = {
   CreativeCommons: "fab fa-creative-commons", //https://fontawesome.com/icons/creative-commons?style=brands
   CreativeCommonsBy: "fab fa-creative-commons-by", // https://fontawesome.com/icons/creative-commons-by?style=brands
   Calendar: "far fa-calendar", // https://fontawesome.com/icons/calendar?style=regular
+  CalendarSolid: "fas fa-calendar", // https://fontawesome.com/icons/calendar?style=solid
   Users: "fas fa-users", // https://fontawesome.com/icons/users?style=solid
   PDF: "far fa-file-pdf", // https://fontawesome.com/icons/file-pdf?style=regular
   Grip: "fas fa-grip-vertical", // https://fontawesome.com/icons/grip-vertical?style=solid

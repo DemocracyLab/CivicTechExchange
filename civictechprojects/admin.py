@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Project, Group, Event, ProjectRelationship, UserAlert, VolunteerRelation, ProjectCommit, \
-    NameRecord, ProjectFile, Testimonial, ProjectLink, ProjectFavorite
+    NameRecord, ProjectFile, Testimonial, ProjectLink, ProjectFavorite, ProjectPosition, EventProject
 
 project_text_fields = ['project_name', 'project_description', 'project_description_solution', 'project_description_actions', 'project_short_description', 'project_location', 'project_country', 'project_state', 'project_city', 'project_url']
 project_filter_fields = ('project_date_created', 'project_date_modified', 'is_searchable', 'is_created')
@@ -88,6 +88,21 @@ class ProjectFavoriteAdmin(admin.ModelAdmin):
     list_display = ('link_project', 'link_user')
     search_fields = ['link_project__project_name', 'link_user__email']
 
+class ProjectPositionAdmin(admin.ModelAdmin):
+    list_display = ('position_project', 'position_event', 'position_role')
+    search_fields = ['position_project__project_name', 'position_event__event_name']
+
+event_project_text_fields = ['goal', 'scope', 'schedule', 'onboarding_notes']
+event_project_filter_fields = ('event', 'project')
+class EventProjectAdmin(admin.ModelAdmin):
+    list_display = event_project_filter_fields + ('creator',) + tuple(event_project_text_fields)
+    search_fields = event_project_text_fields + ['creator__email', 'event__event_name', 'project__project_name']
+    list_filter = event_project_filter_fields
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if change:
+            obj.recache()
+
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectRelationship, ProjectRelationshipAdmin)
@@ -101,3 +116,5 @@ admin.site.register(ProjectFile, ProjectFileAdmin)
 admin.site.register(Testimonial, TestimonialAdmin)
 admin.site.register(ProjectLink, ProjectLinkAdmin)
 admin.site.register(ProjectFavorite, ProjectFavoriteAdmin)
+admin.site.register(ProjectPosition, ProjectPositionAdmin)
+admin.site.register(EventProject, EventProjectAdmin)

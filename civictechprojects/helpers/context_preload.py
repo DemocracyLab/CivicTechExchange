@@ -7,6 +7,7 @@ from common.helpers.front_end import section_url
 from common.helpers.redirectors import RedirectTo
 from common.helpers.request_helpers import url_params
 
+#TODO: event_project_preload
 
 def about_project_preload(context, request):
     context = default_preload(context, request)

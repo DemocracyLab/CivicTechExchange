@@ -1,6 +1,7 @@
 // @flow
 
 import React from "react";
+import _ from "lodash";
 import CurrentUser from "../../components/utils/CurrentUser.js";
 import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
@@ -22,7 +23,7 @@ import FormWorkflow, {
   FormWorkflowStepConfig,
 } from "../forms/FormWorkflow.jsx";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
-import _ from "lodash";
+import type { Dictionary } from "../types/Generics.jsx";
 
 type State = {|
   projectId: ?number,
@@ -176,11 +177,19 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     });
     metrics.logProjectCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
-    window.location.href = url.section(Section.MyProjects, {
+    let urlArgs: Dictionary<string> = {
       projectAwaitingApproval: url.encodeNameForUrlPassing(
         project.project_name
       ),
-    });
+    };
+    if (project.event_created_from) {
+      // Show modal on next page for prompting to create event project
+      urlArgs = Object.assign(urlArgs, {
+        fromProjectId: project.project_id,
+        fromEventId: project.event_created_from,
+      });
+    }
+    window.location.href = url.section(Section.MyProjects, urlArgs);
   }
 
   render(): React$Node {

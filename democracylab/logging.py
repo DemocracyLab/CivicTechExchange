@@ -1,6 +1,12 @@
 import copy
 import logging
 import traceback
+import os
+import psutil
+
+
+def log_memory_usage():
+    print('Memory Usage: {useInMb} MB'.format(useInMb=psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2))
 
 
 def dump(obj):

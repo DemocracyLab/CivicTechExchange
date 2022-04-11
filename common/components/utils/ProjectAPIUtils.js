@@ -48,7 +48,9 @@ export type ProjectData = {|
   +thumbnail: FileInfo,
   +claimed: boolean,
   +date_modified: string,
-  +video: LinkInfo,
+  +url: string,
+  +video: ?LinkInfo,
+  +cardUrl: ?string,
 |};
 
 export type ProjectAPIData = {|
@@ -67,6 +69,7 @@ export type ProjectAPIData = {|
   +project_date_modified: string,
   +project_url: string,
   +project_positions: $ReadOnlyArray<PositionInfo>,
+  +card_url: ?string,
 |};
 
 export type VolunteerUserData = {|
@@ -120,6 +123,7 @@ export type ProjectDetailsAPIData = {|
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date,
   +project_events: $ReadOnlyArray<EventTileAPIData>,
+  +event_created_from: ?number,
 |};
 
 export type TeamAPIData = {|
@@ -167,6 +171,7 @@ class ProjectAPIUtils {
         ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
         : ["Contact Project for Details"],
       video: apiData.project_thumbnail_video,
+      cardUrl: apiData.card_url,
     };
   }
 

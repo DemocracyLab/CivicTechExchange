@@ -33,6 +33,7 @@ function importUrls(urls_vx): Dictionary<UrlPattern> {
     return "/" + pattern.replace(regex.regexControlChars, "");
   };
 
+  // TODO: Need to support parameters other than 'id'
   const idPlaceholderRegex: RegExp = new RegExp("\\(.+\\)");
   const generateTemplateFunc: string => TemplateFunc = (pattern: string) => {
     const scrubbed: string = sanitizePattern(pattern);
@@ -42,7 +43,7 @@ function importUrls(urls_vx): Dictionary<UrlPattern> {
   };
 
   const fromPythonRegex: string => RegExp = (pattern: string) => {
-    const newPattern: string = pattern.replace("?P", "?");
+    const newPattern: string = pattern.replaceAll("?P", "?");
     return new RegExp(newPattern);
   };
 
@@ -87,7 +88,11 @@ class urlHelper {
     args: ?Object,
     includeIdInArgs: boolean
   ): string {
-    let sectionUrl = urls[section].templateFunc(args);
+    let sectionUrl: string = urlHelper._sectionSpecialCases(section, args);
+    if (!_.isEmpty(sectionUrl)) {
+      return sectionUrl;
+    }
+    sectionUrl = urls[section].templateFunc(args);
     if (args) {
       const _args = includeIdInArgs ? args : _.omit(args, "id");
       sectionUrl += _.reduce(
@@ -100,6 +105,19 @@ class urlHelper {
       );
     }
     return sectionUrl;
+  }
+
+  static _sectionSpecialCases(section: string, args: ?Object): string {
+    // TODO: Fix the url template generators to handle these
+    // TODO: Fix bug where calling section with an argument other than an id argument
+    switch (section) {
+      case Section.CreateEventProject:
+        return `/events/${args["event_id"]}/projects/create/${args[
+          "project_id"
+        ] || ""}`;
+      case Section.AboutEventProject:
+        return `/events/${args["event_id"]}/projects/${args["project_id"]}`;
+    }
   }
 
   // Determine if we are on a given section
@@ -205,7 +223,7 @@ class urlHelper {
     );
     if (urlPattern) {
       const matches = urlPattern.regex.exec(url);
-      const args = _.size(matches) > 1 ? { id: matches[1] } : {};
+      const args = matches.groups || {};
       processedUrlPattern = {
         url: url,
         args: args,

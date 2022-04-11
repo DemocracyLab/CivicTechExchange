@@ -1,15 +1,17 @@
 from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
-from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group, NameRecord
+from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group, NameRecord, EventProject
 from .sitemaps import SitemapPages
-from democracylab.emails import send_project_creation_notification, send_group_creation_notification, send_event_creation_notification
+from democracylab.emails import send_project_creation_notification, send_group_creation_notification, \
+    send_event_creation_notification, notify_project_owners_event_rsvp
 from democracylab.models import get_request_contributor
 from .caching.cache import ProjectSearchTagsCache
 from salesforce import campaign as salesforce_campaign
 from common.helpers.date_helpers import parse_front_end_datetime
 from common.helpers.form_helpers import is_creator, is_creator_or_staff, is_co_owner_or_staff, read_form_field_string, \
-    read_form_field_boolean, merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, read_form_fields_point
+    read_form_field_boolean, merge_json_changes, merge_single_file, read_form_field_tags, read_form_field_datetime, \
+    read_form_fields_point, read_form_field
 
 
 class ProjectCreationForm(ModelForm):
@@ -82,6 +84,11 @@ class ProjectCreationForm(ModelForm):
         if not request.user.is_staff:
             project.project_date_modified = timezone.now()
 
+        from_event_id = read_form_field(form, 'from_event_id')
+        if from_event_id:
+            event = Event.objects.get(id=from_event_id)
+            project.event_created_from = event
+
         project.save()
         salesforce_campaign.save(project)
 
@@ -103,8 +110,7 @@ class ProjectCreationForm(ModelForm):
                 project.update_linked_items()
 
         if fields_changed:
-            # Only recache linked events if tags were changed
-            project.recache(recache_linked=tags_changed)
+            project.recache(recache_linked=True)
             project.project_creator.purge_cache()
 
         return project
@@ -262,7 +268,7 @@ class GroupCreationForm(ModelForm):
         fields_changed |= merge_json_changes(ProjectLink, group, form, 'group_links')
         fields_changed |= merge_json_changes(ProjectFile, group, form, 'group_files')
 
-        project_fields_changed |= merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail_location')
+        project_fields_changed |= merge_single_file(group, form, FileCategory.THUMBNAIL, 'group_thumbnail')
 
         fields_changed |=  project_fields_changed
 
@@ -287,3 +293,51 @@ class GroupCreationForm(ModelForm):
         group_creator = group.group_creator
         group.delete()
         group_creator.purge_cache()
+
+
+class EventProjectCreationForm(ModelForm):
+    class Meta:
+        model = EventProject
+        fields = '__all__'
+
+    @staticmethod
+    def create_or_edit_event_project(request, event_id, project_id):
+        form = ProjectCreationForm(request.POST)
+        event = Event.get_by_id_or_slug(event_id)
+        project = Project.objects.get(id=project_id)
+        if not is_co_owner_or_staff(request.user, project):
+            raise PermissionDenied()
+
+        event_project = EventProject.get(event_id, project_id)
+        fields_changed = False
+        recache_linked = False
+        if not event_project:
+            user = get_request_contributor(request)
+            event_project = EventProject.create(user, event, project)
+            notify_project_owners_event_rsvp(event_project)
+            fields_changed = True
+            recache_linked = True
+
+        fields_changed |= read_form_field_string(event_project, form, 'goal')
+        fields_changed |= read_form_field_string(event_project, form, 'scope')
+        fields_changed |= read_form_field_string(event_project, form, 'schedule')
+        fields_changed |= read_form_field_string(event_project, form, 'onboarding_notes')
+
+        # TODO: Add to model
+        # if not request.user.is_staff:
+        #     project.project_date_modified = timezone.now()
+
+        event_project.save()
+
+        fields_changed |= merge_json_changes(ProjectLink, event_project, form, 'event_project_links')
+        fields_changed |= merge_json_changes(ProjectPosition, event_project, form, 'event_project_positions')
+
+        if fields_changed:
+            # Only recache linked projects/event on initial creation
+            event_project.recache()
+            event.recache()
+            if recache_linked:
+                project.recache(recache_linked=False)
+                project.project_creator.purge_cache()
+
+        return event_project
