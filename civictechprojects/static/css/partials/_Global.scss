@@ -27,7 +27,7 @@ a[type="button"].btn-footer:active {
 }
 
 //Sets button states to be our specific values instead of default computed by Bootstrap
-//I don't think we're going to call these colors manually at any point so no vars here
+//TODO: Update these with design system button variables at some point (e.g. $button-success-bg ... or whatever)
 .btn-success:active,
 .btn-success:hover {
   background-color: #395e00;

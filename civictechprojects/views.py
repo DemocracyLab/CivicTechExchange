@@ -17,7 +17,7 @@ import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
-    ProjectRelationship, Testimonial, ProjectFavorite, EventProject
+    ProjectRelationship, Testimonial, ProjectFavorite, EventProject, RSVPVolunteerRelation
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from common.caching.cache import Cache
@@ -34,7 +34,8 @@ from common.helpers.constants import FrontEndSection, TagCategory
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
-    notify_group_owners_group_approved, notify_event_owners_event_approved
+    notify_group_owners_group_approved, notify_event_owners_event_approved, notify_rsvped_volunteer, notify_rsvp_cancellation, \
+    notify_rsvp_for_project_owner, notify_rsvp_cancellation_for_project_owner, notify_rsvp_cancellation_for_event_owner
 from civictechprojects.helpers.context_preload import context_preload
 from civictechprojects.helpers.projects.annotations import apply_project_annotations
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
@@ -252,6 +253,97 @@ def event_project_edit(request, event_id, project_id):
 
     event_project = EventProjectCreationForm.create_or_edit_event_project(request, event_id, project_id)
     return JsonResponse(event_project.hydrate_to_json())
+
+
+def rsvp_for_event(request, event_id):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    event = Event.get_by_id_or_slug(event_id)
+    RSVPVolunteerRelation.create(event, user)
+
+    notify_rsvped_volunteer(event, user)
+    user.purge_cache()
+    return HttpResponse(status=200)
+
+
+def cancel_rsvp_for_event(request, event_id):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    event = Event.get_by_id_or_slug(event_id)
+    rsvp = RSVPVolunteerRelation.get_for_event_volunteer(event, user)
+    rsvp.delete()
+
+    notify_rsvp_cancellation(event, user)
+    user.purge_cache()
+    return HttpResponse(status=200)
+
+
+def rsvp_for_event_project(request, event_id, project_id):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    event = Event.get_by_id_or_slug(event_id)
+    event_project = EventProject.get(event_id, project_id)
+
+    # If rsvp already created, do nothing
+    rsvp = RSVPVolunteerRelation.get_for_event_project(event_project, user)
+    if rsvp is None:
+        rsvp = RSVPVolunteerRelation.create(event, user)
+        body = json.loads(request.body)
+        rsvp.event_project = event_project
+        rsvp.application_text = body['applicationText']
+        rsvp.save()
+        rsvp.role.add(body['roleTag'])
+
+        notify_rsvp_for_project_owner(rsvp)
+        user.purge_cache()
+
+    return JsonResponse(event_project.recache())
+
+
+def cancel_rsvp_for_event_project(request, event_id, project_id):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+    if not user.email_verified:
+        return HttpResponse(status=403)
+
+    event = Event.get_by_id_or_slug(event_id)
+    event_project = EventProject.get(event_id, project_id)
+    rsvp = RSVPVolunteerRelation.get_for_event_project(event_project, user)
+    if event_project.is_owner(user):
+        # If event project owner, delete event project
+        project = event_project.project
+        event_project.delete()
+        event.recache()
+        project.recache()
+        user.purge_cache()
+        notify_rsvp_cancellation_for_event_owner(event_project)
+        return HttpResponse(status=200)
+    elif rsvp is not None:
+        # If rsvp-ed, delete rsvp
+        notify_rsvp_cancellation_for_project_owner(rsvp)
+        rsvp.delete()
+        rsvp.event_project.recache()
+        user.purge_cache()
+        return JsonResponse(event_project.recache())
+    else:
+        return HttpResponse(status=401)
 
 
 # TODO: Pass csrf token in ajax call so we can check for it
@@ -487,7 +579,6 @@ def projects_list(request):
     elif 'event_id' in query_params:
         event_id = query_params['event_id'][0]
         event = Event.get_by_id_or_slug(event_id)
-        # project_list = event.get_linked_projects().filter(is_searchable=True)
         project_list = event.get_linked_projects()
     else:
         project_list = Project.objects.filter(is_searchable=True)

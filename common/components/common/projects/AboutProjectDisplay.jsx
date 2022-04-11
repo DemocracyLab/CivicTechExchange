@@ -275,11 +275,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                 .map(action => {
                   if (action.type === "ProjectCommit") {
                     return <ProjectCommitCard commit={action} />;
-                  }
-                  else if (action.type === "TrelloAction"){
-                    return <TrelloActionCard action={action} />
-                  }
-                  else {
+                  } else if (action.type === "TrelloAction") {
+                    return <TrelloActionCard action={action} />;
+                  } else {
                     // unknown action type
                   }
                 })}
@@ -424,7 +422,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
   _renderPositions(): ?Array<React$Node> {
     const project: ProjectDetailsAPIData = this.state.project;
     const canApply: boolean =
-      !this.state.viewOnly && CurrentUser.canVolunteerForProject(project);
+      !this.state.viewOnly && CurrentUser.canVolunteerFor(project);
     return (
       project &&
       project.project_positions &&

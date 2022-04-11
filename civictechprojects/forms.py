@@ -185,7 +185,7 @@ class EventCreationForm(ModelForm):
 
         event.event_date_modified = timezone.now()
 
-        project_fields_changed |= merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail_location')
+        project_fields_changed |= merge_single_file(event, form, FileCategory.THUMBNAIL, 'event_thumbnail')
 
         event.save()
 

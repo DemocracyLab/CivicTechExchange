@@ -152,7 +152,7 @@ class CreateEventProjectController extends React.Component<{||}, State> {
     api.postForm(
       formSubmitUrl,
       formRef,
-      onSubmitSuccess,
+      response => onSubmitSuccess(JSON.parse(response)),
       response => null /* TODO: Report error to user */
     );
   }

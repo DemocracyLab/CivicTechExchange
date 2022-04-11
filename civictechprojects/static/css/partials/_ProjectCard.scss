@@ -104,3 +104,17 @@
   padding-top: 4px;
   padding-right: 4px;
 }
+.ProjectCard-operation {
+  grid-row: 5;
+  grid-column: 1/5;
+  border-top: 1px solid $color-grey-medium;
+  text-align: center;
+}
+//selector specificity here is to avoid  matching .ProjectCard-root a, which is hilarious but not intended behavior
+a.ProjectCard-rsvp-btn, button.ProjectCard-rsvp-btn {
+  margin: 1rem auto;
+  width: 80%;
+  max-width: 280px;
+  max-height: 40px;
+  display: block;
+}

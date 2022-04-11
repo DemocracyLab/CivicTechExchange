@@ -15,6 +15,7 @@ import FormWorkflow, {
 import CurrentUser from "../utils/CurrentUser";
 import LogInController from "./LogInController.jsx";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
+import type { APIResponse } from "../utils/api.js";
 
 type State = {|
   eventId: ?number,
@@ -107,7 +108,7 @@ class CreateEventController extends React.PureComponent<{||}, State> {
     api.postForm(
       formSubmitUrl,
       formRef,
-      onSubmitSuccess,
+      (response: APIResponse) => onSubmitSuccess(JSON.parse(response)),
       response => null /* TODO: Report error to user */
     );
   }

@@ -8,6 +8,7 @@ import type { Dictionary } from "../types/Generics.jsx";
 
 export const ModalSizes = {
   Small: "sm",
+  Medium: "",
   Large: "lg",
   ExtraLarge: "xl",
 };
@@ -21,9 +22,10 @@ type Props = {|
   submitEnabled: boolean,
   onClickCancel: () => void,
   onClickSubmit: () => void,
-  onModalHide: ?()=> void,
+  onModalHide: ?() => void,
   hideButtons: ?boolean,
   size: ?string,
+  reverseCancelConfirm: ?boolean,
 |};
 type State = {||};
 
@@ -57,8 +59,17 @@ class ModalWrapper extends React.PureComponent<Props, State> {
           <Modal.Body>{this.props.children}</Modal.Body>
           {!this.props.hideButtons && (
             <Modal.Footer>
-              {this.props.onClickCancel && this._renderCancelButton()}
-              {this._renderSubmitButton()}
+              {this.props.reverseCancelConfirm ? (
+                <React.Fragment>
+                  {this._renderSubmitButton()}
+                  {this.props.onClickCancel && this._renderCancelButton()}
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  {this.props.onClickCancel && this._renderCancelButton()}
+                  {this._renderSubmitButton()}
+                </React.Fragment>
+              )}
             </Modal.Footer>
           )}
         </Modal>

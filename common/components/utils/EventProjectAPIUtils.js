@@ -1,14 +1,29 @@
 // @flow
 
 import type { FileInfo } from "../common/FileInfo.jsx";
-import type { TagDefinition } from "./ProjectAPIUtils.js";
 import type { LinkInfo } from "../forms/LinkInfo.jsx";
 import { PositionInfo } from "../forms/PositionInfo.jsx";
+import {
+  TagDefinition,
+  APIError,
+  APIResponse,
+  VolunteerUserData,
+} from "./ProjectAPIUtils.js";
+import apiHelper from "./api.js";
+
+export type VolunteerRSVPDetailsAPIData = {|
+  +application_id: number,
+  +user: VolunteerUserData,
+  +application_text: string,
+  +application_date: string,
+  +roleTag: TagDefinition,
+|};
 
 export type EventProjectAPIDetails = {|
   event_project_id: string,
   event_project_creator: string,
   event_project_positions: $ReadOnlyArray<PositionInfo>,
+  event_project_volunteers: $ReadOnlyArray<VolunteerRSVPDetailsAPIData>,
   event_project_files: $ReadOnlyArray<FileInfo>,
   event_project_links: $ReadOnlyArray<LinkInfo>,
   event_project_goal: ?string,
@@ -62,5 +77,50 @@ export default class EventProjectAPIUtils {
             errorMessage: JSON.stringify(response),
           })
       );
+  }
+
+  static rsvpForEvent(
+    eventId: number,
+    successCallback: ?(APIResponse) => void,
+    errCallback: ?(APIError) => void
+  ): void {
+    const url: string = `/api/event/${eventId}/rsvp/`;
+    return apiHelper.post(url, {}, successCallback, errCallback);
+  }
+
+  static rsvpEventCancel(
+    eventId: number,
+    successCallback: ?(APIResponse) => void,
+    errCallback: ?(APIError) => void
+  ): void {
+    const url: string = `/api/event/${eventId}/rsvp/cancel/`;
+    return apiHelper.post(url, {}, successCallback, errCallback);
+  }
+
+  static rsvpForEventProject(
+    eventId: number,
+    projectId: number,
+    message: string,
+    roleTag: string,
+    successCallback: ?(APIResponse) => void,
+    errCallback: ?(APIError) => void
+  ): void {
+    const url: string = `/api/event/${eventId}/projects/${projectId}/rsvp/`;
+    return apiHelper.post(
+      url,
+      { applicationText: message, roleTag: roleTag },
+      successCallback,
+      errCallback
+    );
+  }
+
+  static cancelEventProject(
+    eventId: number,
+    projectId: number,
+    successCallback: ?(APIResponse) => void,
+    errCallback: ?(APIError) => void
+  ): void {
+    const url: string = `/api/event/${eventId}/projects/${projectId}/cancel/`;
+    return apiHelper.post(url, {}, successCallback, errCallback);
   }
 }

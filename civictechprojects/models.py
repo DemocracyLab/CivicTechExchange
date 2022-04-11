@@ -480,6 +480,9 @@ class Event(Archived):
     def get_event_files(self):
         return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
+    def get_url(self):
+        return section_url(FrontEndSection.AboutEvent, {'id': self.event_slug or self.id})
+
     @staticmethod
     def get_by_id_or_slug(slug):
         event = None
@@ -503,7 +506,7 @@ class Event(Archived):
         return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
     def get_linked_projects(self):
-        projects = Project.objects.filter(project_events__event=self)
+        projects = Project.objects.filter(project_events__event=self, project_events__deleted=False, is_searchable=True)
         return projects
 
     def update_linked_items(self):
@@ -539,12 +542,13 @@ class EventProject(Archived):
         links = self.get_event_project_links()
         files = self.get_event_project_files()
         positions = self.get_project_positions()
+        rsvps = self.get_event_project_volunteers()
         event_json = keys_subset(self.event.hydrate_to_json(), ['event_id', 'event_name', 'event_slug', 'event_thumbnail',
                                                                 'event_date_end', 'event_date_start', 'event_location'])
         project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
                                                                     'project_short_description', 'project_description',
                                                                     'project_description_solution', 'project_technologies',
-                                                                    'project_owners', 'project_volunteers', 'project_creator'])
+                                                                    'project_owners', 'project_creator'])
 
         # TODO: Export RSVP-ed volunteers
         event_project_json = merge_dicts(event_json, project_json, {
@@ -555,11 +559,30 @@ class EventProject(Archived):
             'event_project_onboarding_notes': self.onboarding_notes,
             'event_project_creator': self.creator.id,
             'event_project_positions': list(map(lambda position: position.to_json(), positions)),
+            'event_project_volunteers': list(map(lambda rsvp: rsvp.to_json(), rsvps)),
             'event_project_files': list(map(lambda file: file.to_json(), files)),
             'event_project_links': list(map(lambda link: link.to_json(), links)),
         })
 
         return event_project_json
+
+    def hydrate_to_list_json(self):
+        return keys_subset(self.hydrate_to_json(), ['event_project_id', 'event_id', 'event_name', 'event_slug',
+                                                    'project_id', 'project_name'])
+
+    def delete(self):
+        print('Deleting Event Project: {ep}'.format(ep=self.__str__()))
+        for link in self.get_event_project_links():
+            print('Deleting link: ' + link.__str__())
+            link.delete()
+        for position in self.get_project_positions():
+            print('Deleting position: ' + position.__str__())
+            position.delete()
+        for rsvp in self.get_event_project_volunteers():
+            print('Deleting rsvp: ' + rsvp.__str__())
+            rsvp.delete()
+
+        super().delete()
 
     def get_event_project_links(self):
         return ProjectLink.objects.filter(link_project=self.project, link_event=self.event, link_group=None, link_user=None)
@@ -570,15 +593,25 @@ class EventProject(Archived):
     def get_project_positions(self):
         return ProjectPosition.objects.filter(position_project=self.project, position_event=self.event).order_by('order_number')
 
+    def get_event_project_volunteers(self):
+        return RSVPVolunteerRelation.objects.filter(event_project=self)
+
     def get_url(self):
         return section_url(FrontEndSection.AboutEventProject,
-                           {'event_id': self.event.id, 'project_id': self.project.id})
+                           {'event_id': self.event.event_slug or self.event.id, 'project_id': self.project.id})
+
+    def is_owner(self, user: Contributor):
+        return user.id == self.project.project_creator.id
 
     @staticmethod
     def get(event_id, project_id):
         event = Event.get_by_id_or_slug(event_id)
         project = Project.objects.get(id=project_id)
         return EventProject.objects.filter(event=event, project=project).first()
+
+    @staticmethod
+    def get_owned(user: Contributor):
+        return EventProject.objects.filter(project__project_creator=user)
 
     @staticmethod
     def create(creator, event, project):
@@ -605,6 +638,7 @@ class EventProject(Archived):
     def recache(self):
         hydrated_project = self._hydrate_to_json()
         EventProjectCache.refresh(self, hydrated_project)
+        return hydrated_project
 
 
 class NameRecord(models.Model):
@@ -797,6 +831,9 @@ class ProjectLink(models.Model):
     link_url = models.CharField(max_length=2083)
     link_visibility = models.CharField(max_length=50)
 
+    def __str__(self):
+        return '{id}: {name} - {url}'.format(id=self.id, name=self.link_name, url=self.link_url)
+
     @staticmethod
     def create(owner, url, name, visibility):
         # TODO: Validate input
@@ -887,6 +924,13 @@ class ProjectPosition(models.Model):
     description_url = models.CharField(max_length=2083, default='')
     order_number = models.PositiveIntegerField(default=0)
     is_hidden = models.BooleanField(default=False)
+
+    def __str__(self):
+        entity = ''
+        entity += self.position_event.__str__() + ', ' if self.position_event else ''
+        entity += self.position_project.__str__() if self.position_project else ''
+        role = self.position_role.all().values()[0]['name']
+        return '{id}: {entity} - {role}'.format(id=self.id, entity=entity, role=role)
 
     def to_json(self):
         return {
@@ -1229,6 +1273,80 @@ class VolunteerRelation(Archived):
     @staticmethod
     def get_by_project(project, active=True):
         return VolunteerRelation.objects.filter(project_id=project.id, is_approved=active, deleted=not active)
+
+
+class TaggedRSVPVolunteerRole(TaggedItemBase):
+    content_object = models.ForeignKey('RSVPVolunteerRelation', on_delete=models.CASCADE)
+
+
+class RSVPVolunteerRelation(Archived):
+    event = models.ForeignKey(Event, related_name='rsvp_volunteers', on_delete=models.CASCADE)
+    volunteer = models.ForeignKey(Contributor, related_name='rsvp_events', on_delete=models.CASCADE)
+    event_project = models.ForeignKey(EventProject, related_name='rsvp_volunteers', blank=True, null=True, on_delete=models.CASCADE)
+    role = TaggableManager(blank=True, through=TaggedRSVPVolunteerRole)
+    role.remote_field.related_name = "rsvp_roles"
+    application_text = models.CharField(max_length=10000, blank=True)
+    rsvp_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+
+    def delete(self):
+        self.volunteer.purge_cache()
+        super().delete()
+
+    def __str__(self):
+        return 'Event: {event}, User: {user}'.format(event=str(self.event.event_name), user=str(self.volunteer.email))
+
+    def to_json(self):
+        volunteer = self.volunteer
+        volunteer_json = {
+            'application_id': self.id,
+            'event_id': self.event.id,
+            'user': volunteer.hydrate_to_tile_json(),
+            'application_text': self.application_text,
+            'rsvp_date': self.rsvp_date.__str__(),
+            'roleTag': Tag.hydrate_to_json(volunteer.id, list(self.role.all().values())),
+        }
+
+        if self.event_project is not None:
+            volunteer_json['project_id'] = self.event_project.project.id
+
+        return volunteer_json
+
+    def hydrate_project_volunteer_info(self):
+        volunteer_json = self.to_json()
+        project_json = self.project.hydrate_to_list_json()
+        return merge_dicts(project_json, volunteer_json)
+
+    @staticmethod
+    def create(event: Event, volunteer: Contributor):
+        relation = RSVPVolunteerRelation()
+        relation.event = event
+        relation.volunteer = volunteer
+        relation.save()
+
+        # relation.role.add(role)
+        return relation
+
+    @staticmethod
+    def create(event: Event, volunteer: Contributor):
+        relation = RSVPVolunteerRelation()
+        relation.event = event
+        relation.volunteer = volunteer
+        relation.save()
+
+        # relation.role.add(role)
+        return relation
+
+    @staticmethod
+    def get_for_event_volunteer(event: Event, volunteer: Contributor):
+        return RSVPVolunteerRelation.objects.filter(event=event.id, volunteer=volunteer.id).first()
+
+    @staticmethod
+    def get_for_event_project(event_project: EventProject, volunteer: Contributor):
+        return RSVPVolunteerRelation.objects.filter(event_project=event_project.id, volunteer=volunteer.id).first()
+
+    @staticmethod
+    def get_for_volunteer(volunteer: Contributor):
+        return RSVPVolunteerRelation.objects.filter(volunteer=volunteer.id)
 
 
 class TaggedCategory(TaggedItemBase):

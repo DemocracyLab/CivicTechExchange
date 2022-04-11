@@ -1,0 +1,38 @@
+//dlab toast overrides (take the default Bootstrap styling and do what we want instead)
+//TODO: make the background-color declaration "success only" and/or make bg color selectable by prop
+//TODO: make the toast body icon glyph and color selectable as well
+
+.toast {
+  z-index: 101; // nav & header is z-index 99, so this ensures toasts won't hide behind it
+  background-color: $color-feedback-background-success-weakest;
+  p {
+    margin-bottom: 0;
+  }
+  i {
+    align-self: center;
+    color: $color-icon-success-strong;
+    margin: 0 16px;
+  }
+}
+.toast-header {
+  color: inherit;
+  background-color: inherit;
+  border-bottom: none;
+  justify-content: space-between; //makes sure header text (if present) and "x" button are positioned
+  button {
+    width: initial !important; // prevent page-level button rules from altering this
+  }
+}
+.toast-body {
+  display: flex;
+  justify-content: space-between; // makes sure icon, content and (for single-body toasts) "x" button are positioned
+  button {
+    width: initial !important; // prevent page-level button rules from altering this
+  }
+}
+
+@include media-breakpoint-up(lg) {
+    .toast {
+        max-width: 400px; // this is a test of slightly wider toasts @ desktop viewports
+    }
+}

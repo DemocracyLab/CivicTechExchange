@@ -56,10 +56,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
 
   _renderApplyButton(showApplyButton: boolean): ?React$Node {
     let applyButton;
-    if (
-      showApplyButton &&
-      CurrentUser.canVolunteerForProject(this.props.project)
-    ) {
+    if (showApplyButton && CurrentUser.canVolunteerFor(this.props.project)) {
       applyButton = (
         <Button
           variant="primary"

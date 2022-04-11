@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import Project, Group, Event, ProjectRelationship, UserAlert, VolunteerRelation, ProjectCommit, \
-    NameRecord, ProjectFile, Testimonial, ProjectLink, ProjectFavorite, ProjectPosition, EventProject
+    NameRecord, ProjectFile, Testimonial, ProjectLink, ProjectFavorite, ProjectPosition, EventProject, \
+    RSVPVolunteerRelation
 
 project_text_fields = ['project_name', 'project_description', 'project_description_solution', 'project_description_actions', 'project_short_description', 'project_location', 'project_country', 'project_state', 'project_city', 'project_url']
 project_filter_fields = ('project_date_created', 'project_date_modified', 'is_searchable', 'is_created')
@@ -103,6 +104,10 @@ class EventProjectAdmin(admin.ModelAdmin):
         if change:
             obj.recache()
 
+class RSVPVolunteerRelationAdmin(admin.ModelAdmin):
+    list_display = ('event', 'volunteer', 'event_project', 'application_text')
+    search_fields = ['volunteer__email', 'event__event_name', 'application_text']
+    list_filter = ('event',)
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectRelationship, ProjectRelationshipAdmin)
@@ -118,3 +123,4 @@ admin.site.register(ProjectLink, ProjectLinkAdmin)
 admin.site.register(ProjectFavorite, ProjectFavoriteAdmin)
 admin.site.register(ProjectPosition, ProjectPositionAdmin)
 admin.site.register(EventProject, EventProjectAdmin)
+admin.site.register(RSVPVolunteerRelation, RSVPVolunteerRelationAdmin)

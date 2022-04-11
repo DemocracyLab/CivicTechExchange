@@ -34,6 +34,13 @@ export type TagDefinitionCount = {|
   num_times: number,
 |} & TagDefinition;
 
+export type CardOperation = {|
+  name: string,
+  buttonVariant: ?string,
+  url: ?string,
+  operation: ?() => null,
+|};
+
 export type ProjectData = {|
   +id: number,
   +ownerId: number,
@@ -51,6 +58,7 @@ export type ProjectData = {|
   +url: string,
   +video: ?LinkInfo,
   +cardUrl: ?string,
+  +cardOperation: ?CardOperation,
 |};
 
 export type ProjectAPIData = {|
