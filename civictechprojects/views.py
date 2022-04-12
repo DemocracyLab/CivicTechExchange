@@ -1463,3 +1463,10 @@ def get_testimonials(request, category=None):
         testimonials = testimonials.filter(categories__name__in=[category])
 
     return JsonResponse(list(map(lambda t: t.to_json(), testimonials.order_by('-priority'))), safe=False)
+
+
+def qiqo_webhook(request):
+    from pprint import pprint
+    print('Zoom webhook payload:')
+    pprint(request.body)
+    return HttpResponse(status=200)
