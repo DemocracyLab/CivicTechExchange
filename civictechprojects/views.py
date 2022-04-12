@@ -1464,7 +1464,8 @@ def get_testimonials(request, category=None):
 
     return JsonResponse(list(map(lambda t: t.to_json(), testimonials.order_by('-priority'))), safe=False)
 
-
+# TODO: Whitelist qiqochat for this hook
+@csrf_exempt
 def qiqo_webhook(request):
     from pprint import pprint
     print('Zoom webhook payload:')
