@@ -7,6 +7,7 @@ import traceback
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
+        print('Merging contributors ...')
         contributors = Contributor.objects.filter(is_active__exact=True)
         for contributor in contributors:
             try:
@@ -15,6 +16,7 @@ class Command(BaseCommand):
                 print(f'Error merging user in Salesforce: ({contributor.id}) {contributor.username}')
                 print(traceback.format_exc())
 
+        print('Merging projects ...')
         projects = Project.objects.filter(is_searchable__exact=True).filter(is_created__exact=True).filter(deleted__exact=False)
         for project in projects:
             try:
@@ -23,15 +25,8 @@ class Command(BaseCommand):
                 print(f'Error merging project in Salesforce: ({project.id}) {project.project_name}')
                 print(traceback.format_exc())
 
-        for volunteer in VolunteerRelation.objects.filter(is_approved__exact=True).order_by('volunteer_id').distinct('volunteer_id'):
-            try:
-                salesforce_contact.set_title(volunteer.volunteer_id, 'Project Volunteer')
-                volunteer.save_to_salesforce()
-            except Exception:
-                print(f'Error merging volunteer (user {volunteer.volunteer_id}) in Salesforce')
-                print(traceback.format_exc())
-
         # Include historical, non-searchable projects:
+        print('Merging non-searchable projects ...')
         projects = Project.objects.raw(f'select * from civictechprojects_project where is_created and not deleted and not is_searchable and lower(project_name) not like "%test%" and id not in (90,155,156,169,170,229,279,352,427,510,648,653,660,778,784,832,878,893,902,903)')
         for project in projects:
             try:
@@ -40,6 +35,7 @@ class Command(BaseCommand):
                 print(f'Error merging project in Salesforce: ({project.project.id}) {project.project_name}')
                 print(traceback.format_exc())
 
+        print('Merging project positions ...')
         # project_positions - Salesforce will return errors where it finds no corresponding campaign
         for position in ProjectPosition.objects.all():
             try:
@@ -49,7 +45,8 @@ class Command(BaseCommand):
                 print(traceback.format_exc())
 
 
-        # Set labels for project volunteers:
+        # Set titles for project owners and volunteers:
+        print('Setting titles for project owners and volunteers ...')
         for volunteer in VolunteerRelation.objects.filter(is_approved__exact=True).order_by('volunteer_id').distinct('volunteer_id'):
             try:
                 salesforce_contact.set_title(volunteer.volunteer_id, 'Project Volunteer')

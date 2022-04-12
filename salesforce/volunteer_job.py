@@ -10,7 +10,6 @@ client = SalesforceClient()
 
 def run(request):
     response = SalesforceClient().send(request)
-    print(response.status_code, response.text)
 
 
 def save(project_position):
