@@ -13,7 +13,6 @@ client = SalesforceClient()
 
 def run(request):
     response = SalesforceClient().send(request)
-    print(response.status_code,  response.text)
 
 
 def send_volunteer_data(volunteer_id, data):
