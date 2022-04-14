@@ -414,6 +414,7 @@ class Event(Archived):
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
     show_headers = models.BooleanField(default=False)
+    is_activated = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.event_name)
@@ -477,6 +478,9 @@ class Event(Archived):
 
         return event
 
+    def get_event_projects(self):
+        return EventProject.objects.filter(event=self)
+
     def get_event_files(self):
         return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
@@ -484,7 +488,7 @@ class Event(Archived):
         return section_url(FrontEndSection.AboutEvent, {'id': self.event_slug or self.id})
 
     @staticmethod
-    def get_by_id_or_slug(slug):
+    def get_by_id_or_slug(slug: str):
         event = None
         if slug is not None:
             _slug = str(slug).strip().lower()
@@ -1351,6 +1355,37 @@ class RSVPVolunteerRelation(Archived):
 
 class TaggedCategory(TaggedItemBase):
     content_object = models.ForeignKey('Testimonial', on_delete=models.CASCADE)
+
+
+class EventConferenceRoom(models.Model):
+    room_number = models.IntegerField(default=0)
+    zoom_id = models.BigIntegerField(default=0)
+    event = models.ForeignKey(Event, related_name='conference_rooms', on_delete=models.CASCADE)
+    event_project = models.ForeignKey(EventProject, related_name='event_conference_rooms', blank=True, null=True, on_delete=models.CASCADE)
+    join_url = models.CharField(max_length=2083)
+    admin_url = models.CharField(max_length=2083)
+    last_activated = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+
+    @staticmethod
+    def get_event_room(event: Event):
+        return EventConferenceRoom.objects.filter(event=event, qiqo_id=0).first()
+
+    @staticmethod
+    def get_event_project_room(event_project: EventProject):
+        return EventConferenceRoom.objects.filter(event_project=event_project).first()
+
+    @staticmethod
+    def create(event: Event, zoom_id: int, join_url: str, admin_url: str, event_project: EventProject = None):
+        room_number = event_project.project.id if event_project else 0
+        room = EventConferenceRoom(
+            room_number=room_number,
+            zoom_id=zoom_id,
+            event=event,
+            join_url=join_url,
+            admin_url=admin_url,
+            event_project=event_project)
+        room.save()
+        return room
 
 
 class Testimonial(models.Model):
