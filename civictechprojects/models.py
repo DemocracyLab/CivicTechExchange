@@ -1386,13 +1386,21 @@ class EventConferenceRoom(models.Model):
     @staticmethod
     def create(event: Event, zoom_id: int, join_url: str, admin_url: str, event_project: EventProject = None):
         room_number = event_project.project.id if event_project else 0
-        room = EventConferenceRoom(
-            room_number=room_number,
-            zoom_id=zoom_id,
-            event=event,
-            join_url=join_url,
-            admin_url=admin_url,
-            event_project=event_project)
+        room = EventConferenceRoom.get_event_project_room(event_project) if event_project is not None \
+            else EventConferenceRoom.get_event_room(event)
+        if room is None:
+            room = EventConferenceRoom(
+                room_number=room_number,
+                zoom_id=zoom_id,
+                event=event,
+                join_url=join_url,
+                admin_url=admin_url,
+                event_project=event_project)
+        else:
+            room.zoom_id = zoom_id
+            room.join_url = join_url
+            room.admin_url = admin_url
+            room.last_activated = timezone.now()
         room.save()
         return room
 
