@@ -463,6 +463,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   _cardOperationGenerator(project: ProjectData): ?CardOperation {
     // TODO: Show signup modal on click
+    // TODO: Show join video buttons if event is active
     const isVolunteering: boolean =
       !_.isEmpty(this.state.volunteering_projects) &&
       this.state.volunteering_projects.find(
@@ -474,17 +475,32 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       this.state.owned_projects.find(
         (myProject: MyProjectData) => myProject.project_id == project.id
       );
-    if (isVolunteering || isOwner) {
-      return {
-        name: "View Details",
-        buttonVariant: "outline-secondary",
-        url: project.cardUrl,
-      };
-    } else if (CurrentUser.isLoggedIn() && !isVolunteering) {
-      return {
-        name: "Sign Up",
-        url: project.cardUrl + "?signUp=1",
-      };
+    if (this.props.event.is_activated) {
+      if (isVolunteering || isOwner) {
+        return {
+          name: "Join Project Video",
+          url: project.conferenceUrl,
+          target: "_blank"
+        };
+      } else {
+        return {
+          name: "Review Project Details",
+          url: project.cardUrl,
+        };
+      }
+    } else {
+      if (isVolunteering || isOwner) {
+        return {
+          name: "View Details",
+          buttonVariant: "outline-secondary",
+          url: project.cardUrl,
+        };
+      } else if (CurrentUser.isLoggedIn() && !isVolunteering) {
+        return {
+          name: "Sign Up",
+          url: project.cardUrl + "?signUp=1",
+        };
+      }
     }
   }
 

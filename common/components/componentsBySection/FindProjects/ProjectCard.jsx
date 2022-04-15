@@ -185,7 +185,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
           onClick: () => cardOperation.operation(),
         };
       } else {
-        buttonConfig = { href: cardOperation.url };
+        buttonConfig = { href: cardOperation.url, target: cardOperation.target || "_self" };
       }
       return (
         <div className="ProjectCard-operation">
