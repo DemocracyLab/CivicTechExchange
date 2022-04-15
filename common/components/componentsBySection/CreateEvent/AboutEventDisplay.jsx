@@ -169,7 +169,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
                 {this.state.event.event_rsvp_url && this._renderRSVPButton()}
                 {!this.props.viewOnly &&
-                  event.event_live_id &&
+                  event.is_activated &&
                   this._renderJoinLiveEventButton()}
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
@@ -437,13 +437,11 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
   _renderJoinLiveEventButton(): ?$React$Node {
     let text: string = "";
     let url: string = "";
+    let target: string = "_self";
     if (CurrentUser.isLoggedIn()) {
-      //TODO: Handle un-verified users
-      text = "Join Event";
-      //TODO: Incorporate live event id into Live Event page
-      url = urlHelper.section(Section.LiveEvent, {
-        id: this.props.event.event_live_id,
-      });
+      text = "Join Main Session";
+      url = this.props.event.event_conference_admin_url || this.props.event.event_conference_url;
+      target = "_blank";
     } else {
       text = "Log In to Join Event";
       url = urlHelper.logInThenReturn();
@@ -451,12 +449,12 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
     return (
       <Button
-        variant="success"
-        size="lg"
-        className="AboutEvent-join-btn"
+        variant="primary"
         type="button"
+        className="AboutEvent-rsvp-btn"
         title={text}
         href={url}
+        target={target}
       >
         {text}
       </Button>

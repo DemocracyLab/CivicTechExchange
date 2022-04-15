@@ -12,7 +12,7 @@ from taggit.models import TaggedItemBase
 from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache, \
     EventProjectCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
-from common.helpers.dictionaries import merge_dicts, keys_subset
+from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
@@ -427,13 +427,17 @@ class Event(Archived):
         self.event_date_modified = timezone.now()
         self.save()
 
-    def hydrate_to_json(self):
-        return EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
+    def hydrate_to_json(self, user=None):
+        hydrated = EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
+        if user is None or not is_creator_or_staff(user, self):
+            hydrated = keys_omit(hydrated, ['event_conference_admin_url'])
+        return hydrated
 
     def _hydrate_to_json(self):
         files = self.get_event_files()
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
+        event_room = EventConferenceRoom.get_event_room(self)
 
         event = {
             'event_agenda': self.event_agenda,
@@ -454,8 +458,13 @@ class Event(Archived):
             'event_legacy_organization': Tag.hydrate_to_json(self.id, list(self.event_legacy_organization.all().values())),
             'event_slug': self.event_slug,
             'is_private': self.is_private,
-            'show_headers': self.show_headers
+            'show_headers': self.show_headers,
+            "is_activated": self.is_activated
         }
+
+        if event_room is not None:
+            event['event_conference_url'] = event_room.join_url
+            event['event_conference_admin_url'] = event_room.admin_url
 
         if len(thumbnail_files) > 0:
             event['event_thumbnail'] = thumbnail_files[0].to_json()
@@ -1368,7 +1377,7 @@ class EventConferenceRoom(models.Model):
 
     @staticmethod
     def get_event_room(event: Event):
-        return EventConferenceRoom.objects.filter(event=event, qiqo_id=0).first()
+        return EventConferenceRoom.objects.filter(event=event, room_number=0).first()
 
     @staticmethod
     def get_event_project_room(event_project: EventProject):
