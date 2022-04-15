@@ -23,9 +23,14 @@
 }
 .AboutEvent-rsvp-btn,
 .AboutEvent-join-btn {
-  display: block;
+  display: flex;
+  flex: 0 1 auto;
   margin: 1rem auto;
   max-width: 280px;
+  justify-content: center;
+  i {
+    margin: 0 8px;
+  }
 }
 button.AboutEvent-rsvp-btn {
   width: 100%;

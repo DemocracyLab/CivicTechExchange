@@ -237,7 +237,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   _renderJoinButton(eventProject: EventProjectAPIDetails): React$Node {
     let buttonConfig: Dictionary<any> = {};
     let label: string = eventProject.is_activated
-      ? "Join Project Video"
+      ? this._renderLiveJoin()
       : "Sign up";
     if (CurrentUser.isLoggedIn()) {
       if (
@@ -297,6 +297,17 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
         )}
       </React.Fragment>
     );
+  }
+
+  // TODO: pass in an argument with the number of people in the zoom room, add style info
+  _renderLiveJoin(): React$Node {
+    return (
+      <React.Fragment>
+        <i className={Glyph(GlyphStyles.Video, GlyphSizes.LG)} /> Join Event
+        Video
+      </React.Fragment>
+    );
+    // <i className={Glyph(GlyphStyles.Users, GlyphSizes.LG)} /><span className="class-tbd">{num}</span> 
   }
 
   cancelRSVP(
