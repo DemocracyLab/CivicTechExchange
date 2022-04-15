@@ -32,7 +32,6 @@ class Command(BaseCommand):
 
         event.is_activated = True
         event.save()
-
-
-
-
+        event.recache()
+        for ep in event_projects:
+            ep.recache()

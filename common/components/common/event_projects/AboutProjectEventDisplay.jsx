@@ -224,6 +224,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
   _renderJoinButton(eventProject: EventProjectAPIDetails): React$Node {
     let buttonConfig: Dictionary<any> = {};
+    let label: string = eventProject.is_activated ? "Join Project Video" : "Sign up";
     if (CurrentUser.isLoggedIn()) {
       if (
         !this.state.isProjectOwner &&
@@ -234,6 +235,8 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             this.setState({ showJoinModal: true });
           },
         };
+      } else if (eventProject.is_activated) {
+        buttonConfig = { href: eventProject.event_conference_admin_url || eventProject.event_conference_url, target: "_blank" };
       }
     } else {
       // If not logged in, go to login page
@@ -257,6 +260,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           positionToJoin={this.state.positionToJoin}
           showModal={this.state.showJoinModal}
           handleClose={this.confirmJoinProject.bind(this)}
+          conferenceUrl={this.props.eventProject.event_conference_admin_url || this.props.eventProject.event_conference_url}
         />
 
         {!_.isEmpty(buttonConfig) && (
@@ -266,7 +270,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             type="button"
             {...buttonConfig}
           >
-            Sign up
+            {label}
           </Button>
         )}
       </React.Fragment>

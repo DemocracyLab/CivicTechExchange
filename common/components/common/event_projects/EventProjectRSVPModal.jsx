@@ -23,6 +23,7 @@ type Props = {|
   positionToJoin: ?PositionInfo,
   showModal: boolean,
   handleClose: (boolean, EventProjectAPIDetails) => void,
+  conferenceUrl: ?string
 |};
 type State = {|
   showModal: boolean,
@@ -188,26 +189,49 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant="outline-secondary"
-              onClick={this.closeModal.bind(
-                this,
-                this.props.eventProject,
-                false
-              )}
-            >
-              {"Cancel"}
-            </Button>
-            <Button
-              variant="primary"
-              disabled={this.state.isSending || !this._fieldsFilled()}
-              onClick={this.receiveSendConfirmation}
-            >
-              {this.state.isSending ? "Sending" : "Send"}
-            </Button>
+            {this.props.conferenceUrl ? this._renderJoinVideoButton() : this._renderSendCancelButtons()}
           </Modal.Footer>
         </Modal>
       </React.Fragment>
+    );
+  }
+
+  _renderSendCancelButtons(): React$Node {
+    return (
+        <React.Fragment>
+          <Button
+              variant="outline-secondary"
+              onClick={this.closeModal.bind(
+                  this,
+                  this.props.eventProject,
+                  false
+              )}
+          >
+            {"Cancel"}
+          </Button>
+          <Button
+              variant="primary"
+              disabled={this.state.isSending || !this._fieldsFilled()}
+              onClick={this.receiveSendConfirmation}
+          >
+            {this.state.isSending ? "Sending" : "Send"}
+          </Button>
+        </React.Fragment>
+    );
+  }
+
+  _renderJoinVideoButton(): React$Node {
+    return (
+        <React.Fragment>
+          <Button
+              variant="primary"
+              onClick={() => this._selectedTag() && this.handleSubmit()}
+              href={this.props.conferenceUrl}
+              target="_blank"
+          >
+            Join Video
+          </Button>
+        </React.Fragment>
     );
   }
 

@@ -548,22 +548,26 @@ class EventProject(Archived):
         return '{id}: {event} - {project}'.format(
             id=self.id, event=self.event.event_name, project=self.project.project_name)
 
-    def hydrate_to_json(self):
-        return EventProjectCache.get(self) or EventProjectCache.refresh(self, self._hydrate_to_json())
+    def hydrate_to_json(self, user=None):
+        hydrated = EventProjectCache.get(self) or EventProjectCache.refresh(self, self._hydrate_to_json())
+        if user is None or not is_creator_or_staff(user, self.project):
+            hydrated = keys_omit(hydrated, ['event_conference_admin_url'])
+        return hydrated
 
     def _hydrate_to_json(self):
         links = self.get_event_project_links()
         files = self.get_event_project_files()
         positions = self.get_project_positions()
         rsvps = self.get_event_project_volunteers()
+        event_room = EventConferenceRoom.get_event_project_room(self)
         event_json = keys_subset(self.event.hydrate_to_json(), ['event_id', 'event_name', 'event_slug', 'event_thumbnail',
-                                                                'event_date_end', 'event_date_start', 'event_location'])
+                                                                'event_date_end', 'event_date_start', 'event_location',
+                                                                'is_activated'])
         project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
                                                                     'project_short_description', 'project_description',
                                                                     'project_description_solution', 'project_technologies',
                                                                     'project_owners', 'project_creator'])
 
-        # TODO: Export RSVP-ed volunteers
         event_project_json = merge_dicts(event_json, project_json, {
             'event_project_id': self.id,
             'event_project_goal': self.goal,
@@ -576,6 +580,10 @@ class EventProject(Archived):
             'event_project_files': list(map(lambda file: file.to_json(), files)),
             'event_project_links': list(map(lambda link: link.to_json(), links)),
         })
+
+        if event_room is not None:
+            event_project_json['event_conference_url'] = event_room.join_url
+            event_project_json['event_conference_admin_url'] = event_room.admin_url
 
         return event_project_json
 

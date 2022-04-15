@@ -244,7 +244,7 @@ def get_event_project(request, event_id, project_id):
     except PermissionDenied:
         return HttpResponseForbidden()
 
-    return JsonResponse(event_project.hydrate_to_json()) if event_project else HttpResponse(status=404)
+    return JsonResponse(event_project.hydrate_to_json(get_request_contributor(request))) if event_project else HttpResponse(status=404)
 
 
 def event_project_edit(request, event_id, project_id):
