@@ -463,7 +463,6 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   _cardOperationGenerator(project: ProjectData): ?CardOperation {
     // TODO: Show signup modal on click
-    // TODO: Show join video buttons if event is active
     const isVolunteering: boolean =
       !_.isEmpty(this.state.volunteering_projects) &&
       this.state.volunteering_projects.find(

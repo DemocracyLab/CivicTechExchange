@@ -40,7 +40,7 @@ class EventVideosProjectAnnotation(ProjectAnnotation):
                     project_json['project_thumbnail_video'] = event_video
                 if event_project.event.is_activated:
                     room = EventConferenceRoom.get_event_project_room(event_project)
-                    project_json['conference_url'] = room.admin_url if is_creator_or_staff(user, event_project) \
+                    project_json['conference_url'] = room.admin_url if user and is_creator_or_staff(user, event_project) \
                         else room.join_url
         return json_list
 
