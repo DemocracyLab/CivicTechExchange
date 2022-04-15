@@ -109,6 +109,7 @@
   grid-column: 1/5;
   border-top: 1px solid $color-grey-medium;
   text-align: center;
+  align-self: end;
 }
 //selector specificity here is to avoid  matching .ProjectCard-root a, which is hilarious but not intended behavior
 a.ProjectCard-rsvp-btn, button.ProjectCard-rsvp-btn {

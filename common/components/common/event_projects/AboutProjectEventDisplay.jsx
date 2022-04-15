@@ -153,10 +153,16 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       <div className="AboutProjectEvent-top-content">
         <div className="AboutProjectEvent-event-logo d-lg-none">
           {eventProject?.event_thumbnail?.publicUrl ? (
-            <img
-              src={eventProject.event_thumbnail.publicUrl}
-              alt="Event Logo"
-            ></img>
+            <a
+              href={url.section(Section.AboutEvent, {
+                id: eventProject.event_id,
+              })}
+            >
+              <img
+                src={eventProject.event_thumbnail.publicUrl}
+                alt="Event Logo"
+              ></img>
+            </a>
           ) : null}
         </div>
         <div className="AboutProjectEvent-top-names">
@@ -167,10 +173,16 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <div className="AboutProjectEvent-event-logo-desktop d-none d-lg-flex">
             <div className="ProjectCard-logo">
               {eventProject?.event_thumbnail?.publicUrl ? (
-                <img
-                  src={eventProject.event_thumbnail.publicUrl}
-                  alt="Event Logo"
-                ></img>
+                <a
+                  href={url.section(Section.AboutEvent, {
+                    id: eventProject.event_id,
+                  })}
+                >
+                  <img
+                    src={eventProject.event_thumbnail.publicUrl}
+                    alt="Event Logo"
+                  ></img>
+                </a>
               ) : null}
             </div>
           </div>
@@ -224,7 +236,9 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
   _renderJoinButton(eventProject: EventProjectAPIDetails): React$Node {
     let buttonConfig: Dictionary<any> = {};
-    let label: string = eventProject.is_activated ? "Join Project Video" : "Sign up";
+    let label: string = eventProject.is_activated
+      ? "Join Project Video"
+      : "Sign up";
     if (CurrentUser.isLoggedIn()) {
       if (
         !this.state.isProjectOwner &&
@@ -236,7 +250,12 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           },
         };
       } else if (eventProject.is_activated) {
-        buttonConfig = { href: eventProject.event_conference_admin_url || eventProject.event_conference_url, target: "_blank" };
+        buttonConfig = {
+          href:
+            eventProject.event_conference_admin_url ||
+            eventProject.event_conference_url,
+          target: "_blank",
+        };
       }
     } else {
       // If not logged in, go to login page
@@ -260,7 +279,10 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           positionToJoin={this.state.positionToJoin}
           showModal={this.state.showJoinModal}
           handleClose={this.confirmJoinProject.bind(this)}
-          conferenceUrl={this.props.eventProject.event_conference_admin_url || this.props.eventProject.event_conference_url}
+          conferenceUrl={
+            this.props.eventProject.event_conference_admin_url ||
+            this.props.eventProject.event_conference_url
+          }
         />
 
         {!_.isEmpty(buttonConfig) && (
