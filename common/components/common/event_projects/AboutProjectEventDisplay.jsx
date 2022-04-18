@@ -289,6 +289,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <Button
             variant="primary"
             type="button"
+            className="AboutEvent-livebutton"
             {...buttonConfig}
           >
             {label}
@@ -299,13 +300,14 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   }
 
   // TODO: pass in an argument with the number of people in the zoom room, replace hardcoded value
+  // this renders the button text and number of users in the zoom call when an event is active (eventProject.is_activated)
   _renderLiveJoin(): React$Node {
     return (
       <React.Fragment>
         <i className={Glyph(GlyphStyles.Video, GlyphSizes.LG) + " mr-3"} />
         Join Event Video
         <i className={Glyph(GlyphStyles.Users, GlyphSizes.LG) + " ml-3"} />
-        <span className="AboutProjectEvent-usercount overline ml-1">42</span> 
+        <span className="AboutEvent-usercount overline ml-1">42</span> 
       </React.Fragment>
     );
     

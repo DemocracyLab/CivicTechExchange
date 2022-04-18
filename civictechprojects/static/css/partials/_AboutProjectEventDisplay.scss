@@ -15,10 +15,10 @@
   .Profile-top-interactions {
     order: 3;
     flex-basis: 100%;
+    gap: 1rem;
     button,
     a {
       width: 100%;
-      margin: 1rem 0;
       height: 40px;
       display: flex;
       justify-content: center;
@@ -65,15 +65,7 @@
     width: 100%;
   }
 }
-.AboutProjectEvent-usercount {
-  background: $color-background-light;
-  color: $color-text-dark;
-  border-radius: 50%;
-  font-weight: bold;
-  min-height: 22px; // min-h and min-w so it has slightly better 3-digit usercount support
-  min-width: 22px;
-  align-self: flex-start; // vertical alignment
-}
+
 
 @include media-breakpoint-up(lg) {
   .AboutProjectEvent-top-section {

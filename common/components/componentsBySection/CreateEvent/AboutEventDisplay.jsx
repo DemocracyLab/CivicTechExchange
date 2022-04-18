@@ -451,7 +451,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       <Button
         variant="primary"
         type="button"
-        className="AboutEvent-rsvp-btn"
+        className="AboutEvent-rsvp-btn AboutEvent-livebutton"
         title={text}
         href={url}
         target={target}
