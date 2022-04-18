@@ -303,8 +303,8 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   _renderLiveJoin(): React$Node {
     return (
       <React.Fragment>
-        <i className={Glyph(GlyphStyles.Video, GlyphSizes.LG)} /> Join Event
-        Video
+        <i className={Glyph(GlyphStyles.Video, GlyphSizes.LG)} />
+        Join Event Video
       </React.Fragment>
     );
     // <i className={Glyph(GlyphStyles.Users, GlyphSizes.LG)} /><span className="class-tbd">{num}</span> 

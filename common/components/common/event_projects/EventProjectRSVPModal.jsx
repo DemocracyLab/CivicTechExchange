@@ -158,7 +158,7 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
           onHide={this.closeModal.bind(this, this.props.eventProject, false)}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Volunteer Application</Modal.Title>
+            <Modal.Title>Select a Role for the Team</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -172,7 +172,7 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
                     OtherRoleOption.value)
                   ? this._renderOtherRoleDropdown()
                   : null}
-                <Form.Label>Message:</Form.Label>
+                <Form.Label>{"Message: " +  (this.props.conferenceUrl ? "(Optional)" : "")}</Form.Label>
                 <div className="character-count">
                   {(this.state.message || "").length} / 3000
                 </div>
@@ -256,9 +256,10 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
 
   _renderExistingPositionDropdown(): React$Node {
     // TODO: Use Selector component
+    const isOptional: boolean = !!this.props.conferenceUrl;
     return (
       <div className="form-group">
-        <label htmlFor="project_technologies">Position to Apply For</label>
+        <label htmlFor="project_technologies">{"Position to Apply For " + (isOptional ? "(Optional)" : "")}</label>
         <Select
           options={this.state.positionOptions}
           value={
