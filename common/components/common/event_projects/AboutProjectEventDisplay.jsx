@@ -288,7 +288,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
         {!_.isEmpty(buttonConfig) && (
           <Button
             variant="primary"
-            className="AboutEvent-rsvp-btn"
             type="button"
             {...buttonConfig}
           >
@@ -299,15 +298,17 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     );
   }
 
-  // TODO: pass in an argument with the number of people in the zoom room, add style info
+  // TODO: pass in an argument with the number of people in the zoom room, replace hardcoded value
   _renderLiveJoin(): React$Node {
     return (
       <React.Fragment>
-        <i className={Glyph(GlyphStyles.Video, GlyphSizes.LG)} />
+        <i className={Glyph(GlyphStyles.Video, GlyphSizes.LG) + " mr-3"} />
         Join Event Video
+        <i className={Glyph(GlyphStyles.Users, GlyphSizes.LG) + " ml-3"} />
+        <span className="AboutProjectEvent-usercount overline ml-1">42</span> 
       </React.Fragment>
     );
-    // <i className={Glyph(GlyphStyles.Users, GlyphSizes.LG)} /><span className="class-tbd">{num}</span> 
+    
   }
 
   cancelRSVP(
@@ -362,7 +363,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
             <Button
               variant="primary"
-              className="AboutEvent-rsvp-btn"
               type="button"
               onClick={() => this.setState({ showCancelRSVPModal: true })}
             >
