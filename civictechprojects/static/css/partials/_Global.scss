@@ -26,8 +26,31 @@ a[type="button"].btn-footer:active {
   text-decoration: none;
 }
 
-//Sets button states to be our specific values instead of default computed by Bootstrap
-//TODO: Update these with design system button variables at some point (e.g. $button-success-bg ... or whatever)
+//DemocracyLab button styles (overwrite/extend Bootstrap button rules)
+//TODO: remove direct color-x-y declarations and use semantics, this is for testing
+button, .btn {
+  padding-top: 7px;
+  padding-bottom: 7px; // 14px padding + 2px border + 24px line height == 40px button height
+  font-weight: 600; // "semi-bold"
+}
+button:focus, .btn:focus {
+  outline: 3px solid $color-blue-50;
+  outline-offset: 1px;
+}
+.btn-primary {
+  color: $color-neutral-100;
+  border-color: $color-brand-70;
+}
+.btn-primary:active, .btn-primary:hover {
+  background-color: $color-brand-60;
+  border-color: $color-brand-60;
+  color: $color-neutral-100;
+}
+button:disabled, .btn:disabled {
+  background-color: $color-neutral-25;
+  border-color: $color-neutral-25;
+  color: $color-text-disabled;
+}
 .btn-success:active,
 .btn-success:hover {
   background-color: #395e00;
