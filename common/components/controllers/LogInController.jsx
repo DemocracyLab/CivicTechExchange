@@ -108,7 +108,7 @@ class LogInController extends React.Component<Props, State> {
             )}
             <div className="LogInController-actionsection">
               <Button
-                variant="login"
+                variant="success"
                 className="LogInController-signInButton"
                 type="submit"
                 onClick={handleSubmit}
