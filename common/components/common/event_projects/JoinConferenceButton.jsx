@@ -8,6 +8,7 @@ import type { Dictionary } from "../../types/Generics.jsx";
 type Props = {|
   buttonConfig: Dictionary<any>,
   participant_count: number,
+  className: ?string,
 |};
 
 /**
@@ -25,7 +26,7 @@ class JoinConferenceButton extends React.PureComponent<Props> {
         <Button
           variant="primary"
           type="button"
-          className="AboutEvent-livebutton"
+          className={this.props.className}
           {...this.props.buttonConfig}
         >
           <i className={Glyph(GlyphStyles.Video, GlyphSizes.LG) + " mr-3"} />

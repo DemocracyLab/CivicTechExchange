@@ -455,6 +455,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       <JoinConferenceButton
         buttonConfig={buttonConfig}
         participant_count={this.props.event.event_conference_participants}
+        className="AboutEvent-livebutton"
       >
         {text}
       </JoinConferenceButton>
@@ -490,11 +491,13 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           name: "Join Project Video",
           url: project.conferenceUrl,
           target: "_blank",
+          count: project.conferenceCt,
         };
       } else {
         return {
           name: "Review Project Details",
           url: project.cardUrl,
+          count: project.conferenceCt,
         };
       }
     } else {

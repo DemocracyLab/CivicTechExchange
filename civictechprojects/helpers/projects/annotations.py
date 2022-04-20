@@ -43,6 +43,7 @@ class EventVideosProjectAnnotation(ProjectAnnotation):
                     if room is not None:
                         project_json['conference_url'] = room.admin_url if user and is_creator_or_staff(user, event_project) \
                             else room.join_url
+                        project_json['conference_count'] = room.participant_count()
         return json_list
 
 

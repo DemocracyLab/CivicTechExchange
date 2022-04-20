@@ -291,6 +291,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             <JoinConferenceButton
               buttonConfig={buttonConfig}
               participant_count={eventProject.event_conference_participants}
+              className="AboutEvent-livebutton"
             >
               {label}
             </JoinConferenceButton>
