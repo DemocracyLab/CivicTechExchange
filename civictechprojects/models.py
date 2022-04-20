@@ -6,6 +6,7 @@ from django.contrib.gis.db.models import PointField
 from enum import Enum
 from itertools import chain
 from democracylab.models import Contributor
+from common.helpers.qiqo_chat import activate_zoom_rooms, get_zoom_room_info
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
@@ -1432,6 +1433,21 @@ class EventConferenceRoom(models.Model):
             room.last_activated = timezone.now()
         room.save()
         return room
+
+    @staticmethod
+    def create_for_entity(event: Event, event_project: EventProject = None):
+        room_id = event_project.id if event_project else 0
+        qiqo_event_id = event.event_live_id
+        if qiqo_event_id is not None:
+            activate_response = activate_zoom_rooms(qiqo_event_id, [room_id])
+            for room_activation_json in activate_response:
+                space_id = int(room_activation_json['space_id'])
+                zoom_id = room_activation_json['zoom_meeting_id']
+                room_json = get_zoom_room_info(qiqo_event_id, space_id)
+                join_url = room_json['join_url']
+                admin_url = room_json['start_url']
+                print('Created room {room} for {entity}'.format(room=zoom_id, entity=(event_project or event).__str__()))
+                EventConferenceRoom.create(event, zoom_id, join_url, admin_url, event_project)
 
 
 class EventConferenceRoomParticipant(models.Model):
