@@ -17,7 +17,8 @@ import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
-    ProjectRelationship, Testimonial, ProjectFavorite, EventProject, RSVPVolunteerRelation
+    ProjectRelationship, Testimonial, ProjectFavorite, EventProject, RSVPVolunteerRelation, EventConferenceRoom, \
+    EventConferenceRoomParticipant
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from common.caching.cache import Cache
@@ -1464,10 +1465,50 @@ def get_testimonials(request, category=None):
 
     return JsonResponse(list(map(lambda t: t.to_json(), testimonials.order_by('-priority'))), safe=False)
 
+
 # TODO: Whitelist qiqochat for this hook
 @csrf_exempt
 def qiqo_webhook(request):
     from pprint import pprint
+    body = json.loads(request.body)
     print('Zoom webhook payload:')
-    pprint(request.body)
+    pprint(body)
+    action = body['event']
+    payload = body['payload']
+    obj = payload['object']
+    room_id = obj['id']
+
+    participant = obj['participant']
+    participant_id = participant['user_id']
+    participant_name = participant['user_name']
+
+    existing_room = EventConferenceRoom.get_by_zoom_id(room_id)
+    if not existing_room:
+        print('Zoom room not found: ' + room_id)
+        return HttpResponse(status=401)
+
+    if action == 'meeting.participant_joined':
+        existing_participant = EventConferenceRoomParticipant.get(existing_room, participant_id)
+        if not existing_participant:
+            existing_participant = EventConferenceRoomParticipant(
+                room=existing_room,
+                zoom_user_name=participant_name,
+                zoom_user_id=participant_id,
+                enter_date=timezone.now())
+            existing_participant.save()
+        else:
+            print('User {user_id} has already joined room {room_id}'.format(user_id=participant_id, room_id=room_id))
+            return HttpResponse(status=302)
+    elif action == 'meeting.participant_left':
+        existing_participant = EventConferenceRoomParticipant.get(existing_room, participant_id)
+        if existing_participant:
+            print('User {user_id} has left room {room_id}'.format(user_id=participant_id, room_id=room_id))
+            existing_participant.delete()
+        else:
+            print('User {user_id} is not in {room_id}'.format(user_id=participant_id, room_id=room_id))
+            return HttpResponse(status=302)
+    else:
+        print('Unrecognized action: ' + action)
+        return HttpResponse(status=401)
+
     return HttpResponse(status=200)

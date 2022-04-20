@@ -1383,6 +1383,10 @@ class EventConferenceRoom(models.Model):
     admin_url = models.CharField(max_length=2083)
     last_activated = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
 
+    def __str__(self):
+        event_prefix = self.event_project.__str__() if self.event_project else self.event.__str__()
+        return '{event}: {room_number}'.format(event=event_prefix, room_number=self.room_number)
+
     @staticmethod
     def get_event_room(event: Event):
         return EventConferenceRoom.objects.filter(event=event, room_number=0).first()
@@ -1390,6 +1394,10 @@ class EventConferenceRoom(models.Model):
     @staticmethod
     def get_event_project_room(event_project: EventProject):
         return EventConferenceRoom.objects.filter(event_project=event_project).first()
+
+    @staticmethod
+    def get_by_zoom_id(zoom_id: str):
+        return EventConferenceRoom.objects.filter(zoom_id=zoom_id).first()
 
     @staticmethod
     def create(event: Event, zoom_id: int, join_url: str, admin_url: str, event_project: EventProject = None):
@@ -1411,6 +1419,21 @@ class EventConferenceRoom(models.Model):
             room.last_activated = timezone.now()
         room.save()
         return room
+
+
+class EventConferenceRoomParticipant(models.Model):
+    room = models.ForeignKey(EventConferenceRoom, related_name='participants', on_delete=models.CASCADE)
+    zoom_user_name = models.CharField(max_length=100)
+    zoom_user_id = models.BigIntegerField(default=0)
+    enter_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+
+    def __str__(self):
+        return '{room} - {name}({id})'.format(room=self.room.__str__(), name=self.zoom_user_name,
+                                                            id=self.zoom_user_id)
+
+    @staticmethod
+    def get(room: EventConferenceRoom, zoom_user_id: str):
+        return EventConferenceRoomParticipant.objects.filter(room=room, zoom_user_id=zoom_user_id).first()
 
 
 class Testimonial(models.Model):
