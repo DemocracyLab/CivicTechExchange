@@ -204,7 +204,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
           ) : (
             <Button
               variant={cardOperation.buttonVariant || "primary"}
-              className="ProjectCard-rsvp-btn"
+              className="ProjectCard-rsvp-btn AboutEvent-livebutton"
               type="button"
               {...buttonConfig}
             >

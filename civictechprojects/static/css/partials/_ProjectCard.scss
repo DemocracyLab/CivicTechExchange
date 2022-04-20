@@ -14,7 +14,7 @@
 .ProjectCard-root h4 {
   color: $color-text-grey;
 }
-.ProjectCard-root a {
+.ProjectCard-root > a {
   text-decoration: none;
   color: $color-text-dark;
   display: grid;
@@ -110,12 +110,9 @@
   border-top: 1px solid $color-grey-medium;
   text-align: center;
   align-self: end;
-}
-//selector specificity here is to avoid  matching .ProjectCard-root a, which is hilarious but not intended behavior
-a.ProjectCard-rsvp-btn, button.ProjectCard-rsvp-btn {
-  margin: 1rem auto;
-  width: 80%;
-  max-width: 300px;
-  max-height: 40px;
-  display: block;
+  a, button {
+    margin: 1rem auto;
+    width: 80%;
+    max-width: fit-content;
+  }
 }

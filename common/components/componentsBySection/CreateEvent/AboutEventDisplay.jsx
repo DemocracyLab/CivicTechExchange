@@ -455,7 +455,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       <JoinConferenceButton
         buttonConfig={buttonConfig}
         participant_count={this.props.event.event_conference_participants}
-        className="AboutEvent-livebutton"
+        className="AboutEvent-rsvp-btn AboutEvent-livebutton"
       >
         {text}
       </JoinConferenceButton>
