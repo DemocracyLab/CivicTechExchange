@@ -33,6 +33,7 @@ import Toast from "../notification/Toast.jsx";
 import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
 import { APIResponse } from "../../utils/ProjectAPIUtils.js";
 import promiseHelper from "../../utils/promise.js";
+import JoinConferenceButton from "./JoinConferenceButton.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -237,7 +238,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   _renderJoinButton(eventProject: EventProjectAPIDetails): React$Node {
     let buttonConfig: Dictionary<any> = {};
     let label: string = eventProject.is_activated
-      ? this._renderLiveJoin()
+      ? "Join Event Video"
       : "Sign up";
     if (CurrentUser.isLoggedIn()) {
       if (
@@ -285,32 +286,26 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           }
         />
 
-        {!_.isEmpty(buttonConfig) && (
-          <Button
-            variant="primary"
-            type="button"
-            className="AboutEvent-livebutton"
-            {...buttonConfig}
-          >
-            {label}
-          </Button>
-        )}
+        {!_.isEmpty(buttonConfig) &&
+          (eventProject.is_activated ? (
+            <JoinConferenceButton
+              buttonConfig={buttonConfig}
+              participant_count={eventProject.event_conference_participants}
+            >
+              {label}
+            </JoinConferenceButton>
+          ) : (
+            <Button
+              variant="primary"
+              type="button"
+              className="AboutEvent-livebutton"
+              {...buttonConfig}
+            >
+              {label}
+            </Button>
+          ))}
       </React.Fragment>
     );
-  }
-
-  // TODO: pass in an argument with the number of people in the zoom room, replace hardcoded value
-  // this renders the button text and number of users in the zoom call when an event is active (eventProject.is_activated)
-  _renderLiveJoin(): React$Node {
-    return (
-      <React.Fragment>
-        <i className={Glyph(GlyphStyles.Video, GlyphSizes.LG) + " mr-3"} />
-        Join Event Video
-        <i className={Glyph(GlyphStyles.Users, GlyphSizes.LG) + " ml-3"} />
-        <span className="AboutEvent-usercount overline ml-1">42</span> 
-      </React.Fragment>
-    );
-    
   }
 
   cancelRSVP(

@@ -585,6 +585,7 @@ class EventProject(Archived):
         if event_room is not None:
             event_project_json['event_conference_url'] = event_room.join_url
             event_project_json['event_conference_admin_url'] = event_room.admin_url
+            event_project_json['event_conference_participants'] = event_room.participant_count()
 
         return event_project_json
 
@@ -1389,9 +1390,7 @@ class EventConferenceRoom(models.Model):
         return '{event}: {room_number}'.format(event=event_prefix, room_number=self.room_number)
 
     def participant_count(self):
-        ct = EventConferenceRoomParticipant.objects.filter(room=self).count()
-        print(ct)
-        return ct
+        return EventConferenceRoomParticipant.objects.filter(room=self).count()
 
     def recache_linked(self):
         if self.event_project is not None:
