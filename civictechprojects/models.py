@@ -567,7 +567,9 @@ class EventProject(Archived):
         project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
                                                                     'project_short_description', 'project_description',
                                                                     'project_description_solution', 'project_technologies',
-                                                                    'project_owners', 'project_creator'])
+                                                                    'project_owners', 'project_creator', 'project_location',
+                                                                    'project_country', 'project_state', 'project_city',
+                                                                    'project_url'])
 
         event_project_json = merge_dicts(event_json, project_json, {
             'event_project_id': self.id,

@@ -31,7 +31,7 @@ import EventProjectAPIUtils, {
 import RSVPVolunteerCard from "./RSVPVolunteerCard.jsx";
 import Toast from "../notification/Toast.jsx";
 import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
-import { APIResponse } from "../../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils, { APIResponse } from "../../utils/ProjectAPIUtils.js";
 import promiseHelper from "../../utils/promise.js";
 import JoinConferenceButton from "./JoinConferenceButton.jsx";
 
@@ -561,52 +561,58 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   _renderIconList(): React$Node {
     const eventProject: EventProjectAPIDetails = this.state.eventProject;
 
-    const startDate: Moment = datetime.parse(eventProject.event_date_start);
+    const projectName: string = ProjectAPIUtils.getLocationDisplayName(
+      eventProject
+    );
 
     return (
       <React.Fragment>
         <div className="AboutProject-icon-row">
-          <i className={Glyph(GlyphStyles.Calendar, GlyphSizes.LG)} />
-          <p className="AboutProject-icon-text">
-            {startDate.format(DateFormat.MONTH_DATE_YEAR)}
-          </p>
-        </div>
-        <div className="AboutProject-icon-row">
-          <i className={Glyph(GlyphStyles.Clock, GlyphSizes.LG)} />
-          <p className="AboutProject-icon-text">
-            {startDate.format(DateFormat.TIME_TIMEZONE)}
-          </p>
-        </div>
-        <div className="AboutProject-icon-row">
-          <i className={Glyph(GlyphStyles.MapMarker, GlyphSizes.LG)} />
-          <p className="AboutProject-icon-text">
-            {eventProject.event_location}
-          </p>
-        </div>
-        <div className="AboutProject-icon-row">
-          <i className={Glyph(GlyphStyles.Folder, GlyphSizes.LG)} />
-          <p className="AboutProject-icon-text">
-            <a
-              href={url.section(Section.AboutProject, {
-                id: eventProject.project_id,
-              })}
-            >
-              Project Profile
-            </a>{" "}
-          </p>
-        </div>
-        <div className="AboutProject-icon-row">
-          <i className={Glyph(GlyphStyles.CalendarSolid, GlyphSizes.LG)} />
+          <i className={Glyph(GlyphStyles.LaptopCode, GlyphSizes.LG)} />
           <p className="AboutProject-icon-text">
             <a
               href={url.section(Section.AboutEvent, {
                 id: eventProject.event_id,
               })}
             >
-              Hackathon Home Page
+              Global Hackathon Page
             </a>
           </p>
         </div>
+        <div className="AboutProject-icon-row">
+          <i className={Glyph(GlyphStyles.ArrowRight, GlyphSizes.LG)} />
+          <p className="AboutProject-icon-text">
+            <a
+              href={url.section(Section.AboutProject, {
+                id: eventProject.project_id,
+              })}
+            >
+              View Project Details
+            </a>
+          </p>
+        </div>
+        {projectName && (
+          <div className="AboutProject-icon-row">
+            <i className={Glyph(GlyphStyles.MapMarker, GlyphSizes.LG)} />
+            <p className="AboutProject-icon-text">{projectName}</p>
+          </div>
+        )}
+        {eventProject.project_url && (
+          <div className="AboutProject-icon-row">
+            <i className={Glyph(GlyphStyles.Globe, GlyphSizes.LG)} />
+            <p className="AboutProject-url-text">
+              <a
+                href={urlHelper.appendHttpIfMissingProtocol(
+                  eventProject.project_url
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {urlHelper.beautify(eventProject.project_url)}
+              </a>
+            </p>
+          </div>
+        )}
       </React.Fragment>
     );
   }
