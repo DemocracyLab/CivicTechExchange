@@ -27,11 +27,11 @@ a[type="button"].btn-footer:active {
 }
 
 //DemocracyLab button styles (overwrite/extend Bootstrap button rules)
-//TODO: remove direct color-x-y declarations and use semantics, this is for testing
+// in general all buttons have a border, but some use the same color as the button to visually have none
+// padding instead of selecting a specific height is for vertical align, but this could stand a rework later
 button, .btn {
-  padding-top: 7px;
-  padding-bottom: 7px; // 14px padding + 2px border + 24px line height == 40px button height
-  font-weight: 600; // "semi-bold"
+  padding: 0.4375rem 1rem; // 7px 16px; padding + border + line-height = 40px height button
+  font-weight: 500; // "semi-bold" - 500 or 600?
 }
 button:focus, .btn:focus {
   outline: 3px solid $color-blue-50;
