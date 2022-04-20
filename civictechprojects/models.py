@@ -465,6 +465,7 @@ class Event(Archived):
         if event_room is not None:
             event['event_conference_url'] = event_room.join_url
             event['event_conference_admin_url'] = event_room.admin_url
+            event['event_conference_participants'] = event_room.participant_count()
 
         if len(thumbnail_files) > 0:
             event['event_thumbnail'] = thumbnail_files[0].to_json()
@@ -1386,6 +1387,17 @@ class EventConferenceRoom(models.Model):
     def __str__(self):
         event_prefix = self.event_project.__str__() if self.event_project else self.event.__str__()
         return '{event}: {room_number}'.format(event=event_prefix, room_number=self.room_number)
+
+    def participant_count(self):
+        ct = EventConferenceRoomParticipant.objects.filter(room=self).count()
+        print(ct)
+        return ct
+
+    def recache_linked(self):
+        if self.event_project is not None:
+            self.event_project.recache()
+        else:
+            self.event.recache()
 
     @staticmethod
     def get_event_room(event: Event):

@@ -1511,4 +1511,5 @@ def qiqo_webhook(request):
         print('Unrecognized action: ' + action)
         return HttpResponse(status=401)
 
+    existing_room.recache_linked()
     return HttpResponse(status=200)

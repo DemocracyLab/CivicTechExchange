@@ -30,6 +30,7 @@ import type {
   CardOperation,
   ProjectData,
 } from "../../utils/ProjectAPIUtils.js";
+import JoinConferenceButton from "../../common/event_projects/JoinConferenceButton.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -436,25 +437,34 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   _renderJoinLiveEventButton(): ?$React$Node {
     let text: string = "";
-    let url: string = "";
-    let target: string = "_self";
+    let buttonConfig: Dictionary<any> = {
+      target: "_self",
+    };
     if (CurrentUser.isLoggedIn()) {
       text = "Join Main Session";
-      url = this.props.event.event_conference_admin_url || this.props.event.event_conference_url;
-      target = "_blank";
+      buttonConfig.href =
+        this.props.event.event_conference_admin_url ||
+        this.props.event.event_conference_url;
+      buttonConfig.target = "_blank";
     } else {
       text = "Log In to Join Event";
-      url = urlHelper.logInThenReturn();
+      buttonConfig.href = urlHelper.logInThenReturn();
     }
 
-    return (
+    return this.props.event.is_activated ? (
+      <JoinConferenceButton
+        buttonConfig={buttonConfig}
+        participant_count={this.props.event.event_conference_participants}
+      >
+        {text}
+      </JoinConferenceButton>
+    ) : (
       <Button
         variant="primary"
         type="button"
         className="AboutEvent-rsvp-btn AboutEvent-livebutton"
         title={text}
-        href={url}
-        target={target}
+        {...buttonConfig}
       >
         {text}
       </Button>
@@ -479,7 +489,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         return {
           name: "Join Project Video",
           url: project.conferenceUrl,
-          target: "_blank"
+          target: "_blank",
         };
       } else {
         return {
