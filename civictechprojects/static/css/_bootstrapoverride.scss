@@ -39,8 +39,7 @@ $font-family-sans-serif: "Montserrat", -apple-system, BlinkMacSystemFont,
 $theme-colors: (
   "primary": $color-brand-70,
   "success": $color-green-80,
-  "danger": $color-red-10, //we use outline-danger and regular danger; labeled "destructive" in design system
-  "info": #107fb0,
+  "danger": $color-red-80, //danger = specified white bg, outline-danger = transparent bg; labeled "Destructive" in design system
   "cta": #b1d3fb,
 );
 

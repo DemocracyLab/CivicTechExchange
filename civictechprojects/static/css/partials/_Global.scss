@@ -53,11 +53,19 @@ button:disabled, .btn:disabled {
 }
 .btn-success:active,
 .btn-success:hover {
-  background-color: #395e00;
+  background-color: $color-green-100;
+}
+.btn-danger {
+  color: $color-red-80;
+  border-color: $color-red-80;
+  background-color: $color-background-light;
+}
+.btn-outline-danger {
+  background-color: transparent;
 }
 .btn-danger:active,
 .btn-danger:hover {
-  background-color: #b20000;
+  background-color: $color-red-10;
 }
 .btn-info:active,
 .btn-info:hover {
