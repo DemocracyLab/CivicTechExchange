@@ -28,9 +28,13 @@ a[type="button"].btn-footer:active {
 
 //Sets button states to be our specific values instead of default computed by Bootstrap
 //TODO: Update these with design system button variables at some point (e.g. $button-success-bg ... or whatever)
+button, .btn {
+  padding: 0.4375rem 1rem; // will give 40px total button height
+}
+
 .btn-success:active,
 .btn-success:hover {
-  background-color: #395e00;
+  background-color: $color-green-100;
 }
 .btn-danger:active,
 .btn-danger:hover {
