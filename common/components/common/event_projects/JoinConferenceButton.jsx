@@ -9,6 +9,7 @@ type Props = {|
   buttonConfig: Dictionary<any>,
   participant_count: number,
   className: ?string,
+  variant: string,
 |};
 
 /**
@@ -24,7 +25,7 @@ class JoinConferenceButton extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <Button
-          variant="primary"
+          variant={this.props.variant}
           type="button"
           className={this.props.className}
           {...this.props.buttonConfig}

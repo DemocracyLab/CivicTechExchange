@@ -492,12 +492,14 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           url: project.conferenceUrl,
           target: "_blank",
           count: project.conferenceCt,
+          buttonVariant: "success"
         };
       } else {
         return {
           name: "Review Project Details",
           url: project.cardUrl,
           count: project.conferenceCt,
+          buttonVariant: "outline-secondary"
         };
       }
     } else {

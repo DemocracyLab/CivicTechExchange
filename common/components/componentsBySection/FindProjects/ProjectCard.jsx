@@ -195,6 +195,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
         <div className="ProjectCard-operation">
           {"count" in cardOperation ? (
             <JoinConferenceButton
+              variant={cardOperation.buttonVariant || "outline-secondary"}
               buttonConfig={buttonConfig}
               participant_count={cardOperation.count}
               className="ProjectCard-rsvp-btn"
