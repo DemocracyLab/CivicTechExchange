@@ -31,7 +31,8 @@ a[type="button"].btn-footer:active {
 // padding instead of selecting a specific height is for vertical align, but this could stand a rework later
 button, .btn {
   padding: 0.4375rem 1rem; // 7px 16px; padding + border + line-height = 40px height button
-  font-weight: 500; // "semi-bold" - 500 or 600?
+  font-weight: 600; // ask design about 500
+  border-radius: 4px;
 }
 button:focus, .btn:focus {
   outline: 3px solid $color-blue-50;
