@@ -46,6 +46,15 @@ button:focus, .btn:focus {
   border-color: $color-brand-60;
   color: $color-neutral-100;
 }
+.btn-secondary {
+  color: $color-neutral-90;
+  border-color: $color-neutral-75;
+  background-color: $color-neutral-10;
+}
+.btn-secondary:active, .btn-secondary:hover, .btn-outline-secondary:active, .btn-outline-secondary:hover {
+  background-color: $color-neutral-20;
+  color: $color-neutral-90;
+}
 button:disabled, .btn:disabled {
   background-color: $color-neutral-25;
   border-color: $color-neutral-25;

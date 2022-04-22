@@ -38,6 +38,7 @@ $font-family-sans-serif: "Montserrat", -apple-system, BlinkMacSystemFont,
 //add DL colors to themes for button variants, etc
 $theme-colors: (
   "primary": $color-brand-70,
+  "secondary": $color-neutral-90,
   "success": $color-green-80,
   "danger": $color-red-80, //danger = specified white bg, outline-danger = transparent bg; labeled "Destructive" in design system
 );
