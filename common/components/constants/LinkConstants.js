@@ -73,7 +73,6 @@ export const LinkTypes: Dictionary<string> = {
   DESIGN: "link_design",
   TWITTER: "social_twitter",
   FACEBOOK: "social_facebook",
-  Figma: "link_facebook",
 };
 
 export const DefaultLinkDisplayConfigurations: KeyValuePair<LinkSourceDisplayConfig> = _.fromPairs(
