@@ -12,7 +12,6 @@ from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache, \
     EventProjectCache
-from civictechprojects.helpers.tagged_position_role import get_project_position_id
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.collections import flatten, count_occurrences
@@ -1003,6 +1002,10 @@ class ProjectPosition(models.Model):
         position.position_role.clear()
         position.delete()
 
+    def salesforce_job_id(self):
+        role = Tag.tags_field_descriptions(self.position_role)
+        return f'{self.position_project.id}{role.lower().replace(" ", "")}'
+
     @staticmethod
     def merge_changes(owner, positions):
         """
@@ -1030,7 +1033,7 @@ class ProjectPosition(models.Model):
 
         for deleted_position_id in deleted_position_ids:
             ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
-            salesforce_job.delete(deleted_position_id)
+            salesforce_job.delete(ProjectPosition.objects.get(deleted_position_id).salesforce_job_id())
 
         return len(added_positions) > 0 or len(updated_positions) > 0 or len(deleted_position_ids) > 0
 
@@ -1257,7 +1260,6 @@ class VolunteerRelation(Archived):
 
     def to_json(self):
         volunteer = self.volunteer
-
         volunteer_json = {
             'application_id': self.id,
             'user': volunteer.hydrate_to_tile_json(),
@@ -1271,7 +1273,6 @@ class VolunteerRelation(Archived):
             'isUpForRenewal': self.is_up_for_renewal(),
             'projectedEndDate': self.projected_end_date.__str__()
         }
-
         return volunteer_json
 
     def hydrate_project_volunteer_info(self):
@@ -1285,7 +1286,11 @@ class VolunteerRelation(Archived):
 
 
     def save_to_salesforce(self):
-        salesforce_volunteer.create(self, get_project_position_id(self))
+        salesforce_volunteer.create(self)
+
+    def salesforce_job_id(self):
+        role = Tag.tags_field_descriptions(self.role)
+        return f"{self.project.id}{role.lower().replace(' ','')}"
 
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
@@ -1298,6 +1303,7 @@ class VolunteerRelation(Archived):
         relation.save()
         relation.role.add(role)
         return relation
+
 
     @staticmethod
     def get_by_user(user):
