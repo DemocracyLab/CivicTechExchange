@@ -134,13 +134,6 @@ export const DefaultLinkDisplayConfigurations: KeyValuePair<LinkSourceDisplayCon
       },
     ],
     [
-      LinkTypes.FIGMA,
-      {
-        sourceTypeDisplayName: "Figma",
-        iconClass: GlyphStyles.Figma,
-      },
-    ],
-    [
       "other",
       {
         sourceTypeDisplayName: "Website",
