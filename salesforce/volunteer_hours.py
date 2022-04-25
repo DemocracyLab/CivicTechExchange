@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from .client import SalesforceClient
 import json
 import requests
@@ -26,7 +26,7 @@ def send_volunteer_data(volunteer_id, data):
     thread.start()
 
 
-def create(volunteer, position_id):
+def create(volunteer):
     data = {
         "GW_Volunteers__Contact__r":
         {
@@ -34,7 +34,7 @@ def create(volunteer, position_id):
         },
         "GW_Volunteers__Volunteer_Job__r":
         {
-            "platform_id__c": position_id
+            "platform_id__c": volunteer.salesforce_job_id()
         },
         "GW_Volunteers__Status__c": "Confirmed",
         "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime("%Y-%m-%d"),
@@ -43,7 +43,7 @@ def create(volunteer, position_id):
     send_volunteer_data(volunteer.id, data)
 
 
-def renew(volunteer, position_id):
+def renew(volunteer):
     data = {
         "GW_Volunteers__Contact__r":
         {
@@ -51,14 +51,15 @@ def renew(volunteer, position_id):
         },
         "GW_Volunteers__Volunteer_Job__r":
         {
-            "platform_id__c": position_id
+            "platform_id__c": volunteer.salesforce_job_id()
         },
+        "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime("%Y-%m-%d"),
         "GW_Volunteers__End_Date__c": volunteer.projected_end_date.strftime("%Y-%m-%d")
     }
     send_volunteer_data(volunteer.id, data)
 
 
-def conclude(volunteer, position_id):
+def conclude(volunteer):
     data = {
         "GW_Volunteers__Contact__r":
         {
@@ -66,14 +67,15 @@ def conclude(volunteer, position_id):
         },
         "GW_Volunteers__Volunteer_Job__r":
         {
-            "platform_id__c": position_id
+            "platform_id__c": volunteer.salesforce_job_id()
         },
+        "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime("%Y-%m-%d"),
         "GW_Volunteers__Status__c": "Completed"
     }
     send_volunteer_data(volunteer.id, data)
 
 
-def dismiss(volunteer, position_id):
+def dismiss(volunteer):
     data = {
         "GW_Volunteers__Contact__r":
         {
@@ -81,8 +83,20 @@ def dismiss(volunteer, position_id):
         },
         "GW_Volunteers__Volunteer_Job__r":
         {
-            "platform_id__c": position_id
+            "platform_id__c": volunteer.salesforce_job_id()
         },
+        "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime("%Y-%m-%d"),
+        "GW_Volunteers__End_Date__c": datetime.date.today().strftime("%Y-%m-%d"),
         "GW_Volunteers__Status__c": "Canceled"
     }
     send_volunteer_data(volunteer.id, data)
+
+
+def delete(hours_id):
+    req = requests.Request(
+        method="DELETE",
+        url=f'{client.hours_endpoint}/platform_id__c/{hours_id}'
+    )
+    thread = threading.Thread(target=run, args=(req,))
+    thread.daemon = True
+    thread.start()

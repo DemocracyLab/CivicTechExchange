@@ -21,7 +21,6 @@ from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAle
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from salesforce import volunteer_hours as salesforce_volunteer
-from civictechprojects.helpers.tagged_position_role import get_project_position_id
 from common.caching.cache import Cache
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.db import unique_column_values
@@ -917,7 +916,7 @@ def renew_volunteering_with_project(request, application_id):
     volunteer_relation.re_enroll_reminder_count = 0
     volunteer_relation.re_enroll_last_reminder_date = None
     volunteer_relation.save()
-    salesforce_volunteer.renew(volunteer_relation, get_project_position_id(volunteer_relation))
+    salesforce_volunteer.renew(volunteer_relation)
     volunteer_relation.volunteer.purge_cache()
 
     notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
@@ -942,7 +941,7 @@ def conclude_volunteering_with_project(request, application_id):
     project = Project.objects.get(id=volunteer_relation.project.id)
     user = volunteer_relation.volunteer
     volunteer_relation.delete()
-    salesforce_volunteer.conclude(volunteer_relation, get_project_position_id(volunteer_relation))
+    salesforce_volunteer.conclude(volunteer_relation)
     project.recache()
     user.purge_cache()
 
@@ -1049,7 +1048,7 @@ def dismiss_project_volunteer(request, application_id):
         project = Project.objects.get(id=volunteer_relation.project.id)
         user = volunteer_relation.volunteer
         volunteer_relation.delete()
-        salesforce_volunteer.dismiss(volunteer_relation, get_project_position_id(volunteer_relation))
+        salesforce_volunteer.dismiss(volunteer_relation)
         project.recache()
         user.purge_cache()
         return HttpResponse(status=200)

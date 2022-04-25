@@ -14,6 +14,7 @@ def run(request):
 
 def save(project_position):
     position_role = Tag.tags_field_descriptions(project_position.position_role)
+    platform_id__c = project_position.salesforce_job_id()
     # Skip if the role tag is blank
     if position_role != '':
         data = {
@@ -26,7 +27,7 @@ def save(project_position):
         }
         req = requests.Request(
             method="PATCH",
-            url=f'{client.job_endpoint}/platform_id__c/{project_position.id}',
+            url=f'{client.job_endpoint}/platform_id__c/{platform_id__c}',
             data=json.dumps(data)
         )
         thread = threading.Thread(target=run, args=(req,))
@@ -34,26 +35,10 @@ def save(project_position):
         thread.start()
 
 
-def delete(position_id):
-    data = {
-        "allOrNone": True,
-        "compositeRequest": [
-            {
-                "method": "GET",
-                "referenceId": "DeletedJob",
-                "url": f'/services/data/v{{version}}/sobjects/GW_Volunteers__Volunteer_Job__c/platform_id__c/{position_id}'
-            },
-            {
-                "method": "DELETE",
-                "referenceId": "deleteRef",
-                "url": "/services/data/v{{version}}/sobjects/GW_Volunteers__Volunteer_Job__c/@{DeletedJob.Id}"
-            }
-        ]
-    }
+def delete(job_id):
     req = requests.Request(
-        method="POST",
-        url=client.composite_endpoint,
-        data=json.dumps(data)
+        method="DELETE",
+        url=f'{client.job_endpoint}/platform_id__c/{job_id}'
     )
     thread = threading.Thread(target=run, args=(req,))
     thread.daemon = True
