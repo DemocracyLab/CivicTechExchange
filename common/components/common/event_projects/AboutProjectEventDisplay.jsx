@@ -31,8 +31,9 @@ import EventProjectAPIUtils, {
 import RSVPVolunteerCard from "./RSVPVolunteerCard.jsx";
 import Toast from "../notification/Toast.jsx";
 import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
-import { APIResponse } from "../../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils, { APIResponse } from "../../utils/ProjectAPIUtils.js";
 import promiseHelper from "../../utils/promise.js";
+import JoinConferenceButton from "./JoinConferenceButton.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -153,10 +154,16 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       <div className="AboutProjectEvent-top-content">
         <div className="AboutProjectEvent-event-logo d-lg-none">
           {eventProject?.event_thumbnail?.publicUrl ? (
-            <img
-              src={eventProject.event_thumbnail.publicUrl}
-              alt="Event Logo"
-            ></img>
+            <a
+              href={url.section(Section.AboutEvent, {
+                id: eventProject.event_id,
+              })}
+            >
+              <img
+                src={eventProject.event_thumbnail.publicUrl}
+                alt="Event Logo"
+              ></img>
+            </a>
           ) : null}
         </div>
         <div className="AboutProjectEvent-top-names">
@@ -167,10 +174,16 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <div className="AboutProjectEvent-event-logo-desktop d-none d-lg-flex">
             <div className="ProjectCard-logo">
               {eventProject?.event_thumbnail?.publicUrl ? (
-                <img
-                  src={eventProject.event_thumbnail.publicUrl}
-                  alt="Event Logo"
-                ></img>
+                <a
+                  href={url.section(Section.AboutEvent, {
+                    id: eventProject.event_id,
+                  })}
+                >
+                  <img
+                    src={eventProject.event_thumbnail.publicUrl}
+                    alt="Event Logo"
+                  ></img>
+                </a>
               ) : null}
             </div>
           </div>
@@ -224,6 +237,9 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
   _renderJoinButton(eventProject: EventProjectAPIDetails): React$Node {
     let buttonConfig: Dictionary<any> = {};
+    let label: string = eventProject.is_activated
+      ? "Join Event Video"
+      : "Sign up";
     if (CurrentUser.isLoggedIn()) {
       if (
         !this.state.isProjectOwner &&
@@ -233,6 +249,13 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           onClick: () => {
             this.setState({ showJoinModal: true });
           },
+        };
+      } else if (eventProject.is_activated) {
+        buttonConfig = {
+          href:
+            eventProject.event_conference_admin_url ||
+            eventProject.event_conference_url,
+          target: "_blank",
         };
       }
     } else {
@@ -257,18 +280,31 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           positionToJoin={this.state.positionToJoin}
           showModal={this.state.showJoinModal}
           handleClose={this.confirmJoinProject.bind(this)}
+          conferenceUrl={
+            this.props.eventProject.event_conference_admin_url ||
+            this.props.eventProject.event_conference_url
+          }
         />
 
-        {!_.isEmpty(buttonConfig) && (
-          <Button
-            variant="primary"
-            className="AboutEvent-rsvp-btn"
-            type="button"
-            {...buttonConfig}
-          >
-            Sign up
-          </Button>
-        )}
+        {!_.isEmpty(buttonConfig) &&
+          (eventProject.is_activated ? (
+            <JoinConferenceButton
+              buttonConfig={buttonConfig}
+              participant_count={eventProject.event_conference_participants}
+              className="AboutEvent-livebutton"
+            >
+              {label}
+            </JoinConferenceButton>
+          ) : (
+            <Button
+              variant="primary"
+              type="button"
+              className="AboutEvent-livebutton"
+              {...buttonConfig}
+            >
+              {label}
+            </Button>
+          ))}
       </React.Fragment>
     );
   }
@@ -325,7 +361,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
             <Button
               variant="primary"
-              className="AboutEvent-rsvp-btn"
               type="button"
               onClick={() => this.setState({ showCancelRSVPModal: true })}
             >
@@ -526,52 +561,58 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   _renderIconList(): React$Node {
     const eventProject: EventProjectAPIDetails = this.state.eventProject;
 
-    const startDate: Moment = datetime.parse(eventProject.event_date_start);
+    const projectName: string = ProjectAPIUtils.getLocationDisplayName(
+      eventProject
+    );
 
     return (
       <React.Fragment>
         <div className="AboutProject-icon-row">
-          <i className={Glyph(GlyphStyles.Calendar, GlyphSizes.LG)} />
-          <p className="AboutProject-icon-text">
-            {startDate.format(DateFormat.MONTH_DATE_YEAR)}
-          </p>
-        </div>
-        <div className="AboutProject-icon-row">
-          <i className={Glyph(GlyphStyles.Clock, GlyphSizes.LG)} />
-          <p className="AboutProject-icon-text">
-            {startDate.format(DateFormat.TIME_TIMEZONE)}
-          </p>
-        </div>
-        <div className="AboutProject-icon-row">
-          <i className={Glyph(GlyphStyles.MapMarker, GlyphSizes.LG)} />
-          <p className="AboutProject-icon-text">
-            {eventProject.event_location}
-          </p>
-        </div>
-        <div className="AboutProject-icon-row">
-          <i className={Glyph(GlyphStyles.Folder, GlyphSizes.LG)} />
-          <p className="AboutProject-icon-text">
-            <a
-              href={url.section(Section.AboutProject, {
-                id: eventProject.project_id,
-              })}
-            >
-              Project Profile
-            </a>{" "}
-          </p>
-        </div>
-        <div className="AboutProject-icon-row">
-          <i className={Glyph(GlyphStyles.CalendarSolid, GlyphSizes.LG)} />
+          <i className={Glyph(GlyphStyles.LaptopCode, GlyphSizes.LG)} />
           <p className="AboutProject-icon-text">
             <a
               href={url.section(Section.AboutEvent, {
                 id: eventProject.event_id,
               })}
             >
-              Hackathon Home Page
+              Global Hackathon Page
             </a>
           </p>
         </div>
+        <div className="AboutProject-icon-row">
+          <i className={Glyph(GlyphStyles.ArrowRight, GlyphSizes.LG)} />
+          <p className="AboutProject-icon-text">
+            <a
+              href={url.section(Section.AboutProject, {
+                id: eventProject.project_id,
+              })}
+            >
+              View Project Details
+            </a>
+          </p>
+        </div>
+        {projectName && (
+          <div className="AboutProject-icon-row">
+            <i className={Glyph(GlyphStyles.MapMarker, GlyphSizes.LG)} />
+            <p className="AboutProject-icon-text">{projectName}</p>
+          </div>
+        )}
+        {eventProject.project_url && (
+          <div className="AboutProject-icon-row">
+            <i className={Glyph(GlyphStyles.Globe, GlyphSizes.LG)} />
+            <p className="AboutProject-url-text">
+              <a
+                href={urlHelper.appendHttpIfMissingProtocol(
+                  eventProject.project_url
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {urlHelper.beautify(eventProject.project_url)}
+              </a>
+            </p>
+          </div>
+        )}
       </React.Fragment>
     );
   }

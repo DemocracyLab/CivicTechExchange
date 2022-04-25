@@ -129,13 +129,17 @@ def is_json_field_empty(field_json):
 
 
 def is_creator(user, entity):
-    from civictechprojects.models import Project, Group
+    from civictechprojects.models import Project, Group, Event, EventProject
     if type(entity) is Project:
         return user.username == entity.project_creator.username
     elif type(entity) is Group:
         return user.username == entity.group_creator.username
-    else:
+    elif type(entity) is Event:
         return user.username == entity.event_creator.username
+    elif type(entity) is EventProject:
+        return user.username == entity.project.project_creator.username
+    else:
+        return False
 
 
 def is_co_owner(user, project):

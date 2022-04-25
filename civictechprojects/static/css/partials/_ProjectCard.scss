@@ -1,7 +1,7 @@
 .ProjectCard-root {
   background-color: $color-background-light;
   border-radius: 6px;
-  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.25);
   color: $color-text-dark;
   margin: 0.5rem 0;
   height: calc(
@@ -14,7 +14,7 @@
 .ProjectCard-root h4 {
   color: $color-text-grey;
 }
-.ProjectCard-root a {
+.ProjectCard-root > a {
   text-decoration: none;
   color: $color-text-dark;
   display: grid;
@@ -109,12 +109,11 @@
   grid-column: 1/5;
   border-top: 1px solid $color-grey-medium;
   text-align: center;
-}
-//selector specificity here is to avoid  matching .ProjectCard-root a, which is hilarious but not intended behavior
-a.ProjectCard-rsvp-btn, button.ProjectCard-rsvp-btn {
-  margin: 1rem auto;
-  width: 80%;
-  max-width: 280px;
-  max-height: 40px;
-  display: block;
+  align-self: end;
+  a, button {
+    margin: 1rem auto;
+    max-width: fit-content;
+    display: flex;
+    align-items: center;
+  }
 }

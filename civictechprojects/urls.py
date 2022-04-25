@@ -103,7 +103,7 @@ urlpatterns = [
     url(r'^volunteer/conclude/(?P<application_id>[0-9]+)/$', views.conclude_volunteering_with_project, name='conclude_volunteering_with_project'),
     url(r'^alert/create/$', views.add_alert, name='add_alert'),
     url(r'^api/testimonials/(?P<category>[-\w]*)', views.get_testimonials, name='get_testimonials'),
-
+    url(r'^api/v1/qiqo/webhooks/zoom_presences', views.qiqo_webhook, name='qiqo_webhook'),
 ]
 
 

@@ -30,6 +30,7 @@ import type {
   CardOperation,
   ProjectData,
 } from "../../utils/ProjectAPIUtils.js";
+import JoinConferenceButton from "../../common/event_projects/JoinConferenceButton.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -169,7 +170,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
                 {this.state.event.event_rsvp_url && this._renderRSVPButton()}
                 {!this.props.viewOnly &&
-                  event.event_live_id &&
+                  event.is_activated &&
                   this._renderJoinLiveEventButton()}
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
@@ -436,27 +437,35 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   _renderJoinLiveEventButton(): ?$React$Node {
     let text: string = "";
-    let url: string = "";
+    let buttonConfig: Dictionary<any> = {
+      target: "_self",
+    };
     if (CurrentUser.isLoggedIn()) {
-      //TODO: Handle un-verified users
-      text = "Join Event";
-      //TODO: Incorporate live event id into Live Event page
-      url = urlHelper.section(Section.LiveEvent, {
-        id: this.props.event.event_live_id,
-      });
+      text = "Join Main Session";
+      buttonConfig.href =
+        this.props.event.event_conference_admin_url ||
+        this.props.event.event_conference_url;
+      buttonConfig.target = "_blank";
     } else {
       text = "Log In to Join Event";
-      url = urlHelper.logInThenReturn();
+      buttonConfig.href = urlHelper.logInThenReturn();
     }
 
-    return (
+    return this.props.event.is_activated ? (
+      <JoinConferenceButton
+        buttonConfig={buttonConfig}
+        participant_count={this.props.event.event_conference_participants}
+        className="AboutEvent-rsvp-btn AboutEvent-livebutton"
+      >
+        {text}
+      </JoinConferenceButton>
+    ) : (
       <Button
-        variant="success"
-        size="lg"
-        className="AboutEvent-join-btn"
+        variant="primary"
         type="button"
+        className="AboutEvent-rsvp-btn AboutEvent-livebutton"
         title={text}
-        href={url}
+        {...buttonConfig}
       >
         {text}
       </Button>
@@ -476,17 +485,36 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       this.state.owned_projects.find(
         (myProject: MyProjectData) => myProject.project_id == project.id
       );
-    if (isVolunteering || isOwner) {
-      return {
-        name: "View Details",
-        buttonVariant: "outline-secondary",
-        url: project.cardUrl,
-      };
-    } else if (CurrentUser.isLoggedIn() && !isVolunteering) {
-      return {
-        name: "Sign Up",
-        url: project.cardUrl + "?signUp=1",
-      };
+    if (this.props.event.is_activated) {
+      if (isVolunteering || isOwner) {
+        return {
+          name: "Join Project Video",
+          url: project.conferenceUrl,
+          target: "_blank",
+          count: project.conferenceCt,
+          buttonVariant: "success"
+        };
+      } else {
+        return {
+          name: "Review Project Details",
+          url: project.cardUrl,
+          count: project.conferenceCt,
+          buttonVariant: "outline-secondary"
+        };
+      }
+    } else {
+      if (isVolunteering || isOwner) {
+        return {
+          name: "View Details",
+          buttonVariant: "outline-secondary",
+          url: project.cardUrl,
+        };
+      } else if (CurrentUser.isLoggedIn() && !isVolunteering) {
+        return {
+          name: "Sign Up",
+          url: project.cardUrl + "?signUp=1",
+        };
+      }
     }
   }
 
