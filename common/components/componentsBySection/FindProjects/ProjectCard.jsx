@@ -16,6 +16,7 @@ import VideoModal from "../../common/video/VideoModal.jsx";
 import FavoriteToggle from "./FavoriteToggle.jsx";
 import CurrentUser from "../../utils/CurrentUser.js";
 import type { Dictionary } from "../../types/Generics.jsx";
+import JoinConferenceButton from "../../common/event_projects/JoinConferenceButton.jsx";
 
 type Props = {|
   project: ProjectData,
@@ -185,18 +186,32 @@ class ProjectCard extends React.PureComponent<Props, State> {
           onClick: () => cardOperation.operation(),
         };
       } else {
-        buttonConfig = { href: cardOperation.url };
+        buttonConfig = {
+          href: cardOperation.url,
+          target: cardOperation.target || "_self",
+        };
       }
       return (
         <div className="ProjectCard-operation">
-          <Button
-            variant={cardOperation.buttonVariant || "primary"}
-            className="ProjectCard-rsvp-btn"
-            type="button"
-            {...buttonConfig}
-          >
-            {cardOperation.name}
-          </Button>
+          {"count" in cardOperation ? (
+            <JoinConferenceButton
+              variant={cardOperation.buttonVariant || "outline-secondary"}
+              buttonConfig={buttonConfig}
+              participant_count={cardOperation.count}
+              className="ProjectCard-rsvp-btn"
+            >
+              {cardOperation.name}
+            </JoinConferenceButton>
+          ) : (
+            <Button
+              variant={cardOperation.buttonVariant || "primary"}
+              className="ProjectCard-rsvp-btn AboutEvent-livebutton"
+              type="button"
+              {...buttonConfig}
+            >
+              {cardOperation.name}
+            </Button>
+          )}
         </div>
       );
     }

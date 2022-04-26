@@ -45,6 +45,15 @@ export type EventProjectAPIDetails = {|
   project_name: string,
   project_thumbnail: ?FileInfo,
   project_thumbnail_video: ?LinkInfo,
+  is_activated: boolean,
+  event_conference_url: ?string,
+  event_conference_admin_url: ?string,
+  event_conference_participants: ?string,
+  project_location: ?string,
+  project_country: ?string,
+  project_state: ?string,
+  project_city: ?string,
+  project_url: ?string,
 |};
 
 export default class EventProjectAPIUtils {

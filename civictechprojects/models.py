@@ -6,13 +6,14 @@ from django.contrib.gis.db.models import PointField
 from enum import Enum
 from itertools import chain
 from democracylab.models import Contributor
+from common.helpers.qiqo_chat import activate_zoom_rooms, get_zoom_room_info
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache, \
     EventProjectCache
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
-from common.helpers.dictionaries import merge_dicts, keys_subset
+from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
@@ -414,6 +415,7 @@ class Event(Archived):
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
     show_headers = models.BooleanField(default=False)
+    is_activated = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.event_name)
@@ -426,13 +428,17 @@ class Event(Archived):
         self.event_date_modified = timezone.now()
         self.save()
 
-    def hydrate_to_json(self):
-        return EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
+    def hydrate_to_json(self, user=None):
+        hydrated = EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
+        if user is None or not is_creator_or_staff(user, self):
+            hydrated = keys_omit(hydrated, ['event_conference_admin_url'])
+        return hydrated
 
     def _hydrate_to_json(self):
         files = self.get_event_files()
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
+        event_room = EventConferenceRoom.get_event_room(self)
 
         event = {
             'event_agenda': self.event_agenda,
@@ -453,8 +459,14 @@ class Event(Archived):
             'event_legacy_organization': Tag.hydrate_to_json(self.id, list(self.event_legacy_organization.all().values())),
             'event_slug': self.event_slug,
             'is_private': self.is_private,
-            'show_headers': self.show_headers
+            'show_headers': self.show_headers,
+            "is_activated": self.is_activated
         }
+
+        if event_room is not None:
+            event['event_conference_url'] = event_room.join_url
+            event['event_conference_admin_url'] = event_room.admin_url
+            event['event_conference_participants'] = event_room.participant_count()
 
         if len(thumbnail_files) > 0:
             event['event_thumbnail'] = thumbnail_files[0].to_json()
@@ -477,6 +489,9 @@ class Event(Archived):
 
         return event
 
+    def get_event_projects(self):
+        return EventProject.objects.filter(event=self)
+
     def get_event_files(self):
         return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
@@ -484,7 +499,7 @@ class Event(Archived):
         return section_url(FrontEndSection.AboutEvent, {'id': self.event_slug or self.id})
 
     @staticmethod
-    def get_by_id_or_slug(slug):
+    def get_by_id_or_slug(slug: str):
         event = None
         if slug is not None:
             _slug = str(slug).strip().lower()
@@ -535,22 +550,28 @@ class EventProject(Archived):
         return '{id}: {event} - {project}'.format(
             id=self.id, event=self.event.event_name, project=self.project.project_name)
 
-    def hydrate_to_json(self):
-        return EventProjectCache.get(self) or EventProjectCache.refresh(self, self._hydrate_to_json())
+    def hydrate_to_json(self, user=None):
+        hydrated = EventProjectCache.get(self) or EventProjectCache.refresh(self, self._hydrate_to_json())
+        if user is None or not is_creator_or_staff(user, self.project):
+            hydrated = keys_omit(hydrated, ['event_conference_admin_url'])
+        return hydrated
 
     def _hydrate_to_json(self):
         links = self.get_event_project_links()
         files = self.get_event_project_files()
         positions = self.get_project_positions()
         rsvps = self.get_event_project_volunteers()
+        event_room = EventConferenceRoom.get_event_project_room(self)
         event_json = keys_subset(self.event.hydrate_to_json(), ['event_id', 'event_name', 'event_slug', 'event_thumbnail',
-                                                                'event_date_end', 'event_date_start', 'event_location'])
+                                                                'event_date_end', 'event_date_start', 'event_location',
+                                                                'is_activated'])
         project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
                                                                     'project_short_description', 'project_description',
                                                                     'project_description_solution', 'project_technologies',
-                                                                    'project_owners', 'project_creator'])
+                                                                    'project_owners', 'project_creator', 'project_location',
+                                                                    'project_country', 'project_state', 'project_city',
+                                                                    'project_url'])
 
-        # TODO: Export RSVP-ed volunteers
         event_project_json = merge_dicts(event_json, project_json, {
             'event_project_id': self.id,
             'event_project_goal': self.goal,
@@ -563,6 +584,11 @@ class EventProject(Archived):
             'event_project_files': list(map(lambda file: file.to_json(), files)),
             'event_project_links': list(map(lambda link: link.to_json(), links)),
         })
+
+        if event_room is not None:
+            event_project_json['event_conference_url'] = event_room.join_url
+            event_project_json['event_conference_admin_url'] = event_room.admin_url
+            event_project_json['event_conference_participants'] = event_room.participant_count()
 
         return event_project_json
 
@@ -1351,6 +1377,92 @@ class RSVPVolunteerRelation(Archived):
 
 class TaggedCategory(TaggedItemBase):
     content_object = models.ForeignKey('Testimonial', on_delete=models.CASCADE)
+
+
+class EventConferenceRoom(models.Model):
+    room_number = models.IntegerField(default=0)
+    zoom_id = models.BigIntegerField(default=0)
+    event = models.ForeignKey(Event, related_name='conference_rooms', on_delete=models.CASCADE)
+    event_project = models.ForeignKey(EventProject, related_name='event_conference_rooms', blank=True, null=True, on_delete=models.CASCADE)
+    join_url = models.CharField(max_length=2083)
+    admin_url = models.CharField(max_length=2083)
+    last_activated = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+
+    def __str__(self):
+        event_prefix = self.event_project.__str__() if self.event_project else self.event.__str__()
+        return '{event}: {room_number}'.format(event=event_prefix, room_number=self.room_number)
+
+    def participant_count(self):
+        return EventConferenceRoomParticipant.objects.filter(room=self).count()
+
+    def recache_linked(self):
+        if self.event_project is not None:
+            self.event_project.recache()
+        else:
+            self.event.recache()
+
+    @staticmethod
+    def get_event_room(event: Event):
+        return EventConferenceRoom.objects.filter(event=event, room_number=0).first()
+
+    @staticmethod
+    def get_event_project_room(event_project: EventProject):
+        return EventConferenceRoom.objects.filter(event_project=event_project).first()
+
+    @staticmethod
+    def get_by_zoom_id(zoom_id: str):
+        return EventConferenceRoom.objects.filter(zoom_id=zoom_id).first()
+
+    @staticmethod
+    def create(event: Event, zoom_id: int, join_url: str, admin_url: str, event_project: EventProject = None):
+        room_number = event_project.project.id if event_project else 0
+        room = EventConferenceRoom.get_event_project_room(event_project) if event_project is not None \
+            else EventConferenceRoom.get_event_room(event)
+        if room is None:
+            room = EventConferenceRoom(
+                room_number=room_number,
+                zoom_id=zoom_id,
+                event=event,
+                join_url=join_url,
+                admin_url=admin_url,
+                event_project=event_project)
+        else:
+            room.zoom_id = zoom_id
+            room.join_url = join_url
+            room.admin_url = admin_url
+            room.last_activated = timezone.now()
+        room.save()
+        return room
+
+    @staticmethod
+    def create_for_entity(event: Event, event_project: EventProject = None):
+        room_id = event_project.id if event_project else 0
+        qiqo_event_id = event.event_live_id
+        if qiqo_event_id is not None:
+            activate_response = activate_zoom_rooms(qiqo_event_id, [room_id])
+            for room_activation_json in activate_response:
+                space_id = int(room_activation_json['space_id'])
+                zoom_id = room_activation_json['zoom_meeting_id']
+                room_json = get_zoom_room_info(qiqo_event_id, space_id)
+                join_url = room_json['join_url']
+                admin_url = room_json['start_url']
+                print('Created room {room} for {entity}'.format(room=zoom_id, entity=(event_project or event).__str__()))
+                EventConferenceRoom.create(event, zoom_id, join_url, admin_url, event_project)
+
+
+class EventConferenceRoomParticipant(models.Model):
+    room = models.ForeignKey(EventConferenceRoom, related_name='participants', on_delete=models.CASCADE)
+    zoom_user_name = models.CharField(max_length=100)
+    zoom_user_id = models.BigIntegerField(default=0)
+    enter_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+
+    def __str__(self):
+        return '{room} - {name}({id})'.format(room=self.room.__str__(), name=self.zoom_user_name,
+                                                            id=self.zoom_user_id)
+
+    @staticmethod
+    def get(room: EventConferenceRoom, zoom_user_id: str):
+        return EventConferenceRoomParticipant.objects.filter(room=room, zoom_user_id=zoom_user_id).first()
 
 
 class Testimonial(models.Model):

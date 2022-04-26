@@ -24,6 +24,9 @@ export type EventData = {|
   event_slug: string,
   is_private: boolean,
   show_headers: boolean,
+  event_conference_url: ?string,
+  event_conference_admin_url: ?string,
+  event_conference_participants: ?string,
 |};
 
 export type EventTileAPIData = {|

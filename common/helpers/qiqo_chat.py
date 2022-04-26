@@ -6,6 +6,7 @@ import civictechprojects.models
 from django.conf import settings
 from django.utils import timezone
 from common.helpers.user_helpers import is_user_blank_name
+from typing import List
 
 
 def get_user_qiqo_iframe(contributor, request):
@@ -27,18 +28,19 @@ def get_user_qiqo_iframe(contributor, request):
         return settings.TEST_IFRAME_URL
     else:
         return settings.QIQO_IFRAME_URL.format(api_key=settings.QIQO_API_KEY,
-                                      source_user_uuid=source_user_uuid,
-                                      qiqo_user_uuid=qiqo_user_uuid)
+                                               source_user_uuid=source_user_uuid,
+                                               qiqo_user_uuid=qiqo_user_uuid)
 
 
 class SubscribeUserToQiqoChat(object):
     def __init__(self, contributor):
         self.user = contributor
         # Throttle user creation calls to qiqochat
-        log_result = 'Subscribe attempt to qiqochat for {user} at {time}'\
+        log_result = 'Subscribe attempt to qiqochat for {user} at {time}' \
             .format(time=timezone.now(), user=self.user.id_full_name())
         if self.user.qiqo_signup_time \
-                and (timezone.now() - self.user.qiqo_signup_time).total_seconds() <= settings.QIQO_SIGNUP_TIMEOUT_SECONDS:
+                and (
+                timezone.now() - self.user.qiqo_signup_time).total_seconds() <= settings.QIQO_SIGNUP_TIMEOUT_SECONDS:
             log_result += ':Aborting, last request < {time}s ago'.format(time=settings.QIQO_SIGNUP_TIMEOUT_SECONDS)
         elif is_user_blank_name(self.user):
             log_result += ':Aborting, missing required user name'
@@ -83,17 +85,57 @@ class SubscribeUserToQiqoChat(object):
             data['user']['about_me'] = self.user.about_me
 
         # TODO: Get thumbnail from cached user
-        thumbnail_files = list(civictechprojects.models.ProjectFile.objects.filter(file_user=self.user.id, file_category=civictechprojects.models.FileCategory.THUMBNAIL.value))
+        thumbnail_files = list(civictechprojects.models.ProjectFile.objects.filter(file_user=self.user.id,
+                                                                                   file_category=civictechprojects.models.FileCategory.THUMBNAIL.value))
         if len(thumbnail_files) > 0:
             data['user']['photo_url'] = thumbnail_files[0].file_url
 
         r = requests.post(
             settings.QIQO_USERS_ENDPOINT,
             data=json.dumps(data),
-            headers={'content-type' : 'application/json'}
+            headers={'content-type': 'application/json'}
         )
         if r.status_code == 200:
             self.user.qiqo_uuid = r.json()['qiqo_user_uuid']
             self.user.save()
         else:
             self.print_error('[{code}] {msg}'.format(code=r.status_code, msg=r.text))
+
+
+def activate_zoom_rooms(qiqo_event_id: str, room_ids: List[int]):
+    space_ids = '[' + ','.join(map(lambda room_id: str(room_id), room_ids)) + ']'
+    url = ('{base_url}activate_zoom_meetings_for_event/{qiqo_event_id}?source[api_key]={api_key}' + \
+           '&source[api_secret]={api_secret}&space_ids={space_ids}').format(
+        base_url=settings.QIQO_API_BASE_URL,
+        qiqo_event_id=qiqo_event_id,
+        api_key=settings.QIQO_API_KEY,
+        api_secret=settings.QIQO_API_SECRET,
+        space_ids=space_ids
+    )
+    print(url)
+    response = requests.get(url)
+    try:
+        return response.json()
+    except:
+        print('Invalid json: ' + url)
+        return None
+
+
+# https://api.qiqochat.com/api/v1/event/BvpumYxUoLsnjAKvyadEPoAjR/space/1/zoom_info
+# ?source[api_key]=democracylab&source[api_secret]=ieuefjlekjesofiewojewijfaKFVANXLKVHOISFAE8a7sd82jj2if2
+def get_zoom_room_info(qiqo_event_id: str, room_number: int):
+    url = ('{base_url}event/{qiqo_event_id}/space/{room_number}/zoom_info?source[api_key]={api_key}' +
+           '&source[api_secret]={api_secret}').format(
+        base_url=settings.QIQO_API_BASE_URL,
+        room_number=room_number,
+        qiqo_event_id=qiqo_event_id,
+        api_key=settings.QIQO_API_KEY,
+        api_secret=settings.QIQO_API_SECRET,
+    )
+    print(url)
+    response = requests.get(url)
+    try:
+        return response.json()
+    except:
+        print('Invalid json: ' + url)
+        return None

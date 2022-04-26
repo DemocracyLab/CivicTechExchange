@@ -38,7 +38,9 @@ export type CardOperation = {|
   name: string,
   buttonVariant: ?string,
   url: ?string,
+  target: ?string,
   operation: ?() => null,
+  count: ?string,
 |};
 
 export type ProjectData = {|
@@ -58,6 +60,8 @@ export type ProjectData = {|
   +url: string,
   +video: ?LinkInfo,
   +cardUrl: ?string,
+  +conferenceUrl: ?string,
+  +conferenceCt: ?string,
   +cardOperation: ?CardOperation,
 |};
 
@@ -179,6 +183,8 @@ class ProjectAPIUtils {
         ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
         : ["Contact Project for Details"],
       video: apiData.project_thumbnail_video,
+      conferenceUrl: apiData.conference_url,
+      conferenceCt: apiData.conference_count,
       cardUrl: apiData.card_url,
     };
   }

@@ -49,6 +49,8 @@ export const GlyphStyles: { [key: string]: string } = {
   Palette: "fas fa-palette", // https://fontawesome.com/v5.15/icons/palette?style=solid
   HeartEmpty: "far fa-heart", // https://fontawesome.com/v6.0/icons/heart?s=regular
   HeartFilled: "fas fa-heart", // https://fontawesome.com/v6.0/icons/heart?s=solid
+  ArrowRight: "fas fa-arrow-right", // https://fontawesome.com/v6.0/icons/arrow-right?s=solid
+  LaptopCode: "fas fa-laptop-code", // https://fontawesome.com/v5.15/icons/laptop-code?style=solid
 };
 
 export const GlyphSizes: { [key: string]: string } = {

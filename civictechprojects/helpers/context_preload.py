@@ -1,13 +1,12 @@
 from django.conf import settings
 from urllib.parse import urljoin, urlparse
-from civictechprojects.models import Event
+from civictechprojects.models import Event, EventProject
 from civictechprojects.caching.cache import ProjectCache, GroupCache
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 from common.helpers.redirectors import RedirectTo
 from common.helpers.request_helpers import url_params
 
-#TODO: event_project_preload
 
 def about_project_preload(context, request):
     context = default_preload(context, request)
@@ -39,6 +38,25 @@ def about_event_preload(context, request):
         context['canonical_url'] = section_url(FrontEndSection.AboutEvent,  {'id': slug_or_id})
     else:
         print('Failed to preload event info, no cache entry found: ' + event_id)
+    return context
+
+
+def about_event_project_preload(context, request):
+    context = default_preload(context, request)
+    query_args = url_params(request)
+    event_id = query_args['event_id']
+    project_id = query_args['project_id']
+    event_project = EventProject.get(event_id, project_id)
+    event_project_json = event_project.hydrate_to_json()
+    if event_project_json is not None:
+        context['title'] = '{project_name} | {event_name}'.format(project_name=event_project_json['project_name'],
+                                                                  event_name=event_project_json['event_name'])
+        context['description'] = event_project_json['event_project_goal'] or event_project_json['project_short_description']
+        if 'event_thumbnail' in event_project_json:
+            context['og_image'] = event_project_json['event_thumbnail']['publicUrl']
+        context['canonical_url'] = event_project.get_url()
+    else:
+        print('Failed to preload event project info, no cache entry found: ' + event_project.__str__())
     return context
 
 
@@ -156,7 +174,8 @@ preload_urls = [
     {'section': FrontEndSection.Donate.value, 'handler': donate_preload},
     {'section': FrontEndSection.AboutGroup.value, 'handler': about_group_preload},
     {'section': FrontEndSection.Companies.value, 'handler': companies_preload},
-    {'section': FrontEndSection.VideoOverview.value, 'handler': videos_preload}
+    {'section': FrontEndSection.VideoOverview.value, 'handler': videos_preload},
+    {'section': FrontEndSection.AboutEventProject.value, 'handler': about_event_project_preload}
 ]
 
 

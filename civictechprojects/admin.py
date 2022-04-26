@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import Project, Group, Event, ProjectRelationship, UserAlert, VolunteerRelation, ProjectCommit, \
     NameRecord, ProjectFile, Testimonial, ProjectLink, ProjectFavorite, ProjectPosition, EventProject, \
-    RSVPVolunteerRelation
+    RSVPVolunteerRelation, EventConferenceRoom, EventConferenceRoomParticipant
 
 project_text_fields = ['project_name', 'project_description', 'project_description_solution', 'project_description_actions', 'project_short_description', 'project_location', 'project_country', 'project_state', 'project_city', 'project_url']
 project_filter_fields = ('project_date_created', 'project_date_modified', 'is_searchable', 'is_created')
@@ -109,6 +109,18 @@ class RSVPVolunteerRelationAdmin(admin.ModelAdmin):
     search_fields = ['volunteer__email', 'event__event_name', 'application_text']
     list_filter = ('event',)
 
+
+class EventConferenceRoomAdmin(admin.ModelAdmin):
+    list_display = ('event', 'event_project', 'zoom_id', 'last_activated')
+    search_fields = ['event__event_name', ]
+    list_filter = ('event',)
+
+
+class EventConferenceRoomParticipantAdmin(admin.ModelAdmin):
+    list_display = ('room', 'zoom_user_name', 'zoom_user_id')
+    search_fields = ['event__event_name', ]
+
+
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectRelationship, ProjectRelationshipAdmin)
 admin.site.register(Group, GroupAdmin)
@@ -124,3 +136,5 @@ admin.site.register(ProjectFavorite, ProjectFavoriteAdmin)
 admin.site.register(ProjectPosition, ProjectPositionAdmin)
 admin.site.register(EventProject, EventProjectAdmin)
 admin.site.register(RSVPVolunteerRelation, RSVPVolunteerRelationAdmin)
+admin.site.register(EventConferenceRoom, EventConferenceRoomAdmin)
+admin.site.register(EventConferenceRoomParticipant, EventConferenceRoomParticipantAdmin)

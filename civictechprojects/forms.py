@@ -1,7 +1,8 @@
 from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
-from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group, NameRecord, EventProject
+from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group, NameRecord, \
+    EventProject, EventConferenceRoom
 from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification, send_group_creation_notification, \
     send_event_creation_notification, notify_project_owners_event_rsvp
@@ -314,6 +315,9 @@ class EventProjectCreationForm(ModelForm):
         if not event_project:
             user = get_request_contributor(request)
             event_project = EventProject.create(user, event, project)
+            event_project.save()
+            if event.is_activated:
+                EventConferenceRoom.create_for_entity(event, event_project)
             notify_project_owners_event_rsvp(event_project)
             fields_changed = True
             recache_linked = True
