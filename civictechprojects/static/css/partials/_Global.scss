@@ -29,12 +29,14 @@ a[type="button"].btn-footer:active {
 //DemocracyLab button styles (overwrite/extend Bootstrap button rules)
 // in general all buttons have a border, but some use the same color as the button to visually have none
 // padding instead of selecting a specific height is for vertical align, but this could stand a rework later
-button, .btn {
+button,
+.btn {
   padding: 0.4375rem 1rem; // 7px 16px; padding + border + line-height = 40px height button
   font-weight: 600; // ask design about 500
   border-radius: 4px;
 }
-button:focus, .btn:focus {
+button:focus,
+.btn:focus {
   outline: 3px solid $color-blue-50;
   outline-offset: 1px;
 }
@@ -42,7 +44,8 @@ button:focus, .btn:focus {
   color: $color-neutral-100;
   border-color: $color-brand-70;
 }
-.btn-primary:active, .btn-primary:hover {
+.btn-primary:active,
+.btn-primary:hover {
   background-color: $color-brand-60;
   border-color: $color-brand-60;
   color: $color-neutral-100;
@@ -52,11 +55,15 @@ button:focus, .btn:focus {
   border-color: $color-neutral-75;
   background-color: $color-neutral-10;
 }
-.btn-secondary:active, .btn-secondary:hover, .btn-outline-secondary:active, .btn-outline-secondary:hover {
+.btn-secondary:active,
+.btn-secondary:hover,
+.btn-outline-secondary:active,
+.btn-outline-secondary:hover {
   background-color: $color-neutral-20;
   color: $color-neutral-90;
 }
-button:disabled, .btn:disabled {
+button:disabled,
+.btn:disabled {
   background-color: $color-neutral-25;
   border-color: $color-neutral-25;
   color: $color-text-disabled;
@@ -81,13 +88,31 @@ button:disabled, .btn:disabled {
 .btn-info:hover {
   background-color: #025d87;
 }
+.btn-ghost,
+.btn-outline-ghost {
+  color: $color-neutral-75;
+}
+.btn-outline-ghost {
+  border-color: transparent;
+  background-color: transparent;
+}
+.btn-ghost:active,
+.btn-ghost:hover,
+.btn-outline-ghost:hover,
+.btn-outline-ghost:active {
+  border-color: $color-neutral-20;
+  background-color: $color-neutral-20;
+}
+.btn-ghost:active,
+.btn-outline-ghost:active {
+  color: $color-neutral-100;
+}
 
 //Global override of disabled state input elements
 input[type="submit"]:disabled {
   background: $color-grey-disabled;
   border: $color-disabled-border;
 }
-
 
 //class-based toggle of background color
 .background-light {
@@ -252,15 +277,18 @@ h4,
 //for on-page actions we want to appear as links (e.g. js onclick events)
 // use pseudo-link as sparingly as possible - links should be links, doubly so since these won't respect :visited, etc
 .pseudo-link {
-  @extend a
+  @extend a;
 }
-a:active, .psuedo-link:active {
+a:active,
+.psuedo-link:active {
   color: $color-link-active;
   text-decoration: underline;
 }
 a:visited {
   color: $color-link-visited;
 }
-a.btn:visited, .btn:visited, button:visited {
+a.btn:visited,
+.btn:visited,
+button:visited {
   color: inherit; // buttons acting as links should not take visited color -- we'll have to revisit this when buttons are implemented from DS
 }

@@ -41,6 +41,7 @@ $theme-colors: (
   "secondary": $color-neutral-90,
   "success": $color-green-80,
   "danger": $color-red-80, //danger = specified white bg, outline-danger = transparent bg; labeled "Destructive" in design system
+  "ghost": $color-neutral-10, // ghost buttons have no visible background
 );
 
 //disables dropdown caret by default
