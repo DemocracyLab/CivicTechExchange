@@ -88,7 +88,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
         key={"view" + id}
         className="MyProjectCard-button"
         href={url.section(Section.AboutProject, id)}
-        variant="info"
+        variant="secondary"
       >
         View
       </Button>,
@@ -100,7 +100,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
           key={"edit" + id}
           className="MyProjectCard-button"
           href={url.section(Section.CreateProject, id)}
-          variant="info"
+          variant="secondary"
         >
           Edit
         </Button>,
@@ -120,7 +120,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
         <Button
           key={"renew" + id}
           className="MyProjectCard-button"
-          variant="warning"
+          variant="secondary"
           onClick={() => this.props.onProjectClickRenew(this.props.project)}
         >
           Renew

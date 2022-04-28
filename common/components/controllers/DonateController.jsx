@@ -68,7 +68,7 @@ class DonateController extends React.Component<{||}, State> {
                 <div className="DonateController-amounts">
                   <h3 className="DonateController-subheader">Amount</h3>
                   <RadioButtons
-                    variant="outline-dark"
+                    variant="outline-secondary"
                     options={DonationAmountOptions}
                     defaultSelection={DonationAmountOptions[2]}
                     onSelection={this.handleFieldSelection.bind(
@@ -82,7 +82,7 @@ class DonateController extends React.Component<{||}, State> {
                   <div className="DonateController-monthly">
                     <h3 className="DonateController-subheader">Frequency</h3>
                     <RadioButtons
-                      variant="outline-dark"
+                      variant="outline-secondary"
                       options={DonationMonthlyOptions}
                       defaultSelection={DonationMonthlyOptions[0]}
                       onSelection={this.handleFieldSelection.bind(

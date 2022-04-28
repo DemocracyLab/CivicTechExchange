@@ -31,8 +31,8 @@ a[type="button"].btn-footer:active {
 // padding instead of selecting a specific height is for vertical align, but this could stand a rework later
 button,
 .btn {
-  padding: 0.4375rem 1rem; // 7px 16px; padding + border + line-height = 40px height button
-  font-weight: 600; // ask design about 500
+  padding: 0.4375rem 1rem; // 7px 16px; padding + border + line-height = 40px height button. for borderless buttons just set border color to background color.
+  font-weight: 600; 
   border-radius: 4px;
 }
 button:focus,
@@ -78,10 +78,12 @@ button:disabled,
   background-color: $color-background-light;
 }
 .btn-outline-danger {
+  color: $color-red-80;
   background-color: transparent;
 }
 .btn-danger:active,
 .btn-danger:hover {
+  color: $color-red-80;
   background-color: $color-red-10;
 }
 .btn-info:active,

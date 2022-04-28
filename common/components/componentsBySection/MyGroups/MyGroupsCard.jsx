@@ -76,7 +76,7 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
       <Button
         className="MyProjectCard-button"
         href={url.section(Section.AboutGroup, id)}
-        variant="info"
+        variant="secondary"
       >
         View
       </Button>,
