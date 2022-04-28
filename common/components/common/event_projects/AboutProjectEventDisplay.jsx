@@ -13,7 +13,7 @@ import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import type { EventProjectAPIDetails } from "../../utils/EventProjectAPIUtils.js";
 import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
-import datetime, { DateFormat } from "../../utils/datetime.js";
+import datetime from "../../utils/datetime.js";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import urlHelper from "../../utils/url.js";
 import CurrentUser, {
@@ -53,6 +53,7 @@ type State = {|
   videoLink: ?LinkInfo,
   isRSVPedForThisEventProject: boolean,
   isProjectOwner: boolean,
+  isPastEvent: boolean,
 |};
 
 class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
@@ -61,6 +62,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     const userContext: UserContext = CurrentUser?.userContext();
     const rsvp_events: Dictionary<MyRSVPData> = userContext?.rsvp_events || {};
     const isProjectOwner: boolean = CurrentUser.isOwner(props.eventProject);
+    const endDate: Moment = datetime.parse(props.eventProject.event_date_end);
     const isRSVPedForThisEventProject: boolean = _.some(
       rsvp_events,
       (rsvp: MyRSVPData) =>
@@ -86,6 +88,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       videoLink: videoLink,
       isRSVPedForThisEventProject: isRSVPedForThisEventProject,
       isProjectOwner: isProjectOwner,
+      isPastEvent: endDate < datetime.now(),
     };
     this.cancelRSVP = this.cancelRSVP.bind(this, props.eventProject);
     this.handleShowVolunteerModal = this.handleShowVolunteerModal.bind(this);
@@ -226,9 +229,10 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
                 Edit
               </Button>
             )}
-            {this._renderJoinButton(eventProject)}
+            {!this.state.isPastEvent && this._renderJoinButton(eventProject)}
             {this._renderLeaveButton(eventProject)}
-            {this._renderCancelRSVPButton(eventProject)}
+            {!this.state.isPastEvent &&
+              this._renderCancelRSVPButton(eventProject)}
           </div>
         </div>
       </div>
