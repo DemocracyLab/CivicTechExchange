@@ -1290,7 +1290,7 @@ class VolunteerRelation(Archived):
 
     def salesforce_job_id(self):
         role = Tag.tags_field_descriptions(self.role)
-        return f"{self.project.id}{role.lower().replace(' ','')}"
+        return f'{self.project.id}{role.lower().replace(" ", "")}'
 
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
