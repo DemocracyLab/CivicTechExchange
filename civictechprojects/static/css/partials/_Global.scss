@@ -34,7 +34,7 @@ a[type="button"].btn-footer:active {
 button,
 .btn {
   padding: 0.4375rem 1rem; // 7px 16px; padding + border + line-height = 40px height button. for borderless buttons just set border color to background color.
-  font-weight: 600;
+  font-weight: 500;
   border-radius: 4px;
 }
 button:focus,
@@ -233,10 +233,6 @@ h4,
   font-size: 13px;
 }
 
-// .btn {
-// font-size: 15px;
-// font-weight: 600; // semibold
-// }
 
 //desktop declarations
 @include media-breakpoint-up(lg) {
@@ -276,11 +272,6 @@ h4,
   .overline {
     font-size: 13px;
   }
-
-  // .btn {
-  // font-size: 16px;
-  // font-weight: 600;
-  // }
 }
 
 // design system link colors are in _vars.scss and _bootstrapoverride, but we have some psuedoselectors here
