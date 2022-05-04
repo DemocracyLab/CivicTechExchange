@@ -72,17 +72,17 @@ button:disabled,
 .btn-success:hover {
   background-color: $color-green-100;
 }
-.btn-danger {
+.btn-critical {
   color: $color-red-80;
   border-color: $color-red-80;
   background-color: $color-background-light;
 }
-.btn-outline-danger {
+.btn-outline-critical {
   color: $color-red-80;
   background-color: transparent;
 }
-.btn-danger:active,
-.btn-danger:hover {
+.btn-critical:active,
+.btn-critical:hover {
   color: $color-red-80;
   background-color: $color-red-10;
 }

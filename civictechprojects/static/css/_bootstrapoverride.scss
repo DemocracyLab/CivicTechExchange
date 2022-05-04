@@ -40,7 +40,7 @@ $theme-colors: (
   "primary": $color-brand-70,
   "secondary": $color-neutral-90,
   "success": $color-green-80,
-  "danger": $color-red-80, //danger = specified white bg, outline-danger = transparent bg; labeled "Destructive" in design system
+  "critical": $color-red-80, //critical has white bg, outline-critical has transparent
   "ghost": $color-neutral-10, // ghost buttons have no visible background
 );
 

@@ -90,7 +90,7 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
         </Button>,
         <Button
           className="MyProjectCard-button"
-          variant="danger"
+          variant="critical"
           onClick={() => this.props.onGroupClickDelete(this.props.group)}
         >
           Delete
