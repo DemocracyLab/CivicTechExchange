@@ -120,8 +120,9 @@ button:disabled,
 
 //Global override of disabled state input elements
 input[type="submit"]:disabled {
-  background: $color-grey-disabled;
-  border: $color-disabled-border;
+  background-color: $color-neutral-25;
+  border-color: $color-neutral-35;
+  color: $color-text-disabled;
 }
 
 //class-based toggle of background color
@@ -232,7 +233,6 @@ h4,
 .overline {
   font-size: 13px;
 }
-
 
 //desktop declarations
 @include media-breakpoint-up(lg) {
