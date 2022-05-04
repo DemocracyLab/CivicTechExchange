@@ -29,10 +29,12 @@ a[type="button"].btn-footer:active {
 //DemocracyLab button styles (overwrite/extend Bootstrap button rules)
 // in general all buttons have a border, but some use the same color as the button to visually have none
 // padding instead of selecting a specific height is for vertical align, but this could stand a rework later
+// Bootstrap specificity is things like .btn-variantname:not(:disabled):not(.disabled):active, hence !important to bypass it
+
 button,
 .btn {
   padding: 0.4375rem 1rem; // 7px 16px; padding + border + line-height = 40px height button. for borderless buttons just set border color to background color.
-  font-weight: 600; 
+  font-weight: 600;
   border-radius: 4px;
 }
 button:focus,
@@ -46,11 +48,11 @@ button:focus,
 }
 .btn-primary:active,
 .btn-primary:hover {
-  background-color: $color-brand-60;
-  border-color: $color-brand-60;
-  color: $color-neutral-100;
+  background-color: $color-brand-60 !important;
+  border-color: $color-brand-60 !important;
+  color: $color-neutral-100 !important;
 }
-.btn-secondary {
+.btn.btn-secondary {
   color: $color-neutral-90;
   border-color: $color-neutral-75;
   background-color: $color-neutral-10;
@@ -59,8 +61,8 @@ button:focus,
 .btn-secondary:hover,
 .btn-outline-secondary:active,
 .btn-outline-secondary:hover {
-  background-color: $color-neutral-20;
-  color: $color-neutral-90;
+  background-color: $color-neutral-20 !important;
+  color: $color-neutral-90 !important;
 }
 button:disabled,
 .btn:disabled {
@@ -70,7 +72,7 @@ button:disabled,
 }
 .btn-success:active,
 .btn-success:hover {
-  background-color: $color-green-100;
+  background-color: $color-green-100 !important;
 }
 .btn-critical {
   color: $color-red-80;
@@ -78,17 +80,23 @@ button:disabled,
   background-color: $color-background-light;
 }
 .btn-outline-critical {
-  color: $color-red-80;
-  background-color: transparent;
+  color: $color-red-80 !important;
+  background-color: transparent !important;
 }
 .btn-critical:active,
-.btn-critical:hover {
-  color: $color-red-80;
-  background-color: $color-red-10;
+.btn-critical:hover,
+.btn-outline-critical:hover,
+.btn-outline-critical:active {
+  background-color: $color-red-10 !important;
 }
-.btn-info:active,
-.btn-info:hover {
-  background-color: #025d87;
+.btn-critical:hover,
+.btn-outline-critical:hover {
+  color: $color-red-80 !important;
+}
+.btn-critical:active,
+.btn-ouline-critical:active {
+  color: $color-red-100 !important;
+  border-color: $color-red-100 !important;
 }
 .btn-ghost,
 .btn-outline-ghost {

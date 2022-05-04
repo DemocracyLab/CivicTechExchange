@@ -85,7 +85,7 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
     if (this.state.isOwner) {
       const editUrl: string = url.section(Section.CreateGroup, id);
       buttons = buttons.concat([
-        <Button className="MyProjectCard-button" href={editUrl} variant="info">
+        <Button className="MyProjectCard-button" href={editUrl} variant="secondary">
           Edit
         </Button>,
         <Button
