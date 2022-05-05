@@ -48,9 +48,14 @@ button:focus,
 }
 .btn-primary:active,
 .btn-primary:hover {
-  background-color: $color-brand-60 !important;
   border-color: $color-brand-60 !important;
   color: $color-neutral-100 !important;
+}
+.btn-primary:hover {
+  background-color: $color-brand-60 !important;
+}
+.btn-primary:active {
+  background-color: $color-brand-45 !important;
 }
 .btn.btn-secondary {
   color: $color-neutral-90;
