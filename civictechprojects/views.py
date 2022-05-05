@@ -382,19 +382,26 @@ def get_project(request, project_id):
 
 
 def approve_project(request, project_id):
-    project = Project.objects.get(id=project_id)
+    project = Project.objects.filter(id=project_id).first()
+    if project is None:
+        # Restore deleted project
+        project = Project.archives.filter(id=project_id).first()
     user = get_request_contributor(request)
 
     if project is not None:
         if user.is_staff:
+            restored_from_archive = project.deleted
+            message = 'Project Approved' if not restored_from_archive else 'Project Restored from Archive'
             project.is_searchable = True
+            project.deleted = False
             project.save()
             project.recache(recache_linked=True)
             ProjectSearchTagsCache.refresh()
             project.project_creator.purge_cache()
             SitemapPages.update()
-            notify_project_owners_project_approved(project)
-            messages.success(request, 'Project Approved')
+            if not restored_from_archive:
+                notify_project_owners_project_approved(project)
+            messages.success(request, message)
             return redirect(section_url(FrontEndSection.AboutProject, {'id': project_id}))
         else:
             return HttpResponseForbidden()
