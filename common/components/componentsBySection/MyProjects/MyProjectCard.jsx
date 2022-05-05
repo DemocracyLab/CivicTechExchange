@@ -107,7 +107,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
         <Button
           key={"delete" + id}
           className="MyProjectCard-button"
-          variant="critical"
+          variant="destructive"
           onClick={() => this.props.onProjectClickDelete(this.props.project)}
         >
           Delete
@@ -128,7 +128,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
         <Button
           key={"conclude" + id}
           className="MyProjectCard-button"
-          variant="critical"
+          variant="destructive"
           onClick={() => this.props.onProjectClickConclude(this.props.project)}
         >
           Conclude

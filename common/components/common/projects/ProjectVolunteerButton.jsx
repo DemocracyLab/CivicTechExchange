@@ -156,7 +156,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       <Button
         className="AboutProject-button"
         type="button"
-        variant="critical"
+        variant="destructive"
         onClick={this.handleShowLeaveModal}
       >
         Leave Project

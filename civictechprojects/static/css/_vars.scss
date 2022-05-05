@@ -30,7 +30,7 @@ $color-neutral-15: #f6f7f8;
 $color-neutral-20: #f5f6f6;
 $color-neutral-25: #f2f2f2;
 $color-neutral-30: #eaeef0;
-$color-neutral-45: #8c8c8c; // rgba(25,25,25,0.5) to rgb; may not be correct, waiting for design response 04/2022
+$color-neutral-45: #191919; // specifically for modal backdrop only, never use without opacity 0.5!
 
 // border
 $color-neutral-35: #d4d4d4;
@@ -61,7 +61,7 @@ $color-orange-20: #f6e1d2; //rgba(211, 104, 32, 0.2) to rgb
 $color-orange-80: #d36820; // see design system notes on when to use this
 $color-orange-100: #b0571b; // see design system notes on when to use this
 
-//critical-error
+//critical
 $color-red-10: #fdf0f0;
 $color-red-20: #f9cece; // rgba(227,12,12,0.2) to rgb
 $color-red-50: #e30c0c;

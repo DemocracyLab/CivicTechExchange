@@ -74,27 +74,27 @@ button:disabled,
 .btn-success:hover {
   background-color: $color-green-100 !important;
 }
-.btn-critical {
+.btn-destructive {
   color: $color-red-80;
   border-color: $color-red-80;
   background-color: $color-background-light;
 }
-.btn-outline-critical {
+.btn-outline-destructive {
   color: $color-red-80 !important;
   background-color: transparent !important;
 }
-.btn-critical:active,
-.btn-critical:hover,
-.btn-outline-critical:hover,
-.btn-outline-critical:active {
+.btn-destructive:active,
+.btn-destructive:hover,
+.btn-outline-destructive:hover,
+.btn-outline-destructive:active {
   background-color: $color-red-10 !important;
 }
-.btn-critical:hover,
-.btn-outline-critical:hover {
+.btn-destructive:hover,
+.btn-outline-destructive:hover {
   color: $color-red-80 !important;
 }
-.btn-critical:active,
-.btn-ouline-critical:active {
+.btn-destructive:active,
+.btn-ouline-destructive:active {
   color: $color-red-100 !important;
   border-color: $color-red-100 !important;
 }
