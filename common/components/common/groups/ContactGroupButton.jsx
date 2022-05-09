@@ -135,7 +135,7 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
         title={this.state.buttonTitle}
         href={url.logInThenReturn()}
       >
-        Sign in to Contact Group
+        Contact Group
       </Button>
     );
   }

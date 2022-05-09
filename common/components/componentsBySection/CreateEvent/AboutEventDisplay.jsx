@@ -447,7 +447,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         this.props.event.event_conference_url;
       buttonConfig.target = "_blank";
     } else {
-      text = "Log In to Join Event";
+      text = "Join Event";
       buttonConfig.href = urlHelper.logInThenReturn();
     }
 

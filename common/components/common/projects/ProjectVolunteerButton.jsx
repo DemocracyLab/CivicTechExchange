@@ -185,7 +185,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
         title={this.state.buttonTitle}
         href={url.logInThenReturn()}
       >
-        Sign in to Volunteer
+        Volunteer
       </Button>
     );
   }
