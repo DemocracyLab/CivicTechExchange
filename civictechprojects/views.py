@@ -804,7 +804,6 @@ def renew_volunteering_with_project(request, application_id):
     volunteer_relation.re_enroll_reminder_count = 0
     volunteer_relation.re_enroll_last_reminder_date = None
     volunteer_relation.save()
-    salesforce_volunteer.renew(volunteer_relation)
     volunteer_relation.volunteer.purge_cache()
 
     notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
