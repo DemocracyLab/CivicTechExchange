@@ -492,14 +492,14 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           url: project.conferenceUrl,
           target: "_blank",
           count: project.conferenceCt,
-          buttonVariant: "success"
+          buttonVariant: "success",
         };
       } else {
         return {
           name: "Review Project Details",
           url: project.cardUrl,
           count: project.conferenceCt,
-          buttonVariant: "outline-secondary"
+          buttonVariant: "outline-secondary",
         };
       }
     } else {
@@ -530,7 +530,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         searchSettings: {
           updateUrl: false,
           defaultSort: "project_name",
-          cardOperationGenerator: this._cardOperationGenerator.bind(this),
+          cardOperationGenerator:
+            !this.state.isPastEvent && this._cardOperationGenerator.bind(this),
         },
       });
     }

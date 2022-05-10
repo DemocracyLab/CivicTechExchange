@@ -21,6 +21,8 @@ from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAle
     EventConferenceRoomParticipant
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
+from .helpers.search.groups import groups_list
+from .helpers.search.projects import projects_list, recent_projects_list
 from common.caching.cache import Cache
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.db import unique_column_values
@@ -48,18 +50,6 @@ from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 import requests
 
 
-def get_tag_counts(category=None, event=None, group=None):
-    queryset = get_tags_by_category(category) if category is not None else Tag.objects.all()
-    activetagdict = ProjectSearchTagsCache.get(event=event, group=group)
-    querydict = {tag.tag_name: tag for tag in queryset}
-    resultdict = {}
-
-    for slug in querydict.keys():
-        resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
-        resultdict[slug]['num_times'] = activetagdict[slug] if slug in activetagdict else 0
-    return list(resultdict.values())
-
-
 def tags(request):
     url_parts = request.GET.urlencode()
     query_terms = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
@@ -83,24 +73,6 @@ def group_tags_counts(request):
         issue_tags[issue_tag]['num_times'] = group_issues_counts[issue_tag]
     return JsonResponse(list(issue_tags.values()), safe=False)
 
-
-def to_rows(items, width):
-    rows = [[]]
-    row_number = 0
-    column_number = 0
-    for item in items:
-        rows[row_number].append(item)
-        column_number += 1
-        if column_number >= width:
-            column_number = 0
-            rows.append([])
-            row_number += 1
-    return rows
-
-
-def to_tag_map(tags):
-    tag_map = ((tag.tag_name, tag.display_name) for tag in tags)
-    return list(tag_map)
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
@@ -410,19 +382,26 @@ def get_project(request, project_id):
 
 
 def approve_project(request, project_id):
-    project = Project.objects.get(id=project_id)
+    project = Project.objects.filter(id=project_id).first()
+    if project is None:
+        # Restore deleted project
+        project = Project.archives.filter(id=project_id).first()
     user = get_request_contributor(request)
 
     if project is not None:
         if user.is_staff:
+            restored_from_archive = project.deleted
+            message = 'Project Approved' if not restored_from_archive else 'Project Restored from Archive'
             project.is_searchable = True
+            project.deleted = False
             project.save()
             project.recache(recache_linked=True)
             ProjectSearchTagsCache.refresh()
             project.project_creator.purge_cache()
             SitemapPages.update()
-            notify_project_owners_project_approved(project)
-            messages.success(request, 'Project Approved')
+            if not restored_from_archive:
+                notify_project_owners_project_approved(project)
+            messages.success(request, message)
             return redirect(section_url(FrontEndSection.AboutProject, {'id': project_id}))
         else:
             return HttpResponseForbidden()
@@ -567,79 +546,15 @@ def add_alert(request):
     return HttpResponse(status=200)
 
 
-def projects_list(request):
-    url_parts = request.GET.urlencode()
-    query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
-    event = None
-    group = None
-
-    if 'group_id' in query_params:
-        group_id = query_params['group_id'][0]
-        group = Group.objects.get(id=group_id)
-        project_list = group.get_group_projects(approved_only=True)
-    elif 'event_id' in query_params:
-        event_id = query_params['event_id'][0]
-        event = Event.get_by_id_or_slug(event_id)
-        project_list = event.get_linked_projects()
-    else:
-        project_list = Project.objects.filter(is_searchable=True)
-
-    project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
-    project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
-    project_list = apply_tag_filters(project_list, query_params, 'role', projects_by_roles)
-    project_list = apply_tag_filters(project_list, query_params, 'org', projects_by_orgs)
-    project_list = apply_tag_filters(project_list, query_params, 'orgType', projects_by_org_types)
-    project_list = apply_tag_filters(project_list, query_params, 'stage', projects_by_stage)
-
-    if 'favoritesOnly' in query_params:
-        user = get_request_contributor(request)
-        project_list = project_list & ProjectFavorite.get_for_user(user)
-
-    if 'keyword' in query_params:
-        project_list = project_list & projects_by_keyword(query_params['keyword'][0])
-
-    if 'locationRadius' in query_params:
-        project_list = projects_by_location(project_list, query_params['locationRadius'][0])
-
-    if 'location' in query_params:
-        project_list = projects_by_legacy_city(project_list, query_params['location'][0])
-
-    project_list = project_list.distinct()
-
-    if 'sortField' in query_params:
-        project_list = projects_by_sortField(project_list, query_params['sortField'][0])
-    else:
-        project_list = projects_by_sortField(project_list, '-project_date_modified')
-
-    project_count = len(project_list)
-
-    project_paginator = Paginator(project_list, settings.PROJECTS_PER_PAGE)
-
-    if 'page' in query_params:
-        project_list_page = project_paginator.page(query_params['page'][0])
-        project_pages = project_paginator.num_pages
-    else:
-        project_list_page = project_list
-        project_pages = 1
-
-    tag_counts = get_tag_counts(category=None, event=event, group=group)
-    response = projects_with_meta_data(get_request_contributor(request), query_params, project_list_page, project_pages, project_count, tag_counts)
-
+def project_search(request):
+    response = projects_list(request)
     return JsonResponse(response)
 
 
-def recent_projects_list(request):
+def recent_projects(request):
     if request.method == 'GET':
-        url_parts = request.GET.urlencode()
-        query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
-        project_count = int(query_params['count'][0]) if 'count' in query_params else 3
-        project_list = Project.objects.filter(is_searchable=True)
-        # Filter out the DemocracyLab project
-        if settings.DLAB_PROJECT_ID.isdigit():
-            project_list = project_list.exclude(id=int(settings.DLAB_PROJECT_ID))
-        project_list = projects_by_sortField(project_list, '-project_date_modified')[:project_count]
-        hydrated_project_list = list(project.hydrate_to_tile_json() for project in project_list)
-        return JsonResponse({'projects': hydrated_project_list})
+        projects_list = recent_projects_list(request)
+        return JsonResponse({'projects': projects_list})
 
 
 def limited_listings(request):
@@ -682,160 +597,9 @@ def limited_listings(request):
     return HttpResponse(xml_response, content_type="application/xml")
 
 
-def apply_tag_filters(project_list, query_params, param_name, tag_filter):
-    if param_name in query_params:
-        tag_dict = get_tag_dictionary()
-        tags_to_filter_by = query_params[param_name][0].split(',')
-        tags_to_filter_by = clean_nonexistent_tags(tags_to_filter_by, tag_dict)
-        if len(tags_to_filter_by):
-            project_list = project_list & tag_filter(tags_to_filter_by)
-
-    return project_list
-
-
-def clean_nonexistent_tags(tags, tag_dict):
-    return list(filter(lambda tag: tag in tag_dict, tags))
-
-
-def projects_by_keyword(keyword):
-    return Project.objects.filter(full_text__icontains=keyword)
-
-
-# TODO: Rename to something generic
-def projects_by_sortField(project_list, sortField):
-    return project_list.order_by(sortField)
-
-
-def projects_by_location(project_list, param):
-    param_parts = param.split(',')
-    location = Point(float(param_parts[1]), float(param_parts[0]))
-    radius = float(param_parts[2])
-    project_list = project_list.filter(project_location_coords__distance_lte=(location, D(mi=radius)))
-    return project_list
-
-
-def projects_by_legacy_city(project_list, param):
-    param_parts = param.split(', ')
-    if len(param_parts) > 1:
-        project_list = project_list.filter(project_city=param_parts[0], project_state=param_parts[1])
-    return project_list
-
-
-def projects_by_issue_areas(tags):
-    return Project.objects.filter(project_issue_area__name__in=tags)
-
-
-def projects_by_technologies(tags):
-    return Project.objects.filter(project_technologies__name__in=tags)
-
-
-def projects_by_orgs(tags):
-    return Project.objects.filter(project_organization__name__in=tags)
-
-
-def projects_by_org_types(tags):
-    return Project.objects.filter(project_organization_type__name__in=tags)
-
-
-def projects_by_stage(tags):
-    return Project.objects.filter(project_stage__name__in=tags)
-
-
-def projects_by_roles(tags):
-    # Get roles by tags
-    positions = ProjectPosition.objects.filter(position_role__name__in=tags)\
-        .exclude(position_event__isnull=False).select_related('position_project')
-
-    # Get the list of projects linked to those roles
-    return Project.objects.filter(positions__in=positions)
-
-
-def project_countries():
-    return unique_column_values(Project, 'project_country', lambda country: country and len(country) == 2)
-
-
-def projects_with_meta_data(user: Contributor, query_params, projects, project_pages, project_count, tag_counts):
-    projects_json = apply_project_annotations(user, query_params, [project.hydrate_to_tile_json() for project in projects])
-    return {
-        'projects': projects_json,
-        'availableCountries': project_countries(),
-        'tags': tag_counts,
-        'numPages': project_pages,
-        'numProjects': project_count
-    }
-
-
-# TODO: Move group search code into new file
-def groups_list(request):
-    url_parts = request.GET.urlencode()
-    query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
-    group_list = Group.objects.filter(is_searchable=True)
-
-    if request.method == 'GET':
-        group_list = group_list & apply_tag_filters(group_list, query_params, 'issues', groups_by_issue_areas)
-        if 'keyword' in query_params:
-            group_list = group_list & groups_by_keyword(query_params['keyword'][0])
-
-        if 'locationRadius' in query_params:
-            group_list = groups_by_location(group_list, query_params['locationRadius'][0])
-
-        group_list = group_list.distinct()
-
-        if 'sortField' in query_params:
-            group_list = projects_by_sortField(group_list, query_params['sortField'][0])
-        else:
-            group_list = projects_by_sortField(group_list, 'group_name')
-
-        group_count = len(group_list)
-
-        group_paginator = Paginator(group_list, settings.PROJECTS_PER_PAGE)
-
-        if 'page' in query_params:
-            group_list_page = group_paginator.page(query_params['page'][0])
-            group_pages = group_paginator.num_pages
-        else:
-            group_list_page = group_list
-            group_pages = 1
-
-        response = groups_with_meta_data(group_list_page, group_pages, group_count)
-
-        return JsonResponse(response)
-
-
-def groups_by_keyword(keyword):
-    return Group.objects.filter(Q(group_name__icontains=keyword)
-                                | Q(group_short_description__icontains=keyword)
-                                | Q(group_description__icontains=keyword))
-
-
-def groups_by_location(group_list, param):
-    param_parts = param.split(',')
-    location = Point(float(param_parts[1]), float(param_parts[0]))
-    radius = float(param_parts[2])
-    group_list = group_list.filter(group_location_coords__distance_lte=(location, D(mi=radius)))
-    return group_list
-
-
-def groups_by_issue_areas(issues):
-    group_relationships = ProjectRelationship.objects.exclude(relationship_group=None)\
-        .filter(relationship_project__project_issue_area__name__in=issues)
-    relationship_ids = list(map(lambda pr: pr.relationship_group.id, group_relationships))
-
-    return Group.objects.filter(id__in=relationship_ids)
-
-
-def groups_with_meta_data(groups, group_pages, group_count):
-    return {
-        'groups': [group.hydrate_to_tile_json() for group in groups],
-        'availableCountries': group_countries(),
-        'tags': list(Tag.objects.filter(category=TagCategory.ISSUE_ADDRESSED.value).values()),
-        'numPages': group_pages,
-        'numGroups': group_count
-    }
-
-
-def group_countries():
-    return unique_column_values(Group, 'group_country', lambda country: country and len(country) == 2)
+def group_search(request):
+    response = groups_list(request)
+    return JsonResponse(response)
 
 
 def events_list(request):
