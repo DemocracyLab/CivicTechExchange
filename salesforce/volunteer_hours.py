@@ -27,14 +27,7 @@ def send_volunteer_data(volunteer_id, data):
 
 
 def create(volunteer):
-    status = 'Web Sign Up'
-    if volunteer.projected_end_date.date() < datetime.date.today():
-        status = 'Completed'
-    else:
-        if volunteer.re_enrolled_last_date is not None:
-            status = 'Renewed'
-        elif volunteer.approved_date is not None:
-            status = 'Accepted'
+    status = 'Completed' if volunteer.projected_end_date.date() < datetime.date.today() else 'Confirmed'
 
     data = {
         "GW_Volunteers__Contact__r":
@@ -45,24 +38,8 @@ def create(volunteer):
         {
             "platform_id__c": volunteer.salesforce_job_id()
         },
-        "GW_Volunteers__Status__c": "Confirmed",
+        "GW_Volunteers__Status__c": status,
         "GW_Volunteers__Start_Date__c": (volunteer.approved_date or volunteer.application_date).strftime("%Y-%m-%d"),
-        "GW_Volunteers__End_Date__c": volunteer.projected_end_date.strftime("%Y-%m-%d")
-    }
-    send_volunteer_data(volunteer.id, data)
-
-
-def renew(volunteer):
-    data = {
-        "GW_Volunteers__Contact__r":
-        {
-            "platform_id__c": volunteer.volunteer_id
-        },
-        "GW_Volunteers__Volunteer_Job__r":
-        {
-            "platform_id__c": volunteer.salesforce_job_id()
-        },
-        "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime("%Y-%m-%d"),
         "GW_Volunteers__End_Date__c": volunteer.projected_end_date.strftime("%Y-%m-%d")
     }
     send_volunteer_data(volunteer.id, data)
@@ -79,7 +56,8 @@ def conclude(volunteer):
             "platform_id__c": volunteer.salesforce_job_id()
         },
         "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime("%Y-%m-%d"),
-        "GW_Volunteers__Status__c": "Completed"
+        "GW_Volunteers__Status__c": "Completed",
+        "GW_Volunteers__Hours_Worked__c": 0
     }
     send_volunteer_data(volunteer.id, data)
 
@@ -96,7 +74,7 @@ def dismiss(volunteer):
         },
         "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime("%Y-%m-%d"),
         "GW_Volunteers__End_Date__c": datetime.date.today().strftime("%Y-%m-%d"),
-        "GW_Volunteers__Status__c": "Canceled"
+        "GW_Volunteers__Status__c": "Rejected"
     }
     send_volunteer_data(volunteer.id, data)
 
