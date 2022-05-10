@@ -1,8 +1,5 @@
 .MyProjectCard-root {
   color: inherit;
-  .btn-info, .btn-info:visited {
-    color: #fff; //temporary quickfix to inherit issues
-  }
   background-color: $color-background-light;
   border: solid 1px $color-grey-frame-border;
   margin: 20px auto;

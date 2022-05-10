@@ -70,7 +70,7 @@ class VolunteerCard extends React.PureComponent<Props> {
   _renderShowApplicationMenu(): ?React$Node {
     return this.props.volunteer ? (
       <DropdownButton
-        variant="light"
+        variant="secondary"
         className="VolunteerCard-dropdownButton"
         size="lg"
         title={

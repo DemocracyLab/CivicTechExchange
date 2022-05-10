@@ -84,7 +84,7 @@ class AddSignUpDetails extends React.Component<{||}, State> {
             />
 
             <Button
-            variant="login"
+            variant="success"
               className="LogInController-signInButton"
               disabled={!this.state.isValid}
               type="submit"
