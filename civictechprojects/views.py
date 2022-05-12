@@ -23,7 +23,7 @@ from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from .helpers.search.groups import groups_list
 from .helpers.search.projects import projects_list, recent_projects_list
-from salesforce import volunteer_hours as salesforce_volunteer
+from salesforce import volunteer_hours as salesforce_volunteer, contact as salesforce_contact
 from common.caching.cache import Cache
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.db import unique_column_values
@@ -780,6 +780,7 @@ def volunteer_with_project(request, project_id):
         projected_end_date=projected_end_date,
         role=role,
         application_text=message)
+    volunteer_relation.save_to_salesforce('create')
     send_volunteer_application_email(volunteer_relation)
     project.recache()
     user.purge_cache()
@@ -854,7 +855,7 @@ def accept_project_volunteer(request, application_id):
         volunteer_relation.is_approved = True
         volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
-        volunteer_relation.save_to_salesforce()
+        volunteer_relation.save_to_salesforce('accept')
         volunteer_relation.volunteer.purge_cache()
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.project.recache()
@@ -910,6 +911,7 @@ def reject_project_volunteer(request, application_id):
         volunteer_relation.delete()
         project.recache()
         user.purge_cache()
+        salesforce_volunteer.delete(application_id)
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -964,6 +966,7 @@ def demote_project_volunteer(request, application_id):
                                template=email_template)
         volunteer_relation.project.recache()
         volunteer_relation.volunteer.purge_cache()
+        salesforce_contact.set_title(volunteer_relation.volunteer_id, 'Project Volunteer')
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()

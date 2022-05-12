@@ -1285,8 +1285,19 @@ class VolunteerRelation(Archived):
         return self.is_approved and (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
 
 
-    def save_to_salesforce(self):
-        salesforce_volunteer.create(self)
+    def save_to_salesforce(self, action):
+        if action == 'create':
+            salesforce_volunteer.create(self)
+        elif action == 'accept':
+            salesforce_volunteer.accept(self)
+        elif action == 'renew':
+            salesforce_volunteer.renew(self)
+        elif action == 'complete':
+            salesforce_volunteer.complete(self)
+        elif action == 'dismiss':
+            salesforce_volunteer.dismiss(self)
+        elif action == 'delete':
+            salesforce_volunteer.delete(self.id)
 
     def salesforce_job_id(self):
         role = Tag.tags_field_descriptions(self.role)

@@ -27,8 +27,6 @@ def send_volunteer_data(volunteer_id, data):
 
 
 def create(volunteer):
-    status = 'Completed' if volunteer.projected_end_date.date() < datetime.date.today() else 'Confirmed'
-
     data = {
         "GW_Volunteers__Contact__r":
         {
@@ -38,9 +36,42 @@ def create(volunteer):
         {
             "platform_id__c": volunteer.salesforce_job_id()
         },
-        "GW_Volunteers__Status__c": status,
+        "GW_Volunteers__Status__c": 'Application Received',
+        "GW_Volunteers__Start_Date__c": volunteer.application_date.strftime("%Y-%m-%d"),
+        "GW_Volunteers__End_Date__c": volunteer.projected_end_date
+    }
+    send_volunteer_data(volunteer.id, data)
+
+
+def accept(volunteer):
+    data = {
+        "GW_Volunteers__Contact__r":
+        {
+            "platform_id__c": volunteer.volunteer_id
+        },
+        "GW_Volunteers__Volunteer_Job__r":
+        {
+            "platform_id__c": volunteer.salesforce_job_id()
+        },
+        "GW_Volunteers__Status__c": 'Accepted',
+        "GW_Volunteers__Start_Date__c": (volunteer.approved_date or volunteer.application_date).strftime("%Y-%m-%d")
+    }
+    send_volunteer_data(volunteer.id, data)
+
+
+def renew(volunteer):
+    data = {
+        "GW_Volunteers__Contact__r":
+        {
+            "platform_id__c": volunteer.volunteer_id
+        },
+        "GW_Volunteers__Volunteer_Job__r":
+        {
+            "platform_id__c": volunteer.salesforce_job_id()
+        },
+        "GW_Volunteers__Status__c": 'Renewed',
         "GW_Volunteers__Start_Date__c": (volunteer.approved_date or volunteer.application_date).strftime("%Y-%m-%d"),
-        "GW_Volunteers__End_Date__c": volunteer.projected_end_date.strftime("%Y-%m-%d")
+        "GW_Volunteers__End_Date__c": volunteer.projected_end_date
     }
     send_volunteer_data(volunteer.id, data)
 
