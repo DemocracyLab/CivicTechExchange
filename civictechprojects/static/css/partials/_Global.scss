@@ -69,12 +69,6 @@ button:focus,
   background-color: $color-neutral-20 !important;
   color: $color-neutral-90 !important;
 }
-button:disabled,
-.btn:disabled {
-  background-color: $color-neutral-25;
-  border-color: $color-neutral-35;
-  color: $color-text-disabled;
-}
 .btn-success:active,
 .btn-success:hover {
   background-color: $color-green-100 !important;
@@ -122,12 +116,18 @@ button:disabled,
 .btn-outline-ghost:active {
   color: $color-neutral-100;
 }
+button:disabled,
+.btn:disabled {
+  background-color: $color-neutral-25 !important;
+  border-color: $color-neutral-35 !important;
+  color: $color-text-disabled !important;
+}
 
 //Global override of disabled state input elements
 input[type="submit"]:disabled {
-  background-color: $color-neutral-25;
-  border-color: $color-neutral-35;
-  color: $color-text-disabled;
+  background-color: $color-neutral-25 !important;
+  border-color: $color-neutral-35 !important;
+  color: $color-text-disabled !important;
 }
 
 //class-based toggle of background color
