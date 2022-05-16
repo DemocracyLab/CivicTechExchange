@@ -1,7 +1,6 @@
 // @flow
-// font awesome brands package instlled link packages/imports to icons
 
-export const GlyphStyles: { [key: string]: string } = {
+export const GlyphStyles: {[key: string]: string } = {
   Close: "fas fa-times", // https://fontawesome.com/icons/times?style=solid
   Delete: "far fa-trash-alt", // https://fontawesome.com/icons/trash-alt?style=regular
   Edit: "far fa-edit", // https://fontawesome.com/icons/edit?style=regular

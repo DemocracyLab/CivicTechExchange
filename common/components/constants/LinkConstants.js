@@ -4,6 +4,7 @@ import GlyphStyles from "../utils/glyphs.js";
 import type { Dictionary, KeyValuePair } from "../types/Generics.jsx";
 import _ from "lodash";
 
+
 export type LinkSourceDisplayConfig = {|
   +sourceUrlPattern: ?RegExp,
   +sourceDisplayName: ?string,
