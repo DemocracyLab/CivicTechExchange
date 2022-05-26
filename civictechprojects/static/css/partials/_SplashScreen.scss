@@ -11,7 +11,7 @@
 
 .SplashScreen-fill {
   min-height: calc(
-    100vh - #{$header-height} - #{$footer-height}
+    100vh - 100px
   ); /* use min-height to fix wide but short viewports */
 }
 
