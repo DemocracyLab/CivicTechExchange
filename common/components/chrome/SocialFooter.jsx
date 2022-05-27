@@ -38,7 +38,7 @@ class SocialFooter extends React.Component {
           <a href="https://www.linkedin.com/company/democracylab">
             <i className={Glyph(GlyphStyles.LinkedIn, GlyphSizes.X3)}></i>
           </a>
-        </div>
+          </div>
       </div>
     );
   }
