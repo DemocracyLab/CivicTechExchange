@@ -1,9 +1,10 @@
 // @flow
 
-export const GlyphStyles: { [key: string]: string } = {
+export const GlyphStyles: {[key: string]: string } = {
   Close: "fas fa-times", // https://fontawesome.com/icons/times?style=solid
   Delete: "far fa-trash-alt", // https://fontawesome.com/icons/trash-alt?style=regular
   Edit: "far fa-edit", // https://fontawesome.com/icons/edit?style=regular
+  Figma: "fab fa-figma", //https://fontawesome.com/icons/figma?s=brands
   Add: "fas fa-plus", // https://fontawesome.com/icons/plus?style=solid
   MapMarker: "fas fa-map-marker-alt", //https://fontawesome.com/icons/map-marker-alt?style=solid
   Globe: "fas fa-globe-americas", // https://fontawesome.com/icons/globe-americas?style=solid

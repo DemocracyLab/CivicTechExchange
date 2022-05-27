@@ -5,6 +5,7 @@ import type { Dictionary, KeyValuePair } from "../types/Generics.jsx";
 import _ from "lodash";
 import stringHelper from "../utils/string.js";
 
+
 export type LinkSourceDisplayConfig = {|
   +sourceUrlPattern: ?RegExp,
   +sourceDisplayName: ?string,
@@ -27,6 +28,11 @@ export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConf
     sourceUrlPattern: new RegExp("slack.com", "i"),
     sourceDisplayName: "Slack",
     iconClass: GlyphStyles.Slack,
+  },
+  {
+    sourceUrlPattern: new RegExp("figma.com", "i"),
+    sourceDisplayName: "Figma",
+    iconClass: GlyphStyles.Figma,
   },
   {
     sourceUrlPattern: new RegExp("trello.com", "i"),
