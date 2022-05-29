@@ -27,14 +27,11 @@
   margin: 1rem auto;
   max-width: 280px;
 }
+.AboutEvent-join-btn:visited a {// exclusion of event join from visited rule
+  color:color-text-light;
+}
 .AboutEvent-edit-btn {
   float: right;
-}
-.AboutEvent-rsvp-btn,
-.AboutEvent-join-btn {
-  display: block;
-  margin: 1rem auto;
-  max-width: 280px;
 }
 .AboutEvent-details h3 {
   margin-top: 2rem; /* acts as section spacing */
