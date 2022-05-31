@@ -73,3 +73,10 @@ $headings-line-height: 1.5; // override the 1.2 default because it seems impervi
 // see _reboot.scss, ~line 182, for implementation
 $link-color: $color-link;
 $link-hover-color: $color-link-hover;
+
+// Button rules (design system buttons, added May 2022)
+//size rules should result in padding + border + line-height = 40px; for a 'borderless' button just set border color to match background
+
+$btn-padding-y: 0.4375rem; // 7px
+$btn-padding-x: 1rem; // 16px;
+$btn-border-radius: 0.25rem; // 4px

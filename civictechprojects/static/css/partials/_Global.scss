@@ -29,49 +29,28 @@ a[type="button"].btn-footer:active {
 //DemocracyLab button styles (overwrite/extend Bootstrap button rules)
 // in general all buttons have a border, but some use the same color as the button to visually have none
 // padding instead of selecting a specific height is for vertical align, but this could stand a rework later
-// Bootstrap specificity is things like .btn-variantname:not(:disabled):not(.disabled):active, hence !important to bypass it
+// declares base classes first, then conditional active/hovers to manage .btn:not(disabled):not(.disabled) specificity
 
 button,
 .btn {
-  padding: 0.4375rem 1rem; // 7px 16px; padding + border + line-height = 40px height button. for borderless buttons just set border color to background color.
   font-weight: 500;
-  border-radius: 4px;
 }
+
+// "focus ring" outline. by default Bootstrap uses customizable box shadow, and we may want to investigate that further, date TBD -- May 25, 2022
 button:focus,
 .btn:focus {
   outline: 3px solid $color-blue-50;
   outline-offset: 1px;
 }
+// default button display rules, overriding the $theme-colors generated bases as needed
 .btn-primary {
   color: $color-neutral-100;
   border-color: $color-brand-70;
-}
-.btn-primary:active,
-.btn-primary:hover {
-  border-color: $color-brand-60 !important;
-  color: $color-neutral-100 !important;
-}
-.btn-primary:hover {
-  background-color: $color-brand-60 !important;
-}
-.btn-primary:active {
-  background-color: $color-brand-45 !important;
 }
 .btn.btn-secondary {
   color: $color-neutral-90;
   border-color: $color-neutral-75;
   background-color: $color-neutral-10;
-}
-.btn-secondary:active,
-.btn-secondary:hover,
-.btn-outline-secondary:active,
-.btn-outline-secondary:hover {
-  background-color: $color-neutral-20 !important;
-  color: $color-neutral-90 !important;
-}
-.btn-success:active,
-.btn-success:hover {
-  background-color: $color-green-100 !important;
 }
 .btn-destructive {
   color: $color-red-80;
@@ -79,24 +58,10 @@ button:focus,
   background-color: $color-background-light;
 }
 .btn-outline-destructive {
-  color: $color-red-80 !important;
-  background-color: transparent !important;
+  color: $color-red-80;
+  background-color: transparent;
 }
-.btn-destructive:active,
-.btn-destructive:hover,
-.btn-outline-destructive:hover,
-.btn-outline-destructive:active {
-  background-color: $color-red-10 !important;
-}
-.btn-destructive:hover,
-.btn-outline-destructive:hover {
-  color: $color-red-80 !important;
-}
-.btn-destructive:active,
-.btn-ouline-destructive:active {
-  color: $color-red-100 !important;
-  border-color: $color-red-100 !important;
-}
+
 .btn-ghost,
 .btn-outline-ghost {
   color: $color-neutral-75;
@@ -105,17 +70,60 @@ button:focus,
   border-color: transparent;
   background-color: transparent;
 }
-.btn-ghost:active,
-.btn-ghost:hover,
-.btn-outline-ghost:hover,
-.btn-outline-ghost:active {
-  border-color: $color-neutral-20;
-  background-color: $color-neutral-20;
+
+//hover, active state rules must also meet the conditional of "not disabled," either psuedoselector or class
+.btn:not(:disabled):not(.disabled) {
+  &.btn-primary:active,
+  &.btn-primary:hover {
+    border-color: $color-brand-60;
+    color: $color-neutral-100;
+  }
+  &.btn-primary:hover {
+    background-color: $color-brand-60;
+  }
+  &.btn-primary:active {
+    background-color: $color-brand-45;
+  }
+  &.btn-secondary:active,
+  &.btn-secondary:hover,
+  &.btn-outline-secondary:active,
+  &.btn-outline-secondary:hover {
+    background-color: $color-neutral-20;
+    color: $color-neutral-90;
+  }
+  &.btn-success:active,
+  &.btn-success:hover {
+    background-color: $color-green-100;
+  }
+  &.btn-destructive:active,
+  &.btn-destructive:hover,
+  &.btn-outline-destructive:hover,
+  &.btn-outline-destructive:active {
+    background-color: $color-red-10;
+  }
+  &.btn-destructive:hover,
+  &.btn-outline-destructive:hover {
+    color: $color-red-80;
+  }
+  &.btn-destructive:active,
+  &.btn-ouline-destructive:active {
+    color: $color-red-100;
+    border-color: $color-red-100;
+  }
+
+  &.btn-ghost:active,
+  &.btn-ghost:hover,
+  &.btn-outline-ghost:hover,
+  &.btn-outline-ghost:active {
+    border-color: $color-neutral-20;
+    background-color: $color-neutral-20;
+  }
+  &.btn-ghost:active,
+  &.btn-outline-ghost:active {
+    color: $color-neutral-100;
+  }
 }
-.btn-ghost:active,
-.btn-outline-ghost:active {
-  color: $color-neutral-100;
-}
+// unlike default bootstrap, we want all disabled buttons to look the same regardless of variant
 button:disabled,
 .btn:disabled {
   background-color: $color-neutral-25 !important;
