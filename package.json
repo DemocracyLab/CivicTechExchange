@@ -47,7 +47,7 @@
     "repeating": "2.0.0",
     "sass-loader": "^8.0.2",
     "sortablejs": "^1.13.0",
-    "validator": "^12.2.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
