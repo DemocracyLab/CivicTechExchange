@@ -1,5 +1,4 @@
-import datetime
-from civictechprojects.models import Project, ProjectPosition
+from civictechprojects.models import Project
 from common.models import Tag
 from .client import SalesforceClient
 import json
