@@ -30,9 +30,10 @@ def save(project_position):
             url=f'{client.job_endpoint}/platform_id__c/{platform_id__c}',
             data=json.dumps(data)
         )
-        thread = threading.Thread(target=run, args=(req,))
-        thread.daemon = True
-        thread.start()
+        response = SalesforceClient().send(req)
+        #thread = threading.Thread(target=run, args=(req,))
+        #thread.daemon = True
+        #thread.start()
 
 
 def delete(job_id):
