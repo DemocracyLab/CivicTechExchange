@@ -48,6 +48,7 @@ from common.helpers.user_helpers import get_my_projects, get_my_groups, get_my_e
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from salesforce import campaign as salesforce_campaign
 import requests
 
 
@@ -396,6 +397,7 @@ def approve_project(request, project_id):
             project.is_searchable = True
             project.deleted = False
             project.save()
+            salesforce_campaign.save(project)
             project.recache(recache_linked=True)
             ProjectSearchTagsCache.refresh()
             project.project_creator.purge_cache()
