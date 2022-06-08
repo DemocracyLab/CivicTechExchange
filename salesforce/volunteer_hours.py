@@ -12,7 +12,7 @@ client = SalesforceClient()
 
 
 def run(request):
-    response = SalesforceClient().send(request)
+    SalesforceClient().send(request)
 
 
 def send_volunteer_data(volunteer_id, data):
@@ -127,8 +127,6 @@ def import_hours():
     count = 0
     for volunteer in VolunteerRelation.objects.all():
         try:
-            count = count + 1
-            if count % 100 == 0: print(f'{count} volunteer relations')
             create(volunteer)
         except Exception:
             print(f'Error merging VolunteerRelation {volunteer.id} in Salesforce')

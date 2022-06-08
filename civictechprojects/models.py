@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.utils import timezone
 from django.contrib.gis.db.models import PointField
@@ -17,7 +16,6 @@ from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
-from salesforce import volunteer_hours as salesforce_volunteer
 from salesforce import volunteer_hours as salesforce_volunteer, volunteer_job as salesforce_job
 
 # Without the following classes, the following error occurs:
@@ -66,7 +64,7 @@ class Archived(models.Model):
     archives = ArchiveManager()
     deleted = models.BooleanField(default=False)
 
-    def delete(self):
+    def delete(self, **kwargs):
         self.deleted = True
         self.save()
 
@@ -105,7 +103,7 @@ class Project(Archived):
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
 
-    def delete(self):
+    def delete(self, **kwargs):
         self.is_searchable=False
         self.update_timestamp()
         super().delete()
@@ -283,7 +281,7 @@ class Group(Archived):
     def __str__(self):
         return str(self.id) + ':' + str(self.group_name)
 
-    def delete(self):
+    def delete(self, **kwargs):
         self.is_searchable = False
         super().delete()
 
@@ -422,7 +420,7 @@ class Event(Archived):
     def __str__(self):
         return str(self.id) + ':' + str(self.event_name)
 
-    def delete(self):
+    def delete(self, **kwargs):
         self.is_searchable=False
         super().delete()
 
@@ -598,7 +596,7 @@ class EventProject(Archived):
         return keys_subset(self.hydrate_to_json(), ['event_project_id', 'event_id', 'event_name', 'event_slug',
                                                     'project_id', 'project_name'])
 
-    def delete(self):
+    def delete(self, **kwargs):
         print('Deleting Event Project: {ep}'.format(ep=self.__str__()))
         for link in self.get_event_project_links():
             print('Deleting link: ' + link.__str__())
@@ -1024,7 +1022,7 @@ class ProjectPosition(models.Model):
         deleted_position_ids = list(existing_positions_ids - updated_positions_ids)
 
         for added_position in added_positions:
-            new_position = ProjectPosition.create_from_json(project, added_position)
+            new_position = ProjectPosition.create_from_json(owner, added_position)
             salesforce_job.save(new_position)
 
         for updated_position_json in updated_positions:
@@ -1033,7 +1031,6 @@ class ProjectPosition(models.Model):
 
         for deleted_position_id in deleted_position_ids:
             ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
-            salesforce_job.delete(ProjectPosition.objects.get(deleted_position_id).salesforce_job_id())
 
         return len(added_positions) > 0 or len(updated_positions) > 0 or len(deleted_position_ids) > 0
 
@@ -1293,7 +1290,7 @@ class VolunteerRelation(Archived):
         elif action == 'renew':
             salesforce_volunteer.renew(self)
         elif action == 'complete':
-            salesforce_volunteer.complete(self)
+            salesforce_volunteer.conclude(self)
         elif action == 'dismiss':
             salesforce_volunteer.dismiss(self)
         elif action == 'delete':
@@ -1338,7 +1335,7 @@ class RSVPVolunteerRelation(Archived):
     application_text = models.CharField(max_length=10000, blank=True)
     rsvp_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
 
-    def delete(self):
+    def delete(self, **kwargs):
         self.volunteer.purge_cache()
         super().delete()
 
@@ -1365,16 +1362,6 @@ class RSVPVolunteerRelation(Archived):
         volunteer_json = self.to_json()
         project_json = self.project.hydrate_to_list_json()
         return merge_dicts(project_json, volunteer_json)
-
-    @staticmethod
-    def create(event: Event, volunteer: Contributor):
-        relation = RSVPVolunteerRelation()
-        relation.event = event
-        relation.volunteer = volunteer
-        relation.save()
-
-        # relation.role.add(role)
-        return relation
 
     @staticmethod
     def create(event: Event, volunteer: Contributor):

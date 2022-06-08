@@ -999,6 +999,7 @@ def leave_project(request, project_id):
         update_project_timestamp(request, volunteer_relation.project)
         user = volunteer_relation.volunteer
         volunteer_relation.delete()
+        salesforce_volunteer.conclude(volunteer_relation)
         project = Project.objects.get(id=project_id)
         project.recache()
         user.purge_cache()
