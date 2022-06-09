@@ -3,12 +3,17 @@ from .client import SalesforceClient
 import json
 import requests
 import threading
-''' Contributor model maps to the Contact object in Salesforce '''
+''' 
+
+Contributor model maps to the Contact object in Salesforce 
+*** Created only in the verify_user method; Only save if email_verified ***
+
+'''
 client = SalesforceClient()
 
 
 def run(request):
-    response = SalesforceClient().send(request)
+    SalesforceClient().send(request)
 
 
 def save(contributor: object):

@@ -9,10 +9,14 @@ client = SalesforceClient()
 
 
 def run(request):
-    response = SalesforceClient().send(request)
+    SalesforceClient().send(request)
 
 
 def save(project_position):
+    from civictechprojects.models import ProjectPosition
+    if not ProjectPosition(project_position).position_project.is_searchable:
+        pass
+
     position_role = Tag.tags_field_descriptions(project_position.position_role)
     platform_id__c = f'{project_position.position_project.id}{position_role.lower().replace(" ", "")}'
     # Skip if the role tag is blank
@@ -30,7 +34,9 @@ def save(project_position):
             url=f'{client.job_endpoint}/platform_id__c/{platform_id__c}',
             data=json.dumps(data)
         )
-        response = SalesforceClient().send(req)
+        ''' Changed this to a synchronous call to avoid record locks (duplicate position names are possible) '''
+        SalesforceClient().send(req)
+
         #thread = threading.Thread(target=run, args=(req,))
         #thread.daemon = True
         #thread.start()

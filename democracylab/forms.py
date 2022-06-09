@@ -50,7 +50,8 @@ class DemocracyLabUserCreationForm(UserCreationForm):
             user.update_linked_items()
 
         SubscribeUserToQiqoChat(user)
-        salesforce_contact.save(user)
+        if user.email_verified:
+            salesforce_contact.save(user)
         return user
 
 

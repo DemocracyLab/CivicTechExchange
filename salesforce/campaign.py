@@ -4,15 +4,21 @@ from .client import SalesforceClient
 import json
 import requests
 import threading
-''' Project model maps to the Campaign object in Salesforce '''
+''' 
+
+Project model maps to the Campaign object in Salesforce 
+*** Created only in the approve_project method; Only save if is_searchable ***
+
+'''
 client = SalesforceClient()
 
 
 def run(request):
-    response = SalesforceClient().send(request)
+    SalesforceClient().send(request)
 
 
 def save(project: Project):
+    status = 'In Progress' if project.is_searchable else 'Completed'
     data = {
         "ownerid": client.owner_id,
         "Project_Owner__r":
@@ -22,6 +28,7 @@ def save(project: Project):
         "recordtypeid": "01246000000uOeRAAU",
         "name": project.project_name,
         "isactive": project.is_searchable,
+        "status": status,
         "project_url__c": project.project_url,
         "description_action__c": project.project_description_actions,
         "description_solution__c": project.project_description_solution,
