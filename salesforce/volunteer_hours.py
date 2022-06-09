@@ -118,17 +118,3 @@ def delete(hours_id):
     thread = threading.Thread(target=run, args=(req,))
     thread.daemon = True
     thread.start()
-
-
-def import_hours():
-    from civictechprojects.models import VolunteerRelation
-    import traceback
-    print('Importing volunteer relations ...')
-    count = 0
-    for volunteer in VolunteerRelation.objects.all():
-        try:
-            create(volunteer)
-        except Exception:
-            print(f'Error merging VolunteerRelation {volunteer.id} in Salesforce')
-            print(traceback.format_exc())
-    print(f'{count} volunteer relations')
