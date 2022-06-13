@@ -69,7 +69,8 @@
   .navbar-light .navbar-nav .nav-link:active {
     color: inherit;
   }
-  a:visited, .navbar-light .navbar-nav .nav-link:visited {
+  a:visited,
+  .navbar-light .navbar-nav .nav-link:visited {
     color: inherit;
   }
   .navbar {
@@ -143,6 +144,22 @@
     .dropdown-item {
       font-size: 16px; // match body text size
     }
+  }
+}
+
+/* move to a single row at XL breakpoint; this could use some further polish but nested containers make it a bit tricky */
+.MainHeader-nav-flex {
+  flex-direction: column;
+}
+@include media-breakpoint-up(xxl) {
+  .MainHeader-nav-flex {
+    flex-direction: row;
+  }
+  .MainHeader-pagenav {
+    order: 1;
+  }
+  .MainHeader-usernav {
+    order: 2;
   }
 }
 
