@@ -147,19 +147,14 @@
   }
 }
 
-/* move to a single row at XL breakpoint; this could use some further polish but nested containers make it a bit tricky */
-.MainHeader-nav-flex {
-  flex-direction: column;
-}
-@include media-breakpoint-up(xxl) {
+/* move to a single row at desktop sizes when content allows */
+@include media-breakpoint-up(lg) {
   .MainHeader-nav-flex {
-    flex-direction: row;
-  }
-  .MainHeader-pagenav {
-    order: 1;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
   }
   .MainHeader-usernav {
-    order: 2;
+    padding-left: 1rem; /* ensures the break between two-row and one happens cleanly */
   }
 }
 
