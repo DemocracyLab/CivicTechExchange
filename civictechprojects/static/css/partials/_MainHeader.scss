@@ -69,7 +69,8 @@
   .navbar-light .navbar-nav .nav-link:active {
     color: inherit;
   }
-  a:visited, .navbar-light .navbar-nav .nav-link:visited {
+  a:visited,
+  .navbar-light .navbar-nav .nav-link:visited {
     color: inherit;
   }
   .navbar {
@@ -143,6 +144,17 @@
     .dropdown-item {
       font-size: 16px; // match body text size
     }
+  }
+}
+
+/* move to a single row at desktop sizes when content allows */
+@include media-breakpoint-up(lg) {
+  .MainHeader-nav-flex {
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+  }
+  .MainHeader-usernav {
+    padding-left: 1rem; /* ensures the break between two-row and one happens cleanly */
   }
 }
 
