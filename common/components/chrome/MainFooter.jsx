@@ -42,6 +42,7 @@ class MainFooter extends React.Component<Props> {
       (_.includes(sectionsToShowFooter, this.state.section) ||
         this.props.forceShow == true) && (
         <React.Fragment>
+          <div className="MainFooter-border"></div>
           <div className="MainFooter-footer container">
             <div className="row">
               <div className="MainFooter-item MainFooter-partner-button col-12 text-center">
@@ -55,7 +56,7 @@ class MainFooter extends React.Component<Props> {
                 </Button>
               </div>
 
-              <div className="MainFooter-item col-12 text-center MainFooter-border-top">
+              <div className="MainFooter-item col-12 text-center">
                 <h2>Our Corporate Partners</h2>
               </div>
 
@@ -67,7 +68,7 @@ class MainFooter extends React.Component<Props> {
                 {this._renderSponsors("In-kind Support", "in-kind")}
               </div>
 
-              <div className="MainFooter-item col-12 text-center MainFooter-border-top">
+              <div className="col-12 text-center">
                 <h3>Made Possible With Past Support From</h3>
                 <img
                   src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png"
