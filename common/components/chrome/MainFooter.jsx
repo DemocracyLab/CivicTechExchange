@@ -39,35 +39,39 @@ class MainFooter extends React.Component<Props> {
   render(): ?React$Node {
     return (
       this.state.section &&
-      (_.includes(sectionsToShowFooter, this.state.section) || this.props.forceShow == true) && (
+      (_.includes(sectionsToShowFooter, this.state.section) ||
+        this.props.forceShow == true) && (
         <React.Fragment>
-          <div className="MainFooter-border"></div>
           <div className="MainFooter-footer container">
-            <div className="MainFooter-item col-12 text-center">
-              <h2>Made Possible With Generous Support From</h2>
+            <div className="MainFooter-item MainFooter-partner-button col-12 text-center MainFooter-border-top">
+              <Button
+                variant="outline-secondary"
+                href={url.section(Section.Companies, {
+                  tab: CorporatePageTabs.Sponsorship,
+                })}
+              >
+                Become a Partner
+              </Button>
+            </div>
+
+            <div className="MainFooter-item col-12 text-center MainFooter-border-top MainFooter-border-bottom">
+              <h2>Our Corporate Partners</h2>
+            </div>
+
+            <div className="MainFooter-sponsor-container col-12">
+              {this._renderSponsors("Visionary", "visionary")}
+              {this._renderSponsors("Sustaining", "sustaining")}
+              {this._renderSponsors("Advancing", "advancing")}
+              {this._renderSponsors("Supporting", "supporting")}
+              {this._renderSponsors("In-kind Support", "in-kind")}
+            </div>
+
+            <div className="MainFooter-item col-12 text-center MainFooter-border-top">
+              <h3>Made Possible With Past Support From</h3>
               <img
                 src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png"
                 alt="Bill and Melinda Gates Foundation logo"
               ></img>
-            </div>
-            <div className="MainFooter-item col-12 text-center">
-              <h2>And Our Corporate Partners</h2>
-              <Button
-                variant="primary"
-                href={url.section(Section.Companies, {
-                  tab: CorporatePageTabs.Sponsorship,
-                })}
-                className="MainFooter-pws-button"
-              >
-                Partner With Us
-              </Button>
-            </div>
-            <div className="MainFooter-sponsor-container col-12">
-              {this._renderSponsors("Visionary")}
-              {this._renderSponsors("Sustaining")}
-              {this._renderSponsors("Advancing")}
-              {this._renderSponsors("Supporting")}
-              {this._renderSponsors("In-kind Support")}
             </div>
           </div>
         </React.Fragment>
@@ -75,16 +79,15 @@ class MainFooter extends React.Component<Props> {
     );
   }
 
-  _renderSponsors(category): ?Array<React$Node> {
+  _renderSponsors(category, cname) {
     const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
     let sdata = sponsors.filter(obj => obj.category === category);
+    let classes = `MainFooter-sponsor-wrapper MainFooter-category-${cname}`;
     if (!_.isEmpty(sdata)) {
       return (
         <React.Fragment>
-          <h2 className="MainFooter-sponsor-header text-center side-lines">
-            {category}
-          </h2>
-          <div className="MainFooter-sponsor-wrapper">
+          <h3 className="text-center">{category}</h3>
+          <div className={classes}>
             {sdata.map((sponsor: SponsorMetadata, i: number) => {
               return (
                 <div key={i} className="MainFooter-sponsor">

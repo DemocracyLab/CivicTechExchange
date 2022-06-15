@@ -7,30 +7,58 @@
   flex-wrap: wrap;
 }
 .MainFooter-item {
-  padding-top: 20px;
-}
-.MainFooter-border {
-  width: 100%;
-  height: 1px;
-  border-top: 1px solid $color-grey-medium;
+  padding: 20px 0;
 }
 .MainFooter-sponsor-container {
   padding-top: 40px;
+  h2 {
+    margin-bottom: 0;
+  }
 }
 .MainFooter-sponsor-wrapper {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-evenly;
+  justify-content: center;
   align-content: space-between;
   align-items: center;
+  gap: 30px 60px;
+  padding-top: 40px; // 30 standard + 10 for extra section spacing)
+  padding-bottom: 30px;
 }
 .MainFooter-sponsor {
-  margin: 0 auto;
-  padding: 20px 0;
+  flex-basis: calc(
+    50% - 30px
+  ); //30px is 1/2 of row-gap declared on parent, so we have 2-wide sponsors on mobile
 }
 .MainFooter-footer img {
   max-width: 100%;
 }
-.MainFooter-pws-button {
-  margin-top: 12px;
+.MainFooter-sponsor {
+  max-width: 200px;
+}
+.MainFooter-category-in-kind .MainFooter-sponsor {
+  max-width: 150px; // for in-kind only, shrink below standard sponsor max
+}
+.MainFooter-border-top {
+  border-top: 1px solid $color-border-weak;
+}
+.MainFooter-border-bottom {
+  border-bottom: 1px solid $color-border-weak;
+}
+@include media-breakpoint-up(sm) {
+  .MainFooter-sponsor {
+    flex-basis: auto; // removing forced 2-wide on mobile, letting it flex naturally now
+  }
+  .MainFooter-border-top,
+  .MainFooter-border-bottom {
+    border: none; // remove the border lines that are mobile only
+  }
+}
+@include media-breakpoint-up(lg) {
+  //desktop numbers are typically mobile * 1.5, to keep ratios consistent
+  .MainFooter-sponsor-wrapper {
+    gap: 45px 90px;
+    padding-top: 60px; // 45 standard + 15 for extra section spacing
+    padding-bottom: 45px;
+  }
 }
