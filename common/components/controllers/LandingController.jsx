@@ -30,13 +30,15 @@ class LandingController extends React.PureComponent<{||}> {
       <div className="LandingController-root">
         {this._renderTopSplash()}
         <div className="container">
-          <RecentProjectsSection className="row" />
-          {this._renderPathFlows()}
-          {this._renderMiddleSplash()}
-          {this._renderTestimonials()}
-          {this._renderPartnerSection()}
-          {this._renderPartnersInAction()}
-          {this._renderBottomSplash()}
+          <div className="row">
+            <RecentProjectsSection />
+            {this._renderPathFlows()}
+            {this._renderMiddleSplash()}
+            {this._renderTestimonials()}
+            {this._renderPartnerSection()}
+            {this._renderPartnersInAction()}
+            {this._renderBottomSplash()}
+          </div>
         </div>
       </div>
     );
@@ -190,7 +192,10 @@ class LandingController extends React.PureComponent<{||}> {
             Let us help your company, non-profit or group strengthen your
             culture and make an impact!
           </p>
-          <Button variant="outline-secondary" href={url.section(Section.Companies)}>
+          <Button
+            variant="outline-secondary"
+            href={url.section(Section.Companies)}
+          >
             Learn More
           </Button>
         </div>
