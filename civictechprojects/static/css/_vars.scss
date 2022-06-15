@@ -80,8 +80,6 @@ $color-feedback-background-critical-weakest: $color-red-10; // "Background color
 
 $color-icon-success-strong: $color-green-80; // "Default icon color for success icon
 
-$color-border-weak: $color-neutral-50; // "Border color for small UI components"
-
 $color-text-strong: $color-neutral-90; // "Secondary text color for headers and subtitles"
 $color-text-strongest: $color-neutral-100; // "Primary text color for H1/H2. Text color for most UI Components."
 $color-text-disabled: $color-neutral-70; // "Disabled text color for UI elements"
@@ -90,6 +88,11 @@ $color-text-decorative: $color-brand-80; // "Text color for names and emphasized
 $color-background-default: $color-neutral-15; //site body
 $color-background-light: $color-neutral-10; //individual components
 $color-background-accent: $color-brand-10; // accent section background color
+
+$color-border-weakest: $color-neutral-35; // default border color for non-interactive surfaces, disabled border color for buttons/UI components
+$color-border-weak: $color-neutral-50; // "Border color for small UI components"
+$color-border-strong: $color-neutral-60; // border color for small UI componenst
+$color-border-stronger: $color-neutral-80;  // border color for a secondary button
 
 
 // # end semantic variable names

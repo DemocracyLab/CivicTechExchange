@@ -174,7 +174,7 @@ input[type="submit"]:disabled {
   }
 }
 
-// header text decorator
+// header text decorator, horizontal lines to either side of text
 .side-lines:before,
 .side-lines:after {
   background-color: $color-text-dark;
