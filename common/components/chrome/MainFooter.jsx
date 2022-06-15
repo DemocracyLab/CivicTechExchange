@@ -43,35 +43,37 @@ class MainFooter extends React.Component<Props> {
         this.props.forceShow == true) && (
         <React.Fragment>
           <div className="MainFooter-footer container">
-            <div className="MainFooter-item MainFooter-partner-button col-12 text-center MainFooter-border-top">
-              <Button
-                variant="outline-secondary"
-                href={url.section(Section.Companies, {
-                  tab: CorporatePageTabs.Sponsorship,
-                })}
-              >
-                Become a Partner
-              </Button>
-            </div>
+            <div className="row">
+              <div className="MainFooter-item MainFooter-partner-button col-12 text-center">
+                <Button
+                  variant="outline-secondary"
+                  href={url.section(Section.Companies, {
+                    tab: CorporatePageTabs.Sponsorship,
+                  })}
+                >
+                  Become a Partner
+                </Button>
+              </div>
 
-            <div className="MainFooter-item col-12 text-center MainFooter-border-top MainFooter-border-bottom">
-              <h2>Our Corporate Partners</h2>
-            </div>
+              <div className="MainFooter-item col-12 text-center MainFooter-border-top">
+                <h2>Our Corporate Partners</h2>
+              </div>
 
-            <div className="MainFooter-sponsor-container col-12">
-              {this._renderSponsors("Visionary", "visionary")}
-              {this._renderSponsors("Sustaining", "sustaining")}
-              {this._renderSponsors("Advancing", "advancing")}
-              {this._renderSponsors("Supporting", "supporting")}
-              {this._renderSponsors("In-kind Support", "in-kind")}
-            </div>
+              <div className="MainFooter-sponsor-container col-12">
+                {this._renderSponsors("Visionary", "visionary")}
+                {this._renderSponsors("Sustaining", "sustaining")}
+                {this._renderSponsors("Advancing", "advancing")}
+                {this._renderSponsors("Supporting", "supporting")}
+                {this._renderSponsors("In-kind Support", "in-kind")}
+              </div>
 
-            <div className="MainFooter-item col-12 text-center MainFooter-border-top">
-              <h3>Made Possible With Past Support From</h3>
-              <img
-                src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png"
-                alt="Bill and Melinda Gates Foundation logo"
-              ></img>
+              <div className="MainFooter-item col-12 text-center MainFooter-border-top">
+                <h3>Made Possible With Past Support From</h3>
+                <img
+                  src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png"
+                  alt="Bill and Melinda Gates Foundation logo"
+                ></img>
+              </div>
             </div>
           </div>
         </React.Fragment>

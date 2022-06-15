@@ -3,7 +3,7 @@
 // contains both color scales and semantic variable names -- use the semantic vars in your CSS
 
 // ##############################
-// Design System 
+// Design System
 // ##############################
 
 // # begin color scales
@@ -91,21 +91,20 @@ $color-background-accent: $color-brand-10; // accent section background color
 
 $color-border-weakest: $color-neutral-35; // default border color for non-interactive surfaces, disabled border color for buttons/UI components
 $color-border-weak: $color-neutral-50; // "Border color for small UI components"
-$color-border-strong: $color-neutral-60; // border color for small UI componenst
-$color-border-stronger: $color-neutral-80;  // border color for a secondary button
-
+$color-border-strong: $color-neutral-60; // border color for small UI component
+$color-border-stronger: $color-neutral-80; // border color for a secondary button
 
 // # end semantic variable names
 
 // #####
-// End Design System 
+// End Design System
 // #####
 
 // ############################
 
 //note: everything below here should be checked and brought into DS compliance, these are live values
 
-//## base colors (NOT design system implementation yet; phase these out with e.g. $color-orange -> $color-brand-70) 
+//## base colors (NOT design system implementation yet; phase these out with e.g. $color-orange -> $color-brand-70)
 $color-orange: #f79e02; // brand
 $color-orange-dark: #de8e01; // accent/button borders
 $color-orange-light: #f7cf88; // footer button hover
@@ -123,13 +122,12 @@ $color-disabled-border: #a8a8a8; // for e.g. a disabled state button border
 $color-grey-frame-border: #6b6e70; // from design guide
 $color-grey-unselected: #585858; // unselected item color
 
-
 // ## link colors (design system "Secondary Colors - Blue Color Scheme - used for text links across dlab, implemented October 6, 2021)
-// these are also in _bootstrapoverride, overriding $link-color and $link-hover-color 
+// these are also in _bootstrapoverride, overriding $link-color and $link-hover-color
 $color-link: #0362cd; // primary link color, info color
 $color-link-hover: #024fa6; // use with underline
 $color-link-active: #02438c; // when something in a pressed state, also use underline
-$color-link-visited: #662d91; 
+$color-link-visited: #662d91;
 
 // ## background colors
 $color-background-dark: $color-neutral-90; //nav bar, footer
@@ -137,4 +135,3 @@ $color-background-info: #add8e6; // info messages
 $color-background-success: #a3ffa6; // success messages
 $color-background-error: #ffcfcf; //error messages
 $color-opacity-layer: #231f20; //  overlay opacity, see SplashScreen component. Not used for modals.
-

@@ -1,13 +1,14 @@
 .MainFooter-footer {
   background-color: $color-background-default;
   width: 100%;
-  padding: 0 20px 20px 20px;
-  margin-top: 20px;
+  padding-top: 30px;
+  padding-bottom: 30px;
   display: flex;
   flex-wrap: wrap;
   h2, h3 {
     margin-bottom: 0; // margin spacing is handled elsewhere in this section
   }
+  border-top: 1px solid $color-border-weak;
 }
 .MainFooter-item {
   padding: 20px 0;
@@ -42,19 +43,9 @@
 .MainFooter-category-in-kind .MainFooter-sponsor {
   max-width: 150px; // for in-kind only, shrink below standard sponsor max
 }
-.MainFooter-border-top {
-  border-top: 1px solid $color-border-weak;
-}
-.MainFooter-border-bottom {
-  border-bottom: 1px solid $color-border-weak;
-}
 @include media-breakpoint-up(sm) {
   .MainFooter-sponsor {
     flex-basis: auto; // removing forced 2-wide on mobile, letting it flex naturally now
-  }
-  .MainFooter-border-top,
-  .MainFooter-border-bottom {
-    border: none; // remove the border lines that are mobile only
   }
 }
 @include media-breakpoint-up(lg) {
@@ -62,6 +53,10 @@
   .MainFooter-sponsor-wrapper {
     gap: 45px 90px;
     padding-top: 60px; // 45 standard + 15 for extra section spacing
+    padding-bottom: 45px;
+  }
+  .MainFooter-footer {
+    padding-top: 45px;
     padding-bottom: 45px;
   }
 }
