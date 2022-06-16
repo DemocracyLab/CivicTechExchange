@@ -2,30 +2,6 @@ body {
   background-color: $color-background-default;
 }
 
-// footer buttons are difficult to theme in Bootstrap, so define manually
-//TODO: Sass variables
-.btn-footer {
-  background-color: $color-background-light;
-  color: $color-text-dark;
-}
-.btn-footer a,
-.btn-footer a[type="button"] {
-  color: $color-text-dark;
-  text-decoration: none;
-}
-.btn-footer:hover,
-.btn-footer:active {
-  background-color: $color-orange-light;
-  color: $color-text-dark;
-  border-color: $color-orange-dark;
-}
-a.btn-footer:hover,
-a.btn-footer:active,
-a[type="button"].btn-footer:hover,
-a[type="button"].btn-footer:active {
-  text-decoration: none;
-}
-
 //DemocracyLab button styles (overwrite/extend Bootstrap button rules)
 // in general all buttons have a border, but some use the same color as the button to visually have none
 // padding instead of selecting a specific height is for vertical align, but this could stand a rework later
