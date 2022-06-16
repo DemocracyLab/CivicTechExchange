@@ -5,7 +5,7 @@ import MainHeader from "../chrome/MainHeader.jsx";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import React from "react";
 import MainFooter from "../chrome/MainFooter.jsx";
-import SocialFooter from "../chrome/SocialFooter.jsx";
+import SiteFooter from "../chrome/SiteFooter.jsx";
 import url from "../../components/utils/url.js";
 import { loadHeap } from "../utils/heapApi.js";
 
@@ -59,7 +59,7 @@ class MainController extends React.Component<{||}, State> {
         headerHeight={this.state.headerHeight}
       />,
       <MainFooter key="main_footer" />,
-      <SocialFooter key="social_footer" />,
+      <SiteFooter key="social_footer" />,
     ];
   }
 }
