@@ -30,15 +30,13 @@ class LandingController extends React.PureComponent<{||}> {
       <div className="LandingController-root">
         {this._renderTopSplash()}
         <div className="container">
-          <div className="row">
-            <RecentProjectsSection />
-            {this._renderPathFlows()}
-            {this._renderMiddleSplash()}
-            {this._renderTestimonials()}
-            {this._renderPartnerSection()}
-            {this._renderPartnersInAction()}
-            {this._renderBottomSplash()}
-          </div>
+          <RecentProjectsSection className="row" />
+          {this._renderPathFlows()}
+          {this._renderMiddleSplash()}
+          {this._renderTestimonials()}
+          {this._renderPartnerSection()}
+          {this._renderPartnersInAction()}
+          {this._renderBottomSplash()}
         </div>
       </div>
     );
