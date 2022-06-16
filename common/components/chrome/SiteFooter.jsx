@@ -8,57 +8,91 @@ import Section from "../enums/Section.js";
 const sectionsToHideFooter: $ReadOnlyArray<string> = [Section.LiveEvent];
 
 class SiteFooter extends React.Component {
-  _socialLinks() {
+  _footerTopSection() {
     return (
-      <div className="SiteFooter-iconblock">
-        <a href="https://www.facebook.com/democracylaborg">
-          <i className={Glyph(GlyphStyles.FacebookSquare, GlyphSizes.X3)}></i>
-        </a>
-        <a href="https://twitter.com/democracylab">
-          <i className={Glyph(GlyphStyles.TwitterSquare, GlyphSizes.X3)}></i>
-        </a>
-        <a href="https://www.linkedin.com/company/democracylab">
-          <i className={Glyph(GlyphStyles.LinkedIn, GlyphSizes.X3)}></i>
-        </a>
+      <div className="SiteFooter-nav col-sm-12 col-lg-8">
+        <div className="SiteFooter-nav-links">
+          <div className="SiteFooter-logo">@logo@</div>
+
+          <a href="">About</a>
+          <a href="">Contact Us</a>
+          <a href="">Donate</a>
+          <a href="">Partner with Us</a>
+          <a href="">Volunteer</a>
+          <a href="">Create a Project</a>
+          <a href="">Find an Event</a>
+          <a href="">Privacy Policy</a>
+          <a href="">Terms of Use</a>
+        </div>
       </div>
     );
   }
-  _copyrightInfo() {
+
+  _footerMidSection() {
     return (
-      <p className="SiteFooter-copyright">
-        <a
-          className="SiteFooter-copyright-icons"
-          rel="license"
-          href="http://creativecommons.org/licenses/by/4.0/"
-        >
-          <i className={Glyph(GlyphStyles.CreativeCommons, GlyphSizes.X2)}></i>
-          <i
-            className={Glyph(GlyphStyles.CreativeCommonsBy, GlyphSizes.X2)}
-          ></i>
-        </a>
-        <br />
-        This work by{" "}
-        <a
-          href="https://www.democracylab.org/"
-          property="cc:attributionName"
-          rel="cc:attributionURL"
-        >
-          DemocracyLab
-        </a>{" "}
-        is licensed under a{" "}
-        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
-          Creative Commons Attribution 4.0 International License
-        </a>
-        .
-      </p>
+      <React.Fragment>
+        <div className="Footer-dividerline d-lg-none"></div>
+
+        <div className="SiteFooter-social col-sm-12 col-lg-4">
+          <div class="SiteFooter-mid-container">
+            <div className="SiteFooter-newsletter">
+              <p>Stay in the loop with our newsletter</p>
+              <NewsletterSignup btnClass="btn btn-primary" />
+            </div>
+
+            <div className="Footer-dividerline d-lg-none"></div>
+
+            <div className="SiteFooter-iconblock">
+              <a href="https://www.facebook.com/democracylaborg">
+                <i
+                  className={Glyph(GlyphStyles.FacebookSquare, GlyphSizes.X3)}
+                ></i>
+              </a>
+              <a href="https://twitter.com/democracylab">
+                <i
+                  className={Glyph(GlyphStyles.TwitterSquare, GlyphSizes.X3)}
+                ></i>
+              </a>
+              <a href="https://www.linkedin.com/company/democracylab">
+                <i className={Glyph(GlyphStyles.LinkedIn, GlyphSizes.X3)}></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
     );
   }
-
-  _newsletterSignup() {
+  _footerBottomSection() {
     return (
-      <div className="SiteFooter-newsletter">
-        <p>Stay in the loop with our newsletter</p>
-        <NewsletterSignup btnClass="btn btn-footer" />
+      <div className="SiteFooter-copyright col-12">
+        <p>
+          <a
+            className="SiteFooter-copyright-icons"
+            rel="license"
+            href="http://creativecommons.org/licenses/by/4.0/"
+          >
+            <i
+              className={Glyph(GlyphStyles.CreativeCommons, GlyphSizes.X2)}
+            ></i>
+            <i
+              className={Glyph(GlyphStyles.CreativeCommonsBy, GlyphSizes.X2)}
+            ></i>
+          </a>
+          <br />
+          This work by{" "}
+          <a
+            href="https://www.democracylab.org/"
+            property="cc:attributionName"
+            rel="cc:attributionURL"
+          >
+            DemocracyLab
+          </a>{" "}
+          is licensed under a{" "}
+          <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+            Creative Commons Attribution 4.0 International License
+          </a>
+          .
+        </p>
       </div>
     );
   }
@@ -66,13 +100,16 @@ class SiteFooter extends React.Component {
   render(): ?React$Node {
     return (
       !_.some(sectionsToHideFooter, section => url.atSection(section)) && (
-        <div className="SiteFooter-root">
+        <footer className="SiteFooter-root">
           <div className="container">
-            {this._socialLinks()}
-            {this._newsletterSignup()}
+            <div class="row">
+              {this._footerTopSection()}
+              {this._footerMidSection()}
+              <div className="Footer-dividerline d-lg-none"></div>
+              {this._footerBottomSection()}
+            </div>
           </div>
-          <div className="SiteFooter-bottom">{this._copyrightInfo()}</div>
-        </div>
+        </footer>
       )
     );
   }

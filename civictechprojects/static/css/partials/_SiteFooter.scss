@@ -1,109 +1,33 @@
-.SocialFooter-root {
-  background: $color-orange; /* placeholder */
-  color: $color-text-dark;
-  padding: 20px 0 10px 0;
-  text-align: center;
+.SiteFooter-root {
+  background: $color-background-light;
+  padding-top: 40px;
 }
-.SocialFooter-root p {
-  font-weight: 500;
-}
-.SocialFooter-root a,
-.SocialFooter-newsletter input[type="submit"] {
-  font-weight: 600;
-}
-.SocialFooter-cta a {
-  display: block;
-  margin: 0 auto 24px auto;
-  max-width: 130px;
-}
-.SocialFooter-iconblock a {
-  text-decoration: none;
-  padding-right: 1.5rem;
-  font-weight: 400;
-}
-.SocialFooter-iconblock a:last-of-type {
-  padding-right: 0;
-}
-.SocialFooter-copyright {
+.SiteFooter-logo {
   width: 100%;
-  margin: 0 auto;
-  text-align: center;
-}
-.SocialFooter-copyright a {
-  color: $color-text-dark;
-}
-.SocialFooter-copyright i {
-  font-weight: 400;
-  padding: 0px 5px;
+  flex-basis: 100%;
 }
 
-.SocialFooter-iconblock a {
-  color: $color-text-light;
-  &:hover {
-    color: $color-text-dark;
+.SiteFooter-nav-links {
+  display: flex;
+  flex-direction: column;
+  a {
+    flex-basis: 100%;
   }
 }
-.SocialFooter-box {
-  margin-bottom: 1.5rem;
-}
-.SocialFooter-signupcontainer input[type="submit"] {
-  display: block;
-  margin: 0 auto;
-}
-.SocialFooter-signupcontainer input[type="email"] {
-  margin: 0 0 0.5rem 0;
-}
-
-@include media-breakpoint-up(sm) {
-  .SocialFooter-btn-about {
-    margin-right: 1rem;
-  }
-  .SocialFooter-root {
-    text-align: left;
-  }
-  .SocialFooter-cta a:first-of-type {
-    display: inline-block;
-    margin: 0 1.5rem 0 0;
-  }
-  .SocialFooter-cta a:last-of-type {
-    display: inline-block;
-    margin: 0;
-  }
-  .SocialFooter-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-  .SocialFooter-box {
-    flex-basis: 50%;
-  }
-  .SocialFooter-newsletter {
-    margin-left: auto;
-  }
-  .SocialFooter-signupcontainer input[type="submit"] {
-    margin: 0;
-  }
+.SiteFooter-mid-container {
+  display: flex;
+  flex-direction: column;
 }
 @include media-breakpoint-up(lg) {
-  .SocialFooter-box {
-    flex-basis: 33%;
-    min-width: 300px;
-  }
-  .SocialFooter-newsletter {
-    margin-left: 0;
-  }
-  .SocialFooter-signupcontainer {
+  .SiteFooter-nav-links {
     display: flex;
-    flex-wrap: nowrap;
+    flex-direction: row;
+    flex-wrap: wrap;
+    a {
+      flex-basis: 33%;
+    }
   }
-  .SocialFooter-signupcontainer input {
-    height: 2.25rem;
-  }
-  .SocialFooter-signupcontainer input[type="submit"] {
-    display: inline-block;
-  }
-  .SocialFooter-signupcontainer input[type="email"] {
-    margin: 0 1rem 0.5rem 0;
+  .SiteFooter-mid-container {
+    flex-direction: column-reverse;
   }
 }

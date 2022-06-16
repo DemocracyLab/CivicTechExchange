@@ -170,6 +170,13 @@ input[type="submit"]:disabled {
   margin-right: -21%;
 }
 
+// for both sponsor and site footers, we use some divider lines
+.Footer-dividerline {
+  border-top: 1px solid $color-border-weak;
+  height: 1px;
+  width: 100%;
+}
+
 // ======================== design system rules ========================
 // font declarations (May 2021)
 // mobile font declarations

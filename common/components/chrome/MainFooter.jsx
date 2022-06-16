@@ -42,7 +42,7 @@ class MainFooter extends React.Component<Props> {
       (_.includes(sectionsToShowFooter, this.state.section) ||
         this.props.forceShow == true) && (
         <React.Fragment>
-          <div className="MainFooter-border"></div>
+          <div className="Footer-dividerline"></div>
           <div className="MainFooter-footer container">
             <div className="row">
               <div className="MainFooter-item MainFooter-partner-button col-12 text-center">
