@@ -1,9 +1,9 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
 import { Glyph, GlyphStyles, GlyphSizes } from "../utils/glyphs.js";
 import NewsletterSignup from "../common/integrations/NewsletterSignup.jsx";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
+import cdn from "../utils/cdn.js";
 
 const sectionsToHideFooter: $ReadOnlyArray<string> = [Section.LiveEvent];
 
@@ -12,8 +12,9 @@ class SiteFooter extends React.Component {
     return (
       <div className="SiteFooter-nav col-sm-12 col-lg-8">
         <div className="SiteFooter-nav-links">
-          <div className="SiteFooter-logo">@logo@</div>
-
+          <div className="SiteFooter-logo">
+            <img src={cdn.image("favicon.png")} alt="DemocracyLab logo" />
+          </div>
           <a href="">About</a>
           <a href="">Contact Us</a>
           <a href="">Donate</a>
@@ -31,9 +32,8 @@ class SiteFooter extends React.Component {
   _footerMidSection() {
     return (
       <React.Fragment>
-        <div className="Footer-dividerline d-lg-none"></div>
-
         <div className="SiteFooter-social col-sm-12 col-lg-4">
+          <div className="Footer-dividerline d-lg-none"></div>
           <div class="SiteFooter-mid-container">
             <div className="SiteFooter-newsletter">
               <p>Stay in the loop with our newsletter</p>
@@ -45,16 +45,16 @@ class SiteFooter extends React.Component {
             <div className="SiteFooter-iconblock">
               <a href="https://www.facebook.com/democracylaborg">
                 <i
-                  className={Glyph(GlyphStyles.FacebookSquare, GlyphSizes.X3)}
+                  className={Glyph(GlyphStyles.FacebookSquare, GlyphSizes.X2)}
                 ></i>
               </a>
               <a href="https://twitter.com/democracylab">
                 <i
-                  className={Glyph(GlyphStyles.TwitterSquare, GlyphSizes.X3)}
+                  className={Glyph(GlyphStyles.TwitterSquare, GlyphSizes.X2)}
                 ></i>
               </a>
               <a href="https://www.linkedin.com/company/democracylab">
-                <i className={Glyph(GlyphStyles.LinkedIn, GlyphSizes.X3)}></i>
+                <i className={Glyph(GlyphStyles.LinkedIn, GlyphSizes.X2)}></i>
               </a>
             </div>
           </div>
@@ -65,12 +65,9 @@ class SiteFooter extends React.Component {
   _footerBottomSection() {
     return (
       <div className="SiteFooter-copyright col-12">
-        <p>
-          <a
-            className="SiteFooter-copyright-icons"
-            rel="license"
-            href="http://creativecommons.org/licenses/by/4.0/"
-          >
+        <div class="Footer-dividerline SiteFooter-sectionline d-none d-lg-block"></div>
+        <div className="SiteFooter-copyright-icons">
+          <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
             <i
               className={Glyph(GlyphStyles.CreativeCommons, GlyphSizes.X2)}
             ></i>
@@ -78,7 +75,8 @@ class SiteFooter extends React.Component {
               className={Glyph(GlyphStyles.CreativeCommonsBy, GlyphSizes.X2)}
             ></i>
           </a>
-          <br />
+        </div>
+        <p className="overline">
           This work by{" "}
           <a
             href="https://www.democracylab.org/"
@@ -93,6 +91,9 @@ class SiteFooter extends React.Component {
           </a>
           .
         </p>
+        <p className="overline">
+          &copy; 2006-2022 DemocracyLab | All Rights Reserved
+        </p>
       </div>
     );
   }
@@ -105,7 +106,6 @@ class SiteFooter extends React.Component {
             <div class="row">
               {this._footerTopSection()}
               {this._footerMidSection()}
-              <div className="Footer-dividerline d-lg-none"></div>
               {this._footerBottomSection()}
             </div>
           </div>
