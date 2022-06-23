@@ -50,7 +50,8 @@
   margin: 1.5rem 0 1rem 0;
 }
 
-@include media-breakpoint-up(lg) {
+@include media-breakpoint-up(md) {
+  // for tablets we can set the footer links to row since they still have full width available
   .SiteFooter-logo {
     margin-bottom: 2rem;
   }
@@ -62,6 +63,9 @@
       flex-basis: 33%;
     }
   }
+}
+
+@include media-breakpoint-up(lg) {
   // on desktop the order is reversed in column, then try to align visually in the row
   .SiteFooter-mid-container {
     flex-direction: column-reverse;
