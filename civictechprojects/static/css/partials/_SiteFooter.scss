@@ -1,7 +1,8 @@
 .SiteFooter-root {
   background: $color-background-light;
   padding-top: 40px;
-  a, a:visited {
+  a,
+  a:visited {
     color: $color-text-dark;
   }
   a:hover {
@@ -20,8 +21,11 @@
 .SiteFooter-nav-links {
   display: flex;
   flex-direction: column;
-  a {
+  .SiteFooter-link-group {
     flex-basis: 100%;
+  }
+  a {
+    display: block; // makes links in column
     margin: 0.25rem 0; // ends up with 8px between items
   }
 }
@@ -54,13 +58,13 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    a {
+    .SiteFooter-link-group {
       flex-basis: 33%;
     }
   }
   // on desktop the order is reversed in column, then try to align visually in the row
   .SiteFooter-mid-container {
-    flex-direction: column-reverse; 
+    flex-direction: column-reverse;
     justify-content: space-around;
     height: 100%;
   }

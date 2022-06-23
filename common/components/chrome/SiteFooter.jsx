@@ -15,15 +15,21 @@ class SiteFooter extends React.Component {
           <div className="SiteFooter-logo">
             <img src={cdn.image("favicon.png")} alt="DemocracyLab logo" />
           </div>
-          <a href="">About</a>
-          <a href="">Contact Us</a>
-          <a href="">Donate</a>
-          <a href="">Partner with Us</a>
-          <a href="">Volunteer</a>
-          <a href="">Create a Project</a>
-          <a href="">Find an Event</a>
-          <a href="">Privacy Policy</a>
-          <a href="">Terms of Use</a>
+          <div className="SiteFooter-link-group">
+            <a href="">About</a>
+            <a href="">Contact Us</a>
+            <a href="">Donate</a>
+            <a href="">Partner with Us</a>
+          </div>
+          <div className="SiteFooter-link-group">
+            <a href="">Volunteer</a>
+            <a href="">Create a Project</a>
+            <a href="">Find an Event</a>
+          </div>
+          <div className="SiteFooter-link-group">
+            <a href="">Privacy Policy</a>
+            <a href="">Terms of Use</a>
+          </div>
         </div>
       </div>
     );
