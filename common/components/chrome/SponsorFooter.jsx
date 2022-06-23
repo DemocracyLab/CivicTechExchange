@@ -21,7 +21,7 @@ type Props = {|
   forceShow: boolean,
 |};
 
-class MainFooter extends React.Component<Props> {
+class SponsorFooter extends React.Component<Props> {
   constructor(props: Props): void {
     super(props);
   }
@@ -43,9 +43,9 @@ class MainFooter extends React.Component<Props> {
         this.props.forceShow == true) && (
         <React.Fragment>
           <div className="Footer-dividerline"></div>
-          <div className="MainFooter-footer container">
+          <div className="SponsorFooter-footer container">
             <div className="row">
-              <div className="MainFooter-item MainFooter-partner-button col-12 text-center">
+              <div className="SponsorFooter-item SponsorFooter-partner-button col-12 text-center">
                 <Button
                   variant="outline-secondary"
                   href={url.section(Section.Companies, {
@@ -56,11 +56,11 @@ class MainFooter extends React.Component<Props> {
                 </Button>
               </div>
 
-              <div className="MainFooter-item col-12 text-center">
+              <div className="SponsorFooter-item col-12 text-center">
                 <h2>Our Corporate Partners</h2>
               </div>
 
-              <div className="MainFooter-sponsor-container col-12">
+              <div className="SponsorFooter-sponsor-container col-12">
                 {this._renderSponsors("Visionary", "visionary")}
                 {this._renderSponsors("Sustaining", "sustaining")}
                 {this._renderSponsors("Advancing", "advancing")}
@@ -85,7 +85,7 @@ class MainFooter extends React.Component<Props> {
   _renderSponsors(category, cname) {
     const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
     let sdata = sponsors.filter(obj => obj.category === category);
-    let classes = `MainFooter-sponsor-wrapper MainFooter-category-${cname}`;
+    let classes = `SponsorFooter-sponsor-wrapper SponsorFooter-category-${cname}`;
     if (!_.isEmpty(sdata)) {
       return (
         <React.Fragment>
@@ -93,12 +93,12 @@ class MainFooter extends React.Component<Props> {
           <div className={classes}>
             {sdata.map((sponsor: SponsorMetadata, i: number) => {
               return (
-                <div key={i} className="MainFooter-sponsor">
+                <div key={i} className="SponsorFooter-sponsor">
                   <a
                     href={sponsor.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="MainFooter-sponsor-link"
+                    className="SponsorFooter-sponsor-link"
                   >
                     <img src={sponsor.thumbnailUrl} />
                   </a>
@@ -111,4 +111,4 @@ class MainFooter extends React.Component<Props> {
     }
   }
 }
-export default Container.create(MainFooter);
+export default Container.create(SponsorFooter);

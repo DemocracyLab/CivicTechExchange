@@ -1,4 +1,4 @@
-.MainFooter-footer {
+.SponsorFooter-footer {
   background-color: $color-background-default;
   width: 100%;
   padding-top: 30px;
@@ -9,16 +9,16 @@
     margin-bottom: 0; // margin spacing is handled elsewhere in this section
   }
 }
-.MainFooter-item {
+.SponsorFooter-item {
   padding: 20px 0;
 }
-.MainFooter-sponsor-container {
+.SponsorFooter-sponsor-container {
   padding-top: 40px;
   h2 {
     margin-bottom: 0;
   }
 }
-.MainFooter-sponsor-wrapper {
+.SponsorFooter-sponsor-wrapper {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -28,33 +28,33 @@
   padding-top: 40px; // 30 standard + 10 for extra section spacing)
   padding-bottom: 30px;
 }
-.MainFooter-sponsor {
+.SponsorFooter-sponsor {
   flex-basis: calc(
     50% - 30px
   ); //30px is 1/2 of row-gap declared on parent, so we have 2-wide sponsors on mobile
 }
-.MainFooter-footer img {
+.SponsorFooter-footer img {
   max-width: 100%;
 }
-.MainFooter-sponsor {
+.SponsorFooter-sponsor {
   max-width: 200px;
 }
-.MainFooter-category-in-kind .MainFooter-sponsor {
+.SponsorFooter-category-in-kind .SponsorFooter-sponsor {
   max-width: 150px; // for in-kind only, shrink below standard sponsor max
 }
 @include media-breakpoint-up(sm) {
-  .MainFooter-sponsor {
+  .SponsorFooter-sponsor {
     flex-basis: auto; // removing forced 2-wide on mobile, letting it flex naturally now
   }
 }
 @include media-breakpoint-up(lg) {
   //desktop numbers are typically mobile * 1.5, to keep ratios consistent
-  .MainFooter-sponsor-wrapper {
+  .SponsorFooter-sponsor-wrapper {
     gap: 45px 90px;
     padding-top: 60px; // 45 standard + 15 for extra section spacing
     padding-bottom: 45px;
   }
-  .MainFooter-footer {
+  .SponsorFooter-footer {
     padding-top: 45px;
     padding-bottom: 45px;
   }

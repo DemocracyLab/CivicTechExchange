@@ -4,7 +4,7 @@ import SectionController from "./SectionController.jsx";
 import MainHeader from "../chrome/MainHeader.jsx";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import React from "react";
-import MainFooter from "../chrome/MainFooter.jsx";
+import SponsorFooter from "../chrome/SponsorFooter.jsx";
 import SiteFooter from "../chrome/SiteFooter.jsx";
 import url from "../../components/utils/url.js";
 import { loadHeap } from "../utils/heapApi.js";
@@ -58,8 +58,8 @@ class MainController extends React.Component<{||}, State> {
         key="section_controller"
         headerHeight={this.state.headerHeight}
       />,
-      <MainFooter key="main_footer" />,
-      <SiteFooter key="social_footer" />,
+      <SponsorFooter key="sponsor_footer" />,
+      <SiteFooter key="site_footer" />,
     ];
   }
 }
