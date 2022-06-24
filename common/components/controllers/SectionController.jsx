@@ -39,6 +39,7 @@ import AddSignUpDetails from "./AddSignUpDetails.jsx";
 import VideoController from "./VideoController.jsx";
 import AboutEventProjectController from "./AboutEventProjectController.jsx";
 import CreateEventProjectController from "./CreateEventProjectController.jsx";
+import PrivacyController from "./PrivacyController.jsx";
 
 type State = {|
   section: SectionType,
@@ -132,6 +133,8 @@ class SectionController extends React.Component<{||}, State> {
         return <AboutEventProjectController />;
       case Section.CreateEventProject:
         return <CreateEventProjectController />;
+      case Section.Privacy:
+        return <PrivacyController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>;
     }
