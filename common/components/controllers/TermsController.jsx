@@ -14,21 +14,21 @@ class TermsController extends React.PureComponent<{||}> {
             <h2>Table of Contents</h2>
             <ul>
               <li>
-                <a href="#volunteer">Terms of Volunteering</a>
-              </li>
-              <li>
                 <a href="#use">Terms of Use</a>
               </li>
+              <li>
+                <a href="#volunteer">Terms of Volunteering</a>
+              </li>
             </ul>
-            <div className="Terms-section">
-              <JumpAnchor id="volunteer" />
-              <h3>Terms of Volunteering</h3>
-              <TermsVolunteer />
-            </div>
             <div className="Terms-section">
               <JumpAnchor id="use" />
               <h3>Terms of Use</h3>
               <TermsUse />
+            </div>
+            <div className="Terms-section">
+              <JumpAnchor id="volunteer" />
+              <h3>Terms of Volunteering</h3>
+              <TermsVolunteer />
             </div>
           </div>
         </div>
