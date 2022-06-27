@@ -8,6 +8,7 @@ import cdn from "../utils/cdn.js";
 const sectionsToHideFooter: $ReadOnlyArray<string> = [Section.LiveEvent];
 
 class SiteFooter extends React.Component {
+  // can have a maximum of three SiteFooter-link-groups
   _footerTopSection() {
     return (
       <div className="SiteFooter-nav col-sm-12 col-lg-8">
@@ -16,19 +17,20 @@ class SiteFooter extends React.Component {
             <img src={cdn.image("favicon.png")} alt="DemocracyLab logo" />
           </div>
           <div className="SiteFooter-link-group">
-            <a href="">About</a>
-            <a href="">Contact Us</a>
-            <a href="">Donate</a>
-            <a href="">Partner with Us</a>
+            <a href={url.section(Section.AboutUs)}>About</a>
+            <a href={url.section(Section.ContactUs)}>Contact Us</a>
+            <a href={url.section(Section.Donate)}>Donate</a>
+            <a href={url.section(Section.Companies)}>Partner with Us</a>
           </div>
+
           <div className="SiteFooter-link-group">
-            <a href="">Volunteer</a>
-            <a href="">Create a Project</a>
-            <a href="">Find an Event</a>
-          </div>
-          <div className="SiteFooter-link-group">
-            <a href="">Privacy Policy</a>
-            <a href="">Terms of Use</a>
+            <a href={url.section(Section.Privacy)}>Privacy Policy</a>
+            <a href={url.section(Section.Terms) + "#use"}>
+              Terms of Use
+            </a>
+            <a href={url.section(Section.Terms) + "#volunteer"}>
+              Terms of Volunteering
+            </a>
           </div>
         </div>
       </div>
