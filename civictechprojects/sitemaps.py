@@ -18,7 +18,8 @@ class SectionSitemap(Sitemap):
         str(FrontEndSection.Donate.value),
         str(FrontEndSection.ContactUs.value),
         str(FrontEndSection.Companies.value),
-        str(FrontEndSection.Privacy.value)
+        str(FrontEndSection.Privacy.value),
+        str(FrontEndSection.Terms.value)
     ]
 
     def items(self):

@@ -133,7 +133,13 @@ def my_events_preload(context, request):
 def privacy_preload(context, request):
     context = default_preload(context, request)
     context['title'] = 'Privacy | DemocracyLab'
-    context['description'] = 'Privacy Policy'
+    context['description'] = 'Privacy Policy page'
+    return context
+
+def terms_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Terms | DemocracyLab'
+    context['description'] = 'Terms of Use page'
     return context
 
 
@@ -182,7 +188,8 @@ preload_urls = [
     {'section': FrontEndSection.Companies.value, 'handler': companies_preload},
     {'section': FrontEndSection.VideoOverview.value, 'handler': videos_preload},
     {'section': FrontEndSection.AboutEventProject.value, 'handler': about_event_project_preload},
-    {'section': FrontEndSection.Privacy.value, 'handler': privacy_preload}
+    {'section': FrontEndSection.Privacy.value, 'handler': privacy_preload},
+    {'section': FrontEndSection.Terms.value, 'handler': terms_preload}
 ]
 
 

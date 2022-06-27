@@ -17,6 +17,7 @@
   {"name": "Press", "pattern": "about/news"},
   {"name": "PartnerWithUs", "pattern": "about/partner", "deprecated": true},
   {"name": "Privacy", "pattern": "about/privacy"},
+  {"name": "Terms", "pattern": "about/terms"},
   {"name": "AboutUs", "pattern": "about"},
   {"name": "Home", "pattern": "^$"},
   {"name": "CreateGroup", "pattern": "groups/create/(?P<id>[\\w\\-]*)"},
