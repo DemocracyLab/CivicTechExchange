@@ -1,11 +1,12 @@
 .SponsorFooter-footer {
   background-color: $color-background-default;
   width: 100%;
-  padding-top: 30px;
+  padding-top: 0;
   padding-bottom: 30px;
   display: flex;
   flex-wrap: wrap;
-  h2, h3 {
+  h2,
+  h3 {
     margin-bottom: 0; // margin spacing is handled elsewhere in this section
   }
 }
@@ -42,9 +43,21 @@
 .SponsorFooter-category-in-kind .SponsorFooter-sponsor {
   max-width: 150px; // for in-kind only, shrink below standard sponsor max
 }
+.SponsorFooter-mobile-divider {
+  border-bottom: 1px solid $color-border-weak;
+}
+.SponsorFooter-past-support h3 {
+  padding-top: 2rem;
+}
+.SponsorFooter-partner-button a {
+  margin-bottom: 1rem; // visually evens up top and bottom spacing on mobile
+}
 @include media-breakpoint-up(sm) {
   .SponsorFooter-sponsor {
     flex-basis: auto; // removing forced 2-wide on mobile, letting it flex naturally now
+  }
+  .SponsorFooter-mobile-divider {
+    border-bottom: none;
   }
 }
 @include media-breakpoint-up(lg) {
@@ -57,5 +70,12 @@
   .SponsorFooter-footer {
     padding-top: 45px;
     padding-bottom: 45px;
+  }
+
+  .SponsorFooter-past-support h3 {
+    padding-top: 0;
+  }
+  .SponsorFooter-partner-button a {
+    margin-bottom: 0;
   }
 }

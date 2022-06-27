@@ -45,7 +45,7 @@ class SponsorFooter extends React.Component<Props> {
           <div className="Footer-dividerline"></div>
           <div className="SponsorFooter-footer container">
             <div className="row">
-              <div className="SponsorFooter-item SponsorFooter-partner-button col-12 text-center">
+              <div className="SponsorFooter-item SponsorFooter-partner-button SponsorFooter-mobile-divider col-12 text-center">
                 <Button
                   variant="outline-secondary"
                   href={url.section(Section.Companies, {
@@ -56,11 +56,11 @@ class SponsorFooter extends React.Component<Props> {
                 </Button>
               </div>
 
-              <div className="SponsorFooter-item col-12 text-center">
+              <div className="SponsorFooter-item col-12 text-center SponsorFooter-mobile-divider">
                 <h2>Our Corporate Partners</h2>
               </div>
 
-              <div className="SponsorFooter-sponsor-container col-12">
+              <div className="SponsorFooter-sponsor-container col-12 SponsorFooter-mobile-divider">
                 {this._renderSponsors("Visionary", "visionary")}
                 {this._renderSponsors("Sustaining", "sustaining")}
                 {this._renderSponsors("Advancing", "advancing")}
@@ -68,7 +68,7 @@ class SponsorFooter extends React.Component<Props> {
                 {this._renderSponsors("In-kind Support", "in-kind")}
               </div>
 
-              <div className="col-12 text-center">
+              <div className="col-12 text-center SponsorFooter-past-support">
                 <h3>Made Possible With Past Support From</h3>
                 <img
                   src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png"
