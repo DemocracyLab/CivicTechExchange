@@ -1,6 +1,8 @@
 // @flow
 
 import React from "react";
+import url from "../utils/url.js";
+import Section from "../enums/Section.js";
 
 class PrivacyController extends React.PureComponent<{||}> {
   render(): $React$Node {
@@ -19,7 +21,7 @@ class PrivacyController extends React.PureComponent<{||}> {
               we may collect about you, how we may use that Personal Data, and
               your rights regarding the Personal Data you give us when you
               access our website, hackathon event pages, apps, social media
-              pages, and publicbenefit services (together, “Services”).
+              pages, and public benefit services (together, “Services”).
               “Personal Data” is information that can be used alone or in
               combination with other information to identity you and typically
               includes information like your name, address, email, phone number,
@@ -27,11 +29,12 @@ class PrivacyController extends React.PureComponent<{||}> {
             </p>
 
             <p>
-              Together with our Terms of Use (“Terms”), this Privacy Policy is a
-              legally binding agreement between you and DemocracyLab. By
-              accessing or using the Services, you consent to the Terms and this
-              Privacy Policy, including our collection, use, and disclosure of
-              your Personal Data as described below.
+              Together with our{" "}
+              <a href={url.section(Section.Terms)}>Terms of Use</a> (“Terms”),
+              this Privacy Policy is a legally binding agreement between you and
+              DemocracyLab. By accessing or using the Services, you consent to
+              the Terms and this Privacy Policy, including our collection, use,
+              and disclosure of your Personal Data as described below.
             </p>
 
             <ol>
