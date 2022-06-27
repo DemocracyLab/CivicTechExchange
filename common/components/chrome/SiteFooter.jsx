@@ -40,7 +40,7 @@ class SiteFooter extends React.Component {
       <React.Fragment>
         <div className="SiteFooter-social col-sm-12 col-lg-4">
           <div className="Footer-dividerline d-lg-none"></div>
-          <div class="SiteFooter-mid-container">
+          <div className="SiteFooter-mid-container">
             <div className="SiteFooter-newsletter">
               <p>Stay in the loop with our newsletter</p>
               <NewsletterSignup btnClass="btn btn-primary" />
@@ -71,7 +71,7 @@ class SiteFooter extends React.Component {
   _footerBottomSection() {
     return (
       <div className="SiteFooter-copyright col-12">
-        <div class="Footer-dividerline SiteFooter-sectionline d-none d-lg-block"></div>
+        <div className="Footer-dividerline SiteFooter-sectionline d-none d-lg-block"></div>
         <div className="SiteFooter-copyright-icons">
           <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
             <i
@@ -109,7 +109,7 @@ class SiteFooter extends React.Component {
       !_.some(sectionsToHideFooter, section => url.atSection(section)) && (
         <footer className="SiteFooter-root">
           <div className="container">
-            <div class="row">
+            <div className="row">
               {this._footerTopSection()}
               {this._footerMidSection()}
               {this._footerBottomSection()}
