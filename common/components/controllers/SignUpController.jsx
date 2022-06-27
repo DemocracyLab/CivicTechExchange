@@ -180,7 +180,9 @@ class SignUpController extends React.Component<Props, State> {
                   onClick={e => this.setState({ termsOpen: true })}
                 />
                 {" and "}
-                <a href={url.section(Section.Privacy)}>Privacy Policy</a>
+                <a href={url.section(Section.Privacy)} target="_blank">
+                  Privacy Policy
+                </a>
               </span>
             </div>
 
@@ -207,7 +209,7 @@ class SignUpController extends React.Component<Props, State> {
             />
 
             <Button
-            variant="success"
+              variant="success"
               className="LogInController-signInButton"
               disabled={!this.state.isValid}
               type="submit"
