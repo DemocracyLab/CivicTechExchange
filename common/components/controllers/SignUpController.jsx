@@ -12,6 +12,8 @@ import PseudoLink from "../chrome/PseudoLink.jsx";
 import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
 import TermsModal, { TermsTypes } from "../common/confirmation/TermsModal.jsx";
 import Button from "react-bootstrap/Button";
+import url from "../utils/url.js";
+import Section from "../enums/Section.js";
 
 type Props = {|
   +errors: { +[key: string]: $ReadOnlyArray<string> },
@@ -178,7 +180,7 @@ class SignUpController extends React.Component<Props, State> {
                   onClick={e => this.setState({ termsOpen: true })}
                 />
                 {" and "}
-                <a href={window.PRIVACY_POLICY_URL}>Privacy Policy</a>
+                <a href={url.section(Section.Privacy)}>Privacy Policy</a>
               </span>
             </div>
 
