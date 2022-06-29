@@ -13,8 +13,8 @@ def run(request):
 
 
 def save(project_position):
-    from civictechprojects.models import ProjectPosition
-    if not ProjectPosition(project_position).position_project.is_searchable:
+    from civictechprojects.models import Project
+    if not Project.objects.get(id__exact=project_position.position_project.id).is_searchable:
         pass
 
     position_role = Tag.tags_field_descriptions(project_position.position_role)

@@ -1,6 +1,7 @@
-from civictechprojects.models import Project
+from civictechprojects.models import Project, ProjectPosition
 from common.models import Tag
 from .client import SalesforceClient
+from salesforce import volunteer_job
 import json
 import requests
 import threading
@@ -15,6 +16,16 @@ client = SalesforceClient()
 
 def run(request):
     SalesforceClient().send(request)
+
+
+def create(project: Project):
+    if not project.is_searchable:
+        pass
+
+    save(project)
+    positions = ProjectPosition.objects.filter(position_project_id__exact=project.id)
+    for position in positions:
+        volunteer_job.save(position)
 
 
 def save(project: Project):

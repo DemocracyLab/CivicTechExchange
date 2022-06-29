@@ -397,7 +397,7 @@ def approve_project(request, project_id):
             project.is_searchable = True
             project.deleted = False
             project.save()
-            salesforce_campaign.save(project)
+            salesforce_campaign.create(project)
             project.recache(recache_linked=True)
             ProjectSearchTagsCache.refresh()
             project.project_creator.purge_cache()
