@@ -1,0 +1,15 @@
+.Privacy-root {
+    h1 {
+        padding: 1rem 0;
+    }
+    ol > li {
+        padding: 1rem; // section separators
+    }
+    ul {
+        list-style-type: disc; // nested list defaults to circle, so override
+    }
+    ul > li {
+        padding: 0.125rem 0; // spacing in each section's list
+    }
+
+}
