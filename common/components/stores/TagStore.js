@@ -42,6 +42,7 @@ class State extends Record(DEFAULT_STATE) {
   tags: List<Tag>;
 }
 
+// TODO: Delete after moving definitions elsewhere
 class TagStore extends ReduceStore<State> {
   constructor(): void {
     super(TagDispatcher);

@@ -1,18 +1,17 @@
 // @flow
 
 import React from "react";
-import type { Project } from "../../stores/ProjectSearchStore.js";
 import { List } from "immutable";
 import ProjectCard from "../FindProjects/ProjectCard.jsx";
 import { Glyph, GlyphSizes, GlyphStyles } from "../../utils/glyphs.js";
-import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils, { ProjectData } from "../../utils/ProjectAPIUtils.js";
 import Button from "react-bootstrap/Button";
 import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import Carousel from "react-bootstrap/Carousel";
 
 type State = {|
-  projects: List<Project>,
+  projects: List<ProjectData>,
   windowWidth: number,
   cardStart: number,
   cardCapacity: number,
