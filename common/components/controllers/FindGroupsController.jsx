@@ -2,7 +2,6 @@
 
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import { SearchFor } from "../stores/EntitySearchStore.js";
-import TagDispatcher from "../stores/TagDispatcher.js";
 import GroupCardsContainer from "../componentsBySection/FindGroups/GroupCardsContainer.jsx";
 import GroupFilterContainer from "../componentsBySection/FindGroups/FIlters/GroupFilterContainer.jsx";
 import Headers from "../common/Headers.jsx";
@@ -42,7 +41,6 @@ class FindGroupsController extends React.PureComponent {
         searchConfig: SearchFor.Groups,
       },
     });
-    TagDispatcher.dispatch({ type: "INIT" });
   }
 
   // TODO: Splash

@@ -16,13 +16,22 @@ import {
   locationRadiusToString,
   locationRadiusFromString,
 } from "../common/location/LocationRadius.js";
-import type { Tag } from "./TagStore.js";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import urls from "../utils/url.js";
 import Section from "../enums/Section.js";
 import { CountryData, countryByCode } from "../constants/Countries.js";
 import { Dictionary } from "../types/Generics.jsx";
 import { SelectOption } from "../types/SelectOption.jsx";
+
+export type Tag = {|
+  +caption: string,
+  +category: string,
+  +displayName: string,
+  +id: number,
+  +parent: string,
+  +subcategory: string,
+  +tagName: string,
+|};
 
 type EntityPayload<T> = {|
   entities: List<T>,

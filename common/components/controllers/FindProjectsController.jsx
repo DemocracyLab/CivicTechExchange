@@ -1,7 +1,6 @@
 // @flow
 
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
-import TagDispatcher from "../stores/TagDispatcher.js";
 import ProjectCardsContainer from "../componentsBySection/FindProjects/ProjectCardsContainer.jsx";
 import ProjectFilterContainer from "../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx";
 import { FindProjectsArgs, SearchFor } from "../stores/EntitySearchStore.js";
@@ -46,7 +45,6 @@ class FindProjectsController extends React.PureComponent {
         searchConfig: SearchFor.Projects,
       },
     });
-    TagDispatcher.dispatch({ type: "INIT" });
   }
 
   render(): React$Node {
