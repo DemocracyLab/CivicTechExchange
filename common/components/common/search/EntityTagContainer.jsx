@@ -1,15 +1,14 @@
 // @flow
 
+import React from "react";
 import type { FluxReduceStore } from "flux/utils";
 import { Container } from "flux/utils";
-import ProjectSearchStore, {
-  LocationRadius,
-} from "../../stores/ProjectSearchStore.js";
-import CloseablePill from "./CloseablePill.jsx";
-import React from "react";
+import EntitySearchStore from "../../stores/EntitySearchStore.js";
+import type { LocationRadius } from "../location/LocationRadius.js";
+import CloseablePill from "../../componentsBySection/FindProjects/CloseablePill.jsx";
 import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
-import { getLocationDisplayString } from "../../common/location/LocationInfo.js";
+import { getLocationDisplayString } from "../location/LocationInfo.js";
 
 type PillConfig = {|
   label: string,
@@ -20,15 +19,15 @@ type State = {|
   pillConfigs: $ReadOnlyArray<PillConfig>,
 |};
 
-class ProjectTagContainer extends React.Component<{||}, State> {
+class EntityTagContainer extends React.Component<{||}, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore];
+    return [EntitySearchStore];
   }
 
   static calculateState(prevState: State): State {
     let pillConfigs: Array<PillConfig> = [];
 
-    if (ProjectSearchStore.getFavoritesOnly()) {
+    if (EntitySearchStore.getFavoritesOnly()) {
       pillConfigs.push({
         label: "Favorites Only",
         closeAction: () =>
@@ -40,7 +39,7 @@ class ProjectTagContainer extends React.Component<{||}, State> {
     }
 
     pillConfigs = pillConfigs.concat(
-      ProjectSearchStore.getTags()
+      EntitySearchStore.getTags()
         .toJS()
         .map((tag: TagDefinition) => {
           return {
@@ -54,10 +53,10 @@ class ProjectTagContainer extends React.Component<{||}, State> {
         })
     );
 
-    const locationRadius: LocationRadius = ProjectSearchStore.getLocation();
+    const locationRadius: LocationRadius = EntitySearchStore.getLocation();
     if (locationRadius && locationRadius.latitude && locationRadius.longitude) {
       pillConfigs.push({
-        label: ProjectTagContainer.getLocationPillLabel(locationRadius),
+        label: EntityTagContainer.getLocationPillLabel(locationRadius),
         closeAction: () =>
           UniversalDispatcher.dispatch({
             type: "SET_LOCATION",
@@ -66,7 +65,7 @@ class ProjectTagContainer extends React.Component<{||}, State> {
       });
     }
 
-    const legacyLocation: string = ProjectSearchStore.getLegacyLocation();
+    const legacyLocation: string = EntitySearchStore.getLegacyLocation();
     if (legacyLocation) {
       pillConfigs.push({
         label: "In: " + decodeURI(legacyLocation),
@@ -108,4 +107,4 @@ class ProjectTagContainer extends React.Component<{||}, State> {
   }
 }
 
-export default Container.create(ProjectTagContainer);
+export default Container.create(EntityTagContainer);

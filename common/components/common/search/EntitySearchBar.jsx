@@ -1,25 +1,29 @@
 // @flow
 
-import React, { SyntheticEvent } from "react";
 import type { FluxReduceStore } from "flux/utils";
 import { Container } from "flux/utils";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
+import EntitySearchStore from "../../stores/EntitySearchStore.js";
 import GlyphStyles from "../../utils/glyphs.js";
 import metrics from "../../utils/metrics.js";
-import EventSearchStore from "../../stores/EventSearchStore.js";
-import EventSearchDispatcher from "../../stores/EventSearchDispatcher.js";
+import React, { SyntheticEvent } from "react";
+
+type Props = {|
+  placeholder: string,
+|};
 
 type State = {|
   keyword: string,
 |};
 
-class EventSearchBar extends React.Component<{||}, State> {
+class EntitySearchBar extends React.Component<{||}, Props, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [EventSearchStore];
+    return [EntitySearchStore];
   }
 
   static calculateState(prevState: State): State {
     return {
-      keyword: EventSearchStore.getKeyword() || "",
+      keyword: EntitySearchStore.getKeyword() || "",
     };
   }
 
@@ -31,7 +35,9 @@ class EventSearchBar extends React.Component<{||}, State> {
           className="ProjectSearchBar-input"
           onChange={e => this.setState({ keyword: e.target.value })}
           onKeyPress={this._handleKeyPress.bind(this)}
-          placeholder="Search Events"
+          placeholder={
+            this.props.placeholder || "Search tech-for-good projects"
+          }
           value={this.state.keyword}
         />
       </div>
@@ -45,12 +51,12 @@ class EventSearchBar extends React.Component<{||}, State> {
   }
 
   _onSubmitKeyword(): void {
-    EventSearchDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: "SET_KEYWORD",
       keyword: this.state.keyword,
     });
-    metrics.logEventSearchByKeywordEvent(this.state.keyword);
+    metrics.logSearchByKeywordEvent(this.state.keyword);
   }
 }
 
-export default Container.create(EventSearchBar);
+export default Container.create(EntitySearchBar);

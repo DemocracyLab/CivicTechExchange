@@ -4,7 +4,8 @@ import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import TagDispatcher from "../stores/TagDispatcher.js";
 import ProjectCardsContainer from "../componentsBySection/FindProjects/ProjectCardsContainer.jsx";
 import ProjectFilterContainer from "../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx";
-import { FindProjectsArgs } from "../stores/ProjectSearchStore.js";
+import { FindProjectsArgs, SearchFor } from "../stores/EntitySearchStore.js";
+
 import Headers from "../common/Headers.jsx";
 import urls from "../utils/url.js";
 import React from "react";
@@ -17,7 +18,7 @@ class FindProjectsController extends React.PureComponent {
   }
 
   componentWillMount(): void {
-    let searchDecoded = decodeURIComponent(document.location.search)
+    let searchDecoded = decodeURIComponent(document.location.search);
     let args: FindProjectsArgs = urls.arguments(searchDecoded);
     args = _.pick(args, [
       "showSplash",
@@ -38,11 +39,11 @@ class FindProjectsController extends React.PureComponent {
     }
 
     UniversalDispatcher.dispatch({
-      type: "INIT_PROJECT_SEARCH",
+      type: "INIT_SEARCH",
       findProjectsArgs: !_.isEmpty(args) ? args : null,
       searchSettings: {
         updateUrl: true,
-        defaultSort: "-project_date_modified",
+        searchConfig: SearchFor.Projects,
       },
     });
     TagDispatcher.dispatch({ type: "INIT" });

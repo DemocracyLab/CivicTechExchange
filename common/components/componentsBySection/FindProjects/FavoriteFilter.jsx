@@ -4,7 +4,7 @@ import React from "react";
 import { Container } from "flux/utils";
 import IconToggle from "../../chrome/IconToggle.jsx";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
-import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
+import EntitySearchStore from "../../stores/EntitySearchStore.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import metrics from "../../utils/metrics.js";
 
@@ -21,12 +21,12 @@ class FavoriteFilter extends React.Component<{||}, State> {
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore];
+    return [EntitySearchStore];
   }
 
   static calculateState(prevState: State): State {
     const state: State = {
-      favoritesOnly: ProjectSearchStore.getFavoritesOnly(),
+      favoritesOnly: EntitySearchStore.getFavoritesOnly(),
     };
 
     return state;
