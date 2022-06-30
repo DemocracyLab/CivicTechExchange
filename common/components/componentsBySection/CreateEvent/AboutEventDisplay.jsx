@@ -17,7 +17,7 @@ import urlHelper from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
-import MainFooter from "../../chrome/MainFooter.jsx";
+import SponsorFooter from "../../chrome/SponsorFooter.jsx";
 import PromptNavigationModal from "../../common/PromptNavigationModal.jsx";
 import type { Dictionary } from "../../types/Generics.jsx";
 import NotificationModal from "../../common/notification/NotificationModal.jsx";
@@ -206,7 +206,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
             <ProfileProjectSearch viewOnly={this.props.viewOnly} />
           )}
         </div>
-        <MainFooter key="main_footer" forceShow={event.show_headers} />
+        <SponsorFooter key="main_footer" forceShow={event.show_headers} />
       </React.Fragment>
     );
   }

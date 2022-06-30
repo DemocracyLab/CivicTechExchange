@@ -1,0 +1,78 @@
+.SiteFooter-root {
+  background: $color-background-light;
+  padding-top: 40px;
+  a,
+  a:visited {
+    color: $color-text-dark;
+  }
+  a:hover {
+    color: $color-link-active;
+  }
+}
+.SiteFooter-logo {
+  width: 100%;
+  flex-basis: 100%;
+  img {
+    width: 50px;
+  }
+  margin-bottom: 1rem;
+}
+
+.SiteFooter-nav-links {
+  display: flex;
+  flex-direction: column;
+  .SiteFooter-link-group {
+    flex-basis: 100%;
+  }
+  a {
+    display: block; // makes links in column
+    margin: 0.25rem 0; // ends up with 8px between items
+  }
+}
+.SiteFooter-mid-container {
+  display: flex;
+  flex-direction: column;
+}
+.SiteFooter-sectionline {
+  width: 80%;
+  margin: 2rem auto;
+}
+.SiteFooter-iconblock {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  gap: 20px;
+}
+.SiteFooter-copyright {
+  text-align: center;
+}
+.SiteFooter-copyright-icons {
+  margin: 1.5rem 0 1rem 0;
+}
+
+@include media-breakpoint-up(md) {
+  // for tablets we can set the footer links to row since they still have full width available
+  .SiteFooter-logo {
+    margin-bottom: 2rem;
+  }
+  .SiteFooter-nav-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    .SiteFooter-link-group {
+      flex-basis: 33%;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  // on desktop the order is reversed in column, then try to align visually in the row
+  .SiteFooter-mid-container {
+    flex-direction: column-reverse;
+    justify-content: space-around;
+    height: 100%;
+  }
+  .SiteFooter-iconblock {
+    justify-content: flex-start; // "left"
+  }
+}

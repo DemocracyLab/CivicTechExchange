@@ -1,0 +1,9 @@
+.Terms-root {
+    padding: 1rem 0 2rem 0;
+    scroll-behavior: smooth;
+}
+
+.Terms-section {
+    position: relative; // a downside to <JumpAnchor /> is it requires a relative positioned parent element
+    padding: 2rem 0;
+}
