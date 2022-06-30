@@ -63,6 +63,7 @@ class RecentProjectsSection extends React.Component<{||}, State> {
         <div className="RecentProjects-button">
           <Button
             className="RecentProjects-all"
+            variant="secondary"
             href={url.section(Section.FindProjects)}
           >
             See All Projects

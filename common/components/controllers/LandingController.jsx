@@ -28,180 +28,68 @@ class LandingController extends React.PureComponent<{||}> {
   render(): React$Node {
     return (
       <div className="LandingController-root">
-        {this._renderTopSplash()}
         <div className="container">
-          <RecentProjectsSection className="row" />
-          {this._renderPathFlows()}
-          {this._renderMiddleSplash()}
-          {this._renderTestimonials()}
-          {this._renderPartnerSection()}
-          {this._renderPartnersInAction()}
-          {this._renderBottomSplash()}
+          <div className="row">
+            {this._renderHero()}
+            {this._renderOptions()}
+            {this._renderNextHackathon()}
+            <RecentProjectsSection className="col-12" />
+            {this._renderTestimonials()}
+            {this._renderLatestBlogpost()}
+            {this._renderCommunityPartners()}
+          </div>
         </div>
       </div>
     );
   }
 
-  _renderTopSplash(): React$Node {
-    const header: string = "Make Tech.  Do Good.";
-    const text: string =
-      "We connect tech-for-good projects with skilled volunteers and socially responsible companies.";
-
+  _renderHero(): React$Node {
     return (
-      <SplashScreen
-        className="LandingController-topsplash"
-        header={header}
-        text={text}
-      >
-        <Button
-          variant="primary"
-          className="SplashScreen-find-projects-btn LandingController-fixed-width-button"
-          href={url.section(Section.FindProjects)}
-        >
-          Explore Projects
-        </Button>
-        <Button
-          variant="primary"
-          className="SplashScreen-create-project-btn LandingController-fixed-width-button"
-          href={url.sectionOrLogIn(Section.CreateProject)}
-        >
-          Create A Project
-        </Button>
-        <Button
-          variant="primary"
-          className="SplashScreen-create-project-btn LandingController-fixed-width-button"
-          href={url.section(Section.Companies)}
-        >
-          For Companies
-        </Button>
-      </SplashScreen>
-    );
-  }
-
-  _renderPathFlows() {
-    return (
-      <div className="LandingController-pathflows row ml-0 mr-0">
-        <div className="col-xs-12 col-lg-6 LandingController-volunteer-flow">
-          <h3>Want to Volunteer?</h3>
-          <p>Apply your tech skills to projects that need them</p>
-          <div className="LandingController-pathflows-stepcontainer">
-            <div className="LandingController-pathflows-item">
-              <Vo2 />
-              <p>1. Browse Projects</p>
-            </div>
-            <div className="LandingController-pathflows-arrow">
-              <ArrowBlack />
-            </div>
-            <div className="LandingController-pathflows-item">
-              <Vo1 />
-              <p>2. Create a Profile</p>
-            </div>
-            <div className="LandingController-pathflows-arrow">
-              <ArrowBlack />
-            </div>
-            <div className="LandingController-pathflows-item">
-              <Vo3 />
-              <p>3. Connect with Project Leaders</p>
-            </div>
-          </div>
-          <Button href={url.section(Section.FindProjects)} variant="light">
-            Start Volunteering!
-          </Button>
-        </div>
-        <div className="col-xs-12 col-lg-6 LandingController-recruit-flow">
-          <h3>Need Volunteers?</h3>
-          <p>Find people with the tech skills you need</p>
-          <div className="LandingController-pathflows-stepcontainer">
-            <div className="LandingController-pathflows-item">
-              <Rec3 />
-              <p>1. Add Your Project</p>
-            </div>
-            <div className="LandingController-pathflows-arrow">
-              <ArrowOrange />
-            </div>
-            <div className="LandingController-pathflows-item">
-              <Rec2 />
-              <p>2. List Your Needs</p>
-            </div>
-            <div className="LandingController-pathflows-arrow">
-              <ArrowOrange />
-            </div>
-            <div className="LandingController-pathflows-item">
-              <Rec1 />
-              <p>3. Recruit Skilled Volunteers</p>
-            </div>
-          </div>
-
-          <Button
-            href={url.sectionOrLogIn(Section.CreateProject)}
-            variant="primary"
-          >
-            Start Recruiting!
-          </Button>
+      <div className="LandingController-hero col-12">
+        <h1>Make Tech. Do Good.</h1>
+        <p>
+          We connect tech-for-good projects with skilled volunteers and socially
+          responsible companies.
+        </p>
+        <div className="LandingController-hero-video">
+          <span>(pretend a video is here)</span>
         </div>
       </div>
     );
   }
 
-  _renderMiddleSplash() {
-    const header: string = "Accelerating Civic Innovation";
-    const text: string =
-      "DemocracyLab is a nonprofit organization. We are advancing tech innovation in the social, nonprofit and civic sectors through the power of tech-for-good volunteerism.";
-
+  _renderOptions() {
     return (
-      <SplashScreen
-        className="LandingController-midsplash"
-        header={header}
-        text={text}
-        img={HeroImage.MidLanding}
-      >
-        <Button
-          variant="primary"
-          className="LandingController-midsplash-btn SplashScreen-create-project-btn"
-          href={url.section(Section.AboutUs)}
-        >
-          Learn More
-        </Button>
-      </SplashScreen>
+      <div className="LandingController-options col-12">
+        <h2>I'd like to...</h2>
+        <p>scrollable/clickable row of 3 content boxes go here</p>
+      </div>
     );
   }
 
-  _renderTestimonials() {
+  _renderNextHackathon(): React$Node {
+    return (<div className="LandingController-next-hackathon col-12">
+    <p>some function that returns a hackathon here i guess, probably don't render section at all if no upcoming?</p>
+    </div>);
+  }
+  _renderTestimonials(): React$Node {
     return (
-      <div className="LandingController-testimonial-container carousel-testimonial-root ">
-        <h2 className="text-center headline1">Testimonials</h2>
+      <div className="LandingController-testimonial-container carousel-testimonial-root col-12">
+        <h2 className="text-center">What people are saying about DemocracyLab</h2>
         <TestimonialCarousel interval={15000} />
       </div>
     );
   }
 
-  _renderPartnerSection() {
+  _renderLatestBlogpost(): React$Node {
     return (
-      <div
-        className="LandingController-partner-section"
-        style={cdn.bgImage("OurVisionBGoverlay.jpg")}
-      >
-        <div className="PartnerSection text-center">
-          <h2>Partner With Us To Organize Your Next Hackathon</h2>
-          <p>
-            DemocracyLab is a leading organizer of tech-for-good hackathons.
-          </p>
-          <p>
-            Let us help your company, non-profit or group strengthen your
-            culture and make an impact!
-          </p>
-          <Button
-            variant="outline-secondary"
-            href={url.section(Section.Companies)}
-          >
-            Learn More
-          </Button>
-        </div>
+      <div className="LandingController-latestblogpost col-12">
+        <p>latest blog post here</p>
       </div>
-    );
+    )
   }
 
-  _renderPartnersInAction() {
+  _renderCommunityPartners() {
     const partnerLogos = Partners.map(i => (
       <div key={i.name} className="LandingController-partnersinaction-logo">
         <a href={i.link}>
@@ -211,32 +99,12 @@ class LandingController extends React.PureComponent<{||}> {
     ));
 
     return (
-      <div className="LandingController-partnersinaction">
+      <div className="LandingController-partnersinaction col-12">
         <h2 className="text-center">Our Community Partners</h2>
         <div className="LandingController-partnersinaction-container">
           {partnerLogos}
         </div>
       </div>
-    );
-  }
-
-  _renderBottomSplash(): React$Node {
-    const header: string = "What are you waiting for?";
-
-    return (
-      <SplashScreen
-        className="LandingController-bottom-splash"
-        header={header}
-        img={HeroImage.BottomLanding}
-      >
-        <Button
-          variant="primary"
-          className="LandingController-bottomsplash-btn"
-          href={url.sectionOrLogIn(Section.FindProjects)}
-        >
-          Get Started
-        </Button>
-      </SplashScreen>
     );
   }
 }
