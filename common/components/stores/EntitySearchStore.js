@@ -41,6 +41,7 @@ type EntityPayload<T> = {|
 export type EntitySearchConfig<T> = {|
   name: string,
   apiUrlBase: string,
+  frontEndUrlBase: string,
   apiEntityTransform: (any, SearchSettings) => EntityPayload<T>,
   defaultSort: string,
   sortFields: $ReadOnlyArray<SelectOption>,
@@ -50,6 +51,7 @@ export const SearchFor: Dictionary<EntitySearchConfig> = {
   Projects: {
     name: "Projects",
     apiUrlBase: "/api/projects",
+    frontEndUrlBase: urls.section(Section.FindProjects),
     apiEntityTransform: (apiResponse, searchSettings: SearchSettings) => {
       let projects = apiResponse.projects.map(
         ProjectAPIUtils.projectFromAPIData
@@ -76,6 +78,7 @@ export const SearchFor: Dictionary<EntitySearchConfig> = {
   Groups: {
     name: "Groups",
     apiUrlBase: "/api/groups",
+    frontEndUrlBase: urls.section(Section.FindGroups),
     apiEntityTransform: apiResponse => {
       return {
         entities: apiResponse.groups,
@@ -92,6 +95,7 @@ export const SearchFor: Dictionary<EntitySearchConfig> = {
   Events: {
     name: "Events",
     apiUrlBase: "/api/events",
+    frontEndUrlBase: urls.section(Section.FindEvents),
     apiEntityTransform: apiResponse => {
       return {
         entities: apiResponse.events,
@@ -378,7 +382,7 @@ class EntitySearchStore extends ReduceStore<State> {
       // Only show the FindProjects page args that users care about
       const urlArgs = _.omit(state.findProjectsArgs, ["page"]);
       const windowUrl: string = urls.constructWithQueryString(
-        urls.section(Section.FindProjects),
+        state.searchSettings.searchConfig.frontEndUrlBase,
         urlArgs
       );
       history.pushState({}, null, windowUrl);
