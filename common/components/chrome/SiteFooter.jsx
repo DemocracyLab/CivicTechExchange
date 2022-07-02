@@ -25,9 +25,7 @@ class SiteFooter extends React.Component {
 
           <div className="SiteFooter-link-group">
             <a href={url.section(Section.Privacy)}>Privacy Policy</a>
-            <a href={url.section(Section.Terms) + "#use"}>
-              Terms of Use
-            </a>
+            <a href={url.section(Section.Terms) + "#use"}>Terms of Use</a>
             <a href={url.section(Section.Terms) + "#volunteer"}>
               Terms of Volunteering
             </a>
@@ -51,7 +49,7 @@ class SiteFooter extends React.Component {
             <div className="Footer-dividerline d-lg-none"></div>
 
             <div className="SiteFooter-iconblock">
-              <a href="https://www.facebook.com/democracylaborg">
+              <a href="https://www.facebook.com/DemocracyLab">
                 <i
                   className={Glyph(GlyphStyles.FacebookSquare, GlyphSizes.X2)}
                 ></i>
