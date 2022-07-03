@@ -30,6 +30,7 @@ class FindProjectsController extends React.PureComponent {
       "tech",
       "role",
       "org",
+      "orgType",
       "stage",
       "favoritesOnly",
     ]);
