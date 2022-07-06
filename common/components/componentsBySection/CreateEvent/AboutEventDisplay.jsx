@@ -31,6 +31,7 @@ import type {
   ProjectData,
 } from "../../utils/ProjectAPIUtils.js";
 import JoinConferenceButton from "../../common/event_projects/JoinConferenceButton.jsx";
+import { SearchFor } from "../../stores/EntitySearchStore.js";
 
 type Props = {|
   event: ?EventData,
@@ -522,14 +523,14 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     const event: EventData = this.state.event;
     if (event && !_.isEmpty(event.event_legacy_organization)) {
       UniversalDispatcher.dispatch({
-        type: "INIT_PROJECT_SEARCH",
+        type: "INIT_SEARCH",
         findProjectsArgs: {
           event_id: event.event_id,
           sortField: "project_name",
         },
         searchSettings: {
           updateUrl: false,
-          defaultSort: "project_name",
+          searchConfig: SearchFor.Projects,
           cardOperationGenerator:
             !this.state.isPastEvent && this._cardOperationGenerator.bind(this),
         },

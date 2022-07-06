@@ -23,6 +23,9 @@
   flex-direction: column;
   .SiteFooter-link-group {
     flex-basis: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
   a {
     display: block; // makes links in column

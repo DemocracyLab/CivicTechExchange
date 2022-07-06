@@ -2,9 +2,8 @@
 
 // @flow
 
-import ProjectSearchSort from "./ProjectSearchSort.jsx";
+import EntitySearchSort from "../../common/search/EntitySearchSort.jsx";
 import ResetSearchButton from "./ResetSearchButton.jsx";
-import AlertSignupModal from "./AlertSignupModal.jsx";
 import metrics from "../../utils/metrics.js";
 import React from "react";
 
@@ -41,7 +40,7 @@ class ProjectSearchContainer extends React.PureComponent<{||}, State> {
           <ResetSearchButton />
         </div>
         <div className="ProjectSearchContainer-search col-12 col-md-9 col-xxl-10">
-          <ProjectSearchSort />
+          <EntitySearchSort />
         </div>
       </div>
     );

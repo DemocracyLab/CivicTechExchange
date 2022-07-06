@@ -87,8 +87,11 @@ class metrics {
     _logEvent("filter_by_location", { location: location });
   }
 
-  static logSearchChangeSortEvent(sortField: string): void {
-    _logEvent("sort_by_field", { sortField: sortField });
+  static logSearchChangeSortEvent(sortField: string, entityType: string): void {
+    _logEvent("sort_by_field", {
+      sortField: sortField,
+      entityType: entityType,
+    });
   }
 
   static logFilterProjectsByFavorite(favoritesOnly: boolean): void {
