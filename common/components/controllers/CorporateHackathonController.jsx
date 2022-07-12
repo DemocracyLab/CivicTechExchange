@@ -390,7 +390,6 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             <h4>Current DemocracyLab sponsors include:</h4>
             <div className="corporate-sponsors-container">
               {this._renderCurrentSponsors()}
-              {/* moved Gates foundation to the bottom of the list */}
               <div className="corporate-sponsor-item">
                 <img
                   src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png"
