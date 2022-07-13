@@ -42,11 +42,13 @@ def save(project_position):
         #thread.start()
 
 
-def delete(job_id):
+def delete(project_position):
+    position_role = Tag.tags_field_descriptions(project_position.position_role)
+    platform_id__c = f'{project_position.position_project.id}{position_role.lower().replace(" ", "")}'
+    data = {"GW_Volunteers__Inactive__c": True}
     req = requests.Request(
-        method="DELETE",
-        url=f'{client.job_endpoint}/platform_id__c/{job_id}'
+        method="PATCH",
+        url=f'{client.job_endpoint}/platform_id__c/{platform_id__c}',
+        data=json.dumps(data)
     )
-    thread = threading.Thread(target=run, args=(req,))
-    thread.daemon = True
-    thread.start()
+    SalesforceClient().send(req)

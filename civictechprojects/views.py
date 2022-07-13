@@ -23,7 +23,6 @@ from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from .helpers.search.groups import groups_list
 from .helpers.search.projects import projects_list, recent_projects_list
-from salesforce import volunteer_hours as salesforce_volunteer, contact as salesforce_contact
 from common.caching.cache import Cache
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.db import unique_column_values
@@ -48,7 +47,7 @@ from common.helpers.user_helpers import get_my_projects, get_my_groups, get_my_e
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
-from salesforce import campaign as salesforce_campaign
+from salesforce import campaign as salesforce_campaign, volunteer_hours as salesforce_volunteer, contact as salesforce_contact
 import requests
 
 
@@ -782,7 +781,7 @@ def volunteer_with_project(request, project_id):
         projected_end_date=projected_end_date,
         role=role,
         application_text=message)
-    volunteer_relation.save_to_salesforce('create')
+    salesforce_volunteer.create(volunteer_relation)
     send_volunteer_application_email(volunteer_relation)
     project.recache()
     user.purge_cache()
@@ -808,6 +807,7 @@ def renew_volunteering_with_project(request, application_id):
     volunteer_relation.re_enroll_last_reminder_date = None
     volunteer_relation.save()
     volunteer_relation.volunteer.purge_cache()
+    salesforce_volunteer.renew(volunteer_relation)
 
     notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
@@ -857,7 +857,7 @@ def accept_project_volunteer(request, application_id):
         volunteer_relation.is_approved = True
         volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
-        volunteer_relation.save_to_salesforce('accept')
+        salesforce_volunteer.accept(volunteer_relation)
         volunteer_relation.volunteer.purge_cache()
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.project.recache()

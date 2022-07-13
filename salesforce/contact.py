@@ -19,16 +19,25 @@ def run(request):
 def save(contributor: object):
     data = {
         "ownerid": client.owner_id,
-        "firstname": contributor.first_name,
-        "lastname": contributor.last_name,
-        "email": contributor.username,
-        "phone": contributor.phone_primary,
-        "mailingpostalcode": contributor.postal_code,
-        "mailingcountry": contributor.country,
-        "npo02__membershipjoindate__c": contributor.date_joined.strftime('%Y-%m-%d'),
-        "description": contributor.about_me,
-        'technologies__c': Tag.tags_field_descriptions(contributor.user_technologies)
+        "email": contributor.username
     }
+    # Take care not to overwrite with blanks:
+    if contributor.first_name:
+        data['firstname'] = contributor.first_name
+    if contributor.last_name:
+        data['lastname'] = contributor.last_name
+    if contributor.phone_primary:
+        data['phone'] = contributor.phone_primary
+    if contributor.postal_code:
+        data['mailingpostalcode'] = contributor.postal_code
+    if contributor.country:
+        data['mailingcountry'] = contributor.country
+    if contributor.date_joined.strftime('%Y-%m-%d'):
+        data['npo02__membershipjoindate__c'] = contributor.date_joined.strftime('%Y-%m-%d')
+    if contributor.about_me:
+        data['description'] = contributor.about_me
+    if contributor.user_technologies:
+        data['technologies__c'] = Tag.tags_field_descriptions(contributor.user_technologies)
 
     req = requests.Request(
         method="PATCH",

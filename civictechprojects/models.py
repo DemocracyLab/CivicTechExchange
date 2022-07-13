@@ -1031,6 +1031,7 @@ class ProjectPosition(models.Model):
 
         for deleted_position_id in deleted_position_ids:
             ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
+            salesforce_job.delete(ProjectPosition.objects.get(id=deleted_position_id))
 
         return len(added_positions) > 0 or len(updated_positions) > 0 or len(deleted_position_ids) > 0
 
@@ -1281,20 +1282,6 @@ class VolunteerRelation(Archived):
         now = now or timezone.now()
         return self.is_approved and (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
 
-
-    def save_to_salesforce(self, action):
-        if action == 'create':
-            salesforce_volunteer.create(self)
-        elif action == 'accept':
-            salesforce_volunteer.accept(self)
-        elif action == 'renew':
-            salesforce_volunteer.renew(self)
-        elif action == 'complete':
-            salesforce_volunteer.conclude(self)
-        elif action == 'dismiss':
-            salesforce_volunteer.dismiss(self)
-        elif action == 'delete':
-            salesforce_volunteer.delete(self.id)
 
     def salesforce_job_id(self):
         role = Tag.tags_field_descriptions(self.role)
