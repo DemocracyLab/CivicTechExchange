@@ -24,6 +24,7 @@ export type GroupTileAPIData = {|
   group_thumbnail: FileInfo,
   group_project_count: number,
   group_issue_areas: Dictionary<TagDefinition>,
+  group_slug: ?string,
 |};
 
 export type GroupDetailsAPIData = {|
@@ -32,6 +33,7 @@ export type GroupDetailsAPIData = {|
   group_short_description: string,
   group_links: $ReadOnlyArray<LinkInfo>,
   group_files: $ReadOnlyArray<FileInfo>,
+  is_private: boolean,
 |} & GroupTileAPIData;
 
 export type ProjectRelationshipAPIData = {|

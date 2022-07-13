@@ -25,6 +25,7 @@ export type MyProjectData = {|
   +isCoOwner: ?boolean,
   +isUpForRenewal: ?boolean,
   +projectedEndDate: ?Date,
+  +slug: string,
 |};
 
 // TODO: Rename isApproved to is_searchable
@@ -38,6 +39,7 @@ export type MyGroupData = {|
   +relationship_is_approved: boolean,
   +isApproved: ?boolean,
   +isCreated: ?boolean,
+  +slug: ?string,
 |};
 
 export type MyEventData = {|

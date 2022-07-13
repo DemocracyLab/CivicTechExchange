@@ -28,7 +28,7 @@ def projects_list(request):
         event = Event.get_by_id_or_slug(event_id)
         project_list = event.get_linked_projects()
     else:
-        project_list = Project.objects.filter(is_searchable=True)
+        project_list = Project.objects.filter(is_searchable=True, is_private=False)
 
     project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
     project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)

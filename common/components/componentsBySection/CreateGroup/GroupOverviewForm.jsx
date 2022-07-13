@@ -20,6 +20,8 @@ import TextFormField, {
   TextFormFieldType,
 } from "../../forms/fields/TextFormField.jsx";
 import CountryLocationFormFields from "../../forms/fields/CountryLocationFormFields.jsx";
+import CheckBox from "../../common/selection/CheckBox.jsx";
+import CurrentUser from "../../utils/CurrentUser.js";
 
 type FormFields = {|
   group_name: ?string,
@@ -53,6 +55,8 @@ class GroupOverviewForm extends React.PureComponent<Props, State> {
       group_location: group ? getLocationInfoFromGroup(group) : null,
       group_description: group ? group.group_description : "",
       group_short_description: group ? group.group_short_description : "",
+      group_slug: group ? group.group_slug : "",
+      is_private: !!group?.is_private,
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
@@ -138,7 +142,25 @@ class GroupOverviewForm extends React.PureComponent<Props, State> {
           showCount={true}
           maxLength={3000}
         />
+
+        {CurrentUser.isStaff(this.props.group) && this._renderAdminControls()}
       </div>
+    );
+  }
+
+  _renderAdminControls(): React$Node {
+    return (
+      <React.Fragment>
+        <TextFormField
+          id="group_slug"
+          label="Group Url Slug"
+          type={TextFormFieldType.SingleLine}
+          required={false}
+          maxLength={60}
+        />
+
+        <CheckBox id="is_private" label="Private Group" />
+      </React.Fragment>
     );
   }
 }
