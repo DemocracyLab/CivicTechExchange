@@ -35,7 +35,7 @@ class ProjectSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Project.objects.filter(is_searchable=True).order_by('id')
+        return Project.objects.filter(is_searchable=True, is_private=False).order_by('id')
 
     def location(self, project):
         return section_path(FrontEndSection.AboutProject.value, {'id': project.id})
@@ -50,7 +50,7 @@ class GroupSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Group.objects.filter(is_searchable=True).order_by('id')
+        return Group.objects.filter(is_searchable=True, is_private=False).order_by('id')
 
     def location(self, group):
         return section_path(FrontEndSection.AboutGroup.value, {'id': group.id})
