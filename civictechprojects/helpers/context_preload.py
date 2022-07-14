@@ -14,7 +14,7 @@ def about_project_preload(context, request):
     project_id = query_args['id']
     project = Project.get_by_id_or_slug(project_id)
     if project is not None:
-        project_json = ProjectCache.get(str(project.id))
+        project_json = project.hydrate_to_json()
         context['title'] = project_json['project_name'] + ' | DemocracyLab'
         context['description'] = project_json['project_short_description'] or project_json['project_description'][:300]
         if 'project_thumbnail' in project_json:
@@ -67,7 +67,7 @@ def about_group_preload(context, request):
     group_id = query_args['id']
     group = Group.get_by_id_or_slug(group_id)
     if group is not None:
-        group_json = GroupCache.get(str(group.id))
+        group_json = group.hydrate_to_json()
         context['title'] = group_json['group_name'] + ' | DemocracyLab'
         context['description'] = group_json['group_short_description']
         if 'group_thumbnail' in group_json:
