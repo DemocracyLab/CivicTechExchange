@@ -176,6 +176,7 @@ class Project(Archived):
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__(),
             'project_slug': self.project_slug,
+            'is_private': self.is_private
         }
 
         if self.project_location_coords is not None and not self.project_location_coords.empty:
@@ -346,6 +347,7 @@ class Group(Archived):
             'group_short_description': self.group_short_description,
             'group_project_count': projects.count(),
             'group_slug': self.group_slug,
+            'is_private': self.is_private
         }
 
         if len(projects) > 0:
