@@ -12,7 +12,7 @@ import Button from "react-bootstrap/Button";
 import url from "../utils/url";
 import Section from "../enums/Section";
 import ProjectChart from "../svg/homepage/chart.svg";
-import GreenSplitDot from "../svg/homepage/green-dot.svg";
+import GreenSplitDot from "../svg/homepage/green-split-dot.svg";
 import YellowDot from "../svg/homepage/yellow-dot.svg";
 import RedDot from "../svg/homepage/red-dot.svg";
 
@@ -29,7 +29,7 @@ class LandingController extends React.PureComponent<{||}> {
             {this._renderHero()}
             {this._renderOptions()}
             {this._renderNextHackathon()}
-            <RecentProjectsSection className="col-12" />
+            {this._recentProjects()}
             {this._renderTestimonials()}
             {this._renderLatestBlogpost()}
             {this._renderCommunityPartners()}
@@ -37,6 +37,14 @@ class LandingController extends React.PureComponent<{||}> {
         </div>
       </div>
     );
+  }
+
+  _recentProjects(): React$Node {
+    return (
+      <div className="col-12">
+        <RecentProjectsSection />
+      </div>
+    )
   }
 
   _renderHero(): React$Node {
@@ -75,7 +83,6 @@ class LandingController extends React.PureComponent<{||}> {
       </div>
     );
   }
-  \;
 
   _createProjectSection(): React$Node {
     return (
