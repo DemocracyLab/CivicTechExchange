@@ -53,14 +53,11 @@ def save(project: Project):
 
     data['startdate'] = project.project_date_created.strftime('%Y-%m-%d') if project.project_date_created else project.project_date_modified.strftime('%Y-%m-%d')
 
-    req = requests.Request(
+    SalesforceClient().send(requests.Request(
         method="PATCH",
         url=f'{client.campaign_endpoint}/platform_id__c/{project.id}',
         data=json.dumps(data)
-    )
-    thread = threading.Thread(target=run, args=(req,))
-    thread.daemon = True
-    thread.start()
+    ))
 
 
 def delete(project: object):
