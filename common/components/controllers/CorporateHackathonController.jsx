@@ -260,7 +260,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <h2>
             Feedback from our partners about their custom hackathon events.
           </h2>
-          <div className="carousel-testimonial-root">
+          <div className="carousel-testimonial-root corporate-bg-light">
             <TestimonialCarousel
               category="partner-highlights"
               interval={600000}
@@ -268,8 +268,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </div>
           <p className="h3">
             {/* TODO find where {window.BLOG_URL} is declared */}
-            Learn more in our blog <a href="https://blog.democracylab.org/how-amazon-hacked-for-good/">blog</a>
-            .
+            Learn more in our <a href="https://blog.democracylab.org/how-amazon-hacked-for-good/">blog</a>.
           </p>
         </div>
 
