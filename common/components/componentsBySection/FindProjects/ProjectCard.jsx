@@ -56,7 +56,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
     const url: string =
       this.props.project.cardUrl ||
       urlHelper.section(Section.AboutProject, {
-        id: this.props.project.id,
+        id: this.props.project.slug || this.props.project.id,
       });
     return (
       <div className="ProjectCard-root">

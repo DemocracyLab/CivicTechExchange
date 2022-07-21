@@ -26,6 +26,7 @@ import type { FormFieldValidator } from "../../utils/validation.js";
 import stringHelper from "../../utils/string.js";
 import HiddenFormFields from "../../forms/HiddenFormFields.jsx";
 import urlHelper from "../../utils/url.js";
+import CurrentUser from "../../utils/CurrentUser.js";
 
 type FormFields = {|
   project_name: ?string,
@@ -62,6 +63,8 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
       project_issue_area: project ? project.project_issue_area : [],
       project_thumbnail: project ? project.project_thumbnail : "",
       didCheckTerms: !!project,
+      project_slug: project ? project.project_slug : "",
+      is_private: !!project?.is_private,
     };
 
     const validations: $ReadOnlyArray<FormFieldValidator<FormFields>> = [
@@ -78,6 +81,13 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
             formFields["project_short_description"]
           ),
         errorMessage: "Please enter Project Description",
+      },
+      {
+        fieldName: "project_slug",
+        checkFunc: (formFields: FormFields) =>
+          stringHelper.isValidSlug(formFields["project_slug"]),
+        errorMessage:
+          "Valid Project slug should only consist of alphanumeric characters and dashes('-')",
       },
       {
         fieldName: "didCheckTerms",
@@ -151,6 +161,8 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
           maxLength={140}
         />
 
+        {CurrentUser.isStaff(this.props.project) && this._renderAdminControls()}
+
         {!this.props.project && (
           <div>
             <CheckBox id="didCheckTerms">
@@ -172,6 +184,22 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
           onSelection={() => this.setState({ termsOpen: false })}
         />
       </div>
+    );
+  }
+
+  _renderAdminControls(): React$Node {
+    return (
+      <React.Fragment>
+        <TextFormField
+          id="project_slug"
+          label="Project Url Slug"
+          type={TextFormFieldType.SingleLine}
+          required={false}
+          maxLength={60}
+        />
+
+        <CheckBox id="is_private" label="Private Project" />
+      </React.Fragment>
     );
   }
 }

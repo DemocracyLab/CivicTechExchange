@@ -466,7 +466,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
                     {this._renderGroupIcon(group)}{" "}
                     <a
                       href={url.section(Section.AboutGroup, {
-                        id: group.group_id,
+                        id: group.slug || group.group_id,
                       })}
                     >
                       {group.group_name}
