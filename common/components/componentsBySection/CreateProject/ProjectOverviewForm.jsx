@@ -83,6 +83,13 @@ class ProjectOverviewForm extends React.PureComponent<Props, State> {
         errorMessage: "Please enter Project Description",
       },
       {
+        fieldName: "project_slug",
+        checkFunc: (formFields: FormFields) =>
+          stringHelper.isValidSlug(formFields["project_slug"]),
+        errorMessage:
+          "Valid Project slug should only consist of alphanumeric characters and dashes('-')",
+      },
+      {
         fieldName: "didCheckTerms",
         checkFunc: (formFields: FormFields) => formFields.didCheckTerms,
         errorMessage: "Agree to Terms of Use",

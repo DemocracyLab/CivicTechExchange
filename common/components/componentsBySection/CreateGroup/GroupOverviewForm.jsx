@@ -22,6 +22,7 @@ import TextFormField, {
 import CountryLocationFormFields from "../../forms/fields/CountryLocationFormFields.jsx";
 import CheckBox from "../../common/selection/CheckBox.jsx";
 import CurrentUser from "../../utils/CurrentUser.js";
+import stringHelper from "../../utils/string.js";
 
 type FormFields = {|
   group_name: ?string,
@@ -76,6 +77,13 @@ class GroupOverviewForm extends React.PureComponent<Props, State> {
         checkFunc: (formFields: FormFields) =>
           !_.isEmpty(formFields["group_description"]),
         errorMessage: "Please enter Group Description",
+      },
+      {
+        fieldName: "group_slug",
+        checkFunc: (formFields: FormFields) =>
+          stringHelper.isValidSlug(formFields["group_slug"]),
+        errorMessage:
+          "Valid Group slug should only consist of alphanumeric characters and dashes('-')",
       },
     ];
 
