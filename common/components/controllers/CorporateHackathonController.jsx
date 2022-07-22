@@ -444,7 +444,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <a
         href={cdn.document(
-          "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
+          "2022+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
         )}
       >
         Corporate Tech-for-Good Hackathons PDF{" "}
@@ -454,7 +454,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   }
   _renderSponsorProspectus(): React$Node {
     return (
-      <a href={cdn.document("2021+DemocracyLab+Sponsorship+Prospectus.pdf")}>
+      <a 
+        href={cdn.document(
+          "2022+DemocracyLab+Sponsorship+Prospectus.pdf"
+        )}
+      >
         Sponsor Prospectus PDF{" "}
         <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
       </a>
