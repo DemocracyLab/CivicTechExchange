@@ -1,10 +1,8 @@
 // @flow
 
 import React from "react";
-import SplashScreen, {
-  HeroImage,
-} from "../componentsBySection/FindProjects/SplashScreen.jsx";
 import RecentProjectsSection from "../componentsBySection/Landing/RecentProjectsSection.jsx";
+import LatestBlogPosts from "../componentsBySection/Landing/LatestBlogPosts.jsx";
 import TestimonialCarousel from "../common/carousel/TestimonialCarousel.jsx";
 import Partners from "../componentsBySection/Landing/Partners.jsx";
 import cdn from "../utils/cdn";
@@ -31,7 +29,7 @@ class LandingController extends React.PureComponent<{||}> {
             {this._renderNextHackathon()}
             {this._recentProjects()}
             {this._renderTestimonials()}
-            {this._renderLatestBlogpost()}
+            {this._renderLatestBlogPosts()}
             {this._renderCommunityPartners()}
           </div>
         </div>
@@ -129,10 +127,11 @@ class LandingController extends React.PureComponent<{||}> {
     );
   }
 
-  _renderLatestBlogpost(): React$Node {
+  _renderLatestBlogPosts(): React$Node {
     return (
-      <div className="LandingController-latestblogpost col-12">
-        <p>latest blog post here</p>
+      <div className="LandingController-latestblogposts col-12">
+        <h2 className="text-center">Blog</h2>
+        <LatestBlogPosts />
       </div>
     );
   }

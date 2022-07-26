@@ -39,7 +39,31 @@ class ghostApiHelper {
         errCallback ? errCallback(err) : console.error(err);
       });
   }
-
+  static isConfigured(): boolean {
+    return !!ghostContentAPI;
+  }
+}
+// get the two most recent posts, return more fields than the carousel uses
+// this is for the homepage's blog section, which is meant to be a static display
+export class ghostApiRecent {
+  static browse(
+    successCallback: ($ReadOnlyArray<GhostPost>) => void,
+    errCallback: string => void
+  ) {
+    ghostContentAPI.posts
+      .browse({
+        limit: 2,
+        include: "tags,authors",
+      })
+      .then(postsResponse => {
+        successCallback
+          ? successCallback(postsResponse)
+          : console.log(JSON.stringify(postsResponse));
+      })
+      .catch(err => {
+        errCallback ? errCallback(err) : console.error(err);
+      });
+  }
   static isConfigured(): boolean {
     return !!ghostContentAPI;
   }
