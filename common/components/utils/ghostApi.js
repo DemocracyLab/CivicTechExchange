@@ -54,6 +54,7 @@ export class ghostApiRecent {
       .browse({
         limit: 2,
         include: "tags,authors",
+        fields: "title, url, slug, excerpt, custom_excerpt, feature_image, reading_time, primary_author, primary_tag, published_at, updated_at"
       })
       .then(postsResponse => {
         successCallback
