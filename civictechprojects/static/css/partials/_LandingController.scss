@@ -122,6 +122,14 @@
   margin-top: 8px;
 }
 
+// start new CSS I know is valid
+
+.LandingController-latestblogposts  {
+  background-color: $color-background-light;
+}
+// end new CSS I know is valid
+
+
 @include media-breakpoint-up(md) {
   .RecentProjects-cards {
     flex-direction: row;

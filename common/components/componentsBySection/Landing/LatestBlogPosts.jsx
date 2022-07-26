@@ -1,6 +1,7 @@
 import React from "react";
 import { ghostApiRecent, GhostPost } from "../../utils/ghostApi.js";
 import LoadingFrame from "../../chrome/LoadingFrame.jsx";
+import Moment from "react-moment";
 
 //props.interval is optional, default 6000ms
 //props.tag filters blog posts to show
@@ -31,25 +32,42 @@ class BlogCarousel extends React.PureComponent<Props, State> {
   render(): React$Node {
     const ghostPosts: $ReadOnlyArray<GhostPost> = this.state.ghostPosts;
     return ghostPosts ? (
-      <React.Fragment>
+      <div className="LatestBlogPosts-container">
         {console.log(ghostPosts)}
         {ghostPosts.map(i => (
           <div key={i.slug} className="LatestBlogPosts-post">
-            {/* <div className="carousel-item-content">
-              <div className="carousel-feature-image">
-                <img src={i.feature_image} alt={i.title} />
-              </div> */}
-              <h3>{i.title}</h3>
-              {/* <p>{i.custom_excerpt ? i.custom_excerpt : i.excerpt}</p>
-              <div className="text-center">
-                <a href={i.url} className="carousel-link" target="_blank">
-                  Read More
-                </a>
+            <img
+              className="LatestBlogPosts-featureimage"
+              src={i.feature_image}
+              alt={i.title}
+              aria-hidden="true"
+            />
+            <p className="LatestBlogPosts-primarytag">{i.primary_tag.name}</p>
+            <h3>{i.title}</h3>
+            <p>{i.custom_excerpt ? i.custom_excerpt : i.excerpt}</p>
+            <div className="LatestBlogPosts-authorblock">
+              <img
+                className="LatestBlogPosts-author-avatar"
+                src={i.primary_author.profile_image}
+                aria-hidden="true"
+              />
+              <div className="LatestBlogPosts-postinfo">
+                <span>{i.primary_author.name}</span>
+                <span>
+                  <Moment format="D MMM YYYY">
+                    {i.updated_at ? i.updated_at : i.published_at}
+                  </Moment>{" "}
+                  &bull; {i.reading_time} min read
+                </span>
               </div>
-            </div> */}
+            </div>
+
+            <a href={i.url} target="_blank">
+              Read More
+            </a>
           </div>
         ))}
-      </React.Fragment>
+      </div>
     ) : (
       <LoadingFrame height="300px" />
     );

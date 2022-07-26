@@ -1,0 +1,33 @@
+.LatestBlogPosts-container, .LatestBlogPosts-authorblock, .LatestBlogPosts-postinfo {
+    display: flex;
+}
+.LatestBlogPosts-post {
+    flex-basis: 100%;
+}
+.LatestBlogPosts-post:last-of-type {
+    display: none;
+}
+.LatestBlogPosts-featureimage {
+    max-width: 100%;
+}
+.LatestBlogPosts-author-avatar {
+    width: 36px;
+    margin: 0 0 auto 0;
+}
+.LatestBlogPosts-postinfo {
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+@include media-breakpoint-up(lg) {
+    .LatestBlogPosts-container {
+        gap: 40px;
+        padding: 40px;
+    }
+    .LatestBlogPosts-post {
+        flex-basis: 50%;
+    }
+    .LatestBlogPosts-post:last-of-type {
+        display: block;
+    }
+}
