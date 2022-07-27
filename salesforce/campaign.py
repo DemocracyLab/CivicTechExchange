@@ -53,6 +53,7 @@ def save(project: Project):
 
     data['startdate'] = project.project_date_created.strftime('%Y-%m-%d') if project.project_date_created else project.project_date_modified.strftime('%Y-%m-%d')
 
+    '''synchronous call - campaign must be saved before saving jobs'''
     SalesforceClient().send(requests.Request(
         method="PATCH",
         url=f'{client.campaign_endpoint}/platform_id__c/{project.id}',
