@@ -120,9 +120,15 @@ def group_delete(request, group_id):
 
 
 def get_group(request, group_id):
-    group = Group.objects.get(id=group_id)
+    group = Group.get_by_id_or_slug(group_id)
 
     if group is not None:
+        is_staff = is_co_owner_or_staff(get_request_contributor(request), group)
+
+        if group.is_private and group_id.isnumeric() and not is_staff:
+            # If private event isn't accessed for slug, don't show to non-admins
+            return HttpResponse(status=404)
+
         if group.is_searchable or is_creator_or_staff(get_request_contributor(request), group):
             return JsonResponse(group.hydrate_to_json())
         else:
@@ -366,10 +372,16 @@ def project_delete(request, project_id):
 
 
 def get_project(request, project_id):
-    project = Project.objects.get(id=project_id)
+    project = Project.get_by_id_or_slug(project_id)
 
     if project is not None:
-        if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
+        is_staff = is_co_owner_or_staff(get_request_contributor(request), project)
+
+        if project.is_private and project_id.isnumeric() and not is_staff:
+            # If private event isn't accessed for slug, don't show to non-admins
+            return HttpResponse(status=404)
+
+        if project.is_searchable or is_staff:
             url_parts = request.GET.urlencode()
             query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
             hydrated_project = project.hydrate_to_json()
@@ -468,7 +480,6 @@ def index(*args, **kwargs):
         'FAVICON_PATH': settings.FAVICON_PATH,
         'BLOG_URL': settings.BLOG_URL,
         'EVENT_URL': settings.EVENT_URL,
-        'PRIVACY_POLICY_URL': settings.PRIVACY_POLICY_URL,
         'DONATE_PAGE_BLURB': settings.DONATE_PAGE_BLURB,
         'HEAP_ANALYTICS_ID': settings.HEAP_ANALYTICS_ID
     }

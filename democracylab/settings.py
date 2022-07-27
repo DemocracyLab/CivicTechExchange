@@ -171,7 +171,7 @@ REDIS_ENABLED = os.environ.get('REDIS_ENABLED', False) == 'True'
 
 RQ_QUEUES = {
     'default': {
-        'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+        'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'), # If you're on Heroku
         'DEFAULT_TIMEOUT': 500,
     },
 }
@@ -352,10 +352,6 @@ ENVIRONMENT_VARIABLE_WARNINGS = {
         'error': False,
         'message': 'Ghost content api key needed to display blog posts on site'
     },
-    'PRIVACY_POLICY_URL': {
-        'error': True,
-        'message': 'Privacy Policy url required'
-    },
     'VIDEO_PAGES': {
         'error': False,
         'message': 'VIDEO_PAGES needed to show /videos/'
@@ -472,8 +468,6 @@ EVENT_URL = os.environ.get('EVENT_URL', '')
 
 GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH', '')
 GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH', '')
-
-PRIVACY_POLICY_URL = os.environ.get('PRIVACY_POLICY_URL')
 
 DONATE_PAGE_BLURB = os.environ.get('DONATE_PAGE_BLURB', '')
 

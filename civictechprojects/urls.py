@@ -27,6 +27,7 @@ from . import views
 # Set custom error handler
 handler500 = handle500
 
+
 urlpatterns = [
 
     url(
@@ -83,14 +84,14 @@ urlpatterns = [
     url(r'', include(v2_urls)),
     url(r'', include(v1_urls)),
     url(r'^api/team$', views.team, name='team'),
-    url(r'^api/project/(?P<project_id>[0-9]+)/$', views.get_project, name='get_project'),
-    url(r'api/project/(?P<project_id>[0-9]+)/volunteers/$', views.get_project_volunteers, name='get_project_volunteers'),
+    url(r'api/project/(?P<project_id>[0-9]+)/volunteers/$', views.get_project_volunteers,name='get_project_volunteers'),
+    url(r'^api/project/(?P<project_id>.*)/$', views.get_project, name='get_project'),
     url(r'^api/group/(?P<group_id>[0-9]+)/invite$', views.invite_project_to_group, name='invite_project_to_group'),
     url(r'^api/invite/(?P<invite_id>[0-9]+)/approve$', views.accept_group_invitation, name='accept_group_invitation'),
     url(r'^api/invite/(?P<invite_id>[0-9]+)/reject$', views.reject_group_invitation, name='reject_group_invitation'),
     url(r'^api/favorite/project/(?P<project_id>[0-9]+)/$', views.project_favorite, name='project_favorite'),
     url(r'^api/unfavorite/project/(?P<project_id>[0-9]+)/$', views.project_unfavorite, name='project_unfavorite'),
-    url(r'^api/group/(?P<group_id>[0-9]+)/$', views.get_group, name='get_group'),
+    url(r'^api/group/(?P<group_id>.*)/$', views.get_group, name='get_group'),
     url(r'^api/event/(?P<event_id>.*)/$', views.get_event, name='get_event'),
     url(r'^volunteer/(?P<project_id>[0-9]+)/$', views.volunteer_with_project, name='volunteer_with_project'),
     url(r'^volunteer/leave/(?P<project_id>[0-9]+)/$', views.leave_project, name='leave_project'),

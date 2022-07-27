@@ -3,32 +3,32 @@
 import React from "react";
 import ProjectFilterDataContainer from "../../componentsBySection/FindProjects/Filters/ProjectFilterDataContainer.jsx";
 import ResetSearchButton from "../../componentsBySection/FindProjects/ResetSearchButton.jsx";
-import ProjectSearchBar from "../../componentsBySection/FindProjects/ProjectSearchBar.jsx";
+import EntitySearchBar from "../search/EntitySearchBar.jsx";
 import ProjectCardsContainer from "../../componentsBySection/FindProjects/ProjectCardsContainer.jsx";
-import ProjectSearchSort from "../../componentsBySection/FindProjects/ProjectSearchSort.jsx";
-import ProjectTagContainer from "../../componentsBySection/FindProjects/ProjectTagContainer.jsx";
+import EntitySearchSort from "../search/EntitySearchSort.jsx";
+import EntityTagContainer from "../search/EntityTagContainer.jsx";
 import CollapsiblePreviewPanel from "../CollapsiblePreviewPanel.jsx";
 
 type Props = {|
   viewOnly: boolean,
-  wide: boolean
+  wide: boolean,
 |};
 
 type State = {|
-  hidden: boolean
+  hidden: boolean,
 |};
 
 class ProfileProjectSearch extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
     this.state = {
-      hidden: true
+      hidden: true,
     };
   }
 
   handleEmptyProject(): void {
     this.setState({
-      hidden: false
+      hidden: false,
     });
   }
 
@@ -50,7 +50,7 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
   }
 
   _renderSearchControls(): ?$React$Node {
-    const tagContainer: React$Node = <ProjectTagContainer />;
+    const tagContainer: React$Node = <EntityTagContainer />;
     const filterContainer: React$Node = (
       <ProjectFilterDataContainer title="Filter by" />
     );
@@ -68,7 +68,7 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
             <h3 className="ProjectProfileSearch-sectiontitle pt-4">
               Search Participating Projects
             </h3>
-            <ProjectSearchBar placeholder="Skill, keyword, or issue areas" />
+            <EntitySearchBar placeholder="Skill, keyword, or issue areas" />
             <div className="d-flex justify-content-between pt-4 pb-2">
               <h3 className="ProjectProfileSearch-sectiontitle">Filter By</h3>
               <ResetSearchButton />
@@ -83,7 +83,7 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
         <div className="ProjectProfileSearch-sort row">
           <div className="col-12 pt-4 d-flex justify-content-end">
             <h4>Sort By</h4>
-            <ProjectSearchSort hideSearch={true} />
+            <EntitySearchSort hideSearch={true} />
           </div>
         </div>
       </React.Fragment>

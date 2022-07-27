@@ -17,7 +17,7 @@ import urlHelper from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
-import MainFooter from "../../chrome/MainFooter.jsx";
+import SponsorFooter from "../../chrome/SponsorFooter.jsx";
 import PromptNavigationModal from "../../common/PromptNavigationModal.jsx";
 import type { Dictionary } from "../../types/Generics.jsx";
 import NotificationModal from "../../common/notification/NotificationModal.jsx";
@@ -31,6 +31,7 @@ import type {
   ProjectData,
 } from "../../utils/ProjectAPIUtils.js";
 import JoinConferenceButton from "../../common/event_projects/JoinConferenceButton.jsx";
+import { SearchFor } from "../../stores/EntitySearchStore.js";
 
 type Props = {|
   event: ?EventData,
@@ -206,7 +207,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
             <ProfileProjectSearch viewOnly={this.props.viewOnly} />
           )}
         </div>
-        <MainFooter key="main_footer" forceShow={event.show_headers} />
+        <SponsorFooter key="main_footer" forceShow={event.show_headers} />
       </React.Fragment>
     );
   }
@@ -522,14 +523,14 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     const event: EventData = this.state.event;
     if (event && !_.isEmpty(event.event_legacy_organization)) {
       UniversalDispatcher.dispatch({
-        type: "INIT_PROJECT_SEARCH",
+        type: "INIT_SEARCH",
         findProjectsArgs: {
           event_id: event.event_id,
           sortField: "project_name",
         },
         searchSettings: {
           updateUrl: false,
-          defaultSort: "project_name",
+          searchConfig: SearchFor.Projects,
           cardOperationGenerator:
             !this.state.isPastEvent && this._cardOperationGenerator.bind(this),
         },

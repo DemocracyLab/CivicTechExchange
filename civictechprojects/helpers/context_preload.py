@@ -1,6 +1,6 @@
 from django.conf import settings
 from urllib.parse import urljoin, urlparse
-from civictechprojects.models import Event, EventProject
+from civictechprojects.models import Event, EventProject, Project, Group
 from civictechprojects.caching.cache import ProjectCache, GroupCache
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
@@ -12,8 +12,9 @@ def about_project_preload(context, request):
     context = default_preload(context, request)
     query_args = url_params(request)
     project_id = query_args['id']
-    project_json = ProjectCache.get(project_id)
-    if project_json is not None:
+    project = Project.get_by_id_or_slug(project_id)
+    if project is not None:
+        project_json = project.hydrate_to_json()
         context['title'] = project_json['project_name'] + ' | DemocracyLab'
         context['description'] = project_json['project_short_description'] or project_json['project_description'][:300]
         if 'project_thumbnail' in project_json:
@@ -64,8 +65,9 @@ def about_group_preload(context, request):
     context = default_preload(context, request)
     query_args = url_params(request)
     group_id = query_args['id']
-    group_json = GroupCache.get(group_id)
-    if group_json is not None:
+    group = Group.get_by_id_or_slug(group_id)
+    if group is not None:
+        group_json = group.hydrate_to_json()
         context['title'] = group_json['group_name'] + ' | DemocracyLab'
         context['description'] = group_json['group_short_description']
         if 'group_thumbnail' in group_json:
@@ -130,6 +132,18 @@ def my_events_preload(context, request):
     context['description'] = 'My Events page'
     return context
 
+def privacy_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Privacy | DemocracyLab'
+    context['description'] = 'Privacy Policy page'
+    return context
+
+def terms_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Terms | DemocracyLab'
+    context['description'] = 'Terms of Use page'
+    return context
+
 
 def videos_preload(context, request):
     context = default_preload(context, request)
@@ -175,7 +189,9 @@ preload_urls = [
     {'section': FrontEndSection.AboutGroup.value, 'handler': about_group_preload},
     {'section': FrontEndSection.Companies.value, 'handler': companies_preload},
     {'section': FrontEndSection.VideoOverview.value, 'handler': videos_preload},
-    {'section': FrontEndSection.AboutEventProject.value, 'handler': about_event_project_preload}
+    {'section': FrontEndSection.AboutEventProject.value, 'handler': about_event_project_preload},
+    {'section': FrontEndSection.Privacy.value, 'handler': privacy_preload},
+    {'section': FrontEndSection.Terms.value, 'handler': terms_preload}
 ]
 
 

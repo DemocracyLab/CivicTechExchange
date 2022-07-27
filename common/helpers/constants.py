@@ -46,6 +46,8 @@ class FrontEndSection(Enum):
     VideoOverview = 'VideoOverview'
     AboutEventProject = 'AboutEventProject'
     CreateEventProject = 'CreateEventProject'
+    Privacy = 'Privacy'
+    Terms = 'Terms'
 
     # deprecated
     CorporateHackathon = 'CorporateHackathon'

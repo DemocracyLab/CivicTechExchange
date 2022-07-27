@@ -63,6 +63,7 @@ export type ProjectData = {|
   +conferenceUrl: ?string,
   +conferenceCt: ?string,
   +cardOperation: ?CardOperation,
+  +slug: ?string,
 |};
 
 export type ProjectAPIData = {|
@@ -82,6 +83,7 @@ export type ProjectAPIData = {|
   +project_url: string,
   +project_positions: $ReadOnlyArray<PositionInfo>,
   +card_url: ?string,
+  +project_slug: string,
 |};
 
 export type VolunteerUserData = {|
@@ -136,6 +138,8 @@ export type ProjectDetailsAPIData = {|
   +project_date_modified: Date,
   +project_events: $ReadOnlyArray<EventTileAPIData>,
   +event_created_from: ?number,
+  +project_slug: string,
+  +is_private: boolean,
 |};
 
 export type TeamAPIData = {|
@@ -186,6 +190,7 @@ class ProjectAPIUtils {
       conferenceUrl: apiData.conference_url,
       conferenceCt: apiData.conference_count,
       cardUrl: apiData.card_url,
+      slug: apiData.project_slug,
     };
   }
 

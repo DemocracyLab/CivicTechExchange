@@ -2,18 +2,18 @@
 
 import _ from "lodash";
 import React from "react";
-import type { Project } from "../../stores/ProjectSearchStore.js";
 import type { FluxReduceStore } from "flux/utils";
-import ProjectSearchSort from "./ProjectSearchSort.jsx";
-import ProjectTagContainer from "./ProjectTagContainer.jsx";
+import EntityTagContainer from "../../common/search/EntityTagContainer.jsx";
+import EntitySearchSort from "../../common/search/EntitySearchSort.jsx";
 import { Container } from "flux/utils";
 import { List } from "immutable";
 import ProjectCard from "./ProjectCard.jsx";
-import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
+import EntitySearchStore from "../../stores/EntitySearchStore.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import LoadingMessage from "../../chrome/LoadingMessage.jsx";
-import type { LocationRadius } from "../../stores/ProjectSearchStore.js";
 import metrics from "../../utils/metrics.js";
+import { ProjectData } from "../../utils/ProjectAPIUtils.js";
+import type { LocationRadius } from "../../common/location/LocationRadius.js";
 
 type Props = {|
   showSearchControls: ?boolean,
@@ -21,43 +21,43 @@ type Props = {|
   onSelectProject: ?Function,
   selectableCards: ?boolean,
   alreadySelectedProjects: ?List<string>, // todo: proper state management
-  handleEmptyProject: ?Function
+  handleEmptyProject: ?Function,
 |};
 
 type State = {|
-  projects: List<Project>,
+  projects: List<ProjectData>,
   project_pages: number,
   current_page: number,
   project_count: number,
   legacyLocation: string,
   location: LocationRadius,
-  error: boolean
+  error: boolean,
 |};
 
 class ProjectCardsContainer extends React.Component<Props, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore];
+    return [EntitySearchStore];
   }
 
   static calculateState(prevState: State): State {
-    const count = ProjectSearchStore.getNumberOfProjects();
+    const count = EntitySearchStore.getNumberOfEntities();
     if (_.isNumber(count)) {
       metrics.logProjectSearchResults(
         count,
-        ProjectSearchStore.getQueryString()
+        EntitySearchStore.getQueryString()
       );
     }
     return {
-      projects: ProjectSearchStore.getProjects(),
-      project_pages: ProjectSearchStore.getProjectPages(),
+      projects: EntitySearchStore.getEntities(),
+      project_pages: EntitySearchStore.getEntityPages(),
       project_count: count,
-      current_page: ProjectSearchStore.getCurrentPage(),
-      projects_loading: ProjectSearchStore.getProjectsLoading(),
-      keyword: ProjectSearchStore.getKeyword() || "",
-      tags: ProjectSearchStore.getTags() || [],
-      legacyLocation: ProjectSearchStore.getLegacyLocation() || "",
-      location: ProjectSearchStore.getLocation() || "",
-      error: ProjectSearchStore.getError()
+      current_page: EntitySearchStore.getCurrentPage(),
+      projects_loading: EntitySearchStore.isLoading(),
+      keyword: EntitySearchStore.getKeyword() || "",
+      tags: EntitySearchStore.getTags() || [],
+      legacyLocation: EntitySearchStore.getLegacyLocation() || "",
+      location: EntitySearchStore.getLocation() || "",
+      error: EntitySearchStore.getError(),
     };
   }
 
@@ -66,8 +66,8 @@ class ProjectCardsContainer extends React.Component<Props, State> {
       <div className="ProjectCardContainer col">
         {this.props.showSearchControls ? (
           <React.Fragment>
-            <ProjectSearchSort />
-            <ProjectTagContainer />
+            <EntitySearchSort />
+            <EntityTagContainer />
           </React.Fragment>
         ) : null}
         <div className="row">
@@ -109,7 +109,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
         this.state.projects.size === 0 &&
         this.props.handleEmptyProject)
     ) {
-      this.props.handleEmptyProject();
+      this.props.handleEmptyProject && this.props.handleEmptyProject();
     }
     return !this.state.projects ? (
       <LoadingMessage message="Loading projects..." />
@@ -140,7 +140,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
     this.setState({ current_page: nextPage }, function() {
       UniversalDispatcher.dispatch({
         type: "SET_PAGE",
-        page: this.state.current_page
+        page: this.state.current_page,
       });
     });
   }

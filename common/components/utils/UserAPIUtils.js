@@ -1,7 +1,7 @@
 // @flow
 
-import type { Project } from "../stores/ProjectSearchStore.js";
-import type { LinkInfo } from "../../components/forms/LinkInfo.jsx";
+import type { TagDefinition } from "./ProjectAPIUtils.js";
+import type { LinkInfo } from "../forms/LinkInfo.jsx";
 import type { FileInfo } from "../common/FileInfo.jsx";
 import { APIError, APIResponse } from "./api.js";
 
