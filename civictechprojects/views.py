@@ -708,7 +708,7 @@ def contact_project_volunteers(request, project_id):
     message = body['message']
 
     project = Project.objects.get(id=project_id)
-    if not user.email_verified or not is_co_owner_or_owner(user, project):
+    if not user.email_verified or not is_co_owner_or_staff(user, project):
         return HttpResponse(status=403)
 
     volunteers = VolunteerRelation.get_by_project(project)
@@ -752,7 +752,7 @@ def contact_project_volunteer(request, application_id):
     message = body['message']
 
     # TODO: Condense common code between this and contact_project_volunteers
-    if not user.email_verified or not is_co_owner_or_owner(user, project):
+    if not user.email_verified or not is_co_owner_or_staff(user, project):
         return HttpResponse(status=403)
 
     email_subject = '{project}: {subject}'.format(
