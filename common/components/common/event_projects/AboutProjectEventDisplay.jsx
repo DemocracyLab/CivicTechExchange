@@ -34,6 +34,7 @@ import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
 import ProjectAPIUtils, { APIResponse } from "../../utils/ProjectAPIUtils.js";
 import promiseHelper from "../../utils/promise.js";
 import JoinConferenceButton from "./JoinConferenceButton.jsx";
+import ReactMarkdown from "react-markdown";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -414,25 +415,35 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <p>{eventProject?.project_short_description}</p>
 
           <h3>Problem</h3>
-          <p>{eventProject?.project_description}</p>
+          <p>
+            <ReactMarkdown>{eventProject?.project_description}</ReactMarkdown>
+          </p>
 
           {eventProject?.project_description_solution && (
             <React.Fragment>
               <h3>Solution</h3>
-              <p>{eventProject.project_description_solution}</p>
+              <p>
+                <ReactMarkdown>
+                  {eventProject.project_description_solution}
+                </ReactMarkdown>
+              </p>
             </React.Fragment>
           )}
 
           <h3>Hackathon Goal</h3>
           {eventProject?.event_project_goal ? (
-            <p>{eventProject.event_project_goal}</p>
+            <p>
+              <ReactMarkdown>{eventProject.event_project_goal}</ReactMarkdown>
+            </p>
           ) : (
             comingSoonMsg
           )}
 
           <h3>Planned Scope</h3>
           {eventProject?.event_project_scope ? (
-            <p>{eventProject.event_project_scope}</p>
+            <p>
+              <ReactMarkdown>{eventProject.event_project_scope}</ReactMarkdown>
+            </p>
           ) : (
             comingSoonMsg
           )}
@@ -440,14 +451,20 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           {/*TODO: Show newlines*/}
           <h3>Schedule</h3>
           {eventProject?.event_project_agenda ? (
-            <p>{eventProject.event_project_agenda}</p>
+            <p>
+              <ReactMarkdown>{eventProject.event_project_agenda}</ReactMarkdown>
+            </p>
           ) : (
             comingSoonMsg
           )}
 
           <h3>Additional Notes</h3>
           {eventProject?.event_project_onboarding_notes ? (
-            <p>{eventProject.event_project_onboarding_notes}</p>
+            <p>
+              <ReactMarkdown>
+                {eventProject.event_project_onboarding_notes}
+              </ReactMarkdown>
+            </p>
           ) : (
             comingSoonMsg
           )}

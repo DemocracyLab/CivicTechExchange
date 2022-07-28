@@ -24,6 +24,7 @@ import EntitySearchStore, {
 } from "../../stores/EntitySearchStore.js";
 import { Dictionary } from "../../types/Generics.jsx";
 import TagCategory from "../tags/TagCategory.jsx";
+import ReactMarkdown from "react-markdown";
 
 type Props = {|
   group: ?GroupDetailsAPIData,
@@ -124,7 +125,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
         <div className="Profile-tab tab-content">
           <h3>Group Description</h3>
           <div className="AboutGroup-description">
-            {group.group_description}
+            <ReactMarkdown>{group.group_description}</ReactMarkdown>
           </div>
           <div className="AboutGroup-issue-areas pt-4">
             {!_.isEmpty(this.state.issueAreas) && (
