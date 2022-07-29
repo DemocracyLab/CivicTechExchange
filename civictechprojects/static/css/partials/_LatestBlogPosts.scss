@@ -18,6 +18,10 @@
     flex-direction: column;
     margin-bottom: 1rem;
 }
+.LatestBlogPosts-primarytag {
+    text-transform: uppercase;
+    font-weight: bold;
+}
 
 @include media-breakpoint-up(lg) {
     .LatestBlogPosts-container {
