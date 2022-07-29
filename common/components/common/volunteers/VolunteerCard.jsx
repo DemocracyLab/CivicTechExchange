@@ -57,7 +57,9 @@ class VolunteerCard extends React.PureComponent<Props> {
         >
           {volunteer && volunteer.first_name + " " + volunteer.last_name}
         </a>
-        {this.props.isProjectAdmin || this.props.isProjectCoOwner
+        {this.props.isProjectAdmin ||
+        this.props.isProjectCoOwner ||
+        CurrentUser.isStaff()
           ? this._renderShowApplicationMenu()
           : null}
         <p className="VolunteerCard-volunteerRole">
