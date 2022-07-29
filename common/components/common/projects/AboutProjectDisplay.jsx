@@ -31,7 +31,7 @@ import EventCardsListings from "../../componentsBySection/FindEvents/EventCardsL
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
-import ReactMarkdown from "react-markdown";
+import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
@@ -196,14 +196,14 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               project.project_description_solution ||
                 project.project_description_actions
             ) && <h3>Problem</h3>}
-            <ReactMarkdown>{project.project_description}</ReactMarkdown>
+            <AllowMarkdown>{project.project_description}</AllowMarkdown>
             {!_.isEmpty(project.project_description_solution) && (
               <React.Fragment>
                 <div>
                   <h3 className="pt-4">Solution</h3>
-                  <ReactMarkdown>
+                  <AllowMarkdown>
                     {project.project_description_solution}
-                  </ReactMarkdown>
+                  </AllowMarkdown>
                 </div>
               </React.Fragment>
             )}
@@ -211,9 +211,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               <React.Fragment>
                 <div>
                   <h3 className="pt-4">Action</h3>
-                  <ReactMarkdown>
+                  <AllowMarkdown>
                     {project.project_description_actions}
-                  </ReactMarkdown>
+                  </AllowMarkdown>
                 </div>
               </React.Fragment>
             )}

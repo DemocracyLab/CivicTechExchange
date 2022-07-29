@@ -34,7 +34,7 @@ import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
 import ProjectAPIUtils, { APIResponse } from "../../utils/ProjectAPIUtils.js";
 import promiseHelper from "../../utils/promise.js";
 import JoinConferenceButton from "./JoinConferenceButton.jsx";
-import ReactMarkdown from "react-markdown";
+import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -416,16 +416,16 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
           <h3>Problem</h3>
           <p>
-            <ReactMarkdown>{eventProject?.project_description}</ReactMarkdown>
+            <AllowMarkdown>{eventProject?.project_description}</AllowMarkdown>
           </p>
 
           {eventProject?.project_description_solution && (
             <React.Fragment>
               <h3>Solution</h3>
               <p>
-                <ReactMarkdown>
+                <AllowMarkdown>
                   {eventProject.project_description_solution}
-                </ReactMarkdown>
+                </AllowMarkdown>
               </p>
             </React.Fragment>
           )}
@@ -433,7 +433,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <h3>Hackathon Goal</h3>
           {eventProject?.event_project_goal ? (
             <p>
-              <ReactMarkdown>{eventProject.event_project_goal}</ReactMarkdown>
+              <AllowMarkdown>{eventProject.event_project_goal}</AllowMarkdown>
             </p>
           ) : (
             comingSoonMsg
@@ -442,7 +442,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <h3>Planned Scope</h3>
           {eventProject?.event_project_scope ? (
             <p>
-              <ReactMarkdown>{eventProject.event_project_scope}</ReactMarkdown>
+              <AllowMarkdown>{eventProject.event_project_scope}</AllowMarkdown>
             </p>
           ) : (
             comingSoonMsg
@@ -452,7 +452,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <h3>Schedule</h3>
           {eventProject?.event_project_agenda ? (
             <p>
-              <ReactMarkdown>{eventProject.event_project_agenda}</ReactMarkdown>
+              <AllowMarkdown>{eventProject.event_project_agenda}</AllowMarkdown>
             </p>
           ) : (
             comingSoonMsg
@@ -461,9 +461,9 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <h3>Additional Notes</h3>
           {eventProject?.event_project_onboarding_notes ? (
             <p>
-              <ReactMarkdown>
+              <AllowMarkdown>
                 {eventProject.event_project_onboarding_notes}
-              </ReactMarkdown>
+              </AllowMarkdown>
             </p>
           ) : (
             comingSoonMsg
