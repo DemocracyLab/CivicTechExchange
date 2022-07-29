@@ -290,3 +290,10 @@ a.btn:visited,
 button:visited {
   color: inherit; // buttons acting as links should not take visited color -- we'll have to revisit this when buttons are implemented from DS
 }
+
+// markdown rendering (fix some issues with lists and white-space: pre-wrap, which we need to keep)
+.markdown-container ul,
+.markdown-container ol {
+  white-space: initial;
+  margin-top: -0.98rem; // may not be neccesary to undershoot 1rem, but certainly no more than 1rem here
+}

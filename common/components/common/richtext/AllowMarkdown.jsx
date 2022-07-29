@@ -14,13 +14,12 @@ class AllowMarkdown extends React.PureComponent {
       "h4",
       "h5",
       "h6",
-      "ol",
-      "li",
     ];
     return (
       <ReactMarkdown
         disallowedElements={disallowedElements}
         unwrapDisallowed={true}
+        className="markdown-container"
       >
         {this.props.children}
       </ReactMarkdown>
