@@ -141,8 +141,7 @@ def verify_user(request, user_id, token):
         contributor = Contributor.objects.get(id=user_id)
         contributor.email_verified = True
         contributor.save()
-        if not Contributor.first_name.lower().__contains__('test') and not Contributor.last_name.lower().__contains__('test'):
-            salesforce_contact.save(contributor)
+        salesforce_contact.save(contributor)
         return redirect(section_url(FrontEndSection.EmailVerified))
     else:
         return HttpResponse(status=401)
