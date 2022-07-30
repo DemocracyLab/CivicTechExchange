@@ -203,9 +203,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
               <AllowMarkdown children={event.event_agenda} />
             </div>
           </div>
-          {!_.isEmpty(event.event_legacy_organization) && (
-            <ProfileProjectSearch viewOnly={this.props.viewOnly} />
-          )}
+          <ProfileProjectSearch viewOnly={this.props.viewOnly} />
         </div>
         <SponsorFooter key="main_footer" forceShow={event.show_headers} />
       </React.Fragment>
@@ -521,7 +519,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   initProjectSearch() {
     const event: EventData = this.state.event;
-    if (event && !_.isEmpty(event.event_legacy_organization)) {
+    if (event?.event_id) {
       UniversalDispatcher.dispatch({
         type: "INIT_SEARCH",
         findProjectsArgs: {
