@@ -32,7 +32,7 @@ class EntitySearchSort extends React.Component<Props, State> {
 
     const state = {
       searchConfig: searchConfig,
-      sortField: searchConfig.sortFields.find(
+      sortField: searchConfig?.sortFields.find(
         option => option.value === (sortField || defaultSort)
       ),
     };
@@ -42,11 +42,13 @@ class EntitySearchSort extends React.Component<Props, State> {
 
   render(): React$Node {
     return this.props.hideSearch ? (
-      <React.Fragment>{this._renderSortFieldDropdown()}</React.Fragment>
+      <React.Fragment>
+        {this.state.searchConfig?.sortFields && this._renderSortFieldDropdown()}
+      </React.Fragment>
     ) : (
       <div className="ProjectSearchSort-container">
         <EntitySearchBar />
-        {this._renderSortFieldDropdown()}
+        {this.state.searchConfig?.sortFields && this._renderSortFieldDropdown()}
       </div>
     );
   }
