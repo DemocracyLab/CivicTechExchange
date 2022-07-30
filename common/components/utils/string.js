@@ -1,6 +1,8 @@
 // @flow
 import _ from "lodash";
 
+const slugInvalidChars = new RegExp("[^A-Za-z0-9-]");
+
 // TODO: Update unit tests
 class stringHelper {
   /**
@@ -64,6 +66,14 @@ class stringHelper {
    */
   static randomAlphanumeric(): string {
     return Math.random().toString(36);
+  }
+
+  /**
+   *
+   * @returns {boolean} Whether a string is a valid slug (i.e. doesn't have characters that are disallowed in slugs)
+   */
+  static isValidSlug(str: string): boolean {
+    return !slugInvalidChars.test(str);
   }
 }
 

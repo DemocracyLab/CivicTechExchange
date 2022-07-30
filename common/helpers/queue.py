@@ -5,7 +5,7 @@ from rq import Queue
 from typing import Callable
 from django.conf import settings
 
-redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
 conn = redis.from_url(redis_url)
 q = settings.REDIS_ENABLED and Queue(connection=conn)
 

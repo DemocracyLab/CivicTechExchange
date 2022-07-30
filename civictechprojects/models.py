@@ -94,6 +94,8 @@ class Project(Archived):
     project_url = models.CharField(max_length=2083, blank=True)
     project_date_created = models.DateTimeField(null=True)
     project_date_modified = models.DateTimeField(auto_now_add=True, null=True)
+    project_slug = models.CharField(max_length=100, blank=True)
+    is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
     event_created_from = models.ForeignKey('Event', related_name='created_projects', blank=True, null=True, on_delete=models.SET_NULL)
@@ -102,6 +104,18 @@ class Project(Archived):
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
+
+    @staticmethod
+    def get_by_id_or_slug(slug: str):
+        project = None
+        if slug is not None:
+            _slug = str(slug).strip().lower()
+            if _slug.isnumeric():
+                project = Project.objects.get(id=_slug)
+            elif len(_slug) > 0:
+                project = Project.objects.filter(project_slug=_slug).first() or NameRecord.get_project(_slug)
+
+        return project
 
     def delete(self):
         self.is_searchable=False
@@ -161,6 +175,8 @@ class Project(Archived):
             'project_owners': [self.project_creator.hydrate_to_tile_json()],
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
             'project_date_modified': self.project_date_modified.__str__(),
+            'project_slug': self.project_slug,
+            'is_private': self.is_private
         }
 
         if self.project_location_coords is not None and not self.project_location_coords.empty:
@@ -179,7 +195,7 @@ class Project(Archived):
         keys = [
             'project_id', 'project_name', 'project_creator',  'project_url', 'project_location', 'project_country',
             'project_state', 'project_city', 'project_issue_area', 'project_stage', 'project_positions',
-            'project_date_modified', 'project_thumbnail', 'project_description'
+            'project_date_modified', 'project_thumbnail', 'project_description', 'project_slug'
         ]
         json_base = self.hydrate_to_json()
         json_result = keys_subset(json_base, keys)
@@ -195,7 +211,8 @@ class Project(Archived):
             'project_name': self.project_name,
             'project_creator': self.project_creator.id,
             'isApproved': self.is_searchable,
-            'isCreated': self.is_created
+            'isCreated': self.is_created,
+            'slug': self.project_slug
         }
 
         return project
@@ -275,11 +292,25 @@ class Group(Archived):
     group_city = models.CharField(max_length=100, blank=True)
     group_name = models.CharField(max_length=200)
     group_short_description = models.CharField(max_length=140, blank=True)
+    group_slug = models.CharField(max_length=100, blank=True)
+    is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.group_name)
+
+    @staticmethod
+    def get_by_id_or_slug(slug: str):
+        group = None
+        if slug is not None:
+            _slug = str(slug).strip().lower()
+            if _slug.isnumeric():
+                group = Group.objects.get(id=_slug)
+            elif len(_slug) > 0:
+                group = Group.objects.filter(group_slug=_slug).first() or NameRecord.get_group(_slug)
+
+        return group
 
     def delete(self):
         self.is_searchable = False
@@ -314,7 +345,9 @@ class Group(Archived):
             'group_city': self.group_city,
             'group_owners': [self.group_creator.hydrate_to_tile_json()],
             'group_short_description': self.group_short_description,
-            'group_project_count': projects.count()
+            'group_project_count': projects.count(),
+            'group_slug': self.group_slug,
+            'is_private': self.is_private
         }
 
         if len(projects) > 0:
@@ -328,7 +361,8 @@ class Group(Archived):
     def hydrate_to_tile_json(self):
         keys = [
             'group_date_modified', 'group_id', 'group_name', 'group_location', 'group_country', 'group_state',
-            'group_city', 'group_short_description', 'group_project_count', 'group_issue_areas', 'group_thumbnail'
+            'group_city', 'group_short_description', 'group_project_count', 'group_issue_areas', 'group_thumbnail',
+            'group_slug'
         ]
 
         return keys_subset(self.hydrate_to_json(), keys)
@@ -343,7 +377,8 @@ class Group(Archived):
             'group_name': self.group_name,
             'group_creator': self.group_creator.id,
             'isApproved': self.is_searchable,
-            'isCreated': self.is_created
+            'isCreated': self.is_created,
+            'slug': self.group_slug
         }
 
         if len(thumbnail_files) > 0:
@@ -669,11 +704,23 @@ class EventProject(Archived):
 
 class NameRecord(models.Model):
     event = models.ForeignKey(Event, related_name='old_slugs', blank=True, null=True, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name='old_slugs', blank=True, null=True, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name='old_slugs', blank=True, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True)
 
     @staticmethod
+    def get_project(name):
+        record = NameRecord.objects.filter(project__isnull=False, name=name).first()
+        return record and record.project
+
+    @staticmethod
+    def get_group(name):
+        record = NameRecord.objects.filter(group__isnull=False, name=name).first()
+        return record and record.group
+
+    @staticmethod
     def get_event(name):
-        record = NameRecord.objects.filter(name=name).first()
+        record = NameRecord.objects.filter(event__isnull=False, name=name).first()
         return record and record.event
 
     @staticmethod

@@ -28,4 +28,22 @@ describe("stringHelper", () => {
     expect(stringHelper.startsWithAny("", substringList)).toEqual(false);
     expect(stringHelper.startsWithAny(undefined, substringList)).toEqual(false);
   });
+
+  test("isValidSlug", () => {
+    const validSlugs = [
+      "hello",
+      "hello-goodbye",
+      "deep-6ed",
+      "Capital-Idea",
+      "",
+    ];
+    const invalidSlugs = ["!", "hello@somewhere.com", "Space Slug"];
+
+    validSlugs.forEach(slug =>
+      expect(stringHelper.isValidSlug(slug)).toEqual(true)
+    );
+    invalidSlugs.forEach(slug =>
+      expect(stringHelper.isValidSlug(slug)).toEqual(false)
+    );
+  });
 });
