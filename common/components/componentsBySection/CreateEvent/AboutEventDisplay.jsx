@@ -195,8 +195,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
             </div>
           </div>
 
-          <div className="AboutEvent-details row">
-            <div className="col-12">
+          <div className="AboutEvent-details row justify-content-center">
+            <div className="col-12 col-lg-9">
               <h3>Details</h3>
               <AllowMarkdown children={event.event_description} />
               <h3>What We Will Do</h3>
