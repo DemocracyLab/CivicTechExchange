@@ -1,4 +1,4 @@
-// democracylab.org/companies page --- TODO: rename controller
+:ww// democracylab.org/companies page --- TODO: rename controller
 
 // @flow
 
@@ -255,19 +255,18 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
 
         
 
-        <div className="corporate-hackathon-saying col-12 corporate-bg-light">
+        <div className="corporate-hackathon-saying col-12">
           <h1>What our partners are saying.</h1>
           <h2>
             Feedback from our partners about their custom hackathon events.
           </h2>
-          <div className="carousel-testimonial-root corporate-bg-light">
+          <div className="carousel-testimonial-root">
             <TestimonialCarousel
               category="partner-highlights"
               interval={600000}
             />
           </div>
           <p className="h3">
-            {/* TODO find where {window.BLOG_URL} is declared */}
             Learn more in our <a href="https://blog.democracylab.org/how-amazon-hacked-for-good/">blog</a>.
           </p>
         </div>
@@ -403,7 +402,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </div>
         </div>
 
-        <div className="corporate-sponsorship-saying corporate-bg-light col-12">
+        <div className="corporate-sponsorship-saying col-12">
           <h1>What our partners are saying.</h1>
           <h2>Feedback from partnering organizations.</h2>
 
