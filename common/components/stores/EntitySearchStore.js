@@ -58,7 +58,7 @@ export const SearchFor: Dictionary<EntitySearchConfig> = {
       );
       if (searchSettings.cardOperationGenerator) {
         projects.forEach((project: ProjectData) => {
-          project.cardOperation = state.searchSettings.cardOperationGenerator(
+          project.cardOperation = searchSettings.cardOperationGenerator(
             project
           );
         });
