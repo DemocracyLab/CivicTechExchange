@@ -172,6 +172,8 @@ REDIS_ENABLED = os.environ.get('REDIS_ENABLED', False) == 'True'
 RQ_QUEUES = {
     'default': {
         'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+        "SSL": True,
+        "SSL_CERT_REQS": None, # Heroku uses self-signed certificates that we can't verify
         'DEFAULT_TIMEOUT': 500,
     },
 }
