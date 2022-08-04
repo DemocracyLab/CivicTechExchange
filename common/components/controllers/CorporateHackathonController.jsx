@@ -1,4 +1,4 @@
-:ww// democracylab.org/companies page --- TODO: rename controller
+// democracylab.org/companies page --- TODO: rename controller
 
 // @flow
 
