@@ -415,35 +415,27 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <p>{eventProject?.project_short_description}</p>
 
           <h3>Problem</h3>
-          <p>
-            <AllowMarkdown>{eventProject?.project_description}</AllowMarkdown>
-          </p>
+          <AllowMarkdown>{eventProject?.project_description}</AllowMarkdown>
 
           {eventProject?.project_description_solution && (
             <React.Fragment>
               <h3>Solution</h3>
-              <p>
-                <AllowMarkdown>
-                  {eventProject.project_description_solution}
-                </AllowMarkdown>
-              </p>
+              <AllowMarkdown>
+                {eventProject.project_description_solution}
+              </AllowMarkdown>
             </React.Fragment>
           )}
 
           <h3>Hackathon Goal</h3>
           {eventProject?.event_project_goal ? (
-            <p>
-              <AllowMarkdown>{eventProject.event_project_goal}</AllowMarkdown>
-            </p>
+            <AllowMarkdown>{eventProject.event_project_goal}</AllowMarkdown>
           ) : (
             comingSoonMsg
           )}
 
           <h3>Planned Scope</h3>
           {eventProject?.event_project_scope ? (
-            <p>
-              <AllowMarkdown>{eventProject.event_project_scope}</AllowMarkdown>
-            </p>
+            <AllowMarkdown>{eventProject.event_project_scope}</AllowMarkdown>
           ) : (
             comingSoonMsg
           )}
@@ -451,20 +443,16 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           {/*TODO: Show newlines*/}
           <h3>Schedule</h3>
           {eventProject?.event_project_agenda ? (
-            <p>
-              <AllowMarkdown>{eventProject.event_project_agenda}</AllowMarkdown>
-            </p>
+            <AllowMarkdown>{eventProject.event_project_agenda}</AllowMarkdown>
           ) : (
             comingSoonMsg
           )}
 
           <h3>Additional Notes</h3>
           {eventProject?.event_project_onboarding_notes ? (
-            <p>
-              <AllowMarkdown>
-                {eventProject.event_project_onboarding_notes}
-              </AllowMarkdown>
-            </p>
+            <AllowMarkdown>
+              {eventProject.event_project_onboarding_notes}
+            </AllowMarkdown>
           ) : (
             comingSoonMsg
           )}
