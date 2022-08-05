@@ -1,9 +1,9 @@
 // @flow
 
 import React from "react";
-import ReactMarkdown from "react-markdown";
 
 import ActionAuthorLine from "./components/ActionAuthorLine.jsx";
+import AllowMarkdown from "../../richtext/AllowMarkdown.jsx";
 
 const TrelloActionType = {
   CARD_CREATED: "CARD_CREATED",
@@ -119,7 +119,7 @@ class TrelloActionCard extends React.PureComponent<Props> {
               </a>{" "}
             </p>
             <p className="ProjectCommitCard-comment">
-              <ReactMarkdown children={action_data?.text} />
+              <AllowMarkdown children={action_data?.text} />
             </p>
           </>
         );

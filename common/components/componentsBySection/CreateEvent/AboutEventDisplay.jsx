@@ -1,7 +1,6 @@
 // @flow
 
 import React from "react";
-import ReactMarkdown from "react-markdown";
 import type Moment from "moment";
 import _ from "lodash";
 import Button from "react-bootstrap/Button";
@@ -32,6 +31,7 @@ import type {
 } from "../../utils/ProjectAPIUtils.js";
 import JoinConferenceButton from "../../common/event_projects/JoinConferenceButton.jsx";
 import { SearchFor } from "../../stores/EntitySearchStore.js";
+import AllowMarkdown from "../../common/richtext/AllowMarkdown.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -195,17 +195,15 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
             </div>
           </div>
 
-          <div className="AboutEvent-details row">
-            <div className="col-12">
+          <div className="AboutEvent-details row justify-content-center">
+            <div className="col-12 col-lg-9">
               <h3>Details</h3>
-              <ReactMarkdown children={event.event_description} />
+              <AllowMarkdown children={event.event_description} />
               <h3>What We Will Do</h3>
-              <ReactMarkdown children={event.event_agenda} />
+              <AllowMarkdown children={event.event_agenda} />
             </div>
           </div>
-          {!_.isEmpty(event.event_legacy_organization) && (
-            <ProfileProjectSearch viewOnly={this.props.viewOnly} />
-          )}
+          <ProfileProjectSearch viewOnly={this.props.viewOnly} />
         </div>
         <SponsorFooter key="main_footer" forceShow={event.show_headers} />
       </React.Fragment>
@@ -521,7 +519,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   initProjectSearch() {
     const event: EventData = this.state.event;
-    if (event && !_.isEmpty(event.event_legacy_organization)) {
+    if (event?.event_id) {
       UniversalDispatcher.dispatch({
         type: "INIT_SEARCH",
         findProjectsArgs: {
