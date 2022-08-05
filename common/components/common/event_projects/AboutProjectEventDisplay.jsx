@@ -404,9 +404,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
   // primary section content
   _renderPrimarySection(eventProject: EventProjectAPIDetails): React$Node {
-    const comingSoonMsg: React$Node = (
-      <React.Fragment>Coming soon!</React.Fragment>
-    );
+    const comingSoonMsg: React$Node = <p>Coming soon!</p>;
 
     return (
       <div className="Profile-primary-container">
