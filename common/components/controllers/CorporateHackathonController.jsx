@@ -253,9 +253,9 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </h3>
         </div>
 
-        {this._renderContactHackathon()}
+        
 
-        <div className="corporate-hackathon-saying corporate-bg-light col-12">
+        <div className="corporate-hackathon-saying col-12">
           <h1>What our partners are saying.</h1>
           <h2>
             Feedback from our partners about their custom hackathon events.
@@ -267,10 +267,12 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             />
           </div>
           <p className="h3">
-            Read about previous events in our <a href={window.BLOG_URL}>blog</a>
-            .
+            Learn more in our <a href="https://blog.democracylab.org/how-amazon-hacked-for-good/">blog</a>.
           </p>
         </div>
+
+        {this._renderContactHackathon()}
+
       </React.Fragment>
     );
   }
@@ -399,9 +401,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             </div>
           </div>
         </div>
-        {this._renderContactSponsor()}
 
-        <div className="corporate-sponsorship-saying corporate-bg-light col-12">
+        <div className="corporate-sponsorship-saying col-12">
           <h1>What our partners are saying.</h1>
           <h2>Feedback from partnering organizations.</h2>
 
@@ -417,13 +418,16 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             up <a href="/events">here</a>.
           </p>
         </div>
+
+        {this._renderContactSponsor()}
+        
       </React.Fragment>
     );
   }
   _renderContactHackathon(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-contact col-12">
+        <div className="corporate-contact col-12 corporate-bg-light">
           <JumpAnchor id="contact-hackathon" />
           <h1>Interested in hosting your own hackathon?</h1>
           <h2>Get in touch to discuss your next tech-for-good event.</h2>
@@ -439,7 +443,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <a
         href={cdn.document(
-          "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
+          "2022+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
         )}
       >
         Corporate Tech-for-Good Hackathons PDF{" "}
@@ -449,7 +453,11 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   }
   _renderSponsorProspectus(): React$Node {
     return (
-      <a href={cdn.document("2021+DemocracyLab+Sponsorship+Prospectus.pdf")}>
+      <a 
+        href={cdn.document(
+          "2022+DemocracyLab+Sponsorship+Prospectus.pdf"
+        )}
+      >
         Sponsor Prospectus PDF{" "}
         <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
       </a>
@@ -459,7 +467,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderContactSponsor(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-contact col-12">
+        <div className="corporate-contact col-12 corporate-bg-light">
           <JumpAnchor id="contact-sponsor" />
           <h1>Interested in becoming a sponsor?</h1>
           <h2>Get in touch to make an impact in the tech-for-good movement.</h2>
