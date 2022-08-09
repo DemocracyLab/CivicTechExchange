@@ -2,6 +2,7 @@ import json
 import requests
 import threading
 from .client import SalesforceClient
+from common.helpers.queue import enqueue
 from common.models import Tag
 
 ''' ProjectPosition model maps to the Volunteer Job object in Salesforce '''
@@ -12,7 +13,7 @@ def run(request):
     SalesforceClient().send(request)
 
 
-def save(project_position):
+def _save(project_position):
     from civictechprojects.models import Project
     if not Project.objects.get(id__exact=project_position.position_project.id).is_searchable:
         pass
@@ -40,6 +41,10 @@ def save(project_position):
         #thread = threading.Thread(target=run, args=(req,))
         #thread.daemon = True
         #thread.start()
+
+
+def save(project_position):
+    enqueue(_save, project_position)
 
 
 def delete(project_position):

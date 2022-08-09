@@ -1,6 +1,7 @@
 from civictechprojects.models import Project, ProjectPosition
 from common.models import Tag
 from .client import SalesforceClient
+from common.helpers.queue import enqueue
 from salesforce import volunteer_job
 import json
 import requests
@@ -21,7 +22,6 @@ def run(request):
 def create(project: Project):
     if not project.is_searchable:
         pass
-
     save(project)
     positions = ProjectPosition.objects.filter(position_project_id__exact=project.id)
     for position in positions:
@@ -29,6 +29,10 @@ def create(project: Project):
 
 
 def save(project: Project):
+    enqueue(_save, project)
+
+
+def _save(project: Project):
     status = 'In Progress' if project.is_searchable else 'Completed'
     data = {
         "ownerid": client.owner_id,
@@ -53,7 +57,7 @@ def save(project: Project):
 
     data['startdate'] = project.project_date_created.strftime('%Y-%m-%d') if project.project_date_created else project.project_date_modified.strftime('%Y-%m-%d')
 
-    '''synchronous call - campaign must be saved before saving jobs'''
+    '''synchronous call (campaign must be saved before saving jobs)'''
     SalesforceClient().send(requests.Request(
         method="PATCH",
         url=f'{client.campaign_endpoint}/platform_id__c/{project.id}',
