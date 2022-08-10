@@ -14,10 +14,6 @@ def run(request):
 
 
 def _save(project_position):
-    from civictechprojects.models import Project
-    if not Project.objects.get(id__exact=project_position.position_project.id).is_searchable:
-        pass
-
     position_role = Tag.tags_field_descriptions(project_position.position_role)
     platform_id__c = f'{project_position.position_project.id}{position_role.lower().replace(" ", "")}'
     # Skip if the role tag is blank
@@ -44,7 +40,9 @@ def _save(project_position):
 
 
 def save(project_position):
-    enqueue(_save, project_position)
+    from civictechprojects.models import Project
+    if Project.objects.get(id__exact=project_position.position_project.id).is_searchable:
+        enqueue(_save, project_position)
 
 
 def delete(project_position):
