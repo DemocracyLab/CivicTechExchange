@@ -29,7 +29,8 @@ def create(project: Project):
 
 
 def save(project: Project):
-    enqueue(_save, project)
+    if project.is_searchable:
+        enqueue(_save, project)
 
 
 def _save(project: Project):
