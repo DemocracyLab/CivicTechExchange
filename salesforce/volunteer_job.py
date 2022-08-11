@@ -15,7 +15,7 @@ def run(request):
 
 def _save(project_position):
     position_role = Tag.tags_field_descriptions(project_position.position_role)
-    platform_id__c = f'{project_position.position_project.id}{position_role.lower().replace(" ", "")}'
+    platform_id__c = project_position.salesforce_job_id
     # Skip if the role tag is blank
     if position_role != '':
         data = {
@@ -34,10 +34,6 @@ def _save(project_position):
         ''' Changed this to a synchronous call to avoid record locks (duplicate position names are possible) '''
         SalesforceClient().send(req)
 
-        #thread = threading.Thread(target=run, args=(req,))
-        #thread.daemon = True
-        #thread.start()
-
 
 def save(project_position):
     if project_position.position_project.is_searchable:
@@ -46,7 +42,7 @@ def save(project_position):
 
 def delete(project_position):
     position_role = Tag.tags_field_descriptions(project_position.position_role)
-    platform_id__c = f'{project_position.position_project.id}{position_role.lower().replace(" ", "")}'
+    platform_id__c = project_position.salesforce_job_id
     data = {"GW_Volunteers__Inactive__c": True}
     req = requests.Request(
         method="PATCH",

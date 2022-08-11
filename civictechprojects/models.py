@@ -1329,7 +1329,6 @@ class VolunteerRelation(Archived):
         now = now or timezone.now()
         return self.is_approved and (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
 
-
     def salesforce_job_id(self):
         role = Tag.tags_field_descriptions(self.role)
         return f'{self.project.id}{role.lower().replace(" ", "")}'

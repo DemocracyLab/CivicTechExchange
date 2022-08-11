@@ -1,4 +1,5 @@
 from common.models import Tag
+from common.helpers.date_helpers import DateTimeFormats
 from .client import SalesforceClient
 import json
 import requests
@@ -32,8 +33,8 @@ def save(contributor: object):
         data['mailingpostalcode'] = contributor.postal_code
     if contributor.country:
         data['mailingcountry'] = contributor.country
-    if contributor.date_joined.strftime('%Y-%m-%d'):
-        data['npo02__membershipjoindate__c'] = contributor.date_joined.strftime('%Y-%m-%d')
+    if contributor.date_joined.strftime(DateTimeFormats.SALESFORCE_DATE):
+        data['npo02__membershipjoindate__c'] = contributor.date_joined.strftime(DateTimeFormats.SALESFORCE_DATE)
     if contributor.about_me:
         data['description'] = contributor.about_me
     if contributor.user_technologies:

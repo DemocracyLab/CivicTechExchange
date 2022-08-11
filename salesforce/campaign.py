@@ -1,4 +1,5 @@
 from civictechprojects.models import Project, ProjectPosition
+from common.helpers.date_helpers import DateTimeFormats
 from common.models import Tag
 from .client import SalesforceClient
 from common.helpers.queue import enqueue
@@ -20,12 +21,11 @@ def run(request):
 
 
 def create(project: Project):
-    if not project.is_searchable:
-        pass
-    save(project)
-    positions = ProjectPosition.objects.filter(position_project_id__exact=project.id)
-    for position in positions:
-        volunteer_job.save(position)
+    if project.is_searchable:
+        save(project)
+        positions = ProjectPosition.objects.filter(position_project_id__exact=project.id)
+        for position in positions:
+            volunteer_job.save(position)
 
 
 def save(project: Project):
@@ -56,7 +56,7 @@ def _save(project: Project):
         "technologies__c": Tag.tags_field_descriptions(project.project_technologies)
     }
 
-    data['startdate'] = project.project_date_created.strftime('%Y-%m-%d') if project.project_date_created else project.project_date_modified.strftime('%Y-%m-%d')
+    data['startdate'] = project.project_date_created.strftime(DateTimeFormats.SALESFORCE_DATE) if project.project_date_created else project.project_date_modified.strftime(DateTimeFormats.SALESFORCE_DATE)
 
     '''synchronous call (campaign must be saved before saving jobs)'''
     SalesforceClient().send(requests.Request(
