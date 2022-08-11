@@ -56,7 +56,7 @@ def _save(project: Project):
         "technologies__c": Tag.tags_field_descriptions(project.project_technologies)
     }
 
-    data['startdate'] = project.project_date_created.strftime(DateTimeFormats.SALESFORCE_DATE) if project.project_date_created else project.project_date_modified.strftime(DateTimeFormats.SALESFORCE_DATE)
+    data['startdate'] = (project.project_date_created or project.project_date_modified).strftime(DateTimeFormats.SALESFORCE_DATE.value)
 
     '''synchronous call (campaign must be saved before saving jobs)'''
     SalesforceClient().send(requests.Request(
