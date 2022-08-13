@@ -15,52 +15,52 @@ export type LinkSourceDisplayConfig = {|
 
 export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConfig> = [
   {
-    sourceUrlPattern: new RegExp("github.com", "i"),
+    sourceUrlPattern: /^http:s?\/\/w*\.?github.com/,
     sourceDisplayName: "GitHub",
     iconClass: GlyphStyles.Github,
   },
   {
-    sourceUrlPattern: new RegExp("meetup.com", "i"),
+    sourceUrlPattern: /^http:s?\/\/w*\.?meetup.com/,
     sourceDisplayName: "Meetup",
     iconClass: GlyphStyles.Meetup,
   },
   {
-    sourceUrlPattern: new RegExp("slack.com", "i"),
+    sourceUrlPattern: /^http:s?\/\/w*\.?slack.com/,
     sourceDisplayName: "Slack",
     iconClass: GlyphStyles.Slack,
   },
   {
-    sourceUrlPattern: new RegExp("figma.com", "i"),
+    sourceUrlPattern: /^http:s?\/\/w*\.?figma.com/,
     sourceDisplayName: "Figma",
     iconClass: GlyphStyles.Figma,
   },
   {
-    sourceUrlPattern: new RegExp("trello.com", "i"),
+    sourceUrlPattern: /^http:s?\/\/w*\.?trello.com/,
     sourceDisplayName: "Trello",
     iconClass: GlyphStyles.Trello,
   },
   {
-    sourceUrlPattern: new RegExp("drive.google.com", "i"),
+    sourceUrlPattern: /^http:s?\/\/w*\.?drive.google.com/,
     sourceDisplayName: "Google Drive",
     iconClass: GlyphStyles.GoogleDrive,
   },
   {
-    sourceUrlPattern: new RegExp("facebook.com", "i"),
+    sourceUrlPattern: /^http:s?\/\/w*\.?facebook.com/,
     sourceDisplayName: "Facebook",
     iconClass: GlyphStyles.FacebookSquare,
   },
   {
-    sourceUrlPattern: new RegExp("twitter.com", "i"),
+    sourceUrlPattern: /^http:s?\/\/w*\.?twitter.com/,
     sourceDisplayName: "Twitter",
     iconClass: GlyphStyles.TwitterSquare,
   },
   {
-    sourceUrlPattern: new RegExp("linkedin.com", "i"),
+    sourceUrlPattern: /^http:s?\/\/w*\.?linkedin.com/,
     sourceDisplayName: "LinkedIn",
     iconClass: GlyphStyles.LinkedIn,
   },
   {
-    sourceUrlPattern: new RegExp("youtube.com", "i"),
+    sourceUrlPattern: /^http:s?\/\/w*\.?youtube.com/,
     sourceDisplayName: "YouTube",
     iconClass: GlyphStyles.YouTube,
   },
