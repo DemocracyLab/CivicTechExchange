@@ -5,7 +5,6 @@ import type { Dictionary, KeyValuePair } from "../types/Generics.jsx";
 import _ from "lodash";
 import stringHelper from "../utils/string.js";
 
-
 export type LinkSourceDisplayConfig = {|
   +sourceUrlPattern: ?RegExp,
   +sourceDisplayName: ?string,
