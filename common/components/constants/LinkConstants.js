@@ -11,7 +11,9 @@ export type LinkSourceDisplayConfig = {|
   +sourceTypeDisplayName: string,
   +iconClass: string,
 |};
-const httpWwwPrefix = '^http:s?\/\/w*\.?';
+
+const httpWwwPrefix = /^http:s?\/\/w*\.?/;
+
 export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConfig> = [
   {
     sourceUrlPattern: new RegExp(httpsWwwPrefix + "github.com", "i"),
