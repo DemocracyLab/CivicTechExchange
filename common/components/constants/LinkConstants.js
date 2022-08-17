@@ -14,7 +14,7 @@ export type LinkSourceDisplayConfig = {|
 
 export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConfig> = [
   {
-    sourceUrlPattern: /^http:s?\/\/w*\.?github.com/i,
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "github.com", "i"),
     sourceDisplayName: "GitHub",
     iconClass: GlyphStyles.Github,
   },
