@@ -1,14 +1,21 @@
 .LatestBlogPosts-container, .LatestBlogPosts-authorblock, .LatestBlogPosts-postinfo {
     display: flex;
+    --blog-grid-rows: 250px 40px 65px 1fr auto auto;
+
 }
 .LatestBlogPosts-post {
-    flex-basis: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: var(--blog-grid-rows);
 }
 .LatestBlogPosts-post:last-of-type {
     display: none;
 }
 .LatestBlogPosts-featureimage {
     max-width: 100%;
+    max-height: 250px;
+    margin: auto; // center image if it doesn't span full width/height
+    
 }
 .LatestBlogPosts-author-avatar {
     width: 36px;
@@ -32,6 +39,6 @@
         flex-basis: 50%;
     }
     .LatestBlogPosts-post:last-of-type {
-        display: block;
+        display: grid;
     }
 }
