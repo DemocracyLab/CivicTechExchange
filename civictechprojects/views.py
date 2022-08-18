@@ -979,7 +979,6 @@ def demote_project_volunteer(request, application_id):
                                template=email_template)
         volunteer_relation.project.recache()
         volunteer_relation.volunteer.purge_cache()
-        salesforce_contact.set_title(volunteer_relation.volunteer_id, 'Project Volunteer')
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()

@@ -22,6 +22,7 @@ def run(request):
 
 def create(project: Project):
     if project.is_searchable:
+        project.project_date_created = (project.project_date_created or project.project_date_modified).strftime(DateTimeFormats.SALESFORCE_DATE.value)
         save(project)
         positions = ProjectPosition.objects.filter(position_project_id__exact=project.id)
         for position in positions:
@@ -53,11 +54,9 @@ def _save(project: Project):
         "issue_area__c": Tag.tags_field_descriptions(project.project_issue_area),
         "stage__c": Tag.tags_field_descriptions(project.project_stage),
         "type": Tag.tags_field_descriptions(project.project_organization_type),
-        "technologies__c": Tag.tags_field_descriptions(project.project_technologies)
+        "technologies__c": Tag.tags_field_descriptions(project.project_technologies),
+        "startdate": project.project_date_created
     }
-
-    data['startdate'] = (project.project_date_created or project.project_date_modified).strftime(DateTimeFormats.SALESFORCE_DATE.value)
-
     '''synchronous call (campaign must be saved before saving jobs)'''
     SalesforceClient().send(requests.Request(
         method="PATCH",
