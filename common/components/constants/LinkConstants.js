@@ -12,7 +12,7 @@ export type LinkSourceDisplayConfig = {|
   +iconClass: string,
 |};
 
-const httpsWwwPrefix = "^http:s?\/\/w*\.?";
+const httpsWwwPrefix = "^https?://w*.?";
 
 export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConfig> = [
   {
