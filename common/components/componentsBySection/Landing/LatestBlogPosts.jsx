@@ -33,7 +33,6 @@ class BlogCarousel extends React.PureComponent<Props, State> {
     const ghostPosts: $ReadOnlyArray<GhostPost> = this.state.ghostPosts;
     return ghostPosts ? (
       <div className="LatestBlogPosts-container">
-        {console.log(ghostPosts)}
         {ghostPosts.map(i => (
           <div key={i.slug} className="LatestBlogPosts-post">
             <img
@@ -42,34 +41,43 @@ class BlogCarousel extends React.PureComponent<Props, State> {
               alt={i.title}
               aria-hidden="true"
             />
-            <p className="LatestBlogPosts-primarytag">{i.primary_tag.name}</p>
-            <h3>{i.title}</h3>
-            <p>{i.custom_excerpt ? i.custom_excerpt : i.excerpt}</p>
-            <div className="LatestBlogPosts-authorblock">
-              <img
-                className="LatestBlogPosts-author-avatar"
-                src={i.primary_author.profile_image}
-                aria-hidden="true"
-              />
-              <div className="LatestBlogPosts-postinfo">
-                <span>{i.primary_author.name}</span>
-                <span>
-                  <Moment format="D MMM YYYY">
-                    {i.updated_at ? i.updated_at : i.published_at}
-                  </Moment>{" "}
-                  &bull; {i.reading_time} min read
-                </span>
+            <p className="LatestBlogPosts-primarytag overline">
+              {i.primary_tag.name}
+            </p>
+            <h3 className="LatestBlogPosts-title">{i.title}</h3>
+            <p className="LatestBlogPosts-excerpt">
+              {i.custom_excerpt ? i.custom_excerpt : i.excerpt}
+            </p>
+            <div className="LatestBlogPosts-bottomrow">
+              <div className="LatestBlogPosts-authorblock">
+                <img
+                  className="LatestBlogPosts-author-avatar"
+                  src={i.primary_author.profile_image}
+                  aria-hidden="true"
+                />
+                <div className="LatestBlogPosts-postinfo overline">
+                  <span className="LatestBlogPosts-author">
+                    {i.primary_author.name}
+                  </span>
+                  <span>
+                    <Moment format="D MMM YYYY">
+                      {i.updated_at ? i.updated_at : i.published_at}
+                    </Moment>{" "}
+                    &bull; {i.reading_time} min read
+                  </span>
+                </div>
+              </div>
+              <div className="LatestBlogPosts-link">
+                <a href={i.url} target="_blank">
+                  Read More
+                </a>
               </div>
             </div>
-
-            <a href={i.url} target="_blank">
-              Read More
-            </a>
           </div>
         ))}
       </div>
     ) : (
-      <LoadingFrame height="300px" />
+      <LoadingFrame height="500px" />
     );
   }
 }
