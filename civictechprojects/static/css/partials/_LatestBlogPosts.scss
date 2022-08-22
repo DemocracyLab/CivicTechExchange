@@ -1,7 +1,9 @@
 .LatestBlogPosts-container, .LatestBlogPosts-authorblock, .LatestBlogPosts-postinfo {
     display: flex;
-    --blog-grid-rows: 250px 32px 65px 1fr auto auto;
-
+}
+.LatestBlogPosts-container {
+    --blog-grid-rows: 250px 32px 65px 1fr auto auto; // set this in the parent so all children inherit the same 1fr, according to a SO post I read ;)
+    flex-wrap: wrap;
 }
 .LatestBlogPosts-post {
     display: grid;
@@ -36,7 +38,7 @@
         padding: 40px;
     }
     .LatestBlogPosts-post {
-        flex-basis: 50%;
+        flex-basis: calc(50% - 40px);
     }
     .LatestBlogPosts-post:last-of-type {
         display: grid;
