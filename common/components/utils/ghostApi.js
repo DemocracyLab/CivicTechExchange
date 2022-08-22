@@ -54,6 +54,7 @@ export class ghostApiRecent {
       .browse({
         limit: 2,
         include: "tags,authors",
+        // limit set to 2 for homepage, but should be a prop-controlled value at some point
         //per the API docs, fields does not play well with include, so we'll grab everything from the api, even though we don't need it all.
         // fields: "title, url, slug, excerpt, custom_excerpt, feature_image, reading_time, primary_author, primary_tag, published_at, updated_at"
       })
