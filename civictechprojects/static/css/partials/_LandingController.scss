@@ -121,12 +121,16 @@
   margin-top: 8px;
 }
 
-// start new CSS I know is valid
+// start new CSS (will review old CSS before PR)
 
-.LandingController-latestblogposts  {
+.LandingController-options, .LandingController-latestblogposts  {
+  padding-top: 24px;
   background-color: $color-background-light;
 }
-// end new CSS I know is valid
+.LandingController-hero {
+  padding-top: 24px;
+}
+// end new CSS (aug 2022)
 
 
 @include media-breakpoint-up(md) {
@@ -181,13 +185,15 @@
   .LandingController-root .SplashScreen-content {
     padding-bottom: 3rem;
   }
-}
-
-@include media-breakpoint-up(lg) {
   .ProjectCard-root {
     min-height: 535px;
   }
+  .LandingController-hero, .LandingController-options, .LandingController-latestblogposts {
+    padding-top: 36px;
+  }
 }
+
+
 @include media-breakpoint-up(xl) {
   .ProjectCard-root {
     min-height: 405px;
