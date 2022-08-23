@@ -13,10 +13,35 @@ import ProjectChart from "../svg/homepage/chart.svg";
 import GreenSplitDot from "../svg/homepage/green-split-dot.svg";
 import YellowDot from "../svg/homepage/yellow-dot.svg";
 import RedDot from "../svg/homepage/red-dot.svg";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
 
-class LandingController extends React.PureComponent<{||}> {
-  constructor(): void {
-    super();
+type State = {|
+  defaultTab: string,
+|};
+
+export const HomepageTabs: Dictionary<string> = {
+  Volunteer: "volunteer",
+  CreateProject: "createproject",
+  Partner: "partner",
+};
+
+const tabOptions: Dictionary<string> = {
+  volunteer: "tab-volunteer",
+  createproject: "tab-createproject",
+  partner: "tab-partner",
+};
+
+class LandingController extends React.PureComponent<{||}, State> {
+  constructor(props): void {
+    super(props);
+    const tabArg: string = url.argument("tab");
+    this.state = {
+      defaultTab:
+        tabArg && tabOptions[tabArg]
+          ? tabOptions[tabArg]
+          : tabOptions.volunteer,
+    };
   }
 
   render(): React$Node {
@@ -42,7 +67,7 @@ class LandingController extends React.PureComponent<{||}> {
       <div className="col-12">
         <RecentProjectsSection />
       </div>
-    )
+    );
   }
 
   _renderHero(): React$Node {
@@ -63,18 +88,30 @@ class LandingController extends React.PureComponent<{||}> {
   _renderOptions(): React$Node {
     return (
       <div className="LandingController-options col-12">
-        <h2>I'd like to...</h2>
-        <p>
-          scrollable/clickable row of 3 content boxes go here: "Volunteer",
-          "Create a Project", and "Be a Partner"
-        </p>
+        <h2 className="text-center">I'd like to...</h2>
+        <Tabs
+          defaultActiveKey={this.state.defaultTab}
+          id="homepage-tabs"
+          className="LandingController-tabs"
+          justify
+        >
+          <Tab eventKey={tabOptions.volunteer} title="Volunteer">
+            {this._volunteerSection()}
+          </Tab>
+          <Tab eventKey={tabOptions.createproject} title="Create a Project">
+            {this._createProjectSection()}
+          </Tab>
+          <Tab eventKey={tabOptions.partner} title="Be a Partner">
+            {this._partnerSection()}
+          </Tab>
+        </Tabs>
       </div>
     );
   }
 
   _volunteerSection(): React$Node {
     return (
-      <div className="LandingController-volunteer-section">
+      <div className="LandingController-volunteer-section LandingController-tab-section">
         <p>Why volunteer with a DemocracyLab Project?</p>
         <p>3 svgs I don't have yet</p>
         <Button variant="primary">Volunteer Now</Button>
@@ -84,20 +121,18 @@ class LandingController extends React.PureComponent<{||}> {
 
   _createProjectSection(): React$Node {
     return (
-      <React.Fragment>
-        <div className="LandingController-createproject-section">
-          <p>Why create a project on DemocracyLab?</p>
-        </div>
+      <div className="LandingController-createproject-section LandingController-tab-section">
+        <p>Why create a project on DemocracyLab?</p>
         <div className="LandingController-chart-section">
           <p>(chart goes here)</p>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 
   _partnerSection(): React$Node {
     return (
-      <div className="LandingController-partner-section">
+      <div className="LandingController-partner-section LandingController-tab-section">
         <p>Why become a sponsor?</p>
         <Button variant="primary">Become a Sponsor</Button>
         <p>Why host a tech-for-good-hackathon?</p>
