@@ -122,6 +122,10 @@
 }
 
 // start new CSS (will review old CSS before PR)
+//local scope variables
+.LandingController-root {
+  $nav-tabs-border-color: $color-neutral-60;
+}
 
 .LandingController-options, .LandingController-latestblogposts  {
   padding-top: 24px;
@@ -129,6 +133,15 @@
 }
 .LandingController-hero {
   padding-top: 24px;
+}
+.LandingController-tabs .nav-link.active {
+  box-shadow: 0px -3px 0 0 $color-brand-70 inset;
+}
+.LandingController-tab-section {
+  border-left: 1px solid $color-neutral-60;
+  border-bottom: 1px solid $color-neutral-60;
+  border-right: 1px solid $color-neutral-60;
+  padding: 1rem;
 }
 // end new CSS (aug 2022)
 
