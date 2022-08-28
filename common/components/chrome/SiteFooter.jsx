@@ -97,9 +97,6 @@ class SiteFooter extends React.Component {
           </a>
           .
         </p>
-        <p className="overline">
-          &copy; 2006-2022 DemocracyLab | All Rights Reserved
-        </p>
       </div>
     );
   }
