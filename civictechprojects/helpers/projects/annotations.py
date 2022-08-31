@@ -1,6 +1,7 @@
 from common.helpers.constants import FrontEndSection
 from common.helpers.form_helpers import is_creator_or_staff
 from common.helpers.front_end import section_url
+from civictechprojects.caching.cache import EventProjectCache
 
 class ProjectAnnotation:
     class Meta:
@@ -33,9 +34,11 @@ class EventVideosProjectAnnotation(ProjectAnnotation):
             for project_json in json_list:
                 project_id = project_json['project_id']
                 event_project = EventProject.get(event_id, project_id)
+                event_project_json = EventProjectCache.get(event_project)
                 project_json['card_url'] = section_url(FrontEndSection.AboutEventProject,
                                                        {'event_id': event_id, 'project_id': project_id})
                 event_video = self._get_event_video(event_id, project_id)
+                project_json['project_positions'] = event_project_json['event_project_positions']
                 if event_video:
                     project_json['project_thumbnail_video'] = event_video
                 if event_project.event.is_activated:
