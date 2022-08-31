@@ -15,6 +15,7 @@ import { SelectOption } from "../../types/SelectOption.jsx";
 import Select from "react-select";
 import moment from "moment";
 import _ from "lodash";
+import type { PositionInfo } from "../../forms/PositionInfo";
 
 type Props = {|
   projectId: number,
@@ -74,6 +75,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
       noPositionOption,
     ].concat(
       nextProps.positions
+        .filter((position: PositionInfo) => !position.isHidden)
         .map((position: PositionInfo) => ({
           value: position.roleTag.tag_name,
           label: tagOptionDisplay(position.roleTag),
