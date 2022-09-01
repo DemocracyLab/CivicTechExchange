@@ -35,6 +35,7 @@ import ProjectAPIUtils, { APIResponse } from "../../utils/ProjectAPIUtils.js";
 import promiseHelper from "../../utils/promise.js";
 import JoinConferenceButton from "./JoinConferenceButton.jsx";
 import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
+import ContactEventVolunteersButton from "./ContactEventVolunteersButton.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -234,6 +235,12 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             {this._renderLeaveButton(eventProject)}
             {!this.state.isPastEvent &&
               this._renderCancelRSVPButton(eventProject)}
+            {this.state.isProjectOwner &&
+              !_.isEmpty(this.props.eventProject.event_project_volunteers) && (
+                <ContactEventVolunteersButton
+                  eventProject={this.props.eventProject}
+                />
+              )}
           </div>
         </div>
       </div>
