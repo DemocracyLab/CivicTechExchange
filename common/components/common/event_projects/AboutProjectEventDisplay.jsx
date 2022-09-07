@@ -148,7 +148,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   _renderTopSection(eventProject: EventProjectAPIDetails): React$Node {
     const showVideo: boolean = !_.isEmpty(this.state.videoLink);
     const showEdit: boolean =
-      CurrentUser.isOwner(eventProject) || CurrentUser.isStaff();
+      CurrentUser.isCoOwnerOrOwner(eventProject) || CurrentUser.isStaff();
     const editUrl: string =
       urlHelper.section(Section.CreateEventProject, {
         event_id: eventProject.event_id,
