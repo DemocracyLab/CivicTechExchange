@@ -750,7 +750,7 @@ def contact_event_project_volunteers(request, event_id, project_id):
     message = body['message']
 
     event_project = EventProject.get(event_id, project_id)
-    if not user.email_verified or not is_creator_or_staff(user, event_project):
+    if not user.email_verified or not is_co_owner_or_staff(user, event_project):
         return HttpResponse(status=403)
 
     volunteers = event_project.get_event_project_volunteers()
@@ -768,6 +768,7 @@ def contact_event_project_volunteers(request, event_id, project_id):
         lastname=user.last_name)) \
         .paragraph('To respond, you can reply to this email.')
 
+    # TODO: add owner if co-owner initiated
     for volunteer in volunteers:
         send_to_event_project_volunteer(event_project.project, volunteer, email_subject, email_template)
 
