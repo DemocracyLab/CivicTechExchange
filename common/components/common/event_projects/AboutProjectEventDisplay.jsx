@@ -63,7 +63,9 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     super();
     const userContext: UserContext = CurrentUser?.userContext();
     const rsvp_events: Dictionary<MyRSVPData> = userContext?.rsvp_events || {};
-    const isProjectOwner: boolean = CurrentUser.isOwner(props.eventProject);
+    const isProjectOwner: boolean = CurrentUser.isCoOwnerOrOwner(
+      props.eventProject
+    );
     const endDate: Moment = datetime.parse(props.eventProject.event_date_end);
     const isRSVPedForThisEventProject: boolean = _.some(
       rsvp_events,
