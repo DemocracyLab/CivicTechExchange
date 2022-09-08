@@ -35,10 +35,11 @@ class EventVideosProjectAnnotation(ProjectAnnotation):
                 project_id = project_json['project_id']
                 event_project = EventProject.get(event_id, project_id)
                 event_project_json = EventProjectCache.get(event_project)
+                if event_project_json:
+                    project_json['project_positions'] = event_project_json['event_project_positions']
                 project_json['card_url'] = section_url(FrontEndSection.AboutEventProject,
                                                        {'event_id': event_id, 'project_id': project_id})
                 event_video = self._get_event_video(event_id, project_id)
-                project_json['project_positions'] = event_project_json['event_project_positions']
                 if event_video:
                     project_json['project_thumbnail_video'] = event_video
                 if event_project.event.is_activated:
