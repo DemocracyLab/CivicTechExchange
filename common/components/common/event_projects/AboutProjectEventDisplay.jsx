@@ -35,6 +35,7 @@ import ProjectAPIUtils, { APIResponse } from "../../utils/ProjectAPIUtils.js";
 import promiseHelper from "../../utils/promise.js";
 import JoinConferenceButton from "./JoinConferenceButton.jsx";
 import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
+import ContactEventVolunteersButton from "./ContactEventVolunteersButton.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -62,7 +63,9 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     super();
     const userContext: UserContext = CurrentUser?.userContext();
     const rsvp_events: Dictionary<MyRSVPData> = userContext?.rsvp_events || {};
-    const isProjectOwner: boolean = CurrentUser.isOwner(props.eventProject);
+    const isProjectOwner: boolean = CurrentUser.isCoOwnerOrOwner(
+      props.eventProject
+    );
     const endDate: Moment = datetime.parse(props.eventProject.event_date_end);
     const isRSVPedForThisEventProject: boolean = _.some(
       rsvp_events,
@@ -147,7 +150,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   _renderTopSection(eventProject: EventProjectAPIDetails): React$Node {
     const showVideo: boolean = !_.isEmpty(this.state.videoLink);
     const showEdit: boolean =
-      CurrentUser.isOwner(eventProject) || CurrentUser.isStaff();
+      CurrentUser.isCoOwnerOrOwner(eventProject) || CurrentUser.isStaff();
     const editUrl: string =
       urlHelper.section(Section.CreateEventProject, {
         event_id: eventProject.event_id,
@@ -234,6 +237,12 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             {this._renderLeaveButton(eventProject)}
             {!this.state.isPastEvent &&
               this._renderCancelRSVPButton(eventProject)}
+            {this.state.isProjectOwner &&
+              !_.isEmpty(this.props.eventProject.event_project_volunteers) && (
+                <ContactEventVolunteersButton
+                  eventProject={this.props.eventProject}
+                />
+              )}
           </div>
         </div>
       </div>
