@@ -58,6 +58,7 @@ export const GlyphStyles: {[key: string]: string } = {
   CodeBranch: "fa-solid fa-code-branch", // https://fontawesome.com/icons/code-branch?s=solid&f=classic (note homepage rotates this 90deg ccw)
   Cubes: "fa-solid fa-cubes", // https://fontawesome.com/icons/cubes?s=solid&f=classic
   HandsHolding: "fa-solid fa-hands-holding", // https://fontawesome.com/icons/hands-holding?s=solid&f=classic
+  HandHoldingHeart: "fa-solid fa-hand-holding-heart", // https://fontawesome.com/icons/hand-holding-heart?s=solid&f=classic
 };
 
 export const GlyphSizes: { [key: string]: string } = {
