@@ -70,7 +70,7 @@ urlpatterns = [
     ),
     url(r'^api/projects/recent', views.recent_projects),
     url(r'^api/projects', views.project_search),
-    url(r'^api/events/recent', views.upcoming_events),
+    url(r'^api/events/upcoming', views.upcoming_events),
     url(r'^api/events', views.events_list),
     url(r'^api/limited_listings', views.limited_listings),
     url(r'^api/groups', views.group_search),
