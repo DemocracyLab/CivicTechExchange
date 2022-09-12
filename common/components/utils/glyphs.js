@@ -52,6 +52,12 @@ export const GlyphStyles: {[key: string]: string } = {
   HeartFilled: "fas fa-heart", // https://fontawesome.com/v6.0/icons/heart?s=solid
   ArrowRight: "fas fa-arrow-right", // https://fontawesome.com/v6.0/icons/arrow-right?s=solid
   LaptopCode: "fas fa-laptop-code", // https://fontawesome.com/v5.15/icons/laptop-code?style=solid
+  CircleArrowUp: "fa-solid fa-circle-arrow-up", // https://fontawesome.com/icons/circle-arrow-up?s=solid&f=classic
+  Handshake: "fa-solid fa-handshake", // https://fontawesome.com/icons/handshake?s=solid&f=classic
+  ReachingUp: "fa-sharp fa-solid fa-child-reaching", // https://fontawesome.com/icons/child-reaching?s=solid&f=sharp
+  CodeBranch: "fa-solid fa-code-branch", // https://fontawesome.com/icons/code-branch?s=solid&f=classic (note homepage rotates this 90deg ccw)
+  Cubes: "fa-solid fa-cubes", // https://fontawesome.com/icons/cubes?s=solid&f=classic
+  HandsHolding: "fa-solid fa-hands-holding", // https://fontawesome.com/icons/hands-holding?s=solid&f=classic
 };
 
 export const GlyphSizes: { [key: string]: string } = {
