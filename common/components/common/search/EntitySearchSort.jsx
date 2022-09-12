@@ -4,35 +4,35 @@ import { Container } from "flux/utils";
 import React from "react";
 import Select from "react-select";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
-import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
-import ProjectSearchBar from "./ProjectSearchBar.jsx";
 import { SelectOption } from "../../types/SelectOption.jsx";
 import metrics from "../../utils/metrics.js";
+import EntitySearchStore, {
+  EntitySearchConfig,
+} from "../../stores/EntitySearchStore.js";
+import EntitySearchBar from "./EntitySearchBar.jsx";
 
 type Props = {|
   hideSearch: ?boolean,
 |};
 
 type State = {|
+  searchConfig: EntitySearchConfig,
   sortField: string,
 |};
-const sortOptions: $ReadOnlyArray<SelectOption> = [
-  { value: "-project_date_modified", label: "Date Modified" },
-  { value: "project_name", label: "Name - Ascending" },
-  { value: "-project_name", label: "Name - Descending" },
-];
 
-class ProjectSearchSort extends React.Component<Props, State> {
+class EntitySearchSort extends React.Component<Props, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore];
+    return [EntitySearchStore];
   }
 
   static calculateState(prevState: State): State {
-    const sortField = ProjectSearchStore.getSortField();
-    const defaultSort = ProjectSearchStore.getDefaultSortField();
+    const sortField = EntitySearchStore.getSortField();
+    const defaultSort = EntitySearchStore.getDefaultSortField();
+    const searchConfig = EntitySearchStore.getSearchConfig();
 
     const state = {
-      sortField: sortOptions.find(
+      searchConfig: searchConfig,
+      sortField: searchConfig?.sortFields.find(
         option => option.value === (sortField || defaultSort)
       ),
     };
@@ -42,11 +42,13 @@ class ProjectSearchSort extends React.Component<Props, State> {
 
   render(): React$Node {
     return this.props.hideSearch ? (
-      <React.Fragment>{this._renderSortFieldDropdown()}</React.Fragment>
+      <React.Fragment>
+        {this.state.searchConfig?.sortFields && this._renderSortFieldDropdown()}
+      </React.Fragment>
     ) : (
       <div className="ProjectSearchSort-container">
-        <ProjectSearchBar />
-        {this._renderSortFieldDropdown()}
+        <EntitySearchBar />
+        {this.state.searchConfig?.sortFields && this._renderSortFieldDropdown()}
       </div>
     );
   }
@@ -62,13 +64,16 @@ class ProjectSearchSort extends React.Component<Props, State> {
       type: "SET_SORT",
       sortField: this.state.sortField,
     });
-    metrics.logSearchChangeSortEvent(this.state.sortField);
+    metrics.logSearchChangeSortEvent(
+      this.state.sortField,
+      this.state.searchConfig.name
+    );
   }
 
   _renderSortFieldDropdown(): React$Node {
     return (
       <Select
-        options={sortOptions}
+        options={this.state.searchConfig.sortFields}
         value={this.state && this.state.sortField}
         onChange={this._handleSubmitSortField.bind(this)}
         classNamePrefix="ProjectSearchSort"
@@ -81,4 +86,4 @@ class ProjectSearchSort extends React.Component<Props, State> {
   }
 }
 
-export default Container.create(ProjectSearchSort);
+export default Container.create(EntitySearchSort);

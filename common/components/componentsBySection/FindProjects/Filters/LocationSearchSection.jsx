@@ -2,9 +2,8 @@
 import React from "react";
 import type { FluxReduceStore } from "flux/utils";
 import { Container } from "flux/utils";
-import ProjectSearchStore, {
-  LocationRadius,
-} from "../../../stores/ProjectSearchStore.js";
+import EntitySearchStore from "../../../stores/EntitySearchStore.js";
+import type { LocationRadius } from "../../../common/location/LocationRadius.js";
 import UniversalDispatcher from "../../../stores/UniversalDispatcher.js";
 import LocationAutocomplete from "../../../common/location/LocationAutocomplete.jsx";
 import type { LocationInfo } from "../../../common/location/LocationInfo";
@@ -52,14 +51,14 @@ class LocationSearchSection extends React.Component<{||}, State> {
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore];
+    return [EntitySearchStore];
   }
 
   static calculateState(prevState: State): State {
     const state: State = {
-      countryOptions: ProjectSearchStore.getCountryList(),
+      countryOptions: EntitySearchStore.getCountryList(),
     };
-    state.locationRadius = ProjectSearchStore.getLocation() || {};
+    state.locationRadius = EntitySearchStore.getLocation() || {};
     if (
       !_.isEmpty(state.locationRadius) &&
       (!prevState || !prevState.locationInfo)

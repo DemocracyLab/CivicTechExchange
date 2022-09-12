@@ -14,7 +14,7 @@ from common.models.tags import Tag
 def groups_list(request):
     url_parts = request.GET.urlencode()
     query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
-    group_list = Group.objects.filter(is_searchable=True)
+    group_list = Group.objects.filter(is_searchable=True, is_private=False)
 
     if request.method == 'GET':
         group_list = group_list & apply_tag_filters(group_list, query_params, 'issues', groups_by_issue_areas)

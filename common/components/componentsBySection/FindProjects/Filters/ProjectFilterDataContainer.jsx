@@ -5,7 +5,7 @@ import { Container } from "flux/utils";
 import { List } from "immutable";
 import type { TagDefinition } from "../../../utils/ProjectAPIUtils.js";
 import LocationSearchSection from "./LocationSearchSection.jsx";
-import ProjectSearchStore from "../../../stores/ProjectSearchStore.js";
+import EntitySearchStore from "../../../stores/EntitySearchStore.js";
 import UniversalDispatcher from "../../../stores/UniversalDispatcher.js";
 import RenderFilterCategory from "./RenderFilterCategory.jsx";
 import metrics from "../../../utils/metrics.js";
@@ -41,16 +41,15 @@ class ProjectFilterDataContainer extends React.Component<Props, State> {
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore, FavoritesStore];
+    return [EntitySearchStore, FavoritesStore];
   }
 
   static calculateState(prevState: State): State {
-    const state: State =
-      this.processTags(ProjectSearchStore.getAllTags()) || {};
+    const state: State = this.processTags(EntitySearchStore.getAllTags()) || {};
 
     return Object.assign(state, {
       selectedTags: _.mapKeys(
-        ProjectSearchStore.getTags().toArray(),
+        EntitySearchStore.getTags().toArray(),
         (tag: TagDefinition) => tag.tag_name
       ),
     });

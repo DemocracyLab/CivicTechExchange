@@ -7,14 +7,14 @@ import type { NavigationActionType } from "./NavigationStore.js";
 import type { OffsetActionType } from "./PageOffsetStore.js";
 import type { FormFieldsActionType } from "./FormFieldsStore.js";
 import type { FavoritesActionType } from "./FavoritesStore.js";
-import type { ProjectSearchActionType } from "./ProjectSearchStore.js";
+import type { EntitySearchActionType } from "./EntitySearchStore.js";
 
 type UniversalActionType =
   | NavigationActionType
   | OffsetActionType
   | FormFieldsActionType
   | FavoritesActionType
-  | ProjectSearchActionType;
+  | EntitySearchActionType;
 
 const UniversalDispatcher: Dispatcher<UniversalActionType> = new Dispatcher();
 

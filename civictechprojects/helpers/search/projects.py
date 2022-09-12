@@ -28,7 +28,7 @@ def projects_list(request):
         event = Event.get_by_id_or_slug(event_id)
         project_list = event.get_linked_projects()
     else:
-        project_list = Project.objects.filter(is_searchable=True)
+        project_list = Project.objects.filter(is_searchable=True, is_private=False)
 
     project_list = apply_tag_filters(project_list, query_params, 'issues', projects_by_issue_areas)
     project_list = apply_tag_filters(project_list, query_params, 'tech', projects_by_technologies)
@@ -78,7 +78,7 @@ def recent_projects_list(request):
     url_parts = request.GET.urlencode()
     query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
     project_count = int(query_params['count'][0]) if 'count' in query_params else 3
-    project_list = Project.objects.filter(is_searchable=True)
+    project_list = Project.objects.filter(is_searchable=True, is_private=False)
     # Filter out the DemocracyLab project
     if settings.DLAB_PROJECT_ID.isdigit():
         project_list = project_list.exclude(id=int(settings.DLAB_PROJECT_ID))

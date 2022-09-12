@@ -63,6 +63,8 @@ export type ProjectData = {|
   +conferenceUrl: ?string,
   +conferenceCt: ?string,
   +cardOperation: ?CardOperation,
+  +slug: ?string,
+  +positions: $ReadOnlyArray<PositionInfo>,
 |};
 
 export type ProjectAPIData = {|
@@ -82,6 +84,7 @@ export type ProjectAPIData = {|
   +project_url: string,
   +project_positions: $ReadOnlyArray<PositionInfo>,
   +card_url: ?string,
+  +project_slug: string,
 |};
 
 export type VolunteerUserData = {|
@@ -136,6 +139,8 @@ export type ProjectDetailsAPIData = {|
   +project_date_modified: Date,
   +project_events: $ReadOnlyArray<EventTileAPIData>,
   +event_created_from: ?number,
+  +project_slug: string,
+  +is_private: boolean,
 |};
 
 export type TeamAPIData = {|
@@ -153,6 +158,9 @@ export type Testimonial = {|
 
 class ProjectAPIUtils {
   static projectFromAPIData(apiData: ProjectAPIData): ProjectData {
+    const visiblePositions: $ReadOnlyArray<PositionInfo> = apiData.project_positions.filter(
+      position => !position.isHidden
+    );
     return {
       description: apiData.project_description,
       id: apiData.project_id,
@@ -179,13 +187,14 @@ class ProjectAPIUtils {
       claimed: apiData.project_claimed,
       date_modified: apiData.project_date_modified,
       url: apiData.project_url,
-      positions: !_.isEmpty(apiData.project_positions)
-        ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
+      positions: !_.isEmpty(visiblePositions)
+        ? ProjectAPIUtils.getSkillNames(visiblePositions)
         : ["Contact Project for Details"],
       video: apiData.project_thumbnail_video,
       conferenceUrl: apiData.conference_url,
       conferenceCt: apiData.conference_count,
       cardUrl: apiData.card_url,
+      slug: apiData.project_slug,
     };
   }
 
@@ -202,10 +211,8 @@ class ProjectAPIUtils {
     return getLocationDisplayString(location);
   }
 
-  static getSkillNames(positions: array) {
-    return positions.map(function(data) {
-      return data.roleTag.display_name;
-    });
+  static getSkillNames(positions: $ReadOnlyArray<PositionInfo>) {
+    return positions.map(position => position.roleTag.display_name);
   }
 
   static fetchProjectDetails(

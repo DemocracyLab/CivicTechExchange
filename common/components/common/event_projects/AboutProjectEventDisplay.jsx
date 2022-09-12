@@ -34,6 +34,8 @@ import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
 import ProjectAPIUtils, { APIResponse } from "../../utils/ProjectAPIUtils.js";
 import promiseHelper from "../../utils/promise.js";
 import JoinConferenceButton from "./JoinConferenceButton.jsx";
+import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
+import ContactEventVolunteersButton from "./ContactEventVolunteersButton.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -61,7 +63,9 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     super();
     const userContext: UserContext = CurrentUser?.userContext();
     const rsvp_events: Dictionary<MyRSVPData> = userContext?.rsvp_events || {};
-    const isProjectOwner: boolean = CurrentUser.isOwner(props.eventProject);
+    const isProjectOwner: boolean = CurrentUser.isCoOwnerOrOwner(
+      props.eventProject
+    );
     const endDate: Moment = datetime.parse(props.eventProject.event_date_end);
     const isRSVPedForThisEventProject: boolean = _.some(
       rsvp_events,
@@ -146,7 +150,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   _renderTopSection(eventProject: EventProjectAPIDetails): React$Node {
     const showVideo: boolean = !_.isEmpty(this.state.videoLink);
     const showEdit: boolean =
-      CurrentUser.isOwner(eventProject) || CurrentUser.isStaff();
+      CurrentUser.isCoOwnerOrOwner(eventProject) || CurrentUser.isStaff();
     const editUrl: string =
       urlHelper.section(Section.CreateEventProject, {
         event_id: eventProject.event_id,
@@ -233,6 +237,12 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             {this._renderLeaveButton(eventProject)}
             {!this.state.isPastEvent &&
               this._renderCancelRSVPButton(eventProject)}
+            {this.state.isProjectOwner &&
+              !_.isEmpty(this.props.eventProject.event_project_volunteers) && (
+                <ContactEventVolunteersButton
+                  eventProject={this.props.eventProject}
+                />
+              )}
           </div>
         </div>
       </div>
@@ -403,9 +413,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
   // primary section content
   _renderPrimarySection(eventProject: EventProjectAPIDetails): React$Node {
-    const comingSoonMsg: React$Node = (
-      <React.Fragment>Coming soon!</React.Fragment>
-    );
+    const comingSoonMsg: React$Node = <p>Coming soon!</p>;
 
     return (
       <div className="Profile-primary-container">
@@ -414,25 +422,27 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <p>{eventProject?.project_short_description}</p>
 
           <h3>Problem</h3>
-          <p>{eventProject?.project_description}</p>
+          <AllowMarkdown>{eventProject?.project_description}</AllowMarkdown>
 
           {eventProject?.project_description_solution && (
             <React.Fragment>
               <h3>Solution</h3>
-              <p>{eventProject.project_description_solution}</p>
+              <AllowMarkdown>
+                {eventProject.project_description_solution}
+              </AllowMarkdown>
             </React.Fragment>
           )}
 
           <h3>Hackathon Goal</h3>
           {eventProject?.event_project_goal ? (
-            <p>{eventProject.event_project_goal}</p>
+            <AllowMarkdown>{eventProject.event_project_goal}</AllowMarkdown>
           ) : (
             comingSoonMsg
           )}
 
           <h3>Planned Scope</h3>
           {eventProject?.event_project_scope ? (
-            <p>{eventProject.event_project_scope}</p>
+            <AllowMarkdown>{eventProject.event_project_scope}</AllowMarkdown>
           ) : (
             comingSoonMsg
           )}
@@ -440,14 +450,16 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           {/*TODO: Show newlines*/}
           <h3>Schedule</h3>
           {eventProject?.event_project_agenda ? (
-            <p>{eventProject.event_project_agenda}</p>
+            <AllowMarkdown>{eventProject.event_project_agenda}</AllowMarkdown>
           ) : (
             comingSoonMsg
           )}
 
           <h3>Additional Notes</h3>
           {eventProject?.event_project_onboarding_notes ? (
-            <p>{eventProject.event_project_onboarding_notes}</p>
+            <AllowMarkdown>
+              {eventProject.event_project_onboarding_notes}
+            </AllowMarkdown>
           ) : (
             comingSoonMsg
           )}

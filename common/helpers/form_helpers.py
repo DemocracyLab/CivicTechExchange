@@ -142,9 +142,15 @@ def is_creator(user, entity):
         return False
 
 
-def is_co_owner(user, project):
-    from civictechprojects.models import VolunteerRelation
-    volunteer_relations = VolunteerRelation.objects.filter(project_id=project.id, volunteer_id=user.id)
+def is_co_owner(user, entity):
+    from civictechprojects.models import Project, EventProject, VolunteerRelation
+    if type(entity) is Project:
+        project_id = entity.id
+    elif type(entity) is EventProject:
+        project_id = entity.project.id
+    else:
+        return False
+    volunteer_relations = VolunteerRelation.objects.filter(project_id=project_id, volunteer_id=user.id)
     co_owner_relationship = find_first(volunteer_relations, lambda volunteer_relation: volunteer_relation.is_co_owner)
     return co_owner_relationship is not None
 

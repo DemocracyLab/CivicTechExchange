@@ -23,7 +23,7 @@ type Props = {|
   positionToJoin: ?PositionInfo,
   showModal: boolean,
   handleClose: (boolean, EventProjectAPIDetails) => void,
-  conferenceUrl: ?string
+  conferenceUrl: ?string,
 |};
 type State = {|
   showModal: boolean,
@@ -71,6 +71,7 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
       noPositionOption,
     ].concat(
       nextProps.eventProject.event_project_positions
+        .filter((position: PositionInfo) => !position.isHidden)
         .map((position: PositionInfo) => ({
           value: position.roleTag.tag_name,
           label: tagOptionDisplay(position.roleTag),
@@ -172,7 +173,9 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
                     OtherRoleOption.value)
                   ? this._renderOtherRoleDropdown()
                   : null}
-                <Form.Label>{"Message: " +  (this.props.conferenceUrl ? "(Optional)" : "")}</Form.Label>
+                <Form.Label>
+                  {"Message: " + (this.props.conferenceUrl ? "(Optional)" : "")}
+                </Form.Label>
                 <div className="character-count">
                   {(this.state.message || "").length} / 3000
                 </div>
@@ -189,7 +192,9 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            {this.props.conferenceUrl ? this._renderJoinVideoButton() : this._renderSendCancelButtons()}
+            {this.props.conferenceUrl
+              ? this._renderJoinVideoButton()
+              : this._renderSendCancelButtons()}
           </Modal.Footer>
         </Modal>
       </React.Fragment>
@@ -198,40 +203,36 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
 
   _renderSendCancelButtons(): React$Node {
     return (
-        <React.Fragment>
-          <Button
-              variant="outline-secondary"
-              onClick={this.closeModal.bind(
-                  this,
-                  this.props.eventProject,
-                  false
-              )}
-          >
-            {"Cancel"}
-          </Button>
-          <Button
-              variant="primary"
-              disabled={this.state.isSending || !this._fieldsFilled()}
-              onClick={this.receiveSendConfirmation}
-          >
-            {this.state.isSending ? "Sending" : "Send"}
-          </Button>
-        </React.Fragment>
+      <React.Fragment>
+        <Button
+          variant="outline-secondary"
+          onClick={this.closeModal.bind(this, this.props.eventProject, false)}
+        >
+          {"Cancel"}
+        </Button>
+        <Button
+          variant="primary"
+          disabled={this.state.isSending || !this._fieldsFilled()}
+          onClick={this.receiveSendConfirmation}
+        >
+          {this.state.isSending ? "Sending" : "Send"}
+        </Button>
+      </React.Fragment>
     );
   }
 
   _renderJoinVideoButton(): React$Node {
     return (
-        <React.Fragment>
-          <Button
-              variant="primary"
-              onClick={() => this._selectedTag() && this.handleSubmit()}
-              href={this.props.conferenceUrl}
-              target="_blank"
-          >
-            Join Video
-          </Button>
-        </React.Fragment>
+      <React.Fragment>
+        <Button
+          variant="primary"
+          onClick={() => this._selectedTag() && this.handleSubmit()}
+          href={this.props.conferenceUrl}
+          target="_blank"
+        >
+          Join Video
+        </Button>
+      </React.Fragment>
     );
   }
 
@@ -259,7 +260,9 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
     const isOptional: boolean = !!this.props.conferenceUrl;
     return (
       <div className="form-group">
-        <label htmlFor="project_technologies">{"Position to Apply For " + (isOptional ? "(Optional)" : "")}</label>
+        <label htmlFor="project_technologies">
+          {"Position to Apply For " + (isOptional ? "(Optional)" : "")}
+        </label>
         <Select
           options={this.state.positionOptions}
           value={

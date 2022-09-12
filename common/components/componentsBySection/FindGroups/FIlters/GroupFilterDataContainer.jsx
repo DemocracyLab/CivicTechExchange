@@ -7,12 +7,12 @@ import {
   TagDefinition,
   TagDefinitionCount,
 } from "../../../utils/ProjectAPIUtils.js";
-import GroupLocationSearchSection from "./GroupLocationSearchSection.jsx";
 import GroupAPIUtils from "../../../utils/GroupAPIUtils.js";
-import GroupSearchStore from "../../../stores/GroupSearchStore.js";
-import GroupSearchDispatcher from "../../../stores/GroupSearchDispatcher.js";
+import EntitySearchStore from "../../../stores/EntitySearchStore.js";
+import UniversalDispatcher from "../../../stores/UniversalDispatcher.js";
+import LocationSearchSection from "../../FindProjects/Filters/LocationSearchSection.jsx";
 import RenderFilterCategory from "../../FindProjects/Filters/RenderFilterCategory.jsx";
-import metrics from "../../../utils/metrics";
+import metrics from "../../../utils/metrics.js";
 import _ from "lodash";
 
 /**
@@ -59,13 +59,13 @@ class GroupFilterDataContainer extends React.Component<Props, State> {
   }
 
   static getStores(): $ReadOnlyArray<ReduceStore> {
-    return [GroupSearchStore];
+    return [EntitySearchStore];
   }
 
   static calculateState(prevState: State): State {
     return {
       selectedTags: _.mapKeys(
-        GroupSearchStore.getSelectedTags().toArray(),
+        EntitySearchStore.getTags().toArray(),
         (tag: TagDefinition) => tag.tag_name
       ),
     };
@@ -77,7 +77,7 @@ class GroupFilterDataContainer extends React.Component<Props, State> {
     return (
       <div>
         {this.state.tagsByCategory ? this._renderFilterCategories() : null}
-        <GroupLocationSearchSection />
+        <LocationSearchSection />
       </div>
     );
   }
@@ -116,13 +116,13 @@ class GroupFilterDataContainer extends React.Component<Props, State> {
     let tagInState = _.has(this.state.selectedTags, tag.tag_name);
     //if tag is NOT currently in state, add it, otherwise remove
     if (!tagInState) {
-      GroupSearchDispatcher.dispatch({
+      UniversalDispatcher.dispatch({
         type: "ADD_TAG",
         tag: tag.tag_name,
       });
       metrics.logSearchFilterByTagEvent(tag);
     } else {
-      GroupSearchDispatcher.dispatch({
+      UniversalDispatcher.dispatch({
         type: "REMOVE_TAG",
         tag: tag,
       });

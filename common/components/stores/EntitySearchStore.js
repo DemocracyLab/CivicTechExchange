@@ -1,28 +1,119 @@
 // @flow
 
-import type { Tag } from "./TagStore";
-
+import _ from "lodash";
 import { ReduceStore } from "flux/utils";
-import UniversalDispatcher from "./UniversalDispatcher.js";
 import { List, Record } from "immutable";
-import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
-import type {
+import UniversalDispatcher from "./UniversalDispatcher.js";
+import ProjectAPIUtils, {
   ProjectData,
   TagDefinition,
   TagDefinitionCount,
   ProjectAPIData,
   CardOperation,
 } from "../utils/ProjectAPIUtils.js";
+import {
+  LocationRadius,
+  locationRadiusToString,
+  locationRadiusFromString,
+} from "../common/location/LocationRadius.js";
 import TagCategory from "../common/tags/TagCategory.jsx";
 import urls from "../utils/url.js";
 import Section from "../enums/Section.js";
 import { CountryData, countryByCode } from "../constants/Countries.js";
 import { Dictionary } from "../types/Generics.jsx";
-import _ from "lodash";
+import { SelectOption } from "../types/SelectOption.jsx";
+
+export type Tag = {|
+  +caption: string,
+  +category: string,
+  +displayName: string,
+  +id: number,
+  +parent: string,
+  +subcategory: string,
+  +tagName: string,
+|};
+
+type EntityPayload<T> = {|
+  entities: List<T>,
+  entityCt: number,
+|};
+
+export type EntitySearchConfig<T> = {|
+  name: string,
+  apiUrlBase: string,
+  frontEndUrlBase: string,
+  apiEntityTransform: (any, SearchSettings) => EntityPayload<T>,
+  defaultSort: string,
+  sortFields: $ReadOnlyArray<SelectOption>,
+|};
+
+export const SearchFor: Dictionary<EntitySearchConfig> = {
+  Projects: {
+    name: "Projects",
+    apiUrlBase: "/api/projects",
+    frontEndUrlBase: urls.section(Section.FindProjects),
+    apiEntityTransform: (apiResponse, searchSettings: SearchSettings) => {
+      let projects = apiResponse.projects.map(
+        ProjectAPIUtils.projectFromAPIData
+      );
+      if (searchSettings.cardOperationGenerator) {
+        projects.forEach((project: ProjectData) => {
+          project.cardOperation = searchSettings.cardOperationGenerator(
+            project
+          );
+        });
+      }
+      return {
+        entities: projects,
+        entityCt: apiResponse.numProjects,
+      };
+    },
+    defaultSort: "-project_date_modified",
+    sortFields: [
+      { value: "-project_date_modified", label: "Date Modified" },
+      { value: "project_name", label: "Name - Ascending" },
+      { value: "-project_name", label: "Name - Descending" },
+    ],
+  },
+  Groups: {
+    name: "Groups",
+    apiUrlBase: "/api/groups",
+    frontEndUrlBase: urls.section(Section.FindGroups),
+    apiEntityTransform: apiResponse => {
+      return {
+        entities: apiResponse.groups,
+        entityCt: apiResponse.numGroups,
+      };
+    },
+    defaultSort: "",
+    sortFields: [
+      { value: "", label: "Name - Ascending" },
+      { value: "-group_name", label: "Name - Descending" },
+      { value: "-group_date_modified", label: "Date Modified" },
+    ],
+  },
+  Events: {
+    name: "Events",
+    apiUrlBase: "/api/events",
+    frontEndUrlBase: urls.section(Section.FindEvents),
+    apiEntityTransform: apiResponse => {
+      return {
+        entities: apiResponse.events,
+        entityCt: apiResponse.numEvents,
+      };
+    },
+    defaultSort: "",
+    sortFields: [
+      { value: "", label: "Date Modified" },
+      { value: "event_name", label: "Name - Ascending" },
+      { value: "-event_name", label: "Name - Descending" },
+    ],
+  },
+};
 
 export type SearchSettings = {|
+  searchConfig: EntitySearchConfig,
   updateUrl: boolean,
-  defaultSort: string,
   cardOperationGenerator: ProjectData => CardOperation,
 |};
 
@@ -61,31 +152,9 @@ type FindProjectsData = {|
   +tags: Dictionary<TagDefinition>,
 |};
 
-export type LocationRadius = {|
-  latitude: number,
-  longitude: number,
-  radius: number,
-|};
-
-export function locationRadiusToString(locationRadius: LocationRadius): string {
-  return `${locationRadius.latitude},${locationRadius.longitude},${locationRadius.radius}`;
-}
-
-export function locationRadiusFromString(str: string): LocationRadius {
-  const parts: $ReadOnlyArray<string> = str && str.split(",");
-  return (
-    parts &&
-    parts.length > 2 && {
-      latitude: parseFloat(parts[0]),
-      longitude: parseFloat(parts[1]),
-      radius: parseInt(parts[2]),
-    }
-  );
-}
-
-export type ProjectSearchActionType =
+export type EntitySearchActionType =
   | {
-      type: "INIT_PROJECT_SEARCH",
+      type: "INIT_SEARCH",
       searchSettings: SearchSettings,
       findProjectsArgs: FindProjectsArgs,
     }
@@ -131,7 +200,7 @@ export type ProjectSearchActionType =
       projectsResponse: FindProjectsResponse,
     };
 
-const defaultSort = "-project_date_modified";
+const defaultSort = "";
 
 const DEFAULT_STATE = {
   keyword: "",
@@ -168,7 +237,7 @@ class State extends Record(DEFAULT_STATE) {
   error: boolean;
 }
 
-class ProjectSearchStore extends ReduceStore<State> {
+class EntitySearchStore extends ReduceStore<State> {
   constructor(): void {
     super(UniversalDispatcher);
   }
@@ -177,9 +246,9 @@ class ProjectSearchStore extends ReduceStore<State> {
     return new State();
   }
 
-  reduce(state: State, action: ProjectSearchActionType): State {
+  reduce(state: State, action: EntitySearchActionType): State {
     switch (action.type) {
-      case "INIT_PROJECT_SEARCH":
+      case "INIT_SEARCH":
         let initialState: State = new State();
         if (action.findProjectsArgs) {
           initialState = this._initializeFilters(
@@ -195,7 +264,7 @@ class ProjectSearchStore extends ReduceStore<State> {
           "searchSettings",
           action.searchSettings || {
             updateUrl: false,
-            defaultSort: defaultSort,
+            defaultSort: "",
           }
         );
         return this._loadProjects(initialState, true);
@@ -237,18 +306,12 @@ class ProjectSearchStore extends ReduceStore<State> {
       case "CLEAR_FILTERS":
         return this._loadProjects(this._clearFilters(state));
       case "SET_PROJECTS_DO_NOT_CALL_OUTSIDE_OF_STORE":
-        let projects = action.projectsResponse.projects.map(
-          ProjectAPIUtils.projectFromAPIData
+        let entityPayload: EntityPayload = state.searchSettings.searchConfig.apiEntityTransform(
+          action.projectsResponse,
+          state.searchSettings
         );
-        if (state.searchSettings.cardOperationGenerator) {
-          projects.forEach((project: ProjectData) => {
-            project.cardOperation = state.searchSettings.cardOperationGenerator(
-              project
-            );
-          });
-        }
         let numPages = action.projectsResponse.numPages;
-        let numProjects = action.projectsResponse.numProjects;
+        let numProjects = entityPayload.entityCt;
         let availableCountries = action.projectsResponse.availableCountries;
         let allTags = _.mapKeys(
           action.projectsResponse.tags,
@@ -262,7 +325,7 @@ class ProjectSearchStore extends ReduceStore<State> {
         state = state.set("error", false);
         let currentProjects = state.projectsData.projects || List();
         state = state.set("projectsData", {
-          projects: currentProjects.concat(projects),
+          projects: currentProjects.concat(entityPayload.entities),
           numPages: numPages,
           numProjects: numProjects,
           allTags: allTags,
@@ -319,7 +382,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       // Only show the FindProjects page args that users care about
       const urlArgs = _.omit(state.findProjectsArgs, ["page"]);
       const windowUrl: string = urls.constructWithQueryString(
-        urls.section(Section.FindProjects),
+        state.searchSettings.searchConfig.frontEndUrlBase,
         urlArgs
       );
       history.pushState({}, null, windowUrl);
@@ -399,7 +462,10 @@ class ProjectSearchStore extends ReduceStore<State> {
 
   _clearFilters(state: State): State {
     state = state.set("keyword", "");
-    state = state.set("sortField", state.searchSettings.defaultSort);
+    state = state.set(
+      "sortField",
+      state.searchSettings.searchConfig.defaultSort
+    );
     state = state.set("location", "");
     state = state.set("locationRadius", {});
     state = state.set("tags", List());
@@ -415,7 +481,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       "findProjectsArgs",
       Object.assign(findProjectsArgs, {
         page: 1,
-        sortField: state.searchSettings.defaultSort,
+        sortField: state.searchSettings.searchConfig.defaultSort,
       })
     );
     return state;
@@ -433,7 +499,7 @@ class ProjectSearchStore extends ReduceStore<State> {
       this._updateWindowUrl(state);
     }
     const url: string = urls.constructWithQueryString(
-      `/api/projects?page=${state.page}`,
+      `${state.searchSettings.searchConfig.apiUrlBase}?page=${state.page}`,
       Object.assign({}, state.findProjectsArgs)
     );
     fetch(new Request(url))
@@ -465,8 +531,14 @@ class ProjectSearchStore extends ReduceStore<State> {
     return this.getState().keyword;
   }
 
+  getSearchConfig(): EntitySearchConfig {
+    return this.getState().searchSettings.searchConfig;
+  }
+
   getDefaultSortField(): string {
-    return this.getState().searchSettings.defaultSort;
+    const searchConfig: EntitySearchConfig = this.getState().searchSettings
+      .searchConfig;
+    return searchConfig?.defaultSort;
   }
 
   getSortField(): string {
@@ -490,12 +562,12 @@ class ProjectSearchStore extends ReduceStore<State> {
     return this.getState().location;
   }
 
-  getProjects(): List<ProjectData> {
+  getEntities() {
     const state: State = this.getState();
     return state.projectsData && state.projectsData.projects;
   }
 
-  getProjectPages(): number {
+  getEntityPages(): number {
     const state: State = this.getState();
     return state.projectsData && state.projectsData.numPages;
   }
@@ -508,12 +580,12 @@ class ProjectSearchStore extends ReduceStore<State> {
     return this.getState().favoritesOnly;
   }
 
-  getNumberOfProjects(): number {
+  getNumberOfEntities(): number {
     const state: State = this.getState();
     return state.projectsData && state.projectsData.numProjects;
   }
 
-  getProjectsLoading(): boolean {
+  isLoading(): boolean {
     return this.getState().projectsLoading;
   }
 
@@ -540,4 +612,4 @@ class ProjectSearchStore extends ReduceStore<State> {
   }
 }
 
-export default new ProjectSearchStore();
+export default new EntitySearchStore();

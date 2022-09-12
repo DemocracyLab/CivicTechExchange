@@ -38,7 +38,8 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
     notify_group_owners_group_approved, notify_event_owners_event_approved, notify_rsvped_volunteer, notify_rsvp_cancellation, \
-    notify_rsvp_for_project_owner, notify_rsvp_cancellation_for_project_owner, notify_rsvp_cancellation_for_event_owner
+    notify_rsvp_for_project_owner, notify_rsvp_cancellation_for_project_owner, notify_rsvp_cancellation_for_event_owner, \
+    send_to_event_project_volunteer
 from civictechprojects.helpers.context_preload import context_preload
 from civictechprojects.helpers.projects.annotations import apply_project_annotations
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
@@ -119,9 +120,15 @@ def group_delete(request, group_id):
 
 
 def get_group(request, group_id):
-    group = Group.objects.get(id=group_id)
+    group = Group.get_by_id_or_slug(group_id)
 
     if group is not None:
+        is_staff = is_co_owner_or_staff(get_request_contributor(request), group)
+
+        if group.is_private and group_id.isnumeric() and not is_staff:
+            # If private event isn't accessed for slug, don't show to non-admins
+            return HttpResponse(status=404)
+
         if group.is_searchable or is_creator_or_staff(get_request_contributor(request), group):
             return JsonResponse(group.hydrate_to_json())
         else:
@@ -365,10 +372,16 @@ def project_delete(request, project_id):
 
 
 def get_project(request, project_id):
-    project = Project.objects.get(id=project_id)
+    project = Project.get_by_id_or_slug(project_id)
 
     if project is not None:
-        if project.is_searchable or is_co_owner_or_staff(get_request_contributor(request), project):
+        is_staff = is_co_owner_or_staff(get_request_contributor(request), project)
+
+        if project.is_private and project_id.isnumeric() and not is_staff:
+            # If private event isn't accessed for slug, don't show to non-admins
+            return HttpResponse(status=404)
+
+        if project.is_searchable or is_staff:
             url_parts = request.GET.urlencode()
             query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
             hydrated_project = project.hydrate_to_json()
@@ -696,7 +709,7 @@ def contact_project_volunteers(request, project_id):
     message = body['message']
 
     project = Project.objects.get(id=project_id)
-    if not user.email_verified or not is_co_owner_or_owner(user, project):
+    if not user.email_verified or not is_co_owner_or_staff(user, project):
         return HttpResponse(status=403)
 
     volunteers = VolunteerRelation.get_by_project(project)
@@ -724,6 +737,43 @@ def contact_project_volunteers(request, project_id):
 
     return HttpResponse(status=200)
 
+# TODO: Pass csrf token in ajax call so we can check for it
+@csrf_exempt
+def contact_event_project_volunteers(request, event_id, project_id):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = get_request_contributor(request)
+
+    body = json.loads(request.body)
+    subject = body['subject']
+    message = body['message']
+
+    event_project = EventProject.get(event_id, project_id)
+    if not user.email_verified or not is_co_owner_or_staff(user, event_project):
+        return HttpResponse(status=403)
+
+    volunteers = event_project.get_event_project_volunteers()
+    project_name = event_project.project.project_name
+
+    email_subject = '[{event}] {project}: {subject}'.format(
+        event=event_project.event.event_name,
+        project=project_name,
+        subject=subject)
+    email_template = HtmlEmailTemplate(use_signature=False) \
+        .header('You have a new message from {projectname}'.format(projectname=project_name)) \
+        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+        message=message,
+        firstname=user.first_name,
+        lastname=user.last_name)) \
+        .paragraph('To respond, you can reply to this email.')
+
+    # TODO: add owner if co-owner initiated
+    for volunteer in volunteers:
+        send_to_event_project_volunteer(event_project.project, volunteer, email_subject, email_template)
+
+    return HttpResponse(status=200)
+
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
@@ -740,7 +790,7 @@ def contact_project_volunteer(request, application_id):
     message = body['message']
 
     # TODO: Condense common code between this and contact_project_volunteers
-    if not user.email_verified or not is_co_owner_or_owner(user, project):
+    if not user.email_verified or not is_co_owner_or_staff(user, project):
         return HttpResponse(status=403)
 
     email_subject = '{project}: {subject}'.format(
