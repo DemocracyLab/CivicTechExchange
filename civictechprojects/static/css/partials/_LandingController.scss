@@ -25,19 +25,6 @@
     height: auto;
   }
 }
-.LandingController-partner-section {
-  align-items: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-  .PartnerSection {
-    padding: 60px 10px; /* makes sure div isn't too short regardless of min-height, makes sure content doesn't hit edges */
-  }
-}
 .LandingController-partnersinaction-logo {
   margin: 5px; /* override this on desktop */
 }
@@ -141,9 +128,15 @@
   border-left: 1px solid $color-neutral-60;
   border-bottom: 1px solid $color-neutral-60;
   border-right: 1px solid $color-neutral-60;
-  text-align: center;
+  text-align: center; 
   padding-top: 40px;
   padding-bottom: 40px; // horizontal padding handled per-element
+  h4 {
+    margin-bottom: 40px;
+  }
+  h4:nth-child(n+2) { // "all but first" rules for tab with multiple H4s
+    margin-top: 40px;
+  }
 }
 .LandingController-icon-group {
   display: grid;
@@ -152,9 +145,7 @@
   padding-left: 8px;
   padding-right: 8px; // minimum space between content and border line
   margin-bottom: 40px;
-  h4 {
-    margin-bottom: 40px;
-  }
+
 }
 .LandingController-icon {
   display: flex;
