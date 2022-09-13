@@ -31,6 +31,7 @@ import EventCardsListings from "../../componentsBySection/FindEvents/EventCardsL
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
+import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
@@ -41,6 +42,7 @@ type State = {|
   project: ?ProjectDetailsAPIData,
   viewOnly: boolean,
   volunteers: ?$ReadOnlyArray<VolunteerDetailsAPIData>,
+  visiblePositions: ?$ReadOnlyArray<PositionInfo>,
   showJoinModal: boolean,
   positionToJoin: ?PositionInfo,
   showPositionModal: boolean,
@@ -55,6 +57,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       project: props.project,
       viewOnly: props.viewOnly,
       volunteers: props.project && props.project.project_volunteers,
+      visiblePositions: props?.project?.project_positions.filter(
+        (position: PositionInfo) => !position.isHidden
+      ),
       showContactModal: false,
       showPositionModal: false,
       shownPosition: null,
@@ -69,6 +74,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
       project: nextProps.project,
       viewOnly: nextProps.viewOnly || url.argument("embedded"),
       volunteers: nextProps.project.project_volunteers,
+      visiblePositions: nextProps?.project?.project_positions.filter(
+        (position: PositionInfo) => !position.isHidden
+      ),
     });
   }
 
@@ -167,9 +175,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
           <ProjectVolunteerModal
             projectId={this.state.project && this.state.project.project_id}
-            positions={
-              this.state.project && this.state.project.project_positions
-            }
+            positions={this.state.visiblePositions}
             positionToJoin={this.state.positionToJoin}
             showModal={this.state.showJoinModal}
             handleClose={this.confirmJoinProject.bind(this)}
@@ -195,12 +201,14 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               project.project_description_solution ||
                 project.project_description_actions
             ) && <h3>Problem</h3>}
-            {project.project_description}
+            <AllowMarkdown>{project.project_description}</AllowMarkdown>
             {!_.isEmpty(project.project_description_solution) && (
               <React.Fragment>
                 <div>
                   <h3 className="pt-4">Solution</h3>
-                  {project.project_description_solution}
+                  <AllowMarkdown>
+                    {project.project_description_solution}
+                  </AllowMarkdown>
                 </div>
               </React.Fragment>
             )}
@@ -208,16 +216,18 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               <React.Fragment>
                 <div>
                   <h3 className="pt-4">Action</h3>
-                  {project.project_description_actions}
+                  <AllowMarkdown>
+                    {project.project_description_actions}
+                  </AllowMarkdown>
                 </div>
               </React.Fragment>
             )}
 
             <div className="AboutProject-skilltech-container pt-4">
-              {project && !_.isEmpty(project.project_positions) && (
+              {project && !_.isEmpty(this.state.visiblePositions) && (
                 <div className="AboutProject-skills">
                   <h4>Roles Needed</h4>
-                  {project.project_positions.map(position => (
+                  {this.state.visiblePositions.map(position => (
                     <span
                       className="Profile-pill"
                       key={position.roleTag.tag_name}
@@ -240,7 +250,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               )}
             </div>
 
-            {project && !_.isEmpty(project.project_positions) && (
+            {project && !_.isEmpty(this.state.visiblePositions) && (
               <div className="AboutProject-positions-available pt-4">
                 <h3>Positions Available</h3>
                 {this._renderPositions()}
@@ -424,10 +434,8 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     const canApply: boolean =
       !this.state.viewOnly && CurrentUser.canVolunteerFor(project);
     return (
-      project &&
-      project.project_positions &&
-      _.chain(project.project_positions)
-        .filter(position => !position.isHidden)
+      !_.isEmpty(this.state.visiblePositions) &&
+      _.chain(this.state.visiblePositions)
         .sortBy(["orderNumber", "id"])
         .value()
         .map((position, i) => {

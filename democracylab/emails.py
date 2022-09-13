@@ -244,6 +244,17 @@ def send_to_project_volunteer(volunteer_relation, subject, template, cc_owners=T
     send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
 
 
+def send_to_event_project_volunteer(project, volunteer_rsvp, subject, template):
+    email_msg = EmailMessage(
+        subject=subject,
+        from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
+        to=[volunteer_rsvp.volunteer.email],
+        reply_to=[project.project_creator.email],
+    )
+    email_msg = template.render(email_msg)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
+
+
 def send_volunteer_application_email(volunteer_relation, is_reminder=False):
     project = volunteer_relation.project
     user = volunteer_relation.volunteer

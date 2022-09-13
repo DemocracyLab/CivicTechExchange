@@ -4,28 +4,28 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import type { ProjectDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
-import ContactModal from "./ContactModal.jsx";
-import metrics from "../../utils/metrics";
-import ProjectAPIUtils from "../../utils/ProjectAPIUtils";
+import ContactModal from "../projects/ContactModal.jsx";
+import apiHelper from "../../utils/api.js";
+import type { EventProjectAPIDetails } from "../../utils/EventProjectAPIUtils.js";
 import _ from "lodash";
 
 type Props = {|
-  project: ?ProjectDetailsAPIData,
+  eventProject: ?EventProjectAPIDetails,
 |};
 type State = {|
-  project: ?ProjectDetailsAPIData,
+  eventProject: ?ProjectDetailsAPIData,
   showContactModal: boolean,
 |};
 
 /**
- * Button to open Modal for sending messages to project volunteers
+ * Button to open Modal for sending messages to event project volunteers
  */
-class ContactVolunteersButton extends React.PureComponent<Props, State> {
+class ContactEventVolunteersButton extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
 
     this.state = {
-      project: props.project,
+      eventProject: props.eventProject,
       showContactModal: false,
     };
 
@@ -36,14 +36,12 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
 
   handleShow() {
     // TODO: Add metrics
-    // metrics.logUserClickContactProjectOwner(CurrentUser.userID(), this.props.project.project_id);
     this.setState({ showContactModal: true });
   }
 
   _handleSubmission(fields, closeModal): ?React$Node {
-    // TODO: Get close modal working
-    ProjectAPIUtils.post(
-      "/contact/volunteers/" + this.props.project.project_id + "/",
+    apiHelper.post(
+      `/contact/volunteers/${this.props.eventProject.event_id}/${this.props.eventProject.project_id}/`,
       fields,
       closeModal, //Send function to close modal
       response => null /* TODO: Report error to user */
@@ -73,9 +71,9 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
       <React.Fragment>
         {this._renderContactVolunteerButton()}
         <ContactModal
-          headerText={"Send message to Project Volunteers"}
+          headerText={"Send message to Event Volunteers"}
           explanationText={
-            "This email will be sent to all project volunteers. They can reply to your message via your registered email."
+            "This email will be sent to all project volunteers for this event. They can reply to your message via your registered email."
           }
           showSubject={true}
           showModal={this.state.showContactModal}
@@ -88,9 +86,9 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
 
   render(): ?React$Node {
     if (
-      (CurrentUser.isCoOwnerOrOwner(this.props.project) ||
+      (CurrentUser.isCoOwnerOrOwner(this.props.eventProject) ||
         CurrentUser.isStaff()) &&
-      !_.isEmpty(this.props.project.project_volunteers)
+      !_.isEmpty(this.props.eventProject.event_project_volunteers)
     ) {
       return <div>{this.displayContactVolunteerButton()}</div>;
     } else {
@@ -99,4 +97,4 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
   }
 }
 
-export default ContactVolunteersButton;
+export default ContactEventVolunteersButton;

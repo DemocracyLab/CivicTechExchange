@@ -78,6 +78,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^contact/democracylab$', views.contact_democracylab, name='contact_democracylab'),
     url(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner'),
+    url(r'^contact/volunteers/(?P<event_id>[0-9]+)/(?P<project_id>[0-9]+)/$', views.contact_event_project_volunteers, name='contact_event_project_volunteers'),
     url(r'^contact/volunteers/(?P<project_id>[0-9]+)/$', views.contact_project_volunteers, name='contact_project_volunteers'),
     url(r'^contact/volunteer/(?P<application_id>[0-9]+)/$', views.contact_project_volunteer, name='contact_project_volunteer'),
     url(r'^contact/group/(?P<group_id>[0-9]+)/$', views.contact_group_owner, name='contact_group_owner'),
