@@ -17,7 +17,6 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import { Glyph, GlyphStyles, GlyphSizes, GlyphWidth } from "../utils/glyphs.js";
 
-
 type State = {|
   defaultTab: string,
 |};
@@ -117,25 +116,25 @@ class LandingController extends React.PureComponent<{||}, State> {
         <h4>Why volunteer through DemocracyLab?</h4>
         <div className="LandingController-icon-group">
           <div className="LandingController-icon">
-          <i
-            className={Glyph(GlyphStyles.HandHoldingHeart, GlyphWidth.Fixed)}
-            aria-hidden="true"
-          ></i>
-          <p>Make an impact</p>
+            <i
+              className={Glyph(GlyphStyles.HandHoldingHeart, GlyphWidth.Fixed)}
+              aria-hidden="true"
+            ></i>
+            <p>Make an impact</p>
           </div>
           <div className="LandingController-icon">
-          <i
-            className={Glyph(GlyphStyles.CircleArrowUp, GlyphWidth.Fixed)}
-            aria-hidden="true"
-          ></i>
-          <p>Gain Experience</p>
+            <i
+              className={Glyph(GlyphStyles.CircleArrowUp, GlyphWidth.Fixed)}
+              aria-hidden="true"
+            ></i>
+            <p>Gain Experience</p>
           </div>
           <div className="LandingController-icon">
-          <i
-            className={Glyph(GlyphStyles.Handshake, GlyphWidth.Fixed)}
-            aria-hidden="true"
-          ></i>
-          <p>Build connections</p>
+            <i
+              className={Glyph(GlyphStyles.Handshake, GlyphWidth.Fixed)}
+              aria-hidden="true"
+            ></i>
+            <p>Build connections</p>
           </div>
         </div>
         <Button variant="primary">Volunteer Now</Button>
@@ -145,21 +144,93 @@ class LandingController extends React.PureComponent<{||}, State> {
 
   _createProjectSection(): React$Node {
     return (
-      <div className="LandingController-createproject-section LandingController-tab-section">
-        <p>Why create a project on DemocracyLab?</p>
+      <React.Fragment>
+        <div className="LandingController-createproject-section LandingController-tab-section">
+          <h4>Why create a project on DemocracyLab?</h4>
+          <div className="LandingController-icon-group">
+            <div className="LandingController-icon">
+              <i
+                className={Glyph(GlyphStyles.ChartLine, GlyphWidth.Fixed)}
+                aria-hidden="true"
+              ></i>
+              <p>Develop your idea</p>
+            </div>
+            <div className="LandingController-icon">
+              <i
+                className={Glyph(GlyphStyles.ReachingUp, GlyphWidth.Fixed)}
+                aria-hidden="true"
+              ></i>
+              <p>Find passionate volunteers</p>
+            </div>
+            <div className="LandingController-icon">
+              <i
+                className={Glyph(GlyphStyles.CodeBranch, GlyphWidth.Fixed) + " rotate-90"}
+                aria-hidden="true"
+              ></i>
+              <p>Access global talent</p>
+            </div>
+          </div>
+          <Button variant="primary">Create a project</Button>
+        </div>
         <div className="LandingController-chart-section">
           <p>(chart goes here)</p>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 
   _partnerSection(): React$Node {
     return (
       <div className="LandingController-partner-section LandingController-tab-section">
-        <p>Why become a sponsor?</p>
+        <h4>Why become a sponsor?</h4>
+        <div className="LandingController-icon-group">
+          <div className="LandingController-icon">
+            <i
+              className={Glyph(GlyphStyles.Cubes, GlyphWidth.Fixed)}
+              aria-hidden="true"
+            ></i>
+            <p>Make an impact</p>
+          </div>
+          <div className="LandingController-icon">
+            <i
+              className={Glyph(GlyphStyles.Shapes, GlyphWidth.Fixed)}
+              aria-hidden="true"
+            ></i>
+            <p>Differentiate your company</p>
+          </div>
+          <div className="LandingController-icon">
+            <i
+              className={Glyph(GlyphStyles.PeopleGroup, GlyphWidth.Fixed)}
+              aria-hidden="true"
+            ></i>
+            <p>Attract talent</p>
+          </div>
+        </div>
         <Button variant="primary">Become a Sponsor</Button>
-        <p>Why host a tech-for-good-hackathon?</p>
+        <h4>Why host a tech-for-good-hackathon?</h4>
+        <div className="LandingController-icon-group">
+          <div className="LandingController-icon">
+            <i
+              className={Glyph(GlyphStyles.Comments, GlyphWidth.Fixed)}
+              aria-hidden="true"
+            ></i>
+            <p>Engage your team</p>
+          </div>
+          <div className="LandingController-icon">
+            <i
+              className={Glyph(GlyphStyles.CircleArrowUp, GlyphWidth.Fixed)}
+              aria-hidden="true"
+            ></i>
+            <p>Drive performance</p>
+          </div>
+          <div className="LandingController-icon">
+            <i
+              className={Glyph(GlyphStyles.HandsHolding, GlyphWidth.Fixed)}
+              aria-hidden="true"
+            ></i>
+            <p>Give back to your community</p>
+          </div>
+        </div>
         <Button variant="primary">Host a Hackathon</Button>
       </div>
     );
