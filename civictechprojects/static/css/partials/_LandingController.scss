@@ -141,7 +141,30 @@
   border-left: 1px solid $color-neutral-60;
   border-bottom: 1px solid $color-neutral-60;
   border-right: 1px solid $color-neutral-60;
-  padding: 1rem;
+  text-align: center;
+  padding-top: 40px;
+  padding-bottom: 40px; // horizontal padding handled per-element
+}
+.LandingController-icon-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  padding-left: 8px;
+  padding-right: 8px; // minimum space between content and border line
+  margin-bottom: 40px;
+  h4 {
+    margin-bottom: 40px;
+  }
+}
+.LandingController-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  i {
+    font-size: 32px; // sizes each to 32px height on mobile
+    line-height: 32px;
+    margin-bottom: 24px; // space between icon and text
+  }
 }
 // end new CSS (aug 2022)
 
@@ -156,9 +179,21 @@
       min-width: 45%;
     }
   }
+  .LandingController-icon {
+    i { 
+      font-size: 48px;
+      line-height: 48px;
+    }
+  }
 }
 
 @include media-breakpoint-up(lg) {
+  .LandingController-icon {
+    i { 
+      font-size: 64px;
+      line-height: 64px;
+    }
+  }
    .LandingController-partnersinaction-logo {
     margin: 5px 20px; /* to get the correct number per row we add margin at lg and above */
   }

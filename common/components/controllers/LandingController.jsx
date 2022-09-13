@@ -15,6 +15,8 @@ import YellowDot from "../svg/homepage/yellow-dot.svg";
 import RedDot from "../svg/homepage/red-dot.svg";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
+import { Glyph, GlyphStyles, GlyphSizes, GlyphWidth } from "../utils/glyphs.js";
+
 
 type State = {|
   defaultTab: string,
@@ -112,8 +114,30 @@ class LandingController extends React.PureComponent<{||}, State> {
   _volunteerSection(): React$Node {
     return (
       <div className="LandingController-volunteer-section LandingController-tab-section">
-        <p>Why volunteer with a DemocracyLab Project?</p>
-        <p>3 svgs I don't have yet</p>
+        <h4>Why volunteer through DemocracyLab?</h4>
+        <div className="LandingController-icon-group">
+          <div className="LandingController-icon">
+          <i
+            className={Glyph(GlyphStyles.HandHoldingHeart, GlyphWidth.Fixed)}
+            aria-hidden="true"
+          ></i>
+          <p>Make an impact</p>
+          </div>
+          <div className="LandingController-icon">
+          <i
+            className={Glyph(GlyphStyles.CircleArrowUp, GlyphWidth.Fixed)}
+            aria-hidden="true"
+          ></i>
+          <p>Gain Experience</p>
+          </div>
+          <div className="LandingController-icon">
+          <i
+            className={Glyph(GlyphStyles.Handshake, GlyphWidth.Fixed)}
+            aria-hidden="true"
+          ></i>
+          <p>Build connections</p>
+          </div>
+        </div>
         <Button variant="primary">Volunteer Now</Button>
       </div>
     );
