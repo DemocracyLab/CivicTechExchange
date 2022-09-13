@@ -164,7 +164,9 @@ class LandingController extends React.PureComponent<{||}, State> {
             </div>
             <div className="LandingController-icon">
               <i
-                className={Glyph(GlyphStyles.CodeBranch, GlyphWidth.Fixed) + " rotate-90"}
+                className={
+                  Glyph(GlyphStyles.CodeBranch, GlyphWidth.Fixed) + " rotate-90"
+                }
                 aria-hidden="true"
               ></i>
               <p>Access global talent</p>

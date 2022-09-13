@@ -114,7 +114,8 @@
   $nav-tabs-border-color: $color-neutral-60;
 }
 
-.LandingController-options, .LandingController-latestblogposts  {
+.LandingController-options,
+.LandingController-latestblogposts {
   padding-top: 24px;
   background-color: $color-background-light;
 }
@@ -128,13 +129,14 @@
   border-left: 1px solid $color-neutral-60;
   border-bottom: 1px solid $color-neutral-60;
   border-right: 1px solid $color-neutral-60;
-  text-align: center; 
+  text-align: center;
   padding-top: 40px;
   padding-bottom: 40px; // horizontal padding handled per-element
   h4 {
     margin-bottom: 40px;
   }
-  h4:nth-child(n+2) { // "all but first" rules for tab with multiple H4s
+  h4:nth-child(n + 2) {
+    // "all but first" rules for tab with multiple H4s
     margin-top: 40px;
   }
 }
@@ -145,7 +147,6 @@
   padding-left: 8px;
   padding-right: 8px; // minimum space between content and border line
   margin-bottom: 40px;
-
 }
 .LandingController-icon {
   display: flex;
@@ -159,7 +160,6 @@
 }
 // end new CSS (aug 2022)
 
-
 @include media-breakpoint-up(md) {
   .RecentProjects-cards {
     flex-direction: row;
@@ -171,7 +171,7 @@
     }
   }
   .LandingController-icon {
-    i { 
+    i {
       font-size: 48px;
       line-height: 48px;
     }
@@ -180,12 +180,12 @@
 
 @include media-breakpoint-up(lg) {
   .LandingController-icon {
-    i { 
+    i {
       font-size: 64px;
       line-height: 64px;
     }
   }
-   .LandingController-partnersinaction-logo {
+  .LandingController-partnersinaction-logo {
     margin: 5px 20px; /* to get the correct number per row we add margin at lg and above */
   }
   .RecentProjects-cards {
@@ -227,11 +227,12 @@
   .ProjectCard-root {
     min-height: 535px;
   }
-  .LandingController-hero, .LandingController-options, .LandingController-latestblogposts {
+  .LandingController-hero,
+  .LandingController-options,
+  .LandingController-latestblogposts {
     padding-top: 36px;
   }
 }
-
 
 @include media-breakpoint-up(xl) {
   .ProjectCard-root {
@@ -245,5 +246,5 @@
 }
 
 .LandingController-fixed-width-button {
-  width: 180px; // TODO: deprecate 
+  width: 180px; // TODO: deprecate
 }
