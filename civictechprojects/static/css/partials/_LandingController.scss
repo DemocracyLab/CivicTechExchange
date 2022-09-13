@@ -158,6 +158,44 @@
     margin-bottom: 24px; // space between icon and text
   }
 }
+.LandingController-hero {
+  padding-top: 16px;
+  padding-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+}
+.LandingController-hero-video-container {
+  border-width: 5px;
+  border-style: solid;
+  // TODO:  border-image: url("dlab-hero-border.png")
+  border-image-slice: 1;
+  border-image-repeat: round;
+}
+
+.LandingController-hero-video {
+  width: 230px;
+  aspect-ratio: 1.4; // the background image is built for a 1.4:1 AR, could enhance this in the future with a square image, using border-image-slice properly, to make it flexible but for now it is not. match AR to image AR or else!
+  // TODO: background-image: url("whatever-the-hands-image-is.jpg")
+  // TODO: add contain/cover/placement rules here, overlay the play button icon
+}
+
+@include media-breakpoint-up(md) {
+  .LandingController-hero-video-container {
+    border-width: 8px;
+  }
+  .LandingController-hero-video {
+    width: 460px;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .LandingController-hero-video-container {
+    border-width: 12px;
+  }
+  .LandingController-hero-video {
+    width: 560px;
+  }
+}
 // end new CSS (aug 2022)
 
 @include media-breakpoint-up(md) {
@@ -230,7 +268,14 @@
   .LandingController-hero,
   .LandingController-options,
   .LandingController-latestblogposts {
-    padding-top: 36px;
+    padding-top: 40px;
+  }
+  .LandingController-hero {
+    flex-direction: row;
+    gap: 20px;
+    .LandingController-hero-text {
+      max-width: 40%;
+    }
   }
 }
 

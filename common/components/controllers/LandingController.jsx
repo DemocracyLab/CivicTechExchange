@@ -74,13 +74,15 @@ class LandingController extends React.PureComponent<{||}, State> {
   _renderHero(): React$Node {
     return (
       <div className="LandingController-hero col-12">
-        <h1>Make Tech. Do Good.</h1>
-        <p>
-          We connect tech-for-good projects with skilled volunteers and socially
-          responsible companies.
-        </p>
-        <div className="LandingController-hero-video">
-          <span>(pretend a video is here)</span>
+        <div className="LandingController-hero-text">
+          <h1>Make Tech. Do Good.</h1>
+          <p>
+            We connect tech-for-good projects with skilled volunteers and
+            socially responsible companies.
+          </p>
+        </div>
+        <div className="LandingController-hero-video-container">
+          <div className="LandingController-hero-video">(pretend a video is here)</div>
         </div>
       </div>
     );
@@ -239,6 +241,13 @@ class LandingController extends React.PureComponent<{||}, State> {
   }
 
   _renderNextHackathon(): React$Node {
+    // this needs to query the upcoming event API endpoint, /api/events/upcoming
+    // if that return is empty, return null (render nothing)
+    // if that return has at least 1 event, only take the next event (apireturn[0]) and render the EventCard
+    // also render an RSVP button below it which will take you to the Event page (events/event_id_or_slug)
+    // to test: private events, do they show up? probably should not
+    // something like !_.isEmpty(api-results) ? render stuff : return null
+
     return (
       <div className="LandingController-next-hackathon col-12">
         <p>
