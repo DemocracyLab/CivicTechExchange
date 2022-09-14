@@ -214,17 +214,42 @@ class LandingController extends React.PureComponent<{||}, State> {
           </div>
           <Button variant="primary">Create a project</Button>
         </div>
-        <div className="LandingController-chart-section col-12 col-lg-10">
+        <div className="LandingController-chart-section col-12 col-lg-10 col-xxl-9 ml-lg-auto mr-lg-auto">
           <div className="lc-gridbox-parent">
-          {/* <h3 class="lc-vertical-left">Organization Type</h3> */}
+            {/* <h3 class="lc-vertical-left">Organization Type</h3> */}
             <div className="lc-gridbox">
-              <div className="lc-text ml-auto">For Profit</div>
-              <div className="lc-big-box"><ProjectChart /></div>
-              <div className="lc-text ml-auto">Non-profit</div>
+              <div className="lc-text">For Profit</div>
+              <div className="lc-big-box">
+                <ProjectChart />
+              </div>
+              <div className="lc-text">Non-profit</div>
               <div className="lc-spacer"></div>
-              <div className="lc-text mb-auto">Public IP</div>
-              <div className="lc-text mb-auto">Proprietary</div>
+              <div className="lc-text">Public IP</div>
+              <div className="lc-text">Proprietary</div>
             </div>
+          </div>
+          <div className="LandingController-chart-legend">
+            These are examples of projects DemocracyLab is involved with.
+            <div className="lc-legend-container">
+              <div className="lc-legend-item">
+                <GreenSplitDot /> Serves these projects
+              </div>
+              <div className="lc-legend-item">
+                <YellowDot /> Serves select social enterprises*{" "}
+              </div>
+              <div className="lc-legend-item">
+                <RedDot /> Does not serve these projects{" "}
+              </div>
+            </div>
+            <p>
+              *Social enterprises must execute an agreement with volunteers that
+              complies with DemocracyLab's{" "}
+              <a href={url.section(Section.Terms) + "#volunteer"}>
+                Terms of Volunteering
+              </a>{" "}
+              and <a href={url.section(Section.Terms) + "#use"}>Terms of Use</a>
+              .
+            </p>
           </div>
         </div>
       </React.Fragment>
