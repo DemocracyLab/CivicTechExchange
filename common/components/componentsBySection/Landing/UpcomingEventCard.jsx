@@ -41,6 +41,9 @@ class UpcomingEventCard extends React.Component<{||}, State> {
   }
 
   _renderUpcomingSection(): React$Node {
+    // get the next upcoming event if there's multiples by selecting index 0
+    
+    // duplicate EventCard's slug-or-ID function
     const eventURI: string =
       this.state.upcomingEvent[0]["event_slug"] ||
       this.state.upcomingEvent[0]["event_id"];

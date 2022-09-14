@@ -214,8 +214,18 @@ class LandingController extends React.PureComponent<{||}, State> {
           </div>
           <Button variant="primary">Create a project</Button>
         </div>
-        <div className="LandingController-chart-section">
-          <p>(chart goes here)</p>
+        <div className="LandingController-chart-section col-12 col-lg-10">
+          <div className="lc-gridbox-parent">
+          {/* <h3 class="lc-vertical-left">Organization Type</h3> */}
+            <div className="lc-gridbox">
+              <div className="lc-text ml-auto">For Profit</div>
+              <div className="lc-big-box"><ProjectChart /></div>
+              <div className="lc-text ml-auto">Non-profit</div>
+              <div className="lc-spacer"></div>
+              <div className="lc-text mb-auto">Public IP</div>
+              <div className="lc-text mb-auto">Proprietary</div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     );
@@ -279,15 +289,9 @@ class LandingController extends React.PureComponent<{||}, State> {
   }
 
   _renderNextHackathon(): React$Node {
-    // this needs to query the upcoming event API endpoint, /api/events/upcoming
-    // if that return is empty, return null (render nothing)
-    // if that return has at least 1 event, only take the next event (apireturn[0]) and render the EventCard
-    // also render an RSVP button below it which will take you to the Event page (events/event_id_or_slug)
-    // to test: private events, do they show up? probably should not
-    // something like !_.isEmpty(api-results) ? render stuff : return null
-
+    // this may be an empty div if there is no upcoming event; that's ok
     return (
-      <div className="LandingController-next-hackathon col-12">
+      <div className="LandingController-next-hackathon col-12 col-lg-11 ml-lg-auto mr-lg-auto">
         <UpcomingEventCard />
       </div>
     );
