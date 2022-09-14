@@ -257,9 +257,6 @@ class LandingController extends React.PureComponent<{||}, State> {
 
     return (
       <div className="LandingController-next-hackathon col-12">
-        <p>
-          some function that returns a hackathon here i guess. UpcomingEventCard is below:
-        </p>
         <UpcomingEventCard />
       </div>
     );

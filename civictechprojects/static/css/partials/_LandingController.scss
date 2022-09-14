@@ -182,7 +182,17 @@
   background-repeat: no-repeat;
   background-position: center center;
 }
-
+.LandingController-next-hackathon {
+  padding-top: 16px;
+  padding-bottom: 40px;
+  h2 {
+    text-align: center;
+  }
+}
+.LandingController-next-hackathon-rsvp {
+  text-align: center;
+  margin-top: 1rem;
+}
 @include media-breakpoint-up(md) {
   .LandingController-hero-video-container {
     border-width: 8px;
