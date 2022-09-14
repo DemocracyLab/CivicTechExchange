@@ -215,19 +215,24 @@ class LandingController extends React.PureComponent<{||}, State> {
           <Button variant="primary">Create a project</Button>
         </div>
         <div className="LandingController-chart-section col-12 col-lg-10 col-xxl-9 ml-lg-auto mr-lg-auto">
-          <div className="lc-gridbox-parent">
-            {/* <h3 class="lc-vertical-left">Organization Type</h3> */}
-            <div className="lc-gridbox">
-              <div className="lc-text">For Profit</div>
-              <div className="lc-big-box">
-                <ProjectChart />
+          <h2 className="text-center">Tech-for-Good Projects</h2>
+          <div className="lc-flex-row">
+            <p class="lc-vertical-left">Organization Type</p>
+            <div className="lc-gridbox-parent">
+              <div className="lc-gridbox">
+                <div className="lc-text">For Profit</div>
+                <div className="lc-big-box">
+                  <ProjectChart />
+                </div>
+                <div className="lc-text">Non-profit</div>
+                <div className="lc-spacer"></div>
+                <div className="lc-text">Public IP</div>
+                <div className="lc-text">Proprietary</div>
               </div>
-              <div className="lc-text">Non-profit</div>
-              <div className="lc-spacer"></div>
-              <div className="lc-text">Public IP</div>
-              <div className="lc-text">Proprietary</div>
             </div>
           </div>
+          <p class="lc-horizontal-bottom">Intellectual Property (IP)</p>
+
           <div className="LandingController-chart-legend">
             These are examples of projects DemocracyLab is involved with.
             <div className="lc-legend-container">

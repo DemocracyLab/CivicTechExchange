@@ -208,6 +208,9 @@
     border-left: 1px solid $color-border-weakest;
     border-bottom: 1px solid $color-border-weakest;
   }
+  .lc-gridbox-parent {
+    width: 100%;
+  }
   .lc-big-box {
     grid-column: 2 / span 2;
     grid-row: 1 / span 2;
@@ -223,15 +226,22 @@
   }
   .lc-vertical-left {
     writing-mode: vertical-rl;
-    margin: auto 0 auto auto;
     text-align: center;
-    line-height: 3;
+  }
+  .lc-horizontal-bottom {
+    flex-basis: 100%;
+    text-align: center;
+  }
+  .lc-flex-row {
+    display: flex;
+    flex-wrap: nowrap;
   }
   .lc-legend-container {
     display: flex;
     flex-direction: column;
     svg {
       height: 50px;
+      width: 50px; // green dot svg is slightly wider, have to clamp both
     }
   }
   .lc-legend-item {
