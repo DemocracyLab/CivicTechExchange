@@ -72,6 +72,8 @@ class LandingController extends React.PureComponent<{||}, State> {
   }
 
   _renderHero(): React$Node {
+    const heroBorder = cdn.image('dlab-hero-border.png')
+    const heroBackground = cdn.image('dlab-hero-background.jpg')
     return (
       <div className="LandingController-hero col-12">
         <div className="LandingController-hero-text">
@@ -81,8 +83,12 @@ class LandingController extends React.PureComponent<{||}, State> {
             socially responsible companies.
           </p>
         </div>
-        <div className="LandingController-hero-video-container">
-          <div className="LandingController-hero-video">(pretend a video is here)</div>
+        <div className="LandingController-hero-video-container" style={{
+          borderImageSource: `url(${heroBorder})`,
+        }}>
+          <div className="LandingController-hero-video" style={{
+            backgroundImage: `url(${heroBackground}`,
+          }}>(pretend a video is here)</div>
         </div>
       </div>
     );

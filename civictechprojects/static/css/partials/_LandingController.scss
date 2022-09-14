@@ -159,7 +159,7 @@
   }
 }
 .LandingController-hero {
-  padding-top: 16px;
+  margin-top: 16px;
   padding-bottom: 40px;
   display: flex;
   flex-direction: column;
@@ -167,16 +167,20 @@
 .LandingController-hero-video-container {
   border-width: 5px;
   border-style: solid;
-  // TODO:  border-image: url("dlab-hero-border.png")
+  border-color: $color-background-default; // fallback in case the image can't show for whatever reason
+  // border-image-source: url("dlab-hero-border.png") is controlled in JSX because it uses cdn.image()
   border-image-slice: 1;
   border-image-repeat: round;
+  margin: auto;
 }
 
 .LandingController-hero-video {
   width: 230px;
-  aspect-ratio: 1.4; // the background image is built for a 1.4:1 AR, could enhance this in the future with a square image, using border-image-slice properly, to make it flexible but for now it is not. match AR to image AR or else!
-  // TODO: background-image: url("whatever-the-hands-image-is.jpg")
-  // TODO: add contain/cover/placement rules here, overlay the play button icon
+  aspect-ratio: 1.4; // the background image is built for a 1.4:1 AR, don't change that unless you also change border-image-slice
+  // background-image: url("dlab-hero-background.jpg") is controlled in JSX because it uses cdn.image()
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 @include media-breakpoint-up(md) {
@@ -192,6 +196,9 @@
   .LandingController-hero-video-container {
     border-width: 12px;
   }
+}
+
+@include media-breakpoint-up(xl) {
   .LandingController-hero-video {
     width: 560px;
   }
@@ -265,16 +272,18 @@
   .ProjectCard-root {
     min-height: 535px;
   }
-  .LandingController-hero,
   .LandingController-options,
   .LandingController-latestblogposts {
     padding-top: 40px;
   }
   .LandingController-hero {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-top: 40px;
     flex-direction: row;
-    gap: 20px;
+    gap: 40px;
     .LandingController-hero-text {
-      max-width: 40%;
+      max-width: 45%;
     }
   }
 }
@@ -283,8 +292,17 @@
   .ProjectCard-root {
     min-height: 405px;
   }
+  .LandingController-hero {
+    .LandingController-hero-text {
+      max-width: 40%;
+    }
+  }
 }
 @include media-breakpoint-up(xxl) {
+  .LandingController-hero {
+    padding-left: 4rem; // 64px
+    padding-right: 4rem;
+  }
   .ProjectCard-root {
     min-height: 380px;
   }
