@@ -17,9 +17,12 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import { Glyph, GlyphStyles, GlyphSizes, GlyphWidth } from "../utils/glyphs.js";
 import UpcomingEventCard from "../componentsBySection/Landing/UpcomingEventCard.jsx";
+import VideoModal from "../common/video/VideoModal.jsx";
+import PlaySVG from "../svg/play-button.svg";
 
 type State = {|
   defaultTab: string,
+  showModal: boolean,
 |};
 
 export const HomepageTabs: Dictionary<string> = {
@@ -39,6 +42,7 @@ class LandingController extends React.PureComponent<{||}, State> {
     super(props);
     const tabArg: string = url.argument("tab");
     this.state = {
+      showModal: false,
       defaultTab:
         tabArg && tabOptions[tabArg]
           ? tabOptions[tabArg]
@@ -46,9 +50,25 @@ class LandingController extends React.PureComponent<{||}, State> {
     };
   }
 
+  onHideShowVideo(): void {
+    this.setState({ showModal: false });
+    // this.forceUpdate();
+  }
+
+  onClickShowVideo(event: SyntheticMouseEvent): void {
+    // event.preventDefault();
+    this.setState({ showModal: true });
+  }
+
   render(): React$Node {
     return (
       <div className="LandingController-root">
+        <VideoModal
+          showModal={this.state.showModal}
+          onClose={this.onHideShowVideo.bind(this)}
+          videoUrl={window.YOUTUBE_VIDEO_URL}
+          videoTitle={"DemocracyLab Overview"}
+        />
         <div className="container">
           <div className="row">
             {this._renderHero()}
@@ -66,15 +86,15 @@ class LandingController extends React.PureComponent<{||}, State> {
 
   _recentProjects(): React$Node {
     return (
-      <div className="col-12">
+      <div className="col-12 LandingController-recent">
         <RecentProjectsSection />
       </div>
     );
   }
 
   _renderHero(): React$Node {
-    const heroBorder = cdn.image('dlab-hero-border.png')
-    const heroBackground = cdn.image('dlab-hero-background.jpg')
+    const heroBorder = cdn.image("dlab-hero-border.png");
+    const heroBackground = cdn.image("dlab-hero-background.jpg");
     return (
       <div className="LandingController-hero col-12">
         <div className="LandingController-hero-text">
@@ -84,12 +104,23 @@ class LandingController extends React.PureComponent<{||}, State> {
             socially responsible companies.
           </p>
         </div>
-        <div className="LandingController-hero-video-container" style={{
-          borderImageSource: `url(${heroBorder})`,
-        }}>
-          <div className="LandingController-hero-video" style={{
-            backgroundImage: `url(${heroBackground}`,
-          }}>(pretend a video is here)</div>
+        <div
+          className="LandingController-hero-video-container"
+          style={{
+            borderImageSource: `url(${heroBorder})`,
+          }}
+        >
+          <div
+            className="LandingController-hero-video"
+            style={{
+              backgroundImage: `url(${heroBackground}`,
+            }}
+            onClick={this.onClickShowVideo.bind(this)}
+          >
+            <div className="ProjectCard-play-button">
+              <PlaySVG />
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -181,6 +181,8 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+  position: relative; // so the play button goes in the right place
+  cursor: pointer;
 }
 .LandingController-next-hackathon {
   padding-top: 16px;
@@ -192,6 +194,11 @@
 .LandingController-next-hackathon-rsvp {
   text-align: center;
   margin-top: 1rem;
+}
+.LandingController-recent {
+  .RecentProjects-button {
+    margin-bottom: 0.5rem;
+  }
 }
 @include media-breakpoint-up(md) {
   .LandingController-hero-video-container {
