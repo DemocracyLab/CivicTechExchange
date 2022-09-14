@@ -16,6 +16,7 @@ import RedDot from "../svg/homepage/red-dot.svg";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import { Glyph, GlyphStyles, GlyphSizes, GlyphWidth } from "../utils/glyphs.js";
+import UpcomingEventCard from "../componentsBySection/Landing/UpcomingEventCard.jsx";
 
 type State = {|
   defaultTab: string,
@@ -257,9 +258,9 @@ class LandingController extends React.PureComponent<{||}, State> {
     return (
       <div className="LandingController-next-hackathon col-12">
         <p>
-          some function that returns a hackathon here i guess, probably don't
-          render section at all if no upcoming?
+          some function that returns a hackathon here i guess. UpcomingEventCard is below:
         </p>
+        <UpcomingEventCard />
       </div>
     );
   }
