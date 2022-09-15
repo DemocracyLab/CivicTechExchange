@@ -69,7 +69,11 @@
   text-align: center;
 }
 .LandingController-testimonial-container {
-  margin-bottom: 20px;
+  background-color: $color-brand-10;
+  .carousel-item {
+    background: $color-background-light;
+  }
+  padding-bottom: 20px;
   h2 {
     margin: 1rem 0 1.5rem 0;
   }
@@ -315,6 +319,14 @@
 @include media-breakpoint-up(lg) {
   .LandingController-hero-video-container {
     border-width: 12px;
+  }
+  .LandingController-testimonial-container.carousel-testimonial-root {
+    background-color: $color-brand-10;
+  }
+  .LandingController-testimonial-container {
+    .carousel-item {
+      background-color: inherit;
+    }
   }
 }
 
