@@ -66,7 +66,8 @@ class LandingController extends React.PureComponent<{||}, State> {
         <VideoModal
           showModal={this.state.showModal}
           onClose={this.onHideShowVideo.bind(this)}
-          videoUrl={window.YOUTUBE_VIDEO_URL}
+          //TODO: use VIDEO_PAGES so we don't have competing sources for this
+          videoUrl={'https://www.youtube.com/embed/nvIUWtx-nmo'}
           videoTitle={"DemocracyLab Overview"}
         />
         <div className="container">
@@ -220,13 +221,13 @@ class LandingController extends React.PureComponent<{||}, State> {
             <p class="lc-vertical-left">Organization Type</p>
             <div className="lc-gridbox-parent">
               <div className="lc-gridbox">
-                <div className="lc-text">For Profit</div>
+                <div className="lc-text">For Profit <span className="lc-long-text">Companies</span></div>
                 <div className="lc-big-box">
                   <ProjectChart />
                 </div>
-                <div className="lc-text">Non-profit</div>
+                <div className="lc-text lc-break-text">Government&nbsp;/ Non-profit <span className="lc-long-text">Companies</span></div>
                 <div className="lc-spacer"></div>
-                <div className="lc-text">Public IP</div>
+                <div className="lc-text">Public <span className="lc-long-text">(Open Source&nbsp;/ Creative Commons)</span></div>
                 <div className="lc-text">Proprietary</div>
               </div>
             </div>
