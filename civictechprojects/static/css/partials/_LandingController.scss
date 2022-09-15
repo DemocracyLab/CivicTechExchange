@@ -222,7 +222,11 @@
   .lc-text {
     @extend .h4;
     place-self: center;
-    padding: 1rem; // don't let the chart crowd the labels
+    text-align: center;
+    padding: 0.5rem; // don't let the chart crowd the labels
+  }
+  .lc-long-text {
+    display: none; // don't display the extended chart labels on mobile
   }
   .lc-vertical-left {
     writing-mode: vertical-rl;
@@ -255,12 +259,37 @@
 }
 
 // ======= media queries ====== //
+
+//specific small-phone-only rules
+//aka the "320-360px phone display section"
+@include media-breakpoint-down(sm) {
+  .LandingController-chart-section {
+    .lc-vertical-left {
+      margin: 0 8px 0 0;
+    }
+    .lc-text {
+      font-size: 13px;
+    }
+    // for cells which need word break; not applied universally since it's just one cell that's the issue @ 320.
+    .lc-break-text {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+  }
+}
+
 @include media-breakpoint-up(md) {
   .LandingController-hero-video-container {
     border-width: 8px;
   }
   .LandingController-hero-video {
     width: 460px;
+  }
+  .LandingController-chart-section {
+    // let the text have more room now that we're not so cramped on space
+    .lc-text {
+      padding: 1rem;
+    }
   }
 }
 
@@ -273,6 +302,15 @@
 @include media-breakpoint-up(xl) {
   .LandingController-hero-video {
     width: 560px;
+  }
+  .LandingController-chart-section {
+    // display the extended chart labels on desktop, layout needs to shift a bit for that
+    .lc-gridbox {
+      grid: repeat(3, (minmax(10px, auto))) / repeat(3, (minmax(10px, 1fr)));
+    }
+    .lc-long-text {
+      display: flex;
+    }
   }
 }
 // end new CSS (aug 2022)
