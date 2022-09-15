@@ -19,6 +19,7 @@ import { Glyph, GlyphStyles, GlyphSizes, GlyphWidth } from "../utils/glyphs.js";
 import UpcomingEventCard from "../componentsBySection/Landing/UpcomingEventCard.jsx";
 import VideoModal from "../common/video/VideoModal.jsx";
 import PlaySVG from "../svg/play-button.svg";
+import { CorporatePageTabs } from "./CorporateHackathonController.jsx";
 
 type State = {|
   defaultTab: string,
@@ -67,7 +68,7 @@ class LandingController extends React.PureComponent<{||}, State> {
           showModal={this.state.showModal}
           onClose={this.onHideShowVideo.bind(this)}
           //TODO: use VIDEO_PAGES so we don't have competing sources for this
-          videoUrl={'https://www.youtube.com/embed/nvIUWtx-nmo'}
+          videoUrl={"https://www.youtube.com/embed/nvIUWtx-nmo"}
           videoTitle={"DemocracyLab Overview"}
         />
         <div className="container">
@@ -178,7 +179,9 @@ class LandingController extends React.PureComponent<{||}, State> {
             <p>Build connections</p>
           </div>
         </div>
-        <Button variant="primary">Volunteer Now</Button>
+        <Button variant="primary" href={url.section(Section.FindProjects)}>
+          Volunteer Now
+        </Button>
       </div>
     );
   }
@@ -213,7 +216,9 @@ class LandingController extends React.PureComponent<{||}, State> {
               <p>Access global talent</p>
             </div>
           </div>
-          <Button variant="primary">Create a project</Button>
+          <Button variant="primary" href={url.section(Section.CreateProject)}>
+            Create a project
+          </Button>
         </div>
         <div className="LandingController-chart-section col-12 col-lg-10 col-xxl-9 ml-lg-auto mr-lg-auto">
           <h2 className="text-center">Tech-for-Good Projects</h2>
@@ -221,30 +226,40 @@ class LandingController extends React.PureComponent<{||}, State> {
             <p class="lc-vertical-left">Organization Type</p>
             <div className="lc-gridbox-parent">
               <div className="lc-gridbox">
-                <div className="lc-text">For Profit <span className="lc-long-text">Companies</span></div>
+                <div className="lc-text">
+                  For Profit <span className="lc-long-text">Companies</span>
+                </div>
                 <div className="lc-big-box">
                   <ProjectChart />
                 </div>
-                <div className="lc-text lc-break-text">Government&nbsp;/ Non-profit <span className="lc-long-text">Companies</span></div>
+                <div className="lc-text lc-break-text">
+                  Government&nbsp;/ Non-profit{" "}
+                  <span className="lc-long-text">Companies</span>
+                </div>
                 <div className="lc-spacer"></div>
-                <div className="lc-text">Public <span className="lc-long-text">(Open Source&nbsp;/ Creative Commons)</span></div>
+                <div className="lc-text">
+                  Public{" "}
+                  <span className="lc-long-text">
+                    (Open Source&nbsp;/ Creative Commons)
+                  </span>
+                </div>
                 <div className="lc-text">Proprietary</div>
               </div>
             </div>
           </div>
-          <p class="lc-horizontal-bottom">Intellectual Property (IP)</p>
+          <p className="lc-horizontal-bottom">Intellectual Property (IP)</p>
 
           <div className="LandingController-chart-legend">
             These are examples of projects DemocracyLab is involved with.
             <div className="lc-legend-container">
               <div className="lc-legend-item">
-                <GreenSplitDot /> Serves these projects
+                <GreenSplitDot /> <span>Serves these projects</span>
               </div>
               <div className="lc-legend-item">
-                <YellowDot /> Serves select social enterprises*{" "}
+                <YellowDot /> <span>Serves select social enterprises*</span>
               </div>
               <div className="lc-legend-item">
-                <RedDot /> Does not serve these projects{" "}
+                <RedDot /> <span>Does not serve these projects</span>
               </div>
             </div>
             <p>
@@ -289,7 +304,14 @@ class LandingController extends React.PureComponent<{||}, State> {
             <p>Attract talent</p>
           </div>
         </div>
-        <Button variant="primary">Become a Sponsor</Button>
+        <Button
+          variant="primary"
+          href={url.section(Section.Companies, {
+            tab: CorporatePageTabs.Sponsorship,
+          })}
+        >
+          Become a Sponsor
+        </Button>
         <h4>Why host a tech-for-good-hackathon?</h4>
         <div className="LandingController-icon-group">
           <div className="LandingController-icon">
@@ -314,7 +336,14 @@ class LandingController extends React.PureComponent<{||}, State> {
             <p>Give back to your community</p>
           </div>
         </div>
-        <Button variant="primary">Host a Hackathon</Button>
+        <Button
+          variant="primary"
+          href={url.section(Section.Companies, {
+            tab: CorporatePageTabs.Hackathon,
+          })}
+        >
+          Host a Hackathon
+        </Button>
       </div>
     );
   }
