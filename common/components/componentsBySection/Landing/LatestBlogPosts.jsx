@@ -46,7 +46,12 @@ class BlogCarousel extends React.PureComponent<Props, State> {
             </p>
             <h3 className="LatestBlogPosts-title">{i.title}</h3>
             <p className="LatestBlogPosts-excerpt">
-              {i.custom_excerpt ? i.custom_excerpt : i.excerpt}
+              {i.custom_excerpt ? i.custom_excerpt : i.excerpt}{" "}
+              {
+                <a href={i.url} target="_blank">
+                  Read More
+                </a>
+              }
             </p>
             <div className="LatestBlogPosts-bottomrow">
               <div className="LatestBlogPosts-authorblock">
@@ -67,11 +72,7 @@ class BlogCarousel extends React.PureComponent<Props, State> {
                   </span>
                 </div>
               </div>
-              <div className="LatestBlogPosts-link">
-                <a href={i.url} target="_blank">
-                  Read More
-                </a>
-              </div>
+              <div className="LatestBlogPosts-link"></div>
             </div>
           </div>
         ))}
