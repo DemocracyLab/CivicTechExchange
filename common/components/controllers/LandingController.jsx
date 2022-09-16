@@ -223,7 +223,7 @@ class LandingController extends React.PureComponent<{||}, State> {
         <div className="LandingController-chart-section col-12 col-lg-10 col-xxl-9 ml-lg-auto mr-lg-auto LandingController-section">
           <h2 className="text-center">Tech-for-Good Projects</h2>
           <div className="lc-flex-row">
-            <p class="lc-vertical-left">Organization Type</p>
+            <p class="lc-vertical-left rotate-180">Organization Type</p>
             <div className="lc-gridbox-parent">
               <div className="lc-gridbox">
                 <div className="lc-text">
