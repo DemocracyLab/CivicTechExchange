@@ -1,0 +1,63 @@
+.RecentProjects-title,
+.RecentProjects-button {
+  text-align: center;
+}
+.RecentProjects-title h2 {
+  margin-bottom: 1rem;
+}
+.RecentProjects-button {
+  padding: 10px 0 0 0; /* push button away from cards a bit */
+}
+.RecentProjects-toggle {
+  display: none; /* these only show at desktop */
+}
+
+.RecentProjects-cards {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-bottom: 20px;
+
+  /* layout for project cards */
+  .ProjectCard-root {
+    flex-basis: 100%;
+    min-width: 100%;
+    height: auto;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .RecentProjects-cards {
+    flex-wrap: nowrap;
+
+    .ProjectCard-root {
+      flex-basis: 30%;
+      min-width: 30%;
+    }
+
+    .ProjectCard-root:not(:last-child) {
+      margin-right: 10px;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+      top: 180px;
+      width: 25px;
+      align-items: self-start;
+    }
+    .carousel-control-prev {
+      display: none;
+    }
+  }
+  .RecentProjects-toggle {
+    margin: 120px 0 0 0;
+    display: inline-block;
+    width: 20px;
+    color: $color-grey-medium;
+    padding: 20px 5px;
+    cursor: pointer;
+  }
+  .RecentProjects-toggle:hover {
+    color: $color-text-dark;
+  }
+}

@@ -124,7 +124,6 @@ class LandingController extends React.PureComponent<{||}, State> {
             </div>
           </div>
         </div>
-        f
       </div>
     );
   }

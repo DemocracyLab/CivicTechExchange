@@ -1,73 +1,7 @@
-.RecentProjects-title,
-.RecentProjects-button {
-  text-align: center;
-}
-.RecentProjects-title h2 {
-  margin-bottom: 1rem;
-}
-.RecentProjects-button {
-  padding: 10px 0 0 0; /* push button away from cards a bit */
-}
-.RecentProjects-toggle {
-  display: none; /* these only show at desktop */
-}
-
-.RecentProjects-cards {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  margin-bottom: 20px;
-
-  /* layout for project cards */
-  .ProjectCard-root {
-    flex-basis: 100%;
-    min-width: 100%;
-    height: auto;
-  }
-}
 .LandingController-partnersinaction-logo {
   margin: 5px; /* override this on desktop */
 }
-.LandingController-root .SplashScreen-content {
-  padding-bottom: 2rem;
-  margin-left: auto;
-  margin-right: auto;
-}
-.LandingController-topsplash .SplashScreen-content h1 {
-  margin-bottom: 0;
-}
-.LandingController-midsplash h1 {
-  padding-top: 20px;
-}
-.LandingController-midsplash p {
-  max-width: 500px;
-  white-space: pre-wrap;
-}
-/* midsplash isn't respecting margin rules because ??? */
-.LandingController-midsplash p,
-.LandingController-midsplash a {
-  margin-left: auto;
-  margin-right: auto;
-}
 
-.LandingController-pathflows-item {
-  flex-basis: 26%;
-}
-.LandingController-pathflows-arrow {
-  flex-basis: 10%;
-  margin: 0 auto; /* ensure the arrow is horizontally centered in its assigned space */
-}
-.LandingController-volunteer-flow {
-  background: $color-orange;
-}
-.LandingController-recruit-flow {
-  background: $color-background-light;
-}
-.LandingController-volunteer-flow,
-.LandingController-recruit-flow {
-  padding: 20px;
-  text-align: center;
-}
 .LandingController-testimonial-container {
   background-color: $color-brand-10;
   .carousel-item {
@@ -103,16 +37,7 @@
   align-items: center;
   padding: 0 8px;
 }
-.LandingController-pathflows-stepcontainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-.LandingController-pathflows-stepcontainer p {
-  margin-top: 8px;
-}
 
-// start new CSS (will review old CSS before PR)
 .LandingController-section {
   padding-top: 16px;
   padding-bottom: 32px;
@@ -224,7 +149,6 @@
     margin-bottom: 0.5rem;
   }
 }
-
 .LandingController-chart-section {
   .lc-gridbox {
     display: grid;
@@ -245,6 +169,8 @@
   }
   .lc-text {
     @extend .h4;
+    font-weight: 400; 
+    margin-bottom: 0; // use padding for all-sides spacing since this text isn't in a normal flow
     place-self: center;
     text-align: center;
     padding: 0.5rem; // don't let the chart crowd the labels
@@ -253,12 +179,17 @@
     display: none; // don't display the extended chart labels on mobile
   }
   .lc-vertical-left {
-    writing-mode: vertical-rl;
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
     text-align: center;
+    font-weight: 500;
   }
   .lc-horizontal-bottom {
+    padding-top: 0.75rem;
+    padding-left: 36px; // push the chart label so it's centered under the chart instead of the whole div
     flex-basis: 100%;
     text-align: center;
+    font-weight: 500;
   }
   .lc-flex-row {
     display: flex;
@@ -268,6 +199,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    margin-top: 36px;
+    margin-bottom: 36px;
 
     svg {
       height: 50px;
@@ -279,7 +212,11 @@
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 10px;
+    align-items: center;
   }
+}
+.LandingController-chart-legend {
+  margin-top: 36px;
 }
 
 // ======= media queries ====== //
@@ -319,6 +256,20 @@
       padding: 1rem;
     }
   }
+  .RecentProjects-cards {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .ProjectCard-root {
+      flex-basis: 45%;
+      min-width: 45%;
+    }
+  }
+  .LandingController-icon {
+    i {
+      font-size: 48px;
+      line-height: 48px;
+    }
+  }
 }
 
 @include media-breakpoint-up(lg) {
@@ -340,42 +291,6 @@
   .LandingController-latestblogposts .LatestBlogPosts-container {
     padding-bottom: 0; // LBP adds 40px but for this specific situation we have it from the parent and don't need to double up
   }
-}
-
-@include media-breakpoint-up(xl) {
-  .LandingController-hero-video {
-    width: 560px;
-  }
-  .LandingController-chart-section {
-    // display the extended chart labels on desktop, layout needs to shift a bit for that
-    .lc-gridbox {
-      grid: repeat(3, (minmax(10px, auto))) / repeat(3, (minmax(10px, 1fr)));
-    }
-    .lc-long-text {
-      display: flex;
-    }
-  }
-}
-// end new CSS (aug 2022)
-
-@include media-breakpoint-up(md) {
-  .RecentProjects-cards {
-    flex-direction: row;
-    flex-wrap: wrap;
-    .ProjectCard-root {
-      flex-basis: 45%;
-      min-width: 45%;
-    }
-  }
-  .LandingController-icon {
-    i {
-      font-size: 48px;
-      line-height: 48px;
-    }
-  }
-}
-
-@include media-breakpoint-up(lg) {
   .LandingController-icon {
     i {
       font-size: 64px;
@@ -385,42 +300,7 @@
   .LandingController-partnersinaction-logo {
     margin: 5px 20px; /* to get the correct number per row we add margin at lg and above */
   }
-  .RecentProjects-cards {
-    flex-wrap: nowrap;
 
-    .ProjectCard-root {
-      flex-basis: 30%;
-      min-width: 30%;
-    }
-
-    .ProjectCard-root:not(:last-child) {
-      margin-right: 10px;
-    }
-
-    .carousel-control-prev,
-    .carousel-control-next {
-      top: 180px;
-      width: 25px;
-      align-items: self-start;
-    }
-    .carousel-control-prev {
-      display: none;
-    }
-  }
-  .RecentProjects-toggle {
-    margin: 120px 0 0 0;
-    display: inline-block;
-    width: 20px;
-    color: $color-grey-medium;
-    padding: 20px 5px;
-    cursor: pointer;
-  }
-  .RecentProjects-toggle:hover {
-    color: $color-text-dark;
-  }
-  .LandingController-root .SplashScreen-content {
-    padding-bottom: 3rem;
-  }
   .ProjectCard-root {
     min-height: 535px;
   }
@@ -441,6 +321,18 @@
 }
 
 @include media-breakpoint-up(xl) {
+  .LandingController-hero-video {
+    width: 560px;
+  }
+  .LandingController-chart-section {
+    // display the extended chart labels on desktop, layout needs to shift a bit for that
+    .lc-gridbox {
+      grid: repeat(3, (minmax(10px, auto))) / repeat(3, (minmax(10px, 1fr)));
+    }
+    .lc-long-text {
+      display: flex;
+    }
+  }
   .ProjectCard-root {
     min-height: 405px;
   }
@@ -466,6 +358,4 @@
   }
 }
 
-.LandingController-fixed-width-button {
-  width: 180px; // TODO: deprecate
-}
+// end media queries
