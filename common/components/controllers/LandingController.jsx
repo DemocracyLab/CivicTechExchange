@@ -170,7 +170,7 @@ class LandingController extends React.PureComponent<{||}, State> {
               className={Glyph(GlyphStyles.CircleArrowUp, GlyphWidth.Fixed)}
               aria-hidden="true"
             ></i>
-            <p>Gain Experience</p>
+            <p>Gain experience</p>
           </div>
           <div className="LandingController-icon">
             <i
