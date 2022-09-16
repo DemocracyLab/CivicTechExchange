@@ -15,7 +15,7 @@ def run(request):
 
 def _save(project_position):
     position_role = Tag.tags_field_descriptions(project_position.position_role)
-    platform_id__c = project_position.salesforce_job_id
+    platform_id__c = project_position.salesforce_job_id()
     # Skip if the role tag is blank
     if position_role != '':
         data = {
@@ -42,7 +42,7 @@ def save(project_position):
 
 def delete(project_position):
     position_role = Tag.tags_field_descriptions(project_position.position_role)
-    platform_id__c = project_position.salesforce_job_id
+    platform_id__c = project_position.salesforce_job_id()
     data = {"GW_Volunteers__Inactive__c": True}
     req = requests.Request(
         method="PATCH",
