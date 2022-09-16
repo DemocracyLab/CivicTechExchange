@@ -62,7 +62,7 @@ DEFAULT_TIMEOUT = 30.1  # seconds
 retry_strategy = Retry(
     total=2,
     status_forcelist=[429, 500, 502, 503, 504],
-    method_whitelist=["HEAD", "POST", "GET", "OPTIONS"]
+    method_whitelist=["HEAD", "PATCH", "POST", "GET", "OPTIONS"]
 )
 
 

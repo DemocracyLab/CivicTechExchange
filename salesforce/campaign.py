@@ -7,6 +7,7 @@ from salesforce import volunteer_job
 import json
 import requests
 import threading
+
 ''' 
 
 Project model maps to the Campaign object in Salesforce 
@@ -22,16 +23,20 @@ def run(request):
 
 def create(project: Project):
     if project.is_searchable:
-        project.project_date_created = (project.project_date_created or project.project_date_modified).strftime(DateTimeFormats.SALESFORCE_DATE.value)
-        save(project)
+        project.project_date_created = (project.project_date_created or project.project_date_modified).strftime(
+            DateTimeFormats.SALESFORCE_DATE.value)
+        save(project, creating_new=True)  # syncronous call must complete before pushing positions to Salesforce
         positions = ProjectPosition.objects.filter(position_project_id__exact=project.id)
         for position in positions:
             volunteer_job.save(position)
 
 
-def save(project: Project):
+def save(project: Project, creating_new=False):
     if project.is_searchable:
-        enqueue(_save, project)
+        if creating_new:
+            _save(project)
+        else:
+            enqueue(_save, project)
 
 
 def _save(project: Project):
