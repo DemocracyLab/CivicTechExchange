@@ -171,6 +171,7 @@
   }
   .lc-vertical-left {
     writing-mode: vertical-lr;
+    transform: rotate(180deg);
     text-align: center;
     font-weight: 500;
   }
@@ -247,6 +248,14 @@
     // let the text have more room now that we're not so cramped on space
     .lc-text {
       padding: 1rem;
+    }
+  }
+  .RecentProjects-cards {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .ProjectCard-root {
+      flex-basis: 45%;
+      min-width: 45%;
     }
   }
   .LandingController-icon {
