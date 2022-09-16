@@ -113,13 +113,17 @@
 }
 
 // start new CSS (will review old CSS before PR)
-.LandingController-options,
-.LandingController-latestblogposts {
-  padding-top: 24px;
-  background-color: $color-background-light;
+.LandingController-section {
+  padding-top: 16px;
+  padding-bottom: 32px;
 }
-.LandingController-hero {
-  padding-top: 24px;
+.LandingController-section.LandingController-chart-section {
+  padding-bottom: 0;
+}
+.LandingController-options,
+.LandingController-latestblogposts,
+.LandingController-recent {
+  background-color: $color-background-light;
 }
 .LandingController-tabs.nav-tabs {
   border: 1px solid $color-neutral-60;
@@ -182,8 +186,7 @@
   }
 }
 .LandingController-hero {
-  margin-top: 16px;
-  padding-bottom: 40px;
+  margin-top: 16px; // margin here in addition to padding section-wide
   display: flex;
   flex-direction: column;
 }
@@ -208,8 +211,6 @@
   cursor: pointer;
 }
 .LandingController-next-hackathon {
-  padding-top: 16px;
-  padding-bottom: 40px;
   h2 {
     text-align: center;
   }
@@ -302,6 +303,10 @@
 }
 
 @include media-breakpoint-up(md) {
+  .LandingController-section {
+    padding-top: 24px;
+    padding-bottom: 48px;
+  }
   .LandingController-hero-video-container {
     border-width: 8px;
   }
@@ -317,6 +322,10 @@
 }
 
 @include media-breakpoint-up(lg) {
+  .LandingController-section {
+    padding-top: 32px;
+    padding-bottom: 64px;
+  }
   .LandingController-hero-video-container {
     border-width: 12px;
   }
@@ -327,6 +336,9 @@
     .carousel-item {
       background-color: inherit;
     }
+  }
+  .LandingController-latestblogposts .LatestBlogPosts-container {
+    padding-bottom: 0; // LBP adds 40px but for this specific situation we have it from the parent and don't need to double up
   }
 }
 

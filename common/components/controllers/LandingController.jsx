@@ -88,7 +88,7 @@ class LandingController extends React.PureComponent<{||}, State> {
 
   _recentProjects(): React$Node {
     return (
-      <div className="col-12 LandingController-recent">
+      <div className="col-12 LandingController-recent LandingController-section">
         <RecentProjectsSection />
       </div>
     );
@@ -98,7 +98,7 @@ class LandingController extends React.PureComponent<{||}, State> {
     const heroBorder = cdn.image("dlab-hero-border.png");
     const heroBackground = cdn.image("dlab-hero-background.jpg");
     return (
-      <div className="LandingController-hero col-12">
+      <div className="LandingController-hero LandingController-section col-12">
         <div className="LandingController-hero-text">
           <h1>Make Tech. Do Good.</h1>
           <p>
@@ -124,13 +124,14 @@ class LandingController extends React.PureComponent<{||}, State> {
             </div>
           </div>
         </div>
+        f
       </div>
     );
   }
 
   _renderOptions(): React$Node {
     return (
-      <div className="LandingController-options col-12">
+      <div className="LandingController-options LandingController-section col-12">
         <h2 className="text-center">I'd like to...</h2>
         <Tabs
           defaultActiveKey={this.state.defaultTab}
@@ -220,7 +221,7 @@ class LandingController extends React.PureComponent<{||}, State> {
             Create a project
           </Button>
         </div>
-        <div className="LandingController-chart-section col-12 col-lg-10 col-xxl-9 ml-lg-auto mr-lg-auto">
+        <div className="LandingController-chart-section col-12 col-lg-10 col-xxl-9 ml-lg-auto mr-lg-auto LandingController-section">
           <h2 className="text-center">Tech-for-Good Projects</h2>
           <div className="lc-flex-row">
             <p class="lc-vertical-left">Organization Type</p>
@@ -350,6 +351,7 @@ class LandingController extends React.PureComponent<{||}, State> {
 
   _renderNextHackathon(): React$Node {
     // this may be an empty div if there is no upcoming event; that's ok
+    // unlike every other section, UpcomingEventCard must handle section spacing so an empty card doesn't throw off spacing
     return (
       <div className="LandingController-next-hackathon col-12 col-lg-11 ml-lg-auto mr-lg-auto">
         <UpcomingEventCard />
@@ -358,7 +360,7 @@ class LandingController extends React.PureComponent<{||}, State> {
   }
   _renderTestimonials(): React$Node {
     return (
-      <div className="LandingController-testimonial-container carousel-testimonial-root col-12">
+      <div className="LandingController-testimonial-container carousel-testimonial-root LandingController-section col-12">
         <h2 className="text-center">
           What people are saying about DemocracyLab
         </h2>
@@ -369,8 +371,7 @@ class LandingController extends React.PureComponent<{||}, State> {
 
   _renderLatestBlogPosts(): React$Node {
     return (
-      <div className="LandingController-latestblogposts col-12">
-        <h2 className="text-center">Blog</h2>
+      <div className="LandingController-latestblogposts LandingController-section col-12">
         <LatestBlogPosts />
       </div>
     );
@@ -386,7 +387,7 @@ class LandingController extends React.PureComponent<{||}, State> {
     ));
 
     return (
-      <div className="LandingController-partnersinaction col-12">
+      <div className="LandingController-partnersinaction LandingController-section col-12">
         <h2 className="text-center">Our Community Partners</h2>
         <div className="LandingController-partnersinaction-container">
           {partnerLogos}

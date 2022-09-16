@@ -42,13 +42,14 @@ class UpcomingEventCard extends React.Component<{||}, State> {
 
   _renderUpcomingSection(): React$Node {
     // get the next upcoming event if there's multiples by selecting index 0
-    
+    //TODO: make this component independent/reusable instead of requiring homepage/landing controller classes
+
     // duplicate EventCard's slug-or-ID function
     const eventURI: string =
       this.state.upcomingEvent[0]["event_slug"] ||
       this.state.upcomingEvent[0]["event_id"];
     return (
-      <React.Fragment>
+      <div className="LandingController-section">
         <h2>Our Next Hackathon</h2>
         <EventCard
           event={this.state.upcomingEvent[0]}
@@ -66,7 +67,7 @@ class UpcomingEventCard extends React.Component<{||}, State> {
             RSVP
           </Button>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }
