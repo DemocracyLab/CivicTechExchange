@@ -955,7 +955,8 @@ def reject_project_volunteer(request, application_id):
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject=email_subject,
-                                  template=email_template)
+                                  template=email_template, 
+                                  cc_owners=False)
         update_project_timestamp(request, volunteer_relation.project)
         project = Project.objects.get(id=volunteer_relation.project.id)
         user = volunteer_relation.volunteer
@@ -983,7 +984,8 @@ def dismiss_project_volunteer(request, application_id):
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                subject=email_subject,
-                               template=email_template)
+                               template=email_template, 
+                               cc_owners=False)
         update_project_timestamp(request, volunteer_relation.project)
         project = Project.objects.get(id=volunteer_relation.project.id)
         user = volunteer_relation.volunteer
