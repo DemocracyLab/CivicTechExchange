@@ -1,5 +1,6 @@
 import datetime
 from .client import SalesforceClient
+from common.helpers.date_helpers import DateTimeFormats
 import json
 import requests
 import threading
@@ -37,7 +38,7 @@ def create(volunteer):
             "platform_id__c": volunteer.salesforce_job_id()
         },
         "GW_Volunteers__Status__c": 'Application Received',
-        "GW_Volunteers__Start_Date__c": volunteer.application_date.strftime("%Y-%m-%d"),
+        "GW_Volunteers__Start_Date__c": volunteer.application_date.strftime(DateTimeFormats.SALESFORCE_DATE.value),
         "GW_Volunteers__End_Date__c": volunteer.projected_end_date
     }
     send_volunteer_data(volunteer.id, data)
@@ -54,7 +55,7 @@ def accept(volunteer):
             "platform_id__c": volunteer.salesforce_job_id()
         },
         "GW_Volunteers__Status__c": 'Accepted',
-        "GW_Volunteers__Start_Date__c": (volunteer.approved_date or volunteer.application_date).strftime("%Y-%m-%d")
+        "GW_Volunteers__Start_Date__c": (volunteer.approved_date or volunteer.application_date).strftime(DateTimeFormats.SALESFORCE_DATE.value)
     }
     send_volunteer_data(volunteer.id, data)
 
@@ -70,7 +71,7 @@ def renew(volunteer):
             "platform_id__c": volunteer.salesforce_job_id()
         },
         "GW_Volunteers__Status__c": 'Renewed',
-        "GW_Volunteers__Start_Date__c": (volunteer.approved_date or volunteer.application_date).strftime("%Y-%m-%d"),
+        "GW_Volunteers__Start_Date__c": (volunteer.approved_date or volunteer.application_date).strftime(DateTimeFormats.SALESFORCE_DATE.value),
         "GW_Volunteers__End_Date__c": volunteer.projected_end_date
     }
     send_volunteer_data(volunteer.id, data)
@@ -86,7 +87,7 @@ def conclude(volunteer):
         {
             "platform_id__c": volunteer.salesforce_job_id()
         },
-        "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime("%Y-%m-%d"),
+        "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime(DateTimeFormats.SALESFORCE_DATE.value),
         "GW_Volunteers__Status__c": "Completed",
         "GW_Volunteers__Hours_Worked__c": 0
     }
@@ -103,8 +104,8 @@ def dismiss(volunteer):
         {
             "platform_id__c": volunteer.salesforce_job_id()
         },
-        "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime("%Y-%m-%d"),
-        "GW_Volunteers__End_Date__c": datetime.date.today().strftime("%Y-%m-%d"),
+        "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime(DateTimeFormats.SALESFORCE_DATE.value),
+        "GW_Volunteers__End_Date__c": datetime.date.today().strftime(DateTimeFormats.SALESFORCE_DATE.value),
         "GW_Volunteers__Status__c": "Rejected"
     }
     send_volunteer_data(volunteer.id, data)
