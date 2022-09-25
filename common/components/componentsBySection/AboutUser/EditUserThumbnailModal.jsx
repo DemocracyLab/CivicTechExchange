@@ -21,6 +21,7 @@ type Props = {|
 type State = {|
   showModal: boolean,
   user_thumbnail: FileInfo,
+  isCropping: boolean,
 |};
 
 type FormFields = {|
@@ -37,6 +38,7 @@ class EditUserThumbnailModal extends React.Component<Props, State> {
     this.state = {
       showModal: false,
       user_thumbnail: null,
+      isCropping: false,
     };
   }
 
@@ -48,6 +50,10 @@ class EditUserThumbnailModal extends React.Component<Props, State> {
     let state: State = _.clone(prevState) || {};
     state.user_thumbnail = FormFieldsStore.getFormFieldValue("user_thumbnail");
     return state;
+  }
+  
+  setIsCropping(isCropping) {
+    this.setState({isCropping});
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -72,11 +78,14 @@ class EditUserThumbnailModal extends React.Component<Props, State> {
         user={this.props.user}
         fields={["user_thumbnail"]}
         onEditClose={this.props.onEditClose}
+	isInvalid={this.state.isCropping}
       >
         <ImageCropUploadFormElement
           form_id="user_thumbnail"
           buttonText="Upload Your Picture"
           aspect={1 / 1}
+          isCropping={this.state.isCropping}
+	  onIsCroppingChanged={this.setIsCropping.bind(this)}
         />
       </EditUserModal>
     );

@@ -16,6 +16,8 @@ type Props = {|
   currentImage: FileInfo,
   onSelection: ?(FileInfo) => void,
   aspect: number,
+  isCropping: boolean,
+  onIsCroppingChanged: (boolean) => void,
 |};
 
 type State = {|
@@ -73,6 +75,8 @@ class ImageCropUploadFormElement extends React.Component<Props, State> {
           aspect={this.props.aspect}
           buttonText={this.props.buttonText || "Upload Image"}
           onFileUpload={this._handleFileSelection.bind(this)}
+          isCropping={this.props.isCropping}
+	  onIsCroppingChanged={this.props.onIsCroppingChanged}
         />
         {/*TODO: Use HiddenFormField component*/}
         <input
