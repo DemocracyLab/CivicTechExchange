@@ -118,6 +118,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
   }
 
   _handleFileSelection(file): void {
+    this.setState({ src: file});
     this.props.onIsCroppingChanged(true);
   }
 
