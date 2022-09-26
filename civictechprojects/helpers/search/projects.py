@@ -2,7 +2,9 @@ from urllib import parse as urlparse
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector, TrigramSimilarity
 from django.core.paginator import Paginator
+from django.db.models.functions import Greatest
 from .common import apply_tag_filters, sort_by_field
 from civictechprojects.caching.cache import ProjectSearchTagsCache
 from civictechprojects.helpers.projects.annotations import apply_project_annotations
@@ -42,7 +44,18 @@ def projects_list(request):
         project_list = project_list & ProjectFavorite.get_for_user(user)
 
     if 'keyword' in query_params:
-        project_list = project_list & projects_by_keyword(query_params['keyword'][0])
+        # project_list = project_list & projects_by_keyword(query_params['keyword'][0])
+
+        keywords = query_params['keyword'][0]
+
+        project_list = project_list.annotate(
+            similarity=Greatest(
+                TrigramSimilarity('project_name', keywords),
+                TrigramSimilarity('project_description', keywords),
+                TrigramSimilarity('project_city', keywords),
+                TrigramSimilarity('full_text', keywords),
+            )
+        ).filter(similarity__gt=0.1).order_by('-similarity')
 
     if 'locationRadius' in query_params:
         project_list = projects_by_location(project_list, query_params['locationRadius'][0])
@@ -69,7 +82,8 @@ def projects_list(request):
         project_pages = 1
 
     tag_counts = get_tag_counts(category=None, event=event, group=group)
-    response = projects_with_meta_data(get_request_contributor(request), query_params, project_list_page, project_pages, project_count, tag_counts)
+    response = projects_with_meta_data(get_request_contributor(request), query_params, project_list_page, project_pages,
+                                       project_count, tag_counts)
 
     return response
 
@@ -125,6 +139,12 @@ def projects_by_stage(tags):
     return Project.objects.filter(project_stage__name__in=tags)
 
 
+def projects_by_keywords(keywords: str, field: str):
+    vector = SearchVector(field)
+    query = SearchQuery(" ".join(keywords))
+    return Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank')
+
+
 def projects_by_roles(tags):
     # Get roles by tags
     positions = ProjectPosition.objects.filter(position_role__name__in=tags) \
@@ -139,7 +159,8 @@ def project_countries():
 
 
 def projects_with_meta_data(user: Contributor, query_params, projects, project_pages, project_count, tag_counts):
-    projects_json = apply_project_annotations(user, query_params, [project.hydrate_to_tile_json() for project in projects])
+    projects_json = apply_project_annotations(user, query_params,
+                                              [project.hydrate_to_tile_json() for project in projects])
     return {
         'projects': projects_json,
         'availableCountries': project_countries(),
