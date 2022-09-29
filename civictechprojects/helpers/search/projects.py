@@ -127,8 +127,11 @@ def projects_by_stage(tags):
 
 def projects_by_roles(tags):
     # Get roles by tags
+    # filter out positions that are hidden
     positions = ProjectPosition.objects.filter(position_role__name__in=tags) \
-        .exclude(position_event__isnull=False).select_related('position_project')
+        .exclude(position_event__isnull=False) \
+        .exclude(is_hidden=True) \
+        .select_related('position_project')
 
     # Get the list of projects linked to those roles
     return Project.objects.filter(positions__in=positions)
