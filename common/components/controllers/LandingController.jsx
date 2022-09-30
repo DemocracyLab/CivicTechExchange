@@ -67,8 +67,8 @@ class LandingController extends React.PureComponent<{||}, State> {
         <VideoModal
           showModal={this.state.showModal}
           onClose={this.onHideShowVideo.bind(this)}
-          //TODO: use VIDEO_PAGES so we don't have competing sources for this
-          videoUrl={"https://www.youtube.com/embed/nvIUWtx-nmo"}
+          //TODO: use VIDEO_PAGES or something so we don't have competing sources for this
+          videoUrl={"https://www.youtube.com/embed/IUE3a2kzHtY"}
           videoTitle={"DemocracyLab Overview"}
         />
         <div className="container">
