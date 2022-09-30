@@ -2,7 +2,7 @@
 .RecentProjects-button {
   text-align: center;
 }
-.RecentProjects-title h2 {
+.RecentProjects-title {
   margin: 1rem 0;
 }
 .RecentProjects-button {
@@ -26,7 +26,7 @@
   }
 }
 @include media-breakpoint-up(md) {
-  .RecentProjects-title h2 {
+  .RecentProjects-title {
     margin: 1rem 0 1.5rem 0;
   }
   .RecentProjects-cards {
