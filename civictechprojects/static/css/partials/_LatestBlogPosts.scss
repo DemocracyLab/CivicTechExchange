@@ -7,6 +7,7 @@
 .LatestBlogPosts-container {
   --blog-grid-rows: 250px 32px 58px 1fr auto auto; // set this in the parent so all children inherit the same value for 1fr, 58px h3 is computed line-height *2
   flex-wrap: wrap;
+  padding: 24px 0 0 0;
 }
 .LatestBlogPosts-post {
   display: grid;

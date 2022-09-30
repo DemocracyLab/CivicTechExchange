@@ -3,7 +3,7 @@
   text-align: center;
 }
 .RecentProjects-title h2 {
-  margin-bottom: 1rem;
+  margin: 1rem 0;
 }
 .RecentProjects-button {
   padding: 10px 0 0 0; /* push button away from cards a bit */
@@ -23,6 +23,19 @@
     flex-basis: 100%;
     min-width: 100%;
     height: auto;
+  }
+}
+@include media-breakpoint-up(md) {
+  .RecentProjects-title h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
+  .RecentProjects-cards {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .ProjectCard-root {
+      flex-basis: 45%;
+      min-width: 45%;
+    }
   }
 }
 

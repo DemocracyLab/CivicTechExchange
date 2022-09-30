@@ -57,7 +57,7 @@ class RecentProjectsSection extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className="RecentProjects">
-        <h2 className="RecentProjects-title headline1">Active Projects</h2>
+        <h2 className="RecentProjects-title">Active Projects</h2>
         <div className="RecentProjects-cards">{this._renderCards()}</div>
         <div className="RecentProjects-button">
           <Button

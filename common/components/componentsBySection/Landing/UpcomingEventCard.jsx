@@ -50,7 +50,7 @@ class UpcomingEventCard extends React.Component<{||}, State> {
       this.state.upcomingEvent[0]["event_id"];
     return (
       <div className="LandingController-section">
-        <h2>Our Next Hackathon</h2>
+        <h2 className="text-center LandingController-section-header">Our Next Hackathon</h2>
         <EventCard
           event={this.state.upcomingEvent[0]}
           key={"Upcoming-EventCard"}
