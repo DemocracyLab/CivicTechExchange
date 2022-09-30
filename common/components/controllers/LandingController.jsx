@@ -96,7 +96,7 @@ class LandingController extends React.PureComponent<{||}, State> {
 
   _renderHero(): React$Node {
     const heroBorder = cdn.image("dlab-hero-border.png");
-    const heroBackground = cdn.image("dlab-hero-background.jpg");
+    const heroBackground = cdn.image("CodeForGood_072719_MSReactor-003.jpg");
     return (
       <div className="LandingController-hero LandingController-section col-12">
         <div className="LandingController-hero-text">
@@ -131,7 +131,7 @@ class LandingController extends React.PureComponent<{||}, State> {
   _renderOptions(): React$Node {
     return (
       <div className="LandingController-options LandingController-section col-12">
-        <h2 className="text-center">I'd like to...</h2>
+        <h2 className="text-center LandingController-section-header">I'd like to...</h2>
         <Tabs
           defaultActiveKey={this.state.defaultTab}
           id="homepage-tabs"
@@ -221,7 +221,7 @@ class LandingController extends React.PureComponent<{||}, State> {
           </Button>
         </div>
         <div className="LandingController-chart-section col-12 col-lg-10 col-xxl-9 ml-lg-auto mr-lg-auto LandingController-section">
-          <h2 className="text-center">Tech-for-Good Projects</h2>
+          <h2 className="text-center LandingController-section-header">Tech-for-Good Projects We Serve</h2>
           <div className="lc-flex-row">
             <p class="lc-vertical-left rotate-180">Organization Type</p>
             <div className="lc-gridbox-parent">
@@ -360,7 +360,7 @@ class LandingController extends React.PureComponent<{||}, State> {
   _renderTestimonials(): React$Node {
     return (
       <div className="LandingController-testimonial-container carousel-testimonial-root LandingController-section col-12">
-        <h2 className="text-center">
+        <h2 className="text-center LandingController-section-header">
           What people are saying about DemocracyLab
         </h2>
         <TestimonialCarousel interval={15000} />
@@ -387,7 +387,7 @@ class LandingController extends React.PureComponent<{||}, State> {
 
     return (
       <div className="LandingController-partnersinaction LandingController-section col-12">
-        <h2 className="text-center">Our Community Partners</h2>
+        <h2 className="text-center LandingController-section-header">Our Community Partners</h2>
         <div className="LandingController-partnersinaction-container">
           {partnerLogos}
         </div>

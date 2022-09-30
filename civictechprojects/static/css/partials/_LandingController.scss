@@ -8,16 +8,12 @@
     background: $color-background-light;
   }
   padding-bottom: 20px;
-  h2 {
-    margin: 1rem 0 1.5rem 0;
-  }
 }
-
+.LandingController-section-header {
+  margin: 1rem 0;
+}
 .LandingController-partnersinaction {
   padding: 20px 0;
-}
-.LandingController-partnersinaction h2 {
-  margin: 1rem 0 1.5rem 0;
 }
 .LandingController-partnersinaction-logo img {
   width: 150px;
@@ -135,11 +131,6 @@
   position: relative; // so the play button goes in the right place
   cursor: pointer;
 }
-.LandingController-next-hackathon {
-  h2 {
-    text-align: center;
-  }
-}
 .LandingController-next-hackathon-rsvp {
   text-align: center;
   margin-top: 1rem;
@@ -243,6 +234,9 @@
     padding-top: 24px;
     padding-bottom: 48px;
   }
+  .LandingController-section-header, .LandingController-testimonial-container.carousel-testimonial-root h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
   .LandingController-hero-video-container {
     border-width: 8px;
   }
@@ -253,14 +247,6 @@
     // let the text have more room now that we're not so cramped on space
     .lc-text {
       padding: 1rem;
-    }
-  }
-  .RecentProjects-cards {
-    flex-direction: row;
-    flex-wrap: wrap;
-    .ProjectCard-root {
-      flex-basis: 45%;
-      min-width: 45%;
     }
   }
   .LandingController-icon {
