@@ -85,7 +85,7 @@ class EditUserThumbnailModal extends React.Component<Props, State> {
           buttonText="Upload Your Picture"
           aspect={1 / 1}
           isCropping={this.state.isCropping}
-	  onIsCroppingChanged={this.setIsCropping.bind(this)}
+	  _onIsCroppingChanged={this.setIsCropping.bind(this)}
         />
       </EditUserModal>
     );

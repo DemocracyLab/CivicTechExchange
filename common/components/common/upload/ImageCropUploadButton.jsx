@@ -16,22 +16,24 @@ type Props = {|
   aspect: ?number,
   currentImage: FileInfo,
   isCropping: boolean,
-  onIsCroppingChanged: (boolean) => void,
+  _onIsCroppingChanged: (boolean) => void,
 |};
 
 type State = {|
   s3Key: string,
+  src: string,
   croppedImageUrl: ?string,
+  crop: any
 |};
 
-let lastFileUploadUrl: string = null;
+let lastFileUploadUrl: string = "";
 
 class ImageCropUploadButton extends React.PureComponent<Props, State> {
   constructor(props): void {
     super(props);
     this.state = {
       s3Key: "",
-      src: null,
+      src: "",
       croppedImageUrl: "",
       crop: this.initializeCropSettings(),
     };
@@ -41,8 +43,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
     const previewImage =
       this.state.croppedImageUrl ||
       (this.props.currentImage && this.props.currentImage.publicUrl);
-      console.log("Rendering ImageCropUploadButton. Value of isCropping is " + this.props.isCropping);
-    return (
+      return (
       <div className="ImageCropUploadButton-root">
         {this.state.src && this.props.isCropping && (
           <div className="ImageCropUploadButton-cropper">
@@ -83,7 +84,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
 
   _handleDoneCropping(): void {
     this.setState({ crop: this.initializeCropSettings() });
-    this.props.onIsCroppingChanged(false);
+    this.props._onIsCroppingChanged(false);
     if (this.fileBlob) {
       this.launchPresignedUploadToS3(this.fileBlob);
     }
@@ -101,7 +102,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
         croppedImageUrl: this.props.currentImage,
       });
     }
-    this.props.onIsCroppingChanged(false);
+    this.props._onIsCroppingChanged(false);
   }
 
   _onCropChange(crop): void {
@@ -119,7 +120,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
 
   _handleFileSelection(file): void {
     this.setState({ src: file});
-    this.props.onIsCroppingChanged(true);
+    this.props._onIsCroppingChanged(true);
   }
 
   makeClientCrop(crop) {

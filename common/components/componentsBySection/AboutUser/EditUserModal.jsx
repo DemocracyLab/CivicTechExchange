@@ -95,7 +95,7 @@ class EditUserModal extends React.Component<Props, State> {
 
   render(): React$Node {
     const submitEnabled: boolean =
-      !this.state.isProcessing && this.state.isValid
+      !this.state.isProcessing && this.state.isValid;
     return (
       <ModalWrapper
         showModal={this.state.showModal}
