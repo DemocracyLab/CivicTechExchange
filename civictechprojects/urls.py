@@ -106,5 +106,8 @@ urlpatterns = [
     url(r'^alert/create/$', views.add_alert, name='add_alert'),
     url(r'^api/testimonials/(?P<category>[-\w]*)', views.get_testimonials, name='get_testimonials'),
     url(r'^api/v1/qiqo/webhooks/zoom_presences', views.qiqo_webhook, name='qiqo_webhook'),
-]
+
+    # volunteers toggle alerts for future projects 
+    url(r'^volunteerAlert/$', views.add_volunteer_alerts, name="add_volunteer_alerts"),
+]   
 

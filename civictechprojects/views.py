@@ -49,7 +49,7 @@ from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 import requests
-
+import logging 
 
 def tags(request):
     url_parts = request.GET.urlencode()
@@ -1327,4 +1327,16 @@ def qiqo_webhook(request):
         return HttpResponse(status=401)
 
     existing_room.recache_linked()
+    return HttpResponse(status=200)
+
+
+# Volunteer add alerts 
+def add_volunteer_alerts(request):
+    # http://localhost:8000/volunteerAlert/?role=back-end-developer&orgType=nonprofit
+    print("========== request: ", request)
+    user = get_request_contributor(request)
+    print("========== user: ", user)
+    url_parts = request.GET.urlencode()
+    query_terms = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+    print("========== query_terms: ", query_terms)
     return HttpResponse(status=200)
