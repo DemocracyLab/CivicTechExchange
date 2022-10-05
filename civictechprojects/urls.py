@@ -108,6 +108,6 @@ urlpatterns = [
     url(r'^api/v1/qiqo/webhooks/zoom_presences', views.qiqo_webhook, name='qiqo_webhook'),
 
     # volunteers toggle alerts for future projects 
-    url(r'^volunteerAlert/$', views.add_volunteer_alerts, name="add_volunteer_alerts"),
+    url(r'^projects/volunteerAlert$', views.add_volunteer_alerts, name="add_volunteer_alerts"),
 ]   
 

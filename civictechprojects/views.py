@@ -1332,7 +1332,7 @@ def qiqo_webhook(request):
 
 # Volunteer add alerts 
 def add_volunteer_alerts(request):
-    # http://localhost:8000/volunteerAlert/?role=back-end-developer&orgType=nonprofit
+    # http://localhost:8000/api/projects/volunteerAlert?role=back-end-developer&orgType=nonprofit
     print("========== request: ", request)
     user = get_request_contributor(request)
     print("========== user: ", user)
