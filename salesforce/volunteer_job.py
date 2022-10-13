@@ -31,13 +31,24 @@ def _save(project_position):
             url=f'{client.job_endpoint}/platform_id__c/{platform_id__c}',
             data=json.dumps(data)
         )
-        ''' Changed this to a synchronous call to avoid record locks (duplicate position names are possible) '''
-        SalesforceClient().send(req)
+
+        thread = threading.Thread(target=run, args=(req,))
+        thread.daemon = True
+        thread.start()
 
 
 def save(project_position):
     if project_position.position_project.is_searchable:
         enqueue(_save, project_position)
+
+
+def save_jobs(project_positions):
+    unique_positions = {}
+    for position in project_positions:
+        unique_positions[str(position.salesforce_job_id())] = position
+
+    for position in unique_positions.values():
+        save(position)
 
 
 def delete(project_position):

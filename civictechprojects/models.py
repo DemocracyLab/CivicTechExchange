@@ -1070,11 +1070,15 @@ class ProjectPosition(models.Model):
 
         for added_position in added_positions:
             new_position = ProjectPosition.create_from_json(owner, added_position)
-            salesforce_job.save(new_position)
 
         for updated_position_json in updated_positions:
             updated_position = ProjectPosition.update_from_json(existing_projects_by_id[updated_position_json['id']], updated_position_json)
-            salesforce_job.save(updated_position)
+
+        if len(added_positions) > 0:
+            salesforce_job.save_jobs(added_positions)
+
+        if len(updated_positions) > 0:
+            salesforce_job.save_jobs(updated_positions)
 
         for deleted_position_id in deleted_position_ids:
             ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])

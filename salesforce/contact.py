@@ -33,7 +33,7 @@ def save(contributor: object):
         data['mailingpostalcode'] = contributor.postal_code
     if contributor.country:
         data['mailingcountry'] = contributor.country
-    if contributor.date_joined.strftime(DateTimeFormats.SALESFORCE_DATE.value):
+    if contributor.date_joined:
         data['npo02__membershipjoindate__c'] = contributor.date_joined.strftime(DateTimeFormats.SALESFORCE_DATE.value)
     if contributor.about_me:
         data['description'] = contributor.about_me
