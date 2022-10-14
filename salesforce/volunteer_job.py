@@ -45,7 +45,7 @@ def save(project_position):
 def save_jobs(project_positions):
     unique_positions = {}
     for position in project_positions:
-        unique_positions[str(position.salesforce_job_id())] = position
+        unique_positions[position.salesforce_job_id()] = position
 
     for position in unique_positions.values():
         save(position)

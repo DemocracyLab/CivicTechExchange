@@ -1042,14 +1042,14 @@ class ProjectPosition(models.Model):
         position.save()
         return position
 
+    def salesforce_job_id(self):
+        role = Tag.tags_field_descriptions(self.position_role)
+        return f'{self.position_project.id}{role.lower().replace(" ", "")}'
+
     @staticmethod
     def delete_position(position):
         position.position_role.clear()
         position.delete()
-
-    def salesforce_job_id(self):
-        role = Tag.tags_field_descriptions(self.position_role)
-        return f'{self.position_project.id}{role.lower().replace(" ", "")}'
 
     @staticmethod
     def merge_changes(owner, positions):
@@ -1059,6 +1059,8 @@ class ProjectPosition(models.Model):
         :param positions: Position changes
         :return: True if there were position changes
         """
+        added_models = []
+        updated_models = []
         added_positions = list(filter(lambda position: 'id' not in position, positions))
         updated_positions = list(filter(lambda position: 'id' in position, positions))
         updated_positions_ids = set(map(lambda position: position['id'], updated_positions))
@@ -1070,15 +1072,17 @@ class ProjectPosition(models.Model):
 
         for added_position in added_positions:
             new_position = ProjectPosition.create_from_json(owner, added_position)
+            added_models.append(new_position)
 
         for updated_position_json in updated_positions:
             updated_position = ProjectPosition.update_from_json(existing_projects_by_id[updated_position_json['id']], updated_position_json)
+            updated_models.append(updated_position)
 
-        if len(added_positions) > 0:
-            salesforce_job.save_jobs(added_positions)
+        if len(added_models) > 0:
+            salesforce_job.save_jobs(added_models)
 
-        if len(updated_positions) > 0:
-            salesforce_job.save_jobs(updated_positions)
+        if len(updated_models) > 0:
+            salesforce_job.save_jobs(updated_models)
 
         for deleted_position_id in deleted_position_ids:
             ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
