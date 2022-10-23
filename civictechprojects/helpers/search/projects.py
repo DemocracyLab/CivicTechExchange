@@ -98,8 +98,7 @@ def projects_list(request):
         project_pages = 1
 
     tag_counts = get_tag_counts(category=None, event=event, group=group)
-    response = projects_with_meta_data(get_request_contributor(request), query_params, project_list_page, project_pages,
-                                       project_count, tag_counts)
+    response = projects_with_meta_data(get_request_contributor(request), query_params, project_list_page, project_pages, project_count, tag_counts)
 
     return response
 
@@ -155,12 +154,6 @@ def projects_by_stage(tags):
     return Project.objects.filter(project_stage__name__in=tags)
 
 
-def projects_by_keywords(keywords: str, field: str):
-    vector = SearchVector(field)
-    query = SearchQuery(" ".join(keywords))
-    return Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank')
-
-
 def projects_by_roles(tags):
     # Get roles by tags
     positions = ProjectPosition.objects.filter(position_role__name__in=tags) \
@@ -175,8 +168,7 @@ def project_countries():
 
 
 def projects_with_meta_data(user: Contributor, query_params, projects, project_pages, project_count, tag_counts):
-    projects_json = apply_project_annotations(user, query_params,
-                                              [project.hydrate_to_tile_json() for project in projects])
+    projects_json = apply_project_annotations(user, query_params, [project.hydrate_to_tile_json() for project in projects])
     return {
         'projects': projects_json,
         'availableCountries': project_countries(),
