@@ -64,6 +64,7 @@ services:
       - ./democracylab/:/code/democracylab/
       - ./oauth2/:/code/oauth2/
       - ./.babelrc:/code/.babelrc
+      - ./coverage-js.sh:/code/coverage-js.sh
       - ./manage.py:/code/manage.py
       - ./webpack.common.js:/code/webpack.common.js
       - ./webpack.dev.js:/code/webpack.dev.js

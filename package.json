@@ -12,7 +12,8 @@
     "postinstall": "webpack --config webpack.dev.js && npm run buildtask:collectstatic",
     "watch": "webpack --mode development --watch",
     "buildtask:collectstatic": "python manage.py collectstatic --noinput -i *.scss",
-    "test": "jest"
+    "test": "jest",
+    "test-cover": "npm test -- --coverage"
   },
   "engines": {
     "node": "14.15.x"
