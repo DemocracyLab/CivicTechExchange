@@ -76,7 +76,6 @@ def signup(request):
             )
             contributor.set_password(raw_password)
             contributor.save()
-            salesforce_contact.save(contributor)
             user = authenticate(username=contributor.username, password=raw_password)
             login(request, user)
             send_verification_email(contributor)
@@ -142,6 +141,7 @@ def verify_user(request, user_id, token):
         contributor = Contributor.objects.get(id=user_id)
         contributor.email_verified = True
         contributor.save()
+        salesforce_contact.save(contributor)
         return redirect(section_url(FrontEndSection.EmailVerified))
     else:
         return HttpResponse(status=401)

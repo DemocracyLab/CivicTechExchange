@@ -48,6 +48,7 @@ from common.helpers.user_helpers import get_my_projects, get_my_groups, get_my_e
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from salesforce import campaign as salesforce_campaign, volunteer_hours as salesforce_volunteer, contact as salesforce_contact
 import requests
 
 
@@ -408,6 +409,7 @@ def approve_project(request, project_id):
             project.is_searchable = True
             project.deleted = False
             project.save()
+            salesforce_campaign.create(project)
             project.recache(recache_linked=True)
             ProjectSearchTagsCache.refresh()
             project.project_creator.purge_cache()
@@ -828,6 +830,7 @@ def volunteer_with_project(request, project_id):
         projected_end_date=projected_end_date,
         role=role,
         application_text=message)
+    salesforce_volunteer.create(volunteer_relation)
     send_volunteer_application_email(volunteer_relation)
     project.recache()
     user.purge_cache()
@@ -853,6 +856,7 @@ def renew_volunteering_with_project(request, application_id):
     volunteer_relation.re_enroll_last_reminder_date = None
     volunteer_relation.save()
     volunteer_relation.volunteer.purge_cache()
+    salesforce_volunteer.renew(volunteer_relation)
 
     notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
@@ -876,6 +880,7 @@ def conclude_volunteering_with_project(request, application_id):
     project = Project.objects.get(id=volunteer_relation.project.id)
     user = volunteer_relation.volunteer
     volunteer_relation.delete()
+    salesforce_volunteer.conclude(volunteer_relation)
     project.recache()
     user.purge_cache()
 
@@ -901,6 +906,7 @@ def accept_project_volunteer(request, application_id):
         volunteer_relation.is_approved = True
         volunteer_relation.approved_date = timezone.now()
         volunteer_relation.save()
+        salesforce_volunteer.accept(volunteer_relation)
         volunteer_relation.volunteer.purge_cache()
         update_project_timestamp(request, volunteer_relation.project)
         volunteer_relation.project.recache()
@@ -957,6 +963,7 @@ def reject_project_volunteer(request, application_id):
         volunteer_relation.delete()
         project.recache()
         user.purge_cache()
+        salesforce_volunteer.delete(application_id)
         return HttpResponse(status=200)
     else:
         raise PermissionDenied()
@@ -983,6 +990,7 @@ def dismiss_project_volunteer(request, application_id):
         project = Project.objects.get(id=volunteer_relation.project.id)
         user = volunteer_relation.volunteer
         volunteer_relation.delete()
+        salesforce_volunteer.dismiss(volunteer_relation)
         project.recache()
         user.purge_cache()
         return HttpResponse(status=200)
@@ -1043,6 +1051,7 @@ def leave_project(request, project_id):
         update_project_timestamp(request, volunteer_relation.project)
         user = volunteer_relation.volunteer
         volunteer_relation.delete()
+        salesforce_volunteer.conclude(volunteer_relation)
         project = Project.objects.get(id=project_id)
         project.recache()
         user.purge_cache()

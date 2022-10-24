@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.utils import timezone
 from django.contrib.gis.db.models import PointField
@@ -17,6 +16,7 @@ from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
+from salesforce import volunteer_hours as salesforce_volunteer, volunteer_job as salesforce_job
 
 # Without the following classes, the following error occurs:
 #
@@ -64,7 +64,7 @@ class Archived(models.Model):
     archives = ArchiveManager()
     deleted = models.BooleanField(default=False)
 
-    def delete(self):
+    def delete(self, **kwargs):
         self.deleted = True
         self.save()
 
@@ -455,7 +455,7 @@ class Event(Archived):
     def __str__(self):
         return str(self.id) + ':' + str(self.event_name)
 
-    def delete(self):
+    def delete(self, **kwargs):
         self.is_searchable=False
         super().delete()
 
@@ -631,7 +631,7 @@ class EventProject(Archived):
         return keys_subset(self.hydrate_to_json(), ['event_project_id', 'event_id', 'event_name', 'event_slug',
                                                     'project_id', 'project_name'])
 
-    def delete(self):
+    def delete(self, **kwargs):
         print('Deleting Event Project: {ep}'.format(ep=self.__str__()))
         for link in self.get_event_project_links():
             print('Deleting link: ' + link.__str__())
@@ -1028,9 +1028,7 @@ class ProjectPosition(models.Model):
         position.order_number = position_json['orderNumber']
         position.is_hidden = position_json['isHidden']
         position.save()
-
         position.position_role.add(position_json['roleTag']['tag_name'])
-
         return position
 
     @staticmethod
@@ -1042,6 +1040,11 @@ class ProjectPosition(models.Model):
         new_role = position_json['roleTag']['tag_name']
         Tag.merge_tags_field(position.position_role, new_role)
         position.save()
+        return position
+
+    def salesforce_job_id(self):
+        role = Tag.tags_field_descriptions(self.position_role)
+        return f'{self.position_project.id}{role.lower().replace(" ", "")}'
 
     @staticmethod
     def delete_position(position):
@@ -1056,6 +1059,8 @@ class ProjectPosition(models.Model):
         :param positions: Position changes
         :return: True if there were position changes
         """
+        added_models = []
+        updated_models = []
         added_positions = list(filter(lambda position: 'id' not in position, positions))
         updated_positions = list(filter(lambda position: 'id' in position, positions))
         updated_positions_ids = set(map(lambda position: position['id'], updated_positions))
@@ -1066,13 +1071,22 @@ class ProjectPosition(models.Model):
         deleted_position_ids = list(existing_positions_ids - updated_positions_ids)
 
         for added_position in added_positions:
-            ProjectPosition.create_from_json(owner, added_position)
+            new_position = ProjectPosition.create_from_json(owner, added_position)
+            added_models.append(new_position)
 
         for updated_position_json in updated_positions:
-            ProjectPosition.update_from_json(existing_projects_by_id[updated_position_json['id']], updated_position_json)
+            updated_position = ProjectPosition.update_from_json(existing_projects_by_id[updated_position_json['id']], updated_position_json)
+            updated_models.append(updated_position)
+
+        if len(added_models) > 0:
+            salesforce_job.save_jobs(added_models)
+
+        if len(updated_models) > 0:
+            salesforce_job.save_jobs(updated_models)
 
         for deleted_position_id in deleted_position_ids:
             ProjectPosition.delete_position(existing_projects_by_id[deleted_position_id])
+            salesforce_job.delete(ProjectPosition.objects.get(id=deleted_position_id))
 
         return len(added_positions) > 0 or len(updated_positions) > 0 or len(deleted_position_ids) > 0
 
@@ -1299,7 +1313,6 @@ class VolunteerRelation(Archived):
 
     def to_json(self):
         volunteer = self.volunteer
-
         volunteer_json = {
             'application_id': self.id,
             'user': volunteer.hydrate_to_tile_json(),
@@ -1313,7 +1326,6 @@ class VolunteerRelation(Archived):
             'isUpForRenewal': self.is_up_for_renewal(),
             'projectedEndDate': self.projected_end_date.__str__()
         }
-
         return volunteer_json
 
     def hydrate_project_volunteer_info(self):
@@ -1325,6 +1337,9 @@ class VolunteerRelation(Archived):
         now = now or timezone.now()
         return self.is_approved and (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
 
+    def salesforce_job_id(self):
+        role = Tag.tags_field_descriptions(self.role)
+        return f'{self.project.id}{role.lower().replace(" ", "")}'
 
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
@@ -1335,9 +1350,9 @@ class VolunteerRelation(Archived):
         relation.application_text = application_text
         relation.is_co_owner = False
         relation.save()
-
         relation.role.add(role)
         return relation
+
 
     @staticmethod
     def get_by_user(user):
@@ -1361,7 +1376,7 @@ class RSVPVolunteerRelation(Archived):
     application_text = models.CharField(max_length=10000, blank=True)
     rsvp_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
 
-    def delete(self):
+    def delete(self, **kwargs):
         self.volunteer.purge_cache()
         super().delete()
 
@@ -1388,16 +1403,6 @@ class RSVPVolunteerRelation(Archived):
         volunteer_json = self.to_json()
         project_json = self.project.hydrate_to_list_json()
         return merge_dicts(project_json, volunteer_json)
-
-    @staticmethod
-    def create(event: Event, volunteer: Contributor):
-        relation = RSVPVolunteerRelation()
-        relation.event = event
-        relation.volunteer = volunteer
-        relation.save()
-
-        # relation.role.add(role)
-        return relation
 
     @staticmethod
     def create(event: Event, volunteer: Contributor):

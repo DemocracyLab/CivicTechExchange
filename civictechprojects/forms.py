@@ -110,7 +110,8 @@ class ProjectCreationForm(ModelForm):
             project.event_created_from = event
 
         project.save()
-        salesforce_campaign.save(project)
+        if project.is_searchable:
+            salesforce_campaign.save(project)
 
         fields_changed |= merge_json_changes(ProjectLink, project, form, 'project_links')
         fields_changed |= merge_json_changes(ProjectFile, project, form, 'project_files')

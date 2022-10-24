@@ -13,6 +13,7 @@ class SalesforceClient:
     campaign_endpoint = f'{endpoint}/sobjects/campaign'
     job_endpoint = f'{endpoint}/sobjects/gw_volunteers__volunteer_job__c'
     hours_endpoint = f'{endpoint}/sobjects/gw_volunteers__volunteer_hours__c'
+    composite_endpoint = f'{endpoint}/composite'
     owner_id = settings.SALESFORCE_OWNER_ID
 
     def __init__(self):
@@ -61,7 +62,7 @@ DEFAULT_TIMEOUT = 30.1  # seconds
 retry_strategy = Retry(
     total=2,
     status_forcelist=[429, 500, 502, 503, 504],
-    method_whitelist=["HEAD", "POST", "GET", "OPTIONS"]
+    method_whitelist=["HEAD", "PATCH", "POST", "GET", "OPTIONS"]
 )
 
 
