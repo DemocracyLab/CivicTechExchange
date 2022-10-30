@@ -68,6 +68,7 @@ urlpatterns = [
         r'^delete_s3/(?P<s3_key>.*)$',
         views.delete_uploaded_file,
     ),
+    url(r'^api/projects/volunteerAlert$', views.add_volunteer_alerts, name="add_volunteer_alerts"),
     url(r'^api/projects/recent', views.recent_projects),
     url(r'^api/projects', views.project_search),
     url(r'^api/events', views.events_list),
@@ -108,6 +109,6 @@ urlpatterns = [
     url(r'^api/v1/qiqo/webhooks/zoom_presences', views.qiqo_webhook, name='qiqo_webhook'),
 
     # volunteers toggle alerts for future projects 
-    url(r'^projects/volunteerAlert$', views.add_volunteer_alerts, name="add_volunteer_alerts"),
+    url(r'^volunteerAlert$', views.add_volunteer_alerts, name="add_volunteer_alerts"),
 ]   
 

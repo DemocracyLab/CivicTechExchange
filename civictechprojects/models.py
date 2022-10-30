@@ -1253,7 +1253,7 @@ class FileCategory(Enum):
 
 class UserAlert(models.Model):
     email = models.EmailField()
-    filters = models.CharField(max_length=2083)
+    filters = models.CharField(max_length=2083) # comma seperated string 
     country = models.CharField(max_length=2)
     postal_code = models.CharField(max_length=20)
 
@@ -1270,6 +1270,7 @@ class UserAlert(models.Model):
         alert.country = country
         alert.postal_code = postal_code
         alert.save()
+
 
 
 class TaggedVolunteerRole(TaggedItemBase):

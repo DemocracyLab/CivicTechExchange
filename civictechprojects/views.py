@@ -16,7 +16,7 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, UserNotification, VolunteerRelation, Group, Event, \
     ProjectRelationship, Testimonial, ProjectFavorite, EventProject, RSVPVolunteerRelation, EventConferenceRoom, \
     EventConferenceRoomParticipant
 from .sitemaps import SitemapPages
@@ -552,6 +552,8 @@ def get_site_stats(request):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def add_alert(request):
+    print("================= request:", request)
+    print("================= request.body:", request.body)
     body = json.loads(request.body)
     UserAlert.create_or_update(
         email=body['email'], filters=body['filters'], country=body['country'], postal_code=body['postal_code'])
@@ -1332,7 +1334,7 @@ def qiqo_webhook(request):
 
 # Volunteer add alerts 
 def add_volunteer_alerts(request):
-    # http://localhost:8000/projects/volunteerAlert?role=back-end-developer&orgType=nonprofit
+    # http://localhost:8000/api/projects/volunteerAlert?role=back-end-developer&orgType=nonprofit
     print("========== request: ", request)
     user = get_request_contributor(request)
     print("========== user: ", user)
