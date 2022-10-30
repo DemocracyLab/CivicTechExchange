@@ -16,7 +16,7 @@ from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, UserNotification, VolunteerRelation, Group, Event, \
+from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
     ProjectRelationship, Testimonial, ProjectFavorite, EventProject, RSVPVolunteerRelation, EventConferenceRoom, \
     EventConferenceRoomParticipant
 from .sitemaps import SitemapPages
