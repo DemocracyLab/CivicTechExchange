@@ -71,6 +71,12 @@ class EditUserThumbnailModal extends React.Component<Props, State> {
     this.setState({ showModal: nextProps.showModal });
   }
 
+  componentDidUpdate(prevProps){
+    if(prevProps.showModal != this.props.showModal){
+      this.setIsCropping(false);
+    }
+  }
+
   render(): React$Node {
     return (
       <EditUserModal
@@ -78,14 +84,14 @@ class EditUserThumbnailModal extends React.Component<Props, State> {
         user={this.props.user}
         fields={["user_thumbnail"]}
         onEditClose={this.props.onEditClose}
-	isInvalid={this.state.isCropping}
+	      isInvalid={this.state.isCropping}
       >
         <ImageCropUploadFormElement
           form_id="user_thumbnail"
           buttonText="Upload Your Picture"
           aspect={1 / 1}
           isCropping={this.state.isCropping}
-	  _onIsCroppingChanged={this.setIsCropping.bind(this)}
+	        _onIsCroppingChanged={this.setIsCropping.bind(this)}
         />
       </EditUserModal>
     );
