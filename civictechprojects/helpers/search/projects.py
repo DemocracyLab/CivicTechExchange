@@ -4,6 +4,7 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector, TrigramSimilarity
 from django.core.paginator import Paginator
+from django.db.models import Value, FloatField, Case, When
 from django.db.models.functions import Greatest
 from .common import apply_tag_filters, sort_by_field, apply_tag_filters_for_search
 from civictechprojects.caching.cache import ProjectSearchTagsCache
@@ -48,30 +49,30 @@ def projects_list(request):
 
         keywords = query_params['keyword'][0]
 
-        project_search_primary = project_list.annotate(
-            similarity=Greatest(
-                TrigramSimilarity('project_name', keywords),
-                TrigramSimilarity('project_description', keywords),
-                TrigramSimilarity('project_city', keywords),
-                TrigramSimilarity('full_text', keywords),
-            )
-        ).filter(similarity__gt=0.2).order_by('-similarity')
-
-        tags = Tag.objects.annotate(
+        tag_names = Tag.objects.annotate(
             similarity=TrigramSimilarity('tag_name', keywords),
-        ).filter(similarity__gt=0.3).order_by('-similarity')
+        ).filter(similarity__gt=0.35).values_list('tag_name', flat=True)
 
-        tag_names = tags.values_list('tag_name', flat=True)
-
+        project_search_name = project_list.annotate(s=TrigramSimilarity('project_name', keywords), ).filter(s__gt=0.2)
         projects_search_issues = apply_tag_filters_for_search(project_list, tag_names, projects_by_issue_areas)
         projects_search_technologies = apply_tag_filters_for_search(project_list, tag_names, projects_by_technologies)
         projects_search_roles = apply_tag_filters_for_search(project_list, tag_names, projects_by_roles)
         projects_search_orgs = apply_tag_filters_for_search(project_list, tag_names, projects_by_orgs)
         projects_search_org_types = apply_tag_filters_for_search(project_list, tag_names, projects_by_org_types)
 
-        projects_search_final = project_search_primary | projects_search_issues | projects_search_technologies | projects_search_roles | projects_search_orgs | projects_search_org_types
+        project_list = project_list.annotate(
+            similarity=Case(
+                When(id__in=project_search_name, then=Value(1, FloatField())),
+                When(id__in=projects_search_issues, then=Value(0.9, FloatField())),
+                When(id__in=projects_search_technologies, then=Value(0.9, FloatField())),
+                When(id__in=projects_search_roles, then=Value(0.9, FloatField())),
+                When(id__in=projects_search_orgs, then=Value(0.8, FloatField())),
+                When(id__in=projects_search_org_types, then=Value(0.75, FloatField())),
+                default=TrigramSimilarity('full_text', keywords)
+            )
+        ).filter(similarity__gt=0.005)
 
-        project_list = projects_search_final
+        # print(project_list.values('project_name', 'similarity'))
 
     if 'locationRadius' in query_params:
         project_list = projects_by_location(project_list, query_params['locationRadius'][0])
@@ -81,7 +82,9 @@ def projects_list(request):
 
     project_list = project_list.distinct()
 
-    if 'sortField' in query_params:
+    if 'keyword' in query_params:
+        project_list = project_list.order_by('-similarity')
+    elif 'sortField' in query_params:
         project_list = sort_by_field(project_list, query_params['sortField'][0])
     else:
         project_list = sort_by_field(project_list, '-project_date_modified')
