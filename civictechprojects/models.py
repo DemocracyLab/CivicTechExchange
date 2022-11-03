@@ -478,9 +478,9 @@ class Event(Archived):
         event = {
             'event_agenda': self.event_agenda,
             'event_creator': self.event_creator.id,
-            'event_date_end': self.event_date_end.__str__(),
-            'event_date_modified': self.event_date_modified.__str__(),
-            'event_date_start': self.event_date_start.__str__(),
+            'event_date_end': self.event_date_end.isoformat(timespec='seconds'),
+            'event_date_modified': self.event_date_modified.isoformat(timespec='seconds'),
+            'event_date_start': self.event_date_start.isoformat(timespec='seconds'),
             'event_description': self.event_description,
             'event_files': list(map(lambda file: file.to_json(), other_files)),
             'event_id': self.id,

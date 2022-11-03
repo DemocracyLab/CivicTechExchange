@@ -26,8 +26,8 @@
   align-content: space-between;
   align-items: center;
   gap: 30px 60px;
-  padding-top: 40px; // 30 standard + 10 for extra section spacing)
-  padding-bottom: 30px;
+  padding-top: 30px;
+  padding-bottom: 40px;
 }
 .SponsorFooter-sponsor {
   flex-basis: calc(
@@ -64,8 +64,8 @@
   //desktop numbers are typically mobile * 1.5, to keep ratios consistent
   .SponsorFooter-sponsor-wrapper {
     gap: 45px 90px;
-    padding-top: 60px; // 45 standard + 15 for extra section spacing
-    padding-bottom: 45px;
+    padding-top: 45px;
+    padding-bottom: 60px;
   }
   .SponsorFooter-footer {
     padding-top: 45px;
