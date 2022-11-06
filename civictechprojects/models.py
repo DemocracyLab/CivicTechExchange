@@ -1293,7 +1293,6 @@ class UserAlert(models.Model):
 
     @staticmethod
     def create_or_update(alert_json):
-        print(alert_json)
         email = alert_json.get('email')
         alert = UserAlert.objects.filter(email=email).first()
         if alert is None:
