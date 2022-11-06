@@ -1251,24 +1251,62 @@ class FileCategory(Enum):
     ETC = 'ETC'
 
 
+class TaggedAlertIssueAreas(TaggedItemBase):
+    content_object = models.ForeignKey('UserAlert', on_delete=models.CASCADE)
+
+
+class TaggedAlertStage(TaggedItemBase):
+    content_object = models.ForeignKey('UserAlert', on_delete=models.CASCADE)
+
+
+class TaggedAlertTechnologies(TaggedItemBase):
+    content_object = models.ForeignKey('UserAlert', on_delete=models.CASCADE)
+
+
+class TaggedAlertOrganizationType(TaggedItemBase):
+    content_object = models.ForeignKey('UserAlert', on_delete=models.CASCADE)
+
+
+class TaggedAlertPositionRole(TaggedItemBase):
+    content_object = models.ForeignKey('UserAlert', on_delete=models.CASCADE)
+
+
 class UserAlert(models.Model):
     email = models.EmailField()
     filters = models.CharField(max_length=2083) # comma seperated string 
-    country = models.CharField(max_length=2)
-    postal_code = models.CharField(max_length=20)
+    country = models.CharField(max_length=2, null=True, blank=True)
+    postal_code = models.CharField(max_length=20, null=True, blank=True)
+
+    alert_issue_area = TaggableManager(blank=True, through=TaggedAlertIssueAreas)
+    alert_issue_area.remote_field.related_name = 'issue_alerts'
+    alert_stage = TaggableManager(blank=True, through=TaggedAlertStage)
+    alert_stage.remote_field.related_name = 'stage_alerts'
+    alert_technologies = TaggableManager(blank=True, through=TaggedAlertTechnologies)
+    alert_technologies.remote_field.related_name = 'technology_alerts'
+    alert_organization_type = TaggableManager(blank=True, through=TaggedAlertOrganizationType)
+    alert_organization_type.remote_field.related_name = 'org_type_alerts'
+    alert_role = TaggableManager(blank=True, through=TaggedAlertPositionRole)
+    alert_role.remote_field.related_name = 'role_alerts'
 
     def __str__(self):
         return str(self.email)
 
     @staticmethod
-    def create_or_update(email, filters, country, postal_code):
+    def create_or_update(alert_json):
+        print(alert_json)
+        email = alert_json.get('email')
         alert = UserAlert.objects.filter(email=email).first()
         if alert is None:
-            alert = UserAlert()
-            alert.email = email
-        alert.filters = filters
-        alert.country = country
-        alert.postal_code = postal_code
+            alert = UserAlert.objects.create(email=email)
+        alert.country = alert_json.get('country')
+        alert.postal_code = alert_json.get('postal_code')
+        # process filter string to tags
+        filters = alert_json.get('filters')
+        fields = []
+        for field_name, field_str in filters.items():
+            Tag.merge_tags_field(getattr(alert, field_name), field_str)
+            fields.append(field_str)
+        alert.filters = ','.join(fields)
         alert.save()
 
 

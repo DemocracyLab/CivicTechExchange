@@ -68,7 +68,6 @@ urlpatterns = [
         r'^delete_s3/(?P<s3_key>.*)$',
         views.delete_uploaded_file,
     ),
-    url(r'^api/projects/volunteerAlert$', views.add_volunteer_alerts, name="add_volunteer_alerts"),
     url(r'^api/projects/recent', views.recent_projects),
     url(r'^api/projects', views.project_search),
     url(r'^api/events', views.events_list),
@@ -104,11 +103,8 @@ urlpatterns = [
     url(r'^volunteer/demote/(?P<application_id>[0-9]+)/$', views.demote_project_volunteer, name='demote_project_volunteer'),
     url(r'^volunteer/renew/(?P<application_id>[0-9]+)/$', views.renew_volunteering_with_project, name='renew_volunteering_with_project'),
     url(r'^volunteer/conclude/(?P<application_id>[0-9]+)/$', views.conclude_volunteering_with_project, name='conclude_volunteering_with_project'),
-    url(r'^alert/create/$', views.add_alert, name='add_alert'),
+    url(r'^alert/create$', views.add_alert, name='add_alert'),
     url(r'^api/testimonials/(?P<category>[-\w]*)', views.get_testimonials, name='get_testimonials'),
     url(r'^api/v1/qiqo/webhooks/zoom_presences', views.qiqo_webhook, name='qiqo_webhook'),
-
-    # volunteers toggle alerts for future projects 
-    url(r'^volunteerAlert$', views.add_volunteer_alerts, name="add_volunteer_alerts"),
 ]   
 

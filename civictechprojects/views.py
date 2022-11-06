@@ -29,7 +29,7 @@ from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff, is_creator
-from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm, EventProjectCreationForm
+from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm, EventProjectCreationForm, AlertCreationForm
 from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
@@ -552,11 +552,8 @@ def get_site_stats(request):
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
 def add_alert(request):
-    print("================= request:", request)
-    print("================= request.body:", request.body)
     body = json.loads(request.body)
-    UserAlert.create_or_update(
-        email=body['email'], filters=body['filters'], country=body['country'], postal_code=body['postal_code'])
+    UserAlert.create_or_update(body)
     return HttpResponse(status=200)
 
 
@@ -1329,16 +1326,4 @@ def qiqo_webhook(request):
         return HttpResponse(status=401)
 
     existing_room.recache_linked()
-    return HttpResponse(status=200)
-
-
-# Volunteer add alerts 
-def add_volunteer_alerts(request):
-    # http://localhost:8000/api/projects/volunteerAlert?role=back-end-developer&orgType=nonprofit
-    print("========== request: ", request)
-    user = get_request_contributor(request)
-    print("========== user: ", user)
-    url_parts = request.GET.urlencode()
-    query_terms = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
-    print("========== query_terms: ", query_terms)
     return HttpResponse(status=200)
