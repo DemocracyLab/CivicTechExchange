@@ -2,7 +2,9 @@
 import React from "react";
 import ProjectFilterDataContainer from "./ProjectFilterDataContainer.jsx";
 import ResetSearchButton from "../ResetSearchButton.jsx";
+import EnableAlertButton from "../EnableAlertButton.jsx";
 import metrics from "../../../utils/metrics.js";
+import AlertSignupModal from "../AlertSignupModal.jsx";
 
 class ProjectFilterContainer<T> extends React.PureComponent<Props<T>, State> {
   render(): React$Node {
@@ -12,6 +14,10 @@ class ProjectFilterContainer<T> extends React.PureComponent<Props<T>, State> {
           <ResetSearchButton />
         </div>
         <ProjectFilterDataContainer />
+        <div>
+        </div>
+        {/* <AlertSignupModal /> */}
+        <EnableAlertButton />
       </div>
     );
   }
