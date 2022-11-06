@@ -29,7 +29,7 @@ from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
 from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff, is_creator
-from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm, EventProjectCreationForm, AlertCreationForm
+from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm, EventProjectCreationForm
 from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
