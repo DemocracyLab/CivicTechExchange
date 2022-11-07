@@ -50,6 +50,7 @@ Pipfile
 Pipfile.lock
 
 # Unit test / coverage reports
+coverage/
 htmlcov/
 .tox/
 .coverage
