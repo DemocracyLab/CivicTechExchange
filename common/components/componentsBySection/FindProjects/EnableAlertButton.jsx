@@ -65,9 +65,9 @@ class EnableAlertButton extends React.Component<{||}, State> {
     // });
     console.log("========= enable alerts =========")
     ProjectAPIUtils.post(
-      "/alert/create/",
+      "/alert/create",
       {
-        "email": "test@gmail.com",
+        "email": "test3@gmail.com",
         "filters":
         {
           "alert_issue_area": "civic-infrastructure,education",

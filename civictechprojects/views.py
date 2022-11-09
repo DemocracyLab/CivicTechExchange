@@ -553,7 +553,11 @@ def get_site_stats(request):
 @csrf_exempt
 def add_alert(request):
     body = json.loads(request.body)
-    UserAlert.create_or_update(body)
+    email = body.get('email')
+    filters = body.get('filters')
+    country = body.get('country')
+    postal_code = body.get('postal_code')
+    UserAlert.create_or_update(email, filters, country, postal_code)
     return HttpResponse(status=200)
 
 

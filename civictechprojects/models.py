@@ -1292,15 +1292,13 @@ class UserAlert(models.Model):
         return str(self.email)
 
     @staticmethod
-    def create_or_update(alert_json):
-        email = alert_json.get('email')
+    def create_or_update(email, filters, country, postal_code):
         alert = UserAlert.objects.filter(email=email).first()
         if alert is None:
             alert = UserAlert.objects.create(email=email)
-        alert.country = alert_json.get('country')
-        alert.postal_code = alert_json.get('postal_code')
+        alert.country = country
+        alert.postal_code = postal_code
         # process filter string to tags
-        filters = alert_json.get('filters')
         fields = []
         for field_name, field_str in filters.items():
             Tag.merge_tags_field(getattr(alert, field_name), field_str)
@@ -1309,6 +1307,19 @@ class UserAlert(models.Model):
         alert.save()
 
 
+class UserAlertHistory(models.Model):
+    alert = models.ForeignKey('UserAlert', on_delete=models.CASCADE)
+    project = models.ForeignKey('Project', on_delete=models.CASCADE)
+    alert_date = models.DateTimeField()
+
+    @staticmethod
+    def create(alert, project, alert_date):
+        alert_history = UserAlertHistory()
+        alert_history.alert = alert
+        alert_history.project = project
+        alert_history.alert_date = alert_date
+        alert_history.save()
+        return alert_history
 
 class TaggedVolunteerRole(TaggedItemBase):
     content_object = models.ForeignKey('VolunteerRelation', on_delete=models.CASCADE)
