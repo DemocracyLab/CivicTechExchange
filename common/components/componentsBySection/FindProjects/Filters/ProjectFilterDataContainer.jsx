@@ -13,6 +13,7 @@ import FavoriteFilter from "../FavoriteFilter.jsx";
 import CurrentUser from "../../../utils/CurrentUser.js";
 import FavoritesStore from "../../../stores/FavoritesStore.js";
 import _ from "lodash";
+import EnableAlertButton from "../EnableAlertButton.jsx";
 
 /**
  * @category: Tag category to pull from

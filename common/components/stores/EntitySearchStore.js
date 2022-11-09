@@ -235,6 +235,7 @@ class State extends Record(DEFAULT_STATE) {
   filterApplied: boolean;
   projectsLoading: boolean;
   error: boolean;
+  isUserAlertEnabled: boolean;
 }
 
 class EntitySearchStore extends ReduceStore<State> {
@@ -332,6 +333,11 @@ class EntitySearchStore extends ReduceStore<State> {
           availableCountries: availableCountries,
         });
         return state.set("projectsLoading", false);
+      case "ENABLE_ALERT":
+        console.log("========== EntitySearchStore ENABLE_ALERT ============ ");
+        // state = state.set("isUserAlertEnabled", true);
+        console.log("========== EntitySearchStore state  ============ " + state);
+        return state;
       default:
         (action: empty);
         return state;
@@ -615,3 +621,7 @@ class EntitySearchStore extends ReduceStore<State> {
 }
 
 export default new EntitySearchStore();
+
+
+
+// qqq TODO: Cannot set unknown key "isUserAlertEnabled" on State

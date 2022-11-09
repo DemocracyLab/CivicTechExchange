@@ -9,6 +9,7 @@ import ProjectAPIUtils from "../../utils/ProjectAPIUtils";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import React from "react";
 import _ from "lodash";
+import TagCategory from "../../common/tags/TagCategory.jsx";
 
 type State = {|
   keyword: string,
@@ -26,6 +27,7 @@ class EnableAlertButton extends React.Component<{||}, State> {
   }
 
   static calculateState(prevState: State): State {
+    console.log("========= calculateState =========")
     return {
       keyword: EntitySearchStore.getKeyword() || "",
       tags: EntitySearchStore.getTags() || [],
@@ -63,19 +65,59 @@ class EnableAlertButton extends React.Component<{||}, State> {
     // UniversalDispatcher.dispatch({
     //   type: "ENABLE_ALERT",
     // });
-    console.log("========= enable alerts =========")
+    console.log("========= enable alerts =========bay",
+      this.state.tags
+      .toJS()
+      .map((tag: TagDefinition) => {
+        return {
+          label: tag.display_name,
+          tag_name: tag.tag_name,
+          id: tag.id,
+          category: tag.category,
+          subcategory: tag.subcategory,
+          parent: tag.parent,
+        };
+      })
+    )
     ProjectAPIUtils.post(
       "/alert/create",
       {
         "email": "test3@gmail.com",
         "filters":
-        {
-          "alert_issue_area": "civic-infrastructure,education",
-          "alert_technologies": "joomla",
-          "alert_role": "project-manager",
-          "alert_organization_type": "nonprofit",
-          "alert_stage": "ideation-stage",
-        },
+          {
+            "alert_issue_area": "civic-infrastructure,education",
+            "alert_technologies": "joomla",
+            "alert_role": "project-manager",
+            "alert_organization_type": "nonprofit",
+            "alert_stage": "ideation-stage",
+          },
+        "country": "EN",
+        "postal_code": 94085,
+        "alert_issue_area": this.state.tags
+                          .toJS()
+                          .filter((tag: TagDefinition) => 
+                            tag.category === TagCategory.ISSUES
+                          ).map(({tag_name}) => ({tag_name})),
+        "alert_technologies": this.state.tags
+                          .toJS()
+                          .filter((tag: TagDefinition) => 
+                            tag.category === TagCategory.TECHNOLOGIES_USED
+                          ).map(({tag_name}) => ({tag_name})),
+        "alert_role": this.state.tags
+                          .toJS()
+                          .filter((tag: TagDefinition) => 
+                            tag.category === TagCategory.ROLE
+                          ).map(({tag_name}) => ({tag_name})),
+        "alert_organization_type": this.state.tags
+                          .toJS()
+                          .filter((tag: TagDefinition) => 
+                            tag.category === TagCategory.ORGANIZATION_TYPE
+                          ).map(({tag_name}) => ({tag_name})),
+        "alert_stage": this.state.tags
+                          .toJS()
+                          .filter((tag: TagDefinition) => 
+                            tag.category === TagCategory.PROJECT_STAGE
+                          ).map(({tag_name}) => ({tag_name})),
       }
       ,
       response => null /* TODO: Report error to user */
