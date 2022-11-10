@@ -89,26 +89,22 @@ class EnableAlertButton extends React.Component<{||}, State> {
           parent: tag.parent,
         };
       })
-    )
+    
     ProjectAPIUtils.post(
       "/alert/create",
       {
         "email": "test3@gmail.com", // qqq: delete
-        "filters":
-          {
-            "alert_issue_area": "civic-infrastructure,education",
-            "alert_technologies": "joomla",
-            "alert_role": "project-manager",
-            "alert_organization_type": "nonprofit",
-            "alert_stage": "ideation-stage",
-          },
         "country": "EN",
         "postal_code": 94085,
-        "alert_issue_area": this._formatOutput(TagCategory.ISSUES),
-        "alert_technologies": this._formatOutput(TagCategory.TECHNOLOGIES_USED),
-        "alert_role": this._formatOutput(TagCategory.ROLE),
-        "alert_organization_type": this._formatOutput(TagCategory.ORGANIZATION_TYPE),
-        "alert_stage":  this._formatOutput(TagCategory.PROJECT_STAGE),
+        "filters":
+        {
+          "alert_issue_area": this._formatOutput(TagCategory.ISSUES),
+          "alert_technologies": this._formatOutput(TagCategory.TECHNOLOGIES_USED),
+          "alert_role": this._formatOutput(TagCategory.ROLE),
+          "alert_organization_type": this._formatOutput(TagCategory.ORGANIZATION_TYPE),
+          "alert_stage":  this._formatOutput(TagCategory.PROJECT_STAGE),
+        },
+
       }
       ,
       response => null /* TODO: Report error to user */
