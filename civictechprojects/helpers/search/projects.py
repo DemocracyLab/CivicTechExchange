@@ -115,6 +115,15 @@ def recent_projects_list(request):
     return list(project.hydrate_to_tile_json() for project in project_list)
 
 
+def projects_by_date_modified(start_date, end_date):
+    '''
+    Filter projects within date range. Used for matching tags to send alerts.
+    '''
+    project_list = Project.objects.filter(is_searchable=True, is_private=False)
+    project_list = project_list.filter(project_date_modified__range=[start_date, end_date])
+    return project_list
+
+
 def projects_by_keyword(keyword):
     return Project.objects.filter(full_text__icontains=keyword)
 

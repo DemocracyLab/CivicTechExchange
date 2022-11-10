@@ -1309,15 +1309,16 @@ class UserAlert(models.Model):
 
 class UserAlertHistory(models.Model):
     alert = models.ForeignKey('UserAlert', on_delete=models.CASCADE)
-    project = models.ForeignKey('Project', on_delete=models.CASCADE)
+    projects = models.ManyToManyField('Project')
     alert_date = models.DateTimeField()
 
     @staticmethod
-    def create(alert, project, alert_date):
+    def create(alert, project_list, alert_date):
         alert_history = UserAlertHistory()
         alert_history.alert = alert
-        alert_history.project = project
         alert_history.alert_date = alert_date
+        alert_history.save()
+        alert_history.projects.add(*project_list)
         alert_history.save()
         return alert_history
 
