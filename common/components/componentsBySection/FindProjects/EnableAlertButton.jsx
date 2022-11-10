@@ -61,11 +61,22 @@ class EnableAlertButton extends React.Component<{||}, State> {
       </React.Fragment>
     );
   }
+
+  _formatOutput(tag_category: TagCategory): string {
+    let tag_list = this.state.tags
+                          .toJS()
+                          .filter((tag: TagDefinition) => 
+                            tag.category === tag_category
+                          ).map(({tag_name}) => ({tag_name}));
+    let string = ''
+    tag_list.forEach(item => string += item.tag_name + ",");
+    return string.replace(/,*$/, '');
+  }
+
   _enableAlert(): void {
     // UniversalDispatcher.dispatch({
     //   type: "ENABLE_ALERT",
     // });
-    console.log("========= enable alerts =========bay",
       this.state.tags
       .toJS()
       .map((tag: TagDefinition) => {
@@ -82,7 +93,7 @@ class EnableAlertButton extends React.Component<{||}, State> {
     ProjectAPIUtils.post(
       "/alert/create",
       {
-        "email": "test3@gmail.com",
+        "email": "test3@gmail.com", // qqq: delete
         "filters":
           {
             "alert_issue_area": "civic-infrastructure,education",
@@ -93,35 +104,16 @@ class EnableAlertButton extends React.Component<{||}, State> {
           },
         "country": "EN",
         "postal_code": 94085,
-        "alert_issue_area": this.state.tags
-                          .toJS()
-                          .filter((tag: TagDefinition) => 
-                            tag.category === TagCategory.ISSUES
-                          ).map(({tag_name}) => ({tag_name})),
-        "alert_technologies": this.state.tags
-                          .toJS()
-                          .filter((tag: TagDefinition) => 
-                            tag.category === TagCategory.TECHNOLOGIES_USED
-                          ).map(({tag_name}) => ({tag_name})),
-        "alert_role": this.state.tags
-                          .toJS()
-                          .filter((tag: TagDefinition) => 
-                            tag.category === TagCategory.ROLE
-                          ).map(({tag_name}) => ({tag_name})),
-        "alert_organization_type": this.state.tags
-                          .toJS()
-                          .filter((tag: TagDefinition) => 
-                            tag.category === TagCategory.ORGANIZATION_TYPE
-                          ).map(({tag_name}) => ({tag_name})),
-        "alert_stage": this.state.tags
-                          .toJS()
-                          .filter((tag: TagDefinition) => 
-                            tag.category === TagCategory.PROJECT_STAGE
-                          ).map(({tag_name}) => ({tag_name})),
+        "alert_issue_area": this._formatOutput(TagCategory.ISSUES),
+        "alert_technologies": this._formatOutput(TagCategory.TECHNOLOGIES_USED),
+        "alert_role": this._formatOutput(TagCategory.ROLE),
+        "alert_organization_type": this._formatOutput(TagCategory.ORGANIZATION_TYPE),
+        "alert_stage":  this._formatOutput(TagCategory.PROJECT_STAGE),
       }
       ,
       response => null /* TODO: Report error to user */
     )
+
   }
 }
 
