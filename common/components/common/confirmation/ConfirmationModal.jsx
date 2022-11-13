@@ -14,7 +14,6 @@ type Props = {|
   reverseCancelConfirm: ?boolean,
 |};
 type State = {|
-  showModal: boolean,
   isProcessing: boolean,
 |};
 
@@ -25,14 +24,10 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
     this.state = {
-      showModal: false,
       isProcessing: false,
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ showModal: nextProps.showModal });
-  }
 
   confirm(confirmation: boolean): void {
     this.setState({ isProcessing: true });
@@ -40,6 +35,7 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
       .onSelection(confirmation)
       .then(() => {
         this.setState({ isProcessing: false });
+        console.log("reached .then following onSelection, isProcessing should be false")
         this.forceUpdate();
       });
     if (this.props.onConfirmOperationComplete) {
@@ -51,7 +47,7 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <ModalWrapper
-        showModal={this.state.showModal}
+        showModal={this.props.showModal}
         headerText={this.props.headerText || "Confirm"}
         cancelText="No"
         cancelEnabled={!this.state.isProcessing}
