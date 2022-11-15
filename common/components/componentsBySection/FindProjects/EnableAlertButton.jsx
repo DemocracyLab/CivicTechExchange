@@ -10,6 +10,9 @@ import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import React from "react";
 import _ from "lodash";
 import TagCategory from "../../common/tags/TagCategory.jsx";
+import CurrentUser from "../../utils/CurrentUser.js";
+import urlHelper from "../../utils/url.js";
+import Button from "react-bootstrap/Button";
 
 type State = {|
   keyword: string,
@@ -40,9 +43,21 @@ class EnableAlertButton extends React.Component<{||}, State> {
   }
 
   render(): React$Node {
+    let buttonConfig: Dictionary<any> = {};
+    if (CurrentUser.isLoggedIn()){
+      buttonConfig = {
+        onClick: () => {
+          this._enableAlert();
+        },
+      };
+    } else {
+        // If not logged in, go to login page
+        buttonConfig = { href: urlHelper.logInThenReturn() };
+    }
+    
     return (
       <React.Fragment>
-        <button
+        <Button
           className="btn btn-primary btn-block enable-alert-button"
           disabled={
             !(
@@ -54,10 +69,10 @@ class EnableAlertButton extends React.Component<{||}, State> {
               this.state.favoritesOnly
             )
           }
-          onClick={this._enableAlert.bind(this)}
+          {...buttonConfig}
         >
           Enable Alert
-        </button>
+        </Button>
       </React.Fragment>
     );
   }
@@ -74,22 +89,19 @@ class EnableAlertButton extends React.Component<{||}, State> {
   }
 
   _enableAlert(): void {
-    // UniversalDispatcher.dispatch({
-    //   type: "ENABLE_ALERT",
-    // });
-      this.state.tags
-      .toJS()
-      .map((tag: TagDefinition) => {
-        return {
-          label: tag.display_name,
-          tag_name: tag.tag_name,
-          id: tag.id,
-          category: tag.category,
-          subcategory: tag.subcategory,
-          parent: tag.parent,
-        };
-      })
-    
+    this.state.tags
+    .toJS()
+    .map((tag: TagDefinition) => {
+      return {
+        label: tag.display_name,
+        tag_name: tag.tag_name,
+        id: tag.id,
+        category: tag.category,
+        subcategory: tag.subcategory,
+        parent: tag.parent,
+      };
+    })
+  
     ProjectAPIUtils.post(
       "/alert/create",
       {
@@ -109,6 +121,8 @@ class EnableAlertButton extends React.Component<{||}, State> {
       ,
       response => null /* TODO: Report error to user */
     )
+   
+      
 
   }
 }
