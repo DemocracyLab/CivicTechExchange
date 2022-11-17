@@ -34,7 +34,6 @@ class UpcomingEventCard extends React.Component<{||}, State> {
   }
 
   render(): React$Node {
-    console.log(this.state);
     return !_.isEmpty(this.state.upcomingEvent)
       ? this._renderUpcomingSection()
       : null;
