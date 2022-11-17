@@ -68,8 +68,9 @@ export const SearchFor: Dictionary<EntitySearchConfig> = {
         entityCt: apiResponse.numProjects,
       };
     },
-    defaultSort: "-project_date_modified",
+    defaultSort: "",
     sortFields: [
+      { value: "", label: "Default" },
       { value: "-project_date_modified", label: "Date Modified" },
       { value: "project_name", label: "Name - Ascending" },
       { value: "-project_name", label: "Name - Descending" },
