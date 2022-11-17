@@ -1302,7 +1302,8 @@ class UserAlert(models.Model):
         fields = []
         for field_name, field_str in filters.items():
             Tag.merge_tags_field(getattr(alert, field_name), field_str)
-            fields.append(field_str)
+            if field_str and len(field_str) != 0:
+                fields.append(field_str)
         alert.filters = ','.join(fields)
         alert.save()
 

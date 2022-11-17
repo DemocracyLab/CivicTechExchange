@@ -553,9 +553,9 @@ def get_site_stats(request):
 @csrf_exempt
 def add_alert(request):
     body = json.loads(request.body)
-    # body.get('filters') 
-    # {'alert_issue_area': 'education', 'alert_technologies': 'mongo-db,my-sql', 'alert_role': '', 'alert_organization_type': '', 'alert_stage': ''}
-    email = body.get('email')
+    if not request.user.is_authenticated:
+        return redirect('/login')
+    email = request.user.email
     filters = body.get('filters')
     country = body.get('country')
     postal_code = body.get('postal_code')

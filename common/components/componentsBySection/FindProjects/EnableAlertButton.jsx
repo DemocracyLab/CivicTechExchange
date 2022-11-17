@@ -105,7 +105,6 @@ class EnableAlertButton extends React.Component<{||}, State> {
     ProjectAPIUtils.post(
       "/alert/create",
       {
-        "email": "test3@gmail.com", // qqq: delete
         "country": "EN",
         "postal_code": 94085,
         "filters":
