@@ -1372,9 +1372,9 @@
     loader-utils "^2.0.0"
 
 "@tryghost/content-api@^1.5.2":
-  version "1.9.8"
-  resolved "https://registry.yarnpkg.com/@tryghost/content-api/-/content-api-1.9.8.tgz#91a83e8baf52705a01d2fe99b07f90d64a066ff2"
-  integrity sha512-aBhEjd5bAA4iNQqX5azhYJ+Ln9w3SnduxfVi1QyS6qDT9WqvTSxBzkKmCARFmfxmlW6o7l+90qmpOtysEqlsOw==
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@tryghost/content-api/-/content-api-1.11.0.tgz#25ab0e2c5618f4ae190d5ad739611a07a551b245"
+  integrity sha512-0JTlp5Ln4BfCJzCYuT2X3MC9ZupIkRtzZaHpf9KZw7O8uOsRnO9RwjItN+lwvkoLIesMzfgrZd/tBJ4BAzeBrg==
   dependencies:
     axios "^0.27.0"
 
@@ -3295,7 +3295,7 @@ del@^4.1.1:
 delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
-  integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
+  integrity sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==
 
 depd@2.0.0:
   version "2.0.0"
