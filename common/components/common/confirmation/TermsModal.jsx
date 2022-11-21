@@ -55,15 +55,8 @@ class TermsModal extends React.PureComponent<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ showModal: nextProps.showModal });
-  }
-
   confirm(): void {
     this.props.onSelection();
-    this.setState({
-      showModal: false,
-    });
   }
 
   render(): React$Node {
@@ -72,7 +65,7 @@ class TermsModal extends React.PureComponent<Props, State> {
       <NotificationModal
         headerText={termsConfig.headerText}
         buttonText="Close and Continue"
-        showModal={this.state.showModal}
+        showModal={this.props.showModal}
         onClickButton={this.confirm.bind(this)}
       >
         <div className="Terms-body">{termsConfig.termsContent()}</div>
