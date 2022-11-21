@@ -107,7 +107,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   ) {
     let state: State = { showJoinModal: false };
     if (confirmJoin) {
-      props.eventProject = eventProject;
       state.showRSVPedToast = true;
       state.isRSVPedForThisEventProject = true;
     }
