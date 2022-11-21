@@ -251,8 +251,9 @@ class Project(Archived):
             self.update_linked_items()
 
     def update_linked_items(self):
-        # Recache events, but only if project is searchable
+        # Recache events and project tags, but only if project is searchable
         if self.is_searchable:
+            ProjectSearchTagsCache.refresh()
             owned_event_projects = self.get_project_event_projects()
             for ep in owned_event_projects:
                 ep.recache()
