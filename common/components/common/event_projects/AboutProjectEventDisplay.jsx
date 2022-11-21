@@ -39,12 +39,10 @@ import ContactEventVolunteersButton from "./ContactEventVolunteersButton.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
-  viewOnly: boolean,
 |};
 
 type State = {|
   eventProject: ?EventProjectAPIDetails,
-  viewOnly: boolean,
   showJoinModal: boolean,
   positionToJoin: ?PositionInfo,
   showRSVPedToast: boolean,
@@ -82,7 +80,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       window.location.href.includes("signUp") && !isRSVPedForThisEventProject;
     this.state = {
       eventProject: props.eventProject,
-      viewOnly: props.viewOnly,
       showContactModal: false,
       showRSVPedToast: false,
       showCancelRSVPModal: false,
@@ -101,7 +98,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   componentWillReceiveProps(nextProps: Props): void {
     this.setState({
       eventProject: nextProps.eventProject,
-      viewOnly: nextProps.viewOnly || url.argument("embedded"),
     });
   }
 

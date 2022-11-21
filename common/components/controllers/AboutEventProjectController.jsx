@@ -60,7 +60,6 @@ class AboutEventProjectController extends React.PureComponent<{||}, State> {
       <React.Fragment>
         <AboutProjectEventDisplay
           eventProject={this.state.eventProject}
-          viewOnly={false}
         />
       </React.Fragment>
     );
