@@ -260,7 +260,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <h2>
             Feedback from our partners about their custom hackathon events.
           </h2>
-          <div className="carousel-testimonial-root">
+          <div className="corporate-hackathon-carousel carousel-testimonial-root">
             <TestimonialCarousel
               category="partner-highlights"
               interval={600000}
@@ -406,7 +406,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <h1>What our partners are saying.</h1>
           <h2>Feedback from partnering organizations.</h2>
 
-          <div className="carousel-testimonial-root">
+          <div className="corporate-hackathon-carousel carousel-testimonial-root">
             <TestimonialCarousel
               category="hackathon-highlights"
               interval={600000}
