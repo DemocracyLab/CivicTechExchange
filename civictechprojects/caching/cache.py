@@ -123,7 +123,7 @@ class ProjectSearchTagsCacheManager:
         elif group is not None:
             projects = group.get_group_projects(approved_only=True)
         else:
-            projects = Project.objects.filter(is_searchable=True)
+            projects = Project.objects.filter(is_searchable=True, is_private=False)
         issues, technologies, stage, organization, organization_type, positions = [], [], [], [], [], []
         if projects:
             for project in projects:
