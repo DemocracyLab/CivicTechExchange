@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from .models import Project, Group, Event, ProjectRelationship, UserAlert, VolunteerRelation, ProjectCommit, \
-    NameRecord, ProjectFile, Testimonial, ProjectLink, ProjectFavorite, ProjectPosition, EventProject, \
-    RSVPVolunteerRelation, EventConferenceRoom, EventConferenceRoomParticipant
+from .models import Project, Group, Event, ProjectRelationship, UserAlert, UserAlertHistory, VolunteerRelation, \
+    ProjectCommit, NameRecord, ProjectFile, Testimonial, ProjectLink, ProjectFavorite, ProjectPosition, \
+    EventProject, RSVPVolunteerRelation, EventConferenceRoom, EventConferenceRoomParticipant
 
 project_text_fields = ['project_name', 'project_description', 'project_description_solution', 'project_description_actions', 'project_short_description', 'project_location', 'project_country', 'project_state', 'project_city', 'project_url']
 project_filter_fields = ('project_date_created', 'project_date_modified', 'is_searchable', 'is_created')
@@ -51,6 +51,11 @@ user_alert_text_fields = ['email', 'filters', 'country', 'postal_code']
 class UserAlertAdmin(admin.ModelAdmin):
     list_display = tuple(user_alert_text_fields)
     search_fields = user_alert_text_fields
+
+user_alert_text_fields = ['alert', 'alert_date']
+class UserAlertHistoryAdmin(admin.ModelAdmin):
+    list_display = tuple(user_alert_text_fields)
+    search_fields = ['alert__email', 'alert_date']
 
 volunteer_relation_filter_fields = ('is_approved', 'is_co_owner', 'is_team_leader', 'projected_end_date', 'application_date', 'approved_date', 'last_reminder_date', 'reminder_count', 're_enrolled_last_date', 're_enroll_last_reminder_date', 're_enroll_reminder_count')
 class VolunteerRelationAdmin(admin.ModelAdmin):
@@ -126,6 +131,7 @@ admin.site.register(ProjectRelationship, ProjectRelationshipAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(UserAlert, UserAlertAdmin)
+admin.site.register(UserAlertHistory, UserAlertHistoryAdmin)
 admin.site.register(VolunteerRelation, VolunteerRelationAdmin)
 admin.site.register(ProjectCommit, ProjectCommitAdmin)
 admin.site.register(NameRecord, NameRecordAdmin)
