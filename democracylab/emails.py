@@ -1,3 +1,4 @@
+from ast import List
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.template import loader, Template, Context
@@ -831,7 +832,7 @@ def contact_democracylab_email(
     send_email(email_msg)
 
 
-def notify_matched_user(userAlert: UserAlert, project: Project):
+def notify_matched_user(userAlert: UserAlert, projects: List[Project]):
     email_template = (
         HtmlEmailTemplate()
         .header("Hi {{first_name}}")
@@ -839,15 +840,14 @@ def notify_matched_user(userAlert: UserAlert, project: Project):
             "We have found some matched project according to your alert.  Please choose one of the "
             + "projects."
         )
-        .button(url=project.project_url, text="project Details")
     )
-    context = {
-        "first_name": userAlert.email,  # no name stored in UserAlert
-    }
+    for project in projects:
+        email_template.button(url=project.project_url, text=project.project_name)
+
     email_msg = EmailMessage(
         subject="Found matched projects ",
         from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
         to=[userAlert.email],
     )
-    email_msg = email_template.render(email_msg, context)
+    email_msg = email_template.render(email_msg, {"first_name": userAlert.email}) # userAlert didn't store first_name
     send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
