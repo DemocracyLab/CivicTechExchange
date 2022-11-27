@@ -92,7 +92,7 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
     this.forceUpdate();
   }
 
-  confirmDeleteProject(confirmedDelete: boolean): void {
+  async confirmDeleteProject(confirmedDelete: boolean): void {
     if (confirmedDelete) {
       const url =
         "/api/projects/delete/" + this.state.projectToDelete.project_id + "/";
