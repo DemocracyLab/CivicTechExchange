@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from civictechprojects.models import UserAlert, UserAlertHistory, ProjectPosition
 from civictechprojects.helpers.search.projects import projects_by_date_modified
+from democracylab.emails import notify_matched_user
 
 # TODO: move to docker env var
 ALERT_FREQUENCY = 1 # flag to indicate date range when checking new projects
@@ -18,6 +19,7 @@ class Command(BaseCommand):
             matching_projects = find_matching_projects(alert, recent_project_list)
             print("alert {} with filters {} has matching project list {}".format(alert, alert.filters, matching_projects))
             # TODO: send email here
+            notify_matched_user(alert, matching_projects)
             # save in alert history
             UserAlertHistory.create(alert, matching_projects, timezone.now())
 
