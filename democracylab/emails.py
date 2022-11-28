@@ -832,7 +832,7 @@ def contact_democracylab_email(
     send_email(email_msg)
 
 
-def notify_matched_user(userAlert: UserAlert, projects: List[Project]):
+def notify_matched_user(userAlert: UserAlert, projects):
     email_template = (
         HtmlEmailTemplate()
         .header("Hi {{first_name}}")
