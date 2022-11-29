@@ -6,7 +6,7 @@ from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.core.paginator import Paginator
 from django.db.models import Value, FloatField, Case, When
 from django.db.models.functions import Greatest
-from .common import apply_tag_filters, sort_by_field, apply_tag_filters_for_search
+from .common import apply_tag_filters, sort_by_field
 from civictechprojects.caching.cache import ProjectSearchTagsCache
 from civictechprojects.helpers.projects.annotations import apply_project_annotations
 from civictechprojects.models import Project, Group, Event, ProjectPosition, ProjectFavorite
@@ -47,22 +47,20 @@ def projects_list(request):
 
     if 'keyword' in query_params:
         keywords = query_params['keyword'][0]
-        # find matching tags
-        tagSimilarity=defaultdict(float)
+        # calculate keyword and tag similarities
+        tagSimilarity = defaultdict(float)
         tmp = Tag.objects.annotate(similarity=TrigramSimilarity('tag_name', keywords))
         for tag in tmp:
-            if tag.similarity > 0.3:
-                tagSimilarity[tag.tag_name]=tag.similarity
+            tagSimilarity[tag.tag_name] = tag.similarity
 
-        posSimilarity=defaultdict(float)
+        # calculate keyword and position similarities
+        posSimilarity = defaultdict(float)
         tmp = ProjectPosition.objects.annotate(similarity=TrigramSimilarity('position_role__name', keywords))
         for pos in tmp:
-            if pos.similarity > 0.3:
-                posSimilarity[str(pos)]=pos.similarity
-
+            posSimilarity[str(pos)] = pos.similarity
 
         def getProjSimilarity(p):
-            similarity = p.similarity_name
+            similarity = max(p.similarity_name, p.similarity_full_text)
             for issue_area in p.project_issue_area.names():
                 similarity = max(similarity, tagSimilarity[issue_area])
             for technology in p.project_technologies.names():
@@ -71,18 +69,17 @@ def projects_list(request):
                 similarity = max(similarity, posSimilarity[position.__str__()])
             for org_type in p.project_organization_type.names():
                 similarity = max(similarity, tagSimilarity[org_type])
-            if similarity < 0.3:
-                similarity = p.similarity_full_text
             return similarity
 
-        #calculate name and full text similarity
-        annotated_projs=project_list.annotate(similarity_name=TrigramSimilarity('project_name', keywords), similarity_full_text=TrigramSimilarity('full_text', keywords))
-        temp=[]
+        # calculate name and full text similarity
+        annotated_projs = project_list.annotate(similarity_name=TrigramSimilarity('project_name', keywords),
+                                                similarity_full_text=TrigramSimilarity('full_text', keywords))
+        temp = []
         for p in annotated_projs:
-            s=getProjSimilarity(p)
-            if s>0.01:
+            s = getProjSimilarity(p)
+            if s > 0.01:
                 temp.append([s, p])
-        temp.sort(key=lambda x:x[0], reverse=True)
+        temp.sort(key=lambda x: x[0], reverse=True)
         project_list = []
         for each in temp:
             project_list.append(each[1])
