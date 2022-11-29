@@ -60,6 +60,7 @@ def projects_list(request):
             posSimilarity[str(pos)] = pos.similarity
 
         def getProjSimilarity(p):
+            '''
             similarity = max(p.similarity_name, p.similarity_full_text)
             for issue_area in p.project_issue_area.names():
                 similarity = max(similarity, tagSimilarity[issue_area])
@@ -69,7 +70,9 @@ def projects_list(request):
                 similarity = max(similarity, posSimilarity[position.__str__()])
             for org_type in p.project_organization_type.names():
                 similarity = max(similarity, tagSimilarity[org_type])
-            return similarity
+            '''
+
+            return p.similarity_full_text
 
         # calculate name and full text similarity
         annotated_projs = project_list.annotate(similarity_name=TrigramSimilarity('project_name', keywords),
