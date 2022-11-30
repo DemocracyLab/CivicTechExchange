@@ -18,17 +18,14 @@ class MainController extends React.Component<{||}, State> {
   constructor() {
     super();
     window.addEventListener("popstate", this.loadPage.bind(this));
+    const section = this.loadPage();
     this.state = {
       headerHeight: 0,
-      currentSection: null,
+      currentSection: section,
     };
   }
 
-  componentWillMount(): void {
-    this.loadPage();
-  }
-
-  loadPage(): void {
+  loadPage(): string {
     const currentUrl: string = url.cleanDemocracyLabUrl();
     const section: string = url.getSection(currentUrl);
     if (section) {
@@ -38,7 +35,6 @@ class MainController extends React.Component<{||}, State> {
         url: window.location.href,
         fromUrl: true,
       });
-      this.setState({ currentSection: section });
     }
   }
 

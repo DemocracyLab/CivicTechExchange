@@ -78,7 +78,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     const showJoinModal =
       window.location.href.includes("signUp") && !isRSVPedForThisEventProject;
     this.state = {
-      eventProject: props.eventProject,
       showContactModal: false,
       showRSVPedToast: false,
       showCancelRSVPModal: false,
@@ -107,7 +106,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   ) {
     let state: State = { showJoinModal: false };
     if (confirmJoin) {
-      props.eventProject = eventProject;
       state.showRSVPedToast = true;
       state.isRSVPedForThisEventProject = true;
     }
@@ -506,7 +504,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
   // TODO: Remove if we're not using files
   _renderFiles(): ?Array<React$Node> {
-    const eventProject: EventProjectAPIDetails = this.props.eventProject;
+    const eventProject: EventProjectAPIDetails = this.state.eventProject;
     return (
       eventProject &&
       eventProject.event_project_files &&
