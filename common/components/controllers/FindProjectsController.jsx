@@ -35,7 +35,7 @@ class FindProjectsController extends React.PureComponent {
       "favoritesOnly",
     ]);
     if (!args.sortField) {
-      args.sortField = "-project_date_modified";
+      args.sortField = "default";
     }
 
     UniversalDispatcher.dispatch({
