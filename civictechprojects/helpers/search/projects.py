@@ -101,15 +101,16 @@ def projects_list(request):
         project_list = projects_by_legacy_city(
             project_list, query_params["location"][0]
         )
-
     project_list = project_list.distinct()
 
-    if "keyword" in query_params:
+    if "keyword" in query_params and "sortField" in query_params and query_params["sortField"][0]=="default":
         project_list = project_list.order_by('-similarity')
-    elif "sortField" in query_params:
-        project_list = sort_by_field(project_list, query_params["sortField"][0])
     else:
-        project_list = sort_by_field(project_list, "-project_date_modified")
+
+        if "sortField" not in query_params or query_params["sortField"][0]=="default":
+            project_list = sort_by_field(project_list, "-project_date_modified")
+        else:
+            project_list = sort_by_field(project_list, query_params["sortField"][0])
 
     project_count = len(project_list)
 
