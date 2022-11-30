@@ -104,13 +104,13 @@ def projects_list(request):
 
     project_list = project_list.distinct()
 
-    if "keyword" in query_params:
-        project_list = project_list.order_by('-similarity')
+    #if "keyword" in query_params:
+    #    project_list = project_list.order_by('-similarity')
 
     if "sortField" in query_params:
         project_list = sort_by_field(project_list, query_params["sortField"][0])
-    #else:
-    #    project_list = sort_by_field(project_list, "-project_date_modified")
+    else:
+        project_list = project_list.order_by('-similarity')
 
     project_count = len(project_list)
 

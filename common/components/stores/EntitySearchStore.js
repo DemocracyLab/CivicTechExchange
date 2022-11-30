@@ -70,8 +70,8 @@ export const SearchFor: Dictionary<EntitySearchConfig> = {
     },
     defaultSort: "",
     sortFields: [
-      { value: "", label: "Default" },
       { value: "-project_date_modified", label: "Date Modified" },
+      { value: "", label: "Relevancy" },
       { value: "project_name", label: "Name - Ascending" },
       { value: "-project_name", label: "Name - Descending" },
     ],
