@@ -1371,10 +1371,10 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
-"@tryghost/content-api@^1.5.2":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@tryghost/content-api/-/content-api-1.11.0.tgz#25ab0e2c5618f4ae190d5ad739611a07a551b245"
-  integrity sha512-0JTlp5Ln4BfCJzCYuT2X3MC9ZupIkRtzZaHpf9KZw7O8uOsRnO9RwjItN+lwvkoLIesMzfgrZd/tBJ4BAzeBrg==
+"@tryghost/content-api@^1.11.0":
+  version "1.11.4"
+  resolved "https://registry.yarnpkg.com/@tryghost/content-api/-/content-api-1.11.4.tgz#4a1afa6a7580eb414d82ce6bd3ca712126927fbc"
+  integrity sha512-1ShIj8i37rR/9gaenRiaGvPNAU3jAuvViD64mmVxE1cedXJjpqbaOLM8lFWaVuGUafDQrfo5tv57FN6ac51QeQ==
   dependencies:
     axios "^0.27.0"
 

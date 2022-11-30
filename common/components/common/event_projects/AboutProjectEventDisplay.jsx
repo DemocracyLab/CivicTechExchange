@@ -39,12 +39,10 @@ import ContactEventVolunteersButton from "./ContactEventVolunteersButton.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
-  viewOnly: boolean,
 |};
 
 type State = {|
   eventProject: ?EventProjectAPIDetails,
-  viewOnly: boolean,
   showJoinModal: boolean,
   positionToJoin: ?PositionInfo,
   showRSVPedToast: boolean,
@@ -81,8 +79,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     const showJoinModal =
       window.location.href.includes("signUp") && !isRSVPedForThisEventProject;
     this.state = {
-      eventProject: props.eventProject,
-      viewOnly: props.viewOnly,
       showContactModal: false,
       showRSVPedToast: false,
       showCancelRSVPModal: false,
@@ -98,13 +94,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     this.handleShowVolunteerModal = this.handleShowVolunteerModal.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({
-      eventProject: nextProps.eventProject,
-      viewOnly: nextProps.viewOnly || url.argument("embedded"),
-    });
-  }
-
   handleShowVolunteerModal(position: ?PositionInfo) {
     this.setState({
       showJoinModal: true,
@@ -118,7 +107,6 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   ) {
     let state: State = { showJoinModal: false };
     if (confirmJoin) {
-      state.eventProject = eventProject;
       state.showRSVPedToast = true;
       state.isRSVPedForThisEventProject = true;
     }
@@ -126,7 +114,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
-    const eventProject: EventProjectAPIDetails = this.state.eventProject;
+    const eventProject: EventProjectAPIDetails = this.props.eventProject;
     return (
       <div className="container Profile-root">
         <div className="row">
@@ -517,7 +505,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
   // TODO: Remove if we're not using files
   _renderFiles(): ?Array<React$Node> {
-    const eventProject: EventProjectAPIDetails = this.state.eventProject;
+    const eventProject: EventProjectAPIDetails = this.props.eventProject;
     return (
       eventProject &&
       eventProject.event_project_files &&
@@ -532,7 +520,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   }
 
   _renderTeam(): React$Node {
-    const eventProject: EventProjectAPIDetails = this.state.eventProject;
+    const eventProject: EventProjectAPIDetails = this.props.eventProject;
     const numVolunteers = eventProject?.event_project_volunteers?.length || 0;
     const groupedVolunteers = _.groupBy(
       eventProject.event_project_volunteers,
@@ -575,7 +563,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   }
 
   _renderIconList(): React$Node {
-    const eventProject: EventProjectAPIDetails = this.state.eventProject;
+    const eventProject: EventProjectAPIDetails = this.props.eventProject;
 
     const projectName: string = ProjectAPIUtils.getLocationDisplayName(
       eventProject
@@ -634,7 +622,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   }
 
   _renderLinks(): ?Array<React$Node> {
-    const eventProject: EventProjectAPIDetails = this.state.eventProject;
+    const eventProject: EventProjectAPIDetails = this.props.eventProject;
     const linkOrder = [
       LinkTypes.CODE_REPOSITORY,
       LinkTypes.FILE_REPOSITORY,
@@ -655,7 +643,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   }
 
   _renderPositions(): ?Array<React$Node> {
-    const eventProject: EventProjectAPIDetails = this.state.eventProject;
+    const eventProject: EventProjectAPIDetails = this.props.eventProject;
     return (
       eventProject &&
       eventProject.event_project_positions &&

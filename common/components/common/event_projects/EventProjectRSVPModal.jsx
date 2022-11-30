@@ -65,6 +65,10 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
     this.forceUpdate();
   }
 
+  // getDerivedStateFromProps(props: Props, state: State){
+
+  // }
+
   initStateFromProps(nextProps: Props): State {
     const noPositionOption: SelectOption = { value: "", label: "---" };
     const positionOptions: $ReadOnlyArray<SelectOption> = [
