@@ -12,6 +12,7 @@ from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache, \
     EventProjectCache
+from timezone_field import TimeZoneField
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.collections import flatten, count_occurrences
@@ -474,6 +475,7 @@ class Event(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         event_room = EventConferenceRoom.get_event_room(self)
+        time_zones = self.get_event_time_zones()
 
         event = {
             'event_agenda': self.event_agenda,
@@ -485,6 +487,7 @@ class Event(Archived):
             'event_files': list(map(lambda file: file.to_json(), other_files)),
             'event_id': self.id,
             'event_location': self.event_location,
+            'event_time_zones': list(map(lambda time_zone: time_zone.hydrate_to_json(), time_zones)),
             'event_rsvp_url': self.event_rsvp_url,
             'event_live_id': self.event_live_id,
             'event_name': self.event_name,
@@ -530,6 +533,9 @@ class Event(Archived):
     def get_event_files(self):
         return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
+    def get_event_time_zones(self):
+        return EventLocationTimeZone.objects.filter(event=self)
+
     def get_url(self):
         return section_url(FrontEndSection.AboutEvent, {'id': self.event_slug or self.id})
 
@@ -572,10 +578,39 @@ class Event(Archived):
         ProjectSearchTagsCache.refresh(event=self)
 
 
+class EventLocationTimeZone(models.Model):
+    event = models.ForeignKey(Event, related_name='event_time_zones', on_delete=models.CASCADE)
+    location_name = models.CharField(max_length=100, blank=True)
+    address_line_1 = models.CharField(max_length=200, blank=True)
+    address_line_2 = models.CharField(max_length=200, blank=True)
+    location_coords = PointField(null=True, blank=True, srid=4326, default='POINT EMPTY')
+    country = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    time_zone = TimeZoneField(null=True)
+
+    def __str__(self):
+        return '{id}: {event} - {timezone}'.format(
+            id=self.id, event=self.event.event_name, timezone=self.time_zone)
+
+    def hydrate_to_json(self):
+        return {
+            'event_id': self.event.id,
+            'address_line_1': self.address_line_1,
+            'address_line_2': self.address_line_2,
+            'time_zone': self.time_zone.__str__(),
+            'country': self.country,
+            'state': self.state,
+            'city': self.city,
+        }
+
+
 class EventProject(Archived):
     event = models.ForeignKey(Event, related_name='event_projects', on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name='project_events', on_delete=models.CASCADE)
     creator = models.ForeignKey(Contributor, related_name='created_event_projects', on_delete=models.CASCADE)
+    event_time_zone = models.ForeignKey(EventLocationTimeZone, related_name='time_zone_event_projects', null=True, on_delete=models.CASCADE)
+    is_remote = models.BooleanField(blank=True, null=True)
     goal = models.CharField(max_length=2000, blank=True)
     scope = models.CharField(max_length=2000, blank=True)
     schedule = models.CharField(max_length=2000, blank=True)
@@ -1356,6 +1391,8 @@ class RSVPVolunteerRelation(Archived):
     event = models.ForeignKey(Event, related_name='rsvp_volunteers', on_delete=models.CASCADE)
     volunteer = models.ForeignKey(Contributor, related_name='rsvp_events', on_delete=models.CASCADE)
     event_project = models.ForeignKey(EventProject, related_name='rsvp_volunteers', blank=True, null=True, on_delete=models.CASCADE)
+    time_zone = models.ForeignKey(EventLocationTimeZone, related_name='time_zone_volunteers', null=True, on_delete=models.CASCADE)
+    is_remote = models.BooleanField(blank=True, null=True)
     role = TaggableManager(blank=True, through=TaggedRSVPVolunteerRole)
     role.remote_field.related_name = "rsvp_roles"
     application_text = models.CharField(max_length=10000, blank=True)
