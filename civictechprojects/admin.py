@@ -127,6 +127,10 @@ class EventLocationTimeZoneAdmin(admin.ModelAdmin):
     list_display = ('event', 'location_name', 'time_zone', 'country', 'state', 'city', 'address_line_1', 'address_line_2')
     search_fields = ['event__event_name', 'time_zone', 'country', 'state', 'city']
     list_filter = ('event',)
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if change:
+            obj.event.recache()
 
 
 admin.site.register(Project, ProjectAdmin)
