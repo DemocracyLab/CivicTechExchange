@@ -10,6 +10,7 @@ import { EventTileAPIData } from "../../utils/EventAPIUtils.js";
 
 type Props = {|
   event: EventTileAPIData,
+  showFullDate: ?boolean,
   maxTextLength: number,
   maxIssuesCount: number,
 |};
@@ -72,11 +73,12 @@ class EventCard extends React.PureComponent<Props> {
 
   _renderEventTime(): React$Node {
     const Event: EventTileAPIData = this.props.event;
+    const momentFormat: string = this.props.showFullDate ? "LLLL" : "LT";
     return (
       <div className="EventCard-time">
         {Event.event_date_start && moment(Event.event_date_start) > moment() && (
           <h2>
-            <Moment format="LT">{Event.event_date_start}</Moment>
+            <Moment format={momentFormat}>{Event.event_date_start}</Moment>
           </h2>
         )}
       </div>
