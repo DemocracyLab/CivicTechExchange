@@ -55,6 +55,7 @@ class UpcomingEventCard extends React.Component<{||}, State> {
           key={"Upcoming-EventCard"}
           maxTextLength={140}
           maxIssuesCount={4}
+          showFullDate={true}
         />
         <div className="LandingController-next-hackathon-rsvp">
           <Button
