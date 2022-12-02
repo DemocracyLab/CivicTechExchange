@@ -31,7 +31,7 @@ class EventCard extends React.PureComponent<Props> {
         >
           {this._renderEventLogo()}
           {this._renderEventInformation()}
-          {this._renderEventTime()}
+          {this.props.showFullDate ? this._renderStartEndDateTime() : this._renderEventTime()}
         </a>
       </div>
     );
@@ -73,13 +73,33 @@ class EventCard extends React.PureComponent<Props> {
   }
 
   _renderEventTime(): React$Node {
-    const Event: EventTileAPIData = this.props.event;
-    const momentFormat: string = this.props.showFullDate ? "LLLL" : "LT";
+    const event: EventTileAPIData = this.props.event;
     return (
       <div className="EventCard-time">
-        {Event.event_date_start && moment(Event.event_date_start) > moment() && (
+        {event.event_date_start && moment(event.event_date_start) > moment() && (
           <h2>
-            <Moment format={momentFormat}>{Event.event_date_start}</Moment>
+            <Moment format="LT">{event.event_date_start}</Moment>
+          </h2>
+        )}
+      </div>
+    );
+  }
+
+  _renderStartEndDateTime(): React$Node {
+    const event: EventTileAPIData = this.props.event;
+    const dateTimeFormat: string = "LT MMM. D";
+    return (
+      <div className="EventCard-time">
+        {event.event_date_start && moment(event.event_date_start) > moment() && (
+          <h2>
+            <p>
+              Begins:<br/>
+              <Moment format={dateTimeFormat}>{event.event_date_start}</Moment>
+            </p>
+            <p>
+              Ends:<br/>
+              <Moment format={dateTimeFormat}>{event.event_date_end}</Moment>
+            </p>
           </h2>
         )}
       </div>
