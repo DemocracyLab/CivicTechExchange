@@ -31,7 +31,9 @@ class EventCard extends React.PureComponent<Props> {
         >
           {this._renderEventLogo()}
           {this._renderEventInformation()}
-          {this.props.showFullDate ? this._renderStartEndDateTime() : this._renderEventTime()}
+          {this.props.showFullDate
+            ? this._renderStartEndDateTime()
+            : this._renderEventTime()}
         </a>
       </div>
     );
@@ -91,16 +93,16 @@ class EventCard extends React.PureComponent<Props> {
     return (
       <div className="EventCard-time">
         {event.event_date_start && moment(event.event_date_start) > moment() && (
-          <h2>
+          <React.Fragment>
+            <h3>Begins:</h3>
             <p>
-              Begins:<br/>
               <Moment format={dateTimeFormat}>{event.event_date_start}</Moment>
             </p>
+            <h3>Ends:</h3>
             <p>
-              Ends:<br/>
               <Moment format={dateTimeFormat}>{event.event_date_end}</Moment>
             </p>
-          </h2>
+          </React.Fragment>
         )}
       </div>
     );
