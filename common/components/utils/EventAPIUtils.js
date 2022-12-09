@@ -5,6 +5,18 @@ import { ProjectAPIData } from "./ProjectAPIUtils.js";
 import type { FileInfo } from "../common/FileInfo.jsx";
 import type { TagDefinition } from "./ProjectAPIUtils.js";
 
+export type LocationTimezone = {|
+  id: string,
+  event_id: string,
+  location_name: string,
+  address_line_1: string,
+  address_line_2: string,
+  time_zone: string,
+  country: string,
+  state: string,
+  city: string,
+|};
+
 export type EventData = {|
   event_id: string,
   event_creator: string,
@@ -27,6 +39,7 @@ export type EventData = {|
   event_conference_url: ?string,
   event_conference_admin_url: ?string,
   event_conference_participants: ?string,
+  event_time_zones: $ReadOnlyArray<LocationTimezone>,
 |};
 
 export type EventTileAPIData = {|

@@ -593,9 +593,18 @@ class EventLocationTimeZone(models.Model):
         return '{id}: {event} - {timezone}'.format(
             id=self.id, event=self.event.event_name, timezone=self.time_zone)
 
+    def create(event, event_location_time_zone_json):
+        time_zone = EventLocationTimeZone(
+            event=event,
+            **event_location_time_zone_json
+            )        
+        return time_zone
+
     def hydrate_to_json(self):
         return {
+            'id': self.id,
             'event_id': self.event.id,
+            'location_name': self.location_name,
             'address_line_1': self.address_line_1,
             'address_line_2': self.address_line_2,
             'time_zone': self.time_zone.__str__(),
@@ -634,7 +643,7 @@ class EventProject(Archived):
         event_room = EventConferenceRoom.get_event_project_room(self)
         event_json = keys_subset(self.event.hydrate_to_json(), ['event_id', 'event_name', 'event_slug', 'event_thumbnail',
                                                                 'event_date_end', 'event_date_start', 'event_location',
-                                                                'is_activated'])
+                                                                'is_activated', 'event_time_zones'])
         project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
                                                                     'project_short_description', 'project_description',
                                                                     'project_description_solution', 'project_technologies',
@@ -1427,20 +1436,13 @@ class RSVPVolunteerRelation(Archived):
         return merge_dicts(project_json, volunteer_json)
 
     @staticmethod
-    def create(event: Event, volunteer: Contributor):
+    def create(event: Event, volunteer: Contributor, is_remote: bool, event_location_time_zone_json: object):
+        time_zone = EventLocationTimeZone.create(event, event_location_time_zone_json)
         relation = RSVPVolunteerRelation()
         relation.event = event
         relation.volunteer = volunteer
-        relation.save()
-
-        # relation.role.add(role)
-        return relation
-
-    @staticmethod
-    def create(event: Event, volunteer: Contributor):
-        relation = RSVPVolunteerRelation()
-        relation.event = event
-        relation.volunteer = volunteer
+        relation.is_remote = is_remote
+        relation.time_zone = time_zone
         relation.save()
 
         # relation.role.add(role)

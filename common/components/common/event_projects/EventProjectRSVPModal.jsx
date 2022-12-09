@@ -11,13 +11,17 @@ import TagCategory from "../tags/TagCategory.jsx";
 import TagSelector, { tagOptionDisplay } from "../tags/TagSelector.jsx";
 import { TagDefinition } from "../../utils/ProjectAPIUtils.js";
 import { SelectOption } from "../../types/SelectOption.jsx";
-import type { PositionInfo } from "../../forms/PositionInfo.jsx";
+import { PositionInfo } from "../../forms/PositionInfo.jsx";
 import EventProjectAPIUtils, {
   EventProjectAPIDetails,
 } from "../../utils/EventProjectAPIUtils.js";
+import { EventData, LocationTimezone } from "../../utils/EventAPIUtils.js";
 import type { APIResponse } from "../../utils/api.js";
+import LocationTimezoneSelector from "../events/LocationTimezoneSelector.jsx";
+import RemoteInPersonSelector from "../events/RemoteInPersonSelector.jsx";
 
 type Props = {|
+  event?: EventData,
   eventProject: EventProjectAPIDetails,
   positions: $ReadOnlyArray<PositionInfo>,
   positionToJoin: ?PositionInfo,
@@ -33,6 +37,8 @@ type State = {|
   initialPositionSelection: ?SelectOption,
   existingPositionOption: ?SelectOption,
   roleTag: ?TagDefinition,
+  isRemote: boolean,
+  locationTimeZone: LocationTimezone,
 |};
 
 const OtherRoleOption: SelectOption = { label: "Other", value: "Other" };
@@ -82,6 +88,7 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
     let state: State = {
       showModal: nextProps.showModal,
       positionOptions: positionOptions,
+      isRemote: false,
     };
 
     if (nextProps.positionToJoin) {
@@ -108,6 +115,16 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
     this.forceUpdate();
   }
 
+  onRemoteChange(isRemote: boolean): void {
+    this.state.isRemote = isRemote;
+    this.forceUpdate();
+  }
+
+  onLocationChange(locationTimezone: LocationTimezone): void {
+    this.state.locationTimeZone = locationTimezone;
+    this.forceUpdate();
+  }
+
   receiveSendConfirmation(confirmation: boolean): void {
     if (confirmation) {
       this.handleSubmit();
@@ -128,16 +145,30 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
     //   CurrentUser.userID(),
     //   this.props.projectId
     // );
-    EventProjectAPIUtils.rsvpForEventProject(
-      this.props.eventProject.event_id,
-      this.props.eventProject.project_id,
-      this.state.message,
-      this._selectedTag(),
-      (response: APIResponse) => {
-        this.closeModal(JSON.parse(response), true);
-      },
-      response => null /* TODO: Report error to user */
-    );
+    if (this.props.event) {
+      EventProjectAPIUtils.rsvpForEvent(
+        this.props.event.event_id,
+        this.state.isRemote,
+        this.state.locationTimeZone,
+        (response: APIResponse) => {
+          this.closeModal(JSON.parse(response), true);
+        },
+        response => null /* TODO: Report error to user */
+      );
+    } else {
+      EventProjectAPIUtils.rsvpForEventProject(
+        this.props.eventProject.event_id,
+        this.props.eventProject.project_id,
+        this.state.message,
+        this._selectedTag(),
+        this.state.isRemote,
+        this.state.locationTimeZone,
+        (response: APIResponse) => {
+          this.closeModal(JSON.parse(response), true);
+        },
+        response => null /* TODO: Report error to user */
+      );
+    }
   }
 
   closeModal(eventProject: EventProjectAPIDetails, submitted: boolean) {
@@ -150,8 +181,10 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     // TODO: Use ModalWrapper
-    const positions: $ReadOnlyArray<PositionInfo> =
-      this.props.eventProject?.event_project_positions || [];
+    const locations: $ReadOnlyArray<LocationTimezone> = (
+      this.props.event || this.props.eventProject
+    ).event_time_zones;
+
     return (
       <React.Fragment>
         <Modal
@@ -164,30 +197,22 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
           <Modal.Body>
             <Form>
               <Form.Group>
-                {!_.isEmpty(positions)
-                  ? this._renderExistingPositionDropdown()
-                  : null}
-                {_.isEmpty(positions) ||
-                (this.state.existingPositionOption &&
-                  this.state.existingPositionOption.value ===
-                    OtherRoleOption.value)
-                  ? this._renderOtherRoleDropdown()
-                  : null}
-                <Form.Label>
-                  {"Message: " + (this.props.conferenceUrl ? "(Optional)" : "")}
-                </Form.Label>
-                <div className="character-count">
-                  {(this.state.message || "").length} / 3000
-                </div>
-                <Form.Control
-                  as="textarea"
-                  placeholder="I'm interested in helping with this project because..."
-                  rows="4"
-                  name="message"
-                  maxLength="3000"
-                  value={this.state.message}
-                  onChange={this.handleChange}
+              {/* // TODO: Figure out why display always changes to US/PAcific when any remote option is selected */}
+              {/* TODO: Figure out why default value not shown */}
+                <RemoteInPersonSelector
+                  elementId="is_remote"
+                  isRemote={this.state.isRemote}
+                  onSelection={this.onRemoteChange.bind(this)}
                 />
+                <LocationTimezoneSelector
+                  elementId="location_time_zone"
+                  value={this.state.locationTimeZone}
+                  show_timezone={this.state.isRemote}
+                  location_timezones={locations}
+                  onSelection={this.onLocationChange.bind(this)}
+                />
+
+                {this.props.eventProject && this._renderEventProjectFields()}
               </Form.Group>
             </Form>
           </Modal.Body>
@@ -197,6 +222,36 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
               : this._renderSendCancelButtons()}
           </Modal.Footer>
         </Modal>
+      </React.Fragment>
+    );
+  }
+
+  _renderEventProjectFields(): React$Node {
+    const positions: $ReadOnlyArray<PositionInfo> =
+      this.props.eventProject?.event_project_positions || [];
+    return (
+      <React.Fragment>
+        {!_.isEmpty(positions) ? this._renderExistingPositionDropdown() : null}
+        {_.isEmpty(positions) ||
+        (this.state.existingPositionOption &&
+          this.state.existingPositionOption.value === OtherRoleOption.value)
+          ? this._renderOtherRoleDropdown()
+          : null}
+        <Form.Label>
+          {"Message: " + (this.props.conferenceUrl ? "(Optional)" : "")}
+        </Form.Label>
+        <div className="character-count">
+          {(this.state.message || "").length} / 3000
+        </div>
+        <Form.Control
+          as="textarea"
+          placeholder="I'm interested in helping with this project because..."
+          rows="4"
+          name="message"
+          maxLength="3000"
+          value={this.state.message}
+          onChange={this.handleChange}
+        />
       </React.Fragment>
     );
   }
