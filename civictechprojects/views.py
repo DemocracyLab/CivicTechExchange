@@ -243,8 +243,9 @@ def rsvp_for_event(request, event_id):
     if not user.email_verified:
         return HttpResponse(status=403)
 
+    body = json.loads(request.body)
     event = Event.get_by_id_or_slug(event_id)
-    RSVPVolunteerRelation.create(event, user)
+    RSVPVolunteerRelation.create(event, user, body['isRemote'], body['locationTimeZone'])
 
     notify_rsvped_volunteer(event, user)
     user.purge_cache()
@@ -282,8 +283,9 @@ def rsvp_for_event_project(request, event_id, project_id):
     # If rsvp already created, do nothing
     rsvp = RSVPVolunteerRelation.get_for_event_project(event_project, user)
     if rsvp is None:
-        rsvp = RSVPVolunteerRelation.create(event, user)
+        # TODO: Test RSVP-ing for project after event
         body = json.loads(request.body)
+        rsvp = RSVPVolunteerRelation.create(event, user, body['isRemote'], body['locationTimeZone'])
         rsvp.event_project = event_project
         rsvp.application_text = body['applicationText']
         rsvp.save()

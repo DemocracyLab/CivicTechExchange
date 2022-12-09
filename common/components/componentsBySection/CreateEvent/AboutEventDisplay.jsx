@@ -272,6 +272,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     );
   }
 
+  // TODO: Show RSVP timezone modal when there are timezones to pick from
   _renderRSVPAsVolunteerButton(): ?$React$Node {
     // TODO: Add spinner while RSVP call is in progress
     let buttonConfig: Dictionary<any> = {};
