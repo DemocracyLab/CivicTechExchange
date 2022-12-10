@@ -17,13 +17,15 @@ type Props = {|
   useFormFieldsStore: Boolean,
 |};
 type State = {|
-  isRemote: boolean,
+  option: string,
 |};
 
-const RemoteInPersonOptions: $ReadOnlyArray<KeyValuePair<boolean>> = [
-  ["In-Person", false],
-  ["Remote", true],
-];
+// Mappings between In-Person/Remote options and their mapping to the 'isRemote' value
+const RemoteInPersonOptions: Dictionary<boolean> = {
+  "In-Person": false,
+  "Remote": true,
+};
+const OptionsByRemoteState: Dictionary<string> = _.invert(RemoteInPersonOptions);
 
 /**
  * Dropdown selector for selecting remote/in-person for an event
@@ -33,8 +35,12 @@ class RemoteInPersonSelector extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      isRemote: RemoteInPersonSelector.getSelected(props),
+      option: RemoteInPersonSelector.getSelected(props),
     };
+  }
+
+  componentWillReceiveProps(nextProps: Props): void {
+    this.setState({option: RemoteInPersonSelector.getSelected(nextProps)});
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
@@ -43,19 +49,19 @@ class RemoteInPersonSelector extends React.Component<Props, State> {
 
   static calculateState(prevState: State, props: Props): State {
     let state: State = _.clone(prevState) || {};
-    state.isRemote = RemoteInPersonSelector.getSelected(props);
+    state.option = RemoteInPersonSelector.getSelected(props);
     return state;
   }
 
-  static getSelected(props: Props): LocationTimezone {
+  static getSelected(props: Props): string {
     return props.useFormFieldsStore
       ? FormFieldsStore.getFormFieldValue(props.elementId)
-      : props.isRemote.toString();
+      : OptionsByRemoteState[props.isRemote];
   }
 
-  handleSelection(remoteInPersonOption: KeyValuePair<boolean>) {
+  handleSelection(option: string) {
     // TODO: Send to flux store
-    this.props.onSelection(remoteInPersonOption[1]);
+    this.props.onSelection(RemoteInPersonOptions[option]);
   }
 
   render(): React$Node {
@@ -66,10 +72,10 @@ class RemoteInPersonSelector extends React.Component<Props, State> {
           isSearchable={true}
           isClearable={false}
           isMultiSelect={false}
-          options={RemoteInPersonOptions}
-          labelGenerator={(kvp: KeyValuePair<boolean>) => kvp[0]}
-          valueStringGenerator={(kvp: KeyValuePair<boolean>) => kvp[1].toString()}
-          selected={this.state.isRemote}
+          options={_.keys(RemoteInPersonOptions)}
+          labelGenerator={(key: string) => key}
+          valueStringGenerator={(key: string) => RemoteInPersonOptions[key].toString()}
+          selected={this.state.option}
           onSelection={this.handleSelection.bind(this)}
         />
       </React.Fragment>
