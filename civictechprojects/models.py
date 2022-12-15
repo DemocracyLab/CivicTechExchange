@@ -1437,7 +1437,7 @@ class RSVPVolunteerRelation(Archived):
 
     @staticmethod
     def create(event: Event, volunteer: Contributor, is_remote: bool, event_location_time_zone_json: object):
-        time_zone = EventLocationTimeZone.create(event, event_location_time_zone_json)
+        time_zone = EventLocationTimeZone.create(event, event_location_time_zone_json) if event_location_time_zone_json else None
         relation = RSVPVolunteerRelation()
         relation.event = event
         relation.volunteer = volunteer
