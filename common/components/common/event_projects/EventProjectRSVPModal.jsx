@@ -72,6 +72,19 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
   }
 
   initStateFromProps(nextProps: Props): State {
+    let state: State = {
+      showModal: nextProps.showModal,
+      isRemote: false,
+    };
+
+    if (nextProps.eventProject) {
+      state = Object.assign(state, this._initPositionStateFromProps(nextProps));
+    }
+
+    return state;
+  }
+
+  _initPositionStateFromProps(nextProps: Props): State {
     const noPositionOption: SelectOption = { value: "", label: "---" };
     const positionOptions: $ReadOnlyArray<SelectOption> = [
       noPositionOption,
@@ -85,10 +98,8 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
         .concat(OtherRoleOption)
     );
 
-    let state: State = {
-      showModal: nextProps.showModal,
+    const state: State = {
       positionOptions: positionOptions,
-      isRemote: false,
     };
 
     if (nextProps.positionToJoin) {
@@ -151,7 +162,7 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
         this.state.isRemote,
         this.state.locationTimeZone,
         (response: APIResponse) => {
-          this.closeModal(JSON.parse(response), true);
+          this.closeModal(null, true);
         },
         response => null /* TODO: Report error to user */
       );
@@ -176,7 +187,7 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
       isSending: false,
       existingPositionOption: null,
     });
-    this.props.handleClose(eventProject, submitted);
+    this.props.handleClose(submitted, eventProject);
   }
 
   render(): React$Node {
@@ -185,6 +196,10 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
       this.props.event || this.props.eventProject
     ).event_time_zones;
 
+    const title: string = this.props.eventProject
+      ? "Select a Role for the Team"
+      : "Select Your Location/Timezone";
+
     return (
       <React.Fragment>
         <Modal
@@ -192,13 +207,11 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
           onHide={this.closeModal.bind(this, this.props.eventProject, false)}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Select a Role for the Team</Modal.Title>
+            <Modal.Title>{title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
               <Form.Group>
-              {/* // TODO: Figure out why display always changes to US/PAcific when any remote option is selected */}
-              {/* TODO: Figure out why default value not shown */}
                 <RemoteInPersonSelector
                   elementId="is_remote"
                   isRemote={this.state.isRemote}
@@ -292,7 +305,11 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
   }
 
   _fieldsFilled(): boolean {
-    return this._selectedTag() && this.state.message;
+    let filled: boolean = !!this.state.locationTimeZone;
+    if (this.props.eventProject) {
+      filled = filled && this._selectedTag() && this.state.message;
+    }
+    return filled;
   }
 
   _selectedExistingPositionTag(): ?string {
