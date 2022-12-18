@@ -11,6 +11,7 @@ import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import type { FormFieldValidator } from "../../utils/validation.js";
 import FormFieldsStore from "../../stores/FormFieldsStore.js";
 import type { EventProjectAPIDetails } from "../../utils/EventProjectAPIUtils.js";
+import type { EventData } from "../../utils/EventAPIUtils.js";
 import InlineFormError from "../../forms/InlineFormError.jsx";
 import CurrentUser, {
   UserContext,
@@ -19,6 +20,9 @@ import CurrentUser, {
 import FormSelector from "../../common/selection/FormSelector.jsx";
 import HiddenFormFields from "../../forms/HiddenFormFields.jsx";
 import url from "../../utils/url.js";
+import RemoteInPersonSelector from "../../common/events/RemoteInPersonSelector.jsx";
+import LocationTimezoneSelector from "../../common/events/LocationTimezoneSelector.jsx";
+import EventAPIUtils, { LocationTimezone } from "../../utils/EventAPIUtils.js";
 
 type FormFields = {|
   project_id: number,
@@ -30,6 +34,7 @@ type Props = {|
 |} & FormPropsBase<FormFields>;
 
 type State = {|
+  event: ?EventData,
   owned_projects: $ReadOnlyArray<MyProjectData>,
   isAlreadySelected: boolean,
   formIsValid: boolean,
@@ -45,6 +50,12 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
     const userContext: UserContext = CurrentUser.userContext();
     const owned_projects: $ReadOnlyArray<MyProjectData> =
       userContext.owned_projects;
+    if (!props.project) {
+      const eventId: string = url.argument("event_id");
+      EventAPIUtils.fetchEventDetails(eventId, (event: EventData) =>
+        this.setState({ event }, null)
+      );
+    }
     const projectId: ?number = url.argument("project_id");
     const formFields: FormFields = {
       project_id: projectId,
@@ -55,6 +66,7 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
         ),
     };
 
+    // TODO: Add validations for location/timezone
     const validations: $ReadOnlyArray<FormFieldValidator<FormFields>> = [
       {
         fieldName: "project",
@@ -93,6 +105,7 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
     if (prevState?.formFields) {
       let state: State = _.clone(prevState) || {};
       state.formFields.project = FormFieldsStore.getFormFieldValue("project");
+      state.isRemote = FormFieldsStore.getFormFieldValue("is_remote");
       state.formFields.project_id = state.formFields.project?.project_id;
       return state;
     }
@@ -100,10 +113,14 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
   }
 
   render(): React$Node {
+    const locations: $ReadOnlyArray<LocationTimezone> = (
+      this.state.event || this.props.project
+    )?.event_time_zones;
     return (
       <div className="EditProjectForm-root">
         <DjangoCSRFToken />
 
+        {/* TODO: Make this Form.Group? */}
         <div className="form-group">
           <label>Please select one project to submit to the hackathon*</label>
           <HiddenFormFields
@@ -125,6 +142,27 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
           />
           <InlineFormError id="project" />
         </div>
+        {locations && (
+          // TODO: Read successfully from these fields
+          <React.Fragment>
+            <div className="form-group">
+              <RemoteInPersonSelector
+                elementId="is_remote"
+                isRemote={this.state.isRemote}
+                useFormFieldsStore={true}
+              />
+            </div>
+            <div className="form-group">
+              <LocationTimezoneSelector
+                elementId="event_time_zone"
+                value={this.state.locationTimeZone}
+                show_timezone={this.state.isRemote}
+                location_timezones={locations}
+                useFormFieldsStore={true}
+              />
+            </div>
+          </React.Fragment>
+        )}
       </div>
     );
   }

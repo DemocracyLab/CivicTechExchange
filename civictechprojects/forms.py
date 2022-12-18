@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group, NameRecord, \
-    EventProject, EventConferenceRoom
+    EventProject, EventConferenceRoom, EventLocationTimeZone
 from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification, send_group_creation_notification, \
     send_event_creation_notification, notify_project_owners_event_rsvp
@@ -359,6 +359,14 @@ class EventProjectCreationForm(ModelForm):
             fields_changed = True
             recache_linked = True
 
+        event_time_zone_value = read_form_field(form, 'event_time_zone')
+        if event_time_zone_value:
+            new_event_time_zone_id = int(event_time_zone_value)
+            if not event_project.event_time_zone or (new_event_time_zone_id != event_project.event_time_zone.id):
+                event_project.event_time_zone = EventLocationTimeZone.objects.get(id=new_event_time_zone_id)
+                fields_changed = True
+
+        fields_changed |= read_form_field_boolean(event_project, form, 'is_remote')
         fields_changed |= read_form_field_string(event_project, form, 'goal')
         fields_changed |= read_form_field_string(event_project, form, 'scope')
         fields_changed |= read_form_field_string(event_project, form, 'schedule')
