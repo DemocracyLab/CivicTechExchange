@@ -60,8 +60,14 @@ class RemoteInPersonSelector extends React.Component<Props, State> {
   }
 
   handleSelection(option: string) {
-    // TODO: Send to flux store
-    this.props.onSelection(RemoteInPersonOptions[option]);
+    this.props.onSelection && this.props.onSelection(RemoteInPersonOptions[option]);
+    if (this.props.useFormFieldsStore) {
+      UniversalDispatcher.dispatch({
+        type: "UPDATE_FORM_FIELD",
+        fieldName: this.props.elementId,
+        fieldValue: option,
+      });
+    }
   }
 
   render(): React$Node {
@@ -69,6 +75,7 @@ class RemoteInPersonSelector extends React.Component<Props, State> {
       <React.Fragment>
         <Selector
           id={this.props.elementId || "is_remote"}
+          placeholder="Select RSVP Type"
           isSearchable={true}
           isClearable={false}
           isMultiSelect={false}

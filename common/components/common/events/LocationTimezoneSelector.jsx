@@ -10,6 +10,7 @@ import type { LocationTimezone } from "../../utils/EventAPIUtils.js";
 import Selector from "../selection/Selector.jsx";
 import _ from "lodash";
 
+// TODO: camelCase
 type Props = {|
   elementId: string,
   location_timezones: $ReadOnlyArray<LocationTimezone>,
@@ -60,23 +61,25 @@ class LocationTimezoneSelector extends React.Component<Props, State> {
       : props.value;
   }
 
-  // pushUpdates(tags: $ReadOnlyArray<TagDefinition>): void {
-  //   this.props.onSelection && this.props.onSelection(tags);
-  //   if (this.props.useFormFieldsStore) {
-  //     UniversalDispatcher.dispatch({
-  //       type: "UPDATE_FORM_FIELD",
-  //       fieldName: this.props.elementId,
-  //       fieldValue: tags,
-  //     });
-  //   }
-  // }
+  pushUpdates(tags: $ReadOnlyArray<TagDefinition>): void {
+    this.props.onSelection && this.props.onSelection(tags);
+    if (this.props.useFormFieldsStore) {
+      UniversalDispatcher.dispatch({
+        type: "UPDATE_FORM_FIELD",
+        fieldName: this.props.elementId,
+        fieldValue: tags,
+      });
+    }
+  }
 
   // TODO: Replace with Selector component
   render(): React$Node {
+    const placeholder: string = this.props.show_timezone ? "Select Time" : "Select Location";
     return (
       <React.Fragment>
         <Selector
           id={this.props.elementId || "location_timezone"}
+          placeholder={placeholder}
           isSearchable={true}
           isClearable={false}
           isMultiSelect={false}
@@ -86,7 +89,7 @@ class LocationTimezoneSelector extends React.Component<Props, State> {
           }
           valueStringGenerator={(tz: LocationTimezone) => tz.id}
           selected={this.state.value}
-          onSelection={this.props.onSelection}
+          onSelection={this.pushUpdates.bind(this)}
         />
       </React.Fragment>
     );
