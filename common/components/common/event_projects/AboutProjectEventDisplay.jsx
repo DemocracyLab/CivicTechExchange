@@ -113,8 +113,8 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   }
 
   confirmJoinProject(
-    eventProject: EventProjectAPIDetails,
-    confirmJoin: boolean
+    confirmJoin: boolean,
+    eventProject: EventProjectAPIDetails
   ) {
     let state: State = { showJoinModal: false };
     if (confirmJoin) {
