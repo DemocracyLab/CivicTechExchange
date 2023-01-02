@@ -212,18 +212,22 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
           <Modal.Body>
             <Form>
               <Form.Group>
-                <RemoteInPersonSelector
-                  elementId="is_remote"
-                  isRemote={this.state.isRemote}
-                  onSelection={this.onRemoteChange.bind(this)}
-                />
-                <LocationTimezoneSelector
-                  elementId="location_time_zone"
-                  value={this.state.locationTimeZone}
-                  show_timezone={this.state.isRemote}
-                  location_timezones={locations}
-                  onSelection={this.onLocationChange.bind(this)}
-                />
+                <div className="form-group">
+                  <RemoteInPersonSelector
+                    elementId="is_remote"
+                    isRemote={this.state.isRemote}
+                    onSelection={this.onRemoteChange.bind(this)}
+                  />
+                </div>
+                <div className="form-group">
+                  <LocationTimezoneSelector
+                    elementId="location_time_zone"
+                    value={this.state.locationTimeZone}
+                    show_timezone={this.state.isRemote}
+                    location_timezones={locations}
+                    onSelection={this.onLocationChange.bind(this)}
+                  />
+                </div>
 
                 {this.props.eventProject && this._renderEventProjectFields()}
               </Form.Group>
