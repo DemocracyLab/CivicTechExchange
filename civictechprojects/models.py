@@ -665,6 +665,9 @@ class EventProject(Archived):
             'event_project_links': list(map(lambda link: link.to_json(), links)),
         })
 
+        if self.event_time_zone is not None:
+            event_project_json['event_time_zone'] = self.event_time_zone.hydrate_to_json()
+
         if event_room is not None:
             event_project_json['event_conference_url'] = event_room.join_url
             event_project_json['event_conference_admin_url'] = event_room.admin_url
