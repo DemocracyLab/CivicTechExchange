@@ -186,16 +186,16 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
                   !this.state.isVolunteerRSVPed &&
+                  this._renderRSVPAsProjectOwnerButton()}
+                {!this.props.viewOnly &&
+                  !this.state.isPastEvent &&
+                  !this.state.isVolunteerRSVPed &&
                   !this.state.isProjectOwnerRSVPed &&
                   this._renderRSVPAsVolunteerButton()}
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
                   this.state.isVolunteerRSVPedForEventOnly &&
                   this._renderCancelVolunteerRSVPButton()}
-                {!this.props.viewOnly &&
-                  !this.state.isPastEvent &&
-                  !this.state.isVolunteerRSVPed &&
-                  this._renderRSVPAsProjectOwnerButton()}
               </div>
             </div>
             <div className="col-xs-12 col-lg-8 AboutEvent-splash">
@@ -296,7 +296,9 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         : () => {
             // If single location, RSVP then show post-RSVP modal
             EventProjectAPIUtils.rsvpForEvent(
-              this.props.event.event_id, false, null,
+              this.props.event.event_id,
+              false,
+              null,
               response => {
                 this.setState({
                   showPostRSVPModal: true,
@@ -334,7 +336,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         <EventProjectRSVPModal
           event={this.state.event}
           showModal={this.state.showRSVPLocationModal}
-          handleClose={(submitted) => this.handleRSVPClose(submitted)}
+          handleClose={submitted => this.handleRSVPClose(submitted)}
           conferenceUrl={
             this.state?.event?.event_conference_admin_url ||
             this.state?.event?.event_conference_url
@@ -347,7 +349,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           type="button"
           {...buttonConfig}
         >
-          RSVP as Project Volunteer
+          RSVP | As a Volunteer
         </Button>
       </React.Fragment>
     );
@@ -458,7 +460,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           type="button"
           {...buttonConfig}
         >
-          RSVP as Project Leader
+          RSVP | As a Project Leader
         </Button>
       </React.Fragment>
     );
