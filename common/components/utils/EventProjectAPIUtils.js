@@ -9,6 +9,7 @@ import {
   APIResponse,
   VolunteerUserData,
 } from "./ProjectAPIUtils.js";
+import { LocationTimezone } from "./EventAPIUtils.js";
 import apiHelper from "./api.js";
 
 export type VolunteerRSVPDetailsAPIData = {|
@@ -38,6 +39,7 @@ export type EventProjectAPIDetails = {|
   event_thumbnail: FileInfo,
   event_slug: string,
   event_time_zones: $ReadOnlyArray<LocationTimezone>,
+  event_time_zone: ?LocationTimezone,
   project_id: number,
   project_description: string,
   project_description_solution: ?string,

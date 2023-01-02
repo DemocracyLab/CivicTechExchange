@@ -583,6 +583,14 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
+        {eventProject.event_time_zone && (
+          <div className="AboutProject-icon-row">
+            <i className={Glyph(GlyphStyles.Clock, GlyphSizes.LG)} />
+            <p className="AboutProject-icon-text">
+              {eventProject.event_time_zone.time_zone + " Time Zone"}
+            </p>
+          </div>
+        )}
         <div className="AboutProject-icon-row">
           <i className={Glyph(GlyphStyles.LaptopCode, GlyphSizes.LG)} />
           <p className="AboutProject-icon-text">
