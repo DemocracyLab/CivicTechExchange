@@ -26,6 +26,8 @@ import EventAPIUtils, { LocationTimezone } from "../../utils/EventAPIUtils.js";
 
 type FormFields = {|
   project_id: number,
+  is_remote: boolean,
+  event_time_zone: LocationTimezone
 |};
 
 type Props = {|
@@ -75,6 +77,22 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
           return valid;
         },
         errorMessage: "Please Select Project",
+      },
+      {
+        fieldName: "is_remote",
+        checkFunc: (formFields: FormFields) => {
+          const valid: boolean = !_.isEmpty(formFields["is_remote"]);
+          return valid;
+        },
+        errorMessage: "Please Select Remote/In-Person",
+      },
+      {
+        fieldName: "event_time_zone",
+        checkFunc: (formFields: FormFields) => {
+          const valid: boolean = !_.isEmpty(formFields["event_time_zone"]);
+          return valid;
+        },
+        errorMessage: "Please Select Location/Timezone",
       },
     ];
 
@@ -145,7 +163,6 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
         </div>
         {locations && (
           // TODO: Read successfully from these fields
-          // TODO: Error message for not selecting
           <React.Fragment>
             <div className="form-group">
               <RemoteInPersonSelector
@@ -153,6 +170,7 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
                 isRemote={this.state.isRemote}
                 useFormFieldsStore={true}
               />
+              <InlineFormError id="is_remote" />
             </div>
             <div className="form-group">
               <LocationTimezoneSelector
@@ -162,6 +180,7 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
                 location_timezones={locations}
                 useFormFieldsStore={true}
               />
+              <InlineFormError id="event_time_zone" />
             </div>
           </React.Fragment>
         )}
