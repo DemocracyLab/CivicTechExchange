@@ -74,7 +74,6 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
   initStateFromProps(nextProps: Props): State {
     let state: State = {
       showModal: nextProps.showModal,
-      isRemote: false,
     };
 
     if (nextProps.eventProject) {

@@ -130,6 +130,7 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
           />
           <FormSelector
             id="project"
+            placeholder="Select Project"
             isSearchable={true}
             isClearable={false}
             isMultiSelect={false}
@@ -144,6 +145,7 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
         </div>
         {locations && (
           // TODO: Read successfully from these fields
+          // TODO: Error message for not selecting
           <React.Fragment>
             <div className="form-group">
               <RemoteInPersonSelector
