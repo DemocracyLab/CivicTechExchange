@@ -155,7 +155,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       urlHelper.section(Section.CreateEventProject, {
         event_id: eventProject.event_id,
         project_id: eventProject.project_id,
-      }) + "?step=2";
+      });
 
     return (
       <div className="AboutProjectEvent-top-content">

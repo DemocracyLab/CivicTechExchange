@@ -49,6 +49,7 @@ type State = {|
 class CreateEventProjectSelect extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
+    const eventProject: EventProjectAPIDetails = props.project;
     const userContext: UserContext = CurrentUser.userContext();
     const owned_projects: $ReadOnlyArray<MyProjectData> =
       userContext.owned_projects;
@@ -66,9 +67,10 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
         owned_projects.find(
           (project: MyProjectData) => project.project_id == projectId
         ),
+        is_remote: eventProject?.is_remote,
+        event_time_zone: eventProject?.event_time_zone,
     };
 
-    // TODO: Add validations for location/timezone
     const validations: $ReadOnlyArray<FormFieldValidator<FormFields>> = [
       {
         fieldName: "project",
@@ -81,7 +83,7 @@ class CreateEventProjectSelect extends React.Component<Props, State> {
       {
         fieldName: "is_remote",
         checkFunc: (formFields: FormFields) => {
-          const valid: boolean = !_.isEmpty(formFields["is_remote"]);
+          const valid: boolean = !_.isUndefined(formFields["is_remote"]);
           return valid;
         },
         errorMessage: "Please Select Remote/In-Person",
