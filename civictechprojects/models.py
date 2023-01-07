@@ -659,6 +659,7 @@ class EventProject(Archived):
             'event_project_scope': self.scope,
             'event_project_onboarding_notes': self.onboarding_notes,
             'event_project_creator': self.creator.id,
+            'is_remote': self.is_remote,
             'event_project_positions': list(map(lambda position: position.to_json(), positions)),
             'event_project_volunteers': list(map(lambda rsvp: rsvp.to_json(), rsvps)),
             'event_project_files': list(map(lambda file: file.to_json(), files)),
