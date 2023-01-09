@@ -566,17 +566,27 @@ class Event(Archived):
         projects = Project.objects.filter(project_events__event=self, project_events__deleted=False, is_searchable=True)
         return projects
 
+    def get_linked_event_projects(self):
+        event_projects = EventProject.objects.filter(event=self, deleted=False)
+        return event_projects
+
     def update_linked_items(self):
         # Recache linked projects
         projects = self.get_linked_projects()
+        event_projects = self.get_linked_event_projects()
         if projects:
             for project in projects:
                 project.recache(recache_linked=False)
+        if event_projects:
+            for event_project in event_projects:
+                event_project.recache()
 
-    def recache(self):
+    def recache(self, recache_linked=False):
         hydrated_event = self._hydrate_to_json()
         EventCache.refresh(self, hydrated_event)
         ProjectSearchTagsCache.refresh(event=self)
+        if recache_linked:
+            self.update_linked_items()
 
 
 class EventLocationTimeZone(models.Model):
