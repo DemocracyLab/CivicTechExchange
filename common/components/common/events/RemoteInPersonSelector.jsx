@@ -57,7 +57,7 @@ class RemoteInPersonSelector extends React.Component<Props, State> {
     const value: boolean = props.useFormFieldsStore
     ? FormFieldsStore.getFormFieldValue(props.elementId)
     : props.isRemote;
-    return !_.isUndefined(value) ? OptionsByRemoteState[value.toString()] : undefined;
+    return !_.isNil(value) ? OptionsByRemoteState[value.toString()] : undefined;
   }
 
   handleSelection(option: string) {
