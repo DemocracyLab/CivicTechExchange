@@ -629,7 +629,7 @@ class EventProject(Archived):
     event = models.ForeignKey(Event, related_name='event_projects', on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name='project_events', on_delete=models.CASCADE)
     creator = models.ForeignKey(Contributor, related_name='created_event_projects', on_delete=models.CASCADE)
-    event_time_zone = models.ForeignKey(EventLocationTimeZone, related_name='time_zone_event_projects', null=True, on_delete=models.CASCADE)
+    event_time_zone = models.ForeignKey(EventLocationTimeZone, related_name='time_zone_event_projects', null=True, blank=True, on_delete=models.CASCADE)
     is_remote = models.BooleanField(blank=True, null=True)
     goal = models.CharField(max_length=2000, blank=True)
     scope = models.CharField(max_length=2000, blank=True)
