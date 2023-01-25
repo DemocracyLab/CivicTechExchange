@@ -9,6 +9,7 @@ import {
   APIResponse,
   VolunteerUserData,
 } from "./ProjectAPIUtils.js";
+import { LocationTimezone } from "./EventAPIUtils.js";
 import apiHelper from "./api.js";
 
 export type VolunteerRSVPDetailsAPIData = {|
@@ -37,6 +38,8 @@ export type EventProjectAPIDetails = {|
   event_location: string,
   event_thumbnail: FileInfo,
   event_slug: string,
+  event_time_zones: $ReadOnlyArray<LocationTimezone>,
+  event_time_zone: ?LocationTimezone,
   project_id: number,
   project_description: string,
   project_description_solution: ?string,
@@ -45,6 +48,7 @@ export type EventProjectAPIDetails = {|
   project_name: string,
   project_thumbnail: ?FileInfo,
   project_thumbnail_video: ?LinkInfo,
+  is_remote: boolean,
   is_activated: boolean,
   event_conference_url: ?string,
   event_conference_admin_url: ?string,
@@ -90,11 +94,18 @@ export default class EventProjectAPIUtils {
 
   static rsvpForEvent(
     eventId: number,
+    isRemote: boolean,
+    locationTimeZone: LocationTimezone,
     successCallback: ?(APIResponse) => void,
     errCallback: ?(APIError) => void
   ): void {
     const url: string = `/api/event/${eventId}/rsvp/`;
-    return apiHelper.post(url, {}, successCallback, errCallback);
+    return apiHelper.post(
+      url,
+      { isRemote: isRemote, locationTimeZone: locationTimeZone },
+      successCallback,
+      errCallback
+    );
   }
 
   static rsvpEventCancel(
@@ -111,13 +122,20 @@ export default class EventProjectAPIUtils {
     projectId: number,
     message: string,
     roleTag: string,
+    isRemote: boolean,
+    locationTimeZone: LocationTimezone,
     successCallback: ?(APIResponse) => void,
     errCallback: ?(APIError) => void
   ): void {
     const url: string = `/api/event/${eventId}/projects/${projectId}/rsvp/`;
     return apiHelper.post(
       url,
-      { applicationText: message, roleTag: roleTag },
+      {
+        applicationText: message,
+        roleTag: roleTag,
+        isRemote: isRemote,
+        locationTimeZone: locationTimeZone,
+      },
       successCallback,
       errCallback
     );

@@ -56,6 +56,7 @@ class EventCard extends React.PureComponent<Props> {
   //TODO: add organizer field to create event form/db record so we can use that instead
   _renderEventInformation(): React$Node {
     const Event: EventTileAPIData = this.props.event;
+    // TODO: List timezones here
     const location: string = Event.event_location;
     return (
       <div className="EventCard-info">
