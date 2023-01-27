@@ -233,7 +233,7 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            {this.props.conferenceUrl
+            {(this.props.event?.is_activated && this.props.conferenceUrl)
               ? this._renderJoinVideoButton()
               : this._renderSendCancelButtons()}
           </Modal.Footer>
