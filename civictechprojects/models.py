@@ -11,6 +11,7 @@ from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache, \
     EventProjectCache
+from timezone_field import TimeZoneField
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
 from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.collections import flatten, count_occurrences
@@ -250,8 +251,9 @@ class Project(Archived):
             self.update_linked_items()
 
     def update_linked_items(self):
-        # Recache events, but only if project is searchable
+        # Recache events and project tags, but only if project is searchable
         if self.is_searchable:
+            ProjectSearchTagsCache.refresh()
             owned_event_projects = self.get_project_event_projects()
             for ep in owned_event_projects:
                 ep.recache()
@@ -474,17 +476,19 @@ class Event(Archived):
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
         event_room = EventConferenceRoom.get_event_room(self)
+        time_zones = self.get_event_time_zones()
 
         event = {
             'event_agenda': self.event_agenda,
             'event_creator': self.event_creator.id,
-            'event_date_end': self.event_date_end.__str__(),
-            'event_date_modified': self.event_date_modified.__str__(),
-            'event_date_start': self.event_date_start.__str__(),
+            'event_date_end': self.event_date_end.isoformat(timespec='seconds'),
+            'event_date_modified': self.event_date_modified.isoformat(timespec='seconds'),
+            'event_date_start': self.event_date_start.isoformat(timespec='seconds'),
             'event_description': self.event_description,
             'event_files': list(map(lambda file: file.to_json(), other_files)),
             'event_id': self.id,
             'event_location': self.event_location,
+            'event_time_zones': list(map(lambda time_zone: time_zone.hydrate_to_json(), time_zones)),
             'event_rsvp_url': self.event_rsvp_url,
             'event_live_id': self.event_live_id,
             'event_name': self.event_name,
@@ -530,6 +534,9 @@ class Event(Archived):
     def get_event_files(self):
         return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
+    def get_event_time_zones(self):
+        return EventLocationTimeZone.objects.filter(event=self)
+
     def get_url(self):
         return section_url(FrontEndSection.AboutEvent, {'id': self.event_slug or self.id})
 
@@ -559,23 +566,71 @@ class Event(Archived):
         projects = Project.objects.filter(project_events__event=self, project_events__deleted=False, is_searchable=True)
         return projects
 
+    def get_linked_event_projects(self):
+        event_projects = EventProject.objects.filter(event=self, deleted=False)
+        return event_projects
+
     def update_linked_items(self):
         # Recache linked projects
         projects = self.get_linked_projects()
+        event_projects = self.get_linked_event_projects()
         if projects:
             for project in projects:
                 project.recache(recache_linked=False)
+        if event_projects:
+            for event_project in event_projects:
+                event_project.recache()
 
-    def recache(self):
+    def recache(self, recache_linked=False):
         hydrated_event = self._hydrate_to_json()
         EventCache.refresh(self, hydrated_event)
         ProjectSearchTagsCache.refresh(event=self)
+        if recache_linked:
+            self.update_linked_items()
+
+
+class EventLocationTimeZone(models.Model):
+    event = models.ForeignKey(Event, related_name='event_time_zones', on_delete=models.CASCADE)
+    location_name = models.CharField(max_length=100, blank=True)
+    address_line_1 = models.CharField(max_length=200, blank=True)
+    address_line_2 = models.CharField(max_length=200, blank=True)
+    location_coords = PointField(null=True, blank=True, srid=4326, default='POINT EMPTY')
+    country = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    time_zone = TimeZoneField(null=True)
+
+    def __str__(self):
+        return '{id}: {event} - {timezone}'.format(
+            id=self.id, event=self.event.event_name, timezone=self.time_zone)
+
+    def create(event, event_location_time_zone_json):
+        time_zone = EventLocationTimeZone(
+            event=event,
+            **event_location_time_zone_json
+            )        
+        return time_zone
+
+    def hydrate_to_json(self):
+        return {
+            'id': self.id,
+            'event_id': self.event.id,
+            'location_name': self.location_name,
+            'address_line_1': self.address_line_1,
+            'address_line_2': self.address_line_2,
+            'time_zone': self.time_zone.__str__(),
+            'country': self.country,
+            'state': self.state,
+            'city': self.city,
+        }
 
 
 class EventProject(Archived):
     event = models.ForeignKey(Event, related_name='event_projects', on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name='project_events', on_delete=models.CASCADE)
     creator = models.ForeignKey(Contributor, related_name='created_event_projects', on_delete=models.CASCADE)
+    event_time_zone = models.ForeignKey(EventLocationTimeZone, related_name='time_zone_event_projects', null=True, blank=True, on_delete=models.CASCADE)
+    is_remote = models.BooleanField(blank=True, null=True)
     goal = models.CharField(max_length=2000, blank=True)
     scope = models.CharField(max_length=2000, blank=True)
     schedule = models.CharField(max_length=2000, blank=True)
@@ -599,7 +654,7 @@ class EventProject(Archived):
         event_room = EventConferenceRoom.get_event_project_room(self)
         event_json = keys_subset(self.event.hydrate_to_json(), ['event_id', 'event_name', 'event_slug', 'event_thumbnail',
                                                                 'event_date_end', 'event_date_start', 'event_location',
-                                                                'is_activated'])
+                                                                'is_activated', 'event_time_zones'])
         project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
                                                                     'project_short_description', 'project_description',
                                                                     'project_description_solution', 'project_technologies',
@@ -614,11 +669,15 @@ class EventProject(Archived):
             'event_project_scope': self.scope,
             'event_project_onboarding_notes': self.onboarding_notes,
             'event_project_creator': self.creator.id,
+            'is_remote': self.is_remote,
             'event_project_positions': list(map(lambda position: position.to_json(), positions)),
             'event_project_volunteers': list(map(lambda rsvp: rsvp.to_json(), rsvps)),
             'event_project_files': list(map(lambda file: file.to_json(), files)),
             'event_project_links': list(map(lambda link: link.to_json(), links)),
         })
+
+        if self.event_time_zone is not None:
+            event_project_json['event_time_zone'] = self.event_time_zone.hydrate_to_json()
 
         if event_room is not None:
             event_project_json['event_conference_url'] = event_room.join_url
@@ -1371,6 +1430,8 @@ class RSVPVolunteerRelation(Archived):
     event = models.ForeignKey(Event, related_name='rsvp_volunteers', on_delete=models.CASCADE)
     volunteer = models.ForeignKey(Contributor, related_name='rsvp_events', on_delete=models.CASCADE)
     event_project = models.ForeignKey(EventProject, related_name='rsvp_volunteers', blank=True, null=True, on_delete=models.CASCADE)
+    time_zone = models.ForeignKey(EventLocationTimeZone, related_name='time_zone_volunteers', null=True, on_delete=models.CASCADE)
+    is_remote = models.BooleanField(blank=True, null=True)
     role = TaggableManager(blank=True, through=TaggedRSVPVolunteerRole)
     role.remote_field.related_name = "rsvp_roles"
     application_text = models.CharField(max_length=10000, blank=True)
@@ -1405,10 +1466,13 @@ class RSVPVolunteerRelation(Archived):
         return merge_dicts(project_json, volunteer_json)
 
     @staticmethod
-    def create(event: Event, volunteer: Contributor):
+    def create(event: Event, volunteer: Contributor, is_remote: bool, event_location_time_zone_json: object):
+        time_zone = EventLocationTimeZone.create(event, event_location_time_zone_json) if event_location_time_zone_json else None
         relation = RSVPVolunteerRelation()
         relation.event = event
         relation.volunteer = volunteer
+        relation.is_remote = is_remote
+        relation.time_zone = time_zone
         relation.save()
 
         # relation.role.add(role)

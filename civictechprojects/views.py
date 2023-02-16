@@ -25,6 +25,7 @@ from .helpers.search.groups import groups_list
 from .helpers.search.projects import projects_list, recent_projects_list
 from common.caching.cache import Cache
 from common.helpers.collections import flatten, count_occurrences
+from common.helpers.dictionaries import keys_subset
 from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
 from common.helpers.tags import get_tags_by_category,get_tag_dictionary
@@ -244,8 +245,11 @@ def rsvp_for_event(request, event_id):
     if not user.email_verified:
         return HttpResponse(status=403)
 
+    body = json.loads(request.body)
     event = Event.get_by_id_or_slug(event_id)
-    RSVPVolunteerRelation.create(event, user)
+    is_remote = body['isRemote'] if 'isRemote' in body else None
+    location_time_zone = body['locationTimeZone'] if 'locationTimeZone' in body else None
+    RSVPVolunteerRelation.create(event, user, is_remote, location_time_zone)
 
     notify_rsvped_volunteer(event, user)
     user.purge_cache()
@@ -283,8 +287,9 @@ def rsvp_for_event_project(request, event_id, project_id):
     # If rsvp already created, do nothing
     rsvp = RSVPVolunteerRelation.get_for_event_project(event_project, user)
     if rsvp is None:
-        rsvp = RSVPVolunteerRelation.create(event, user)
+        # TODO: Test RSVP-ing for project after event
         body = json.loads(request.body)
+        rsvp = RSVPVolunteerRelation.create(event, user, body['isRemote'], body['locationTimeZone'])
         rsvp.event_project = event_project
         rsvp.application_text = body['applicationText']
         rsvp.save()
@@ -569,6 +574,13 @@ def recent_projects(request):
     if request.method == 'GET':
         projects_list = recent_projects_list(request)
         return JsonResponse({'projects': projects_list})
+
+def upcoming_events(request):
+    url_parts = request.GET.urlencode()
+    query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
+    event_count = int(query_params['count'][0]) if 'count' in query_params else 1
+    events = Event.objects.filter(is_created=True, is_searchable=True, is_private=False, event_date_start__gt=timezone.now())
+    return JsonResponse({'events': [event.hydrate_to_tile_json() for event in events.order_by('event_date_start')[:event_count]]})
 
 
 def limited_listings(request):

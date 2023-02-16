@@ -492,7 +492,9 @@ class EntitySearchStore extends ReduceStore<State> {
     state = this._updateFindProjectArgs(state);
     if (state.filterApplied) {
       state = state.set("page", 1);
-      state = state.set("projectsData", {});
+      //cleaning project data but not tag data
+      const allTags = state.projectsData.allTags;
+      state = state.set("projectsData", {allTags}); 
       state = state.set("filterApplied", false);
     }
     if (state.searchSettings.updateUrl && !noUpdateUrl) {

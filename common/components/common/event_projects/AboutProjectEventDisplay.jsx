@@ -113,8 +113,8 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   }
 
   confirmJoinProject(
-    eventProject: EventProjectAPIDetails,
-    confirmJoin: boolean
+    confirmJoin: boolean,
+    eventProject: EventProjectAPIDetails
   ) {
     let state: State = { showJoinModal: false };
     if (confirmJoin) {
@@ -155,7 +155,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       urlHelper.section(Section.CreateEventProject, {
         event_id: eventProject.event_id,
         project_id: eventProject.project_id,
-      }) + "?step=2";
+      });
 
     return (
       <div className="AboutProjectEvent-top-content">
@@ -583,6 +583,14 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
+        {eventProject.event_time_zone && (
+          <div className="AboutProject-icon-row">
+            <i className={Glyph(GlyphStyles.Clock, GlyphSizes.LG)} />
+            <p className="AboutProject-icon-text">
+              {eventProject.event_time_zone.time_zone + " Time Zone"}
+            </p>
+          </div>
+        )}
         <div className="AboutProject-icon-row">
           <i className={Glyph(GlyphStyles.LaptopCode, GlyphSizes.LG)} />
           <p className="AboutProject-icon-text">
