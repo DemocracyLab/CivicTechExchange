@@ -960,6 +960,7 @@ class ProjectLink(models.Model):
     link_event = models.ForeignKey(Event, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
     link_user = models.ForeignKey(Contributor, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
     link_name = models.CharField(max_length=200, blank=True)
+    link_title = models.CharField(max_length=200, blank=True)
     link_url = models.CharField(max_length=2083)
     link_visibility = models.CharField(max_length=50)
 
@@ -1405,6 +1406,51 @@ class VolunteerRelation(Archived):
     @staticmethod
     def get_by_project(project, active=True):
         return VolunteerRelation.objects.filter(project_id=project.id, is_approved=active, deleted=not active)
+
+
+class VolunteerActivityReport(models.Model):
+    project = models.ForeignKey(Project, related_name='volunteer_activity_reports', on_delete=models.CASCADE)
+    volunteer = models.ForeignKey(Contributor, related_name='volunteer_activity_reports', on_delete=models.CASCADE)
+    activity_period_start = models.DateTimeField()
+    activity_period_end = models.DateTimeField()
+    hours_spent = models.DecimalField(max_digits=5, decimal_places=2)
+    activity_text = models.CharField(max_length=1000, blank=True)
+
+    def __str__(self):
+        return f'[{self.project.project_name}]:{self.volunteer.email} ({str(self.activity_period_start)})'
+
+    def to_json(self):
+        var_json = {
+            'project_id': self.project.id,
+            'volunteer': self.volunteer.hydrate_to_tile_json(),
+            'activity_period_start': self.activity_period_start.__str__(),
+            'activity_period_end': self.activity_period_end.__str__(),
+            'activity_text': self.activity_text,
+            'hours_spent': self.hours_spent.__str__(),
+        }
+
+        return var_json
+
+
+    @staticmethod
+    def create(project, volunteer, activity_period_start, activity_period_end, hours_spent, activity_text):
+        var = VolunteerActivityReport()
+        var.project = project
+        var.volunteer = volunteer
+        var.activity_period_start = activity_period_start
+        var.activity_period_end = activity_period_end
+        var.hours_spent = hours_spent
+        var.save()
+
+        return var
+
+    @staticmethod
+    def get_by_user(user):
+        return VolunteerActivityReport.objects.filter(volunteer=user.id)
+
+    @staticmethod
+    def get_by_project(project):
+        return VolunteerActivityReport.objects.filter(project_id=project.id)    
 
 
 class TaggedRSVPVolunteerRole(TaggedItemBase):

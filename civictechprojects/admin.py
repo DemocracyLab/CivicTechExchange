@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from .models import Project, Group, Event, ProjectRelationship, UserAlert, VolunteerRelation, ProjectCommit, \
     NameRecord, ProjectFile, Testimonial, ProjectLink, ProjectFavorite, ProjectPosition, EventProject, \
-    RSVPVolunteerRelation, EventConferenceRoom, EventConferenceRoomParticipant, EventLocationTimeZone
+    RSVPVolunteerRelation, EventConferenceRoom, EventConferenceRoomParticipant, EventLocationTimeZone, \
+    VolunteerActivityReport
 
 project_text_fields = ['project_name', 'project_description', 'project_description_solution', 'project_description_actions', 'project_short_description', 'project_location', 'project_country', 'project_state', 'project_city', 'project_url']
 project_filter_fields = ('project_date_created', 'project_date_modified', 'is_searchable', 'is_created')
@@ -132,6 +133,15 @@ class EventLocationTimeZoneAdmin(admin.ModelAdmin):
         obj.event.recache(recache_linked=True)
 
 
+class VolunteerActivityReportAdmin(admin.ModelAdmin):
+    list_display = ('project', 'volunteer', 'activity_period_start', 'activity_text')
+    search_fields = ['project__project_name', 'volunteer__email']
+    list_filter = ('project',)
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        obj.project.recache()
+
+
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectRelationship, ProjectRelationshipAdmin)
 admin.site.register(Group, GroupAdmin)
@@ -150,3 +160,4 @@ admin.site.register(RSVPVolunteerRelation, RSVPVolunteerRelationAdmin)
 admin.site.register(EventConferenceRoom, EventConferenceRoomAdmin)
 admin.site.register(EventConferenceRoomParticipant, EventConferenceRoomParticipantAdmin)
 admin.site.register(EventLocationTimeZone, EventLocationTimeZoneAdmin)
+admin.site.register(VolunteerActivityReport, VolunteerActivityReportAdmin)
