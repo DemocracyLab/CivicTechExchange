@@ -51,13 +51,11 @@ def save_jobs(project_positions):
         save(position)
 
 
-def delete(project_position):
-    position_role = Tag.tags_field_descriptions(project_position.position_role)
-    platform_id__c = project_position.salesforce_job_id()
+def delete(salesforce_job_id):
     data = {"GW_Volunteers__Inactive__c": True}
     req = requests.Request(
         method="PATCH",
-        url=f'{client.job_endpoint}/platform_id__c/{platform_id__c}',
+        url=f'{client.job_endpoint}/platform_id__c/{salesforce_job_id}',
         data=json.dumps(data)
     )
     SalesforceClient().send(req)

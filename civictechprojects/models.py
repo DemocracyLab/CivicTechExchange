@@ -1400,6 +1400,9 @@ class VolunteerRelation(Archived):
         role = Tag.tags_field_descriptions(self.role)
         return f'{self.project.id}{role.lower().replace(" ", "")}'
 
+    def role_name(self):
+        return  Tag.tags_field_descriptions(self.role)
+
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
         relation = VolunteerRelation()

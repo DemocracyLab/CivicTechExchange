@@ -22,7 +22,7 @@ def save(contributor: object):
         "ownerid": client.owner_id,
         "email": contributor.username
     }
-    # Take care not to overwrite with blanks:
+    # Take care not to overwrite with blanks. User may already exist in salesforce, from a different source
     if contributor.first_name:
         data['firstname'] = contributor.first_name
     if contributor.last_name:
@@ -50,6 +50,18 @@ def save(contributor: object):
     thread.start()
 
 
+def set_category(user_id, category):
+    data = {"category__c": category}
+    req = requests.Request(
+        method="PATCH",
+        url=f'{client.contact_endpoint}/platform_id__c/{user_id}',
+        data=json.dumps(data),
+    )
+    thread = threading.Thread(target=run, args=(req,))
+    thread.daemon = True
+    thread.start()
+
+
 def set_title(user_id, title):
     data = {"title": title}
     req = requests.Request(
@@ -62,10 +74,22 @@ def set_title(user_id, title):
     thread.start()
 
 
-def delete(contributor: object):
+def set_dlab_volunteer_role(user_id, role):
+    data = {"DL_Volunteer_role__c": role}
+    req = requests.Request(
+        method="PATCH",
+        url=f'{client.contact_endpoint}/platform_id__c/{user_id}',
+        data=json.dumps(data),
+    )
+    thread = threading.Thread(target=run, args=(req,))
+    thread.daemon = True
+    thread.start()
+
+
+def delete(user_id):
     req = requests.Request(
         method="DELETE",
-        url=f'{client.contact_endpoint}/platform_id__c/{contributor.id}'
+        url=f'{client.contact_endpoint}/platform_id__c/{user_id}'
     )
     thread = threading.Thread(target=run, args=(req,))
     thread.daemon = True

@@ -1,6 +1,7 @@
 import datetime
 from .client import SalesforceClient
 from common.helpers.date_helpers import DateTimeFormats
+from democracylab import settings
 import json
 import requests
 import threading
@@ -28,6 +29,10 @@ def send_volunteer_data(volunteer_id, data):
 
 
 def create(volunteer):
+    from salesforce import contact
+    category = 'Internal Volunteers' if str(volunteer.project_id) == settings.DLAB_PROJECT_ID else 'External Volunteers'
+    contact.set_category(volunteer.volunteer_id, category)
+
     data = {
         "GW_Volunteers__Contact__r":
         {
@@ -42,6 +47,10 @@ def create(volunteer):
         "GW_Volunteers__End_Date__c": volunteer.projected_end_date
     }
     send_volunteer_data(volunteer.id, data)
+    '''
+    if str(volunteer.project_id) == settings.DLAB_PROJECT_ID:
+        contact.set_dlab_volunteer_role(volunteer.volunteer_id, volunteer.role())
+    '''
 
 
 def accept(volunteer):
@@ -87,7 +96,8 @@ def conclude(volunteer):
         {
             "platform_id__c": volunteer.salesforce_job_id()
         },
-        "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime(DateTimeFormats.SALESFORCE_DATE.value),
+        "GW_Volunteers__Start_Date__c": (volunteer.approved_date or volunteer.application_date).strftime(DateTimeFormats.SALESFORCE_DATE.value),
+        "GW_Volunteers__End_Date__c": datetime.date.today().strftime(DateTimeFormats.SALESFORCE_DATE.value),
         "GW_Volunteers__Status__c": "Completed",
         "GW_Volunteers__Hours_Worked__c": 0
     }
@@ -104,7 +114,7 @@ def dismiss(volunteer):
         {
             "platform_id__c": volunteer.salesforce_job_id()
         },
-        "GW_Volunteers__Start_Date__c": volunteer.approved_date.strftime(DateTimeFormats.SALESFORCE_DATE.value),
+        "GW_Volunteers__Start_Date__c": (volunteer.approved_date or volunteer.application_date).strftime(DateTimeFormats.SALESFORCE_DATE.value),
         "GW_Volunteers__End_Date__c": datetime.date.today().strftime(DateTimeFormats.SALESFORCE_DATE.value),
         "GW_Volunteers__Status__c": "Rejected"
     }

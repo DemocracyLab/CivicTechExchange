@@ -30,7 +30,6 @@ class SalesforceClient:
 
     def send(self, req):
         if settings.SALESFORCE_JWT:
-            """ The PreparedRequest has settings merged from the Request instance and those of the Session """
             prepped_request = self.__session.prepare_request(req)
             response = self.__session.send(prepped_request)
             if response.status_code == requests.codes.unauthorized:

@@ -3,7 +3,7 @@ from common.helpers.date_helpers import DateTimeFormats
 from common.models import Tag
 from .client import SalesforceClient
 from common.helpers.queue import enqueue
-from salesforce import volunteer_job
+from salesforce import volunteer_job, contact
 import json
 import requests
 import threading
@@ -25,6 +25,7 @@ def create(project: Project):
     if project.is_searchable:
         project.project_date_created = project.project_date_created or project.project_date_modified
         save(project, creating_new=True)  # syncronous call must complete before pushing positions to Salesforce
+        contact.set_category(project.project_creator.id, 'Project Leaders')
         positions = ProjectPosition.objects.filter(position_project_id__exact=project.id)
         for position in positions:
             volunteer_job.save(position)
@@ -58,11 +59,13 @@ def _save(project: Project):
         "issue_area__c": Tag.tags_field_descriptions(project.project_issue_area),
         "stage__c": Tag.tags_field_descriptions(project.project_stage),
         "type": Tag.tags_field_descriptions(project.project_organization_type),
-        "technologies__c": Tag.tags_field_descriptions(project.project_technologies),
-        "startdate": project.project_date_created.strftime(
-            DateTimeFormats.SALESFORCE_DATE.value)
+        "technologies__c": Tag.tags_field_descriptions(project.project_technologies)
     }
-    '''synchronous call (campaign must be saved before saving jobs)'''
+    if project.project_date_created:
+        data["startdate"] = project.project_date_created.strftime(
+            DateTimeFormats.SALESFORCE_DATE.value)
+
+        '''synchronous call (campaign must be saved before saving jobs)'''
     SalesforceClient().send(requests.Request(
         method="PATCH",
         url=f'{client.campaign_endpoint}/platform_id__c/{project.id}',
@@ -70,10 +73,10 @@ def _save(project: Project):
     ))
 
 
-def delete(project: object):
+def delete(project_id):
     req = requests.Request(
         method="DELETE",
-        url=f'{client.campaign_endpoint}/platform_id__c/{project.id}'
+        url=f'{client.campaign_endpoint}/platform_id__c/{project_id}'
     )
     thread = threading.Thread(target=run, args=(req,))
     thread.daemon = True
