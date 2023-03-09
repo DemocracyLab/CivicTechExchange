@@ -21,6 +21,8 @@ import EditUserLinksModal from "../componentsBySection/AboutUser/EditUserLinksMo
 import EditUserFilesModal from "../componentsBySection/AboutUser/EditUserFilesModal.jsx";
 import EditUserThumbnailModal from "../componentsBySection/AboutUser/EditUserThumbnailModal.jsx";
 import EditUserTagsModal from "../componentsBySection/AboutUser/EditUserTagsModal.jsx";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
 
 type State = {|
   user: ?UserAPIData,
@@ -114,6 +116,11 @@ class AboutUserController extends React.PureComponent<{||}, State> {
           <h3>{user && user.first_name + " " + user.last_name}</h3>
           {this._renderEditControl("showEditNameModal")}
         </div>
+        {/* TODO: conditional render, everything else for badges */}
+        <div className="about-user-section">
+          <h3>Badges</h3>
+          <div>{this._renderBadges(user)}</div>
+        </div>
         {!_.isEmpty(user.user_links) || this.state.isUserOrAdmin ? (
           <div className="about-user-section">
             <span className="d-flex justify-content-between">
@@ -126,29 +133,64 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       </React.Fragment>
     );
   }
-
+  
   _renderRightColumn(user: UserAPIData): React$Node {
     return (
+     <div class="AboutUser-tab-container">
+      <h2>Hi, user.user_firstname and log activity button conditional render goes here</h2>
+      {this._renderUserTabs(user)}
+    </div>
+    )
+  }
+
+  _renderUserTabs(user: UserAPIData): React$Node {
+    // TODO: remove landing controller styles, add AboutUser- styles
+    return (
+      <Tabs
+      defaultActiveKey="t-aboutme"
+      id="about-tabs"
+      className="LandingController-tabs"
+      justify
+    >
+      <Tab eventKey="t-aboutme" title="About Me">
+        {this._aboutMeTab(user)}
+      </Tab>
+      <Tab eventKey="t-myactivity" title="My Activity">
+        {this._myActivityTab(user)}
+      </Tab>
+    </Tabs>
+    )
+  }
+
+
+
+  _aboutMeTab(user: UserAPIData): React$Node {
+    return (
       <React.Fragment>
-        {(user.about_me || this.state.isUserOrAdmin) &&
-          this._renderAboutMe(user)}
+      {(user.about_me || this.state.isUserOrAdmin) &&
+        this._renderAboutMe(user)}
 
-        {user &&
-        (!_.isEmpty(user.user_technologies) || this.state.isUserOrAdmin)
-          ? this._renderAreasOfInterest(user)
-          : null}
+      {user &&
+      (!_.isEmpty(user.user_technologies) || this.state.isUserOrAdmin)
+        ? this._renderAreasOfInterest(user)
+        : null}
 
-        {!_.isEmpty(user.user_files) || this.state.isUserOrAdmin ? (
-          <div className="about-user-section">
-            <span className="d-flex justify-content-between">
-              <h2>Files</h2>
-              {this._renderEditControl("showEditFilesModal")}
-            </span>
-            <div>{this._renderFiles()}</div>
-          </div>
-        ) : null}
-      </React.Fragment>
-    );
+      {!_.isEmpty(user.user_files) || this.state.isUserOrAdmin ? (
+        <div className="about-user-section">
+          <span className="d-flex justify-content-between">
+            <h2>Files</h2>
+            {this._renderEditControl("showEditFilesModal")}
+          </span>
+          <div>{this._renderFiles()}</div>
+        </div>
+      ) : null}
+    </React.Fragment>
+    )
+  }
+  _myActivityTab(user: UserAPIData): React$Node {
+    return (
+      <p>@@@ PLACEHOLDER FOR MY ACTIVITY TAB CONTENT @@@</p>
+    )
   }
 
   _renderAboutMe(user: UserAPIData): React$Node {
@@ -177,6 +219,12 @@ class AboutUserController extends React.PureComponent<{||}, State> {
         <TagsDisplay tags={user && user.user_technologies} />
       </div>
     );
+  }
+
+  _renderBadges(user: userAPIData) {
+    return (
+      <p>@@@ PLACEHOLDER FOR BADGES @@@</p>
+    )
   }
 
   _renderLinks(user: UserAPIData): ?Array<React$Node> {
