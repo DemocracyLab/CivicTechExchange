@@ -144,6 +144,12 @@ def terms_preload(context, request):
     context['description'] = 'Terms of Use page'
     return context
 
+def my_activity_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'My Activity Report | DemocracyLab'
+    context['description'] = 'My  Activity Report page'
+    return context
+
 
 def videos_preload(context, request):
     context = default_preload(context, request)
@@ -191,7 +197,8 @@ preload_urls = [
     {'section': FrontEndSection.VideoOverview.value, 'handler': videos_preload},
     {'section': FrontEndSection.AboutEventProject.value, 'handler': about_event_project_preload},
     {'section': FrontEndSection.Privacy.value, 'handler': privacy_preload},
-    {'section': FrontEndSection.Terms.value, 'handler': terms_preload}
+    {'section': FrontEndSection.Terms.value, 'handler': terms_preload},
+    {'section': FrontEndSection.MyActivityReport.value, 'handler': my_activity_preload}
 ]
 
 

@@ -48,6 +48,7 @@ class FrontEndSection(Enum):
     CreateEventProject = 'CreateEventProject'
     Privacy = 'Privacy'
     Terms = 'Terms'
+    MyActivityReport = 'MyActivityReport'
 
     # deprecated
     CorporateHackathon = 'CorporateHackathon'

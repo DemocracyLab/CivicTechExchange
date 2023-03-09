@@ -138,6 +138,15 @@ class AboutUserController extends React.PureComponent<{||}, State> {
     return (
      <div class="AboutUser-tab-container">
       <h2>Hi, user.user_firstname and log activity button conditional render goes here</h2>
+      <Button
+        variant="primary"
+        href={url.section(Section.MyActivityReport, {
+          id: user.id
+        })}
+        >
+          Log Activity
+        </Button>
+
       {this._renderUserTabs(user)}
     </div>
     )
@@ -196,7 +205,6 @@ class AboutUserController extends React.PureComponent<{||}, State> {
   _renderAboutMe(user: UserAPIData): React$Node {
     return (
       <div className="about-user-section">
-        <h2>About Me</h2>
         <div className="d-flex justify-content-between">
           <h3>Bio</h3>
           {this._renderEditControl("showEditBioModal")}

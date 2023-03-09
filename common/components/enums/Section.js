@@ -33,6 +33,7 @@ const Section = {
   CreateEventProject: "CreateEventProject",
   Privacy: "Privacy",
   Terms: "Terms",
+  MyActivityReport: "MyActivityReport",
 };
 
 export type SectionType = $Keys<typeof Section>;

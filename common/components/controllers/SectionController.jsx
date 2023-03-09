@@ -41,6 +41,7 @@ import AboutEventProjectController from "./AboutEventProjectController.jsx";
 import CreateEventProjectController from "./CreateEventProjectController.jsx";
 import PrivacyController from "./PrivacyController.jsx";
 import TermsController from "./TermsController.jsx";
+import MyActivityReport from "./MyActivityReport.jsx";
 
 type State = {|
   section: SectionType,
@@ -138,6 +139,8 @@ class SectionController extends React.Component<{||}, State> {
         return <PrivacyController />;
       case Section.Terms:
         return <TermsController />;
+      case Section.MyActivityReport:
+        return <MyActivityReport />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>;
     }
