@@ -140,9 +140,7 @@ class AboutUserController extends React.PureComponent<{||}, State> {
       <h2>Hi, user.user_firstname and log activity button conditional render goes here</h2>
       <Button
         variant="primary"
-        href={url.section(Section.MyActivityReport, {
-          id: user.id
-        })}
+        href={url.section(Section.MyActivityReport)}
         >
           Log Activity
         </Button>

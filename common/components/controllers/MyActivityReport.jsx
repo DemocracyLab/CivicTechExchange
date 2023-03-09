@@ -45,14 +45,11 @@ class MyActivityReport extends React.PureComponent<{||}, State> {
   }
 
   _renderDetails(user: UserAPIData): React$Node {
+    //look at my/projects MyProjects for template on how to load data here, no need to pass an ID via querystring as in My Profile
     return (
       <div className="VAR-root col-12">
         <p>Volunteer Activity Report form goes here</p>
-        <p>
-          debug stuff I guess:
-          <br />
-          {JSON.parse(this.state.user)}
-        </p>
+
       </div>
     );
   }
