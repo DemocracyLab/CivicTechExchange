@@ -171,7 +171,14 @@
   }
   .lc-vertical-left {
     writing-mode: vertical-lr;
+<<<<<<< HEAD
     transform: rotate(180deg);
+=======
+<<<<<<< HEAD
+=======
+    transform: rotate(180deg);
+>>>>>>> fcf4d16b (rebase with remote branch)
+>>>>>>> 72423a88 (rebase with remote branch)
     text-align: center;
     font-weight: 500;
   }
@@ -250,6 +257,11 @@
       padding: 1rem;
     }
   }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 72423a88 (rebase with remote branch)
   .RecentProjects-cards {
     flex-direction: row;
     flex-wrap: wrap;
@@ -258,6 +270,10 @@
       min-width: 45%;
     }
   }
+<<<<<<< HEAD
+=======
+>>>>>>> fcf4d16b (rebase with remote branch)
+>>>>>>> 72423a88 (rebase with remote branch)
   .LandingController-icon {
     i {
       font-size: 48px;
