@@ -86,6 +86,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       showPostRSVPModal: false,
       showCancelRSVPConfirmModal: false,
       startDate: startDate,
+      showHeaders: false,
       endDate: endDate,
       isPastEvent: endDate < datetime.now(),
       showPostRSVPToast: false,
