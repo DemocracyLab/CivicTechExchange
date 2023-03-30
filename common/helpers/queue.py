@@ -6,7 +6,8 @@ from rq import Queue
 from typing import Callable
 from django.conf import settings
 
-redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
+#redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
+redis_url = os.getenv('REDIS_URL', 'rediss://:@127.0.0.1:6380/16')
 conn = redis.from_url(redis_url)
 q = settings.REDIS_ENABLED and Queue(connection=conn)
 
@@ -31,19 +32,16 @@ from rq import Queue
 from ssl import CERT_NONE
 from typing import Callable
 from django.conf import settings
+from urllib.parse import urlparse
 
-redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
-
-# Check if the Redis connection is using SSL
+redis_url = os.getenv('REDIS_URL', 'rediss://:@127.0.0.1:6380/16')
+#redis_url = os.getenv('REDIS_URL','redis://localhost:6379')
+url = urlparse(redis_url)
+# Check if the Redis connection is using SSL/TSL
 is_secure = redis_url.startswith('rediss://')
 
 if is_secure:
-    conn = redis.from_url(
-        redis_url,
-        ssl=True,
-        ssl_ca_certs=None,
-        ssl_cert_reqs=CERT_NONE,
-    )
+    conn = redis.Redis(host=url.hostname, port=url.port, username=url.username, password=url.password, ssl=True, ssl_cert_reqs=None)
 else:
     conn = redis.from_url(redis_url)
 

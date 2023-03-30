@@ -5,7 +5,6 @@ from common.helpers import queue
 import redis.exceptions
 from django.conf import settings
 print("hqd\n")
-print(settings.REDIS_ENABLED)
 class RedisConnectionTestCase(TestCase):
     @staticmethod
     def test_function():
