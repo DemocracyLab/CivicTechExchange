@@ -34,7 +34,7 @@ from typing import Callable
 from django.conf import settings
 from urllib.parse import urlparse
 
-redis_url = os.getenv('REDIS_URL', 'rediss://:@127.0.0.1:6380/16')
+redis_url = os.getenv('REDIS_URL', 'rediss://localhost:6380/16')
 #redis_url = os.getenv('REDIS_URL','redis://localhost:6379')
 url = urlparse(redis_url)
 # Check if the Redis connection is using SSL/TSL
