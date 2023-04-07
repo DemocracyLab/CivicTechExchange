@@ -34,7 +34,7 @@ from typing import Callable
 from django.conf import settings
 from urllib.parse import urlparse
 
-redis_url = os.getenv('REDIS_URL', 'rediss://localhost:6380/16')
+redis_url = os.getenv('REDIS_URL', 'rediss://localhost:6380/0')
 #redis_url = os.getenv('REDIS_URL','redis://localhost:6379')
 url = urlparse(redis_url)
 # Check if the Redis connection is using SSL/TSL
@@ -52,6 +52,9 @@ def enqueue(job_func: Callable, *args):
         job = q.enqueue(job_func, *args)
         from pprint import pprint
         pprint(job)
+        import time
+        time.sleep(1)
+        print(job.result)
         return job
     else:
         # If redis is not enabled, use thread

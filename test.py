@@ -4,7 +4,7 @@ from django.test import TestCase
 from common.helpers import queue
 import redis.exceptions
 from django.conf import settings
-print("hqd\n")
+
 class RedisConnectionTestCase(TestCase):
     @staticmethod
     def test_function():
