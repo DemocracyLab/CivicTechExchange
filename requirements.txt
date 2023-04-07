@@ -4,7 +4,6 @@ dj-database-url==0.4.1
 Django==3.1.14
 django-allauth==0.44
 django-appconf==1.0.2
-django-autofixture==0.12.1
 django-compressor==2.1.1
 django-core==1.4.1
 django-cors-headers==3.10.1
