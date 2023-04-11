@@ -409,7 +409,6 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="corporate-hackathon-carousel carousel-testimonial-root">
             <TestimonialCarousel
               category="hackathon-highlights"
-              //interval={600000}
               interval={null}
             />
           </div>
