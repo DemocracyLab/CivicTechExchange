@@ -263,7 +263,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="corporate-hackathon-carousel carousel-testimonial-root">
             <TestimonialCarousel
               category="partner-highlights"
-              interval={600000}
+              interval={null}
             />
           </div>
           <p className="h3">
@@ -409,7 +409,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="corporate-hackathon-carousel carousel-testimonial-root">
             <TestimonialCarousel
               category="hackathon-highlights"
-              interval={600000}
+              //interval={600000}
+              interval={null}
             />
           </div>
           <p className="headline2">

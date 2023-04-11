@@ -6,7 +6,6 @@ import LoadingFrame from "../../chrome/LoadingFrame.jsx";
 //props.interval is optional, default 6000ms
 //props.category is optional, default shows all testimonials
 type Props = {|
-  interval: number,
   category: string,
 |};
 
@@ -34,7 +33,8 @@ class TestimonialCarousel extends React.PureComponent<Props, State> {
   render(): ?React$Node {
     const testimonials: $ReadOnlyArray<Testimonial> = this.state.testimonials;
     return testimonials ? (
-      <Carousel interval={this.props.interval ? this.props.interval : 6000}>
+      // <Carousel interval={this.props.interval ? this.props.interval : null}>
+      <Carousel interval={null}>
         {testimonials.map(i => (
           <Carousel.Item className="carousel-item" key={i.name}>
             <div className="carousel-item-content">
