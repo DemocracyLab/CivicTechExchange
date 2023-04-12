@@ -32,7 +32,7 @@ class BlogCarousel extends React.PureComponent<Props, State> {
   render(): React$Node {
     const ghostPosts: $ReadOnlyArray<GhostPost> = this.state.ghostPosts;
     return ghostPosts ? (
-<Carousel interval={null}>
+<Carousel>
         {ghostPosts.map(i => (
           <Carousel.Item className="carousel-item" key={i.slug}>
             <div className="carousel-item-content">

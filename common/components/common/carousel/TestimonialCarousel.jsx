@@ -33,8 +33,7 @@ class TestimonialCarousel extends React.PureComponent<Props, State> {
   render(): ?React$Node {
     const testimonials: $ReadOnlyArray<Testimonial> = this.state.testimonials;
     return testimonials ? (
-      // <Carousel interval={this.props.interval ? this.props.interval : null}>
-      <Carousel interval={null}>
+      <Carousel>
         {testimonials.map(i => (
           <Carousel.Item className="carousel-item" key={i.name}>
             <div className="carousel-item-content">
