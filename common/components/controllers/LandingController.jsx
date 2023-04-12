@@ -363,7 +363,7 @@ class LandingController extends React.PureComponent<{||}, State> {
         <h2 className="text-center LandingController-section-header">
           What people are saying about DemocracyLab
         </h2>
-        <TestimonialCarousel interval={null} />
+        <TestimonialCarousel/>
       </div>
     );
   }
