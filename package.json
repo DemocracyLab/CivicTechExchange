@@ -15,7 +15,7 @@
     "test": "jest"
   },
   "engines": {
-    "node": "14.15.x"
+    "node": "16.20.x"
   },
   "dependencies": {
     "@tryghost/content-api": "^1.11.0",
@@ -57,7 +57,7 @@
     "@babel/preset-react": "^7.12.10",
     "@svgr/webpack": "^5.1.0",
     "aws-sdk": "^2.289.0",
-    "babel-loader": "^8.2.2",
+    "babel-loader": "^8.3.0",
     "child_process": "^1.0.2",
     "core-js": "^3.1.4",
     "fs": "0.0.1-security",
