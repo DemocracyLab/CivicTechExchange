@@ -18,7 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
     ProjectRelationship, Testimonial, ProjectFavorite, EventProject, RSVPVolunteerRelation, EventConferenceRoom, \
-    EventConferenceRoomParticipant
+    EventConferenceRoomParticipant, VolunteerActivityReport
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from .helpers.search.groups import groups_list
@@ -1340,3 +1340,22 @@ def qiqo_webhook(request):
 
     existing_room.recache_linked()
     return HttpResponse(status=200)
+
+
+def get_project_activity_reports(request, project_id):
+    project = Project.get_by_id_or_slug(project_id)
+
+    if project is not None:
+        is_staff = is_co_owner_or_staff(get_request_contributor(request), project)
+
+        if project.is_private and project_id.isnumeric() and not is_staff:
+            # If private event isn't accessed for slug, don't show to non-admins
+            return HttpResponse(status=404)
+
+        if project.is_searchable or is_staff:
+            activity_reports = VolunteerActivityReport.get_by_project(project)
+            return JsonResponse({'volunteer_activity_reports': [var.to_json() for var in activity_reports]}, safe=False)
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponse(status=404)
