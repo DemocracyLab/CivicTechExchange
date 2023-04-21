@@ -46,6 +46,7 @@ from civictechprojects.helpers.projects.annotations import apply_project_annotat
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
 from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector
 from common.helpers.user_helpers import get_my_projects, get_my_groups, get_my_events, get_user_context
+from common.helpers.request_helpers import is_ajax
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
@@ -101,7 +102,7 @@ def group_edit(request, group_id):
     except PermissionDenied:
         return HttpResponseForbidden()
 
-    if request.is_ajax():
+    if is_ajax(request):
         return JsonResponse(group.hydrate_to_json())
     else:
         return redirect(section_url(FrontEndSection.AboutGroup, {'id': group_id}))
@@ -188,7 +189,7 @@ def event_edit(request, event_id):
     except PermissionDenied:
         return HttpResponseForbidden()
 
-    if request.is_ajax():
+    if is_ajax(request):
         return JsonResponse(event.hydrate_to_json())
     else:
         return redirect(section_url(FrontEndSection.AboutEvent, {'id': event_id}))
@@ -357,7 +358,7 @@ def project_edit(request, project_id):
     except PermissionDenied:
         return HttpResponseForbidden()
 
-    if request.is_ajax():
+    if is_ajax(request):
         return JsonResponse(project.hydrate_to_json())
     else:
         return redirect(section_url(FrontEndSection.AboutProject, {'id': project_id}))
