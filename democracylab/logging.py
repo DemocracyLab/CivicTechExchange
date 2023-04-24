@@ -42,7 +42,7 @@ class CustomErrorHandler(logging.Handler):
             exctype, value, tb = record.exc_info
             exception_msg = {
                 'exception_type': str(exctype),
-                'message': str(traceback.format_tb(tb, 10))
+                'message': str(traceback.format_tb(tb, 10)).replace('\\n', '').replace('\\', '')
             }
             error_msg = 'ERROR: {}'.format(str(exception_msg))
         else:
@@ -51,3 +51,4 @@ class CustomErrorHandler(logging.Handler):
         if hasattr(record, 'request'):
             error_msg += ' REQUEST: {}'.format(dump_request_summary(record.request))
         print(error_msg)
+
