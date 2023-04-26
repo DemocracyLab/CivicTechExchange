@@ -8,7 +8,7 @@ module.exports = {
   target: 'web',
   output: {
     path: path.resolve(__dirname, "./common/static"),
-    filename: "js/[name].bundle.js"
+    filename: "js/[name].bundle.js",
   },
   module: {
     rules: [
