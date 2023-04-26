@@ -47,6 +47,9 @@
 .LatestBlogPosts-excerpt {
     margin-top: 0.5rem;
 }
+.LatestBlogPosts-excerpt a { 
+    text-decoration: underline;
+}
 .LatestBlogPosts-bottomrow {
     justify-content: space-between;
 }
