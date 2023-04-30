@@ -55,8 +55,12 @@ $modal-backdrop-opacity: 0.5;
 //disables dropdown caret by default
 $enable-caret: false;
 
-// change carousel control colors for our theme, not default near-white
-$carousel-control-color: #c4c4c4;
+// change carousel control color. designers requested black 3/29/2023, this is the closest design system value.
+$carousel-control-color: $color-neutral-100;
+// setting higher opacity values than default prevents them from appearing grey 
+$carousel-control-opacity: .9;
+$carousel-control-hover-opacity: 1.0;
+
 
 // declare design system header values
 // these values are for **mobile** and are overwritten via mediaquery for desktop in global.scss
