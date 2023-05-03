@@ -1,5 +1,5 @@
 # https://hub.docker.com/r/nikolaik/python-nodejs
-FROM nikolaik/python-nodejs:python3.8-nodejs12
+FROM nikolaik/python-nodejs:python3.10-nodejs16
 
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -9,6 +9,7 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
 WORKDIR /code
 
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN apt-get update && apt-get install -y libgdal-dev
 
 # Install and set up nvm

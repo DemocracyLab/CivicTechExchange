@@ -6,7 +6,6 @@ import Moment from "react-moment";
 //props.interval is optional, default 6000ms
 //props.tag filters blog posts to show
 type Props = {|
-  interval: number,
   tag: string,
 |};
 
