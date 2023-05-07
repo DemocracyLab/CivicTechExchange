@@ -37,7 +37,7 @@ import EventProjectRSVPModal from "../../common/event_projects/EventProjectRSVPM
 type Props = {|
   event: ?EventData,
   viewOnly: boolean,
-  showHeaders: false
+  showHeaders: boolean
 |};
 
 type State = {|
