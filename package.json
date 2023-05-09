@@ -102,7 +102,8 @@
     "browserslist": "^4.16.6",
     "async": "^2.6.4",
     "terser": "^4.8.1",
-    "decode-uri-component": "^0.2.2"
+    "decode-uri-component": "^0.2.2",
+    "json5": "^1.0.1"
   },
   "jest": {
     "automock": false,
