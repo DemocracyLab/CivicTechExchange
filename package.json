@@ -103,7 +103,7 @@
     "async": "^2.6.4",
     "terser": "^4.8.1",
     "decode-uri-component": "^0.2.2",
-    "json5": "^1.0.1"
+    "json5": "^1.0.2"
   },
   "jest": {
     "automock": false,
