@@ -35,6 +35,7 @@ export type EventData = {|
   event_legacy_organization: $ReadOnlyArray<TagDefinition>,
   event_slug: string,
   is_private: boolean,
+  is_activated: boolean,
   show_headers: boolean,
   event_conference_url: ?string,
   event_conference_admin_url: ?string,
