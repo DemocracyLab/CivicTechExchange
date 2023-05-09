@@ -92,7 +92,7 @@ class EventCard extends React.PureComponent<Props> {
     const dateTimeFormat: string = "LT MMM. D";
     return (
       <div className="EventCard-time">
-        {event.event_date_start && moment(event.event_date_start) > moment() && (
+        {event.event_date_end && moment(event.event_date_end) > moment() && (
           <React.Fragment>
             <h3>Begins:</h3>
             <p>

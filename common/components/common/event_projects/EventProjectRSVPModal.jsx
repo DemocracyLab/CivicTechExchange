@@ -232,11 +232,7 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
               </Form.Group>
             </Form>
           </Modal.Body>
-          <Modal.Footer>
-            {this.props.conferenceUrl
-              ? this._renderJoinVideoButton()
-              : this._renderSendCancelButtons()}
-          </Modal.Footer>
+          <Modal.Footer>{this._renderSendCancelButtons()}</Modal.Footer>
         </Modal>
       </React.Fragment>
     );
@@ -281,6 +277,9 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
         >
           {"Cancel"}
         </Button>
+        {this.props.event?.is_activated &&
+          this.props.conferenceUrl &&
+          this._renderJoinVideoButton()}
         <Button
           variant="primary"
           disabled={this.state.isSending || !this._fieldsFilled()}
