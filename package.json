@@ -90,7 +90,7 @@
     "yargs-parser": "^5.0.1",
     "ssri": "^6.0.2",
     "url-parse": "^1.5.3",
-    "ua-parser-js": "^0.7.28",
+    "ua-parser-js": "^0.7.33",
     "hosted-git-info": "^2.8.9",
     "elliptic": "^6.5.4",
     "tmpl": "^1.0.5",
