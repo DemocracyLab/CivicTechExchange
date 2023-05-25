@@ -131,3 +131,6 @@ docker_environment_init.sh
 
 # Exclude Makefiles
 Makefile
+
+# shell config file where private env variable are stored
+.bashrc
