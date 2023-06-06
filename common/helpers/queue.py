@@ -14,7 +14,7 @@ url = urlparse(redis_url)
 is_secure = redis_url.startswith('rediss://')
 
 if is_secure:
-    conn = redis.Redis(host=url.hostname, port=url.port, username=url.username, password=url.password, ssl=True, ssl_cert_reqs=None)
+    conn = redis.Redis(host=url.hostname, port=url.port, password=url.password, ssl=True, ssl_cert_reqs=None)
 else:
     conn = redis.from_url(redis_url)
 
