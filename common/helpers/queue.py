@@ -9,14 +9,18 @@ from urllib.parse import urlparse
 
 
 redis_url = os.getenv('REDIS_URL','redis://localhost:6379')
+print('REDIS_URL: ' + redis_url)
 url = urlparse(redis_url)
 # Check if the Redis connection is using SSL/TSL
 is_secure = redis_url.startswith('rediss://')
+print('Secure Redis: ' + str(is_secure))
 
 if is_secure:
     conn = redis.Redis(host=url.hostname, port=url.port, password=url.password, ssl=True, ssl_cert_reqs=None)
 else:
     conn = redis.from_url(redis_url)
+
+print('Redis Connection: ' + conn.__str__())
 
 q = settings.REDIS_ENABLED and Queue(connection=conn)
 
