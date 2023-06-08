@@ -18,7 +18,7 @@ django-debreach==2.0.1
 djangorestframework==3.14.0
 docutils==0.14
 gunicorn==19.6.0
-jmespath==0.9.3
+jmespath==1.0.1
 mailchimp==2.0.9
 psycopg2==2.9.6
 psycopg2-binary==2.9.6
