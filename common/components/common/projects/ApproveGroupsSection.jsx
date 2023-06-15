@@ -29,8 +29,8 @@ class ApproveGroupsSection extends React.PureComponent<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ pendingGroups: this.getPendingGroups(nextProps.project) });
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return { pendingGroups: this.getPendingGroups(nextProps.project) };
   }
 
   getPendingGroups(

@@ -35,8 +35,8 @@ class FeedbackModal extends React.PureComponent<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ showModal: nextProps.showModal });
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return { showModal: nextProps.showModal };
   }
 
   onTextChange(event: SyntheticInputEvent<HTMLInputElement>): void {

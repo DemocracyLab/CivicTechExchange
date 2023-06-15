@@ -81,8 +81,8 @@ class LinkEntryModal extends React.PureComponent<Props, State> {
     });
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ showModal: nextProps.showModal });
+  static getDerivedStateFromProps(nextProps: Props){
+    let state: State = { showModal: nextProps.showModal };
     if (nextProps.existingLink) {
       this.resetModal(
         nextProps.existingLink.linkUrl,
@@ -91,6 +91,7 @@ class LinkEntryModal extends React.PureComponent<Props, State> {
     } else {
       this.resetModal();
     }
+    return state;
   }
 
   componentDidMount() {

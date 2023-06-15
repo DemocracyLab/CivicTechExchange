@@ -55,7 +55,7 @@ class EditUserBioModal extends React.Component<Props, State> {
     return state;
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props, state){
     if (!this.state.showModal && nextProps.showModal) {
       const user: UserAPIData = nextProps.user;
 
@@ -65,7 +65,7 @@ class EditUserBioModal extends React.Component<Props, State> {
         validators: [],
       });
     }
-    this.setState({ showModal: nextProps.showModal });
+    return { showModal: nextProps.showModal };
   }
 
   _serializeLinks(): string {

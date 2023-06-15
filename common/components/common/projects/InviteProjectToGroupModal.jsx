@@ -45,14 +45,12 @@ class InviteProjectToGroupModal extends React.PureComponent<Props, State> {
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    let state: State = {
+  static getDerivedStateFromProps(nextProps: Props){
+      let state: State = {
       showModal: nextProps.showModal,
       selectedGroup: nextProps.groups && nextProps.groups[0],
     };
-
-    this.setState(state);
-    this.forceUpdate();
+    return state;
   }
 
   handleGroupSelection(group: MyGroupData): void {

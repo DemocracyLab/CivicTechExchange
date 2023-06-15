@@ -98,11 +98,11 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     this.handleShowVolunteerModal = this.handleShowVolunteerModal.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return {
       eventProject: nextProps.eventProject,
       viewOnly: nextProps.viewOnly || url.argument("embedded"),
-    });
+    };
   }
 
   handleShowVolunteerModal(position: ?PositionInfo) {

@@ -23,7 +23,7 @@ class FindGroupsController extends React.PureComponent {
     this.state = { showSplash: true };
   }
 
-  componentWillMount(): void {
+  componentDidMount(): void {
     let args: FindGroupsArgs = urls.arguments(document.location.search);
     args = _.pick(args, [
       "showSplash",

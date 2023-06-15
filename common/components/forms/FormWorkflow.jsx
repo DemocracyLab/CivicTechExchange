@@ -83,13 +83,14 @@ class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
     return state;
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props, state){
     if (nextProps.startStep && !this.state.currentStep) {
       const newStep: number = nextProps.startStep - 1;
       if (newStep !== this.state.currentStep) {
         this.navigateToStep(newStep);
       }
     }
+    return null;
   }
 
   navigateToStep(step: number): void {

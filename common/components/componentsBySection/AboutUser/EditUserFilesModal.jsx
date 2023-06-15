@@ -37,7 +37,7 @@ class EditUserFilesModal extends React.PureComponent<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props, state){
     if (!this.state.showModal && nextProps.showModal) {
       const user: UserAPIData = nextProps.user;
       const formFieldsValues: FormFields = {
@@ -54,7 +54,7 @@ class EditUserFilesModal extends React.PureComponent<Props, State> {
         formFieldValues: formFieldsValues,
       });
     }
-    this.setState({ showModal: nextProps.showModal });
+    return { showModal: nextProps.showModal };
   }
 
   render(): React$Node {

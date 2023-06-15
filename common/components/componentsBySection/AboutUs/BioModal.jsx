@@ -29,8 +29,8 @@ class BioModal extends React.PureComponent<Props, State> {
     this.closeModal = this.closeModal.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ showModal: nextProps.showModal });
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return { showModal: nextProps.showModal };
   }
 
   closeModal(): void {

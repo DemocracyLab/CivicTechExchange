@@ -105,10 +105,11 @@ class PositionEntryModal extends React.PureComponent<Props, State> {
     });
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ showModal: nextProps.showModal }, function() {
+  static getDerivedStateFromProps(nextProps: Props){
+    let state: State = { showModal: nextProps.showModal, function() {
       this.resetModal(nextProps.existingPosition);
-    });
+    }};
+    return state;
   }
 
   componentDidMount() {

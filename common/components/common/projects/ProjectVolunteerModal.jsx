@@ -69,7 +69,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
     this._fieldsFilled = this._fieldsFilled.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props){
     const noPositionOption: SelectOption = { value: "", label: "---" };
     const positionOptions: $ReadOnlyArray<SelectOption> = [
       noPositionOption,
@@ -98,8 +98,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
     } else {
       state.existingPositionOption = noPositionOption;
     }
-    this.setState(state);
-    this.forceUpdate();
+    return state;
   }
 
   handleChange(event: SyntheticInputEvent<HTMLInputElement>): void {

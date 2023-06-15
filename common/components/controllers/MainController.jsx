@@ -24,7 +24,7 @@ class MainController extends React.Component<{||}, State> {
     };
   }
 
-  componentWillMount(): void {
+  componentDidMount(): void {
     this.loadPage();
   }
 

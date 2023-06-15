@@ -42,16 +42,16 @@ export class LocationAutocomplete extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props) {
     if (!_.isEqual(nextProps, this.props)) {
-      this.setState(
-        {
-          countryCode: this.ensureCountryCodeFormat(nextProps.countryCode),
-          selected: nextProps.selected,
-        },
-        this.updateAutocompleteOptions
-      );
+      let state: State = {
+        countryCode: this.ensureCountryCodeFormat(nextProps.countryCode),
+        selected: nextProps.selected,
+      };
+      this.updateAutocompleteOptions;
+      return state;
     }
+    return null;
   }
 
   onInputChange(inputValue: string): void {

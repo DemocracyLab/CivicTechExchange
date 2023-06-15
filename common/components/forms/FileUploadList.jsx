@@ -51,13 +51,14 @@ class FileUploadList extends React.Component<Props, State> {
     return state;
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props){
     if (nextProps.files) {
-      this.setState({
-        files: FileUploadList.getFiles(nextProps),
-      });
+      let state: State = { files: FileUploadList.getFiles(nextProps),
+      };
       this.pushFileUpdates();
+      return state;
     }
+    return null;
   }
 
   static getFiles(props: Props): Array<FileInfo> {

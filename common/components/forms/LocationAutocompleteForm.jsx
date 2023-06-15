@@ -52,10 +52,11 @@ export class LocationAutocompleteForm extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props, state){
     if (!_.isEqual(nextProps.location, this.state.location)) {
-      this.setState({ location: nextProps.location });
+      return { location: nextProps.location };
     }
+    return null;
   }
 
   onOptionSelect(location: LocationInfo): void {

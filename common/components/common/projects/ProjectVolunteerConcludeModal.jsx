@@ -34,13 +34,12 @@ class ProjectVolunteerConcludeModal extends React.PureComponent<Props, State> {
     this.handleMessageChange = this.handleMessageChange.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props){
     let state: State = {
       showModal: nextProps.showModal,
     };
 
-    this.setState(state);
-    this.forceUpdate();
+    return state;
   }
 
   handleMessageChange(event: SyntheticInputEvent<HTMLInputElement>): void {

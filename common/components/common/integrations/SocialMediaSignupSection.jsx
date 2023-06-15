@@ -70,10 +70,10 @@ class SocialMediaSignupSection extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({
+  static (nextProps: Props, state){
+    return{
       visibleApps: this.getVisibleApps(nextProps),
-    });
+    };
   }
 
   getVisibleApps(props: Props): $ReadOnlyArray<string> {

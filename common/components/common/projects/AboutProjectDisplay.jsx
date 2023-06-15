@@ -69,15 +69,15 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     this.handleShowMoreActivity = this.handleShowMoreActivity.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return{
       project: nextProps.project,
       viewOnly: nextProps.viewOnly || url.argument("embedded"),
       volunteers: nextProps.project.project_volunteers,
       visiblePositions: nextProps?.project?.project_positions.filter(
         (position: PositionInfo) => !position.isHidden
       ),
-    });
+    };
   }
 
   handleShowVolunteerModal(position: ?PositionInfo) {

@@ -54,11 +54,11 @@ class AlertSignupModal extends React.PureComponent<Props, State> {
     this.isDisabled = this.isDisabled.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return{
       showModal: nextProps.showModal,
       formFields: this.resetFormFields(nextProps),
-    });
+    };
   }
 
   resetFormFields(props: Props): FormFields {

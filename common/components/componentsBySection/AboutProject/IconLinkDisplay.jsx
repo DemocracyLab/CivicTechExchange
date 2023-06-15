@@ -31,10 +31,11 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
     this.state = props.link ? this.initializeState(props) : {};
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props, state){
     if (nextProps.link) {
-      this.setState(this.initializeState(nextProps));
+      return this.initializeState(nextProps);
     }
+    return null;
   }
 
   initializeState(props: Props): State {

@@ -108,10 +108,10 @@ class Selector<T> extends React.Component<SelectorProps<T>, State<T>> {
     return state;
   }
 
-  componentWillReceiveProps(nextProps: SelectorProps): void {
-    this.setState(Selector.updateOptions(nextProps, this.state), function() {
-      this.forceUpdate();
-    });
+  getDerivedStateFromProps(nextProps: SelectorProps, state){
+    Selector.updateOptions(nextProps, this.state), function() {
+    };
+    return state;
   }
 
   handleSelection(selection: SelectOption, selectionAction: SelectAction) {

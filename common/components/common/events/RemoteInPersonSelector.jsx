@@ -39,8 +39,8 @@ class RemoteInPersonSelector extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({option: RemoteInPersonSelector.getSelected(nextProps)});
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return {option: RemoteInPersonSelector.getSelected(nextProps)};
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {

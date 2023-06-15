@@ -97,15 +97,16 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     this.handleRSVPClose = this.handleRSVPClose.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    if (nextProps.event !== this.props.event) {
-      this.setState(
-        {
-          event: nextProps.event,
-        },
-        this.initProjectSearch
-      );
+  static getDerivedStateFromProps(nextProps: Props){
+    let state: State = {
+      event: nextProps.event,
     }
+  
+    if (nextProps.event !== this.props.event) {
+      this.initProjectSearch;
+      return state;
+    }
+    return null;
   }
 
   handleRSVPClose(submitted: boolean) {

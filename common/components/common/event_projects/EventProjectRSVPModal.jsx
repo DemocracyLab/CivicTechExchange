@@ -66,9 +66,8 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
     this._fieldsFilled = this._fieldsFilled.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState(this.initStateFromProps(nextProps));
-    this.forceUpdate();
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return this.initStateFromProps(nextProps);
   }
 
   initStateFromProps(nextProps: Props): State {

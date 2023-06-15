@@ -35,8 +35,8 @@ class Toast extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ show: nextProps.show });
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return{ show: nextProps.show };
   }
 
   render(): React$Node {

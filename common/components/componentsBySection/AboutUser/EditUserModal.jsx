@@ -47,8 +47,8 @@ class EditUserModal extends React.Component<Props, State> {
     return state;
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ showModal: nextProps.showModal });
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return { showModal: nextProps.showModal };
   }
 
   close(user: ?UserAPIData): void {

@@ -20,10 +20,12 @@ class FlashMessage extends React.Component<{||}, State> {
     };
   }
 
-  componentWillUpdate(nextProps, nextState: State) {
-    if (nextState.section !== this.state.section) {
+  getSnapshotBeforeUpdate(prevProps, prevState){
+    console.log("prevState: ", prevState.section);
+    if (prevState.section !== this.state.section) {
       window.DLAB_MESSAGES = [];
     }
+    return null;
   }
 
   render(): React$Node {

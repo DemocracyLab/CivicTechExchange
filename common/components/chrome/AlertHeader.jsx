@@ -99,12 +99,13 @@ class AlertHeader extends React.Component<Props, State> {
     };
   }
 
-  componentWillUpdate(nextProps: Props, nextState: State) {
-    if (!nextState.currentAlert) {
-      this.setState({
-        currentAlert: this.getCurrentAlert(this.state.alertConfigurations),
-      });
+  getSnapshotBeforeUpdate(prevProps: Props, prevState: State) {
+    if (!prevState.currentAlert) {
+      let state: State = { currentAlert: this.getCurrentAlert(this.state.alertConfigurations)
+      };
+      return state;
     }
+    return null;
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {

@@ -81,10 +81,11 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     );
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props, state){
     if (nextProps.volunteers) {
-      this.setState({ volunteers: _.cloneDeep(nextProps.volunteers) });
+      return{ volunteers: _.cloneDeep(nextProps.volunteers) };
     }
+    return null;
   }
 
   openApplicationModal(volunteer: VolunteerDetailsAPIData): void {

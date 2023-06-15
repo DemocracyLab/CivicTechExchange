@@ -76,10 +76,11 @@ class TagSelectWrapper extends React.PureComponent<Props, State> {
     return displayList.find(displayTag => displayTag.value === tag.tag_name);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  getDerivedStateFromProps(nextProps: Props, state){
     if (!_.isEmpty(nextProps.tagOptions)) {
-      this.populateOptionsList(nextProps);
+      return this.populateOptionsList(nextProps);
     }
+    return null;
   }
 
   handleSelection(

@@ -33,8 +33,8 @@ class PositionListEntry extends React.PureComponent<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ visualStateClass: this.getVisualState(nextProps) });
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return { visualStateClass: this.getVisualState(nextProps)};
   }
 
   getVisualState(props: Props): string {

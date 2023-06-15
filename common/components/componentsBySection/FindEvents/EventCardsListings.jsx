@@ -60,12 +60,12 @@ class EventCardsListings extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return {
       events: nextProps.events,
       eventsByDate:
         nextProps.events && generateEventsDateListings(nextProps.events),
-    });
+    };
   }
 
   render(): React$Node {

@@ -29,7 +29,7 @@ class FormValidation<T> extends React.PureComponent<Props<T>, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props<T>): void {
+  static (nextProps: Props<T>, state){
     if (nextProps.formState && nextProps.validations) {
       let errorMessages: Array<string> = this.props.errorMessages || [];
       let validationSuccess = _.isEmpty(errorMessages);
@@ -44,11 +44,11 @@ class FormValidation<T> extends React.PureComponent<Props<T>, State> {
           failedValidations.map(validation => validation.errorMessage)
         );
       }
-      this.setState({ errorMessages: errorMessages });
+      return { errorMessages: errorMessages };
       nextProps.onValidationCheck &&
         nextProps.onValidationCheck(validationSuccess);
     } else {
-      this.setState({ errorMessages: nextProps.errorMessages });
+      return{ errorMessages: nextProps.errorMessages };
     }
   }
 

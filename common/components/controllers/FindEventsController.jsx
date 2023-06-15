@@ -13,7 +13,7 @@ class FindEventsController extends React.PureComponent {
     super();
   }
 
-  componentWillMount(): void {
+  componentDidMount(): void {
     let args = urls.arguments(document.location.search);
     args = _.pick(args, ["keyword", "page"]);
     UniversalDispatcher.dispatch({

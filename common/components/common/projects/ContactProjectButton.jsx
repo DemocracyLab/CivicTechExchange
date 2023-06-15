@@ -70,8 +70,8 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
     return newState;
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState(this.getButtonDisplaySetup(nextProps));
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return this.getButtonDisplaySetup(nextProps);
   }
 
   handleShow() {

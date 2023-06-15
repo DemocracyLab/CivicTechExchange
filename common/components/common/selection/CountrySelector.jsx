@@ -42,7 +42,12 @@ export class CountrySelector extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  getDerivedStateFromProps(nextProps: Props){
+    let state: State = {
+      selectedCountry: nextCountry,
+      countryOptions: countryList,
+    };
+    
     if (!_.isEqual(nextProps, this.props)) {
       const countryCodeFormat: string =
         nextProps.countryCodeFormat || this.state.countryCodeFormat;
@@ -53,16 +58,9 @@ export class CountrySelector extends React.Component<Props, State> {
         countryCodeFormat,
         countryList
       );
-      this.setState(
-        {
-          selectedCountry: nextCountry,
-          countryOptions: countryList,
-        },
-        function() {
-          this.forceUpdate();
-        }
-      );
+      return state;
     }
+    return null;
   }
 
   getSelectedCountry(

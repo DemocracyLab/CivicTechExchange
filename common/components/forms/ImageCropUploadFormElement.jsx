@@ -33,11 +33,12 @@ class ImageCropUploadFormElement extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props, state){
     if (!this.state.initialized && nextProps.currentImage) {
       this.updateFormFields(nextProps.currentImage);
-      this.setState({ initialized: true });
+      return { initialized: true };
     }
+    return null;
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {

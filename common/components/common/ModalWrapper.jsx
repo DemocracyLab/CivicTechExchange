@@ -38,8 +38,8 @@ class ModalWrapper extends React.PureComponent<Props, State> {
     this.state = {};
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ showModal: nextProps.showModal });
+  static getDerivedStateFromProps(nextProps: Props){
+    return { showModal: nextProps.showModal };
   }
 
   render(): React$Node {

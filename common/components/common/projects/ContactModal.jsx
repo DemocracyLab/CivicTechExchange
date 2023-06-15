@@ -54,9 +54,9 @@ class ContactModal extends React.PureComponent<Props, State> {
     this.form = formHelper.setup();
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props, state){
     // TODO: Erase fields
-    this.setState({ showModal: nextProps.showModal });
+    return { showModal: nextProps.showModal };
   }
 
   askForSendConfirmation(): void {

@@ -96,10 +96,10 @@ class TeamSections extends React.PureComponent<Props, State> {
     this.handleClose = this.handleClose.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  static getDerivedStateFromProps(nextProps: Props){
     let state: State = { showModal: nextProps.showModal };
     state = this.loadTeamDetails(state, nextProps.teamResponse);
-    this.setState(state);
+    return state;
   }
 
   loadTeamDetails(state: State, response: TeamAPIData): State {

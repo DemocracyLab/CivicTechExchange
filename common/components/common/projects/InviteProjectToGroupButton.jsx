@@ -57,8 +57,8 @@ class InviteProjectToGroupButton extends React.PureComponent<Props, State> {
     }
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    this.setState({ projectGroups: nextProps.project.project_groups });
+  static getDerivedStateFromProps(nextProps: Props, state){
+    return { projectGroups: nextProps.project.project_groups };
   }
 
   handleShow() {
