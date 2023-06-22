@@ -1,6 +1,18 @@
 # https://hub.docker.com/r/nikolaik/python-nodejs
 FROM nikolaik/python-nodejs:python3.10-nodejs16
 
+# This to get GDAL thanks to https://stackoverflow.com/questions/62546706/how-do-i-install-gdal-in-a-python-docker-environment
+RUN apt-get update && apt-get install
+
+RUN apt-get install -y libmariadb-dev-compat libmariadb-dev
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gcc \
+    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update &&\
+    apt-get install -y binutils libproj-dev gdal-bin
+RUN export CPLUS_INCLUDE_PATH=/usr/include/gdal
+RUN export C_INCLUDE_PATH=/usr/include/gdal
+
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
