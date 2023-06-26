@@ -30,6 +30,7 @@ import MyGroupsController from "./MyGroupsController.jsx";
 import LiveEventController from "./LiveEventController.jsx";
 import AboutEventController from "./AboutEventController.jsx";
 import AboutGroupController from "./AboutGroupController.jsx";
+import IframeGroupController from "./IframeGroupController.jsx";
 import ErrorController from "./ErrorController.jsx";
 import FindGroupsController from "./FindGroupsController.jsx";
 import FindEventsController from "./FindEventsController.jsx";
@@ -114,6 +115,8 @@ class SectionController extends React.Component<{||}, State> {
         return <CreateEventController />;
       case Section.AboutGroup:
         return <AboutGroupController />;
+      case Section.IframeGroup:
+        return <IframeGroupController />;
       case Section.MyGroups:
         return <MyGroupsController />;
       case Section.MyEvents:

@@ -71,7 +71,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
           </React.Fragment>
         ) : null}
         <div className="row">
-          {!_.isEmpty(this.state.projects) && (
+          {!_.isEmpty(this.state.projects) && !this.props.supressHeader && (
             <h3 className="ProjectCardContainer-header">
               {this._renderCardHeaderText()}
             </h3>

@@ -34,6 +34,7 @@ class FrontEndSection(Enum):
     EmailVerified = 'EmailVerified'
     Error = 'Error'
     AboutGroup = 'AboutGroup'
+    IframeGroup = 'IframeGroup'
     FindGroups = 'FindGroups'
     FindEvents = 'FindEvents'
     CreateEvent = 'CreateEvent'

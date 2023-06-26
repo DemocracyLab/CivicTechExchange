@@ -49,18 +49,19 @@ class MainController extends React.Component<{||}, State> {
   }
 
   render(): Array<React$Node> {
-    return [
-      <MainHeader
+    const ShowHeadAndFoot=!(window.location.pathname.includes('igs'))
+    return <>
+      {ShowHeadAndFoot && <MainHeader
         key="main_header"
         onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}
-      />,
+      />}
       <SectionController
         key="section_controller"
         headerHeight={this.state.headerHeight}
-      />,
-      <SponsorFooter key="sponsor_footer" />,
-      <SiteFooter key="site_footer" />,
-    ];
+      />
+      {ShowHeadAndFoot && <SponsorFooter key="sponsor_footer" />}
+      {ShowHeadAndFoot && <SiteFooter key="site_footer" />}
+    </>
   }
 }
 
