@@ -20,7 +20,6 @@ docutils==0.14
 gunicorn==19.6.0
 jmespath==0.9.3
 mailchimp==2.0.9
-psycopg2==2.9.6
 psycopg2-binary==2.9.6
 python-dateutil==2.8.2
 pytz==2023.3
