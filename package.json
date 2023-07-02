@@ -18,7 +18,7 @@
     "node": "16.20.x"
   },
   "dependencies": {
-    "@tryghost/content-api": "^1.11.0",
+    "@tryghost/content-api": "^1.11.13",
     "bluebird": "^3.5.2",
     "css-loader": "^3.4.2",
     "django-react-csrftoken": "^1.0.4",
