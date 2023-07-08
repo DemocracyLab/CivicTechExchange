@@ -19,6 +19,7 @@ class FrontEndSection(Enum):
     ResetPassword = 'ResetPassword'
     ChangePassword = 'ChangePassword'
     AboutProject = 'AboutProject'
+    IframeProject = 'IframeProject'
     SignedUp = 'SignedUp'
     AboutUs = 'AboutUs'
     FindProjects = 'FindProjects'

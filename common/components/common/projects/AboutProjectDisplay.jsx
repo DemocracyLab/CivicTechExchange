@@ -108,8 +108,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const project = this.state.project;
+    const widthModifier=window.parent !== window ? ' use-parent-width' : '';
     return (
-      <div className="container Profile-root">
+      <div className={"container Profile-root" + widthModifier }>
         {this._renderHeader(project)}
         <div className="row">
           <div className="Profile-top-section col-12">

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+  <head>
+    <meta charset="utf-8" />
+    <title>iframe test</title>
+  </head>
+  <body>
+    <div style="width: 100vw;">
+        <h1>This is a landing page with Group projects:</h1>
+        <style>
+          iframe {
+            width: 1px;
+            min-width: 100%;
+          }
+        </style>
+        <script src="http://localhost:8000/static/iframeResizer.min.js"></script>
+        <iframe id="democracylab-groups"
+            src="http://localhost:8000/igs/1"
+        ></iframe>
+        <script>
+            iFrameResize({ log: true }, '#democracylab-groups')
+        </script>
+        <h1>This is the footer below the projects</h1>
+    </div>
+  </body>
+</html>

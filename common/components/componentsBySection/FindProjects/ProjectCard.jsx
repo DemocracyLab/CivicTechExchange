@@ -39,6 +39,10 @@ class ProjectCard extends React.PureComponent<Props, State> {
       }),
       showModal: false,
     };
+    // iFrameResizer will startup after the page is rendered, so we need to rerener if it does
+    if(!window.iFrameResizer) window.iFrameResizer={}
+    if(!window.iFrameResizer.onInParent) window.iFrameResizer.onInParent=[]
+    window.iFrameResizer.onInParent.push(this.onIframeResizer.bind(this))
   }
 
   onClickShowVideo(event: SyntheticMouseEvent): void {
@@ -52,12 +56,16 @@ class ProjectCard extends React.PureComponent<Props, State> {
     this.forceUpdate();
   }
 
+  onIframeResizer(){
+    this.forceUpdate()
+  }
+
   render(): React$Node {
-    const url: string =
-      this.props.project.cardUrl ||
+    const url: string = (window.location.pathname.includes('igs') && window.iFrameResizer?.inParent) ? '/ips/'+this.props.project.id :
+      (this.props.project.cardUrl ||
       urlHelper.section(Section.AboutProject, {
         id: this.props.project.slug || this.props.project.id,
-      });
+      }));
     return (
       <div className="ProjectCard-root">
         {this.props.project.video && (
@@ -68,7 +76,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
             videoTitle={this.props.project.name}
           />
         )}
-        <a href={url} rel="noopener noreferrer">
+        <a href={url} rel="noopener noreferrer" target={window.parent !== window && !window?.iFrameResizer?.inParent ? 'blank' : ''}>
           {this._renderLogo()}
           {this._renderSubInfo()}
           {this._renderTitleAndIssue()}
