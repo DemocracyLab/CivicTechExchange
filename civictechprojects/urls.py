@@ -77,7 +77,7 @@ urlpatterns = [
     re_path(r'^api/groups', views.group_search),
     re_path(r'^api/tags/groups', views.group_tags_counts),
     re_path(r'^api/tags', views.tags),
-    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^secretadmin/', admin.site.urls),
     re_path(r'^contact/democracylab$', views.contact_democracylab, name='contact_democracylab'),
     re_path(r'^contact/project/(?P<project_id>[0-9]+)/$', views.contact_project_owner, name='contact_project_owner'),
     re_path(r'^contact/volunteers/(?P<event_id>[0-9]+)/(?P<project_id>[0-9]+)/$', views.contact_event_project_volunteers, name='contact_event_project_volunteers'),
