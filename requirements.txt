@@ -12,7 +12,7 @@ django-registration==3.1.2
 django-rq==2.4.1
 django-s3direct==0.4.2
 django-storages==1.5.1
-django-taggit==1.3.0
+django-taggit==4.0
 django-timezone-field==4.2.3
 django-debreach==2.0.1
 djangorestframework==3.14.0
