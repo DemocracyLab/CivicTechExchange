@@ -43,7 +43,7 @@ class BlogCarousel extends React.PureComponent<Props, State> {
                 aria-hidden="true"
               />
               <p className="LatestBlogPosts-primarytag overline">
-                {i.primary_tag.name}
+                {i.primary_tag?.name}
               </p>
               <h3 className="LatestBlogPosts-title">{i.title}</h3>
               <p className="LatestBlogPosts-excerpt">
