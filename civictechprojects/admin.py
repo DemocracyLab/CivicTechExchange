@@ -116,6 +116,12 @@ class EventConferenceRoomAdmin(admin.ModelAdmin):
     list_display = ('event', 'event_project', 'zoom_id', 'last_activated')
     search_fields = ['event__event_name', ]
     list_filter = ('event',)
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if obj.event_project:
+            obj.event_project.recache()
+        else:
+            obj.event.recache(recache_linked=False)
 
 
 class EventConferenceRoomParticipantAdmin(admin.ModelAdmin):

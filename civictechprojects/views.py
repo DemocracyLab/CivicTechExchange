@@ -578,7 +578,7 @@ def upcoming_events(request):
     url_parts = request.GET.urlencode()
     query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
     event_count = int(query_params['count'][0]) if 'count' in query_params else 1
-    events = Event.objects.filter(is_created=True, is_searchable=True, is_private=False, event_date_start__gt=timezone.now())
+    events = Event.objects.filter(is_created=True, is_searchable=True, is_private=False, event_date_end__gt=timezone.now())
     return JsonResponse({'events': [event.hydrate_to_tile_json() for event in events.order_by('event_date_start')[:event_count]]})
 
 
@@ -983,8 +983,6 @@ def dismiss_project_volunteer(request, application_id):
         body = json.loads(request.body)
         message = body['dismissal_message']
         email_template = HtmlEmailTemplate()\
-        .paragraph('The owner of {project_name} has removed you from the project for the following reason:'.format(
-            project_name=volunteer_relation.project.project_name))\
         .paragraph('Thank you for contributing to {project_name}. Your volunteer work for the project has ended. \"{message}\"'\
                    .format(project_name=volunteer_relation.project.project_name, message=message))
         email_subject = 'Thank you for your work at {project_name}'.format(
