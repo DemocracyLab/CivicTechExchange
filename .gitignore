@@ -105,6 +105,9 @@ ENV/
 .history
 .ionide
 
+# MacOS
+.DS_Store
+
 # Local database
 mydatabase
 

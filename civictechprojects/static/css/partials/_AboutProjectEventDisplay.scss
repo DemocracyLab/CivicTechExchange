@@ -1,0 +1,107 @@
+// for Section.AboutProjectEventDisplay, child of Profile.scss rules, uses a lot of AboutProject components and rules too
+.AboutProjectEvent-top-section {
+  .Profile-top-section-content {
+    border: none; // remove border from general Profile-top section just for this page since it has different containers
+    border-radius: initial;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .Profile-top-logo {
+    padding: 0;
+  }
+  .Profile-top-details {
+    order: 2;
+  }
+  .Profile-top-interactions {
+    order: 3;
+    flex-basis: 100%;
+    gap: 1rem;
+    button,
+    a {
+      width: 100%;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .ProjectCard-logo a {
+    align-self: center; // aligns the logo image link
+  }
+}
+.AboutProjectEvent-top-content {
+  border: 1px solid $color-grey-frame-border;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+.AboutProjectEvent-event-logo {
+  width: 100%; // container takes entire width on mobile
+  img {
+    object-fit: contain; // don't crop by default
+    object-position: center top; // if we do crop, it keeps the top of the image visible
+    max-width: 100%;
+    display: flex;
+    margin: 0 auto; // center in container horizontally
+  }
+}
+.AboutProjectEvent-project-logo img {
+  max-height: 150px; // so very tall logo images don't ruin mobile
+}
+.AboutProjectEvent-top-names {
+  width: 100%;
+  background: $color-feedback-background-info-weakest;
+  .AboutProjectEvent-top-names-text {
+    padding: 48px 16px; // make sure long or short titles still have enough space
+  }
+}
+.AboutProjectEvent-primary-container {
+  padding: 16px;
+  h3 {
+    padding-top: 12px;
+  }
+  .apply-position-button,
+  .apply-position-button a {
+    width: 100%;
+  }
+}
+
+
+@include media-breakpoint-up(lg) {
+  .AboutProjectEvent-top-section {
+    .Profile-top-interactions {
+      flex-basis: unset;
+      .btn {
+        min-width: 160px;
+      }
+    }
+  }
+  .AboutProjectEvent-top-names {
+    display: flex;
+    flex-direction: row;
+    flex-basis: 65%;
+    gap: 64px;
+    .AboutProjectEvent-top-names-text {
+      padding: 16px 0 16px 16px;
+      align-self: center;
+    }
+  }
+  .AboutProjectEvent-event-logo-desktop {
+    flex-basis: 35%;
+    flex-shrink: 1;
+    margin-left: auto;
+    img {
+      max-width: 100%;
+      object-fit: contain;
+    }
+  }
+  .AboutProjectEvent-primary-container {
+    .apply-position-button,
+    .apply-position-button a {
+      width: unset;
+    }
+    p {
+      white-space: pre-wrap;
+    }
+  }
+}

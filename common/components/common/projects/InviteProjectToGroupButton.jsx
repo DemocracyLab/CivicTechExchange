@@ -1,14 +1,12 @@
 // @flow
 
 import React from "react";
-import { Container, ReduceStore } from "flux/utils";
 import Button from "react-bootstrap/Button";
-import MyGroupsStore, {
-  MyGroupsAPIResponse,
-  MyGroupData,
-} from "../../stores/MyGroupsStore.js";
 import type { ProjectDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
-import CurrentUser from "../../utils/CurrentUser.js";
+import CurrentUser, {
+  UserContext,
+  MyGroupData,
+} from "../../utils/CurrentUser.js";
 import metrics from "../../utils/metrics.js";
 import InviteProjectToGroupModal from "./InviteProjectToGroupModal.jsx";
 import { Dictionary, createDictionary } from "../../types/Generics.jsx";
@@ -28,27 +26,18 @@ type State = {|
 /**
  * Button to open Modal for inviting project to join group
  */
-class InviteProjectToGroupButton extends React.Component<Props, State> {
+class InviteProjectToGroupButton extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
 
+    const userContext: UserContext = CurrentUser.userContext();
     this.state = {
       projectGroups: props.project.project_groups,
+      ownedGroups: CurrentUser.isLoggedIn() && userContext.owned_groups,
       showModal: false,
     };
     this.handleShow = this.handleShow.bind(this);
     this.closeModal = this.closeModal.bind(this);
-  }
-
-  static getStores(): $ReadOnlyArray<ReduceStore> {
-    return [MyGroupsStore];
-  }
-
-  static calculateState(prevState: State): State {
-    const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
-    return {
-      ownedGroups: myGroups && myGroups.owned_groups,
-    };
   }
 
   getOwnedButNotInvitedGroups(
@@ -124,4 +113,4 @@ class InviteProjectToGroupButton extends React.Component<Props, State> {
   }
 }
 
-export default Container.create(InviteProjectToGroupButton);
+export default InviteProjectToGroupButton;

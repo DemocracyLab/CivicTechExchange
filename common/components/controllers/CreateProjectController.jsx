@@ -1,6 +1,7 @@
 // @flow
 
 import React from "react";
+import _ from "lodash";
 import CurrentUser from "../../components/utils/CurrentUser.js";
 import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
@@ -22,6 +23,8 @@ import FormWorkflow, {
   FormWorkflowStepConfig,
 } from "../forms/FormWorkflow.jsx";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
+import type { Dictionary } from "../types/Generics.jsx";
+import type { APIResponse } from "../utils/api.js";
 
 type State = {|
   projectId: ?number,
@@ -82,9 +85,10 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
           formComponent: ProjectPositionsForm,
         },
         {
-          header: "Ready to publish your project?",
+          header: "Ready to submit your project?",
           subHeader:
-            "Please review your project's details and click \"PUBLISH\" below when you're ready.",
+            'Please review your project’s details and click "Submit" below when you’re ready.',
+          submitButtonText: "Submit",
           onSubmit: this.onSubmit,
           onSubmitSuccess: this.onFinalSubmitSuccess,
           formComponent: ProjectPreviewForm,
@@ -97,6 +101,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     if (this.state.projectId) {
       ProjectAPIUtils.fetchProjectDetails(
         this.state.projectId,
+        true,
         this.loadProjectDetails.bind(this),
         this.handleLoadProjectError.bind(this)
       );
@@ -119,10 +124,18 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     if (!CurrentUser.isCoOwnerOrOwner(project) && !CurrentUser.isStaff()) {
       // TODO: Handle someone other than owner
     } else {
+      if (project.project_created) {
+        const lastStep: FormWorkflowStepConfig = _.last(this.state.steps);
+        lastStep.header = "Ready to save your edits?";
+        lastStep.subHeader =
+          'When everything looks good, click "Update Project" below.';
+        lastStep.submitButtonText = "Update Project";
+      }
       this.setState({
         project: project,
         projectIsLoading: false,
         startStep: url.argument("step") || 1,
+        steps: _.clone(this.state.steps),
       });
     }
   }
@@ -136,7 +149,7 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
   onSubmit(
     event: SyntheticEvent<HTMLFormElement>,
     formRef: HTMLFormElement,
-    onSubmitSuccess: (ProjectDetailsAPIData, () => void) => void
+    onSubmitSuccess: ProjectDetailsAPIData => void
   ): void {
     const formSubmitUrl: string =
       this.state.project && this.state.project.project_id
@@ -145,17 +158,19 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     api.postForm(
       formSubmitUrl,
       formRef,
-      onSubmitSuccess,
+      (response: APIResponse) => onSubmitSuccess(JSON.parse(response)),
       response => null /* TODO: Report error to user */
     );
   }
 
   onNextPageSuccess(project: ProjectDetailsAPIData): void {
-    this.setState({
-      project: project,
-      projectId: project.project_id,
-    });
-    this.updatePageUrl();
+    this.setState(
+      {
+        project: project,
+        projectId: project.project_id,
+      },
+      this.updatePageUrl.bind(this)
+    );
   }
 
   onFinalSubmitSuccess(project: ProjectDetailsAPIData): void {
@@ -165,9 +180,19 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
     });
     metrics.logProjectCreated(CurrentUser.userID());
     // TODO: Fix bug with switching to this section without page reload
-    window.location.href = url.section(Section.MyProjects, {
-      projectAwaitingApproval: url.encodeNameForUrlPassing(project.project_name),
-    });
+    let urlArgs: Dictionary<string> = {
+      projectAwaitingApproval: url.encodeNameForUrlPassing(
+        project.project_name
+      ),
+    };
+    if (project.event_created_from) {
+      // Show modal on next page for prompting to create event project
+      urlArgs = Object.assign(urlArgs, {
+        fromProjectId: project.project_id,
+        fromEventId: project.event_created_from,
+      });
+    }
+    window.location.href = url.section(Section.MyProjects, urlArgs);
   }
 
   render(): React$Node {

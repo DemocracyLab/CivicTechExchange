@@ -17,11 +17,14 @@ import type {
   TagDefinitionCount,
 } from "../../utils/ProjectAPIUtils.js";
 import ProfileProjectSearch from "../projects/ProfileProjectSearch.jsx";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import { Container } from "flux/utils";
-import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
+import EntitySearchStore, {
+  SearchFor,
+} from "../../stores/EntitySearchStore.js";
 import { Dictionary } from "../../types/Generics.jsx";
 import TagCategory from "../tags/TagCategory.jsx";
+import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
 
 type Props = {|
   group: ?GroupDetailsAPIData,
@@ -43,7 +46,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore];
+    return [EntitySearchStore];
   }
 
   static calculateState(prevState: State): State {
@@ -54,7 +57,7 @@ class AboutGroupDisplay extends React.Component<Props, State> {
   }
 
   static getIssueAreas(): ?$ReadOnlyArray<TagDefinition> {
-    const tags: Dictionary<TagDefinitionCount> = ProjectSearchStore.getAllTags();
+    const tags: Dictionary<TagDefinitionCount> = EntitySearchStore.getAllTags();
     const presentTags: $ReadOnlyArray<TagDefinitionCount> = _.values(
       tags
     ).filter(
@@ -121,14 +124,18 @@ class AboutGroupDisplay extends React.Component<Props, State> {
       <div className="Profile-primary-container">
         <div className="Profile-tab tab-content">
           <h3>Group Description</h3>
-          <div className="AboutGroup-description">{group.group_description}</div>
+          <div className="AboutGroup-description">
+            <AllowMarkdown>{group.group_description}</AllowMarkdown>
+          </div>
           <div className="AboutGroup-issue-areas pt-4">
             {!_.isEmpty(this.state.issueAreas) && (
               <React.Fragment>
                 <h4>Issue Areas</h4>
                 {this.state.issueAreas &&
                   this.state.issueAreas.map((issue: TagDefinition) => (
-                    <span className="Profile-pill" key={issue.tag_name}>{issue.display_name}</span>
+                    <span className="Profile-pill" key={issue.tag_name}>
+                      {issue.display_name}
+                    </span>
                   ))}
               </React.Fragment>
             )}
@@ -186,15 +193,15 @@ class AboutGroupDisplay extends React.Component<Props, State> {
   initProjectSearch(state: State) {
     const group: GroupDetailsAPIData = state.group;
     if (group) {
-      ProjectSearchDispatcher.dispatch({
-        type: "INIT",
+      UniversalDispatcher.dispatch({
+        type: "INIT_SEARCH",
         findProjectsArgs: {
           group_id: group.group_id,
           sortField: "-project_date_modified",
         },
         searchSettings: {
           updateUrl: false,
-          defaultSort: "-project_date_modified",
+          searchConfig: SearchFor.Projects,
         },
       });
     }

@@ -6,6 +6,7 @@ from .models import Contributor
 from civictechprojects.models import ProjectLink, ProjectFile, FileCategory
 from common.helpers.form_helpers import read_form_field_string, read_form_field_tags, merge_json_changes, merge_single_file
 from common.helpers.qiqo_chat import SubscribeUserToQiqoChat
+from salesforce import contact as salesforce_contact
 from common.helpers.request_helpers import is_ajax
 
 
@@ -49,6 +50,7 @@ class DemocracyLabUserCreationForm(UserCreationForm):
             user.update_linked_items()
 
         SubscribeUserToQiqoChat(user)
+        salesforce_contact.save(user)
         return user
 
 

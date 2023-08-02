@@ -1,24 +1,21 @@
 // @flow
 
-import CurrentUser from "../utils/CurrentUser.js";
+import React from "react";
+import _ from "lodash";
+import CurrentUser, {
+  UserContext,
+  MyProjectData,
+} from "../utils/CurrentUser.js";
 import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 import MyProjectCard from "../componentsBySection/MyProjects/MyProjectCard.jsx";
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
-import MyProjectsStore, {
-  MyProjectData,
-  MyProjectsAPIResponse,
-} from "../stores/MyProjectsStore.js";
-import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import metrics from "../utils/metrics.js";
-import { Container } from "flux/utils";
 import ProjectVolunteerRenewModal from "../common/projects/ProjectVolunteerRenewModal.jsx";
 import ProjectVolunteerConcludeModal from "../common/projects/ProjectVolunteerConcludeModal.jsx";
 import LogInController from "./LogInController.jsx";
 import url from "../utils/url.js";
-import Section from "../enums/Section";
-import React from "react";
-import _ from "lodash";
-import Headers from "../common/Headers.jsx";
+import Section from "../enums/Section.js";
+import PromptNavigationModal from "../common/PromptNavigationModal.jsx";
 
 type State = {|
   ownedProjects: ?Array<MyProjectData>,
@@ -26,37 +23,30 @@ type State = {|
   showConfirmDeleteModal: boolean,
   showRenewVolunteerModal: boolean,
   showConcludeVolunteerModal: boolean,
+  showPromptCreateEventProject: boolean,
+  fromProjectId: string,
+  fromEventId: string,
 |};
 
-class MyProjectsController extends React.Component<{||}, State> {
+class MyProjectsController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
+    const userContext: UserContext = CurrentUser.userContext();
+    const fromProjectId: string = url.argument("fromProjectId");
+    const fromEventId: string = url.argument("fromEventId");
     this.state = {
-      ownedProjects: null,
-      volunteeringProjects: null,
+      ownedProjects: userContext?.owned_projects,
+      volunteeringProjects: userContext?.volunteering_projects,
       showConfirmDeleteModal: false,
       showRenewVolunteerModal: false,
       showConcludeVolunteerModal: false,
-    };
-  }
-
-  static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [MyProjectsStore];
-  }
-
-  static calculateState(prevState: State): State {
-    const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
-    return {
-      ownedProjects: myProjects && myProjects.owned_projects,
-      volunteeringProjects: myProjects && myProjects.volunteering_projects,
+      showPromptCreateEventProject: fromProjectId && fromEventId,
+      fromProjectId: fromProjectId,
+      fromEventId: fromEventId,
     };
   }
 
   componentWillMount(): void {
-    setTimeout(function() {
-      // Run after dispatcher has finished
-      UniversalDispatcher.dispatch({ type: "INIT" });
-    }, 0);
     const args = url.arguments(window.location.href);
     if (
       "from" in args &&
@@ -102,7 +92,7 @@ class MyProjectsController extends React.Component<{||}, State> {
     this.forceUpdate();
   }
 
-  confirmDeleteProject(confirmedDelete: boolean): void {
+  async confirmDeleteProject(confirmedDelete: boolean): void {
     if (confirmedDelete) {
       const url =
         "/api/projects/delete/" + this.state.projectToDelete.project_id + "/";
@@ -154,11 +144,7 @@ class MyProjectsController extends React.Component<{||}, State> {
   render(): React$Node {
     return CurrentUser.isLoggedIn() ? (
       <React.Fragment>
-        <Headers
-          title="My Projects | DemocracyLab"
-          description="My Projects page"
-        />
-        <div className="MyProjectsController-root">
+        <div className="container MyProjectsController-root">
           <ConfirmationModal
             showModal={this.state.showConfirmDeleteModal}
             message="Are you sure you want to delete this project?"
@@ -176,6 +162,23 @@ class MyProjectsController extends React.Component<{||}, State> {
             applicationId={this.state.applicationId}
             handleClose={this.confirmVolunteerConclude.bind(this)}
           />
+
+          <PromptNavigationModal
+            showModal={this.state.showPromptCreateEventProject}
+            submitUrl={url.section(Section.CreateEventProject, {
+              event_id: this.state.fromEventId,
+            })}
+            headerText="Thank you for creating a project!"
+            cancelText="No, I'll do it later"
+            submitText="Yes"
+            onCancel={() =>
+              this.setState({ showPromptCreateEventProject: false })
+            }
+          >
+            Your project is awaiting approval by DemocracyLab. The next step is
+            to define your hackathon project scope. Would you like to do that
+            now?
+          </PromptNavigationModal>
 
           {!_.isEmpty(this.state.ownedProjects) &&
             this.renderProjectCollection(
@@ -221,4 +224,4 @@ class MyProjectsController extends React.Component<{||}, State> {
   }
 }
 
-export default Container.create(MyProjectsController);
+export default MyProjectsController;

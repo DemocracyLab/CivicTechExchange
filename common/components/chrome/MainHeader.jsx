@@ -9,11 +9,6 @@ import React from "react";
 import Section from "../enums/Section.js";
 import urlHelper from "../utils/url.js";
 import AlertHeader from "./AlertHeader.jsx";
-import MyProjectsStore, {
-  MyProjectsAPIResponse,
-} from "../stores/MyProjectsStore.js";
-import MyGroupsStore, { MyGroupsAPIResponse } from "../stores/MyGroupsStore.js";
-import MyEventsStore, { MyEventsAPIResponse } from "../stores/MyEventsStore.js";
 import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import _ from "lodash";
 import Navbar from "react-bootstrap/Navbar";
@@ -33,23 +28,15 @@ type State = {|
 
 class MainHeader extends React.Component<{||}, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [NavigationStore, MyProjectsStore, MyGroupsStore, MyEventsStore];
+    return [NavigationStore];
   }
 
   static calculateState(prevState: State): State {
-    const myProjects: MyProjectsAPIResponse = MyProjectsStore.getMyProjects();
-    const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
-    const myEvents: MyEventsAPIResponse = MyEventsStore.getMyEvents();
     return {
       showHeader: !urlHelper.argument("embedded"),
-      showMyProjects:
-        myProjects &&
-        (!_.isEmpty(myProjects.volunteering_projects) ||
-          !_.isEmpty(myProjects.owned_projects)),
-      showMyGroups: myGroups && !_.isEmpty(myGroups.owned_groups),
-      showMyEvents:
-        myEvents &&
-        (!_.isEmpty(myEvents.owned_events) || CurrentUser.isStaff()),
+      showMyProjects: CurrentUser.hasProjects(),
+      showMyGroups: CurrentUser.hasGroups(),
+      showMyEvents: CurrentUser.hasEvents(),
       loginUrl: urlHelper.logInThenReturn(),
     };
   }
@@ -90,7 +77,7 @@ class MainHeader extends React.Component<{||}, State> {
       <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
         <Navbar.Brand>
           <a href={urlHelper.section(Section.Home)}>
-            <img src={cdn.image("dl_logo.png")} alt="DemocracyLab" />
+            <img src={cdn.image("dl_logo.png")} alt="DemocracyLab - Home" />
           </a>
         </Navbar.Brand>
         {CurrentUser.isLoggedIn() ? null : (
@@ -103,7 +90,7 @@ class MainHeader extends React.Component<{||}, State> {
           </Button>
         )}
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
-        <Navbar.Collapse id="nav-pagenav-container" className="flex-column">
+        <Navbar.Collapse id="nav-pagenav-container" className="MainHeader-nav-flex">
           <Nav className="MainHeader-usernav ml-auto">
             {CurrentUser.isLoggedIn()
               ? this._renderUserSection()
@@ -144,10 +131,6 @@ class MainHeader extends React.Component<{||}, State> {
               {this._renderNavDropdownItem(
                 urlHelper.section(Section.ContactUs),
                 "Contact Us"
-              )}
-              {this._renderNavDropdownItem(
-                urlHelper.section(Section.Press),
-                "News"
               )}
             </NavDropdown>
             {window.BLOG_URL ? (

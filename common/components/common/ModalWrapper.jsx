@@ -3,7 +3,16 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { Glyph, GlyphSizes, GlyphStyles } from "../utils/glyphs";
+import { Glyph, GlyphSizes, GlyphStyles } from "../utils/glyphs.js";
+import type { Dictionary } from "../types/Generics.jsx";
+
+export const ModalSizes = {
+  Small: "sm",
+  Medium: "",
+  Large: "lg",
+  ExtraLarge: "xl",
+};
+
 type Props = {|
   showModal: boolean,
   headerText: string,
@@ -13,6 +22,10 @@ type Props = {|
   submitEnabled: boolean,
   onClickCancel: () => void,
   onClickSubmit: () => void,
+  onModalHide: ?() => void,
+  hideButtons: ?boolean,
+  size: ?string,
+  reverseCancelConfirm: ?boolean,
 |};
 type State = {||};
 
@@ -30,17 +43,35 @@ class ModalWrapper extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
+    const modalProps: Dictionary<string> = {
+      show: this.props.showModal,
+      onHide: this.props.onModalHide || this.props.onClickCancel,
+    };
+    if (this.props.size) {
+      modalProps.size = this.props.size;
+    }
     return (
       <div>
-        <Modal show={this.props.showModal} onHide={this.props.onClickCancel}>
+        <Modal {...modalProps}>
           <Modal.Header closeButton={true}>
             <Modal.Title>{this.props.headerText}</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.props.children}</Modal.Body>
-          <Modal.Footer>
-            {this.props.onClickCancel && this._renderCancelButton()}
-            {this._renderSubmitButton()}
-          </Modal.Footer>
+          {!this.props.hideButtons && (
+            <Modal.Footer>
+              {this.props.reverseCancelConfirm ? (
+                <React.Fragment>
+                  {this._renderSubmitButton()}
+                  {this.props.onClickCancel && this._renderCancelButton()}
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  {this.props.onClickCancel && this._renderCancelButton()}
+                  {this._renderSubmitButton()}
+                </React.Fragment>
+              )}
+            </Modal.Footer>
+          )}
         </Modal>
       </div>
     );

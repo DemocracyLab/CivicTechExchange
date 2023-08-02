@@ -1,6 +1,6 @@
 .ProjectProfileSearch-root {
   button.reset-search-button {
-    max-width: 120px;
+    max-width: 150px;
   }
   .ProjectTagContainer-root {
     border: 0;
@@ -33,7 +33,8 @@ h3.ProjectProfileSearch-sectiontitle {
   .ProjectProfileSearch-root {
     .ProjectFilterContainer-category-header,
     .ProjectFilterContainer-subcategory-header,
-    .ProjectFilterContainer-filter-list {
+    .ProjectFilterContainer-filter-list,
+    .favorite-filter {
       margin: 0 2rem;
     }
   }

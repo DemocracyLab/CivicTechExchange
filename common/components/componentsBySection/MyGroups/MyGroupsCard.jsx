@@ -4,8 +4,7 @@ import React from "react";
 import Section from "../../enums/Section.js";
 import url from "../../utils/url.js";
 import { Button } from "react-bootstrap";
-import { MyGroupData } from "../../stores/MyGroupsStore.js";
-import CurrentUser from "../../utils/CurrentUser.js";
+import CurrentUser, { MyGroupData } from "../../utils/CurrentUser.js";
 
 type Props = {|
   +group: MyGroupData,
@@ -26,27 +25,19 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     return (
-      <div className="MyProjectCard-root">
-        <table className="MyProjectCard-table">
-          <tbody>
-            <tr>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">Group Name</tr>
-                <tr className="MyProjectCard-projectName">
-                  {this.props.group.group_name}
-                </tr>
-              </td>
-              <td className="MyProjectCard-column">
-                <tr className="MyProjectCard-header">Your Role</tr>
-                <tr>{this.state.isOwner ? "Group Owner" : "Volunteer"}</tr>
-              </td>
-              <td className="MyProjectCard-column">
-                {this._renderGroupStatus()}
-              </td>
-              <td className="MyProjectCard-column">{this._renderButtons()}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="row MyProjectCard-root">
+        <div className="col-sm-4">
+          <div className="MyProjectCard-header">Group Name</div>
+          <div className="MyProjectCard-projectName text-break">
+            {this.props.group.group_name}
+          </div>
+        </div>
+        <div className="col-sm-2">
+          <div className="MyProjectCard-header">Your Role</div>
+          <div>{this.state.isOwner ? "Group Owner" : "Volunteer"}</div>
+        </div>
+        <div className="col-sm-3">{this._renderGroupStatus()}</div>
+        <div className="col-sm-3">{this._renderButtons()}</div>
       </div>
     );
   }
@@ -71,8 +62,8 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <tr className="MyProjectCard-header">{header}</tr>
-        <tr>{status}</tr>
+        <div className="MyProjectCard-header">{header}</div>
+        <div>{status}</div>
       </React.Fragment>
     );
   }
@@ -82,8 +73,10 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
     let buttons: ?Array<React$Node> = [
       <Button
         className="MyProjectCard-button"
-        href={url.section(Section.AboutGroup, id)}
-        variant="info"
+        href={url.section(Section.AboutGroup, {
+          id: this.props.group.slug || this.props.group.group_id,
+        })}
+        variant="secondary"
       >
         View
       </Button>,
@@ -92,12 +85,16 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
     if (this.state.isOwner) {
       const editUrl: string = url.section(Section.CreateGroup, id);
       buttons = buttons.concat([
-        <Button className="MyProjectCard-button" href={editUrl} variant="info">
+        <Button
+          className="MyProjectCard-button"
+          href={editUrl}
+          variant="secondary"
+        >
           Edit
         </Button>,
         <Button
           className="MyProjectCard-button"
-          variant="danger"
+          variant="destructive"
           onClick={() => this.props.onGroupClickDelete(this.props.group)}
         >
           Delete

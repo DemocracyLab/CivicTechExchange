@@ -5,8 +5,7 @@ import Button from "react-bootstrap/Button";
 import ProjectAPIUtils, {
   ProjectDetailsAPIData,
 } from "../../utils/ProjectAPIUtils.js";
-import CurrentUser from "../../utils/CurrentUser.js";
-import type { MyGroupData } from "../../stores/MyGroupsStore.js";
+import CurrentUser, { MyGroupData } from "../../utils/CurrentUser.js";
 import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import _ from "lodash";

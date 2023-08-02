@@ -1,20 +1,21 @@
+// democracylab.org/companies page --- TODO: rename controller
+
 // @flow
 
 import React from "react";
 import Button from "react-bootstrap/Button";
 import url from "../utils/url.js";
-import Section from "../enums/Section.js";
+import Sponsors, { SponsorMetadata } from "../utils/Sponsors.js";
 import cdn from "../utils/cdn.js";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import TestimonialCarousel from "../../components/common/carousel/TestimonialCarousel.jsx";
-import BlogCarousel from "../../components/common/carousel/BlogCarousel.jsx";
 import ContactForm from "../../components/forms/ContactForm.jsx";
 import JumpAnchor from "../common/JumpAnchor.jsx";
 import _ from "lodash";
-import IconCircle1 from "../svg/corporatehackathon/corp1circle.svg";
-import IconCircle2 from "../svg/corporatehackathon/corp2circle.svg";
-import IconCircle3 from "../svg/corporatehackathon/corp3circle.svg";
+import IconCircle1 from "../svg/corporatehackathon/Discover.svg";
+import IconCircle2 from "../svg/corporatehackathon/ConnectionCircle.svg";
+import IconCircle3 from "../svg/corporatehackathon/Code.svg";
 import type { Dictionary } from "../types/Generics.jsx";
 import { Glyph, GlyphStyles, GlyphSizes } from "../utils/glyphs.js";
 
@@ -50,8 +51,6 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         <div className="corporate-root container">
           {this._renderTop()}
           <div className="row">{this._renderTabs()}</div>
-          <div className="row">{this._renderContact()}</div>
-          {this._renderBottomImage()}
         </div>
       </React.Fragment>
     );
@@ -70,45 +69,39 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               }}
             >
               <div className="corporate-top-overlay">
-                <h1>Together we can advance technology for the public good.</h1>
+                <h1>Do well by doing good.</h1>
               </div>
             </div>
           </div>
         </div>
         <div className="row">
-          <div className="corporate-top col-12 corporate-section">
+          <div className="corporate-top col-12 corporate-bg-light">
             <div className="corporate-top-flex">
               <div className="corporate-top-flex-section">
-                <p>
-                  DemocracyLab's success depends on creating value for our
-                  corporate partners:
-                </p>
+                <h1>Partner with DemocracyLab to make a difference.</h1>
+                <h2>Ways to work together:</h2>
                 <ul>
                   <li>
-                    Our custom employee engagement events build a culture of
-                    purpose and spur innovation.
+                    <span className="h4">
+                      Host a custom tech-for-good hackathon event.
+                    </span>
+                    <p>
+                      Promote employee engagement and give back to your
+                      community.
+                    </p>
                   </li>
                   <li>
-                    Sponsorship of our public hackathons differentiates your
-                    brand and amplifies the impact of our diverse community.
+                    <span className="h4">
+                      Sponsor the DemocracyLab platform and public hackathons.
+                    </span>
+                    <p>
+                      Differentiate your brand and show your commitment to the
+                      tech-for-good movement.
+                    </p>
                   </li>
                 </ul>
-                <p>
-                  We make it easy and fun for your company to do well by doing
-                  good.
-                </p>
-              </div>
-              <div className="corporate-top-flex-button">
-                <Button
-                  variant="cta"
-                  href="#contact"
-                  className="corporate-cta-button"
-                >
-                  Partner With Us
-                </Button>
               </div>
             </div>
-            <h2>Learn more about opportunities below.</h2>
           </div>
         </div>
       </React.Fragment>
@@ -120,10 +113,16 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
       <React.Fragment>
         <div className="corporate-tab-section">
           <Tabs defaultActiveKey={this.state.defaultTab} id="corporate-tabs">
-            <Tab eventKey={tabOptions.hackathon} title="Host a Hackathon">
+            <Tab
+              eventKey={tabOptions.hackathon}
+              title="Host a Tech-for-Good Hackathon"
+            >
               {this._renderHackathonTab()}
             </Tab>
-            <Tab eventKey={tabOptions.sponsorship} title="Sponsorship">
+            <Tab
+              eventKey={tabOptions.sponsorship}
+              title="Sponsor Our Platform & Public Events"
+            >
               {this._renderSponsorshipTab()}
             </Tab>
           </Tabs>
@@ -136,70 +135,79 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-hackathon-whyhost col-12">
-          <h1>Why Host a Hackathon?</h1>
+          <h1>Benefits of hosting an in-house hackathon.</h1>
           <div className="row">
-            <div className="col-sm-12 col-lg-4">
-              <div className="corporate-hackathon-card">
-                <h2>Cultivate Culture</h2>
+            <div className="col-12 corporate-card-container">
+              <div className="corporate-card">
+                <h2>Engage your team and give back to your community</h2>
                 <p>
-                  Our events allow your employees to take risks, try bold new
-                  strategies, and share their knowledge in a low-pressure
-                  environment, all while contributing to the public good.
+                  Strengthen employee enthusiasm, participate in meaningful
+                  projects, and instill a sense of purpose.
                 </p>
                 <p>
-                  73% of DemocracyLab’s corporate hackathon participants
-                  reported an increase in enthusiasm for working at their
-                  company.
+                  73% of our corporate hackathon participants reported an
+                  increase in enthusiasm for working at their company.
+                </p>
+              </div>
+              <div className="corporate-card">
+                <h2>Drive performance</h2>
+                <p>
+                  Spur innovation and turn your culture of purpose into
+                  bottom-line results.
+                </p>
+                <p>
+                  91% of executives and employees correlate a sense of purpose
+                  with a history of strong financial performance. (
+                  <a
+                    href="https://www2.deloitte.com/us/en/pages/about-deloitte/articles/culture-of-purpose.html"
+                    rel="noopener noreferrer nofollow"
+                    target="_blank"
+                  >
+                    Deloitte
+                  </a>
+                  )
+                </p>
+              </div>
+              <div className="corporate-card">
+                <h2>Enjoy a significant return on investment</h2>
+                <p>
+                  Increased employee enthusiasm and engagement leads to lower
+                  turnover rates and higher profitability.
+                </p>
+                <p>
+                  Highly engaged teams realize 59% less turnover and 21% greater
+                  profitability. (
+                  <a
+                    href="https://www.gallup.com/workplace/236366/right-culture-not-employee-satisfaction.aspx"
+                    rel="noopener noreferrer nofollow"
+                    target="_blank"
+                  >
+                    Gallup
+                  </a>
+                  )
                 </p>
               </div>
             </div>
-            <div className="col-sm-12 col-lg-4">
-              <div className="corporate-hackathon-card">
-                <h2>Drive Performance</h2>
-                <p>
-                  91% of respondents (executives and employees) who said their
-                  company had a strong sense of purpose also said their company
-                  had a history of strong financial performance.
-                </p>
-                <p>
-                  75% of DemocracyLab’s corporate hackathon participants
-                  reported increased belief that they could make a positive
-                  impact in the world.
-                </p>
-              </div>
-            </div>
-            <div className="col-sm-12 col-lg-4">
-              <div className="corporate-hackathon-card">
-                <h2>Amplify Impact</h2>
-                <p>
-                  Systematic change requires a shift in power. That means that a
-                  top-down approach to social innovation won’t produce the
-                  equitable outcomes society needs.
-                </p>
-                <p>
-                  DemocracyLab serves projects from social impact startups,
-                  nonprofits and governments. We help your employees use their
-                  most valuable skills to address society’s toughest problems.
-                </p>
-              </div>
+            <div className="col-12 corporate-learn-more">
+              <h4>Learn more: {this._renderHackathonProspectus()}</h4>
+              <Button
+                variant="primary"
+                href="#contact-hackathon"
+                className="corporate-block-button"
+              >
+                Get Started
+              </Button>
             </div>
           </div>
-          <p className="corporate-sources-citation overline">
-            Sources:
-            <br />
-            DemocracyLab post-event surveys <br />
-            Deloitte{" "}
-            <a
-              className="overline"
-              href="https://www2.deloitte.com/us/en/pages/about-deloitte/articles/culture-of-purpose.html"
-              target="_blank"
-            >
-              "Culture of Purpose"
-            </a>
-          </p>
+
+          {/* this button jumps down to the contact form FOR the hackathon section, see issue #820 */}
         </div>
-        <div className="corporate-hackathon-howitworks corporate-section col-12">
-          <h1>How it Works</h1>
+        <div className="corporate-hackathon-howitworks corporate-bg-light col-12">
+          <h1>How it works:</h1>
+          <h2>
+            We do the heavy lifting. Your employees make an impact. Your
+            organization thrives.
+          </h2>
           <div className="corporate-how-flex-container">
             <div className="corporate-how-flex-block">
               <div className="corporate-how-image-container">
@@ -207,10 +215,10 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
               </div>
               <div className="corporate-how-text-container">
                 <div className="corporate-how-text">
-                  <h2>Recruit</h2>
+                  <h3>1. Discover</h3>
                   <p>
                     We find tech-for-good projects that are a good fit for your
-                    team and help you motivate your employees to participate.
+                    team.
                   </p>
                 </div>
               </div>
@@ -220,10 +228,9 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 <IconCircle2 />
               </div>
               <div className="corporate-how-text">
-                <h2>Define</h2>
+                <h3>2. Define</h3>
                 <p>
-                  We work with projects to define a narrow scope of work that
-                  will help them fulfill their mission.
+                  We determine project scope to match your employees' strengths.
                 </p>
               </div>
             </div>
@@ -232,64 +239,39 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 <IconCircle3 />
               </div>
               <div className="corporate-how-text">
-                <h2>Hack</h2>
+                <h3>3. Collaborate</h3>
                 <p>
-                  Your employees collaborate with project leaders to create
-                  innovative tech-for-good solutions.
+                  Together, we make a positive impact at your tech-for-good
+                  hackathon!
                 </p>
               </div>
             </div>
           </div>
-          <hr className="corporate-hr-line"></hr>
-
-          <p className="corporate-how-after">
+          <h3 className="corporate-how-after">
             After the event, DemocracyLab reports on the resulting engagement,
             outcomes, and impact.
-          </p>
-          <div className="corporate-how-after corporate-learn-link">
-            <a 
-              href={cdn.document(
-                "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
-              )}
-            >
-              Learn More
-              <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
-            </a>
-          </div>
+          </h3>
         </div>
-        <div className="corporate-hackathon-saying corporate-section col-12">
-          <h1>What People Are Saying</h1>
-          <div className="carousel-testimonial-root">
+
+        
+
+        <div className="corporate-hackathon-saying col-12">
+          <h1>What our partners are saying.</h1>
+          <h2>
+            Feedback from our partners about their custom hackathon events.
+          </h2>
+          <div className="corporate-hackathon-carousel carousel-testimonial-root">
             <TestimonialCarousel
               category="partner-highlights"
-              interval={600000}
             />
           </div>
-        </div>
-        <div className="corporate-hackathon-stories corporate-section col-12">
-          <h1>Impact Stories</h1>
-          <div className="carousel-blog-root">
-            <BlogCarousel tag="partner-highlights" interval={600000} />
-          </div>
-          <p className="headline2 font-weight-normal">
-            Read about other previous events in our{" "}
-            <a
-              className="headline2 font-weight-normal"
-              href={window.BLOG_URL}
-              target="_blank"
-            >
-              blog
-            </a>
-            , or other events that are coming up{" "}
-            <a
-              className="headline2 font-weight-normal"
-              href={url.section(Section.FindEvents)}
-            >
-              here
-            </a>
-            .
+          <p className="h3">
+            Learn more in our <a href="https://blog.democracylab.org/how-amazon-hacked-for-good/">blog</a>.
           </p>
         </div>
+
+        {this._renderContactHackathon()}
+
       </React.Fragment>
     );
   }
@@ -298,179 +280,225 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-sponsorship-why col-12">
-          <h1>Why Partner With Us?</h1>
+          <h1>Why become a sponsor?</h1>
           <div className="row">
-            <div className="col-sm-12 col-lg-4">
-              <div className="corporate-sponsorship-card">
-                <h2>Impact</h2>
+            <div className="col-12 corporate-card-container">
+              <div className="corporate-card">
+                <h2>Make an impact.</h2>
                 <p>
-                  Your investment will support hundreds of tech-for-good
-                  projects that use DemocracyLab’s platform to attract the
-                  skilled volunteers they need to launch their products and
-                  prove their concepts.
+                  Your support advances hundreds of tech-for-good projects,
+                  helps us grow, and improves our public events.
                 </p>
                 <p>
-                  DemocracyLab will use your investment to support our public
-                  events, scale our operations, and accelerate our growth.
+                  Every $1,000 contributed enables 500 hours of skilled
+                  volunteer work, helping more projects make more of an impact.
                 </p>
               </div>
-            </div>
-            <div className="col-sm-12 col-lg-4">
-              <div className="corporate-sponsorship-card">
-                <h2>Differentiation</h2>
+              <div className="corporate-card">
+                <h2>Differentiate your company.</h2>
                 <p>
-                  DemocracyLab’s unique product and positioning make sponsorship
-                  a bold way to demonstrate your company’s commitment to social
-                  responsibility.
+                  Supporting DemocracyLab shows your company's commitment to
+                  social responsibility.
                 </p>
                 <p>
-                  Our community of volunteers is tomorrow’s diverse, dynamic,
-                  and purpose-driven workforce. Sponsorship lets them know your
-                  company helped create the opportunities they are enjoying.
+                  79% of employees prefer to work at a socially responsible
+                  company. (
+                  <a
+                    href="https://www2.deloitte.com/us/en/pages/about-deloitte/articles/culture-of-purpose.html"
+                    rel="noopener noreferrer nofollow"
+                    target="_blank"
+                  >
+                    Deloitte
+                  </a>
+                  )
                 </p>
               </div>
-            </div>
-            <div className="col-sm-12 col-lg-4">
-              <div className="corporate-sponsorship-card">
-                <h2>Value</h2>
-                <p>
-                  For a fraction of the cost of a typical corporate event, your
-                  company can become part of the accelerating tech-for-good
-                  movement.
-                </p>
-                <p>
-                  Today's sponsorship pricing is a bargain. Buy low and enjoy a
-                  significant return on your company's investment!
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="corporate-section col-12">
-            <h2 className="corporate-sponsorship-stat-title">
-              Public hackathons are an opportunity to contribute with great
-              visibility.
-            </h2>
-            <div className="corporate-sponsorship-stat-container">
-              <div className="corporate-sponsorship-stat">
-                <h4>$1&nbsp;Million+</h4>
-                <p>Public Value Created</p>
-              </div>
-              <div className="corporate-sponsorship-stat">
-                <h4>1500+</h4>
-                <p>Volunteers</p>
-              </div>
-              <div className="corporate-sponsorship-stat">
-                <h4>100</h4>
-                <p>Avg Event Attendees</p>
-              </div>
-              <div className="corporate-sponsorship-stat">
-                <h4>250+</h4>
-                <p>Project Teams</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="corporate-sponsorship-how col-12 corporate-section">
-          <h1>How it Works</h1>
-          <div className="corporate-sponsorship-how-flex">
-            <div className="corporate-sponsorship-how-image">
-              <img
-                src={cdn.image("corporate-hiw.png")}
-                alt="Sponsorship image"
-              />
-            </div>
-            <div className="corporate-sponsorship-how-text">
-              <h2>
-                Our public tech-for-good hackathons are the pulse of our
-                community
-              </h2>
-              <p>
-                Six times a year, the DemocracyLab community convenes to move
-                the needle on projects and build connections around the world.
-                Your support will increase our capacity, amplify impact, and
-                innovate your brand.
-              </p>
-            </div>
-          </div>
-          <div className="corporate-sponsorship-how-button corporate-learn-link">
-            <a 
-              href={cdn.document(
-                "2021+DemocracyLab+Sponsorship+Prospectus.pdf"
-              )}
-            >
-              Learn More
-              <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+              <div className="corporate-card">
+                <h2>Attract purpose-minded talent.</h2>
 
-            </a>
+                <p>
+                  Connect with skilled tech volunteers who strive to make a
+                  difference.
+                </p>
+
+                <p>
+                  Position your company as an employer of choice for our diverse
+                  community of talented volunteers.
+                </p>
+              </div>
+            </div>
+            <div className="col-12 corporate-learn-more">
+              <h4>Learn more: {this._renderSponsorProspectus()}</h4>
+              <Button
+                variant="primary"
+                href="#contact-sponsor"
+                className="corporate-block-button"
+              >
+                Get Started
+              </Button>
+            </div>
           </div>
         </div>
-        <div className="corporate-sponsorship-saying corporate-section col-12">
-          <h1>What People Are Saying</h1>
-          <div className="carousel-testimonial-root">
+        <div className="corporate-sponsorship-how corporate-bg-light col-12">
+          <h1>Our sponsors make a difference.</h1>
+
+          <h2>
+            Your support of DemocracyLab and our events extends your brand reach
+            and helps solve challenging problems through public interest
+            technology.
+          </h2>
+
+          <div className="corporate-sponsorship-stat-container">
+            <div className="corporate-sponsorship-stat">
+              <h4>$1&nbsp;Million+</h4>
+              <p>Public Value Created</p>
+            </div>
+            <div className="corporate-sponsorship-stat">
+              <h4>1500+</h4>
+              <p>Volunteers</p>
+            </div>
+            <div className="corporate-sponsorship-stat">
+              <h4>250+</h4>
+              <p>Project Teams</p>
+            </div>
+          </div>
+          <h3>
+            We offer flexible sponsorship levels so you can get involved at any
+            budget.
+          </h3>
+
+          <h4>
+            In addition to the benefits of each level, all DemocracyLab sponsors
+            receive:
+          </h4>
+
+          <ul>
+            <li>Exposure on the DemocracyLab website</li>
+
+            <li>Branding and involvement at our bimonthly hackathon events</li>
+
+            <li>Impactful, positive PR opportunities for your organization</li>
+          </ul>
+          <ul className="corporate-sponsorship-learn">
+            <li>
+              {" "}
+              Learn more about our sponsorship levels:{" "}
+              {this._renderSponsorProspectus()}
+            </li>
+          </ul>
+
+          <div className="corporate-sponsorship-current">
+            <h4>Current DemocracyLab sponsors include:</h4>
+            <div className="corporate-sponsors-container">
+              {this._renderCurrentSponsors()}
+              <div className="corporate-sponsor-item">
+                <img
+                  src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png"
+                  alt="Bill and Melinda Gates Foundation logo"
+                ></img>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="corporate-sponsorship-saying col-12">
+          <h1>What our partners are saying.</h1>
+          <h2>Feedback from partnering organizations.</h2>
+
+          <div className="corporate-hackathon-carousel carousel-testimonial-root">
             <TestimonialCarousel
               category="hackathon-highlights"
-              interval={600000}
             />
           </div>
-        </div>
-        <div className="corporate-sponsorship-impact corporate-section col-12">
-          <h1>Impact Stories</h1>
-          <div className="carousel-blog-root">
-            <BlogCarousel tag="hackathon-highlights" interval={600000} />
-          </div>
-          <p className="headline2 font-weight-normal">
+          <p className="headline2">
             Read about other previous events in our{" "}
-            <a
-              className="headline2 font-weight-normal"
-              href={window.BLOG_URL}
-              target="_blank"
-            >
-              blog
-            </a>
-            , or other events that are coming up{" "}
-            <a className="headline2 font-weight-normal" href="/events">
-              here
-            </a>
-            .
+            <a href={window.BLOG_URL}>blog</a>, or other events that are coming
+            up <a href="/events">here</a>.
           </p>
+        </div>
+
+        {this._renderContactSponsor()}
+        
+      </React.Fragment>
+    );
+  }
+  _renderContactHackathon(): React$Node {
+    return (
+      <React.Fragment>
+        <div className="corporate-contact col-12 corporate-bg-light">
+          <JumpAnchor id="contact-hackathon" />
+          <h1>Interested in hosting your own hackathon?</h1>
+          <h2>Get in touch to discuss your next tech-for-good event.</h2>
+          <ContactForm interest_hackathon={true} />
+          <h4>
+            Not ready yet? Learn more: {this._renderHackathonProspectus()}
+          </h4>
         </div>
       </React.Fragment>
     );
   }
-  _renderContact(): React$Node {
+  _renderHackathonProspectus(): React$Node {
     return (
-      <React.Fragment>
-        <div className="corporate-section corporate-contact col-12">
-          <JumpAnchor id="contact" />
-          <h1>Take The First Step!</h1>
-          <h2>
-            To receive more information about becoming a corporate partner,
-            complete and submit the form below.
-          </h2>
-          <ContactForm showInterests={true} />
-        </div>
-      </React.Fragment>
+      <a
+        href={cdn.document(
+          "2023+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
+        )}
+      >
+        Corporate Tech-for-Good Hackathons PDF{" "}
+        <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+      </a>
+    );
+  }
+  _renderSponsorProspectus(): React$Node {
+    return (
+      <a 
+        href={cdn.document(
+          "2023+DemocracyLab+Sponsorship+Prospectus.pdf"
+        )}
+      >
+        Sponsor Prospectus PDF{" "}
+        <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
+      </a>
     );
   }
 
-  _renderBottomImage(): React$Node {
+  _renderContactSponsor(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-edge">
-          <div className="row">
-            <div
-              className="corporate-bottom-image col-12"
-              style={{
-                backgroundImage:
-                  "url(" + cdn.image("corporate_footer.jpg") + ")",
-              }}
-            >
-              <div className="corporate-bottom-overlay"></div>
-            </div>
-          </div>
+        <div className="corporate-contact col-12 corporate-bg-light">
+          <JumpAnchor id="contact-sponsor" />
+          <h1>Interested in becoming a sponsor?</h1>
+          <h2>Get in touch to make an impact in the tech-for-good movement.</h2>
+          <ContactForm interest_sponsor={true} />
+          <h4>Not ready yet? Learn more: {this._renderSponsorProspectus()}</h4>
         </div>
       </React.Fragment>
     );
+  }
+  _renderCurrentSponsors(): React$Node {
+    const sponsors: $ReadOnlyArray<SponsorMetadata> = Sponsors.list();
+    let sdata = sponsors.filter(obj => obj.category !== "In-kind Support");
+
+    if (!_.isEmpty(sdata)) {
+      return (
+        <React.Fragment>
+          {sdata.map((sponsor: SponsorMetadata, i: number) => {
+            return (
+              <div key={i} className="corporate-sponsor-item">
+                <a
+                  href={sponsor.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="corporate-sponsor-item-link"
+                >
+                  <img src={sponsor.thumbnailUrl} />
+                </a>
+              </div>
+            );
+          })}
+        </React.Fragment>
+      );
+    }
   }
 }
 

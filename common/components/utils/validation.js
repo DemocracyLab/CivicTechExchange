@@ -17,7 +17,8 @@ class validationHelper {
     const failingValidations: $ReadOnlyArray<
       FormFieldValidator<T>
     > = validations.filter(
-      (validation: FormFieldValidator<T>) => !validation.checkFunc(formFields)
+      (validation: FormFieldValidator<T>) =>
+        validation?.checkFunc && !validation.checkFunc(formFields)
     );
 
     return createDictionary(

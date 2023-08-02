@@ -1,18 +1,17 @@
 // @flow
 
 import React from "react";
-import type { Project } from "../../stores/ProjectSearchStore.js";
 import { List } from "immutable";
 import ProjectCard from "../FindProjects/ProjectCard.jsx";
 import { Glyph, GlyphSizes, GlyphStyles } from "../../utils/glyphs.js";
-import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import ProjectAPIUtils, { ProjectData } from "../../utils/ProjectAPIUtils.js";
 import Button from "react-bootstrap/Button";
 import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import Carousel from "react-bootstrap/Carousel";
 
 type State = {|
-  projects: List<Project>,
+  projects: List<ProjectData>,
   windowWidth: number,
   cardStart: number,
   cardCapacity: number,
@@ -58,11 +57,12 @@ class RecentProjectsSection extends React.Component<{||}, State> {
   render(): React$Node {
     return (
       <div className="RecentProjects">
-        <h2 className="RecentProjects-title headline1">Active Projects</h2>
+        <h2 className="RecentProjects-title">Active Projects</h2>
         <div className="RecentProjects-cards">{this._renderCards()}</div>
         <div className="RecentProjects-button">
           <Button
             className="RecentProjects-all"
+            variant="secondary"
             href={url.section(Section.FindProjects)}
           >
             See All Projects

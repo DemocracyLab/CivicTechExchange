@@ -4,14 +4,19 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import { Glyph, GlyphStyles, GlyphSizes } from "../utils/glyphs.js";
 import _ from "lodash";
-import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
+import WarningModal from "../common/WarningModal.jsx";
 import StepIndicatorBars from "../common/StepIndicatorBars.jsx";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 import utils from "../utils/utils.js";
+import { Container } from "flux/utils";
+import FormFieldsStore from "../stores/FormFieldsStore.js";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
+import promiseHelper from "../utils/promise.js";
 
 export type FormWorkflowStepConfig<T> = {|
   header: string,
   subHeader: string,
+  submitButtonText: string,
   formComponent: React$Node,
   onSubmit: (
     SyntheticEvent<HTMLFormElement>,
@@ -45,7 +50,7 @@ type State<T> = {|
 /**
  * Encapsulates form for creating projects
  */
-class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
+class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
   constructor(props: Props): void {
     super(props);
     this.formRef = React.createRef();
@@ -65,6 +70,17 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
     this.onSubmit = _.debounce(this.onSubmit.bind(this), 1000, {
       leading: true,
     });
+  }
+
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [FormFieldsStore];
+  }
+
+  static calculateState(prevState: State, props: Props): State {
+    let state: State = _.clone(prevState) || {};
+    state.formIsValid = FormFieldsStore.fieldsAreValid();
+    state.fieldsUpdated = FormFieldsStore.areFormFieldsChanged();
+    return state;
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -103,6 +119,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
     });
   }
 
+  // TODO: Still necessary?
   onValidationCheck(formIsValid: boolean, preSubmitProcessing: Function): void {
     if (formIsValid !== this.state.formIsValid) {
       this.setState({ formIsValid });
@@ -113,6 +130,7 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
     }
   }
 
+  // TODO: Still necessary?
   onFormUpdate(formFields: {||}): void {
     !this.state.initialFormFields
       ? this.setState(
@@ -128,40 +146,49 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
         );
   }
 
+  // TODO: Still necessary?
   setFieldsUpdated(): void {
-    _.isEqual(this.state.initialFormFields, this.state.currentFormFields)
-      ? this.setState({ fieldsUpdated: false })
-      : this.setState({ fieldsUpdated: true });
+    this.setState({ fieldsUpdated: FormFieldsStore.areFormFieldsChanged() });
   }
 
-  confirmDiscardChanges(confirmDiscard: boolean): void {
-    let confirmState: State = this.state;
-    confirmState.showConfirmDiscardChanges = false;
-    if (confirmDiscard) {
-      confirmState.currentStep = this.state.navigateToStepUponDiscardConfirmation;
-      confirmState = this.resetPageState(confirmState);
-    }
+  confirmDiscardChanges(confirmDiscard: boolean): Promise<any> {
+    return promiseHelper.promisify(() => {
+      let confirmState: State = Object.assign({}, this.state);
+      confirmState.showConfirmDiscardChanges = false;
+      if (confirmDiscard) {
+        confirmState.currentStep = this.state.navigateToStepUponDiscardConfirmation;
+        confirmState = this.resetPageState(confirmState);
+      }
 
-    this.setState(confirmState);
-    this.forceUpdate(utils.navigateToTopOfPage);
+      this.setState(confirmState);
+      this.forceUpdate(utils.navigateToTopOfPage);
+    });
   }
 
   onSubmit(event: SyntheticEvent<HTMLFormElement>): void {
     event.preventDefault();
-    const currentStep: FormWorkflowStepConfig = this.props.steps[
-      this.state.currentStep
-    ];
-    this.setState({ isSubmitting: true });
-    const submitFunc: Function = () => {
-      currentStep.onSubmit(
-        event,
-        this.formRef,
-        this.onSubmitSuccess.bind(this, currentStep.onSubmitSuccess)
-      );
-    };
-    this.state.preSubmitProcessing
-      ? this.state.preSubmitProcessing(submitFunc)
-      : submitFunc();
+    if (!FormFieldsStore.fieldsAreValid()) {
+      UniversalDispatcher.dispatch({
+        type: "ATTEMPT_SUBMIT",
+      });
+      this.setState({ clickedNext: true });
+      this.formRef.current.checkValidity();
+    } else {
+      const currentStep: FormWorkflowStepConfig = this.props.steps[
+        this.state.currentStep
+      ];
+      this.setState({ isSubmitting: true });
+      const submitFunc: Function = () => {
+        currentStep.onSubmit(
+          event,
+          this.formRef,
+          this.onSubmitSuccess.bind(this, currentStep.onSubmitSuccess)
+        );
+      };
+      this.state.preSubmitProcessing
+        ? this.state.preSubmitProcessing(submitFunc)
+        : submitFunc();
+    }
   }
 
   onSubmitSuccess(onStepSubmitSuccess: T => void, formFields: T) {
@@ -194,9 +221,12 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
 
     return (
       <React.Fragment>
-        <ConfirmationModal
+        <WarningModal
           showModal={this.state.showConfirmDiscardChanges}
-          message="You have unsaved changes on this form. Do you want to discard these changes? (To save your changes press Next on the form.)"
+          headerText="Go Back?"
+          message="You have unsaved changes. If you go back, you will lose any information added to this step."
+          cancelText="Yes, Go Back"
+          submitText="No, Stay"
           onSelection={this.confirmDiscardChanges.bind(this)}
         />
 
@@ -217,8 +247,12 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
   }
 
   _renderForm(): React$Node {
-    const FormComponent: React$Node = this.props.steps[this.state.currentStep]
-      .formComponent;
+    const currentStep: FormWorkflowStepConfig = this.props.steps[
+      this.state.currentStep
+    ];
+    const FormComponent: React$Node = currentStep.formComponent;
+    const submitText: string =
+      currentStep.submitButtonText || (this.onLastStep() ? "PUBLISH" : "Next");
     return (
       <form
         onSubmit={this.onSubmit.bind(this)}
@@ -261,16 +295,17 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
             <button
               type="submit"
               className="btn btn-primary create-btn"
-              disabled={!this.state.formIsValid || this.state.isSubmitting}
+              disabled={
+                (!this.state.formIsValid && this.state.clickedNext) ||
+                this.state.isSubmitting
+              }
             >
               {this.state.isSubmitting ? (
                 <i
                   className={Glyph(GlyphStyles.LoadingSpinner, GlyphSizes.LG)}
                 ></i>
-              ) : this.onLastStep() ? (
-                "PUBLISH"
               ) : (
-                "Next"
+                submitText
               )}
             </button>
           </div>
@@ -288,4 +323,4 @@ class FormWorkflow<T> extends React.PureComponent<Props<T>, State<T>> {
   }
 }
 
-export default FormWorkflow;
+export default Container.create(FormWorkflow, { withProps: true });

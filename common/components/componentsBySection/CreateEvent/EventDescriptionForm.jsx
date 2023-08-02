@@ -3,16 +3,20 @@
 import React from "react";
 import DjangoCSRFToken from "django-react-csrftoken";
 import FormValidation from "../../../components/forms/FormValidation.jsx";
-import type { Validator } from "../../../components/forms/FormValidation.jsx";
-import type { ProjectDetailsAPIData } from "../../../components/utils/ProjectAPIUtils.js";
-import form, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
+import type { Validator } from "../../forms/FormValidation";
+import { FormPropsBase, FormStateBase } from "../../utils/forms.js";
 import TagSelector from "../../common/tags/TagSelector.jsx";
 import TagCategory from "../../common/tags/TagCategory.jsx";
-import type { TagDefinition } from "../../../components/utils/ProjectAPIUtils.js";
+import type { TagDefinition } from "../../utils/ProjectAPIUtils";
 import type { EventData } from "../../utils/EventAPIUtils.js";
 import CurrentUser from "../../utils/CurrentUser.js";
 import CheckBox from "../../common/selection/CheckBox.jsx";
 import _ from "lodash";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
+import TextFormField, {
+  TextFormFieldType,
+} from "../../forms/fields/TextFormField.jsx";
+import type { Dictionary } from "../../types/Generics.jsx";
 import stringHelper from "../../utils/string.js";
 
 type FormFields = {|
@@ -41,59 +45,56 @@ type State = {|
 class ProjectDescriptionForm extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.nonAlphanumericSlugPattern = new RegExp("[^A-Za-z0-9-]");
     const event: EventData = props.project;
-    this.state = {
-      formIsValid: false,
-      formFields: {
-        event_description: event ? event.event_description : "",
-        event_agenda: event ? event.event_agenda : "",
-        event_live_id: event ? event.event_live_id : "",
-        event_legacy_organization: event ? event.event_legacy_organization : "",
-        event_slug: event ? event.event_slug : "",
-        is_private: event ? event.is_private : false,
-        show_headers: event ? event.show_headers : false,
-      },
-      validations: [
-        {
-          checkFunc: (formFields: FormFields) =>
-            !_.isEmpty(formFields["event_description"]),
-          errorMessage: "Please enter Event Description",
-        },
-        {
-          checkFunc: (formFields: FormFields) =>
-            !_.isEmpty(formFields["event_agenda"]),
-          errorMessage: "Please enter Event Agenda",
-        },
-        {
-          checkFunc: (formFields: FormFields) =>
-            !this.nonAlphanumericSlugPattern.test(formFields["event_slug"]),
-          errorMessage:
-            "Event slug can only contain alphanumeric characters and dashes",
-        },
-      ],
+    const formFields: Dictionary<any> = {
+      event_description: event ? event.event_description : "",
+      event_agenda: event ? event.event_agenda : "",
+      event_live_id: event ? event.event_live_id : "",
+      event_legacy_organization: event ? event.event_legacy_organization : "",
+      event_slug: event ? event.event_slug : "",
+      is_private: event ? event.is_private : false,
+      show_headers: event ? event.show_headers : false,
     };
 
-    this.form = form.setup();
-  }
+    const validations: $ReadOnlyArray<Validator> = [
+      {
+        fieldName: "event_description",
+        checkFunc: (formFields: FormFields) =>
+          !_.isEmpty(formFields["event_description"]),
+        errorMessage: "Please enter Event Description",
+      },
+      {
+        fieldName: "event_agenda",
+        checkFunc: (formFields: FormFields) =>
+          !_.isEmpty(formFields["event_agenda"]),
+        errorMessage: "Please enter Event Agenda",
+      },
+      {
+        fieldName: "event_slug",
+        checkFunc: (formFields: FormFields) =>
+          stringHelper.isValidSlug(formFields["event_slug"]),
+        errorMessage:
+          "Valid Event slug should only consist of alphanumeric characters and dashes('-')",
+      },
+    ];
 
-  componentDidMount() {
-    // Initial validation check
-    this.form.doValidation.bind(this)();
-  }
+    const formIsValid: boolean = FormValidation.isValid(
+      formFields,
+      validations
+    );
 
-  onTagChange(
-    formFieldName: string,
-    value: $ReadOnlyArray<TagDefinition>
-  ): void {
-    this.state.formFields[formFieldName] = value;
-  }
+    this.state = {
+      formIsValid: formIsValid,
+      formFields: formFields,
+    };
 
-  onValidationCheck(formIsValid: boolean): void {
-    if (formIsValid !== this.state.formIsValid) {
-      this.setState({ formIsValid });
-      this.props.readyForSubmit(formIsValid);
-    }
+    UniversalDispatcher.dispatch({
+      type: "SET_FORM_FIELDS",
+      formFieldValues: formFields,
+      validators: validations,
+    });
+
+    props.readyForSubmit(formIsValid);
   }
 
   render(): React$Node {
@@ -101,52 +102,29 @@ class ProjectDescriptionForm extends React.PureComponent<Props, State> {
       <div className="EditProjectForm-root">
         <DjangoCSRFToken />
 
-        <div className="form-group">
-          <label>
-            <strong>Description</strong>
-          </label>
-          <div className="character-count">
-            {(this.state.formFields.event_description || "").length} / 4000
-          </div>
-          <textarea
-            className="form-control"
-            id="event_description"
-            name="event_description"
-            placeholder="Describe the Event"
-            rows="6"
-            maxLength="4000"
-            value={this.state.formFields.event_description}
-            onChange={this.form.onInput.bind(this, "event_description")}
-          ></textarea>
-          *Required
-        </div>
+        <TextFormField
+          id="event_description"
+          label="Description"
+          type={TextFormFieldType.MultiLine}
+          rows={6}
+          placeholder="Describe the Event"
+          required={true}
+          showCount={true}
+          maxLength={4000}
+        />
 
-        <div className="form-group">
-          <label>
-            <strong>Agenda</strong>
-          </label>
-          <div className="character-count">
-            {(this.state.formFields.event_agenda || "").length} / 4000
-          </div>
-          <textarea
-            className="form-control"
-            id="event_agenda"
-            name="event_agenda"
-            placeholder="List the items on the Event's agenda"
-            rows="6"
-            maxLength="4000"
-            value={this.state.formFields.event_agenda}
-            onChange={this.form.onInput.bind(this, "event_agenda")}
-          ></textarea>
-        </div>
+        <TextFormField
+          id="event_agenda"
+          label="Agenda"
+          type={TextFormFieldType.MultiLine}
+          rows={6}
+          placeholder="List the items on the Event's agenda"
+          required={true}
+          showCount={true}
+          maxLength={4000}
+        />
 
         {CurrentUser.isStaff() && this._renderAdminControls()}
-
-        <FormValidation
-          validations={this.state.validations}
-          onValidationCheck={this.onValidationCheck.bind(this)}
-          formState={this.state.formFields}
-        />
       </div>
     );
   }
@@ -154,63 +132,35 @@ class ProjectDescriptionForm extends React.PureComponent<Props, State> {
   _renderAdminControls(): React$Node {
     return (
       <React.Fragment>
-        <div className="form-group">
-          <label>Event Url Slug</label>
-          <input
-            type="text"
-            className="form-control"
-            id="event_slug"
-            name="event_slug"
-            maxLength="60"
-            value={this.state.formFields.event_slug}
-            onChange={this.form.onInput.bind(this, "event_slug")}
-          />
-        </div>
+        <TextFormField
+          id="event_slug"
+          label="Event Url Slug"
+          type={TextFormFieldType.SingleLine}
+          required={false}
+          maxLength={60}
+        />
 
-        <div>
-          <CheckBox
-            id="is_private"
-            value={this.state.formFields.is_private}
-            onCheck={this.form.onSelection.bind(this, "is_private")}
-          />
-          <span> Private Event</span>
-        </div>
+        <CheckBox id="is_private" label="Private Event" />
 
-        <div>
-          <CheckBox
-            id="show_headers"
-            value={this.state.formFields.show_headers}
-            onCheck={this.form.onSelection.bind(this, "show_headers")}
-          />
-          <span> Show Sponsor Footer</span>
-        </div>
+        <CheckBox id="show_headers" label="Show Sponsor Footer" />
 
         <div className="form-group">
           <label>Legacy Organization (Optional)</label>
           <TagSelector
             elementId="event_legacy_organization"
-            value={this.state.formFields.event_legacy_organization}
             category={TagCategory.ORGANIZATION}
             allowMultiSelect={false}
-            onSelection={this.onTagChange.bind(
-              this,
-              "event_legacy_organization"
-            )}
+            useFormFieldsStore={true}
           />
         </div>
 
-        <div className="form-group">
-          <label>QiqoChat Live Event ID (Optional)</label>
-          <input
-            type="text"
-            className="form-control"
-            id="event_live_id"
-            name="event_live_id"
-            maxLength="50"
-            value={this.state.formFields.event_live_id}
-            onChange={this.form.onInput.bind(this, "event_live_id")}
-          />
-        </div>
+        <TextFormField
+          id="event_live_id"
+          label="QiqoChat Live Event ID (Optional)"
+          type={TextFormFieldType.SingleLine}
+          required={false}
+          maxLength={50}
+        />
       </React.Fragment>
     );
   }

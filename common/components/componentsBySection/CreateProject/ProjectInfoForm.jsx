@@ -6,28 +6,25 @@ import TagSelector from "../../common/tags/TagSelector.jsx";
 import DjangoCSRFToken from "django-react-csrftoken";
 import { OnReadySubmitFunc } from "./ProjectFormCommon.jsx";
 import FormValidation from "../../../components/forms/FormValidation.jsx";
-import type { Validator } from "../../../components/forms/FormValidation.jsx";
+import type { Validator } from "../../forms/FormValidation.jsx";
 import type {
   TagDefinition,
   ProjectDetailsAPIData,
-} from "../../../components/utils/ProjectAPIUtils.js";
-import formHelper, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
+} from "../../utils/ProjectAPIUtils.js";
+import { FormPropsBase, FormStateBase } from "../../utils/forms.js";
 import url from "../../utils/url.js";
-import { CountrySelector } from "../../common/selection/CountrySelector.jsx";
-import {
-  CountryCodeFormats,
-  CountryData,
-  countryByCode,
-} from "../../constants/Countries.js";
+import { CountryData, countryByCode } from "../../constants/Countries.js";
 import {
   LocationInfo,
   getLocationInfoFromProject,
 } from "../../common/location/LocationInfo.js";
-import {
-  LocationAutocompleteForm,
-  LocationFormInputsByEntity,
-} from "../../forms/LocationAutocompleteForm.jsx";
-import CurrentUser from "../../utils/CurrentUser";
+import { LocationFormInputsByEntity } from "../../forms/LocationAutocompleteForm.jsx";
+import CurrentUser from "../../utils/CurrentUser.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
+import CountryLocationFormFields from "../../forms/fields/CountryLocationFormFields.jsx";
+import TextFormField, {
+  TextFormFieldType,
+} from "../../forms/fields/TextFormField.jsx";
 
 type FormFields = {|
   project_country: ?CountryData,
@@ -68,11 +65,18 @@ class ProjectInfoForm extends React.PureComponent<Props, State> {
     };
     const validations: $ReadOnlyArray<Validator<FormFields>> = [
       {
+        fieldName: "project_url",
         checkFunc: (formFields: FormFields) =>
           url.isEmptyStringOrValidUrl(formFields["project_url"]),
         errorMessage: "Please enter valid URL.",
       },
     ];
+    UniversalDispatcher.dispatch({
+      type: "SET_FORM_FIELDS",
+      formFieldValues: formFields,
+      validators: validations,
+    });
+
     const formIsValid: boolean = FormValidation.isValid(
       formFields,
       validations
@@ -80,22 +84,8 @@ class ProjectInfoForm extends React.PureComponent<Props, State> {
     this.state = {
       formIsValid: formIsValid,
       formFields: formFields,
-      validations: validations,
     };
     props.readyForSubmit(formIsValid);
-    this.form = formHelper.setup();
-    this.form.onSelection = this.form.onSelection.bind(this);
-  }
-
-  componentDidMount() {
-    this.form.doValidation.bind(this)();
-  }
-
-  onValidationCheck(formIsValid: boolean): void {
-    if (formIsValid !== this.state.formIsValid) {
-      this.setState({ formIsValid });
-      this.props.readyForSubmit(formIsValid);
-    }
   }
 
   render(): React$Node {
@@ -103,53 +93,27 @@ class ProjectInfoForm extends React.PureComponent<Props, State> {
       <div className="EditProjectForm-root">
         <DjangoCSRFToken />
 
-        <div className="form-group">
-          <label>Country</label>
-          <CountrySelector
-            id="project_country"
-            countryCode={
-              this.state.formFields.project_country &&
-              this.state.formFields.project_country.ISO_2
-            }
-            countryCodeFormat={CountryCodeFormats.ISO_2}
-            onSelection={(country: CountryData) => {
-              this.form.onSelection("project_country", country);
-              this.form.onSelection("project_location", null);
-            }}
-          />
-        </div>
+        <CountryLocationFormFields
+          countryFieldId="project_country"
+          locationFieldId="project_location"
+          locationFormInputs={LocationFormInputsByEntity.Projects}
+        />
 
-        <div className="form-group">
-          <label>Location</label>
-          <LocationAutocompleteForm
-            country={this.state.formFields.project_country}
-            onSelect={this.form.onSelection.bind(this, "project_location")}
-            location={this.state.formFields.project_location}
-            formInputs={LocationFormInputsByEntity.Projects}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="project_url">Website URL</label>
-          <input
-            type="text"
-            className="form-control"
-            id="project_url"
-            name="project_url"
-            maxLength="2075"
-            value={this.state.formFields.project_url}
-            onChange={this.form.onInput.bind(this, "project_url")}
-          />
-        </div>
+        <TextFormField
+          id="project_url"
+          label="Website URL"
+          type={TextFormFieldType.SingleLine}
+          required={false}
+          maxLength={2075}
+        />
 
         <div className="form-group">
           <label>Project Stage</label>
           <TagSelector
             elementId="project_stage"
-            value={this.state.formFields.project_stage}
             category={TagCategory.PROJECT_STAGE}
             allowMultiSelect={false}
-            onSelection={this.form.onSelection.bind(this, "project_stage")}
+            useFormFieldsStore={true}
           />
         </div>
 
@@ -159,13 +123,9 @@ class ProjectInfoForm extends React.PureComponent<Props, State> {
             <label>Organization</label>
             <TagSelector
               elementId="project_organization"
-              value={this.state.formFields.project_organization}
               category={TagCategory.ORGANIZATION}
               allowMultiSelect={true}
-              onSelection={this.form.onSelection.bind(
-                this,
-                "project_organization"
-              )}
+              useFormFieldsStore={true}
             />
           </div>
         )}
@@ -174,13 +134,9 @@ class ProjectInfoForm extends React.PureComponent<Props, State> {
           <label>Organization Type</label>
           <TagSelector
             elementId="project_organization_type"
-            value={this.state.formFields.project_organization_type}
             category={TagCategory.ORGANIZATION_TYPE}
             allowMultiSelect={false}
-            onSelection={this.form.onSelection.bind(
-              this,
-              "project_organization_type"
-            )}
+            useFormFieldsStore={true}
           />
         </div>
 
@@ -188,21 +144,11 @@ class ProjectInfoForm extends React.PureComponent<Props, State> {
           <label>Technology Used</label>
           <TagSelector
             elementId="project_technologies"
-            value={this.state.formFields.project_technologies}
             category={TagCategory.TECHNOLOGIES_USED}
             allowMultiSelect={true}
-            onSelection={this.form.onSelection.bind(
-              this,
-              "project_technologies"
-            )}
+            useFormFieldsStore={true}
           />
         </div>
-
-        <FormValidation
-          validations={this.state.validations}
-          onValidationCheck={this.onValidationCheck.bind(this)}
-          formState={this.state.formFields}
-        />
       </div>
     );
   }

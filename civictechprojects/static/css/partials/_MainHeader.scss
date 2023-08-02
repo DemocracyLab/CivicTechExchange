@@ -18,19 +18,19 @@
   color: $color-text-dark;
 }
 .MainHeader-useravatar {
-  height: 38px;
-  width: 38px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
   margin-right: 0.5rem;
 }
 .MainHeader-donatebutton {
-  height: 38px;
   margin: auto 20px auto 0;
 }
 .MainHeader-active {
   text-decoration: underline;
   text-decoration-color: $color-orange;
   text-underline-position: under;
+  text-decoration-thickness: 4px;
 }
 #nav-pagenav-container {
   padding-left: 12px;
@@ -70,6 +70,10 @@
   .navbar-light .navbar-nav .nav-link:active {
     color: inherit;
   }
+  a:visited,
+  .navbar-light .navbar-nav .nav-link:visited {
+    color: inherit;
+  }
   .navbar {
     padding: 0.25rem; //override entire navbar padding values, set our own later
   }
@@ -88,10 +92,6 @@
   a.MainHeader-login-button.btn.btn-outline-primary:focus,
   a.MainHeader-login-button.btn.btn-outline-primary:active {
     color: inherit;
-  }
-  a.MainHeader-donatebutton:hover,
-  a.MainHeader-donatebutton:active {
-    color: white;
   }
   .dropdown-menu.show {
     border: none;
@@ -145,6 +145,17 @@
     .dropdown-item {
       font-size: 16px; // match body text size
     }
+  }
+}
+
+/* move to a single row at desktop sizes when content allows */
+@include media-breakpoint-up(lg) {
+  .MainHeader-nav-flex {
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+  }
+  .MainHeader-usernav {
+    padding-left: 1rem; /* ensures the break between two-row and one happens cleanly */
   }
 }
 

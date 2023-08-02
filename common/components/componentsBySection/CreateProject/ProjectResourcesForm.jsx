@@ -6,18 +6,19 @@ import DjangoCSRFToken from "django-react-csrftoken";
 import type { ProjectDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
 import { LinkInfo } from "../../forms/LinkInfo.jsx";
 import type { FileInfo } from "../../common/FileInfo.jsx";
-import LinkList, { linkCaptions } from "../../forms/LinkList.jsx";
-import LinkListStore, { NewLinkInfo } from "../../stores/LinkListStore.js";
+import LinkList, {
+  compileLinkFormFields,
+  linkCaptions,
+} from "../../forms/LinkList.jsx";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import { Dictionary } from "../../types/Generics.jsx";
 import FileUploadList from "../../forms/FileUploadList.jsx";
-import formHelper, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
-import FormValidation from "../../forms/FormValidation.jsx";
+import { FormPropsBase, FormStateBase } from "../../utils/forms.js";
 import { OnReadySubmitFunc } from "./ProjectFormCommon.jsx";
 import { LinkTypes } from "../../constants/LinkConstants.js";
 import HiddenFormFields from "../../forms/HiddenFormFields.jsx";
-import url from "../../utils/url.js";
 import _ from "lodash";
+import FormFieldsStore from "../../stores/FormFieldsStore.js";
 
 type FormFields = {|
   project_links: Array<LinkInfo>,
@@ -31,7 +32,7 @@ type Props = {|
 
 type State = {|
   errorMessages: $ReadOnlyArray<string>,
-  onSubmit: OnReadySubmitFunc,
+  formFields: Dictionary<any>,
 |} & FormStateBase<FormFields>;
 
 const resourceLinks: $ReadOnlyArray<string> = [
@@ -48,11 +49,6 @@ const socialLinks: $ReadOnlyArray<string> = [
   LinkTypes.LINKED_IN,
 ];
 
-const allPresetLinks: $ReadOnlyArray<string> = _.concat(
-  resourceLinks,
-  socialLinks
-);
-
 /**
  * Encapsulates form for Project Resources section
  */
@@ -66,56 +62,23 @@ class ProjectResourcesForm extends React.Component<Props, State> {
     };
     this.state = {
       formFields: formFields,
-      onSubmit: this.onSubmit.bind(this),
     };
-    this.form = formHelper.setup();
-    UniversalDispatcher.dispatch({
-      type: "SET_LINK_LIST",
-      links: project.project_links,
-      presetLinks: allPresetLinks,
-    });
-    props.readyForSubmit(true, this.state.onSubmit);
-  }
 
-  componentDidMount() {
-    this.form.doValidation.bind(this)();
+    UniversalDispatcher.dispatch({
+      type: "SET_FORM_FIELDS",
+      formFieldValues: formFields,
+      validators: [],
+    });
   }
 
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [LinkListStore];
+    return [FormFieldsStore];
   }
 
   static calculateState(prevState: State, props: Props): State {
-    let state: State = _.clone(prevState) || {
-      formFields: {
-        project_files: props.project ? props.project.project_files : [],
-      },
-    };
-    state.formFields.project_links = LinkListStore.getLinkList();
-    state.errorMessages = LinkListStore.getLinkErrors();
-    state.formIsValid = _.isEmpty(state.errorMessages);
-    props.readyForSubmit(state.formIsValid, state.onSubmit);
+    let state: State = _.clone(prevState) || {};
+    state.formFields = _.clone(FormFieldsStore.getFormFieldValues());
     return state;
-  }
-
-  onValidationCheck(formIsValid: boolean): void {
-    if (formIsValid !== this.state.formIsValid) {
-      this.setState({ formIsValid });
-      this.props.readyForSubmit(formIsValid, this.onSubmit.bind(this));
-    }
-  }
-
-  onSubmit(submitFunc: Function): void {
-    let formFields = this.state.formFields;
-    let project_links: $ReadOnlyArray<NewLinkInfo> = LinkListStore.getLinkList();
-    formFields.project_links = project_links.filter(
-      (link: LinkInfo) => !_.isEmpty(link.linkUrl)
-    );
-    formFields.project_links.forEach((link: NewLinkInfo) => {
-      link.linkUrl = url.appendHttpIfMissingProtocol(link.linkUrl);
-    });
-    this.setState({ formFields: formFields }, submitFunc);
-    this.forceUpdate();
   }
 
   render(): React$Node {
@@ -125,9 +88,17 @@ class ProjectResourcesForm extends React.Component<Props, State> {
 
         <HiddenFormFields
           sourceDict={{
-            project_links: JSON.stringify(
-              this.state.formFields.project_links || []
-            ),
+            project_links:
+              this.state.formFields &&
+              JSON.stringify(
+                compileLinkFormFields(
+                  this.state.formFields.project_links,
+                  _.omit(this.state.formFields, [
+                    "project_files",
+                    "project_links",
+                  ])
+                ) || []
+              ),
           }}
         />
 
@@ -138,6 +109,7 @@ class ProjectResourcesForm extends React.Component<Props, State> {
             linkNamePrefixExclude={["social_", LinkTypes.LINKED_IN]}
             linkOrdering={resourceLinks}
             addLinkText="Add a new link"
+            links={this.props.project.project_links}
           />
         </div>
 
@@ -148,6 +120,7 @@ class ProjectResourcesForm extends React.Component<Props, State> {
             linkNamePrefix="social_"
             linkOrdering={socialLinks}
             addLinkText="Add a social link"
+            links={this.props.project.project_links}
           />
         </div>
 
@@ -157,15 +130,8 @@ class ProjectResourcesForm extends React.Component<Props, State> {
             title="Project Files"
             subheader="Add files or documents"
             files={this.state.formFields.project_files}
-            onChange={this.form.onFormChange.bind(this)}
           />
         </div>
-
-        <FormValidation
-          onValidationCheck={this.onValidationCheck.bind(this)}
-          formState={this.state.formFields}
-          errorMessages={this.state.errorMessages}
-        />
       </div>
     );
   }

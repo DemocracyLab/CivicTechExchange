@@ -22,6 +22,7 @@
   }
   order: 1;
   flex-basis: 35%;
+  position: relative;
 }
 // make buttons stay in column even if the section is wide enough to stack horizontally
 // on narrow mobile devices keep them constrained to a little less than 65% for visual spacing
@@ -126,7 +127,6 @@
     flex-basis: auto;
     img {
       width: 100%;
-      max-height: unset;
     }
   }
   .Profile-top-details {

@@ -34,11 +34,14 @@ class RenderFilterCategory<T> extends React.PureComponent<Props<T>, State> {
     let cs = _.concat(c, s);
     //cs is now an array of each key we want to use for expand/collapse tracking
 
-    //make an object and push in each key from cs, set all values to false
+    //make an object and push in each key from cs, set all values based whether the tag inside is checked
     const collector = {};
     for (var key in cs) {
       let val = cs[key];
-      collector[val] = false;
+      collector[val] = _.some(props.data, tag => 
+        props.checkEnabled(tag) && 
+        _.includes([tag.category, tag.subcategory], val) 
+      );
     }
     //set initial state once collector is populated
     this.state = collector || {};

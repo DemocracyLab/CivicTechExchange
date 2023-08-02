@@ -23,15 +23,15 @@
 }
 
 .AboutProject-positions-available {
-  .Position-header {
+  .Position-entry {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     flex-direction: column;
-    margin-bottom: 16px;
+    margin-bottom: 1rem;
   }
   .Text-section {
-    margin-top: 1rem;
+    margin: 1rem 0;
   }
 }
 .AboutProject-skilltech-container {
@@ -84,6 +84,7 @@
   i {
     object-fit: contain;
     max-width: 100%;
+    max-height:50px;
   }
   i {
     color: $color-text-dark;

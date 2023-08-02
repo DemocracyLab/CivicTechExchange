@@ -7,6 +7,7 @@ class DateTimeFormats(Enum):
     DATE_LOCALIZED = '%x'
     DATEPICKER_DATE = '%a %b %d %Y %H:%M:%S GMT%z'
     MONTH_DD_YYYY = '%B %d, %Y'
+    SCHEDULED_DATE_TIME = '[%A, %B %d, %Y] at [%H:%M:%S %Z]'
 
 
 def datetime_field_to_datetime(field):

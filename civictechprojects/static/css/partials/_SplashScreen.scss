@@ -11,7 +11,7 @@
 
 .SplashScreen-fill {
   min-height: calc(
-    100vh - #{$header-height} - #{$footer-height}
+    100vh - 100px
   ); /* use min-height to fix wide but short viewports */
 }
 
@@ -30,8 +30,6 @@
   border: 1px solid $color-orange;
   color: $color-text-dark;
   background-color: $color-orange;
-  border-radius: 5px;
-  padding: 6px 12px;
   min-width: 80px;
 }
 
@@ -39,8 +37,6 @@
   border: 1px solid $color-text-light;
   color: $color-text-light;
   background-color: transparent;
-  border-radius: 5px;
-  padding: 6px 12px;
   cursor: pointer;
   min-width: 80px;
 }

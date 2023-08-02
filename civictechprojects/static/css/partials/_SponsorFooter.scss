@@ -1,0 +1,81 @@
+.SponsorFooter-footer {
+  background-color: $color-background-default;
+  width: 100%;
+  padding-top: 0;
+  padding-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  h2,
+  h3 {
+    margin-bottom: 0; // margin spacing is handled elsewhere in this section
+  }
+}
+.SponsorFooter-item {
+  padding: 20px 0;
+}
+.SponsorFooter-sponsor-container {
+  padding-top: 40px;
+  h2 {
+    margin-bottom: 0;
+  }
+}
+.SponsorFooter-sponsor-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-content: space-between;
+  align-items: center;
+  gap: 30px 60px;
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+.SponsorFooter-sponsor {
+  flex-basis: calc(
+    50% - 30px
+  ); //30px is 1/2 of row-gap declared on parent, so we have 2-wide sponsors on mobile
+}
+.SponsorFooter-footer img {
+  max-width: 100%;
+}
+.SponsorFooter-sponsor {
+  max-width: 200px;
+}
+.SponsorFooter-category-in-kind .SponsorFooter-sponsor {
+  max-width: 150px; // for in-kind only, shrink below standard sponsor max
+}
+.SponsorFooter-mobile-divider {
+  border-bottom: 1px solid $color-border-weak;
+}
+.SponsorFooter-past-support h3 {
+  padding-top: 2rem;
+}
+.SponsorFooter-partner-button a {
+  margin-bottom: 1rem; // visually evens up top and bottom spacing on mobile
+}
+@include media-breakpoint-up(sm) {
+  .SponsorFooter-sponsor {
+    flex-basis: auto; // removing forced 2-wide on mobile, letting it flex naturally now
+  }
+  .SponsorFooter-mobile-divider {
+    border-bottom: none;
+  }
+}
+@include media-breakpoint-up(lg) {
+  //desktop numbers are typically mobile * 1.5, to keep ratios consistent
+  .SponsorFooter-sponsor-wrapper {
+    gap: 45px 90px;
+    padding-top: 45px;
+    padding-bottom: 60px;
+  }
+  .SponsorFooter-footer {
+    padding-top: 45px;
+    padding-bottom: 45px;
+  }
+
+  .SponsorFooter-past-support h3 {
+    padding-top: 0;
+  }
+  .SponsorFooter-partner-button a {
+    margin-bottom: 0;
+  }
+}

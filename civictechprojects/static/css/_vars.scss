@@ -1,31 +1,137 @@
-//pattern for variable names: generic-to-specific.
-//when possible name variables after function
+// DemocracyLab Colors
+// SASS Variables for styling our brand and colors
+// contains both color scales and semantic variable names -- use the semantic vars in your CSS
 
-//colors
+// ##############################
+// Design System
+// ##############################
+
+// # begin color scales
+
+// primary colors //
+
+//brand
+$color-brand-10: #fef5e6; // used for "Accent Background"
+$color-brand-20: #fde2b3;
+$color-brand-45: #fac567;
+$color-brand-60: #f9b135;
+$color-brand-70: #f79e02;
+
+//typography
+$color-neutral-70: #4f4f4f;
+$color-neutral-80: #535a5f;
+$color-neutral-90: #222629;
+$color-neutral-100: #191919;
+$color-brand-80: #f06d23;
+
+//background
+$color-neutral-10: #ffffff;
+$color-neutral-15: #f6f7f8;
+$color-neutral-20: #f5f6f6;
+$color-neutral-25: #f2f2f2;
+$color-neutral-30: #eaeef0;
+$color-neutral-45: #191919; // specifically for modal backdrop only, never use without opacity 0.5!
+
+// border
+$color-neutral-35: #d4d4d4;
+$color-neutral-50: #bdbdbd;
+$color-neutral-60: #828282;
+$color-neutral-75: #4e5154;
+
+// secondary colors | semantics //
+
+// info
+$color-blue-10: #e6effa;
+$color-blue-20: #ccdced; //rgba(2,79,166,0.2) to rgb
+$color-blue-40: #81b1e6;
+$color-blue-80: #0362cd;
+$color-blue-90: #024fa6;
+$color-blue-100: #02438c;
+$color-purple-100: #662d91;
+
+// success
+$color-green-10: #e6f7ef;
+$color-green-20: #cce6da; //rgba(1,128,71,0.2) to rgb
+$color-green-80: #018047;
+$color-green-100: #01562f;
+
+//caution-warning
+$color-orange-10: #fdf5da;
+$color-orange-20: #f6e1d2; //rgba(211, 104, 32, 0.2) to rgb
+$color-orange-80: #d36820; // see design system notes on when to use this
+$color-orange-100: #b0571b; // see design system notes on when to use this
+
+//critical
+$color-red-10: #fdf0f0;
+$color-red-20: #f9cece; // rgba(227,12,12,0.2) to rgb
+$color-red-50: #e30c0c;
+$color-red-80: #b30909;
+$color-red-100: #970808;
+
+//focus ring (css :focus outline)
+$color-blue-50: #4f91dc;
+
+// # end color scales
+// # begin semantic variable names (use these in CSS)
+
+$color-feedback-background-info-weakest: $color-blue-10; // "Background color for informational messages"
+$color-feedback-background-success-weakest: $color-green-10; // "Background color for success messages and statuses"
+$color-feedback-background-critical-weakest: $color-red-10; // "Background color for error messages and error statuses"
+
+$color-icon-success-strong: $color-green-80; // "Default icon color for success icon
+
+$color-text-strong: $color-neutral-90; // "Secondary text color for headers and subtitles"
+$color-text-strongest: $color-neutral-100; // "Primary text color for H1/H2. Text color for most UI Components."
+$color-text-disabled: $color-neutral-70; // "Disabled text color for UI elements"
+$color-text-decorative: $color-brand-80; // "Text color for names and emphasized titles or subtitles on content pages"
+
+$color-background-default: $color-neutral-15; //site body
+$color-background-light: $color-neutral-10; //individual components
+$color-background-accent: $color-brand-10; // accent section background color
+
+$color-border-weakest: $color-neutral-35; // default border color for non-interactive surfaces, disabled border color for buttons/UI components
+$color-border-weak: $color-neutral-50; // "Border color for small UI components"
+$color-border-strong: $color-neutral-60; // border color for small UI component
+$color-border-stronger: $color-neutral-80; // border color for a secondary button
+
+// # end semantic variable names
+
+// #####
+// End Design System
+// #####
+
+// ############################
+
+//note: everything below here should be checked and brought into DS compliance, these are live values
+
+//## base colors (NOT design system implementation yet; phase these out with e.g. $color-orange -> $color-brand-70)
 $color-orange: #f79e02; // brand
 $color-orange-dark: #de8e01; // accent/button borders
 $color-orange-light: #f7cf88; // footer button hover
+$color-orange-text: #f06d23; // companies page, will need a rename
 $color-green: #86c232; //confirm-role buttons
 $color-green-dark: #61892f; //tag selectors and selected tags
 $color-red: #eb5757; //reject button
+$color-favorite: #f32302; // Favorite heart color
 $color-text-light: #ffffff;
-$color-text-dark: #222629;
+$color-text-dark: #1f1f1f;
 $color-text-grey: #535a5f; //lightest we can go without brekaing accessibility
 $color-grey-medium: #dddddd;
 $color-grey-disabled: #cecece; // any item in a disabled state
 $color-disabled-border: #a8a8a8; // for e.g. a disabled state button border
 $color-grey-frame-border: #6b6e70; // from design guide
-$color-cta: #b1d3fb; // call to action button blue, is deprecated, should be removed when companies page is updated to remove it
+$color-grey-unselected: #585858; // unselected item color
 
-//background colors
-$color-background-default: #f6f7f8; //site body
-$color-background-light: #ffffff; //individual components
-$color-background-dark: #222629; //nav bar, footer
+// ## link colors (design system "Secondary Colors - Blue Color Scheme - used for text links across dlab, implemented October 6, 2021)
+// these are also in _bootstrapoverride, overriding $link-color and $link-hover-color
+$color-link: #0362cd; // primary link color, info color
+$color-link-hover: #024fa6; // use with underline
+$color-link-active: #02438c; // when something in a pressed state, also use underline
+$color-link-visited: #662d91;
+
+// ## background colors
+$color-background-dark: $color-neutral-90; //nav bar, footer
 $color-background-info: #add8e6; // info messages
 $color-background-success: #a3ffa6; // success messages
 $color-background-error: #ffcfcf; //error messages
-$color-opacity-layer: #231f20; //  overlay opacity
-
-//Dimensions
-$header-height: 50px; //Height of site header
-$footer-height: 50px; //Height of site footer
+$color-opacity-layer: #231f20; //  overlay opacity, see SplashScreen component. Not used for modals.

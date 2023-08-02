@@ -1,19 +1,13 @@
 // @flow
 
 import React from "react";
-import { Container } from "flux/utils";
-import CurrentUser from "../utils/CurrentUser.js";
+import CurrentUser, { UserContext, MyGroupData } from "../utils/CurrentUser.js";
 import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 import MyGroupsCard from "../componentsBySection/MyGroups/MyGroupsCard.jsx";
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
-import MyGroupsStore, {
-  MyGroupData,
-  MyGroupsAPIResponse,
-} from "../stores/MyGroupsStore.js";
 import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
-import Section from "../enums/Section";
-import Headers from "../common/Headers.jsx";
+import Section from "../enums/Section.js";
 import _ from "lodash";
 
 type State = {|
@@ -21,23 +15,13 @@ type State = {|
   showConfirmDeleteModal: boolean,
 |};
 
-class MyGroupsController extends React.Component<{||}, State> {
+class MyGroupsController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
+    const userContext: UserContext = CurrentUser.userContext();
     this.state = {
-      ownedGroups: null,
+      ownedGroups: userContext.owned_groups,
       showConfirmDeleteModal: false,
-    };
-  }
-
-  static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [MyGroupsStore];
-  }
-
-  static calculateState(prevState: State): State {
-    const myGroups: MyGroupsAPIResponse = MyGroupsStore.getMyGroups();
-    return {
-      ownedGroups: myGroups && myGroups.owned_groups,
     };
   }
 
@@ -59,7 +43,7 @@ class MyGroupsController extends React.Component<{||}, State> {
     this.forceUpdate();
   }
 
-  confirmDeleteProject(confirmedDelete: boolean): void {
+  async confirmDeleteProject(confirmedDelete: boolean): void {
     if (confirmedDelete) {
       const url =
         "/api/groups/delete/" + this.state.groupToDelete.group_id + "/";
@@ -81,14 +65,9 @@ class MyGroupsController extends React.Component<{||}, State> {
     if (!CurrentUser.isLoggedIn) {
       return <LogInController prevPage={Section.MyGroups} />;
     }
-
     return (
       <React.Fragment>
-        <Headers
-          title="My Groups | DemocracyLab"
-          description="My Groups page"
-        />
-        <div className="MyProjectsController-root">
+        <div className="container MyProjectsController-root">
           <ConfirmationModal
             showModal={this.state.showConfirmDeleteModal}
             message="Are you sure you want to delete this group?"
@@ -123,4 +102,4 @@ class MyGroupsController extends React.Component<{||}, State> {
   }
 }
 
-export default Container.create(MyGroupsController);
+export default MyGroupsController;

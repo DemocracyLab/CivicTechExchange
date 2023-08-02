@@ -25,11 +25,20 @@
 
 .ProjectCommitCard-author-line {
   align-items: flex-end;
+  
+  .ProjectCommitCard-avatar {
+    width: 30px;
+  }
+  
 }
 
 .ProjectCommitCard-user {
   color: #888;
   font-weight: bold;
+}
+
+.ProjectCommitCard-comment {
+  color: #888
 }
 
 .ProjectCommitCard-date {

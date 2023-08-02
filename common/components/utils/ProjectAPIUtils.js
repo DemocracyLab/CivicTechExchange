@@ -7,7 +7,7 @@ import {
   LocationInfo,
   getLocationDisplayString,
 } from "../common/location/LocationInfo.js";
-import type { MyGroupData } from "../stores/MyGroupsStore.js";
+import type { MyGroupData } from "./CurrentUser.js";
 import type { GroupTileAPIData } from "./GroupAPIUtils.js";
 import type { EventTileAPIData } from "./EventAPIUtils.js";
 import type { Dictionary } from "../types/Generics.jsx";
@@ -34,6 +34,15 @@ export type TagDefinitionCount = {|
   num_times: number,
 |} & TagDefinition;
 
+export type CardOperation = {|
+  name: string,
+  buttonVariant: ?string,
+  url: ?string,
+  target: ?string,
+  operation: ?() => null,
+  count: ?string,
+|};
+
 export type ProjectData = {|
   +id: number,
   +ownerId: number,
@@ -48,6 +57,14 @@ export type ProjectData = {|
   +thumbnail: FileInfo,
   +claimed: boolean,
   +date_modified: string,
+  +url: string,
+  +video: ?LinkInfo,
+  +cardUrl: ?string,
+  +conferenceUrl: ?string,
+  +conferenceCt: ?string,
+  +cardOperation: ?CardOperation,
+  +slug: ?string,
+  +positions: $ReadOnlyArray<PositionInfo>,
 |};
 
 export type ProjectAPIData = {|
@@ -61,10 +78,13 @@ export type ProjectAPIData = {|
   +project_state: string,
   +project_city: string,
   +project_name: string,
-  +project_thumbnail: FileInfo,
+  +project_thumbnail: ?FileInfo,
+  +project_thumbnail_video: ?LinkInfo,
   +project_date_modified: string,
   +project_url: string,
   +project_positions: $ReadOnlyArray<PositionInfo>,
+  +card_url: ?string,
+  +project_slug: string,
 |};
 
 export type VolunteerUserData = {|
@@ -97,6 +117,7 @@ export type ProjectDetailsAPIData = {|
   +project_creator: number,
   +project_claimed: boolean,
   +project_approved: boolean,
+  +project_created: boolean,
   +project_url: string,
   +project_organization: $ReadOnlyArray<TagDefinition>,
   +project_organization_type: $ReadOnlyArray<TagDefinition>,
@@ -116,8 +137,10 @@ export type ProjectDetailsAPIData = {|
   +project_owners: $ReadOnlyArray<VolunteerUserData>,
   +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
   +project_date_modified: Date,
-  +project_groups: $ReadOnlyArray<GroupTileAPIData>,
   +project_events: $ReadOnlyArray<EventTileAPIData>,
+  +event_created_from: ?number,
+  +project_slug: string,
+  +is_private: boolean,
 |};
 
 export type TeamAPIData = {|
@@ -135,6 +158,9 @@ export type Testimonial = {|
 
 class ProjectAPIUtils {
   static projectFromAPIData(apiData: ProjectAPIData): ProjectData {
+    const visiblePositions: $ReadOnlyArray<PositionInfo> = apiData.project_positions.filter(
+      position => !position.isHidden
+    );
     return {
       description: apiData.project_description,
       id: apiData.project_id,
@@ -161,9 +187,14 @@ class ProjectAPIUtils {
       claimed: apiData.project_claimed,
       date_modified: apiData.project_date_modified,
       url: apiData.project_url,
-      positions: !_.isEmpty(apiData.project_positions)
-        ? ProjectAPIUtils.getSkillNames(apiData.project_positions)
+      positions: !_.isEmpty(visiblePositions)
+        ? ProjectAPIUtils.getSkillNames(visiblePositions)
         : ["Contact Project for Details"],
+      video: apiData.project_thumbnail_video,
+      conferenceUrl: apiData.conference_url,
+      conferenceCt: apiData.conference_count,
+      cardUrl: apiData.card_url,
+      slug: apiData.project_slug,
     };
   }
 
@@ -180,18 +211,21 @@ class ProjectAPIUtils {
     return getLocationDisplayString(location);
   }
 
-  static getSkillNames(positions: array) {
-    return positions.map(function(data) {
-      return data.roleTag.display_name;
-    });
+  static getSkillNames(positions: $ReadOnlyArray<PositionInfo>) {
+    return positions.map(position => position.roleTag.display_name);
   }
 
   static fetchProjectDetails(
     id: number,
+    includeVolunteers: boolean,
     callback: ProjectDetailsAPIData => void,
     errCallback: APIError => void
   ): void {
-    fetch(new Request("/api/project/" + id + "/", { credentials: "include" }))
+    let url: string = "/api/project/" + id + "/";
+    if (includeVolunteers) {
+      url += "?includeVolunteers=1";
+    }
+    fetch(new Request(url, { credentials: "include" }))
       .then(response => {
         if (!response.ok) {
           throw Error();
@@ -218,7 +252,11 @@ class ProjectAPIUtils {
     callback: VolunteerDetailsAPIData => void,
     errCallback: APIError => void
   ): void {
-    fetch(new Request("/api/project/" + id + "/volunteers/", { credentials: "include" }))
+    fetch(
+      new Request("/api/project/" + id + "/volunteers/", {
+        credentials: "include",
+      })
+    )
       .then(response => {
         if (!response.ok) {
           throw Error();
@@ -226,7 +264,7 @@ class ProjectAPIUtils {
         return response.json();
       })
       .then(response => {
-        callback(response['project_volunteers']);
+        callback(response["project_volunteers"]);
       })
       .catch(
         response =>
@@ -237,7 +275,7 @@ class ProjectAPIUtils {
           })
       );
   }
-  
+
   // fetch specific category of tags
   static fetchTagsByCategory(
     tagCategory: string,

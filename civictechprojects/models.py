@@ -4,14 +4,20 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.gis.db.models import PointField
 from enum import Enum
+from itertools import chain
 from democracylab.models import Contributor
+from common.helpers.qiqo_chat import activate_zoom_rooms, get_zoom_room_info
 from common.models.tags import Tag
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
-from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache
+from civictechprojects.caching.cache import ProjectCache, GroupCache, EventCache, ProjectSearchTagsCache, \
+    EventProjectCache
+from timezone_field import TimeZoneField
 from common.helpers.form_helpers import is_json_field_empty, is_creator_or_staff
-from common.helpers.dictionaries import merge_dicts, keys_subset
+from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.collections import flatten, count_occurrences
+from common.helpers.constants import FrontEndSection
+from common.helpers.front_end import section_url
 
 # Without the following classes, the following error occurs:
 #
@@ -50,7 +56,7 @@ class DefaultManager(models.Manager):
     def get_queryset(self):
         return super(DefaultManager, self).get_queryset().filter(deleted=False)
 
-# This base class adds delete functionality to models using a flag,  and filters deleted items out of the default result set 
+# This base class adds delete functionality to models using a flag, and filters deleted items out of the default result set
 class Archived(models.Model):
     class Meta:
         abstract = True
@@ -89,13 +95,28 @@ class Project(Archived):
     project_url = models.CharField(max_length=2083, blank=True)
     project_date_created = models.DateTimeField(null=True)
     project_date_modified = models.DateTimeField(auto_now_add=True, null=True)
+    project_slug = models.CharField(max_length=100, blank=True)
+    is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
+    event_created_from = models.ForeignKey('Event', related_name='created_projects', blank=True, null=True, on_delete=models.SET_NULL)
     _full_text_capacity = 200000
     full_text = models.CharField(max_length=_full_text_capacity, blank=True)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.project_name)
+
+    @staticmethod
+    def get_by_id_or_slug(slug: str):
+        project = None
+        if slug is not None:
+            _slug = str(slug).strip().lower()
+            if _slug.isnumeric():
+                project = Project.objects.get(id=_slug)
+            elif len(_slug) > 0:
+                project = Project.objects.filter(project_slug=_slug).first() or NameRecord.get_project(_slug)
+
+        return project
 
     def delete(self):
         self.is_searchable=False
@@ -113,19 +134,24 @@ class Project(Archived):
         return ProjectCache.get(self) or ProjectCache.refresh(self, self._hydrate_to_json())
 
     def _hydrate_to_json(self):
-        files = ProjectFile.objects.filter(file_project=self.id)
+        files = self.get_project_files()
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
-        links = ProjectLink.objects.filter(link_project=self.id)
-        positions = ProjectPosition.objects.filter(position_project=self.id).order_by('order_number')
+        links = self.get_project_links()
+        positions = self.get_project_positions()
         volunteers = VolunteerRelation.objects.filter(project=self.id)
         group_relationships = ProjectRelationship.objects.filter(relationship_project=self).exclude(relationship_group=None)
         commits = ProjectCommit.objects.filter(commit_project=self.id).order_by('-commit_date')[:20]
+        trello_actions = TrelloAction.objects.filter(
+            action_project=self.id).order_by('-action_date')[:20]
+        actions = sorted(chain(commits, trello_actions), reverse=True, key=lambda x: getattr(
+            x, 'commit_date', getattr(x, 'action_date', '')))
         project = {
             'project_id': self.id,
             'project_name': self.project_name,
             'project_creator': self.project_creator.id,
             'project_claimed': not self.project_creator.is_admin_contributor(),
+            'project_created': self.is_created,
             'project_approved': self.is_searchable,
             'project_description': self.project_description,
             'project_description_solution': self.project_description_solution,
@@ -144,12 +170,14 @@ class Project(Archived):
             'project_positions': list(map(lambda position: position.to_json(), positions)),
             'project_files': list(map(lambda file: file.to_json(), other_files)),
             'project_links': list(map(lambda link: link.to_json(), links)),
-            'project_commits': list(map(lambda commit: commit.to_json(), commits)),
+            'project_actions': list(map(lambda action: action.to_json(), actions)),
             'project_groups': list(map(lambda gr: gr.hydrate_to_list_json(), group_relationships)),
             'project_events': list(map(lambda er: er.hydrate_to_tile_json(), self.get_project_events())),
             'project_owners': [self.project_creator.hydrate_to_tile_json()],
             'project_volunteers': list(map(lambda volunteer: volunteer.to_json(), volunteers)),
-            'project_date_modified': self.project_date_modified.__str__()
+            'project_date_modified': self.project_date_modified.__str__(),
+            'project_slug': self.project_slug,
+            'is_private': self.is_private
         }
 
         if self.project_location_coords is not None and not self.project_location_coords.empty:
@@ -159,13 +187,16 @@ class Project(Archived):
         if len(thumbnail_files) > 0:
             project['project_thumbnail'] = thumbnail_files[0].to_json()
 
+        if self.event_created_from:
+            project['event_created_from'] = self.event_created_from.id
+
         return project
 
     def hydrate_to_tile_json(self):
         keys = [
             'project_id', 'project_name', 'project_creator',  'project_url', 'project_location', 'project_country',
             'project_state', 'project_city', 'project_issue_area', 'project_stage', 'project_positions',
-            'project_date_modified', 'project_thumbnail', 'project_description'
+            'project_date_modified', 'project_thumbnail', 'project_description', 'project_slug'
         ]
         json_base = self.hydrate_to_json()
         json_result = keys_subset(json_base, keys)
@@ -181,14 +212,27 @@ class Project(Archived):
             'project_name': self.project_name,
             'project_creator': self.project_creator.id,
             'isApproved': self.is_searchable,
-            'isCreated': self.is_created
+            'isCreated': self.is_created,
+            'slug': self.project_slug
         }
 
         return project
 
+    def get_project_links(self):
+        return ProjectLink.objects.filter(link_project=self, link_event=None, link_group=None, link_user=None)
+
+    def get_project_positions(self):
+        return ProjectPosition.objects.filter(position_project=self, position_event=None).order_by('order_number')
+
+    def get_project_files(self):
+        return ProjectFile.objects.filter(file_project=self, file_user=None, file_group=None, file_event=None)
+
+    def get_project_event_projects(self):
+        return EventProject.objects.filter(project=self)
+
     def get_project_events(self):
-        slugs = list(map(lambda tag: tag['slug'], self.project_organization.all().values()))
-        return Event.objects.filter(event_legacy_organization__name__in=slugs, is_private=False, is_searchable=True)
+        event_projects = self.get_project_event_projects().select_related('event')
+        return list(map(lambda ep: ep.event, event_projects))
 
     def get_project_groups(self):
         project_relationships = ProjectRelationship.objects.filter(relationship_project=self.id)
@@ -207,11 +251,13 @@ class Project(Archived):
             self.update_linked_items()
 
     def update_linked_items(self):
-        # Recache events, but only if project is searchable
+        # Recache events and project tags, but only if project is searchable
         if self.is_searchable:
-            owned_events = self.get_project_events()
-            for event in owned_events:
-                event.recache()
+            ProjectSearchTagsCache.refresh()
+            owned_event_projects = self.get_project_event_projects()
+            for ep in owned_event_projects:
+                ep.recache()
+                ep.event.recache()
 
     def generate_full_text(self):
         base_json = self.hydrate_to_json()
@@ -248,11 +294,25 @@ class Group(Archived):
     group_city = models.CharField(max_length=100, blank=True)
     group_name = models.CharField(max_length=200)
     group_short_description = models.CharField(max_length=140, blank=True)
+    group_slug = models.CharField(max_length=100, blank=True)
+    is_private = models.BooleanField(default=False)
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.group_name)
+
+    @staticmethod
+    def get_by_id_or_slug(slug: str):
+        group = None
+        if slug is not None:
+            _slug = str(slug).strip().lower()
+            if _slug.isnumeric():
+                group = Group.objects.get(id=_slug)
+            elif len(_slug) > 0:
+                group = Group.objects.filter(group_slug=_slug).first() or NameRecord.get_group(_slug)
+
+        return group
 
     def delete(self):
         self.is_searchable = False
@@ -266,10 +326,10 @@ class Group(Archived):
         return GroupCache.get(self) or GroupCache.refresh(self, self._hydrate_to_json())
 
     def _hydrate_to_json(self):
-        files = ProjectFile.objects.filter(file_group=self.id)
+        files = self.get_group_files()
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
-        links = ProjectLink.objects.filter(link_group=self.id)
+        links = self.get_group_links()
         projects = self.get_group_project_relationships(approved_only=True)
 
         group = {
@@ -287,7 +347,9 @@ class Group(Archived):
             'group_city': self.group_city,
             'group_owners': [self.group_creator.hydrate_to_tile_json()],
             'group_short_description': self.group_short_description,
-            'group_project_count': projects.count()
+            'group_project_count': projects.count(),
+            'group_slug': self.group_slug,
+            'is_private': self.is_private
         }
 
         if len(projects) > 0:
@@ -301,13 +363,14 @@ class Group(Archived):
     def hydrate_to_tile_json(self):
         keys = [
             'group_date_modified', 'group_id', 'group_name', 'group_location', 'group_country', 'group_state',
-            'group_city', 'group_short_description', 'group_project_count', 'group_issue_areas', 'group_thumbnail'
+            'group_city', 'group_short_description', 'group_project_count', 'group_issue_areas', 'group_thumbnail',
+            'group_slug'
         ]
 
         return keys_subset(self.hydrate_to_json(), keys)
     
     def hydrate_to_list_json(self):
-        files = ProjectFile.objects.filter(file_group=self.id)
+        files = self.get_group_files()
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
 
         group = {
@@ -316,13 +379,20 @@ class Group(Archived):
             'group_name': self.group_name,
             'group_creator': self.group_creator.id,
             'isApproved': self.is_searchable,
-            'isCreated': self.is_created
+            'isCreated': self.is_created,
+            'slug': self.group_slug
         }
 
         if len(thumbnail_files) > 0:
             group['group_thumbnail'] = thumbnail_files[0].to_json()
 
         return group
+
+    def get_group_links(self):
+        return ProjectLink.objects.filter(link_group=self, link_project=None, link_event=None, link_user=None)
+
+    def get_group_files(self):
+        return ProjectFile.objects.filter(file_group=self, file_project=None, file_user=None, file_event=None)
 
     def get_project_issue_areas(self, with_counts, project_relationships=None):
         if project_relationships is None:
@@ -382,6 +452,7 @@ class Event(Archived):
     is_searchable = models.BooleanField(default=False)
     is_created = models.BooleanField(default=True)
     show_headers = models.BooleanField(default=False)
+    is_activated = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id) + ':' + str(self.event_name)
@@ -394,24 +465,30 @@ class Event(Archived):
         self.event_date_modified = timezone.now()
         self.save()
 
-    def hydrate_to_json(self):
-        return EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
+    def hydrate_to_json(self, user=None):
+        hydrated = EventCache.get(self) or EventCache.refresh(self, self._hydrate_to_json())
+        if user is None or not is_creator_or_staff(user, self):
+            hydrated = keys_omit(hydrated, ['event_conference_admin_url'])
+        return hydrated
 
     def _hydrate_to_json(self):
-        files = ProjectFile.objects.filter(file_event=self.id)
+        files = self.get_event_files()
         thumbnail_files = list(files.filter(file_category=FileCategory.THUMBNAIL.value))
         other_files = list(files.filter(file_category=FileCategory.ETC.value))
+        event_room = EventConferenceRoom.get_event_room(self)
+        time_zones = self.get_event_time_zones()
 
         event = {
             'event_agenda': self.event_agenda,
             'event_creator': self.event_creator.id,
-            'event_date_end': self.event_date_end.__str__(),
-            'event_date_modified': self.event_date_modified.__str__(),
-            'event_date_start': self.event_date_start.__str__(),
+            'event_date_end': self.event_date_end.isoformat(timespec='seconds'),
+            'event_date_modified': self.event_date_modified.isoformat(timespec='seconds'),
+            'event_date_start': self.event_date_start.isoformat(timespec='seconds'),
             'event_description': self.event_description,
             'event_files': list(map(lambda file: file.to_json(), other_files)),
             'event_id': self.id,
             'event_location': self.event_location,
+            'event_time_zones': list(map(lambda time_zone: time_zone.hydrate_to_json(), time_zones)),
             'event_rsvp_url': self.event_rsvp_url,
             'event_live_id': self.event_live_id,
             'event_name': self.event_name,
@@ -421,8 +498,14 @@ class Event(Archived):
             'event_legacy_organization': Tag.hydrate_to_json(self.id, list(self.event_legacy_organization.all().values())),
             'event_slug': self.event_slug,
             'is_private': self.is_private,
-            'show_headers': self.show_headers
+            'show_headers': self.show_headers,
+            "is_activated": self.is_activated
         }
+
+        if event_room is not None:
+            event['event_conference_url'] = event_room.join_url
+            event['event_conference_admin_url'] = event_room.admin_url
+            event['event_conference_participants'] = event_room.participant_count()
 
         if len(thumbnail_files) > 0:
             event['event_thumbnail'] = thumbnail_files[0].to_json()
@@ -445,11 +528,23 @@ class Event(Archived):
 
         return event
 
+    def get_event_projects(self):
+        return EventProject.objects.filter(event=self)
+
+    def get_event_files(self):
+        return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
+
+    def get_event_time_zones(self):
+        return EventLocationTimeZone.objects.filter(event=self)
+
+    def get_url(self):
+        return section_url(FrontEndSection.AboutEvent, {'id': self.event_slug or self.id})
+
     @staticmethod
-    def get_by_id_or_slug(slug):
+    def get_by_id_or_slug(slug: str):
         event = None
         if slug is not None:
-            _slug = slug.strip().lower()
+            _slug = str(slug).strip().lower()
             if _slug.isnumeric():
                 event = Event.objects.get(id=_slug)
             elif len(_slug) > 0:
@@ -464,34 +559,227 @@ class Event(Archived):
 
         return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
 
+    def get_event_files(self):
+        return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
+
     def get_linked_projects(self):
-        # Get projects by legacy organization
-        projects = None
-        legacy_org_slugs = self.event_legacy_organization.slugs()
-        if legacy_org_slugs and len(legacy_org_slugs) > 0:
-            projects = Project.objects.filter(project_organization__name__in=legacy_org_slugs)
+        projects = Project.objects.filter(project_events__event=self, project_events__deleted=False, is_searchable=True)
         return projects
+
+    def get_linked_event_projects(self):
+        event_projects = EventProject.objects.filter(event=self, deleted=False)
+        return event_projects
 
     def update_linked_items(self):
         # Recache linked projects
         projects = self.get_linked_projects()
+        event_projects = self.get_linked_event_projects()
         if projects:
             for project in projects:
                 project.recache(recache_linked=False)
+        if event_projects:
+            for event_project in event_projects:
+                event_project.recache()
 
-    def recache(self):
+    def recache(self, recache_linked=False):
         hydrated_event = self._hydrate_to_json()
         EventCache.refresh(self, hydrated_event)
         ProjectSearchTagsCache.refresh(event=self)
+        if recache_linked:
+            self.update_linked_items()
+
+
+class EventLocationTimeZone(models.Model):
+    event = models.ForeignKey(Event, related_name='event_time_zones', on_delete=models.CASCADE)
+    location_name = models.CharField(max_length=100, blank=True)
+    address_line_1 = models.CharField(max_length=200, blank=True)
+    address_line_2 = models.CharField(max_length=200, blank=True)
+    location_coords = PointField(null=True, blank=True, srid=4326, default='POINT EMPTY')
+    country = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    time_zone = TimeZoneField(null=True)
+
+    def __str__(self):
+        return '{id}: {event} - {timezone}'.format(
+            id=self.id, event=self.event.event_name, timezone=self.time_zone)
+
+    def create(event, event_location_time_zone_json):
+        time_zone = EventLocationTimeZone(
+            event=event,
+            **event_location_time_zone_json
+            )        
+        return time_zone
+
+    def hydrate_to_json(self):
+        return {
+            'id': self.id,
+            'event_id': self.event.id,
+            'location_name': self.location_name,
+            'address_line_1': self.address_line_1,
+            'address_line_2': self.address_line_2,
+            'time_zone': self.time_zone.__str__(),
+            'country': self.country,
+            'state': self.state,
+            'city': self.city,
+        }
+
+
+class EventProject(Archived):
+    event = models.ForeignKey(Event, related_name='event_projects', on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name='project_events', on_delete=models.CASCADE)
+    creator = models.ForeignKey(Contributor, related_name='created_event_projects', on_delete=models.CASCADE)
+    event_time_zone = models.ForeignKey(EventLocationTimeZone, related_name='time_zone_event_projects', null=True, blank=True, on_delete=models.CASCADE)
+    is_remote = models.BooleanField(blank=True, null=True)
+    goal = models.CharField(max_length=2000, blank=True)
+    scope = models.CharField(max_length=2000, blank=True)
+    schedule = models.CharField(max_length=2000, blank=True)
+    onboarding_notes = models.CharField(max_length=2000, blank=True)
+
+    def __str__(self):
+        return '{id}: {event} - {project}'.format(
+            id=self.id, event=self.event.event_name, project=self.project.project_name)
+
+    def hydrate_to_json(self, user=None):
+        hydrated = EventProjectCache.get(self) or EventProjectCache.refresh(self, self._hydrate_to_json())
+        if user is None or not is_creator_or_staff(user, self.project):
+            hydrated = keys_omit(hydrated, ['event_conference_admin_url'])
+        return hydrated
+
+    def _hydrate_to_json(self):
+        links = self.get_event_project_links()
+        files = self.get_event_project_files()
+        positions = self.get_project_positions()
+        rsvps = self.get_event_project_volunteers()
+        event_room = EventConferenceRoom.get_event_project_room(self)
+        event_json = keys_subset(self.event.hydrate_to_json(), ['event_id', 'event_name', 'event_slug', 'event_thumbnail',
+                                                                'event_date_end', 'event_date_start', 'event_location',
+                                                                'is_activated', 'event_time_zones'])
+        project_json = keys_subset(self.project.hydrate_to_json(), ['project_id', 'project_name', 'project_thumbnail',
+                                                                    'project_short_description', 'project_description',
+                                                                    'project_description_solution', 'project_technologies',
+                                                                    'project_owners', 'project_creator', 'project_location',
+                                                                    'project_country', 'project_state', 'project_city',
+                                                                    'project_url', 'project_volunteers'])
+
+        event_project_json = merge_dicts(event_json, project_json, {
+            'event_project_id': self.id,
+            'event_project_goal': self.goal,
+            'event_project_agenda': self.schedule,
+            'event_project_scope': self.scope,
+            'event_project_onboarding_notes': self.onboarding_notes,
+            'event_project_creator': self.creator.id,
+            'is_remote': self.is_remote,
+            'event_project_positions': list(map(lambda position: position.to_json(), positions)),
+            'event_project_volunteers': list(map(lambda rsvp: rsvp.to_json(), rsvps)),
+            'event_project_files': list(map(lambda file: file.to_json(), files)),
+            'event_project_links': list(map(lambda link: link.to_json(), links)),
+        })
+
+        if self.event_time_zone is not None:
+            event_project_json['event_time_zone'] = self.event_time_zone.hydrate_to_json()
+
+        if event_room is not None:
+            event_project_json['event_conference_url'] = event_room.join_url
+            event_project_json['event_conference_admin_url'] = event_room.admin_url
+            event_project_json['event_conference_participants'] = event_room.participant_count()
+
+        return event_project_json
+
+    def hydrate_to_list_json(self):
+        return keys_subset(self.hydrate_to_json(), ['event_project_id', 'event_id', 'event_name', 'event_slug',
+                                                    'project_id', 'project_name'])
+
+    def delete(self):
+        print('Deleting Event Project: {ep}'.format(ep=self.__str__()))
+        for link in self.get_event_project_links():
+            print('Deleting link: ' + link.__str__())
+            link.delete()
+        for position in self.get_project_positions():
+            print('Deleting position: ' + position.__str__())
+            position.delete()
+        for rsvp in self.get_event_project_volunteers():
+            print('Deleting rsvp: ' + rsvp.__str__())
+            rsvp.delete()
+
+        super().delete()
+
+    def get_event_project_links(self):
+        return ProjectLink.objects.filter(link_project=self.project, link_event=self.event, link_group=None, link_user=None)
+
+    def get_event_project_files(self):
+        return ProjectFile.objects.filter(file_project=self.project, file_event=self.event, file_user=None, file_group=None)
+
+    def get_project_positions(self):
+        return ProjectPosition.objects.filter(position_project=self.project, position_event=self.event).order_by('order_number')
+
+    def get_event_project_volunteers(self):
+        return RSVPVolunteerRelation.objects.filter(event_project=self)
+
+    def get_url(self):
+        return section_url(FrontEndSection.AboutEventProject,
+                           {'event_id': self.event.event_slug or self.event.id, 'project_id': self.project.id})
+
+    def is_owner(self, user: Contributor):
+        return user.id == self.project.project_creator.id
+
+    @staticmethod
+    def get(event_id, project_id):
+        event = Event.get_by_id_or_slug(event_id)
+        project = Project.objects.get(id=project_id)
+        return EventProject.objects.filter(event=event, project=project).first()
+
+    @staticmethod
+    def get_owned(user: Contributor):
+        return EventProject.objects.filter(project__project_creator=user)
+
+    @staticmethod
+    def create(creator, event, project):
+        ep = EventProject(creator=creator, event=event, project=project)
+
+        # Copy links and positions from project
+        project_links = project.get_project_links()
+        for link in project_links:
+            # Copy project link and add reference to event
+            link.pk = None
+            link.link_event = event
+            link.save()
+
+        project_positions = project.get_project_positions()
+        for pos in project_positions:
+            # Copy position and add reference to event
+            position_role_name = pos.position_role.all()[0].name
+            pos.pk = None
+            pos.position_event = event
+            pos.save()
+            pos.position_role.add(position_role_name)
+        return ep
+
+    def recache(self):
+        hydrated_project = self._hydrate_to_json()
+        EventProjectCache.refresh(self, hydrated_project)
+        return hydrated_project
 
 
 class NameRecord(models.Model):
     event = models.ForeignKey(Event, related_name='old_slugs', blank=True, null=True, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name='old_slugs', blank=True, null=True, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name='old_slugs', blank=True, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True)
 
     @staticmethod
+    def get_project(name):
+        record = NameRecord.objects.filter(project__isnull=False, name=name).first()
+        return record and record.project
+
+    @staticmethod
+    def get_group(name):
+        record = NameRecord.objects.filter(group__isnull=False, name=name).first()
+        return record and record.group
+
+    @staticmethod
     def get_event(name):
-        record = NameRecord.objects.filter(name=name).first()
+        record = NameRecord.objects.filter(event__isnull=False, name=name).first()
         return record and record.event
 
     @staticmethod
@@ -600,6 +888,7 @@ class ProjectCommit(models.Model):
 
     def to_json(self):
         return {
+            'type': self.__class__.__name__,
             'user_name': self.user_name,
             'user_link': self.user_link,
             'user_avatar_link': self.user_avatar_link,
@@ -611,6 +900,60 @@ class ProjectCommit(models.Model):
         }
 
 
+class TrelloAction(models.Model):
+    action_project = models.ForeignKey(
+        Project, related_name='trello_actions', on_delete=models.CASCADE)
+    member_id = models.CharField(max_length=256)  # action creator
+    member_fullname = models.CharField(max_length=1024)  # full name first middle and last
+    member_avatar_base_url = models.CharField(max_length=2083, blank=True)
+    board_id = models.CharField(max_length=256)
+    action_type = models.CharField(max_length=1024)   #action types : https://developer.atlassian.com/cloud/trello/guides/rest-api/action-types/
+    action_date = models.DateTimeField(auto_now=False)
+    id = models.CharField(max_length=256, primary_key = True)
+    action_data = models.JSONField(null=True)
+
+    @staticmethod
+    def create(project, id, fullname, member_id, member_avatar_base_url, board_id, action_type, action_date, action_data):
+
+        trello_action = TrelloAction()
+        trello_action.action_project = project
+        trello_action.member_fullname = fullname
+        trello_action.member_id = member_id
+        trello_action.member_avatar_base_url = member_avatar_base_url
+        trello_action.board_id = board_id
+        trello_action.action_type = action_type
+        trello_action.action_date = action_date
+        trello_action.id = id
+        trello_action.action_data = action_data
+
+        trello_action.save()
+
+        return TrelloAction.objects.get(id=id)
+
+    def get_avatar_url(self):
+        '''
+        Trello's API gives back avatar base urls (e.g. https://trello-members.s3.amazonaws.com/{id}/{hash}), but
+        a size and file extension need to be added to form a valid url
+        Currently, 30, 50, 170, & original are valid sizes
+        '''
+        avatar_size = 50
+        if self.member_avatar_base_url:
+            return '{base}/{size}.png'.format(base=self.member_avatar_base_url, size=avatar_size)
+        else:
+            return ''
+
+    def to_json(self):
+        return {
+            'type': self.__class__.__name__,
+            'member_fullname': self.member_fullname,
+            'member_id': self.member_id,
+            'board_id': self.board_id,
+            'action_type': self.action_type,
+            'action_date': self.action_date,
+            'action_data': self.action_data,
+            'member_avatar_url': self.get_avatar_url()
+        }
+
 class ProjectLink(models.Model):
     link_project = models.ForeignKey(Project, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
     link_group = models.ForeignKey(Group, related_name='links', blank=True, null=True, on_delete=models.CASCADE)
@@ -619,6 +962,9 @@ class ProjectLink(models.Model):
     link_name = models.CharField(max_length=200, blank=True)
     link_url = models.CharField(max_length=2083)
     link_visibility = models.CharField(max_length=50)
+
+    def __str__(self):
+        return '{id}: {name} - {url}'.format(id=self.id, name=self.link_name, url=self.link_url)
 
     @staticmethod
     def create(owner, url, name, visibility):
@@ -632,6 +978,9 @@ class ProjectLink(models.Model):
             link.link_project = owner
         elif type(owner) is Group:
             link.link_group = owner
+        elif type(owner) is EventProject:
+            link.link_project = owner.project
+            link.link_event = owner.event
         else:
             link.link_user = owner
 
@@ -659,11 +1008,13 @@ class ProjectLink(models.Model):
     @staticmethod
     def remove_links_not_in_list(owner, links):
         if type(owner) is Project:
-            existing_links = ProjectLink.objects.filter(link_project=owner.id)
+            existing_links = owner.get_project_links()
         elif type(owner) is Group:
-            existing_links = ProjectLink.objects.filter(link_group=owner.id)
+            existing_links = owner.get_group_links()
+        elif type(owner) is EventProject:
+            existing_links = owner.get_event_project_links()
         else:
-            existing_links = ProjectLink.objects.filter(link_user=owner.id)
+            existing_links = owner.get_user_links()
 
         existing_link_ids = set(map(lambda link: link.id, existing_links))
         updated_link_ids = set(map(lambda link: link['id'], links))
@@ -699,11 +1050,19 @@ class TaggedPositionRole(TaggedItemBase):
 
 class ProjectPosition(models.Model):
     position_project = models.ForeignKey(Project, related_name='positions', on_delete=models.CASCADE)
+    position_event = models.ForeignKey(Event, related_name='positions', blank=True, null=True, on_delete=models.CASCADE)
     position_role = TaggableManager(blank=False, through=TaggedPositionRole)
     position_description = models.CharField(max_length=3000, blank=True)
     description_url = models.CharField(max_length=2083, default='')
     order_number = models.PositiveIntegerField(default=0)
     is_hidden = models.BooleanField(default=False)
+
+    def __str__(self):
+        entity = ''
+        entity += self.position_event.__str__() + ', ' if self.position_event else ''
+        entity += self.position_project.__str__() if self.position_project else ''
+        role = self.position_role.all().values()[0]['name']
+        return '{id}: {entity} - {role}'.format(id=self.id, entity=entity, role=role)
 
     def to_json(self):
         return {
@@ -716,9 +1075,13 @@ class ProjectPosition(models.Model):
         }
 
     @staticmethod
-    def create_from_json(project, position_json):
+    def create_from_json(owner, position_json):
         position = ProjectPosition()
-        position.position_project = project
+        if type(owner) is Project:
+            position.position_project = owner
+        if type(owner) is EventProject:
+            position.position_event = owner.event
+            position.position_project = owner.project
         position.position_description = position_json['description']
         position.description_url = position_json['descriptionUrl']
         position.order_number = position_json['orderNumber']
@@ -745,24 +1108,24 @@ class ProjectPosition(models.Model):
         position.delete()
 
     @staticmethod
-    def merge_changes(project, positions):
+    def merge_changes(owner, positions):
         """
-        Merge project position changes
-        :param project: Project with position changes
+        Merge project/EventProject position changes
+        :param owner: Project or EventProject with position changes
         :param positions: Position changes
         :return: True if there were position changes
         """
         added_positions = list(filter(lambda position: 'id' not in position, positions))
         updated_positions = list(filter(lambda position: 'id' in position, positions))
         updated_positions_ids = set(map(lambda position: position['id'], updated_positions))
-        existing_positions = ProjectPosition.objects.filter(position_project=project.id)
+        existing_positions = owner.get_project_positions()
         existing_positions_ids = set(map(lambda position: position.id, existing_positions))
         existing_projects_by_id = {position.id: position for position in existing_positions}
 
         deleted_position_ids = list(existing_positions_ids - updated_positions_ids)
 
         for added_position in added_positions:
-            ProjectPosition.create_from_json(project, added_position)
+            ProjectPosition.create_from_json(owner, added_position)
 
         for updated_position_json in updated_positions:
             ProjectPosition.update_from_json(existing_projects_by_id[updated_position_json['id']], updated_position_json)
@@ -818,16 +1181,18 @@ class ProjectFile(models.Model):
         added_files = filter(lambda file: 'id' not in file, files)
 
         if type(owner) is Project:
-            old_files = list(ProjectFile.objects.filter(file_project=owner.id, file_category=FileCategory.ETC.value)
-                             .values())
+            old_files = list(owner.get_project_files().filter(file_category=FileCategory.ETC.value).values())
         elif type(owner) is Group:
-            old_files = list(ProjectFile.objects.filter(file_group=owner.id, file_category=FileCategory.ETC.value)
+            old_files = list(owner.get_group_files().filter(file_category=FileCategory.ETC.value)
                              .values())
         elif type(owner) is Event:
-            old_files = list(ProjectFile.objects.filter(file_event=owner.id, file_category=FileCategory.ETC.value)
+            old_files = list(owner.get_event_files().filter(file_category=FileCategory.ETC.value.value)
+                             .values())
+        elif type(owner) is EventProject:
+            old_files = list(owner.get_event_project_files().filter(file_category=FileCategory.ETC.value.value)
                              .values())
         else:
-            old_files = list(ProjectFile.objects.filter(file_user=owner.id, file_category=FileCategory.ETC.value)
+            old_files = list(owner.get_user_files().filter(file_category=FileCategory.ETC.value)
                              .values())
 
         for file in added_files:
@@ -852,13 +1217,15 @@ class ProjectFile(models.Model):
         """
         new_file_category = new_file_category or file_category
         if type(owner) is Project:
-            existing_file = ProjectFile.objects.filter(file_project=owner.id, file_category=file_category.value).first()
+            existing_file = owner.get_project_files().filter(file_category=file_category.value).first()
         elif type(owner) is Group:
-            existing_file = ProjectFile.objects.filter(file_group=owner.id, file_category=file_category.value).first()
+            existing_file = owner.get_group_files().filter(file_category=file_category.value).first()
         elif type(owner) is Event:
-            existing_file = ProjectFile.objects.filter(file_event=owner.id, file_category=file_category.value).first()
+            existing_file = owner.get_event_files().filter(file_category=file_category.value).first()
+        elif type(owner) is EventProject:
+            existing_file = owner.get_event_project_files().filter(file_category=file_category.value).first()
         else:
-            existing_file = ProjectFile.objects.filter(file_user=owner.id, file_category=file_category.value).first()
+            existing_file = owner.get_user_files().filter(file_category=file_category.value).first()
 
         is_empty_field = is_json_field_empty(file_json)
         file_changed = False
@@ -881,13 +1248,20 @@ class ProjectFile(models.Model):
         return file_changed
 
     def get_owner(self):
-        return self.file_project or self.file_group or self.file_event or self.file_user
+        if self.file_project and self.file_event:
+            return EventProject.get(self.file_event.id, self.file_project.id)
+        else:
+            return self.file_project or self.file_group or self.file_event or self.file_user
 
     @staticmethod
     def from_json(owner, file_category, file_json):
         file_name_parts = file_json['fileName'].split('.')
-        file_name = "".join(file_name_parts[:-1])
-        file_type = file_name_parts[-1]
+        file_name = "".join(file_name_parts[0])
+        # Filename without file type
+        if len(file_name_parts) == 1:
+            file_type = ""
+        else:
+            file_type = file_name_parts[-1]
 
         return ProjectFile.create(owner=owner,
                                   file_url=file_json['publicUrl'],
@@ -905,6 +1279,28 @@ class ProjectFile(models.Model):
             'publicUrl': self.file_url,
             'visibility': self.file_visibility
         }
+
+
+class ProjectFavorite(models.Model):
+    link_project = models.ForeignKey(Project, related_name='favorites', on_delete=models.CASCADE)
+    link_user = models.ForeignKey(Contributor, related_name='favorites', on_delete=models.CASCADE)
+
+    @staticmethod
+    def create(user, project):
+        fav = ProjectFavorite.objects.create(link_project=project, link_user=user)
+        fav.save()
+        return fav
+
+    @staticmethod
+    def get_for_user(user):
+        return Project.objects.filter(favorites__link_user=user)
+
+    @staticmethod
+    def get_for_project(project, user=None):
+        if user is not None:
+            return ProjectFavorite.objects.filter(link_project=project, link_user=user)
+        else:
+            return ProjectFavorite.objects.filter(link_project=project)
 
 
 class FileCategory(Enum):
@@ -986,7 +1382,8 @@ class VolunteerRelation(Archived):
 
     def is_up_for_renewal(self, now=None):
         now = now or timezone.now()
-        return (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
+        return self.is_approved and (self.projected_end_date - now) < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
+
 
     @staticmethod
     def create(project, volunteer, projected_end_date, role, application_text):
@@ -1010,8 +1407,163 @@ class VolunteerRelation(Archived):
         return VolunteerRelation.objects.filter(project_id=project.id, is_approved=active, deleted=not active)
 
 
+class TaggedRSVPVolunteerRole(TaggedItemBase):
+    content_object = models.ForeignKey('RSVPVolunteerRelation', on_delete=models.CASCADE)
+
+
+class RSVPVolunteerRelation(Archived):
+    event = models.ForeignKey(Event, related_name='rsvp_volunteers', on_delete=models.CASCADE)
+    volunteer = models.ForeignKey(Contributor, related_name='rsvp_events', on_delete=models.CASCADE)
+    event_project = models.ForeignKey(EventProject, related_name='rsvp_volunteers', blank=True, null=True, on_delete=models.CASCADE)
+    time_zone = models.ForeignKey(EventLocationTimeZone, related_name='time_zone_volunteers', null=True, on_delete=models.CASCADE)
+    is_remote = models.BooleanField(blank=True, null=True)
+    role = TaggableManager(blank=True, through=TaggedRSVPVolunteerRole)
+    role.remote_field.related_name = "rsvp_roles"
+    application_text = models.CharField(max_length=10000, blank=True)
+    rsvp_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+
+    def delete(self):
+        self.volunteer.purge_cache()
+        super().delete()
+
+    def __str__(self):
+        return 'Event: {event}, User: {user}'.format(event=str(self.event.event_name), user=str(self.volunteer.email))
+
+    def to_json(self):
+        volunteer = self.volunteer
+        volunteer_json = {
+            'application_id': self.id,
+            'event_id': self.event.id,
+            'user': volunteer.hydrate_to_tile_json(),
+            'application_text': self.application_text,
+            'rsvp_date': self.rsvp_date.__str__(),
+            'roleTag': Tag.hydrate_to_json(volunteer.id, list(self.role.all().values())),
+        }
+
+        if self.event_project is not None:
+            volunteer_json['project_id'] = self.event_project.project.id
+
+        return volunteer_json
+
+    def hydrate_project_volunteer_info(self):
+        volunteer_json = self.to_json()
+        project_json = self.project.hydrate_to_list_json()
+        return merge_dicts(project_json, volunteer_json)
+
+    @staticmethod
+    def create(event: Event, volunteer: Contributor, is_remote: bool, event_location_time_zone_json: object):
+        time_zone = EventLocationTimeZone.create(event, event_location_time_zone_json) if event_location_time_zone_json else None
+        relation = RSVPVolunteerRelation()
+        relation.event = event
+        relation.volunteer = volunteer
+        relation.is_remote = is_remote
+        relation.time_zone = time_zone
+        relation.save()
+
+        # relation.role.add(role)
+        return relation
+
+    @staticmethod
+    def get_for_event_volunteer(event: Event, volunteer: Contributor):
+        return RSVPVolunteerRelation.objects.filter(event=event.id, volunteer=volunteer.id).first()
+
+    @staticmethod
+    def get_for_event_project(event_project: EventProject, volunteer: Contributor):
+        return RSVPVolunteerRelation.objects.filter(event_project=event_project.id, volunteer=volunteer.id).first()
+
+    @staticmethod
+    def get_for_volunteer(volunteer: Contributor):
+        return RSVPVolunteerRelation.objects.filter(volunteer=volunteer.id)
+
+
 class TaggedCategory(TaggedItemBase):
     content_object = models.ForeignKey('Testimonial', on_delete=models.CASCADE)
+
+
+class EventConferenceRoom(models.Model):
+    room_number = models.IntegerField(default=0)
+    zoom_id = models.BigIntegerField(default=0)
+    event = models.ForeignKey(Event, related_name='conference_rooms', on_delete=models.CASCADE)
+    event_project = models.ForeignKey(EventProject, related_name='event_conference_rooms', blank=True, null=True, on_delete=models.CASCADE)
+    join_url = models.CharField(max_length=2083)
+    admin_url = models.CharField(max_length=2083)
+    last_activated = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+
+    def __str__(self):
+        event_prefix = self.event_project.__str__() if self.event_project else self.event.__str__()
+        return '{event}: {room_number}'.format(event=event_prefix, room_number=self.room_number)
+
+    def participant_count(self):
+        return EventConferenceRoomParticipant.objects.filter(room=self).count()
+
+    def recache_linked(self):
+        if self.event_project is not None:
+            self.event_project.recache()
+        else:
+            self.event.recache()
+
+    @staticmethod
+    def get_event_room(event: Event):
+        return EventConferenceRoom.objects.filter(event=event, room_number=0).first()
+
+    @staticmethod
+    def get_event_project_room(event_project: EventProject):
+        return EventConferenceRoom.objects.filter(event_project=event_project).first()
+
+    @staticmethod
+    def get_by_zoom_id(zoom_id: str):
+        return EventConferenceRoom.objects.filter(zoom_id=zoom_id).first()
+
+    @staticmethod
+    def create(event: Event, zoom_id: int, join_url: str, admin_url: str, event_project: EventProject = None):
+        room_number = event_project.project.id if event_project else 0
+        room = EventConferenceRoom.get_event_project_room(event_project) if event_project is not None \
+            else EventConferenceRoom.get_event_room(event)
+        if room is None:
+            room = EventConferenceRoom(
+                room_number=room_number,
+                zoom_id=zoom_id,
+                event=event,
+                join_url=join_url,
+                admin_url=admin_url,
+                event_project=event_project)
+        else:
+            room.zoom_id = zoom_id
+            room.join_url = join_url
+            room.admin_url = admin_url
+            room.last_activated = timezone.now()
+        room.save()
+        return room
+
+    @staticmethod
+    def create_for_entity(event: Event, event_project: EventProject = None):
+        room_id = event_project.id if event_project else 0
+        qiqo_event_id = event.event_live_id
+        if qiqo_event_id is not None:
+            activate_response = activate_zoom_rooms(qiqo_event_id, [room_id])
+            for room_activation_json in activate_response:
+                space_id = int(room_activation_json['space_id'])
+                zoom_id = room_activation_json['zoom_meeting_id']
+                room_json = get_zoom_room_info(qiqo_event_id, space_id)
+                join_url = room_json['join_url']
+                admin_url = room_json['start_url']
+                print('Created room {room} for {entity}'.format(room=zoom_id, entity=(event_project or event).__str__()))
+                EventConferenceRoom.create(event, zoom_id, join_url, admin_url, event_project)
+
+
+class EventConferenceRoomParticipant(models.Model):
+    room = models.ForeignKey(EventConferenceRoom, related_name='participants', on_delete=models.CASCADE)
+    zoom_user_name = models.CharField(max_length=100)
+    zoom_user_id = models.BigIntegerField(default=0)
+    enter_date = models.DateTimeField(auto_now=False, null=False, default=timezone.now)
+
+    def __str__(self):
+        return '{room} - {name}({id})'.format(room=self.room.__str__(), name=self.zoom_user_name,
+                                                            id=self.zoom_user_id)
+
+    @staticmethod
+    def get(room: EventConferenceRoom, zoom_user_id: str):
+        return EventConferenceRoomParticipant.objects.filter(room=room, zoom_user_id=zoom_user_id).first()
 
 
 class Testimonial(models.Model):

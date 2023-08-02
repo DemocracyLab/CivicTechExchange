@@ -2,9 +2,10 @@
 import type { FluxReduceStore } from "flux/utils";
 import { List } from "immutable";
 import { Container } from "flux/utils";
-import ProjectSearchStore from "../../stores/ProjectSearchStore.js";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
-import type { LocationRadius } from "../../stores/ProjectSearchStore.js";
+import EntitySearchStore from "../../stores/EntitySearchStore.js";
+import type { LocationRadius } from "../../common/location/LocationRadius.js";
+import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import React from "react";
 import _ from "lodash";
 
@@ -15,21 +16,23 @@ type State = {|
   sortField: string,
   location: string,
   locationRadius: LocationRadius,
+  favoritesOnly: boolean,
 |};
 
 class ResetSearchButton extends React.Component<{||}, State> {
   static getStores(): $ReadOnlyArray<FluxReduceStore> {
-    return [ProjectSearchStore];
+    return [EntitySearchStore];
   }
 
   static calculateState(prevState: State): State {
     return {
-      keyword: ProjectSearchStore.getKeyword() || "",
-      tags: ProjectSearchStore.getTags() || [],
-      defaultSort: ProjectSearchStore.getDefaultSortField() || "",
-      sortField: ProjectSearchStore.getSortField() || "",
-      location: ProjectSearchStore.getLegacyLocation() || "",
-      locationRadius: ProjectSearchStore.getLocation() || {},
+      keyword: EntitySearchStore.getKeyword() || "",
+      tags: EntitySearchStore.getTags() || [],
+      defaultSort: EntitySearchStore.getDefaultSortField() || "",
+      sortField: EntitySearchStore.getSortField() || "",
+      location: EntitySearchStore.getLegacyLocation() || "",
+      locationRadius: EntitySearchStore.getLocation() || {},
+      favoritesOnly: EntitySearchStore.getFavoritesOnly(),
     };
   }
 
@@ -44,7 +47,8 @@ class ResetSearchButton extends React.Component<{||}, State> {
               this.state.tags.size > 0 ||
               this.state.sortField !== this.state.defaultSort ||
               this.state.location ||
-              !_.isEmpty(this.state.locationRadius)
+              !_.isEmpty(this.state.locationRadius) ||
+              this.state.favoritesOnly
             )
           }
           onClick={this._clearFilters.bind(this)}
@@ -55,7 +59,7 @@ class ResetSearchButton extends React.Component<{||}, State> {
     );
   }
   _clearFilters(): void {
-    ProjectSearchDispatcher.dispatch({
+    UniversalDispatcher.dispatch({
       type: "CLEAR_FILTERS",
     });
   }

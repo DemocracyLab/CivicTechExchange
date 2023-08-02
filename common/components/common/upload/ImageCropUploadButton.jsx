@@ -5,6 +5,7 @@ import type { S3Data } from "./S3Data.jsx";
 import type { FileUploadData } from "./FileUploadButton";
 import FileSelectButton from "./FileSelectButton.jsx";
 import ReactCrop from "react-image-crop";
+import type { FileInfo } from "../FileInfo.jsx";
 
 type Props = {|
   onFileUpload: FileUploadData => void,
@@ -13,10 +14,12 @@ type Props = {|
   acceptedFileTypes: string,
   iconClass: string,
   aspect: ?number,
+  currentImage: FileInfo,
 |};
 
 type State = {|
   s3Key: string,
+  croppedImageUrl: ?string,
 |};
 
 let lastFileUploadUrl: string = null;
@@ -34,7 +37,9 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
-    const previewImage = this.state.croppedImageUrl || this.props.currentImage;
+    const previewImage =
+      this.state.croppedImageUrl ||
+      (this.props.currentImage && this.props.currentImage.publicUrl);
     return (
       <div className="ImageCropUploadButton-root">
         {this.state.src && this.state.isCropping && (

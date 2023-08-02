@@ -16,6 +16,7 @@ import utils from "../utils/utils.js";
 import FormWorkflow, {
   FormWorkflowStepConfig,
 } from "../forms/FormWorkflow.jsx";
+import type { APIResponse } from "../utils/api.js";
 
 type State = {|
   groupId: ?number,
@@ -113,7 +114,7 @@ class CreateGroupController extends React.PureComponent<{||}, State> {
     api.postForm(
       formSubmitUrl,
       formRef,
-      onSubmitSuccess,
+      (response: APIResponse) => onSubmitSuccess(JSON.parse(response)),
       response => null /* TODO: Report error to user */
     );
   }

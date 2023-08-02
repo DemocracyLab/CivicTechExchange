@@ -23,18 +23,17 @@
 }
 .AboutEvent-rsvp-btn,
 .AboutEvent-join-btn {
-  display: block;
+  display: flex;
+  flex: 0 1 auto;
   margin: 1rem auto;
-  max-width: 280px;
+  max-width: 360px; //todo: container these buttons so we can do all the same width but not fixed width
+  justify-content: center;
+}
+button.AboutEvent-rsvp-btn {
+  width: 100%;
 }
 .AboutEvent-edit-btn {
   float: right;
-}
-.AboutEvent-rsvp-btn,
-.AboutEvent-join-btn {
-  display: block;
-  margin: 1rem auto;
-  max-width: 280px;
 }
 .AboutEvent-details h3 {
   margin-top: 2rem; /* acts as section spacing */

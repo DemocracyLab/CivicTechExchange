@@ -8,7 +8,8 @@ import Form from "react-bootstrap/Form";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import ConfirmationModal from "../../common/confirmation/ConfirmationModal.jsx";
 import Selector from "../selection/Selector.jsx";
-import type { MyGroupData } from "../../stores/MyGroupsStore.js";
+import type { MyGroupData } from "../../utils/CurrentUser.js";
+import promiseHelper from "../../utils/promise.js";
 
 type Props = {|
   projectId: number,
@@ -71,11 +72,13 @@ class InviteProjectToGroupModal extends React.PureComponent<Props, State> {
     this.setState({ showConfirmationModal: true });
   }
 
-  receiveSendConfirmation(confirmation: boolean): void {
-    if (confirmation) {
-      this.handleSubmit();
-    }
-    this.setState({ showConfirmationModal: false });
+  receiveSendConfirmation(confirmation: boolean): Promise {
+    return promiseHelper.promisify(() =>{
+      if (confirmation) {
+        this.handleSubmit();
+      }
+      this.setState({ showConfirmationModal: false });
+    });
   }
 
   handleSubmit() {

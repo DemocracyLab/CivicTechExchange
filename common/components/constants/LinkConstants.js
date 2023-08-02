@@ -3,6 +3,7 @@
 import GlyphStyles from "../utils/glyphs.js";
 import type { Dictionary, KeyValuePair } from "../types/Generics.jsx";
 import _ from "lodash";
+import stringHelper from "../utils/string.js";
 
 export type LinkSourceDisplayConfig = {|
   +sourceUrlPattern: ?RegExp,
@@ -11,48 +12,62 @@ export type LinkSourceDisplayConfig = {|
   +iconClass: string,
 |};
 
+const httpsWwwPrefix = "^https?://\\w*\\.?";
+
 export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConfig> = [
   {
-    sourceUrlPattern: new RegExp("github.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "github.com", "i"),
     sourceDisplayName: "GitHub",
     iconClass: GlyphStyles.Github,
   },
   {
-    sourceUrlPattern: new RegExp("meetup.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "meetup.com", "i"),
     sourceDisplayName: "Meetup",
     iconClass: GlyphStyles.Meetup,
   },
   {
-    sourceUrlPattern: new RegExp("slack.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "slack.com", "i"),
     sourceDisplayName: "Slack",
     iconClass: GlyphStyles.Slack,
   },
   {
-    sourceUrlPattern: new RegExp("trello.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "figma.com", "i"),
+    sourceDisplayName: "Figma",
+    iconClass: GlyphStyles.Figma,
+  },
+  {
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "trello.com", "i"),
     sourceDisplayName: "Trello",
     iconClass: GlyphStyles.Trello,
   },
   {
-    sourceUrlPattern: new RegExp("drive.google.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "drive.google.com", "i"),
     sourceDisplayName: "Google Drive",
     iconClass: GlyphStyles.GoogleDrive,
   },
   {
-    sourceUrlPattern: new RegExp("facebook.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "facebook.com", "i"),
     sourceDisplayName: "Facebook",
     iconClass: GlyphStyles.FacebookSquare,
   },
   {
-    sourceUrlPattern: new RegExp("twitter.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "twitter.com", "i"),
     sourceDisplayName: "Twitter",
     iconClass: GlyphStyles.TwitterSquare,
   },
   {
-    sourceUrlPattern: new RegExp("linkedin.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "linkedin.com", "i"),
     sourceDisplayName: "LinkedIn",
     iconClass: GlyphStyles.LinkedIn,
   },
+  {
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "youtube.com", "i"),
+    sourceDisplayName: "YouTube",
+    iconClass: GlyphStyles.YouTube,
+  },
 ];
+
+export const LinkTypePrefixes: $ReadOnlyArray<string> = ["link_", "social_"];
 
 export const LinkTypes: Dictionary<string> = {
   CODE_REPOSITORY: "link_coderepo",
@@ -61,6 +76,7 @@ export const LinkTypes: Dictionary<string> = {
   PROJECT_MANAGEMENT: "link_projmanage",
   LINKED_IN: "link_linkedin",
   DESIGN: "link_design",
+  VIDEO: "link_video",
   TWITTER: "social_twitter",
   FACEBOOK: "social_facebook",
 };
@@ -124,6 +140,13 @@ export const DefaultLinkDisplayConfigurations: KeyValuePair<LinkSourceDisplayCon
       },
     ],
     [
+      LinkTypes.VIDEO,
+      {
+        sourceTypeDisplayName: "Video",
+        iconClass: GlyphStyles.Video,
+      },
+    ],
+    [
       "other",
       {
         sourceTypeDisplayName: "Website",
@@ -132,3 +155,7 @@ export const DefaultLinkDisplayConfigurations: KeyValuePair<LinkSourceDisplayCon
     ],
   ]
 );
+
+export const isLinkFieldName: string => boolean = (str: string) => {
+  return stringHelper.startsWithAny(str, LinkTypePrefixes);
+};

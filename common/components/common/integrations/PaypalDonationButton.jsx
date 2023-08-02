@@ -52,7 +52,7 @@ class PaypalDonationButton extends React.Component<Props> {
         value={url.hostname() + url.section(Section.ThankYou)}
       />,
       <input type="hidden" name="no_note" value="1" />,
-      <input type="hidden" name="no_shipping" value="1" />,
+      <input type="hidden" name="no_shipping" value="2" />,
       <input type="hidden" name="currency_code" value="USD" />,
       <input type="hidden" name="business" value={window.PAYPAL_PAYEE} />,
     ];

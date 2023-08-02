@@ -65,6 +65,12 @@ class metrics {
     _logEvent("navigateToProjectProfile", { projectId: projectId });
   }
 
+  static logNavigateToEventProjectProfile(eventProjectId: string): void {
+    _logEvent("navigateToEventProjectProfile", {
+      eventProjectId: eventProjectId,
+    });
+  }
+
   static logSearchFilterByTagEvent(tag: TagDefinition): void {
     _logEvent(tagCategoryEventMapping[tag.category], { tagName: tag.tag_name });
   }
@@ -81,8 +87,15 @@ class metrics {
     _logEvent("filter_by_location", { location: location });
   }
 
-  static logSearchChangeSortEvent(sortField: string): void {
-    _logEvent("sort_by_field", { sortField: sortField });
+  static logSearchChangeSortEvent(sortField: string, entityType: string): void {
+    _logEvent("sort_by_field", {
+      sortField: sortField,
+      entityType: entityType,
+    });
+  }
+
+  static logFilterProjectsByFavorite(favoritesOnly: boolean): void {
+    _logEvent("project_filter_by_favorites", { favoritesOnly: favoritesOnly });
   }
 
   static logGroupSearchChangeSortEvent(sortField: string): void {
@@ -256,8 +269,14 @@ class metrics {
     _logEvent("headerLinkClick", { url: url, userId: userId || 0 });
   }
 
-  static logProjectSearchResults(projectCount: number, queryString: string): void {
-    _logEvent("projectSearchResults", { projectCount: projectCount, queryString: queryString })
+  static logProjectSearchResults(
+    projectCount: number,
+    queryString: string
+  ): void {
+    _logEvent("projectSearchResults", {
+      projectCount: projectCount,
+      queryString: queryString,
+    });
   }
 }
 

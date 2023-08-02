@@ -13,7 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import include, url
+from django.conf.urls import include
+from django.urls import re_path
 from django.views.generic.base import RedirectView
 from common.helpers.error_handlers import handle500
 
@@ -24,39 +25,40 @@ handler500 = handle500
 
 
 urlpatterns = [
-    url(r'^accounts/', include('oauth2.providers.github.urls')),
-    url(r'^accounts/', include('oauth2.providers.google.urls')),
-    url(r'^accounts/', include('oauth2.providers.linkedin.urls')),
-    url(r'^accounts/', include('oauth2.providers.facebook.urls')),
-    url(r'^accounts/', include('allauth.urls')),
-    url(r'^api/signup/add/$', views.add_signup_details, name='add_signup_details'),
-    url(r'^api/signup/$', views.signup, name='signup'),
-    url(r'^api/login/$', views.login_view, name='login_view'),
-    url(r'^api/login/(?P<provider>\w+)', views.login_view, name='login_view'),
-    url(r'^logout/$', views.logout_view, name='logout_view'),
-    url(
+    re_path(r'^accounts/', include('oauth2.providers.github.urls')),
+    re_path(r'^accounts/', include('oauth2.providers.google.urls')),
+    re_path(r'^accounts/', include('oauth2.providers.linkedin.urls')),
+    re_path(r'^accounts/', include('oauth2.providers.facebook.urls')),
+    re_path(r'^accounts/', include('allauth.urls')),
+    re_path(r'^api/signup/add/$', views.add_signup_details, name='add_signup_details'),
+    re_path(r'^api/signup/$', views.signup, name='signup'),
+    re_path(r'^api/login/$', views.login_view, name='login_view'),
+    re_path(r'^api/login/(?P<provider>\w+)', views.login_view, name='login_view'),
+    re_path(r'^logout/$', views.logout_view, name='logout_view'),
+    re_path(
         r'^password_reset/$',
         views.password_reset,
         name="password_reset",
     ),
-    url(
+    re_path(
         r'^change_password/$',
         views.change_password,
         name="change_password",
     ),
-    url(
+    re_path(
         r'^verify_user/(?P<user_id>[0-9]+)/(?P<token>[0-9a-z\-]+)$',
         views.verify_user,
         name="verify_user"
     ),
-    url(
+    re_path(
         r'^verify_user/$',
         views.send_verification_email_request,
         name="send_verification_email_request"
     ),
-    url(r'^api/user/edit/(?P<user_id>[0-9]+)/details/$', views.user_edit_details, name='user_edit_details'),
-    url(r'^api/user/edit/(?P<user_id>[0-9]+)/$', views.user_edit, name='user_edit'),
-    url(r'^api/user/(?P<user_id>[0-9]+)/$', views.user_details, name='user_details'),
-    url(r'', include('civictechprojects.urls')),
-    url(r'^platform$', RedirectView.as_view(url='http://connect.democracylab.org/platform/', permanent=False))
+    re_path(r'^api/user/edit/(?P<user_id>[0-9]+)/details/$', views.user_edit_details, name='user_edit_details'),
+    re_path(r'^api/user/edit/(?P<user_id>[0-9]+)/$', views.user_edit, name='user_edit'),
+    re_path(r'^api/user/(?P<user_id>[0-9]+)/$', views.user_details, name='user_details'),
+    re_path(r'', include('civictechprojects.urls')),
+    re_path(r'^platform$', RedirectView.as_view(url='http://connect.democracylab.org/platform/', permanent=False)),
+    re_path('django-rq/', include('django_rq.urls'))
 ]

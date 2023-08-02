@@ -8,8 +8,10 @@ import ModalWrapper from "../ModalWrapper.jsx";
 type Props = {|
   showModal: boolean,
   message: string,
+  headerText: ?string,
   onSelection: boolean => Promise<any>,
   onConfirmOperationComplete: ?() => void,
+  reverseCancelConfirm: ?boolean,
 |};
 type State = {|
   showModal: boolean,
@@ -50,13 +52,14 @@ class ConfirmationModal extends React.PureComponent<Props, State> {
     return (
       <ModalWrapper
         showModal={this.state.showModal}
-        headerText="Confirm"
+        headerText={this.props.headerText || "Confirm"}
         cancelText="No"
         cancelEnabled={!this.state.isProcessing}
         submitText={this.state.isProcessing ? "" : "Yes"}
         submitEnabled={!this.state.isProcessing}
         onClickCancel={this.confirm.bind(this, false)}
         onClickSubmit={this.confirm.bind(this, true)}
+        reverseCancelConfirm={this.props.reverseCancelConfirm}
       >
         {this.props.message}
       </ModalWrapper>

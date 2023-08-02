@@ -2,13 +2,17 @@
 
 import React from "react";
 import DjangoCSRFToken from "django-react-csrftoken";
-import type { Validator } from "../../../components/forms/FormValidation.jsx";
-import type { ProjectDetailsAPIData } from "../../../components/utils/ProjectAPIUtils.js";
-import formHelper, { FormPropsBase, FormStateBase } from "../../utils/forms.js";
+import type { Validator } from "../../forms/FormValidation.jsx";
+import type { ProjectDetailsAPIData } from "../../utils/ProjectAPIUtils.js";
+import { FormPropsBase, FormStateBase } from "../../utils/forms.js";
 import { OnReadySubmitFunc } from "./ProjectFormCommon.jsx";
 import { PositionInfo } from "../../forms/PositionInfo.jsx";
 import PositionList from "../../forms/PositionList.jsx";
 import _ from "lodash";
+import { Container } from "flux/utils";
+import FormFieldsStore from "../../stores/FormFieldsStore.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
+import type { Dictionary } from "../../types/Generics.jsx";
 
 type FormFields = {|
   project_positions?: Array<PositionInfo>,
@@ -27,24 +31,36 @@ type State = {|
 /**
  * Encapsulates form for Project Overview section
  */
-class ProjectPositionsForm extends React.PureComponent<Props, State> {
+class ProjectPositionsForm extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
     const project: ProjectDetailsAPIData = props.project;
+    const formFields: Dictionary<any> = {
+      project_positions: project ? project.project_positions : [],
+    };
     this.state = {
-      formIsValid: true,
-      formFields: {
-        project_positions: project ? project.project_positions : [],
-      },
+      formFields: formFields,
     };
 
-    this.form = formHelper.setup();
-    // All fields optional
-    props.readyForSubmit(true);
+    this.state = {
+      formFields: formFields,
+    };
+
+    UniversalDispatcher.dispatch({
+      type: "SET_FORM_FIELDS",
+      formFieldValues: formFields,
+      validators: [],
+    });
   }
 
-  componentDidMount() {
-    this.form.doValidation.bind(this)();
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [FormFieldsStore];
+  }
+
+  static calculateState(prevState: State, props: Props): State {
+    let state: State = _.clone(prevState) || {};
+    state.formFields = _.clone(FormFieldsStore.getFormFieldValues());
+    return state;
   }
 
   render(): React$Node {
@@ -56,7 +72,6 @@ class ProjectPositionsForm extends React.PureComponent<Props, State> {
           <PositionList
             elementid="project_positions"
             positions={this.state.formFields.project_positions}
-            onChange={this.form.onFormChange.bind(this)}
           />
         </div>
       </div>
@@ -64,4 +79,4 @@ class ProjectPositionsForm extends React.PureComponent<Props, State> {
   }
 }
 
-export default ProjectPositionsForm;
+export default Container.create(ProjectPositionsForm, { withProps: true });

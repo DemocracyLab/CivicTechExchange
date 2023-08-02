@@ -22,6 +22,7 @@ type SelectorFlags = {|
   isSearchable: boolean,
   isClearable: boolean,
   isMultiSelect: boolean,
+  isDisabled: ?boolean,
 |};
 
 const defaultFlags: SelectorFlags = {
@@ -30,7 +31,7 @@ const defaultFlags: SelectorFlags = {
   isMultiSelect: false,
 };
 
-type Props<T> = {|
+export type SelectorProps<T> = {|
   id: string,
   options: $ReadOnlyArray<T>,
   selected: T,
@@ -51,8 +52,9 @@ type State<T> = {|
   isCleared: boolean,
 |};
 
-class Selector<T> extends React.Component<Props<T>, State<T>> {
-  constructor(props: Props<T>): void {
+// Generic dropdown selector
+class Selector<T> extends React.Component<SelectorProps<T>, State<T>> {
+  constructor(props: SelectorProps<T>): void {
     super();
 
     this.state = Selector.updateOptions(props, {});
@@ -67,7 +69,7 @@ class Selector<T> extends React.Component<Props<T>, State<T>> {
     );
   }
 
-  static updateOptions(props: Props, state: State): State {
+  static updateOptions(props: SelectorProps, state: State): State {
     state.labelGenerator = props.labelGenerator || _.toString;
     if (props.noOptionsMessage) {
       state.noOptionsMessage = _.isString(props.noOptionsMessage)
@@ -106,7 +108,7 @@ class Selector<T> extends React.Component<Props<T>, State<T>> {
     return state;
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  componentWillReceiveProps(nextProps: SelectorProps): void {
     this.setState(Selector.updateOptions(nextProps, this.state), function() {
       this.forceUpdate();
     });
@@ -161,6 +163,7 @@ class Selector<T> extends React.Component<Props<T>, State<T>> {
           this.props.isMultiSelect,
           defaultFlags.isMultiSelect
         )}
+        isDisabled={this.props.isDisabled}
       />
     );
   }

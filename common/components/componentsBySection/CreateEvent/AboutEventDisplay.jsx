@@ -1,18 +1,38 @@
 // @flow
 
 import React from "react";
-import Linkify from "react-linkify";
 import type Moment from "moment";
-import datetime, { DateFormat } from "../../utils/datetime.js";
+import _ from "lodash";
 import Button from "react-bootstrap/Button";
-import CurrentUser from "../../utils/CurrentUser.js";
+import datetime, { DateFormat } from "../../utils/datetime.js";
+import CurrentUser, {
+  MyEventProjectData,
+  MyProjectData,
+  MyRSVPData,
+  UserContext,
+} from "../../utils/CurrentUser.js";
 import { EventData } from "../../utils/EventAPIUtils.js";
 import urlHelper from "../../utils/url.js";
-import Section from "../../enums/Section";
-import ProjectSearchDispatcher from "../../stores/ProjectSearchDispatcher.js";
+import Section from "../../enums/Section.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
-import _ from "lodash";
-import MainFooter from "../../chrome/MainFooter.jsx"
+import SponsorFooter from "../../chrome/SponsorFooter.jsx";
+import PromptNavigationModal from "../../common/PromptNavigationModal.jsx";
+import type { Dictionary } from "../../types/Generics.jsx";
+import NotificationModal from "../../common/notification/NotificationModal.jsx";
+import EventProjectAPIUtils from "../../utils/EventProjectAPIUtils.js";
+import { ModalSizes } from "../../common/ModalWrapper.jsx";
+import ConfirmationModal from "../../common/confirmation/ConfirmationModal.jsx";
+import promiseHelper from "../../utils/promise.js";
+import Toast from "../../common/notification/Toast.jsx";
+import type {
+  CardOperation,
+  ProjectData,
+} from "../../utils/ProjectAPIUtils.js";
+import JoinConferenceButton from "../../common/event_projects/JoinConferenceButton.jsx";
+import { SearchFor } from "../../stores/EntitySearchStore.js";
+import AllowMarkdown from "../../common/richtext/AllowMarkdown.jsx";
+import EventProjectRSVPModal from "../../common/event_projects/EventProjectRSVPModal.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -21,18 +41,60 @@ type Props = {|
 
 type State = {|
   event: ?EventData,
+  owned_projects: $ReadOnlyArray<MyProjectData>,
+  volunteering_projects: ?$ReadOnlyArray<MyProjectData>,
+  isProjectOwnerRSVPed: boolean,
+  isVolunteerRSVPed: boolean,
+  isVolunteerRSVPedForEventOnly: boolean,
+  showRSVPLocationModal: boolean,
+  showPromptCreateProjectModal: boolean,
+  showPostRSVPModal: boolean,
+  showCancelRSVPConfirmModal: boolean,
+  showPostRSVPToast: boolean,
+  showPostCancelRSVPToast: boolean,
+  startDate: Moment,
+  endDate: Moment,
+  isPastEvent: boolean,
 |};
 
 class AboutEventDisplay extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
+    const userContext: UserContext = CurrentUser?.userContext();
+    const startDate: Moment = datetime.parse(props.event.event_date_start);
+    const endDate: Moment = datetime.parse(props.event.event_date_end);
+    const isProjectOwnerRSVPed: boolean = !_.isEmpty(
+      userContext?.event_projects
+    );
+    const volunteering_projects: ?$ReadOnlyArray<MyProjectData> = userContext?.rsvp_events?.filter(
+      (rsvp: MyRSVPData) => rsvp.event_id === props.event.event_id
+    );
+    const isVolunteerRSVPedForEventOnly: boolean =
+      !_.isEmpty(volunteering_projects) &&
+      volunteering_projects.length == 1 &&
+      !volunteering_projects[0].project_id;
     this.state = {
       event: props.event,
+      owned_projects: userContext?.owned_projects,
+      volunteering_projects: volunteering_projects,
+      isProjectOwnerRSVPed: isProjectOwnerRSVPed,
+      isVolunteerRSVPed: !_.isEmpty(volunteering_projects),
+      isVolunteerRSVPedForEventOnly: isVolunteerRSVPedForEventOnly,
+      showRSVPLocationModal: false,
+      showPromptCreateProjectModal: false,
+      showPostRSVPModal: false,
+      showCancelRSVPConfirmModal: false,
+      startDate: startDate,
+      endDate: endDate,
+      isPastEvent: endDate < datetime.now(),
+      showPostRSVPToast: false,
+      showPostCancelRSVPToast: false,
     };
 
     if (this.state.event) {
       this.initProjectSearch();
     }
+    this.handleRSVPClose = this.handleRSVPClose.bind(this);
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -46,10 +108,17 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     }
   }
 
+  handleRSVPClose(submitted: boolean) {
+    this.setState({
+      showRSVPLocationModal: false,
+      showPostRSVPModal: submitted,
+    });
+  }
+
   render(): ?$React$Node {
     const event: EventData = this.state.event;
-    const startDate: Moment = datetime.parse(event.event_date_start);
-    const endDate: Moment = datetime.parse(event.event_date_end);
+    const startDate: Moment = this.state.startDate;
+    const endDate: Moment = this.state.endDate;
     const isSingleDayEvent: boolean = datetime.isOnSame(
       "day",
       startDate,
@@ -57,6 +126,22 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     );
     return !event ? null : (
       <React.Fragment>
+        <Toast
+          show={this.state.showPostRSVPToast}
+          onClose={() => this.setState({ showPostRSVPToast: false })}
+          timeoutMilliseconds={4000}
+        >
+          You have RSVP-ed successfully to the event.
+        </Toast>
+
+        <Toast
+          show={this.state.showPostCancelRSVPToast}
+          onClose={() => this.setState({ showPostCancelRSVPToast: false })}
+          timeoutMilliseconds={4000}
+        >
+          You have canceled your RSVP to the event.
+        </Toast>
+
         <div className="AboutEvent-root container">
           <div className="AboutEvent-title row">
             <div className="col-12 AboutEvent-header">
@@ -96,8 +181,21 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
                 {this.state.event.event_rsvp_url && this._renderRSVPButton()}
                 {!this.props.viewOnly &&
-                  event.event_live_id &&
+                  event.is_activated &&
                   this._renderJoinLiveEventButton()}
+                {!this.props.viewOnly &&
+                  !this.state.isPastEvent &&
+                  !this.state.isVolunteerRSVPed &&
+                  this._renderRSVPAsProjectOwnerButton()}
+                {!this.props.viewOnly &&
+                  !this.state.isPastEvent &&
+                  !this.state.isVolunteerRSVPed &&
+                  !this.state.isProjectOwnerRSVPed &&
+                  this._renderRSVPAsVolunteerButton()}
+                {!this.props.viewOnly &&
+                  !this.state.isPastEvent &&
+                  this.state.isVolunteerRSVPedForEventOnly &&
+                  this._renderCancelVolunteerRSVPButton()}
               </div>
             </div>
             <div className="col-xs-12 col-lg-8 AboutEvent-splash">
@@ -107,21 +205,17 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
             </div>
           </div>
 
-          <div className="AboutEvent-details row">
-            <div className="col-12">
-              <Linkify>
-                <h3>Details</h3>
-                <p>{event.event_description}</p>
-                <h3>What We Will Do</h3>
-                <p>{event.event_agenda}</p>
-              </Linkify>
+          <div className="AboutEvent-details row justify-content-center">
+            <div className="col-12 col-lg-9">
+              <h3>Details</h3>
+              <AllowMarkdown children={event.event_description} />
+              <h3>What We Will Do</h3>
+              <AllowMarkdown children={event.event_agenda} />
             </div>
           </div>
-          {!_.isEmpty(event.event_legacy_organization) && (
-            <ProfileProjectSearch viewOnly={this.props.viewOnly} />
-          )}
+          <ProfileProjectSearch viewOnly={this.props.viewOnly} />
         </div>
-        <MainFooter key="main_footer" forceShow={event.show_headers}/>
+        <SponsorFooter key="main_footer" forceShow={event.show_headers} />
       </React.Fragment>
     );
   }
@@ -181,53 +275,294 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         className="AboutEvent-rsvp-btn"
         type="button"
         href={url}
+        target="_blank"
       >
         {text}
       </Button>
+    );
+  }
+
+  _renderRSVPAsVolunteerButton(): ?$React$Node {
+    // TODO: Add spinner while RSVP call is in progress
+    let buttonConfig: Dictionary<any> = {};
+    if (CurrentUser.isLoggedIn()) {
+      const onClick: () => void = !_.isEmpty(
+        this.state?.event?.event_time_zones
+      )
+        ? () => {
+            // If there are multiple locations, show RSVP location modal
+            this.setState({ showRSVPLocationModal: true });
+          }
+        : () => {
+            // If single location, RSVP then show post-RSVP modal
+            EventProjectAPIUtils.rsvpForEvent(
+              this.props.event.event_id,
+              false,
+              null,
+              response => {
+                this.setState({
+                  showPostRSVPModal: true,
+                });
+              }
+            );
+          };
+
+      buttonConfig = {
+        onClick: onClick,
+      };
+    } else {
+      // If not logged in, go to login page
+      buttonConfig = { href: urlHelper.logInThenReturn() };
+    }
+
+    return (
+      <React.Fragment>
+        <NotificationModal
+          showModal={this.state.showPostRSVPModal}
+          size={ModalSizes.Medium}
+          message="Your next step is to select a project.  If you don't see a project you like, please check back closer to the hackathon."
+          buttonText="Ok"
+          headerText="Thank you for RSVPing!"
+          onClickButton={() =>
+            this.setState({
+              showPostRSVPModal: false,
+              showPostRSVPToast: true,
+              isVolunteerRSVPed: true,
+              isVolunteerRSVPedForEventOnly: true,
+            })
+          }
+        />
+
+        <EventProjectRSVPModal
+          event={this.state.event}
+          showModal={this.state.showRSVPLocationModal}
+          handleClose={submitted => this.handleRSVPClose(submitted)}
+          conferenceUrl={
+            this.state?.event?.event_conference_admin_url ||
+            this.state?.event?.event_conference_url
+          }
+        />
+
+        <Button
+          variant="primary"
+          className="AboutEvent-rsvp-btn"
+          type="button"
+          {...buttonConfig}
+        >
+          RSVP | As a Volunteer
+        </Button>
+      </React.Fragment>
+    );
+  }
+
+  _renderCancelVolunteerRSVPButton(): ?$React$Node {
+    // TODO: Add spinner while cancel call is in progress
+    let buttonConfig: Dictionary<any> = {};
+    if (CurrentUser.isLoggedIn()) {
+      buttonConfig = {
+        onClick: () =>
+          this.setState({
+            showCancelRSVPConfirmModal: true,
+          }),
+      };
+    } else {
+      // If not logged in, go to login page
+      buttonConfig = { href: urlHelper.logInThenReturn() };
+    }
+
+    return (
+      <React.Fragment>
+        <ConfirmationModal
+          showModal={this.state.showCancelRSVPConfirmModal}
+          headerText="Cancel Your RSVP?"
+          message="If you cancel your RSVP, you will be removed from the hackathon.  Do you want to continue?"
+          reverseCancelConfirm={true}
+          onSelection={(canceled: boolean) => {
+            if (canceled) {
+              return EventProjectAPIUtils.rsvpEventCancel(
+                this.props.event.event_id,
+                response => {
+                  this.setState({
+                    showCancelRSVPConfirmModal: false,
+                    showPostCancelRSVPToast: true,
+                    isVolunteerRSVPed: false,
+                    isVolunteerRSVPedForEventOnly: false,
+                  });
+                }
+              );
+            } else {
+              return promiseHelper.promisify(() =>
+                this.setState({
+                  showCancelRSVPConfirmModal: false,
+                })
+              );
+            }
+          }}
+        />
+
+        <Button
+          variant="primary"
+          className="AboutEvent-rsvp-btn"
+          type="button"
+          {...buttonConfig}
+        >
+          Cancel RSVP
+        </Button>
+      </React.Fragment>
+    );
+  }
+
+  _renderRSVPAsProjectOwnerButton(): ?$React$Node {
+    // TODO: Don't show when a user has rsvp-ed all their projects with this event
+    let buttonConfig: Dictionary<any> = {};
+    if (CurrentUser.isLoggedIn()) {
+      if (!_.isEmpty(this.state.owned_projects)) {
+        // Go to create event project page if user has projects
+        buttonConfig = {
+          href: urlHelper.section(Section.CreateEventProject, {
+            event_id: this.state.event.event_id,
+          }),
+        };
+      } else {
+        // If no projects, open create project prompt
+        buttonConfig = {
+          onClick: () => this.setState({ showPromptCreateProjectModal: true }),
+        };
+      }
+    } else {
+      // If not logged in, go to login page
+      buttonConfig = { href: urlHelper.logInThenReturn() };
+    }
+
+    return (
+      <React.Fragment>
+        <PromptNavigationModal
+          showModal={this.state.showPromptCreateProjectModal}
+          submitUrl={
+            urlHelper.section(Section.CreateProject) +
+            "?fromEventId=" +
+            this.state.event.event_id
+          }
+          headerText="Create a Project on DemocracyLab.org?"
+          cancelText="Cancel"
+          submitText="Create Project"
+          onCancel={() =>
+            this.setState({ showPromptCreateProjectModal: false })
+          }
+        >
+          You must create a project on DemocracyLab.org to join the hackathon as
+          a project leader.
+        </PromptNavigationModal>
+
+        <Button
+          variant="primary"
+          className="AboutEvent-rsvp-btn"
+          type="button"
+          {...buttonConfig}
+        >
+          RSVP | As a Project Leader
+        </Button>
+      </React.Fragment>
     );
   }
 
   _renderJoinLiveEventButton(): ?$React$Node {
     let text: string = "";
-    let url: string = "";
+    let buttonConfig: Dictionary<any> = {
+      target: "_self",
+    };
     if (CurrentUser.isLoggedIn()) {
-      //TODO: Handle un-verified users
-      text = "Join Event";
-      //TODO: Incorporate live event id into Live Event page
-      url = urlHelper.section(Section.LiveEvent, {
-        id: this.props.event.event_live_id,
-      });
+      text = "Join Main Session";
+      buttonConfig.href =
+        this.props.event.event_conference_admin_url ||
+        this.props.event.event_conference_url;
+      buttonConfig.target = "_blank";
     } else {
-      text = "Log In to Join Event";
-      url = urlHelper.logInThenReturn();
+      text = "Join Event";
+      buttonConfig.href = urlHelper.logInThenReturn();
     }
 
-    return (
+    return this.props.event.is_activated ? (
+      <JoinConferenceButton
+        buttonConfig={buttonConfig}
+        participant_count={this.props.event.event_conference_participants}
+        className="AboutEvent-rsvp-btn JoinConference-livebutton"
+      >
+        {text}
+      </JoinConferenceButton>
+    ) : (
       <Button
-        variant="success"
-        size="lg"
-        className="AboutEvent-join-btn"
+        variant="primary"
         type="button"
+        className="AboutEvent-rsvp-btn JoinConference-livebutton"
         title={text}
-        href={url}
+        {...buttonConfig}
       >
         {text}
       </Button>
     );
   }
 
+  _cardOperationGenerator(project: ProjectData): ?CardOperation {
+    // TODO: Show signup modal on click
+    const isVolunteering: boolean =
+      !_.isEmpty(this.state.volunteering_projects) &&
+      this.state.volunteering_projects.find(
+        (myProject: MyProjectData) => myProject.project_id == project.id
+      );
+
+    const isOwner: boolean =
+      !_.isEmpty(this.state.owned_projects) &&
+      this.state.owned_projects.find(
+        (myProject: MyProjectData) => myProject.project_id == project.id
+      );
+    if (this.props.event.is_activated) {
+      if (isVolunteering || isOwner) {
+        return {
+          name: "Join Project Video",
+          url: project.conferenceUrl,
+          target: "_blank",
+          count: project.conferenceCt,
+          buttonVariant: "success",
+        };
+      } else {
+        return {
+          name: "Review Project Details",
+          url: project.cardUrl,
+          count: project.conferenceCt,
+          buttonVariant: "outline-secondary",
+        };
+      }
+    } else {
+      if (isVolunteering || isOwner) {
+        return {
+          name: "View Details",
+          buttonVariant: "outline-secondary",
+          url: project.cardUrl,
+        };
+      } else if (CurrentUser.isLoggedIn() && !isVolunteering) {
+        return {
+          name: "Sign Up",
+          url: project.cardUrl + "?signUp=1",
+        };
+      }
+    }
+  }
+
   initProjectSearch() {
     const event: EventData = this.state.event;
-    if (event && !_.isEmpty(event.event_legacy_organization)) {
-      ProjectSearchDispatcher.dispatch({
-        type: "INIT",
+    if (event?.event_id) {
+      UniversalDispatcher.dispatch({
+        type: "INIT_SEARCH",
         findProjectsArgs: {
           event_id: event.event_id,
           sortField: "project_name",
         },
         searchSettings: {
           updateUrl: false,
-          defaultSort: "project_name",
+          searchConfig: SearchFor.Projects,
+          cardOperationGenerator:
+            !this.state.isPastEvent && this._cardOperationGenerator.bind(this),
         },
       });
     }

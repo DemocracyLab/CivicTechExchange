@@ -14,6 +14,10 @@ export const DateFormat: { [key: string]: string } = {
 export const timezone: string = moment.tz.guess();
 
 class datetimeHelper {
+  static now(): Moment {
+    return moment();
+  }
+
   static parse(dateString: string): Moment {
     return moment(dateString).tz(timezone);
   }

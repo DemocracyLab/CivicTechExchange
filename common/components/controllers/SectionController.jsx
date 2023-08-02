@@ -17,14 +17,12 @@ import LogInController from "./LogInController.jsx";
 import SignUpController from "./SignUpController.jsx";
 import ResetPasswordController from "./ResetPasswordController.jsx";
 import ChangePasswordController from "./ChangePasswordController.jsx";
-import EditProfileController from "./EditProfileController.jsx";
 import AboutUserController from "./AboutUserController.jsx";
 import SignedUpController from "./SignedUpController.jsx";
 import EmailVerifiedController from "./EmailVerifiedController.jsx";
 import FlashMessage from "../chrome/FlashMessage.jsx";
 import DonateController from "./DonateController.jsx";
 import ThankYouController from "./ThankYouController.jsx";
-import PressController from "./PressController.jsx";
 import ContactUsController from "./ContactUsController.jsx";
 import CreateGroupController from "./CreateGroupController.jsx";
 import CreateEventController from "./CreateEventController.jsx";
@@ -39,6 +37,10 @@ import CoroporateHackathonController from "./CorporateHackathonController.jsx";
 import MyEventsController from "./MyEventsController.jsx";
 import AddSignUpDetails from "./AddSignUpDetails.jsx";
 import VideoController from "./VideoController.jsx";
+import AboutEventProjectController from "./AboutEventProjectController.jsx";
+import CreateEventProjectController from "./CreateEventProjectController.jsx";
+import PrivacyController from "./PrivacyController.jsx";
+import TermsController from "./TermsController.jsx";
 
 type State = {|
   section: SectionType,
@@ -94,7 +96,6 @@ class SectionController extends React.Component<{||}, State> {
       case Section.ChangePassword:
         return <ChangePasswordController />;
       case Section.EditProfile:
-        return <EditProfileController />;
       case Section.Profile:
         return <AboutUserController />;
       case Section.SignedUp:
@@ -105,8 +106,6 @@ class SectionController extends React.Component<{||}, State> {
         return <DonateController />;
       case Section.ThankYou:
         return <ThankYouController />;
-      case Section.Press:
-        return <PressController />;
       case Section.ContactUs:
         return <ContactUsController />;
       case Section.CreateGroup:
@@ -131,6 +130,14 @@ class SectionController extends React.Component<{||}, State> {
         return <AddSignUpDetails />;
       case Section.VideoOverview:
         return <VideoController />;
+      case Section.AboutEventProject:
+        return <AboutEventProjectController />;
+      case Section.CreateEventProject:
+        return <CreateEventProjectController />;
+      case Section.Privacy:
+        return <PrivacyController />;
+      case Section.Terms:
+        return <TermsController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>;
     }

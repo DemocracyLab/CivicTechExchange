@@ -1,5 +1,5 @@
 from django.db import models
-
+from common.helpers.collections import omit_falsy
 
 # Create your models here.
 class Tag(models.Model):
@@ -77,3 +77,18 @@ class Tag(models.Model):
             if len(tag) > 0:
                 tags_field.remove(tag)
         return len(tags_to_add) > 0 or len(tags_to_remove) > 0
+
+    @staticmethod
+    def tags_field_descriptions(tags_field):
+        """
+        :param tags_field: Tag field to pull tag display names from
+        :return: Comma-separated list of tag display names
+        """
+        valid_tags = omit_falsy(list(tags_field.all().values()))
+        tag_strings = []
+        if valid_tags:
+            for tag_data in valid_tags:
+                tag = Tag.get_by_name(tag_data['name'])
+                if tag:
+                    tag_strings.append(tag.display_name)
+        return ",".join(tag_strings)

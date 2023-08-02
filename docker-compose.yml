@@ -7,8 +7,6 @@ services:
       - ./.env
     ports:
       - "5432:5432"
-    env_file:
-      - ./.env
     volumes:
       - demolab:/var/lib/postgresql/data/
       - ./civictechprojects/:/code/civictechprojects/
@@ -37,7 +35,7 @@ services:
     env_file:
       - ./.env
     command: python manage.py migrate
-    volumes: 
+    volumes:
       - ./civictechprojects/:/code/civictechprojects/
       - ./common/:/code/common/
       - ./democracylab/:/code/democracylab/
@@ -60,7 +58,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    volumes: 
+    volumes:
       - ./civictechprojects/:/code/civictechprojects/
       - ./common/:/code/common/
       - ./democracylab/:/code/democracylab/
@@ -70,5 +68,5 @@ services:
       - ./webpack.common.js:/code/webpack.common.js
       - ./webpack.dev.js:/code/webpack.dev.js
 
-volumes: 
+volumes:
   demolab:

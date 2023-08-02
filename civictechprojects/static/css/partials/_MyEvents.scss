@@ -1,6 +1,7 @@
 //keep page content off header and footer edges
 .MyEventsController-root {
-  padding: 1rem 0 2rem 0;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
 
   //keep subheaders within a section apart
   .EventCardContainer-section-header:nth-of-type(n + 2) {

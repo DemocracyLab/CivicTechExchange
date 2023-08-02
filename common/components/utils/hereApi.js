@@ -83,7 +83,7 @@ class hereApiHelper {
     const requestOptions = {
       credentials: "omit",
     };
-    apiHelper._request(
+    apiHelper._legacyRequest(
       _url,
       "GET",
       null,

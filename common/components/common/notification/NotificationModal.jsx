@@ -3,6 +3,8 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { ModalSizes } from "../ModalWrapper.jsx";
+import type { Dictionary } from "../../types/Generics.jsx";
 
 type Props = {|
   showModal: boolean,
@@ -10,6 +12,7 @@ type Props = {|
   buttonText: string,
   headerText: ?string,
   onClickButton: () => void,
+  size: ?string,
 |};
 type State = {|
   showModal: boolean,
@@ -36,12 +39,17 @@ class NotificationModal extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
+    // TODO: Use ModalWrapper
+    const sizeProp: Dictionary<string> =
+      "size" in this.props
+        ? { size: this.props.size }
+        : { size: ModalSizes.Large };
     return (
       <div>
         <Modal
           show={this.state.showModal}
-          size="lg"
           onHide={this.closeModal.bind(this)}
+          {...sizeProp}
         >
           <Modal.Header style={{ whiteSpace: "pre-wrap" }} closeButton>
             <Modal.Title>{this.props.headerText}</Modal.Title>

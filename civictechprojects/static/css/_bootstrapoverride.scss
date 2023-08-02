@@ -27,7 +27,7 @@ $container-max-widths: (
     xl: 1140px,
   // 12 col @ 95px/ea inc. gutters
     xxl: 1392px,
-  // 12 col @ 116px/ea inc. gutters,
+  // 12 col @ 116px/ea inc. gutters
 );
 
 //define our font stack
@@ -37,19 +37,30 @@ $font-family-sans-serif: "Montserrat", -apple-system, BlinkMacSystemFont,
 
 //add DL colors to themes for button variants, etc
 $theme-colors: (
-  "primary": #f79e02,
-  "success": #528305,
-  "danger": #e4100e,
-  "info": #107fb0,
-  "cta": #b1d3fb,
-  "login": #86c232,
+  "primary": $color-brand-70,
+  "secondary": $color-neutral-90,
+  "success": $color-green-80,
+  "danger": $color-red-80,
+  // don't use danger, use destructive -- only declared for coverage
+    "destructive": $color-red-80,
+  //destructive has white bg, outline-destructive has transparent
+    "ghost": $color-neutral-10,
+  // ghost buttons have no visible background
 );
+
+// modal backdrop rules
+$modal-backdrop-bg: $color-neutral-45;
+$modal-backdrop-opacity: 0.5;
 
 //disables dropdown caret by default
 $enable-caret: false;
 
-// change carousel control colors for our theme, not default near-white
-$carousel-control-color: #c4c4c4;
+// change carousel control color. designers requested black 3/29/2023, this is the closest design system value.
+$carousel-control-color: $color-neutral-100;
+// setting higher opacity values than default prevents them from appearing grey 
+$carousel-control-opacity: .9;
+$carousel-control-hover-opacity: 1.0;
+
 
 // declare design system header values
 // these values are for **mobile** and are overwritten via mediaquery for desktop in global.scss
@@ -60,3 +71,16 @@ $h1-font-size: $font-size-base * 1.6875; // 27px, headline1
 $h2-font-size: $font-size-base * 1.3125; // 21px, headline2
 $h3-font-size: $font-size-base * 1.0625; // 17px, subtitle1
 $h4-font-size: $font-size-base * 0.9375; // 15px, subtitle2
+$headings-line-height: 1.5; // override the 1.2 default because it seems impervious to any other override
+
+// design system link colors (October 6, 2021)
+// see _reboot.scss, ~line 182, for implementation
+$link-color: $color-link;
+$link-hover-color: $color-link-hover;
+
+// Button rules (design system buttons, added May 2022)
+//size rules should result in padding + border + line-height = 40px; for a 'borderless' button just set border color to match background
+
+$btn-padding-y: 0.4375rem; // 7px
+$btn-padding-x: 1rem; // 16px;
+$btn-border-radius: 0.25rem; // 4px

@@ -1,0 +1,19 @@
+// for Join _ Video buttons with live usercounts, used on Event and ProjectEvent pages
+.JoinConference-livebutton {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  // for the usercount specifically
+  .JoinConference-usercount {
+    background: $color-background-light;
+    color: $color-text-dark;
+    border-radius: 50%;
+    font-weight: bold;
+    min-height: 22px; // min-h and min-w so it has slightly better 3-digit usercount support
+    min-width: 22px;
+    align-self: flex-start; // vertical alig nment
+  }
+  

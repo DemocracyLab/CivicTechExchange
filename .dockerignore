@@ -6,6 +6,7 @@
 !common/
 !democracylab/
 !oauth2/
+!salesforce/
 
 # Important run-time files.
 !manage.py
@@ -21,6 +22,5 @@
 
 # Config
 !webpack.common.js
-!webpack.dev.js
 !webpack.prod.js
 !docker_environment_init.sh

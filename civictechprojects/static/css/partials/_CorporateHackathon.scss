@@ -16,9 +16,6 @@
 
 // quick and dirty top and bottom image sizing
 // TODO: save me from this terrible CSS
-.corporate-bottom-image {
-  height: 101px;
-}
 .corporate-top-image {
   height: 300px;
 }
@@ -26,33 +23,42 @@
   .corporate-top-image {
     height: 400px;
   }
-  .corporate-bottom-image {
-    height: 150px;
-  }
 }
 @include media-breakpoint-up(lg) {
   .corporate-top-image {
     height: 533px;
-  }
-  .corporate-bottom-image {
-    height: 252px;
   }
 }
 @include media-breakpoint-up(xl) {
   .corporate-top-image {
     height: 630px;
   }
-  .corporate-bottom-image {
-    height: 323px;
-  }
 }
 // end awful image sizing zone
+
+// temporary font color zone; this needs to be reworked with Design System color update
+// remove this when colors and color variables are updated
+.corporate-root {
+  p,
+  span,
+  div,
+  ul,
+  li {
+    color: $color-text-strong;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: $color-text-strongest;
+  }
+}
 
 //END OVERRIDES
 
 //begin regular CSS for the page
 
-// corporate page (hackathons and sponsorships)
+// Companies page (formerly Corporate Hackathon page, hence the classes)
 .corporate-root {
   // nav and some others in here for specificity
   // nav acts as section headers but is difficult to @extend h2, so fonts set specifically here to match headline2
@@ -61,11 +67,13 @@
   }
   .nav-tabs {
     background: $color-background-light;
-    border-bottom: 5px solid $color-orange;
+    border-bottom: 8px solid $color-orange;
   }
   .nav-tabs a {
     text-align: center;
-    flex-basis: calc(50% - 20px);
+    flex-basis: calc(
+      50% - 24px
+    ); // 16px left, right, center spacing, 48/3. Probably could revise this.
     color: $color-text-dark;
     font-size: 21px; // match .headline2 size (but not weight)
   }
@@ -83,14 +91,6 @@
     border: 1px solid $color-text-dark;
     border-bottom: 1px solid $color-orange;
   }
-  .corporate-hackathon-stories a,
-  .corporate-sponsorship-impact a,
-  .corporate-learn-link a {
-    color: #2caae2;
-    &:hover {
-      color: #2388b4;
-    }
-  }
   .carousel-blog-root {
     margin-bottom: 2rem;
   }
@@ -99,47 +99,22 @@
     font-weight: normal;
   }
   .corporate-top {
-    padding-top: 2rem;
+    padding-top: 24px;
+  }
+  // only used for FontAwesome glyphs
+  i {
+    font-size: 20px;
+    margin-left: 4px;
   }
 }
-.corporate-sources-citation a {
-  color: $color-text-dark;
-  text-decoration: underline;
-}
-.corporate-sources-citation a:hover {
-  color: $color-text-dark;
-}
-
 .corporate-hr-line {
   display: none;
   width: 45%;
 }
-.corporate-learn-link {
-  width: 100%;
-  text-align: center;
-  a,
-  i {
-    font-size: 21px; // match headline2 font size
-  }
-  i {
-    padding-left: 8px;
-  }
-}
-.corporate-top,
-.corporate-hackathon-saying,
-.corporate-hackathon-saying .carousel-testimonial-root,
-.corporate-sponsorship-saying,
-.corporate-sponsorship-saying .carousel-testimonial-root,
-.corporate-contact,
-.corporate-bottom-image {
+.corporate-bg-light {
   background-color: $color-background-light;
 }
-
-.corporate-top-flex {
-  margin-bottom: 3rem;
-}
-.corporate-top-overlay,
-.corporate-bottom-overlay {
+.corporate-top-overlay {
   background-blend-mode: multiply;
   margin-left: -15px;
   margin-right: -15px;
@@ -149,12 +124,6 @@
 .corporate-top-image {
   background-position-x: center;
   background-position-y: top; // keep faces in view
-}
-.corporate-bottom-image {
-  background-position: center;
-}
-.corporate-top-image,
-.corporate-bottom-image {
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -172,50 +141,42 @@
     color: #fff;
     max-width: 500px;
     margin-top: auto;
-    padding: 0 8px 8px 15px;
+    padding: 0 0 16px 16px;
   }
 }
-.corporate-bottom-overlay {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 255, 255, 0) 45%
-  );
-}
-
-//padding because we want background colors to have spacing too
-.corporate-section,
-.corporate-hackathon-whyhost h1,
-.corporate-sponsorship-why h1 {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
-.corporate-sponsorship-saying h1,
-.corporate-hackathon-saying h1,
-.corporate-sponsorship-impact h1,
-.corporate-hackathon-stories h1,
-.corporate-sponsorship-how h1 {
-  padding-bottom: 3rem;
-}
-.corporate-top-flex-button {
-  margin-top: 2rem;
+.corporate-tab-section {
+  max-width: 100%; // fixes some viewport issues below 334px, could use 100vw if this doesn't work
 }
 .corporate-cta-button {
   display: block;
   margin: 0 auto;
   max-width: 450px;
 }
-.corporate-hackathon-card,
-.corporate-sponsorship-card {
-  border: 1px solid $color-grey-frame-border;
+.corporate-card {
+  border: 1px solid $color-border-weak;
   background: $color-background-light;
-  margin-bottom: 30px;
-  padding: 15px;
+  margin-bottom: 16px;
+  padding: 16px;
+  h2 {
+    margin-bottom: 12px;
+  }
+  p {
+    margin-bottom: 0;
+  }
+  p:first-of-type {
+    margin-bottom: 8px;
+  }
 }
-
 .corporate-contact {
   h2 {
-    padding: 30px 0;
+    margin-bottom: 32px;
+  }
+  .form-group {
+    margin-bottom: 24px;
+  }
+  .ContactForm-submit-btn {
+    display: block;
+    margin: 24px 0 40px 0;
   }
 }
 .corporate-sponsorship-stat-container {
@@ -225,15 +186,16 @@
 }
 .corporate-sponsorship-stat {
   flex: 1 1 26%;
-  margin: 0 20px;
+  margin: 0 20px 20px 20px;
   text-justify: center;
   h4 {
-    @extend .h1;
-    color: $color-orange;
+    @extend .h2;
+    color: $color-orange-text;
   }
   h4,
   p {
     text-align: center;
+    margin-bottom: 0px;
   }
 }
 .corporate-how-flex-container {
@@ -241,12 +203,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  margin: 2rem 0;
 }
 .corporate-how-flex-block {
   display: flex;
   flex-direction: row;
-  margin: 0 0 15px 0;
+  margin: 0 0 24px 0;
+  width: 100%;
 }
 .corporate-how-image-container {
   margin: auto 0;
@@ -254,6 +216,32 @@
 .corporate-how-text {
   margin: 0 0 0 15px;
 }
+.corporate-hackathon-howitworks {
+  h1 {
+    margin-bottom: 8px;
+  }
+  h2 {
+    margin-bottom: 32px;
+  }
+  h3 {
+    margin-bottom: 8px;
+  }
+}
+.corporate-sponsors-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  .corporate-sponsor-item {
+    width: calc(50% - 32px);
+    margin: 32px 16px;
+    max-width: 150px;
+    img {
+      max-width: 100%;
+    }
+  }
+ }
+
 .corporate-sponsorship-how-flex {
   display: flex;
   flex-direction: column;
@@ -270,27 +258,104 @@
     margin-bottom: 1rem;
   }
 }
+.corporate-block-button {
+  display: block;
+}
+.corporate-sponsorship-why,
+.corporate-hackathon-whyhost {
+  h1 {
+    margin-bottom: 16px;
+  }
+}
 
+//section spacing
+.corporate-top-flex-section {
+  margin-bottom: 16px;
+  ul {
+    margin: 0;
+  }
+  li {
+    margin: 0 0 24px 0;
+  }
+}
+.corporate-hackathon-whyhost,
+.corporate-sponsorship-why,
+.corporate-hackathon-howitworks,
+.corporate-contact,
+.corporate-hackathon-saying,
+.corporate-hackathon-carousel,
+.corporate-sponsorship-how,
+.corporate-sponsorship-saying {
+  padding-top: 24px;
+}
+.corporate-hackathon-howitworks,
+.corporate-contact,
+.corporate-hackathon-saying,
+.corporate-sponsorship-how,
+.corporate-sponsorship-saying {
+  padding-bottom: 40px;
+}
+
+.corporate-learn-more {
+  margin-top: 8px; // 8 + 16 from corporate-card above it = 24
+  margin-bottom: 32px;
+  h4 {
+    margin-bottom: 24px;
+  }
+}
+.corporate-hackathon-saying,
+.corporate-sponsorship-saying {
+  h1 {
+    margin-bottom: 16px;
+  }
+  p {
+    margin-top: 24px;
+  }
+}
+.corporate-sponsorship-how {
+  ul {
+    padding-inline-start: 16px;
+  }
+  li {
+    margin-bottom: 16px;
+  }
+  h2 {
+    margin-bottom: 1.5rem;
+  }
+  ul.corporate-sponsorship-learn {
+    list-style-type: none;
+  }
+  .corporate-sponsorship-learn i {
+    margin-left: 8px;
+  }
+}
+
+// applies light background inside frame
+.corporate-root{
+  .carousel-item, .carousel-item-content{
+    background: $color-background-light;
+  }
+}
+ 
 @include media-breakpoint-up(lg) {
+  .corporate-block-button {
+    display: flex;
+    justify-content: center;
+    max-width: 180px;
+    margin: 0 auto;
+  }
   .corporate-cta-button {
     display: initial;
     padding-left: 30px;
     padding-right: 30px;
   }
-  .corporate-hackathon-card,
-  .corporate-sponsorship-card {
-    min-height: 100%; // equal height cards when displayed in a row
-  }
   .nav-tabs a {
     font-size: 23px; // match .headline2 size (but not weight)
   }
-  .corporate-hr-line {
-    display: block;
-  }
-  .corporate-learn-link {
-    a,
-    i {
-      font-size: 23px; // match headline2 font size
+  .corporate-sponsors-container {
+    .corporate-sponsor-item {
+      width: 150px;
+      margin: 32px;
     }
   }
   .corporate-top-overlay {
@@ -298,25 +363,29 @@
       padding: 15px;
     }
   }
-      
+  .corporate-top-flex-section {
+    margin-bottom: 24px;
+  }
   .corporate-root {
     .ContactForm-container {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      flex: 0 0 auto;
-      justify-content: space-around;
+      width: 100%;
+      margin: 0 auto 40px auto;
+      max-width: 34rem;
+      background: $color-background-light;
+      padding: 24px 40px 40px 40px;
     }
-    .ContactForm-group {
-      flex-basis: 45%;
-    }
-    .corporate-top {
-      padding-top: 3rem;
+    // makes background gray outside of frame
+    .carousel-item{
+      background: inherit;
     }
   }
+
   .corporate-top-flex {
     display: flex;
     flex: row nowrap;
+  }
+  .corporate-top-overlay h1 {
+    padding-bottom: 40px;
   }
   .corporate-top-flex-button {
     flex-shrink: 0;
@@ -333,16 +402,21 @@
   }
   .corporate-sponsorship-stat {
     flex-basis: 20%;
+    margin-bottom: 40px;
   }
   .corporate-how-flex-container {
     flex-direction: row;
     align-items: flex-start;
-    margin: 3rem 0;
+    margin-bottom: 64px;
   }
   .corporate-how-flex-block {
     flex-direction: column;
     margin: 0 15px;
     text-align: center;
+    flex-basis: 33%;
+  }
+  .corporate-how-image-container {
+    margin-bottom: 16px;
   }
   .corporate-how-text {
     margin: 0;
@@ -352,7 +426,6 @@
     }
   }
   .corporate-how-after {
-    padding: 1rem 0;
     text-align: center;
   }
   .corporate-sponsorship-how-flex {
@@ -373,6 +446,47 @@
   }
   .corporate-sponsorship-how-button {
     text-align: center;
-    margin-top: 3rem;
+  }
+  .corporate-hackathon-whyhost,
+  .corporate-sponsorship-why,
+  .corporate-hackathon-howitworks,
+  .corporate-contact,
+  .corporate-hackathon-saying,
+  .corporate-hackathon-carousel,
+  .corporate-sponsorship-how,
+  .corporate-sponsorship-saying {
+    padding-top: 40px;
+  }
+  .corporate-hackathon-howitworks,
+  .corporate-contact,
+  .corporate-hackathon-saying,
+  .corporate-sponsorship-saying,
+  .corporate-sponsorship-how {
+    padding-bottom: 64px;
+  }
+  .corporate-hackathon-whyhost,
+  .corporate-sponsorship-why {
+    padding-bottom: 0;
+  }
+  .corporate-hackathon-saying p,
+  .corporate-sponsorship-saying p {
+    margin-top: 40px;
+  }
+}
+@include media-breakpoint-up(xl) {
+  // switch cards back to row layout on large enough screens, for readability
+  .corporate-card-container {
+    display: flex;
+    flex-flow: row nowrap;
+    .corporate-card {
+      margin: 16px;
+      flex-basis: 33%;
+    }
+  }
+  .corporate-sponsorship-why,
+  .corporate-hackathon-whyhost {
+    h1 {
+      margin-bottom: 0; // provided by the cards now
+    }
   }
 }

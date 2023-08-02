@@ -3,6 +3,8 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import { ReactSortable } from "react-sortablejs";
+import { Container } from "flux/utils";
+import _ from "lodash";
 
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import { PositionInfo } from "./PositionInfo.jsx";
@@ -10,7 +12,10 @@ import PositionEntryModal from "./PositionEntryModal.jsx";
 import { GlyphStyles } from "../utils/glyphs.js";
 import PositionListEntry from "./PositionListEntry.jsx";
 import promiseHelper from "../utils/promise.js";
-import _ from "lodash";
+import FormFieldsStore from "../stores/FormFieldsStore.js";
+import HiddenFormFields from "./HiddenFormFields.jsx";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
+import type { Dictionary } from "../types/Generics.jsx";
 
 export type NewPositionInfo = PositionInfo & {| tempId: ?number |};
 
@@ -27,6 +32,7 @@ type State = {|
   selectedPosition: ?NewPositionInfo,
   positionToActUpon: ?NewPositionInfo,
   positions: Array<NewPositionInfo>,
+  positionsJson: string,
 |};
 
 type OnChooseEvent = Event & {| oldIndex: number |};
@@ -34,14 +40,10 @@ type OnChooseEvent = Event & {| oldIndex: number |};
 /**
  * Lists project positions and provides add/edit functionality for them
  */
-class PositionList extends React.PureComponent<Props, State> {
+class PositionList extends React.Component<Props, State> {
   constructor(props: Props): void {
     super(props);
-    const positions: $ReadOnlyArray<NewPositionInfo> =
-      this.props.positions || [];
     this.state = {
-      positions: positions,
-      positionsInitialized: !_.isEmpty(positions),
       selectedPosition: null,
       showAddEditModal: false,
       showDeleteModal: false,
@@ -49,19 +51,23 @@ class PositionList extends React.PureComponent<Props, State> {
       existingPosition: null,
       positionToActUpon: null,
     };
+
+    this.updatePositionsField = this.updatePositionsField.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
-    if (
-      !this.state.positionsInitialized &&
-      nextProps.positions !== this.state.positions
-    ) {
-      this.setState({
-        positions: nextProps.positions || [],
-        positionsInitialized: !_.isEmpty(nextProps.positions),
-      });
-      this.updatePositionsField();
+  static getStores(): $ReadOnlyArray<FluxReduceStore> {
+    return [FormFieldsStore];
+  }
+
+  static calculateState(prevState: State, props: Props): State {
+    let state: State = _.clone(prevState) || {};
+    const formFields: Dictionary<any> = FormFieldsStore.getFormFieldValues();
+    if (!_.isEmpty(formFields[props.elementid])) {
+      state.positions = formFields[props.elementid];
+      state.positionsJson = JSON.stringify(state.positions);
     }
+
+    return state;
   }
 
   savePositionOrdering(positions: $ReadOnlyArray<NewPositionInfo>): void {
@@ -69,8 +75,9 @@ class PositionList extends React.PureComponent<Props, State> {
       positions[i].orderNumber = i;
     }
     this.setState(
-      { positions: positions, selectedPosition: this.state.selectedPosition },
-      this.updatePositionsField
+      Object.assign(this.updatePositionsField(positions), {
+        selectedPosition: this.state.selectedPosition,
+      })
     );
   }
 
@@ -96,25 +103,45 @@ class PositionList extends React.PureComponent<Props, State> {
   }
 
   savePosition(position: NewPositionInfo): void {
+    const positions: Array<NewPositionInfo> = this.state.positions || [];
     if (!this.state.existingPosition) {
       // We need a temporary id for keying, until such time as the position is saved
       position.tempId = _.random(Number.MAX_VALUE);
-      this.state.positions.unshift(position);
-      this.savePositionOrdering(this.state.positions);
+      positions.unshift(position);
+      this.savePositionOrdering(positions);
     } else {
-      _.assign(this.state.existingPosition, position);
+      Object.assign(this.state.existingPosition, position);
     }
 
-    this.setState({ showAddEditModal: false });
-    this.updatePositionsField();
-    this.props.onChange && this.props.onChange();
+    this.setState(
+      Object.assign(this.updatePositionsField(positions), {
+        showAddEditModal: false,
+      })
+    );
   }
 
-  updatePositionsField(): void {
-    if (this.refs && this.refs.hiddenFormField && this.state.positions) {
-      const fieldValue: string = JSON.stringify(this.state.positions);
-      this.refs.hiddenFormField.value = fieldValue;
-    }
+  // Remove values injected by ReactSortable component
+  scrubSortableValues(
+    positions: $ReadOnlyArray<NewPositionInfo>
+  ): $ReadOnlyArray<NewPositionInfo> {
+    return positions.map((position: NewPositionInfo) =>
+      _.omit(position, ["chosen", "selected"])
+    );
+  }
+
+  updatePositionsField(
+    positions: $ReadOnlyArray<NewPositionInfo>,
+    state: ?State
+  ): State {
+    const newState: State = _.clone(state || this.state);
+    newState.positions = this.scrubSortableValues(positions);
+    newState.positionsJson = JSON.stringify(newState.positions);
+    UniversalDispatcher.dispatch({
+      type: "UPDATE_FORM_FIELD",
+      fieldName: this.props.elementid,
+      fieldValue: newState.positions,
+    });
+    return newState;
   }
 
   openModal(position: ?NewPositionInfo): void {
@@ -131,12 +158,12 @@ class PositionList extends React.PureComponent<Props, State> {
     });
   }
 
-  // TODO: Fix deleted positions popping back on the page as we proceed to next page
   confirmDelete(confirmed: boolean): void {
     return promiseHelper.promisify(() => {
-      const state: State = {
+      let state: State = {
         showDeleteModal: false,
         positionToActUpon: null,
+        positions: this.state.positions,
       };
       if (confirmed) {
         state.positions = this.state.positions.slice();
@@ -146,23 +173,30 @@ class PositionList extends React.PureComponent<Props, State> {
             : p.id === this.state.positionToActUpon.id
         );
       }
-      this.setState(state, this.updatePositionsField);
-      this.props.onChange && this.props.onChange();
+      state = Object.assign(
+        state,
+        this.updatePositionsField(state.positions, state)
+      );
+      this.setState(state);
     });
   }
 
   confirmHide(confirmed: boolean): void {
     return promiseHelper.promisify(() => {
-      const state: State = {
+      const position: NewPositionInfo = this.state.positionToActUpon;
+      let state: State = {
         showHideModal: false,
         positionToActUpon: null,
+        positions: this.state.positions,
       };
       if (confirmed) {
-        this.state.positionToActUpon.isHidden = true;
-        state.positions = this.state.positions.slice();
+        position.isHidden = true;
       }
-      this.setState(state, this.updatePositionsField);
-      this.props.onChange && this.props.onChange();
+      state = Object.assign(
+        state,
+        this.updatePositionsField(state.positions, state)
+      );
+      this.setState(state);
     });
   }
 
@@ -175,14 +209,12 @@ class PositionList extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
+    const hiddenFormFields: Dictionary<string> = _.fromPairs([
+      [this.props.elementid, this.state.positionsJson],
+    ]);
     return (
       <div>
-        <input
-          type="hidden"
-          ref="hiddenFormField"
-          id={this.props.elementid}
-          name={this.props.elementid}
-        />
+        <HiddenFormFields sourceDict={hiddenFormFields} />
         <label>Roles Needed &nbsp;</label>
         <Button
           variant="primary"
@@ -199,7 +231,7 @@ class PositionList extends React.PureComponent<Props, State> {
           </div>
         )}
 
-        {this._renderPositions()}
+        {!_.isEmpty(this.state.positions) && this._renderPositions()}
 
         <PositionEntryModal
           showModal={this.state.showAddEditModal}
@@ -258,4 +290,4 @@ class PositionList extends React.PureComponent<Props, State> {
   }
 }
 
-export default PositionList;
+export default Container.create(PositionList, { withProps: true });
