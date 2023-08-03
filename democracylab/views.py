@@ -1,8 +1,5 @@
-from django.conf import settings
-from django.urls import Resolver404
 from common.helpers.constants import FrontEndSection
-from common.helpers.front_end import args_dict_to_query_string, get_page_section, has_page_section, section_url
-from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector
+from common.helpers.front_end import get_page_section, has_page_section, section_url
 from common.helpers.mailing_list import SubscribeToMailingList
 from common.helpers.qiqo_chat import SubscribeUserToQiqoChat
 from django.contrib.auth import login, logout, authenticate
@@ -12,7 +9,6 @@ from django.shortcuts import redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import simplejson as json
-import ast
 from .emails import send_verification_email, send_password_reset_email
 from .forms import DemocracyLabUserCreationForm, DemocracyLabUserAddDetailsForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
