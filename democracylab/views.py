@@ -38,15 +38,8 @@ def login_view(request, provider=None):
             if prev_page.strip('/') == '':
                 redirect_url = '/'
             else:
-                if has_page_section(prev_page) or get_page_section(prev_page):
-                    redirect_url = section_url(prev_page,prev_page_args)
-                else:
-                    redirect_url = prev_page
-                    if prev_page_args:
-                        redirect_url+=args_dict_to_query_string(prev_page_args)
-                    redirect_result = redirect_by([InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector], redirect_url)
-                    if redirect_result is None:
-                        raise Resolver404
+                is_page_section = bool(has_page_section(prev_page) or get_page_section(prev_page))
+                redirect_url = section_url(prev_page,prev_page_args,is_page_section)
             return redirect(redirect_url)
         else:
             messages.error(request, 'Incorrect Email or Password')
