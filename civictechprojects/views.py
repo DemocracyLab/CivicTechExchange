@@ -983,8 +983,6 @@ def dismiss_project_volunteer(request, application_id):
         body = json.loads(request.body)
         message = body['dismissal_message']
         email_template = HtmlEmailTemplate()\
-        .paragraph('The owner of {project_name} has removed you from the project for the following reason:'.format(
-            project_name=volunteer_relation.project.project_name))\
         .paragraph('Thank you for contributing to {project_name}. Your volunteer work for the project has ended. \"{message}\"'\
                    .format(project_name=volunteer_relation.project.project_name, message=message))
         email_subject = 'Thank you for your work at {project_name}'.format(

@@ -441,7 +441,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <a
         href={cdn.document(
-          "2022+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
+          "2023+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
         )}
       >
         Corporate Tech-for-Good Hackathons PDF{" "}
@@ -453,7 +453,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <a 
         href={cdn.document(
-          "2022+DemocracyLab+Sponsorship+Prospectus.pdf"
+          "2023+DemocracyLab+Sponsorship+Prospectus.pdf"
         )}
       >
         Sponsor Prospectus PDF{" "}
