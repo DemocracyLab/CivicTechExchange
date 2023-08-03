@@ -23,7 +23,6 @@ from salesforce import contact as salesforce_contact
 
 def login_view(request, provider=None):
     provider_ids = [p.id for p in registry.get_list()]
-
     if request.method == 'POST':
         email = request.POST['username']
         password = request.POST['password']
@@ -42,9 +41,9 @@ def login_view(request, provider=None):
                 if has_page_section(prev_page) or get_page_section(prev_page):
                     redirect_url = section_url(prev_page,prev_page_args)
                 else:
-                    redirect_url =  prev_page
+                    redirect_url = prev_page
                     if prev_page_args:
-                        redirect_url +=args_dict_to_query_string(prev_page_args)
+                        redirect_url+=args_dict_to_query_string(prev_page_args)
                     redirect_result = redirect_by([InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector], redirect_url)
                     if redirect_result is None:
                         raise Resolver404
