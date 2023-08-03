@@ -1,5 +1,5 @@
 from common.helpers.constants import FrontEndSection
-from common.helpers.front_end import get_page_section, has_page_section, section_url
+from common.helpers.front_end import section_url
 from common.helpers.mailing_list import SubscribeToMailingList
 from common.helpers.qiqo_chat import SubscribeUserToQiqoChat
 from django.contrib.auth import login, logout, authenticate
