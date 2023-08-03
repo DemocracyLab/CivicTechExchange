@@ -30,12 +30,7 @@ def login_view(request, provider=None):
         if user is not None and user.is_authenticated:
             login(request, user)
             prev_page_args = json.loads(prev_page_args_string) if prev_page_args_string else None
-            redirect_url = ''
-            if prev_page.strip('/') == '':
-                redirect_url = '/'
-            else:
-                is_page_section = bool(has_page_section(prev_page) or get_page_section(prev_page))
-                redirect_url = section_url(prev_page,prev_page_args,is_page_section)
+            redirect_url = '/' if prev_page.strip('/') == '' else section_url(prev_page,prev_page_args)
             return redirect(redirect_url)
         else:
             messages.error(request, 'Incorrect Email or Password')

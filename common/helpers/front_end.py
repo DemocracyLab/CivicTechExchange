@@ -19,8 +19,8 @@ def args_dict_to_query_string(args_dict, urlencode=False):
     return "".join(map(lambda ikv: arg_string(idx=ikv[0], key=ikv[1][0], value=ikv[1][1]), enumerate(args_dict.items())))
 
 
-def section_url(section, args_dict=None,is_page_section=True):
-    return settings.PROTOCOL_DOMAIN + section_path(section, args_dict,is_page_section)
+def section_url(section, args_dict=None):
+    return settings.PROTOCOL_DOMAIN + section_path(section, args_dict)
 
 
 def _section_path_special_cases(section_string, args_dict=None):
@@ -31,7 +31,7 @@ def _section_path_special_cases(section_string, args_dict=None):
         return "/events/{event_id}/projects/{project_id}".format(event_id=args_dict['event_id'], project_id=args_dict['project_id'])
 
 
-def section_path(section, args_dict=None,is_page_section=True):
+def section_path(section, args_dict=None):
     from common.urls import url_generators
     if args_dict is None:
         args_dict = {}
@@ -43,6 +43,8 @@ def section_path(section, args_dict=None,is_page_section=True):
     section_path_url = _section_path_special_cases(section_string, args_dict)
     if section_path_url:
         return section_path_url
+    #check if it is a page section
+    is_page_section = bool(has_page_section(section_string) or get_page_section(section_string))
     if(is_page_section):
         section_path_url = '/' + url_generators[section_string]['generator'].format(**id_arg)
     else:
