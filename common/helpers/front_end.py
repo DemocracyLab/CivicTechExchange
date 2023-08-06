@@ -44,7 +44,7 @@ def section_path(section, args_dict=None):
     if section_path_url:
         return section_path_url
     #check if it is a page section
-    is_page_section = bool(has_page_section(section_string) or get_page_section(section_string))
+    is_page_section = has_page_section(section_string)
     if(is_page_section):
         section_path_url = '/' + url_generators[section_string]['generator'].format(**id_arg)
     else:
