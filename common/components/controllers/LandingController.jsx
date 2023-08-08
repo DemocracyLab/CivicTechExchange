@@ -4,7 +4,6 @@ import React from "react";
 import RecentProjectsSection from "../componentsBySection/Landing/RecentProjectsSection.jsx";
 import LatestBlogPosts from "../componentsBySection/Landing/LatestBlogPosts.jsx";
 import TestimonialCarousel from "../common/carousel/TestimonialCarousel.jsx";
-import Partners from "../componentsBySection/Landing/Partners.jsx";
 import cdn from "../utils/cdn";
 import Button from "react-bootstrap/Button";
 import url from "../utils/url";
@@ -79,7 +78,6 @@ class LandingController extends React.PureComponent<{||}, State> {
             {this._recentProjects()}
             {this._renderTestimonials()}
             {this._renderLatestBlogPosts()}
-            {this._renderCommunityPartners()}
           </div>
         </div>
       </div>
@@ -372,25 +370,6 @@ class LandingController extends React.PureComponent<{||}, State> {
     return (
       <div className="LandingController-latestblogposts LandingController-section col-12">
         <LatestBlogPosts />
-      </div>
-    );
-  }
-
-  _renderCommunityPartners() {
-    const partnerLogos = Partners.map(i => (
-      <div key={i.name} className="LandingController-partnersinaction-logo">
-        <a href={i.link}>
-          <img src={i.logo} alt={i.name} />
-        </a>
-      </div>
-    ));
-
-    return (
-      <div className="LandingController-partnersinaction LandingController-section col-12">
-        <h2 className="text-center LandingController-section-header">Our Community Partners</h2>
-        <div className="LandingController-partnersinaction-container">
-          {partnerLogos}
-        </div>
       </div>
     );
   }
