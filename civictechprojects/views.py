@@ -79,7 +79,7 @@ def group_tags_counts(request):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view(['POST'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def group_create(request):
     if not request.user.is_authenticated:
@@ -94,7 +94,7 @@ def group_create(request):
     return JsonResponse(group.hydrate_to_json())
 
 
-@api_view()
+@api_view(['GET', 'POST'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def group_edit(request, group_id):
     if not request.user.is_authenticated:
@@ -114,7 +114,7 @@ def group_edit(request, group_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view(['GET', 'DELETE'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def group_delete(request, group_id):
     # if not logged in, send user to login page
@@ -147,7 +147,7 @@ def get_group(request, group_id):
         return HttpResponse(status=404)
 
 
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def approve_group(request, group_id):
     group = Group.objects.get(id=group_id)
@@ -172,7 +172,7 @@ def approve_group(request, group_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view(['POST'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def event_create(request):
     if not request.user.is_authenticated:
@@ -191,7 +191,7 @@ def event_create(request):
     return JsonResponse(event.hydrate_to_json())
 
 
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def event_edit(request, event_id):
     if not request.user.is_authenticated:
@@ -211,7 +211,7 @@ def event_edit(request, event_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view(['GET', 'DELETE'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def event_delete(request, event_id):
     # if not logged in, send user to login page
@@ -249,7 +249,7 @@ def get_event_project(request, event_id, project_id):
     return JsonResponse(event_project.hydrate_to_json(get_request_contributor(request))) if event_project else HttpResponse(status=404)
 
 
-@api_view()
+@api_view(['GET', 'POST'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def event_project_edit(request, event_id, project_id):
     if not request.user.is_authenticated:
@@ -259,7 +259,7 @@ def event_project_edit(request, event_id, project_id):
     return JsonResponse(event_project.hydrate_to_json())
 
 
-@api_view()
+@api_view(['GET', 'POST'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def rsvp_for_event(request, event_id):
     if not request.user.is_authenticated:
@@ -280,7 +280,7 @@ def rsvp_for_event(request, event_id):
     return HttpResponse(status=200)
 
 
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def cancel_rsvp_for_event(request, event_id):
     if not request.user.is_authenticated:
@@ -299,7 +299,7 @@ def cancel_rsvp_for_event(request, event_id):
     return HttpResponse(status=200)
 
 
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def rsvp_for_event_project(request, event_id, project_id):
     if not request.user.is_authenticated:
@@ -329,7 +329,7 @@ def rsvp_for_event_project(request, event_id, project_id):
     return JsonResponse(event_project.recache())
 
 
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def cancel_rsvp_for_event_project(request, event_id, project_id):
     if not request.user.is_authenticated:
@@ -364,7 +364,7 @@ def cancel_rsvp_for_event_project(request, event_id, project_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view(['POST'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def project_create(request):
     if not request.user.is_authenticated:
@@ -379,7 +379,7 @@ def project_create(request):
     return JsonResponse(project.hydrate_to_json())
 
 
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def project_edit(request, project_id):
     if not request.user.is_authenticated:
@@ -400,7 +400,7 @@ def project_edit(request, project_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view(['GET', 'DELETE'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def project_delete(request, project_id):
     # if not logged in, send user to login page
@@ -438,7 +438,7 @@ def get_project(request, project_id):
         return HttpResponse(status=404)
 
 
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def approve_project(request, project_id):
     project = Project.objects.filter(id=project_id).first()
@@ -468,7 +468,7 @@ def approve_project(request, project_id):
         return HttpResponse(status=404)
 
 
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def approve_event(request, event_id):
     event = Event.objects.get(id=event_id)
@@ -601,7 +601,7 @@ def get_site_stats(request):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def add_alert(request):
     body = json.loads(request.body)
@@ -690,7 +690,7 @@ def events_list(request):
     return JsonResponse({'events': [event.hydrate_to_tile_json() for event in events]})
 
 
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def presign_project_thumbnail_upload(request):
     uploader = request.user.username
@@ -715,7 +715,7 @@ def volunteer_operation_is_authorized(request, volunteer_relation):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'DELETE')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def delete_uploaded_file(request, s3_key):
     uploader = request.user.username
@@ -748,7 +748,7 @@ def get_project_volunteers(request,project_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def contact_project_owner(request, project_id):
     if not request.user.is_authenticated:
@@ -780,7 +780,7 @@ def contact_project_owner(request, project_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def contact_project_volunteers(request, project_id):
     if not request.user.is_authenticated:
@@ -823,7 +823,7 @@ def contact_project_volunteers(request, project_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def contact_event_project_volunteers(request, event_id, project_id):
     if not request.user.is_authenticated:
@@ -863,7 +863,7 @@ def contact_event_project_volunteers(request, event_id, project_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def contact_project_volunteer(request, application_id):
     if not request.user.is_authenticated:
@@ -897,7 +897,7 @@ def contact_project_volunteer(request, application_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def volunteer_with_project(request, project_id):
     if not request.user.is_authenticated:
@@ -926,7 +926,7 @@ def volunteer_with_project(request, project_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def renew_volunteering_with_project(request, application_id):
     if not request.user.is_authenticated:
@@ -952,7 +952,7 @@ def renew_volunteering_with_project(request, application_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def conclude_volunteering_with_project(request, application_id):
     if not request.user.is_authenticated:
@@ -979,7 +979,7 @@ def conclude_volunteering_with_project(request, application_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def accept_project_volunteer(request, application_id):
     # Redirect to login if not logged in
@@ -1012,7 +1012,7 @@ def accept_project_volunteer(request, application_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def promote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
@@ -1030,7 +1030,7 @@ def promote_project_volunteer(request, application_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def reject_project_volunteer(request, application_id):
     find_projects_page_url = section_url(FrontEndSection.FindProjects)
@@ -1064,7 +1064,7 @@ def reject_project_volunteer(request, application_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def dismiss_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
@@ -1093,7 +1093,7 @@ def dismiss_project_volunteer(request, application_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def demote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
@@ -1120,7 +1120,7 @@ def demote_project_volunteer(request, application_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def leave_project(request, project_id):
     volunteer_relation = VolunteerRelation.objects.filter(project_id=project_id, volunteer_id=request.user.id).first()
@@ -1162,7 +1162,7 @@ def update_project_timestamp(request, project):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def contact_group_owner(request, group_id):
     if not request.user.is_authenticated:
@@ -1194,7 +1194,7 @@ def contact_group_owner(request, group_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def invite_project_to_group(request, group_id):
     if not request.user.is_authenticated:
@@ -1223,7 +1223,7 @@ def invite_project_to_group(request, group_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def accept_group_invitation(request, invite_id):
     # Redirect to login if not logged in
@@ -1257,7 +1257,7 @@ def accept_group_invitation(request, invite_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def reject_group_invitation(request, invite_id):
     # Redirect to login if not logged in
@@ -1288,7 +1288,7 @@ def reject_group_invitation(request, invite_id):
 
 
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def project_favorite(request, project_id):
     user = get_request_contributor(request)
@@ -1305,7 +1305,7 @@ def project_favorite(request, project_id):
 
 
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def project_unfavorite(request, project_id):
     user = get_request_contributor(request)
@@ -1326,7 +1326,7 @@ def project_unfavorite(request, project_id):
 #TODO: Figure out why
 #  changing the endpoint to /api/contact/democracylab results in CSRF issues
 @csrf_exempt
-@api_view()
+@api_view('GET', 'POST')
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def contact_democracylab(request):
     #first prepare all the data from the request body
