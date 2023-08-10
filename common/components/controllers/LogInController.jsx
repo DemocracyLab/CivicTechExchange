@@ -115,25 +115,27 @@ class LogInController extends React.Component<Props, State> {
               >
                 Sign In
               </Button>
+              <a href={url.section(Section.ResetPassword)}>
+                <Button
+                  variant="link"
+                  className="LogInController-forgotPassword"
+                  >
+                  Forgot Password?
+                </Button>
+              </a>
 
-              <Button
-                variant="link"
-                className="LogInController-forgotPassword"
-                onClick={url.navigateToSection.bind(
-                  this,
-                  Section.ResetPassword
-                )}
+              {/* Need to be converted to link to be able to change the header metadata */}
+              <a
+                type="button"
+                href={url.section(Section.SignUp)}
               >
-                Forgot Password?
-              </Button>
-
-              <Button
-                variant="link"
-                className="LogInController-createAccount"
-                onClick={url.navigateToSection.bind(this, Section.SignUp)}
-              >
-                Don't Have an Account?
-              </Button>
+                <Button
+                  variant="link"
+                  className="LogInController-createAccount"
+                >
+                  Don't Have an Account?
+                </Button>
+              </a>
             </div>
             <div className="LogInController-socialSection">
               <SocialMediaSignupSection  prevPage={this.state.prevPage} prevPageArgs={this.state.prevPageArgs}/>

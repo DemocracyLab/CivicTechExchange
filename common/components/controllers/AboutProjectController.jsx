@@ -1,11 +1,9 @@
 // @flow
 
 import React from "react";
-import Helmet from "react-helmet";
 import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 import type { ProjectDetailsAPIData } from "../utils/ProjectAPIUtils.js";
 import metrics from "../utils/metrics.js";
-import Headers from "../common/Headers.jsx";
 import Truncate from "../utils/truncate.js";
 import AboutProjectDisplay from "../common/projects/AboutProjectDisplay.jsx";
 import { APIError } from "../utils/api.js";
