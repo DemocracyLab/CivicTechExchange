@@ -22,10 +22,15 @@ This if for testing with iframe resizer
         <iframe id="democracylab-groups"
             src="http://localhost:8000/groups/inframe/1"
         ></iframe>
+        <h1>This is below the group</h1>
+        <h1>This is a project</h1>
+        <iframe id="democracylab-project"
+            src="http://localhost:8000/projects/inframe/1"
+        ></iframe>
+        <h1>This is below the project. </h1>
         <script>
-            iFrameResize({ log: true }, '#democracylab-groups')
+            iFrameResize({ log: true }, '#democracylab-groups,#democracylab-project')
         </script>
-        <h1>This is the footer below the projects</h1>
     </div>
   </body>
 </html>
