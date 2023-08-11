@@ -8,6 +8,7 @@ import SponsorFooter from "../chrome/SponsorFooter.jsx";
 import SiteFooter from "../chrome/SiteFooter.jsx";
 import url from "../../components/utils/url.js";
 import { loadHeap } from "../utils/heapApi.js";
+import isWithinIframe from "../utils/isWithinIframe.js";
 
 type State = {|
   headerHeight: number,
@@ -26,21 +27,26 @@ class MainController extends React.Component<{||}, State> {
 
   static iframeresizerInParent(...args){
     // if we are running within an iframe, and the parent is running IframeResizer then do this
-      if(!args[0].data.includes('[iFrameSizer]')) return
+      if(!args[0].data.includes('[iFrameSizer]')) return;
       // let the height go auto rather than being the height defined by the parent - since we will be resizing
-      const style = document.createElement("style")
-      style.textContent = ".Profile-primary-container.frame-full .AboutGroup-card-container .row .ProjectCardContainer .row {height: auto!important;}"
-      document.head.appendChild(style)
-      if(!window.iFrameResizer) window.iFrameResizer={}
-      window.iFrameResizer.inParent=true
-      let func
+      const style = document.createElement("style");
+      style.textContent = ".Profile-primary-container.frame-full .AboutGroup-card-container .row .ProjectCardContainer .row {height: auto!important;}";
+      document.head.appendChild(style);
+      if(!window.iFrameResizer) window.iFrameResizer={};
+      window.iFrameResizer.inParent=true;
+      /*There could be multiple components needing to be re-rendered after iframe resizer starts, each will add a callback
+      * to the array: onInParent.
+      * Components may need to rerender after iframeresizer starts because their style needs to change if rendering 
+      * in an iframe that resizes v. rendering in an iframe that doesn't resize.
+      */
+      let func;
       while((func=window.iFrameResizer.onInParent?.shift()))
         func();
-      window.removeEventListener('message',MainController.iframeresizerInParent)
+      window.removeEventListener('message',MainController.iframeresizerInParent);
   }
   
   componentDidMount(){
-    if (window && document && window.parent !== window) {
+    if (window && document && isWithinIframe()) {
       // we are running within an iframe
       // allow parent frame to determine background color
       document.getElementsByTagName('body')[0].style.backgroundColor='transparent'
@@ -78,7 +84,7 @@ class MainController extends React.Component<{||}, State> {
   }
 
   render(): Array<React$Node> {
-    const ShowHeadAndFoot=!(window.location.pathname.includes('igs')||window.location.pathname.includes('ips'))
+    const ShowHeadAndFoot=!(window.location.pathname.includes('/groups/inframe')||window.location.pathname.includes('/projects/inframe'))
     return <>
       {ShowHeadAndFoot && <MainHeader
         key="main_header"

@@ -6,7 +6,7 @@
   {"name": "CreateEventProject", "pattern": "events/(?P<event_id>[\\w\\-]+)/projects/create/(?P<project_id>[\\w\\-]*)"},
   {"name": "AboutEventProject", "pattern": "events/(?P<event_id>[\\w\\-]+)/projects/(?P<project_id>[\\w\\-]+)"},
   {"name": "CreateProject", "pattern": "projects/create/(?P<id>[\\w\\-]*)"},
-  {"name": "IframeProject", "pattern": "ips/(?P<id>[\\w\\-]+)"}, 
+  {"name": "IframeProject", "pattern": "projects/inframe/(?P<id>[\\w\\-]+)"}, 
   {"name": "AboutProject", "pattern": "projects/(?P<id>[\\w\\-]+)"},
   {"name": "FindProjects", "pattern": "projects"},
   {"name": "Companies", "pattern": "companies"},
@@ -21,6 +21,7 @@
   {"name": "Terms", "pattern": "about/terms"},
   {"name": "AboutUs", "pattern": "about"},
   {"name": "Home", "pattern": "^$"},
+  {"name": "IframeGroup", "pattern": "groups/inframe/(?P<id>[\\w\\-]+)"},
   {"name": "CreateGroup", "pattern": "groups/create/(?P<id>[\\w\\-]*)"},
   {"name": "AboutGroup", "pattern": "groups/(?P<id>[\\w\\-]+)"},
   {"name": "FindGroups", "pattern": "groups"},
@@ -36,6 +37,5 @@
   {"name": "Donate", "pattern": "donate"},
   {"name": "ContactUs", "pattern": "contact"},
   {"name": "VideoOverview", "pattern": "videos/(?P<id>[\\w\\-]*)"},
-  {"name": "Error", "pattern": "error"},
-  {"name": "IframeGroup", "pattern": "igs/(?P<id>[\\w\\-]+)"}
+  {"name": "Error", "pattern": "error"}
 ]

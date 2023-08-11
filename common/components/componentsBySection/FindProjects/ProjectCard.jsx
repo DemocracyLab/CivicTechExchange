@@ -17,6 +17,7 @@ import FavoriteToggle from "./FavoriteToggle.jsx";
 import CurrentUser from "../../utils/CurrentUser.js";
 import type { Dictionary } from "../../types/Generics.jsx";
 import JoinConferenceButton from "../../common/event_projects/JoinConferenceButton.jsx";
+import isWithinIframe from "../../utils/isWithinIframe";
 
 type Props = {|
   project: ProjectData,
@@ -39,10 +40,10 @@ class ProjectCard extends React.PureComponent<Props, State> {
       }),
       showModal: false,
     };
-    // iFrameResizer will startup after the page is rendered, so we need to rerener if it does
-    if(!window.iFrameResizer) window.iFrameResizer={}
-    if(!window.iFrameResizer.onInParent) window.iFrameResizer.onInParent=[]
-    window.iFrameResizer.onInParent.push(this.onIframeResizer.bind(this))
+    // iFrameResizer will startup after the page is rendered, so we need to rerender if it does
+    if(!window.iFrameResizer) window.iFrameResizer={};
+    if(!window.iFrameResizer.onInParent) window.iFrameResizer.onInParent=[];
+    window.iFrameResizer.onInParent.push(this.onIframeResizer.bind(this));
   }
 
   onClickShowVideo(event: SyntheticMouseEvent): void {
@@ -57,11 +58,11 @@ class ProjectCard extends React.PureComponent<Props, State> {
   }
 
   onIframeResizer(){
-    this.forceUpdate()
+    this.forceUpdate();
   }
 
   render(): React$Node {
-    const url: string = (window.location.pathname.includes('igs') && window.iFrameResizer?.inParent) ? '/ips/'+this.props.project.id :
+    const url: string = (window.location.pathname.includes('/groups/inframe/') && window.iFrameResizer?.inParent) ? '/projects/inframe/'+this.props.project.id :
       (this.props.project.cardUrl ||
       urlHelper.section(Section.AboutProject, {
         id: this.props.project.slug || this.props.project.id,
@@ -76,7 +77,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
             videoTitle={this.props.project.name}
           />
         )}
-        <a href={url} rel="noopener noreferrer" target={window.parent !== window && !window?.iFrameResizer?.inParent ? 'blank' : ''}>
+        <a href={url} rel="noopener noreferrer" target={isWithinIframe() && !window?.iFrameResizer?.inParent ? 'blank' : ''}>
           {this._renderLogo()}
           {this._renderSubInfo()}
           {this._renderTitleAndIssue()}
