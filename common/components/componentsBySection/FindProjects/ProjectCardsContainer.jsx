@@ -22,6 +22,7 @@ type Props = {|
   selectableCards: ?boolean,
   alreadySelectedProjects: ?List<string>, // todo: proper state management
   handleEmptyProject: ?Function,
+  suppressHeader: ?boolean,
 |};
 
 type State = {|
@@ -71,7 +72,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
           </React.Fragment>
         ) : null}
         <div className="row">
-          {!_.isEmpty(this.state.projects) && !this.props.supressHeader && (
+          {!_.isEmpty(this.state.projects) && !this.props.suppressHeader && (
             <h3 className="ProjectCardContainer-header">
               {this._renderCardHeaderText()}
             </h3>

@@ -17,7 +17,7 @@ class IframeGroupDisplay extends AboutGroupDisplay<Props, State> {
               <div className="row">
                 <ProjectCardsContainer
                   showSearchControls={false}
-                  supressHeader={true}
+                  suppressHeader={true}
                   staticHeaderText=""
                   fullWidth={true}
                   selectableCards={false}
