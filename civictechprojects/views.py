@@ -114,7 +114,7 @@ def group_edit(request, group_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'POST'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def group_delete(request, group_id):
     # if not logged in, send user to login page
@@ -211,7 +211,7 @@ def event_edit(request, event_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'POST'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def event_delete(request, event_id):
     # if not logged in, send user to login page
@@ -400,7 +400,7 @@ def project_edit(request, project_id):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'POST'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def project_delete(request, project_id):
     # if not logged in, send user to login page
@@ -715,7 +715,7 @@ def volunteer_operation_is_authorized(request, volunteer_relation):
 
 # TODO: Pass csrf token in ajax call so we can check for it
 @csrf_exempt
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'POST'])
 @throttle_classes([AnonRateThrottle, UserRateThrottle])
 def delete_uploaded_file(request, s3_key):
     uploader = request.user.username
