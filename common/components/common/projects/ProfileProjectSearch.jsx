@@ -42,7 +42,7 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
             staticHeaderText="Participating Projects"
             fullWidth={true}
             selectableCards={false}
-            handleEmptyProject={this.handleEmptyProject.bind(this)}
+            // handleEmptyProject={this.handleEmptyProject.bind(this)}
           />
         </div>
       </React.Fragment>
