@@ -115,6 +115,8 @@ class LogInController extends React.Component<Props, State> {
               >
                 Sign In
               </Button>
+
+              {/* Need to be converted to link to be able to change the header metadata */}
               <a href={url.section(Section.ResetPassword)}>
                 <Button
                   variant="link"
