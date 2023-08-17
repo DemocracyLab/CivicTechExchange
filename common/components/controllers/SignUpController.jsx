@@ -14,6 +14,7 @@ import TermsModal, { TermsTypes } from "../common/confirmation/TermsModal.jsx";
 import Button from "react-bootstrap/Button";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
+import CurrentUser from "../utils/CurrentUser.js";
 
 type Props = {|
   +errors: { +[key: string]: $ReadOnlyArray<string> },
@@ -91,6 +92,13 @@ class SignUpController extends React.Component<Props, State> {
         },
       ],
     };
+  }
+
+   //if the user is logged in, navigate back to home page
+   componentDidMount():void{
+    if (CurrentUser.isLoggedIn()) {
+      document.location.href = url.section(Section.Home);
+    }
   }
 
   onValidationCheck(isValid: boolean): void {

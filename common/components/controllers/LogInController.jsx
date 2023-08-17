@@ -10,7 +10,7 @@ import { Dictionary } from "../types/Generics.jsx";
 import _ from "lodash";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-
+import CurrentUser from "../utils/CurrentUser.js";
 type Props = {|
   prevPage: string,
 |};
@@ -38,6 +38,13 @@ class LogInController extends React.Component<Props, State> {
     };
     if ("prevPageArgs" in args) {
       this.state.prevPageArgs = decodeURIComponent(args["prevPageArgs"]);
+    }
+  }
+
+  //if the user is logged in, navigate back to home page
+  componentDidMount():void{
+    if (CurrentUser.isLoggedIn()) {
+      document.location.href = url.section(Section.Home);
     }
   }
 
