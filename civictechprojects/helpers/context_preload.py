@@ -23,7 +23,6 @@ def about_project_preload(context, request):
         print('Failed to preload project info, no cache entry found: ' + project_id)
     return context
 
-
 def about_event_preload(context, request):
     context = default_preload(context, request)
     query_args = url_params(request)
@@ -113,7 +112,7 @@ def create_event_preload(context, request):
 
 def create_group_preload(context, request):
     context = default_preload(context, request)
-    context['title'] = 'Create an group | DemocracyLab'
+    context['title'] = 'Create a Group | DemocracyLab'
     context['description'] = 'Create group page'
     return context
 
@@ -128,7 +127,6 @@ def my_projects_preload(context, request):
     context['title'] = 'My Projects | DemocracyLab'
     context['description'] = 'My Projects page'
     return context
-
 
 def my_groups_preload(context, request):
     context = default_preload(context, request)
@@ -190,12 +188,6 @@ def reset_password_preload(context, request):
     context['description'] = 'Reset password page'
     return context
 
-def press_preload(context, request):
-    context = default_preload(context, request)
-    context['title'] = 'News Feed | DemocracyLab'
-    context['description'] =  "Read external articles and blog posts describing DemocracyLab's work."
-    return context
-
 def videos_preload(context, request):
     context = default_preload(context, request)
     if settings.VIDEO_PAGES:
@@ -251,7 +243,6 @@ preload_urls = [
     {'section': FrontEndSection.FindEvents.value,'handler':find_events_preload},
     {'section': FrontEndSection.FindGroups.value,'handler':find_groups_preload},
     {'section': FrontEndSection.FindProjects.value,'handler':find_projects_preload},
-    {'section': FrontEndSection.Press.value,'handler':press_preload},
 ]
 
 

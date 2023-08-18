@@ -127,10 +127,7 @@ class LogInController extends React.Component<Props, State> {
               </a>
 
               {/* Need to be converted to link to be able to change the header metadata */}
-              <a
-                type="button"
-                href={url.section(Section.SignUp)}
-              >
+              <a href={url.section(Section.SignUp)}>
                 <Button
                   variant="link"
                   className="LogInController-createAccount"
