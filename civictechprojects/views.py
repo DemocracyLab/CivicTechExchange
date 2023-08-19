@@ -673,7 +673,6 @@ def presign_project_thumbnail_upload(request):
         raw_key=s3_key, file_name=file_name, file_type=file_type, acl="public-read")
 
 # TODO: Replace with is_co_owner_or_owner
-@api_view()
 def volunteer_operation_is_authorized(request, volunteer_relation):
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project)
     authorized_usernames = ([volunteer_relation.project.project_creator.username]
