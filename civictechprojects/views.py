@@ -2,11 +2,8 @@ import re
 from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.exceptions import PermissionDenied
-from django.core.paginator import Paginator
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.gis.geos import Point
-from django.contrib.gis.measure import D
 from django.template import loader
 from django.utils import timezone
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -15,7 +12,6 @@ from time import time
 from urllib import parse as urlparse
 import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
 from .models import FileCategory, Project, ProjectFile, ProjectPosition, UserAlert, VolunteerRelation, Group, Event, \
     ProjectRelationship, Testimonial, ProjectFavorite, EventProject, RSVPVolunteerRelation, EventConferenceRoom, \
     EventConferenceRoomParticipant
@@ -23,18 +19,15 @@ from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from .helpers.search.groups import groups_list
 from .helpers.search.projects import projects_list, recent_projects_list
-from common.caching.cache import Cache
 from common.helpers.collections import flatten, count_occurrences
-from common.helpers.dictionaries import keys_subset
-from common.helpers.db import unique_column_values
 from common.helpers.s3 import presign_s3_upload, user_has_permission_for_s3_file, delete_s3_file
-from common.helpers.tags import get_tags_by_category,get_tag_dictionary
-from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner, is_co_owner_or_owner, is_creator_or_staff, is_creator
+from common.helpers.tags import get_tags_by_category
+from common.helpers.form_helpers import is_co_owner_or_staff, is_co_owner_or_owner, is_creator_or_staff, is_creator
 from .forms import ProjectCreationForm, EventCreationForm, GroupCreationForm, EventProjectCreationForm
 from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
-from common.helpers.constants import FrontEndSection, TagCategory
+from common.helpers.constants import FrontEndSection
 from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
@@ -42,10 +35,9 @@ from democracylab.emails import send_to_project_owners, send_to_project_voluntee
     notify_rsvp_for_project_owner, notify_rsvp_cancellation_for_project_owner, notify_rsvp_cancellation_for_event_owner, \
     send_to_event_project_volunteer
 from civictechprojects.helpers.context_preload import context_preload
-from civictechprojects.helpers.projects.annotations import apply_project_annotations
 from common.helpers.front_end import section_url, get_page_section, get_clean_url, redirect_from_deprecated_url
 from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, DirtyUrlsRedirector, DeprecatedUrlsRedirector
-from common.helpers.user_helpers import get_my_projects, get_my_groups, get_my_events, get_user_context
+from common.helpers.user_helpers import get_user_context
 from common.helpers.request_helpers import is_ajax
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, throttle_classes

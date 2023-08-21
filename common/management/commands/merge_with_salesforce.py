@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from civictechprojects.models import Project, VolunteerRelation, TaggedVolunteerRole
+from civictechprojects.models import Project
 from democracylab.models import Contributor
 from salesforce import contact as salesforce_contact, campaign as salesforce_campaign
 import traceback

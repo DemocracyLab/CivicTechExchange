@@ -116,7 +116,7 @@ class ProjectSearchTagsCacheManager:
 
     @staticmethod
     def _projects_tag_counts(event=None, group=None):
-        from civictechprojects.models import Project, ProjectPosition
+        from civictechprojects.models import Project
         projects = None
         if event is not None:
             projects = event.get_linked_projects()

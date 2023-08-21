@@ -1,5 +1,4 @@
 from django.core.cache import cache
-from enum import Enum
 
 
 class CacheWrapper:

@@ -1,5 +1,4 @@
 import requests
-from datetime import datetime, timedelta
 
 
 trello_base_api = 'https://api.trello.com/1'

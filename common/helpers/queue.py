@@ -2,7 +2,6 @@ import os
 import redis
 import threading
 from rq import Queue
-from ssl import CERT_NONE
 from typing import Callable
 from django.conf import settings
 from urllib.parse import urlparse

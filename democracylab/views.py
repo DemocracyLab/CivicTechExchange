@@ -9,7 +9,6 @@ from django.shortcuts import redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import simplejson as json
-import ast
 from .emails import send_verification_email, send_password_reset_email
 from .forms import DemocracyLabUserCreationForm, DemocracyLabUserAddDetailsForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username

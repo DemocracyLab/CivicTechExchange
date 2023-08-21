@@ -1,4 +1,3 @@
-from common.helpers.collections import omit_falsy
 from common.models import Tag
 from .client import SalesforceClient
 import json
@@ -9,7 +8,7 @@ client = SalesforceClient()
 
 
 def run(request):
-    response = SalesforceClient().send(request)
+    SalesforceClient().send(request)
 
 
 def save(project: object):
