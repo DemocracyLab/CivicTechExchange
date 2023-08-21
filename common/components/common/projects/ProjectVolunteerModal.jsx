@@ -44,7 +44,6 @@ const volunteerPeriodsInDays: $ReadOnlyArray<SelectOption> = [
   ["6 months - 1 year", 365],
 ].map(textDaysPair => ({ label: textDaysPair[0], value: textDaysPair[1] }));
 
-const OtherRoleOption: SelectOption = { label: "Other", value: "Other" };
 
 /**
  * Modal for volunteering to join a project
@@ -80,7 +79,6 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
           value: position.roleTag.tag_name,
           label: tagOptionDisplay(position.roleTag),
         }))
-        .concat(OtherRoleOption)
     );
 
     let state: State = {
@@ -187,12 +185,6 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
                 {!_.isEmpty(this.props.positions)
                   ? this._renderExistingPositionDropdown()
                   : null}
-                {_.isEmpty(this.props.positions) ||
-                (this.state.existingPositionOption &&
-                  this.state.existingPositionOption.value ===
-                    OtherRoleOption.value)
-                  ? this._renderOtherRoleDropdown()
-                  : null}
                 <Form.Label>
                   How long do you expect to be able to contribute to this
                   project?
@@ -243,8 +235,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
   }
 
   _selectedExistingPositionTag(): ?string {
-    return this.state.existingPositionOption &&
-      this.state.existingPositionOption.value !== OtherRoleOption.value
+    return this.state.existingPositionOption
       ? this.state.existingPositionOption.value
       : null;
   }
