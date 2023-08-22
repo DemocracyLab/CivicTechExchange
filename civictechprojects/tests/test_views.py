@@ -64,6 +64,11 @@ class CivictechprojectsViewsTestCase(TestCase):
         cache.clear()  # clear the throttling cache before measuring num of throttled requests
         num_succeeded, num_throttled = 0, 0
 
+        # cache has "1 second" resolution, so throttling counts API calls not from first call to
+        # last call but from beginning of second (say, 21:30:45.000) to end of second (21:30:45.999);
+        # to make a fair test, we start measuring right at the beginning of a second, thus the sleep:
+        sleep(1 - now().microsecond/1_000_000)
+
         start = now()
         for request_params in params:
             response = getattr(client, method)(**request_params)
@@ -178,6 +183,31 @@ class CivictechprojectsViewsTestCase(TestCase):
                 params=[{
                     'path': reverse('group_delete', kwargs={'group_id': group.id}),
                 } for group in groups],
+            )
+
+            expect_succeeded = 10 if is_authenticated else 5
+            self.assertEqual(num_succeeded, expect_succeeded)
+            self.assertEqual(num_throttled, 12-expect_succeeded)
+
+    def test_api_views_throttling__project_delete(self):
+        for is_authenticated in {True, False}:
+            client = Client()
+            if is_authenticated:
+                client.force_login(self.test_user)
+
+            projects = Project.objects.bulk_create([
+                Project(
+                    project_creator=self.test_user,
+                    project_name=f'test-name-{i}',
+                    is_searchable=True,
+                ) for i in range(12)
+            ])
+            num_succeeded, num_throttled = self.make_many_requests(
+                client=client,
+                method='post',
+                params=[{
+                    'path': reverse('project_delete', kwargs={'project_id': project.id}),
+                } for project in projects],
             )
 
             expect_succeeded = 10 if is_authenticated else 5

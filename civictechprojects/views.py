@@ -48,8 +48,7 @@ from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, 
 from common.helpers.user_helpers import get_my_projects, get_my_groups, get_my_events, get_user_context
 from common.helpers.request_helpers import is_ajax
 from django.views.decorators.cache import cache_page
-from rest_framework.decorators import api_view, throttle_classes
-from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from rest_framework.decorators import api_view
 import requests
 
 
