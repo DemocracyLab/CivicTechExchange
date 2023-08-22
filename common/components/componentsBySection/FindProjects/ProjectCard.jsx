@@ -5,6 +5,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Section from "../../../components/enums/Section.js";
 import Moment from "react-moment";
+import { intervalToDuration, formatDistance } from "date-fns";
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js";
 import GlyphStyles from "../../utils/glyphs.js";
@@ -12,6 +13,7 @@ import ProjectAPIUtils, {
   ProjectData,
   CardOperation,
 } from "../../utils/ProjectAPIUtils.js";
+import datetime from "../../utils/datetime.js";
 import VideoModal from "../../common/video/VideoModal.jsx";
 import FavoriteToggle from "./FavoriteToggle.jsx";
 import CurrentUser from "../../utils/CurrentUser.js";
@@ -169,7 +171,10 @@ class ProjectCard extends React.PureComponent<Props, State> {
           {this.props.project.date_modified && (
             <li>
               <i className={GlyphStyles.Clock + glyphFixedWidth}></i>
-              <Moment fromNow>{this.props.project.date_modified}</Moment>
+              {datetime.getDisplayDistance(
+                new Date(this.props.project.date_modified),
+                new Date()
+              )}
             </li>
           )}
         </ul>

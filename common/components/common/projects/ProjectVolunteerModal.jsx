@@ -7,8 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
 import datetime from "../../utils/datetime.js";
-import { addDays } from "date-fns";
-import { getUnixTime } from "date-fns";
+import { add } from "date-fns";
 import CurrentUser from "../../utils/CurrentUser.js";
 import ConfirmationModal from "../../common/confirmation/ConfirmationModal.jsx";
 import TagCategory from "../tags/TagCategory.jsx";
@@ -151,7 +150,9 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
       {
         message: this.state.message,
         projectedEndDate: datetime.formatInTimeZone(
-          addDays(new Date(), this.state.daysToVolunteerForOption.value),
+          add(new Date(), {
+            days: this.state.daysToVolunteerForOption.value,
+          }),
           "yyyy-MM-dd'T'HH':'mm':'ss'Z'",
           "UTC"
         ),
@@ -171,8 +172,6 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
-    // console.log("kst moment: " + moment.now().valueOf());
-    // console.log("kst datefn: " + Date.now());
     return (
       <React.Fragment>
         <ConfirmationModal

@@ -3,8 +3,9 @@
 import type Moment from "moment";
 import moment from "moment-timezone";
 
-import { addDays, parseISO } from "date-fns";
+import { addDays, add } from "date-fns"; //parseISO
 import { format, utcToZonedTime } from "date-fns-tz";
+import { formatDistance } from "date-fns";
 
 export const DateFormat: { [key: string]: string } = {
   DAY_MONTH_DATE_YEAR: "dddd, MMMM Do YYYY",
@@ -42,8 +43,22 @@ class datetimeHelper {
       .isSame(b.clone().startOf(period));
   }
 
-  static formatInTimeZone(date: Date, format: string, tz: string): string {
-    return format(utcToZonedTime(date, tz), format, { timeZone: tz });
+  static formatInTimeZone(date: Date, strFormat: string, tz: string): string {
+    return format(utcToZonedTime(date, tz), strFormat, { timeZone: tz });
+  }
+
+  static addToDate(date: Date, timeToAdd: duration): Date {
+    return add(date, timeToAdd);
+  }
+
+  static getDisplayDistance(date1: Date, date2: Date) {
+    //i-8999501
+    let value = formatDistance(date1, date2); // converts to largest human readable value
+    value = value.split(" ");
+    if (Number.isNaN(parseInt(value[0]))) value.shift();
+    if (parseInt(value[0]) == 1) value[0] = "a";
+    value.push("ago");
+    return value.join(" ");
   }
 }
 

@@ -11,8 +11,9 @@ import Section from "../enums/Section.js";
 import NavigationStore from "../stores/NavigationStore.js";
 import moment from "moment";
 import _ from "lodash";
-import { differenceInMilliseconds, parseISO, milliseconds } from "date-fns";
-import { duration } from "../utils/datetime.js";
+import { differenceInMilliseconds, milliseconds, add } from "date-fns";
+import type { duration } from "../utils/datetime.js";
+import datetime from "../utils/datetime.js";
 
 type AlertShownStats = {|
   lastHidden: number /* Time since alert was last hidden in Milliseconds */,
@@ -165,6 +166,23 @@ class AlertHeader extends React.Component<Props, State> {
   }
 
   render(): ?React$Node {
+    // console.log(
+    //   "kst mome: " +
+    //     moment()
+    //       .utc()
+    //       .add(5, "days")
+    //       .format()
+    // );
+    // console.log(
+    //   "kst date: " +
+    //     datetime.formatInTimeZone(
+    //       add(new Date(), {
+    //         days: 5,
+    //       }),
+    //       "yyyy-MM-dd'T'HH':'mm':'ss'Z'",
+    //       "UTC"
+    //     )
+    // );
     return this.state.showHeader && this.state.currentAlert ? (
       <div className="AlertHeader-root">
         {this._renderCurrentAlert()}
