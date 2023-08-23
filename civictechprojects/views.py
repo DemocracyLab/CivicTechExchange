@@ -76,8 +76,6 @@ def group_tags_counts(request):
     return JsonResponse(list(issue_tags.values()), safe=False)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['POST'])
 def group_create(request):
     if not request.user.is_authenticated:
@@ -109,8 +107,6 @@ def group_edit(request, group_id):
         return redirect(section_url(FrontEndSection.AboutGroup, {'id': group_id}))
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def group_delete(request, group_id):
     # if not logged in, send user to login page
@@ -164,8 +160,6 @@ def approve_group(request, group_id):
         return HttpResponse(status=404)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['POST'])
 def event_create(request):
     if not request.user.is_authenticated:
@@ -201,8 +195,6 @@ def event_edit(request, event_id):
         return redirect(section_url(FrontEndSection.AboutEvent, {'id': event_id}))
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def event_delete(request, event_id):
     # if not logged in, send user to login page
@@ -346,8 +338,6 @@ def cancel_rsvp_for_event_project(request, event_id, project_id):
         return HttpResponse(status=401)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['POST'])
 def project_create(request):
     if not request.user.is_authenticated:
@@ -380,8 +370,6 @@ def project_edit(request, project_id):
         return redirect(section_url(FrontEndSection.AboutProject, {'id': project_id}))
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def project_delete(request, project_id):
     # if not logged in, send user to login page
@@ -575,8 +563,6 @@ def get_site_stats(request):
     return JsonResponse(stats)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['POST'])
 def add_alert(request):
     body = json.loads(request.body)
@@ -596,6 +582,7 @@ def recent_projects(request):
     if request.method == 'GET':
         projects_list = recent_projects_list(request)
         return JsonResponse({'projects': projects_list})
+
 
 @api_view()
 def upcoming_events(request):
@@ -679,8 +666,6 @@ def volunteer_operation_is_authorized(request, volunteer_relation):
     return request.user.username in authorized_usernames
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def delete_uploaded_file(request, s3_key):
     uploader = request.user.username
@@ -710,8 +695,6 @@ def get_project_volunteers(request,project_id):
         return HttpResponse(status=404)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def contact_project_owner(request, project_id):
     if not request.user.is_authenticated:
@@ -741,8 +724,6 @@ def contact_project_owner(request, project_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def contact_project_volunteers(request, project_id):
     if not request.user.is_authenticated:
@@ -783,8 +764,7 @@ def contact_project_volunteers(request, project_id):
 
     return HttpResponse(status=200)
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+
 @api_view(['GET', 'POST'])
 def contact_event_project_volunteers(request, event_id, project_id):
     if not request.user.is_authenticated:
@@ -822,8 +802,6 @@ def contact_event_project_volunteers(request, event_id, project_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def contact_project_volunteer(request, application_id):
     if not request.user.is_authenticated:
@@ -855,8 +833,6 @@ def contact_project_volunteer(request, application_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def volunteer_with_project(request, project_id):
     if not request.user.is_authenticated:
@@ -883,8 +859,6 @@ def volunteer_with_project(request, project_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def renew_volunteering_with_project(request, application_id):
     if not request.user.is_authenticated:
@@ -908,8 +882,6 @@ def renew_volunteering_with_project(request, application_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def conclude_volunteering_with_project(request, application_id):
     if not request.user.is_authenticated:
@@ -934,8 +906,6 @@ def conclude_volunteering_with_project(request, application_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def accept_project_volunteer(request, application_id):
     # Redirect to login if not logged in
@@ -966,8 +936,6 @@ def accept_project_volunteer(request, application_id):
         return redirect(about_project_url)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def promote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
@@ -983,8 +951,6 @@ def promote_project_volunteer(request, application_id):
         raise PermissionDenied()
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def reject_project_volunteer(request, application_id):
     find_projects_page_url = section_url(FrontEndSection.FindProjects)
@@ -1016,8 +982,6 @@ def reject_project_volunteer(request, application_id):
         raise PermissionDenied()
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def dismiss_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
@@ -1044,8 +1008,6 @@ def dismiss_project_volunteer(request, application_id):
         raise PermissionDenied()
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def demote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
@@ -1070,8 +1032,7 @@ def demote_project_volunteer(request, application_id):
     else:
         raise PermissionDenied()
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+
 @api_view(['GET', 'POST'])
 def leave_project(request, project_id):
     volunteer_relation = VolunteerRelation.objects.filter(project_id=project_id, volunteer_id=request.user.id).first()
@@ -1106,13 +1067,12 @@ def leave_project(request, project_id):
     else:
         raise PermissionDenied()
 
+
 def update_project_timestamp(request, project):
     if not request.user.is_staff:
         project.update_timestamp()
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def contact_group_owner(request, group_id):
     if not request.user.is_authenticated:
@@ -1142,8 +1102,6 @@ def contact_group_owner(request, group_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def invite_project_to_group(request, group_id):
     if not request.user.is_authenticated:
@@ -1170,8 +1128,6 @@ def invite_project_to_group(request, group_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def accept_group_invitation(request, invite_id):
     # Redirect to login if not logged in
@@ -1203,8 +1159,6 @@ def accept_group_invitation(request, invite_id):
         return redirect(about_project_url)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def reject_group_invitation(request, invite_id):
     # Redirect to login if not logged in
@@ -1234,7 +1188,6 @@ def reject_group_invitation(request, invite_id):
         return redirect(about_project_url)
 
 
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def project_favorite(request, project_id):
     user = get_request_contributor(request)
@@ -1250,7 +1203,6 @@ def project_favorite(request, project_id):
     return HttpResponse(status=200)
 
 
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def project_unfavorite(request, project_id):
     user = get_request_contributor(request)
@@ -1270,7 +1222,6 @@ def project_unfavorite(request, project_id):
 #TODO: Return text strings to be displayed on the front end so we know specifically what happened
 #TODO: Figure out why
 #  changing the endpoint to /api/contact/democracylab results in CSRF issues
-@csrf_exempt
 @api_view(['GET', 'POST'])
 def contact_democracylab(request):
     #first prepare all the data from the request body
@@ -1351,7 +1302,6 @@ def get_testimonials(request, category=None):
 
 # TODO: Whitelist qiqochat for this hook
 @csrf_exempt
-@api_view()
 def qiqo_webhook(request):
     from pprint import pprint
     body = json.loads(request.body)
