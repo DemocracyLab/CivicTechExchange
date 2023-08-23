@@ -272,7 +272,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
               </div>
             </Tab>
           )}
-          {console.log("kst commit")}
+
           {project.project_actions && !_.isEmpty(project.project_actions) && (
             <Tab
               eventKey="proj-activity"

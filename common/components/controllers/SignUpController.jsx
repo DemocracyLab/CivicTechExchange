@@ -5,7 +5,7 @@ import React from "react";
 import type { Validator } from "../forms/FormValidation.jsx";
 import FormValidation from "../forms/FormValidation.jsx";
 import metrics from "../utils/metrics.js";
-// import mom from "moment";
+// import moment from "moment";
 import _ from "lodash";
 import Headers from "../common/Headers.jsx";
 import PseudoLink from "../chrome/PseudoLink.jsx";

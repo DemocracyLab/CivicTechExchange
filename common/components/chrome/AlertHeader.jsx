@@ -166,23 +166,15 @@ class AlertHeader extends React.Component<Props, State> {
   }
 
   render(): ?React$Node {
+    console.log("kst alert 4");
     // console.log(
-    //   "kst mome: " +
-    //     moment()
-    //       .utc()
-    //       .add(5, "days")
-    //       .format()
-    // );
-    // console.log(
-    //   "kst date: " +
-    //     datetime.formatInTimeZone(
-    //       add(new Date(), {
-    //         days: 5,
-    //       }),
-    //       "yyyy-MM-dd'T'HH':'mm':'ss'Z'",
-    //       "UTC"
+    //   "kst datefn: " +
+    //     datetime.getDisplayDistance(
+    //       new Date(),
+    //       new Date("2023-08-14T16:25:20.946Z")
     //     )
     // );
+    // console.log("kst moment: " + moment("2023-08-14T16:25:20.946Z").fromNow());
     return this.state.showHeader && this.state.currentAlert ? (
       <div className="AlertHeader-root">
         {this._renderCurrentAlert()}

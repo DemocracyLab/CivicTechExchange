@@ -3,7 +3,7 @@
 import type Moment from "moment";
 import moment from "moment-timezone";
 
-import { addDays, add } from "date-fns"; //parseISO
+import { addDays, add } from "date-fns";
 import { format, utcToZonedTime } from "date-fns-tz";
 import { formatDistance } from "date-fns";
 
@@ -52,10 +52,9 @@ class datetimeHelper {
   }
 
   static getDisplayDistance(date1: Date, date2: Date) {
-    //i-8999501
     let value = formatDistance(date1, date2); // converts to largest human readable value
     value = value.split(" ");
-    if (Number.isNaN(parseInt(value[0]))) value.shift();
+    if (Number.isNaN(parseInt(value[0]))) value.shift(); // removes first word if not number ie over/under
     if (parseInt(value[0]) == 1) value[0] = "a";
     value.push("ago");
     return value.join(" ");

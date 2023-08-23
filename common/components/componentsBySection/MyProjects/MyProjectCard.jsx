@@ -6,6 +6,7 @@ import url from "../../utils/url.js";
 import Button from "react-bootstrap/Button";
 import CurrentUser, { MyProjectData } from "../../utils/CurrentUser.js";
 import moment from "moment";
+import { format } from "date-fns";
 
 //TODO: Update
 type MyProjectClickCallback = MyProjectData => void;
@@ -35,7 +36,7 @@ export let getStatus = function(
   } else {
     if (project.isApproved) {
       status = project.isUpForRenewal
-        ? "Expires on " + moment(project.projectedEndDate).format("l")
+        ? "Expires on " + format(new Date(project.projectedEndDate), "M/d/yyyy")
         : "Active";
     } else {
       status = "Pending";
@@ -55,6 +56,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
+    // console.log("kst my project card");
     return (
       <div className="row MyProjectCard-root">
         <div className="col-sm-4">

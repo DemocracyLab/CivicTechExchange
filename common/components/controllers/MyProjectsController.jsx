@@ -142,6 +142,7 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
   }
 
   render(): React$Node {
+    // console.log("kst my project controller:");
     return CurrentUser.isLoggedIn() ? (
       <React.Fragment>
         <div className="container MyProjectsController-root">
