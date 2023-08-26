@@ -558,9 +558,6 @@ class Event(Archived):
 
         return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
 
-    def get_event_files(self):
-        return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
-
     def get_linked_projects(self):
         projects = Project.objects.filter(project_events__event=self, project_events__deleted=False, is_searchable=True)
         return projects
