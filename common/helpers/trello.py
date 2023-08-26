@@ -35,7 +35,7 @@ def fetch(rel_url, params={}):
             return None
         else:
             return repo_info
-    except:
+    except ValueError:
         print('response code from trello api {}'.format(str(response.status_code)))
         print('Invalid json for fetching trello actions from url : ' + url)
         return None

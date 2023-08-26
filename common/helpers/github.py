@@ -16,7 +16,7 @@ def fetch_github_info(github_url):
             return None
         else:
             return repo_info
-    except:
+    except ValueError:
         print('Invalid json: ' + github_url)
         return None
 
