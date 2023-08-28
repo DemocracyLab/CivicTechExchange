@@ -71,7 +71,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
           <h2>Core Values</h2>
           <div className="about-us-values-list">
             <div className="about-us-values-icon">
-              <img src={cdn.image("CommunityIcon.png")}></img>
+              <img src={cdn.image("CommunityIcon.png")} alt="community icon"></img>
             </div>
             <div className="about-us-values-text">
               <h3>Community Built</h3>
@@ -81,7 +81,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
           <div className="about-us-values-list">
             <div className="about-us-values-icon">
-              <img src={cdn.image("InclusivityIcon.png")}></img>
+              <img src={cdn.image("InclusivityIcon.png")} alt="inclusivity icon"></img>
             </div>
             <div className="about-us-values-text">
               <h3>Inclusivity</h3>
@@ -94,7 +94,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
           <div className="about-us-values-list">
             <div className="about-us-values-icon">
-              <img src={cdn.image("CollaborationIcon.png")}></img>
+              <img src={cdn.image("CollaborationIcon.png")} alt="collaboration icon"></img>
             </div>
             <div className="about-us-values-text">
               <h3>Collaboration</h3>
@@ -107,7 +107,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
           <div className="about-us-values-list">
             <div className="about-us-values-icon">
-              <img src={cdn.image("EncourageTransparencyIcon.png")}></img>
+              <img src={cdn.image("EncourageTransparencyIcon.png")} alt="encourage transparency icon"></img>
             </div>
             <div className="about-us-values-text">
               <h3>Transparency</h3>
@@ -117,7 +117,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
           <div className="about-us-values-list">
             <div className="about-us-values-icon">
-              <img src={cdn.image("InnovateIcon.png")}></img>
+              <img src={cdn.image("InnovateIcon.png")} alt="innovate icon"></img>
             </div>
             <div className="about-us-values-text">
               <h3>Innovation</h3>
@@ -130,7 +130,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
 
           <div className="about-us-values-list">
             <div className="about-us-values-icon">
-              <img src={cdn.image("ChallengeIcon.png")}></img>
+              <img src={cdn.image("ChallengeIcon.png")} alt="challenge icon"></img>
             </div>
             <div className="about-us-values-text">
               <h3>Challenge</h3>
@@ -142,7 +142,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
           </div>
         </div>
         <div className="col-12 col-md-6 about-us-values-image">
-          <img src={cdn.image(Images.CORE_VALUES_BG)}></img>
+          <img src={cdn.image(Images.CORE_VALUES_BG)} alt="animated people celebrating core values"></img>
         </div>
       </div>
     );
@@ -152,7 +152,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
       <div className="row about-us-ps">
         <hr />
         <div className="d-none d-md-block col-12 col-md-6 about-us-ps-image">
-          <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)}></img>
+          <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)} alt="animated people connecting puzzle pieces"></img>
         </div>
         <div className="col-12 col-md-6">
           <div className="about-us-ps-problem">
@@ -163,7 +163,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             </p>
           </div>
           <div className="d-md-none col-12 col-md-6 about-us-ps-image">
-            <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)}></img>
+            <img src={cdn.image(Images.PROBLEM_SOLUTION_BG)} alt="animated people connecting puzzle pieces"></img>
           </div>
           <div className="about-us-ps-solution">
             <h2>Solution</h2>
@@ -191,6 +191,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             <img
               className="about-us-volunteer-logo"
               src={cdn.image(Images.DL_GLYPH)}
+              alt="democracy lab logo"
             ></img>
           </div>
           <div className="col-xs-12 col-sm-9">

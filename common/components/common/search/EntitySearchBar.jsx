@@ -32,6 +32,7 @@ class EntitySearchBar extends React.Component<{||}, Props, State> {
       <div className="ProjectSearchBar-root">
         <i className={GlyphStyles.Search}></i>
         <input
+          aria-label="search projects"
           className="ProjectSearchBar-input"
           onChange={e => this.setState({ keyword: e.target.value })}
           onKeyPress={this._handleKeyPress.bind(this)}

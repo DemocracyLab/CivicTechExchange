@@ -81,6 +81,7 @@ class EntitySearchSort extends React.Component<Props, State> {
         simpleValue={true}
         isClearable={false}
         isMulti={false}
+        aria-label="sort projects"
       />
     );
   }
