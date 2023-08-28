@@ -53,6 +53,7 @@ class GroupCard extends React.PureComponent<Props> {
               ? this.props.group.group_thumbnail.publicUrl
               : "/static/images/projectlogo-default.png"
           }
+          alt="Project Logo"
         />
       </div>
     );

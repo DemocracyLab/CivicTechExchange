@@ -98,6 +98,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
             ? this.props.project.thumbnail.publicUrl
             : "/static/images/projectlogo-default.png"
         }
+        alt="Project Logo"
       />
     );
   }
