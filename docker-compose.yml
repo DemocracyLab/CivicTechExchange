@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   db:
-    image: postgis/postgis
+    image: postgis/postgis:15-3.4-alpine # saves 150MB container size over vanilla postgis
     env_file:
       - ./.env
     ports:
