@@ -151,28 +151,34 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   }
 
   _renderVolunteerButton(): React$Node {
-    return this.state.isAlreadyVolunteering ? (
+    if (this.state.isAlreadyVolunteering) {
       // TODO: Make this its own component and hook up to My Projects page
-      <Button
+      return (<Button
         className="AboutProject-button"
         type="button"
         variant="destructive"
         onClick={this.handleShowLeaveModal}
       >
         Leave Project
-      </Button>
-    ) : (
-      <Button
-        variant="primary"
-        className="AboutProject-button"
-        type="button"
-        disabled={this.state.buttonDisabled}
-        title={this.state.buttonTitle}
-        onClick={this.handleShowJoinModal}
-      >
-        Volunteer With Project
-      </Button>
-    );
+      </Button>);
+
+    } else {
+      if (!_.isEmpty(this.props.positions)) {
+        return (
+          <Button
+            variant="primary"
+            className="AboutProject-button"
+            type="button"
+            disabled={this.state.buttonDisabled}
+            title={this.state.buttonTitle}
+            onClick={this.handleShowJoinModal}
+          >
+            Volunteer With Project
+          </Button>
+        );
+
+      }
+    }
   }
 
   _renderLinkToSignInButton(): React$Node {
