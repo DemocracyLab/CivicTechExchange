@@ -1,10 +1,10 @@
 // @flow
 
 import React from "react";
-import moment from "moment";
 import EventCard from "./EventCard.jsx";
 import type { Dictionary } from "../../types/Generics.jsx";
 import type { EventTileAPIData } from "../../utils/EventAPIUtils.js";
+import datetime, { DateFormat } from "../../utils/datetime.js"; //checked
 import _ from "lodash";
 
 type EventsDateGrouping = {|
@@ -13,17 +13,16 @@ type EventsDateGrouping = {|
   events: $ReadOnlyArray<EventTileAPIData>,
 |};
 
-const dateHeaderFormat: string = "dddd, MMMM D, YYYY";
-
 function generateEventsDateListings(
   events: $ReadOnlyArray<EventTileAPIData>
 ): $ReadOnlyArray<EventsDateGrouping> {
   const groupings: Dictionary<EventTileAPIData> = _.groupBy(
     events,
     (event: EventTileAPIData) => {
-      return moment(event.event_date_start)
-        .startOf("day")
-        .format(dateHeaderFormat);
+      return datetime.startOfDay(
+        new Date(event.event_date_start),
+        DateFormat.DAY_MONTH_DAY_YEAR
+      );
     }
   );
 
@@ -31,7 +30,10 @@ function generateEventsDateListings(
     groupings
   ).map(dateKey => {
     return {
-      date: moment(dateKey, dateHeaderFormat),
+      date: datetime.formatByString(
+        new Date(dateKey),
+        DateFormat.DAY_MONTH_DAY_YEAR
+      ),
       dateString: dateKey,
       events: _.sortBy(groupings[dateKey], ["event_date_start"]),
     };
@@ -73,7 +75,7 @@ class EventCardsListings extends React.Component<Props, State> {
       this.state.eventsByDate &&
       _.partition(
         this.state.eventsByDate,
-        (event: EventsDateGrouping) => event.date > moment()
+        (event: EventsDateGrouping) => event.date > Date.now()
       );
     const upcomingEvents: $ReadOnlyArray<EventsDateGrouping> =
       upcomingPastEvents && _.reverse(upcomingPastEvents[0]);

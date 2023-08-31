@@ -3,8 +3,7 @@
 import React from "react";
 import Section from "../../../components/enums/Section.js";
 import url from "../../utils/url.js";
-import Moment from "react-moment";
-import moment from "moment";
+import datetime, { DateFormat } from "../../utils/datetime.js"; //checked
 import { Glyph, GlyphWidth, GlyphStyles } from "../../utils/glyphs.js";
 import { EventTileAPIData } from "../../utils/EventAPIUtils.js";
 
@@ -78,32 +77,42 @@ class EventCard extends React.PureComponent<Props> {
     const event: EventTileAPIData = this.props.event;
     return (
       <div className="EventCard-time">
-        {event.event_date_start && moment(event.event_date_start) > moment() && (
-          <h2>
-            <Moment format="LT">{event.event_date_start}</Moment>
-          </h2>
-        )}
+        {event.event_date_start &&
+          datetime.parse(event.event_date_start) > Date.now() && (
+            <h2>
+              {datetime.formatByString(
+                new Date(event.event_date_start),
+                DateFormat.TIME
+              )}
+            </h2>
+          )}
       </div>
     );
   }
 
   _renderStartEndDateTime(): React$Node {
     const event: EventTileAPIData = this.props.event;
-    const dateTimeFormat: string = "LT MMM. D";
     return (
       <div className="EventCard-time">
-        {event.event_date_end && moment(event.event_date_end) > moment() && (
-          <React.Fragment>
-            <h3>Begins:</h3>
-            <p>
-              <Moment format={dateTimeFormat}>{event.event_date_start}</Moment>
-            </p>
-            <h3>Ends:</h3>
-            <p>
-              <Moment format={dateTimeFormat}>{event.event_date_end}</Moment>
-            </p>
-          </React.Fragment>
-        )}
+        {event.event_date_end &&
+          datetime.parse(event.event_date_end) > Date.now() && (
+            <React.Fragment>
+              <h3>Begins:</h3>
+              <p>
+                {datetime.formatByString(
+                  new Date(event.event_date_start),
+                  DateFormat.TIME_MONTH_DAY
+                )}
+              </p>
+              <h3>Ends:</h3>
+              <p>
+                {datetime.formatByString(
+                  new Date(event.event_date_end),
+                  DateFormat.TIME_MONTH_DAY
+                )}
+              </p>
+            </React.Fragment>
+          )}
       </div>
     );
   }

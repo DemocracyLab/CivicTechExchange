@@ -1,18 +1,32 @@
 // @flow
 
-import type Moment from "moment";
-import moment from "moment-timezone";
+import { format as format_tz, utcToZonedTime } from "date-fns-tz";
 
-import { addDays, add } from "date-fns";
-import { format, utcToZonedTime } from "date-fns-tz";
-import { formatDistance } from "date-fns";
+import {
+  addDays,
+  add,
+  formatDistance,
+  format,
+  getTime,
+  isSameDay,
+  startOfDay,
+  differenceInMilliseconds,
+  milliseconds,
+} from "date-fns";
+
+//date-fns   datetime Date  /utils/datetime.js
 
 export const DateFormat: { [key: string]: string } = {
-  DAY_MONTH_DATE_YEAR: "dddd, MMMM Do YYYY",
-  DAY_MONTH_DATE_YEAR_TIME: "dddd, MMMM Do YYYY h:mm a z",
-  MONTH_DATE_YEAR: "MMMM Do YYYY",
-  TIME: "h:mm a",
-  TIME_TIMEZONE: "h:mm a z",
+  DAY_MONTH_DATE_YEAR: "EEEE, MMMM Mo yyyy",
+  DAY_MONTH_DATE_YEAR_TIME: "EEEE, MMMM Mo yyyy h:mm aaa zzz",
+  MONTH_DATE_YEAR: "MMMM Mo yyyy",
+  TIME: "h:mm aaa",
+  TIME_TIMEZONE: "h:mm aaa zzz",
+  TIME_MONTH_DAY: "p MMM. d",
+  DAY_MONTH_DAY_YEAR: "EEEE, MMMM M, yyyy",
+  DATE_TIME_ZULU: "yyyy-MM-dd'T'HH':'mm':'ss'Z'",
+  DAY_MONTH_YEAR: "d MMM yyyy",
+  MONTH_DAY_YEAR: "M/d/yyyy",
 };
 
 export type duration = {|
@@ -24,27 +38,44 @@ export type duration = {|
   minutes: ?number,
   seconds: ?number,
 |};
-
-export const timezone: string = moment.tz.guess();
+export const timezone: string = Intl.DateTimeFormat().resolvedOptions()
+  .timeZone;
 
 class datetimeHelper {
-  static now(): Moment {
-    return moment();
+  static parse(dateString: string): Number {
+    return getTime(utcToZonedTime(new Date(dateString), timezone));
   }
 
-  static parse(dateString: string): Moment {
-    return moment(dateString).tz(timezone);
+  static getMillisecondsFromDuration(duration: Duration): Number {
+    return milliseconds(duration);
   }
 
-  static isOnSame(period: string, a: Moment, b: Moment): boolean {
-    return a
-      .clone()
-      .startOf(period)
-      .isSame(b.clone().startOf(period));
+  static getDifferenceInMilliseconds(date1: Date, date2: Date): Number {
+    return differenceInMilliseconds(date1, date2);
   }
 
-  static formatInTimeZone(date: Date, strFormat: string, tz: string): string {
-    return format(utcToZonedTime(date, tz), strFormat, { timeZone: tz });
+  static isSameDay(date1: Date, date2: Date): boolean {
+    return isSameDay(date1, date2);
+  }
+
+  static startOfDay(date: Date, strFormat: string) {
+    return format(startOfDay(date), strFormat);
+  }
+
+  static formatByString(date: Date, strFormat: string) {
+    return format(date, strFormat);
+  }
+
+  static formatByStringUTC(date: Date, strFormat: string) {
+    return format_tz(utcToZonedTime(date, timezone), strFormat, {
+      timeZone: "UTC",
+    });
+  }
+
+  static formatbyStringWithTimeZone(date: Date, strFormat: string): string {
+    return format_tz(utcToZonedTime(date, timezone), strFormat, {
+      timeZone: timezone,
+    });
   }
 
   static addToDate(date: Date, timeToAdd: duration): Date {

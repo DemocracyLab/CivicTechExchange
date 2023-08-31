@@ -9,11 +9,9 @@ import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import Section from "../enums/Section.js";
 import NavigationStore from "../stores/NavigationStore.js";
-import moment from "moment";
 import _ from "lodash";
-import { differenceInMilliseconds, milliseconds, add } from "date-fns";
 import type { duration } from "../utils/datetime.js";
-import datetime from "../utils/datetime.js";
+import datetime from "../utils/datetime.js"; //checked
 
 type AlertShownStats = {|
   lastHidden: number /* Time since alert was last hidden in Milliseconds */,
@@ -155,26 +153,17 @@ class AlertHeader extends React.Component<Props, State> {
       return true;
     }
 
-    const durationSinceLastHidden = differenceInMilliseconds(
+    const durationSinceLastHidden = datetime.getDifferenceInMilliseconds(
       new Date(),
       new Date(alertShownStats.lastHidden)
     );
-    const durationBeforeShowAgain = milliseconds(
+    const durationBeforeShowAgain = datetime.getMillisecondsFromDuration(
       alertConfig.waitTimeBeforeShowAgain
     );
     return durationSinceLastHidden > durationBeforeShowAgain;
   }
 
   render(): ?React$Node {
-    console.log("kst alert 4");
-    // console.log(
-    //   "kst datefn: " +
-    //     datetime.getDisplayDistance(
-    //       new Date(),
-    //       new Date("2023-08-14T16:25:20.946Z")
-    //     )
-    // );
-    // console.log("kst moment: " + moment("2023-08-14T16:25:20.946Z").fromNow());
     return this.state.showHeader && this.state.currentAlert ? (
       <div className="AlertHeader-root">
         {this._renderCurrentAlert()}

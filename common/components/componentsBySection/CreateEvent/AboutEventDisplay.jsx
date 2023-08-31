@@ -1,10 +1,9 @@
 // @flow
 
 import React from "react";
-import type Moment from "moment";
 import _ from "lodash";
 import Button from "react-bootstrap/Button";
-import datetime, { DateFormat } from "../../utils/datetime.js";
+import datetime, { DateFormat, timezone } from "../../utils/datetime.js"; //checked
 import CurrentUser, {
   MyEventProjectData,
   MyProjectData,
@@ -52,8 +51,8 @@ type State = {|
   showCancelRSVPConfirmModal: boolean,
   showPostRSVPToast: boolean,
   showPostCancelRSVPToast: boolean,
-  startDate: Moment,
-  endDate: Moment,
+  startDate: Number,
+  endDate: Number,
   isPastEvent: boolean,
 |};
 
@@ -61,8 +60,8 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super();
     const userContext: UserContext = CurrentUser?.userContext();
-    const startDate: Moment = datetime.parse(props.event.event_date_start);
-    const endDate: Moment = datetime.parse(props.event.event_date_end);
+    const startDate: Number = datetime.parse(props.event.event_date_start);
+    const endDate: Number = datetime.parse(props.event.event_date_end);
     const isProjectOwnerRSVPed: boolean = !_.isEmpty(
       userContext?.event_projects
     );
@@ -86,7 +85,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       showCancelRSVPConfirmModal: false,
       startDate: startDate,
       endDate: endDate,
-      isPastEvent: endDate < datetime.now(),
+      isPastEvent: endDate < Date.now(),
       showPostRSVPToast: false,
       showPostCancelRSVPToast: false,
     };
@@ -117,12 +116,11 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   render(): ?$React$Node {
     const event: EventData = this.state.event;
-    const startDate: Moment = this.state.startDate;
-    const endDate: Moment = this.state.endDate;
-    const isSingleDayEvent: boolean = datetime.isOnSame(
-      "day",
-      startDate,
-      endDate
+    const startDate: Number = this.state.startDate;
+    const endDate: Number = this.state.endDate;
+    const isSingleDayEvent: boolean = datetime.isSameDay(
+      new Date(startDate),
+      new Date(endDate)
     );
     return !event ? null : (
       <React.Fragment>
@@ -150,7 +148,12 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                   CurrentUser.isStaff()) &&
                 this._renderEditButton()}
               <div className="AboutEvent-title-date">
-                <h4>{startDate.format(DateFormat.MONTH_DATE_YEAR)}</h4>
+                <h4>
+                  {datetime.formatByString(
+                    new Date(startDate),
+                    DateFormat.MONTH_DATE_YEAR
+                  )}
+                </h4>
               </div>
               <h1>{event.event_name}</h1>
               <p>{event.event_short_description}</p>
@@ -220,28 +223,46 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     );
   }
 
-  _renderDatesSection(startDate: Moment, endDate: Moment): $React$Node {
+  _renderDatesSection(startDate: Number, endDate: Number): $React$Node {
     return (
       <React.Fragment>
         <h5 className="AboutEvent-info-header">Dates</h5>
-        <p>{startDate.format(DateFormat.DAY_MONTH_DATE_YEAR_TIME)}</p>
+        <p>
+          {datetime.formatbyStringWithTimeZone(
+            new Date(startDate),
+            DateFormat.DAY_MONTH_DATE_YEAR_TIME
+          )}
+        </p>
         <h6>To</h6>
-        <p>{endDate.format(DateFormat.DAY_MONTH_DATE_YEAR_TIME)}</p>
+        <p>
+          {datetime.formatbyStringWithTimeZone(
+            new Date(endDate),
+            DateFormat.DAY_MONTH_DATE_YEAR_TIME
+          )}
+        </p>
       </React.Fragment>
     );
   }
 
-  _renderDateTimeSections(startDate: Moment, endDate: Moment): $React$Node {
+  _renderDateTimeSections(startDate: Number, endDate: Number): $React$Node {
     return (
       <React.Fragment>
         <h5 className="AboutEvent-info-header">Date</h5>
-        <p>{startDate.format(DateFormat.DAY_MONTH_DATE_YEAR)}</p>
+        <p>
+          {datetime.formatByString(
+            new Date(startDate),
+            DateFormat.DAY_MONTH_DATE_YEAR
+          )}
+        </p>
 
         <h5 className="AboutEvent-info-header">Time</h5>
         <p>
-          {startDate.format(DateFormat.TIME) +
+          {datetime.formatByString(new Date(startDate), DateFormat.TIME) +
             " - " +
-            endDate.format(DateFormat.TIME_TIMEZONE)}
+            datetime.formatbyStringWithTimeZone(
+              new Date(endDate),
+              DateFormat.TIME_TIMEZONE
+            )}
         </p>
       </React.Fragment>
     );

@@ -4,8 +4,6 @@ import PlaySVG from "../../svg/play-button.svg";
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Section from "../../../components/enums/Section.js";
-import Moment from "react-moment";
-import { intervalToDuration, formatDistance } from "date-fns";
 import Truncate from "../../utils/truncate.js";
 import urlHelper from "../../utils/url.js";
 import GlyphStyles from "../../utils/glyphs.js";

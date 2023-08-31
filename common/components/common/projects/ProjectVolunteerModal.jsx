@@ -6,8 +6,6 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
-import datetime from "../../utils/datetime.js";
-import { add } from "date-fns";
 import CurrentUser from "../../utils/CurrentUser.js";
 import ConfirmationModal from "../../common/confirmation/ConfirmationModal.jsx";
 import TagCategory from "../tags/TagCategory.jsx";
@@ -15,7 +13,7 @@ import TagSelector, { tagOptionDisplay } from "../tags/TagSelector.jsx";
 import { TagDefinition } from "../../utils/ProjectAPIUtils.js";
 import { SelectOption } from "../../types/SelectOption.jsx";
 import Select from "react-select";
-import moment from "moment";
+import datetime, { DateFormat } from "../../utils/datetime.js"; // checked
 import _ from "lodash";
 import type { PositionInfo } from "../../forms/PositionInfo";
 
@@ -149,12 +147,11 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
       "/volunteer/" + this.props.projectId + "/",
       {
         message: this.state.message,
-        projectedEndDate: datetime.formatInTimeZone(
-          add(new Date(), {
+        projectedEndDate: datetime.formatByStringUTC(
+          datetime.addToDate(new Date(), {
             days: this.state.daysToVolunteerForOption.value,
           }),
-          "yyyy-MM-dd'T'HH':'mm':'ss'Z'",
-          "UTC"
+          DateFormat.DATE_TIME_ZULU
         ),
         roleTag: this._selectedTag(),
       },

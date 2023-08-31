@@ -1,9 +1,8 @@
 // @flow
 
 import React from "react";
-// import moment from "moment";
 import ActivityFeedDefaultAvatar from "../../../../svg/default-activity-feed-avatar.svg";
-import datetime from "../../../../utils/datetime.js";
+import datetime from "../../../../utils/datetime.js"; //checked
 
 type ActionAuthorLineCommitProps = {
   user_name: string,
