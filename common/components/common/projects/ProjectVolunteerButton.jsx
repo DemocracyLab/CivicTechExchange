@@ -19,6 +19,7 @@ type LeaveProjectParams = {|
 type Props = {|
   project: ?ProjectDetailsAPIData,
   positionToJoin: ?PositionInfo,
+  positions: $ReadOnlyArray<PositionInfo>,
   onVolunteerClick: () => void,
 |};
 type State = {|
@@ -163,7 +164,7 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
       </Button>);
 
     } else {
-      if (!_.isEmpty(this.props.positions)) {
+        if (!_.isEmpty(this.state.project.project_positions)) {
         return (
           <Button
             variant="primary"
@@ -176,7 +177,9 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
             Volunteer With Project
           </Button>
         );
-
+      }
+      else{
+        return null
       }
     }
   }
