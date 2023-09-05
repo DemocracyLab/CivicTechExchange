@@ -663,7 +663,7 @@ def volunteer_operation_is_authorized(request, volunteer_relation):
     return request.user.username in authorized_usernames
 
 
-@api_view(['GET', 'POST'])
+@api_view(['POST', 'DELETE'])
 def delete_uploaded_file(request, s3_key):
     uploader = request.user.username
     has_permisson = user_has_permission_for_s3_file(uploader, s3_key)
