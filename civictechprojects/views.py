@@ -746,7 +746,7 @@ def contact_project_volunteers(request, project_id):
         subject=subject)
     email_template = HtmlEmailTemplate(use_signature=False) \
         .header('You have a new message from {projectname}'.format(projectname=project.project_name)) \
-        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+        .paragraph('\{message}\ - {firstname} {lastname}'.format(
         message=message,
         firstname=user.first_name,
         lastname=user.last_name)) \
@@ -810,11 +810,13 @@ def contact_project_volunteer(request, application_id):
     user = get_request_contributor(request)
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     project = volunteer_relation.project
+    contributor_full_name = Contributor.full_name(volunteer_relation.volunteer)
+
 
     body = json.loads(request.body)
     subject = body['subject']
     message = body['message']
-
+    
     # TODO: Condense common code between this and contact_project_volunteers
     if not user.email_verified or not is_co_owner_or_staff(user, project):
         return HttpResponse(status=403)
@@ -824,7 +826,8 @@ def contact_project_volunteer(request, application_id):
         subject=subject)
     email_template = HtmlEmailTemplate(use_signature=False) \
         .header('You have a new message from {projectname}'.format(projectname=project.project_name)) \
-        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
+        .paragraph('Hi {contributor_full_name}, \n{message} - {firstname} {lastname}'.format(
+        contributor_full_name = contributor_full_name,
         message=message,
         firstname=user.first_name,
         lastname=user.last_name)) \
