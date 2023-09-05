@@ -4,7 +4,6 @@ import type { FluxReduceStore } from "flux/utils";
 import type { SectionType } from "../enums/Section.js";
 
 import { Container } from "flux/utils";
-import IframeProjectController from "./IframeProjectController.jsx";
 import AboutProjectController from "./AboutProjectController.jsx";
 import AboutUsController from "./AboutUsController.jsx";
 import CreateProjectController from "./CreateProjectController.jsx";
@@ -74,7 +73,7 @@ class SectionController extends React.Component<{||}, State> {
   _getController(): React$Node {
     switch (this.state.section) {
       case Section.IframeProject:
-        return <IframeProjectController />
+        return <AboutProjectController />
       case Section.AboutProject:
         return <AboutProjectController />;
       case Section.AboutUs:
