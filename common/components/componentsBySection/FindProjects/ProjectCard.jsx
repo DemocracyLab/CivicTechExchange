@@ -17,7 +17,7 @@ import FavoriteToggle from "./FavoriteToggle.jsx";
 import CurrentUser from "../../utils/CurrentUser.js";
 import type { Dictionary } from "../../types/Generics.jsx";
 import JoinConferenceButton from "../../common/event_projects/JoinConferenceButton.jsx";
-import isWithinIframe from "../../utils/isWithinIframe";
+import { isWithinIframe } from "../../utils/iframe";
 import IframeResizerInParent from "../../common/IframeResizerInParent.jsx";
 
 type Props = {|

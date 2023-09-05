@@ -1,5 +1,5 @@
 import React from "react";
-import isWithinIframe from "../utils/isWithinIframe.js";
+import { isWithinIframe } from "../utils/iframe.js";
 
 // This is a wrapper component that works with https://www.npmjs.com/package/iframe-resizer 
 // to allow the components detect that they are within an iframe who's parent is running iframeresizer

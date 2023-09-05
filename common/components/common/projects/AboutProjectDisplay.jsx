@@ -32,7 +32,7 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
 import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
-import isWithinIframe from "../../utils/isWithinIframe.js";
+import { isWithinIframe } from "../../utils/iframe.js";
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
