@@ -9,6 +9,8 @@ import SiteFooter from "../chrome/SiteFooter.jsx";
 import url from "../../components/utils/url.js";
 import { loadHeap } from "../utils/heapApi.js";
 import IframeResizerInParent from "../common/IframeResizerInParent.jsx";
+import urlHelper from "../../components/utils/url.js";
+import Section from "../enums/Section.js";
 
 type State = {|
   headerHeight: number,
@@ -56,7 +58,7 @@ class MainController extends React.Component<{||}, State> {
   }
 
   render(): Array<React$Node> {
-    const ShowHeadAndFoot=!(window.location.pathname.includes('/groups/inframe')||window.location.pathname.includes('/projects/inframe'));
+    const ShowHeadAndFoot=!(urlHelper.atSection(Section.IframeProject)||urlHelper.atSection(Section.IframeGroup));
     return (
       <IframeResizerInParent>
         {ShowHeadAndFoot && <MainHeader

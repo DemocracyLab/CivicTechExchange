@@ -56,11 +56,15 @@ class ProjectCard extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
-    const url: string = (window.location.pathname.includes('/groups/inframe/') && IframeResizerInParent.inParent()) ? '/projects/inframe/'+this.props.project.id :
-      (this.props.project.cardUrl ||
-      urlHelper.section(Section.AboutProject, {
-        id: this.props.project.slug || this.props.project.id,
-      }));
+    const url: string = (urlHelper.atSection(Section.IframeGroup) && IframeResizerInParent.inParent()) ? 
+        urlHelper.section(Section.IframeProject, {
+          id: this.props.project.slug || this.props.project.id,
+        }) :
+        ( this.props.project.cardUrl ||
+          urlHelper.section(Section.AboutProject, {
+            id: this.props.project.slug || this.props.project.id,
+        })
+      );
     return (
       <div className="ProjectCard-root">
         {this.props.project.video && (
