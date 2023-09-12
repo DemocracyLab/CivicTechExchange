@@ -114,6 +114,34 @@
   }
 }
 
+// for use with IframeGroupDisplay to make it full size in iframe
+.frame-full {
+  margin: 0;
+  width: 100%!important; // important to override the media queries
+}
+
+.Profile-primary-container.frame-full .AboutGroup-card-container .row .ProjectCardContainer .row{
+  margin: 0;
+  row-gap: 1rem;
+  column-gap: 1rem;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100vh; // force the flex box to use the whole iframe height that it is in
+}
+
+.Profile-primary-container.frame-full .AboutGroup-card-container .row .ProjectCardContainer .row .col-sm-12.col-lg-6 .ProjectCard-root {
+  margin: 0;
+}
+
+// for the project cards burried in the iframe, give them a fixed width and let them fill the frame
+.Profile-primary-container.frame-full .AboutGroup-card-container .row .ProjectCardContainer .row .col-sm-12.col-lg-6 {
+  flex: 0 0 26rem;
+}
+
+.use-parent-width {
+  max-width: none;
+}
+
 
 @include media-breakpoint-up(lg) {
   .Profile-top-section-content {

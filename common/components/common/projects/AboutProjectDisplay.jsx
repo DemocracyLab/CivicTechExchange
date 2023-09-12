@@ -32,6 +32,7 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
 import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
+import { isWithinIframe } from "../../utils/iframe.js";
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
@@ -108,8 +109,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const project = this.state.project;
+    const widthModifier=isWithinIframe() ? ' use-parent-width' : '';
     return (
-      <div className="container Profile-root">
+      <div className={"container Profile-root" + widthModifier }>
         {this._renderHeader(project)}
         <div className="row">
           <div className="Profile-top-section col-12">
