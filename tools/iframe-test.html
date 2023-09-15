@@ -7,10 +7,11 @@ This if for testing without using iframe resizer
 <html lang="en" style="height: 100%">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>iframe test</title>
   </head>
   <body>
-    <div style="width: 100vw;">
+    <div style="width: calc( 100vw - 4rem); margin-left: auto; margin-right: auto">
         <h1>This is a landing page with Group projects:</h1>
         <!-- see https://www.w3schools.com/howto/howto_css_responsive_iframes.asp -->
         <div style="position: relative; overflow: hidden; width: auto;  padding-top: 40%; margin-left: 5rem; margin-right: 5rem; border-radius:1rem; border: 1px solid black;">
