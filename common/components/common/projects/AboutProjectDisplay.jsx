@@ -191,9 +191,8 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   // tabbed primary section content
   _renderPrimarySection(project) {
-    const widthModifier=isWithinIframe() ? ' override-breakpoint-width' : '';
     return (
-      <div className={"Profile-primary-container" + widthModifier } >
+      <div className="Profile-primary-container">
         <Tabs defaultActiveKey="proj-details" id="AboutProject-tabs">
           <Tab
             eventKey="proj-details"

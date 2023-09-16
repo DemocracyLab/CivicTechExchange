@@ -133,20 +133,15 @@
   margin: 0;
 }
 
-@include media-breakpoint-up(sm){
-// for the project cards burried in the iframe, give them a fixed width and let them fill the frame - unless we are on a really small viewport
-  .Profile-primary-container.frame-full .AboutGroup-card-container .row .ProjectCardContainer .row .col-sm-12.col-lg-6 {
-    flex: 0 0 26rem;
-  }
+// for the project cards burried in the iframe, give them a fixed width and let them fill the frame
+.Profile-primary-container.frame-full .AboutGroup-card-container .row .ProjectCardContainer .row .col-sm-12.col-lg-6 {
+  flex: 0 0 26rem;
 }
 
 .use-parent-width {
   max-width: none;
 }
 
-.override-breakpoint-width {
-  width: 100%!important;
-}
 
 @include media-breakpoint-up(lg) {
   .Profile-top-section-content {
