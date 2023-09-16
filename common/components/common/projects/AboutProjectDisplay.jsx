@@ -109,7 +109,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const project = this.state.project;
-    const widthModifier=isWithinIframe() ? ' use-parent-width' : '';
+    const widthModifier=isWithinIframe() ? ' override-breakpoint-max-width' : '';
     return (
       <div className={"container Profile-root" + widthModifier }>
         {this._renderHeader(project)}
