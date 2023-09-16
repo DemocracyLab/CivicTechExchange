@@ -17,8 +17,6 @@ import FavoriteToggle from "./FavoriteToggle.jsx";
 import CurrentUser from "../../utils/CurrentUser.js";
 import type { Dictionary } from "../../types/Generics.jsx";
 import JoinConferenceButton from "../../common/event_projects/JoinConferenceButton.jsx";
-import { isWithinIframe } from "../../utils/iframe";
-import IframeResizerInParent from "../../common/IframeResizerInParent.jsx";
 
 type Props = {|
   project: ProjectData,
@@ -41,7 +39,6 @@ class ProjectCard extends React.PureComponent<Props, State> {
       }),
       showModal: false,
     };
-    IframeResizerInParent.onInParent(this.forceUpdate.bind(this));
   }
 
   onClickShowVideo(event: SyntheticMouseEvent): void {
@@ -56,15 +53,11 @@ class ProjectCard extends React.PureComponent<Props, State> {
   }
 
   render(): React$Node {
-    const url: string = (urlHelper.atSection(Section.IframeGroup) && IframeResizerInParent.inParent()) ? 
-        urlHelper.section(Section.IframeProject, {
-          id: this.props.project.slug || this.props.project.id,
-        }) :
-        ( this.props.project.cardUrl ||
-          urlHelper.section(Section.AboutProject, {
-            id: this.props.project.slug || this.props.project.id,
-        })
-      );
+    const url: string =
+      this.props.project.cardUrl ||
+      urlHelper.section(Section.AboutProject, {
+        id: this.props.project.slug || this.props.project.id,
+      });
     return (
       <div className="ProjectCard-root">
         {this.props.project.video && (
@@ -75,7 +68,7 @@ class ProjectCard extends React.PureComponent<Props, State> {
             videoTitle={this.props.project.name}
           />
         )}
-        <a href={url} rel="noopener noreferrer" target={isWithinIframe() && !IframeResizerInParent.inParent() ? 'blank' : ''}>
+        <a href={url} rel="noopener noreferrer">
           {this._renderLogo()}
           {this._renderSubInfo()}
           {this._renderTitleAndIssue()}

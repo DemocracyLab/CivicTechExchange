@@ -60,7 +60,7 @@ class AboutGroupController extends React.PureComponent<{||}, State> {
 
   _renderLoading(): React$Node {
     return this.state.statusCode
-      ? this._renderLoadErrorMessage()
+      ? this_.renderLoadErrorMessage()
       : this._renderLoadingSpinner();
   }
 
