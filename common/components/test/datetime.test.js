@@ -17,7 +17,7 @@ describe("datetimehelper", () => {
         new Date(event_date_start),
         DateFormat.DAY_MONTH_DATE_YEAR
       )
-    ).toEqual("Friday, May 5th 2020");
+    ).toEqual("Friday, May 22nd 2020");
     expect(
       datetime.formatByString(
         new Date(event_date_start),
@@ -41,9 +41,9 @@ describe("datetimehelper", () => {
   test("getting Display Distance", () => {
     expect(
       datetime.getDisplayDistance(new Date(), new Date(event_date_start))
-    ).toEqual("3 years ago");
+    ).toEqual("over 3 years ago");
     expect(
       datetime.getDisplayDistance(new Date(), new Date(event_date_end))
-    ).toEqual("3 years ago");
+    ).toEqual("over 3 years ago");
   });
 });

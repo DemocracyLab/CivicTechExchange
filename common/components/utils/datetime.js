@@ -17,13 +17,13 @@ import {
 //date-fns   datetime Date  /utils/datetime.js
 
 export const DateFormat: { [key: string]: string } = {
-  DAY_MONTH_DATE_YEAR: "EEEE, MMMM Mo yyyy",
-  DAY_MONTH_DATE_YEAR_TIME: "EEEE, MMMM Mo yyyy h:mm aaa zzz",
-  MONTH_DATE_YEAR: "MMMM Mo yyyy",
+  DAY_MONTH_DATE_YEAR: "EEEE, MMMM do yyyy",
+  DAY_MONTH_DATE_YEAR_TIME: "EEEE, MMMM do yyyy h:mm aaa zzz",
+  MONTH_DATE_YEAR: "MMMM do yyyy",
   TIME: "h:mm aaa",
   TIME_TIMEZONE: "h:mm aaa zzz",
   TIME_MONTH_DAY: "p MMM. d",
-  DAY_MONTH_DAY_YEAR: "EEEE, MMMM M, yyyy",
+  // DAY_MONTH_DAY_YEAR: "EEEE, MMMM do, yyyy",
   DATE_TIME_ZULU: "yyyy-MM-dd'T'HH':'mm':'ss'Z'",
   DAY_MONTH_YEAR: "d MMM yyyy",
   MONTH_DAY_YEAR: "M/d/yyyy",
@@ -85,7 +85,6 @@ class datetimeHelper {
   static getDisplayDistance(date1: Date, date2: Date) {
     let value = formatDistance(date1, date2); // converts to largest human readable value
     value = value.split(" ");
-    if (Number.isNaN(parseInt(value[0]))) value.shift(); // removes first word if not number ie over/under
     if (parseInt(value[0]) == 1) value[0] = "a";
     value.push("ago");
     return value.join(" ");

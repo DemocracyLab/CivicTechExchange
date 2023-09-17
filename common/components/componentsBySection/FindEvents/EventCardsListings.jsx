@@ -21,7 +21,7 @@ function generateEventsDateListings(
     (event: EventTileAPIData) => {
       return datetime.startOfDay(
         new Date(event.event_date_start),
-        DateFormat.DAY_MONTH_DAY_YEAR
+        DateFormat.DAY_MONTH_DATE_YEAR
       );
     }
   );
@@ -32,7 +32,7 @@ function generateEventsDateListings(
     return {
       date: datetime.formatByString(
         new Date(dateKey),
-        DateFormat.DAY_MONTH_DAY_YEAR
+        DateFormat.DAY_MONTH_DATE_YEAR
       ),
       dateString: dateKey,
       events: _.sortBy(groupings[dateKey], ["event_date_start"]),
