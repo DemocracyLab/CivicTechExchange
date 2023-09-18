@@ -85,7 +85,6 @@ class datetimeHelper {
   static getDisplayDistance(date1: Date, date2: Date) {
     let value = formatDistance(date1, date2); // converts to largest human readable value
     value = value.split(" ");
-    if (parseInt(value[0]) == 1) value[0] = "a";
     value.push("ago");
     return value.join(" ");
   }
