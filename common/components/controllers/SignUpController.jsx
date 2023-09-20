@@ -14,6 +14,7 @@ import TermsModal, { TermsTypes } from "../common/confirmation/TermsModal.jsx";
 import Button from "react-bootstrap/Button";
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
+import { Dictionary } from "../types/Generics.jsx";
 
 type Props = {|
   +errors: { +[key: string]: $ReadOnlyArray<string> },
@@ -42,11 +43,13 @@ class SignUpController extends React.Component<Props, State> {
     this.hasNumberPattern = new RegExp("[0-9]");
     this.hasLetterPattern = new RegExp("[A-Za-z]");
     this.hasSpecialCharacterPattern = new RegExp("[^A-Za-z0-9]");
+    this.emailPattern = new RegExp("^([\\w\\.\\-+]+)@([\\w\\-]+)((\\.([\\w]){2,3})+)$");
 
+    const args: Dictionary<string> = url.arguments();
     this.state = {
-      firstName: "",
-      lastName: "",
-      email: "",
+      firstName: "firstname" in args ? decodeURIComponent(args["firstname"]) : "",
+      lastName: "lastname" in args ? decodeURIComponent(args["lastname"]) : "",
+      email: "email" in args ? decodeURIComponent(args["email"]).replace(' ', '+') : "",
       password1: "",
       password2: "",
       termsOpen: false,
@@ -62,7 +65,7 @@ class SignUpController extends React.Component<Props, State> {
           errorMessage: "Please enter Last Name",
         },
         {
-          checkFunc: (state: State) => !_.isEmpty(state.email),
+          checkFunc: (state: State) => this.emailPattern.test(state.email),
           errorMessage: "Please enter email address",
         },
         {
@@ -116,6 +119,7 @@ class SignUpController extends React.Component<Props, State> {
                 name="first_name"
                 onChange={e => this.setState({ firstName: e.target.value })}
                 type="text"
+                value={this.state.firstName}
               />
             </div>
             <div>Last Name:</div>
@@ -125,6 +129,7 @@ class SignUpController extends React.Component<Props, State> {
                 name="last_name"
                 onChange={e => this.setState({ lastName: e.target.value })}
                 type="text"
+                value={this.state.lastName}
               />
             </div>
             <div>Email:</div>
@@ -134,6 +139,7 @@ class SignUpController extends React.Component<Props, State> {
                 name="email"
                 onChange={e => this.setState({ email: e.target.value })}
                 type="text"
+                value={this.state.email}
               />
             </div>
             <div>Password:</div>
