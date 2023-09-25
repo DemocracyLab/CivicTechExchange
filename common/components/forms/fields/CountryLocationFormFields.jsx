@@ -49,6 +49,7 @@ class CountryLocationFormFields extends React.Component<Props, State> {
     });
   }
 
+//find a way to let country form have clear feature!
   render(): ?React$Node {
     return (
       <React.Fragment>
