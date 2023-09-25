@@ -30,7 +30,10 @@ function generateEventsDateListings(
     groupings
   ).map(dateKey => {
     return {
-      date: dateKey,
+      date: datetime.formatByString(
+        new Date(Date(dateKey)),
+        DateFormat.DAY_MONTH_DATE_YEAR
+      ),
       dateString: dateKey,
       events: _.sortBy(groupings[dateKey], ["event_date_start"]),
     };
