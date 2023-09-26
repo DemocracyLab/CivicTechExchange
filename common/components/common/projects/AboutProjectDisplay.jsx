@@ -112,6 +112,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     const widthModifier=isWithinIframe() ? ' override-breakpoint-max-width' : '';
     return (
       <div className={"container Profile-root" + widthModifier }>
+        {isWithinIframe() && <base target="_blank" />}
         {this._renderHeader(project)}
         <div className="row">
           <div className="Profile-top-section col-12">
