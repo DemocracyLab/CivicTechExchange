@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
-import datetime, { DateFormat } from "../../utils/datetime.js"; //checked
+import datetime, { DateFormat } from "../../utils/datetime.js";
 import { SelectOption } from "../../types/SelectOption.jsx";
 import Select from "react-select";
 

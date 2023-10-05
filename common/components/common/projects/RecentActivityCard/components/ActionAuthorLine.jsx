@@ -2,7 +2,7 @@
 
 import React from "react";
 import ActivityFeedDefaultAvatar from "../../../../svg/default-activity-feed-avatar.svg";
-import datetime from "../../../../utils/datetime.js"; //checked
+import datetime from "../../../../utils/datetime.js";
 
 type ActionAuthorLineCommitProps = {
   user_name: string,

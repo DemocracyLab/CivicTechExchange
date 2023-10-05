@@ -11,7 +11,7 @@ import Section from "../enums/Section.js";
 import NavigationStore from "../stores/NavigationStore.js";
 import _ from "lodash";
 import type { duration } from "../utils/datetime.js";
-import datetime from "../utils/datetime.js"; //checked
+import datetime from "../utils/datetime.js";
 
 type AlertShownStats = {|
   lastHidden: number /* Time since alert was last hidden in Milliseconds */,

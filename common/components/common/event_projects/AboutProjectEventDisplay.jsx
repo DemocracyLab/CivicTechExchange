@@ -12,7 +12,7 @@ import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import type { EventProjectAPIDetails } from "../../utils/EventProjectAPIUtils.js";
 import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
-import datetime from "../../utils/datetime.js"; // checked
+import datetime from "../../utils/datetime.js";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import urlHelper from "../../utils/url.js";
 import CurrentUser, {

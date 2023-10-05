@@ -3,7 +3,7 @@
 import React from "react";
 import _ from "lodash";
 import Button from "react-bootstrap/Button";
-import datetime, { DateFormat, timezone } from "../../utils/datetime.js"; //checked
+import datetime, { DateFormat, timezone } from "../../utils/datetime.js";
 import CurrentUser, {
   MyEventProjectData,
   MyProjectData,

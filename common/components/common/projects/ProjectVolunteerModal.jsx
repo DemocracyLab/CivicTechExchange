@@ -13,7 +13,7 @@ import TagSelector, { tagOptionDisplay } from "../tags/TagSelector.jsx";
 import { TagDefinition } from "../../utils/ProjectAPIUtils.js";
 import { SelectOption } from "../../types/SelectOption.jsx";
 import Select from "react-select";
-import datetime, { DateFormat } from "../../utils/datetime.js"; // checked
+import datetime, { DateFormat } from "../../utils/datetime.js";
 import _ from "lodash";
 import type { PositionInfo } from "../../forms/PositionInfo";
 

@@ -3,7 +3,7 @@
 import React from "react";
 import Section from "../../../components/enums/Section.js";
 import url from "../../utils/url.js";
-import datetime, { DateFormat } from "../../utils/datetime.js"; //checked
+import datetime, { DateFormat } from "../../utils/datetime.js";
 import { Glyph, GlyphWidth, GlyphStyles } from "../../utils/glyphs.js";
 import { EventTileAPIData } from "../../utils/EventAPIUtils.js";
 

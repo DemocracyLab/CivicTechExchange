@@ -4,7 +4,7 @@ import React from "react";
 import EventCard from "./EventCard.jsx";
 import type { Dictionary } from "../../types/Generics.jsx";
 import type { EventTileAPIData } from "../../utils/EventAPIUtils.js";
-import datetime, { DateFormat } from "../../utils/datetime.js"; //checked
+import datetime, { DateFormat } from "../../utils/datetime.js";
 import _ from "lodash";
 
 type EventsDateGrouping = {|
