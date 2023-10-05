@@ -13,7 +13,7 @@ import TagSelector, { tagOptionDisplay } from "../tags/TagSelector.jsx";
 import { TagDefinition } from "../../utils/ProjectAPIUtils.js";
 import { SelectOption } from "../../types/SelectOption.jsx";
 import Select from "react-select";
-import moment from "moment";
+import datetime, { DateFormat } from "../../utils/datetime.js";
 import _ from "lodash";
 import type { PositionInfo } from "../../forms/PositionInfo";
 
@@ -147,10 +147,12 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
       "/volunteer/" + this.props.projectId + "/",
       {
         message: this.state.message,
-        projectedEndDate: moment()
-          .utc()
-          .add(this.state.daysToVolunteerForOption.value, "days")
-          .format(),
+        projectedEndDate: datetime.formatByStringUTC(
+          datetime.addToDate(new Date(), {
+            days: this.state.daysToVolunteerForOption.value,
+          }),
+          DateFormat.DATE_TIME_ZULU
+        ),
         roleTag: this._selectedTag(),
       },
       response => this.closeModal(true),

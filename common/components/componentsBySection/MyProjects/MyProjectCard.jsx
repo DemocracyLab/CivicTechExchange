@@ -5,7 +5,7 @@ import Section from "../../enums/Section.js";
 import url from "../../utils/url.js";
 import Button from "react-bootstrap/Button";
 import CurrentUser, { MyProjectData } from "../../utils/CurrentUser.js";
-import moment from "moment";
+import datetime, { DateFormat } from "../../utils/datetime.js";
 
 //TODO: Update
 type MyProjectClickCallback = MyProjectData => void;
@@ -35,7 +35,11 @@ export let getStatus = function(
   } else {
     if (project.isApproved) {
       status = project.isUpForRenewal
-        ? "Expires on " + moment(project.projectedEndDate).format("l")
+        ? "Expires on " +
+          datetime.formatByString(
+            new Date(project.projectedEndDate),
+            DateFormat.MONTH_DAY_YEAR
+          )
         : "Active";
     } else {
       status = "Pending";

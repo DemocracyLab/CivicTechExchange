@@ -1,9 +1,9 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import moment from "moment";
 import window from "./__mocks__/window"; // Keep this even though it's not referenced in this file
 import mockAPI from "./__mocks__/mockAPI";
 import { MyProjectData } from "../utils/CurrentUser.js";
+import datetime, { DateFormat } from "../utils/datetime.js";
 import MyProjectCard, {
   getStatus,
 } from "../componentsBySection/MyProjects/MyProjectCard";
@@ -59,7 +59,12 @@ describe("Components By Section", () => {
 
     // Volunteer reaching expiration date
     project.isUpForRenewal = true;
-    let status = "Expires on " + moment(project.projectedEndDate).format("l");
+    let status =
+      "Expires on " +
+      datetime.formatByString(
+        new Date(project.projectedEndDate),
+        DateFormat.MONTH_DAY_YEAR
+      );
     expect(myprojectcardRenderedOutput(false, project)).toEqual([
       status,
       ["View", "Renew", "Conclude"],

@@ -5,7 +5,7 @@ import React from "react";
 import type { Validator } from "../forms/FormValidation.jsx";
 import FormValidation from "../forms/FormValidation.jsx";
 import metrics from "../utils/metrics.js";
-import moment from "moment";
+import datetime from "../utils/datetime.js";
 import _ from "lodash";
 import Headers from "../common/Headers.jsx";
 import PseudoLink from "../chrome/PseudoLink.jsx";
@@ -196,9 +196,7 @@ class SignUpController extends React.Component<Props, State> {
             <input name="username" value={this.state.email} type="hidden" />
             <input
               name="date_joined"
-              value={moment()
-                .utc()
-                .format("MM/DD/YYYY")}
+              value={datetime.formatInTimeZone(new Date(), "MM/dd/yyyy", "UTC")}
               type="hidden"
             />
 

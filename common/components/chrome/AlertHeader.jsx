@@ -9,8 +9,9 @@ import url from "../utils/url.js";
 import utils from "../utils/utils.js";
 import Section from "../enums/Section.js";
 import NavigationStore from "../stores/NavigationStore.js";
-import moment from "moment";
 import _ from "lodash";
+import type { duration } from "../utils/datetime.js";
+import datetime from "../utils/datetime.js";
 
 type AlertShownStats = {|
   lastHidden: number /* Time since alert was last hidden in Milliseconds */,
@@ -18,7 +19,7 @@ type AlertShownStats = {|
 
 type AlertConfiguration = {|
   name: string /* Identifier for tracking AlertShownStats in session storage */,
-  waitTimeBeforeShowAgain: ?string /* ISO 8601 duration string */,
+  waitTimeBeforeShowAgain: ?duration /* duration object */,
   shouldShowAlert: () => boolean /* Whether to show alert */,
   getAlertBody: () => React$Node /* Alert HTML body */,
 |};
@@ -57,7 +58,7 @@ class AlertHeader extends React.Component<Props, State> {
       },
       {
         name: "emailVerificationAlert",
-        waitTimeBeforeShowAgain: "PT1M" /* 1 Minute */,
+        waitTimeBeforeShowAgain: { minutes: 1 },
         shouldShowAlert: () => {
           return CurrentUser.isLoggedIn() && !CurrentUser.isEmailVerified();
         },
@@ -65,7 +66,7 @@ class AlertHeader extends React.Component<Props, State> {
       },
       {
         name: "renewVolunteeringAlert",
-        waitTimeBeforeShowAgain: "P1D" /* 1 day */,
+        waitTimeBeforeShowAgain: { days: 1 },
         shouldShowAlert: () => {
           return CurrentUser.isVolunteeringUpForRenewal();
         },
@@ -73,7 +74,7 @@ class AlertHeader extends React.Component<Props, State> {
       },
       {
         name: "eventAlert",
-        waitTimeBeforeShowAgain: "P1D" /* 1 day */,
+        waitTimeBeforeShowAgain: { days: 1 },
         shouldShowAlert: () => {
           return window.HEADER_ALERT;
         },
@@ -117,7 +118,7 @@ class AlertHeader extends React.Component<Props, State> {
     url.removeArgs(_.keys(AlertMessages));
     if (this.state.currentAlert.waitTimeBeforeShowAgain) {
       const alertShownStats: AlertShownStats = {
-        lastHidden: moment.now().valueOf(),
+        lastHidden: Date.now(),
       };
 
       sessionStorage[this.state.currentAlert.name] = JSON.stringify(
@@ -147,14 +148,16 @@ class AlertHeader extends React.Component<Props, State> {
     const alertShownStats: AlertShownStats =
       sessionStorage[alertConfig.name] &&
       JSON.parse(sessionStorage[alertConfig.name]);
+
     if (!alertShownStats) {
       return true;
     }
 
-    const durationSinceLastHidden = moment.duration(
-      moment().diff(moment(alertShownStats.lastHidden))
+    const durationSinceLastHidden = datetime.getDifferenceInMilliseconds(
+      new Date(),
+      new Date(alertShownStats.lastHidden)
     );
-    const durationBeforeShowAgain = moment.duration(
+    const durationBeforeShowAgain = datetime.getMillisecondsFromDuration(
       alertConfig.waitTimeBeforeShowAgain
     );
     return durationSinceLastHidden > durationBeforeShowAgain;
@@ -180,9 +183,9 @@ class AlertHeader extends React.Component<Props, State> {
 
   _renderTriggeredAlert(): React$Node {
     const key: string = _.keys(AlertMessages).find(key => url.argument(key));
-    const message: string = url.decodeNameFromUrlPassing(AlertMessages[key].replace(
-       "{value}", url.argument(key)
-     ));
+    const message: string = url.decodeNameFromUrlPassing(
+      AlertMessages[key].replace("{value}", url.argument(key))
+    );
     return <div className="AlertHeader-text">{message}</div>;
   }
 

@@ -6,9 +6,9 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import ProjectAPIUtils from "../../utils/ProjectAPIUtils.js";
+import datetime, { DateFormat } from "../../utils/datetime.js";
 import { SelectOption } from "../../types/SelectOption.jsx";
 import Select from "react-select";
-import moment from "moment";
 
 type Props = {|
   applicationId: number,
@@ -70,10 +70,12 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
     ProjectAPIUtils.post(
       "/volunteer/renew/" + this.props.applicationId + "/",
       {
-        projectedEndDate: moment()
-          .utc()
-          .add(this.state.daysToVolunteerForOption.value, "days")
-          .format(),
+        projectedEndDate: datetime.formatByStringUTC(
+          datetime.addToDate(new Date(), {
+            days: this.state.daysToVolunteerForOption.value,
+          }),
+          DateFormat.DATE_TIME_ZULU
+        ),
         message: this.state.message,
       },
       response => this.closeModal(true),

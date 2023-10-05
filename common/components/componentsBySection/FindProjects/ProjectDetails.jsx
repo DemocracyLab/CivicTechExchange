@@ -1,8 +1,8 @@
 // @flow
 import React from "react";
 import GlyphStyles, { GlyphSizes, Glyph } from "../../utils/glyphs.js";
-import Moment from "react-moment";
 import urlHelper from "../../utils/url.js";
+import datetime from "../../utils/datetime.js";
 
 type Props = {|
   projectLocation: string,
@@ -54,7 +54,10 @@ class ProjectDetails extends React.PureComponent<Props, State> {
           <div className="AboutProject-icon-row">
             <i className={Glyph(GlyphStyles.Clock, GlyphSizes.LG)} />
             <p className="AboutProject-icon-text">
-              <Moment fromNow>{this.state.dateModified}</Moment>
+              {datetime.getDisplayDistance(
+                new Date(),
+                new Date(this.state.dateModified)
+              )}
             </p>
           </div>
         )}

@@ -1,7 +1,7 @@
 import React from "react";
 import { ghostApiRecent, GhostPost } from "../../utils/ghostApi.js";
+import datetime, { DateFormat } from "../../utils/datetime.js";
 import LoadingFrame from "../../chrome/LoadingFrame.jsx";
-import Moment from "react-moment";
 
 //props.interval is optional, default 6000ms
 //props.tag filters blog posts to show
@@ -66,9 +66,10 @@ class BlogCarousel extends React.PureComponent<Props, State> {
                       {i.primary_author.name}
                     </span>
                     <span>
-                      <Moment format="D MMM YYYY">
-                        {i.updated_at ? i.updated_at : i.published_at}
-                      </Moment>{" "}
+                      {datetime.formatByString(
+                        new Date(i.updated_at ? i.updated_at : i.published_at),
+                        DateFormat.DAY_MONTH_YEAR
+                      )}{" "}
                       &bull; {i.reading_time} min read
                     </span>
                   </div>

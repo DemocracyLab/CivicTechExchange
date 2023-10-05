@@ -3,11 +3,11 @@
 import React from "react";
 import Section from "../../../components/enums/Section.js";
 import url from "../../utils/url.js";
-import Moment from "react-moment";
 import type { Dictionary } from "../../types/Generics.jsx";
 import Sort from "../../utils/sort.js";
 import Truncate from "../../utils/truncate.js";
 import GlyphStyles from "../../utils/glyphs.js";
+import datetime from "../../utils/datetime.js";
 import utils from "../../utils/utils.js";
 import GroupAPIUtils, { GroupTileAPIData } from "../../utils/GroupAPIUtils.js";
 import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
@@ -130,7 +130,10 @@ class GroupCard extends React.PureComponent<Props> {
           {group.group_date_modified && (
             <li>
               <i className={GlyphStyles.Clock + glyphFixedWidth}></i>
-              <Moment fromNow>{group.group_date_modified}</Moment>
+              {datetime.getDisplayDistance(
+                new Date(group.group_date_modified),
+                new Date()
+              )}
             </li>
           )}
         </ul>

@@ -2,7 +2,6 @@
 
 import React from "react";
 import _ from "lodash";
-import type Moment from "moment";
 import Button from "react-bootstrap/Button";
 import AboutPositionEntry from "../positions/AboutPositionEntry.jsx";
 import IconLinkDisplay from "../../componentsBySection/AboutProject/IconLinkDisplay.jsx";
@@ -66,7 +65,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     const isProjectOwner: boolean = CurrentUser.isCoOwnerOrOwner(
       props.eventProject
     );
-    const endDate: Moment = datetime.parse(props.eventProject.event_date_end);
+    const endDate: Number = datetime.parse(props.eventProject.event_date_end);
     const isRSVPedForThisEventProject: boolean = _.some(
       rsvp_events,
       (rsvp: MyRSVPData) =>
@@ -92,7 +91,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       videoLink: videoLink,
       isRSVPedForThisEventProject: isRSVPedForThisEventProject,
       isProjectOwner: isProjectOwner,
-      isPastEvent: endDate < datetime.now(),
+      isPastEvent: endDate < Date.now(),
     };
     this.cancelRSVP = this.cancelRSVP.bind(this, props.eventProject);
     this.handleShowVolunteerModal = this.handleShowVolunteerModal.bind(this);
@@ -151,11 +150,10 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     const showVideo: boolean = !_.isEmpty(this.state.videoLink);
     const showEdit: boolean =
       CurrentUser.isCoOwnerOrOwner(eventProject) || CurrentUser.isStaff();
-    const editUrl: string =
-      urlHelper.section(Section.CreateEventProject, {
-        event_id: eventProject.event_id,
-        project_id: eventProject.project_id,
-      });
+    const editUrl: string = urlHelper.section(Section.CreateEventProject, {
+      event_id: eventProject.event_id,
+      project_id: eventProject.project_id,
+    });
 
     return (
       <div className="AboutProjectEvent-top-content">
