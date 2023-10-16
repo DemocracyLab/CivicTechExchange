@@ -31,7 +31,7 @@ class LogInController extends React.Component<Props, State> {
     const prevPage: string =
       checkPrevPage === Section.SignUp ? Section.Home : checkPrevPage;
     this.state = {
-      username: "",
+      username: "username" in args ? decodeURIComponent(args["username"]).replace(' ', '+') : "",
       password: "",
       validated: false,
       prevPage: prevPage,
@@ -73,12 +73,14 @@ class LogInController extends React.Component<Props, State> {
             <Form.Label>Email address</Form.Label>
             <Form.Control
               required
-              type="email"
+              type="text"
               name="username"
               placeholder="Email"
+              pattern="^([\w\.\-+]+)@([\w\-]+)((\.(\w){2,3})+)$"
+              value={this.state.username}
               onChange={e => this.setState({ username: e.target.value })}
             />
-            
+
             <Form.Control.Feedback type="invalid">
               Please enter your email address.
             </Form.Control.Feedback>
@@ -92,7 +94,7 @@ class LogInController extends React.Component<Props, State> {
               placeholder="Password"
               onChange={e => this.setState({ password: e.target.value })}
             />
-            
+
             <Form.Control.Feedback type="invalid">
               Please enter your password.
             </Form.Control.Feedback>
