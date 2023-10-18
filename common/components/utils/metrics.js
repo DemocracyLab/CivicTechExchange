@@ -21,7 +21,9 @@ type HeapInterface = {|
 |};
 
 function _logEvent(eventName: string, parameters: ?MetricsParameters): void {
-  if (window.HEAP_ANALYTICS_ID) {
+  // TODO: Needs to changed after metrics collection rework 
+  // Disableing tracking using heap analytics for now
+  if (false) {
     Async.onEvent("heapLoaded", () => {
       window.heap.track(eventName, parameters);
     });
