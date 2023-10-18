@@ -313,9 +313,6 @@ GOOGLE_CONVERSION_IDS = ast.literal_eval(
 GR_SITEKEY = os.environ.get("GOOGLE_RECAPTCHA_SITE_KEY", "")
 GR_SECRETKEY = os.environ.get("GOOGLE_RECAPTCHA_SECRET_KEY", "")
 
-# Heap Analytics app id
-HEAP_ANALYTICS_ID = os.environ.get("HEAP_ANALYTICS_ID", "")
-
 STATIC_CDN_URL = os.environ.get("STATIC_CDN_URL", "")
 
 HERE_CONFIG = os.environ.get("HERE_CONFIG", "")
