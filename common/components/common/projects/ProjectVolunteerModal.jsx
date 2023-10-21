@@ -234,18 +234,10 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
     );
   }
 
-  _selectedExistingPositionTag(): ?string {
+  _selectedTag(): ?string {
     return this.state.existingPositionOption
       ? this.state.existingPositionOption.value
       : null;
-  }
-
-  _selectedOtherRoleTag(): ?string {
-    return this.state.roleTag && this.state.roleTag.tag_name;
-  }
-
-  _selectedTag(): ?string {
-    return this._selectedExistingPositionTag() || this._selectedOtherRoleTag();
   }
 
   _renderExistingPositionDropdown(): React$Node {
@@ -262,21 +254,6 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
           simpleValue={true}
           isClearable={false}
           isMulti={false}
-        />
-      </div>
-    );
-  }
-
-  _renderOtherRoleDropdown(): React$Node {
-    return (
-      <div className="form-group">
-        <label htmlFor="project_technologies">Role You are Applying For</label>
-        <TagSelector
-          value={[this.state.roleTag]}
-          category={TagCategory.ROLE}
-          allowMultiSelect={false}
-          isClearable={false}
-          onSelection={this.onRoleChange.bind(this)}
         />
       </div>
     );
