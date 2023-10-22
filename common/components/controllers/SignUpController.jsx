@@ -96,9 +96,7 @@ class SignUpController extends React.Component<Props, State> {
 
    //if the user is logged in, navigate back to home page
    componentDidMount():void{
-    if (CurrentUser.isLoggedIn()) {
-      document.location.href = url.section(Section.Home);
-    }
+    url.ifAuthThenRedirect();
   }
 
   onValidationCheck(isValid: boolean): void {

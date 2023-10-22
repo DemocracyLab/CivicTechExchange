@@ -317,6 +317,12 @@ class urlHelper {
   static decodeNameFromUrlPassing(name: string): string {
     return decodeURIComponent(name);
   }
+
+  static ifAuthThenRedirect(section:string = Section.Home):void{
+    if (CurrentUser.isLoggedIn()) {
+      urlHelper.navigateToSection(section);
+    }
+  }
 }
 
 export default urlHelper;
