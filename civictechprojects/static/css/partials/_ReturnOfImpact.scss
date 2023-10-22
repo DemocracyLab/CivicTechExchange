@@ -1,0 +1,56 @@
+.AggregatedDashboard-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; // make titles two rows maximum
+    -webkit-box-orient: vertical;
+    font-size: 23px;
+    font-weight: medium;
+    overflow: hidden;
+    align-self: start; // stops character descenders from getting clipped, weird but works
+}
+
+.Return-impact-summary {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+    margin-bottom: 56px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.Return-impact-summary .card-number {
+    text-align: center;
+    align-items: center;
+}
+
+.Return-impact-summary .card-number span {
+    color: #F79E02;
+    font-size: 80px;
+    font-family: Montserrat;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.Return-impact-summary .card-number h4 {
+    color: #191919;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 10px 0 0 0;
+    padding: 0;
+}
+
+.Return-impact-summary .card-text {
+    margin-left: 128px;
+    align-items: center;
+}
+
+.Return-impact-summary .card-text span {
+    color: #191919;
+    font-size: 16px;
+    font-weight: normal;
+    font-family: Montserrat;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+}

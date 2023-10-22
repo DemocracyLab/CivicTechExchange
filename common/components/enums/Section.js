@@ -2,6 +2,7 @@ const Section = {
   AboutProject: "AboutProject",
   AboutGroup: "AboutGroup",
   AboutUs: "AboutUs",
+  AggregatedDashboard: "AggregatedDashboard",
   CreateProject: "CreateProject",
   Home: "Home",
   FindProjects: "FindProjects",
