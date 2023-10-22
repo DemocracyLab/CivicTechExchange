@@ -1,0 +1,61 @@
+.AggregatedDashboard-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; // make titles two rows maximum
+    -webkit-box-orient: vertical;
+    font-size: 23px;
+    font-weight: medium;
+    overflow: hidden;
+    align-self: start; // stops character descenders from getting clipped, weird but works
+}
+
+.Aggregated-dashboard {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 56px;
+}
+
+.Aggregated-dashboard .card {
+  border: 1px solid #828282;
+  border-radius: 4px;
+  padding-top: 49px; // Need further investigation to maintain 59px
+  padding-bottom: 59px;
+  width: 264px;
+  height: 208px;
+  text-align: center;
+  background-color: #fff;
+  align-items: center;
+}
+
+.Aggregated-dashboard .card span {
+  color: #F79E02;
+  font-size: 48px;
+  font-family: Montserrat;
+//   margin-top: 59px;
+//   margin-bottom: 8px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.Aggregated-dashboard .card h4 {
+    color: #4E5154;
+    font-size: 16px;
+    font-weight: 500;
+    // margin-bottom: 59px;
+    margin: 0;
+    padding: 0;
+}
+
+.AggregatedDashboard-button {
+    margin-top: 40px;
+    width: 118px;
+    height: 40px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #191919;
+    color: #191919;
+    font-weight: normal;
+}

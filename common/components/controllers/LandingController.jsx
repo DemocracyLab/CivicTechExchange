@@ -3,6 +3,7 @@
 import React from "react";
 import RecentProjectsSection from "../componentsBySection/Landing/RecentProjectsSection.jsx";
 import LatestBlogPosts from "../componentsBySection/Landing/LatestBlogPosts.jsx";
+import AggregatedDashboard from "../componentsBySection/Landing/AggregatedDashboard.jsx";
 import TestimonialCarousel from "../common/carousel/TestimonialCarousel.jsx";
 import cdn from "../utils/cdn";
 import Button from "react-bootstrap/Button";
@@ -76,6 +77,7 @@ class LandingController extends React.PureComponent<{||}, State> {
             {this._renderOptions()}
             {this._renderNextHackathon()}
             {this._recentProjects()}
+            {this._renderAggregatedDashboard()}
             {this._renderTestimonials()}
             {this._renderLatestBlogPosts()}
           </div>
@@ -373,5 +375,16 @@ class LandingController extends React.PureComponent<{||}, State> {
       </div>
     );
   }
+
+  _renderAggregatedDashboard(): React$Node {
+    return (
+      <div className="LandingController-aggregateddashboard col-12">
+        <AggregatedDashboard />
+      </div>
+    );
+  }
+
 }
+
+
 export default LandingController;
