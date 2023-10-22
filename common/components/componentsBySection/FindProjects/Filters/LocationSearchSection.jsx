@@ -143,7 +143,7 @@ class LocationSearchSection extends React.Component<{||}, State> {
   _renderSelector(): React$Node {
     return (
       <React.Fragment>
-        <label>Country/Region(Required)</label>
+        <label>Country/Region (Required)</label>
         <CountrySelector
           countryCode={this.state.countryCode}
           countryOptions={this.state.countryOptions}
