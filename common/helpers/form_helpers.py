@@ -6,6 +6,8 @@ from distutils.util import strtobool
 from django.contrib.gis.geos import Point
 from django.forms import ModelForm
 
+from democracylab.models import Contributor
+
 
 def is_json_string(string):
     return string.startswith(('[', '{'))
@@ -164,5 +166,8 @@ def is_co_owner_or_staff(user, project):
         return is_creator(user, project) or is_co_owner(user, project) or user.is_staff
 
 
-def is_creator_or_staff(user, entity):
+def is_creator_or_staff(user: Contributor | None, entity):
+    if not user:
+        return False
+
     return is_creator(user, entity) or user.is_staff

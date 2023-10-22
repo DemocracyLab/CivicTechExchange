@@ -48,8 +48,7 @@ from common.helpers.redirectors import redirect_by, InvalidArgumentsRedirector, 
 from common.helpers.user_helpers import get_my_projects, get_my_groups, get_my_events, get_user_context
 from common.helpers.request_helpers import is_ajax
 from django.views.decorators.cache import cache_page
-from rest_framework.decorators import api_view, throttle_classes
-from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from rest_framework.decorators import api_view
 import requests
 
 
@@ -77,8 +76,7 @@ def group_tags_counts(request):
     return JsonResponse(list(issue_tags.values()), safe=False)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['POST'])
 def group_create(request):
     if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn))
@@ -92,6 +90,7 @@ def group_create(request):
     return JsonResponse(group.hydrate_to_json())
 
 
+@api_view(['GET', 'POST'])
 def group_edit(request, group_id):
     if not request.user.is_authenticated:
         return redirect('/signup')
@@ -108,8 +107,7 @@ def group_edit(request, group_id):
         return redirect(section_url(FrontEndSection.AboutGroup, {'id': group_id}))
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def group_delete(request, group_id):
     # if not logged in, send user to login page
     if not request.user.is_authenticated:
@@ -121,6 +119,7 @@ def group_delete(request, group_id):
     return HttpResponse(status=204)
 
 
+@api_view()
 def get_group(request, group_id):
     group = Group.get_by_id_or_slug(group_id)
 
@@ -139,6 +138,7 @@ def get_group(request, group_id):
         return HttpResponse(status=404)
 
 
+@api_view(['GET', 'POST'])
 def approve_group(request, group_id):
     group = Group.objects.get(id=group_id)
     user = get_request_contributor(request)
@@ -160,8 +160,7 @@ def approve_group(request, group_id):
         return HttpResponse(status=404)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['POST'])
 def event_create(request):
     if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn))
@@ -179,6 +178,7 @@ def event_create(request):
     return JsonResponse(event.hydrate_to_json())
 
 
+@api_view(['GET', 'POST'])
 def event_edit(request, event_id):
     if not request.user.is_authenticated:
         return redirect('/signup')
@@ -195,8 +195,7 @@ def event_edit(request, event_id):
         return redirect(section_url(FrontEndSection.AboutEvent, {'id': event_id}))
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def event_delete(request, event_id):
     # if not logged in, send user to login page
     if not request.user.is_authenticated:
@@ -208,6 +207,7 @@ def event_delete(request, event_id):
     return HttpResponse(status=204)
 
 
+@api_view()
 def get_event(request, event_id):
     try:
         event = Event.get_by_id_or_slug(event_id)
@@ -220,6 +220,7 @@ def get_event(request, event_id):
     return JsonResponse(event.hydrate_to_json(get_request_contributor(request))) if event else HttpResponse(status=404)
 
 
+@api_view()
 def get_event_project(request, event_id, project_id):
     try:
         event_project = EventProject.get(event_id, project_id)
@@ -229,6 +230,7 @@ def get_event_project(request, event_id, project_id):
     return JsonResponse(event_project.hydrate_to_json(get_request_contributor(request))) if event_project else HttpResponse(status=404)
 
 
+@api_view(['GET', 'POST'])
 def event_project_edit(request, event_id, project_id):
     if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn))
@@ -237,6 +239,7 @@ def event_project_edit(request, event_id, project_id):
     return JsonResponse(event_project.hydrate_to_json())
 
 
+@api_view(['GET', 'POST'])
 def rsvp_for_event(request, event_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -245,10 +248,9 @@ def rsvp_for_event(request, event_id):
     if not user.email_verified:
         return HttpResponse(status=403)
 
-    body = json.loads(request.body)
     event = Event.get_by_id_or_slug(event_id)
-    is_remote = body['isRemote'] if 'isRemote' in body else None
-    location_time_zone = body['locationTimeZone'] if 'locationTimeZone' in body else None
+    is_remote = request.data.get('isRemote')
+    location_time_zone = request.data.get('locationTimeZone')
     RSVPVolunteerRelation.create(event, user, is_remote, location_time_zone)
 
     notify_rsvped_volunteer(event, user)
@@ -256,6 +258,7 @@ def rsvp_for_event(request, event_id):
     return HttpResponse(status=200)
 
 
+@api_view(['GET', 'POST'])
 def cancel_rsvp_for_event(request, event_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -273,6 +276,7 @@ def cancel_rsvp_for_event(request, event_id):
     return HttpResponse(status=200)
 
 
+@api_view(['GET', 'POST'])
 def rsvp_for_event_project(request, event_id, project_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -288,12 +292,11 @@ def rsvp_for_event_project(request, event_id, project_id):
     rsvp = RSVPVolunteerRelation.get_for_event_project(event_project, user)
     if rsvp is None:
         # TODO: Test RSVP-ing for project after event
-        body = json.loads(request.body)
-        rsvp = RSVPVolunteerRelation.create(event, user, body['isRemote'], body['locationTimeZone'])
+        rsvp = RSVPVolunteerRelation.create(event, user, request.data['isRemote'], request.data['locationTimeZone'])
         rsvp.event_project = event_project
-        rsvp.application_text = body['applicationText']
+        rsvp.application_text = request.data['applicationText']
         rsvp.save()
-        rsvp.role.add(body['roleTag'])
+        rsvp.role.add(request.data['roleTag'])
 
         notify_rsvp_for_project_owner(rsvp)
         user.purge_cache()
@@ -301,6 +304,7 @@ def rsvp_for_event_project(request, event_id, project_id):
     return JsonResponse(event_project.recache())
 
 
+@api_view(['GET', 'POST'])
 def cancel_rsvp_for_event_project(request, event_id, project_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -332,8 +336,7 @@ def cancel_rsvp_for_event_project(request, event_id, project_id):
         return HttpResponse(status=401)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['POST'])
 def project_create(request):
     if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn))
@@ -347,6 +350,7 @@ def project_create(request):
     return JsonResponse(project.hydrate_to_json())
 
 
+@api_view(['GET', 'POST'])
 def project_edit(request, project_id):
     if not request.user.is_authenticated:
         return redirect('/signup')
@@ -364,8 +368,7 @@ def project_edit(request, project_id):
         return redirect(section_url(FrontEndSection.AboutProject, {'id': project_id}))
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def project_delete(request, project_id):
     # if not logged in, send user to login page
     if not request.user.is_authenticated:
@@ -377,6 +380,7 @@ def project_delete(request, project_id):
     return HttpResponse(status=204)
 
 
+@api_view()
 def get_project(request, project_id):
     project = Project.get_by_id_or_slug(project_id)
 
@@ -400,6 +404,7 @@ def get_project(request, project_id):
         return HttpResponse(status=404)
 
 
+@api_view(['GET', 'POST'])
 def approve_project(request, project_id):
     project = Project.objects.filter(id=project_id).first()
     if project is None:
@@ -428,6 +433,7 @@ def approve_project(request, project_id):
         return HttpResponse(status=404)
 
 
+@api_view(['GET', 'POST'])
 def approve_event(request, event_id):
     event = Event.objects.get(id=event_id)
     user = get_request_contributor(request)
@@ -450,7 +456,6 @@ def approve_event(request, event_id):
 @ensure_csrf_cookie
 @xframe_options_exempt
 @api_view()
-@throttle_classes([AnonRateThrottle, UserRateThrottle])
 def index(*args, **kwargs):
     request = args[0]
     # id = kwargs['id'] // Uncomment if this is ever needed
@@ -542,6 +547,7 @@ def index(*args, **kwargs):
     return HttpResponse(template.render(context, request))
 
 
+@api_view()
 def get_site_stats(request):
     active_volunteers = VolunteerRelation.objects.filter(deleted=False)
 
@@ -555,25 +561,27 @@ def get_site_stats(request):
     return JsonResponse(stats)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['POST'])
 def add_alert(request):
-    body = json.loads(request.body)
     UserAlert.create_or_update(
-        email=body['email'], filters=body['filters'], country=body['country'], postal_code=body['postal_code'])
+        email=request.data['email'], filters=request.data['filters'], country=request.data['country'], postal_code=request.data['postal_code'])
     return HttpResponse(status=200)
 
 
+@api_view()
 def project_search(request):
     response = projects_list(request)
     return JsonResponse(response)
 
 
+@api_view()
 def recent_projects(request):
     if request.method == 'GET':
         projects_list = recent_projects_list(request)
         return JsonResponse({'projects': projects_list})
 
+
+@api_view()
 def upcoming_events(request):
     url_parts = request.GET.urlencode()
     query_params = urlparse.parse_qs(url_parts, keep_blank_values=0, strict_parsing=0)
@@ -582,6 +590,7 @@ def upcoming_events(request):
     return JsonResponse({'events': [event.hydrate_to_tile_json() for event in events.order_by('event_date_start')[:event_count]]})
 
 
+@api_view()
 def limited_listings(request):
     """Summarizes current positions in a format specified by the LinkedIn "Limited Listings" feature."""
 
@@ -589,7 +598,7 @@ def limited_listings(request):
         # Using CDATA tags (and escaping the close sequence) protects us from XSS attacks when
         # displaying user provided string values.
         return f"<![CDATA[{str.replace(']]>', ']]]]><![CDATA[>')}]]>"
-    
+
     def position_to_job(position):
         project = position.position_project
         roleTag = Tag.get_by_name(position.position_role.first().slug)
@@ -613,7 +622,7 @@ def limited_listings(request):
         .exclude(position_event__isnull=False)
     xml_response = f"""<?xml version="1.0" encoding="UTF-8"?>
     <source>
-        <lastBuildDate>{timezone.now().strftime('%a, %d %b %Y %H:%M:%S %Z')}</lastBuildDate> 
+        <lastBuildDate>{timezone.now().strftime('%a, %d %b %Y %H:%M:%S %Z')}</lastBuildDate>
         <publisherUrl>https://www.democracylab.org</publisherUrl>
         <publisher>DemocracyLab</publisher>
         {"".join(map(position_to_job, approved_projects))}
@@ -622,16 +631,19 @@ def limited_listings(request):
     return HttpResponse(xml_response, content_type="application/xml")
 
 
+@api_view()
 def group_search(request):
     response = groups_list(request)
     return JsonResponse(response)
 
 
+@api_view()
 def events_list(request):
     events = Event.objects.filter(is_created=True, is_searchable=True, is_private=False)
     return JsonResponse({'events': [event.hydrate_to_tile_json() for event in events]})
 
 
+@api_view(['GET', 'POST'])
 def presign_project_thumbnail_upload(request):
     uploader = request.user.username
     file_name = request.GET['file_name'][:150]
@@ -651,8 +663,7 @@ def volunteer_operation_is_authorized(request, volunteer_relation):
     return request.user.username in authorized_usernames
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['POST', 'DELETE'])
 def delete_uploaded_file(request, s3_key):
     uploader = request.user.username
     has_permisson = user_has_permission_for_s3_file(uploader, s3_key)
@@ -664,6 +675,8 @@ def delete_uploaded_file(request, s3_key):
         # TODO: Log this
         return HttpResponse(status=401)
 
+
+@api_view()
 def get_project_volunteers(request,project_id):
     project = Project.objects.get(id=project_id)
     if project is not None:
@@ -679,8 +692,7 @@ def get_project_volunteers(request,project_id):
         return HttpResponse(status=404)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def contact_project_owner(request, project_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -689,8 +701,7 @@ def contact_project_owner(request, project_id):
     if not user.email_verified:
         return HttpResponse(status=403)
 
-    body = json.loads(request.body)
-    message = body['message']
+    message = request.data['message']
 
     project = Project.objects.get(id=project_id)
     email_subject = '{firstname} {lastname} sent a message to {project}'.format(
@@ -709,17 +720,14 @@ def contact_project_owner(request, project_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def contact_project_volunteers(request, project_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
-
-    body = json.loads(request.body)
-    subject = body['subject']
-    message = body['message']
+    subject = request.data['subject']
+    message = request.data['message']
 
     project = Project.objects.get(id=project_id)
     if not user.email_verified or not is_co_owner_or_staff(user, project):
@@ -750,17 +758,15 @@ def contact_project_volunteers(request, project_id):
 
     return HttpResponse(status=200)
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+
+@api_view(['GET', 'POST'])
 def contact_event_project_volunteers(request, event_id, project_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
-
-    body = json.loads(request.body)
-    subject = body['subject']
-    message = body['message']
+    subject = request.data['subject']
+    message = request.data['message']
 
     event_project = EventProject.get(event_id, project_id)
     if not user.email_verified or not is_co_owner_or_staff(user, event_project):
@@ -788,8 +794,7 @@ def contact_event_project_volunteers(request, event_id, project_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def contact_project_volunteer(request, application_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -798,9 +803,8 @@ def contact_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     project = volunteer_relation.project
 
-    body = json.loads(request.body)
-    subject = body['subject']
-    message = body['message']
+    subject = request.data['subject']
+    message = request.data['message']
 
     # TODO: Condense common code between this and contact_project_volunteers
     if not user.email_verified or not is_co_owner_or_staff(user, project):
@@ -820,8 +824,7 @@ def contact_project_volunteer(request, application_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def volunteer_with_project(request, project_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -831,10 +834,9 @@ def volunteer_with_project(request, project_id):
         return HttpResponse(status=403)
 
     project = Project.objects.get(id=project_id)
-    body = json.loads(request.body)
-    projected_end_date = body['projectedEndDate']
-    message = body['message']
-    role = body['roleTag']
+    projected_end_date = request.data['projectedEndDate']
+    message = request.data['message']
+    role = request.data['roleTag']
     volunteer_relation = VolunteerRelation.create(
         project=project,
         volunteer=user,
@@ -847,8 +849,7 @@ def volunteer_with_project(request, project_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def renew_volunteering_with_project(request, application_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -859,20 +860,18 @@ def renew_volunteering_with_project(request, application_id):
     if not user.id == volunteer_relation.volunteer.id:
         return HttpResponse(status=403)
 
-    body = json.loads(request.body)
-    volunteer_relation.projected_end_date = body['projectedEndDate']
+    volunteer_relation.projected_end_date = request.data['projectedEndDate']
     volunteer_relation.re_enrolled_last_date = timezone.now()
     volunteer_relation.re_enroll_reminder_count = 0
     volunteer_relation.re_enroll_last_reminder_date = None
     volunteer_relation.save()
     volunteer_relation.volunteer.purge_cache()
 
-    notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
+    notify_project_owners_volunteer_renewed_email(volunteer_relation, request.data['message'])
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def conclude_volunteering_with_project(request, application_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -885,19 +884,17 @@ def conclude_volunteering_with_project(request, application_id):
 
     send_volunteer_conclude_email(user, volunteer_relation.project.project_name)
 
-    body = json.loads(request.body)
     project = Project.objects.get(id=volunteer_relation.project.id)
     user = volunteer_relation.volunteer
     volunteer_relation.delete()
     project.recache()
     user.purge_cache()
 
-    notify_project_owners_volunteer_concluded_email(volunteer_relation, body['message'])
+    notify_project_owners_volunteer_concluded_email(volunteer_relation, request.data['message'])
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def accept_project_volunteer(request, application_id):
     # Redirect to login if not logged in
     if not request.user.is_authenticated:
@@ -927,8 +924,7 @@ def accept_project_volunteer(request, application_id):
         return redirect(about_project_url)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def promote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     if volunteer_operation_is_authorized(request, volunteer_relation):
@@ -943,14 +939,12 @@ def promote_project_volunteer(request, application_id):
         raise PermissionDenied()
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def reject_project_volunteer(request, application_id):
     find_projects_page_url = section_url(FrontEndSection.FindProjects)
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     if volunteer_operation_is_authorized(request, volunteer_relation):
-        body = json.loads(request.body)
-        message = body['rejection_message']
+        message = request.data['rejection_message']
         email_template = HtmlEmailTemplate()\
         .paragraph('Hi {first_name},'.format(first_name=volunteer_relation.volunteer.first_name))\
         .paragraph('Thank you for your interest in volunteering with {project_name}.'.format(project_name=volunteer_relation.project.project_name))\
@@ -962,7 +956,7 @@ def reject_project_volunteer(request, application_id):
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                   subject=email_subject,
-                                  template=email_template, 
+                                  template=email_template,
                                   cc_owners=False)
         update_project_timestamp(request, volunteer_relation.project)
         project = Project.objects.get(id=volunteer_relation.project.id)
@@ -975,13 +969,11 @@ def reject_project_volunteer(request, application_id):
         raise PermissionDenied()
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def dismiss_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     if volunteer_operation_is_authorized(request, volunteer_relation):
-        body = json.loads(request.body)
-        message = body['dismissal_message']
+        message = request.data['dismissal_message']
         email_template = HtmlEmailTemplate()\
         .paragraph('Thank you for contributing to {project_name}. Your volunteer work for the project has ended. \"{message}\"'\
                    .format(project_name=volunteer_relation.project.project_name, message=message))
@@ -989,7 +981,7 @@ def dismiss_project_volunteer(request, application_id):
             project_name=volunteer_relation.project.project_name)
         send_to_project_volunteer(volunteer_relation=volunteer_relation,
                                subject=email_subject,
-                               template=email_template, 
+                               template=email_template,
                                cc_owners=False)
         update_project_timestamp(request, volunteer_relation.project)
         project = Project.objects.get(id=volunteer_relation.project.id)
@@ -1002,16 +994,14 @@ def dismiss_project_volunteer(request, application_id):
         raise PermissionDenied()
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def demote_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     if volunteer_operation_is_authorized(request, volunteer_relation):
         volunteer_relation.is_co_owner = False
         volunteer_relation.save()
         update_project_timestamp(request, volunteer_relation.project)
-        body = json.loads(request.body)
-        message = body['demotion_message']
+        message = request.data['demotion_message']
         email_template = HtmlEmailTemplate()\
         .paragraph('The owner of {project_name} has removed you as a co-owner of the project for the following reason:'.format(
             project_name=volunteer_relation.project.project_name))\
@@ -1027,13 +1017,12 @@ def demote_project_volunteer(request, application_id):
     else:
         raise PermissionDenied()
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+
+@api_view(['GET', 'POST'])
 def leave_project(request, project_id):
     volunteer_relation = VolunteerRelation.objects.filter(project_id=project_id, volunteer_id=request.user.id).first()
     if request.user.id == volunteer_relation.volunteer.id:
-        body = json.loads(request.body)
-        message = body['departure_message']
+        message = request.data['departure_message']
         if len(message) > 0:
             email_template = HtmlEmailTemplate()\
             .paragraph('{volunteer_name} is leaving {project_name} because:'.format(
@@ -1062,13 +1051,13 @@ def leave_project(request, project_id):
     else:
         raise PermissionDenied()
 
+
 def update_project_timestamp(request, project):
     if not request.user.is_staff:
         project.update_timestamp()
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def contact_group_owner(request, group_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -1077,8 +1066,7 @@ def contact_group_owner(request, group_id):
     if not user.email_verified:
         return HttpResponse(status=403)
 
-    body = json.loads(request.body)
-    message = body['message']
+    message = request.data['message']
 
     group = Group.objects.get(id=group_id)
     email_subject = '{firstname} {lastname} would like to connect with {group}'.format(
@@ -1097,8 +1085,7 @@ def contact_group_owner(request, group_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def invite_project_to_group(request, group_id):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -1111,9 +1098,8 @@ def invite_project_to_group(request, group_id):
     if not is_creator(user, group):
         return HttpResponse(status=403)
 
-    body = json.loads(request.body)
-    project = Project.objects.get(id=body['projectId'])
-    message = body['message']
+    project = Project.objects.get(id=request.data['projectId'])
+    message = request.data['message']
     is_approved = is_co_owner_or_owner(user, project)
     project_relation = ProjectRelationship.create(group, project, is_approved, message)
     project_relation.save()
@@ -1124,8 +1110,7 @@ def invite_project_to_group(request, group_id):
     return HttpResponse(status=200)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def accept_group_invitation(request, invite_id):
     # Redirect to login if not logged in
     if not request.user.is_authenticated:
@@ -1156,8 +1141,7 @@ def accept_group_invitation(request, invite_id):
         return redirect(about_project_url)
 
 
-# TODO: Pass csrf token in ajax call so we can check for it
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def reject_group_invitation(request, invite_id):
     # Redirect to login if not logged in
     if not request.user.is_authenticated:
@@ -1186,7 +1170,7 @@ def reject_group_invitation(request, invite_id):
         return redirect(about_project_url)
 
 
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def project_favorite(request, project_id):
     user = get_request_contributor(request)
     project = Project.objects.get(id=project_id)
@@ -1201,7 +1185,7 @@ def project_favorite(request, project_id):
     return HttpResponse(status=200)
 
 
-@csrf_exempt
+@api_view(['GET', 'POST'])
 def project_unfavorite(request, project_id):
     user = get_request_contributor(request)
     project = Project.objects.get(id=project_id)
@@ -1218,28 +1202,28 @@ def project_unfavorite(request, project_id):
 
 #This will ask Google if the recaptcha is valid and if so send email, otherwise return an error.
 #TODO: Return text strings to be displayed on the front end so we know specifically what happened
-#TODO: Figure out why changing the endpoint to /api/contact/democracylab results in CSRF issues
-@csrf_exempt
+#TODO: Figure out why
+#  changing the endpoint to /api/contact/democracylab results in CSRF issues
+@api_view(['GET', 'POST'])
 def contact_democracylab(request):
     #first prepare all the data from the request body
-    body = json.loads(request.body)
     # submit validation request to recaptcha
     r = requests.post(
       'https://www.google.com/recaptcha/api/siteverify',
       data={
         'secret': settings.GR_SECRETKEY,
-        'response': body['reCaptchaValue']
+        'response': request.data['reCaptchaValue']
       }
     )
 
     if r.json()['success']:
         # Successfully validated, send email
-        first_name = body['fname']
-        last_name = body['lname']
-        email_addr = body['emailaddr']
-        message = body['message']
-        company_name = body['company_name'] if 'company_name' in body else None
-        interest_flags = list(filter(lambda key: body[key] and isinstance(body[key], bool), body.keys()))
+        first_name = request.data['fname']
+        last_name = request.data['lname']
+        email_addr = request.data['emailaddr']
+        message = request.data['message']
+        company_name = request.data.get('company_name')
+        interest_flags = list(filter(lambda key: request.data[key] and isinstance(request.data[key], bool), request.data.keys()))
         contact_democracylab_email(first_name, last_name, email_addr, message, company_name, interest_flags)
         return HttpResponse(status=200)
 
@@ -1247,6 +1231,7 @@ def contact_democracylab(request):
     return HttpResponse(status=401)
 
 
+@api_view()
 def robots(request):
     template = loader.get_template('robots.txt')
     context = {
@@ -1257,6 +1242,7 @@ def robots(request):
     return HttpResponse(template.render(context, request))
 
 
+@api_view()
 def team(request):
     response = {
         'board_of_directors': settings.BOARD_OF_DIRECTORS
@@ -1269,6 +1255,7 @@ def team(request):
     return JsonResponse(response)
 
 
+@api_view()
 def redirect_v1_urls(request):
     page_url = request.get_full_path()
     print(page_url)
@@ -1285,6 +1272,7 @@ def redirect_v1_urls(request):
     return redirect(section_url(section_name, {'id': section_id}))
 
 
+@api_view()
 def get_testimonials(request, category=None):
     testimonials = Testimonial.objects.filter(active=True)
     if category:

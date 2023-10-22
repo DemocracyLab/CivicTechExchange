@@ -32,6 +32,7 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
 import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
+import { isWithinIframe } from "../../utils/iframe.js";
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
@@ -108,8 +109,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const project = this.state.project;
+    const widthModifier=isWithinIframe() ? ' override-breakpoint-max-width' : '';
     return (
-      <div className="container Profile-root">
+      <div className={"container Profile-root" + widthModifier }>
+        {isWithinIframe() && <base target="_blank" />}
         {this._renderHeader(project)}
         <div className="row">
           <div className="Profile-top-section col-12">
@@ -189,8 +192,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   // tabbed primary section content
   _renderPrimarySection(project) {
+    const widthModifier=isWithinIframe() ? ' override-breakpoint-width' : '';
     return (
-      <div className="Profile-primary-container">
+      <div className={"Profile-primary-container" + widthModifier } >
         <Tabs defaultActiveKey="proj-details" id="AboutProject-tabs">
           <Tab
             eventKey="proj-details"

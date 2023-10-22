@@ -1,0 +1,33 @@
+<!-- this file can be loaded directly from a browser and used to test embedding groups and projects within iframes
+see https://github.com/DemocracyLab/CivicTechExchange/issues/978 
+change groups/inframe to projects/inframe below to test embedding a project
+This if for testing without using iframe resizer
+ -->
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>iframe test</title>
+  </head>
+  <body>
+    <div style="width: calc( 100vw - 4rem); margin-left: auto; margin-right: auto">
+        <h1>This is a landing page with Group projects:</h1>
+        <!-- see https://www.w3schools.com/howto/howto_css_responsive_iframes.asp -->
+        <div style="position: relative; overflow: hidden; width: auto;  padding-top: 40%; margin-left: 5rem; margin-right: 5rem; border-radius:1rem; border: 1px solid black;">
+            <iframe
+                src="http://localhost:8000/groups/inframe/1"
+                style="position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; border-radius: 1rem;"
+            ></iframe>
+        </div>
+        <h1>This is the footer below the projects</h1>
+        <h1>This is a project</h1>
+        <div style="position: relative; overflow: hidden; width: auto;  padding-top: 40%; margin-left: 5rem; margin-right: 5rem; border-radius:1rem; border: 1px solid black;">
+          <iframe
+              src="http://localhost:8000/projects/inframe/1"
+              style="position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; border-radius: 1rem;"
+          ></iframe>
+      </div>
+    </div>
+  </body>
+</html>
