@@ -24,19 +24,19 @@ class AggregatedDashboard extends React.PureComponent<Props, State> {
       <React.Fragment>
         <h2 className="text-center AggregatedDashboard-title">DemocarcyLab's Impact</h2>
         <div className="Aggregated-dashboard" id="dashboardDisplay">
-            <div className="card">
+            <div className="card card1">
                 <span>4099%</span>
                 <h4>Return of Impact</h4>
             </div>
-            <div className="card">
+            <div className="card card2">
                 <span>$12M</span>
                 <h4>Dollars Saved</h4>
             </div>
-            <div className="card">
+            <div className="card card3">
                 <span>386</span>
                 <h4>Active Volunteers</h4>
             </div>
-            <div className="card">
+            <div className="card card4">
                 <span>87</span>
                 <h4>Active Projects</h4>
             </div>

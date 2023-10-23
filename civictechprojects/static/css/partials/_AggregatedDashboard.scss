@@ -10,7 +10,7 @@
 
 .Aggregated-dashboard {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   margin-top: 56px;
 }
 
@@ -59,4 +59,8 @@
     background-color: #fff;
     color: #191919;
     font-weight: normal;
+}
+
+.card1, .card2, .card3, .card4 {
+  margin: 0 30px;
 }

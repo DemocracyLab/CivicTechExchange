@@ -7,3 +7,53 @@
     overflow: hidden;
     align-self: start; // stops character descenders from getting clipped, weird but works
 }
+
+.hackathon-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 88px;
+}
+
+.hackathon-section .hackathon-card {
+  border: 1px solid #828282;
+  border-radius: 4px;
+  padding-top: 49px; // Need further investigation to maintain 59px
+  padding-bottom: 59px;
+  width: 264px;
+  height: 208px;
+  text-align: center;
+  background-color: #fff;
+  align-items: center;
+}
+
+.hackathon-section .hackathon-card span {
+  color: #F79E02;
+  font-size: 48px;
+  font-family: Montserrat;
+//   margin-top: 59px;
+//   margin-bottom: 8px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.hackathon-section .hackathon-card h4 {
+    color: #191919;
+    font-size: 16px;
+    font-weight: 500;
+    // margin-bottom: 59px;
+    margin: 0;
+    padding: 0;
+}
+
+.card1, .card2 {
+    margin: 0 30px;
+}
+
+.bottom-text {
+    color: #191919;
+    font-size: 16px;
+    font-weight: normal;
+    font-family: Montserrat;
+    margin-top: 88px;
+}
