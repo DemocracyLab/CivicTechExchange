@@ -1,7 +1,4 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
-import url from "../../utils/url.js";
-import Section from "../../enums/Section.js";
 import { Line } from "react-chartjs-2"; // References: https://react-chartjs-2.js.org/
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);

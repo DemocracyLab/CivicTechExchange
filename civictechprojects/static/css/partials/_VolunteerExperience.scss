@@ -7,3 +7,50 @@
     overflow: hidden;
     align-self: start; // stops character descenders from getting clipped, weird but works
 }
+
+.volunteer-experience-summary {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 45px;
+    margin-bottom: 56px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.volunteer-experience-summary .card-number {
+    text-align: center;
+    align-items: center;
+}
+
+.volunteer-experience-summary .card-number span {
+    color: #F79E02;
+    font-size: 80px;
+    font-family: Montserrat;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.volunteer-experience-summary .card-number h4 {
+    color: #191919;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 10px 0 0 0;
+    padding: 0;
+}
+
+.volunteer-experience-summary .card-text {
+    margin-left: 128px;
+    align-items: center;
+}
+
+.volunteer-experience-summary .card-text span {
+    color: #191919;
+    font-size: 16px;
+    font-weight: normal;
+    font-family: Montserrat;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+}
