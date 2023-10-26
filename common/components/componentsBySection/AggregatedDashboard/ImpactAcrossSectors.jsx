@@ -4,17 +4,14 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 const data = {
-  labels: ['2019', '2020', '2021', '2022', '2023'],
+  labels: ['Civic Infrastructure', 'No Specific/Other Issue', 'Education', 'Environment', 'Political Reform',
+            'Social Justice', 'Health Care', 'Economy', 'Homelessness', 'Public Safety', 'International Issues',
+            'Transportation', 'Immigration', 'Cultural Issues', 'Housing Policies', 'National Security', 'Taxes'],
   datasets: [
     {
-      label: 'Number of volunteer applications every year',
-      data: [150, 450, 700, 1100, 1550],
+      label: 'Number of projects in different categories since inception',
+      data: [48, 26, 21, 20, 20, 17, 15, 14, 12, 11, 10, 10, 10, 9, 9, 8, 8],
       backgroundColor: '#F9B135',
-    },
-    {
-      label: 'Number of volunteer approvals every year',
-      data: [50, 200, 350, 700, 850],
-      backgroundColor: '#FDE2B3',
     },
   ],
 };
@@ -45,7 +42,9 @@ const options = {
     },
     y: {
       ticks: {
-        count: 5,
+        callback: function(tick, index, array) {
+          return (index % 2) ? "" : tick;
+        },
         font: {
           family:'Montserrat'
         }
@@ -60,7 +59,7 @@ type Props = {|
 type State = {|
 |};
 
-class VolunteerMatching extends React.PureComponent<Props, State> {
+class ImpactAcrossSectors extends React.PureComponent<Props, State> {
   constructor(props) {
     super();
     this.state = { };
@@ -72,16 +71,16 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <React.Fragment>
-        <h2 className="text-center AggregatedDashboard-title">Volunteer Matching</h2>
-        <div className="Volunteer-matching-summary">
+        <h2 className="text-center AggregatedDashboard-title">Impact Across Sectors</h2>
+        <div className="Impact-across-sectors-summary">
           <div className="card-number">
-            <span>45%</span>
-            <h4>Volunteer Matched</h4>
+            <span>20+</span>
+            <h4>Areas Served</h4>
           </div>
           <div className="card-text">
             <span>
-              The onboarding process is selective, yet ensuring a good response rate
-              for a fair portion of total applicants.
+              We host projects from various backgrounds, attracting a wide array of volunteers
+              with different skills and capabilities.
             </span>
           </div>
         </div>
@@ -95,7 +94,6 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
                 beforeDraw(c) {
                   var legends = c.legend.legendItems;
                   legends[0].fillStyle = "#F9B135";
-                  legends[1].fillStyle = "#FDE2B3";
                 }
               }
             ]}
@@ -106,4 +104,4 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
   }
 }
 
-export default VolunteerMatching;
+export default ImpactAcrossSectors;

@@ -8,25 +8,23 @@
     align-self: start; // stops character descenders from getting clipped, weird but works
 }
 
-.volunteer-roles-detail {
+.Impact-across-sectors-summary {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 88px;
+    margin-bottom: 56px;
+    margin-left: 80px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
-.volunteer-roles-summary {
-    flex: 1;
-    // text-align: center;
-    align-items: center;
-}
-
-.volunteer-roles-summary .card-number {
+.Impact-across-sectors-summary .card-number {
     text-align: center;
     align-items: center;
 }
 
-.volunteer-roles-summary .card-number span {
+.Impact-across-sectors-summary .card-number span {
     color: #F79E02;
     font-size: 80px;
     font-family: Montserrat;
@@ -35,7 +33,7 @@
     padding: 0;
 }
 
-.volunteer-roles-summary .card-number h4 {
+.Impact-across-sectors-summary .card-number h4 {
     color: #191919;
     font-size: 16px;
     font-weight: 500;
@@ -43,12 +41,12 @@
     padding: 0;
 }
 
-.volunteer-roles-summary .card-text {
-    margin-top: 56px;
+.Impact-across-sectors-summary .card-text {
+    margin-left: 128px;
     align-items: center;
 }
 
-.volunteer-roles-summary .card-text span {
+.Impact-across-sectors-summary .card-text span {
     color: #191919;
     font-size: 16px;
     font-weight: normal;
@@ -56,8 +54,4 @@
     text-align: left;
     margin: 0;
     padding: 0;
-}
-
-.volunteer-roles-chart {
-    flex: 1;
 }

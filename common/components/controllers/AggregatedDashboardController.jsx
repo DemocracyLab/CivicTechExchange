@@ -2,11 +2,12 @@
 
 import AggregatedDashboard from "../componentsBySection/Landing/AggregatedDashboard.jsx";
 import ReturnOfImpact from "../componentsBySection/AggregatedDashboard/ReturnOfImpact.jsx";
-import ImpactInVariousSectors from "../componentsBySection/AggregatedDashboard/ImpactInVariousSectors.jsx";
+import ImpactAcrossSectors from "../componentsBySection/AggregatedDashboard/ImpactAcrossSectors.jsx";
 import VolunteerRoles from "../componentsBySection/AggregatedDashboard/VolunteerRoles.jsx";
-import VolunteerExperience from "../componentsBySection/AggregatedDashboard/VolunteerExperience.jsx";
+import VolunteerRenewal from "../componentsBySection/AggregatedDashboard/VolunteerRenewal.jsx";
 import VolunteerMatching from "../componentsBySection/AggregatedDashboard/VolunteerMatching.jsx";
 import Hackathons from "../componentsBySection/AggregatedDashboard/Hackathons.jsx";
+import SponsorFooter from "../chrome/SponsorFooter.jsx";
 
 import urls from "../utils/url.js";
 import React from "react";
@@ -33,13 +34,13 @@ class AggregatedDashboardController extends React.PureComponent {
             <ReturnOfImpact />
           </div>
           <div className="Dashboard-section">
-            <ImpactInVariousSectors />
+            <ImpactAcrossSectors />
           </div>
           <div className="Dashboard-section">
             <VolunteerRoles />
           </div>
           <div className="Dashboard-section">
-            <VolunteerExperience />
+            <VolunteerRenewal />
           </div>
           <div className="Dashboard-section">
             <VolunteerMatching />
@@ -48,6 +49,7 @@ class AggregatedDashboardController extends React.PureComponent {
             <Hackathons />
           </div>
         </div>
+        <SponsorFooter forceShow={true}/>
       </React.Fragment>
     );
   }

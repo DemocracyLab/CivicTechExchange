@@ -53,9 +53,19 @@ const options = {
     }
   },
   scales: {
+    x: {
+      ticks: {
+        font: {
+          family:'Montserrat'
+        }
+      }
+    },
     y: {
       ticks: {
         count: 5,
+        font: {
+          family:'Montserrat'
+        }
       }
     }
   }
@@ -67,7 +77,7 @@ type Props = {|
 type State = {|
 |};
 
-class VolunteerExperience extends React.PureComponent<Props, State> {
+class VolunteerRenewal extends React.PureComponent<Props, State> {
   constructor(props) {
     super();
     this.state = { };
@@ -80,7 +90,7 @@ class VolunteerExperience extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <h2 className="text-center AggregatedDashboard-title">Volunteer Experience</h2>
+        <h2 className="text-center AggregatedDashboard-title">Volunteer Renewal</h2>
         <div className="volunteer-experience-summary">
           <div className="card-number">
             <span>87%</span>
@@ -113,4 +123,4 @@ class VolunteerExperience extends React.PureComponent<Props, State> {
   }
 }
 
-export default VolunteerExperience;
+export default VolunteerRenewal;

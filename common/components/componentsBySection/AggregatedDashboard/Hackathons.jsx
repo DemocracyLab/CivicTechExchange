@@ -30,11 +30,12 @@ class Hackathons extends React.PureComponent<Props, State> {
               <h4>Hackathon participants</h4>
           </div>
         </div>
-      <h4 className="bottom-text">Aliquam at ex cursus odio rhoncus euismod non non dolor. Nunc volutpat nunc at turpis egestas fermentum.
-        Donec vulputate volutpat neque, vitae consequat lacus accumsan tristique. Integer consequat nisi ac metus
-        porttitor, in mollis dolor tristique. Curabitur cursus velit elit, eu feugiat lorem accumsan eget. Fusce sem
-        odio, consectetur et enim vel, interdum vulputate lorem. Integer justo purus, fermentum scelerisque leo iaculis,
-        volutpat sodales felis.</h4>
+        <h4 className="bottom-text">
+          Hackathons play a pivotal role in the culture at DemocracyLab. They provide an
+          invaluable opportunity for projects to make incremental progress toward their
+          long-term goals and have also been instrumental in helping volunteers establish
+          enduring relationships with projects that align with their expertise and interests.
+        </h4>
       </React.Fragment>
     );
   }

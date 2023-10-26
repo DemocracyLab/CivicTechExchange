@@ -53,11 +53,21 @@ const options = {
     }
   },
   scales: {
+    x: {
+      ticks: {
+        font: {
+          family:'Montserrat'
+        }
+      }
+    },
     y: {
       ticks: {
         count: 6,
         callback: function(value, index, values) {
           return '$' + value/1000000 + 'M';
+        },
+        font: {
+          family:'Montserrat'
         }
       }
     }
