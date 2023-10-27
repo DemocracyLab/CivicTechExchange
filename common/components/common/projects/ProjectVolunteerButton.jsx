@@ -19,6 +19,7 @@ type LeaveProjectParams = {|
 type Props = {|
   project: ?ProjectDetailsAPIData,
   positionToJoin: ?PositionInfo,
+  positions: $ReadOnlyArray<PositionInfo>,
   onVolunteerClick: () => void,
 |};
 type State = {|
@@ -151,28 +152,35 @@ class ProjectVolunteerButton extends React.PureComponent<Props, State> {
   }
 
   _renderVolunteerButton(): React$Node {
-    return this.state.isAlreadyVolunteering ? (
+    const hasProjectPositions = !_.isEmpty(this.state.project.project_positions) && this.state.project.project_positions.some(position => !position.isHidden);
+    if (this.state.isAlreadyVolunteering) {
       // TODO: Make this its own component and hook up to My Projects page
-      <Button
-        className="AboutProject-button"
-        type="button"
-        variant="destructive"
-        onClick={this.handleShowLeaveModal}
-      >
-        Leave Project
-      </Button>
-    ) : (
-      <Button
-        variant="primary"
-        className="AboutProject-button"
-        type="button"
-        disabled={this.state.buttonDisabled}
-        title={this.state.buttonTitle}
-        onClick={this.handleShowJoinModal}
-      >
-        Volunteer With Project
-      </Button>
-    );
+      return (
+        <Button
+          className="AboutProject-button"
+          type="button"
+          variant="destructive"
+          onClick={this.handleShowLeaveModal}
+        >
+          Leave Project
+        </Button>
+      );
+    } else if (hasProjectPositions) {
+      return (
+        <Button
+          variant="primary"
+          className="AboutProject-button"
+          type="button"
+          disabled={this.state.buttonDisabled}
+          title={this.state.buttonTitle}
+          onClick={this.handleShowJoinModal}
+        >
+          Volunteer With Project
+        </Button>
+      );
+    } else {
+      return null;
+    }
   }
 
   _renderLinkToSignInButton(): React$Node {

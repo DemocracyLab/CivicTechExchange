@@ -169,7 +169,7 @@ class urlHelper {
       return _url;
     } else {
       let _args: Dictionary<string> = {
-        prev: sectionArgs.section,
+        prev: sectionArgs.section!==Section.IframeProject ? sectionArgs.section : Section.AboutProject, // if login from within an iframe, go direct without iframe
       };
       if (!_.isEmpty(sectionArgs.args)) {
         _args.prevPageArgs = JSON.stringify(sectionArgs.args);

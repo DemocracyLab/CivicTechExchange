@@ -47,11 +47,12 @@ class apiHelper {
       empty: true,
       hash: false,
     });
-
+    const cookies: Dictionary<string> = htmlDocument.cookies();
     const headers = {
       Accept: "application/json, text/plain, */*",
       "Content-Type": "application/x-www-form-urlencoded",
       "X-Requested-With": "XMLHttpRequest",
+      "X-CSRFToken": cookies["csrftoken"],
     };
     apiHelper._request(
       url,
