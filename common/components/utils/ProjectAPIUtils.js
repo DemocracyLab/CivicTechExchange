@@ -11,6 +11,7 @@ import type { MyGroupData } from "./CurrentUser.js";
 import type { GroupTileAPIData } from "./GroupAPIUtils.js";
 import type { EventTileAPIData } from "./EventAPIUtils.js";
 import type { Dictionary } from "../types/Generics.jsx";
+import htmlDocument from "./htmlDocument.js";
 import _ from "lodash";
 
 export type APIResponse = Response;
@@ -364,11 +365,13 @@ class ProjectAPIUtils {
         errorMessage: JSON.stringify(response),
       });
 
+    const cookies = htmlDocument.cookies();
     let headers: Dictionary<string> = Object.assign(
       {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json",
         "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": cookies["csrftoken"],
       },
       additionalHeaders
     );
