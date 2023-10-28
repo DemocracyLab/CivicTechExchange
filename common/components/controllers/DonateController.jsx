@@ -50,7 +50,7 @@ class DonateController extends React.Component<{||}, State> {
       <div className="DonateController-root container">
         <div className="row">
           <div className="col-xs-12 col-md-6 DonateController-image">
-            <img src={cdn.image(Images.DONATE_SPLASH)}></img>
+            <img src={cdn.image(Images.DONATE_SPLASH)} alt="donate and make a difference"></img>
           </div>
           <div className="col-xs-12 col-md-6 DonateController-text">
             <div className="DonateController-text-container">

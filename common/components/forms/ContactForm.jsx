@@ -145,7 +145,7 @@ class ContactForm extends React.Component<Props, State> {
                   required
                   className="form-control"
                   name="fname"
-                  id="fname"
+                  id={this.state.interest_sponsor?'sponsor-fname':'hackathon-fname'}
                   type="text"
                   placeholder="Your first name"
                   value={this.state.fname}
@@ -158,7 +158,7 @@ class ContactForm extends React.Component<Props, State> {
                   required
                   className="form-control"
                   name="lname"
-                  id="lname"
+                  id={this.state.interest_sponsor?'sponsor-lname':'hackathon-lname'}
                   type="text"
                   placeholder="Your last name"
                   value={this.state.lname}
@@ -172,7 +172,7 @@ class ContactForm extends React.Component<Props, State> {
                   className="form-control"
                   name="emailaddr"
                   type="email"
-                  id="emailaddr"
+                  id={this.state.interest_sponsor?'sponsor-emailaddr':'hackathon-emailaddr'}
                   placeholder="name@example.com"
                   value={this.state.emailaddr}
                   onChange={this.handleInputChange}
@@ -189,7 +189,7 @@ class ContactForm extends React.Component<Props, State> {
                   required
                   className="form-control"
                   name="message"
-                  id="message"
+                  id={this.state.interest_sponsor?'sponsor-message':'hackathon-message'}
                   placeholder="Type your message here"
                   rows="8"
                   maxLength="3000"

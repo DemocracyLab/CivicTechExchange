@@ -320,7 +320,7 @@ class MainHeader extends React.Component<{||}, State> {
 
   _renderAvatar(): React$Node {
     return !_.isEmpty(CurrentUser.userImgUrl()) ? (
-      <img className="MainHeader-useravatar" src={CurrentUser.userImgUrl()} />
+      <img className="MainHeader-useravatar" src={CurrentUser.userImgUrl()} alt="user avatar" />
     ) : (
       <UserIcon className="MainHeader-useravatar" />
     );

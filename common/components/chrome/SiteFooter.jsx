@@ -49,17 +49,17 @@ class SiteFooter extends React.Component {
             <div className="Footer-dividerline d-lg-none"></div>
 
             <div className="SiteFooter-iconblock">
-              <a href="https://www.facebook.com/DemocracyLab">
+              <a href="https://www.facebook.com/DemocracyLab" aria-label="Facebook">
                 <i
                   className={Glyph(GlyphStyles.FacebookSquare, GlyphSizes.X2)}
                 ></i>
               </a>
-              <a href="https://twitter.com/democracylab">
+              <a href="https://twitter.com/democracylab" aria-label="Twitter">
                 <i
                   className={Glyph(GlyphStyles.TwitterSquare, GlyphSizes.X2)}
                 ></i>
               </a>
-              <a href="https://www.linkedin.com/company/democracylab">
+              <a href="https://www.linkedin.com/company/democracylab" aria-label="LinkedIn">
                 <i className={Glyph(GlyphStyles.LinkedIn, GlyphSizes.X2)}></i>
               </a>
             </div>
@@ -73,7 +73,7 @@ class SiteFooter extends React.Component {
       <div className="SiteFooter-copyright col-12">
         <div className="Footer-dividerline SiteFooter-sectionline d-none d-lg-block"></div>
         <div className="SiteFooter-copyright-icons">
-          <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+          <a rel="license" href="http://creativecommons.org/licenses/by/4.0/" aria-label="creative commons license">
             <i
               className={Glyph(GlyphStyles.CreativeCommons, GlyphSizes.X2)}
             ></i>

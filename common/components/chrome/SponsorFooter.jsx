@@ -100,7 +100,7 @@ class SponsorFooter extends React.Component<Props> {
                     rel="noopener noreferrer"
                     className="SponsorFooter-sponsor-link"
                   >
-                    <img src={sponsor.thumbnailUrl} />
+                    <img src={sponsor.thumbnailUrl} alt="Sponsor logo" alt="Sponsor logo" />
                   </a>
                 </div>
               );
