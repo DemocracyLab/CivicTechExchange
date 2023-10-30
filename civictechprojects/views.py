@@ -899,7 +899,6 @@ def accept_project_volunteer(request, application_id):
     # Redirect to login if not logged in
     if not request.user.is_authenticated:
         return redirect(section_url(FrontEndSection.LogIn, {'prev': request.get_full_path()}))
-
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     about_project_url = section_url(FrontEndSection.AboutProject, {'id': str(volunteer_relation.project.id)})
     if volunteer_relation.is_approved:

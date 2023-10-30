@@ -169,6 +169,12 @@ describe("utils", () => {
     expect(urlHelper.logInThenReturn(expectedNoArguments)).toEqual(
       expectedNoArguments
     );
+
+    // Redirect project iframe to regular project page
+    expect(urlHelper.logInThenReturn("/projects/inframe/1")).toEqual(
+      expectedWithArguments
+    );
+
   });
 
   test("groupBy.andTransform", () => {
