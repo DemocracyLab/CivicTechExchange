@@ -12,6 +12,7 @@ import {
 } from "../LocationAutocompleteForm.jsx";
 import { LocationInfo } from "../../common/location/LocationInfo.js";
 import _ from "lodash";
+import Button from "react-bootstrap/Button";
 
 type Props = {|
   locationFormInputs: LocationFormInputsByEntity,
@@ -49,6 +50,11 @@ class CountryLocationFormFields extends React.Component<Props, State> {
     });
   }
 
+  clearCountrySelection = () => {
+    this.onSelection(this.props.countryFieldId, null);
+  }
+
+
 //find a way to let country form have clear feature!
   render(): ?React$Node {
     return (
@@ -64,7 +70,12 @@ class CountryLocationFormFields extends React.Component<Props, State> {
               this.onSelection(this.props.locationFieldId, null);
             }}
           />
-          <button>clear</button>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={this.clearCountrySelection}
+          >
+            clear</Button>
         </div>
 
         <div className="form-group">
