@@ -43,6 +43,13 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           ? tabOptions[tabArg]
           : tabOptions.hackathon,
     };
+    // if GOOGLE_PROPERTY_ID is not set in the environment, then google's gtag snippet will not get loaded and 
+    // window.gtag won't be defined.  We should make a global fix to this issue, but for now we are tring to limit changes
+    // to this one file as we research the differences and tradeoffs between gtags and google tag managers
+    //
+    // it is called like this (gtag('event',tab_option),true) within events because event handlers need to return true
+    // for the event propogation to continue.
+    if(!window.gtag) window.gtag=()=>{}
   }
 
   render(): $React$Node {
@@ -112,7 +119,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-tab-section">
-          <Tabs defaultActiveKey={this.state.defaultTab} id="corporate-tabs">
+          <Tabs defaultActiveKey={this.state.defaultTab} id="corporate-tabs" 
+                onSelect={tab_option=>(gtag('event',tab_option),true)}>
             <Tab
               eventKey={tabOptions.hackathon}
               title="Host a Tech-for-Good Hackathon"
@@ -194,6 +202,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 variant="primary"
                 href="#contact-hackathon"
                 className="corporate-block-button"
+                onClick={e=>(gtag('event','contact-hackathon'),true)}
               >
                 Get Started
               </Button>
@@ -333,6 +342,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 variant="primary"
                 href="#contact-sponsor"
                 className="corporate-block-button"
+                onClick={e=>(gtag('event','contact-sponsor'),true)}
               >
                 Get Started
               </Button>
@@ -443,6 +453,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         href={cdn.document(
           "2023+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
         )}
+        onClick={e=>(gtag('event','HackathonProspectus'),true)}
       >
         Corporate Tech-for-Good Hackathons PDF{" "}
         <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
@@ -455,6 +466,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         href={cdn.document(
           "2023+DemocracyLab+Sponsorship+Prospectus.pdf"
         )}
+        onClick={e=>(gtag('event','SponsorProspectus'),true)}
       >
         Sponsor Prospectus PDF{" "}
         <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
