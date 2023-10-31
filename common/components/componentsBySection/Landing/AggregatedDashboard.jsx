@@ -8,15 +8,43 @@ type Props = {|
 |};
 
 type State = {|
+  returnOfImpact: number,
+  estimatedImpact: number,
+  activeVolunteerCount: number,
+  activeProjectCount: number,
 |};
+
 
 class AggregatedDashboard extends React.PureComponent<Props, State> {
   constructor(props) {
     super();
-    this.state = { };
+    this.state = {
+      returnOfImpact: 0,
+      estimatedImpact: 0,
+      activeVolunteerCount: 0,
+      activeProjectCount: 0,
+    };
   }
 
   componentDidMount() {
+    const url_impact: string = "/api/impact_data";
+    fetch(new Request(url_impact))
+      .then(response => response.json())
+      .then(getResponse =>
+        this.setState({
+          returnOfImpact: getResponse.roi,
+          estimatedImpact: getResponse.est_impact,
+        })
+      );
+    const url_stats: string = "/api/volunteers_stats";
+    fetch(new Request(url_stats))
+      .then(response => response.json())
+      .then(getResponse =>
+        this.setState({
+          activeVolunteerCount: getResponse.activeVolunteerCount,
+          activeProjectCount: getResponse.projectCount,
+        })
+      );
   }
 
   render(): React$Node {
@@ -25,19 +53,19 @@ class AggregatedDashboard extends React.PureComponent<Props, State> {
         <h2 className="text-center AggregatedDashboard-title">DemocarcyLab's Impact</h2>
         <div className="Aggregated-dashboard" id="dashboardDisplay">
             <div className="card card1">
-                <span>4099%</span>
+                <span>{this.state.returnOfImpact*100}%</span>
                 <h4>Return of Impact</h4>
             </div>
             <div className="card card2">
-                <span>$12M</span>
+                <span>${this.state.estimatedImpact/1000000}M</span>
                 <h4>Dollars Saved</h4>
             </div>
             <div className="card card3">
-                <span>386</span>
+                <span>{this.state.activeVolunteerCount}</span>
                 <h4>Active Volunteers</h4>
             </div>
             <div className="card card4">
-                <span>87</span>
+                <span>{this.state.activeProjectCount}</span>
                 <h4>Active Projects</h4>
             </div>
         </div>
