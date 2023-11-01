@@ -4569,6 +4569,11 @@ iferr@^0.1.5:
   resolved "https://registry.npmjs.org/iferr/-/iferr-0.1.5.tgz"
   integrity sha1-xg7taebY/bazEEofy8ocGS3FtQE= sha512-DUNFN5j7Tln0D+TxzloUjKB+CtVu6myn0JEFak6dG18mNt9YkQ6lzGCdafwofISZ1lLF3xRHJ98VKy9ynkcFaA==
 
+iframe-resizer@^4.3.6:
+  version "4.3.6"
+  resolved "https://registry.yarnpkg.com/iframe-resizer/-/iframe-resizer-4.3.6.tgz#61d92c1adefe5d416bff4fbf80c7f1f74be70ec0"
+  integrity sha512-wz0WodRIF6eP0oGQa5NIP1yrITAZ59ZJvVaVJqJRjaeCtfm461vy2C3us6CKx0e7pooqpIGLpVMSTzrfAjX9Sg==
+
 immutable@^3.8.2:
   version "3.8.2"
   resolved "https://registry.npmjs.org/immutable/-/immutable-3.8.2.tgz"

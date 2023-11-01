@@ -109,10 +109,10 @@ class Contributor(User):
             project.recache()
 
 
-def get_contributor_by_username(username):
+def get_contributor_by_username(username) -> Contributor | None:
     # using .first instead of .get_by_natural_key returns None instead of raising if object does not exist
     return Contributor.objects.filter(username=username.lower()).first()
 
 
-def get_request_contributor(request):
+def get_request_contributor(request) -> Contributor | None:
     return get_contributor_by_username(request.user.username) if request.user.username else None

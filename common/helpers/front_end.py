@@ -43,7 +43,12 @@ def section_path(section, args_dict=None):
     section_path_url = _section_path_special_cases(section_string, args_dict)
     if section_path_url:
         return section_path_url
-    section_path_url = '/' + url_generators[section_string]['generator'].format(**id_arg)
+    #check if it is a page section
+    is_page_section = has_page_section(section_string)
+    if(is_page_section):
+        section_path_url = '/' + url_generators[section_string]['generator'].format(**id_arg)
+    else:
+        section_path_url = section
     section_path_url += args_dict_to_query_string(args_dict)
     return section_path_url
 
@@ -62,6 +67,9 @@ def get_page_section(url):
     url_generator = get_page_section_generator(url)
     return url_generator and url_generator['section']
 
+def has_page_section(section_name):
+    from common.urls import url_generators
+    return section_name in url_generators
 
 def get_page_path_parameters(url, page_section_generator=None):
     page_section_generator = page_section_generator or get_page_section_generator(url)
