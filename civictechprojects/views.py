@@ -1659,6 +1659,7 @@ def dollar_impact(request):
         total_expense = expense.total_expenses
 
         roi = (cumulative_impact - total_expense) / total_expense
+        print(roi)
         est_impact = cumulative_impact
 
         data = {"roi": roi, "est_impact": est_impact}
