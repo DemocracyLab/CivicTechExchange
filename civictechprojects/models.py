@@ -2086,4 +2086,4 @@ class DollarsSaved(models.Model):
     total_expenses = models.IntegerField(default=294483)
 
     def __str__(self):
-        return self.dollar_value_impact, self.total_expenses
+        return self.dollar_value_impact.__str__()
