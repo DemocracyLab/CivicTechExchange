@@ -1658,9 +1658,9 @@ def dollar_impact(request):
         cumulative_impact = expense.dollar_value_impact
         total_expense = expense.total_expenses
 
-        roi = int((cumulative_impact - total_expense) / total_expense)
+        roi = (cumulative_impact - total_expense) / total_expense
         print(roi)
-        est_impact = int(cumulative_impact)
+        est_impact = cumulative_impact
 
         data = {"roi": roi, "est_impact": est_impact}
 
