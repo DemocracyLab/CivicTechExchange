@@ -53,11 +53,11 @@ class AggregatedDashboard extends React.PureComponent<Props, State> {
         <h2 className="text-center AggregatedDashboard-title">DemocarcyLab's Impact</h2>
         <div className="Aggregated-dashboard" id="dashboardDisplay">
             <div className="card card1">
-                <span>{this.state.returnOfImpact*100}%</span>
+                <span>{Math.round(this.state.returnOfImpact*100)}%</span>
                 <h4>Return of Impact</h4>
             </div>
             <div className="card card2">
-                <span>${this.state.estimatedImpact/1000000}M</span>
+                <span>${Math.round(this.state.estimatedImpact/1000000)}M</span>
                 <h4>Dollars Saved</h4>
             </div>
             <div className="card card3">
