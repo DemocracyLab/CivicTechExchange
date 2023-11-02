@@ -3,7 +3,6 @@
 import React from "react";
 import CurrentUser from "../../components/utils/CurrentUser.js";
 import Section from "../enums/Section.js";
-import Headers from "../common/Headers.jsx";
 import LogInController from "./LogInController.jsx";
 import VerifyEmailBlurb from "../common/notification/VerifyEmailBlurb.jsx";
 import GroupOverviewForm from "../componentsBySection/CreateGroup/GroupOverviewForm.jsx";
@@ -138,11 +137,6 @@ class CreateGroupController extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return (
       <React.Fragment>
-        <Headers
-          title="Create an group | DemocracyLab"
-          description="Create group page"
-        />
-
         <div className="form-body">
           {!CurrentUser.isLoggedIn() ? (
             <LogInController prevPage={Section.CreateGroup} />

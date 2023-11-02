@@ -5,7 +5,6 @@ import ProjectCardsContainer from "../componentsBySection/FindProjects/ProjectCa
 import ProjectFilterContainer from "../componentsBySection/FindProjects/Filters/ProjectFilterContainer.jsx";
 import { FindProjectsArgs, SearchFor } from "../stores/EntitySearchStore.js";
 
-import Headers from "../common/Headers.jsx";
 import urls from "../utils/url.js";
 import React from "react";
 import _ from "lodash";
@@ -51,10 +50,6 @@ class FindProjectsController extends React.PureComponent {
   render(): React$Node {
     return (
       <React.Fragment>
-        <Headers
-          title="DemocracyLab"
-          description="Optimizing the connection between skilled volunteers and tech-for-good projects"
-        />
         <div className="FindProjectsController-root container">
           <div className="row">
             <ProjectFilterContainer />

@@ -4,7 +4,6 @@ import UniversalDispatcher from "../stores/UniversalDispatcher.js";
 import { SearchFor } from "../stores/EntitySearchStore.js";
 import GroupCardsContainer from "../componentsBySection/FindGroups/GroupCardsContainer.jsx";
 import GroupFilterContainer from "../componentsBySection/FindGroups/FIlters/GroupFilterContainer.jsx";
-import Headers from "../common/Headers.jsx";
 import urls from "../utils/url.js";
 import React from "react";
 import _ from "lodash";
@@ -47,10 +46,6 @@ class FindGroupsController extends React.PureComponent {
   render(): React$Node {
     return (
       <React.Fragment>
-        <Headers
-          title="DemocracyLab"
-          description="Optimizing the connection between skilled volunteers and tech-for-good groups"
-        />
         <div className="FindProjectsController-root container">
           <div className="row">
             <GroupFilterContainer />

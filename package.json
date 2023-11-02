@@ -39,7 +39,6 @@
     "react-dom": "^16.11.0",
     "react-file-drop": "^0.2.8",
     "react-google-recaptcha": "^1.1.0",
-    "react-helmet": "^5.2.0",
     "react-image-crop": "^8.3.0",
     "react-markdown": "^7.0.1",
     "react-moment": "^0.7.9",
