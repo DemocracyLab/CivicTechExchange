@@ -21,11 +21,11 @@ class Hackathons extends React.PureComponent<Props, State> {
       <React.Fragment>
        <h2 className="text-center AggregatedDashboard-title">Hackathons</h2>
        <div className="hackathon-section">
-          <div className="hackathon-card card1">
+          <div className="hackathon-card">
               <span>30+</span>
               <h4>Hackathons organized</h4>
           </div>
-          <div className="hackathon-card card2">
+          <div className="hackathon-card">
               <span>2.5k+</span>
               <h4>Hackathon participants</h4>
           </div>

@@ -10,20 +10,105 @@
 
 .hackathon-section {
   display: flex;
-  justify-content: center;
+  // justify-content: center;
+  flex-direction: column;
+  justify-content: space-around;
   margin-top: 88px;
 }
 
 .hackathon-section .hackathon-card {
+  height: auto;
   border: 1px solid #828282;
   border-radius: 4px;
   padding-top: 49px; // Need further investigation to maintain 59px
   padding-bottom: 59px;
-  width: 264px;
-  height: 208px;
+  // width: 264px;
+  // height: 208px;
   text-align: center;
   background-color: #fff;
   align-items: center;
+  margin: 0 30px;
+}
+
+@include media-breakpoint-up(xs) {
+  .hackathon-section {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .hackathon-card {
+      flex-basis: 90%;
+      min-width: 90%;
+      margin-bottom: 24px;
+    }
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .hackathon-section {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .hackathon-card {
+      flex-basis: 80%;
+      min-width: 80%;
+      margin-bottom: 24px;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .hackathon-section {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .hackathon-card {
+      flex-basis: 60%;
+      min-width: 60%;
+      margin-bottom: 24px;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .hackathon-section {
+    flex-wrap: nowrap;
+    .hackathon-card {
+      flex-basis: 22%;
+      min-width: 22%;
+      // margin-bottom: 24px;
+    }
+
+    // .ProjectCard-root:not(:last-child) {
+    //   margin-right: 10px;
+    // }
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .hackathon-section {
+    flex-wrap: nowrap;
+    .hackathon-card {
+      flex-basis: 22%;
+      min-width: 22%;
+      // margin-bottom: 24px;
+    }
+
+    // .ProjectCard-root:not(:last-child) {
+    //   margin-right: 10px;
+    // }
+  }
+}
+
+@include media-breakpoint-up(xxl) {
+  .hackathon-section {
+    flex-wrap: nowrap;
+    .card {
+      flex-basis: 22%;
+      min-width: 22%;
+      // margin-bottom: 24px;
+    }
+
+    // .ProjectCard-root:not(:last-child) {
+    //   margin-right: 10px;
+    // }
+  }
 }
 
 .hackathon-section .hackathon-card span {
@@ -44,10 +129,6 @@
     // margin-bottom: 59px;
     margin: 0;
     padding: 0;
-}
-
-.card1, .card2 {
-    margin: 0 30px;
 }
 
 .bottom-text {

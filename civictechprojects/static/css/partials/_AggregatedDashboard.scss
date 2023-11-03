@@ -10,28 +10,93 @@
 
 .Aggregated-dashboard {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-around;
   margin-top: 56px;
 }
 
 .Aggregated-dashboard .card {
+  height: auto;
   border: 1px solid #828282;
   border-radius: 4px;
   padding-top: 49px; // Need further investigation to maintain 59px
   padding-bottom: 59px;
-  width: 264px;
-  height: 208px;
   text-align: center;
   background-color: #fff;
   align-items: center;
+  margin: 0 30px;
+}
+
+@include media-breakpoint-up(xs) {
+  .Aggregated-dashboard {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .card {
+      flex-basis: 90%;
+      min-width: 90%;
+      margin-bottom: 24px;
+    }
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .Aggregated-dashboard {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .card {
+      flex-basis: 80%;
+      min-width: 80%;
+      margin-bottom: 24px;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .Aggregated-dashboard {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .card {
+      flex-basis: 60%;
+      min-width: 60%;
+      margin-bottom: 24px;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .Aggregated-dashboard {
+    flex-wrap: nowrap;
+    .card {
+      flex-basis: 22%;
+      min-width: 22%;
+    }
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .Aggregated-dashboard {
+    flex-wrap: nowrap;
+    .card {
+      flex-basis: 22%;
+      min-width: 22%;
+    }
+  }
+}
+
+@include media-breakpoint-up(xxl) {
+  .Aggregated-dashboard {
+    flex-wrap: nowrap;
+    .card {
+      flex-basis: 22%;
+      min-width: 22%;
+    }
+  }
 }
 
 .Aggregated-dashboard .card span {
   color: #F79E02;
   font-size: 48px;
   font-family: Montserrat;
-//   margin-top: 59px;
-//   margin-bottom: 8px;
   font-weight: bold;
   margin: 0;
   padding: 0;
@@ -41,7 +106,6 @@
     color: #4E5154;
     font-size: 16px;
     font-weight: 500;
-    // margin-bottom: 59px;
     margin: 0;
     padding: 0;
 }
@@ -59,8 +123,4 @@
     background-color: #fff;
     color: #191919;
     font-weight: normal;
-}
-
-.card1, .card2, .card3, .card4 {
-  margin: 0 30px;
 }
