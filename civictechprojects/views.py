@@ -38,6 +38,7 @@ from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
 from .helpers.search.groups import groups_list
 from .helpers.search.projects import projects_list, recent_projects_list
+from .helpers.search.volunteers import volunteer_history_list
 from common.caching.cache import Cache
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.dictionaries import keys_subset
@@ -109,6 +110,7 @@ from common.helpers.user_helpers import (
 from common.helpers.request_helpers import is_ajax
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view
+from collections import defaultdict
 import requests
 
 
@@ -1677,3 +1679,28 @@ def dollar_impact(request):
     }
 
     return JsonResponse(res)
+
+@api_view()
+def volunteer_history(request):
+    yearly_stats = volunteer_history_list(request)
+    total_applications = sum(year_data['applications'] for year_data in yearly_stats.values())
+    total_approved = sum(year_data['approved'] for year_data in yearly_stats.values())
+    total_renewals = sum(year_data['renewals'] for year_data in yearly_stats.values())
+    if total_approved > 0:
+        cumulative_renewal_percentage = (total_renewals / total_approved)
+        volunteer_matching = total_approved / total_applications
+    else:
+        cumulative_renewal_percentage = 0
+        volunteer_matching = 0
+    # Convert the dictionary to a list of JSON objects
+    stats_list = [
+        {"year": year, **data}
+        for year, data in yearly_stats.items()
+    ]
+    data = {
+        "yearly_stats" : stats_list,
+        "cumulative_renewal_percentage": cumulative_renewal_percentage,
+        "volunteer_matching" : volunteer_matching
+    }
+
+    return JsonResponse(data)

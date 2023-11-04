@@ -263,4 +263,5 @@ urlpatterns = [
     ),
     re_path(r"^api/volunteers_stats", views.get_site_stats, name="active_volunteers"),
     re_path(r"^api/impact_data", views.dollar_impact, name="impact_data"),
+    re_path(r"^api/volunteers_history_stats", views.volunteer_history, name="volunteer_history")
 ]
